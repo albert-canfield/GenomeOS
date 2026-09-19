@@ -1,0 +1,3078 @@
+{
+  "result": "vista_chr10",
+  "date": "2026-09-12",
+  "chrom": "chr10",
+  "elements": 119,
+  "annotated": 112,
+  "summary": {
+    "positive": {
+      "elements": 62,
+      "enhancer_like": 0.855,
+      "any_ccre": 0.887,
+      "in_a_node": 1.0,
+      "mean_constrained_fraction": 0.325,
+      "constrained": 0.565,
+      "scored": 60,
+      "with_predicted_target": 47,
+      "fraction_with_target": 0.783,
+      "strong": 28,
+      "coding_target_agrees_with_nearest": 0.383,
+      "tissue_judged": 13,
+      "tissue_agrees": 0.538,
+      "tissue_agrees_expected": 0.318
+    },
+    "negative": {
+      "elements": 50,
+      "enhancer_like": 0.68,
+      "any_ccre": 0.78,
+      "in_a_node": 1.0,
+      "mean_constrained_fraction": 0.408,
+      "constrained": 0.7,
+      "scored": 48,
+      "with_predicted_target": 26,
+      "fraction_with_target": 0.542,
+      "strong": 12,
+      "coding_target_agrees_with_nearest": 0.346,
+      "tissue_judged": 0,
+      "tissue_agrees": null,
+      "tissue_agrees_expected": null
+    },
+    "separation": {
+      "enhancer_like": 0.175,
+      "constrained": -0.135,
+      "fraction_with_target": 0.241,
+      "mean_constrained_fraction": -0.083
+    },
+    "positive_groups": {
+      "neural": 40,
+      "limb and mesenchyme": 20,
+      "heart": 13,
+      "pancreas": 1
+    },
+    "evidence": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates"
+  },
+  "rows": [
+    {
+      "id": "hs1958",
+      "start": 3045431,
+      "end": 3048249,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D24",
+      "inferred": null,
+      "constrained_fraction": 0.007,
+      "predicted": {
+        "gene": "ENSG00000287560",
+        "action": "activates",
+        "log2_fold_change": -1.8871,
+        "tissue": "Kidney_Medulla",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1837",
+      "start": 3809394,
+      "end": 3811669,
+      "status": "positive",
+      "tissues": [
+        "lb"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D29",
+      "inferred": {
+        "gene": "KLF6",
+        "distance": 24132,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.105,
+      "predicted": {
+        "gene": "ENSG00000287175",
+        "action": "activates",
+        "log2_fold_change": -3.9732,
+        "tissue": "CD4-positive, CD25-positive, alpha-beta regulatory T cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2420",
+      "start": 5586024,
+      "end": 5587846,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D38",
+      "inferred": {
+        "gene": "CALML3",
+        "distance": 61135,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.023,
+      "predicted": {
+        "gene": "LASTR",
+        "action": "activates",
+        "log2_fold_change": -0.2111,
+        "tissue": "epithelial cell of umbilical artery",
+        "strength": "weak",
+        "confidence": 0.211,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2237",
+      "start": 10293183,
+      "end": 10296221,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D80",
+      "inferred": null,
+      "constrained_fraction": 0.048,
+      "predicted": {
+        "gene": "ENSG00000279575",
+        "action": "activates",
+        "log2_fold_change": -0.1917,
+        "tissue": "parietal lobe",
+        "strength": "weak",
+        "confidence": 0.192,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1382",
+      "start": 11679307,
+      "end": 11680769,
+      "status": "positive",
+      "tissues": [
+        "fb"
+      ],
+      "ccre_classes": [
+        "pELS"
+      ],
+      "domain": "chr10:D88",
+      "inferred": {
+        "gene": "ECHDC3",
+        "distance": 62135,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.123,
+      "predicted": {
+        "gene": "ENSG00000271046",
+        "action": "activates",
+        "log2_fold_change": -3.5215,
+        "tissue": "OCI-LY7",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2048",
+      "start": 22692965,
+      "end": 22694359,
+      "status": "positive",
+      "tissues": [
+        "ba"
+      ],
+      "ccre_classes": [
+        "pELS"
+      ],
+      "domain": "chr10:D167",
+      "inferred": {
+        "gene": "PIP4K2A",
+        "distance": 21113,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.028,
+      "predicted": {
+        "gene": "ENSG00000279819",
+        "action": "activates",
+        "log2_fold_change": -1.8379,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs826",
+      "start": 23201912,
+      "end": 23202579,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D171",
+      "inferred": {
+        "domain": "chr10:D171",
+        "gene": "PTF1A",
+        "distance": 9941,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.85,
+      "predicted": {
+        "gene": "C10orf67",
+        "action": "represses",
+        "log2_fold_change": 0.21,
+        "tissue": "brain",
+        "strength": "weak",
+        "confidence": 0.21,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1588",
+      "start": 35636453,
+      "end": 35638314,
+      "status": "positive",
+      "tissues": [
+        "fb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D247",
+      "inferred": {
+        "gene": "FZD8",
+        "distance": 5546,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.456,
+      "predicted": {
+        "gene": "ENSG00000287528",
+        "action": "activates",
+        "log2_fold_change": -0.5366,
+        "tissue": "H7",
+        "strength": "strong",
+        "confidence": 0.537,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1567",
+      "start": 35683963,
+      "end": 35687004,
+      "status": "positive",
+      "tissues": [
+        "ba",
+        "gen",
+        "hb",
+        "lb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D248",
+      "inferred": null,
+      "constrained_fraction": 0.191,
+      "predicted": {
+        "gene": "MIR4683",
+        "action": "activates",
+        "log2_fold_change": -0.401,
+        "tissue": "HepG2",
+        "strength": "strong",
+        "confidence": 0.401,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1589",
+      "start": 35783343,
+      "end": 35785363,
+      "status": "positive",
+      "tissues": [
+        "cn"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D250",
+      "inferred": null,
+      "constrained_fraction": 0.095,
+      "predicted": {
+        "gene": "ENSG00000287528",
+        "action": "activates",
+        "log2_fold_change": -0.1742,
+        "tissue": "HT-29",
+        "strength": "weak",
+        "confidence": 0.174,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1334",
+      "start": 36765816,
+      "end": 36768296,
+      "status": "positive",
+      "tissues": [
+        "fb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D257",
+      "inferred": null,
+      "constrained_fraction": 0.237,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2327",
+      "start": 42951825,
+      "end": 42953179,
+      "status": "positive",
+      "tissues": [
+        "drg",
+        "mb",
+        "other"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D269",
+      "inferred": null,
+      "constrained_fraction": 0.006,
+      "predicted": {
+        "gene": "LINC01264",
+        "action": "activates",
+        "log2_fold_change": -0.699,
+        "tissue": "cardiac muscle cell",
+        "strength": "strong",
+        "confidence": 0.699,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "heart",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs2497",
+      "start": 42980636,
+      "end": 42982237,
+      "status": "positive",
+      "tissues": [
+        "mb"
+      ],
+      "ccre_classes": [
+        "pELS"
+      ],
+      "domain": "chr10:D269",
+      "inferred": null,
+      "constrained_fraction": 0.041,
+      "predicted": {
+        "gene": "LINC01264",
+        "action": "activates",
+        "log2_fold_change": -2.9857,
+        "tissue": "Adrenal_Gland",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2498",
+      "start": 43056441,
+      "end": 43058441,
+      "status": "positive",
+      "tissues": [
+        "drg",
+        "other"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D269",
+      "inferred": null,
+      "constrained_fraction": 0.018,
+      "predicted": {
+        "gene": "RET",
+        "action": "represses",
+        "log2_fold_change": 0.1196,
+        "tissue": "hair follicular keratinocyte",
+        "strength": "weak",
+        "confidence": 0.12,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2326",
+      "start": 43086363,
+      "end": 43087440,
+      "status": "positive",
+      "tissues": [
+        "drg",
+        "lb",
+        "mb",
+        "other"
+      ],
+      "ccre_classes": [
+        "DNase-H3K4me3",
+        "dELS"
+      ],
+      "domain": "chr10:D270",
+      "inferred": {
+        "gene": "RET",
+        "distance": 9497,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.099,
+      "predicted": {
+        "gene": "RET",
+        "action": "activates",
+        "log2_fold_change": -0.4501,
+        "tissue": "LHCN-M2",
+        "strength": "strong",
+        "confidence": 0.45,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2509",
+      "start": 44260652,
+      "end": 44262837,
+      "status": "positive",
+      "tissues": [
+        "lb"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D277",
+      "inferred": null,
+      "constrained_fraction": 0.035,
+      "predicted": {
+        "gene": "LINC03089",
+        "action": "activates",
+        "log2_fold_change": -0.743,
+        "tissue": "BE2C",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2065",
+      "start": 45557433,
+      "end": 45560218,
+      "status": "positive",
+      "tissues": [
+        "bv"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D287",
+      "inferred": null,
+      "constrained_fraction": 0.01,
+      "predicted": {
+        "gene": "MARCHF8",
+        "action": "activates",
+        "log2_fold_change": -0.1106,
+        "tissue": "CD14-positive monocyte",
+        "strength": "weak",
+        "confidence": 0.111,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2721",
+      "start": 47294716,
+      "end": 47298046,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D296",
+      "inferred": {
+        "gene": "GDF10",
+        "distance": 3729,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.172,
+      "predicted": {
+        "gene": "GDF10",
+        "action": "activates",
+        "log2_fold_change": -0.966,
+        "tissue": "neurosphere",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs753",
+      "start": 49205406,
+      "end": 49206260,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D306",
+      "inferred": {
+        "domain": "chr10:D306",
+        "gene": "TMEM273",
+        "distance": 17249,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.725,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs318",
+      "start": 49395758,
+      "end": 49397208,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D308",
+      "inferred": {
+        "gene": "DRGX",
+        "distance": 1828,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.651,
+      "predicted": {
+        "gene": "DRGX",
+        "action": "activates",
+        "log2_fold_change": -1.5126,
+        "tissue": "endodermal cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs727",
+      "start": 59031417,
+      "end": 59032389,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D378",
+      "inferred": null,
+      "constrained_fraction": 0.318,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs3033",
+      "start": 60534644,
+      "end": 60535243,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D387",
+      "inferred": null,
+      "constrained_fraction": 0.12,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2722",
+      "start": 62074237,
+      "end": 62079725,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D400",
+      "inferred": {
+        "gene": "ARID5B",
+        "distance": 174487,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.118,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": "longer than 5000 bp"
+    },
+    {
+      "id": "hs2785",
+      "start": 62976426,
+      "end": 62976783,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D407",
+      "inferred": null,
+      "constrained_fraction": 0.283,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2786",
+      "start": 62978401,
+      "end": 62978926,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D407",
+      "inferred": null,
+      "constrained_fraction": 0.223,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2768",
+      "start": 62980099,
+      "end": 62981619,
+      "status": "positive",
+      "tissues": [
+        "hb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D407",
+      "inferred": null,
+      "constrained_fraction": 0.396,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2767",
+      "start": 62996294,
+      "end": 62997403,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D408",
+      "inferred": null,
+      "constrained_fraction": 0.34,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1699",
+      "start": 69576020,
+      "end": 69578973,
+      "status": "positive",
+      "tissues": [
+        "tail"
+      ],
+      "ccre_classes": [
+        "DNase-H3K4me3"
+      ],
+      "domain": "chr10:D453",
+      "inferred": {
+        "domain": "chr10:D453",
+        "gene": "NEUROG3",
+        "distance": 3986,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.432,
+      "predicted": {
+        "gene": "ENSG00000236154",
+        "action": "activates",
+        "log2_fold_change": -1.7854,
+        "tissue": "SK-N-DZ",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2674",
+      "start": 71083915,
+      "end": 71087354,
+      "status": "positive",
+      "tissues": [
+        "ear",
+        "hb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D466",
+      "inferred": null,
+      "constrained_fraction": 0.098,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1834",
+      "start": 72253325,
+      "end": 72256597,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D473",
+      "inferred": {
+        "gene": "DDIT4",
+        "distance": 20554,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.108,
+      "predicted": {
+        "gene": "DDIT4",
+        "action": "activates",
+        "log2_fold_change": -0.4285,
+        "tissue": "Muscle_Skeletal",
+        "strength": "strong",
+        "confidence": 0.428,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "limb and mesenchyme",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2142",
+      "start": 73964098,
+      "end": 73967969,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "hb",
+        "ht",
+        "mb",
+        "som"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D477",
+      "inferred": {
+        "gene": "VCL",
+        "distance": 29743,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.069,
+      "predicted": {
+        "gene": "ENSG00000225761",
+        "action": "activates",
+        "log2_fold_change": -0.4178,
+        "tissue": "sigmoid colon",
+        "strength": "strong",
+        "confidence": 0.418,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs595",
+      "start": 74418006,
+      "end": 74419242,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "mb",
+        "nose"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D479",
+      "inferred": null,
+      "constrained_fraction": 0.67,
+      "predicted": {
+        "gene": "POLR3DP1",
+        "action": "activates",
+        "log2_fold_change": -0.1181,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.118,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1500",
+      "start": 74753402,
+      "end": 74754923,
+      "status": "positive",
+      "tissues": [
+        "lb",
+        "nt"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D481",
+      "inferred": null,
+      "constrained_fraction": 0.149,
+      "predicted": {
+        "gene": "FAM32CP",
+        "action": "activates",
+        "log2_fold_change": -0.2057,
+        "tissue": "left kidney",
+        "strength": "weak",
+        "confidence": 0.206,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1437",
+      "start": 75261439,
+      "end": 75263087,
+      "status": "positive",
+      "tissues": [
+        "lb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D485",
+      "inferred": {
+        "gene": "COMTD1",
+        "distance": 25444,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.374,
+      "predicted": {
+        "gene": "ZNF503-AS1",
+        "action": "activates",
+        "log2_fold_change": -0.64,
+        "tissue": "left colon",
+        "strength": "strong",
+        "confidence": 0.64,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs319",
+      "start": 75378487,
+      "end": 75379926,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D486",
+      "inferred": {
+        "gene": "ZNF503",
+        "distance": 22953,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.57,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs484",
+      "start": 75404805,
+      "end": 75405881,
+      "status": "positive",
+      "tissues": [
+        "ba",
+        "cn",
+        "eye",
+        "hb",
+        "lb",
+        "mb",
+        "nose",
+        "other"
+      ],
+      "ccre_classes": [
+        "dELS",
+        "pELS"
+      ],
+      "domain": "chr10:D486",
+      "inferred": {
+        "gene": "ZNF503",
+        "distance": 2477,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.436,
+      "predicted": {
+        "gene": "ENSG00000270087",
+        "action": "represses",
+        "log2_fold_change": 0.3502,
+        "tissue": "Whole_Blood",
+        "strength": "strong",
+        "confidence": 0.35,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs795",
+      "start": 75923695,
+      "end": 75924878,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D489",
+      "inferred": null,
+      "constrained_fraction": 0.745,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs320",
+      "start": 75967102,
+      "end": 75967860,
+      "status": "positive",
+      "tissues": [
+        "eye",
+        "hb",
+        "nt",
+        "other"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D489",
+      "inferred": null,
+      "constrained_fraction": 0.844,
+      "predicted": {
+        "gene": "LRMDA",
+        "action": "activates",
+        "log2_fold_change": -0.1308,
+        "tissue": "dermis blood vessel endothelial cell",
+        "strength": "weak",
+        "confidence": 0.131,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1679",
+      "start": 76034145,
+      "end": 76038131,
+      "status": "positive",
+      "tissues": [
+        "ht",
+        "nt",
+        "other"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D489",
+      "inferred": null,
+      "constrained_fraction": 0.259,
+      "predicted": {
+        "gene": "ENSG00000268659",
+        "action": "activates",
+        "log2_fold_change": -0.5783,
+        "tissue": "dermis blood vessel endothelial cell",
+        "strength": "strong",
+        "confidence": 0.578,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs321",
+      "start": 76230237,
+      "end": 76231711,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D490",
+      "inferred": null,
+      "constrained_fraction": 0.674,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1678",
+      "start": 76279495,
+      "end": 76284024,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D491",
+      "inferred": null,
+      "constrained_fraction": 0.229,
+      "predicted": {
+        "gene": "ENSG00000269256",
+        "action": "activates",
+        "log2_fold_change": -0.1252,
+        "tissue": "common myeloid progenitor, CD34-positive",
+        "strength": "weak",
+        "confidence": 0.125,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1683",
+      "start": 76396762,
+      "end": 76398994,
+      "status": "positive",
+      "tissues": [
+        "ba",
+        "som"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D492",
+      "inferred": null,
+      "constrained_fraction": 0.493,
+      "predicted": {
+        "gene": "ENSG00000269256",
+        "action": "activates",
+        "log2_fold_change": -0.1366,
+        "tissue": "common myeloid progenitor, CD34-positive",
+        "strength": "weak",
+        "confidence": 0.137,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1434",
+      "start": 76522833,
+      "end": 76525230,
+      "status": "positive",
+      "tissues": [
+        "lb",
+        "nt"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D493",
+      "inferred": null,
+      "constrained_fraction": 0.421,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs815",
+      "start": 76542109,
+      "end": 76543008,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D493",
+      "inferred": null,
+      "constrained_fraction": 0.808,
+      "predicted": {
+        "gene": "LRMDA",
+        "action": "activates",
+        "log2_fold_change": -0.1093,
+        "tissue": "immature natural killer cell",
+        "strength": "weak",
+        "confidence": 0.109,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs748",
+      "start": 76630834,
+      "end": 76632117,
+      "status": "positive",
+      "tissues": [
+        "fb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D493",
+      "inferred": null,
+      "constrained_fraction": 0.666,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2223",
+      "start": 78175815,
+      "end": 78180338,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "hb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D504",
+      "inferred": null,
+      "constrained_fraction": 0.19,
+      "predicted": {
+        "gene": "ENSG00000283096",
+        "action": "activates",
+        "log2_fold_change": -4.8054,
+        "tissue": "Testis",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1974",
+      "start": 78212636,
+      "end": 78217575,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D504",
+      "inferred": null,
+      "constrained_fraction": 0.046,
+      "predicted": {
+        "gene": "LINC00595",
+        "action": "activates",
+        "log2_fold_change": -0.3957,
+        "tissue": "H1",
+        "strength": "strong",
+        "confidence": 0.396,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1491",
+      "start": 78535691,
+      "end": 78537330,
+      "status": "positive",
+      "tissues": [
+        "lb",
+        "tail"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D506",
+      "inferred": null,
+      "constrained_fraction": 0.149,
+      "predicted": {
+        "gene": "ENSG00000282952",
+        "action": "represses",
+        "log2_fold_change": 0.2314,
+        "tissue": "testis",
+        "strength": "weak",
+        "confidence": 0.231,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs3027",
+      "start": 79194857,
+      "end": 79195302,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D509",
+      "inferred": {
+        "gene": "ZMIZ1",
+        "distance": 126302,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.027,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1767",
+      "start": 79220560,
+      "end": 79224285,
+      "status": "positive",
+      "tissues": [
+        "ht",
+        "other"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D509",
+      "inferred": {
+        "gene": "PPIF",
+        "distance": 126924,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.139,
+      "predicted": {
+        "gene": "ZMIZ1",
+        "action": "activates",
+        "log2_fold_change": -0.1267,
+        "tissue": "heart",
+        "strength": "weak",
+        "confidence": 0.127,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "predicted_group": "heart",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs2143",
+      "start": 86684071,
+      "end": 86689569,
+      "status": "positive",
+      "tissues": [
+        "ht",
+        "som"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D573",
+      "inferred": {
+        "gene": "LDB3",
+        "distance": 17811,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.125,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": "longer than 5000 bp"
+    },
+    {
+      "id": "hs2654",
+      "start": 86697756,
+      "end": 86701528,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D573",
+      "inferred": {
+        "gene": "LDB3",
+        "distance": 31784,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.103,
+      "predicted": {
+        "gene": "ENSG00000289258",
+        "action": "activates",
+        "log2_fold_change": -1.7988,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs3022",
+      "start": 86722862,
+      "end": 86728583,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D573",
+      "inferred": {
+        "gene": "BMPR1A",
+        "distance": 28987,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.043,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": "longer than 5000 bp"
+    },
+    {
+      "id": "hs2658",
+      "start": 86793348,
+      "end": 86797287,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D573",
+      "inferred": {
+        "gene": "BMPR1A",
+        "distance": 38142,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.039,
+      "predicted": {
+        "gene": "BMPR1A",
+        "action": "activates",
+        "log2_fold_change": -0.1134,
+        "tissue": "common myeloid progenitor, CD34-positive",
+        "strength": "weak",
+        "confidence": 0.113,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs495",
+      "start": 90930263,
+      "end": 90930917,
+      "status": "positive",
+      "tissues": [
+        "ba",
+        "hb",
+        "mb",
+        "nose",
+        "nt"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D591",
+      "inferred": {
+        "gene": "ANKRD1",
+        "distance": 9044,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.312,
+      "predicted": {
+        "gene": "ANKRD1",
+        "action": "activates",
+        "log2_fold_change": -0.5478,
+        "tissue": "gastroesophageal sphincter",
+        "strength": "strong",
+        "confidence": 0.548,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1950",
+      "start": 91588731,
+      "end": 91591963,
+      "status": "positive",
+      "tissues": [
+        "ba",
+        "ht",
+        "som"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D594",
+      "inferred": {
+        "gene": "PPP1R3C",
+        "distance": 43913,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.093,
+      "predicted": {
+        "gene": "PPP1R3C",
+        "action": "activates",
+        "log2_fold_change": -0.6421,
+        "tissue": "ascending aorta",
+        "strength": "strong",
+        "confidence": 0.642,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "heart",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs1981",
+      "start": 92449712,
+      "end": 92453327,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D600",
+      "inferred": null,
+      "constrained_fraction": 0.107,
+      "predicted": {
+        "gene": "ENSG00000286795",
+        "action": "represses",
+        "log2_fold_change": 0.5463,
+        "tissue": "Brain_Cerebellum",
+        "strength": "strong",
+        "confidence": 0.546,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1866",
+      "start": 92754238,
+      "end": 92758228,
+      "status": "positive",
+      "tissues": [
+        "bv"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D602",
+      "inferred": {
+        "gene": "HHEX",
+        "distance": 66044,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.163,
+      "predicted": {
+        "gene": "HHEX",
+        "action": "activates",
+        "log2_fold_change": -1.0812,
+        "tissue": "IgD-negative memory B cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1778",
+      "start": 95413367,
+      "end": 95416533,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D619",
+      "inferred": {
+        "gene": "PDLIM1",
+        "distance": 122665,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.313,
+      "predicted": {
+        "gene": "SORBS1",
+        "action": "represses",
+        "log2_fold_change": 0.6331,
+        "tissue": "epithelial cell of umbilical artery",
+        "strength": "strong",
+        "confidence": 0.633,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2353",
+      "start": 95507958,
+      "end": 95509585,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D619",
+      "inferred": {
+        "gene": "SORBS1",
+        "distance": 52511,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.04,
+      "predicted": {
+        "gene": "SORBS1",
+        "action": "activates",
+        "log2_fold_change": -0.3504,
+        "tissue": "fibroblast of skin of back",
+        "strength": "strong",
+        "confidence": 0.35,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "limb and mesenchyme",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs478",
+      "start": 96954858,
+      "end": 96955972,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D627",
+      "inferred": null,
+      "constrained_fraction": 0.962,
+      "predicted": {
+        "gene": "LCOR",
+        "action": "represses",
+        "log2_fold_change": 0.3434,
+        "tissue": "Brain_Frontal_Cortex_BA9",
+        "strength": "strong",
+        "confidence": 0.343,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1006",
+      "start": 100485084,
+      "end": 100486577,
+      "status": "positive",
+      "tissues": [
+        "eye",
+        "fb",
+        "hb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D652",
+      "inferred": {
+        "gene": "WNT8B",
+        "distance": 22584,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.564,
+      "predicted": {
+        "gene": "WNT8B",
+        "action": "activates",
+        "log2_fold_change": -1.4043,
+        "tissue": "endodermal cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs224",
+      "start": 100612460,
+      "end": 100614449,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D653",
+      "inferred": null,
+      "constrained_fraction": 0.59,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs225",
+      "start": 100615130,
+      "end": 100615721,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D653",
+      "inferred": null,
+      "constrained_fraction": 0.56,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs285",
+      "start": 100655160,
+      "end": 100655821,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D654",
+      "inferred": null,
+      "constrained_fraction": 0.812,
+      "predicted": {
+        "gene": "Metazoa_SRP",
+        "action": "represses",
+        "log2_fold_change": 0.1646,
+        "tissue": "Brain_Cerebellum",
+        "strength": "weak",
+        "confidence": 0.165,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs286",
+      "start": 100659360,
+      "end": 100659974,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "DNase-H3K4me3"
+      ],
+      "domain": "chr10:D654",
+      "inferred": null,
+      "constrained_fraction": 0.705,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs228",
+      "start": 100687327,
+      "end": 100689228,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "DNase-H3K4me3"
+      ],
+      "domain": "chr10:D655",
+      "inferred": {
+        "domain": "chr10:D655",
+        "gene": "PAX2",
+        "distance": 47102,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.527,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2985",
+      "start": 100766476,
+      "end": 100768753,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D656",
+      "inferred": null,
+      "constrained_fraction": 0.346,
+      "predicted": {
+        "gene": "PAX2",
+        "action": "represses",
+        "log2_fold_change": 0.1475,
+        "tissue": "pancreas",
+        "strength": "weak",
+        "confidence": 0.147,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "pancreas",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs229",
+      "start": 100786834,
+      "end": 100788338,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "DNase-H3K4me3"
+      ],
+      "domain": "chr10:D656",
+      "inferred": null,
+      "constrained_fraction": 0.75,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs520",
+      "start": 100791714,
+      "end": 100792615,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "CTCF-only",
+        "dELS"
+      ],
+      "domain": "chr10:D656",
+      "inferred": null,
+      "constrained_fraction": 0.033,
+      "predicted": {
+        "gene": "PAX2",
+        "action": "represses",
+        "log2_fold_change": 0.1284,
+        "tissue": "kidney",
+        "strength": "weak",
+        "confidence": 0.128,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs324",
+      "start": 101219064,
+      "end": 101219843,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D661",
+      "inferred": {
+        "domain": "chr10:D661",
+        "gene": "LBX1",
+        "distance": 10947,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.852,
+      "predicted": {
+        "gene": "LBX1",
+        "action": "represses",
+        "log2_fold_change": 0.1903,
+        "tissue": "Brain_Cortex",
+        "strength": "weak",
+        "confidence": 0.19,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs939",
+      "start": 101334854,
+      "end": 101335629,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D662",
+      "inferred": {
+        "domain": "chr10:D662",
+        "gene": "BTRC",
+        "distance": 18788,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.164,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2647",
+      "start": 101449290,
+      "end": 101454155,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "hb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D663",
+      "inferred": null,
+      "constrained_fraction": 0.374,
+      "predicted": {
+        "gene": "BTRC",
+        "action": "activates",
+        "log2_fold_change": -0.127,
+        "tissue": "liver",
+        "strength": "weak",
+        "confidence": 0.127,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "liver",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs897",
+      "start": 101485256,
+      "end": 101486853,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D663",
+      "inferred": null,
+      "constrained_fraction": 0.538,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs326",
+      "start": 101506891,
+      "end": 101508215,
+      "status": "positive",
+      "tissues": [
+        "lb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D664",
+      "inferred": null,
+      "constrained_fraction": 0.628,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs511",
+      "start": 101767435,
+      "end": 101768636,
+      "status": "positive",
+      "tissues": [
+        "tail"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D666",
+      "inferred": {
+        "gene": "FGF8",
+        "distance": 11983,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.444,
+      "predicted": {
+        "gene": "FGF8",
+        "action": "activates",
+        "log2_fold_change": -0.3804,
+        "tissue": "Peyer's patch",
+        "strength": "strong",
+        "confidence": 0.38,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs513",
+      "start": 101780422,
+      "end": 101781273,
+      "status": "positive",
+      "tissues": [
+        "cn",
+        "drg"
+      ],
+      "ccre_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "domain": "chr10:D666",
+      "inferred": {
+        "gene": "FGF8",
+        "distance": 272,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.388,
+      "predicted": {
+        "gene": "FGF8",
+        "action": "represses",
+        "log2_fold_change": 0.449,
+        "tissue": "CD8-positive, alpha-beta memory T cell",
+        "strength": "strong",
+        "confidence": 0.449,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs3035",
+      "start": 103549088,
+      "end": 103549552,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "PLS"
+      ],
+      "domain": "chr10:D677",
+      "inferred": {
+        "domain": "chr10:D677",
+        "gene": "NEURL1",
+        "distance": 55729,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.269,
+      "predicted": {
+        "gene": "ENSG00000226431",
+        "action": "activates",
+        "log2_fold_change": -0.9672,
+        "tissue": "transverse colon",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2581",
+      "start": 104082857,
+      "end": 104085565,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS",
+        "pELS"
+      ],
+      "domain": "chr10:D678",
+      "inferred": {
+        "gene": "COL17A1",
+        "distance": 3137,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.023,
+      "predicted": {
+        "gene": "COL17A1",
+        "action": "activates",
+        "log2_fold_change": -0.3234,
+        "tissue": "omental fat pad",
+        "strength": "strong",
+        "confidence": 0.323,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs951",
+      "start": 105559441,
+      "end": 105560153,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "CTCF-only"
+      ],
+      "domain": "chr10:D688",
+      "inferred": null,
+      "constrained_fraction": 0.324,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs328",
+      "start": 112643925,
+      "end": 112644807,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D741",
+      "inferred": {
+        "gene": "ZDHHC6",
+        "distance": 196172,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.837,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1980",
+      "start": 112997944,
+      "end": 112998897,
+      "status": "positive",
+      "tissues": [
+        "pan"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D743",
+      "inferred": {
+        "domain": "chr10:D743",
+        "gene": "TCF7L2",
+        "distance": 48406,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.018,
+      "predicted": {
+        "gene": "TCF7L2",
+        "action": "represses",
+        "log2_fold_change": 0.1003,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.1,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "neural",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs841",
+      "start": 117094612,
+      "end": 117095728,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D776",
+      "inferred": null,
+      "constrained_fraction": 0.591,
+      "predicted": {
+        "gene": "VAX1",
+        "action": "activates",
+        "log2_fold_change": -0.2005,
+        "tissue": "Brain_Spinal_cord_cervical_c-1",
+        "strength": "weak",
+        "confidence": 0.201,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs934",
+      "start": 117096188,
+      "end": 117097238,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D776",
+      "inferred": null,
+      "constrained_fraction": 0.45,
+      "predicted": {
+        "gene": "ENSG00000235742",
+        "action": "represses",
+        "log2_fold_change": 0.3524,
+        "tissue": "testis",
+        "strength": "strong",
+        "confidence": 0.352,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1032",
+      "start": 117549688,
+      "end": 117551033,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D781",
+      "inferred": {
+        "gene": "EMX2",
+        "distance": 7277,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.398,
+      "predicted": {
+        "gene": "ENSG00000288172",
+        "action": "activates",
+        "log2_fold_change": -0.2464,
+        "tissue": "left kidney",
+        "strength": "weak",
+        "confidence": 0.246,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1221",
+      "start": 117554197,
+      "end": 117555349,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "DNase-H3K4me3"
+      ],
+      "domain": "chr10:D781",
+      "inferred": {
+        "domain": "chr10:D781",
+        "gene": "EMX2",
+        "distance": 12329,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.339,
+      "predicted": {
+        "gene": "EMX2",
+        "action": "activates",
+        "log2_fold_change": -0.5971,
+        "tissue": "psoas muscle",
+        "strength": "strong",
+        "confidence": 0.597,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "limb and mesenchyme",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1087",
+      "start": 117732424,
+      "end": 117733626,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D784",
+      "inferred": null,
+      "constrained_fraction": 0.32,
+      "predicted": {
+        "gene": "LINC02674",
+        "action": "represses",
+        "log2_fold_change": 0.1301,
+        "tissue": "Kidney_Medulla",
+        "strength": "weak",
+        "confidence": 0.13,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1236",
+      "start": 117830147,
+      "end": 117831665,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "lb",
+        "tail"
+      ],
+      "ccre_classes": [
+        "pELS"
+      ],
+      "domain": "chr10:D785",
+      "inferred": null,
+      "constrained_fraction": 0.426,
+      "predicted": {
+        "gene": "ENSG00000263041",
+        "action": "activates",
+        "log2_fold_change": -0.6624,
+        "tissue": "Testis",
+        "strength": "strong",
+        "confidence": 0.662,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs1551",
+      "start": 117966287,
+      "end": 117967650,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D787",
+      "inferred": null,
+      "constrained_fraction": 0.285,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs672",
+      "start": 118314526,
+      "end": 118316184,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D790",
+      "inferred": {
+        "gene": "FAM204A",
+        "distance": 26510,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.761,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2646",
+      "start": 121433748,
+      "end": 121439067,
+      "status": "positive",
+      "tissues": [
+        "nt"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D813",
+      "inferred": {
+        "gene": "FGFR2",
+        "distance": 164614,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.104,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": "longer than 5000 bp"
+    },
+    {
+      "id": "hs1319",
+      "start": 123067937,
+      "end": 123070218,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "nt"
+      ],
+      "ccre_classes": [
+        "DNase-H3K4me3",
+        "dELS"
+      ],
+      "domain": "chr10:D818",
+      "inferred": {
+        "gene": "ACADSB",
+        "distance": 61164,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.357,
+      "predicted": {
+        "gene": "HMX3",
+        "action": "activates",
+        "log2_fold_change": -0.6416,
+        "tissue": "neurosphere",
+        "strength": "strong",
+        "confidence": 0.642,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "predicted_group": "neural",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs329",
+      "start": 123092296,
+      "end": 123093555,
+      "status": "positive",
+      "tissues": [
+        "lb"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D818",
+      "inferred": {
+        "domain": "chr10:D818",
+        "gene": "ACADSB",
+        "distance": 83954,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.82,
+      "predicted": {
+        "gene": "HMX3",
+        "action": "represses",
+        "log2_fold_change": 0.1538,
+        "tissue": "Brain_Putamen_basal_ganglia",
+        "strength": "weak",
+        "confidence": 0.154,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "predicted_group": "neural",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs1005",
+      "start": 123143410,
+      "end": 123145122,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D819",
+      "inferred": {
+        "gene": "HMX2",
+        "distance": 1216,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.473,
+      "predicted": {
+        "gene": "HMX2",
+        "action": "represses",
+        "log2_fold_change": 0.51,
+        "tissue": "K562",
+        "strength": "strong",
+        "confidence": 0.51,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs771",
+      "start": 123348806,
+      "end": 123349878,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D822",
+      "inferred": null,
+      "constrained_fraction": 0.673,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs578",
+      "start": 123429470,
+      "end": 123430559,
+      "status": "positive",
+      "tissues": [
+        "nt"
+      ],
+      "ccre_classes": [
+        "pELS"
+      ],
+      "domain": "chr10:D824",
+      "inferred": null,
+      "constrained_fraction": 0.783,
+      "predicted": {
+        "gene": "HMX3",
+        "action": "represses",
+        "log2_fold_change": 0.1174,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.117,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs330",
+      "start": 125216752,
+      "end": 125217434,
+      "status": "positive",
+      "tissues": [
+        "hb"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D838",
+      "inferred": null,
+      "constrained_fraction": 0.441,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2814",
+      "start": 126177360,
+      "end": 126178101,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "hb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D848",
+      "inferred": null,
+      "constrained_fraction": 0.022,
+      "predicted": {
+        "gene": "ADAM12",
+        "action": "activates",
+        "log2_fold_change": -0.274,
+        "tissue": "neural progenitor cell",
+        "strength": "weak",
+        "confidence": 0.274,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": true,
+      "skipped": null
+    },
+    {
+      "id": "hs542",
+      "start": 128165802,
+      "end": 128166830,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D866",
+      "inferred": {
+        "domain": "chr10:D866",
+        "gene": "MKI67",
+        "distance": 39859,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.671,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs737",
+      "start": 128568603,
+      "end": 128569741,
+      "status": "positive",
+      "tissues": [
+        "cn",
+        "hb",
+        "mb",
+        "tri"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D871",
+      "inferred": null,
+      "constrained_fraction": 0.637,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs699",
+      "start": 129033192,
+      "end": 129034911,
+      "status": "positive",
+      "tissues": [
+        "fb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D875",
+      "inferred": null,
+      "constrained_fraction": 0.668,
+      "predicted": {
+        "gene": "ENSG00000289400",
+        "action": "activates",
+        "log2_fold_change": -0.2668,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.267,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs562",
+      "start": 129308257,
+      "end": 129310478,
+      "status": "positive",
+      "tissues": [
+        "hb"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D879",
+      "inferred": null,
+      "constrained_fraction": 0.642,
+      "predicted": null,
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs656",
+      "start": 129602683,
+      "end": 129604015,
+      "status": "positive",
+      "tissues": [
+        "fb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D881",
+      "inferred": {
+        "gene": "MGMT",
+        "distance": 135921,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.535,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs696",
+      "start": 129605803,
+      "end": 129607046,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D881",
+      "inferred": {
+        "gene": "MGMT",
+        "distance": 139153,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.496,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs331",
+      "start": 129647522,
+      "end": 129649421,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [],
+      "domain": "chr10:D881",
+      "inferred": {
+        "domain": "chr10:D881",
+        "gene": "MGMT",
+        "distance": 181793,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.585,
+      "predicted": null,
+      "verdict_coding": "no predicted effect",
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs589",
+      "start": 129716556,
+      "end": 129717922,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D882",
+      "inferred": null,
+      "constrained_fraction": 0.578,
+      "predicted": {
+        "gene": "LINC02666",
+        "action": "activates",
+        "log2_fold_change": -0.1399,
+        "tissue": "GM23338",
+        "strength": "weak",
+        "confidence": 0.14,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2776",
+      "start": 129793027,
+      "end": 129794773,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D883",
+      "inferred": null,
+      "constrained_fraction": 0.137,
+      "predicted": {
+        "gene": "LINC02666",
+        "action": "activates",
+        "log2_fold_change": -0.2491,
+        "tissue": "left lobe of liver",
+        "strength": "weak",
+        "confidence": 0.249,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2775",
+      "start": 129883792,
+      "end": 129885377,
+      "status": "positive",
+      "tissues": [
+        "drg"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D883",
+      "inferred": null,
+      "constrained_fraction": 0.437,
+      "predicted": {
+        "gene": "ENSG00000275327",
+        "action": "activates",
+        "log2_fold_change": -0.4335,
+        "tissue": "common myeloid progenitor, CD34-positive",
+        "strength": "strong",
+        "confidence": 0.433,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs232",
+      "start": 129892825,
+      "end": 129894584,
+      "status": "positive",
+      "tissues": [
+        "hb",
+        "mb"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D883",
+      "inferred": null,
+      "constrained_fraction": 0.532,
+      "predicted": {
+        "gene": "MIR4297",
+        "action": "activates",
+        "log2_fold_change": -0.1779,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.178,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": null,
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2593",
+      "start": 129901000,
+      "end": 129902160,
+      "status": "negative",
+      "tissues": [],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D883",
+      "inferred": null,
+      "constrained_fraction": 0.506,
+      "predicted": {
+        "gene": "EBF3",
+        "action": "activates",
+        "log2_fold_change": -0.1675,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.168,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": null,
+      "predicted_group": "neural",
+      "tissue_agrees": null,
+      "skipped": null
+    },
+    {
+      "id": "hs2774",
+      "start": 129943842,
+      "end": 129945342,
+      "status": "positive",
+      "tissues": [
+        "nt",
+        "other"
+      ],
+      "ccre_classes": [],
+      "domain": "chr10:D884",
+      "inferred": {
+        "domain": "chr10:D884",
+        "gene": "EBF3",
+        "distance": 28460,
+        "basis": "nearest TSS in domain"
+      },
+      "constrained_fraction": 0.499,
+      "predicted": {
+        "gene": "EBF3",
+        "action": "represses",
+        "log2_fold_change": 0.1177,
+        "tissue": "heart left ventricle",
+        "strength": "weak",
+        "confidence": 0.118,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "heart",
+      "tissue_agrees": false,
+      "skipped": null
+    },
+    {
+      "id": "hs1763",
+      "start": 132628525,
+      "end": 132633308,
+      "status": "positive",
+      "tissues": [
+        "ht"
+      ],
+      "ccre_classes": [
+        "dELS"
+      ],
+      "domain": "chr10:D912",
+      "inferred": {
+        "gene": "NKX6-2",
+        "distance": 157103,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "constrained_fraction": 0.012,
+      "predicted": {
+        "gene": "NKX6-2",
+        "action": "activates",
+        "log2_fold_change": -0.4652,
+        "tissue": "heart left ventricle",
+        "strength": "strong",
+        "confidence": 0.465,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "predicted_group": "heart",
+      "tissue_agrees": true,
+      "skipped": null
+    }
+  ],
+  "phylop_cost": {
+    "requests": 171,
+    "mb_fetched": 2.0,
+    "seconds": 90.5
+  },
+  "evidence": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates; measured: Zoonomia phyloP; curated: ENCODE cCREs; inferred: CTCF-only nodes; predicted: AlphaGenome deletion effect"
+}

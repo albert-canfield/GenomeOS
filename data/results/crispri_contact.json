@@ -1,0 +1,542 @@
+{
+  "result": "crispri_contact",
+  "date": "2026-09-16",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: AlphaGenome deletion per element; experimental: 4D Nucleome in-situ Hi-C contact matrix at 5 kb, the file's own balancing vector, read by range request; observed over expected from the file's expected-value vector",
+  "contact_source": {
+    "evidence": "experimental: 4D Nucleome in-situ Hi-C contact matrix (.hic), read by range request",
+    "matrices": {
+      "K562": "https://data.4dnucleome.org/files-processed/4DNFITUOMFUQ/@@download/4DNFITUOMFUQ.hic",
+      "GM12878": "https://data.4dnucleome.org/files-processed/4DNFI1UEG1HD/@@download/4DNFI1UEG1HD.hic"
+    },
+    "binsize": 5000,
+    "norm_preference": [
+      "SCALE",
+      "KR",
+      "VC_SQRT",
+      "VC"
+    ],
+    "reads": {},
+    "cached_cells": {
+      "K562": 10613,
+      "GM12878": 54
+    },
+    "cache_bytes": {
+      "K562": 1598811,
+      "GM12878": 8184
+    }
+  },
+  "preregistered": "fitted on the K562 training pairs that have a measured contact, 'activity x contact' (measured 4DN Hi-C contact at 5 kb in the screen's own cell line, balanced) has a higher AUPRC than 'activity + distance' (the same activity over 1/distance) on the held-out K562 pairs",
+  "verdict": "passed",
+  "reading": "the held-out interval straddles zero, so the held-out comparison settles nothing; the same substitution on the larger training sample is clearly negative",
+  "coverage": {
+    "training_pairs": 10356,
+    "training_pairs_scored": 9165,
+    "training_positives_scored": 451,
+    "heldout_pairs": 4378,
+    "heldout_pairs_scored": 1800,
+    "contacts_found": {
+      "training": {
+        "pairs_with_contact": 10266,
+        "balanced_by_KR": 9127,
+        "same_bin": 58,
+        "zero_contact": 1158,
+        "balanced_by_VC_SQRT": 1139,
+        "pairs_without_contact": 90,
+        "without_contact_no_balanced_bin_in_the_matrix": 90
+      },
+      "heldout": {
+        "pairs_with_contact": 1970,
+        "balanced_by_KR": 1661,
+        "same_bin": 6,
+        "zero_contact": 172,
+        "pairs_without_contact": 2408,
+        "without_contact_no_balanced_bin_in_the_matrix": 16,
+        "without_contact_no_matrix_for_this_cell_line": 2392,
+        "balanced_by_VC_SQRT": 309
+      }
+    }
+  },
+  "contact_coverage_by_arm": {
+    "K562 training": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 451,
+          "with_a_measured_contact": 451,
+          "fraction": 1.0
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 8786,
+          "with_a_measured_contact": 8714,
+          "fraction": 0.9918
+        }
+      },
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.4413,
+            "auroc": 0.8963
+          },
+          "activity over distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.519,
+            "auroc": 0.925
+          }
+        },
+        "and with a measured contact": {
+          "distance": {
+            "pairs": 9165,
+            "positives": 451,
+            "baseline_precision": 0.0492,
+            "auprc": 0.4424,
+            "auroc": 0.8965
+          },
+          "activity over distance": {
+            "pairs": 9165,
+            "positives": 451,
+            "baseline_precision": 0.0492,
+            "auprc": 0.5195,
+            "auroc": 0.925
+          }
+        }
+      },
+      "same_bin_pairs": 53,
+      "same_bin_regulated": 34
+    },
+    "K562 held out": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 114,
+          "with_a_measured_contact": 114,
+          "fraction": 1.0
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 1630,
+          "with_a_measured_contact": 1625,
+          "fraction": 0.9969
+        }
+      },
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.3753,
+            "auroc": 0.826
+          },
+          "activity over distance": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.5502,
+            "auroc": 0.8935
+          }
+        },
+        "and with a measured contact": {
+          "distance": {
+            "pairs": 1739,
+            "positives": 114,
+            "baseline_precision": 0.0656,
+            "auprc": 0.3767,
+            "auroc": 0.8264
+          },
+          "activity over distance": {
+            "pairs": 1739,
+            "positives": 114,
+            "baseline_precision": 0.0656,
+            "auprc": 0.5503,
+            "auroc": 0.8934
+          }
+        }
+      },
+      "same_bin_pairs": 6,
+      "same_bin_regulated": 5
+    },
+    "GM12878 held out": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 14,
+          "with_a_measured_contact": 13,
+          "fraction": 0.9286
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 48,
+          "with_a_measured_contact": 48,
+          "fraction": 1.0
+        }
+      },
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 62,
+            "positives": 14,
+            "baseline_precision": 0.2258,
+            "auprc": 0.8207,
+            "auroc": 0.8616
+          },
+          "activity over distance": {
+            "pairs": 62,
+            "positives": 14,
+            "baseline_precision": 0.2258,
+            "auprc": 0.8608,
+            "auroc": 0.9033
+          }
+        },
+        "and with a measured contact": {
+          "distance": {
+            "pairs": 61,
+            "positives": 13,
+            "baseline_precision": 0.2131,
+            "auprc": 0.8076,
+            "auroc": 0.8526
+          },
+          "activity over distance": {
+            "pairs": 61,
+            "positives": 13,
+            "baseline_precision": 0.2131,
+            "auprc": 0.8926,
+            "auroc": 0.9231
+          }
+        }
+      },
+      "same_bin_pairs": 0,
+      "same_bin_regulated": 0
+    }
+  },
+  "training_single_predictors": {
+    "distance": {
+      "pairs": 9165,
+      "positives": 451,
+      "baseline_precision": 0.0492,
+      "auprc": 0.4424,
+      "auroc": 0.8965
+    },
+    "activity over distance": {
+      "pairs": 9165,
+      "positives": 451,
+      "baseline_precision": 0.0492,
+      "auprc": 0.5195,
+      "auroc": 0.925
+    },
+    "measured contact": {
+      "pairs": 9165,
+      "positives": 451,
+      "baseline_precision": 0.0492,
+      "auprc": 0.3789,
+      "auroc": 0.891
+    },
+    "measured contact over expected": {
+      "pairs": 9165,
+      "positives": 451,
+      "baseline_precision": 0.0492,
+      "auprc": 0.0825,
+      "auroc": 0.6677
+    },
+    "activity x measured contact": {
+      "pairs": 9165,
+      "positives": 451,
+      "baseline_precision": 0.0492,
+      "auprc": 0.4407,
+      "auroc": 0.9142
+    }
+  },
+  "training_leave_chromosome_out": {
+    "models": {
+      "distance": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.4321,
+        "auroc": 0.8931
+      },
+      "contact": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.349,
+        "auroc": 0.8848
+      },
+      "activity + distance": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.5122,
+        "auroc": 0.9217
+      },
+      "activity x contact": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.4308,
+        "auroc": 0.91
+      },
+      "activity + distance + deletion": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.6746,
+        "auroc": 0.934
+      },
+      "activity + contact + deletion": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.65,
+        "auroc": 0.928
+      },
+      "activity + distance + contact": {
+        "pairs": 9165,
+        "positives": 451,
+        "baseline_precision": 0.0492,
+        "auprc": 0.5219,
+        "auroc": 0.9276
+      }
+    },
+    "contact_gain": {
+      "gain": -0.0814,
+      "ci95": [
+        -0.1176,
+        -0.0113
+      ],
+      "resamples": 200
+    },
+    "contact_gain_with_deletion": {
+      "gain": -0.0246,
+      "ci95": [
+        -0.0477,
+        0.0082
+      ],
+      "resamples": 200
+    },
+    "contact_added_to_distance": {
+      "gain": 0.0097,
+      "ci95": [
+        -0.0097,
+        0.0266
+      ],
+      "resamples": 200
+    }
+  },
+  "weights": {
+    "distance": {
+      "intercept": 10.7857,
+      "log_distance": -1.1869
+    },
+    "contact": {
+      "intercept": -6.2329,
+      "log_contact": 1.4282
+    },
+    "activity + distance": {
+      "intercept": 9.0174,
+      "log_distance": -0.4401,
+      "log_activity": 0.3395,
+      "activity_over_distance": 0.7796
+    },
+    "activity x contact": {
+      "intercept": -8.1175,
+      "log_activity": 0.1828,
+      "log_contact": 0.6236,
+      "activity_x_contact": 0.8064
+    },
+    "activity + distance + deletion": {
+      "intercept": 6.9876,
+      "log_distance": -0.3625,
+      "log_activity": 0.3275,
+      "activity_over_distance": 0.69,
+      "top_target": 1.2777,
+      "deletion_drop": 15.937
+    },
+    "activity + contact + deletion": {
+      "intercept": -7.8233,
+      "log_activity": 0.2001,
+      "log_contact": 0.5129,
+      "activity_x_contact": 0.713,
+      "top_target": 1.5075,
+      "deletion_drop": 16.6409
+    },
+    "activity + distance + contact": {
+      "intercept": 13.6891,
+      "log_distance": -0.7737,
+      "log_activity": 0.1368,
+      "activity_over_distance": 0.9105,
+      "log_contact": -0.6146,
+      "log_oe": 2.464
+    }
+  },
+  "heldout": {
+    "GM12878": {
+      "models": {
+        "distance": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.8076,
+          "auroc": 0.8526
+        },
+        "contact": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.902,
+          "auroc": 0.9551
+        },
+        "activity + distance": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.8969,
+          "auroc": 0.9247
+        },
+        "activity x contact": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.9223,
+          "auroc": 0.9583
+        },
+        "activity + distance + deletion": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.9565,
+          "auroc": 0.984
+        },
+        "activity + contact + deletion": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.9819,
+          "auroc": 0.9936
+        },
+        "activity + distance + contact": {
+          "pairs": 61,
+          "positives": 13,
+          "baseline_precision": 0.2131,
+          "auprc": 0.9117,
+          "auroc": 0.9503
+        }
+      },
+      "contact_gain": {
+        "gain": 0.0254,
+        "ci95": [
+          -0.0286,
+          0.067
+        ],
+        "resamples": 200
+      },
+      "contact_gain_with_deletion": {
+        "gain": 0.0254,
+        "ci95": [
+          -0.0042,
+          0.0583
+        ],
+        "resamples": 200
+      },
+      "contact_added_to_distance": {
+        "gain": 0.0148,
+        "ci95": [
+          -0.0483,
+          0.0708
+        ],
+        "resamples": 200
+      },
+      "passes": true
+    },
+    "HCT116": {
+      "refused": "no 4DN Hi-C matrix chosen for this cell type"
+    },
+    "Jurkat": {
+      "refused": "no 4DN Hi-C matrix chosen for this cell type"
+    },
+    "K562": {
+      "models": {
+        "distance": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.3767,
+          "auroc": 0.8264
+        },
+        "contact": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.404,
+          "auroc": 0.8458
+        },
+        "activity + distance": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.5505,
+          "auroc": 0.8926
+        },
+        "activity x contact": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.5627,
+          "auroc": 0.8958
+        },
+        "activity + distance + deletion": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.6334,
+          "auroc": 0.9015
+        },
+        "activity + contact + deletion": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.6438,
+          "auroc": 0.9056
+        },
+        "activity + distance + contact": {
+          "pairs": 1739,
+          "positives": 114,
+          "baseline_precision": 0.0656,
+          "auprc": 0.5737,
+          "auroc": 0.8949
+        }
+      },
+      "contact_gain": {
+        "gain": 0.0123,
+        "ci95": [
+          -0.0235,
+          0.0463
+        ],
+        "resamples": 200
+      },
+      "contact_gain_with_deletion": {
+        "gain": 0.0104,
+        "ci95": [
+          -0.0101,
+          0.0392
+        ],
+        "resamples": 200
+      },
+      "contact_added_to_distance": {
+        "gain": 0.0232,
+        "ci95": [
+          0.0,
+          0.0631
+        ],
+        "resamples": 200
+      },
+      "passes": true
+    },
+    "WTC11": {
+      "refused": "no 4DN Hi-C matrix chosen for this cell type"
+    }
+  },
+  "same_bin_pairs": {
+    "training": 53,
+    "note": "an element and its TSS inside one 5 kb bin share the diagonal cell of the matrix, which is the measured self-contact of that bin, not a contact between two places"
+  }
+}

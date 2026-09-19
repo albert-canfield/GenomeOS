@@ -1,0 +1,2978 @@
+{
+  "result": "variation_rerun_chain",
+  "date": "2026-09-17",
+  "question": "bring every chromosome's measured_bp and human_constrained_bp onto the interval's own bases, as chr21 already is, without any two files disagreeing about the field",
+  "stopping_rule": "stop on the first chromosome where a tier with at least 100000 measured bases moves its constrained fraction by more than 0.02 absolute; fixed before the chain ran",
+  "chromosomes_attempted": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "stopped": null,
+  "range_reads": {
+    "requests": 9105,
+    "mb_fetched": 134.11
+  },
+  "seconds": 1667.6,
+  "per_chromosome": {
+    "chr1": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            14137000,
+            13715856
+          ],
+          "human_constrained_bp": [
+            566987,
+            515249
+          ],
+          "touched_bin_bp": 14137000,
+          "fraction": [
+            0.0401,
+            0.0376
+          ],
+          "fraction_move": 0.0025,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1691000,
+            1627607
+          ],
+          "human_constrained_bp": [
+            51992,
+            46937
+          ],
+          "touched_bin_bp": 1691000,
+          "fraction": [
+            0.0307,
+            0.0288
+          ],
+          "fraction_move": 0.0019,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            24084000,
+            22976436
+          ],
+          "human_constrained_bp": [
+            3655002,
+            3335835
+          ],
+          "touched_bin_bp": 24084000,
+          "fraction": [
+            0.1518,
+            0.1452
+          ],
+          "fraction_move": 0.0066,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1924000,
+            1812754
+          ],
+          "human_constrained_bp": [
+            103001,
+            89999
+          ],
+          "touched_bin_bp": 1924000,
+          "fraction": [
+            0.0535,
+            0.0496
+          ],
+          "fraction_move": 0.0039,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 85.3,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 1.41,
+          "seconds": 1.6
+        },
+        "elements_phylop": {
+          "requests": 410,
+          "mb_fetched": 2.4,
+          "seconds": 70.4
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 1.41,
+          "seconds": 1.5
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 1.31,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 1.41,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 1.41,
+          "seconds": 0.9
+        },
+        "seconds": 85.3
+      },
+      "range_reads": {
+        "requests": 446,
+        "mb_fetched": 9.35
+      }
+    },
+    "chr2": {
+      "tiers": {
+        "regulatory": {
+          "measured_bp": [
+            22298000,
+            21473534
+          ],
+          "human_constrained_bp": [
+            2444981,
+            2281355
+          ],
+          "touched_bin_bp": 22298000,
+          "fraction": [
+            0.1097,
+            0.1062
+          ],
+          "fraction_move": 0.0035,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            17819000,
+            17490533
+          ],
+          "human_constrained_bp": [
+            370977,
+            337292
+          ],
+          "touched_bin_bp": 17819000,
+          "fraction": [
+            0.0208,
+            0.0193
+          ],
+          "fraction_move": 0.0015,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            3850000,
+            3744653
+          ],
+          "human_constrained_bp": [
+            110980,
+            99399
+          ],
+          "touched_bin_bp": 3850000,
+          "fraction": [
+            0.0288,
+            0.0265
+          ],
+          "fraction_move": 0.0023,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            2805000,
+            2722975
+          ],
+          "human_constrained_bp": [
+            70000,
+            64007
+          ],
+          "touched_bin_bp": 2805000,
+          "fraction": [
+            0.025,
+            0.0235
+          ],
+          "fraction_move": 0.0015,
+          "big_enough_to_judge": true
+        },
+        "structural": {
+          "measured_bp": [
+            1000,
+            1000
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 1000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 84.2,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 1.55,
+          "seconds": 0.9
+        },
+        "elements_phylop": {
+          "requests": 404,
+          "mb_fetched": 2.4,
+          "seconds": 70.5
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 1.55,
+          "seconds": 1.6
+        },
+        "vista": {
+          "requests": 11,
+          "mb_fetched": 1.25,
+          "seconds": 1.3
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 1.55,
+          "seconds": 1.5
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 1.55,
+          "seconds": 0.9
+        },
+        "seconds": 84.2
+      },
+      "range_reads": {
+        "requests": 443,
+        "mb_fetched": 9.85
+      }
+    },
+    "chr3": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            38000,
+            36007
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 38000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "neutral": {
+          "measured_bp": [
+            3636000,
+            3561946
+          ],
+          "human_constrained_bp": [
+            29012,
+            21282
+          ],
+          "touched_bin_bp": 3636000,
+          "fraction": [
+            0.008,
+            0.006
+          ],
+          "fraction_move": 0.002,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            16082000,
+            15460782
+          ],
+          "human_constrained_bp": [
+            1623969,
+            1493191
+          ],
+          "touched_bin_bp": 16082000,
+          "fraction": [
+            0.101,
+            0.0966
+          ],
+          "fraction_move": 0.0044,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            16860000,
+            16607173
+          ],
+          "human_constrained_bp": [
+            410004,
+            392777
+          ],
+          "touched_bin_bp": 16860000,
+          "fraction": [
+            0.0243,
+            0.0237
+          ],
+          "fraction_move": 0.0006,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1395000,
+            1353085
+          ],
+          "human_constrained_bp": [
+            16996,
+            13358
+          ],
+          "touched_bin_bp": 1395000,
+          "fraction": [
+            0.0122,
+            0.0099
+          ],
+          "fraction_move": 0.0023,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 83.8,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 1.31,
+          "seconds": 0.7
+        },
+        "elements_phylop": {
+          "requests": 403,
+          "mb_fetched": 2.4,
+          "seconds": 70.3
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 1.24,
+          "seconds": 1.6
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 1.27,
+          "seconds": 1.9
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 1.31,
+          "seconds": 1.5
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 1.31,
+          "seconds": 0.7
+        },
+        "seconds": 83.8
+      },
+      "range_reads": {
+        "requests": 439,
+        "mb_fetched": 8.84
+      }
+    },
+    "chr4": {
+      "tiers": {
+        "regulatory": {
+          "measured_bp": [
+            15015000,
+            14527503
+          ],
+          "human_constrained_bp": [
+            1041010,
+            969527
+          ],
+          "touched_bin_bp": 15015000,
+          "fraction": [
+            0.0693,
+            0.0667
+          ],
+          "fraction_move": 0.0026,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            8826000,
+            8679341
+          ],
+          "human_constrained_bp": [
+            53992,
+            46791
+          ],
+          "touched_bin_bp": 8826000,
+          "fraction": [
+            0.0061,
+            0.0054
+          ],
+          "fraction_move": 0.0007,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            22661000,
+            22301198
+          ],
+          "human_constrained_bp": [
+            245012,
+            222898
+          ],
+          "touched_bin_bp": 22661000,
+          "fraction": [
+            0.0108,
+            0.01
+          ],
+          "fraction_move": 0.0008,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1439000,
+            1398380
+          ],
+          "human_constrained_bp": [
+            13005,
+            11735
+          ],
+          "touched_bin_bp": 1439000,
+          "fraction": [
+            0.009,
+            0.0084
+          ],
+          "fraction_move": 0.0006,
+          "big_enough_to_judge": true
+        },
+        "structural": {
+          "measured_bp": [
+            26000,
+            23651
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 26000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 79.5,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 1.26,
+          "seconds": 0.8
+        },
+        "elements_phylop": {
+          "requests": 396,
+          "mb_fetched": 2.3,
+          "seconds": 67.3
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 1.25,
+          "seconds": 1.7
+        },
+        "vista": {
+          "requests": 11,
+          "mb_fetched": 0.99,
+          "seconds": 1.2
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 1.26,
+          "seconds": 1.6
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 1.26,
+          "seconds": 0.8
+        },
+        "seconds": 79.5
+      },
+      "range_reads": {
+        "requests": 439,
+        "mb_fetched": 8.32
+      }
+    },
+    "chr5": {
+      "tiers": {
+        "neutral": {
+          "measured_bp": [
+            4897000,
+            4761425
+          ],
+          "human_constrained_bp": [
+            119995,
+            105038
+          ],
+          "touched_bin_bp": 4897000,
+          "fraction": [
+            0.0245,
+            0.0221
+          ],
+          "fraction_move": 0.0024,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            16443000,
+            15878989
+          ],
+          "human_constrained_bp": [
+            1421014,
+            1323432
+          ],
+          "touched_bin_bp": 16443000,
+          "fraction": [
+            0.0864,
+            0.0833
+          ],
+          "fraction_move": 0.0031,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            16696000,
+            16395362
+          ],
+          "human_constrained_bp": [
+            252008,
+            237764
+          ],
+          "touched_bin_bp": 16696000,
+          "fraction": [
+            0.0151,
+            0.0145
+          ],
+          "fraction_move": 0.0006,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            2071000,
+            2031642
+          ],
+          "human_constrained_bp": [
+            22011,
+            20474
+          ],
+          "touched_bin_bp": 2071000,
+          "fraction": [
+            0.0106,
+            0.0101
+          ],
+          "fraction_move": 0.0005,
+          "big_enough_to_judge": true
+        },
+        "structural": {
+          "measured_bp": [
+            45000,
+            44389
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 45000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 79.5,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 1.17,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 392,
+          "mb_fetched": 2.3,
+          "seconds": 67.0
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 1.09,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 10,
+          "mb_fetched": 0.91,
+          "seconds": 2.2
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 1.17,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 1.17,
+          "seconds": 0.8
+        },
+        "seconds": 79.5
+      },
+      "range_reads": {
+        "requests": 431,
+        "mb_fetched": 7.81
+      }
+    },
+    "chr6": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            259000,
+            256980
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 259000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            14403000,
+            14120347
+          ],
+          "human_constrained_bp": [
+            403970,
+            368718
+          ],
+          "touched_bin_bp": 14403000,
+          "fraction": [
+            0.028,
+            0.0261
+          ],
+          "fraction_move": 0.0019,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            2124000,
+            2069475
+          ],
+          "human_constrained_bp": [
+            30989,
+            23716
+          ],
+          "touched_bin_bp": 2124000,
+          "fraction": [
+            0.0146,
+            0.0115
+          ],
+          "fraction_move": 0.0031,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            16630000,
+            16016380
+          ],
+          "human_constrained_bp": [
+            2298033,
+            2135698
+          ],
+          "touched_bin_bp": 16630000,
+          "fraction": [
+            0.1382,
+            0.1333
+          ],
+          "fraction_move": 0.0049,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            2324000,
+            2239111
+          ],
+          "human_constrained_bp": [
+            165007,
+            146900
+          ],
+          "touched_bin_bp": 2324000,
+          "fraction": [
+            0.071,
+            0.0656
+          ],
+          "fraction_move": 0.0054,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 79.5,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 1.12,
+          "seconds": 0.8
+        },
+        "elements_phylop": {
+          "requests": 395,
+          "mb_fetched": 2.3,
+          "seconds": 68.0
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 1.11,
+          "seconds": 1.5
+        },
+        "vista": {
+          "requests": 9,
+          "mb_fetched": 0.93,
+          "seconds": 0.9
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 1.12,
+          "seconds": 1.5
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 1.12,
+          "seconds": 0.8
+        },
+        "seconds": 79.5
+      },
+      "range_reads": {
+        "requests": 436,
+        "mb_fetched": 7.7
+      }
+    },
+    "chr7": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            25000,
+            22194
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 25000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            14104000,
+            13557797
+          ],
+          "human_constrained_bp": [
+            1748026,
+            1630017
+          ],
+          "touched_bin_bp": 14104000,
+          "fraction": [
+            0.1239,
+            0.1202
+          ],
+          "fraction_move": 0.0037,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            2158000,
+            2075408
+          ],
+          "human_constrained_bp": [
+            93996,
+            86568
+          ],
+          "touched_bin_bp": 2158000,
+          "fraction": [
+            0.0436,
+            0.0417
+          ],
+          "fraction_move": 0.0019,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            12578000,
+            12317457
+          ],
+          "human_constrained_bp": [
+            510008,
+            474824
+          ],
+          "touched_bin_bp": 12578000,
+          "fraction": [
+            0.0405,
+            0.0385
+          ],
+          "fraction_move": 0.002,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            920000,
+            879473
+          ],
+          "human_constrained_bp": [
+            78000,
+            73162
+          ],
+          "touched_bin_bp": 920000,
+          "fraction": [
+            0.0848,
+            0.0832
+          ],
+          "fraction_move": 0.0016,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 79.5,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.98,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 392,
+          "mb_fetched": 2.3,
+          "seconds": 68.4
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.98,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.98,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.98,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.98,
+          "seconds": 0.7
+        },
+        "seconds": 79.5
+      },
+      "range_reads": {
+        "requests": 427,
+        "mb_fetched": 7.2
+      }
+    },
+    "chr8": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            206000,
+            203744
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 206000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            13688000,
+            13217279
+          ],
+          "human_constrained_bp": [
+            983015,
+            912617
+          ],
+          "touched_bin_bp": 13688000,
+          "fraction": [
+            0.0718,
+            0.069
+          ],
+          "fraction_move": 0.0028,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            11842000,
+            11616139
+          ],
+          "human_constrained_bp": [
+            253031,
+            242487
+          ],
+          "touched_bin_bp": 11842000,
+          "fraction": [
+            0.0214,
+            0.0209
+          ],
+          "fraction_move": 0.0005,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1780000,
+            1714331
+          ],
+          "human_constrained_bp": [
+            58006,
+            52545
+          ],
+          "touched_bin_bp": 1780000,
+          "fraction": [
+            0.0326,
+            0.0307
+          ],
+          "fraction_move": 0.0019,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1600000,
+            1553648
+          ],
+          "human_constrained_bp": [
+            14003,
+            11678
+          ],
+          "touched_bin_bp": 1600000,
+          "fraction": [
+            0.0088,
+            0.0075
+          ],
+          "fraction_move": 0.0013,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 76.5,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 0.94,
+          "seconds": 0.8
+        },
+        "elements_phylop": {
+          "requests": 381,
+          "mb_fetched": 2.2,
+          "seconds": 65.4
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 0.94,
+          "seconds": 1.5
+        },
+        "vista": {
+          "requests": 9,
+          "mb_fetched": 0.87,
+          "seconds": 0.9
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 0.94,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 0.94,
+          "seconds": 0.9
+        },
+        "seconds": 76.5
+      },
+      "range_reads": {
+        "requests": 422,
+        "mb_fetched": 6.83
+      }
+    },
+    "chr9": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            50000,
+            48217
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 50000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            11589000,
+            11143496
+          ],
+          "human_constrained_bp": [
+            1491957,
+            1370806
+          ],
+          "touched_bin_bp": 11589000,
+          "fraction": [
+            0.1287,
+            0.123
+          ],
+          "fraction_move": 0.0057,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1075000,
+            1031320
+          ],
+          "human_constrained_bp": [
+            53003,
+            40362
+          ],
+          "touched_bin_bp": 1075000,
+          "fraction": [
+            0.0493,
+            0.0391
+          ],
+          "fraction_move": 0.0102,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            7513000,
+            7347180
+          ],
+          "human_constrained_bp": [
+            334979,
+            311751
+          ],
+          "touched_bin_bp": 7513000,
+          "fraction": [
+            0.0446,
+            0.0424
+          ],
+          "fraction_move": 0.0022,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1140000,
+            1109823
+          ],
+          "human_constrained_bp": [
+            37999,
+            34391
+          ],
+          "touched_bin_bp": 1140000,
+          "fraction": [
+            0.0333,
+            0.031
+          ],
+          "fraction_move": 0.0023,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 75.9,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.72,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 379,
+          "mb_fetched": 2.2,
+          "seconds": 65.2
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.72,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.71,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.72,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.72,
+          "seconds": 0.6
+        },
+        "seconds": 75.9
+      },
+      "range_reads": {
+        "requests": 414,
+        "mb_fetched": 5.79
+      }
+    },
+    "chr10": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            1000,
+            1000
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 1000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            15202000,
+            14660983
+          ],
+          "human_constrained_bp": [
+            1497990,
+            1384815
+          ],
+          "touched_bin_bp": 15202000,
+          "fraction": [
+            0.0985,
+            0.0945
+          ],
+          "fraction_move": 0.004,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1946000,
+            1877751
+          ],
+          "human_constrained_bp": [
+            90996,
+            85746
+          ],
+          "touched_bin_bp": 1946000,
+          "fraction": [
+            0.0468,
+            0.0457
+          ],
+          "fraction_move": 0.0011,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            8423000,
+            8249934
+          ],
+          "human_constrained_bp": [
+            224993,
+            212833
+          ],
+          "touched_bin_bp": 8423000,
+          "fraction": [
+            0.0267,
+            0.0258
+          ],
+          "fraction_move": 0.0009,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            702000,
+            674066
+          ],
+          "human_constrained_bp": [
+            64997,
+            62234
+          ],
+          "touched_bin_bp": 702000,
+          "fraction": [
+            0.0926,
+            0.0923
+          ],
+          "fraction_move": 0.0003,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 76.5,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.82,
+          "seconds": 1.3
+        },
+        "elements_phylop": {
+          "requests": 387,
+          "mb_fetched": 2.3,
+          "seconds": 63.4
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.82,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 0.74,
+          "seconds": 1.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.82,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.82,
+          "seconds": 0.8
+        },
+        "seconds": 76.5
+      },
+      "range_reads": {
+        "requests": 423,
+        "mb_fetched": 6.32
+      }
+    },
+    "chr11": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            65000,
+            61018
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 65000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            11321000,
+            11010506
+          ],
+          "human_constrained_bp": [
+            316979,
+            302305
+          ],
+          "touched_bin_bp": 11321000,
+          "fraction": [
+            0.028,
+            0.0275
+          ],
+          "fraction_move": 0.0005,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1922000,
+            1791260
+          ],
+          "human_constrained_bp": [
+            59999,
+            53141
+          ],
+          "touched_bin_bp": 1922000,
+          "fraction": [
+            0.0312,
+            0.0297
+          ],
+          "fraction_move": 0.0015,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            11993000,
+            11451406
+          ],
+          "human_constrained_bp": [
+            1521015,
+            1393713
+          ],
+          "touched_bin_bp": 11993000,
+          "fraction": [
+            0.1268,
+            0.1217
+          ],
+          "fraction_move": 0.0051,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            873000,
+            837383
+          ],
+          "human_constrained_bp": [
+            58990,
+            55795
+          ],
+          "touched_bin_bp": 873000,
+          "fraction": [
+            0.0676,
+            0.0666
+          ],
+          "fraction_move": 0.001,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 82.4,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 0.85,
+          "seconds": 0.8
+        },
+        "elements_phylop": {
+          "requests": 385,
+          "mb_fetched": 2.3,
+          "seconds": 66.9
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 0.85,
+          "seconds": 1.5
+        },
+        "vista": {
+          "requests": 10,
+          "mb_fetched": 0.69,
+          "seconds": 3.5
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 0.85,
+          "seconds": 1.5
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 0.85,
+          "seconds": 1.0
+        },
+        "seconds": 82.4
+      },
+      "range_reads": {
+        "requests": 427,
+        "mb_fetched": 6.39
+      }
+    },
+    "chr12": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            162000,
+            161432
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 162000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            11144000,
+            10888582
+          ],
+          "human_constrained_bp": [
+            420989,
+            389679
+          ],
+          "touched_bin_bp": 11144000,
+          "fraction": [
+            0.0378,
+            0.0358
+          ],
+          "fraction_move": 0.002,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            11940000,
+            11396410
+          ],
+          "human_constrained_bp": [
+            1312001,
+            1201105
+          ],
+          "touched_bin_bp": 11940000,
+          "fraction": [
+            0.1099,
+            0.1054
+          ],
+          "fraction_move": 0.0045,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1485000,
+            1420292
+          ],
+          "human_constrained_bp": [
+            62003,
+            54906
+          ],
+          "touched_bin_bp": 1485000,
+          "fraction": [
+            0.0418,
+            0.0387
+          ],
+          "fraction_move": 0.0031,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            261000,
+            232265
+          ],
+          "human_constrained_bp": [
+            8000,
+            4673
+          ],
+          "touched_bin_bp": 261000,
+          "fraction": [
+            0.0307,
+            0.0201
+          ],
+          "fraction_move": 0.0106,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 78.1,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.85,
+          "seconds": 0.9
+        },
+        "elements_phylop": {
+          "requests": 390,
+          "mb_fetched": 2.2,
+          "seconds": 66.6
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.85,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 0.72,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.85,
+          "seconds": 1.4
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.85,
+          "seconds": 0.6
+        },
+        "seconds": 78.1
+      },
+      "range_reads": {
+        "requests": 426,
+        "mb_fetched": 6.32
+      }
+    },
+    "chr13": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            8965000,
+            8662944
+          ],
+          "human_constrained_bp": [
+            708007,
+            663720
+          ],
+          "touched_bin_bp": 8965000,
+          "fraction": [
+            0.079,
+            0.0766
+          ],
+          "fraction_move": 0.0024,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            6630000,
+            6545456
+          ],
+          "human_constrained_bp": [
+            31988,
+            31175
+          ],
+          "touched_bin_bp": 6630000,
+          "fraction": [
+            0.0048,
+            0.0048
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            9624000,
+            9477281
+          ],
+          "human_constrained_bp": [
+            77992,
+            69350
+          ],
+          "touched_bin_bp": 9624000,
+          "fraction": [
+            0.0081,
+            0.0073
+          ],
+          "fraction_move": 0.0008,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1902000,
+            1867052
+          ],
+          "human_constrained_bp": [
+            9999,
+            8806
+          ],
+          "touched_bin_bp": 1902000,
+          "fraction": [
+            0.0053,
+            0.0047
+          ],
+          "fraction_move": 0.0006,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 69.7,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 0.65,
+          "seconds": 1.9
+        },
+        "elements_phylop": {
+          "requests": 340,
+          "mb_fetched": 1.9,
+          "seconds": 56.8
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 0.65,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 10,
+          "mb_fetched": 0.39,
+          "seconds": 1.0
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 0.65,
+          "seconds": 1.3
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 0.65,
+          "seconds": 0.7
+        },
+        "seconds": 69.7
+      },
+      "range_reads": {
+        "requests": 382,
+        "mb_fetched": 4.89
+      }
+    },
+    "chr14": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            7000,
+            6559
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 7000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            6145000,
+            5998096
+          ],
+          "human_constrained_bp": [
+            358030,
+            341769
+          ],
+          "touched_bin_bp": 6145000,
+          "fraction": [
+            0.0583,
+            0.057
+          ],
+          "fraction_move": 0.0013,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            2053000,
+            1997763
+          ],
+          "human_constrained_bp": [
+            37997,
+            30167
+          ],
+          "touched_bin_bp": 2053000,
+          "fraction": [
+            0.0185,
+            0.0151
+          ],
+          "fraction_move": 0.0034,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1187000,
+            1156032
+          ],
+          "human_constrained_bp": [
+            30014,
+            26870
+          ],
+          "touched_bin_bp": 1187000,
+          "fraction": [
+            0.0253,
+            0.0232
+          ],
+          "fraction_move": 0.0021,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            6927000,
+            6613046
+          ],
+          "human_constrained_bp": [
+            926991,
+            863099
+          ],
+          "touched_bin_bp": 6927000,
+          "fraction": [
+            0.1338,
+            0.1305
+          ],
+          "fraction_move": 0.0033,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 70.7,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.57,
+          "seconds": 0.5
+        },
+        "elements_phylop": {
+          "requests": 357,
+          "mb_fetched": 2.0,
+          "seconds": 60.8
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.57,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 0.48,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.57,
+          "seconds": 1.2
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.57,
+          "seconds": 0.6
+        },
+        "seconds": 70.7
+      },
+      "range_reads": {
+        "requests": 393,
+        "mb_fetched": 4.76
+      }
+    },
+    "chr15": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            2236000,
+            2156638
+          ],
+          "human_constrained_bp": [
+            169991,
+            160059
+          ],
+          "touched_bin_bp": 2236000,
+          "fraction": [
+            0.076,
+            0.0742
+          ],
+          "fraction_move": 0.0018,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            248000,
+            225269
+          ],
+          "human_constrained_bp": [
+            42996,
+            40360
+          ],
+          "touched_bin_bp": 248000,
+          "fraction": [
+            0.1734,
+            0.1792
+          ],
+          "fraction_move": 0.0058,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            752000,
+            731771
+          ],
+          "human_constrained_bp": [
+            24007,
+            21279
+          ],
+          "touched_bin_bp": 752000,
+          "fraction": [
+            0.0319,
+            0.0291
+          ],
+          "fraction_move": 0.0028,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            6262000,
+            5976084
+          ],
+          "human_constrained_bp": [
+            908012,
+            845189
+          ],
+          "touched_bin_bp": 6262000,
+          "fraction": [
+            0.145,
+            0.1414
+          ],
+          "fraction_move": 0.0036,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 75.5,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.5,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 359,
+          "mb_fetched": 2.0,
+          "seconds": 60.6
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.5,
+          "seconds": 1.2
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.5,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.5,
+          "seconds": 1.2
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.5,
+          "seconds": 0.6
+        },
+        "seconds": 75.5
+      },
+      "range_reads": {
+        "requests": 394,
+        "mb_fetched": 4.5
+      }
+    },
+    "chr16": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            80000,
+            77057
+          ],
+          "human_constrained_bp": [
+            1000,
+            70
+          ],
+          "touched_bin_bp": 80000,
+          "fraction": [
+            0.0125,
+            0.0009
+          ],
+          "fraction_move": 0.0116,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            5929000,
+            5629617
+          ],
+          "human_constrained_bp": [
+            524980,
+            460604
+          ],
+          "touched_bin_bp": 5929000,
+          "fraction": [
+            0.0885,
+            0.0818
+          ],
+          "fraction_move": 0.0067,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            3615000,
+            3504053
+          ],
+          "human_constrained_bp": [
+            81997,
+            73242
+          ],
+          "touched_bin_bp": 3615000,
+          "fraction": [
+            0.0227,
+            0.0209
+          ],
+          "fraction_move": 0.0018,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            853000,
+            825806
+          ],
+          "human_constrained_bp": [
+            13000,
+            9802
+          ],
+          "touched_bin_bp": 853000,
+          "fraction": [
+            0.0152,
+            0.0119
+          ],
+          "fraction_move": 0.0033,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            1530000,
+            1502042
+          ],
+          "human_constrained_bp": [
+            12012,
+            11249
+          ],
+          "touched_bin_bp": 1530000,
+          "fraction": [
+            0.0079,
+            0.0075
+          ],
+          "fraction_move": 0.0004,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 68.8,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 357,
+          "mb_fetched": 2.0,
+          "seconds": 59.2
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 1.1
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 0.5
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 1.1
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 0.5
+        },
+        "seconds": 68.8
+      },
+      "range_reads": {
+        "requests": 392,
+        "mb_fetched": 4.25
+      }
+    },
+    "chr17": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            15000,
+            14289
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 15000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            2483000,
+            2365711
+          ],
+          "human_constrained_bp": [
+            194995,
+            176614
+          ],
+          "touched_bin_bp": 2483000,
+          "fraction": [
+            0.0785,
+            0.0747
+          ],
+          "fraction_move": 0.0038,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            355000,
+            336096
+          ],
+          "human_constrained_bp": [
+            20000,
+            16589
+          ],
+          "touched_bin_bp": 355000,
+          "fraction": [
+            0.0563,
+            0.0494
+          ],
+          "fraction_move": 0.0069,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            7177000,
+            6700247
+          ],
+          "human_constrained_bp": [
+            1313005,
+            1161674
+          ],
+          "touched_bin_bp": 7177000,
+          "fraction": [
+            0.1829,
+            0.1734
+          ],
+          "fraction_move": 0.0095,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            538000,
+            510446
+          ],
+          "human_constrained_bp": [
+            28001,
+            23420
+          ],
+          "touched_bin_bp": 538000,
+          "fraction": [
+            0.052,
+            0.0459
+          ],
+          "fraction_move": 0.0061,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 75.2,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.46,
+          "seconds": 0.5
+        },
+        "elements_phylop": {
+          "requests": 378,
+          "mb_fetched": 2.2,
+          "seconds": 64.3
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.46,
+          "seconds": 1.2
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.45,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.46,
+          "seconds": 1.2
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.46,
+          "seconds": 0.6
+        },
+        "seconds": 75.2
+      },
+      "range_reads": {
+        "requests": 413,
+        "mb_fetched": 4.49
+      }
+    },
+    "chr18": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            15000,
+            14487
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 15000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            2448000,
+            2410570
+          ],
+          "human_constrained_bp": [
+            20992,
+            16093
+          ],
+          "touched_bin_bp": 2448000,
+          "fraction": [
+            0.0086,
+            0.0067
+          ],
+          "fraction_move": 0.0019,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            7302000,
+            7053096
+          ],
+          "human_constrained_bp": [
+            717988,
+            678590
+          ],
+          "touched_bin_bp": 7302000,
+          "fraction": [
+            0.0983,
+            0.0962
+          ],
+          "fraction_move": 0.0021,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            5186000,
+            5085336
+          ],
+          "human_constrained_bp": [
+            124996,
+            114648
+          ],
+          "touched_bin_bp": 5186000,
+          "fraction": [
+            0.0241,
+            0.0225
+          ],
+          "fraction_move": 0.0016,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            3978000,
+            3912992
+          ],
+          "human_constrained_bp": [
+            75984,
+            72537
+          ],
+          "touched_bin_bp": 3978000,
+          "fraction": [
+            0.0191,
+            0.0185
+          ],
+          "fraction_move": 0.0006,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 65.9,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 0.51,
+          "seconds": 0.8
+        },
+        "elements_phylop": {
+          "requests": 335,
+          "mb_fetched": 1.8,
+          "seconds": 56.4
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 0.51,
+          "seconds": 1.4
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 0.44,
+          "seconds": 0.9
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 0.51,
+          "seconds": 0.9
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 0.51,
+          "seconds": 0.7
+        },
+        "seconds": 65.9
+      },
+      "range_reads": {
+        "requests": 375,
+        "mb_fetched": 4.28
+      }
+    },
+    "chr19": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            86000,
+            80581
+          ],
+          "human_constrained_bp": [
+            2000,
+            2000
+          ],
+          "touched_bin_bp": 86000,
+          "fraction": [
+            0.0233,
+            0.0248
+          ],
+          "fraction_move": 0.0015,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            1907000,
+            1715461
+          ],
+          "human_constrained_bp": [
+            187995,
+            154538
+          ],
+          "touched_bin_bp": 1907000,
+          "fraction": [
+            0.0986,
+            0.0901
+          ],
+          "fraction_move": 0.0085,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            4577000,
+            4145622
+          ],
+          "human_constrained_bp": [
+            901009,
+            752706
+          ],
+          "touched_bin_bp": 4577000,
+          "fraction": [
+            0.1969,
+            0.1816
+          ],
+          "fraction_move": 0.0153,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            156000,
+            143624
+          ],
+          "human_constrained_bp": [
+            4000,
+            3679
+          ],
+          "touched_bin_bp": 156000,
+          "fraction": [
+            0.0256,
+            0.0256
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            400000,
+            371164
+          ],
+          "human_constrained_bp": [
+            27000,
+            21023
+          ],
+          "touched_bin_bp": 400000,
+          "fraction": [
+            0.0675,
+            0.0566
+          ],
+          "fraction_move": 0.0109,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 70.3,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.3,
+          "seconds": 0.6
+        },
+        "elements_phylop": {
+          "requests": 350,
+          "mb_fetched": 1.9,
+          "seconds": 60.1
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.3,
+          "seconds": 1.0
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.22,
+          "seconds": 0.5
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.3,
+          "seconds": 1.0
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.3,
+          "seconds": 0.5
+        },
+        "seconds": 70.3
+      },
+      "range_reads": {
+        "requests": 385,
+        "mb_fetched": 3.32
+      }
+    },
+    "chr20": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            26000,
+            25117
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 26000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            3581000,
+            3468848
+          ],
+          "human_constrained_bp": [
+            203987,
+            190185
+          ],
+          "touched_bin_bp": 3581000,
+          "fraction": [
+            0.057,
+            0.0548
+          ],
+          "fraction_move": 0.0022,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            8066000,
+            7690772
+          ],
+          "human_constrained_bp": [
+            1568999,
+            1464259
+          ],
+          "touched_bin_bp": 8066000,
+          "fraction": [
+            0.1945,
+            0.1904
+          ],
+          "fraction_move": 0.0041,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            709000,
+            667721
+          ],
+          "human_constrained_bp": [
+            48995,
+            42613
+          ],
+          "touched_bin_bp": 709000,
+          "fraction": [
+            0.0691,
+            0.0638
+          ],
+          "fraction_move": 0.0053,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            675000,
+            656600
+          ],
+          "human_constrained_bp": [
+            12991,
+            12926
+          ],
+          "touched_bin_bp": 675000,
+          "fraction": [
+            0.0192,
+            0.0197
+          ],
+          "fraction_move": 0.0005,
+          "big_enough_to_judge": true
+        }
+      },
+      "stopped_by": null,
+      "seconds": 66.3,
+      "cost": {
+        "blocks": {
+          "requests": 8,
+          "mb_fetched": 0.39,
+          "seconds": 0.7
+        },
+        "elements_phylop": {
+          "requests": 333,
+          "mb_fetched": 1.8,
+          "seconds": 55.5
+        },
+        "elements": {
+          "requests": 8,
+          "mb_fetched": 0.39,
+          "seconds": 1.3
+        },
+        "vista": {
+          "requests": 8,
+          "mb_fetched": 0.38,
+          "seconds": 0.7
+        },
+        "coding_control": {
+          "requests": 8,
+          "mb_fetched": 0.39,
+          "seconds": 1.0
+        },
+        "intron_control": {
+          "requests": 8,
+          "mb_fetched": 0.39,
+          "seconds": 1.9
+        },
+        "seconds": 66.3
+      },
+      "range_reads": {
+        "requests": 373,
+        "mb_fetched": 3.74
+      }
+    },
+    "chr22": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            2000,
+            2000
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 2000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "neutral": {
+          "measured_bp": [
+            121466,
+            121466
+          ],
+          "human_constrained_bp": [
+            22525,
+            22525
+          ],
+          "touched_bin_bp": 147000,
+          "fraction": [
+            0.1854,
+            0.1854
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "regulatory": {
+          "measured_bp": [
+            2950682,
+            2950682
+          ],
+          "human_constrained_bp": [
+            515411,
+            515411
+          ],
+          "touched_bin_bp": 3204000,
+          "fraction": [
+            0.1747,
+            0.1747
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            845922,
+            845922
+          ],
+          "human_constrained_bp": [
+            38514,
+            38514
+          ],
+          "touched_bin_bp": 898000,
+          "fraction": [
+            0.0455,
+            0.0455
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            29598,
+            29598
+          ],
+          "human_constrained_bp": [
+            1787,
+            1787
+          ],
+          "touched_bin_bp": 35000,
+          "fraction": [
+            0.0604,
+            0.0604
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 57.1,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.2,
+          "seconds": 0.5
+        },
+        "elements_phylop": {
+          "requests": 298,
+          "mb_fetched": 1.5,
+          "seconds": 48.4
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.2,
+          "seconds": 1.0
+        },
+        "vista": {
+          "requests": 7,
+          "mb_fetched": 0.19,
+          "seconds": 0.5
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.2,
+          "seconds": 0.8
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.2,
+          "seconds": 0.5
+        },
+        "seconds": 57.1
+      },
+      "range_reads": {
+        "requests": 333,
+        "mb_fetched": 2.49
+      }
+    },
+    "chrX": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            35000,
+            34541
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": 35000,
+          "fraction": [
+            0.0,
+            0.0
+          ],
+          "fraction_move": 0.0,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            3194000,
+            3077431
+          ],
+          "human_constrained_bp": [
+            537996,
+            505029
+          ],
+          "touched_bin_bp": 3194000,
+          "fraction": [
+            0.1684,
+            0.1641
+          ],
+          "fraction_move": 0.0043,
+          "big_enough_to_judge": true
+        },
+        "fossil": {
+          "measured_bp": [
+            20432000,
+            20146958
+          ],
+          "human_constrained_bp": [
+            1003013,
+            973580
+          ],
+          "touched_bin_bp": 20432000,
+          "fraction": [
+            0.0491,
+            0.0483
+          ],
+          "fraction_move": 0.0008,
+          "big_enough_to_judge": true
+        },
+        "neutral": {
+          "measured_bp": [
+            1503000,
+            1465720
+          ],
+          "human_constrained_bp": [
+            96990,
+            89795
+          ],
+          "touched_bin_bp": 1503000,
+          "fraction": [
+            0.0645,
+            0.0613
+          ],
+          "fraction_move": 0.0032,
+          "big_enough_to_judge": true
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            95000,
+            87242
+          ],
+          "human_constrained_bp": [
+            13001,
+            11317
+          ],
+          "touched_bin_bp": 95000,
+          "fraction": [
+            0.1369,
+            0.1297
+          ],
+          "fraction_move": 0.0072,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 74.9,
+      "cost": {
+        "blocks": {
+          "requests": 7,
+          "mb_fetched": 0.55,
+          "seconds": 0.7
+        },
+        "elements_phylop": {
+          "requests": 385,
+          "mb_fetched": 2.2,
+          "seconds": 65.3
+        },
+        "elements": {
+          "requests": 7,
+          "mb_fetched": 0.55,
+          "seconds": 1.1
+        },
+        "vista": {
+          "requests": 9,
+          "mb_fetched": 0.27,
+          "seconds": 0.8
+        },
+        "coding_control": {
+          "requests": 7,
+          "mb_fetched": 0.55,
+          "seconds": 1.1
+        },
+        "intron_control": {
+          "requests": 7,
+          "mb_fetched": 0.55,
+          "seconds": 0.5
+        },
+        "seconds": 74.8
+      },
+      "range_reads": {
+        "requests": 422,
+        "mb_fetched": 4.67
+      }
+    },
+    "chrY": {
+      "tiers": {
+        "structural": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "fossil": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "regulatory": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "neutral": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        },
+        "constrained_unknown": {
+          "measured_bp": [
+            0,
+            0
+          ],
+          "human_constrained_bp": [
+            0,
+            0
+          ],
+          "touched_bin_bp": null,
+          "fraction": [
+            null,
+            null
+          ],
+          "fraction_move": null,
+          "big_enough_to_judge": false
+        }
+      },
+      "stopped_by": null,
+      "seconds": 12.3,
+      "cost": {
+        "blocks": {
+          "requests": 4,
+          "mb_fetched": 0.0,
+          "seconds": 0.0
+        },
+        "elements_phylop": {
+          "requests": 54,
+          "mb_fetched": 2.0,
+          "seconds": 8.9
+        },
+        "elements": {
+          "requests": 4,
+          "mb_fetched": 0.0,
+          "seconds": 0.0
+        },
+        "coding_control": {
+          "requests": 4,
+          "mb_fetched": 0.0,
+          "seconds": 0.0
+        },
+        "intron_control": {
+          "requests": 4,
+          "mb_fetched": 0.0,
+          "seconds": 0.0
+        },
+        "seconds": 12.3
+      },
+      "range_reads": {
+        "requests": 70,
+        "mb_fetched": 2.0
+      }
+    }
+  }
+}

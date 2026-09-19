@@ -1,0 +1,883 @@
+{
+  "result": "methylation_erosion",
+  "date": "2026-09-16",
+  "claim": {
+    "name": "solo_wcgw_erosion_ordering",
+    "chromosomes": [
+      "chr19",
+      "chr20",
+      "chr21",
+      "chr22"
+    ],
+    "registered": "2026-09-16",
+    "engine": "genomeos/runtime/methylation.py (CpG methylation state machine)",
+    "mechanism": "Maintenance (UHRF1 + DNMT1) and de novo methylation (DNMT3A/B) are less efficient at an isolated CpG than in a cluster, so each division loses more methylation at a solo CpG than at a dense one and the two run apart as divisions accumulate.",
+    "prediction": "In WGBS, 200 bp windows whose CpGs are all isolated and A/T-flanked (solo-WCGW, Zhou et al. 2018) are less methylated than windows whose CpGs all have a close neighbour, and the difference is LARGER in the long-cultured lines (K562, HepG2, GM12878) than in the three biosamples with an intact methylome (H1, hepatocyte, CD14-positive monocyte).",
+    "decision_rule": "The ordering holds if min(gap over K562, HepG2, GM12878) > max(gap over H1, hepatocyte, monocyte), where gap = dense methylation minus solo-WCGW methylation in points. Reported for the whole chromosome set and, as the region control, within 50 kb windows that hold both classes. The gap relative to the dense level (gap / dense) is a secondary metric, registered here because a line whose whole methylome sits near zero cannot show a large gap in points.",
+    "falsified_if": "any long-cultured line shows a smaller gap than any intact biosample, or the gap is not positive where the engine says it must be.",
+    "long_cultured": [
+      "K562",
+      "HepG2",
+      "GM12878"
+    ],
+    "intact": [
+      "H1",
+      "hepatocyte",
+      "CD14-positive monocyte"
+    ],
+    "also_reported_outside_the_claim": [
+      "SK-N-SH",
+      "IMR-90"
+    ]
+  },
+  "chromosomes": [
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22"
+  ],
+  "window_classes": {
+    "bin_bp": 200,
+    "solo_window_bp": 35,
+    "min_solo_cpgs": 2,
+    "min_dense_cpgs": 6,
+    "max_dense_obs_exp": 0.6,
+    "min_covered_calls": 2,
+    "region_bp": 50000,
+    "counts": {
+      "chr19": {
+        "bins": 293089,
+        "cpgs": 1105620,
+        "solo_cpgs": 227829,
+        "solo_wcgw_cpgs": 60487,
+        "solo_windows": 2384,
+        "dense_windows": 23802
+      },
+      "chr20": {
+        "bins": 322221,
+        "cpgs": 773477,
+        "solo_cpgs": 247804,
+        "solo_wcgw_cpgs": 75215,
+        "solo_windows": 3921,
+        "dense_windows": 10915
+      },
+      "chr21": {
+        "bins": 233550,
+        "cpgs": 462299,
+        "solo_cpgs": 146866,
+        "solo_wcgw_cpgs": 51763,
+        "solo_windows": 2907,
+        "dense_windows": 6591
+      },
+      "chr22": {
+        "bins": 254093,
+        "cpgs": 634646,
+        "solo_cpgs": 156601,
+        "solo_wcgw_cpgs": 43830,
+        "solo_windows": 2045,
+        "dense_windows": 12214
+      }
+    }
+  },
+  "measured": {
+    "K562": {
+      "solo_wcgw": 0.172,
+      "dense": 0.408,
+      "gap": 0.236,
+      "gap_over_dense": 0.5785,
+      "gap_within_50kb": 0.0913,
+      "regions_with_both": 2717,
+      "solo_windows_measured": 8872,
+      "dense_windows_measured": 39151,
+      "solo_calls": 29529,
+      "dense_calls": 258565,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "HepG2": {
+      "solo_wcgw": 0.3075,
+      "dense": 0.6756,
+      "gap": 0.368,
+      "gap_over_dense": 0.5448,
+      "gap_within_50kb": 0.231,
+      "regions_with_both": 2961,
+      "solo_windows_measured": 9970,
+      "dense_windows_measured": 40780,
+      "solo_calls": 33644,
+      "dense_calls": 287186,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "GM12878": {
+      "solo_wcgw": 0.2772,
+      "dense": 0.6312,
+      "gap": 0.354,
+      "gap_over_dense": 0.5608,
+      "gap_within_50kb": 0.2736,
+      "regions_with_both": 2986,
+      "solo_windows_measured": 10153,
+      "dense_windows_measured": 48005,
+      "solo_calls": 37828,
+      "dense_calls": 446814,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "H1": {
+      "solo_wcgw": 0.8153,
+      "dense": 0.8319,
+      "gap": 0.0167,
+      "gap_over_dense": 0.0201,
+      "gap_within_50kb": 0.0381,
+      "regions_with_both": 2958,
+      "solo_windows_measured": 10035,
+      "dense_windows_measured": 45102,
+      "solo_calls": 36522,
+      "dense_calls": 356864,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "IMR-90": {
+      "solo_wcgw": 0.5547,
+      "dense": 0.7387,
+      "gap": 0.1841,
+      "gap_over_dense": 0.2491,
+      "gap_within_50kb": 0.1105,
+      "regions_with_both": 230,
+      "solo_windows_measured": 371,
+      "dense_windows_measured": 16204,
+      "solo_calls": 767,
+      "dense_calls": 64441,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "SK-N-SH": {
+      "solo_wcgw": 0.3809,
+      "dense": 0.7233,
+      "gap": 0.3424,
+      "gap_over_dense": 0.4734,
+      "gap_within_50kb": 0.2161,
+      "regions_with_both": 2943,
+      "solo_windows_measured": 9944,
+      "dense_windows_measured": 39134,
+      "solo_calls": 34017,
+      "dense_calls": 253451,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "hepatocyte": {
+      "solo_wcgw": 0.7602,
+      "dense": 0.8358,
+      "gap": 0.0756,
+      "gap_over_dense": 0.0904,
+      "gap_within_50kb": 0.0838,
+      "regions_with_both": 3012,
+      "solo_windows_measured": 10365,
+      "dense_windows_measured": 48443,
+      "solo_calls": 40684,
+      "dense_calls": 483195,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "CD14-positive monocyte": {
+      "solo_wcgw": 0.7864,
+      "dense": 0.7715,
+      "gap": -0.0149,
+      "gap_over_dense": -0.0193,
+      "gap_within_50kb": 0.014,
+      "regions_with_both": 878,
+      "solo_windows_measured": 1271,
+      "dense_windows_measured": 35510,
+      "solo_calls": 2659,
+      "dense_calls": 221576,
+      "chromosomes": [
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    }
+  },
+  "verdict": {
+    "gap": {
+      "holds": true,
+      "min_long_cultured": 0.236,
+      "max_intact": 0.0756,
+      "margin": 0.1604,
+      "long_cultured": {
+        "K562": 0.236,
+        "HepG2": 0.368,
+        "GM12878": 0.354
+      },
+      "intact": {
+        "H1": 0.0167,
+        "hepatocyte": 0.0756,
+        "CD14-positive monocyte": -0.0149
+      },
+      "every_gap_positive": false
+    },
+    "gap_over_dense": {
+      "holds": true,
+      "min_long_cultured": 0.5448,
+      "max_intact": 0.0904,
+      "margin": 0.4544,
+      "long_cultured": {
+        "K562": 0.5785,
+        "HepG2": 0.5448,
+        "GM12878": 0.5608
+      },
+      "intact": {
+        "H1": 0.0201,
+        "hepatocyte": 0.0904,
+        "CD14-positive monocyte": -0.0193
+      },
+      "every_gap_positive": false
+    },
+    "gap_within_50kb": {
+      "holds": true,
+      "min_long_cultured": 0.0913,
+      "max_intact": 0.0838,
+      "margin": 0.0075,
+      "long_cultured": {
+        "K562": 0.0913,
+        "HepG2": 0.231,
+        "GM12878": 0.2736
+      },
+      "intact": {
+        "H1": 0.0381,
+        "hepatocyte": 0.0838,
+        "CD14-positive monocyte": 0.014
+      },
+      "every_gap_positive": true
+    }
+  },
+  "inferred_fit": {
+    "low": {
+      "inferred": true,
+      "start_level": {
+        "dense": 0.8319,
+        "solo_wcgw": 0.8153
+      },
+      "de_novo_scenario": {
+        "name": "low",
+        "de_novo_dense": 0.01,
+        "de_novo_solo": 0.002
+      },
+      "literature_fidelity_dense": 0.97,
+      "neighbour_scale": 2.0,
+      "note": "Inferred, not measured. The start level is the intact reference's own measured level, the de novo rates and the neighbour scale are assumptions (UNKNOWN in the literature), and TET turnover is set to zero, so every number here is conditional on those four.",
+      "per_cell": {
+        "K562": {
+          "divisions_implied_at_literature_fidelity": 123,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.91448,
+              "maintenance_fidelity_solo_wcgw": 0.84246,
+              "deficit": 0.07202
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.95583,
+              "maintenance_fidelity_solo_wcgw": 0.93051,
+              "deficit": 0.02531
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.96821,
+              "maintenance_fidelity_solo_wcgw": 0.96039,
+              "deficit": 0.00782
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.97207,
+              "maintenance_fidelity_solo_wcgw": 0.97465,
+              "deficit": -0.00258
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.97245,
+              "maintenance_fidelity_solo_wcgw": 0.98047,
+              "deficit": -0.00802
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.97245,
+              "maintenance_fidelity_solo_wcgw": 0.9807,
+              "deficit": -0.00826
+            }
+          }
+        },
+        "HepG2": {
+          "divisions_implied_at_literature_fidelity": 17,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.97376,
+              "maintenance_fidelity_solo_wcgw": 0.90047,
+              "deficit": 0.0733
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.98624,
+              "maintenance_fidelity_solo_wcgw": 0.95692,
+              "deficit": 0.02933
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99018,
+              "maintenance_fidelity_solo_wcgw": 0.97599,
+              "deficit": 0.01419
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99175,
+              "maintenance_fidelity_solo_wcgw": 0.98536,
+              "deficit": 0.00639
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99213,
+              "maintenance_fidelity_solo_wcgw": 0.99023,
+              "deficit": 0.0019
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99213,
+              "maintenance_fidelity_solo_wcgw": 0.99094,
+              "deficit": 0.00119
+            }
+          }
+        },
+        "GM12878": {
+          "divisions_implied_at_literature_fidelity": 24,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.96588,
+              "maintenance_fidelity_solo_wcgw": 0.8901,
+              "deficit": 0.07578
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.98237,
+              "maintenance_fidelity_solo_wcgw": 0.9523,
+              "deficit": 0.03007
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.98755,
+              "maintenance_fidelity_solo_wcgw": 0.97335,
+              "deficit": 0.0142
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.98958,
+              "maintenance_fidelity_solo_wcgw": 0.98365,
+              "deficit": 0.00592
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99002,
+              "maintenance_fidelity_solo_wcgw": 0.98887,
+              "deficit": 0.00115
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99002,
+              "maintenance_fidelity_solo_wcgw": 0.98953,
+              "deficit": 0.00049
+            }
+          }
+        },
+        "H1": {
+          "divisions_implied_at_literature_fidelity": 0,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99777,
+              "maintenance_fidelity_solo_wcgw": 0.99909,
+              "deficit": -0.00132
+            }
+          }
+        },
+        "IMR-90": {
+          "divisions_implied_at_literature_fidelity": 10,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.98409,
+              "maintenance_fidelity_solo_wcgw": 0.95984,
+              "deficit": 0.02425
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.99125,
+              "maintenance_fidelity_solo_wcgw": 0.98263,
+              "deficit": 0.00862
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99351,
+              "maintenance_fidelity_solo_wcgw": 0.99026,
+              "deficit": 0.00325
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99445,
+              "maintenance_fidelity_solo_wcgw": 0.99404,
+              "deficit": 0.0004
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99469,
+              "maintenance_fidelity_solo_wcgw": 0.99618,
+              "deficit": -0.00149
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99469,
+              "maintenance_fidelity_solo_wcgw": 0.99669,
+              "deficit": -0.002
+            }
+          }
+        },
+        "SK-N-SH": {
+          "divisions_implied_at_literature_fidelity": 11,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.98165,
+              "maintenance_fidelity_solo_wcgw": 0.92192,
+              "deficit": 0.05973
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.99007,
+              "maintenance_fidelity_solo_wcgw": 0.96634,
+              "deficit": 0.02373
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99274,
+              "maintenance_fidelity_solo_wcgw": 0.9813,
+              "deficit": 0.01144
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99383,
+              "maintenance_fidelity_solo_wcgw": 0.98869,
+              "deficit": 0.00514
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99411,
+              "maintenance_fidelity_solo_wcgw": 0.99268,
+              "deficit": 0.00143
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99411,
+              "maintenance_fidelity_solo_wcgw": 0.99342,
+              "deficit": 0.00069
+            }
+          }
+        },
+        "hepatocyte": {
+          "divisions_implied_at_literature_fidelity": 0,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.99831,
+              "maintenance_fidelity_solo_wcgw": 0.99192,
+              "deficit": 0.00638
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.99802,
+              "maintenance_fidelity_solo_wcgw": 0.99611,
+              "deficit": 0.00191
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99793,
+              "maintenance_fidelity_solo_wcgw": 0.99751,
+              "deficit": 0.00042
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99789,
+              "maintenance_fidelity_solo_wcgw": 0.9982,
+              "deficit": -0.00031
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99788,
+              "maintenance_fidelity_solo_wcgw": 0.9986,
+              "deficit": -0.00072
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99788,
+              "maintenance_fidelity_solo_wcgw": 0.99871,
+              "deficit": -0.00082
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "divisions_implied_at_literature_fidelity": 6,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.9891,
+              "maintenance_fidelity_solo_wcgw": 0.99539,
+              "deficit": -0.0063
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.99365,
+              "maintenance_fidelity_solo_wcgw": 0.99756,
+              "deficit": -0.00391
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.99509,
+              "maintenance_fidelity_solo_wcgw": 0.99828,
+              "deficit": -0.00318
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.99569,
+              "maintenance_fidelity_solo_wcgw": 0.99863,
+              "deficit": -0.00294
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.99586,
+              "maintenance_fidelity_solo_wcgw": 0.99884,
+              "deficit": -0.00298
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.99586,
+              "maintenance_fidelity_solo_wcgw": 0.9989,
+              "deficit": -0.00303
+            }
+          }
+        }
+      }
+    },
+    "high": {
+      "inferred": true,
+      "start_level": {
+        "dense": 0.8319,
+        "solo_wcgw": 0.8153
+      },
+      "de_novo_scenario": {
+        "name": "high",
+        "de_novo_dense": 0.05,
+        "de_novo_solo": 0.01
+      },
+      "literature_fidelity_dense": 0.97,
+      "neighbour_scale": 2.0,
+      "note": "Inferred, not measured. The start level is the intact reference's own measured level, the de novo rates and the neighbour scale are assumptions (UNKNOWN in the literature), and TET turnover is set to zero, so every number here is conditional on those four.",
+      "per_cell": {
+        "K562": {
+          "divisions_implied_at_literature_fidelity": null,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.82954,
+              "maintenance_fidelity_solo_wcgw": 0.80685,
+              "deficit": 0.02269
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.84825,
+              "maintenance_fidelity_solo_wcgw": 0.88605,
+              "deficit": -0.0378
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.84868,
+              "maintenance_fidelity_solo_wcgw": 0.9017,
+              "deficit": -0.05302
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.84868,
+              "maintenance_fidelity_solo_wcgw": 0.90275,
+              "deficit": -0.05407
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.84868,
+              "maintenance_fidelity_solo_wcgw": 0.90275,
+              "deficit": -0.05407
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.84868,
+              "maintenance_fidelity_solo_wcgw": 0.90275,
+              "deficit": -0.05407
+            }
+          }
+        },
+        "HepG2": {
+          "divisions_implied_at_literature_fidelity": null,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.9416,
+              "maintenance_fidelity_solo_wcgw": 0.88166,
+              "deficit": 0.05994
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.95035,
+              "maintenance_fidelity_solo_wcgw": 0.93579,
+              "deficit": 0.01456
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.95115,
+              "maintenance_fidelity_solo_wcgw": 0.95091,
+              "deficit": 0.00025
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.95117,
+              "maintenance_fidelity_solo_wcgw": 0.95436,
+              "deficit": -0.00319
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.95117,
+              "maintenance_fidelity_solo_wcgw": 0.9545,
+              "deficit": -0.00333
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.95117,
+              "maintenance_fidelity_solo_wcgw": 0.9545,
+              "deficit": -0.00333
+            }
+          }
+        },
+        "GM12878": {
+          "divisions_implied_at_literature_fidelity": null,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.92815,
+              "maintenance_fidelity_solo_wcgw": 0.86889,
+              "deficit": 0.05927
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.93927,
+              "maintenance_fidelity_solo_wcgw": 0.92811,
+              "deficit": 0.01115
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.94016,
+              "maintenance_fidelity_solo_wcgw": 0.94408,
+              "deficit": -0.00392
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.94018,
+              "maintenance_fidelity_solo_wcgw": 0.94723,
+              "deficit": -0.00705
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.94018,
+              "maintenance_fidelity_solo_wcgw": 0.94732,
+              "deficit": -0.00714
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.94018,
+              "maintenance_fidelity_solo_wcgw": 0.94732,
+              "deficit": -0.00714
+            }
+          }
+        },
+        "H1": {
+          "divisions_implied_at_literature_fidelity": 0,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.98053,
+              "maintenance_fidelity_solo_wcgw": 0.99542,
+              "deficit": -0.01489
+            }
+          }
+        },
+        "IMR-90": {
+          "divisions_implied_at_literature_fidelity": null,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.95869,
+              "maintenance_fidelity_solo_wcgw": 0.95144,
+              "deficit": 0.00724
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.96394,
+              "maintenance_fidelity_solo_wcgw": 0.97385,
+              "deficit": -0.00991
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.9645,
+              "maintenance_fidelity_solo_wcgw": 0.98078,
+              "deficit": -0.01628
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.96452,
+              "maintenance_fidelity_solo_wcgw": 0.98334,
+              "deficit": -0.01881
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.96452,
+              "maintenance_fidelity_solo_wcgw": 0.98378,
+              "deficit": -0.01926
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.96452,
+              "maintenance_fidelity_solo_wcgw": 0.98378,
+              "deficit": -0.01926
+            }
+          }
+        },
+        "SK-N-SH": {
+          "divisions_implied_at_literature_fidelity": null,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.95471,
+              "maintenance_fidelity_solo_wcgw": 0.90746,
+              "deficit": 0.04725
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.96082,
+              "maintenance_fidelity_solo_wcgw": 0.95055,
+              "deficit": 0.01028
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.96146,
+              "maintenance_fidelity_solo_wcgw": 0.96322,
+              "deficit": -0.00176
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.96148,
+              "maintenance_fidelity_solo_wcgw": 0.96687,
+              "deficit": -0.0054
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.96148,
+              "maintenance_fidelity_solo_wcgw": 0.96716,
+              "deficit": -0.00569
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.96148,
+              "maintenance_fidelity_solo_wcgw": 0.96716,
+              "deficit": -0.00569
+            }
+          }
+        },
+        "hepatocyte": {
+          "divisions_implied_at_literature_fidelity": 0,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.98137,
+              "maintenance_fidelity_solo_wcgw": 0.98749,
+              "deficit": -0.00611
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.98115,
+              "maintenance_fidelity_solo_wcgw": 0.99163,
+              "deficit": -0.01048
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.98113,
+              "maintenance_fidelity_solo_wcgw": 0.99294,
+              "deficit": -0.01182
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.98112,
+              "maintenance_fidelity_solo_wcgw": 0.99348,
+              "deficit": -0.01236
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.98112,
+              "maintenance_fidelity_solo_wcgw": 0.99362,
+              "deficit": -0.0125
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.98112,
+              "maintenance_fidelity_solo_wcgw": 0.99363,
+              "deficit": -0.0125
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "divisions_implied_at_literature_fidelity": 45,
+          "per_division_count": {
+            "20": {
+              "maintenance_fidelity_dense": 0.96678,
+              "maintenance_fidelity_solo_wcgw": 0.99133,
+              "deficit": -0.02455
+            },
+            "50": {
+              "maintenance_fidelity_dense": 0.97019,
+              "maintenance_fidelity_solo_wcgw": 0.99347,
+              "deficit": -0.02329
+            },
+            "100": {
+              "maintenance_fidelity_dense": 0.97058,
+              "maintenance_fidelity_solo_wcgw": 0.99415,
+              "deficit": -0.02357
+            },
+            "200": {
+              "maintenance_fidelity_dense": 0.9706,
+              "maintenance_fidelity_solo_wcgw": 0.99443,
+              "deficit": -0.02384
+            },
+            "500": {
+              "maintenance_fidelity_dense": 0.9706,
+              "maintenance_fidelity_solo_wcgw": 0.99451,
+              "deficit": -0.02391
+            },
+            "1000": {
+              "maintenance_fidelity_dense": 0.9706,
+              "maintenance_fidelity_solo_wcgw": 0.99451,
+              "deficit": -0.02392
+            }
+          }
+        }
+      }
+    }
+  },
+  "engine_prediction": {
+    "note": "the engine's own trajectory under the demo program's assumptions",
+    "divisions": 100,
+    "solo_wcgw": 0.1698,
+    "dense": 0.7684
+  }
+}

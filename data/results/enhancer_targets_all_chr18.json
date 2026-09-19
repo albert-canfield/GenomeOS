@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr18",
+  "date": "2026-09-13",
+  "chrom": "chr18",
+  "elements_total": 21973,
+  "scored": 21973,
+  "requests_this_run": 22549,
+  "workers": 16,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 21973,
+    "with_predicted_target": 13650,
+    "fraction_with_target": 0.621,
+    "strong": 3389,
+    "weak": 10261,
+    "silencer_like": 5194,
+    "verdicts": {
+      "no predicted effect": 8323,
+      "another gene in the same domain": 5638,
+      "gene outside the domain": 4078,
+      "agrees with nearest TSS in domain": 3934
+    },
+    "verdicts_coding": {
+      "no predicted effect": 12723,
+      "agrees with nearest TSS in domain": 5905,
+      "gene outside the domain": 2857,
+      "another gene in the same domain": 488
+    },
+    "coding_target_agrees_with_nearest": 0.638,
+    "fraction_agreeing_with_nearest": 0.288,
+    "fraction_inside_domain": 0.701,
+    "top_tissues": {
+      "K562": 746,
+      "placenta": 537,
+      "HepG2": 393,
+      "CD14-positive monocyte": 390,
+      "common myeloid progenitor, CD34-positive": 319,
+      "testis": 309,
+      "GM23338": 305,
+      "naive thymus-derived CD4-positive, alpha-beta T cell": 293,
+      "kidney": 288,
+      "Whole_Blood": 263,
+      "Karpas-422": 246,
+      "endothelial cell of umbilical vein": 199
+    },
+    "median_distance_when_agreeing": 25837
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr18.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

@@ -1,0 +1,42 @@
+{
+  "result": "syntax_tiling_plan",
+  "date": "2026-09-17",
+  "pre_registration": {
+    "written": "2026-09-17, before the instrument was written and before any window was scored; committed in this file before the code that runs it",
+    "question": "do deletions inside the 69 syntax blocks move a gene more often than deletions in matched sequence? The observation that prompts it (0.575 of 40 elements) rests on elements ENCODE happened to call inside those blocks, compared with a tier average rather than with matched windows, and was sliced after the fact",
+    "arms": {
+      "syntax": "the 69 constrained_unknown, non-copy blocks whose case is syntax: held across mammals and constrained among people",
+      "relaxed": "the 437 blocks whose case is relaxed: held across mammals, variable among people. This arm isolates the human axis, since it differs from the syntax arm in that alone",
+      "neutral": "blocks of the neutral tier: the background the whole tier reading was taken against"
+    },
+    "sampling": "every block of an arm is tiled in non-overlapping 300 bp windows from its start; where a block yields more than 12, 12 are taken evenly spaced across it, so block length cannot decide the sample. Windows are scored one request each, as the sweep scores an element",
+    "matching": "each syntax window is matched, on its own chromosome, to one relaxed and one neutral window with GC within 0.04 and distance to the nearest coding TSS within 0.35 relative. Length is equal by construction. The arms are NOT matched on constraint: mammalian constraint is what defines the tier and human constraint is what the relaxed arm isolates, so matching on either would remove the variable under test. A syntax window with no match in an arm is dropped from that comparison and counted",
+    "outcome": "a window moves a gene if deleting it changes a gene's predicted expression by at least 0.1 in |log2| and names that gene, which is the sweep's own threshold",
+    "primary": "the difference in the share of windows that move a gene, syntax minus neutral and syntax minus relaxed, each with a one-sided p and a 95% upper bound",
+    "outcomes": {
+      "success": "at least +0.10 against BOTH control arms at one-sided p 0.01 or better",
+      "weak": "0.05 to 0.10 against both, or at least +0.10 against one arm only: the observation survives in a form worth one more instrument, and nothing is claimed for the blocks",
+      "failure": "below 0.05 against the neutral arm: the 0.575 of 40 elements was the sample it came from, and the syntax case stops being carried as the sharpest candidate in the roadmap"
+    },
+    "budget": "2,400 requests, one per window, about 800 per arm",
+    "stopping": "one look at half the budget, for futility only: if the 95% upper bound of syntax minus neutral is below 0.05 the run stops and is reported as stopped for futility. No interim success look",
+    "secondary": "declared now: inside the syntax arm, windows that overlap an element the sweep already scored should act about as often as those 40 did (0.575), and windows that overlap none are the new information. If only the overlapping windows act, the tiling has added nothing and the arm's rate is the old observation in a new coat",
+    "cannot_do": "this is the same model that produced the observation, so it cannot be independent evidence about it. What it can fix is the sampling: 40 elements chosen by where ENCODE called a cCRE, compared with a tier average, become a few hundred windows fixed by the blocks themselves and compared with matched sequence. A positive says the model reacts more to deleting these sequences than to deleting matched sequence; it does not say the sequence is functional, and measured evidence on these blocks (lentiMPRA where it covers them) remains the thing that would"
+  },
+  "windows_by_arm": {
+    "syntax": 12,
+    "relaxed": 0,
+    "neutral": 4
+  },
+  "syntax_windows": 12,
+  "syntax_windows_matched_in_both": 0,
+  "syntax_windows_matched_in_neither": 8,
+  "syntax_windows_already_scored": 2,
+  "requests_if_run": 16,
+  "blocks_by_arm": {
+    "syntax": 1,
+    "relaxed": 0,
+    "neutral": 2
+  },
+  "seconds": 3.5
+}

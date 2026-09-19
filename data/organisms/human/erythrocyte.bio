@@ -1,0 +1,48 @@
+# The mature human red blood cell, located: the gate that proves the runtime does not need a genome.
+# It has no nucleus and no DNA, so nothing is transcribed and nothing is translated; what it does, it
+# does with the proteins it was born with. A runtime that assumes a stored program is present fails
+# here, which is the sharpest demonstration of the separation between the program and the machinery.
+# BioLang v0.4 stage 1 (docs/BIOLANG-v0.4-ECONOMY.md §4.4, gate 4).
+module human.erythrocyte
+
+compartment Extracellular { evidence: curated "Alberts et al., Molecular Biology of the Cell 6e"; confidence: 0.9 }
+compartment PlasmaMembrane { parent: Extracellular; membrane: yes
+  evidence: curated "Alberts MBoC 6e"; confidence: 0.9 }
+compartment Cytosol { parent: PlasmaMembrane; volume: 1.0
+  evidence: experimental "the mature erythrocyte has no nucleus and no mitochondria; its volume is cytosol"
+  confidence: 0.8 }
+
+# haemoglobin: 2.8e8 tetramers per cell, so 5.6e8 chains of each kind
+protein HBA {
+  location: Cytosol; initial: 5.6e8; half_life: 2856 h
+  evidence: experimental "derived from MCHC 330 g/L and MCV 90 fL (haematology reference ranges), Hb 64.5 kDa"
+  confidence: 0.7
+}
+protein HBB {
+  location: Cytosol; initial: 5.6e8; half_life: 2856 h
+  evidence: experimental "derived from MCHC 330 g/L and MCV 90 fL (haematology reference ranges), Hb 64.5 kDa"
+  confidence: 0.7
+}
+protein HbA {
+  location: Cytosol; half_life: 2856 h
+  evidence: curated "haemoglobin A is the alpha2-beta2 tetramer (UniProt P69905, P68871)"; confidence: 0.9
+}
+rule HBA binds HbA { evidence: curated "UniProt P69905"; confidence: 0.9 }
+rule HBB binds HbA { evidence: curated "UniProt P68871"; confidence: 0.9 }
+
+# band 3, the anion exchanger, sits in the membrane and faces both sides
+protein SLC4A1 {
+  location: PlasmaMembrane; initial: 1.2e6; half_life: 2856 h
+  evidence: inferred "about a million copies per cell, commonly quoted; not checked against a primary source"
+  confidence: 0.3
+}
+param protein_half_life = 2856 h { evidence: inferred "nothing is resynthesised in this cell"; confidence: 0.3 }
+
+# test: entities >= 7
+# test: stranded == 0
+# assembly uses one of each chain per complex (stoichiometry arrives with costs in stage 2), so the
+# complex count is the chain count, twice the real tetramer count; what the test holds is mass balance:
+# a complex is never made from nothing
+# test: HbA@Cytosol final > 5e8
+# test: HbA@Cytosol final <= 5.6e8
+# test: SLC4A1@PlasmaMembrane final > 1e6

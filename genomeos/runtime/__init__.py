@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 from .cell import CELL_TYPES, CellRuntime, CellState, Environment, TissueReport
 from .central_dogma import (
     STANDARD_CODE,
@@ -14,6 +16,8 @@ from .central_dogma import (
     translate_transcript,
 )
 from .grn import NetworkRuntime, Trajectory
+from .located import LocatedResult, LocatedRuntime
+from .methylation import CpGContext, MethylationParams, MethylationRun, UnknownParametersError
 from .variant_effect import Effect, classify, classify_all, severity
 
 __all__ = [
@@ -30,6 +34,8 @@ __all__ = [
     "splice",
     "Orf",
     "NetworkRuntime",
+    "LocatedRuntime",
+    "LocatedResult",
     "Effect",
     "classify",
     "classify_all",
@@ -40,4 +46,8 @@ __all__ = [
     "Environment",
     "TissueReport",
     "CELL_TYPES",
+    "CpGContext",
+    "MethylationParams",
+    "MethylationRun",
+    "UnknownParametersError",
 ]

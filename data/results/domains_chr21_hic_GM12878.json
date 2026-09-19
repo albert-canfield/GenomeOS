@@ -1,0 +1,22 @@
+{
+  "result": "domains_chr21_hic_GM12878",
+  "date": "2026-09-12",
+  "chrom": "chr21",
+  "biosource": "GM12878",
+  "file": "4DNFINFT8NR9",
+  "comparison": {
+    "inferred": 227,
+    "predicted": 557,
+    "tolerance": 20000,
+    "inferred_on_a_predicted_boundary": 132,
+    "fraction_inferred_supported": 0.581,
+    "predicted_on_an_inferred_boundary": 151,
+    "fraction_predicted_matched": 0.271,
+    "median_distance_inferred_to_predicted": 15381,
+    "random_control": 0.416
+  },
+  "evidence": {
+    "inferred": "inferred: CTCF-only ENCODE elements as boundaries",
+    "measured": "experimental: 4D Nucleome boundary calls (insulation score) on released GRCh38 Hi-C and Micro-C"
+  }
+}

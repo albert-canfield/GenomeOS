@@ -1,0 +1,7280 @@
+{
+  "result": "domains_ctcf_orientation",
+  "date": "2026-09-14",
+  "profile": "MA0139",
+  "relative_score": 0.85,
+  "tolerance": 20000,
+  "elements_scanned": 35783,
+  "elements_with_site": 14221,
+  "chr21": {
+    "GM12878": {
+      "boundaries": 227,
+      "supported_share": 0.5815,
+      "random_control": 0.416,
+      "by_class": {
+        "convergent": {
+          "n": 33,
+          "supported_share": 0.5455
+        },
+        "divergent": {
+          "n": 14,
+          "supported_share": 0.8571
+        },
+        "motif": {
+          "n": 54,
+          "supported_share": 0.6667
+        },
+        "none": {
+          "n": 126,
+          "supported_share": 0.5238
+        }
+      }
+    },
+    "H1-hESC": {
+      "boundaries": 227,
+      "supported_share": 0.2379,
+      "random_control": 0.132,
+      "by_class": {
+        "convergent": {
+          "n": 33,
+          "supported_share": 0.2727
+        },
+        "divergent": {
+          "n": 14,
+          "supported_share": 0.2143
+        },
+        "motif": {
+          "n": 54,
+          "supported_share": 0.3889
+        },
+        "none": {
+          "n": 126,
+          "supported_share": 0.1667
+        }
+      }
+    },
+    "K562": {
+      "boundaries": 227,
+      "supported_share": 0.141,
+      "random_control": 0.077,
+      "by_class": {
+        "convergent": {
+          "n": 33,
+          "supported_share": 0.1212
+        },
+        "divergent": {
+          "n": 14,
+          "supported_share": 0.1429
+        },
+        "motif": {
+          "n": 54,
+          "supported_share": 0.2407
+        },
+        "none": {
+          "n": 126,
+          "supported_share": 0.1032
+        }
+      }
+    },
+    "HepG2": {
+      "boundaries": 227,
+      "supported_share": 0.1498,
+      "random_control": 0.078,
+      "by_class": {
+        "convergent": {
+          "n": 33,
+          "supported_share": 0.1212
+        },
+        "divergent": {
+          "n": 14,
+          "supported_share": 0.0714
+        },
+        "motif": {
+          "n": 54,
+          "supported_share": 0.1481
+        },
+        "none": {
+          "n": 126,
+          "supported_share": 0.1667
+        }
+      }
+    },
+    "IMR-90": {
+      "boundaries": 227,
+      "supported_share": 0.1233,
+      "random_control": 0.11,
+      "by_class": {
+        "convergent": {
+          "n": 33,
+          "supported_share": 0.1515
+        },
+        "divergent": {
+          "n": 14,
+          "supported_share": 0.1429
+        },
+        "motif": {
+          "n": 54,
+          "supported_share": 0.0926
+        },
+        "none": {
+          "n": 126,
+          "supported_share": 0.127
+        }
+      }
+    }
+  },
+  "genome": {
+    "chromosomes": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chrX"
+    ],
+    "biosources": {
+      "GM12878": {
+        "boundaries": 19930,
+        "supported_share": 0.5934,
+        "random_control": 0.5415,
+        "by_class": {
+          "convergent": {
+            "n": 2360,
+            "supported_share": 0.586
+          },
+          "divergent": {
+            "n": 1056,
+            "supported_share": 0.5881
+          },
+          "motif": {
+            "n": 4989,
+            "supported_share": 0.5971
+          },
+          "none": {
+            "n": 11525,
+            "supported_share": 0.5938
+          }
+        },
+        "strand_shuffle": {
+          "shuffles": 500,
+          "convergent_supported_share_median": 0.5899,
+          "convergent_95": [
+            0.5747,
+            0.6059
+          ],
+          "p_convergent_at_or_above": 0.692,
+          "convergent_n_median": 2243,
+          "divergent_supported_share_median": 0.5885,
+          "p_divergent_at_or_below": 0.488,
+          "divergent_n_median": 1061
+        },
+        "convergent_n": 2360,
+        "divergent_n": 1056,
+        "positive_control_sites_within_20kb_of_measured_boundaries": {
+          "upstream": {
+            "+": 2193,
+            "-": 2219,
+            "plus_share": 0.4971
+          },
+          "downstream": {
+            "+": 2227,
+            "-": 2111,
+            "plus_share": 0.5134
+          }
+        },
+        "strand_flip_boundaries": {
+          "-+": {
+            "n": 3093,
+            "supported_share": 0.5845,
+            "random_control": 0.541
+          },
+          "+-": {
+            "n": 3109,
+            "supported_share": 0.5748,
+            "random_control": 0.5417
+          }
+        }
+      },
+      "H1-hESC": {
+        "boundaries": 19930,
+        "supported_share": 0.2472,
+        "random_control": 0.1793,
+        "by_class": {
+          "convergent": {
+            "n": 2360,
+            "supported_share": 0.3102
+          },
+          "divergent": {
+            "n": 1056,
+            "supported_share": 0.3362
+          },
+          "motif": {
+            "n": 4989,
+            "supported_share": 0.3399
+          },
+          "none": {
+            "n": 11525,
+            "supported_share": 0.1859
+          }
+        },
+        "strand_shuffle": {
+          "shuffles": 500,
+          "convergent_supported_share_median": 0.3125,
+          "convergent_95": [
+            0.2984,
+            0.3264
+          ],
+          "p_convergent_at_or_above": 0.644,
+          "convergent_n_median": 2243,
+          "divergent_supported_share_median": 0.3165,
+          "p_divergent_at_or_below": 0.944,
+          "divergent_n_median": 1061
+        },
+        "convergent_n": 2360,
+        "divergent_n": 1056,
+        "positive_control_sites_within_20kb_of_measured_boundaries": {
+          "upstream": {
+            "+": 748,
+            "-": 1447,
+            "plus_share": 0.3408
+          },
+          "downstream": {
+            "+": 1480,
+            "-": 759,
+            "plus_share": 0.661
+          }
+        },
+        "strand_flip_boundaries": {
+          "-+": {
+            "n": 3093,
+            "supported_share": 0.2519,
+            "random_control": 0.18
+          },
+          "+-": {
+            "n": 3109,
+            "supported_share": 0.1621,
+            "random_control": 0.1796
+          }
+        }
+      },
+      "K562": {
+        "boundaries": 19930,
+        "supported_share": 0.1535,
+        "random_control": 0.113,
+        "by_class": {
+          "convergent": {
+            "n": 2360,
+            "supported_share": 0.2169
+          },
+          "divergent": {
+            "n": 1056,
+            "supported_share": 0.1979
+          },
+          "motif": {
+            "n": 4989,
+            "supported_share": 0.2047
+          },
+          "none": {
+            "n": 11525,
+            "supported_share": 0.1143
+          }
+        },
+        "strand_shuffle": {
+          "shuffles": 500,
+          "convergent_supported_share_median": 0.2108,
+          "convergent_95": [
+            0.1992,
+            0.223
+          ],
+          "p_convergent_at_or_above": 0.174,
+          "convergent_n_median": 2243,
+          "divergent_supported_share_median": 0.2041,
+          "p_divergent_at_or_below": 0.292,
+          "divergent_n_median": 1061
+        },
+        "convergent_n": 2360,
+        "divergent_n": 1056,
+        "positive_control_sites_within_20kb_of_measured_boundaries": {
+          "upstream": {
+            "+": 503,
+            "-": 924,
+            "plus_share": 0.3525
+          },
+          "downstream": {
+            "+": 927,
+            "-": 493,
+            "plus_share": 0.6528
+          }
+        },
+        "strand_flip_boundaries": {
+          "-+": {
+            "n": 3093,
+            "supported_share": 0.1749,
+            "random_control": 0.1114
+          },
+          "+-": {
+            "n": 3109,
+            "supported_share": 0.102,
+            "random_control": 0.1114
+          }
+        }
+      },
+      "HepG2": {
+        "boundaries": 19930,
+        "supported_share": 0.1576,
+        "random_control": 0.1214,
+        "by_class": {
+          "convergent": {
+            "n": 2360,
+            "supported_share": 0.2004
+          },
+          "divergent": {
+            "n": 1056,
+            "supported_share": 0.1989
+          },
+          "motif": {
+            "n": 4989,
+            "supported_share": 0.2123
+          },
+          "none": {
+            "n": 11525,
+            "supported_share": 0.1214
+          }
+        },
+        "strand_shuffle": {
+          "shuffles": 500,
+          "convergent_supported_share_median": 0.2029,
+          "convergent_95": [
+            0.1921,
+            0.2128
+          ],
+          "p_convergent_at_or_above": 0.664,
+          "convergent_n_median": 2243,
+          "divergent_supported_share_median": 0.2011,
+          "p_divergent_at_or_below": 0.408,
+          "divergent_n_median": 1061
+        },
+        "convergent_n": 2360,
+        "divergent_n": 1056,
+        "positive_control_sites_within_20kb_of_measured_boundaries": {
+          "upstream": {
+            "+": 468,
+            "-": 968,
+            "plus_share": 0.3259
+          },
+          "downstream": {
+            "+": 931,
+            "-": 489,
+            "plus_share": 0.6556
+          }
+        },
+        "strand_flip_boundaries": {
+          "-+": {
+            "n": 3093,
+            "supported_share": 0.195,
+            "random_control": 0.1226
+          },
+          "+-": {
+            "n": 3109,
+            "supported_share": 0.0991,
+            "random_control": 0.1228
+          }
+        }
+      },
+      "IMR-90": {
+        "boundaries": 19930,
+        "supported_share": 0.1631,
+        "random_control": 0.1411,
+        "by_class": {
+          "convergent": {
+            "n": 2360,
+            "supported_share": 0.1869
+          },
+          "divergent": {
+            "n": 1056,
+            "supported_share": 0.1913
+          },
+          "motif": {
+            "n": 4989,
+            "supported_share": 0.1878
+          },
+          "none": {
+            "n": 11525,
+            "supported_share": 0.145
+          }
+        },
+        "strand_shuffle": {
+          "shuffles": 500,
+          "convergent_supported_share_median": 0.1823,
+          "convergent_95": [
+            0.1714,
+            0.1941
+          ],
+          "p_convergent_at_or_above": 0.23,
+          "convergent_n_median": 2243,
+          "divergent_supported_share_median": 0.1825,
+          "p_divergent_at_or_below": 0.8,
+          "divergent_n_median": 1061
+        },
+        "convergent_n": 2360,
+        "divergent_n": 1056,
+        "positive_control_sites_within_20kb_of_measured_boundaries": {
+          "upstream": {
+            "+": 537,
+            "-": 719,
+            "plus_share": 0.4275
+          },
+          "downstream": {
+            "+": 722,
+            "-": 561,
+            "plus_share": 0.5627
+          }
+        },
+        "strand_flip_boundaries": {
+          "-+": {
+            "n": 3093,
+            "supported_share": 0.1817,
+            "random_control": 0.1364
+          },
+          "+-": {
+            "n": 3109,
+            "supported_share": 0.1235,
+            "random_control": 0.1359
+          }
+        }
+      }
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "boundaries": 1638,
+      "by_class": {
+        "convergent": 182,
+        "divergent": 91,
+        "motif": 398,
+        "none": 967
+      },
+      "by_sites": {
+        "+": 289,
+        "-": 298,
+        "both": 84,
+        "none": 967
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1638,
+            "predicted": 3576,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 960,
+            "fraction_inferred_supported": 0.586,
+            "predicted_on_an_inferred_boundary": 1062,
+            "fraction_predicted_matched": 0.297,
+            "median_distance_inferred_to_predicted": 16366,
+            "random_control": 0.508
+          },
+          "convergent": {
+            "n": 182,
+            "supported": 104,
+            "random_control": 0.497
+          },
+          "divergent": {
+            "n": 91,
+            "supported": 53,
+            "random_control": 0.477
+          },
+          "motif": {
+            "n": 398,
+            "supported": 225,
+            "random_control": 0.499
+          },
+          "none": {
+            "n": 967,
+            "supported": 578,
+            "random_control": 0.503
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1638,
+            "predicted": 1087,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 380,
+            "fraction_inferred_supported": 0.232,
+            "predicted_on_an_inferred_boundary": 381,
+            "fraction_predicted_matched": 0.351,
+            "median_distance_inferred_to_predicted": 48421,
+            "random_control": 0.17
+          },
+          "convergent": {
+            "n": 182,
+            "supported": 62,
+            "random_control": 0.178
+          },
+          "divergent": {
+            "n": 91,
+            "supported": 29,
+            "random_control": 0.189
+          },
+          "motif": {
+            "n": 398,
+            "supported": 127,
+            "random_control": 0.165
+          },
+          "none": {
+            "n": 967,
+            "supported": 162,
+            "random_control": 0.172
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1638,
+            "predicted": 736,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 260,
+            "fraction_inferred_supported": 0.159,
+            "predicted_on_an_inferred_boundary": 260,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 79870,
+            "random_control": 0.115
+          },
+          "convergent": {
+            "n": 182,
+            "supported": 55,
+            "random_control": 0.121
+          },
+          "divergent": {
+            "n": 91,
+            "supported": 20,
+            "random_control": 0.125
+          },
+          "motif": {
+            "n": 398,
+            "supported": 71,
+            "random_control": 0.109
+          },
+          "none": {
+            "n": 967,
+            "supported": 114,
+            "random_control": 0.116
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1638,
+            "predicted": 772,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 263,
+            "fraction_inferred_supported": 0.161,
+            "predicted_on_an_inferred_boundary": 263,
+            "fraction_predicted_matched": 0.341,
+            "median_distance_inferred_to_predicted": 74871,
+            "random_control": 0.121
+          },
+          "convergent": {
+            "n": 182,
+            "supported": 53,
+            "random_control": 0.136
+          },
+          "divergent": {
+            "n": 91,
+            "supported": 22,
+            "random_control": 0.163
+          },
+          "motif": {
+            "n": 398,
+            "supported": 80,
+            "random_control": 0.117
+          },
+          "none": {
+            "n": 967,
+            "supported": 108,
+            "random_control": 0.119
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1638,
+            "predicted": 808,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 241,
+            "fraction_inferred_supported": 0.147,
+            "predicted_on_an_inferred_boundary": 241,
+            "fraction_predicted_matched": 0.298,
+            "median_distance_inferred_to_predicted": 67629,
+            "random_control": 0.13
+          },
+          "convergent": {
+            "n": 182,
+            "supported": 36,
+            "random_control": 0.137
+          },
+          "divergent": {
+            "n": 91,
+            "supported": 14,
+            "random_control": 0.134
+          },
+          "motif": {
+            "n": 398,
+            "supported": 64,
+            "random_control": 0.132
+          },
+          "none": {
+            "n": 967,
+            "supported": 127,
+            "random_control": 0.131
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 167,
+            "-": 189
+          },
+          "downstream": {
+            "+": 172,
+            "-": 166
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 56,
+            "-": 118
+          },
+          "downstream": {
+            "+": 126,
+            "-": 61
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 40,
+            "-": 67
+          },
+          "downstream": {
+            "+": 75,
+            "-": 48
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 35,
+            "-": 74
+          },
+          "downstream": {
+            "+": 81,
+            "-": 51
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 40,
+            "-": 53
+          },
+          "downstream": {
+            "+": 46,
+            "-": 42
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 274,
+            "supported": 150,
+            "random_control": 0.496
+          },
+          "+-": {
+            "n": 271,
+            "supported": 157,
+            "random_control": 0.496
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 274,
+            "supported": 63,
+            "random_control": 0.161
+          },
+          "+-": {
+            "n": 271,
+            "supported": 49,
+            "random_control": 0.161
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 274,
+            "supported": 40,
+            "random_control": 0.11
+          },
+          "+-": {
+            "n": 271,
+            "supported": 31,
+            "random_control": 0.11
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 274,
+            "supported": 52,
+            "random_control": 0.124
+          },
+          "+-": {
+            "n": 271,
+            "supported": 31,
+            "random_control": 0.125
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 274,
+            "supported": 43,
+            "random_control": 0.136
+          },
+          "+-": {
+            "n": 271,
+            "supported": 43,
+            "random_control": 0.134
+          }
+        }
+      }
+    },
+    "chr2": {
+      "boundaries": 1653,
+      "by_class": {
+        "convergent": 215,
+        "divergent": 84,
+        "motif": 415,
+        "none": 939
+      },
+      "by_sites": {
+        "+": 309,
+        "-": 324,
+        "both": 81,
+        "none": 939
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1653,
+            "predicted": 3909,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 982,
+            "fraction_inferred_supported": 0.594,
+            "predicted_on_an_inferred_boundary": 1094,
+            "fraction_predicted_matched": 0.28,
+            "median_distance_inferred_to_predicted": 15788,
+            "random_control": 0.574
+          },
+          "convergent": {
+            "n": 215,
+            "supported": 119,
+            "random_control": 0.592
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 49,
+            "random_control": 0.564
+          },
+          "motif": {
+            "n": 415,
+            "supported": 260,
+            "random_control": 0.596
+          },
+          "none": {
+            "n": 939,
+            "supported": 554,
+            "random_control": 0.58
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1653,
+            "predicted": 1091,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 425,
+            "fraction_inferred_supported": 0.257,
+            "predicted_on_an_inferred_boundary": 425,
+            "fraction_predicted_matched": 0.39,
+            "median_distance_inferred_to_predicted": 48267,
+            "random_control": 0.178
+          },
+          "convergent": {
+            "n": 215,
+            "supported": 56,
+            "random_control": 0.172
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 31,
+            "random_control": 0.157
+          },
+          "motif": {
+            "n": 415,
+            "supported": 155,
+            "random_control": 0.181
+          },
+          "none": {
+            "n": 939,
+            "supported": 183,
+            "random_control": 0.173
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1653,
+            "predicted": 683,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 251,
+            "fraction_inferred_supported": 0.152,
+            "predicted_on_an_inferred_boundary": 251,
+            "fraction_predicted_matched": 0.367,
+            "median_distance_inferred_to_predicted": 86492,
+            "random_control": 0.115
+          },
+          "convergent": {
+            "n": 215,
+            "supported": 50,
+            "random_control": 0.113
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 17,
+            "random_control": 0.09
+          },
+          "motif": {
+            "n": 415,
+            "supported": 80,
+            "random_control": 0.113
+          },
+          "none": {
+            "n": 939,
+            "supported": 104,
+            "random_control": 0.115
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1653,
+            "predicted": 710,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 260,
+            "fraction_inferred_supported": 0.157,
+            "predicted_on_an_inferred_boundary": 260,
+            "fraction_predicted_matched": 0.366,
+            "median_distance_inferred_to_predicted": 81130,
+            "random_control": 0.118
+          },
+          "convergent": {
+            "n": 215,
+            "supported": 34,
+            "random_control": 0.114
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 25,
+            "random_control": 0.091
+          },
+          "motif": {
+            "n": 415,
+            "supported": 92,
+            "random_control": 0.116
+          },
+          "none": {
+            "n": 939,
+            "supported": 109,
+            "random_control": 0.117
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1653,
+            "predicted": 900,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 290,
+            "fraction_inferred_supported": 0.175,
+            "predicted_on_an_inferred_boundary": 290,
+            "fraction_predicted_matched": 0.322,
+            "median_distance_inferred_to_predicted": 63787,
+            "random_control": 0.158
+          },
+          "convergent": {
+            "n": 215,
+            "supported": 49,
+            "random_control": 0.146
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 23,
+            "random_control": 0.15
+          },
+          "motif": {
+            "n": 415,
+            "supported": 82,
+            "random_control": 0.146
+          },
+          "none": {
+            "n": 939,
+            "supported": 136,
+            "random_control": 0.158
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 170,
+            "-": 177
+          },
+          "downstream": {
+            "+": 191,
+            "-": 182
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 53,
+            "-": 104
+          },
+          "downstream": {
+            "+": 135,
+            "-": 71
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 34,
+            "-": 76
+          },
+          "downstream": {
+            "+": 88,
+            "-": 41
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 29,
+            "-": 77
+          },
+          "downstream": {
+            "+": 91,
+            "-": 40
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 51,
+            "-": 63
+          },
+          "downstream": {
+            "+": 67,
+            "-": 57
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 252,
+            "supported": 158,
+            "random_control": 0.601
+          },
+          "+-": {
+            "n": 258,
+            "supported": 148,
+            "random_control": 0.599
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 252,
+            "supported": 63,
+            "random_control": 0.173
+          },
+          "+-": {
+            "n": 258,
+            "supported": 50,
+            "random_control": 0.171
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 252,
+            "supported": 45,
+            "random_control": 0.109
+          },
+          "+-": {
+            "n": 258,
+            "supported": 24,
+            "random_control": 0.11
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 252,
+            "supported": 45,
+            "random_control": 0.11
+          },
+          "+-": {
+            "n": 258,
+            "supported": 23,
+            "random_control": 0.11
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 252,
+            "supported": 42,
+            "random_control": 0.139
+          },
+          "+-": {
+            "n": 258,
+            "supported": 32,
+            "random_control": 0.138
+          }
+        }
+      }
+    },
+    "chr3": {
+      "boundaries": 1440,
+      "by_class": {
+        "convergent": 173,
+        "divergent": 72,
+        "motif": 323,
+        "none": 872
+      },
+      "by_sites": {
+        "+": 275,
+        "-": 237,
+        "both": 56,
+        "none": 872
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1440,
+            "predicted": 3226,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 865,
+            "fraction_inferred_supported": 0.601,
+            "predicted_on_an_inferred_boundary": 973,
+            "fraction_predicted_matched": 0.302,
+            "median_distance_inferred_to_predicted": 15932,
+            "random_control": 0.574
+          },
+          "convergent": {
+            "n": 173,
+            "supported": 98,
+            "random_control": 0.566
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 48,
+            "random_control": 0.572
+          },
+          "motif": {
+            "n": 323,
+            "supported": 187,
+            "random_control": 0.565
+          },
+          "none": {
+            "n": 872,
+            "supported": 532,
+            "random_control": 0.565
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1440,
+            "predicted": 938,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 366,
+            "fraction_inferred_supported": 0.254,
+            "predicted_on_an_inferred_boundary": 366,
+            "fraction_predicted_matched": 0.39,
+            "median_distance_inferred_to_predicted": 49993,
+            "random_control": 0.197
+          },
+          "convergent": {
+            "n": 173,
+            "supported": 63,
+            "random_control": 0.188
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 24,
+            "random_control": 0.181
+          },
+          "motif": {
+            "n": 323,
+            "supported": 108,
+            "random_control": 0.197
+          },
+          "none": {
+            "n": 872,
+            "supported": 171,
+            "random_control": 0.2
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1440,
+            "predicted": 579,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 215,
+            "fraction_inferred_supported": 0.149,
+            "predicted_on_an_inferred_boundary": 215,
+            "fraction_predicted_matched": 0.371,
+            "median_distance_inferred_to_predicted": 88498,
+            "random_control": 0.118
+          },
+          "convergent": {
+            "n": 173,
+            "supported": 37,
+            "random_control": 0.111
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 17,
+            "random_control": 0.103
+          },
+          "motif": {
+            "n": 323,
+            "supported": 66,
+            "random_control": 0.114
+          },
+          "none": {
+            "n": 872,
+            "supported": 95,
+            "random_control": 0.119
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1440,
+            "predicted": 615,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 217,
+            "fraction_inferred_supported": 0.151,
+            "predicted_on_an_inferred_boundary": 217,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 81761,
+            "random_control": 0.129
+          },
+          "convergent": {
+            "n": 173,
+            "supported": 37,
+            "random_control": 0.116
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 10,
+            "random_control": 0.089
+          },
+          "motif": {
+            "n": 323,
+            "supported": 64,
+            "random_control": 0.121
+          },
+          "none": {
+            "n": 872,
+            "supported": 106,
+            "random_control": 0.127
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1440,
+            "predicted": 738,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 232,
+            "fraction_inferred_supported": 0.161,
+            "predicted_on_an_inferred_boundary": 232,
+            "fraction_predicted_matched": 0.314,
+            "median_distance_inferred_to_predicted": 66034,
+            "random_control": 0.158
+          },
+          "convergent": {
+            "n": 173,
+            "supported": 29,
+            "random_control": 0.15
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 13,
+            "random_control": 0.142
+          },
+          "motif": {
+            "n": 323,
+            "supported": 66,
+            "random_control": 0.154
+          },
+          "none": {
+            "n": 872,
+            "supported": 124,
+            "random_control": 0.154
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 163,
+            "-": 136
+          },
+          "downstream": {
+            "+": 141,
+            "-": 136
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 53,
+            "-": 92
+          },
+          "downstream": {
+            "+": 113,
+            "-": 55
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 37,
+            "-": 64
+          },
+          "downstream": {
+            "+": 57,
+            "-": 26
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 32,
+            "-": 58
+          },
+          "downstream": {
+            "+": 62,
+            "-": 31
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 43,
+            "-": 40
+          },
+          "downstream": {
+            "+": 52,
+            "-": 45
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 194,
+            "supported": 122,
+            "random_control": 0.575
+          },
+          "+-": {
+            "n": 196,
+            "supported": 104,
+            "random_control": 0.577
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 194,
+            "supported": 49,
+            "random_control": 0.186
+          },
+          "+-": {
+            "n": 196,
+            "supported": 32,
+            "random_control": 0.186
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 194,
+            "supported": 30,
+            "random_control": 0.111
+          },
+          "+-": {
+            "n": 196,
+            "supported": 23,
+            "random_control": 0.11
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 194,
+            "supported": 32,
+            "random_control": 0.115
+          },
+          "+-": {
+            "n": 196,
+            "supported": 22,
+            "random_control": 0.115
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 194,
+            "supported": 36,
+            "random_control": 0.157
+          },
+          "+-": {
+            "n": 196,
+            "supported": 21,
+            "random_control": 0.155
+          }
+        }
+      }
+    },
+    "chr4": {
+      "boundaries": 1321,
+      "by_class": {
+        "convergent": 124,
+        "divergent": 84,
+        "motif": 330,
+        "none": 783
+      },
+      "by_sites": {
+        "+": 222,
+        "-": 262,
+        "both": 54,
+        "none": 783
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1321,
+            "predicted": 3155,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 806,
+            "fraction_inferred_supported": 0.61,
+            "predicted_on_an_inferred_boundary": 916,
+            "fraction_predicted_matched": 0.29,
+            "median_distance_inferred_to_predicted": 14900,
+            "random_control": 0.588
+          },
+          "convergent": {
+            "n": 124,
+            "supported": 71,
+            "random_control": 0.589
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 50,
+            "random_control": 0.586
+          },
+          "motif": {
+            "n": 330,
+            "supported": 198,
+            "random_control": 0.569
+          },
+          "none": {
+            "n": 783,
+            "supported": 487,
+            "random_control": 0.583
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1321,
+            "predicted": 876,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 337,
+            "fraction_inferred_supported": 0.255,
+            "predicted_on_an_inferred_boundary": 337,
+            "fraction_predicted_matched": 0.385,
+            "median_distance_inferred_to_predicted": 49274,
+            "random_control": 0.189
+          },
+          "convergent": {
+            "n": 124,
+            "supported": 46,
+            "random_control": 0.187
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 27,
+            "random_control": 0.19
+          },
+          "motif": {
+            "n": 330,
+            "supported": 121,
+            "random_control": 0.181
+          },
+          "none": {
+            "n": 783,
+            "supported": 143,
+            "random_control": 0.187
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1321,
+            "predicted": 498,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 186,
+            "fraction_inferred_supported": 0.141,
+            "predicted_on_an_inferred_boundary": 186,
+            "fraction_predicted_matched": 0.373,
+            "median_distance_inferred_to_predicted": 98375,
+            "random_control": 0.106
+          },
+          "convergent": {
+            "n": 124,
+            "supported": 29,
+            "random_control": 0.103
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 18,
+            "random_control": 0.119
+          },
+          "motif": {
+            "n": 330,
+            "supported": 60,
+            "random_control": 0.096
+          },
+          "none": {
+            "n": 783,
+            "supported": 79,
+            "random_control": 0.107
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1321,
+            "predicted": 528,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 202,
+            "fraction_inferred_supported": 0.153,
+            "predicted_on_an_inferred_boundary": 202,
+            "fraction_predicted_matched": 0.383,
+            "median_distance_inferred_to_predicted": 88442,
+            "random_control": 0.121
+          },
+          "convergent": {
+            "n": 124,
+            "supported": 28,
+            "random_control": 0.136
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 20,
+            "random_control": 0.15
+          },
+          "motif": {
+            "n": 330,
+            "supported": 65,
+            "random_control": 0.125
+          },
+          "none": {
+            "n": 783,
+            "supported": 89,
+            "random_control": 0.126
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1321,
+            "predicted": 702,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 221,
+            "fraction_inferred_supported": 0.167,
+            "predicted_on_an_inferred_boundary": 221,
+            "fraction_predicted_matched": 0.315,
+            "median_distance_inferred_to_predicted": 66366,
+            "random_control": 0.151
+          },
+          "convergent": {
+            "n": 124,
+            "supported": 28,
+            "random_control": 0.127
+          },
+          "divergent": {
+            "n": 84,
+            "supported": 18,
+            "random_control": 0.131
+          },
+          "motif": {
+            "n": 330,
+            "supported": 70,
+            "random_control": 0.14
+          },
+          "none": {
+            "n": 783,
+            "supported": 105,
+            "random_control": 0.149
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 163,
+            "-": 135
+          },
+          "downstream": {
+            "+": 133,
+            "-": 132
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 47,
+            "-": 91
+          },
+          "downstream": {
+            "+": 95,
+            "-": 49
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 34,
+            "-": 59
+          },
+          "downstream": {
+            "+": 55,
+            "-": 28
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 26,
+            "-": 62
+          },
+          "downstream": {
+            "+": 58,
+            "-": 29
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 37,
+            "-": 51
+          },
+          "downstream": {
+            "+": 45,
+            "-": 36
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 200,
+            "supported": 124,
+            "random_control": 0.57
+          },
+          "+-": {
+            "n": 200,
+            "supported": 125,
+            "random_control": 0.57
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 200,
+            "supported": 57,
+            "random_control": 0.189
+          },
+          "+-": {
+            "n": 200,
+            "supported": 31,
+            "random_control": 0.189
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 200,
+            "supported": 40,
+            "random_control": 0.1
+          },
+          "+-": {
+            "n": 200,
+            "supported": 9,
+            "random_control": 0.1
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 200,
+            "supported": 43,
+            "random_control": 0.132
+          },
+          "+-": {
+            "n": 200,
+            "supported": 14,
+            "random_control": 0.132
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 200,
+            "supported": 36,
+            "random_control": 0.143
+          },
+          "+-": {
+            "n": 200,
+            "supported": 23,
+            "random_control": 0.143
+          }
+        }
+      }
+    },
+    "chr5": {
+      "boundaries": 1244,
+      "by_class": {
+        "convergent": 127,
+        "divergent": 66,
+        "motif": 298,
+        "none": 753
+      },
+      "by_sites": {
+        "+": 210,
+        "-": 232,
+        "both": 49,
+        "none": 753
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1244,
+            "predicted": 2934,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 757,
+            "fraction_inferred_supported": 0.609,
+            "predicted_on_an_inferred_boundary": 844,
+            "fraction_predicted_matched": 0.288,
+            "median_distance_inferred_to_predicted": 14717,
+            "random_control": 0.574
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 81,
+            "random_control": 0.554
+          },
+          "divergent": {
+            "n": 66,
+            "supported": 43,
+            "random_control": 0.561
+          },
+          "motif": {
+            "n": 298,
+            "supported": 187,
+            "random_control": 0.578
+          },
+          "none": {
+            "n": 753,
+            "supported": 446,
+            "random_control": 0.578
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1244,
+            "predicted": 817,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 299,
+            "fraction_inferred_supported": 0.24,
+            "predicted_on_an_inferred_boundary": 299,
+            "fraction_predicted_matched": 0.366,
+            "median_distance_inferred_to_predicted": 51760,
+            "random_control": 0.175
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 35,
+            "random_control": 0.181
+          },
+          "divergent": {
+            "n": 66,
+            "supported": 24,
+            "random_control": 0.173
+          },
+          "motif": {
+            "n": 298,
+            "supported": 106,
+            "random_control": 0.178
+          },
+          "none": {
+            "n": 753,
+            "supported": 134,
+            "random_control": 0.178
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1244,
+            "predicted": 462,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 156,
+            "fraction_inferred_supported": 0.125,
+            "predicted_on_an_inferred_boundary": 156,
+            "fraction_predicted_matched": 0.338,
+            "median_distance_inferred_to_predicted": 101621,
+            "random_control": 0.1
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 25,
+            "random_control": 0.091
+          },
+          "divergent": {
+            "n": 66,
+            "supported": 12,
+            "random_control": 0.1
+          },
+          "motif": {
+            "n": 298,
+            "supported": 51,
+            "random_control": 0.097
+          },
+          "none": {
+            "n": 753,
+            "supported": 68,
+            "random_control": 0.103
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1244,
+            "predicted": 522,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 169,
+            "fraction_inferred_supported": 0.136,
+            "predicted_on_an_inferred_boundary": 169,
+            "fraction_predicted_matched": 0.324,
+            "median_distance_inferred_to_predicted": 86624,
+            "random_control": 0.113
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 21,
+            "random_control": 0.091
+          },
+          "divergent": {
+            "n": 66,
+            "supported": 12,
+            "random_control": 0.094
+          },
+          "motif": {
+            "n": 298,
+            "supported": 59,
+            "random_control": 0.103
+          },
+          "none": {
+            "n": 753,
+            "supported": 77,
+            "random_control": 0.108
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1244,
+            "predicted": 639,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 180,
+            "fraction_inferred_supported": 0.145,
+            "predicted_on_an_inferred_boundary": 180,
+            "fraction_predicted_matched": 0.282,
+            "median_distance_inferred_to_predicted": 70381,
+            "random_control": 0.139
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 16,
+            "random_control": 0.134
+          },
+          "divergent": {
+            "n": 66,
+            "supported": 11,
+            "random_control": 0.142
+          },
+          "motif": {
+            "n": 298,
+            "supported": 62,
+            "random_control": 0.131
+          },
+          "none": {
+            "n": 753,
+            "supported": 91,
+            "random_control": 0.135
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 130,
+            "-": 151
+          },
+          "downstream": {
+            "+": 135,
+            "-": 136
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 46,
+            "-": 98
+          },
+          "downstream": {
+            "+": 89,
+            "-": 36
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 18,
+            "-": 52
+          },
+          "downstream": {
+            "+": 49,
+            "-": 29
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 22,
+            "-": 58
+          },
+          "downstream": {
+            "+": 51,
+            "-": 25
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 31,
+            "-": 41
+          },
+          "downstream": {
+            "+": 46,
+            "-": 28
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 194,
+            "supported": 111,
+            "random_control": 0.568
+          },
+          "+-": {
+            "n": 195,
+            "supported": 124,
+            "random_control": 0.568
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 194,
+            "supported": 39,
+            "random_control": 0.179
+          },
+          "+-": {
+            "n": 195,
+            "supported": 34,
+            "random_control": 0.178
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 194,
+            "supported": 31,
+            "random_control": 0.096
+          },
+          "+-": {
+            "n": 195,
+            "supported": 27,
+            "random_control": 0.096
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 194,
+            "supported": 34,
+            "random_control": 0.097
+          },
+          "+-": {
+            "n": 195,
+            "supported": 24,
+            "random_control": 0.097
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 194,
+            "supported": 37,
+            "random_control": 0.13
+          },
+          "+-": {
+            "n": 195,
+            "supported": 29,
+            "random_control": 0.129
+          }
+        }
+      }
+    },
+    "chr6": {
+      "boundaries": 1179,
+      "by_class": {
+        "convergent": 92,
+        "divergent": 52,
+        "motif": 301,
+        "none": 734
+      },
+      "by_sites": {
+        "+": 204,
+        "-": 199,
+        "both": 42,
+        "none": 734
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1179,
+            "predicted": 2746,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 724,
+            "fraction_inferred_supported": 0.614,
+            "predicted_on_an_inferred_boundary": 799,
+            "fraction_predicted_matched": 0.291,
+            "median_distance_inferred_to_predicted": 15570,
+            "random_control": 0.572
+          },
+          "convergent": {
+            "n": 92,
+            "supported": 58,
+            "random_control": 0.561
+          },
+          "divergent": {
+            "n": 52,
+            "supported": 31,
+            "random_control": 0.527
+          },
+          "motif": {
+            "n": 301,
+            "supported": 182,
+            "random_control": 0.564
+          },
+          "none": {
+            "n": 734,
+            "supported": 453,
+            "random_control": 0.572
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1179,
+            "predicted": 811,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 273,
+            "fraction_inferred_supported": 0.232,
+            "predicted_on_an_inferred_boundary": 273,
+            "fraction_predicted_matched": 0.337,
+            "median_distance_inferred_to_predicted": 49565,
+            "random_control": 0.189
+          },
+          "convergent": {
+            "n": 92,
+            "supported": 28,
+            "random_control": 0.206
+          },
+          "divergent": {
+            "n": 52,
+            "supported": 15,
+            "random_control": 0.188
+          },
+          "motif": {
+            "n": 301,
+            "supported": 87,
+            "random_control": 0.187
+          },
+          "none": {
+            "n": 734,
+            "supported": 143,
+            "random_control": 0.192
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1179,
+            "predicted": 487,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 182,
+            "fraction_inferred_supported": 0.154,
+            "predicted_on_an_inferred_boundary": 182,
+            "fraction_predicted_matched": 0.374,
+            "median_distance_inferred_to_predicted": 88624,
+            "random_control": 0.113
+          },
+          "convergent": {
+            "n": 92,
+            "supported": 22,
+            "random_control": 0.104
+          },
+          "divergent": {
+            "n": 52,
+            "supported": 12,
+            "random_control": 0.1
+          },
+          "motif": {
+            "n": 301,
+            "supported": 57,
+            "random_control": 0.108
+          },
+          "none": {
+            "n": 734,
+            "supported": 91,
+            "random_control": 0.111
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1179,
+            "predicted": 546,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 182,
+            "fraction_inferred_supported": 0.154,
+            "predicted_on_an_inferred_boundary": 182,
+            "fraction_predicted_matched": 0.333,
+            "median_distance_inferred_to_predicted": 75747,
+            "random_control": 0.126
+          },
+          "convergent": {
+            "n": 92,
+            "supported": 19,
+            "random_control": 0.109
+          },
+          "divergent": {
+            "n": 52,
+            "supported": 9,
+            "random_control": 0.096
+          },
+          "motif": {
+            "n": 301,
+            "supported": 60,
+            "random_control": 0.118
+          },
+          "none": {
+            "n": 734,
+            "supported": 94,
+            "random_control": 0.122
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1179,
+            "predicted": 627,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 192,
+            "fraction_inferred_supported": 0.163,
+            "predicted_on_an_inferred_boundary": 192,
+            "fraction_predicted_matched": 0.306,
+            "median_distance_inferred_to_predicted": 63733,
+            "random_control": 0.153
+          },
+          "convergent": {
+            "n": 92,
+            "supported": 10,
+            "random_control": 0.168
+          },
+          "divergent": {
+            "n": 52,
+            "supported": 14,
+            "random_control": 0.166
+          },
+          "motif": {
+            "n": 301,
+            "supported": 44,
+            "random_control": 0.145
+          },
+          "none": {
+            "n": 734,
+            "supported": 124,
+            "random_control": 0.154
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 129,
+            "-": 121
+          },
+          "downstream": {
+            "+": 119,
+            "-": 105
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 43,
+            "-": 72
+          },
+          "downstream": {
+            "+": 76,
+            "-": 36
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 32,
+            "-": 45
+          },
+          "downstream": {
+            "+": 52,
+            "-": 25
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 31,
+            "-": 53
+          },
+          "downstream": {
+            "+": 45,
+            "-": 18
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 35,
+            "-": 40
+          },
+          "downstream": {
+            "+": 41,
+            "-": 23
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 175,
+            "supported": 99,
+            "random_control": 0.566
+          },
+          "+-": {
+            "n": 178,
+            "supported": 102,
+            "random_control": 0.57
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 175,
+            "supported": 54,
+            "random_control": 0.208
+          },
+          "+-": {
+            "n": 178,
+            "supported": 29,
+            "random_control": 0.207
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 175,
+            "supported": 35,
+            "random_control": 0.104
+          },
+          "+-": {
+            "n": 178,
+            "supported": 17,
+            "random_control": 0.106
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 175,
+            "supported": 41,
+            "random_control": 0.112
+          },
+          "+-": {
+            "n": 178,
+            "supported": 12,
+            "random_control": 0.111
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 175,
+            "supported": 41,
+            "random_control": 0.16
+          },
+          "+-": {
+            "n": 178,
+            "supported": 26,
+            "random_control": 0.162
+          }
+        }
+      }
+    },
+    "chr7": {
+      "boundaries": 1132,
+      "by_class": {
+        "convergent": 138,
+        "divergent": 50,
+        "motif": 269,
+        "none": 675
+      },
+      "by_sites": {
+        "+": 193,
+        "-": 206,
+        "both": 58,
+        "none": 675
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1132,
+            "predicted": 2445,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 645,
+            "fraction_inferred_supported": 0.57,
+            "predicted_on_an_inferred_boundary": 730,
+            "fraction_predicted_matched": 0.299,
+            "median_distance_inferred_to_predicted": 16193,
+            "random_control": 0.546
+          },
+          "convergent": {
+            "n": 138,
+            "supported": 71,
+            "random_control": 0.565
+          },
+          "divergent": {
+            "n": 50,
+            "supported": 33,
+            "random_control": 0.532
+          },
+          "motif": {
+            "n": 269,
+            "supported": 162,
+            "random_control": 0.548
+          },
+          "none": {
+            "n": 675,
+            "supported": 379,
+            "random_control": 0.543
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1132,
+            "predicted": 728,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 263,
+            "fraction_inferred_supported": 0.232,
+            "predicted_on_an_inferred_boundary": 263,
+            "fraction_predicted_matched": 0.361,
+            "median_distance_inferred_to_predicted": 49605,
+            "random_control": 0.185
+          },
+          "convergent": {
+            "n": 138,
+            "supported": 41,
+            "random_control": 0.209
+          },
+          "divergent": {
+            "n": 50,
+            "supported": 20,
+            "random_control": 0.18
+          },
+          "motif": {
+            "n": 269,
+            "supported": 85,
+            "random_control": 0.183
+          },
+          "none": {
+            "n": 675,
+            "supported": 117,
+            "random_control": 0.189
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1132,
+            "predicted": 448,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 158,
+            "fraction_inferred_supported": 0.14,
+            "predicted_on_an_inferred_boundary": 158,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 92197,
+            "random_control": 0.112
+          },
+          "convergent": {
+            "n": 138,
+            "supported": 28,
+            "random_control": 0.135
+          },
+          "divergent": {
+            "n": 50,
+            "supported": 13,
+            "random_control": 0.116
+          },
+          "motif": {
+            "n": 269,
+            "supported": 47,
+            "random_control": 0.121
+          },
+          "none": {
+            "n": 675,
+            "supported": 70,
+            "random_control": 0.113
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1132,
+            "predicted": 481,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 170,
+            "fraction_inferred_supported": 0.15,
+            "predicted_on_an_inferred_boundary": 170,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 80512,
+            "random_control": 0.12
+          },
+          "convergent": {
+            "n": 138,
+            "supported": 28,
+            "random_control": 0.145
+          },
+          "divergent": {
+            "n": 50,
+            "supported": 10,
+            "random_control": 0.136
+          },
+          "motif": {
+            "n": 269,
+            "supported": 48,
+            "random_control": 0.127
+          },
+          "none": {
+            "n": 675,
+            "supported": 84,
+            "random_control": 0.118
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1132,
+            "predicted": 558,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 191,
+            "fraction_inferred_supported": 0.169,
+            "predicted_on_an_inferred_boundary": 191,
+            "fraction_predicted_matched": 0.342,
+            "median_distance_inferred_to_predicted": 67680,
+            "random_control": 0.139
+          },
+          "convergent": {
+            "n": 138,
+            "supported": 27,
+            "random_control": 0.125
+          },
+          "divergent": {
+            "n": 50,
+            "supported": 12,
+            "random_control": 0.12
+          },
+          "motif": {
+            "n": 269,
+            "supported": 51,
+            "random_control": 0.12
+          },
+          "none": {
+            "n": 675,
+            "supported": 101,
+            "random_control": 0.136
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 120,
+            "-": 121
+          },
+          "downstream": {
+            "+": 115,
+            "-": 108
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 47,
+            "-": 77
+          },
+          "downstream": {
+            "+": 85,
+            "-": 38
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 38,
+            "-": 42
+          },
+          "downstream": {
+            "+": 57,
+            "-": 29
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 28,
+            "-": 54
+          },
+          "downstream": {
+            "+": 57,
+            "-": 24
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 40,
+            "-": 41
+          },
+          "downstream": {
+            "+": 42,
+            "-": 26
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 149,
+            "supported": 82,
+            "random_control": 0.558
+          },
+          "+-": {
+            "n": 164,
+            "supported": 87,
+            "random_control": 0.556
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 149,
+            "supported": 38,
+            "random_control": 0.203
+          },
+          "+-": {
+            "n": 164,
+            "supported": 31,
+            "random_control": 0.196
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 149,
+            "supported": 24,
+            "random_control": 0.13
+          },
+          "+-": {
+            "n": 164,
+            "supported": 15,
+            "random_control": 0.128
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 149,
+            "supported": 30,
+            "random_control": 0.141
+          },
+          "+-": {
+            "n": 164,
+            "supported": 16,
+            "random_control": 0.138
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 149,
+            "supported": 33,
+            "random_control": 0.125
+          },
+          "+-": {
+            "n": 164,
+            "supported": 22,
+            "random_control": 0.122
+          }
+        }
+      }
+    },
+    "chr8": {
+      "boundaries": 1111,
+      "by_class": {
+        "convergent": 99,
+        "divergent": 41,
+        "motif": 278,
+        "none": 693
+      },
+      "by_sites": {
+        "+": 185,
+        "-": 183,
+        "both": 50,
+        "none": 693
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 1111,
+            "predicted": 2323,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 667,
+            "fraction_inferred_supported": 0.6,
+            "predicted_on_an_inferred_boundary": 753,
+            "fraction_predicted_matched": 0.324,
+            "median_distance_inferred_to_predicted": 15759,
+            "random_control": 0.571
+          },
+          "convergent": {
+            "n": 99,
+            "supported": 54,
+            "random_control": 0.554
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 21,
+            "random_control": 0.537
+          },
+          "motif": {
+            "n": 278,
+            "supported": 180,
+            "random_control": 0.545
+          },
+          "none": {
+            "n": 693,
+            "supported": 412,
+            "random_control": 0.56
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 1111,
+            "predicted": 662,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 264,
+            "fraction_inferred_supported": 0.238,
+            "predicted_on_an_inferred_boundary": 264,
+            "fraction_predicted_matched": 0.399,
+            "median_distance_inferred_to_predicted": 51382,
+            "random_control": 0.189
+          },
+          "convergent": {
+            "n": 99,
+            "supported": 27,
+            "random_control": 0.19
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 11,
+            "random_control": 0.161
+          },
+          "motif": {
+            "n": 278,
+            "supported": 96,
+            "random_control": 0.193
+          },
+          "none": {
+            "n": 693,
+            "supported": 130,
+            "random_control": 0.187
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 1111,
+            "predicted": 406,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 151,
+            "fraction_inferred_supported": 0.136,
+            "predicted_on_an_inferred_boundary": 151,
+            "fraction_predicted_matched": 0.372,
+            "median_distance_inferred_to_predicted": 95388,
+            "random_control": 0.114
+          },
+          "convergent": {
+            "n": 99,
+            "supported": 18,
+            "random_control": 0.119
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 4,
+            "random_control": 0.107
+          },
+          "motif": {
+            "n": 278,
+            "supported": 61,
+            "random_control": 0.118
+          },
+          "none": {
+            "n": 693,
+            "supported": 68,
+            "random_control": 0.116
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 1111,
+            "predicted": 438,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 151,
+            "fraction_inferred_supported": 0.136,
+            "predicted_on_an_inferred_boundary": 151,
+            "fraction_predicted_matched": 0.345,
+            "median_distance_inferred_to_predicted": 84708,
+            "random_control": 0.123
+          },
+          "convergent": {
+            "n": 99,
+            "supported": 21,
+            "random_control": 0.113
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 6,
+            "random_control": 0.093
+          },
+          "motif": {
+            "n": 278,
+            "supported": 53,
+            "random_control": 0.117
+          },
+          "none": {
+            "n": 693,
+            "supported": 71,
+            "random_control": 0.126
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 1111,
+            "predicted": 533,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 171,
+            "fraction_inferred_supported": 0.154,
+            "predicted_on_an_inferred_boundary": 171,
+            "fraction_predicted_matched": 0.321,
+            "median_distance_inferred_to_predicted": 65951,
+            "random_control": 0.156
+          },
+          "convergent": {
+            "n": 99,
+            "supported": 17,
+            "random_control": 0.135
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 7,
+            "random_control": 0.117
+          },
+          "motif": {
+            "n": 278,
+            "supported": 55,
+            "random_control": 0.149
+          },
+          "none": {
+            "n": 693,
+            "supported": 92,
+            "random_control": 0.159
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 128,
+            "-": 129
+          },
+          "downstream": {
+            "+": 119,
+            "-": 112
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 47,
+            "-": 77
+          },
+          "downstream": {
+            "+": 70,
+            "-": 43
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 27,
+            "-": 60
+          },
+          "downstream": {
+            "+": 36,
+            "-": 19
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 28,
+            "-": 54
+          },
+          "downstream": {
+            "+": 35,
+            "-": 29
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 27,
+            "-": 53
+          },
+          "downstream": {
+            "+": 25,
+            "-": 24
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 156,
+            "supported": 94,
+            "random_control": 0.542
+          },
+          "+-": {
+            "n": 158,
+            "supported": 86,
+            "random_control": 0.543
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 156,
+            "supported": 33,
+            "random_control": 0.187
+          },
+          "+-": {
+            "n": 158,
+            "supported": 24,
+            "random_control": 0.186
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 156,
+            "supported": 23,
+            "random_control": 0.119
+          },
+          "+-": {
+            "n": 158,
+            "supported": 19,
+            "random_control": 0.119
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 156,
+            "supported": 27,
+            "random_control": 0.11
+          },
+          "+-": {
+            "n": 158,
+            "supported": 25,
+            "random_control": 0.111
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 156,
+            "supported": 29,
+            "random_control": 0.149
+          },
+          "+-": {
+            "n": 158,
+            "supported": 22,
+            "random_control": 0.151
+          }
+        }
+      }
+    },
+    "chr9": {
+      "boundaries": 813,
+      "by_class": {
+        "convergent": 97,
+        "divergent": 42,
+        "motif": 198,
+        "none": 476
+      },
+      "by_sites": {
+        "+": 158,
+        "-": 141,
+        "both": 38,
+        "none": 476
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 813,
+            "predicted": 1854,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 479,
+            "fraction_inferred_supported": 0.589,
+            "predicted_on_an_inferred_boundary": 538,
+            "fraction_predicted_matched": 0.29,
+            "median_distance_inferred_to_predicted": 16465,
+            "random_control": 0.479
+          },
+          "convergent": {
+            "n": 97,
+            "supported": 53,
+            "random_control": 0.443
+          },
+          "divergent": {
+            "n": 42,
+            "supported": 23,
+            "random_control": 0.424
+          },
+          "motif": {
+            "n": 198,
+            "supported": 114,
+            "random_control": 0.463
+          },
+          "none": {
+            "n": 476,
+            "supported": 289,
+            "random_control": 0.485
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 813,
+            "predicted": 527,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 192,
+            "fraction_inferred_supported": 0.236,
+            "predicted_on_an_inferred_boundary": 192,
+            "fraction_predicted_matched": 0.364,
+            "median_distance_inferred_to_predicted": 48153,
+            "random_control": 0.157
+          },
+          "convergent": {
+            "n": 97,
+            "supported": 33,
+            "random_control": 0.167
+          },
+          "divergent": {
+            "n": 42,
+            "supported": 13,
+            "random_control": 0.176
+          },
+          "motif": {
+            "n": 198,
+            "supported": 74,
+            "random_control": 0.156
+          },
+          "none": {
+            "n": 476,
+            "supported": 72,
+            "random_control": 0.159
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 813,
+            "predicted": 329,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 131,
+            "fraction_inferred_supported": 0.161,
+            "predicted_on_an_inferred_boundary": 131,
+            "fraction_predicted_matched": 0.398,
+            "median_distance_inferred_to_predicted": 83996,
+            "random_control": 0.097
+          },
+          "convergent": {
+            "n": 97,
+            "supported": 22,
+            "random_control": 0.097
+          },
+          "divergent": {
+            "n": 42,
+            "supported": 7,
+            "random_control": 0.124
+          },
+          "motif": {
+            "n": 198,
+            "supported": 49,
+            "random_control": 0.096
+          },
+          "none": {
+            "n": 476,
+            "supported": 53,
+            "random_control": 0.093
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 813,
+            "predicted": 375,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 145,
+            "fraction_inferred_supported": 0.178,
+            "predicted_on_an_inferred_boundary": 145,
+            "fraction_predicted_matched": 0.387,
+            "median_distance_inferred_to_predicted": 75463,
+            "random_control": 0.105
+          },
+          "convergent": {
+            "n": 97,
+            "supported": 23,
+            "random_control": 0.103
+          },
+          "divergent": {
+            "n": 42,
+            "supported": 6,
+            "random_control": 0.128
+          },
+          "motif": {
+            "n": 198,
+            "supported": 52,
+            "random_control": 0.101
+          },
+          "none": {
+            "n": 476,
+            "supported": 64,
+            "random_control": 0.105
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 813,
+            "predicted": 408,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 131,
+            "fraction_inferred_supported": 0.161,
+            "predicted_on_an_inferred_boundary": 131,
+            "fraction_predicted_matched": 0.321,
+            "median_distance_inferred_to_predicted": 67557,
+            "random_control": 0.12
+          },
+          "convergent": {
+            "n": 97,
+            "supported": 25,
+            "random_control": 0.132
+          },
+          "divergent": {
+            "n": 42,
+            "supported": 4,
+            "random_control": 0.129
+          },
+          "motif": {
+            "n": 198,
+            "supported": 42,
+            "random_control": 0.13
+          },
+          "none": {
+            "n": 476,
+            "supported": 60,
+            "random_control": 0.121
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 65,
+            "-": 78
+          },
+          "downstream": {
+            "+": 90,
+            "-": 83
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 38,
+            "-": 53
+          },
+          "downstream": {
+            "+": 56,
+            "-": 23
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 19,
+            "-": 41
+          },
+          "downstream": {
+            "+": 38,
+            "-": 19
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 19,
+            "-": 39
+          },
+          "downstream": {
+            "+": 36,
+            "-": 24
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 12,
+            "-": 27
+          },
+          "downstream": {
+            "+": 29,
+            "-": 25
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 124,
+            "supported": 72,
+            "random_control": 0.448
+          },
+          "+-": {
+            "n": 122,
+            "supported": 72,
+            "random_control": 0.451
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 124,
+            "supported": 21,
+            "random_control": 0.164
+          },
+          "+-": {
+            "n": 122,
+            "supported": 14,
+            "random_control": 0.166
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 124,
+            "supported": 9,
+            "random_control": 0.105
+          },
+          "+-": {
+            "n": 122,
+            "supported": 13,
+            "random_control": 0.103
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 124,
+            "supported": 16,
+            "random_control": 0.111
+          },
+          "+-": {
+            "n": 122,
+            "supported": 11,
+            "random_control": 0.112
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 124,
+            "supported": 21,
+            "random_control": 0.126
+          },
+          "+-": {
+            "n": 122,
+            "supported": 10,
+            "random_control": 0.128
+          }
+        }
+      }
+    },
+    "chr10": {
+      "boundaries": 921,
+      "by_class": {
+        "convergent": 115,
+        "divergent": 59,
+        "motif": 229,
+        "none": 518
+      },
+      "by_sites": {
+        "+": 167,
+        "-": 182,
+        "both": 54,
+        "none": 518
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 921,
+            "predicted": 2140,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 548,
+            "fraction_inferred_supported": 0.595,
+            "predicted_on_an_inferred_boundary": 616,
+            "fraction_predicted_matched": 0.288,
+            "median_distance_inferred_to_predicted": 16528,
+            "random_control": 0.567
+          },
+          "convergent": {
+            "n": 115,
+            "supported": 74,
+            "random_control": 0.565
+          },
+          "divergent": {
+            "n": 59,
+            "supported": 35,
+            "random_control": 0.542
+          },
+          "motif": {
+            "n": 229,
+            "supported": 130,
+            "random_control": 0.565
+          },
+          "none": {
+            "n": 518,
+            "supported": 309,
+            "random_control": 0.568
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 921,
+            "predicted": 603,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 214,
+            "fraction_inferred_supported": 0.232,
+            "predicted_on_an_inferred_boundary": 214,
+            "fraction_predicted_matched": 0.355,
+            "median_distance_inferred_to_predicted": 52641,
+            "random_control": 0.183
+          },
+          "convergent": {
+            "n": 115,
+            "supported": 32,
+            "random_control": 0.211
+          },
+          "divergent": {
+            "n": 59,
+            "supported": 20,
+            "random_control": 0.187
+          },
+          "motif": {
+            "n": 229,
+            "supported": 74,
+            "random_control": 0.204
+          },
+          "none": {
+            "n": 518,
+            "supported": 88,
+            "random_control": 0.187
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 921,
+            "predicted": 408,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 141,
+            "fraction_inferred_supported": 0.153,
+            "predicted_on_an_inferred_boundary": 141,
+            "fraction_predicted_matched": 0.346,
+            "median_distance_inferred_to_predicted": 84473,
+            "random_control": 0.12
+          },
+          "convergent": {
+            "n": 115,
+            "supported": 22,
+            "random_control": 0.131
+          },
+          "divergent": {
+            "n": 59,
+            "supported": 9,
+            "random_control": 0.122
+          },
+          "motif": {
+            "n": 229,
+            "supported": 50,
+            "random_control": 0.126
+          },
+          "none": {
+            "n": 518,
+            "supported": 60,
+            "random_control": 0.121
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 921,
+            "predicted": 418,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 131,
+            "fraction_inferred_supported": 0.142,
+            "predicted_on_an_inferred_boundary": 131,
+            "fraction_predicted_matched": 0.313,
+            "median_distance_inferred_to_predicted": 83504,
+            "random_control": 0.12
+          },
+          "convergent": {
+            "n": 115,
+            "supported": 25,
+            "random_control": 0.146
+          },
+          "divergent": {
+            "n": 59,
+            "supported": 9,
+            "random_control": 0.129
+          },
+          "motif": {
+            "n": 229,
+            "supported": 48,
+            "random_control": 0.136
+          },
+          "none": {
+            "n": 518,
+            "supported": 49,
+            "random_control": 0.125
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 921,
+            "predicted": 501,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 171,
+            "fraction_inferred_supported": 0.186,
+            "predicted_on_an_inferred_boundary": 171,
+            "fraction_predicted_matched": 0.341,
+            "median_distance_inferred_to_predicted": 65962,
+            "random_control": 0.15
+          },
+          "convergent": {
+            "n": 115,
+            "supported": 27,
+            "random_control": 0.137
+          },
+          "divergent": {
+            "n": 59,
+            "supported": 16,
+            "random_control": 0.139
+          },
+          "motif": {
+            "n": 229,
+            "supported": 49,
+            "random_control": 0.156
+          },
+          "none": {
+            "n": 518,
+            "supported": 79,
+            "random_control": 0.153
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 96,
+            "-": 110
+          },
+          "downstream": {
+            "+": 114,
+            "-": 102
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 39,
+            "-": 59
+          },
+          "downstream": {
+            "+": 73,
+            "-": 50
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 27,
+            "-": 40
+          },
+          "downstream": {
+            "+": 49,
+            "-": 29
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 28,
+            "-": 46
+          },
+          "downstream": {
+            "+": 46,
+            "-": 18
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 35,
+            "-": 42
+          },
+          "downstream": {
+            "+": 45,
+            "-": 25
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 148,
+            "supported": 88,
+            "random_control": 0.561
+          },
+          "+-": {
+            "n": 147,
+            "supported": 81,
+            "random_control": 0.559
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 148,
+            "supported": 42,
+            "random_control": 0.205
+          },
+          "+-": {
+            "n": 147,
+            "supported": 27,
+            "random_control": 0.203
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 148,
+            "supported": 30,
+            "random_control": 0.131
+          },
+          "+-": {
+            "n": 147,
+            "supported": 16,
+            "random_control": 0.13
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 148,
+            "supported": 31,
+            "random_control": 0.141
+          },
+          "+-": {
+            "n": 147,
+            "supported": 18,
+            "random_control": 0.14
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 148,
+            "supported": 26,
+            "random_control": 0.143
+          },
+          "+-": {
+            "n": 147,
+            "supported": 24,
+            "random_control": 0.143
+          }
+        }
+      }
+    },
+    "chr11": {
+      "boundaries": 946,
+      "by_class": {
+        "convergent": 118,
+        "divergent": 36,
+        "motif": 240,
+        "none": 552
+      },
+      "by_sites": {
+        "+": 183,
+        "-": 170,
+        "both": 41,
+        "none": 552
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 946,
+            "predicted": 2123,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 559,
+            "fraction_inferred_supported": 0.591,
+            "predicted_on_an_inferred_boundary": 621,
+            "fraction_predicted_matched": 0.293,
+            "median_distance_inferred_to_predicted": 15903,
+            "random_control": 0.572
+          },
+          "convergent": {
+            "n": 118,
+            "supported": 70,
+            "random_control": 0.588
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 23,
+            "random_control": 0.611
+          },
+          "motif": {
+            "n": 240,
+            "supported": 138,
+            "random_control": 0.58
+          },
+          "none": {
+            "n": 552,
+            "supported": 328,
+            "random_control": 0.577
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 946,
+            "predicted": 630,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 242,
+            "fraction_inferred_supported": 0.256,
+            "predicted_on_an_inferred_boundary": 242,
+            "fraction_predicted_matched": 0.384,
+            "median_distance_inferred_to_predicted": 47627,
+            "random_control": 0.181
+          },
+          "convergent": {
+            "n": 118,
+            "supported": 36,
+            "random_control": 0.188
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 7,
+            "random_control": 0.183
+          },
+          "motif": {
+            "n": 240,
+            "supported": 82,
+            "random_control": 0.179
+          },
+          "none": {
+            "n": 552,
+            "supported": 117,
+            "random_control": 0.185
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 946,
+            "predicted": 407,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 139,
+            "fraction_inferred_supported": 0.147,
+            "predicted_on_an_inferred_boundary": 139,
+            "fraction_predicted_matched": 0.342,
+            "median_distance_inferred_to_predicted": 87145,
+            "random_control": 0.116
+          },
+          "convergent": {
+            "n": 118,
+            "supported": 19,
+            "random_control": 0.11
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 3,
+            "random_control": 0.106
+          },
+          "motif": {
+            "n": 240,
+            "supported": 43,
+            "random_control": 0.107
+          },
+          "none": {
+            "n": 552,
+            "supported": 74,
+            "random_control": 0.118
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 946,
+            "predicted": 438,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 140,
+            "fraction_inferred_supported": 0.148,
+            "predicted_on_an_inferred_boundary": 140,
+            "fraction_predicted_matched": 0.32,
+            "median_distance_inferred_to_predicted": 75508,
+            "random_control": 0.127
+          },
+          "convergent": {
+            "n": 118,
+            "supported": 21,
+            "random_control": 0.127
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 4,
+            "random_control": 0.122
+          },
+          "motif": {
+            "n": 240,
+            "supported": 43,
+            "random_control": 0.133
+          },
+          "none": {
+            "n": 552,
+            "supported": 72,
+            "random_control": 0.133
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 946,
+            "predicted": 486,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 160,
+            "fraction_inferred_supported": 0.169,
+            "predicted_on_an_inferred_boundary": 160,
+            "fraction_predicted_matched": 0.329,
+            "median_distance_inferred_to_predicted": 69363,
+            "random_control": 0.142
+          },
+          "convergent": {
+            "n": 118,
+            "supported": 22,
+            "random_control": 0.124
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 3,
+            "random_control": 0.144
+          },
+          "motif": {
+            "n": 240,
+            "supported": 38,
+            "random_control": 0.131
+          },
+          "none": {
+            "n": 552,
+            "supported": 97,
+            "random_control": 0.138
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 98,
+            "-": 106
+          },
+          "downstream": {
+            "+": 102,
+            "-": 100
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 23,
+            "-": 82
+          },
+          "downstream": {
+            "+": 69,
+            "-": 29
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 16,
+            "-": 45
+          },
+          "downstream": {
+            "+": 32,
+            "-": 11
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 19,
+            "-": 45
+          },
+          "downstream": {
+            "+": 35,
+            "-": 15
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 21,
+            "-": 35
+          },
+          "downstream": {
+            "+": 40,
+            "-": 20
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 153,
+            "supported": 94,
+            "random_control": 0.575
+          },
+          "+-": {
+            "n": 151,
+            "supported": 76,
+            "random_control": 0.574
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 153,
+            "supported": 38,
+            "random_control": 0.187
+          },
+          "+-": {
+            "n": 151,
+            "supported": 22,
+            "random_control": 0.188
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 153,
+            "supported": 33,
+            "random_control": 0.097
+          },
+          "+-": {
+            "n": 151,
+            "supported": 14,
+            "random_control": 0.098
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 153,
+            "supported": 32,
+            "random_control": 0.133
+          },
+          "+-": {
+            "n": 151,
+            "supported": 17,
+            "random_control": 0.135
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 153,
+            "supported": 29,
+            "random_control": 0.128
+          },
+          "+-": {
+            "n": 151,
+            "supported": 16,
+            "random_control": 0.127
+          }
+        }
+      }
+    },
+    "chr12": {
+      "boundaries": 921,
+      "by_class": {
+        "convergent": 127,
+        "divergent": 41,
+        "motif": 225,
+        "none": 528
+      },
+      "by_sites": {
+        "+": 183,
+        "-": 160,
+        "both": 50,
+        "none": 528
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 921,
+            "predicted": 2102,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 547,
+            "fraction_inferred_supported": 0.594,
+            "predicted_on_an_inferred_boundary": 615,
+            "fraction_predicted_matched": 0.293,
+            "median_distance_inferred_to_predicted": 16278,
+            "random_control": 0.561
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 81,
+            "random_control": 0.62
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 23,
+            "random_control": 0.629
+          },
+          "motif": {
+            "n": 225,
+            "supported": 139,
+            "random_control": 0.6
+          },
+          "none": {
+            "n": 528,
+            "supported": 304,
+            "random_control": 0.57
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 921,
+            "predicted": 646,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 234,
+            "fraction_inferred_supported": 0.254,
+            "predicted_on_an_inferred_boundary": 234,
+            "fraction_predicted_matched": 0.362,
+            "median_distance_inferred_to_predicted": 47445,
+            "random_control": 0.197
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 41,
+            "random_control": 0.197
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 18,
+            "random_control": 0.186
+          },
+          "motif": {
+            "n": 225,
+            "supported": 76,
+            "random_control": 0.199
+          },
+          "none": {
+            "n": 528,
+            "supported": 99,
+            "random_control": 0.197
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 921,
+            "predicted": 402,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 143,
+            "fraction_inferred_supported": 0.155,
+            "predicted_on_an_inferred_boundary": 143,
+            "fraction_predicted_matched": 0.356,
+            "median_distance_inferred_to_predicted": 87153,
+            "random_control": 0.13
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 27,
+            "random_control": 0.134
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 7,
+            "random_control": 0.141
+          },
+          "motif": {
+            "n": 225,
+            "supported": 44,
+            "random_control": 0.121
+          },
+          "none": {
+            "n": 528,
+            "supported": 65,
+            "random_control": 0.128
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 921,
+            "predicted": 450,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 149,
+            "fraction_inferred_supported": 0.162,
+            "predicted_on_an_inferred_boundary": 149,
+            "fraction_predicted_matched": 0.331,
+            "median_distance_inferred_to_predicted": 73780,
+            "random_control": 0.145
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 24,
+            "random_control": 0.156
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 11,
+            "random_control": 0.156
+          },
+          "motif": {
+            "n": 225,
+            "supported": 49,
+            "random_control": 0.143
+          },
+          "none": {
+            "n": 528,
+            "supported": 65,
+            "random_control": 0.147
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 921,
+            "predicted": 497,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 171,
+            "fraction_inferred_supported": 0.186,
+            "predicted_on_an_inferred_boundary": 171,
+            "fraction_predicted_matched": 0.344,
+            "median_distance_inferred_to_predicted": 62238,
+            "random_control": 0.153
+          },
+          "convergent": {
+            "n": 127,
+            "supported": 25,
+            "random_control": 0.162
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 10,
+            "random_control": 0.146
+          },
+          "motif": {
+            "n": 225,
+            "supported": 49,
+            "random_control": 0.153
+          },
+          "none": {
+            "n": 528,
+            "supported": 87,
+            "random_control": 0.155
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 115,
+            "-": 105
+          },
+          "downstream": {
+            "+": 112,
+            "-": 111
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 42,
+            "-": 66
+          },
+          "downstream": {
+            "+": 71,
+            "-": 42
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 24,
+            "-": 42
+          },
+          "downstream": {
+            "+": 43,
+            "-": 22
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 17,
+            "-": 46
+          },
+          "downstream": {
+            "+": 49,
+            "-": 28
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 24,
+            "-": 36
+          },
+          "downstream": {
+            "+": 42,
+            "-": 36
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 141,
+            "supported": 80,
+            "random_control": 0.618
+          },
+          "+-": {
+            "n": 139,
+            "supported": 84,
+            "random_control": 0.62
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 141,
+            "supported": 31,
+            "random_control": 0.201
+          },
+          "+-": {
+            "n": 139,
+            "supported": 23,
+            "random_control": 0.201
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 141,
+            "supported": 24,
+            "random_control": 0.131
+          },
+          "+-": {
+            "n": 139,
+            "supported": 13,
+            "random_control": 0.128
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 141,
+            "supported": 27,
+            "random_control": 0.157
+          },
+          "+-": {
+            "n": 139,
+            "supported": 8,
+            "random_control": 0.157
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 141,
+            "supported": 32,
+            "random_control": 0.163
+          },
+          "+-": {
+            "n": 139,
+            "supported": 19,
+            "random_control": 0.164
+          }
+        }
+      }
+    },
+    "chr13": {
+      "boundaries": 661,
+      "by_class": {
+        "convergent": 50,
+        "divergent": 36,
+        "motif": 172,
+        "none": 403
+      },
+      "by_sites": {
+        "+": 113,
+        "-": 116,
+        "both": 29,
+        "none": 403
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 661,
+            "predicted": 1646,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 398,
+            "fraction_inferred_supported": 0.602,
+            "predicted_on_an_inferred_boundary": 470,
+            "fraction_predicted_matched": 0.286,
+            "median_distance_inferred_to_predicted": 15743,
+            "random_control": 0.488
+          },
+          "convergent": {
+            "n": 50,
+            "supported": 34,
+            "random_control": 0.568
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 21,
+            "random_control": 0.583
+          },
+          "motif": {
+            "n": 172,
+            "supported": 101,
+            "random_control": 0.492
+          },
+          "none": {
+            "n": 403,
+            "supported": 242,
+            "random_control": 0.478
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 661,
+            "predicted": 422,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 159,
+            "fraction_inferred_supported": 0.241,
+            "predicted_on_an_inferred_boundary": 159,
+            "fraction_predicted_matched": 0.377,
+            "median_distance_inferred_to_predicted": 54334,
+            "random_control": 0.149
+          },
+          "convergent": {
+            "n": 50,
+            "supported": 19,
+            "random_control": 0.148
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 12,
+            "random_control": 0.172
+          },
+          "motif": {
+            "n": 172,
+            "supported": 48,
+            "random_control": 0.152
+          },
+          "none": {
+            "n": 403,
+            "supported": 80,
+            "random_control": 0.143
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 661,
+            "predicted": 266,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 94,
+            "fraction_inferred_supported": 0.142,
+            "predicted_on_an_inferred_boundary": 94,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 92067,
+            "random_control": 0.091
+          },
+          "convergent": {
+            "n": 50,
+            "supported": 14,
+            "random_control": 0.076
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 6,
+            "random_control": 0.095
+          },
+          "motif": {
+            "n": 172,
+            "supported": 34,
+            "random_control": 0.09
+          },
+          "none": {
+            "n": 403,
+            "supported": 40,
+            "random_control": 0.085
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 661,
+            "predicted": 268,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 106,
+            "fraction_inferred_supported": 0.16,
+            "predicted_on_an_inferred_boundary": 106,
+            "fraction_predicted_matched": 0.396,
+            "median_distance_inferred_to_predicted": 87391,
+            "random_control": 0.098
+          },
+          "convergent": {
+            "n": 50,
+            "supported": 10,
+            "random_control": 0.104
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 6,
+            "random_control": 0.122
+          },
+          "motif": {
+            "n": 172,
+            "supported": 40,
+            "random_control": 0.113
+          },
+          "none": {
+            "n": 403,
+            "supported": 50,
+            "random_control": 0.099
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 661,
+            "predicted": 371,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 103,
+            "fraction_inferred_supported": 0.156,
+            "predicted_on_an_inferred_boundary": 103,
+            "fraction_predicted_matched": 0.278,
+            "median_distance_inferred_to_predicted": 66452,
+            "random_control": 0.124
+          },
+          "convergent": {
+            "n": 50,
+            "supported": 7,
+            "random_control": 0.124
+          },
+          "divergent": {
+            "n": 36,
+            "supported": 2,
+            "random_control": 0.117
+          },
+          "motif": {
+            "n": 172,
+            "supported": 30,
+            "random_control": 0.13
+          },
+          "none": {
+            "n": 403,
+            "supported": 64,
+            "random_control": 0.125
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 60,
+            "-": 64
+          },
+          "downstream": {
+            "+": 66,
+            "-": 75
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 22,
+            "-": 42
+          },
+          "downstream": {
+            "+": 33,
+            "-": 23
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 14,
+            "-": 24
+          },
+          "downstream": {
+            "+": 26,
+            "-": 18
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 16,
+            "-": 27
+          },
+          "downstream": {
+            "+": 25,
+            "-": 15
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 12,
+            "-": 17
+          },
+          "downstream": {
+            "+": 22,
+            "-": 23
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 88,
+            "supported": 50,
+            "random_control": 0.525
+          },
+          "+-": {
+            "n": 86,
+            "supported": 56,
+            "random_control": 0.533
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 88,
+            "supported": 23,
+            "random_control": 0.155
+          },
+          "+-": {
+            "n": 86,
+            "supported": 13,
+            "random_control": 0.156
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 88,
+            "supported": 12,
+            "random_control": 0.089
+          },
+          "+-": {
+            "n": 86,
+            "supported": 8,
+            "random_control": 0.088
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 88,
+            "supported": 14,
+            "random_control": 0.109
+          },
+          "+-": {
+            "n": 86,
+            "supported": 7,
+            "random_control": 0.112
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 88,
+            "supported": 14,
+            "random_control": 0.132
+          },
+          "+-": {
+            "n": 86,
+            "supported": 8,
+            "random_control": 0.128
+          }
+        }
+      }
+    },
+    "chr14": {
+      "boundaries": 633,
+      "by_class": {
+        "convergent": 56,
+        "divergent": 29,
+        "motif": 171,
+        "none": 377
+      },
+      "by_sites": {
+        "+": 110,
+        "-": 123,
+        "both": 23,
+        "none": 377
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 633,
+            "predicted": 1469,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 376,
+            "fraction_inferred_supported": 0.594,
+            "predicted_on_an_inferred_boundary": 431,
+            "fraction_predicted_matched": 0.293,
+            "median_distance_inferred_to_predicted": 15176,
+            "random_control": 0.488
+          },
+          "convergent": {
+            "n": 56,
+            "supported": 32,
+            "random_control": 0.454
+          },
+          "divergent": {
+            "n": 29,
+            "supported": 19,
+            "random_control": 0.448
+          },
+          "motif": {
+            "n": 171,
+            "supported": 106,
+            "random_control": 0.469
+          },
+          "none": {
+            "n": 377,
+            "supported": 219,
+            "random_control": 0.483
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 633,
+            "predicted": 422,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 145,
+            "fraction_inferred_supported": 0.229,
+            "predicted_on_an_inferred_boundary": 145,
+            "fraction_predicted_matched": 0.344,
+            "median_distance_inferred_to_predicted": 52301,
+            "random_control": 0.157
+          },
+          "convergent": {
+            "n": 56,
+            "supported": 17,
+            "random_control": 0.175
+          },
+          "divergent": {
+            "n": 29,
+            "supported": 8,
+            "random_control": 0.186
+          },
+          "motif": {
+            "n": 171,
+            "supported": 53,
+            "random_control": 0.147
+          },
+          "none": {
+            "n": 377,
+            "supported": 67,
+            "random_control": 0.153
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 633,
+            "predicted": 283,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 103,
+            "fraction_inferred_supported": 0.163,
+            "predicted_on_an_inferred_boundary": 103,
+            "fraction_predicted_matched": 0.364,
+            "median_distance_inferred_to_predicted": 80207,
+            "random_control": 0.109
+          },
+          "convergent": {
+            "n": 56,
+            "supported": 15,
+            "random_control": 0.136
+          },
+          "divergent": {
+            "n": 29,
+            "supported": 4,
+            "random_control": 0.152
+          },
+          "motif": {
+            "n": 171,
+            "supported": 38,
+            "random_control": 0.117
+          },
+          "none": {
+            "n": 377,
+            "supported": 46,
+            "random_control": 0.114
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 633,
+            "predicted": 288,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 89,
+            "fraction_inferred_supported": 0.141,
+            "predicted_on_an_inferred_boundary": 89,
+            "fraction_predicted_matched": 0.309,
+            "median_distance_inferred_to_predicted": 79988,
+            "random_control": 0.11
+          },
+          "convergent": {
+            "n": 56,
+            "supported": 7,
+            "random_control": 0.125
+          },
+          "divergent": {
+            "n": 29,
+            "supported": 5,
+            "random_control": 0.172
+          },
+          "motif": {
+            "n": 171,
+            "supported": 34,
+            "random_control": 0.112
+          },
+          "none": {
+            "n": 377,
+            "supported": 43,
+            "random_control": 0.116
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 633,
+            "predicted": 334,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 112,
+            "fraction_inferred_supported": 0.177,
+            "predicted_on_an_inferred_boundary": 112,
+            "fraction_predicted_matched": 0.335,
+            "median_distance_inferred_to_predicted": 64387,
+            "random_control": 0.123
+          },
+          "convergent": {
+            "n": 56,
+            "supported": 8,
+            "random_control": 0.107
+          },
+          "divergent": {
+            "n": 29,
+            "supported": 5,
+            "random_control": 0.131
+          },
+          "motif": {
+            "n": 171,
+            "supported": 38,
+            "random_control": 0.126
+          },
+          "none": {
+            "n": 377,
+            "supported": 61,
+            "random_control": 0.125
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 75,
+            "-": 75
+          },
+          "downstream": {
+            "+": 71,
+            "-": 67
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 23,
+            "-": 52
+          },
+          "downstream": {
+            "+": 41,
+            "-": 20
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 19,
+            "-": 30
+          },
+          "downstream": {
+            "+": 27,
+            "-": 14
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 17,
+            "-": 38
+          },
+          "downstream": {
+            "+": 23,
+            "-": 9
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 12,
+            "-": 32
+          },
+          "downstream": {
+            "+": 26,
+            "-": 16
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 92,
+            "supported": 55,
+            "random_control": 0.469
+          },
+          "+-": {
+            "n": 92,
+            "supported": 53,
+            "random_control": 0.469
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 92,
+            "supported": 26,
+            "random_control": 0.154
+          },
+          "+-": {
+            "n": 92,
+            "supported": 11,
+            "random_control": 0.154
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 92,
+            "supported": 17,
+            "random_control": 0.111
+          },
+          "+-": {
+            "n": 92,
+            "supported": 9,
+            "random_control": 0.111
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 92,
+            "supported": 23,
+            "random_control": 0.111
+          },
+          "+-": {
+            "n": 92,
+            "supported": 8,
+            "random_control": 0.111
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 92,
+            "supported": 14,
+            "random_control": 0.113
+          },
+          "+-": {
+            "n": 92,
+            "supported": 3,
+            "random_control": 0.113
+          }
+        }
+      }
+    },
+    "chr15": {
+      "boundaries": 542,
+      "by_class": {
+        "convergent": 73,
+        "divergent": 43,
+        "motif": 129,
+        "none": 297
+      },
+      "by_sites": {
+        "+": 118,
+        "-": 103,
+        "both": 24,
+        "none": 297
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 542,
+            "predicted": 1293,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 302,
+            "fraction_inferred_supported": 0.557,
+            "predicted_on_an_inferred_boundary": 354,
+            "fraction_predicted_matched": 0.274,
+            "median_distance_inferred_to_predicted": 17268,
+            "random_control": 0.451
+          },
+          "convergent": {
+            "n": 73,
+            "supported": 39,
+            "random_control": 0.436
+          },
+          "divergent": {
+            "n": 43,
+            "supported": 14,
+            "random_control": 0.484
+          },
+          "motif": {
+            "n": 129,
+            "supported": 84,
+            "random_control": 0.423
+          },
+          "none": {
+            "n": 297,
+            "supported": 165,
+            "random_control": 0.44
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 542,
+            "predicted": 376,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 129,
+            "fraction_inferred_supported": 0.238,
+            "predicted_on_an_inferred_boundary": 129,
+            "fraction_predicted_matched": 0.343,
+            "median_distance_inferred_to_predicted": 50075,
+            "random_control": 0.143
+          },
+          "convergent": {
+            "n": 73,
+            "supported": 18,
+            "random_control": 0.123
+          },
+          "divergent": {
+            "n": 43,
+            "supported": 15,
+            "random_control": 0.14
+          },
+          "motif": {
+            "n": 129,
+            "supported": 44,
+            "random_control": 0.13
+          },
+          "none": {
+            "n": 297,
+            "supported": 52,
+            "random_control": 0.143
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 542,
+            "predicted": 265,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 94,
+            "fraction_inferred_supported": 0.173,
+            "predicted_on_an_inferred_boundary": 94,
+            "fraction_predicted_matched": 0.355,
+            "median_distance_inferred_to_predicted": 71099,
+            "random_control": 0.108
+          },
+          "convergent": {
+            "n": 73,
+            "supported": 13,
+            "random_control": 0.107
+          },
+          "divergent": {
+            "n": 43,
+            "supported": 8,
+            "random_control": 0.121
+          },
+          "motif": {
+            "n": 129,
+            "supported": 33,
+            "random_control": 0.104
+          },
+          "none": {
+            "n": 297,
+            "supported": 40,
+            "random_control": 0.113
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 542,
+            "predicted": 277,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 93,
+            "fraction_inferred_supported": 0.172,
+            "predicted_on_an_inferred_boundary": 93,
+            "fraction_predicted_matched": 0.336,
+            "median_distance_inferred_to_predicted": 68714,
+            "random_control": 0.11
+          },
+          "convergent": {
+            "n": 73,
+            "supported": 14,
+            "random_control": 0.121
+          },
+          "divergent": {
+            "n": 43,
+            "supported": 7,
+            "random_control": 0.14
+          },
+          "motif": {
+            "n": 129,
+            "supported": 35,
+            "random_control": 0.104
+          },
+          "none": {
+            "n": 297,
+            "supported": 37,
+            "random_control": 0.111
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 542,
+            "predicted": 297,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 81,
+            "fraction_inferred_supported": 0.149,
+            "predicted_on_an_inferred_boundary": 81,
+            "fraction_predicted_matched": 0.273,
+            "median_distance_inferred_to_predicted": 68851,
+            "random_control": 0.113
+          },
+          "convergent": {
+            "n": 73,
+            "supported": 10,
+            "random_control": 0.112
+          },
+          "divergent": {
+            "n": 43,
+            "supported": 5,
+            "random_control": 0.13
+          },
+          "motif": {
+            "n": 129,
+            "supported": 24,
+            "random_control": 0.115
+          },
+          "none": {
+            "n": 297,
+            "supported": 42,
+            "random_control": 0.111
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 73,
+            "-": 53
+          },
+          "downstream": {
+            "+": 74,
+            "-": 52
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 23,
+            "-": 36
+          },
+          "downstream": {
+            "+": 46,
+            "-": 18
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 14,
+            "-": 25
+          },
+          "downstream": {
+            "+": 30,
+            "-": 18
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 15,
+            "-": 22
+          },
+          "downstream": {
+            "+": 35,
+            "-": 12
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 11,
+            "-": 18
+          },
+          "downstream": {
+            "+": 18,
+            "-": 13
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 94,
+            "supported": 53,
+            "random_control": 0.423
+          },
+          "+-": {
+            "n": 95,
+            "supported": 55,
+            "random_control": 0.425
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 94,
+            "supported": 32,
+            "random_control": 0.115
+          },
+          "+-": {
+            "n": 95,
+            "supported": 15,
+            "random_control": 0.116
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 94,
+            "supported": 21,
+            "random_control": 0.102
+          },
+          "+-": {
+            "n": 95,
+            "supported": 13,
+            "random_control": 0.101
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 94,
+            "supported": 23,
+            "random_control": 0.109
+          },
+          "+-": {
+            "n": 95,
+            "supported": 6,
+            "random_control": 0.107
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 94,
+            "supported": 19,
+            "random_control": 0.104
+          },
+          "+-": {
+            "n": 95,
+            "supported": 8,
+            "random_control": 0.103
+          }
+        }
+      }
+    },
+    "chr16": {
+      "boundaries": 562,
+      "by_class": {
+        "convergent": 87,
+        "divergent": 41,
+        "motif": 139,
+        "none": 295
+      },
+      "by_sites": {
+        "+": 120,
+        "-": 115,
+        "both": 32,
+        "none": 295
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 562,
+            "predicted": 1164,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 310,
+            "fraction_inferred_supported": 0.552,
+            "predicted_on_an_inferred_boundary": 348,
+            "fraction_predicted_matched": 0.299,
+            "median_distance_inferred_to_predicted": 16737,
+            "random_control": 0.464
+          },
+          "convergent": {
+            "n": 87,
+            "supported": 50,
+            "random_control": 0.446
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 21,
+            "random_control": 0.453
+          },
+          "motif": {
+            "n": 139,
+            "supported": 70,
+            "random_control": 0.456
+          },
+          "none": {
+            "n": 295,
+            "supported": 169,
+            "random_control": 0.466
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 562,
+            "predicted": 358,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 147,
+            "fraction_inferred_supported": 0.262,
+            "predicted_on_an_inferred_boundary": 147,
+            "fraction_predicted_matched": 0.411,
+            "median_distance_inferred_to_predicted": 53344,
+            "random_control": 0.159
+          },
+          "convergent": {
+            "n": 87,
+            "supported": 20,
+            "random_control": 0.135
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 18,
+            "random_control": 0.146
+          },
+          "motif": {
+            "n": 139,
+            "supported": 45,
+            "random_control": 0.142
+          },
+          "none": {
+            "n": 295,
+            "supported": 64,
+            "random_control": 0.153
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 562,
+            "predicted": 251,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 89,
+            "fraction_inferred_supported": 0.158,
+            "predicted_on_an_inferred_boundary": 89,
+            "fraction_predicted_matched": 0.355,
+            "median_distance_inferred_to_predicted": 84100,
+            "random_control": 0.103
+          },
+          "convergent": {
+            "n": 87,
+            "supported": 13,
+            "random_control": 0.076
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 8,
+            "random_control": 0.088
+          },
+          "motif": {
+            "n": 139,
+            "supported": 29,
+            "random_control": 0.085
+          },
+          "none": {
+            "n": 295,
+            "supported": 39,
+            "random_control": 0.097
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 562,
+            "predicted": 256,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 88,
+            "fraction_inferred_supported": 0.157,
+            "predicted_on_an_inferred_boundary": 88,
+            "fraction_predicted_matched": 0.344,
+            "median_distance_inferred_to_predicted": 83398,
+            "random_control": 0.104
+          },
+          "convergent": {
+            "n": 87,
+            "supported": 11,
+            "random_control": 0.083
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 7,
+            "random_control": 0.107
+          },
+          "motif": {
+            "n": 139,
+            "supported": 33,
+            "random_control": 0.086
+          },
+          "none": {
+            "n": 295,
+            "supported": 37,
+            "random_control": 0.102
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 562,
+            "predicted": 257,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 88,
+            "fraction_inferred_supported": 0.157,
+            "predicted_on_an_inferred_boundary": 88,
+            "fraction_predicted_matched": 0.342,
+            "median_distance_inferred_to_predicted": 79743,
+            "random_control": 0.111
+          },
+          "convergent": {
+            "n": 87,
+            "supported": 12,
+            "random_control": 0.08
+          },
+          "divergent": {
+            "n": 41,
+            "supported": 8,
+            "random_control": 0.098
+          },
+          "motif": {
+            "n": 139,
+            "supported": 22,
+            "random_control": 0.083
+          },
+          "none": {
+            "n": 295,
+            "supported": 46,
+            "random_control": 0.107
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 50,
+            "-": 62
+          },
+          "downstream": {
+            "+": 64,
+            "-": 56
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 23,
+            "-": 46
+          },
+          "downstream": {
+            "+": 34,
+            "-": 24
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 14,
+            "-": 25
+          },
+          "downstream": {
+            "+": 24,
+            "-": 18
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 15,
+            "-": 27
+          },
+          "downstream": {
+            "+": 22,
+            "-": 13
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 13,
+            "-": 20
+          },
+          "downstream": {
+            "+": 15,
+            "-": 11
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 102,
+            "supported": 60,
+            "random_control": 0.453
+          },
+          "+-": {
+            "n": 99,
+            "supported": 53,
+            "random_control": 0.453
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 102,
+            "supported": 17,
+            "random_control": 0.137
+          },
+          "+-": {
+            "n": 99,
+            "supported": 7,
+            "random_control": 0.139
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 102,
+            "supported": 15,
+            "random_control": 0.076
+          },
+          "+-": {
+            "n": 99,
+            "supported": 8,
+            "random_control": 0.077
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 102,
+            "supported": 13,
+            "random_control": 0.086
+          },
+          "+-": {
+            "n": 99,
+            "supported": 6,
+            "random_control": 0.087
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 102,
+            "supported": 18,
+            "random_control": 0.076
+          },
+          "+-": {
+            "n": 99,
+            "supported": 11,
+            "random_control": 0.077
+          }
+        }
+      }
+    },
+    "chr17": {
+      "boundaries": 545,
+      "by_class": {
+        "convergent": 78,
+        "divergent": 28,
+        "motif": 154,
+        "none": 285
+      },
+      "by_sites": {
+        "+": 113,
+        "-": 113,
+        "both": 34,
+        "none": 285
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 545,
+            "predicted": 1215,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 314,
+            "fraction_inferred_supported": 0.576,
+            "predicted_on_an_inferred_boundary": 351,
+            "fraction_predicted_matched": 0.289,
+            "median_distance_inferred_to_predicted": 16959,
+            "random_control": 0.516
+          },
+          "convergent": {
+            "n": 78,
+            "supported": 46,
+            "random_control": 0.508
+          },
+          "divergent": {
+            "n": 28,
+            "supported": 21,
+            "random_control": 0.471
+          },
+          "motif": {
+            "n": 154,
+            "supported": 82,
+            "random_control": 0.497
+          },
+          "none": {
+            "n": 285,
+            "supported": 165,
+            "random_control": 0.522
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 545,
+            "predicted": 406,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 132,
+            "fraction_inferred_supported": 0.242,
+            "predicted_on_an_inferred_boundary": 132,
+            "fraction_predicted_matched": 0.325,
+            "median_distance_inferred_to_predicted": 48593,
+            "random_control": 0.194
+          },
+          "convergent": {
+            "n": 78,
+            "supported": 27,
+            "random_control": 0.202
+          },
+          "divergent": {
+            "n": 28,
+            "supported": 9,
+            "random_control": 0.15
+          },
+          "motif": {
+            "n": 154,
+            "supported": 48,
+            "random_control": 0.197
+          },
+          "none": {
+            "n": 285,
+            "supported": 48,
+            "random_control": 0.194
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 545,
+            "predicted": 308,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 104,
+            "fraction_inferred_supported": 0.191,
+            "predicted_on_an_inferred_boundary": 104,
+            "fraction_predicted_matched": 0.338,
+            "median_distance_inferred_to_predicted": 65870,
+            "random_control": 0.142
+          },
+          "convergent": {
+            "n": 78,
+            "supported": 18,
+            "random_control": 0.159
+          },
+          "divergent": {
+            "n": 28,
+            "supported": 7,
+            "random_control": 0.136
+          },
+          "motif": {
+            "n": 154,
+            "supported": 38,
+            "random_control": 0.138
+          },
+          "none": {
+            "n": 285,
+            "supported": 41,
+            "random_control": 0.135
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 545,
+            "predicted": 323,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 104,
+            "fraction_inferred_supported": 0.191,
+            "predicted_on_an_inferred_boundary": 104,
+            "fraction_predicted_matched": 0.322,
+            "median_distance_inferred_to_predicted": 62228,
+            "random_control": 0.157
+          },
+          "convergent": {
+            "n": 78,
+            "supported": 18,
+            "random_control": 0.177
+          },
+          "divergent": {
+            "n": 28,
+            "supported": 10,
+            "random_control": 0.164
+          },
+          "motif": {
+            "n": 154,
+            "supported": 34,
+            "random_control": 0.157
+          },
+          "none": {
+            "n": 285,
+            "supported": 42,
+            "random_control": 0.157
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 545,
+            "predicted": 293,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 87,
+            "fraction_inferred_supported": 0.16,
+            "predicted_on_an_inferred_boundary": 87,
+            "fraction_predicted_matched": 0.297,
+            "median_distance_inferred_to_predicted": 72493,
+            "random_control": 0.135
+          },
+          "convergent": {
+            "n": 78,
+            "supported": 15,
+            "random_control": 0.141
+          },
+          "divergent": {
+            "n": 28,
+            "supported": 7,
+            "random_control": 0.136
+          },
+          "motif": {
+            "n": 154,
+            "supported": 29,
+            "random_control": 0.137
+          },
+          "none": {
+            "n": 285,
+            "supported": 36,
+            "random_control": 0.133
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 69,
+            "-": 71
+          },
+          "downstream": {
+            "+": 61,
+            "-": 49
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 14,
+            "-": 38
+          },
+          "downstream": {
+            "+": 30,
+            "-": 27
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 9,
+            "-": 32
+          },
+          "downstream": {
+            "+": 24,
+            "-": 16
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 11,
+            "-": 33
+          },
+          "downstream": {
+            "+": 24,
+            "-": 21
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 12,
+            "-": 20
+          },
+          "downstream": {
+            "+": 16,
+            "-": 18
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 91,
+            "supported": 51,
+            "random_control": 0.499
+          },
+          "+-": {
+            "n": 89,
+            "supported": 50,
+            "random_control": 0.494
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 91,
+            "supported": 21,
+            "random_control": 0.196
+          },
+          "+-": {
+            "n": 89,
+            "supported": 11,
+            "random_control": 0.198
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 91,
+            "supported": 17,
+            "random_control": 0.152
+          },
+          "+-": {
+            "n": 89,
+            "supported": 5,
+            "random_control": 0.155
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 91,
+            "supported": 19,
+            "random_control": 0.178
+          },
+          "+-": {
+            "n": 89,
+            "supported": 6,
+            "random_control": 0.18
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 91,
+            "supported": 16,
+            "random_control": 0.143
+          },
+          "+-": {
+            "n": 89,
+            "supported": 8,
+            "random_control": 0.142
+          }
+        }
+      }
+    },
+    "chr18": {
+      "boundaries": 559,
+      "by_class": {
+        "convergent": 53,
+        "divergent": 34,
+        "motif": 155,
+        "none": 317
+      },
+      "by_sites": {
+        "+": 98,
+        "-": 119,
+        "both": 25,
+        "none": 317
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 559,
+            "predicted": 1247,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 334,
+            "fraction_inferred_supported": 0.597,
+            "predicted_on_an_inferred_boundary": 380,
+            "fraction_predicted_matched": 0.305,
+            "median_distance_inferred_to_predicted": 15641,
+            "random_control": 0.558
+          },
+          "convergent": {
+            "n": 53,
+            "supported": 30,
+            "random_control": 0.596
+          },
+          "divergent": {
+            "n": 34,
+            "supported": 16,
+            "random_control": 0.547
+          },
+          "motif": {
+            "n": 155,
+            "supported": 93,
+            "random_control": 0.573
+          },
+          "none": {
+            "n": 317,
+            "supported": 195,
+            "random_control": 0.555
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 559,
+            "predicted": 338,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 134,
+            "fraction_inferred_supported": 0.24,
+            "predicted_on_an_inferred_boundary": 134,
+            "fraction_predicted_matched": 0.396,
+            "median_distance_inferred_to_predicted": 49666,
+            "random_control": 0.167
+          },
+          "convergent": {
+            "n": 53,
+            "supported": 14,
+            "random_control": 0.159
+          },
+          "divergent": {
+            "n": 34,
+            "supported": 13,
+            "random_control": 0.171
+          },
+          "motif": {
+            "n": 155,
+            "supported": 66,
+            "random_control": 0.147
+          },
+          "none": {
+            "n": 317,
+            "supported": 41,
+            "random_control": 0.174
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 559,
+            "predicted": 201,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 73,
+            "fraction_inferred_supported": 0.131,
+            "predicted_on_an_inferred_boundary": 73,
+            "fraction_predicted_matched": 0.363,
+            "median_distance_inferred_to_predicted": 92026,
+            "random_control": 0.097
+          },
+          "convergent": {
+            "n": 53,
+            "supported": 9,
+            "random_control": 0.095
+          },
+          "divergent": {
+            "n": 34,
+            "supported": 8,
+            "random_control": 0.1
+          },
+          "motif": {
+            "n": 155,
+            "supported": 32,
+            "random_control": 0.098
+          },
+          "none": {
+            "n": 317,
+            "supported": 24,
+            "random_control": 0.089
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 559,
+            "predicted": 220,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 85,
+            "fraction_inferred_supported": 0.152,
+            "predicted_on_an_inferred_boundary": 85,
+            "fraction_predicted_matched": 0.386,
+            "median_distance_inferred_to_predicted": 85689,
+            "random_control": 0.11
+          },
+          "convergent": {
+            "n": 53,
+            "supported": 6,
+            "random_control": 0.109
+          },
+          "divergent": {
+            "n": 34,
+            "supported": 9,
+            "random_control": 0.118
+          },
+          "motif": {
+            "n": 155,
+            "supported": 35,
+            "random_control": 0.108
+          },
+          "none": {
+            "n": 317,
+            "supported": 35,
+            "random_control": 0.106
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 559,
+            "predicted": 277,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 93,
+            "fraction_inferred_supported": 0.166,
+            "predicted_on_an_inferred_boundary": 93,
+            "fraction_predicted_matched": 0.336,
+            "median_distance_inferred_to_predicted": 65822,
+            "random_control": 0.131
+          },
+          "convergent": {
+            "n": 53,
+            "supported": 8,
+            "random_control": 0.155
+          },
+          "divergent": {
+            "n": 34,
+            "supported": 9,
+            "random_control": 0.17
+          },
+          "motif": {
+            "n": 155,
+            "supported": 33,
+            "random_control": 0.142
+          },
+          "none": {
+            "n": 317,
+            "supported": 43,
+            "random_control": 0.132
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 59,
+            "-": 61
+          },
+          "downstream": {
+            "+": 68,
+            "-": 70
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 18,
+            "-": 51
+          },
+          "downstream": {
+            "+": 50,
+            "-": 29
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 16,
+            "-": 32
+          },
+          "downstream": {
+            "+": 25,
+            "-": 17
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 17,
+            "-": 33
+          },
+          "downstream": {
+            "+": 24,
+            "-": 18
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 16,
+            "-": 21
+          },
+          "downstream": {
+            "+": 22,
+            "-": 19
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 95,
+            "supported": 62,
+            "random_control": 0.587
+          },
+          "+-": {
+            "n": 96,
+            "supported": 62,
+            "random_control": 0.59
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 95,
+            "supported": 24,
+            "random_control": 0.172
+          },
+          "+-": {
+            "n": 96,
+            "supported": 14,
+            "random_control": 0.173
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 95,
+            "supported": 16,
+            "random_control": 0.114
+          },
+          "+-": {
+            "n": 96,
+            "supported": 10,
+            "random_control": 0.117
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 95,
+            "supported": 18,
+            "random_control": 0.116
+          },
+          "+-": {
+            "n": 96,
+            "supported": 9,
+            "random_control": 0.114
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 95,
+            "supported": 15,
+            "random_control": 0.156
+          },
+          "+-": {
+            "n": 96,
+            "supported": 17,
+            "random_control": 0.154
+          }
+        }
+      }
+    },
+    "chr19": {
+      "boundaries": 338,
+      "by_class": {
+        "convergent": 49,
+        "divergent": 18,
+        "motif": 99,
+        "none": 172
+      },
+      "by_sites": {
+        "+": 71,
+        "-": 70,
+        "both": 25,
+        "none": 172
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 338,
+            "predicted": 840,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 198,
+            "fraction_inferred_supported": 0.586,
+            "predicted_on_an_inferred_boundary": 218,
+            "fraction_predicted_matched": 0.26,
+            "median_distance_inferred_to_predicted": 17030,
+            "random_control": 0.521
+          },
+          "convergent": {
+            "n": 49,
+            "supported": 33,
+            "random_control": 0.535
+          },
+          "divergent": {
+            "n": 18,
+            "supported": 10,
+            "random_control": 0.533
+          },
+          "motif": {
+            "n": 99,
+            "supported": 54,
+            "random_control": 0.515
+          },
+          "none": {
+            "n": 172,
+            "supported": 101,
+            "random_control": 0.517
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 338,
+            "predicted": 312,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 98,
+            "fraction_inferred_supported": 0.29,
+            "predicted_on_an_inferred_boundary": 98,
+            "fraction_predicted_matched": 0.314,
+            "median_distance_inferred_to_predicted": 40806,
+            "random_control": 0.208
+          },
+          "convergent": {
+            "n": 49,
+            "supported": 17,
+            "random_control": 0.224
+          },
+          "divergent": {
+            "n": 18,
+            "supported": 5,
+            "random_control": 0.233
+          },
+          "motif": {
+            "n": 99,
+            "supported": 32,
+            "random_control": 0.202
+          },
+          "none": {
+            "n": 172,
+            "supported": 44,
+            "random_control": 0.22
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 338,
+            "predicted": 241,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 81,
+            "fraction_inferred_supported": 0.24,
+            "predicted_on_an_inferred_boundary": 81,
+            "fraction_predicted_matched": 0.336,
+            "median_distance_inferred_to_predicted": 51970,
+            "random_control": 0.162
+          },
+          "convergent": {
+            "n": 49,
+            "supported": 16,
+            "random_control": 0.159
+          },
+          "divergent": {
+            "n": 18,
+            "supported": 3,
+            "random_control": 0.122
+          },
+          "motif": {
+            "n": 99,
+            "supported": 31,
+            "random_control": 0.159
+          },
+          "none": {
+            "n": 172,
+            "supported": 31,
+            "random_control": 0.167
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 338,
+            "predicted": 262,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 73,
+            "fraction_inferred_supported": 0.216,
+            "predicted_on_an_inferred_boundary": 73,
+            "fraction_predicted_matched": 0.279,
+            "median_distance_inferred_to_predicted": 47524,
+            "random_control": 0.175
+          },
+          "convergent": {
+            "n": 49,
+            "supported": 11,
+            "random_control": 0.184
+          },
+          "divergent": {
+            "n": 18,
+            "supported": 4,
+            "random_control": 0.144
+          },
+          "motif": {
+            "n": 99,
+            "supported": 27,
+            "random_control": 0.178
+          },
+          "none": {
+            "n": 172,
+            "supported": 31,
+            "random_control": 0.178
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 338,
+            "predicted": 152,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 39,
+            "fraction_inferred_supported": 0.115,
+            "predicted_on_an_inferred_boundary": 39,
+            "fraction_predicted_matched": 0.257,
+            "median_distance_inferred_to_predicted": 122261,
+            "random_control": 0.105
+          },
+          "convergent": {
+            "n": 49,
+            "supported": 8,
+            "random_control": 0.09
+          },
+          "divergent": {
+            "n": 18,
+            "supported": 2,
+            "random_control": 0.1
+          },
+          "motif": {
+            "n": 99,
+            "supported": 10,
+            "random_control": 0.089
+          },
+          "none": {
+            "n": 172,
+            "supported": 19,
+            "random_control": 0.099
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 48,
+            "-": 46
+          },
+          "downstream": {
+            "+": 52,
+            "-": 35
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 10,
+            "-": 33
+          },
+          "downstream": {
+            "+": 28,
+            "-": 8
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 9,
+            "-": 30
+          },
+          "downstream": {
+            "+": 29,
+            "-": 19
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 12,
+            "-": 22
+          },
+          "downstream": {
+            "+": 20,
+            "-": 18
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 10,
+            "-": 12
+          },
+          "downstream": {
+            "+": 13,
+            "-": 15
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 59,
+            "supported": 32,
+            "random_control": 0.539
+          },
+          "+-": {
+            "n": 60,
+            "supported": 31,
+            "random_control": 0.536
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 59,
+            "supported": 20,
+            "random_control": 0.224
+          },
+          "+-": {
+            "n": 60,
+            "supported": 11,
+            "random_control": 0.223
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 59,
+            "supported": 15,
+            "random_control": 0.163
+          },
+          "+-": {
+            "n": 60,
+            "supported": 9,
+            "random_control": 0.163
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 59,
+            "supported": 17,
+            "random_control": 0.186
+          },
+          "+-": {
+            "n": 60,
+            "supported": 11,
+            "random_control": 0.183
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 59,
+            "supported": 5,
+            "random_control": 0.092
+          },
+          "+-": {
+            "n": 60,
+            "supported": 7,
+            "random_control": 0.09
+          }
+        }
+      }
+    },
+    "chr20": {
+      "boundaries": 477,
+      "by_class": {
+        "convergent": 83,
+        "divergent": 12,
+        "motif": 116,
+        "none": 266
+      },
+      "by_sites": {
+        "+": 86,
+        "-": 90,
+        "both": 35,
+        "none": 266
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 477,
+            "predicted": 984,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 291,
+            "fraction_inferred_supported": 0.61,
+            "predicted_on_an_inferred_boundary": 328,
+            "fraction_predicted_matched": 0.333,
+            "median_distance_inferred_to_predicted": 14784,
+            "random_control": 0.544
+          },
+          "convergent": {
+            "n": 83,
+            "supported": 45,
+            "random_control": 0.544
+          },
+          "divergent": {
+            "n": 12,
+            "supported": 8,
+            "random_control": 0.567
+          },
+          "motif": {
+            "n": 116,
+            "supported": 80,
+            "random_control": 0.55
+          },
+          "none": {
+            "n": 266,
+            "supported": 158,
+            "random_control": 0.543
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 477,
+            "predicted": 298,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 103,
+            "fraction_inferred_supported": 0.216,
+            "predicted_on_an_inferred_boundary": 103,
+            "fraction_predicted_matched": 0.346,
+            "median_distance_inferred_to_predicted": 50699,
+            "random_control": 0.199
+          },
+          "convergent": {
+            "n": 83,
+            "supported": 19,
+            "random_control": 0.191
+          },
+          "divergent": {
+            "n": 12,
+            "supported": 4,
+            "random_control": 0.167
+          },
+          "motif": {
+            "n": 116,
+            "supported": 37,
+            "random_control": 0.192
+          },
+          "none": {
+            "n": 266,
+            "supported": 43,
+            "random_control": 0.189
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 477,
+            "predicted": 208,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 74,
+            "fraction_inferred_supported": 0.155,
+            "predicted_on_an_inferred_boundary": 74,
+            "fraction_predicted_matched": 0.356,
+            "median_distance_inferred_to_predicted": 77272,
+            "random_control": 0.144
+          },
+          "convergent": {
+            "n": 83,
+            "supported": 15,
+            "random_control": 0.135
+          },
+          "divergent": {
+            "n": 12,
+            "supported": 4,
+            "random_control": 0.15
+          },
+          "motif": {
+            "n": 116,
+            "supported": 23,
+            "random_control": 0.136
+          },
+          "none": {
+            "n": 266,
+            "supported": 32,
+            "random_control": 0.139
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 477,
+            "predicted": 219,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 80,
+            "fraction_inferred_supported": 0.168,
+            "predicted_on_an_inferred_boundary": 80,
+            "fraction_predicted_matched": 0.365,
+            "median_distance_inferred_to_predicted": 73409,
+            "random_control": 0.142
+          },
+          "convergent": {
+            "n": 83,
+            "supported": 18,
+            "random_control": 0.147
+          },
+          "divergent": {
+            "n": 12,
+            "supported": 3,
+            "random_control": 0.117
+          },
+          "motif": {
+            "n": 116,
+            "supported": 31,
+            "random_control": 0.14
+          },
+          "none": {
+            "n": 266,
+            "supported": 28,
+            "random_control": 0.142
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 477,
+            "predicted": 221,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 78,
+            "fraction_inferred_supported": 0.164,
+            "predicted_on_an_inferred_boundary": 78,
+            "fraction_predicted_matched": 0.353,
+            "median_distance_inferred_to_predicted": 66835,
+            "random_control": 0.146
+          },
+          "convergent": {
+            "n": 83,
+            "supported": 16,
+            "random_control": 0.135
+          },
+          "divergent": {
+            "n": 12,
+            "supported": 1,
+            "random_control": 0.133
+          },
+          "motif": {
+            "n": 116,
+            "supported": 21,
+            "random_control": 0.14
+          },
+          "none": {
+            "n": 266,
+            "supported": 40,
+            "random_control": 0.146
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 61,
+            "-": 66
+          },
+          "downstream": {
+            "+": 61,
+            "-": 71
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 14,
+            "-": 40
+          },
+          "downstream": {
+            "+": 43,
+            "-": 17
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 14,
+            "-": 27
+          },
+          "downstream": {
+            "+": 29,
+            "-": 13
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 16,
+            "-": 34
+          },
+          "downstream": {
+            "+": 32,
+            "-": 13
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 13,
+            "-": 20
+          },
+          "downstream": {
+            "+": 20,
+            "-": 13
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 92,
+            "supported": 53,
+            "random_control": 0.543
+          },
+          "+-": {
+            "n": 91,
+            "supported": 53,
+            "random_control": 0.547
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 92,
+            "supported": 25,
+            "random_control": 0.187
+          },
+          "+-": {
+            "n": 91,
+            "supported": 16,
+            "random_control": 0.187
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 92,
+            "supported": 12,
+            "random_control": 0.135
+          },
+          "+-": {
+            "n": 91,
+            "supported": 11,
+            "random_control": 0.134
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 92,
+            "supported": 16,
+            "random_control": 0.148
+          },
+          "+-": {
+            "n": 91,
+            "supported": 13,
+            "random_control": 0.15
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 92,
+            "supported": 11,
+            "random_control": 0.137
+          },
+          "+-": {
+            "n": 91,
+            "supported": 15,
+            "random_control": 0.136
+          }
+        }
+      }
+    },
+    "chr21": {
+      "boundaries": 227,
+      "by_class": {
+        "convergent": 33,
+        "divergent": 14,
+        "motif": 54,
+        "none": 126
+      },
+      "by_sites": {
+        "+": 47,
+        "-": 40,
+        "both": 14,
+        "none": 126
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 227,
+            "predicted": 557,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 132,
+            "fraction_inferred_supported": 0.581,
+            "predicted_on_an_inferred_boundary": 151,
+            "fraction_predicted_matched": 0.271,
+            "median_distance_inferred_to_predicted": 15381,
+            "random_control": 0.416
+          },
+          "convergent": {
+            "n": 33,
+            "supported": 18,
+            "random_control": 0.449
+          },
+          "divergent": {
+            "n": 14,
+            "supported": 12,
+            "random_control": 0.414
+          },
+          "motif": {
+            "n": 54,
+            "supported": 36,
+            "random_control": 0.43
+          },
+          "none": {
+            "n": 126,
+            "supported": 66,
+            "random_control": 0.421
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 227,
+            "predicted": 149,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 54,
+            "fraction_inferred_supported": 0.238,
+            "predicted_on_an_inferred_boundary": 54,
+            "fraction_predicted_matched": 0.362,
+            "median_distance_inferred_to_predicted": 48701,
+            "random_control": 0.132
+          },
+          "convergent": {
+            "n": 33,
+            "supported": 9,
+            "random_control": 0.152
+          },
+          "divergent": {
+            "n": 14,
+            "supported": 3,
+            "random_control": 0.2
+          },
+          "motif": {
+            "n": 54,
+            "supported": 21,
+            "random_control": 0.137
+          },
+          "none": {
+            "n": 126,
+            "supported": 21,
+            "random_control": 0.116
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 227,
+            "predicted": 93,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 32,
+            "fraction_inferred_supported": 0.141,
+            "predicted_on_an_inferred_boundary": 32,
+            "fraction_predicted_matched": 0.344,
+            "median_distance_inferred_to_predicted": 99384,
+            "random_control": 0.077
+          },
+          "convergent": {
+            "n": 33,
+            "supported": 4,
+            "random_control": 0.073
+          },
+          "divergent": {
+            "n": 14,
+            "supported": 2,
+            "random_control": 0.086
+          },
+          "motif": {
+            "n": 54,
+            "supported": 13,
+            "random_control": 0.082
+          },
+          "none": {
+            "n": 126,
+            "supported": 13,
+            "random_control": 0.071
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 227,
+            "predicted": 93,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 34,
+            "fraction_inferred_supported": 0.15,
+            "predicted_on_an_inferred_boundary": 34,
+            "fraction_predicted_matched": 0.366,
+            "median_distance_inferred_to_predicted": 99086,
+            "random_control": 0.078
+          },
+          "convergent": {
+            "n": 33,
+            "supported": 4,
+            "random_control": 0.091
+          },
+          "divergent": {
+            "n": 14,
+            "supported": 1,
+            "random_control": 0.129
+          },
+          "motif": {
+            "n": 54,
+            "supported": 8,
+            "random_control": 0.085
+          },
+          "none": {
+            "n": 126,
+            "supported": 21,
+            "random_control": 0.074
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 227,
+            "predicted": 126,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 28,
+            "fraction_inferred_supported": 0.123,
+            "predicted_on_an_inferred_boundary": 28,
+            "fraction_predicted_matched": 0.222,
+            "median_distance_inferred_to_predicted": 69850,
+            "random_control": 0.11
+          },
+          "convergent": {
+            "n": 33,
+            "supported": 5,
+            "random_control": 0.097
+          },
+          "divergent": {
+            "n": 14,
+            "supported": 2,
+            "random_control": 0.128
+          },
+          "motif": {
+            "n": 54,
+            "supported": 5,
+            "random_control": 0.096
+          },
+          "none": {
+            "n": 126,
+            "supported": 16,
+            "random_control": 0.106
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 30,
+            "-": 20
+          },
+          "downstream": {
+            "+": 28,
+            "-": 24
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 13,
+            "-": 17
+          },
+          "downstream": {
+            "+": 11,
+            "-": 8
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 10,
+            "-": 9
+          },
+          "downstream": {
+            "+": 7,
+            "-": 1
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 9,
+            "-": 5
+          },
+          "downstream": {
+            "+": 4,
+            "-": 2
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 5,
+            "-": 4
+          },
+          "downstream": {
+            "+": 5,
+            "-": 6
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 35,
+            "supported": 21,
+            "random_control": 0.44
+          },
+          "+-": {
+            "n": 37,
+            "supported": 19,
+            "random_control": 0.438
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 35,
+            "supported": 10,
+            "random_control": 0.149
+          },
+          "+-": {
+            "n": 37,
+            "supported": 6,
+            "random_control": 0.146
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 35,
+            "supported": 5,
+            "random_control": 0.069
+          },
+          "+-": {
+            "n": 37,
+            "supported": 3,
+            "random_control": 0.07
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 35,
+            "supported": 9,
+            "random_control": 0.086
+          },
+          "+-": {
+            "n": 37,
+            "supported": 2,
+            "random_control": 0.092
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 35,
+            "supported": 6,
+            "random_control": 0.091
+          },
+          "+-": {
+            "n": 37,
+            "supported": 4,
+            "random_control": 0.097
+          }
+        }
+      }
+    },
+    "chr22": {
+      "boundaries": 246,
+      "by_class": {
+        "convergent": 21,
+        "divergent": 11,
+        "motif": 72,
+        "none": 142
+      },
+      "by_sites": {
+        "+": 41,
+        "-": 48,
+        "both": 15,
+        "none": 142
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 246,
+            "predicted": 562,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 138,
+            "fraction_inferred_supported": 0.561,
+            "predicted_on_an_inferred_boundary": 151,
+            "fraction_predicted_matched": 0.269,
+            "median_distance_inferred_to_predicted": 16732,
+            "random_control": 0.374
+          },
+          "convergent": {
+            "n": 21,
+            "supported": 14,
+            "random_control": 0.381
+          },
+          "divergent": {
+            "n": 11,
+            "supported": 4,
+            "random_control": 0.309
+          },
+          "motif": {
+            "n": 72,
+            "supported": 34,
+            "random_control": 0.378
+          },
+          "none": {
+            "n": 142,
+            "supported": 86,
+            "random_control": 0.37
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 246,
+            "predicted": 173,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 70,
+            "fraction_inferred_supported": 0.285,
+            "predicted_on_an_inferred_boundary": 70,
+            "fraction_predicted_matched": 0.405,
+            "median_distance_inferred_to_predicted": 46595,
+            "random_control": 0.143
+          },
+          "convergent": {
+            "n": 21,
+            "supported": 6,
+            "random_control": 0.171
+          },
+          "divergent": {
+            "n": 11,
+            "supported": 2,
+            "random_control": 0.146
+          },
+          "motif": {
+            "n": 72,
+            "supported": 28,
+            "random_control": 0.153
+          },
+          "none": {
+            "n": 142,
+            "supported": 34,
+            "random_control": 0.145
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 246,
+            "predicted": 137,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 48,
+            "fraction_inferred_supported": 0.195,
+            "predicted_on_an_inferred_boundary": 48,
+            "fraction_predicted_matched": 0.35,
+            "median_distance_inferred_to_predicted": 61132,
+            "random_control": 0.114
+          },
+          "convergent": {
+            "n": 21,
+            "supported": 4,
+            "random_control": 0.114
+          },
+          "divergent": {
+            "n": 11,
+            "supported": 1,
+            "random_control": 0.109
+          },
+          "motif": {
+            "n": 72,
+            "supported": 19,
+            "random_control": 0.133
+          },
+          "none": {
+            "n": 142,
+            "supported": 24,
+            "random_control": 0.127
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 246,
+            "predicted": 150,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 55,
+            "fraction_inferred_supported": 0.224,
+            "predicted_on_an_inferred_boundary": 55,
+            "fraction_predicted_matched": 0.367,
+            "median_distance_inferred_to_predicted": 56331,
+            "random_control": 0.132
+          },
+          "convergent": {
+            "n": 21,
+            "supported": 5,
+            "random_control": 0.143
+          },
+          "divergent": {
+            "n": 11,
+            "supported": 2,
+            "random_control": 0.091
+          },
+          "motif": {
+            "n": 72,
+            "supported": 21,
+            "random_control": 0.145
+          },
+          "none": {
+            "n": 142,
+            "supported": 27,
+            "random_control": 0.138
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 246,
+            "predicted": 117,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 43,
+            "fraction_inferred_supported": 0.175,
+            "predicted_on_an_inferred_boundary": 43,
+            "fraction_predicted_matched": 0.368,
+            "median_distance_inferred_to_predicted": 81465,
+            "random_control": 0.092
+          },
+          "convergent": {
+            "n": 21,
+            "supported": 5,
+            "random_control": 0.086
+          },
+          "divergent": {
+            "n": 11,
+            "supported": 1,
+            "random_control": 0.109
+          },
+          "motif": {
+            "n": 72,
+            "supported": 15,
+            "random_control": 0.083
+          },
+          "none": {
+            "n": 142,
+            "supported": 22,
+            "random_control": 0.079
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 24,
+            "-": 31
+          },
+          "downstream": {
+            "+": 26,
+            "-": 28
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 8,
+            "-": 23
+          },
+          "downstream": {
+            "+": 24,
+            "-": 10
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 9,
+            "-": 12
+          },
+          "downstream": {
+            "+": 15,
+            "-": 9
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 10,
+            "-": 18
+          },
+          "downstream": {
+            "+": 13,
+            "-": 10
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 7,
+            "-": 8
+          },
+          "downstream": {
+            "+": 8,
+            "-": 8
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 33,
+            "supported": 17,
+            "random_control": 0.418
+          },
+          "+-": {
+            "n": 33,
+            "supported": 18,
+            "random_control": 0.418
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 33,
+            "supported": 8,
+            "random_control": 0.164
+          },
+          "+-": {
+            "n": 33,
+            "supported": 3,
+            "random_control": 0.164
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 33,
+            "supported": 9,
+            "random_control": 0.122
+          },
+          "+-": {
+            "n": 33,
+            "supported": 3,
+            "random_control": 0.122
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 33,
+            "supported": 9,
+            "random_control": 0.134
+          },
+          "+-": {
+            "n": 33,
+            "supported": 5,
+            "random_control": 0.134
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 33,
+            "supported": 7,
+            "random_control": 0.103
+          },
+          "+-": {
+            "n": 33,
+            "supported": 4,
+            "random_control": 0.103
+          }
+        }
+      }
+    },
+    "chrX": {
+      "boundaries": 821,
+      "by_class": {
+        "convergent": 170,
+        "divergent": 72,
+        "motif": 224,
+        "none": 355
+      },
+      "by_sites": {
+        "+": 196,
+        "-": 218,
+        "both": 52,
+        "none": 355
+      },
+      "biosources": {
+        "GM12878": {
+          "all": {
+            "inferred": 821,
+            "predicted": 2441,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 495,
+            "fraction_inferred_supported": 0.603,
+            "predicted_on_an_inferred_boundary": 562,
+            "fraction_predicted_matched": 0.23,
+            "median_distance_inferred_to_predicted": 15941,
+            "random_control": 0.543
+          },
+          "convergent": {
+            "n": 170,
+            "supported": 108,
+            "random_control": 0.538
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 43,
+            "random_control": 0.519
+          },
+          "motif": {
+            "n": 224,
+            "supported": 137,
+            "random_control": 0.538
+          },
+          "none": {
+            "n": 355,
+            "supported": 207,
+            "random_control": 0.544
+          }
+        },
+        "H1-hESC": {
+          "all": {
+            "inferred": 821,
+            "predicted": 759,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 266,
+            "fraction_inferred_supported": 0.324,
+            "predicted_on_an_inferred_boundary": 266,
+            "fraction_predicted_matched": 0.35,
+            "median_distance_inferred_to_predicted": 38453,
+            "random_control": 0.201
+          },
+          "convergent": {
+            "n": 170,
+            "supported": 66,
+            "random_control": 0.188
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 27,
+            "random_control": 0.211
+          },
+          "motif": {
+            "n": 224,
+            "supported": 83,
+            "random_control": 0.206
+          },
+          "none": {
+            "n": 355,
+            "supported": 90,
+            "random_control": 0.205
+          }
+        },
+        "K562": {
+          "all": {
+            "inferred": 821,
+            "predicted": 411,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 154,
+            "fraction_inferred_supported": 0.188,
+            "predicted_on_an_inferred_boundary": 154,
+            "fraction_predicted_matched": 0.375,
+            "median_distance_inferred_to_predicted": 80719,
+            "random_control": 0.107
+          },
+          "convergent": {
+            "n": 170,
+            "supported": 37,
+            "random_control": 0.111
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 19,
+            "random_control": 0.1
+          },
+          "motif": {
+            "n": 224,
+            "supported": 52,
+            "random_control": 0.121
+          },
+          "none": {
+            "n": 355,
+            "supported": 46,
+            "random_control": 0.125
+          }
+        },
+        "HepG2": {
+          "all": {
+            "inferred": 821,
+            "predicted": 437,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 155,
+            "fraction_inferred_supported": 0.189,
+            "predicted_on_an_inferred_boundary": 155,
+            "fraction_predicted_matched": 0.355,
+            "median_distance_inferred_to_predicted": 71590,
+            "random_control": 0.114
+          },
+          "convergent": {
+            "n": 170,
+            "supported": 35,
+            "random_control": 0.114
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 12,
+            "random_control": 0.111
+          },
+          "motif": {
+            "n": 224,
+            "supported": 48,
+            "random_control": 0.121
+          },
+          "none": {
+            "n": 355,
+            "supported": 60,
+            "random_control": 0.121
+          }
+        },
+        "IMR-90": {
+          "all": {
+            "inferred": 821,
+            "predicted": 597,
+            "tolerance": 20000,
+            "inferred_on_a_predicted_boundary": 148,
+            "fraction_inferred_supported": 0.18,
+            "predicted_on_an_inferred_boundary": 148,
+            "fraction_predicted_matched": 0.248,
+            "median_distance_inferred_to_predicted": 60873,
+            "random_control": 0.162
+          },
+          "convergent": {
+            "n": 170,
+            "supported": 36,
+            "random_control": 0.153
+          },
+          "divergent": {
+            "n": 72,
+            "supported": 15,
+            "random_control": 0.164
+          },
+          "motif": {
+            "n": 224,
+            "supported": 38,
+            "random_control": 0.162
+          },
+          "none": {
+            "n": 355,
+            "supported": 59,
+            "random_control": 0.158
+          }
+        }
+      },
+      "measured_flanks": {
+        "GM12878": {
+          "upstream": {
+            "+": 100,
+            "-": 112
+          },
+          "downstream": {
+            "+": 113,
+            "-": 111
+          }
+        },
+        "H1-hESC": {
+          "upstream": {
+            "+": 46,
+            "-": 80
+          },
+          "downstream": {
+            "+": 82,
+            "-": 42
+          }
+        },
+        "K562": {
+          "upstream": {
+            "+": 29,
+            "-": 45
+          },
+          "downstream": {
+            "+": 60,
+            "-": 24
+          }
+        },
+        "HepG2": {
+          "upstream": {
+            "+": 16,
+            "-": 43
+          },
+          "downstream": {
+            "+": 63,
+            "-": 26
+          }
+        },
+        "IMR-90": {
+          "upstream": {
+            "+": 30,
+            "-": 25
+          },
+          "downstream": {
+            "+": 37,
+            "-": 32
+          }
+        }
+      },
+      "flips": {
+        "GM12878": {
+          "-+": {
+            "n": 152,
+            "supported": 80,
+            "random_control": 0.541
+          },
+          "+-": {
+            "n": 152,
+            "supported": 91,
+            "random_control": 0.541
+          }
+        },
+        "H1-hESC": {
+          "-+": {
+            "n": 152,
+            "supported": 45,
+            "random_control": 0.191
+          },
+          "+-": {
+            "n": 152,
+            "supported": 31,
+            "random_control": 0.191
+          }
+        },
+        "K562": {
+          "-+": {
+            "n": 152,
+            "supported": 38,
+            "random_control": 0.108
+          },
+          "+-": {
+            "n": 152,
+            "supported": 17,
+            "random_control": 0.108
+          }
+        },
+        "HepG2": {
+          "-+": {
+            "n": 152,
+            "supported": 32,
+            "random_control": 0.113
+          },
+          "+-": {
+            "n": 152,
+            "supported": 14,
+            "random_control": 0.113
+          }
+        },
+        "IMR-90": {
+          "-+": {
+            "n": 152,
+            "supported": 32,
+            "random_control": 0.158
+          },
+          "+-": {
+            "n": 152,
+            "supported": 12,
+            "random_control": 0.158
+          }
+        }
+      }
+    }
+  },
+  "evidence": {
+    "orientation": "inferred: JASPAR MA0139 best hits inside CTCF-only ENCODE elements; convergent = the domain's upstream boundary carries a + site and its downstream boundary a - site (Rao et al. 2014)",
+    "measured": "experimental: 4D Nucleome boundary calls (insulation score) on released GRCh38 Hi-C and Micro-C",
+    "controls": "uniform random positions (the comparison's own control); strand labels shuffled among elements with a site, positions and presence kept"
+  }
+}

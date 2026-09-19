@@ -1,0 +1,254 @@
+{
+  "result": "shortlist_in_real_unknown",
+  "date": "2026-09-17",
+  "question": "do the calibration's reliable targets (coding drop above 0.2, the band where the CRISPRi screens called 105 of 105) fall inside the 882 blocks of the real unknown, so the MPRA library carries its own bridge to the screens' evidence",
+  "shortlist_drop": 0.2,
+  "real_unknown_blocks": 882,
+  "real_unknown_blocks_by_case": {
+    "tolerant": 329,
+    "recent": 29,
+    "relaxed": 437,
+    "syntax": 69,
+    "unmeasured": 18
+  },
+  "shortlist_elements_genome_wide": 24114,
+  "blocks_with_any_scored_element": 163,
+  "blocks_with_any_scored_element_by_case": {
+    "recent": 7,
+    "unmeasured": 2,
+    "tolerant": 62,
+    "relaxed": 81,
+    "syntax": 11
+  },
+  "max_drop_of_the_best_scored_element_per_block": {
+    "chr7:8752961-8938786": 1.1467,
+    "chr10:73783652-73785548": 0.6689,
+    "chr1:153205120-153217583": 0.6326,
+    "chr16:8180769-8252085": 0.5307,
+    "chr4:82044244-82128534": 0.4108,
+    "chr6:50913256-51302209": 0.3975,
+    "chr1:69563715-69567490": 0.2152,
+    "chr6:93103384-93240009": 0.1738,
+    "chr9:125967379-126051029": 0.1545,
+    "chr2:118836766-118842170": 0.1518,
+    "chr6:50875604-50897614": 0.1479,
+    "chr7:115504081-115581314": 0.138,
+    "chr1:34366511-34468866": 0.1286,
+    "chr5:123194266-123235902": 0.1209,
+    "chr13:94803430-94960040": 0.116,
+    "chr2:163318996-163445665": 0.1066,
+    "chr6:128521871-128565544": 0.1056,
+    "chr15:48652016-48662530": 0.1056,
+    "chr2:149290196-149320592": 0.1045,
+    "chr4:84299240-84371392": 0.1028
+  },
+  "blocks_with_a_shortlist_element": 7,
+  "blocks_with_a_shortlist_element_by_case": {
+    "relaxed": 3,
+    "tolerant": 4
+  },
+  "shortlist_elements_inside_a_block": 8,
+  "oligos_an_overlap_implies": 16,
+  "oligo_length": 300,
+  "blocks": {
+    "chr1:69563715-69567490": {
+      "case": "relaxed",
+      "elements": [
+        "EH38E2818498"
+      ],
+      "genes": [
+        "LRRC7"
+      ],
+      "max_drop": 0.2152
+    },
+    "chr1:153205120-153217583": {
+      "case": "tolerant",
+      "elements": [
+        "EH38E1385252"
+      ],
+      "genes": [
+        "PRR9"
+      ],
+      "max_drop": 0.6326
+    },
+    "chr4:82044244-82128534": {
+      "case": "tolerant",
+      "elements": [
+        "EH38E3591871"
+      ],
+      "genes": [
+        "RASGEF1B"
+      ],
+      "max_drop": 0.4108
+    },
+    "chr6:50913256-51302209": {
+      "case": "tolerant",
+      "elements": [
+        "EH38E3712033",
+        "EH38E3712057"
+      ],
+      "genes": [
+        "TFAP2B"
+      ],
+      "max_drop": 0.3975
+    },
+    "chr7:8752961-8938786": {
+      "case": "tolerant",
+      "elements": [
+        "EH38E3757714"
+      ],
+      "genes": [
+        "NXPH1"
+      ],
+      "max_drop": 1.1467
+    },
+    "chr10:73783652-73785548": {
+      "case": "relaxed",
+      "elements": [
+        "EH38E2908587"
+      ],
+      "genes": [
+        "ZSWIM8"
+      ],
+      "max_drop": 0.6689
+    },
+    "chr16:8180769-8252085": {
+      "case": "relaxed",
+      "elements": [
+        "EH38E3166550"
+      ],
+      "genes": [
+        "RBFOX1"
+      ],
+      "max_drop": 0.5307
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "real_unknown_blocks": 73,
+      "shortlist_elements": 2728,
+      "blocks_with_a_shortlist_element": 2
+    },
+    "chr2": {
+      "real_unknown_blocks": 93,
+      "shortlist_elements": 1574,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr3": {
+      "real_unknown_blocks": 48,
+      "shortlist_elements": 1303,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr4": {
+      "real_unknown_blocks": 52,
+      "shortlist_elements": 958,
+      "blocks_with_a_shortlist_element": 1
+    },
+    "chr5": {
+      "real_unknown_blocks": 47,
+      "shortlist_elements": 1143,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr6": {
+      "real_unknown_blocks": 58,
+      "shortlist_elements": 1276,
+      "blocks_with_a_shortlist_element": 1
+    },
+    "chr7": {
+      "real_unknown_blocks": 39,
+      "shortlist_elements": 1157,
+      "blocks_with_a_shortlist_element": 1
+    },
+    "chr8": {
+      "real_unknown_blocks": 50,
+      "shortlist_elements": 869,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr9": {
+      "real_unknown_blocks": 39,
+      "shortlist_elements": 954,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr10": {
+      "real_unknown_blocks": 38,
+      "shortlist_elements": 986,
+      "blocks_with_a_shortlist_element": 1
+    },
+    "chr11": {
+      "real_unknown_blocks": 39,
+      "shortlist_elements": 1436,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr12": {
+      "real_unknown_blocks": 31,
+      "shortlist_elements": 1195,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr13": {
+      "real_unknown_blocks": 40,
+      "shortlist_elements": 380,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr14": {
+      "real_unknown_blocks": 35,
+      "shortlist_elements": 612,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr15": {
+      "real_unknown_blocks": 21,
+      "shortlist_elements": 737,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr16": {
+      "real_unknown_blocks": 39,
+      "shortlist_elements": 948,
+      "blocks_with_a_shortlist_element": 1
+    },
+    "chr17": {
+      "real_unknown_blocks": 24,
+      "shortlist_elements": 1434,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr18": {
+      "real_unknown_blocks": 37,
+      "shortlist_elements": 296,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr19": {
+      "real_unknown_blocks": 14,
+      "shortlist_elements": 1740,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr20": {
+      "real_unknown_blocks": 21,
+      "shortlist_elements": 666,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr21": {
+      "real_unknown_blocks": 5,
+      "shortlist_elements": 247,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chr22": {
+      "real_unknown_blocks": 10,
+      "shortlist_elements": 609,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chrX": {
+      "real_unknown_blocks": 25,
+      "shortlist_elements": 854,
+      "blocks_with_a_shortlist_element": 0
+    },
+    "chrY": {
+      "real_unknown_blocks": 4,
+      "shortlist_elements": 12,
+      "blocks_with_a_shortlist_element": 0
+    }
+  },
+  "refused": {
+    "below_the_band": 416263,
+    "no_coding_target": 520850
+  },
+  "evidence": "predicted: AlphaGenome deletion per element, banded by the CRISPRi-fitted calibration; inferred: the real-unknown tier from constraint on two axes with copies removed",
+  "reading": "empty means the shortlist and the real unknown do not overlap, so the library holds no internal positive set tied to the screens and the drop band has to be tested elsewhere"
+}

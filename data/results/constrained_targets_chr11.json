@@ -1,0 +1,3004 @@
+{
+  "result": "constrained_targets_chr11",
+  "date": "2026-09-12",
+  "chrom": "chr11",
+  "distal_enhancers": 26426,
+  "min_constrained_fraction": 0.2,
+  "constrained_elements_available": 3578,
+  "scored": 100,
+  "summary": {
+    "elements_scored": 100,
+    "with_predicted_target": 80,
+    "fraction_with_target": 0.8,
+    "strong": 16,
+    "weak": 64,
+    "silencer_like": 32,
+    "verdicts": {
+      "agrees with nearest TSS in domain": 37,
+      "another gene in the same domain": 35,
+      "no predicted effect": 20,
+      "gene outside the domain": 8
+    },
+    "verdicts_coding": {
+      "agrees with nearest TSS in domain": 46,
+      "no predicted effect": 25,
+      "another gene in the same domain": 21,
+      "gene outside the domain": 8
+    },
+    "coding_target_agrees_with_nearest": 0.613,
+    "fraction_agreeing_with_nearest": 0.463,
+    "fraction_inside_domain": 0.9,
+    "top_tissues": {
+      "Purkinje cell": 5,
+      "K562": 3,
+      "endothelial cell of umbilical vein": 3,
+      "CD4-positive, alpha-beta T cell": 3,
+      "neurosphere": 3,
+      "H9": 2,
+      "H1": 2,
+      "neural cell": 2,
+      "NCI-H460": 2,
+      "Brain_Cerebellum": 2,
+      "Whole_Blood": 2,
+      "placenta": 2
+    },
+    "median_distance_when_agreeing": 20762
+  },
+  "mean_abs_log2fc_when_named": 0.274,
+  "uniform_sample": {
+    "elements_scored": 200,
+    "fraction_with_target": 0.675,
+    "coding_target_agrees_with_nearest": 0.664,
+    "fraction_inside_domain": 0.874,
+    "strong": 33,
+    "silencer_like": 48
+  },
+  "elements": [
+    {
+      "id": "EH38E1518388",
+      "start": 8283178,
+      "end": 8283526,
+      "constrained_fraction": 0.997,
+      "phylop_mean": 7.125,
+      "inferred": {
+        "gene": "LMO1",
+        "distance": 14546,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.2004,
+        "tissue": "H9",
+        "strength": "weak",
+        "confidence": 0.2,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.2004,
+        "tissue": "H9",
+        "strength": "weak",
+        "confidence": 0.2,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D58"
+    },
+    {
+      "id": "EH38E2951343",
+      "start": 31764243,
+      "end": 31764395,
+      "constrained_fraction": 0.993,
+      "phylop_mean": 6.945,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 48071,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E1571285",
+      "start": 114229095,
+      "end": 114229435,
+      "constrained_fraction": 0.988,
+      "phylop_mean": 7.006,
+      "inferred": {
+        "gene": "NNMT",
+        "distance": 28499,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E1550729",
+      "start": 72369815,
+      "end": 72370134,
+      "constrained_fraction": 0.984,
+      "phylop_mean": 6.694,
+      "inferred": {
+        "gene": "CLPB",
+        "distance": 64705,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PHOX2A",
+        "action": "activates",
+        "log2_fold_change": -0.2877,
+        "tissue": "adrenal gland",
+        "strength": "weak",
+        "confidence": 0.288,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PHOX2A",
+        "action": "activates",
+        "log2_fold_change": -0.2877,
+        "tissue": "adrenal gland",
+        "strength": "weak",
+        "confidence": 0.288,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D471"
+    },
+    {
+      "id": "EH38E1530735",
+      "start": 32786879,
+      "end": 32787183,
+      "constrained_fraction": 0.984,
+      "phylop_mean": 6.558,
+      "inferred": {
+        "gene": "CCDC73",
+        "distance": 8335,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CCDC73",
+        "action": "activates",
+        "log2_fold_change": -0.2035,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.203,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CCDC73",
+        "action": "activates",
+        "log2_fold_change": -0.2035,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.203,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D238"
+    },
+    {
+      "id": "EH38E2951344",
+      "start": 31764431,
+      "end": 31764596,
+      "constrained_fraction": 0.982,
+      "phylop_mean": 6.97,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 47877,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E2951342",
+      "start": 31763302,
+      "end": 31763651,
+      "constrained_fraction": 0.98,
+      "phylop_mean": 6.506,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 48914,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAUPAR",
+        "action": "represses",
+        "log2_fold_change": 0.1453,
+        "tissue": "Brain_Cerebellar_Hemisphere",
+        "strength": "weak",
+        "confidence": 0.145,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.1242,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.124,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E2963491",
+      "start": 64765948,
+      "end": 64766232,
+      "constrained_fraction": 0.975,
+      "phylop_mean": 6.555,
+      "inferred": {
+        "gene": "PYGM",
+        "distance": 6101,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PYGM",
+        "action": "represses",
+        "log2_fold_change": 0.5596,
+        "tissue": "MCF 10A",
+        "strength": "strong",
+        "confidence": 0.56,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PYGM",
+        "action": "represses",
+        "log2_fold_change": 0.5596,
+        "tissue": "MCF 10A",
+        "strength": "strong",
+        "confidence": 0.56,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D413"
+    },
+    {
+      "id": "EH38E2963489",
+      "start": 64765437,
+      "end": 64765594,
+      "constrained_fraction": 0.968,
+      "phylop_mean": 6.691,
+      "inferred": {
+        "gene": "PYGM",
+        "distance": 5526,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PYGM",
+        "action": "represses",
+        "log2_fold_change": 0.1613,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.161,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PYGM",
+        "action": "represses",
+        "log2_fold_change": 0.1613,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.161,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D413"
+    },
+    {
+      "id": "EH38E1530142",
+      "start": 31764663,
+      "end": 31764815,
+      "constrained_fraction": 0.961,
+      "phylop_mean": 6.486,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 47651,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E1538236",
+      "start": 47466238,
+      "end": 47466513,
+      "constrained_fraction": 0.956,
+      "phylop_mean": 6.043,
+      "inferred": {
+        "gene": "RAPSN",
+        "distance": 17184,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CELF1",
+        "action": "activates",
+        "log2_fold_change": -0.2343,
+        "tissue": "Purkinje cell",
+        "strength": "weak",
+        "confidence": 0.234,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CELF1",
+        "action": "activates",
+        "log2_fold_change": -0.2343,
+        "tissue": "Purkinje cell",
+        "strength": "weak",
+        "confidence": 0.234,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D344"
+    },
+    {
+      "id": "EH38E1524097",
+      "start": 16470073,
+      "end": 16470316,
+      "constrained_fraction": 0.955,
+      "phylop_mean": 5.825,
+      "inferred": {
+        "gene": "C11orf58",
+        "distance": 142937,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "SOX6",
+        "action": "represses",
+        "log2_fold_change": 0.147,
+        "tissue": "myocyte",
+        "strength": "weak",
+        "confidence": 0.147,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "SOX6",
+        "action": "represses",
+        "log2_fold_change": 0.147,
+        "tissue": "myocyte",
+        "strength": "weak",
+        "confidence": 0.147,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D112"
+    },
+    {
+      "id": "EH38E2951062",
+      "start": 30535839,
+      "end": 30536189,
+      "constrained_fraction": 0.951,
+      "phylop_mean": 6.364,
+      "inferred": {
+        "gene": "ARL14EP",
+        "distance": 212966,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "MPPED2",
+        "action": "activates",
+        "log2_fold_change": -0.1797,
+        "tissue": "H1",
+        "strength": "weak",
+        "confidence": 0.18,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "MPPED2",
+        "action": "activates",
+        "log2_fold_change": -0.1797,
+        "tissue": "H1",
+        "strength": "weak",
+        "confidence": 0.18,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D216"
+    },
+    {
+      "id": "EH38E2975931",
+      "start": 82757269,
+      "end": 82757608,
+      "constrained_fraction": 0.95,
+      "phylop_mean": 5.958,
+      "inferred": {
+        "gene": "FAM181B",
+        "distance": 23575,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "FAM181B",
+        "action": "activates",
+        "log2_fold_change": -0.5378,
+        "tissue": "melanocyte of skin",
+        "strength": "strong",
+        "confidence": 0.538,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "FAM181B",
+        "action": "activates",
+        "log2_fold_change": -0.5378,
+        "tissue": "melanocyte of skin",
+        "strength": "strong",
+        "confidence": 0.538,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D553"
+    },
+    {
+      "id": "EH38E1530143",
+      "start": 31764838,
+      "end": 31765154,
+      "constrained_fraction": 0.949,
+      "phylop_mean": 6.454,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 47394,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E2963505",
+      "start": 64773325,
+      "end": 64773542,
+      "constrained_fraction": 0.949,
+      "phylop_mean": 6.682,
+      "inferred": {
+        "gene": "SF1",
+        "distance": 5368,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "SF1",
+        "action": "activates",
+        "log2_fold_change": -0.2612,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.261,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "SF1",
+        "action": "activates",
+        "log2_fold_change": -0.2612,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.261,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D413"
+    },
+    {
+      "id": "EH38E2992168",
+      "start": 125399279,
+      "end": 125399620,
+      "constrained_fraction": 0.938,
+      "phylop_mean": 6.15,
+      "inferred": {
+        "gene": "PKNOX2",
+        "distance": 234913,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PKNOX2",
+        "action": "activates",
+        "log2_fold_change": -0.1897,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.19,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PKNOX2",
+        "action": "activates",
+        "log2_fold_change": -0.1897,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.19,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D877"
+    },
+    {
+      "id": "EH38E2951376",
+      "start": 31801748,
+      "end": 31802004,
+      "constrained_fraction": 0.938,
+      "phylop_mean": 6.264,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 10514,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.2483,
+        "tissue": "NCI-H460",
+        "strength": "weak",
+        "confidence": 0.248,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.2483,
+        "tissue": "NCI-H460",
+        "strength": "weak",
+        "confidence": 0.248,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E1538240",
+      "start": 47468658,
+      "end": 47468857,
+      "constrained_fraction": 0.935,
+      "phylop_mean": 6.248,
+      "inferred": {
+        "gene": "RAPSN",
+        "distance": 19566,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "RAPSN",
+        "action": "activates",
+        "log2_fold_change": -0.1126,
+        "tissue": "peripheral blood mononuclear cell",
+        "strength": "weak",
+        "confidence": 0.113,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "RAPSN",
+        "action": "activates",
+        "log2_fold_change": -0.1126,
+        "tissue": "peripheral blood mononuclear cell",
+        "strength": "weak",
+        "confidence": 0.113,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D344"
+    },
+    {
+      "id": "EH38E1571163",
+      "start": 114142283,
+      "end": 114142616,
+      "constrained_fraction": 0.934,
+      "phylop_mean": 6.077,
+      "inferred": {
+        "gene": "ZBTB16",
+        "distance": 84115,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E1526444",
+      "start": 20164174,
+      "end": 20164353,
+      "constrained_fraction": 0.933,
+      "phylop_mean": 5.892,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 3787,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.2101,
+        "tissue": "H1",
+        "strength": "weak",
+        "confidence": 0.21,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.2101,
+        "tissue": "H1",
+        "strength": "weak",
+        "confidence": 0.21,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2976934",
+      "start": 85977879,
+      "end": 85978195,
+      "constrained_fraction": 0.93,
+      "phylop_mean": 5.477,
+      "inferred": {
+        "gene": "PICALM",
+        "distance": 91844,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PICALM",
+        "action": "activates",
+        "log2_fold_change": -0.2574,
+        "tissue": "Brain_Cerebellum",
+        "strength": "weak",
+        "confidence": 0.257,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PICALM",
+        "action": "activates",
+        "log2_fold_change": -0.2574,
+        "tissue": "Brain_Cerebellum",
+        "strength": "weak",
+        "confidence": 0.257,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D575"
+    },
+    {
+      "id": "EH38E2951306",
+      "start": 31601853,
+      "end": 31602193,
+      "constrained_fraction": 0.929,
+      "phylop_mean": 5.728,
+      "inferred": {
+        "gene": "ELP4",
+        "distance": 92279,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D227"
+    },
+    {
+      "id": "EH38E2948904",
+      "start": 20247613,
+      "end": 20247780,
+      "constrained_fraction": 0.928,
+      "phylop_mean": 5.939,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 87220,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.1573,
+        "tissue": "progenitor cell of endocrine pancreas",
+        "strength": "weak",
+        "confidence": 0.157,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.1573,
+        "tissue": "progenitor cell of endocrine pancreas",
+        "strength": "weak",
+        "confidence": 0.157,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2965840",
+      "start": 66643464,
+      "end": 66643767,
+      "constrained_fraction": 0.924,
+      "phylop_mean": 6.378,
+      "inferred": {
+        "gene": "RBM4",
+        "distance": 5845,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "RBM14-RBM4",
+        "action": "represses",
+        "log2_fold_change": 0.4551,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.455,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "RBM14-RBM4",
+        "action": "represses",
+        "log2_fold_change": 0.4551,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.455,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D427"
+    },
+    {
+      "id": "EH38E2945689",
+      "start": 12832844,
+      "end": 12833184,
+      "constrained_fraction": 0.918,
+      "phylop_mean": 5.984,
+      "inferred": {
+        "gene": "TEAD1",
+        "distance": 158644,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000255067",
+        "action": "activates",
+        "log2_fold_change": -0.1095,
+        "tissue": "mammary stem cell",
+        "strength": "weak",
+        "confidence": 0.11,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D83"
+    },
+    {
+      "id": "EH38E1537045",
+      "start": 45933624,
+      "end": 45933896,
+      "constrained_fraction": 0.915,
+      "phylop_mean": 6.096,
+      "inferred": {
+        "gene": "PEX16",
+        "distance": 14907,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "LARGE2",
+        "action": "activates",
+        "log2_fold_change": -0.1248,
+        "tissue": "Whole_Blood",
+        "strength": "weak",
+        "confidence": 0.125,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LARGE2",
+        "action": "activates",
+        "log2_fold_change": -0.1248,
+        "tissue": "Whole_Blood",
+        "strength": "weak",
+        "confidence": 0.125,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D335"
+    },
+    {
+      "id": "EH38E2943049",
+      "start": 8258885,
+      "end": 8259233,
+      "constrained_fraction": 0.914,
+      "phylop_mean": 6.073,
+      "inferred": {
+        "gene": "LMO1",
+        "distance": 9747,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.3098,
+        "tissue": "LHCN-M2",
+        "strength": "strong",
+        "confidence": 0.31,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.3098,
+        "tissue": "LHCN-M2",
+        "strength": "strong",
+        "confidence": 0.31,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D58"
+    },
+    {
+      "id": "EH38E2951428",
+      "start": 31824443,
+      "end": 31824686,
+      "constrained_fraction": 0.914,
+      "phylop_mean": 5.78,
+      "inferred": {
+        "gene": "PAX6",
+        "distance": 6598,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAUPAR",
+        "action": "represses",
+        "log2_fold_change": 0.1722,
+        "tissue": "SK-N-DZ",
+        "strength": "weak",
+        "confidence": 0.172,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.1144,
+        "tissue": "cardiac muscle cell",
+        "strength": "weak",
+        "confidence": 0.114,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E1550672",
+      "start": 72308593,
+      "end": 72308943,
+      "constrained_fraction": 0.911,
+      "phylop_mean": 5.828,
+      "inferred": {
+        "gene": "CLPB",
+        "distance": 125911,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PHOX2A",
+        "action": "represses",
+        "log2_fold_change": 0.25,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.25,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PHOX2A",
+        "action": "represses",
+        "log2_fold_change": 0.25,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.25,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D471"
+    },
+    {
+      "id": "EH38E2963490",
+      "start": 64765646,
+      "end": 64765802,
+      "constrained_fraction": 0.904,
+      "phylop_mean": 5.641,
+      "inferred": {
+        "gene": "PYGM",
+        "distance": 5735,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D413"
+    },
+    {
+      "id": "EH38E1571246",
+      "start": 114194810,
+      "end": 114195086,
+      "constrained_fraction": 0.902,
+      "phylop_mean": 5.217,
+      "inferred": {
+        "gene": "NNMT",
+        "distance": 62816,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E2951748",
+      "start": 32598036,
+      "end": 32598188,
+      "constrained_fraction": 0.901,
+      "phylop_mean": 5.535,
+      "inferred": {
+        "gene": "EIF3M",
+        "distance": 14371,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D237"
+    },
+    {
+      "id": "EH38E2945688",
+      "start": 12832573,
+      "end": 12832805,
+      "constrained_fraction": 0.901,
+      "phylop_mean": 4.953,
+      "inferred": {
+        "gene": "TEAD1",
+        "distance": 158319,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D83"
+    },
+    {
+      "id": "EH38E2948921",
+      "start": 20273962,
+      "end": 20274303,
+      "constrained_fraction": 0.9,
+      "phylop_mean": 5.578,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 113656,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.2309,
+        "tissue": "GM12891",
+        "strength": "weak",
+        "confidence": 0.231,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.2309,
+        "tissue": "GM12891",
+        "strength": "weak",
+        "confidence": 0.231,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E1552507",
+      "start": 74612917,
+      "end": 74613256,
+      "constrained_fraction": 0.9,
+      "phylop_mean": 5.391,
+      "inferred": {
+        "gene": "CHRDL2",
+        "distance": 118538,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "POLD3",
+        "action": "activates",
+        "log2_fold_change": -0.1741,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.174,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "POLD3",
+        "action": "activates",
+        "log2_fold_change": -0.1741,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.174,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D483"
+    },
+    {
+      "id": "EH38E1573556",
+      "start": 117751196,
+      "end": 117751382,
+      "constrained_fraction": 0.898,
+      "phylop_mean": 5.534,
+      "inferred": {
+        "gene": "DSCAML1",
+        "distance": 66235,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DSCAML1",
+        "action": "activates",
+        "log2_fold_change": -0.1154,
+        "tissue": "mammary epithelial cell",
+        "strength": "weak",
+        "confidence": 0.115,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DSCAML1",
+        "action": "activates",
+        "log2_fold_change": -0.1154,
+        "tissue": "mammary epithelial cell",
+        "strength": "weak",
+        "confidence": 0.115,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D823"
+    },
+    {
+      "id": "EH38E2957146",
+      "start": 46934251,
+      "end": 46934419,
+      "constrained_fraction": 0.893,
+      "phylop_mean": 5.183,
+      "inferred": {
+        "gene": "CSTPP1",
+        "distance": 2353,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D340"
+    },
+    {
+      "id": "EH38E2945394",
+      "start": 12318996,
+      "end": 12319342,
+      "constrained_fraction": 0.887,
+      "phylop_mean": 5.274,
+      "inferred": {
+        "gene": "PARVA",
+        "distance": 57964,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D82"
+    },
+    {
+      "id": "EH38E2985274",
+      "start": 113936780,
+      "end": 113937079,
+      "constrained_fraction": 0.886,
+      "phylop_mean": 5.467,
+      "inferred": {
+        "gene": "HTR3B",
+        "distance": 32134,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "HTR3B",
+        "action": "activates",
+        "log2_fold_change": -0.2692,
+        "tissue": "Brain_Caudate_basal_ganglia",
+        "strength": "weak",
+        "confidence": 0.269,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "HTR3B",
+        "action": "activates",
+        "log2_fold_change": -0.2692,
+        "tissue": "Brain_Caudate_basal_ganglia",
+        "strength": "weak",
+        "confidence": 0.269,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D795"
+    },
+    {
+      "id": "EH38E2950364",
+      "start": 27443762,
+      "end": 27444110,
+      "constrained_fraction": 0.876,
+      "phylop_mean": 5.121,
+      "inferred": {
+        "gene": "LGR4",
+        "distance": 28891,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "LGR4",
+        "action": "activates",
+        "log2_fold_change": -0.4643,
+        "tissue": "Brain_Spinal_cord_cervical_c-1",
+        "strength": "strong",
+        "confidence": 0.464,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LGR4",
+        "action": "activates",
+        "log2_fold_change": -0.4643,
+        "tissue": "Brain_Spinal_cord_cervical_c-1",
+        "strength": "strong",
+        "confidence": 0.464,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D195"
+    },
+    {
+      "id": "EH38E1522104",
+      "start": 12864773,
+      "end": 12865117,
+      "constrained_fraction": 0.869,
+      "phylop_mean": 5.833,
+      "inferred": {
+        "gene": "TEAD1",
+        "distance": 190575,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "TEAD1",
+        "action": "represses",
+        "log2_fold_change": 0.1693,
+        "tissue": "CD8-positive, alpha-beta memory T cell",
+        "strength": "weak",
+        "confidence": 0.169,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "TEAD1",
+        "action": "represses",
+        "log2_fold_change": 0.1693,
+        "tissue": "CD8-positive, alpha-beta memory T cell",
+        "strength": "weak",
+        "confidence": 0.169,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D83"
+    },
+    {
+      "id": "EH38E2948931",
+      "start": 20303535,
+      "end": 20303884,
+      "constrained_fraction": 0.868,
+      "phylop_mean": 5.239,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 143233,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E1538364",
+      "start": 47589956,
+      "end": 47590106,
+      "constrained_fraction": 0.867,
+      "phylop_mean": 5.321,
+      "inferred": {
+        "gene": "FAM180B",
+        "distance": 3825,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "C1QTNF4",
+        "action": "activates",
+        "log2_fold_change": -0.7335,
+        "tissue": "bronchial smooth muscle cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "C1QTNF4",
+        "action": "activates",
+        "log2_fold_change": -0.7335,
+        "tissue": "bronchial smooth muscle cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D344"
+    },
+    {
+      "id": "EH38E2944454",
+      "start": 10797569,
+      "end": 10797918,
+      "constrained_fraction": 0.865,
+      "phylop_mean": 5.39,
+      "inferred": {
+        "gene": "EIF4G2",
+        "distance": 11203,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "EIF4G2",
+        "action": "activates",
+        "log2_fold_change": -0.545,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.545,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "EIF4G2",
+        "action": "activates",
+        "log2_fold_change": -0.545,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.545,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D68"
+    },
+    {
+      "id": "EH38E2988257",
+      "start": 118786065,
+      "end": 118786280,
+      "constrained_fraction": 0.865,
+      "phylop_mean": 5.609,
+      "inferred": {
+        "gene": "DDX6",
+        "distance": 5053,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000255422",
+        "action": "represses",
+        "log2_fold_change": 0.1439,
+        "tissue": "cardiac muscle cell",
+        "strength": "weak",
+        "confidence": 0.144,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DDX6",
+        "action": "represses",
+        "log2_fold_change": 0.123,
+        "tissue": "NCI-H460",
+        "strength": "weak",
+        "confidence": 0.123,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D827"
+    },
+    {
+      "id": "EH38E2988367",
+      "start": 118898598,
+      "end": 118898842,
+      "constrained_fraction": 0.865,
+      "phylop_mean": 5.148,
+      "inferred": {
+        "gene": "CXCR5",
+        "distance": 14853,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CXCR5",
+        "action": "represses",
+        "log2_fold_change": 0.1505,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.15,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CXCR5",
+        "action": "represses",
+        "log2_fold_change": 0.1505,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.15,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D827"
+    },
+    {
+      "id": "EH38E2963308",
+      "start": 64632639,
+      "end": 64632918,
+      "constrained_fraction": 0.864,
+      "phylop_mean": 5.548,
+      "inferred": {
+        "gene": "SLC22A12",
+        "distance": 42138,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "NRXN2",
+        "action": "represses",
+        "log2_fold_change": 0.1489,
+        "tissue": "colonic mucosa",
+        "strength": "weak",
+        "confidence": 0.149,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "NRXN2",
+        "action": "represses",
+        "log2_fold_change": 0.1489,
+        "tissue": "colonic mucosa",
+        "strength": "weak",
+        "confidence": 0.149,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D411"
+    },
+    {
+      "id": "EH38E1517389",
+      "start": 6401553,
+      "end": 6401713,
+      "constrained_fraction": 0.863,
+      "phylop_mean": 5.546,
+      "inferred": {
+        "gene": "SMPD1",
+        "distance": 11253,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "APBB1",
+        "action": "activates",
+        "log2_fold_change": -0.1499,
+        "tissue": "HeLa-S3",
+        "strength": "weak",
+        "confidence": 0.15,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "APBB1",
+        "action": "activates",
+        "log2_fold_change": -0.1499,
+        "tissue": "HeLa-S3",
+        "strength": "weak",
+        "confidence": 0.15,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D40"
+    },
+    {
+      "id": "EH38E2963284",
+      "start": 64607801,
+      "end": 64607973,
+      "constrained_fraction": 0.86,
+      "phylop_mean": 5.569,
+      "inferred": {
+        "gene": "SLC22A12",
+        "distance": 17247,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "SLC22A12",
+        "action": "represses",
+        "log2_fold_change": 0.2944,
+        "tissue": "Brain_Cerebellum",
+        "strength": "weak",
+        "confidence": 0.294,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "SLC22A12",
+        "action": "represses",
+        "log2_fold_change": 0.2944,
+        "tissue": "Brain_Cerebellum",
+        "strength": "weak",
+        "confidence": 0.294,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D411"
+    },
+    {
+      "id": "EH38E2952348",
+      "start": 33930490,
+      "end": 33930726,
+      "constrained_fraction": 0.86,
+      "phylop_mean": 4.781,
+      "inferred": {
+        "gene": "LMO2",
+        "distance": 38533,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000184566",
+        "action": "activates",
+        "log2_fold_change": -0.6146,
+        "tissue": "Whole_Blood",
+        "strength": "strong",
+        "confidence": 0.615,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LMO2",
+        "action": "activates",
+        "log2_fold_change": -0.5613,
+        "tissue": "mononuclear cell",
+        "strength": "strong",
+        "confidence": 0.561,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D245"
+    },
+    {
+      "id": "EH38E1526428",
+      "start": 20157945,
+      "end": 20158115,
+      "constrained_fraction": 0.859,
+      "phylop_mean": 5.163,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 2446,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.4205,
+        "tissue": "Brain_Caudate_basal_ganglia",
+        "strength": "strong",
+        "confidence": 0.42,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.4205,
+        "tissue": "Brain_Caudate_basal_ganglia",
+        "strength": "strong",
+        "confidence": 0.42,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2945699",
+      "start": 12845887,
+      "end": 12846237,
+      "constrained_fraction": 0.857,
+      "phylop_mean": 5.452,
+      "inferred": {
+        "gene": "TEAD1",
+        "distance": 171692,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "TEAD1",
+        "action": "represses",
+        "log2_fold_change": 0.1549,
+        "tissue": "OCI-LY7",
+        "strength": "weak",
+        "confidence": 0.155,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "TEAD1",
+        "action": "represses",
+        "log2_fold_change": 0.1549,
+        "tissue": "OCI-LY7",
+        "strength": "weak",
+        "confidence": 0.155,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D83"
+    },
+    {
+      "id": "EH38E1558118",
+      "start": 85662323,
+      "end": 85662571,
+      "constrained_fraction": 0.855,
+      "phylop_mean": 5.612,
+      "inferred": {
+        "gene": "TMEM126A",
+        "distance": 14492,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CREBZF",
+        "action": "activates",
+        "log2_fold_change": -0.3211,
+        "tissue": "Ovary",
+        "strength": "strong",
+        "confidence": 0.321,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CREBZF",
+        "action": "activates",
+        "log2_fold_change": -0.3211,
+        "tissue": "Ovary",
+        "strength": "strong",
+        "confidence": 0.321,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D575"
+    },
+    {
+      "id": "EH38E1579061",
+      "start": 125228509,
+      "end": 125228858,
+      "constrained_fraction": 0.848,
+      "phylop_mean": 5.23,
+      "inferred": {
+        "gene": "PKNOX2",
+        "distance": 64147,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.1213,
+        "tissue": "PC-9",
+        "strength": "weak",
+        "confidence": 0.121,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.1213,
+        "tissue": "PC-9",
+        "strength": "weak",
+        "confidence": 0.121,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D877"
+    },
+    {
+      "id": "EH38E1518394",
+      "start": 8289399,
+      "end": 8289738,
+      "constrained_fraction": 0.847,
+      "phylop_mean": 5.389,
+      "inferred": {
+        "gene": "LMO1",
+        "distance": 20762,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.2943,
+        "tissue": "neural crest cell",
+        "strength": "weak",
+        "confidence": 0.294,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "LMO1",
+        "action": "activates",
+        "log2_fold_change": -0.2943,
+        "tissue": "neural crest cell",
+        "strength": "weak",
+        "confidence": 0.294,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D58"
+    },
+    {
+      "id": "EH38E2962309",
+      "start": 63765991,
+      "end": 63766195,
+      "constrained_fraction": 0.843,
+      "phylop_mean": 5.628,
+      "inferred": {
+        "gene": "ZFTA",
+        "distance": 3658,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ZFTA",
+        "action": "activates",
+        "log2_fold_change": -0.2388,
+        "tissue": "CD14-positive monocyte",
+        "strength": "weak",
+        "confidence": 0.239,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZFTA",
+        "action": "activates",
+        "log2_fold_change": -0.2388,
+        "tissue": "CD14-positive monocyte",
+        "strength": "weak",
+        "confidence": 0.239,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D406"
+    },
+    {
+      "id": "EH38E2956539",
+      "start": 45971046,
+      "end": 45971369,
+      "constrained_fraction": 0.842,
+      "phylop_mean": 5.769,
+      "inferred": {
+        "gene": "PEX16",
+        "distance": 52354,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PHF21A",
+        "action": "activates",
+        "log2_fold_change": -0.1528,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.153,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PHF21A",
+        "action": "activates",
+        "log2_fold_change": -0.1528,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.153,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D335"
+    },
+    {
+      "id": "EH38E2951354",
+      "start": 31784686,
+      "end": 31785008,
+      "constrained_fraction": 0.842,
+      "phylop_mean": 4.867,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 27543,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.1141,
+        "tissue": "GM23248",
+        "strength": "weak",
+        "confidence": 0.114,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PAX6",
+        "action": "activates",
+        "log2_fold_change": -0.1141,
+        "tissue": "GM23248",
+        "strength": "weak",
+        "confidence": 0.114,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E1559133",
+      "start": 86953156,
+      "end": 86953381,
+      "constrained_fraction": 0.84,
+      "phylop_mean": 4.865,
+      "inferred": {
+        "gene": "FZD4",
+        "distance": 2200,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "FZD4",
+        "action": "represses",
+        "log2_fold_change": 0.2201,
+        "tissue": "H9",
+        "strength": "weak",
+        "confidence": 0.22,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "FZD4",
+        "action": "represses",
+        "log2_fold_change": 0.2201,
+        "tissue": "H9",
+        "strength": "weak",
+        "confidence": 0.22,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D580"
+    },
+    {
+      "id": "EH38E1537095",
+      "start": 46001671,
+      "end": 46002020,
+      "constrained_fraction": 0.84,
+      "phylop_mean": 4.733,
+      "inferred": {
+        "gene": "PEX16",
+        "distance": 82992,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PHF21A",
+        "action": "activates",
+        "log2_fold_change": -0.1128,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.113,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PHF21A",
+        "action": "activates",
+        "log2_fold_change": -0.1128,
+        "tissue": "neural cell",
+        "strength": "weak",
+        "confidence": 0.113,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D335"
+    },
+    {
+      "id": "EH38E2948923",
+      "start": 20276231,
+      "end": 20276581,
+      "constrained_fraction": 0.837,
+      "phylop_mean": 5.42,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 115930,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.1085,
+        "tissue": "muscle of arm",
+        "strength": "weak",
+        "confidence": 0.108,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.1085,
+        "tissue": "muscle of arm",
+        "strength": "weak",
+        "confidence": 0.108,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2976764",
+      "start": 85662101,
+      "end": 85662307,
+      "constrained_fraction": 0.835,
+      "phylop_mean": 4.544,
+      "inferred": {
+        "gene": "TMEM126A",
+        "distance": 14249,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CREBZF",
+        "action": "represses",
+        "log2_fold_change": 0.1453,
+        "tissue": "immature natural killer cell",
+        "strength": "weak",
+        "confidence": 0.145,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CREBZF",
+        "action": "represses",
+        "log2_fold_change": 0.1453,
+        "tissue": "immature natural killer cell",
+        "strength": "weak",
+        "confidence": 0.145,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D575"
+    },
+    {
+      "id": "EH38E2951371",
+      "start": 31799371,
+      "end": 31799719,
+      "constrained_fraction": 0.833,
+      "phylop_mean": 5.255,
+      "inferred": {
+        "gene": "ENSG00000285283",
+        "distance": 12845,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAX6",
+        "action": "represses",
+        "log2_fold_change": 0.1066,
+        "tissue": "foreskin melanocyte",
+        "strength": "weak",
+        "confidence": 0.107,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PAX6",
+        "action": "represses",
+        "log2_fold_change": 0.1066,
+        "tissue": "foreskin melanocyte",
+        "strength": "weak",
+        "confidence": 0.107,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E2977426",
+      "start": 86950113,
+      "end": 86950267,
+      "constrained_fraction": 0.831,
+      "phylop_mean": 4.427,
+      "inferred": {
+        "gene": "FZD4",
+        "distance": 5278,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "FZD4",
+        "action": "represses",
+        "log2_fold_change": 0.176,
+        "tissue": "GM23248",
+        "strength": "weak",
+        "confidence": 0.176,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "FZD4",
+        "action": "represses",
+        "log2_fold_change": 0.176,
+        "tissue": "GM23248",
+        "strength": "weak",
+        "confidence": 0.176,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D580"
+    },
+    {
+      "id": "EH38E1538133",
+      "start": 47355230,
+      "end": 47355578,
+      "constrained_fraction": 0.828,
+      "phylop_mean": 5.421,
+      "inferred": {
+        "gene": "MYBPC3",
+        "distance": 2703,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "MYBPC3",
+        "action": "represses",
+        "log2_fold_change": 2.7078,
+        "tissue": "CD14-positive monocyte",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "MYBPC3",
+        "action": "represses",
+        "log2_fold_change": 2.7078,
+        "tissue": "CD14-positive monocyte",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D343"
+    },
+    {
+      "id": "EH38E1571202",
+      "start": 114166959,
+      "end": 114167306,
+      "constrained_fraction": 0.827,
+      "phylop_mean": 5.38,
+      "inferred": {
+        "gene": "NNMT",
+        "distance": 90632,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ZBTB16",
+        "action": "activates",
+        "log2_fold_change": -0.1211,
+        "tissue": "GM12892",
+        "strength": "weak",
+        "confidence": 0.121,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZBTB16",
+        "action": "activates",
+        "log2_fold_change": -0.1211,
+        "tissue": "GM12892",
+        "strength": "weak",
+        "confidence": 0.121,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E2966577",
+      "start": 67365213,
+      "end": 67365554,
+      "constrained_fraction": 0.827,
+      "phylop_mean": 5.144,
+      "inferred": {
+        "gene": "ENSG00000256514",
+        "distance": 8200,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CLCF1",
+        "action": "activates",
+        "log2_fold_change": -0.9704,
+        "tissue": "ascending aorta",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CLCF1",
+        "action": "activates",
+        "log2_fold_change": -0.9704,
+        "tissue": "ascending aorta",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D430"
+    },
+    {
+      "id": "EH38E2950368",
+      "start": 27451470,
+      "end": 27451678,
+      "constrained_fraction": 0.827,
+      "phylop_mean": 3.973,
+      "inferred": {
+        "gene": "LGR4",
+        "distance": 21253,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D195"
+    },
+    {
+      "id": "EH38E2985379",
+      "start": 114074641,
+      "end": 114074791,
+      "constrained_fraction": 0.827,
+      "phylop_mean": 5.19,
+      "inferred": {
+        "gene": "ZBTB16",
+        "distance": 16382,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000289230",
+        "action": "activates",
+        "log2_fold_change": -0.2359,
+        "tissue": "CD4-positive, alpha-beta T cell",
+        "strength": "weak",
+        "confidence": 0.236,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZBTB16",
+        "action": "activates",
+        "log2_fold_change": -0.1793,
+        "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "strength": "weak",
+        "confidence": 0.179,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E2996121",
+      "start": 133920034,
+      "end": 133920327,
+      "constrained_fraction": 0.826,
+      "phylop_mean": 5.567,
+      "inferred": {
+        "gene": "IGSF9B",
+        "distance": 36841,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "MIR4697",
+        "action": "activates",
+        "log2_fold_change": -0.2483,
+        "tissue": "HFFc6",
+        "strength": "weak",
+        "confidence": 0.248,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "IGSF9B",
+        "action": "activates",
+        "log2_fold_change": -0.1831,
+        "tissue": "HFFc6",
+        "strength": "weak",
+        "confidence": 0.183,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D937"
+    },
+    {
+      "id": "EH38E1571982",
+      "start": 115525547,
+      "end": 115525771,
+      "constrained_fraction": 0.826,
+      "phylop_mean": 5.108,
+      "inferred": {
+        "gene": "CADM1",
+        "distance": 20703,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D802"
+    },
+    {
+      "id": "EH38E2963632",
+      "start": 64854506,
+      "end": 64854701,
+      "constrained_fraction": 0.826,
+      "phylop_mean": 5.042,
+      "inferred": {
+        "gene": "CDC42BPG",
+        "distance": 9869,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "EHD1",
+        "action": "activates",
+        "log2_fold_change": -0.1513,
+        "tissue": "nasal cavity respiratory epithelium epithelial cell of viscerocranial mucosa",
+        "strength": "weak",
+        "confidence": 0.151,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "EHD1",
+        "action": "activates",
+        "log2_fold_change": -0.1513,
+        "tissue": "nasal cavity respiratory epithelium epithelial cell of viscerocranial mucosa",
+        "strength": "weak",
+        "confidence": 0.151,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D414"
+    },
+    {
+      "id": "EH38E2958958",
+      "start": 57791325,
+      "end": 57791673,
+      "constrained_fraction": 0.825,
+      "phylop_mean": 5.509,
+      "inferred": {
+        "gene": "CTNND1",
+        "distance": 38257,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000254732",
+        "action": "activates",
+        "log2_fold_change": -0.2184,
+        "tissue": "ascending aorta",
+        "strength": "weak",
+        "confidence": 0.218,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ENSG00000254732",
+        "action": "activates",
+        "log2_fold_change": -0.2184,
+        "tissue": "ascending aorta",
+        "strength": "weak",
+        "confidence": 0.218,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D373"
+    },
+    {
+      "id": "EH38E2992112",
+      "start": 125343491,
+      "end": 125343699,
+      "constrained_fraction": 0.822,
+      "phylop_mean": 4.755,
+      "inferred": {
+        "gene": "PKNOX2",
+        "distance": 179059,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.1061,
+        "tissue": "endothelial cell",
+        "strength": "weak",
+        "confidence": 0.106,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.1061,
+        "tissue": "endothelial cell",
+        "strength": "weak",
+        "confidence": 0.106,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D877"
+    },
+    {
+      "id": "EH38E1571966",
+      "start": 115500911,
+      "end": 115501261,
+      "constrained_fraction": 0.82,
+      "phylop_mean": 4.955,
+      "inferred": {
+        "gene": "CADM1",
+        "distance": 3870,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000287897",
+        "action": "activates",
+        "log2_fold_change": -0.6169,
+        "tissue": "HepG2",
+        "strength": "strong",
+        "confidence": 0.617,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CADM1",
+        "action": "activates",
+        "log2_fold_change": -0.5305,
+        "tissue": "foreskin melanocyte",
+        "strength": "strong",
+        "confidence": 0.53,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D802"
+    },
+    {
+      "id": "EH38E2985478",
+      "start": 114144330,
+      "end": 114144489,
+      "constrained_fraction": 0.818,
+      "phylop_mean": 4.625,
+      "inferred": {
+        "gene": "ZBTB16",
+        "distance": 86075,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000289230",
+        "action": "activates",
+        "log2_fold_change": -0.1102,
+        "tissue": "gastrocnemius medialis",
+        "strength": "weak",
+        "confidence": 0.11,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E2945498",
+      "start": 12508746,
+      "end": 12508947,
+      "constrained_fraction": 0.816,
+      "phylop_mean": 4.526,
+      "inferred": {
+        "gene": "PARVA",
+        "distance": 131713,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PARVA",
+        "action": "activates",
+        "log2_fold_change": -0.1465,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.146,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PARVA",
+        "action": "activates",
+        "log2_fold_change": -0.1465,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.146,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D82"
+    },
+    {
+      "id": "EH38E2963646",
+      "start": 64860076,
+      "end": 64860287,
+      "constrained_fraction": 0.815,
+      "phylop_mean": 4.839,
+      "inferred": {
+        "gene": "CDC42BPG",
+        "distance": 15447,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "EHD1",
+        "action": "represses",
+        "log2_fold_change": 0.1485,
+        "tissue": "Purkinje cell",
+        "strength": "weak",
+        "confidence": 0.148,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "EHD1",
+        "action": "represses",
+        "log2_fold_change": 0.1485,
+        "tissue": "Purkinje cell",
+        "strength": "weak",
+        "confidence": 0.148,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D414"
+    },
+    {
+      "id": "EH38E1547001",
+      "start": 67366993,
+      "end": 67367290,
+      "constrained_fraction": 0.815,
+      "phylop_mean": 5.177,
+      "inferred": {
+        "gene": "ENSG00000256514",
+        "distance": 6442,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CLCF1",
+        "action": "activates",
+        "log2_fold_change": -0.3452,
+        "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "strength": "strong",
+        "confidence": 0.345,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CLCF1",
+        "action": "activates",
+        "log2_fold_change": -0.3452,
+        "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "strength": "strong",
+        "confidence": 0.345,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D430"
+    },
+    {
+      "id": "EH38E1529620",
+      "start": 30356184,
+      "end": 30356394,
+      "constrained_fraction": 0.814,
+      "phylop_mean": 4.871,
+      "inferred": {
+        "gene": "ARL14EP",
+        "distance": 33241,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D216"
+    },
+    {
+      "id": "EH38E2971926",
+      "start": 73576194,
+      "end": 73576543,
+      "constrained_fraction": 0.814,
+      "phylop_mean": 4.122,
+      "inferred": {
+        "gene": "FAM168A",
+        "distance": 21884,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "HMGN2P38",
+        "action": "represses",
+        "log2_fold_change": 0.1621,
+        "tissue": "Cervix_Endocervix",
+        "strength": "weak",
+        "confidence": 0.162,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "FAM168A",
+        "action": "activates",
+        "log2_fold_change": -0.1013,
+        "tissue": "Brain_Hippocampus",
+        "strength": "weak",
+        "confidence": 0.101,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D476"
+    },
+    {
+      "id": "EH38E1571171",
+      "start": 114147727,
+      "end": 114147931,
+      "constrained_fraction": 0.814,
+      "phylop_mean": 4.714,
+      "inferred": {
+        "gene": "ZBTB16",
+        "distance": 89495,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000289230",
+        "action": "activates",
+        "log2_fold_change": -0.1032,
+        "tissue": "tibial nerve",
+        "strength": "weak",
+        "confidence": 0.103,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E1571198",
+      "start": 114163954,
+      "end": 114164295,
+      "constrained_fraction": 0.812,
+      "phylop_mean": 5.202,
+      "inferred": {
+        "gene": "NNMT",
+        "distance": 93640,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000286463",
+        "action": "activates",
+        "log2_fold_change": -0.2188,
+        "tissue": "tibial nerve",
+        "strength": "weak",
+        "confidence": 0.219,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZBTB16",
+        "action": "represses",
+        "log2_fold_change": 0.161,
+        "tissue": "H9",
+        "strength": "weak",
+        "confidence": 0.161,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E1526489",
+      "start": 20289754,
+      "end": 20289988,
+      "constrained_fraction": 0.812,
+      "phylop_mean": 4.598,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 129395,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.2268,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.227,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.2268,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.227,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2951104",
+      "start": 30635447,
+      "end": 30635796,
+      "constrained_fraction": 0.811,
+      "phylop_mean": 5.098,
+      "inferred": {
+        "gene": "MPPED2",
+        "distance": 48695,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DCDC1",
+        "action": "represses",
+        "log2_fold_change": 0.2607,
+        "tissue": "dermis lymphatic vessel endothelial cell",
+        "strength": "weak",
+        "confidence": 0.261,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DCDC1",
+        "action": "represses",
+        "log2_fold_change": 0.2607,
+        "tissue": "dermis lymphatic vessel endothelial cell",
+        "strength": "weak",
+        "confidence": 0.261,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chr11:D217"
+    },
+    {
+      "id": "EH38E2951432",
+      "start": 31826505,
+      "end": 31826821,
+      "constrained_fraction": 0.81,
+      "phylop_mean": 4.647,
+      "inferred": {
+        "gene": "PAX6",
+        "distance": 8697,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PAUPAR",
+        "action": "activates",
+        "log2_fold_change": -0.1374,
+        "tissue": "camera-type eye",
+        "strength": "weak",
+        "confidence": 0.137,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D229"
+    },
+    {
+      "id": "EH38E2988366",
+      "start": 118898417,
+      "end": 118898580,
+      "constrained_fraction": 0.81,
+      "phylop_mean": 4.449,
+      "inferred": {
+        "gene": "CXCR5",
+        "distance": 14631,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "CXCR5",
+        "action": "represses",
+        "log2_fold_change": 0.1589,
+        "tissue": "psoas muscle",
+        "strength": "weak",
+        "confidence": 0.159,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "CXCR5",
+        "action": "represses",
+        "log2_fold_change": 0.1589,
+        "tissue": "psoas muscle",
+        "strength": "weak",
+        "confidence": 0.159,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D827"
+    },
+    {
+      "id": "EH38E2988015",
+      "start": 118473955,
+      "end": 118474216,
+      "constrained_fraction": 0.808,
+      "phylop_mean": 5.271,
+      "inferred": {
+        "gene": "KMT2A",
+        "distance": 37630,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D826"
+    },
+    {
+      "id": "EH38E2976152",
+      "start": 83161328,
+      "end": 83161552,
+      "constrained_fraction": 0.808,
+      "phylop_mean": 5.188,
+      "inferred": {
+        "gene": "PCF11",
+        "distance": 4453,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D554"
+    },
+    {
+      "id": "EH38E2985358",
+      "start": 114063234,
+      "end": 114063570,
+      "constrained_fraction": 0.807,
+      "phylop_mean": 5.242,
+      "inferred": {
+        "gene": "ZBTB16",
+        "distance": 5068,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000289230",
+        "action": "represses",
+        "log2_fold_change": 0.1821,
+        "tissue": "CD4-positive, alpha-beta T cell",
+        "strength": "weak",
+        "confidence": 0.182,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZBTB16",
+        "action": "activates",
+        "log2_fold_change": -0.1399,
+        "tissue": "renal cortical epithelial cell",
+        "strength": "weak",
+        "confidence": 0.14,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D796"
+    },
+    {
+      "id": "EH38E1577028",
+      "start": 122097546,
+      "end": 122097896,
+      "constrained_fraction": 0.806,
+      "phylop_mean": 4.566,
+      "inferred": {
+        "gene": "BLID",
+        "distance": 18493,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "MIR125B1",
+        "action": "activates",
+        "log2_fold_change": -0.3707,
+        "tissue": "bronchial epithelial cell",
+        "strength": "strong",
+        "confidence": 0.371,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D852"
+    },
+    {
+      "id": "EH38E2959471",
+      "start": 59608481,
+      "end": 59608665,
+      "constrained_fraction": 0.804,
+      "phylop_mean": 5.027,
+      "inferred": {
+        "gene": "OSBP",
+        "distance": 7218,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "MIR3162",
+        "action": "activates",
+        "log2_fold_change": -0.2186,
+        "tissue": "CD4-positive, alpha-beta T cell",
+        "strength": "weak",
+        "confidence": 0.219,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "OSBP",
+        "action": "activates",
+        "log2_fold_change": -0.1584,
+        "tissue": "hematopoietic multipotent progenitor cell",
+        "strength": "weak",
+        "confidence": 0.158,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D384"
+    },
+    {
+      "id": "EH38E1538453",
+      "start": 47732291,
+      "end": 47732632,
+      "constrained_fraction": 0.804,
+      "phylop_mean": 5.125,
+      "inferred": {
+        "gene": "AGBL2",
+        "distance": 17073,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "FNBP4",
+        "action": "activates",
+        "log2_fold_change": -0.2532,
+        "tissue": "NCI-H460",
+        "strength": "weak",
+        "confidence": 0.253,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "FNBP4",
+        "action": "activates",
+        "log2_fold_change": -0.2532,
+        "tissue": "NCI-H460",
+        "strength": "weak",
+        "confidence": 0.253,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D346"
+    },
+    {
+      "id": "EH38E2948925",
+      "start": 20276982,
+      "end": 20277221,
+      "constrained_fraction": 0.803,
+      "phylop_mean": 4.842,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 116625,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.1171,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.117,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "represses",
+        "log2_fold_change": 0.1171,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.117,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E2992102",
+      "start": 125333639,
+      "end": 125333974,
+      "constrained_fraction": 0.803,
+      "phylop_mean": 4.564,
+      "inferred": {
+        "gene": "PKNOX2",
+        "distance": 169270,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.2238,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.224,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PKNOX2",
+        "action": "represses",
+        "log2_fold_change": 0.2238,
+        "tissue": "endothelial cell of umbilical vein",
+        "strength": "weak",
+        "confidence": 0.224,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D877"
+    },
+    {
+      "id": "EH38E2948924",
+      "start": 20276672,
+      "end": 20276920,
+      "constrained_fraction": 0.802,
+      "phylop_mean": 4.744,
+      "inferred": {
+        "gene": "DBX1",
+        "distance": 116320,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.13,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.13,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "DBX1",
+        "action": "activates",
+        "log2_fold_change": -0.13,
+        "tissue": "neurosphere",
+        "strength": "weak",
+        "confidence": 0.13,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D138"
+    },
+    {
+      "id": "EH38E1572852",
+      "start": 116929228,
+      "end": 116929424,
+      "constrained_fraction": 0.801,
+      "phylop_mean": 3.961,
+      "inferred": {
+        "gene": "APOA1",
+        "distance": 87262,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chr11:D817"
+    },
+    {
+      "id": "EH38E2970838",
+      "start": 72239960,
+      "end": 72240205,
+      "constrained_fraction": 0.796,
+      "phylop_mean": 5.217,
+      "inferred": {
+        "gene": "PHOX2A",
+        "distance": 5581,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "PHOX2A",
+        "action": "represses",
+        "log2_fold_change": 0.4841,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.484,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PHOX2A",
+        "action": "represses",
+        "log2_fold_change": 0.4841,
+        "tissue": "Purkinje cell",
+        "strength": "strong",
+        "confidence": 0.484,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr11:D470"
+    },
+    {
+      "id": "EH38E1524135",
+      "start": 16605819,
+      "end": 16606039,
+      "constrained_fraction": 0.795,
+      "phylop_mean": 4.448,
+      "inferred": {
+        "gene": "C11orf58",
+        "distance": 7202,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "AKR1B1P3",
+        "action": "activates",
+        "log2_fold_change": -0.1368,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.137,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "SOX6",
+        "action": "activates",
+        "log2_fold_change": -0.1223,
+        "tissue": "K562",
+        "strength": "weak",
+        "confidence": 0.122,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr11:D112"
+    }
+  ],
+  "phylop_cost": {
+    "requests": 713,
+    "mb_fetched": 162.7,
+    "seconds": 544.3
+  },
+  "evidence": "measured: Zoonomia phyloP constraint; predicted: AlphaGenome deletion effect per element"
+}

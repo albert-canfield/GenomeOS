@@ -1,0 +1,57 @@
+# Lateral inhibition, emergent rather than stated: two equivalent cells, one anchor cell.
+# Collier et al. 1996 (J Theor Biol 183:429): a cell's Notch activity rises with its neighbours' Delta and
+# its own Delta falls with its Notch activity. Two cells started exactly equal stay equal forever — the
+# symmetric state is a steady state — but it is unstable, so noise decides which cell keeps the primary
+# fate. In the worm's AC/VU decision Z1.ppp and Z4.aaa each become the anchor cell about half the time
+# (Kimble & Hirsh 1979; Seydoux & Greenwald 1989), while the reference lineage records only one outcome.
+# Nothing here names the winner: neighbours come from contact, the amount received is read from the
+# neighbour's own network, and the seed decides. BioLang v0.4 §7.4.
+module demo.lateral_inhibition
+import bio.std.development
+
+organism AcVu {
+  root: Z; cell_type: Progenitor
+  space: 2 x 1; origin: 0,0; placement: names
+  cell_network: 6 min          # every cell's own network, stepped together
+  replicates: 100              # the outcome is a distribution, so it is scored over seeds
+  seed: 0
+  observe: fates
+  assert: exactly one of Z1.ppp, Z4.aaa is AnchorCell at 40 h in >= 90%
+  assert: Z1.ppp is AnchorCell at 40 h in 35..65%
+  evidence: experimental "Kimble & Hirsh 1979, Dev Biol 70:396; Seydoux & Greenwald 1989, Cell 57:1237"
+  confidence: 0.8
+}
+stage AcVu_decision { from: 0 min; to: 40 h }
+cell_type AnchorCell { parent: PostMitotic; evidence: curated "Cell Ontology"; confidence: 0.7 }
+cell_type VentralUterine { parent: PostMitotic; evidence: curated "Cell Ontology"; confidence: 0.7 }
+
+# the circuit: Delta from the neighbour switches Notch on, Notch switches Delta off
+gene N { max: 1.0; produces: Np; evidence: curated "Collier et al. 1996, J Theor Biol 183:429"; confidence: 0.7 }
+gene D { max: 1.0; produces: Dp; evidence: curated "Collier et al. 1996, J Theor Biol 183:429"; confidence: 0.7 }
+protein Np { initial: 0.5; evidence: curated "Collier et al. 1996: n(0) = 0.5"; confidence: 0.6 }
+protein Dp { initial: 0.5; evidence: curated "Collier et al. 1996: d(0) = 0.5"; confidence: 0.6 }
+protein Dext { evidence: curated "the neighbours' Delta, read at the contact"; confidence: 0.7 }
+
+rule Dext activates N { strength: 1.0; threshold: 0.1; hill: 2
+  evidence: curated "Collier et al. 1996: f(d) = d^2 / (0.01 + d^2)"; confidence: 0.7 }
+rule Np inhibits D { strength: 1.0; threshold: 0.1; hill: 2
+  evidence: curated "Collier et al. 1996: g(n) = 1 / (1 + 100 n^2)"; confidence: 0.7 }
+
+signal DeltaAtContact {
+  mode: contact; ligand: Dp; receptor: N; reads: amount; sets: Dext
+  evidence: curated "Delta on a neighbour's membrane binds Notch on this one"; confidence: 0.8
+}
+
+param mrna_half_life = 0.693 h { evidence: inferred "Collier's dimensionless unit time"; confidence: 0.3 }
+param translation_rate = 20 { evidence: inferred "fast translation, so protein tracks its transcript"; confidence: 0.3 }
+param protein_half_life = 0.0347 h { evidence: inferred "fast turnover, the same reason"; confidence: 0.3 }
+param noise = 0.05 { evidence: inferred "the symmetry has to be broken by something; the size is not measured"; confidence: 0.3 }
+
+decision first { action: divide; when: cell = Z; daughters: Z1.ppp, Z4.aaa; after: 1 min
+  evidence: experimental "the two cells of the AC/VU equivalence group"; confidence: 0.8 }
+decision anchor { action: differentiate; when: Dp = >=0.6; to: AnchorCell; name: AC; priority: 2
+  evidence: experimental "the high-Delta cell becomes the anchor cell"; confidence: 0.7 }
+decision uterine { action: differentiate; when: Np = >=0.6; to: VentralUterine; priority: 1
+  evidence: experimental "the high-Notch cell takes the uterine fate"; confidence: 0.7 }
+
+# test: cells == 3

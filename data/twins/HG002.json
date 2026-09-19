@@ -7,7 +7,7 @@
     "chronological_age": 45.0,
     "telomere_bp": 5896.0,
     "epigenetic_age": 97.52,
-    "notes": "measured state from streamed GIAB data: telomere_bp, epigenetic_age"
+    "notes": "epigenetic_age 97.52 is Horvath from streamed nanopore bedMethyl at 409 of 418 clock CpGs at 36x (33c3629), recorded there as a LYMPHOBLASTOID CELL-LINE signature, which is why it sits far above the chronological age; Hannum on the same data read 62.7. TWO TELOMERE READINGS DISAGREE BY 2.2x AND BOTH ARE KEPT. telomere_bp 5896 is the streamed GIAB reading of 2026-09-10 and is the value this twin is calibrated against, so it stays the consumed one. A second method gives 2676 bp: TelSeq (Ding et al. 2014) over the indexed 300x BAM, data/results/telomere_range_HG002.json, evidence inferred at confidence 0.3, and its own note says the derivation reads LOW against Southern blots. Neither is a Southern blot. Calibrate the twin's attrition against either with care, and do not quote one without saying which method produced it. An uncommitted edit of 2026-09-17 set chronological_age to 46 with no source given; 45 is kept because a person's age is not something to change silently."
   },
   "environment": {
     "proliferation_factor": 1.0,

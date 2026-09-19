@@ -1,0 +1,615 @@
+{
+  "result": "executor_replication",
+  "date": "2026-09-15",
+  "chromosomes": [
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chrX"
+  ],
+  "discovery_chromosomes_excluded": [
+    "chr21",
+    "chr22"
+  ],
+  "by_chromosome": {
+    "chr6": {
+      "units_with_a_measured_value": 43491,
+      "tests": {
+        "E3R_eqtl_linked_replication": 30476,
+        "E2R_eqtl_replication": 255
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 191,
+        "E3R_eqtl_linked_replication": 26963
+      },
+      "control_pool": 63774
+    },
+    "chr7": {
+      "units_with_a_measured_value": 38616,
+      "tests": {
+        "E3R_eqtl_linked_replication": 28869,
+        "E2R_eqtl_replication": 286
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 222,
+        "E3R_eqtl_linked_replication": 26595
+      },
+      "control_pool": 63108
+    },
+    "chr8": {
+      "units_with_a_measured_value": 30134,
+      "tests": {
+        "E3R_eqtl_linked_replication": 20519,
+        "E2R_eqtl_replication": 134
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 135,
+        "E3R_eqtl_linked_replication": 22120
+      },
+      "control_pool": 60129
+    },
+    "chr9": {
+      "units_with_a_measured_value": 20583,
+      "tests": {
+        "E3R_eqtl_linked_replication": 14822,
+        "E2R_eqtl_replication": 225
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 201,
+        "E3R_eqtl_linked_replication": 15445
+      },
+      "control_pool": 48342
+    },
+    "chr10": {
+      "units_with_a_measured_value": 31260,
+      "tests": {
+        "E3R_eqtl_linked_replication": 22682,
+        "E2R_eqtl_replication": 246
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 249,
+        "E3R_eqtl_linked_replication": 21939
+      },
+      "control_pool": 55839
+    },
+    "chr11": {
+      "units_with_a_measured_value": 37028,
+      "tests": {
+        "E3R_eqtl_linked_replication": 28525,
+        "E2R_eqtl_replication": 236
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 191,
+        "E3R_eqtl_linked_replication": 21383
+      },
+      "control_pool": 47410
+    },
+    "chr12": {
+      "units_with_a_measured_value": 33048,
+      "tests": {
+        "E3R_eqtl_linked_replication": 23666,
+        "E2R_eqtl_replication": 176
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 149,
+        "E3R_eqtl_linked_replication": 22312
+      },
+      "control_pool": 44296
+    },
+    "chr13": {
+      "units_with_a_measured_value": 18279,
+      "tests": {
+        "E3R_eqtl_linked_replication": 12300,
+        "E2R_eqtl_replication": 100
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 141,
+        "E3R_eqtl_linked_replication": 16979
+      },
+      "control_pool": 59337
+    },
+    "chr14": {
+      "units_with_a_measured_value": 17782,
+      "tests": {
+        "E3R_eqtl_linked_replication": 12947,
+        "E2R_eqtl_replication": 159
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 141,
+        "E3R_eqtl_linked_replication": 12442
+      },
+      "control_pool": 33046
+    },
+    "chr15": {
+      "units_with_a_measured_value": 12834,
+      "tests": {
+        "E3R_eqtl_linked_replication": 9750,
+        "E2R_eqtl_replication": 147
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 103,
+        "E3R_eqtl_linked_replication": 7742
+      },
+      "control_pool": 18595
+    },
+    "chr16": {
+      "units_with_a_measured_value": 12953,
+      "tests": {
+        "E3R_eqtl_linked_replication": 9517,
+        "E2R_eqtl_replication": 209
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 168,
+        "E3R_eqtl_linked_replication": 9008
+      },
+      "control_pool": 29859
+    },
+    "chr17": {
+      "units_with_a_measured_value": 16994,
+      "tests": {
+        "E3R_eqtl_linked_replication": 12757,
+        "E2R_eqtl_replication": 243
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 197,
+        "E3R_eqtl_linked_replication": 9661
+      },
+      "control_pool": 18616
+    },
+    "chr18": {
+      "units_with_a_measured_value": 13615,
+      "tests": {
+        "E3R_eqtl_linked_replication": 9426,
+        "E2R_eqtl_replication": 77
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 103,
+        "E3R_eqtl_linked_replication": 11912
+      },
+      "control_pool": 42728
+    },
+    "chr19": {
+      "units_with_a_measured_value": 19308,
+      "tests": {
+        "E3R_eqtl_linked_replication": 15560,
+        "E2R_eqtl_replication": 376
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 247,
+        "E3R_eqtl_linked_replication": 9083
+      },
+      "control_pool": 11177
+    },
+    "chr20": {
+      "units_with_a_measured_value": 15351,
+      "tests": {
+        "E3R_eqtl_linked_replication": 11671,
+        "E2R_eqtl_replication": 140
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 131,
+        "E3R_eqtl_linked_replication": 11420
+      },
+      "control_pool": 27859
+    },
+    "chrX": {
+      "units_with_a_measured_value": 36595,
+      "tests": {
+        "E3R_eqtl_linked_replication": 25701,
+        "E2R_eqtl_replication": 74
+      },
+      "pairs": {
+        "E2R_eqtl_replication": 102,
+        "E3R_eqtl_linked_replication": 25554
+      },
+      "control_pool": 74985
+    }
+  },
+  "unmatched": {
+    "E3R_eqtl_linked_replication": 147091,
+    "E2R_eqtl_replication": 1642
+  },
+  "pairs": {
+    "E2R_eqtl_replication": 2671,
+    "E3R_eqtl_linked_replication": 270558
+  },
+  "units": {
+    "E2R_eqtl_replication": 1441,
+    "E3R_eqtl_linked_replication": 142097
+  },
+  "chromosomes_in_the_first_400_pairs": {
+    "E2R_eqtl_replication": {
+      "chr6": 26,
+      "chr7": 26,
+      "chr8": 26,
+      "chr9": 22,
+      "chr10": 24,
+      "chr11": 27,
+      "chr12": 25,
+      "chr13": 28,
+      "chr14": 25,
+      "chr15": 27,
+      "chr16": 25,
+      "chr17": 25,
+      "chr18": 25,
+      "chr19": 21,
+      "chr20": 24,
+      "chrX": 24
+    },
+    "E3R_eqtl_linked_replication": {
+      "chr6": 25,
+      "chr7": 22,
+      "chr8": 28,
+      "chr9": 27,
+      "chr10": 27,
+      "chr11": 25,
+      "chr12": 27,
+      "chr13": 28,
+      "chr14": 28,
+      "chr15": 24,
+      "chr16": 25,
+      "chr17": 23,
+      "chr18": 22,
+      "chr19": 22,
+      "chr20": 21,
+      "chrX": 26
+    }
+  },
+  "match_levels": {
+    "E2R_eqtl_replication": {
+      "1": 709,
+      "0": 1593,
+      "2": 369
+    },
+    "E3R_eqtl_linked_replication": {
+      "2": 28759,
+      "1": 59904,
+      "0": 181895
+    }
+  },
+  "measured_positive_share": {
+    "E2R_eqtl_replication": 0.486,
+    "E3R_eqtl_linked_replication": 0.507
+  },
+  "control_distance_median_kb": {
+    "E2R_eqtl_replication": 131.7,
+    "E3R_eqtl_linked_replication": 118.0
+  },
+  "budget": {
+    "E2R_eqtl_replication": {
+      "units": 600,
+      "pairs": 1200,
+      "requests": 1800
+    },
+    "E3R_eqtl_linked_replication": {
+      "units": 400,
+      "pairs": 800,
+      "requests": 1200
+    }
+  },
+  "pre_registration": {
+    "written": "2026-09-15, before any model request of the replication and before a pair of it was scored; the human panel had just reached 19 chromosomes and the shortlist 123,667 units with a measured value",
+    "why": "E2 is the strongest result this lane has (+0.268, units 38 of 56 against controls 30 of 73, p 0.0021) and E3 showed its agreement follows causality rather than the neighbourhood. Both rest on 161 pairs from chr21 and chr22, the two chromosomes that happened to be scored first, and chr22 carried the difference while chr21 did not reach significance alone. A claim that holds on those two and nowhere else has caught this project four times already, so the question is asked again where the answer can be different",
+    "population": "storage units on the catalogued chromosomes other than chr21 and chr22, which are the discovery set and are excluded from the replication claim entirely. E2R_eqtl_replication: the unit's recurring value is a variant DAP-G fine-maps (PIP at or above 0.5) for a gene with GTEx p at or below 1e-5 and one sign across tissues. E3R_eqtl_linked_replication: the other significant eQTL values, which are usually linked to a cause rather than causal",
+    "unchanged": "everything the first run fixed stays fixed: the read-out (the gene GTEx names, the track matching the most significant tissue else the mean over the gene's tracks), the measured sign (GTEx slope for the alternative allele), the no-call at 0.001 with the 0, 0.001 and 0.01 grid, two matched controls per unit from the same chromosome within 250 kb with the same GC stratum and, where the neighbourhood allows, the same timing tertile and value count, panel r-squared under 0.2, no measured value of their own, borrowing the unit's gene, tissue and measured sign, each unit counted once and each control once",
+    "order": "round robin over chromosomes, strongest evidence first inside each: the first requests answer whether the effect appears on chromosomes the original never saw, not which chromosome has the most units. A unit's two pairs stay together, so a stop leaves no half-answered unit. E2R is spent before E3R",
+    "alpha_spending": {
+      "look_1_pairs": 150,
+      "alpha_1": 0.0005,
+      "look_2_pairs": 400,
+      "alpha_2": 0.002
+    },
+    "final_alpha": 0.01,
+    "stopping": "unchanged: at 150 and 400 pairs an endpoint stops for success at its alpha or for futility if the upper 95% bound of the difference is below 0.05; otherwise the run ends at the budget and is read at 0.01. E3R never stops the run and is read against E2R by the hold-out's own rule (compare_endpoints)",
+    "replicates": "the pooled difference on the replication chromosomes is at or above 0.10 with one-sided Fisher p at or below the alpha of the look, AND no single chromosome's removal takes the pooled difference below 0.05 (leave_one_out). The second half is the point: it is what would have caught a claim carried by one chromosome, and E2 itself would have passed it only because chr21 and chr22 both leaned the same way",
+    "fails_to_replicate": "the pooled difference is at or below 0 with the budget spent, or the run stops for futility. Then E2's +0.268 belongs to chr21 and chr22 or to 161 pairs, the executor claim loses the result it rested on, and E3's dilution becomes a statement about two chromosomes",
+    "resolves_nothing": "a pooled difference between 0 and 0.10, or p above the alpha with the upper 95% bound above 0.05, or a pooled difference that only clears 0.10 while one chromosome carries it (leave-one-out below 0.05). The last case is reported as 'not replicated as a genome-wide claim', never as a success",
+    "dilution_again": "E3R is the hold-out asked at power: if a unit executes its value, E3R's difference should again be clearly smaller than E2R's, with the gap's one-sided 95% lower bound above zero. If the two match this time, the reading is the neighbourhood and not causality, whatever the first run found",
+    "what_a_success_would_still_not_mean": "this endpoint is one model agreeing with fine-mapping. The widened E1, the endpoint whose outcome is an external measurement, came back at +0.014 with an upper bound of 0.073 and resolved nothing, and the benchmark lane has since shown that a model producing a direction is evidence of having been scored rather than of an element doing anything. The only part of this work that does not depend on AlphaGenome is the measured-against-measured reading: MPRA direction against GTEx slope, 0.670 where DAP-G fine-maps the variant and 0.518 over all of them, with no model in between. A replication here strengthens the pattern; it does not move the evidence outside the model",
+    "caveat": "the same ENCODE caveat as E2: the model learned from RNA-seq tracks and GTEx expression is the same kind of measurement. Five chromosomes (chr1 to chr5) have no panel yet, so 'genome-wide' means 17 replication chromosomes, and chrY contributes almost nothing"
+  },
+  "first_pairs": [
+    {
+      "order": 1,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr6:134955540-134955740",
+      "test": {
+        "pos": 134955558,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs4440481",
+        "endpoint": "E2_eqtl",
+        "tissue": "Brain_Cerebellar_Hemisphere",
+        "gene": "ALDH8A1",
+        "measured_sign": -1,
+        "measured_effect": -0.974918,
+        "pval": 1.07608e-101,
+        "pip": 0.727
+      },
+      "control": {
+        "unit": "chr6:135163260-135163460",
+        "pos": 135163307,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs56748859",
+        "panel_minor": 9,
+        "gnomad_af": 0.102407,
+        "distance": 207749,
+        "r2_with_test": 0.026
+      },
+      "borrowed": {
+        "gene": "ALDH8A1",
+        "tissue": "Brain_Cerebellar_Hemisphere",
+        "cell": null,
+        "measured_sign": -1
+      },
+      "match_level": 1
+    },
+    {
+      "order": 2,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr6:134955540-134955740",
+      "test": {
+        "pos": 134955558,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs4440481",
+        "endpoint": "E2_eqtl",
+        "tissue": "Brain_Cerebellar_Hemisphere",
+        "gene": "ALDH8A1",
+        "measured_sign": -1,
+        "measured_effect": -0.974918,
+        "pval": 1.07608e-101,
+        "pip": 0.727
+      },
+      "control": {
+        "unit": "chr6:134707896-134708096",
+        "pos": 134707948,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs77859722",
+        "panel_minor": 4,
+        "gnomad_af": 0.0657511,
+        "distance": -247610,
+        "r2_with_test": 0.006
+      },
+      "borrowed": {
+        "gene": "ALDH8A1",
+        "tissue": "Brain_Cerebellar_Hemisphere",
+        "cell": null,
+        "measured_sign": -1
+      },
+      "match_level": 1
+    },
+    {
+      "order": 3,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr7:74793935-74794135",
+      "test": {
+        "pos": 74793968,
+        "ref": "G",
+        "alt": "C",
+        "rsid": "rs1268836686",
+        "endpoint": "E2_eqtl",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "gene": "GTF2IRD2",
+        "measured_sign": -1,
+        "measured_effect": -0.996006,
+        "pval": 6.88442e-116,
+        "pip": 0.7856
+      },
+      "control": {
+        "unit": "chr7:74959051-74959251",
+        "pos": 74959067,
+        "ref": "T",
+        "alt": "G",
+        "rsid": "rs868911077",
+        "panel_minor": 11,
+        "gnomad_af": 0.0232367,
+        "distance": 165099,
+        "r2_with_test": 0.0
+      },
+      "borrowed": {
+        "gene": "GTF2IRD2",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "cell": null,
+        "measured_sign": -1
+      },
+      "match_level": 1
+    },
+    {
+      "order": 4,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr8:124181729-124181929",
+      "test": {
+        "pos": 124181805,
+        "ref": "G",
+        "alt": "C",
+        "rsid": "rs4366065",
+        "endpoint": "E2_eqtl",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "gene": "TMEM65",
+        "measured_sign": -1,
+        "measured_effect": -1.11663,
+        "pval": 1.74062e-153,
+        "pip": 0.9999
+      },
+      "control": {
+        "unit": "chr8:124295369-124295569",
+        "pos": 124295559,
+        "ref": "G",
+        "alt": "T",
+        "rsid": "rs67647956",
+        "panel_minor": 25,
+        "gnomad_af": 0.0961549,
+        "distance": 113754,
+        "r2_with_test": 0.028
+      },
+      "borrowed": {
+        "gene": "TMEM65",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "cell": null,
+        "measured_sign": -1
+      },
+      "match_level": 0
+    },
+    {
+      "order": 5,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr8:124181729-124181929",
+      "test": {
+        "pos": 124181805,
+        "ref": "G",
+        "alt": "C",
+        "rsid": "rs4366065",
+        "endpoint": "E2_eqtl",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "gene": "TMEM65",
+        "measured_sign": -1,
+        "measured_effect": -1.11663,
+        "pval": 1.74062e-153,
+        "pip": 0.9999
+      },
+      "control": {
+        "unit": "chr8:124430511-124430711",
+        "pos": 124430607,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs79662167",
+        "panel_minor": 6,
+        "gnomad_af": 0.0167282,
+        "distance": 248802,
+        "r2_with_test": 0.002
+      },
+      "borrowed": {
+        "gene": "TMEM65",
+        "tissue": "Cells_Cultured_fibroblasts",
+        "cell": null,
+        "measured_sign": -1
+      },
+      "match_level": 0
+    },
+    {
+      "order": 6,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr9:33437236-33437436",
+      "test": {
+        "pos": 33437246,
+        "ref": "G",
+        "alt": "T",
+        "rsid": "rs34239839",
+        "endpoint": "E2_eqtl",
+        "tissue": "Esophagus_Mucosa",
+        "gene": "AQP7",
+        "measured_sign": 1,
+        "measured_effect": 0.826791,
+        "pval": 6.87638e-73,
+        "pip": 0.9994
+      },
+      "control": {
+        "unit": "chr9:33484330-33484530",
+        "pos": 33484407,
+        "ref": "A",
+        "alt": "T",
+        "rsid": "rs13287942",
+        "panel_minor": 25,
+        "gnomad_af": 0.106067,
+        "distance": 47161,
+        "r2_with_test": 0.004
+      },
+      "borrowed": {
+        "gene": "AQP7",
+        "tissue": "Esophagus_Mucosa",
+        "cell": null,
+        "measured_sign": 1
+      },
+      "match_level": 1
+    },
+    {
+      "order": 7,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr10:97721150-97721350",
+      "test": {
+        "pos": 97721261,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs7914697",
+        "endpoint": "E2_eqtl",
+        "tissue": "Lung",
+        "gene": "MARVELD1",
+        "measured_sign": 1,
+        "measured_effect": 0.530226,
+        "pval": 7.01758e-59,
+        "pip": 0.8152
+      },
+      "control": {
+        "unit": "chr10:97783887-97784087",
+        "pos": 97784085,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs77320627",
+        "panel_minor": 13,
+        "gnomad_af": 0.057129,
+        "distance": 62824,
+        "r2_with_test": 0.101
+      },
+      "borrowed": {
+        "gene": "MARVELD1",
+        "tissue": "Lung",
+        "cell": null,
+        "measured_sign": 1
+      },
+      "match_level": 0
+    },
+    {
+      "order": 8,
+      "endpoint": "E2R_eqtl_replication",
+      "unit": "chr10:97721150-97721350",
+      "test": {
+        "pos": 97721261,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs7914697",
+        "endpoint": "E2_eqtl",
+        "tissue": "Lung",
+        "gene": "MARVELD1",
+        "measured_sign": 1,
+        "measured_effect": 0.530226,
+        "pval": 7.01758e-59,
+        "pip": 0.8152
+      },
+      "control": {
+        "unit": "chr10:97708936-97709136",
+        "pos": 97708996,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs58764357",
+        "panel_minor": 5,
+        "gnomad_af": 0.0176103,
+        "distance": -12265,
+        "r2_with_test": 0.035
+      },
+      "borrowed": {
+        "gene": "MARVELD1",
+        "tissue": "Lung",
+        "cell": null,
+        "measured_sign": 1
+      },
+      "match_level": 0
+    }
+  ],
+  "model_requests_spent": 0,
+  "seconds": 1963.6
+}

@@ -1,0 +1,151 @@
+{
+  "result": "kinetic_BIOMD0000000010",
+  "date": "2026-09-11",
+  "pathways": [],
+  "query": null,
+  "baseline": {
+    "model": "BIOMD0000000010",
+    "name": "Kholodenko2000 - Ultrasensitivity and negative feedback bring oscillations in MAPK cascade",
+    "species": 8,
+    "reactions": 10,
+    "functions": 0,
+    "rate_rules": 0,
+    "duration": 3000.0,
+    "dt": 0.05,
+    "knocked_out": [],
+    "levels": {
+      "MKKK": {
+        "name": "Mos",
+        "initial": 90.0,
+        "final": 55.555524,
+        "peak": 96.918887,
+        "peaks": 2
+      },
+      "MKKK_P": {
+        "name": "Mos-P",
+        "initial": 10.0,
+        "final": 44.444476,
+        "peak": 88.133479,
+        "peaks": 2
+      },
+      "MKK": {
+        "name": "Mek1",
+        "initial": 280.0,
+        "final": 244.250988,
+        "peak": 296.519659,
+        "peaks": 2
+      },
+      "MKK_P": {
+        "name": "Mek1-P",
+        "initial": 10.0,
+        "final": 32.354851,
+        "peak": 85.711741,
+        "peaks": 3
+      },
+      "MKK_PP": {
+        "name": "Mek1-PP",
+        "initial": 10.0,
+        "final": 23.394161,
+        "peak": 265.911339,
+        "peaks": 2
+      },
+      "MAPK": {
+        "name": "Erk2",
+        "initial": 280.0,
+        "final": 202.633303,
+        "peak": 280.049776,
+        "peaks": 3
+      },
+      "MAPK_P": {
+        "name": "Erk2-P",
+        "initial": 10.0,
+        "final": 60.402024,
+        "peak": 76.424697,
+        "peaks": 4
+      },
+      "MAPK_PP": {
+        "name": "Erk2-PP",
+        "initial": 10.0,
+        "final": 36.964673,
+        "peak": 298.761641,
+        "peaks": 2
+      }
+    },
+    "evidence": "curated: BioModels (manually curated, reproduces the cited paper); derived: in-house RK4 run"
+  },
+  "knockout": {
+    "term": "MEK",
+    "held": [
+      "MKK",
+      "MKK_P",
+      "MKK_PP"
+    ],
+    "changed": [
+      {
+        "species": "MAPK_PP",
+        "name": "Erk2-PP",
+        "baseline_final": 36.964673,
+        "knockout_final": 0.0,
+        "baseline_peak": 298.761641,
+        "knockout_peak": 10.0,
+        "relative_change": -0.967,
+        "final_change": -0.124,
+        "peak_change": -0.967,
+        "peaks_before": 2,
+        "peaks_after": 0
+      },
+      {
+        "species": "MAPK_P",
+        "name": "Erk2-P",
+        "baseline_final": 60.402024,
+        "knockout_final": 0.0,
+        "baseline_peak": 76.424697,
+        "knockout_peak": 10.0,
+        "relative_change": -0.869,
+        "final_change": -0.79,
+        "peak_change": -0.869,
+        "peaks_before": 4,
+        "peaks_after": 0
+      },
+      {
+        "species": "MKKK_P",
+        "name": "Mos-P",
+        "baseline_final": 44.444476,
+        "knockout_final": 98.980449,
+        "baseline_peak": 88.133479,
+        "knockout_peak": 98.980449,
+        "relative_change": 0.619,
+        "final_change": 0.619,
+        "peak_change": 0.123,
+        "peaks_before": 2,
+        "peaks_after": 1
+      },
+      {
+        "species": "MKKK",
+        "name": "Mos",
+        "baseline_final": 55.555524,
+        "knockout_final": 1.019551,
+        "baseline_peak": 96.918887,
+        "knockout_peak": 90.0,
+        "relative_change": -0.563,
+        "final_change": -0.563,
+        "peak_change": -0.071,
+        "peaks_before": 2,
+        "peaks_after": 0
+      },
+      {
+        "species": "MAPK",
+        "name": "Erk2",
+        "baseline_final": 202.633303,
+        "knockout_final": 300.0,
+        "baseline_peak": 280.049776,
+        "knockout_peak": 300.0,
+        "relative_change": 0.348,
+        "final_change": 0.348,
+        "peak_change": 0.071,
+        "peaks_before": 3,
+        "peaks_after": 1
+      }
+    ]
+  }
+}

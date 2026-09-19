@@ -1,0 +1,31 @@
+{
+  "result": "celegans_time_axis",
+  "date": "2026-09-11",
+  "reference_axis": "WormWeb minutes from first cleavage (source scale unverified until now)",
+  "atlas_births": {
+    "n": 718,
+    "slope": 0.582,
+    "intercept_min": -36.9,
+    "residual_sd_min": 9.3
+  },
+  "atlas_divisions": {
+    "n": 638,
+    "slope": 0.6072,
+    "intercept_min": 28.2,
+    "residual_sd_min": 42.7
+  },
+  "packer_midlife": {
+    "n": 73,
+    "slope": 0.695,
+    "intercept_min": -7.6,
+    "residual_sd_min": 22.2
+  },
+  "packer_median_inside_lifetime": {
+    "inside": 2,
+    "of": 73
+  },
+  "minutes_per_reference_minute": 0.607,
+  "reading": "one reference minute is about 0.607 minutes on the two independent clocks (Ma 2021 imaging at 1.25 min per frame; Packer 2019 estimated embryo times), so the reference axis runs slow by a factor of about 1.65; topology, fates and deaths are unaffected, and a timing statement in reference minutes converts by this factor",
+  "inputs": [],
+  "describe": "the reference lineage's minute against the Ma 2021 frames and the Packer 2019 embryo times"
+}

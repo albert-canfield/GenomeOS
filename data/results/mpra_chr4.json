@@ -1,0 +1,237 @@
+{
+  "result": "mpra_chr4",
+  "date": "2026-09-12",
+  "chrom": "chr4",
+  "elements": 2560,
+  "annotated": 2438,
+  "reader_cells": [
+    "HepG2",
+    "K562"
+  ],
+  "summary": {
+    "elements": 2438,
+    "active_threshold_log2": 1.0,
+    "cells": {
+      "HepG2": {
+        "elements": 2438,
+        "active": 0.064,
+        "median_activity": -0.386,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 51,
+            "active": 0.216
+          },
+          "pELS": {
+            "elements": 107,
+            "active": 0.093
+          },
+          "dELS": {
+            "elements": 1452,
+            "active": 0.071
+          },
+          "CTCF-only": {
+            "elements": 199,
+            "active": 0.005
+          },
+          "DNase-H3K4me3": {
+            "elements": 85,
+            "active": 0.059
+          },
+          "none": {
+            "elements": 544,
+            "active": 0.05
+          }
+        },
+        "active_when_constrained": 0.043,
+        "active_when_not_constrained": 0.067,
+        "reader_open_predicts_active": {
+          "same_cell": {
+            "flagged": 1328,
+            "precision": 0.072,
+            "recall": 0.605,
+            "base_rate": 0.064
+          },
+          "other_cells": {
+            "K562": {
+              "flagged": 1117,
+              "precision": 0.058,
+              "recall": 0.414,
+              "base_rate": 0.064
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": {
+            "elements": 2438,
+            "spearman": 0.283,
+            "active_in_top_quartile": 0.098,
+            "active_in_bottom_quartile": 0.039
+          },
+          "other_cells": {
+            "K562": {
+              "elements": 2438,
+              "spearman": 0.086,
+              "active_in_top_quartile": 0.093,
+              "active_in_bottom_quartile": 0.057
+            }
+          }
+        }
+      },
+      "K562": {
+        "elements": 2438,
+        "active": 0.073,
+        "median_activity": -0.406,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 51,
+            "active": 0.333
+          },
+          "pELS": {
+            "elements": 107,
+            "active": 0.121
+          },
+          "dELS": {
+            "elements": 1452,
+            "active": 0.065
+          },
+          "CTCF-only": {
+            "elements": 199,
+            "active": 0.01
+          },
+          "DNase-H3K4me3": {
+            "elements": 85,
+            "active": 0.094
+          },
+          "none": {
+            "elements": 544,
+            "active": 0.077
+          }
+        },
+        "active_when_constrained": 0.038,
+        "active_when_not_constrained": 0.077,
+        "reader_open_predicts_active": {
+          "same_cell": {
+            "flagged": 1117,
+            "precision": 0.096,
+            "recall": 0.605,
+            "base_rate": 0.073
+          },
+          "other_cells": {
+            "HepG2": {
+              "flagged": 1328,
+              "precision": 0.053,
+              "recall": 0.401,
+              "base_rate": 0.073
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": {
+            "elements": 2438,
+            "spearman": 0.416,
+            "active_in_top_quartile": 0.134,
+            "active_in_bottom_quartile": 0.028
+          },
+          "other_cells": {
+            "HepG2": {
+              "elements": 2438,
+              "spearman": 0.017,
+              "active_in_top_quartile": 0.057,
+              "active_in_bottom_quartile": 0.084
+            }
+          }
+        }
+      },
+      "WTC11": {
+        "elements": 2438,
+        "active": 0.077,
+        "median_activity": -0.918,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 51,
+            "active": 0.314
+          },
+          "pELS": {
+            "elements": 107,
+            "active": 0.103
+          },
+          "dELS": {
+            "elements": 1452,
+            "active": 0.069
+          },
+          "CTCF-only": {
+            "elements": 199,
+            "active": 0.045
+          },
+          "DNase-H3K4me3": {
+            "elements": 85,
+            "active": 0.118
+          },
+          "none": {
+            "elements": 544,
+            "active": 0.077
+          }
+        },
+        "active_when_constrained": 0.055,
+        "active_when_not_constrained": 0.078,
+        "reader_open_predicts_active": {
+          "same_cell": null,
+          "other_cells": {
+            "HepG2": {
+              "flagged": 1328,
+              "precision": 0.06,
+              "recall": 0.426,
+              "base_rate": 0.077
+            },
+            "K562": {
+              "flagged": 1117,
+              "precision": 0.079,
+              "recall": 0.468,
+              "base_rate": 0.077
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": null,
+          "other_cells": {
+            "K562": {
+              "elements": 2438,
+              "spearman": 0.237,
+              "active_in_top_quartile": 0.108,
+              "active_in_bottom_quartile": 0.066
+            },
+            "HepG2": {
+              "elements": 2438,
+              "spearman": 0.083,
+              "active_in_top_quartile": 0.072,
+              "active_in_bottom_quartile": 0.087
+            }
+          }
+        }
+      }
+    },
+    "specific_elements": {
+      "elements": 166,
+      "active_in": {
+        "K562": 93,
+        "HepG2": 73
+      },
+      "reader_open_in_the_active_cell_only": 0.512,
+      "reader_open_in_the_inactive_cell_only": 0.114,
+      "predicted_dnase_higher_in_the_active_cell": 0.795,
+      "predicted_judged": 166
+    },
+    "evidence": "experimental: ENCODE4 lentiMPRA (Ahituv lab, UCSF), joint library ENCSR106SZM in K562, HepG2 and WTC11, log2(RNA/DNA) per 200 bp element"
+  },
+  "phylop_cost": {
+    "requests": 2060,
+    "mb_fetched": 36.2,
+    "seconds": 1160.9
+  },
+  "model_cost": {
+    "requests": 181,
+    "seconds": 106.5
+  },
+  "evidence": "experimental: ENCODE4 lentiMPRA (Ahituv lab, UCSF), joint library ENCSR106SZM in K562, HepG2 and WTC11, log2(RNA/DNA) per 200 bp element; experimental: ENCODE DNase peaks (reader); measured: Zoonomia phyloP; curated: ENCODE cCREs; predicted: AlphaGenome DNase per cell line",
+  "rows_where": "data/knowledge/mpra/rows_chr4.json"
+}

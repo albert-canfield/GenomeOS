@@ -1,0 +1,584 @@
+{
+  "result": "executor_shortlist",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr21",
+    "chr22"
+  ],
+  "by_chromosome": {
+    "chr21": {
+      "units_with_a_measured_value": 5872,
+      "tests": {
+        "E3_eqtl_linked": 4500,
+        "E2_eqtl": 67,
+        "E1_mpra": 6
+      },
+      "pairs": {
+        "E1_mpra": 4,
+        "E2_eqtl": 41,
+        "E3_eqtl_linked": 4551
+      }
+    },
+    "chr22": {
+      "units_with_a_measured_value": 10055,
+      "tests": {
+        "E3_eqtl_linked": 7787,
+        "E2_eqtl": 196,
+        "E1_mpra": 14
+      },
+      "pairs": {
+        "E1_mpra": 8,
+        "E2_eqtl": 120,
+        "E3_eqtl_linked": 6486
+      }
+    }
+  },
+  "measured_value_events": 22411,
+  "events_with_gtex_pairs": 22375,
+  "events_with_dapg_pip_05": 437,
+  "events_with_mpra_rows": 361,
+  "events_with_significant_mpra": 20,
+  "tests": {
+    "E3_eqtl_linked": 12287,
+    "E2_eqtl": 263,
+    "E1_mpra": 20
+  },
+  "pairs": {
+    "E1_mpra": 12,
+    "E2_eqtl": 161,
+    "E3_eqtl_linked": 11037
+  },
+  "unmatched": {
+    "E3_eqtl_linked": 6470,
+    "E2_eqtl": 173,
+    "E1_mpra": 14
+  },
+  "control_pool": 31230,
+  "match_levels": {
+    "E1_mpra": {
+      "0": 8,
+      "1": 4
+    },
+    "E2_eqtl": {
+      "1": 74,
+      "0": 62,
+      "2": 25
+    },
+    "E3_eqtl_linked": {
+      "0": 7219,
+      "2": 1175,
+      "1": 2643
+    }
+  },
+  "measured_positive_share": {
+    "E1_mpra": 0.833,
+    "E2_eqtl": 0.609,
+    "E3_eqtl_linked": 0.496
+  },
+  "control_distance_median_kb": 112.9,
+  "control_r2_max": 0.2,
+  "criterion": {
+    "written": "2026-09-14, before any model request for this test",
+    "claim_tested": "a storage unit executes its value: swapping the stored allele changes the predicted read-out of the measured gene or cell in the measured direction, more often than the same swap at a matched unit that stores a value nobody has measured",
+    "unit_of_test": "one variant per shortlist unit: the recurring value event that is the measured variant (rsID match to gnomAD at the event, same alternative base); units whose measured variant is not one of their recurring values are listed but not tested",
+    "prediction": "AlphaGenome RNA-seq gene scorer through predict/alphagenome_adapter.py: both alleles in one request over the 1 Mb window centred on the variant; the read-out is the log2 fold change of alternative over reference on the implicated gene",
+    "readout_eqtl": "the gene GTEx names; the track whose GTEx tissue name matches the eQTL's most significant tissue, else the mean over the gene's tracks (declared per unit)",
+    "readout_mpra": "the MPRA's cell line tracks on the gene the variant's eQTL names; without an eQTL, the gene with the largest absolute predicted effect in that cell's tracks, chosen identically for the control",
+    "measured_sign_eqtl": "sign of GTEx v8 slope for the alternative allele (hg38 ref/alt of the variant id)",
+    "measured_sign_mpra": "sign of MPRAVarDB log2FC, which UCSC's track description defines as log2(alt RNA/DNA) - log2(ref RNA/DNA): alternative over reference",
+    "no_call": "a predicted |log2FC| below 0.001 is a no-call in either arm and is counted, not scored",
+    "endpoints": {
+      "E1_mpra": "sign agreement among units whose value has an MPRA allele pair at FDR <= 0.05 (or nominal p <= 0.01 where no FDR is given), 3'UTR stability libraries excluded, against matched controls drawn chromosome-wide; the cleaner test, reported apart",
+      "E2_eqtl": "sign agreement among units whose value is DAP-G fine-mapped (PIP >= 0.5) for a gene with GTEx p <= 1e-5 and one sign across tissues, against controls within 250 kb; partly the model reading back ENCODE-like training data",
+      "E3_eqtl_linked": "the other significant eQTL values, which may only be linked to the cause; exploratory, run only after E1 and E2 are decided and only if the quota holder agrees, never a claim"
+    },
+    "controls": "one per unit, never reused: same chromosome and GC stratum, and where the neighbourhood allows the same timing tertile and number of recurring values (2, 3, 4+), relaxed in that order and recorded as match_level (0 all, 1 values relaxed, 2 timing relaxed); a substitution value with no GTEx pair and no MPRA row anywhere in the unit; panel r-squared under 0.2 with the tested variant; within 250 kb for E2 and E3, anywhere on the chromosome for E1; the control borrows the unit's gene, tissue or cell and measured sign",
+    "power": "a difference of 0.10 in agreement needs about 495 pairs (80% power, one-sided alpha 0.01); with the 20 MPRA pairs chr21 and chr22 offer, only a difference of 0.5 or more is detectable, so a negative E1 here is a lack of power and not evidence of absence; E2's 135 pairs detect about 0.19. Both primary endpoints together are 155 pairs, so the first look (150 pairs) falls near their end and the later looks matter only if E3 is run",
+    "success": "for an endpoint: agreement in units minus agreement in controls >= 0.10, one-sided Fisher exact p at or below the alpha of the look, and the same direction of difference on chr21 and chr22 separately; anything else is a negative",
+    "secondary": [
+      "absolute predicted effect larger in units than in controls (Mann-Whitney, reported only)",
+      "rank correlation of predicted log2FC with GTEx slope among units (reported only)",
+      "agreement against 0.5 without controls (reported only; the controls decide)",
+      "a no-call grid of 0, 0.001 and 0.01 on |predicted log2FC|, added 2026-09-14 after a two-request smoke test showed single-variant gene effects of about 0.001, before any endpoint was scored; the primary keeps 0.001"
+    ],
+    "alpha_spending": {
+      "look_1_pairs": 150,
+      "alpha_1": 0.0005,
+      "look_2_pairs": 400,
+      "alpha_2": 0.002,
+      "final_alpha": 0.01
+    },
+    "stopping": "requests go out in unit-control pairs in the order below; at each look an endpoint stops for success at its alpha, or for futility if the upper 95% bound of the agreement difference is below 0.05; the run stops when both endpoints have stopped, when the ordered list is exhausted, or when the quota holder asks for it back; a stopped run reports requests spent against units answered",
+    "order": [
+      "1: E1 MPRA units, strongest |log2FC| first",
+      "2: E2 fine-mapped eQTL units, early-replicating with at most three values, smallest p first",
+      "3: the other E2 units, smallest p first",
+      "4: E3 linked eQTL units, only on request"
+    ],
+    "caveat": "AlphaGenome learned from ENCODE RNA-seq, DNase and histone tracks, and GTEx expression is the same kind of measurement; agreement with an eQTL is partly the model reading back its inputs. MPRA reporter activity is not a training track in that way, so E1 is the cleaner test"
+  },
+  "amendments": [
+    {
+      "when": "2026-09-14, after a two-request smoke test and before any endpoint was scored",
+      "what": "a no-call grid of 0, 0.001 and 0.01 reported beside the primary 0.001",
+      "why": "single-variant gene effects came out near 0.001 log2, so the threshold choice is shown"
+    },
+    {
+      "when": "2026-09-14, after the first 308 requests (155 pairs, E1 and E2)",
+      "what": "E1's controls are drawn within 250 kb like E2's rather than chromosome-wide; the cache filter keeps every gene's tracks in the read-out cell; two controls per unit instead of one",
+      "why": "19 of E1's 20 controls returned no value at all: a chromosome-wide control's borrowed gene was outside its window and the cache filter had dropped the cell's other genes, so the arm could not be scored. The unit arm is unchanged and its answers come from cache; only controls are added. Both readings are reported, before and after"
+    }
+  ],
+  "plan": {
+    "requests_per_pair": 2,
+    "pairs": 11210,
+    "requests_if_all_run": 22420,
+    "pairs_by_endpoint": {
+      "E1_mpra": 12,
+      "E2_eqtl": 161,
+      "E3_eqtl_linked": 11037
+    },
+    "first_look_after_requests": 300,
+    "second_look_after_requests": 800,
+    "order": [
+      "1: E1 MPRA units, strongest |log2FC| first",
+      "2: E2 fine-mapped eQTL units, early-replicating with at most three values, smallest p first",
+      "3: the other E2 units, smallest p first",
+      "4: E3 linked eQTL units, only on request"
+    ],
+    "seconds_per_request_measured_elsewhere": 3.9,
+    "hours_if_all_run_sequentially": 24.3,
+    "cache": "data/knowledge/human_panel/executor/predictions",
+    "note": "a cached variant costs no request; the run reports requests spent against units answered"
+  },
+  "first_pairs": [
+    {
+      "order": 1,
+      "endpoint": "E1_mpra",
+      "unit": "chr21:42841277-42841477",
+      "test": {
+        "pos": 42841462,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs2401140",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "WDR4",
+        "measured_sign": 1,
+        "measured_effect": 2.00676370613041,
+        "measured_fdr": 8.16611514176634e-09,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr21:43046694-43046894",
+        "pos": 43046777,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs2401195",
+        "panel_minor": 25,
+        "gnomad_af": 0.18331,
+        "distance": 205315,
+        "r2_with_test": 0.009
+      },
+      "borrowed": {
+        "gene": "WDR4",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 2,
+      "endpoint": "E1_mpra",
+      "unit": "chr21:42841277-42841477",
+      "test": {
+        "pos": 42841462,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs2401140",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "WDR4",
+        "measured_sign": 1,
+        "measured_effect": 2.00676370613041,
+        "measured_fdr": 8.16611514176634e-09,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr21:43038494-43038694",
+        "pos": 43038616,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs928876",
+        "panel_minor": 27,
+        "gnomad_af": 0.435492,
+        "distance": 197154,
+        "r2_with_test": 0.006
+      },
+      "borrowed": {
+        "gene": "WDR4",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 3,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21626234-21626434",
+      "test": {
+        "pos": 21626349,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs5754426",
+        "endpoint": "E1_mpra",
+        "cell": "Jurkat",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.286630155,
+        "measured_fdr": null,
+        "study": "Prioritization of autoimmune disease-associated genetic variants that perturb regulatory e"
+      },
+      "control": {
+        "unit": "chr22:21522863-21523063",
+        "pos": 21522947,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs527862257",
+        "panel_minor": 3,
+        "gnomad_af": 0.0,
+        "distance": -103402,
+        "r2_with_test": 0.009
+      },
+      "borrowed": {
+        "gene": "CCDC116",
+        "tissue": null,
+        "cell": "Jurkat",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 4,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21626234-21626434",
+      "test": {
+        "pos": 21626349,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs5754426",
+        "endpoint": "E1_mpra",
+        "cell": "Jurkat",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.286630155,
+        "measured_fdr": null,
+        "study": "Prioritization of autoimmune disease-associated genetic variants that perturb regulatory e"
+      },
+      "control": {
+        "unit": "chr22:21539263-21539463",
+        "pos": 21539435,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs574172940",
+        "panel_minor": 6,
+        "gnomad_af": 0.00730282,
+        "distance": -86914,
+        "r2_with_test": 0.039
+      },
+      "borrowed": {
+        "gene": "CCDC116",
+        "tissue": null,
+        "cell": "Jurkat",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 5,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:39567010-39567210",
+      "test": {
+        "pos": 39567168,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757727",
+        "endpoint": "E1_mpra",
+        "cell": "HNPS",
+        "gene": "MGAT3",
+        "measured_sign": -1,
+        "measured_effect": -0.262935853,
+        "measured_fdr": 0.048029555,
+        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
+      },
+      "control": {
+        "unit": "chr22:39724142-39724342",
+        "pos": 39724281,
+        "ref": "C",
+        "alt": "G",
+        "rsid": "rs11702927",
+        "panel_minor": 13,
+        "gnomad_af": 0.10054,
+        "distance": 157113,
+        "r2_with_test": 0.002
+      },
+      "borrowed": {
+        "gene": "MGAT3",
+        "tissue": null,
+        "cell": "HNPS",
+        "measured_sign": -1
+      }
+    },
+    {
+      "order": 6,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:39567010-39567210",
+      "test": {
+        "pos": 39567168,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757727",
+        "endpoint": "E1_mpra",
+        "cell": "HNPS",
+        "gene": "MGAT3",
+        "measured_sign": -1,
+        "measured_effect": -0.262935853,
+        "measured_fdr": 0.048029555,
+        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
+      },
+      "control": {
+        "unit": "chr22:39691335-39691535",
+        "pos": 39691384,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757773",
+        "panel_minor": 22,
+        "gnomad_af": 0.557251,
+        "distance": 124216,
+        "r2_with_test": 0.014
+      },
+      "borrowed": {
+        "gene": "MGAT3",
+        "tissue": null,
+        "cell": "HNPS",
+        "measured_sign": -1
+      }
+    },
+    {
+      "order": 7,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21454863-21455063",
+      "test": {
+        "pos": 21454896,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs463426",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.19,
+        "measured_fdr": 0.016,
+        "study": "Global discovery of lupus genetic risk variant allelic enhancer activity (Lu et al., 2021)"
+      },
+      "control": {
+        "unit": "chr22:21543663-21543863",
+        "pos": 21543697,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs532672559",
+        "panel_minor": 11,
+        "gnomad_af": 0.0,
+        "distance": 88801,
+        "r2_with_test": 0.0
+      },
+      "borrowed": {
+        "gene": "CCDC116",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 8,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21454863-21455063",
+      "test": {
+        "pos": 21454896,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs463426",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.19,
+        "measured_fdr": 0.016,
+        "study": "Global discovery of lupus genetic risk variant allelic enhancer activity (Lu et al., 2021)"
+      },
+      "control": {
+        "unit": "chr22:21462063-21462263",
+        "pos": 21462105,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs977276393",
+        "panel_minor": 5,
+        "gnomad_af": 0.0,
+        "distance": 7209,
+        "r2_with_test": 0.053
+      },
+      "borrowed": {
+        "gene": "CCDC116",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 9,
+      "endpoint": "E1_mpra",
+      "unit": "chr21:26775798-26775998",
+      "test": {
+        "pos": 26775872,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs2830489",
+        "endpoint": "E1_mpra",
+        "cell": "HEK293T",
+        "gene": null,
+        "measured_sign": 1,
+        "measured_effect": 0.154535361,
+        "measured_fdr": 0.007998489,
+        "study": "Functional regulatory variants implicate distinct transcriptional networks in dementia (Co"
+      },
+      "control": {
+        "unit": "chr21:26735598-26735798",
+        "pos": 26735659,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs3017524",
+        "panel_minor": 43,
+        "gnomad_af": 0.601928,
+        "distance": -40213,
+        "r2_with_test": 0.028
+      },
+      "borrowed": {
+        "gene": null,
+        "tissue": null,
+        "cell": "HEK293T",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 10,
+      "endpoint": "E1_mpra",
+      "unit": "chr21:26775798-26775998",
+      "test": {
+        "pos": 26775872,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs2830489",
+        "endpoint": "E1_mpra",
+        "cell": "HEK293T",
+        "gene": null,
+        "measured_sign": 1,
+        "measured_effect": 0.154535361,
+        "measured_fdr": 0.007998489,
+        "study": "Functional regulatory variants implicate distinct transcriptional networks in dementia (Co"
+      },
+      "control": {
+        "unit": "chr21:26799398-26799598",
+        "pos": 26799430,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs457752",
+        "panel_minor": 44,
+        "gnomad_af": 0.745198,
+        "distance": 23558,
+        "r2_with_test": 0.054
+      },
+      "borrowed": {
+        "gene": null,
+        "tissue": null,
+        "cell": "HEK293T",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 11,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:45242744-45242944",
+      "test": {
+        "pos": 45242915,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs5765229",
+        "endpoint": "E1_mpra",
+        "cell": "C283T",
+        "gene": "KIAA0930",
+        "measured_sign": 1,
+        "measured_effect": 0.05,
+        "measured_fdr": 0.033799319,
+        "study": "Massively parallel reporter assays and variant scoring identified functional variants and "
+      },
+      "control": {
+        "unit": "chr22:45465143-45465343",
+        "pos": 45465272,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs111930858",
+        "panel_minor": 15,
+        "gnomad_af": 0.142091,
+        "distance": 222357,
+        "r2_with_test": 0.001
+      },
+      "borrowed": {
+        "gene": "KIAA0930",
+        "tissue": null,
+        "cell": "C283T",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 12,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:45242744-45242944",
+      "test": {
+        "pos": 45242915,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs5765229",
+        "endpoint": "E1_mpra",
+        "cell": "C283T",
+        "gene": "KIAA0930",
+        "measured_sign": 1,
+        "measured_effect": 0.05,
+        "measured_fdr": 0.033799319,
+        "study": "Massively parallel reporter assays and variant scoring identified functional variants and "
+      },
+      "control": {
+        "unit": "chr22:45462143-45462343",
+        "pos": 45462216,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs73441275",
+        "panel_minor": 14,
+        "gnomad_af": 0.137579,
+        "distance": 219301,
+        "r2_with_test": 0.0
+      },
+      "borrowed": {
+        "gene": "KIAA0930",
+        "tissue": null,
+        "cell": "C283T",
+        "measured_sign": 1
+      }
+    }
+  ],
+  "sample_sizes": {
+    "panel": "89 haplotype assemblies per value",
+    "gnomad": "gnomAD v4.1.1 genomes, allele number per variant (about 152,000)",
+    "gtex": "GTEx v8 significant pairs per tissue (73 to 706 donors by tissue)",
+    "mpra": "MPRAVarDB as reported per study and cell line"
+  },
+  "model_requests_spent": 0,
+  "seconds": 53.9
+}

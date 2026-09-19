@@ -1,0 +1,632 @@
+{
+  "result": "executor_mpra_wide_extension",
+  "date": "2026-09-17",
+  "pairs_done": 2260,
+  "requests_spent": 4518,
+  "stopped": {},
+  "E1W_mpra_wide": {
+    "pairs": 2260,
+    "units_called": 1096,
+    "units_agree": 637,
+    "controls_called": 968,
+    "controls_agree": 490,
+    "difference": 0.075,
+    "p_one_sided": 0.0003733,
+    "difference_upper_95": 0.111,
+    "by_chromosome": {
+      "chr1": {
+        "pairs": 231,
+        "units_called": 112,
+        "units_agree": 66,
+        "controls_called": 108,
+        "controls_agree": 56,
+        "difference": 0.071,
+        "p_one_sided": 0.17877363,
+        "difference_upper_95": 0.181
+      },
+      "chr10": {
+        "pairs": 69,
+        "units_called": 29,
+        "units_agree": 15,
+        "controls_called": 23,
+        "controls_agree": 9,
+        "difference": 0.126,
+        "p_one_sided": 0.26652134,
+        "difference_upper_95": 0.352
+      },
+      "chr11": {
+        "pairs": 175,
+        "units_called": 70,
+        "units_agree": 42,
+        "controls_called": 72,
+        "controls_agree": 37,
+        "difference": 0.086,
+        "p_one_sided": 0.1939339,
+        "difference_upper_95": 0.223
+      },
+      "chr12": {
+        "pairs": 90,
+        "units_called": 53,
+        "units_agree": 26,
+        "controls_called": 39,
+        "controls_agree": 22,
+        "difference": -0.074,
+        "p_one_sided": 0.81822824,
+        "difference_upper_95": 0.099
+      },
+      "chr13": {
+        "pairs": 14,
+        "units_called": 8,
+        "units_agree": 6,
+        "controls_called": 8,
+        "controls_agree": 5,
+        "difference": 0.125,
+        "p_one_sided": 0.5,
+        "difference_upper_95": 0.503
+      },
+      "chr14": {
+        "pairs": 65,
+        "units_called": 33,
+        "units_agree": 25,
+        "controls_called": 30,
+        "controls_agree": 15,
+        "difference": 0.258,
+        "p_one_sided": 0.03117778,
+        "difference_upper_95": 0.452
+      },
+      "chr15": {
+        "pairs": 63,
+        "units_called": 29,
+        "units_agree": 20,
+        "controls_called": 22,
+        "controls_agree": 10,
+        "difference": 0.235,
+        "p_one_sided": 0.08038657,
+        "difference_upper_95": 0.46
+      },
+      "chr16": {
+        "pairs": 125,
+        "units_called": 65,
+        "units_agree": 37,
+        "controls_called": 64,
+        "controls_agree": 31,
+        "difference": 0.085,
+        "p_one_sided": 0.21517315,
+        "difference_upper_95": 0.229
+      },
+      "chr17": {
+        "pairs": 162,
+        "units_called": 65,
+        "units_agree": 34,
+        "controls_called": 45,
+        "controls_agree": 18,
+        "difference": 0.123,
+        "p_one_sided": 0.14069797,
+        "difference_upper_95": 0.281
+      },
+      "chr18": {
+        "pairs": 48,
+        "units_called": 25,
+        "units_agree": 11,
+        "controls_called": 29,
+        "controls_agree": 15,
+        "difference": -0.077,
+        "p_one_sided": 0.79923174,
+        "difference_upper_95": 0.146
+      },
+      "chr19": {
+        "pairs": 104,
+        "units_called": 60,
+        "units_agree": 40,
+        "controls_called": 54,
+        "controls_agree": 30,
+        "difference": 0.111,
+        "p_one_sided": 0.15290113,
+        "difference_upper_95": 0.261
+      },
+      "chr2": {
+        "pairs": 122,
+        "units_called": 48,
+        "units_agree": 26,
+        "controls_called": 53,
+        "controls_agree": 29,
+        "difference": -0.006,
+        "p_one_sided": 0.60085652,
+        "difference_upper_95": 0.158
+      },
+      "chr20": {
+        "pairs": 55,
+        "units_called": 27,
+        "units_agree": 14,
+        "controls_called": 21,
+        "controls_agree": 9,
+        "difference": 0.09,
+        "p_one_sided": 0.37202102,
+        "difference_upper_95": 0.328
+      },
+      "chr21": {
+        "pairs": 18,
+        "units_called": 10,
+        "units_agree": 7,
+        "controls_called": 8,
+        "controls_agree": 3,
+        "difference": 0.325,
+        "p_one_sided": 0.18421774,
+        "difference_upper_95": 0.694
+      },
+      "chr22": {
+        "pairs": 77,
+        "units_called": 39,
+        "units_agree": 20,
+        "controls_called": 35,
+        "controls_agree": 20,
+        "difference": -0.059,
+        "p_one_sided": 0.76975907,
+        "difference_upper_95": 0.132
+      },
+      "chr3": {
+        "pairs": 109,
+        "units_called": 57,
+        "units_agree": 31,
+        "controls_called": 41,
+        "controls_agree": 28,
+        "difference": -0.139,
+        "p_one_sided": 0.94552716,
+        "difference_upper_95": 0.022
+      },
+      "chr4": {
+        "pairs": 101,
+        "units_called": 45,
+        "units_agree": 24,
+        "controls_called": 32,
+        "controls_agree": 22,
+        "difference": -0.154,
+        "p_one_sided": 0.94549063,
+        "difference_upper_95": 0.028
+      },
+      "chr5": {
+        "pairs": 109,
+        "units_called": 62,
+        "units_agree": 39,
+        "controls_called": 44,
+        "controls_agree": 21,
+        "difference": 0.152,
+        "p_one_sided": 0.08782747,
+        "difference_upper_95": 0.312
+      },
+      "chr6": {
+        "pairs": 187,
+        "units_called": 98,
+        "units_agree": 55,
+        "controls_called": 100,
+        "controls_agree": 49,
+        "difference": 0.071,
+        "p_one_sided": 0.19461645,
+        "difference_upper_95": 0.188
+      },
+      "chr7": {
+        "pairs": 135,
+        "units_called": 57,
+        "units_agree": 33,
+        "controls_called": 50,
+        "controls_agree": 19,
+        "difference": 0.199,
+        "p_one_sided": 0.03113457,
+        "difference_upper_95": 0.355
+      },
+      "chr8": {
+        "pairs": 94,
+        "units_called": 38,
+        "units_agree": 26,
+        "controls_called": 33,
+        "controls_agree": 14,
+        "difference": 0.26,
+        "p_one_sided": 0.02454121,
+        "difference_upper_95": 0.448
+      },
+      "chr9": {
+        "pairs": 66,
+        "units_called": 40,
+        "units_agree": 26,
+        "controls_called": 34,
+        "controls_agree": 15,
+        "difference": 0.209,
+        "p_one_sided": 0.05844573,
+        "difference_upper_95": 0.396
+      },
+      "chrX": {
+        "pairs": 41,
+        "units_called": 26,
+        "units_agree": 14,
+        "controls_called": 23,
+        "controls_agree": 13,
+        "difference": -0.027,
+        "p_one_sided": 0.68239181,
+        "difference_upper_95": 0.207
+      }
+    },
+    "by_cell": {
+      "GM12878": {
+        "pairs": 1895,
+        "units_called": 922,
+        "units_agree": 549,
+        "controls_called": 810,
+        "controls_agree": 410,
+        "difference": 0.089,
+        "p_one_sided": 0.00011591,
+        "difference_upper_95": 0.129
+      },
+      "Jurkat": {
+        "pairs": 365,
+        "units_called": 174,
+        "units_agree": 88,
+        "controls_called": 158,
+        "controls_agree": 80,
+        "difference": -0.001,
+        "p_one_sided": 0.54793303,
+        "difference_upper_95": 0.09
+      }
+    },
+    "verdict": "negative"
+  },
+  "E1S_mpra_saturation": {
+    "pairs": 0,
+    "units_called": 0,
+    "units_agree": 0,
+    "controls_called": 0,
+    "controls_agree": 0,
+    "difference": null,
+    "p_one_sided": null,
+    "difference_upper_95": null,
+    "by_chromosome": {
+      "chr1": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr10": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr11": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr12": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr13": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr14": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr15": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr16": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr17": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr18": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr19": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr2": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr20": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr21": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr22": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr3": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr4": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr5": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr6": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr7": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr8": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr9": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chrX": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      }
+    },
+    "by_cell": {},
+    "verdict": "negative"
+  },
+  "no_call_grid": {
+    "E1W_mpra_wide": [
+      {
+        "no_call": 0.0,
+        "pairs": 2260,
+        "units_called": 1973,
+        "units_agree": 1068,
+        "controls_called": 1972,
+        "controls_agree": 988,
+        "difference": 0.04,
+        "p_one_sided": 0.00618378,
+        "difference_upper_95": 0.066
+      },
+      {
+        "no_call": 0.001,
+        "pairs": 2260,
+        "units_called": 1096,
+        "units_agree": 637,
+        "controls_called": 968,
+        "controls_agree": 490,
+        "difference": 0.075,
+        "p_one_sided": 0.0003733,
+        "difference_upper_95": 0.111
+      },
+      {
+        "no_call": 0.01,
+        "pairs": 2260,
+        "units_called": 210,
+        "units_agree": 167,
+        "controls_called": 84,
+        "controls_agree": 48,
+        "difference": 0.224,
+        "p_one_sided": 0.00011578,
+        "difference_upper_95": 0.324
+      }
+    ]
+  },
+  "fine_mapped_split": {
+    "E1W_mpra_wide": {
+      "fine_mapped": {
+        "pairs": 175,
+        "units_called": 132,
+        "units_agree": 98,
+        "controls_called": 90,
+        "controls_agree": 49,
+        "difference": 0.198,
+        "p_one_sided": 0.00181712,
+        "difference_upper_95": 0.305
+      },
+      "the_rest": {
+        "pairs": 2085,
+        "units_called": 964,
+        "units_agree": 539,
+        "controls_called": 878,
+        "controls_agree": 441,
+        "difference": 0.057,
+        "p_one_sided": 0.00829063,
+        "difference_upper_95": 0.095
+      },
+      "prediction": "declared 2026-09-14 before any request, after the convention check and from it: among the tested GM12878 variants that also have a significant eQTL in EBV-transformed lymphocytes, the reporter's direction and the eQTL's direction agree 120 of 179 times (0.670) where DAP-G fine-maps the variant and 946 of 1,826 (0.518) over all of them. Two independent measurements therefore show the same split E2 and E3 found in the model. E1W is read again inside those strata: if the model is tracking the measurement rather than its own training data, its agreement should be higher on the fine-mapped variants than on the rest, by about the same margin. This is a prediction, not a criterion: the endpoint's success or failure is decided by the difference against the matched nulls as stated above"
+    }
+  },
+  "against_e2": {
+    "E2_eqtl": {
+      "pairs": 161,
+      "units_called": 56,
+      "units_agree": 38,
+      "controls_called": 73,
+      "controls_agree": 30,
+      "difference": 0.268,
+      "p_one_sided": 0.00213786,
+      "difference_upper_95": 0.407
+    },
+    "E1W_mpra_wide": {
+      "pairs": 2260,
+      "units_called": 1096,
+      "units_agree": 637,
+      "controls_called": 968,
+      "controls_agree": 490,
+      "difference": 0.075,
+      "p_one_sided": 0.0003733,
+      "difference_upper_95": 0.111
+    },
+    "gap": 0.193,
+    "gap_lower_95": 0.049,
+    "second_endpoint_meets_success": false,
+    "reading": "E1W_mpra_wide is diluted against E2_eqtl as the executor claim predicts",
+    "note": "descriptive only. compare_endpoints was written for E2 against E3, two readings of the same kind of measurement, and its 'diluted' wording means dilution by linkage there. E2 and this endpoint measure different outcomes - a gene's expression across donors against a reporter fragment's activity - so a gap between them is not the hold-out's dilution and must not be read as one"
+  },
+  "pre_registration": {
+    "written": "2026-09-16, before any request of the extension and before any of its pairs were scored; the prose is docs/ATTRIBUTION.md, 'Pre-registration: E1's remaining 2,260 pairs'",
+    "why": "the widened E1 ran on 1,000 of its 3,260 pairs and returned +0.014 at one-sided p 0.38, upper 95% bound 0.073 \u2014 the band its own pre-registration called a result that decides nothing. Spending the remaining pairs and reading all 3,260 together would be optional stopping run backwards, because the decision to continue was taken after seeing that result. So the unspent pairs are a fresh sample with its own reading, and the pooled figure over all 3,260 may be described but never used as a test",
+    "sample": "the 2,260 pairs of E1W_mpra_wide not scored in cbff5f6, in the order the original pre-registration fixed (strongest measured MPRA effect first), with no further selection. They are weaker by construction than the first 1,000, since the order was by effect size: this is a reading of weaker measured effects and must be stated as such wherever the two are compared",
+    "primary": "the share of units whose model read-out moves in the direction the reporter measured, minus the same share for the matched nulls from the same library, with its one-sided p and 95% upper bound",
+    "outcomes": {
+      "success": "a difference of 0.10 or more at one-sided p 0.01 or better",
+      "weak": "0.05 to 0.10, which settles nothing on its own",
+      "failure": "below 0.05 with an upper bound under 0.10: reported as the ENCODE objection standing unanswered, not as an absence of evidence"
+    },
+    "secondary_fine_mapped_split": "agreement higher where DAP-G fine-maps the variant than where it does not; it failed in the first run (-0.152 on 57 fine-mapped pairs) at power too low to mean much, is declared again here, and a second failure is a failure of the prediction",
+    "alpha_spending": {
+      "look_1_pairs": 1130,
+      "alpha_1": 0.0,
+      "look_2_pairs": 0,
+      "alpha_2": 0.0,
+      "final_alpha": 0.01
+    },
+    "stopping": "one look at 1,130 pairs, for futility only (the upper 95% bound below 0.05); no interim success look, so nothing can be gained by watching it; otherwise the run ends at the budget of 2,260 pairs and is read at 0.01",
+    "cannot_do": "no outcome here makes E2 and E3 independent of the model. A success says the model's agreement with a reporter assay survives at the size the executor claim needs; a failure says it does not track a reporter assay's direction at that size, which is compatible both with the executor claim being wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome"
+  },
+  "seconds": 4267.5,
+  "first_run": {
+    "result": "executor_mpra_wide_run",
+    "commit": "cbff5f6",
+    "reading": "1,000 pairs, +0.014, one-sided p 0.38, upper 95% bound 0.073; undecided by its own pre-registration. This result is a separate sample and is not to be pooled with it as a test"
+  }
+}
