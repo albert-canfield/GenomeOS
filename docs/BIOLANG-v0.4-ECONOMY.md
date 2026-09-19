@@ -1203,6 +1203,17 @@ it there, and for an imported protein that link is the transport at 0.3.
    argument about *when* to decide, not about which unit is right — and this decision
    does not say which unit is right, because the gate still cannot separate them until
    the language can express an absolute volume.
+
+   **Resolved 2026-09-19 by Albert: add the absolute volume, unblock stage 2.** A
+   `compartment` gains an absolute volume beside the fraction it already carries, so a
+   concentration becomes expressible and §9's gate becomes runnable — it was not runnable
+   before, since a fraction of a cell cannot express cells of different volume. The price
+   is the one that was measured: one language field, and one citation per cell type that
+   declares a compartment, which is two today and both published. The fraction stays,
+   because it is what the existing programs state and what the tree needs; the absolute
+   volume is what a threshold can be divided by. This resolves the decision by making the
+   arm expressible rather than by choosing the unit: stage 2 is no longer held, and the
+   gate can now be run both ways and report which unit a threshold should be stated in.
 3. **Membranes as compartments.** A membrane is a node of the tree facing both
    sides. The alternative (a membrane as the edge between two spaces) is closer
    to a bigraph link but makes receptors harder to place.
