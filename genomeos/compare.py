@@ -203,3 +203,46 @@ def input_presence(targets: list[Row], controls: list[Row], inputs: dict[str, st
             ),
         }
     return out
+
+
+def spearman(xs: list[float], ys: list[float], min_n: int = 3) -> float | None:
+    """Rank correlation, ties averaged; None when either side is constant or there are too few points.
+
+    One home, because there were eight. The algorithm was the same in all of them — average ranks,
+    None on a constant side — but **the minimum n diverged: 3, 4 and 10 across the copies**, which
+    silently decides *admissibility* rather than a value. Two lanes computing "the same" correlation
+    were disagreeing about which elements were allowed to have one, so their results did not line up
+    even where the statistic matched.
+
+    So `min_n` is an argument with no hidden default per copy: a caller that needs a stricter bar
+    passes it, and the bar is then readable at the call site instead of buried in a module constant.
+    3 is the floor because below it a rank correlation is arithmetic without content; it is not an
+    endorsement of 3 for any particular question.
+
+    `attribution/closure.py` held the de-facto canonical version and this matches it exactly, which a
+    test asserts over random inputs so the two cannot drift while both exist.
+    """
+    n = len(xs)
+    if n < max(3, min_n):
+        return None
+
+    def ranks(v: list[float]) -> list[float]:
+        order = sorted(range(n), key=lambda i: v[i])
+        out = [0.0] * n
+        i = 0
+        while i < n:
+            j = i
+            while j + 1 < n and v[order[j + 1]] == v[order[i]]:
+                j += 1
+            for k in range(i, j + 1):
+                out[order[k]] = (i + j) / 2 + 1
+            i = j + 1
+        return out
+
+    rx, ry = ranks(xs), ranks(ys)
+    mx, my = sum(rx) / n, sum(ry) / n
+    sxx = sum((a - mx) ** 2 for a in rx)
+    syy = sum((b - my) ** 2 for b in ry)
+    if sxx == 0 or syy == 0:
+        return None
+    return sum((a - mx) * (b - my) for a, b in zip(rx, ry, strict=True)) / (sxx * syy) ** 0.5

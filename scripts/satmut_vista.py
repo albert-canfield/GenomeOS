@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import random
 import time
 from contextlib import contextmanager
@@ -29,6 +28,7 @@ from statistics import mean
 
 from genomeos import jobs
 from genomeos.attribution import satmut_vista as reg
+from genomeos.compare import spearman as compare_spearman
 from genomeos.predict import AlphaGenomeAdapter
 from genomeos.predict.enhancer_target import Context, score_element
 from genomeos.results import load_result, save_result
@@ -62,30 +62,15 @@ def windows_of(record: dict) -> list[tuple[int, int]]:
 
 
 def spearman(xs: list[float], ys: list[float]) -> float | None:
-    """Rank correlation, ties averaged. None when either side is constant: no order to correlate."""
-    n = len(xs)
-    if n < 4:
-        return None
+    """The registered reading's rank correlation: `compare.spearman` at this lane's own bar of 4.
 
-    def ranks(v: list[float]) -> list[float]:
-        order = sorted(range(n), key=lambda i: v[i])
-        out = [0.0] * n
-        i = 0
-        while i < n:
-            j = i
-            while j + 1 < n and v[order[j + 1]] == v[order[i]]:
-                j += 1
-            r = (i + j) / 2 + 1
-            for k in range(i, j + 1):
-                out[order[k]] = r
-            i = j + 1
-        return out
-
-    rx, ry = ranks(xs), ranks(ys)
-    mx, my = mean(rx), mean(ry)
-    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry, strict=True))
-    den = math.sqrt(sum((a - mx) ** 2 for a in rx) * sum((b - my) ** 2 for b in ry))
-    return (num / den) if den else None
+    This was one of eight copies of the same algorithm, and the minimum n diverged across them - 3,
+    4 and 10 - which decides which elements are allowed a correlation rather than what the
+    correlation is. The algorithm here was identical to the others; only the bar differed, and 4 is
+    the bar this lane's registration ran under, so it is passed explicitly and the run's numbers are
+    unchanged. A test asserts the shared function reproduces this lane's published per-element values.
+    """
+    return compare_spearman(xs, ys, min_n=4)
 
 
 def assemble() -> dict:

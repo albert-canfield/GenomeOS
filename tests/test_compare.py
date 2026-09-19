@@ -3,7 +3,15 @@
 
 from __future__ import annotations
 
-from genomeos.compare import Strata, difference, imbalance, input_presence, standardised, stratum_rates
+from genomeos.compare import (
+    Strata,
+    difference,
+    imbalance,
+    input_presence,
+    spearman,
+    standardised,
+    stratum_rates,
+)
 
 STRATA = Strata(gc=(0.35, 0.45, 0.55), tss=(1_000, 5_000, 20_000, 100_000))
 
@@ -193,3 +201,43 @@ def test_the_shared_helper_and_the_executor_lane_now_agree() -> None:
 
     assert theirs is not None
     assert abs(mine - theirs) < 1e-4
+
+
+# -------------------------------------------------------- one Spearman, with the bar at the call site
+def test_the_shared_spearman_matches_the_de_facto_canonical_one() -> None:
+    """Eight copies existed and the algorithm agreed in all of them; only the bar diverged.
+
+    `attribution/closure.py` held the version other lanes delegated to. This asserts the shared one
+    reproduces it exactly over random inputs, including the None cases, so the two cannot drift while
+    both exist.
+    """
+    import random
+
+    from genomeos.attribution.closure import spearman as canonical
+
+    rng = random.Random(7)
+    for _ in range(2000):
+        n = rng.randint(1, 12)
+        xs = [round(rng.uniform(-3, 3), 3) for _ in range(n)]
+        ys = [round(rng.uniform(-3, 3), 3) for _ in range(n)]
+        mine, theirs = spearman(xs, ys), canonical(xs, ys)
+        assert (mine is None) == (theirs is None)
+        if mine is not None:
+            assert abs(mine - theirs) < 1e-12
+
+
+def test_the_minimum_n_is_an_argument_so_the_bar_is_visible_where_it_is_chosen() -> None:
+    """The divergence was 3 / 4 / 10 hidden in eight module constants, deciding admissibility."""
+    three = ([1, 2, 3], [3, 2, 1])
+
+    assert spearman(*three) == -1.0
+    assert spearman(*three, min_n=4) is None
+    assert spearman([1, 2, 3, 4], [1, 2, 3, 4], min_n=4) == 1.0
+    # 3 is a floor, not a default worth overriding downwards: below it there is no order to correlate
+    assert spearman([1, 2], [2, 1], min_n=1) is None
+
+
+def test_a_constant_side_is_none_rather_than_zero() -> None:
+    """ "No ranking" and "no relationship" are different statements and must not share an output."""
+    assert spearman([1, 1, 1, 1], [1, 2, 3, 4]) is None
+    assert spearman([1, 2, 3, 4], [2, 2, 2, 2]) is None

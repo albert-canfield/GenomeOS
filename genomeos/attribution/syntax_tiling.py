@@ -20,6 +20,11 @@ from __future__ import annotations
 
 from typing import Any
 
+# re-exported deliberately: `scripts/syntax_tiling.py` calls `st.difference`, and this module used to
+# define its own copy of it. `as difference` says the name is part of this module's surface rather
+# than an unused import.
+from genomeos.compare import difference as difference
+
 # The design, fixed before any window was scored.
 WINDOW = 300  # bp, close to the median length of an ENCODE cCRE, so the arms are comparable to the sweep
 MAX_PER_BLOCK = 12  # evenly spaced, so a 40 kb block cannot outvote a 2 kb one
@@ -233,21 +238,12 @@ def match_windows(rows: list[dict]) -> list[dict]:
     return kept
 
 
-def difference(a_hits: int, a_n: int, b_hits: int, b_n: int) -> dict[str, Any]:
-    """Difference in two shares, with a one-sided p and a 95% upper bound (normal approximation)."""
-    if not a_n or not b_n:
-        return {"difference": None, "p_one_sided": None, "upper_95": None}
-    pa, pb = a_hits / a_n, b_hits / b_n
-    se = math.sqrt(pa * (1 - pa) / a_n + pb * (1 - pb) / b_n)
-    z = (pa - pb) / se if se else 0.0
-    p = 0.5 * math.erfc(z / math.sqrt(2))
-    return {
-        "a": round(pa, 4),
-        "b": round(pb, 4),
-        "difference": round(pa - pb, 4),
-        "p_one_sided": round(p, 6),
-        "upper_95": round(pa - pb + 1.96 * se, 4),
-    }
+# `difference` was a line-for-line copy of `compare.difference` and is now that function. It kept the
+# old z of 1.96 under the name `upper_95`, which is the two-sided 95% constant and therefore a
+# one-sided 97.5% bound beside a one-sided p; the shared helper was corrected to 1.645 on 2026-09-18
+# and this copy would have gone on disagreeing with it. Nothing published from this lane - the
+# registered run was cancelled unrun, so it has a plan file and no result - and the futility look in
+# `scripts/syntax_tiling.py` reads `upper_95`, which is why the copy mattered even unrun.
 
 
 def moved(row: dict) -> bool:
