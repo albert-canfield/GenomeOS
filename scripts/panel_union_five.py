@@ -56,6 +56,7 @@ from genomeos.attribution.panel_union_five import (
     analyse,
     where_it_sits,
     where_the_five_sit,
+    which_way_each_covariate_runs,
 )
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
@@ -379,10 +380,10 @@ def from_result(name: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, An
 
     Reading the stores is the expensive half and distilling them is not, so a wording or a reading
     that has to be corrected should not cost hours of rereading sequence that has not changed.
-    Nothing is measured here. The one thing recomputed is each chromosome's `where_the_union_sits`,
-    from that chromosome's own stored `explained`: it is a reading of numbers rather than a number,
-    and leaving the stale one beside a freshly distilled top level is how a file comes to hold two
-    answers to one question.
+    Nothing is measured here. What is recomputed is each chromosome's `where_the_union_sits` and its
+    `which_way_each_covariate_runs`, from that chromosome's own stored `explained` and
+    `feature_splits`: both are readings of numbers rather than numbers, and leaving a stale one beside
+    a freshly distilled top level is how a file comes to hold two answers to one question.
     """
     prev = load_result(name, results_dir) or {}
     rows = prev.get("per_chromosome") or {}
@@ -398,6 +399,9 @@ def from_result(name: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, An
             }
             for t in TIERS
         }
+        r["which_way_each_covariate_runs"] = which_way_each_covariate_runs(
+            r["feature_splits"], r["explained"]
+        )
     return runs
 
 

@@ -124,6 +124,9 @@ MOVED_AT_ALL = 0.02
 # Two per-kilobase rates within this relative distance of each other are not called one quieter than
 # the other; the rates themselves are reported beside the verdict either way.
 SAME_WITHIN = 0.02
+# A tier ratio is rounded to four places by `panel_background.tier_ratios`, so a move smaller than
+# this is the rounding and not a direction.
+RATIO_MOVED = 0.001
 
 # -- the sign, as data ---------------------------------------------------------------------------
 SIGN_RULE = (
@@ -333,34 +336,50 @@ def which_way_each_covariate_runs(splits: dict[str, Any], exp: dict[str, Any]) -
     """Per covariate: the rate where it is, the rate where it is not, and whether the arm agrees.
 
     The rate is descriptive and the arm is the measurement; they are two different readings of the
-    same covariate and this says whether they point the same way. `exp` is the per-tier decomposition,
-    so the arm's sign is taken on every tier the chromosome carries rather than on a chosen one.
+    same covariate and this says whether they point the same way. What the two are compared on is the
+    direction the RATIO moves, not the sign of the share: whether a move away from 1 widens an offset
+    or closes one depends on which side of 1 the tier sits, and the constrained-unknown tier sits
+    below it, so on that tier a quiet covariate's removal reads as "widens" while doing the same thing
+    to the background as everywhere else. The share with its sign is reported beside the direction,
+    for every tier, and is what the union arithmetic uses; the direction is what a rate can be checked
+    against.
     """
     out: dict[str, Any] = {}
     for name in COVARIATES:
         row = splits.get(name) or {}
         reads = which_way_it_runs(row.get("with_per_kb"), row.get("without_per_kb"))
+        moves = {
+            t: (exp[t][f"without_{name}"]["ratio"], exp[t]["ratio_as_built"])
+            for t in exp
+            if isinstance(exp[t].get(f"without_{name}"), dict)
+            and exp[t][f"without_{name}"].get("ratio") is not None
+            and exp[t].get("ratio_as_built") is not None
+        }
         signs = {
             t: exp[t][f"without_{name}"]["explains"]
             for t in exp
             if isinstance(exp[t].get(f"without_{name}"), dict)
             and exp[t][f"without_{name}"].get("explains") is not None
         }
-        widens = [t for t, v in signs.items() if v < -MOVED_AT_ALL]
-        narrows = [t for t, v in signs.items() if v > MOVED_AT_ALL]
+        rises = [t for t, (r, base) in moves.items() if r - base > RATIO_MOVED]
+        falls = [t for t, (r, base) in moves.items() if base - r > RATIO_MOVED]
         entry: dict[str, Any] = {
             "recurring_per_kb_where_it_is": row.get("with_per_kb"),
             "recurring_per_kb_where_it_is_not": row.get("without_per_kb"),
             "share_of_background_bases": row.get("share_of_background_bases"),
             "reads": reads,
             "declared_as_widening": name in WIDENING_WHEN_MEASURED,
-            "tiers_whose_arm_widens_the_offset": sorted(widens),
-            "tiers_whose_arm_narrows_the_offset": sorted(narrows),
+            # the direction of the ratio, which is a property of the background and of nothing else
+            "tiers_whose_ratio_rises_when_it_is_removed": sorted(rises),
+            "tiers_whose_ratio_falls_when_it_is_removed": sorted(falls),
+            # and the share with its sign, which also depends on which side of 1 the tier sits
+            "tiers_whose_arm_widens_the_offset": sorted(t for t, v in signs.items() if v < -MOVED_AT_ALL),
+            "tiers_whose_arm_narrows_the_offset": sorted(t for t, v in signs.items() if v > MOVED_AT_ALL),
             "explains_by_tier_with_its_sign": {t: signs[t] for t in sorted(signs)},
         }
-        if reads in (RATE_NOT_ASSESSED, SAME_AS_THE_REST) or not signs:
+        if reads in (RATE_NOT_ASSESSED, SAME_AS_THE_REST) or not moves:
             entry["the_rate_and_the_arm"] = UNASSESSED
-        elif (reads == NOISIER_THAN_THE_REST) == (len(widens) >= len(narrows)):
+        elif (reads == NOISIER_THAN_THE_REST) == (len(rises) >= len(falls)):
             entry["the_rate_and_the_arm"] = AGREE
         else:
             entry["the_rate_and_the_arm"] = DISAGREE

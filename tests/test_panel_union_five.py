@@ -205,7 +205,40 @@ def test_the_rate_and_the_arm_are_two_readings_and_the_result_says_whether_they_
     row = out["which_way_each_covariate_runs"][p5.FIFTH]
     assert row["the_rate_and_the_arm"] in (p5.AGREE, p5.DISAGREE, p5.UNASSESSED)
     assert row["the_rate_and_the_arm"] == p5.AGREE
+    # the direction of the ratio is what the rate is checked against; the sign of the share is beside it
+    assert row["tiers_whose_ratio_rises_when_it_is_removed"]
+    assert row["tiers_whose_ratio_falls_when_it_is_removed"] == []
     assert row["tiers_whose_arm_widens_the_offset"]
+
+
+def test_the_direction_is_taken_from_the_ratio_and_not_from_the_sign_of_the_share():
+    """A tier below 1 flips the sign of every share over it, and must not flip the direction.
+
+    The constrained-unknown tier reads below the panel's background, so removing quiet sequence pushes
+    it further below and the share reads "widens" while the background moved exactly as it does under
+    every other tier. Checking a rate against the share would call that a disagreement; checking it
+    against the ratio does not.
+    """
+    exp = {
+        # above 1: removing the quiet covariate lowers the ratio, and the share reads as narrowing
+        "fossil": {
+            "ratio_as_built": 1.10,
+            "without_exon_any": {"assessed": True, "ratio": 1.05, "explains": 0.5},
+        },
+        # below 1: the same move in the background, and the share reads as widening
+        "constrained_unknown": {
+            "ratio_as_built": 0.92,
+            "without_exon_any": {"assessed": True, "ratio": 0.88, "explains": -0.5},
+        },
+    }
+    splits = {"exon_any": {"with_per_kb": 5.3, "without_per_kb": 7.4, "share_of_background_bases": 0.1}}
+    row = p5.which_way_each_covariate_runs(splits, exp)["exon_any"]
+    assert row["reads"] == p5.QUIETER_THAN_THE_REST
+    assert row["tiers_whose_ratio_falls_when_it_is_removed"] == ["constrained_unknown", "fossil"]
+    assert row["tiers_whose_ratio_rises_when_it_is_removed"] == []
+    assert row["the_rate_and_the_arm"] == p5.AGREE  # one rate, one direction, two signs
+    assert row["tiers_whose_arm_widens_the_offset"] == ["constrained_unknown"]
+    assert row["tiers_whose_arm_narrows_the_offset"] == ["fossil"]
 
 
 def test_a_covariate_with_no_kilobase_on_either_side_is_not_given_a_direction():
