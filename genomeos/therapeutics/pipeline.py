@@ -734,6 +734,7 @@ def pathway_induced(
     providers: Providers,
     profile: PatientProfile,
     limit: int = 4,
+    already: set[str] | None = None,
 ) -> list[TherapeuticTargetCandidate]:
     """Surface proteins associated with a disrupted driver.
 
@@ -742,9 +743,18 @@ def pathway_induced(
     data, so it does the part it can: name the surface-localised proteins most
     strongly associated with the disrupted driver, and mark every one of them
     as a hypothesis that needs expression evidence before it means anything.
+
+    `already` is every gene the run has proposed by some other route. A gene
+    reached by its own alteration must not be proposed a second time as a
+    hypothesis about a neighbour: the two entries carry different evidence and
+    the same gene, so the list reads as two targets where the tumour has one,
+    and the weaker entry is indistinguishable from the stronger one in the
+    ranking. Before this argument existed the set held only the disrupted
+    drivers, so a gene amplified in this tumour and associated with a mutated
+    one appeared twice.
     """
     out: list[TherapeuticTargetCandidate] = []
-    seen = {c.gene for c in disrupted}
+    seen = {c.gene for c in disrupted} | (already or set())
     for driver in disrupted:
         ann = providers.protein.annotation(driver.gene)
         if not ann.available:
@@ -973,7 +983,9 @@ def analyse(
         if blocked:
             if log:
                 print(f"therapeutics: indirect routes for {[c.gene for c in blocked]}", file=log, flush=True)
-            candidates.extend(pathway_induced(blocked, providers, profile))
+            candidates.extend(
+                pathway_induced(blocked, providers, profile, already={c.gene for c in candidates})
+            )
 
     for c in candidates:
         c.scores = score_candidate(c, c.precedent is not None)

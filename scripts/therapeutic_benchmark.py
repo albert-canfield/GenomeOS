@@ -2,19 +2,29 @@
 # Part of the GenomeOS application; see LICENSING.md.
 """Retrospective benchmark: does the therapeutic pipeline recover known targets?
 
-Seven tumours whose target and whose approved therapy are public knowledge are
+Eight tumours whose target and whose approved therapy are public knowledge are
 run through `genomeos therapeutic`, and the result is compared with what is
 actually approved for that alteration. The point is falsifiability: until a
 pipeline is asked to reproduce something already known, its rankings are
 assertions.
 
-Six of the seven targets are reached through a point mutation, which for a long
+Six of the eight targets are reached through a point mutation, which for a long
 time was the whole benchmark and was a narrower test than it read as: the
 copy-number, structural and expression routes into the candidate list were
-covered by unit tests and by nothing that scored the pipeline end to end. The
-seventh, CD19, carries no alteration of any kind and is reached only from the
-patient's own RNA. Each case records the `call` that puts its target on the
-list, so what the benchmark does not cover is visible in the result.
+covered by unit tests and by nothing that scored the pipeline end to end. CD19
+carries no alteration of any kind and is reached only from the patient's own
+RNA; ERBB2 appears a second time reached by nothing but its amplification.
+Each case records the `call` that puts its target on the list, so what the
+benchmark does not cover is visible in the result.
+
+The copy-number case earned its place on the first run. It passes all three
+questions and ranks fourth, behind three surface proteins that carry no
+alteration in this tumour and are named only for neighbouring the one that
+does. Its two entries — the amplified gene and the same gene as a hypothesis —
+scored identically at 0.494 before the duplicate was removed, which is the
+finding: for a surface target the score reads the gene's annotation and not
+the alteration, so twelve copies and a guess are worth the same. Recovery was
+never the hard question, and six point mutations could not ask the other one.
 
 Two different questions are scored separately, because conflating them would
 flatter the pipeline:
@@ -129,6 +139,34 @@ CASES: tuple[dict, ...] = (
         ),
     },
     {
+        # The copy-number case. ERBB2 appears twice in this benchmark on
+        # purpose, and the repetition is the design: the case above reaches it
+        # through an ERBB2 coding variant, this one through nothing but the
+        # copy-number call. Holding the target fixed and changing only the
+        # measurement is what isolates the route; CD19 below varies both at
+        # once and so cannot separate them. The VCF carries a PIK3CA variant
+        # and no ERBB2 change at all, so a build without the copy-number path
+        # does not rank ERBB2 anywhere.
+        #
+        # It is also the honest clinical case. Trastuzumab's companion
+        # diagnostic is amplification, not a point mutation: the measurement
+        # that selects the patient IS the copy-number call.
+        "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call",
+        "dir": "alterations",
+        "vcf": "erbb2_amplification_only.vcf",
+        "cnv": "erbb2_amplification_only.cnv",
+        "call": "copy number",
+        "gene": "ERBB2",
+        "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+        "modality": "antibody",
+        "expect": "surface",
+        "why": (
+            "the amplification is the approved therapy's companion diagnostic, so a pipeline "
+            "that needs a coding change to see ERBB2 would miss every patient trastuzumab is "
+            "actually given to"
+        ),
+    },
+    {
         # The case that is not a point mutation. Six drivers above are single
         # base changes, so until this one existed the benchmark never asked the
         # pipeline to reach a target through anything but a VCF line, and the
@@ -184,6 +222,15 @@ def run_case(case: dict, net: bool, log) -> dict:
     gene = case["gene"]
     ranked = [c.gene for c in a["candidates"]]
     hit = next((c for c in a["candidates"] if c.gene == gene), None)
+    # A fourth question, and the copy-number case is what made it askable: how
+    # many candidates outrank the target while carrying no alteration in this
+    # tumour at all? A pathway-induced hypothesis has no origin — it is named
+    # for being a neighbour of something that is altered. Recovering the target
+    # and burying it under hypotheses are not the same result, and the first
+    # three questions cannot tell them apart, so the count is recorded rather
+    # than scored: it is a measurement of the ranking, not a verdict on it.
+    above = a["candidates"][: ranked.index(gene)] if hit is not None else []
+    hypotheses_above = [c.gene for c in above if not c.origins]
     out = {
         "case": case["case"],
         "gene": gene,
@@ -195,6 +242,7 @@ def run_case(case: dict, net: bool, log) -> dict:
         "candidates": ranked,
         "recovered": hit is not None,
         "rank": (ranked.index(gene) + 1) if hit is not None else None,
+        "outranked_by_hypotheses": hypotheses_above,
         "seconds": round(time.time() - t0, 1),
     }
     if hit is not None:
@@ -291,10 +339,18 @@ def main() -> int:
             "protein has no established outward-facing part for, or if it heads the list with a hard "
             "requirement unanswered rather than answered. A row with no preferred mechanism names the "
             "open requirement in requirements_unanswered rather than falling silent. "
-            "cases_by_driver_call says which measurement reaches each target: six point mutations and "
-            "one expression call, CD19, which carries no alteration of any kind. Copy number and "
-            "structural variants reach the ranking and are covered by unit tests, but no scored case "
-            "here turns on one, so the benchmark does not yet measure those two routes."
+            "cases_by_driver_call says which measurement reaches each target: six point mutations, "
+            "one expression call (CD19, which carries no alteration of any kind) and one copy-number "
+            "call (ERBB2 amplified and not mutated, the same target as the point-mutation case, so "
+            "that the route is the only thing that differs). Structural variants reach the ranking "
+            "and are covered by unit tests, but no scored case here turns on one, so the benchmark "
+            "does not yet measure that route. "
+            "outranked_by_hypotheses is recorded per row and is the question the copy-number case "
+            "made askable: candidates ranked above the target that carry no alteration in this "
+            "tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion "
+            "diagnostic, sits behind three of them. The pipeline recovers it and does not "
+            "prefer it, and the three scored questions cannot tell those apart, so the count is "
+            "reported beside them rather than folded into a verdict."
         ),
         "rows": rows,
     }

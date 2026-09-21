@@ -172,7 +172,8 @@ def test_a_structural_table_reads_the_partner():
 def _run(vcf: str, **kw):
     from genomeos.therapeutics import analyse_vcf
 
-    return analyse_vcf(str(DEMO / vcf), top_genes=8, net=False, indirect=False, **kw)
+    kw.setdefault("indirect", False)
+    return analyse_vcf(str(DEMO / vcf), top_genes=8, net=False, **kw)
 
 
 @needs_caches
@@ -193,6 +194,35 @@ def test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own():
     assert [o.alteration_kind for o in erbb2.origins] == ["amplification"]
     assert erbb2.origins[0].copy_number == 12.0
     assert erbb2.origins[0].driver_frequency, "the cohort frequency of the amplification is attached"
+
+
+@needs_caches
+@needs_knowledge
+def test_a_gene_reached_by_its_own_alteration_is_not_proposed_again_as_a_hypothesis():
+    """Found by scoring the copy-number route end to end, which needs `indirect`.
+
+    The control above passes `indirect=False`, so for as long as it was the
+    only test of these inputs the defect could not appear. With the pathway
+    route on, PIK3CA is mutated and intracellular, ERBB2 is one of its
+    physical-evidence partners, and the exclusion set held only the disrupted
+    drivers — so ERBB2, already a candidate carrying its 12 copies, was added a
+    second time as a hypothesis about PIK3CA. Both entries scored 0.494: the
+    amplification bought nothing, which is why the duplicate was invisible in
+    the ranking and visible only as a repeated name.
+
+    The weaker entry is the one that has to go. A gene reached by its own
+    alteration is not a guess about a neighbour.
+    """
+    a = _run(
+        "erbb2_amplification_only.vcf",
+        cnv=str(DEMO / "erbb2_amplification_only.cnv"),
+        indirect=True,
+    )
+    ranked = [c.gene for c in a["candidates"]]
+    assert len(ranked) == len(set(ranked)), f"a gene is proposed twice: {ranked}"
+    erbb2 = next(c for c in a["candidates"] if c.gene == "ERBB2")
+    assert erbb2.target_class == "direct_surface", "the surviving entry is the one with the evidence"
+    assert [o.alteration_kind for o in erbb2.origins] == ["amplification"]
 
 
 @needs_caches

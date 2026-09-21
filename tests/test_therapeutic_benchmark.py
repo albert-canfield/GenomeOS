@@ -124,10 +124,67 @@ def test_a_target_is_reached_by_something_other_than_a_point_mutation():
     assert cd19["best_mechanism_established"], "the approved CD19 drugs are antibody-like"
 
 
+def test_the_copy_number_route_is_scored_and_not_merely_unit_tested():
+    """The same target twice, so that the route is the only thing that differs.
+
+    ERBB2 is in this benchmark under a point mutation and again under nothing
+    but its amplification. Varying one thing is the whole reason the second
+    case exists: CD19 changes the target and the route together, so a failure
+    there cannot be attributed. Amplification is also the clinically honest
+    call, since it is what trastuzumab is prescribed on.
+    """
+    amp = next(r for r in rows() if r["driver_call"] == "copy number")
+    assert amp["gene"] == "ERBB2"
+    assert amp["recovered"] and amp["pass"]
+    assert amp["target_class"] == "direct_surface", "reached as itself, not as a pathway hypothesis"
+    assert amp["best_mechanism_established"], "an approved antibody must not be provisional here"
+    mutated = next(r for r in rows() if r["gene"] == "ERBB2" and r["driver_call"] == "point mutation")
+    assert mutated["rank"] == 1 and amp["rank"] > mutated["rank"], (
+        "the finding this case exists to record: the same target, reached by the measurement the "
+        "approved therapy is actually prescribed on, ranks below where a coding change puts it"
+    )
+
+
+#: Targets outranked by candidates carrying no alteration in the tumour, counted
+#: today. It may fall, never rise. ERBB2 reached by its amplification sits behind
+#: three such hypotheses and CD19 behind one; the four intracellular cases are not
+#: expected to head their lists at all. The cause is one thing: for a surface
+#: target the score reads the gene's curated annotation and not the alteration, so
+#: the amplified gene and the same gene as a guess scored identically at 0.494.
+BURIED_SURFACE_TARGETS = 2
+
+
+def test_a_recovered_target_is_not_quietly_buried_under_hypotheses():
+    """Recovery was never the hard question, and three scored questions miss this one.
+
+    A pathway-induced candidate has no origin: it is named for neighbouring
+    something altered, and needs expression evidence before it means anything.
+    When such a candidate outranks a target whose approved antibody exists, the
+    pipeline has recovered the target without preferring it, and every verdict
+    above still reads as a pass. The count is pinned rather than asserted to
+    zero, because lowering it is a scoring change and this test exists to keep
+    it visible until someone makes that change deliberately.
+    """
+    buried = [
+        r for r in rows() if r["expected"] == "surface" and r["recovered"] and r["outranked_by_hypotheses"]
+    ]
+    assert len(buried) <= BURIED_SURFACE_TARGETS, (
+        f"more approved-antibody targets are buried under evidence-free candidates than the "
+        f"pinned {BURIED_SURFACE_TARGETS}: {[(r['gene'], r['outranked_by_hypotheses']) for r in buried]}"
+    )
+    for r in rows():
+        assert r["gene"] not in r["outranked_by_hypotheses"], (
+            f"{r['gene']} outranks itself: the same gene reached twice, once by its alteration and "
+            "once as a hypothesis about a neighbour"
+        )
+
+
 def test_the_benchmark_states_what_it_does_not_cover():
     note = RESULT["note"].lower()
     assert "small molecule" in note
-    assert "copy number" in note and "structural variant" in note, (
-        "the two routes no scored case turns on have to be named as uncovered"
+    assert "structural variant" in note, "the route no scored case turns on has to be named as uncovered"
+    assert "copy-number call" in note, "the route a scored case now turns on has to be named as covered"
+    assert "structural variant" not in RESULT["cases_by_driver_call"], (
+        "no scored case is driven by a structural variant yet; when one is, say so here"
     )
-    assert RESULT["cases"] == len(rows()) >= 7
+    assert RESULT["cases"] == len(rows()) >= 8

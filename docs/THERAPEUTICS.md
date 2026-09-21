@@ -408,9 +408,34 @@ These are unit controls, and for a long time they were the only evidence for
 three of the four routes: every scored case in the therapeutic benchmark
 reached its target through a point mutation, so the benchmark measured the
 variant path end to end and the other three not at all. The seventh case, CD19,
-closes that for expression. Copy number and structural variants are still
-covered by controls alone, and the benchmark result says so in its note rather
-than leaving the gap to be inferred from the case list.
+closes that for expression; the eighth closes it for copy number. Structural
+variants are still covered by controls alone, and the benchmark result says so
+in its note rather than leaving the gap to be inferred from the case list.
+
+The eighth case is ERBB2 a second time, amplified and not mutated, and it is
+deliberately the same target as the point-mutation case so that the route is
+the only thing that differs. It was worth scoring on the first run. ERBB2 is
+recovered as a `direct_surface` target with an established blocking antibody
+and it ranks **fourth**, behind KDR, EGFR and PDGFRB — three surface proteins
+with no alteration in this tumour at all, named only for being STRING partners
+of the mutated PIK3CA. Amplification is what trastuzumab is actually
+prescribed on, so this is the ranking the clinic would care about most.
+
+Two defects, one cause. ERBB2 was proposed **twice**, once carrying its twelve
+copies and once as a hypothesis about PIK3CA, because `pathway_induced`
+excluded only the disrupted drivers from its search and not the genes already
+on the list. Both entries scored **0.494** — identical — which is why the
+duplicate was invisible in the ranking and showed only as a repeated name, and
+which is the finding underneath it: for a surface target the score reads the
+gene's curated annotation and not the alteration, so twelve copies and a guess
+about a neighbour are worth the same. Removing the duplicate freed a slot in
+the pathway search and let KDR in at 0.575, above everything, so the fix made
+the ranking visibly worse while making it honest.
+
+The duplicate is fixed and pinned. The scoring is not: `outranked_by_hypotheses`
+is recorded per row and pinned at two buried surface targets
+(`BURIED_SURFACE_TARGETS`), because teaching the score to read the alteration is
+a change to every case's numbers and is made deliberately or not at all.
 
 ## The Therapeutic Design Dataset
 
