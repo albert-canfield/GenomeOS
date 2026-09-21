@@ -371,3 +371,113 @@ def test_the_cell_counterpart_claims_a_reader_cell_only_where_there_is_one():
             assert c in loci.READER_CELLS
         if cell in ("HCT116", "Jurkat", "WTC11"):
             assert counterpart["cells"] == () and counterpart["gtex_tissues"] == ()
+
+
+# ------------------------------------------------------- the cap raise, registered before the rerun
+def test_the_landed_hunk_is_the_one_the_frame_asked_for():
+    """The runtime patch and the file must say the same thing, or a paid deletion is never read back."""
+    assert fourth.NEEDED_LOCI_HUNK["to"] == loci.STATED_INTERVAL_RESULTS
+    assert fourth.INTERVALS in loci.STATED_INTERVAL_RESULTS
+
+
+def test_the_cap_raise_leaves_the_rule_alone_and_says_so_before_the_run():
+    """A cap is a cap; a rule is a rule. Raising the first after seeing a result is allowed only
+    because the second is untouched, and only because the raise was written down before the rerun."""
+    assert fourth.MAX_LOCI > fourth.FIRST_DRAW
+    for key in (
+        "written",
+        "what_changes",
+        "what_does_not_change",
+        "expected_request_cost",
+        "what_the_next_36_would_have_to_read",
+        "what_a_divergence_would_mean",
+    ):
+        assert fourth.CAP_RAISE[key].strip()
+    assert "MAX_LOCI" in fourth.CAP_RAISE["what_changes"]
+
+
+def test_the_cap_is_a_prefix_of_genome_order_so_raising_it_cannot_re_cut_the_first_draw():
+    """The loci already scored have to be the same loci after the raise. `select` applies the cap as
+    `drawn[:cap]`, so a larger cap can only append - this pins that property against an edit that
+    made the cap a filter."""
+    drawn = [f"locus{i}" for i in range(10)]
+    assert drawn[:3] == drawn[:7][:3] == drawn[:10][:3]
+
+
+def scored(locus, chrom, hit, first_named, targets=("AAA",)):
+    return {
+        "locus": locus,
+        "chrom": chrom,
+        "expected": {
+            "targets": list(targets),
+            "nearest_gene_trap": "TRAP",
+            "distance": 50_000,
+            "direction": "activates",
+            "cells": (),
+            "gtex_tissues": (),
+        },
+        "coding_genes_in_window": 10,
+        "readings": {"node": {"target": None, "nearest_coding_anywhere": "TRAP"}},
+        "score": {
+            "target_hit_derived": hit,
+            "target_hit_heuristic": False,
+            "target_hit_looked_up": False,
+            "deletion_unaskable": False,
+            "reachable_by_a_derived_target_layer": True,
+            "heuristic_fell_in_trap": True,
+            "cell_hit_derived": False,
+            "class_hit_derived": False,
+            "direction_hit_derived": False,
+            "scored": {
+                "direction": {"judged": False},
+                "target": {
+                    "by_layer": {"deletion": {"provenance": "derived", "hit": hit, "target": first_named}}
+                },
+            },
+        },
+    }
+
+
+def test_the_halves_are_split_by_the_first_cap_and_never_by_the_score():
+    """If the split were computed from the rows rather than from the draw order, a locus that died at
+    the reach filter would move between halves and the two rates would stop being comparable."""
+    order = [{"locus": f"L{i}"} for i in range(fourth.FIRST_DRAW + 3)]
+    rows = [scored(f"L{i}", "chr1" if i < fourth.FIRST_DRAW else "chr20", i == 0, "TRAP") for i in range(2)]
+    rows += [scored(f"L{i}", "chr20", True, "AAA") for i in (fourth.FIRST_DRAW, fourth.FIRST_DRAW + 1)]
+    out = fourth.halves({"drawn_panel": order, "loci": rows})
+    assert out["first_24"]["loci"] == ["L0", "L1"]
+    assert out["next_36"]["loci"] == [f"L{fourth.FIRST_DRAW}", f"L{fourth.FIRST_DRAW + 1}"]
+    # the denominator of a half is what was DRAWN into it, not what survived the reach filter
+    assert out["first_24"]["drawn"] == fourth.FIRST_DRAW
+    assert out["first_24"]["died_at_the_reach_filter"] == fourth.FIRST_DRAW - 2
+    assert out["first_24"]["target_derived_where_the_model_could_answer"]["k"] == 1
+    assert out["next_36"]["target_derived_where_the_model_could_answer"]["rate"] == 1.0
+    # each half is measured against its own floor, because genome order is not random in gene density
+    assert out["first_24"]["chance_floor"]["of"] == 2
+
+
+def test_the_halves_carry_the_registration_that_was_written_before_the_second_one_was_scored():
+    out = fourth.halves({"drawn_panel": [], "loci": []})
+    assert (
+        out["registered_before_the_second_half_was_scored"]
+        == (fourth.CAP_RAISE["what_the_next_36_would_have_to_read"])
+    )
+
+
+def test_a_second_interval_run_carries_forward_the_requests_the_first_one_paid_for():
+    """`save_result` overwrites. Writing only the new rows would delete a spent deletion, and the
+    locus it belongs to would then grade as though no request had ever been made for it."""
+    from scripts.loci_fourth import merge  # noqa: PLC0415
+
+    out = merge(
+        [{"locus": "OLD", "id": "x"}, {"locus": "BOTH", "id": "stale"}],
+        [{"locus": "OLD"}, {"locus": "BOTH", "named_first_coding": "stale"}],
+        [{"locus": "NEW", "id": "z"}, {"locus": "BOTH", "id": "fresh"}],
+        [{"locus": "NEW"}, {"locus": "BOTH", "named_first_coding": "fresh"}],
+    )
+    assert [r["locus"] for r in out["read"]] == ["OLD", "NEW", "BOTH"]
+    assert [e["id"] for e in out["elements"]] == ["x", "z", "fresh"]
+    assert out["carried_forward_from_an_earlier_run"] == ["OLD"]
+    # and a run that asks for nothing keeps every row it inherited, rather than emptying the file
+    quiet = merge([{"locus": "OLD"}], [{"locus": "OLD"}], [], [])
+    assert [r["locus"] for r in quiet["read"]] == ["OLD"]

@@ -37,7 +37,7 @@ from genomeos import jobs
 from genomeos.benchmark import loci_fourth as fourth
 from genomeos.predict import AlphaGenomeAdapter, status
 from genomeos.predict.enhancer_target import Context
-from genomeos.results import save_result
+from genomeos.results import load_result, save_result
 
 HOLDER = "lane-loci4"
 
@@ -95,10 +95,39 @@ def show_plan(rows: list[dict[str, Any]]) -> None:
     )
 
 
+def carried_forward() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """The deletions an earlier run of this frame already paid for.
+
+    `save_result` overwrites, and a second run asks only for the intervals the first one did not
+    cover - so writing the new rows alone would silently delete a request that has been spent, and
+    that locus would grade as though it had never been asked. The elements are keyed by locus, the
+    new row wins on a clash, and the count of requests actually spent is reported per run rather
+    than as the length of this file.
+    """
+    old = load_result(fourth.INTERVALS) or {}
+    return list(old.get("elements") or []), list(old.get("read") or [])
+
+
+def merge(
+    kept_elements: list[dict[str, Any]],
+    kept_read: list[dict[str, Any]],
+    elements: list[dict[str, Any]],
+    read: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Old rows first, keyed by locus, and this run's row wins wherever the two overlap."""
+    fresh = {r["locus"] for r in read}
+    return {
+        "elements": [e for e in kept_elements if e.get("locus") not in fresh] + elements,
+        "read": [r for r in kept_read if r.get("locus") not in fresh] + read,
+        "carried_forward_from_an_earlier_run": [r["locus"] for r in kept_read if r.get("locus") not in fresh],
+    }
+
+
 def score_intervals(rows: list[dict[str, Any]], draw: dict[str, Any]) -> dict[str, Any]:
     """Delete the perturbed elements the sweep has not already covered, one request each."""
     t0 = time.time()
     asked = [r for r in rows if r["requests"]]
+    kept_elements, kept_read = carried_forward()
     adapter = AlphaGenomeAdapter()
     scorer = adapter._live_scorer(threshold=0.0)  # noqa: SLF001  (as scripts/loci_third.py does)
     elements: list[dict[str, Any]] = []
@@ -144,17 +173,18 @@ def score_intervals(rows: list[dict[str, Any]], draw: dict[str, Any]) -> dict[st
                 }
             )
             say(f"{row['locus']}: named {pred.get('gene')} first among coding genes")
+    merged = merge(kept_elements, kept_read, elements, read)
     return {
         "result": fourth.INTERVALS,
-        "elements": elements,
-        "read": read,
+        **merged,
         "note": (
             "AlphaGenome deletions of the ENCODE CRISPR benchmark's own perturbed intervals, drawn"
             " into the fourth frame by genomeos/benchmark/loci_fourth.py and not already covered by"
             " the finished sweep. Read by loci._deletion_rows and labelled `stated_interval`, so these"
-            " rows are never pooled with registry ones. loci.STATED_INTERVAL_RESULTS must list this"
-            " result's name for that to happen: see loci_fourth.NEEDED_LOCI_HUNK and"
-            " loci_fourth.register_stated_intervals"
+            " rows are never pooled with registry ones. loci.STATED_INTERVAL_RESULTS lists this"
+            " result's name since 2026-09-21, which is what makes them readable back. Rows a previous"
+            " run of this frame paid for are carried forward rather than overwritten: see"
+            " `carried_forward`, and `requests_this_run` counts only what this run spent"
         ),
         "requests_this_run": len(read),
         "seconds": round(time.time() - t0, 1),

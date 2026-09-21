@@ -61,8 +61,14 @@ GTEX_DIR = Path("data/knowledge/loci_fourth")
 #: threshold inside the loci that test it.
 SOURCE = crispri.HELDOUT
 #: the most loci the frame may contain, applied in genome order after the rule, so the cap can never
-#: act as a quality filter. Set before the file was read.
-MAX_LOCI = 24
+#: act as a quality filter. Set at 24 before the file was read; raised to 60 on 2026-09-21, after the
+#: first 24 had been scored, to take in the 36 the first cap left undrawn. See `CAP_RAISE`: the rule
+#: that decides which elements pass is untouched, and 60 is every element that passes it, so the cap
+#: no longer binds at all and cannot be re-cut later on anything that has been seen.
+MAX_LOCI = 60
+#: how many the first draw took, in genome order: chr1 to chr10. Kept so the run can report the two
+#: halves apart, because genome order is not random with respect to gene density.
+FIRST_DRAW = 24
 #: the most model requests this run may spend. A locus whose element the finished sweep has already
 #: deleted costs nothing; the rest cost one each, and loci past the budget are dropped from the END of
 #: genome order, with the drop reported.
@@ -91,6 +97,76 @@ CELL_COUNTERPART: dict[str, dict[str, tuple[str, ...]]] = {
     "HCT116": {"cells": (), "gtex_tissues": (), "tissues": ("HCT116 colorectal carcinoma",)},
     "Jurkat": {"cells": (), "gtex_tissues": (), "tissues": ("Jurkat T-lymphoblast",)},
     "WTC11": {"cells": (), "gtex_tissues": (), "tissues": ("WTC11 induced pluripotent stem cell",)},
+}
+
+# ------------------------------------------------- the cap raise, registered before the second run
+#: The second registration, written and committed on 2026-09-21 BEFORE the 36 undrawn loci were
+#: scored and before the three requests they cost were spent. It is small, because raising a cap is
+#: a small thing next to stating a rule - but it is a registration, and it is here rather than in a
+#: message because the first 24 have been seen and this run has to be checkable against what was
+#: expected of it before it ran.
+CAP_RAISE: dict[str, Any] = {
+    "written": (
+        "2026-09-21, after commit 188f4ce scored the first 24 and before the remaining 36 were drawn,"
+        " read or scored. `assess` and `select` are byte-for-byte the rule that drew the first 24:"
+        " the only change is MAX_LOCI, 24 to 60"
+    ),
+    "what_changes": (
+        f"MAX_LOCI {FIRST_DRAW} -> {MAX_LOCI}. 60 is the number of held-out elements that PASS the"
+        " rule, so after this the cap does not bind and there is nothing left for a later hand to"
+        " choose. n goes from 20 graded to 50 graded: 60 drawn, 10 of which the free reach filter"
+        " kills before a request exists"
+    ),
+    "what_does_not_change": (
+        "the rule, the hit rules, the readers, the denominators, the keep-out, the window, the cell"
+        " counterparts and the positive control. Nothing that decides which elements are in the frame"
+        " is touched, and nothing that decides whether a reading is a hit is touched. Changing a"
+        " selection rule after seeing its first result is the artefact this benchmark has been caught"
+        " by before; raising a cap that was registered as a cap is not that, and this file would be"
+        " the wrong place to find out"
+    ),
+    "expected_request_cost": (
+        "3 requests, counted by `plan` before any was spent and before any score of the new 36 was"
+        " read. `plan` is free arithmetic - reach against the scorer's 1,048,576 bp input, and whether"
+        " the finished all-chromosome sweep has already deleted an element inside the perturbed"
+        " interval - and it reads no model answer, so costing the run in advance cannot feed back"
+        " into what the run selects. 47 of the 50 graded intervals are already covered by the sweep;"
+        " the three that are not are SEPHS2_Jurkat_chr16_30472k, TRAPPC2L_K562_chr16_88496k and"
+        " VAPA_K562_chr18_9889k. The registered budget of 30 is unchanged and is not approached"
+    ),
+    "what_the_next_36_would_have_to_read": (
+        "THE POINT OF REGISTERING THIS. The first 24 read 6/24 over every drawn locus and 6/20 where"
+        " the model could answer (0.300), against a chance floor of 0.137. For the frame's combined"
+        " rate to be called STABLE rather than a number that happened at n = 20, the 30 graded loci"
+        " of the second half have to land in the same place: a second-half derived rate inside about"
+        " 0.15 and 0.45 where the model could answer, which is the interval the first half's 6 of 20"
+        " would be an unremarkable draw from, and a combined rate that therefore stays well below the"
+        " 0.867 to 0.889 the three curated frames read and above the chance floor. If that is what"
+        " comes back, the negative of 188f4ce is the frame's result at n = 50 and not an n = 20"
+        " accident, and the deletion layer's 1 of 20 is the number to watch: it should stay near 0.05"
+        " and it should keep naming the nearest coding TSS instead at something near 14 of 20"
+    ),
+    "what_a_divergence_would_mean": (
+        "the two halves are NOT interchangeable and the registration says so before the numbers"
+        " exist. The cap was applied in genome order, so the first 24 are chr1 to chr10 and the next"
+        " 36 are chr11 to chrX. Genome order is not random with respect to gene density: the later"
+        " chromosomes include the most gene-dense stretches in the genome (chr17, chr19, chr22),"
+        " where the nearest coding TSS is closer, more coding genes sit inside the scorer's window,"
+        " and the chance floor per locus is LOWER. So a second half that reads BELOW the first is the"
+        " expected direction of a density effect rather than a new finding, and must be reported"
+        " against its own chance floor, which this run computes per frame half rather than assuming."
+        " A second half that reads materially ABOVE the first would be the interesting divergence,"
+        " because it would run against that gradient, and it would mean the first half's 0.300 is a"
+        " property of chr1-chr10 and not of the geometry the rule selects. Either way the two halves"
+        " are reported separately, with their floors, and neither is dropped in favour of the other."
+        " The combined rate over all 50 is the frame's rate, because all 60 were drawn by one rule"
+        " and no locus was kept or dropped on anything anybody saw"
+    ),
+    "what_is_not_claimed": (
+        "the two halves are not independent replications. They are one rule applied to one file, split"
+        " by an arbitrary cap, so a difference between them is a statement about the genome's"
+        " arrangement and about n, not about two experiments agreeing"
+    ),
 }
 
 # ------------------------------------------------------------------ the registration, before the draw
@@ -142,7 +218,9 @@ PREREGISTRATION: dict[str, Any] = {
             " three frames, so the fourth frame is independent of them and the matched control draw"
             " stays clean",
             f"7. genome order (chr1..chr22, chrX, chrY, then start), capped at {MAX_LOCI}. The cap is"
-            " applied to the order, never to the scores, so it cannot act as a quality filter",
+            " applied to the order, never to the scores, so it cannot act as a quality filter. It was"
+            f" {FIRST_DRAW} at the first run and is {MAX_LOCI} now, which is every element the rule"
+            " passes: `CAP_RAISE` registers that change and was committed before the second run",
             "8. `loci.read_reach` last, as in every other frame: a target whose gene BODY lies"
             " outside the scorer's 1,048,576 bp input is unaskable, is never sent a request, and is"
             " reported as a reach fatality rather than as a miss",
@@ -161,7 +239,8 @@ PREREGISTRATION: dict[str, Any] = {
         " geometry all along"
     ),
     "loci": (
-        f"however many the rule returns, capped at {MAX_LOCI} in genome order. The count is not chosen:"
+        f"however many the rule returns, capped at {MAX_LOCI} in genome order (see `CAP_RAISE`; the"
+        f" first run's cap was {FIRST_DRAW}). The count is not chosen:"
         " it is a property of the file. If the rule returns fewer than 5, the frame is reported as"
         " unassemblable at that n and no rate is quoted from it - that is a statement about how rare"
         " a long-range CRISPRi positive is, which is itself worth the section"
@@ -292,9 +371,13 @@ PREREGISTRATION: dict[str, Any] = {
     ),
 }
 
-#: the hunk `genomeos/benchmark/loci.py` needs and that this lane is not permitted to make. Until it
-#: lands, `register_stated_intervals` applies it at runtime; the two are the same one-line change.
+#: the hunk `genomeos/benchmark/loci.py` needed, LANDED 2026-09-21 with the cap raise. It is kept as
+#: the record of what the runtime patch was doing, and `register_stated_intervals` is kept because it
+#: is idempotent and because a test asserts the two say the same thing.
 NEEDED_LOCI_HUNK = {
+    "landed": "2026-09-21, in the commit that raised the cap. loci.STATED_INTERVAL_RESULTS now lists"
+    " this frame, so the deletion this frame paid for is read back from the file rather than from a"
+    " global the run patched at import time",
     "file": "genomeos/benchmark/loci.py",
     "constant": "STATED_INTERVAL_RESULTS",
     "from": ("loci_stated_intervals", "loci_candidate_intervals", "loci_third_intervals"),
@@ -895,6 +978,67 @@ def beside_the_other_three(result: dict[str, Any], results_dir: Path = RESULTS_D
     }
 
 
+def halves(result: dict[str, Any]) -> dict[str, Any]:
+    """The frame split at the first cap: the 24 scored on 2026-09-21 and the 36 added after it.
+
+    `CAP_RAISE` registered this split before the second half was scored, and it registered why the
+    two halves are not interchangeable: the cap was applied in genome order, so the first half is
+    chr1 to chr10 and the second is chr11 to chrX, and the later chromosomes carry the gene-dense
+    stretches. Each half therefore gets its own chance floor rather than sharing the frame's.
+    """
+    order = [e["locus"] for e in result.get("drawn_panel", [])]
+    first, second = set(order[:FIRST_DRAW]), set(order[FIRST_DRAW:])
+    rows = drawn_rows(result)
+
+    def half(name: str, want: set[str], drawn: int) -> dict[str, Any]:
+        mine = [r for r in rows if r["locus"] in want]
+        agg = loci.aggregate(mine) if mine else {}
+        askable = agg.get("target_derived_where_the_model_could_answer", {})
+        floor = agg.get("target_by_chance", {})
+        return {
+            "half": name,
+            "chromosomes": sorted({r["chrom"] for r in mine}, key=lambda c: CHROM_ORDER.get(c, 99)),
+            "drawn": drawn,
+            "graded": len(mine),
+            "died_at_the_reach_filter": drawn - len(mine),
+            "target_derived_over_every_drawn_locus": {
+                "k": agg.get("target_derived", {}).get("k"),
+                "n": drawn,
+                "rate": round(agg["target_derived"]["k"] / drawn, 3) if mine and drawn else None,
+            },
+            "target_derived_where_the_model_could_answer": {k: askable.get(k) for k in ("k", "n", "rate")},
+            "target_heuristic": {k: agg.get("target_heuristic", {}).get(k) for k in ("k", "n", "rate")},
+            "target_looked_up": {k: agg.get("target_looked_up", {}).get(k) for k in ("k", "n", "rate")},
+            "chance_floor": {
+                "expected": floor.get("expected"),
+                "of": floor.get("of"),
+                "rate": round(floor["expected"] / floor["of"], 3) if floor.get("of") else None,
+            },
+            "layers": what_the_layers_named({"loci": mine}),
+            "loci": [r["locus"] for r in mine],
+        }
+
+    return {
+        "why": CAP_RAISE["what_a_divergence_would_mean"],
+        "first_24": half(
+            f"the first {FIRST_DRAW}, scored 2026-09-21 at the registered cap", first, FIRST_DRAW
+        ),
+        "next_36": half(
+            f"the {len(order) - FIRST_DRAW} the first cap left undrawn, same rule",
+            second,
+            len(order) - FIRST_DRAW,
+        ),
+        "registered_before_the_second_half_was_scored": CAP_RAISE["what_the_next_36_would_have_to_read"],
+        "reading": (
+            "the two halves are one rule applied to one file and split by an arbitrary cap, so a"
+            " difference between them is a statement about the genome's arrangement and about n, not"
+            " about two experiments agreeing. The frame's rate is the combined one over every locus"
+            " the rule returned; these are printed so a reader can see whether it is carried by half"
+            " of it"
+        ),
+    }
+
+
 def readings(out: dict[str, Any], results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     """Everything this frame computes from the scored rows. Free, and re-runnable on a saved result.
 
@@ -909,6 +1053,8 @@ def readings(out: dict[str, Any], results_dir: Path = RESULTS_DIR) -> dict[str, 
         " rate, and `aggregate_with_the_control` is kept beside this one rather than discarded"
     )
     out["layers"] = what_the_layers_named(out)
+    out["halves"] = halves(out)
+    out["cap_raise"] = CAP_RAISE
     out["baselines"] = baselines(out)
     out["directions"] = direction_readings(out)
     out["positive_control"] = positive_control(out)
