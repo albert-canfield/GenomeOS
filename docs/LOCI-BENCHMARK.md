@@ -1662,3 +1662,151 @@ because it was computed after the number was known and the registration says wha
   the recorded cost of fixing that.
 - The post-hoc length gradient is unregistered and should be re-run as a registered reading if anyone
   wants to quote it.
+
+## 21. A third set, the direction axis asked both ways, and an answer that was registered as undecidable (2026-09-21)
+
+`genomeos/benchmark/loci_third.py`, `scripts/loci_third.py`, `tests/test_loci_third.py`, results `loci_third` and `loci_third_intervals`. **3 model requests spent.** 237 seconds of range reads over public tracks for the rest.
+
+Section 19's own "left undone" named three gaps. This set is aimed at two of them and records the third as unfillable. **Every one of the nine candidates activates**, so the benchmark has never asked whether the deletion layer's sign means anything when the published element's job is to hold a gene *down*; and section 20 asked for a set whose element lengths span the panel's rather than sitting at a uniform 500 bp. Two of the nine loci here are published **repressors** with a perturbation behind them, and the element lengths run 300 bp to 52,000 bp.
+
+It is a **third sampling frame**, separately registered, scored by `genomeos/benchmark/loci.py` with no change to any scorer or hit rule. Its rates are reported beside the seventeen and the nine with each frame named, and never pooled with either.
+
+### The nine, and what the free filter did to them first
+
+| locus | element | len | published target | direction | distance | perturbation |
+|---|---|---|---|---|---|---|
+| SHH_SBE2 | chr7:156,268,356-156,269,154 | 798 | SHH | **activates** | 455,893 bp | point mutation in a holoprosencephaly patient; transgenic reporter (Jeong 2008) |
+| GATA2_plus95 | chr3:128,483,458-128,483,958 (**stated**) | 500 | GATA2 | **activates** | 9,500 bp | targeted mouse enhancer deletion; germline human mutations (Johnson 2012) |
+| TAL1_MuTE | chr1:47,239,475-47,239,975 (**stated**) | 500 | TAL1 | **activates** | 7,500 bp | CRISPR deletion of a somatically created enhancer (Mansour 2014) |
+| CDKN2A_9p21 | chr9:22,124,228-22,124,728 | 500 | CDKN2A, CDKN2B | **activates** | 114,903 bp | 70 kb mouse interval deletion (Visel 2010) |
+| KITLG_blond | chr12:88,934,308-88,934,808 | 500 | KITLG | **activates** | 353,457 bp | human-enhancer knock-in mouse (Guenther 2014) |
+| SOST_VanBuchem | chr17:43,666,737-43,718,737 (**stated**) | 52,000 | SOST | **activates** | 35,000 bp | homozygous 52 kb human deletion; mouse enhancer deletion (Balemans 2002) |
+| HBG1_BCL11A_site | chr11:5,249,724-5,250,224 (**stated**) | 500 | HBG1, HBG2 | **represses** | 115 bp | HPFH point mutations; editing in human erythroid cells (Martyn 2018) |
+| MYC_PVT1promoter | chr8:127,794,262-127,794,762 (**stated**) | 500 | MYC | **represses** | 58,829 bp | CRISPR deletion of the promoter raises MYC (Cho 2018) |
+| TERT_promoter | chr5:1,294,950-1,295,250 (**stated**) | 300 | TERT | **activates** | 124 bp | recurrent somatic mutation; CRISPR reversal (Chiba 2015) |
+
+**0 of 9 died at the reach filter, and that was the registered prediction.** `loci.read_reach` was called, not reimplemented: a gene-**body** test against the scorer's 1,048,576 bp input, never a TSS-distance test. Beside the other two frames - 3 of 17 unaskable (SHH_ZRS, SOX9_PierreRobin, FTO_IRX3's IRX5), 2 of 11 died, both exhibits placed on a bare offset - the filter keeps killing the famous megabase loci and almost nothing else. Three frames have now made the same measurement: a published enhancer-gene link is usually well inside the model's reach.
+
+**The sharpest case is SHH.** Section 18 retired the ZRS as an element-level miss because SHH is 979 kb away and **not in the model's input at all** - no number of requests puts it there. SBE2 is a different published SHH enhancer 455,893 bp away, SHH's body is inside the window, and the question the benchmark could not ask about its flagship gene becomes askable by changing the element rather than the model.
+
+### What the requests were
+
+| loci | cCREs over the element | already deleted | requests |
+|---|---|---|---|
+| CDKN2A_9p21, GATA2_plus95, HBG1_BCL11A_site, KITLG_blond, SHH_SBE2, SOST_VanBuchem | 1 to 35 | 1 to 30 | **0** |
+| MYC_PVT1promoter, TAL1_MuTE, TERT_promoter | 1 to 2 | 0 | **1 each** |
+
+**3 requests for the whole set**, because the finished all-chromosome sweep had already deleted an element inside 6 of the 9 published intervals. Section 6 spent 2,283 on twelve loci; the cost of a new locus now is the cost of the intervals nobody annotated.
+
+**A caveat on those three, from the run's own record rather than from reading it charitably.** `Context.score_region` substitutes an overlapping ENCODE element when there is one, and it did so at MYC_PVT1promoter, TAL1_MuTE, TERT_promoter - every interval this set paid for. So what was deleted is an annotated element *overlapping* the published one, not the published interval itself, and the stated coordinate acted as a pointer rather than as the thing scored. It is recorded per locus in `loci_third_intervals` and is the honest reading of what those three requests bought.
+
+### The scores, beside the other two frames
+
+| field | the third set | the nine candidates | the seventeen panel |
+|---|---|---|---|
+| right target, derived | **8/9 (0.889)** | 8/9 (0.889) | 15/17 (0.882) |
+| right target, where the model could answer | **8/9 (0.889)** | 8/9 (0.889) | 13/15 (0.867) |
+| right target, nearest TSS in node | **7/9 (0.778)** | 3/9 (0.333) | 11/17 (0.647) |
+| right target, annotation lookup | **3/9 (0.333)** | 1/9 (0.111) | 8/17 (0.471) |
+| chance floor (random coding gene in the window) | 2.4/9 | 1.06/9 | 7.12/17 |
+| direction, where a deletion names the target | **6/7 (0.857)** | 3/5 (0.600) | 5/5 |
+| right cell or tissue, where judged | 0/4 (0.000) | 4/6 (0.667) | - |
+| a published class read | 7/9 | 9/9 | 13/17 |
+
+The floors are not comparable across the frames and are printed so that each rate can be read against its own: this set's 2.4 of 9 sits between the candidates' and the panel's. Within each frame the derived rate clears its own floor.
+
+**The three derived rates agree to within 0.007**, which is the least interesting thing here and worth saying first so it cannot be mistaken for the finding. Three sets chosen on different days by different criteria land on 8/9 (0.889), 8/9 (0.889) and 15/17 (0.882). The headline is stable across sampling frames. Everything that moves is underneath it.
+
+### The nearest-gene rule moves further than anything else, and in the opposite direction to section 19
+
+The heuristic reads 7/9 (0.778) here against 3/9 (0.333) at the candidates and 11/17 (0.647) at the panel. **That spread is wider than any spread in the derived rate, and it is a property of the loci, not of the rule.** It was registered in advance as a weakness of this set: 7 of 9 loci here have a published target as their own nearest coding TSS, because an element that sits in its target's intron or promoter is what a clean perturbation experiment usually looks like.
+
+**And the two traps caught nothing, which is not the same as the traps failing.** SHH_SBE2, SOST_VanBuchem were written down before scoring as the two loci where the nearest coding TSS is not the published target - RNF32 at 371,126 bp against SHH's 455,893, MEOX1 at 4,808 bp against SOST's 40,054. The heuristic fell into **0 of them**: at both loci the node model named **no gene at all** rather than naming the wrong one. Its two misses (SHH_SBE2, KITLG_blond) are both silences. A baseline that abstains at the long-range loci and answers at the short-range ones is not the baseline its rate describes, and this is the first set in which that distinction shows.
+
+### The direction axis, asked both ways - and the registered answer is *undecidable*
+
+This is what the set was assembled for, and the registration wrote down in advance what each outcome would be worth: both repressors right is weak support that the layer reads direction, both inverted is weak support that it does not, **one of each decides nothing**.
+
+| arm | right | n |
+|---|---|---|
+| activators | 5 | 5 |
+| **repressors** | **1** | **2** |
+
+**It came back one of each, so by its own registration this set decides nothing about the sign.** No pooled direction rate is quoted here and none should be quoted from it.
+
+| locus | published | the model | |
+|---|---|---|---|
+| GATA2_plus95 | activates | activates | right |
+| TAL1_MuTE | activates | activates | right |
+| CDKN2A_9p21 | activates | activates | right |
+| SOST_VanBuchem | activates | activates | right |
+| HBG1_BCL11A_site (repressor) | represses | activates | **inverted** |
+| MYC_PVT1promoter (repressor) | represses | represses | right |
+| TERT_promoter | activates | activates | right |
+
+**The two repressors are the two readings worth having, and they disagree with each other.**
+
+At **MYC_PVT1promoter** the model gets it right: deleting the PVT1 promoter *raises* MYC (+0.1392), which is what Cho 2018 reports and is the opposite of what the panel's own MYC element does 335 kb the other side of the gene. A layer that reports a sign has to disagree with itself across those two elements, and it did.
+
+At **HBG1_BCL11A_site** it gets it wrong, and this is the sharper of the two because nothing else about the locus is ambiguous. Deleting the BCL11A motif at -115 *lowers* HBG1 in the model (-1.0195); in human erythroid cells, destroying that motif is one of the best-replicated ways to *raise* fetal haemoglobin. The element is in the reader's own cell type, the target is named first and correctly, the distance is 115 bp - the model has every input it could want and reports the sign backwards.
+
+**What this adds to the ledger.** The candidates got 2 of 5 wrong among activators (IL2RA, GDF5); this set gets 0 of 5 wrong among activators and 1 of 2 wrong among repressors. Pooled across all three frames the sign is right more often than not, and the one clean case where a published *repressor* could be checked with the cell, the target and the distance all in the model's favour came back inverted. **n = 2 was declared too small before the run and is still too small after it.** What would settle it is a CRISPRi screen reporting de-repression, not more curation - published repressive elements with a perturbation behind them were searched for twice now, and the two here are what a second search produced.
+
+### The positive control, and the one miss
+
+**The control passed.** Deleting TERT's own core promoter named TERT first at -5.0034 - by a wide margin the largest effect anywhere in this set. That was registered as the thing whose failure would invalidate the run rather than score as a miss, so it is reported before the rates that depend on it and not after.
+
+**KITLG_blond is the one target miss, and it is the FTO and SORT1 pattern for the third time.** KITLG is *second* in the summed-window layer behind DUSP6 and is named by no other derived layer; the element's own deletion names nothing at all, and neither does the node. So the lenient reading hits and the strict one misses, as at FTO and at SORT1. The expectation named KITLG alone, before scoring, and the miss stands.
+
+**Which layer does the work has moved again.** The element's own deletion names the published target first at **7 of 9** here, against 5 of 9 at the candidates. The difference is not the model: it is that six of these nine elements sit inside or beside their own target, which is the registered weakness of the set and the same fact that lifts the nearest-gene rule.
+
+### The controls, with presence counted before coverage is made a stratum
+
+31 matched windows, the same four covariates and the same hit rules, with the keep-outs extended to every locus in **all three** sets. `genomeos/compare.py` does the standardising; nothing here reimplements it.
+
+**`input_presence` runs first, and it is the reason the table below can be read at all.**
+
+| input | kind | targets | controls |
+|---|---|---|---|
+| a deletion spent inside the window | **bought** | 9/9 | 17/31 |
+| a GTEx eQTL distilled for the window | **bought** | 5/9 | 24/31 |
+| the mammalian constraint track over the window | **free** | 9/9 | 31/31 |
+
+A coverage stratum can only bite a claim whose input somebody had to **buy**. The deletion input is bought here - 17 of 31 controls have one - so the direction claim is genuinely under test. The constraint track is **free**, present on every window in both arms, so a null on the storage claim under a coverage stratum is arithmetic and not a test the claim passed. Section 19 did not separate those two cases; this run does, before the strata are run rather than after.
+
+| claim | third set | controls, covariates only | p | controls, **coverage held fixed** | p |
+|---|---|---|---|---|---|
+| target | 0.778 | 0.875 (-0.125) | 0.742 | **1.000** (-0.250) | 0.949 |
+| cell | 0.889 | 0.719 (+0.156) | 0.214 | **0.750** (+0.125) | 0.258 |
+| direction | 0.778 | 0.708 (+0.042) | 0.426 | **0.875** (-0.125) | 0.742 |
+| storage | 0.111 | 0.412 (-0.287) | 0.915 | **0.412** (-0.287) | 0.915 |
+
+**The coverage artefact reproduces on a third independent set of loci.** Raw, the direction claim separates: 0.778 against 0.484, p = 0.038. Standardising on GC, distance and constraint takes it to +0.042; adding *has an element inside this window actually been deleted* as a fifth stratum takes it to **-0.125** at p = 0.742 - the matched windows produce a direction slightly more often than the loci do. Section 8 retracted this claim at the panel, section 19 reproduced the retraction at the candidates, and it now holds at three frames. It is not a property of which loci anyone picked.
+
+**The value-on-syntax claim does not separate here either:** 0.111 at the loci against 0.194 at the controls, and -0.287 once standardised. That is the candidates' 1/9 shape and not the panel's 9/17, and it was registered in advance as the expected outcome because this set has one long element and eight short ones. **With one long element it cannot settle a length gradient and was declared unable to before the number existed.** What it adds is only that the panel's 9/17 has now failed to reproduce twice.
+
+**The controls are thinner than they should be and that is stated rather than buried.** Five windows per locus were asked for and 31 of 45 were found: the length-and-distance matching could place five for six loci, one for HBG1_BCL11A_site and **none** for MYC_PVT1promoter or TERT_promoter, because a window whose nearest coding TSS is essentially zero away and whose length is 300 to 500 bp is hard to match outside a promoter. One locus is dropped for want of a control in every comparison above (1 of 9), and the constrained fraction is 1.93x between the arms - the one covariate that differs materially, as it did at the candidates.
+
+### Where this set disagrees with the other two, and what the disagreement is
+
+| | the seventeen | the nine | the third set |
+|---|---|---|---|
+| chosen for | fame | perturbation | direction and length |
+| derived target | 15/17 (0.882) | 8/9 (0.889) | 8/9 (0.889) |
+| nearest-gene rule | 11/17 (0.647) | 3/9 (0.333) | 7/9 (0.778) |
+| annotation lookup | 8/17 (0.471) | 1/9 (0.111) | 3/9 (0.333) |
+| unaskable for reach | 3/17 | 2/11 | 0/9 |
+
+**The headline is the stable number and the baselines are the unstable ones.** Across three frames the derived target rate moves by 0.007 and the nearest-gene baseline moves by 0.445. A benchmark reporting a derived rate alone would look reproducible; the thing it is supposed to be measured *against* is what depends on who picked the loci. That is a finding about benchmarks, and it is the main one this set produces.
+
+### Left undone
+
+- **The repressor arm is n = 2 and came back one of each, which was registered as undecidable.** Nothing here licenses a claim about the deletion layer's sign. The HBG inversion is a single reading at a locus where every input favoured the model, and it is worth following up on its own rather than aggregating.
+- **A published non-coding target is still missing after three sets**, so the `predicted_coding`-first defect H19 exposed remains untested. The search is recorded in `PREREGISTRATION['aims_that_failed_before_the_run']`: the clean non-coding cases act through parent-of-origin methylation, which no layer here carries.
+- **The three paid requests were answered about an overlapping annotated element**, not the stated interval, because `Context.score_region` substitutes one when it can. Whether that substitution should be refused for a stated interval is the benchmark owner's call.
+- **`loci.STATED_INTERVAL_RESULTS` does not list `loci_third_intervals`.** Until it does, `loci_third.register_stated_intervals` applies the same one-line change at runtime. The hunk is in `loci_third.NEEDED_LOCI_HUNK`; this lane was not permitted to make it.
+- **The cell axis is close to unmeasurable on this set**, as registered: 5 of 9 published tissues have no counterpart in the eleven reader cells or the GTEx panel, and where it could be judged it reads 0/4 (0.000). A benchmark built on loci GTEx can see will keep overrating the tissue layers.
+- **The controls are 31 windows, not 45**, and two loci have none at all. A promoter-proximal element cannot be length-and-distance matched against anything that is not itself a promoter, which is a structural limit of `loci.candidate_windows` rather than a shortage of genome.
+- **The three sets are still three sets.** Whether any of them should merge, and on what denominator, is the benchmark owner's call; nothing here pools them.
+
+---

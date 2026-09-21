@@ -85,7 +85,7 @@ GTEX_DIR = Path("data/knowledge/loci_benchmark")
 #: results holding deletions of intervals a panel STATED from a publication because no registry drew
 #: one. Read first by `_deletion_rows` and labelled `stated_interval`, so a hit on one is never
 #: pooled with a hit on somebody else's annotation. One per panel: the seventeen, then the candidates.
-STATED_INTERVAL_RESULTS = ("loci_stated_intervals", "loci_candidate_intervals")
+STATED_INTERVAL_RESULTS = ("loci_stated_intervals", "loci_candidate_intervals", "loci_third_intervals")
 NEGATIVES_PER_LOCUS = 5
 CANDIDATES_PER_LOCUS = 40  # sampled, then narrowed to the best matches on four covariates
 MATCH_GC = 0.04  # matched window: GC within this of the positive's

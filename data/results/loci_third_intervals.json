@@ -1,0 +1,456 @@
+{
+  "result": "loci_third_intervals",
+  "date": "2026-09-21",
+  "elements": [
+    {
+      "id": "EH38E3858788",
+      "chrom": "chr8",
+      "start": 127794297,
+      "end": 127794640,
+      "length": 343,
+      "genes_in_window": 21,
+      "tracks": 371,
+      "seconds": 1.2,
+      "predicted": {
+        "gene": "MIR1204",
+        "action": "activates",
+        "log2_fold_change": -2.2059,
+        "tissue": "K562",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "MYC",
+        "action": "represses",
+        "log2_fold_change": 0.1392,
+        "tissue": "GM23338",
+        "strength": "weak",
+        "confidence": 0.139,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -1.7527,
+        "IMR-90": -0.5617,
+        "K562": -2.2059,
+        "GM12878": 0.0263
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0328,
+        "IMR-90": 0.0545,
+        "K562": 0.045,
+        "GM12878": -0.0275
+      },
+      "top_genes": [
+        {
+          "gene": "MIR1204",
+          "n_tracks": 371,
+          "mean_log2fc": -0.8236,
+          "max_drop_log2fc": -2.2059,
+          "max_drop_tissue": "K562",
+          "max_rise_log2fc": 0.2418,
+          "max_rise_tissue": "GM12891",
+          "by_cell": {
+            "HepG2": -1.7527,
+            "IMR-90": -0.5617,
+            "K562": -2.2059,
+            "GM12878": 0.0263
+          }
+        },
+        {
+          "gene": "ENSG00000278324",
+          "n_tracks": 371,
+          "mean_log2fc": -0.7677,
+          "max_drop_log2fc": -1.4681,
+          "max_drop_tissue": "HepG2",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -1.4681,
+            "IMR-90": -0.4883,
+            "K562": -1.2,
+            "GM12878": -0.3587
+          }
+        },
+        {
+          "gene": "PVT1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.5305,
+          "max_drop_log2fc": -1.1764,
+          "max_drop_tissue": "HepG2",
+          "max_rise_log2fc": 0.1532,
+          "max_rise_tissue": "Whole_Blood",
+          "by_cell": {
+            "HepG2": -1.1764,
+            "IMR-90": -0.4405,
+            "K562": -0.7873,
+            "GM12878": -0.2556
+          }
+        },
+        {
+          "gene": "MIR1206",
+          "n_tracks": 371,
+          "mean_log2fc": -0.3516,
+          "max_drop_log2fc": -0.998,
+          "max_drop_tissue": "HepG2",
+          "max_rise_log2fc": 0.1818,
+          "max_rise_tissue": "natural killer cell",
+          "by_cell": {
+            "HepG2": -0.998,
+            "IMR-90": -0.3218,
+            "K562": -0.8539,
+            "GM12878": -0.1755
+          }
+        },
+        {
+          "gene": "MIR1205",
+          "n_tracks": 371,
+          "mean_log2fc": -0.3637,
+          "max_drop_log2fc": -0.9755,
+          "max_drop_tissue": "HepG2",
+          "max_rise_log2fc": 0.014,
+          "max_rise_tissue": "natural killer cell",
+          "by_cell": {
+            "HepG2": -0.9755,
+            "IMR-90": -0.4269,
+            "K562": -0.6432,
+            "GM12878": -0.3267
+          }
+        }
+      ],
+      "inferred": {
+        "gene": "PVT1",
+        "distance": 44,
+        "basis": "promoter of",
+        "confidence": 0.8
+      },
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr8:D961",
+      "locus": "MYC_PVT1promoter",
+      "substituted_annotated_element": true
+    },
+    {
+      "id": "EH38E1345155",
+      "chrom": "chr1",
+      "start": 47239156,
+      "end": 47239505,
+      "length": 349,
+      "genes_in_window": 31,
+      "tracks": 371,
+      "seconds": 1.1,
+      "predicted": {
+        "gene": "TAL1",
+        "action": "activates",
+        "log2_fold_change": -0.2484,
+        "tissue": "T-cell",
+        "strength": "weak",
+        "confidence": 0.248,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "TAL1",
+        "action": "activates",
+        "log2_fold_change": -0.2484,
+        "tissue": "T-cell",
+        "strength": "weak",
+        "confidence": 0.248,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": 0.0339,
+        "IMR-90": 0.0225,
+        "K562": 0.0028,
+        "GM12878": -0.0003
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0339,
+        "IMR-90": 0.0225,
+        "K562": 0.0028,
+        "GM12878": -0.0003
+      },
+      "top_genes": [
+        {
+          "gene": "TAL1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0099,
+          "max_drop_log2fc": -0.2484,
+          "max_drop_tissue": "T-cell",
+          "max_rise_log2fc": 0.0744,
+          "max_rise_tissue": "Calu3",
+          "by_cell": {
+            "HepG2": 0.0339,
+            "IMR-90": 0.0225,
+            "K562": 0.0028,
+            "GM12878": -0.0003
+          }
+        },
+        {
+          "gene": "ENSG00000226252",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0042,
+          "max_drop_log2fc": -0.1216,
+          "max_drop_tissue": "CD8-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.0362,
+          "max_rise_tissue": "Panc1",
+          "by_cell": {
+            "HepG2": 0.0001,
+            "IMR-90": 0.0,
+            "K562": -0.0173,
+            "GM12878": -0.0
+          }
+        },
+        {
+          "gene": "PDZK1IP1",
+          "n_tracks": 371,
+          "mean_log2fc": 0.015,
+          "max_drop_log2fc": -0.0187,
+          "max_drop_tissue": "placenta",
+          "max_rise_log2fc": 0.0672,
+          "max_rise_tissue": "mammary microvascular endothelial cell",
+          "by_cell": {
+            "HepG2": 0.0099,
+            "IMR-90": 0.0184,
+            "K562": 0.0231,
+            "GM12878": 0.005
+          }
+        },
+        {
+          "gene": "ENSG00000290081",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0017,
+          "max_drop_log2fc": -0.0153,
+          "max_drop_tissue": "large intestine",
+          "max_rise_log2fc": 0.0187,
+          "max_rise_tissue": "upper lobe of right lung",
+          "by_cell": {
+            "HepG2": 0.0017,
+            "IMR-90": 0.0003,
+            "K562": -0.0041,
+            "GM12878": -0.0003
+          }
+        },
+        {
+          "gene": "CYP4A44P",
+          "n_tracks": 370,
+          "mean_log2fc": -0.0003,
+          "max_drop_log2fc": -0.0145,
+          "max_drop_tissue": "Adipose_Subcutaneous",
+          "max_rise_log2fc": 0.0046,
+          "max_rise_tissue": "spinal cord",
+          "by_cell": {
+            "HepG2": 0.0,
+            "IMR-90": -0.0,
+            "K562": -0.0001,
+            "GM12878": 0.0002
+          }
+        }
+      ],
+      "inferred": null,
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr1:D333",
+      "locus": "TAL1_MuTE",
+      "substituted_annotated_element": true
+    },
+    {
+      "id": "EH38E3622530",
+      "chrom": "chr5",
+      "start": 1294944,
+      "end": 1295294,
+      "length": 350,
+      "genes_in_window": 42,
+      "tracks": 371,
+      "seconds": 1.1,
+      "predicted": {
+        "gene": "TERT",
+        "action": "activates",
+        "log2_fold_change": -5.0034,
+        "tissue": "NCI-H460",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "TERT",
+        "action": "activates",
+        "log2_fold_change": -5.0034,
+        "tissue": "NCI-H460",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -2.9823,
+        "IMR-90": -2.1744,
+        "K562": -3.8062,
+        "GM12878": -3.0769
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -2.9823,
+        "IMR-90": -2.1744,
+        "K562": -3.8062,
+        "GM12878": -3.0769
+      },
+      "top_genes": [
+        {
+          "gene": "TERT",
+          "n_tracks": 371,
+          "mean_log2fc": -1.5557,
+          "max_drop_log2fc": -5.0034,
+          "max_drop_tissue": "NCI-H460",
+          "max_rise_log2fc": 0.4023,
+          "max_rise_tissue": "small intestine",
+          "by_cell": {
+            "HepG2": -2.9823,
+            "IMR-90": -2.1744,
+            "K562": -3.8062,
+            "GM12878": -3.0769
+          }
+        },
+        {
+          "gene": "ENSG00000287486",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1826,
+          "max_drop_log2fc": -3.9152,
+          "max_drop_tissue": "HCT116",
+          "max_rise_log2fc": 0.9654,
+          "max_rise_tissue": "small intestine",
+          "by_cell": {
+            "HepG2": -0.0098,
+            "IMR-90": -0.0023,
+            "K562": -0.0213,
+            "GM12878": -0.0685
+          }
+        },
+        {
+          "gene": "SLC6A18",
+          "n_tracks": 371,
+          "mean_log2fc": 0.011,
+          "max_drop_log2fc": -0.1927,
+          "max_drop_tissue": "PFSK-1",
+          "max_rise_log2fc": 0.2739,
+          "max_rise_tissue": "kidney",
+          "by_cell": {
+            "HepG2": -0.0155,
+            "IMR-90": -0.0,
+            "K562": -0.0136,
+            "GM12878": -0.0014
+          }
+        },
+        {
+          "gene": "TERLR1",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0189,
+          "max_drop_log2fc": -0.0771,
+          "max_drop_tissue": "K562",
+          "max_rise_log2fc": 0.1026,
+          "max_rise_tissue": "adrenal gland",
+          "by_cell": {
+            "HepG2": -0.018,
+            "IMR-90": 0.0,
+            "K562": -0.0599,
+            "GM12878": -0.001
+          }
+        },
+        {
+          "gene": "SLC6A19",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0059,
+          "max_drop_log2fc": -0.0591,
+          "max_drop_tissue": "K562",
+          "max_rise_log2fc": 0.0555,
+          "max_rise_tissue": "hematopoietic multipotent progenitor cell",
+          "by_cell": {
+            "HepG2": -0.0163,
+            "IMR-90": -0.0,
+            "K562": -0.0578,
+            "GM12878": -0.0006
+          }
+        }
+      ],
+      "inferred": {
+        "gene": "ENSG00000300381",
+        "distance": 19,
+        "basis": "promoter of",
+        "confidence": 0.8
+      },
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr5:D12",
+      "locus": "TERT_promoter",
+      "substituted_annotated_element": true
+    }
+  ],
+  "read": [
+    {
+      "locus": "MYC_PVT1promoter",
+      "element": "chr8:127794262-127794762",
+      "substituted_annotated_element": true,
+      "named_first_coding": "MYC",
+      "named_first_any": "MIR1204",
+      "log2_fold_change": 0.1392,
+      "action": "represses",
+      "published_direction": "represses",
+      "tissue": "GM23338",
+      "top_genes": [
+        "MIR1204",
+        "ENSG00000278324",
+        "PVT1",
+        "MIR1206",
+        "MIR1205"
+      ],
+      "hit": true,
+      "targets": [
+        "MYC"
+      ]
+    },
+    {
+      "locus": "TAL1_MuTE",
+      "element": "chr1:47239475-47239975",
+      "substituted_annotated_element": true,
+      "named_first_coding": "TAL1",
+      "named_first_any": "TAL1",
+      "log2_fold_change": -0.2484,
+      "action": "activates",
+      "published_direction": "activates",
+      "tissue": "T-cell",
+      "top_genes": [
+        "TAL1",
+        "ENSG00000226252",
+        "PDZK1IP1",
+        "ENSG00000290081",
+        "CYP4A44P"
+      ],
+      "hit": true,
+      "targets": [
+        "TAL1"
+      ]
+    },
+    {
+      "locus": "TERT_promoter",
+      "element": "chr5:1294950-1295250",
+      "substituted_annotated_element": true,
+      "named_first_coding": "TERT",
+      "named_first_any": "TERT",
+      "log2_fold_change": -5.0034,
+      "action": "activates",
+      "published_direction": "activates",
+      "tissue": "NCI-H460",
+      "top_genes": [
+        "TERT",
+        "ENSG00000287486",
+        "SLC6A18",
+        "TERLR1",
+        "SLC6A19"
+      ],
+      "hit": true,
+      "targets": [
+        "TERT"
+      ]
+    }
+  ],
+  "note": "AlphaGenome deletions of intervals genomeos/benchmark/loci_third.py STATED from a publication, which the finished sweep had not already covered. Read by loci._deletion_rows and labelled `stated_interval`, so these rows are never pooled with registry ones. loci.STATED_INTERVAL_RESULTS must list this result's name for that to happen: see loci_third.NEEDED_LOCI_HUNK and loci_third.register_stated_intervals",
+  "requests_this_run": 3,
+  "seconds": 60.5
+}
