@@ -1,0 +1,4940 @@
+{
+  "result": "loci_reread",
+  "date": "2026-09-21",
+  "preregistration": {
+    "written": "2026-09-21, before any frame was re-read and before the corrected draw was taken. Committed on its own, ahead of the one-line change it licenses",
+    "the_two_changes": "ONE, the reader: `loci.read_deletion` ranks both stored keys together instead of breaking at the first one that holds a gene. TWO, the draw: `loci_fourth.select` joins the benchmark file's own `measuredGeneEnsemblId` to GENCODE before testing whether a published target is protein coding",
+    "registered_together_measured_apart": "one registration, two stages, and the reason is that they move different things. The reader changes the READINGS over a draw that is held fixed, so every denominator in sections 9, 19, 21, 22 and 23 is the same before and after and a difference is a difference in what a layer named. The Ensembl join changes the DRAW, so the fourth frame's denominator itself moves and a rate computed after it is over a different set of loci. Applying both at once would leave no way to say which of them moved the fourth frame's 0.200, which is the one number this whole exercise is most likely to be accused of having been aimed at. So the reader is applied first and every frame is re-read with the draw untouched; only then is the join applied and the frame re-drawn, and the fourth frame is reported three times: as it stands, after the reader alone, and after the reader and the join",
+    "what_the_reader_will_do": "for every already-scored element inside the window, both `predicted` and `predicted_coding` are entered into the same ranking, a gene named by both keys of one element counts once, and the layer's answer is the gene with the largest absolute predicted log2 fold change whatever its biotype. On an exact tie the coding entry keeps its place, because it is inserted first and the sort is stable - the tie-break is deliberately the one that preserves the old answer. The pre-2026-09-21 reading is computed alongside and returned in the same dict as `coding_first_target` and `coding_first_targets`, so every rate this benchmark reported before today stays computable from the shipped reader rather than only from the git history",
+    "why_this_reading_and_not_the_favourable_one": "FIRST, it is the question the layer says it is answering. `read_deletion`'s own first line is 'which gene moves when an element here is deleted', and the answer to that question does not depend on the biotype of the gene that moves. A reader that filters by biotype is answering 'which CODING gene moves most' while being scored as though it had answered the first, and the benchmark has no line that says so. SECOND, `predicted_coding` is not a better estimate than `predicted`, it is a restriction of it: the same deletion, the same scorer, the same run, with the candidate set cut down. It exists because the panel's first loci all had coding targets. Preferring a restriction of a computation over the computation is a choice that needs a reason, and there is none on the record. THIRD, and this is what makes it the right reading rather than the convenient one, the change is expected to be NET UNFAVOURABLE to this benchmark's headline. Because |predicted| >= |predicted_coding| holds for one element by construction, a published CODING target that used to rank first can now be displaced by a stronger non-coding effect, and it can never be promoted. Only a published NON-CODING target can gain. Three of the five frames contain coding targets only, and the fourth frame's drawing rule REQUIRES the target to be protein coding, so in four of the five frames the reader fix can lower the derived rate and cannot raise it. The one frame it can raise is n = 2. FOURTH, the readings that would have been favourable were available and are not taken. The lenient `among` reading - a published target anywhere in the six a layer names - rises monotonically under this change and is already excluded from every headline by section 9's own rule; it stays excluded. Choosing per locus whichever of the two keys names the published target would read the answer before reporting it and is not a reader at all",
+    "scope_what_is_not_being_changed": "`read_gene_input` reads `predicted_coding` and nothing else and is left alone. Section 23 registered that as a separate property of a separate layer - it is a summed-window reading rather than an element answer - and folding a second layer into this change would put two movements behind one number. `summed_by_cell` keeps reading `predicted_coding_by_cell`, which is a coding-specific field by name. The drawing rules of the first three frames are curated panels and are not re-drawn here",
+    "expected_direction_per_section": {
+      "reading": "written before the re-read. Each entry is the direction the rate is expected to move and by roughly how much. The headline `target_derived` is a UNION over the derived layers, so a deletion-layer loss only reaches the headline at a locus where the deletion layer was the only derived layer that hit",
+      "9 - the seventeen panel": "derived target 15/17 (0.882) and 13/15 where the model could answer. Expected to FALL by 0 to 2 loci, most likely 0 or 1. The panel's targets are coding except at the H19 ICR, which is where section 18 first saw the defect and where a gain is possible",
+      "19 - the nine candidates": "derived target 8/9 (0.889). Expected to FALL by 0 or 1 locus. Every published target here is coding, so a rise is not available",
+      "21 - the third set": "derived target 8/9 (0.889). Expected to FALL by 0 or 1 locus, same reasoning",
+      "22 - the fourth frame": "derived target 10/60 (0.167) and 10/50 (0.200) where the model could answer; the deletion layer alone is 3/50. Expected to FALL by 0 to 3 loci, most likely 1: the deletion layer is the only derived hit at some of the ten, and the rule requires a coding target so no locus here can gain. 0.200 is expected to land between 0.140 and 0.200. The 'named the nearest coding TSS' count of 26/50 is expected to FALL, because a non-coding gene displacing the nearest coding TSS moves a locus out of that column and into 'another gene'",
+      "23 - the non-coding frame": "derived target 0/2 rises to 1/2. This is NOT a prediction: section 23 computed it with `loci_noncoding.counterfactual` and disclosed that the CCDC26 row had been read before its own registration was written. It is listed here so that it is not counted twice",
+      "the matched-window comparisons in 8, 19, 21 and 22": "expected to be EXACTLY unchanged, targets and controls alike. `loci.claims` asks whether a layer named a gene at all, not which one; the fix never empties a reading that held a gene and never fills one that was empty, because the candidate set only ever grows. `elements_scored` and `summed_by_cell` are likewise expected to be identical. Any movement in a claim rate, in an element count or in a p-value is a defect in the change and not a finding",
+      "cell and direction": "both read the rank-1 gene's tissue and action, so both can move in EITHER direction and no direction is registered for them. They are reported before and after whatever they do"
+    },
+    "known_before_the_registration": "what the fix does at the chr8 CCDC26 element, because section 23 measured it and published it; and that all eight elements the corrected draw recovers are already covered by the finished sweep, because that was checked with `loci._deletion_rows` while this was being written, in order to state the budget. Neither is a prediction this re-read confirms",
+    "falsifiers": {
+      "the harness": "`historical_deletion_reading` must reproduce the stored deletion reading of every locus and every negative in all five result files, field for field. If it does not, the re-read is not reading what the runs read, and NO number out of it is admissible - including the ones that would look good",
+      "the mechanism": "a frame whose published targets are all coding must not RISE. |predicted| >= |predicted_coding| for one element, so a coding rank-1 can only be displaced, never promoted; a rise there would mean the mechanism argued above is false and that the change is doing something not understood. If one appears, the run stops, the defect stays pinned, and the rise is reported as an unexplained result rather than as a gain",
+      "double counting": "`elements_scored` must be identical before and after at every window. The fix enters two keys per element, and an element whose two keys name the same gene must still count once. A changed element count means the ranking is inflated and every rate from it is void",
+      "the claim tables": "the four claim rates and their control rates must not move by one window. They are existence claims and the fix cannot touch them",
+      "unfalsifiability": "if after the fix the deletion layer names a non-coding gene at most loci, then 'names the published target' stops discriminating in the four coding frames and the layer has been turned into a different measurement rather than repaired. The threshold registered in advance: if the rank-1 gene changes at more than half the graded loci of the fourth frame, the fix is reported as a change of measurement and the old reading keeps the headline until a frame is registered for the new one"
+    },
+    "if_the_fourth_frames_0.200_RISES": "it is reported in the same place, in the same table and in the same sentence as the fall it would partly undo, and with the same emphasis section 22 gave the fall. BOTH readings stay in the record permanently: section 22's numbers are not rewritten, the new ones are added beside them, and every table that carries one carries the other. The registered position is that a rise here is WEAK evidence and a fall is weak evidence too - n = 50 over one screen - and that the interesting number is not the headline but which gene the deletion layer names instead of the published one. If the rise came from the Ensembl join rather than the reader, it is reported as a change of denominator, because the eight recovered elements are seven perturbations of one gene in one cell line plus one other, and a rate over 58 loci that contains seven elements of ITPRID2 is less independent than a rate over 50 that does not",
+    "if_the_fix_is_wrong": "if the reader fix makes the frames worse in a way the mechanism does not explain, or trips any falsifier above, the change is reverted, the defect stays pinned by its test, and the outcome is written up as a failed attempt. That is a legitimate result and it is the reason this is registered first",
+    "budget": "0 AlphaGenome requests for the whole exercise, and the number is not an estimate. The reader makes no request. All eight elements the corrected draw recovers already have a scored deletion inside them from `enhancer_targets_all`. If the re-draw turns out to need more than 10 requests the run stops and the number goes back to the coordinator unspent"
+  },
+  "frames": {
+    "loci_benchmark": {
+      "frame": "loci_benchmark",
+      "section": "9 - the seventeen panel",
+      "loci": 17,
+      "fidelity": {
+        "loci_checked": 17,
+        "negatives_checked": 85,
+        "mismatches": 0,
+        "reading": "the pre-2026-09-21 loop reproduced every stored deletion reading, so the rows read here are the rows the run read and the difference below is the change to the reader"
+      },
+      "before": {
+        "loci": 17,
+        "target_derived": {
+          "k": 15,
+          "n": 17,
+          "rate": 0.882,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "SOX9_PierreRobin",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 7.12,
+          "of": 17,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 13,
+          "n": 15,
+          "rate": 0.867,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 13,
+          "n": 15,
+          "rate": 0.867,
+          "hits": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ],
+          "held_out": [
+            "SHH_ZRS",
+            "SOX9_PierreRobin"
+          ],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 11,
+          "n": 17,
+          "rate": 0.647,
+          "hits": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "SHH_ZRS",
+            "FTO_IRX3",
+            "MYC_8q24",
+            "APP",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ]
+        },
+        "target_looked_up": {
+          "k": 8,
+          "n": 17,
+          "rate": 0.471,
+          "hits": [
+            "SHH_ZRS",
+            "HBB_LCR",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "MC1R"
+          ],
+          "misses": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "ABO",
+            "SOX9_PierreRobin",
+            "H19_ICR1",
+            "CYP2D6"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "MYC_8q24",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ],
+          "heuristic_fell_in": [
+            "FTO_IRX3"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 5,
+          "n": 12,
+          "rate": 0.417,
+          "hits": [
+            "HBB_LCR",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "CYP2D6"
+          ],
+          "misses": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "ABO",
+            "PMP22_CMT1A"
+          ]
+        },
+        "cell_unreachable": [
+          "SHH_ZRS",
+          "HOXD",
+          "SOX9_PierreRobin",
+          "H19_ICR1",
+          "MC1R"
+        ],
+        "direction_derived_where_judged": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "hits": [
+            "MCM6_LCT",
+            "HBB_LCR",
+            "BCL11A_enhancer",
+            "HOXD",
+            "PMP22_CMT1A"
+          ],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "SHH_ZRS",
+          "HERC2_OCA2",
+          "FTO_IRX3",
+          "MYC_8q24",
+          "SOX9_PierreRobin",
+          "H19_ICR1"
+        ],
+        "class_derived": {
+          "k": 14,
+          "n": 17,
+          "rate": 0.824,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "APP",
+            "TP53",
+            "HOXD",
+            "H19_ICR1",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "ABO",
+            "HLA_DRB1",
+            "SOX9_PierreRobin"
+          ]
+        },
+        "unreachable_target": [
+          "APP",
+          "SOX9_PierreRobin"
+        ],
+        "published_element_coverage": {
+          "per_locus": {
+            "SHH_ZRS": {
+              "ccres_over_element": 1,
+              "elements_scored": 2,
+              "runs": [
+                "loci_windows",
+                "vista"
+              ]
+            },
+            "HERC2_OCA2": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MCM6_LCT": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "HBB_LCR": {
+              "ccres_over_element": 20,
+              "elements_scored": 18,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "FTO_IRX3": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "BCL11A_enhancer": {
+              "ccres_over_element": 5,
+              "elements_scored": 5,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "MYC_8q24": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "ABO": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "HLA_DRB1": {
+              "ccres_over_element": 10,
+              "elements_scored": 9,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "APP": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "TP53": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "HOXD": {
+              "ccres_over_element": 185,
+              "elements_scored": 167,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "SOX9_PierreRobin": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "H19_ICR1": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "PMP22_CMT1A": {
+              "ccres_over_element": 52,
+              "elements_scored": 43,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CYP2D6": {
+              "ccres_over_element": 6,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MC1R": {
+              "ccres_over_element": 12,
+              "elements_scored": 8,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "APP",
+            "TP53",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ],
+          "no_element_level_reading_at_all": [
+            "APP",
+            "TP53",
+            "SOX9_PierreRobin"
+          ],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 14,
+            "n": 15,
+            "rate": 0.933,
+            "loci": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "MYC_8q24",
+              "ABO",
+              "HLA_DRB1",
+              "APP",
+              "TP53",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ],
+            "hits": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "ABO",
+              "HLA_DRB1",
+              "APP",
+              "TP53",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ],
+            "scored_at_the_element": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "MYC_8q24",
+              "ABO",
+              "HLA_DRB1",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ]
+          },
+          "stated": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5,
+            "loci": [
+              "SOX9_PierreRobin",
+              "H19_ICR1"
+            ],
+            "hits": [
+              "SOX9_PierreRobin"
+            ],
+            "scored_at_the_element": [
+              "H19_ICR1"
+            ]
+          }
+        }
+      },
+      "after": {
+        "loci": 17,
+        "target_derived": {
+          "k": 15,
+          "n": 17,
+          "rate": 0.882,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "SOX9_PierreRobin",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 7.12,
+          "of": 17,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 13,
+          "n": 15,
+          "rate": 0.867,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 13,
+          "n": 15,
+          "rate": 0.867,
+          "hits": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "MYC_8q24",
+            "H19_ICR1"
+          ],
+          "held_out": [
+            "SHH_ZRS",
+            "SOX9_PierreRobin"
+          ],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 11,
+          "n": 17,
+          "rate": 0.647,
+          "hits": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "BCL11A_enhancer",
+            "ABO",
+            "HLA_DRB1",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "SHH_ZRS",
+            "FTO_IRX3",
+            "MYC_8q24",
+            "APP",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ]
+        },
+        "target_looked_up": {
+          "k": 8,
+          "n": 17,
+          "rate": 0.471,
+          "hits": [
+            "SHH_ZRS",
+            "HBB_LCR",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "HOXD",
+            "PMP22_CMT1A",
+            "MC1R"
+          ],
+          "misses": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "ABO",
+            "SOX9_PierreRobin",
+            "H19_ICR1",
+            "CYP2D6"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "MYC_8q24",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ],
+          "heuristic_fell_in": [
+            "FTO_IRX3"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 5,
+          "n": 12,
+          "rate": 0.417,
+          "hits": [
+            "HBB_LCR",
+            "HLA_DRB1",
+            "APP",
+            "TP53",
+            "CYP2D6"
+          ],
+          "misses": [
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "ABO",
+            "PMP22_CMT1A"
+          ]
+        },
+        "cell_unreachable": [
+          "SHH_ZRS",
+          "HOXD",
+          "SOX9_PierreRobin",
+          "H19_ICR1",
+          "MC1R"
+        ],
+        "direction_derived_where_judged": {
+          "k": 5,
+          "n": 5,
+          "rate": 1.0,
+          "hits": [
+            "MCM6_LCT",
+            "HBB_LCR",
+            "BCL11A_enhancer",
+            "HOXD",
+            "PMP22_CMT1A"
+          ],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "SHH_ZRS",
+          "HERC2_OCA2",
+          "FTO_IRX3",
+          "MYC_8q24",
+          "SOX9_PierreRobin",
+          "H19_ICR1"
+        ],
+        "class_derived": {
+          "k": 14,
+          "n": 17,
+          "rate": 0.824,
+          "hits": [
+            "SHH_ZRS",
+            "HERC2_OCA2",
+            "MCM6_LCT",
+            "HBB_LCR",
+            "FTO_IRX3",
+            "BCL11A_enhancer",
+            "MYC_8q24",
+            "APP",
+            "TP53",
+            "HOXD",
+            "H19_ICR1",
+            "PMP22_CMT1A",
+            "CYP2D6",
+            "MC1R"
+          ],
+          "misses": [
+            "ABO",
+            "HLA_DRB1",
+            "SOX9_PierreRobin"
+          ]
+        },
+        "unreachable_target": [
+          "APP",
+          "SOX9_PierreRobin"
+        ],
+        "published_element_coverage": {
+          "per_locus": {
+            "SHH_ZRS": {
+              "ccres_over_element": 1,
+              "elements_scored": 2,
+              "runs": [
+                "loci_windows",
+                "vista"
+              ]
+            },
+            "HERC2_OCA2": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MCM6_LCT": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "HBB_LCR": {
+              "ccres_over_element": 20,
+              "elements_scored": 18,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "FTO_IRX3": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "BCL11A_enhancer": {
+              "ccres_over_element": 5,
+              "elements_scored": 5,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "MYC_8q24": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "ABO": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "HLA_DRB1": {
+              "ccres_over_element": 10,
+              "elements_scored": 9,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "APP": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "TP53": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "HOXD": {
+              "ccres_over_element": 185,
+              "elements_scored": 167,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "SOX9_PierreRobin": {
+              "ccres_over_element": 0,
+              "elements_scored": 0,
+              "runs": []
+            },
+            "H19_ICR1": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "PMP22_CMT1A": {
+              "ccres_over_element": 52,
+              "elements_scored": 43,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CYP2D6": {
+              "ccres_over_element": 6,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MC1R": {
+              "ccres_over_element": 12,
+              "elements_scored": 8,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "APP",
+            "TP53",
+            "SOX9_PierreRobin",
+            "H19_ICR1"
+          ],
+          "no_element_level_reading_at_all": [
+            "APP",
+            "TP53",
+            "SOX9_PierreRobin"
+          ],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 14,
+            "n": 15,
+            "rate": 0.933,
+            "loci": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "MYC_8q24",
+              "ABO",
+              "HLA_DRB1",
+              "APP",
+              "TP53",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ],
+            "hits": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "ABO",
+              "HLA_DRB1",
+              "APP",
+              "TP53",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ],
+            "scored_at_the_element": [
+              "SHH_ZRS",
+              "HERC2_OCA2",
+              "MCM6_LCT",
+              "HBB_LCR",
+              "FTO_IRX3",
+              "BCL11A_enhancer",
+              "MYC_8q24",
+              "ABO",
+              "HLA_DRB1",
+              "HOXD",
+              "PMP22_CMT1A",
+              "CYP2D6",
+              "MC1R"
+            ]
+          },
+          "stated": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5,
+            "loci": [
+              "SOX9_PierreRobin",
+              "H19_ICR1"
+            ],
+            "hits": [
+              "SOX9_PierreRobin"
+            ],
+            "scored_at_the_element": [
+              "H19_ICR1"
+            ]
+          }
+        }
+      },
+      "rank_one_changed": 5,
+      "movements": [
+        {
+          "locus": "MCM6_LCT",
+          "published": [
+            "LCT"
+          ],
+          "was": "LCT",
+          "was_log2": -0.3558,
+          "now": "Y_RNA",
+          "now_log2": -0.3709,
+          "hit_before": true,
+          "hit_after": false
+        },
+        {
+          "locus": "MYC_8q24",
+          "published": [
+            "MYC"
+          ],
+          "was": "POU5F1B",
+          "was_log2": -0.5327,
+          "now": "CCAT2",
+          "now_log2": -0.8688,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "HOXD",
+          "published": [
+            "HOXD13",
+            "HOXD12",
+            "HOXD11",
+            "HOXD10",
+            "HOXD9",
+            "HOXD8",
+            "HOXD4",
+            "HOXD3",
+            "HOXD1"
+          ],
+          "was": "HOXD1",
+          "was_log2": -2.5611,
+          "now": "HAGLROS",
+          "now_log2": -4.0493,
+          "hit_before": true,
+          "hit_after": false
+        },
+        {
+          "locus": "H19_ICR1",
+          "published": [
+            "IGF2",
+            "H19"
+          ],
+          "was": "INS-IGF2",
+          "was_log2": 0.1492,
+          "now": "IGF2-AS",
+          "now_log2": 0.4031,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "MC1R",
+          "published": [
+            "MC1R"
+          ],
+          "was": "MC1R",
+          "was_log2": -1.3073,
+          "now": "ENSG00000259006",
+          "now_log2": -1.864,
+          "hit_before": true,
+          "hit_after": false
+        }
+      ],
+      "negatives": {
+        "checked": 85,
+        "claims_changed": [],
+        "element_counts_changed": [],
+        "reading": "the registration predicted that no claim over a negative window can move, because a claim asks whether a layer named a gene at all and the fix only ever enlarges the candidate set. An entry here falsifies that"
+      }
+    },
+    "loci_candidates": {
+      "frame": "loci_candidates",
+      "section": "19 - the nine candidates",
+      "loci": 9,
+      "fidelity": {
+        "loci_checked": 9,
+        "negatives_checked": 45,
+        "mismatches": 0,
+        "reading": "the pre-2026-09-21 loop reproduced every stored deletion reading, so the rows read here are the rows the run read and the difference below is the change to the reader"
+      },
+      "before": {
+        "loci": 9,
+        "target_derived": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "SORT1_1p13"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 1.06,
+          "of": 9,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "SORT1_1p13"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "SORT1_1p13"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 3,
+          "n": 9,
+          "rate": 0.333,
+          "hits": [
+            "RET_MCS97",
+            "IL2RA_CaRE4",
+            "PTF1A_enhancer"
+          ],
+          "misses": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ]
+        },
+        "target_looked_up": {
+          "k": 1,
+          "n": 9,
+          "rate": 0.111,
+          "hits": [
+            "RET_MCS97"
+          ],
+          "misses": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "HBA_HS40"
+          ],
+          "heuristic_fell_in": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "HBA_HS40"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 4,
+          "n": 6,
+          "rate": 0.667,
+          "hits": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "IL2RA_CaRE4",
+            "PTF1A_enhancer"
+          ]
+        },
+        "cell_unreachable": [
+          "RET_MCS97",
+          "GDF5_GROW1",
+          "PAX6_SIMO"
+        ],
+        "direction_derived_where_judged": {
+          "k": 3,
+          "n": 5,
+          "rate": 0.6,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "IL2RA_CaRE4",
+            "GDF5_GROW1"
+          ]
+        },
+        "direction_not_judged": [
+          "MYB_HMIP2",
+          "SORT1_1p13",
+          "PTF1A_enhancer",
+          "PAX6_SIMO"
+        ],
+        "class_derived": {
+          "k": 9,
+          "n": 9,
+          "rate": 1.0,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "RET_MCS97": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "IRF6_MCS97": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "MYB_HMIP2": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SORT1_1p13": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "IL2RA_CaRE4": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "GDF5_GROW1": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "PTF1A_enhancer": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "PAX6_SIMO": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HBA_HS40": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "PTF1A_enhancer"
+          ],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 7,
+            "n": 8,
+            "rate": 0.875,
+            "loci": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "SORT1_1p13",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO",
+              "HBA_HS40"
+            ],
+            "hits": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO",
+              "HBA_HS40"
+            ],
+            "scored_at_the_element": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "SORT1_1p13",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO",
+              "HBA_HS40"
+            ]
+          },
+          "stated": {
+            "k": 1,
+            "n": 1,
+            "rate": 1.0,
+            "loci": [
+              "PTF1A_enhancer"
+            ],
+            "hits": [
+              "PTF1A_enhancer"
+            ],
+            "scored_at_the_element": [
+              "PTF1A_enhancer"
+            ]
+          }
+        }
+      },
+      "after": {
+        "loci": 9,
+        "target_derived": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO"
+          ],
+          "misses": [
+            "SORT1_1p13",
+            "HBA_HS40"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 1.06,
+          "of": 9,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO"
+          ],
+          "misses": [
+            "SORT1_1p13",
+            "HBA_HS40"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO"
+          ],
+          "misses": [
+            "SORT1_1p13",
+            "HBA_HS40"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 3,
+          "n": 9,
+          "rate": 0.333,
+          "hits": [
+            "RET_MCS97",
+            "IL2RA_CaRE4",
+            "PTF1A_enhancer"
+          ],
+          "misses": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ]
+        },
+        "target_looked_up": {
+          "k": 1,
+          "n": 9,
+          "rate": 0.111,
+          "hits": [
+            "RET_MCS97"
+          ],
+          "misses": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "HBA_HS40"
+          ],
+          "heuristic_fell_in": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "GDF5_GROW1",
+            "HBA_HS40"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 4,
+          "n": 6,
+          "rate": 0.667,
+          "hits": [
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "IL2RA_CaRE4",
+            "PTF1A_enhancer"
+          ]
+        },
+        "cell_unreachable": [
+          "RET_MCS97",
+          "GDF5_GROW1",
+          "PAX6_SIMO"
+        ],
+        "direction_derived_where_judged": {
+          "k": 3,
+          "n": 5,
+          "rate": 0.6,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "HBA_HS40"
+          ],
+          "misses": [
+            "IL2RA_CaRE4",
+            "GDF5_GROW1"
+          ]
+        },
+        "direction_not_judged": [
+          "MYB_HMIP2",
+          "SORT1_1p13",
+          "PTF1A_enhancer",
+          "PAX6_SIMO"
+        ],
+        "class_derived": {
+          "k": 9,
+          "n": 9,
+          "rate": 1.0,
+          "hits": [
+            "RET_MCS97",
+            "IRF6_MCS97",
+            "MYB_HMIP2",
+            "SORT1_1p13",
+            "IL2RA_CaRE4",
+            "GDF5_GROW1",
+            "PTF1A_enhancer",
+            "PAX6_SIMO",
+            "HBA_HS40"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "RET_MCS97": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "IRF6_MCS97": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "MYB_HMIP2": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SORT1_1p13": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "IL2RA_CaRE4": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "GDF5_GROW1": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "PTF1A_enhancer": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "PAX6_SIMO": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HBA_HS40": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "PTF1A_enhancer"
+          ],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 6,
+            "n": 8,
+            "rate": 0.75,
+            "loci": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "SORT1_1p13",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO",
+              "HBA_HS40"
+            ],
+            "hits": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO"
+            ],
+            "scored_at_the_element": [
+              "RET_MCS97",
+              "IRF6_MCS97",
+              "MYB_HMIP2",
+              "SORT1_1p13",
+              "IL2RA_CaRE4",
+              "GDF5_GROW1",
+              "PAX6_SIMO",
+              "HBA_HS40"
+            ]
+          },
+          "stated": {
+            "k": 1,
+            "n": 1,
+            "rate": 1.0,
+            "loci": [
+              "PTF1A_enhancer"
+            ],
+            "hits": [
+              "PTF1A_enhancer"
+            ],
+            "scored_at_the_element": [
+              "PTF1A_enhancer"
+            ]
+          }
+        }
+      },
+      "rank_one_changed": 1,
+      "movements": [
+        {
+          "locus": "HBA_HS40",
+          "published": [
+            "HBA1",
+            "HBA2"
+          ],
+          "was": "HBA2",
+          "was_log2": -0.7656,
+          "now": "ENSG00000290010",
+          "now_log2": -0.8452,
+          "hit_before": true,
+          "hit_after": false
+        }
+      ],
+      "negatives": {
+        "checked": 45,
+        "claims_changed": [],
+        "element_counts_changed": [],
+        "reading": "the registration predicted that no claim over a negative window can move, because a claim asks whether a layer named a gene at all and the fix only ever enlarges the candidate set. An entry here falsifies that"
+      }
+    },
+    "loci_third": {
+      "frame": "loci_third",
+      "section": "21 - the third set",
+      "loci": 9,
+      "fidelity": {
+        "loci_checked": 9,
+        "negatives_checked": 31,
+        "mismatches": 0,
+        "reading": "the pre-2026-09-21 loop reproduced every stored deletion reading, so the rows read here are the rows the run read and the difference below is the change to the reader"
+      },
+      "before": {
+        "loci": 9,
+        "target_derived": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 2.4,
+          "of": 9,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 8,
+          "n": 9,
+          "rate": 0.889,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "KITLG_blond"
+          ]
+        },
+        "target_looked_up": {
+          "k": 3,
+          "n": 9,
+          "rate": 0.333,
+          "hits": [
+            "GATA2_plus95",
+            "HBG1_BCL11A_site",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "KITLG_blond",
+            "SOST_VanBuchem",
+            "MYC_PVT1promoter"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "SHH_SBE2",
+            "SOST_VanBuchem"
+          ],
+          "heuristic_fell_in": []
+        },
+        "cell_derived_where_judged": {
+          "k": 0,
+          "n": 4,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "GATA2_plus95",
+            "CDKN2A_9p21",
+            "KITLG_blond",
+            "HBG1_BCL11A_site"
+          ]
+        },
+        "cell_unreachable": [
+          "SHH_SBE2",
+          "TAL1_MuTE",
+          "SOST_VanBuchem",
+          "MYC_PVT1promoter",
+          "TERT_promoter"
+        ],
+        "direction_derived_where_judged": {
+          "k": 6,
+          "n": 7,
+          "rate": 0.857,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "HBG1_BCL11A_site"
+          ]
+        },
+        "direction_not_judged": [
+          "SHH_SBE2",
+          "KITLG_blond"
+        ],
+        "class_derived": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "KITLG_blond"
+          ]
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "SHH_SBE2": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "GATA2_plus95": {
+              "ccres_over_element": 3,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "TAL1_MuTE": {
+              "ccres_over_element": 2,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "CDKN2A_9p21": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "KITLG_blond": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SOST_VanBuchem": {
+              "ccres_over_element": 35,
+              "elements_scored": 30,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HBG1_BCL11A_site": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "MYC_PVT1promoter": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "TERT_promoter": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 2,
+            "n": 3,
+            "rate": 0.667,
+            "loci": [
+              "SHH_SBE2",
+              "CDKN2A_9p21",
+              "KITLG_blond"
+            ],
+            "hits": [
+              "SHH_SBE2",
+              "CDKN2A_9p21"
+            ],
+            "scored_at_the_element": [
+              "SHH_SBE2",
+              "CDKN2A_9p21",
+              "KITLG_blond"
+            ]
+          },
+          "stated": {
+            "k": 6,
+            "n": 6,
+            "rate": 1.0,
+            "loci": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "MYC_PVT1promoter",
+              "TERT_promoter"
+            ],
+            "hits": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "MYC_PVT1promoter",
+              "TERT_promoter"
+            ],
+            "scored_at_the_element": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "MYC_PVT1promoter",
+              "TERT_promoter"
+            ]
+          }
+        }
+      },
+      "after": {
+        "loci": 9,
+        "target_derived": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond",
+            "MYC_PVT1promoter"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 2.4,
+          "of": 9,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond",
+            "MYC_PVT1promoter"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "SHH_SBE2",
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "KITLG_blond",
+            "MYC_PVT1promoter"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "KITLG_blond"
+          ]
+        },
+        "target_looked_up": {
+          "k": 3,
+          "n": 9,
+          "rate": 0.333,
+          "hits": [
+            "GATA2_plus95",
+            "HBG1_BCL11A_site",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "KITLG_blond",
+            "SOST_VanBuchem",
+            "MYC_PVT1promoter"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "SHH_SBE2",
+            "SOST_VanBuchem"
+          ],
+          "heuristic_fell_in": []
+        },
+        "cell_derived_where_judged": {
+          "k": 0,
+          "n": 4,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "GATA2_plus95",
+            "CDKN2A_9p21",
+            "KITLG_blond",
+            "HBG1_BCL11A_site"
+          ]
+        },
+        "cell_unreachable": [
+          "SHH_SBE2",
+          "TAL1_MuTE",
+          "SOST_VanBuchem",
+          "MYC_PVT1promoter",
+          "TERT_promoter"
+        ],
+        "direction_derived_where_judged": {
+          "k": 6,
+          "n": 7,
+          "rate": 0.857,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "HBG1_BCL11A_site"
+          ]
+        },
+        "direction_not_judged": [
+          "SHH_SBE2",
+          "KITLG_blond"
+        ],
+        "class_derived": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.778,
+          "hits": [
+            "GATA2_plus95",
+            "TAL1_MuTE",
+            "CDKN2A_9p21",
+            "SOST_VanBuchem",
+            "HBG1_BCL11A_site",
+            "MYC_PVT1promoter",
+            "TERT_promoter"
+          ],
+          "misses": [
+            "SHH_SBE2",
+            "KITLG_blond"
+          ]
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "SHH_SBE2": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "GATA2_plus95": {
+              "ccres_over_element": 3,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "TAL1_MuTE": {
+              "ccres_over_element": 2,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "CDKN2A_9p21": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "KITLG_blond": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SOST_VanBuchem": {
+              "ccres_over_element": 35,
+              "elements_scored": 30,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HBG1_BCL11A_site": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "loci_windows"
+              ]
+            },
+            "MYC_PVT1promoter": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "TERT_promoter": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 2,
+            "n": 3,
+            "rate": 0.667,
+            "loci": [
+              "SHH_SBE2",
+              "CDKN2A_9p21",
+              "KITLG_blond"
+            ],
+            "hits": [
+              "SHH_SBE2",
+              "CDKN2A_9p21"
+            ],
+            "scored_at_the_element": [
+              "SHH_SBE2",
+              "CDKN2A_9p21",
+              "KITLG_blond"
+            ]
+          },
+          "stated": {
+            "k": 5,
+            "n": 6,
+            "rate": 0.833,
+            "loci": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "MYC_PVT1promoter",
+              "TERT_promoter"
+            ],
+            "hits": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "TERT_promoter"
+            ],
+            "scored_at_the_element": [
+              "GATA2_plus95",
+              "TAL1_MuTE",
+              "SOST_VanBuchem",
+              "HBG1_BCL11A_site",
+              "MYC_PVT1promoter",
+              "TERT_promoter"
+            ]
+          }
+        }
+      },
+      "rank_one_changed": 3,
+      "movements": [
+        {
+          "locus": "CDKN2A_9p21",
+          "published": [
+            "CDKN2A",
+            "CDKN2B"
+          ],
+          "was": "CDKN2B",
+          "was_log2": -0.1957,
+          "now": "ENSG00000277653",
+          "now_log2": -0.3474,
+          "hit_before": true,
+          "hit_after": false
+        },
+        {
+          "locus": "SOST_VanBuchem",
+          "published": [
+            "SOST"
+          ],
+          "was": "SOST",
+          "was_log2": -0.6479,
+          "now": "LINC02594",
+          "now_log2": -1.3252,
+          "hit_before": true,
+          "hit_after": false
+        },
+        {
+          "locus": "MYC_PVT1promoter",
+          "published": [
+            "MYC"
+          ],
+          "was": "MYC",
+          "was_log2": 0.1392,
+          "now": "MIR1204",
+          "now_log2": -2.2059,
+          "hit_before": true,
+          "hit_after": false
+        }
+      ],
+      "negatives": {
+        "checked": 31,
+        "claims_changed": [],
+        "element_counts_changed": [],
+        "reading": "the registration predicted that no claim over a negative window can move, because a claim asks whether a layer named a gene at all and the fix only ever enlarges the candidate set. An entry here falsifies that"
+      }
+    },
+    "loci_fourth": {
+      "frame": "loci_fourth",
+      "section": "22 - the fourth frame, drawn by a rule",
+      "loci": 51,
+      "fidelity": {
+        "loci_checked": 51,
+        "negatives_checked": 239,
+        "mismatches": 0,
+        "reading": "the pre-2026-09-21 loop reproduced every stored deletion reading, so the rows read here are the rows the run read and the difference below is the change to the reader"
+      },
+      "before": {
+        "loci": 51,
+        "target_derived": {
+          "k": 11,
+          "n": 51,
+          "rate": 0.216,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "DHRS13_K562_chr17_28864k",
+            "EIF3K_K562_chr19_38636k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 5.57,
+          "of": 51,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 11,
+          "n": 51,
+          "rate": 0.216,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "DHRS13_K562_chr17_28864k",
+            "EIF3K_K562_chr19_38636k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 11,
+          "n": 51,
+          "rate": 0.216,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "DHRS13_K562_chr17_28864k",
+            "EIF3K_K562_chr19_38636k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 4,
+          "n": 51,
+          "rate": 0.078,
+          "hits": [
+            "SLC2A3_WTC11_chr12_7995k",
+            "SMAD6_K562_chr15_66632k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k"
+          ]
+        },
+        "target_looked_up": {
+          "k": 0,
+          "n": 51,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "heuristic_fell_in": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 37,
+          "n": 40,
+          "rate": 0.925,
+          "hits": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "MSN_K562_chrX_66005k"
+          ],
+          "misses": [
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "TRAPPC2L_K562_chr16_88496k"
+          ]
+        },
+        "cell_unreachable": [
+          "PCBP1_WTC11_chr2_70086k",
+          "IL6ST_Jurkat_chr5_56148k",
+          "FAM3C_HCT116_chr7_121301k",
+          "FAM3C_HCT116_chr7_121303k",
+          "CCND1_HCT116_chr11_69298k",
+          "CCND1_HCT116_chr11_69352k",
+          "ENO2_WTC11_chr12_6925k",
+          "SLC2A3_WTC11_chr12_7995k",
+          "SEPHS2_Jurkat_chr16_30472k",
+          "CEBPB_WTC11_chr20_49888k",
+          "CONTROL_HMGA1_WTC11_chr6_34235k"
+        ],
+        "direction_derived_where_judged": {
+          "k": 6,
+          "n": 6,
+          "rate": 1.0,
+          "hits": [
+            "PCBP1_WTC11_chr2_70086k",
+            "STXBP5_K562_chr6_146875k",
+            "ENO2_WTC11_chr12_6925k",
+            "DHRS13_K562_chr17_28864k",
+            "EIF3K_K562_chr19_38636k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "AGTRAP_K562_chr1_11798k",
+          "TNFRSF8_K562_chr1_12038k",
+          "AUNIP_K562_chr1_26377k",
+          "CCT3_K562_chr1_156119k",
+          "DUSP23_K562_chr1_159921k",
+          "TSEN15_K562_chr1_184031k",
+          "XPC_K562_chr3_14232k",
+          "STX18_K562_chr4_5003k",
+          "IL6ST_Jurkat_chr5_56148k",
+          "RGS14_K562_chr5_177390k",
+          "MAN1A1_K562_chr6_119137k",
+          "AP1S1_K562_chr7_101138k",
+          "FAM3C_HCT116_chr7_121301k",
+          "FAM3C_HCT116_chr7_121303k",
+          "JAK2_K562_chr9_4852k",
+          "VIM_K562_chr10_17029k",
+          "VIM_K562_chr10_17425k",
+          "ARID5B_K562_chr10_61765k",
+          "ARID5B_K562_chr10_61781k",
+          "EXOC6_K562_chr10_92755k",
+          "FADS3_K562_chr11_61833k",
+          "FADS3_K562_chr11_61841k",
+          "CCND1_HCT116_chr11_69298k",
+          "CCND1_HCT116_chr11_69352k",
+          "NDUFC2_K562_chr11_78290k",
+          "NDUFC2_K562_chr11_78291k",
+          "SRSF8_K562_chr11_95152k",
+          "RBM7_K562_chr11_114216k",
+          "SLC2A3_WTC11_chr12_7995k",
+          "ERP29_K562_chr12_111994k",
+          "ERP29_K562_chr12_111995k",
+          "HSP90AA1_K562_chr14_102551k",
+          "SMAD6_K562_chr15_66632k",
+          "GFER_K562_chr16_1828k",
+          "ECI1_K562_chr16_2140k",
+          "SEPHS2_Jurkat_chr16_30472k",
+          "TRAPPC2L_K562_chr16_88496k",
+          "SOCS3_K562_chr17_78257k",
+          "VAPA_K562_chr18_9802k",
+          "VAPA_K562_chr18_9889k",
+          "VAPA_K562_chr18_9898k",
+          "ADGRE2_K562_chr19_14355k",
+          "PDCD5_K562_chr19_32686k",
+          "CEBPB_WTC11_chr20_49888k",
+          "MSN_K562_chrX_66005k"
+        ],
+        "class_derived": {
+          "k": 51,
+          "n": 51,
+          "rate": 1.0,
+          "hits": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "AGTRAP_K562_chr1_11798k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "TNFRSF8_K562_chr1_12038k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "AUNIP_K562_chr1_26377k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCT3_K562_chr1_156119k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "DUSP23_K562_chr1_159921k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "TSEN15_K562_chr1_184031k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "PCBP1_WTC11_chr2_70086k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "XPC_K562_chr3_14232k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "STX18_K562_chr4_5003k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "IL6ST_Jurkat_chr5_56148k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "RGS14_K562_chr5_177390k": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "MAN1A1_K562_chr6_119137k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "STXBP5_K562_chr6_146875k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "AP1S1_K562_chr7_101138k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FAM3C_HCT116_chr7_121301k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FAM3C_HCT116_chr7_121303k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "JAK2_K562_chr9_4852k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VIM_K562_chr10_17029k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VIM_K562_chr10_17425k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ARID5B_K562_chr10_61765k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ARID5B_K562_chr10_61781k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "EXOC6_K562_chr10_92755k": {
+              "ccres_over_element": 5,
+              "elements_scored": 6,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "FADS3_K562_chr11_61833k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FADS3_K562_chr11_61841k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCND1_HCT116_chr11_69298k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCND1_HCT116_chr11_69352k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "NDUFC2_K562_chr11_78290k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "NDUFC2_K562_chr11_78291k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SRSF8_K562_chr11_95152k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "RBM7_K562_chr11_114216k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ENO2_WTC11_chr12_6925k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SLC2A3_WTC11_chr12_7995k": {
+              "ccres_over_element": 2,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ERP29_K562_chr12_111994k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ERP29_K562_chr12_111995k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HSP90AA1_K562_chr14_102551k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SMAD6_K562_chr15_66632k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "GFER_K562_chr16_1828k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ECI1_K562_chr16_2140k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SEPHS2_Jurkat_chr16_30472k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "TRAPPC2L_K562_chr16_88496k": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "DHRS13_K562_chr17_28864k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SOCS3_K562_chr17_78257k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VAPA_K562_chr18_9802k": {
+              "ccres_over_element": 7,
+              "elements_scored": 7,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VAPA_K562_chr18_9889k": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "VAPA_K562_chr18_9898k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ADGRE2_K562_chr19_14355k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "PDCD5_K562_chr19_32686k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "EIF3K_K562_chr19_38636k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CEBPB_WTC11_chr20_49888k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MSN_K562_chrX_66005k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CONTROL_HMGA1_WTC11_chr6_34235k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "TRAPPC2L_K562_chr16_88496k",
+            "VAPA_K562_chr18_9889k"
+          ],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 11,
+            "n": 51,
+            "rate": 0.216,
+            "loci": [
+              "AGTRAP_K562_chr1_11798k",
+              "TNFRSF8_K562_chr1_12038k",
+              "AUNIP_K562_chr1_26377k",
+              "CCT3_K562_chr1_156119k",
+              "DUSP23_K562_chr1_159921k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "XPC_K562_chr3_14232k",
+              "STX18_K562_chr4_5003k",
+              "IL6ST_Jurkat_chr5_56148k",
+              "RGS14_K562_chr5_177390k",
+              "MAN1A1_K562_chr6_119137k",
+              "STXBP5_K562_chr6_146875k",
+              "AP1S1_K562_chr7_101138k",
+              "FAM3C_HCT116_chr7_121301k",
+              "FAM3C_HCT116_chr7_121303k",
+              "JAK2_K562_chr9_4852k",
+              "VIM_K562_chr10_17029k",
+              "VIM_K562_chr10_17425k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "EXOC6_K562_chr10_92755k",
+              "FADS3_K562_chr11_61833k",
+              "FADS3_K562_chr11_61841k",
+              "CCND1_HCT116_chr11_69298k",
+              "CCND1_HCT116_chr11_69352k",
+              "NDUFC2_K562_chr11_78290k",
+              "NDUFC2_K562_chr11_78291k",
+              "SRSF8_K562_chr11_95152k",
+              "RBM7_K562_chr11_114216k",
+              "ENO2_WTC11_chr12_6925k",
+              "SLC2A3_WTC11_chr12_7995k",
+              "ERP29_K562_chr12_111994k",
+              "ERP29_K562_chr12_111995k",
+              "HSP90AA1_K562_chr14_102551k",
+              "SMAD6_K562_chr15_66632k",
+              "GFER_K562_chr16_1828k",
+              "ECI1_K562_chr16_2140k",
+              "SEPHS2_Jurkat_chr16_30472k",
+              "TRAPPC2L_K562_chr16_88496k",
+              "DHRS13_K562_chr17_28864k",
+              "SOCS3_K562_chr17_78257k",
+              "VAPA_K562_chr18_9802k",
+              "VAPA_K562_chr18_9889k",
+              "VAPA_K562_chr18_9898k",
+              "ADGRE2_K562_chr19_14355k",
+              "PDCD5_K562_chr19_32686k",
+              "EIF3K_K562_chr19_38636k",
+              "CEBPB_WTC11_chr20_49888k",
+              "MSN_K562_chrX_66005k",
+              "CONTROL_HMGA1_WTC11_chr6_34235k"
+            ],
+            "hits": [
+              "TNFRSF8_K562_chr1_12038k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "RGS14_K562_chr5_177390k",
+              "FAM3C_HCT116_chr7_121303k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "SMAD6_K562_chr15_66632k",
+              "DHRS13_K562_chr17_28864k",
+              "EIF3K_K562_chr19_38636k",
+              "CONTROL_HMGA1_WTC11_chr6_34235k"
+            ],
+            "scored_at_the_element": [
+              "AGTRAP_K562_chr1_11798k",
+              "TNFRSF8_K562_chr1_12038k",
+              "AUNIP_K562_chr1_26377k",
+              "CCT3_K562_chr1_156119k",
+              "DUSP23_K562_chr1_159921k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "XPC_K562_chr3_14232k",
+              "STX18_K562_chr4_5003k",
+              "IL6ST_Jurkat_chr5_56148k",
+              "RGS14_K562_chr5_177390k",
+              "MAN1A1_K562_chr6_119137k",
+              "STXBP5_K562_chr6_146875k",
+              "AP1S1_K562_chr7_101138k",
+              "FAM3C_HCT116_chr7_121301k",
+              "FAM3C_HCT116_chr7_121303k",
+              "JAK2_K562_chr9_4852k",
+              "VIM_K562_chr10_17029k",
+              "VIM_K562_chr10_17425k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "EXOC6_K562_chr10_92755k",
+              "FADS3_K562_chr11_61833k",
+              "FADS3_K562_chr11_61841k",
+              "CCND1_HCT116_chr11_69298k",
+              "CCND1_HCT116_chr11_69352k",
+              "NDUFC2_K562_chr11_78290k",
+              "NDUFC2_K562_chr11_78291k",
+              "SRSF8_K562_chr11_95152k",
+              "RBM7_K562_chr11_114216k",
+              "ENO2_WTC11_chr12_6925k",
+              "SLC2A3_WTC11_chr12_7995k",
+              "ERP29_K562_chr12_111994k",
+              "ERP29_K562_chr12_111995k",
+              "HSP90AA1_K562_chr14_102551k",
+              "SMAD6_K562_chr15_66632k",
+              "GFER_K562_chr16_1828k",
+              "ECI1_K562_chr16_2140k",
+              "SEPHS2_Jurkat_chr16_30472k",
+              "TRAPPC2L_K562_chr16_88496k",
+              "DHRS13_K562_chr17_28864k",
+              "SOCS3_K562_chr17_78257k",
+              "VAPA_K562_chr18_9802k",
+              "VAPA_K562_chr18_9889k",
+              "VAPA_K562_chr18_9898k",
+              "ADGRE2_K562_chr19_14355k",
+              "PDCD5_K562_chr19_32686k",
+              "EIF3K_K562_chr19_38636k",
+              "CEBPB_WTC11_chr20_49888k",
+              "MSN_K562_chrX_66005k",
+              "CONTROL_HMGA1_WTC11_chr6_34235k"
+            ]
+          },
+          "stated": {
+            "k": 0,
+            "n": 0,
+            "rate": null,
+            "loci": [],
+            "hits": [],
+            "scored_at_the_element": []
+          }
+        }
+      },
+      "after": {
+        "loci": 51,
+        "target_derived": {
+          "k": 9,
+          "n": 51,
+          "rate": 0.176,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "EIF3K_K562_chr19_38636k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 5.57,
+          "of": 51,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 9,
+          "n": 51,
+          "rate": 0.176,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "EIF3K_K562_chr19_38636k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 9,
+          "n": 51,
+          "rate": 0.176,
+          "hits": [
+            "TNFRSF8_K562_chr1_12038k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "RGS14_K562_chr5_177390k",
+            "FAM3C_HCT116_chr7_121303k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "SMAD6_K562_chr15_66632k",
+            "EIF3K_K562_chr19_38636k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 4,
+          "n": 51,
+          "rate": 0.078,
+          "hits": [
+            "SLC2A3_WTC11_chr12_7995k",
+            "SMAD6_K562_chr15_66632k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k"
+          ]
+        },
+        "target_looked_up": {
+          "k": 0,
+          "n": 51,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "heuristic_fell_in": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 37,
+          "n": 40,
+          "rate": 0.925,
+          "hits": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "MSN_K562_chrX_66005k"
+          ],
+          "misses": [
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "TRAPPC2L_K562_chr16_88496k"
+          ]
+        },
+        "cell_unreachable": [
+          "PCBP1_WTC11_chr2_70086k",
+          "IL6ST_Jurkat_chr5_56148k",
+          "FAM3C_HCT116_chr7_121301k",
+          "FAM3C_HCT116_chr7_121303k",
+          "CCND1_HCT116_chr11_69298k",
+          "CCND1_HCT116_chr11_69352k",
+          "ENO2_WTC11_chr12_6925k",
+          "SLC2A3_WTC11_chr12_7995k",
+          "SEPHS2_Jurkat_chr16_30472k",
+          "CEBPB_WTC11_chr20_49888k",
+          "CONTROL_HMGA1_WTC11_chr6_34235k"
+        ],
+        "direction_derived_where_judged": {
+          "k": 6,
+          "n": 6,
+          "rate": 1.0,
+          "hits": [
+            "PCBP1_WTC11_chr2_70086k",
+            "STXBP5_K562_chr6_146875k",
+            "ENO2_WTC11_chr12_6925k",
+            "DHRS13_K562_chr17_28864k",
+            "EIF3K_K562_chr19_38636k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "AGTRAP_K562_chr1_11798k",
+          "TNFRSF8_K562_chr1_12038k",
+          "AUNIP_K562_chr1_26377k",
+          "CCT3_K562_chr1_156119k",
+          "DUSP23_K562_chr1_159921k",
+          "TSEN15_K562_chr1_184031k",
+          "XPC_K562_chr3_14232k",
+          "STX18_K562_chr4_5003k",
+          "IL6ST_Jurkat_chr5_56148k",
+          "RGS14_K562_chr5_177390k",
+          "MAN1A1_K562_chr6_119137k",
+          "AP1S1_K562_chr7_101138k",
+          "FAM3C_HCT116_chr7_121301k",
+          "FAM3C_HCT116_chr7_121303k",
+          "JAK2_K562_chr9_4852k",
+          "VIM_K562_chr10_17029k",
+          "VIM_K562_chr10_17425k",
+          "ARID5B_K562_chr10_61765k",
+          "ARID5B_K562_chr10_61781k",
+          "EXOC6_K562_chr10_92755k",
+          "FADS3_K562_chr11_61833k",
+          "FADS3_K562_chr11_61841k",
+          "CCND1_HCT116_chr11_69298k",
+          "CCND1_HCT116_chr11_69352k",
+          "NDUFC2_K562_chr11_78290k",
+          "NDUFC2_K562_chr11_78291k",
+          "SRSF8_K562_chr11_95152k",
+          "RBM7_K562_chr11_114216k",
+          "SLC2A3_WTC11_chr12_7995k",
+          "ERP29_K562_chr12_111994k",
+          "ERP29_K562_chr12_111995k",
+          "HSP90AA1_K562_chr14_102551k",
+          "SMAD6_K562_chr15_66632k",
+          "GFER_K562_chr16_1828k",
+          "ECI1_K562_chr16_2140k",
+          "SEPHS2_Jurkat_chr16_30472k",
+          "TRAPPC2L_K562_chr16_88496k",
+          "SOCS3_K562_chr17_78257k",
+          "VAPA_K562_chr18_9802k",
+          "VAPA_K562_chr18_9889k",
+          "VAPA_K562_chr18_9898k",
+          "ADGRE2_K562_chr19_14355k",
+          "PDCD5_K562_chr19_32686k",
+          "CEBPB_WTC11_chr20_49888k",
+          "MSN_K562_chrX_66005k"
+        ],
+        "class_derived": {
+          "k": 51,
+          "n": 51,
+          "rate": 1.0,
+          "hits": [
+            "AGTRAP_K562_chr1_11798k",
+            "TNFRSF8_K562_chr1_12038k",
+            "AUNIP_K562_chr1_26377k",
+            "CCT3_K562_chr1_156119k",
+            "DUSP23_K562_chr1_159921k",
+            "TSEN15_K562_chr1_184031k",
+            "PCBP1_WTC11_chr2_70086k",
+            "XPC_K562_chr3_14232k",
+            "STX18_K562_chr4_5003k",
+            "IL6ST_Jurkat_chr5_56148k",
+            "RGS14_K562_chr5_177390k",
+            "MAN1A1_K562_chr6_119137k",
+            "STXBP5_K562_chr6_146875k",
+            "AP1S1_K562_chr7_101138k",
+            "FAM3C_HCT116_chr7_121301k",
+            "FAM3C_HCT116_chr7_121303k",
+            "JAK2_K562_chr9_4852k",
+            "VIM_K562_chr10_17029k",
+            "VIM_K562_chr10_17425k",
+            "ARID5B_K562_chr10_61765k",
+            "ARID5B_K562_chr10_61781k",
+            "EXOC6_K562_chr10_92755k",
+            "FADS3_K562_chr11_61833k",
+            "FADS3_K562_chr11_61841k",
+            "CCND1_HCT116_chr11_69298k",
+            "CCND1_HCT116_chr11_69352k",
+            "NDUFC2_K562_chr11_78290k",
+            "NDUFC2_K562_chr11_78291k",
+            "SRSF8_K562_chr11_95152k",
+            "RBM7_K562_chr11_114216k",
+            "ENO2_WTC11_chr12_6925k",
+            "SLC2A3_WTC11_chr12_7995k",
+            "ERP29_K562_chr12_111994k",
+            "ERP29_K562_chr12_111995k",
+            "HSP90AA1_K562_chr14_102551k",
+            "SMAD6_K562_chr15_66632k",
+            "GFER_K562_chr16_1828k",
+            "ECI1_K562_chr16_2140k",
+            "SEPHS2_Jurkat_chr16_30472k",
+            "TRAPPC2L_K562_chr16_88496k",
+            "DHRS13_K562_chr17_28864k",
+            "SOCS3_K562_chr17_78257k",
+            "VAPA_K562_chr18_9802k",
+            "VAPA_K562_chr18_9889k",
+            "VAPA_K562_chr18_9898k",
+            "ADGRE2_K562_chr19_14355k",
+            "PDCD5_K562_chr19_32686k",
+            "EIF3K_K562_chr19_38636k",
+            "CEBPB_WTC11_chr20_49888k",
+            "MSN_K562_chrX_66005k",
+            "CONTROL_HMGA1_WTC11_chr6_34235k"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "AGTRAP_K562_chr1_11798k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "TNFRSF8_K562_chr1_12038k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "AUNIP_K562_chr1_26377k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCT3_K562_chr1_156119k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "DUSP23_K562_chr1_159921k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "TSEN15_K562_chr1_184031k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "PCBP1_WTC11_chr2_70086k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "XPC_K562_chr3_14232k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "STX18_K562_chr4_5003k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "IL6ST_Jurkat_chr5_56148k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "RGS14_K562_chr5_177390k": {
+              "ccres_over_element": 2,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "MAN1A1_K562_chr6_119137k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "STXBP5_K562_chr6_146875k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "AP1S1_K562_chr7_101138k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FAM3C_HCT116_chr7_121301k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FAM3C_HCT116_chr7_121303k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "JAK2_K562_chr9_4852k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VIM_K562_chr10_17029k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VIM_K562_chr10_17425k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ARID5B_K562_chr10_61765k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ARID5B_K562_chr10_61781k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "EXOC6_K562_chr10_92755k": {
+              "ccres_over_element": 5,
+              "elements_scored": 6,
+              "runs": [
+                "enhancer_targets_all",
+                "vista"
+              ]
+            },
+            "FADS3_K562_chr11_61833k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "FADS3_K562_chr11_61841k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCND1_HCT116_chr11_69298k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCND1_HCT116_chr11_69352k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "NDUFC2_K562_chr11_78290k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "NDUFC2_K562_chr11_78291k": {
+              "ccres_over_element": 4,
+              "elements_scored": 4,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SRSF8_K562_chr11_95152k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "RBM7_K562_chr11_114216k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ENO2_WTC11_chr12_6925k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SLC2A3_WTC11_chr12_7995k": {
+              "ccres_over_element": 2,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ERP29_K562_chr12_111994k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ERP29_K562_chr12_111995k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "HSP90AA1_K562_chr14_102551k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SMAD6_K562_chr15_66632k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "GFER_K562_chr16_1828k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ECI1_K562_chr16_2140k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SEPHS2_Jurkat_chr16_30472k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "TRAPPC2L_K562_chr16_88496k": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "DHRS13_K562_chr17_28864k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "SOCS3_K562_chr17_78257k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VAPA_K562_chr18_9802k": {
+              "ccres_over_element": 7,
+              "elements_scored": 7,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "VAPA_K562_chr18_9889k": {
+              "ccres_over_element": 0,
+              "elements_scored": 1,
+              "runs": [
+                "stated_interval"
+              ]
+            },
+            "VAPA_K562_chr18_9898k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "ADGRE2_K562_chr19_14355k": {
+              "ccres_over_element": 3,
+              "elements_scored": 3,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "PDCD5_K562_chr19_32686k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "EIF3K_K562_chr19_38636k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CEBPB_WTC11_chr20_49888k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "MSN_K562_chrX_66005k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CONTROL_HMGA1_WTC11_chr6_34235k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [
+            "TRAPPC2L_K562_chr16_88496k",
+            "VAPA_K562_chr18_9889k"
+          ],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 9,
+            "n": 51,
+            "rate": 0.176,
+            "loci": [
+              "AGTRAP_K562_chr1_11798k",
+              "TNFRSF8_K562_chr1_12038k",
+              "AUNIP_K562_chr1_26377k",
+              "CCT3_K562_chr1_156119k",
+              "DUSP23_K562_chr1_159921k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "XPC_K562_chr3_14232k",
+              "STX18_K562_chr4_5003k",
+              "IL6ST_Jurkat_chr5_56148k",
+              "RGS14_K562_chr5_177390k",
+              "MAN1A1_K562_chr6_119137k",
+              "STXBP5_K562_chr6_146875k",
+              "AP1S1_K562_chr7_101138k",
+              "FAM3C_HCT116_chr7_121301k",
+              "FAM3C_HCT116_chr7_121303k",
+              "JAK2_K562_chr9_4852k",
+              "VIM_K562_chr10_17029k",
+              "VIM_K562_chr10_17425k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "EXOC6_K562_chr10_92755k",
+              "FADS3_K562_chr11_61833k",
+              "FADS3_K562_chr11_61841k",
+              "CCND1_HCT116_chr11_69298k",
+              "CCND1_HCT116_chr11_69352k",
+              "NDUFC2_K562_chr11_78290k",
+              "NDUFC2_K562_chr11_78291k",
+              "SRSF8_K562_chr11_95152k",
+              "RBM7_K562_chr11_114216k",
+              "ENO2_WTC11_chr12_6925k",
+              "SLC2A3_WTC11_chr12_7995k",
+              "ERP29_K562_chr12_111994k",
+              "ERP29_K562_chr12_111995k",
+              "HSP90AA1_K562_chr14_102551k",
+              "SMAD6_K562_chr15_66632k",
+              "GFER_K562_chr16_1828k",
+              "ECI1_K562_chr16_2140k",
+              "SEPHS2_Jurkat_chr16_30472k",
+              "TRAPPC2L_K562_chr16_88496k",
+              "DHRS13_K562_chr17_28864k",
+              "SOCS3_K562_chr17_78257k",
+              "VAPA_K562_chr18_9802k",
+              "VAPA_K562_chr18_9889k",
+              "VAPA_K562_chr18_9898k",
+              "ADGRE2_K562_chr19_14355k",
+              "PDCD5_K562_chr19_32686k",
+              "EIF3K_K562_chr19_38636k",
+              "CEBPB_WTC11_chr20_49888k",
+              "MSN_K562_chrX_66005k",
+              "CONTROL_HMGA1_WTC11_chr6_34235k"
+            ],
+            "hits": [
+              "TNFRSF8_K562_chr1_12038k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "RGS14_K562_chr5_177390k",
+              "FAM3C_HCT116_chr7_121303k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "SMAD6_K562_chr15_66632k",
+              "EIF3K_K562_chr19_38636k"
+            ],
+            "scored_at_the_element": [
+              "AGTRAP_K562_chr1_11798k",
+              "TNFRSF8_K562_chr1_12038k",
+              "AUNIP_K562_chr1_26377k",
+              "CCT3_K562_chr1_156119k",
+              "DUSP23_K562_chr1_159921k",
+              "TSEN15_K562_chr1_184031k",
+              "PCBP1_WTC11_chr2_70086k",
+              "XPC_K562_chr3_14232k",
+              "STX18_K562_chr4_5003k",
+              "IL6ST_Jurkat_chr5_56148k",
+              "RGS14_K562_chr5_177390k",
+              "MAN1A1_K562_chr6_119137k",
+              "STXBP5_K562_chr6_146875k",
+              "AP1S1_K562_chr7_101138k",
+              "FAM3C_HCT116_chr7_121301k",
+              "FAM3C_HCT116_chr7_121303k",
+              "JAK2_K562_chr9_4852k",
+              "VIM_K562_chr10_17029k",
+              "VIM_K562_chr10_17425k",
+              "ARID5B_K562_chr10_61765k",
+              "ARID5B_K562_chr10_61781k",
+              "EXOC6_K562_chr10_92755k",
+              "FADS3_K562_chr11_61833k",
+              "FADS3_K562_chr11_61841k",
+              "CCND1_HCT116_chr11_69298k",
+              "CCND1_HCT116_chr11_69352k",
+              "NDUFC2_K562_chr11_78290k",
+              "NDUFC2_K562_chr11_78291k",
+              "SRSF8_K562_chr11_95152k",
+              "RBM7_K562_chr11_114216k",
+              "ENO2_WTC11_chr12_6925k",
+              "SLC2A3_WTC11_chr12_7995k",
+              "ERP29_K562_chr12_111994k",
+              "ERP29_K562_chr12_111995k",
+              "HSP90AA1_K562_chr14_102551k",
+              "SMAD6_K562_chr15_66632k",
+              "GFER_K562_chr16_1828k",
+              "ECI1_K562_chr16_2140k",
+              "SEPHS2_Jurkat_chr16_30472k",
+              "TRAPPC2L_K562_chr16_88496k",
+              "DHRS13_K562_chr17_28864k",
+              "SOCS3_K562_chr17_78257k",
+              "VAPA_K562_chr18_9802k",
+              "VAPA_K562_chr18_9889k",
+              "VAPA_K562_chr18_9898k",
+              "ADGRE2_K562_chr19_14355k",
+              "PDCD5_K562_chr19_32686k",
+              "EIF3K_K562_chr19_38636k",
+              "CEBPB_WTC11_chr20_49888k",
+              "MSN_K562_chrX_66005k",
+              "CONTROL_HMGA1_WTC11_chr6_34235k"
+            ]
+          },
+          "stated": {
+            "k": 0,
+            "n": 0,
+            "rate": null,
+            "loci": [],
+            "hits": [],
+            "scored_at_the_element": []
+          }
+        }
+      },
+      "rank_one_changed": 11,
+      "movements": [
+        {
+          "locus": "FAM3C_HCT116_chr7_121303k",
+          "published": [
+            "FAM3C"
+          ],
+          "was": "WNT16",
+          "was_log2": -0.1308,
+          "now": "RNU6-517P",
+          "now_log2": 0.1415,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "CCND1_HCT116_chr11_69298k",
+          "published": [
+            "CCND1"
+          ],
+          "was": "MYEOV",
+          "was_log2": -1.0045,
+          "now": "ENSG00000260877",
+          "now_log2": -1.5214,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "NDUFC2_K562_chr11_78290k",
+          "published": [
+            "NDUFC2"
+          ],
+          "was": "GAB2",
+          "was_log2": -0.4671,
+          "now": "ENSG00000288853",
+          "now_log2": -0.7669,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "SLC2A3_WTC11_chr12_7995k",
+          "published": [
+            "SLC2A3"
+          ],
+          "was": "FOXJ2",
+          "was_log2": 0.5033,
+          "now": "ENSG00000240739",
+          "now_log2": 1.4856,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "ERP29_K562_chr12_111994k",
+          "published": [
+            "ERP29"
+          ],
+          "was": "TMEM116",
+          "was_log2": -0.5184,
+          "now": "SLC25A3P2",
+          "now_log2": -0.6527,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "ERP29_K562_chr12_111995k",
+          "published": [
+            "ERP29"
+          ],
+          "was": "TMEM116",
+          "was_log2": -0.5184,
+          "now": "SLC25A3P2",
+          "now_log2": -0.6527,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "SEPHS2_Jurkat_chr16_30472k",
+          "published": [
+            "SEPHS2"
+          ],
+          "was": "ITGAL",
+          "was_log2": -3.3652,
+          "now": "ENSG00000261346",
+          "now_log2": -3.7252,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "DHRS13_K562_chr17_28864k",
+          "published": [
+            "DHRS13"
+          ],
+          "was": "DHRS13",
+          "was_log2": -0.6048,
+          "now": "MIR451A",
+          "now_log2": -5.2441,
+          "hit_before": true,
+          "hit_after": false
+        },
+        {
+          "locus": "VAPA_K562_chr18_9802k",
+          "published": [
+            "VAPA"
+          ],
+          "was": "RAB31",
+          "was_log2": -0.4532,
+          "now": "ZNF415P1",
+          "now_log2": -0.5263,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "MSN_K562_chrX_66005k",
+          "published": [
+            "MSN"
+          ],
+          "was": "MIR223HG",
+          "was_log2": -0.1977,
+          "now": "MIR223",
+          "now_log2": -0.7318,
+          "hit_before": false,
+          "hit_after": false
+        },
+        {
+          "locus": "CONTROL_HMGA1_WTC11_chr6_34235k",
+          "published": [
+            "HMGA1"
+          ],
+          "was": "HMGA1",
+          "was_log2": -0.2271,
+          "now": "ENSG00000288879",
+          "now_log2": -1.1735,
+          "hit_before": true,
+          "hit_after": false
+        }
+      ],
+      "negatives": {
+        "checked": 239,
+        "claims_changed": [],
+        "element_counts_changed": [],
+        "reading": "the registration predicted that no claim over a negative window can move, because a claim asks whether a layer named a gene at all and the fix only ever enlarges the candidate set. An entry here falsifies that"
+      }
+    },
+    "loci_noncoding": {
+      "frame": "loci_noncoding",
+      "section": "23 - the non-coding frame",
+      "loci": 2,
+      "fidelity": {
+        "loci_checked": 2,
+        "negatives_checked": 0,
+        "mismatches": 0,
+        "reading": "the pre-2026-09-21 loop reproduced every stored deletion reading, so the rows read here are the rows the run read and the difference below is the change to the reader"
+      },
+      "before": {
+        "loci": 2,
+        "target_derived": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 0.61,
+          "of": 2,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_looked_up": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "heuristic_fell_in": [
+            "LINC00885_K562_chr3_196194k"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "hits": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": []
+        },
+        "cell_unreachable": [],
+        "direction_derived_where_judged": {
+          "k": 0,
+          "n": 0,
+          "rate": null,
+          "hits": [],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "LINC00885_K562_chr3_196194k",
+          "CCDC26_K562_chr8_129581k"
+        ],
+        "class_derived": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "hits": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "LINC00885_K562_chr3_196194k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCDC26_K562_chr8_129581k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 0,
+            "n": 2,
+            "rate": 0.0,
+            "loci": [
+              "LINC00885_K562_chr3_196194k",
+              "CCDC26_K562_chr8_129581k"
+            ],
+            "hits": [],
+            "scored_at_the_element": [
+              "LINC00885_K562_chr3_196194k",
+              "CCDC26_K562_chr8_129581k"
+            ]
+          },
+          "stated": {
+            "k": 0,
+            "n": 0,
+            "rate": null,
+            "loci": [],
+            "hits": [],
+            "scored_at_the_element": []
+          }
+        }
+      },
+      "after": {
+        "loci": 2,
+        "target_derived": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "hits": [
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": [
+            "LINC00885_K562_chr3_196194k"
+          ]
+        },
+        "target_by_chance": {
+          "expected": 0.61,
+          "of": 2,
+          "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+        },
+        "target_derived_where_reachable": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "hits": [
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": [
+            "LINC00885_K562_chr3_196194k"
+          ]
+        },
+        "target_derived_where_the_model_could_answer": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "hits": [
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": [
+            "LINC00885_K562_chr3_196194k"
+          ],
+          "held_out": [],
+          "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+        },
+        "target_heuristic": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_looked_up": {
+          "k": 0,
+          "n": 2,
+          "rate": 0.0,
+          "hits": [],
+          "misses": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ]
+        },
+        "target_only_looked_up": [],
+        "nearest_gene_traps": {
+          "loci": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "heuristic_fell_in": [
+            "LINC00885_K562_chr3_196194k"
+          ]
+        },
+        "cell_derived_where_judged": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "hits": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": []
+        },
+        "cell_unreachable": [],
+        "direction_derived_where_judged": {
+          "k": 1,
+          "n": 1,
+          "rate": 1.0,
+          "hits": [
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": []
+        },
+        "direction_not_judged": [
+          "LINC00885_K562_chr3_196194k"
+        ],
+        "class_derived": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "hits": [
+            "LINC00885_K562_chr3_196194k",
+            "CCDC26_K562_chr8_129581k"
+          ],
+          "misses": []
+        },
+        "unreachable_target": [],
+        "published_element_coverage": {
+          "per_locus": {
+            "LINC00885_K562_chr3_196194k": {
+              "ccres_over_element": 2,
+              "elements_scored": 2,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            },
+            "CCDC26_K562_chr8_129581k": {
+              "ccres_over_element": 1,
+              "elements_scored": 1,
+              "runs": [
+                "enhancer_targets_all"
+              ]
+            }
+          },
+          "no_ccre_over_the_published_element": [],
+          "no_element_level_reading_at_all": [],
+          "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+        },
+        "target_derived_by_element_source": {
+          "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+          "annotated": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5,
+            "loci": [
+              "LINC00885_K562_chr3_196194k",
+              "CCDC26_K562_chr8_129581k"
+            ],
+            "hits": [
+              "CCDC26_K562_chr8_129581k"
+            ],
+            "scored_at_the_element": [
+              "LINC00885_K562_chr3_196194k",
+              "CCDC26_K562_chr8_129581k"
+            ]
+          },
+          "stated": {
+            "k": 0,
+            "n": 0,
+            "rate": null,
+            "loci": [],
+            "hits": [],
+            "scored_at_the_element": []
+          }
+        }
+      },
+      "rank_one_changed": 1,
+      "movements": [
+        {
+          "locus": "CCDC26_K562_chr8_129581k",
+          "published": [
+            "CCDC26"
+          ],
+          "was": "GSDMC",
+          "was_log2": -0.1433,
+          "now": "CCDC26",
+          "now_log2": -1.691,
+          "hit_before": false,
+          "hit_after": true
+        }
+      ],
+      "negatives": {
+        "checked": 0,
+        "claims_changed": [],
+        "element_counts_changed": [],
+        "reading": "the registration predicted that no claim over a negative window can move, because a claim asks whether a layer named a gene at all and the fix only ever enlarges the candidate set. An entry here falsifies that"
+      }
+    }
+  },
+  "requests_spent": 0,
+  "note": "Every frame this benchmark has scored, re-read through the repaired `loci.read_deletion` with its draw held fixed. No request, no network: the rows were bought by the finished all-element sweep and are read off disk. The registration that licensed the change is carried in this file and was committed before any number below was computed. A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped."
+}

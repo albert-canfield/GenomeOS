@@ -131,11 +131,23 @@ def test_counterfactual_drops_the_coding_first_break(monkeypatch):
     assert out["per_locus"][0]["would_name"] == "LNC"
 
 
-def test_read_deletion_hides_a_non_coding_answer_behind_a_coding_one(monkeypatch):
-    """The defect itself, pinned: the shipped reader must return COD while the row holds LNC.
+def test_read_deletion_no_longer_hides_a_non_coding_answer_behind_a_coding_one(monkeypatch):
+    """The defect, now fixed, and the history kept because the history is what licenses the fix.
 
-    If someone fixes `loci.read_deletion`, this test fails and the section that reports the defect
-    has to be re-read rather than left standing.
+    Until 2026-09-21 this test asserted the OPPOSITE - ``out["target"] == "COD"`` and LNC absent from
+    the ranking - and it was written that way on purpose: `loci.read_deletion` walked
+    ``("predicted_coding", "predicted")`` and broke at the first key that held a gene, so a deletion
+    whose strongest effect was on a non-coding gene was reported as whatever coding gene came second.
+    Section 18 of docs/LOCI-BENCHMARK.md found that at the H19 ICR as a caveat that changed no
+    verdict. Section 23 caught it with a positive - the chr8 CCDC26 element, where the row below is
+    the real one: the published lncRNA at -1.691 against a coding gene 204 kb away at -0.1433, a
+    twelfth of the effect - and pinned the defective behaviour here so that whoever repaired it would
+    be told that the section had to be re-read rather than left standing.
+
+    It has been repaired, and section 23 was re-read: section 24 carries the before and after of
+    every frame, and `loci_reread.PREREGISTRATION` was committed before any of those numbers existed.
+    Both keys are now ranked together, so the reader returns LNC; `coding_first_target` keeps the old
+    answer beside it so the rates published before that date stay computable.
     """
     rows = [
         {
@@ -152,5 +164,10 @@ def test_read_deletion_hides_a_non_coding_answer_behind_a_coding_one(monkeypatch
     monkeypatch.setattr(nc.loci, "_deletion_rows", lambda *a, **k: rows)
     ch = type("C", (), {"chrom": "chr8"})()
     out = nc.loci.read_deletion(ch, 10, 20)
-    assert out["target"] == "COD"
-    assert "LNC" not in [g["gene"] for g in out["targets"]]
+    assert out["target"] == "LNC"
+    assert [g["gene"] for g in out["targets"]] == ["LNC", "COD"]
+    # the element counts once towards each gene, not twice towards the one both keys could name
+    assert [g["elements"] for g in out["targets"]] == [1, 1]
+    # and the reading the benchmark published before 2026-09-21 is kept beside the ranking
+    assert out["coding_first_target"] == "COD"
+    assert [g["gene"] for g in out["coding_first_targets"]] == ["COD"]

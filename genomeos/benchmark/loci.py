@@ -1096,29 +1096,68 @@ def read_deletion(ch: Chromosome, start: int, end: int, results_dir: Path = RESU
 
     No request is made. When no run covers the window the reading is `pending` with the cost of
     asking, so the locus is never silently dropped.
+
+    **Both stored keys are ranked together, and that is a change made on 2026-09-21.** The sweep
+    keeps two views of one deletion: `predicted`, the strongest expression change over any gene, and
+    `predicted_coding`, the strongest one restricted to protein-coding genes. Until that date this
+    walked ``("predicted_coding", "predicted")`` and BROKE at the first key that held a gene, so the
+    any-gene answer was visible only where no coding answer existed at all. Section 18 of
+    docs/LOCI-BENCHMARK.md recorded that at the H19 ICR as a caveat which changed no verdict;
+    section 23 caught it with a positive, at the chr8 CCDC26 element, where the stored row names the
+    published lncRNA at -1.691 and this reader reported GSDMC, a coding gene 204 kb away, at
+    -0.1433 - a twelfth of the effect - and the locus scored as a miss.
+
+    The layer's question is which gene moves, and the answer to that question does not depend on the
+    gene's biotype; `predicted_coding` is a restriction of the same computation rather than a better
+    estimate of it. Ranking both together is not the flattering reading either: |predicted| >=
+    |predicted_coding| holds for one element by construction, so a published CODING target that
+    ranked first can now be displaced and can never be promoted. Section 24 reports what it did to
+    every frame, in both directions, and `loci_reread.PREREGISTRATION` was committed before any of
+    those numbers was computed.
+
+    `coding_first_target` and `coding_first_targets` carry the pre-2026-09-21 reading beside the
+    ranking, so every rate this benchmark published before that date stays computable from the
+    shipped reader rather than only from the git history.
     """
     rows = _deletion_rows(ch.chrom, start, end, results_dir)
     genes: dict[str, dict[str, Any]] = {}
+    coding_first: dict[str, dict[str, Any]] = {}
+
+    def note(into: dict[str, dict[str, Any]], p: dict[str, Any]) -> None:
+        g = into.setdefault(
+            p["gene"],
+            {"gene": p["gene"], "elements": 0, "best": 0.0, "action": p["action"], "tissue": p["tissue"]},
+        )
+        g["elements"] += 1
+        if abs(p["log2_fold_change"]) > abs(g["best"]):
+            g["best"] = p["log2_fold_change"]
+            g["action"] = p["action"]
+            g["tissue"] = p["tissue"]
+
     for e in rows:
+        counted: set[str] = set()
         for key in ("predicted_coding", "predicted"):
             p = e.get(key) or {}
             if not p.get("gene"):
                 continue
-            g = genes.setdefault(
-                p["gene"],
-                {"gene": p["gene"], "elements": 0, "best": 0.0, "action": p["action"], "tissue": p["tissue"]},
-            )
-            g["elements"] += 1
-            if abs(p["log2_fold_change"]) > abs(g["best"]):
-                g["best"] = p["log2_fold_change"]
-                g["action"] = p["action"]
-                g["tissue"] = p["tissue"]
-            break
+            # the old reader looked at exactly one key per element: the coding one when it held a
+            # gene, the any-gene one otherwise. `counted` is empty only on that first key.
+            if not counted:
+                note(coding_first, p)
+            # an element counts once towards a gene however many of its keys name that gene, or the
+            # element tallies double wherever the strongest effect happens to be on a coding gene.
+            if p["gene"] in counted:
+                continue
+            counted.add(p["gene"])
+            note(genes, p)
     by_cell: dict[str, float] = {}
     for e in rows:
         for cell, v in (e.get("predicted_coding_by_cell") or {}).items():
             by_cell[cell] = round(by_cell.get(cell, 0.0) + v, 4)
+    # stable sort, and the coding entry of an element is inserted first, so an exact tie between a
+    # coding and a non-coding effect keeps the answer this reader gave before 2026-09-21.
     ranked = sorted(genes.values(), key=lambda g: -abs(g["best"]))
+    ranked_coding_first = sorted(coding_first.values(), key=lambda g: -abs(g["best"]))
     return {
         "layer": "deletion",
         "provenance": "derived",
@@ -1129,6 +1168,13 @@ def read_deletion(ch: Chromosome, start: int, end: int, results_dir: Path = RESU
         "target": ranked[0]["gene"] if ranked else None,
         "action": ranked[0]["action"] if ranked else None,
         "tissue": ranked[0]["tissue"] if ranked else None,
+        "coding_first_targets": ranked_coding_first[:6],
+        "coding_first_target": ranked_coding_first[0]["gene"] if ranked_coding_first else None,
+        "coding_first_reading": (
+            "this reader as it stood until 2026-09-21: the coding prediction of each element when it"
+            " held a gene and the any-gene one otherwise, so that every rate published before that"
+            " date stays computable. Reported, never scored"
+        ),
         "summed_by_cell": by_cell or None,
         "pending": None
         if rows
