@@ -1395,6 +1395,38 @@ in order. "Owner" is the session that holds the files today (see §7).
   answer on purpose so it fails when the measurement arrives. Copy number and
   structural variants still have no scored case, which `cases_by_driver_call`
   now states in the result instead of leaving it inferable from the case list.
+  **The copy-number half of that gap closed the same night (`3aee02f`), and it
+  is a pass with a negative inside it.** The eighth case is **ERBB2 a second
+  time, amplified and not mutated** — the repetition is the design, since the
+  point-mutation case reaches the same gene through a coding change, so the
+  route is the only thing that differs, where CD19 varies target and route
+  together and cannot separate them; it is also the call the clinic makes,
+  amplification being the companion diagnostic trastuzumab is prescribed on.
+  **8/8 recovered, 8/8 verdicts, 8/8 defensible**, and `cases_by_driver_call`
+  reads six point mutations, one copy number, one expression.
+  **But the three questions could not see what was wrong with the answer.**
+  ERBB2 is recovered as `direct_surface` with an established blocking antibody
+  and **ranks fourth, behind KDR, EGFR and PDGFRB — three surface proteins with
+  no alteration in this tumour at all**, named only for being STRING partners
+  of the mutated PIK3CA. **Recovering a target and preferring it are different
+  results, and every verdict read as a pass.** A fourth measurement per row,
+  `outranked_by_hypotheses`, now records it, and it shows the same pattern in
+  two of the four approved-antibody cases and three of the four intracellular
+  ones — so it was not invented for this case.
+  **Under it, a duplicate and the reason it was invisible.** ERBB2 was proposed
+  twice, once carrying its twelve copies and once as a hypothesis about PIK3CA,
+  because `pathway_induced` seeded its exclusion set from the disrupted drivers
+  alone; the existing control could never have caught it, since it passes
+  `indirect=False`. **Both entries scored 0.494, identically**: for a surface
+  target the score reads the gene's curated annotation and not the alteration,
+  so twelve copies and a guess about a neighbour are worth the same. Fixing it
+  freed a slot, KDR entered at 0.575 above everything, and ERBB2 went from
+  third to fourth — **the fix made the ranking look worse and is still right.**
+  The duplicate is fixed and pinned (`BURIED_SURFACE_TARGETS` at 2, may fall
+  and never rise); **the scoring is recorded and not fixed**, because teaching
+  the score to read the alteration changes every case's numbers and is a
+  decision rather than a side effect of adding a case. It is the next thing
+  this area should be asked for.
   3. What a deep deletion is worth: the dependency the loss creates, which
   nothing models.
 - **Owner.** genomeos-f2 since 2026-09-14; the benchmark and the 2026-09-21
@@ -3082,6 +3114,23 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.2 therapeutics benchmark** ◑ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. **2026-09-21 (`e21d34a`): 7/7 recovered, 7/7 routes, 7/7 defensible, the pinned mechanism-defect count down from 2 to 0, and the seventh case reached by an expression call rather than a DNA event.** The `cancer.*` libraries landed 2026-09-14 (`9c0e6ce`). Outstanding: **no scored case is driven by a copy number or a structural variant** — both routes have unit controls only — and the fusion candidate keeps a surface class its product may not have, blocked on a junction or orientation measurement this project does not hold and pinned as a failing-when-fixed test |
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (312,129 oligos) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
+
+**1.2 moved twice on 2026-09-21 and its row above is left as it was written each time.** By `e21d34a`
+the benchmark read 7/7 on all three questions with the pinned mechanism-defect count down from 2 to
+0, and by `3aee02f` it reads **8/8**, the eighth case driven by a **copy number** — ERBB2 amplified
+and not mutated, deliberately the same gene as the point-mutation case so that the route is the only
+thing that differs. So the row's "no scored case is driven by a copy number" is superseded; **a
+structural variant still has none**, and the fusion candidate is still pinned.
+**What the eighth case actually exposed is larger than the clause it closed, and it is the next thing
+this area should be asked for: the benchmark measures whether a target is RECOVERED, not whether it
+is PREFERRED.** ERBB2 comes back as a direct surface target with an established blocking antibody and
+ranks **fourth**, behind KDR, EGFR and PDGFRB — three surface proteins with no alteration in that
+tumour at all, on the list for being STRING partners of the mutated PIK3CA — and all three questions
+still read as a pass. The cause is that a surface score reads the gene's curated annotation and not
+the alteration, which is also why the same gene appearing twice, once with twelve copies and once as
+a guess about a neighbour, scored **0.494 both times**. The duplicate is fixed and pinned; the
+scoring is recorded per row as `outranked_by_hypotheses` and deliberately left alone, because
+teaching a score to read the alteration moves every case's numbers and is a decision of its own.
 
 ---
 
