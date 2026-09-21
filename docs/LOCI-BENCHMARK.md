@@ -1810,3 +1810,164 @@ A coverage stratum can only bite a claim whose input somebody had to **buy**. Th
 - **The three sets are still three sets.** Whether any of them should merge, and on what denominator, is the benchmark owner's call; nothing here pools them.
 
 ---
+
+## 22. A fourth frame, drawn by a rule instead of chosen, and the headline does not survive it (2026-09-21)
+
+`genomeos/benchmark/loci_fourth.py` (the registration and the rule), `scripts/loci_fourth.py`, `scripts/loci_fourth_section.py`, `tests/test_loci_fourth.py`, results `loci_fourth` and `loci_fourth_intervals`. **1 model request spent.** 586 seconds of range reads over public tracks for the rest.
+
+Section 21 ended on a number that reads well and one that does not. Across three frames the derived target rate moves 0.007 and the nearest-gene rule over the same three moves 0.445. Section 21 also said why the baseline moves: at the third set seven of nine published targets are the element's own nearest coding TSS. So the three frames differ mostly in **geometry**, and the question that raises cannot be answered from any of them - is the 0.88 a property of the model, or of the fact that curators pick elements sitting next to their targets?
+
+**A frame chosen by hand cannot answer it, because whoever picks the loci picks the geometry.** So this one was not picked. The rule was written, committed and its tests run before the file it draws from was read (commit 2103c5a), and it contains no loci at all:
+
+> every element in the ENCODE CRISPR benchmark's **held-out** arm whose regulated target is **not** its own nearest coding TSS.
+
+That is the geometry on which the cheap answer is wrong by construction. It reads no model output, no effect size and no chromatin score - only the file's own positive flag and GENCODE arithmetic - and it is adversarial to this benchmark's headline rather than flattering to it. The K562 **training** arm is excluded because `data/results/crispri_benchmark.json` fitted logistic weights on it on 2026-09-16.
+
+### What the rule drew, and what it threw away
+
+| step | elements |
+|---|---|
+| perturbed elements with a regulated gene in the held-out arm | 175 |
+| rejected: the nearest coding TSS IS a published target - the shortcut is right here | 85 |
+| rejected: within 200000 bp of a locus in an earlier frame | 16 |
+| rejected: a regulated target is not protein coding in GENCODE | 14 |
+| **passed the rule** | **60** |
+| drawn, being the first 24 in genome order | 24 |
+| left over, same rule, not drawn | 36 |
+
+**85 of the 175 held-out CRISPR positives have their own nearest coding TSS as the published target** - 49% of them, and 59% of the 145 where the geometry question is even well posed. That number is worth reading before any rate below it: at half the field's own measured enhancer-gene pairs, naming the nearest gene is simply correct. A benchmark drawn without a geometry rule inherits that proportion, whoever draws it.
+
+**14 elements were dropped for having a non-coding regulated target**, and that answers an item section 21 left open. Three frames failed to find a published non-coding target clean enough to state by curation; the held-out arm has that many, and they were dropped here on purpose because the deletion layer ranks `predicted_coding` first, so they test the H19 defect rather than the geometry question. They are a frame of their own, already drawn.
+
+The cap bound: 36 loci that pass the same rule were not drawn, because the registration capped the frame at 24 in genome order before the file was read. They are listed in the result and cost nothing to add later; what they cannot do is be chosen now that the first twenty-four have been scored.
+
+### The twenty-four, and what the free filter did to them first
+
+| locus | element | len | published target | nearest coding TSS | distance | cell |
+|---|---|---|---|---|---|---|
+| AGTRAP_K562_chr1_11798k | chr1:11,798,254-11,798,873 | 619 | AGTRAP | MTHFR | 62,478 bp | K562 |
+| TNFRSF8_K562_chr1_12038k | chr1:12,038,207-12,039,433 | 1,226 | TNFRSF8 | MIIP | 24,555 bp | K562 |
+| AUNIP_K562_chr1_26377k | chr1:26,377,452-26,379,163 | 1,711 | AUNIP | ZNF683 | 518,848 bp | K562 |
+| TMEM54_K562_chr1_31928k **(unaskable)** | chr1:31,928,713-31,929,213 | 500 | TMEM54 | ENSG00000288678 | 972,476 bp | K562 |
+| CCT3_K562_chr1_156119k | chr1:156,119,466-156,120,399 | 933 | CCT3 | LMNA | 218,482 bp | K562 |
+| DUSP23_K562_chr1_159921k | chr1:159,921,814-159,922,623 | 809 | DUSP23 | TAGLN2 | 141,272 bp | K562 |
+| TSEN15_K562_chr1_184031k | chr1:184,031,227-184,031,862 | 635 | TSEN15 | COLGALT2 | 20,105 bp | K562 |
+| PCBP1_WTC11_chr2_70086k | chr2:70,086,003-70,086,502 | 499 | PCBP1 | ENSG00000293615 | 1,199 bp | WTC11 induced pluripotent stem cell |
+| XPC_K562_chr3_14232k | chr3:14,232,088-14,233,010 | 922 | XPC | LSM3 | 53,876 bp | K562 |
+| STX18_K562_chr4_5003k | chr4:5,003,097-5,003,889 | 792 | STX18 | CYTL1 | 461,426 bp | K562 |
+| IL6ST_Jurkat_chr5_56148k | chr5:56,148,470-56,148,970 | 500 | IL6ST | ANKRD55 | 153,726 bp | Jurkat T-lymphoblast |
+| RGS14_K562_chr5_177390k | chr5:177,390,358-177,390,920 | 562 | RGS14 | SLC34A1 | 32,796 bp | K562 |
+| GMPR_K562_chr6_15299k **(unaskable)** | chr6:15,299,497-15,299,997 | 500 | GMPR | JARID2 | 938,831 bp | K562 |
+| MAN1A1_K562_chr6_119137k | chr6:119,137,438-119,137,937 | 499 | MAN1A1 | FAM184A | 212,078 bp | K562 |
+| STXBP5_K562_chr6_146875k | chr6:146,875,908-146,877,348 | 1,440 | STXBP5 | ADGB | 327,728 bp | K562 |
+| AP1S1_K562_chr7_101138k | chr7:101,138,234-101,138,832 | 598 | AP1S1 | SERPINE1 | 15,870 bp | K562 |
+| FAM3C_HCT116_chr7_121301k | chr7:121,301,407-121,302,673 | 1,266 | FAM3C | WNT16 | 94,327 bp | HCT116 colorectal carcinoma |
+| FAM3C_HCT116_chr7_121303k | chr7:121,303,504-121,304,004 | 500 | FAM3C | WNT16 | 92,613 bp | HCT116 colorectal carcinoma |
+| MYC_HCT116_chr8_129710k **(unaskable)** | chr8:129,710,072-129,711,049 | 977 | MYC | GSDMC | 1,974,491 bp | HCT116 colorectal carcinoma |
+| JAK2_K562_chr9_4852k | chr9:4,852,343-4,852,926 | 583 | JAK2 | RCL1 | 132,594 bp | K562 |
+| DOLPP1_K562_chr9_129742k **(unaskable)** | chr9:129,742,911-129,743,411 | 500 | DOLPP1 | PTGES | 662,057 bp | K562 |
+| VIM_K562_chr10_17029k | chr10:17,029,282-17,030,231 | 949 | VIM | CUBN | 198,501 bp | K562 |
+| VIM_K562_chr10_17425k | chr10:17,425,572-17,426,534 | 962 | VIM | ST8SIA6 | 197,794 bp | K562 |
+| ARID5B_K562_chr10_61765k | chr10:61,765,101-61,766,128 | 1,027 | ARID5B | CABCOCO1 | 135,638 bp | K562 |
+
+**4 of 24 died at the reach filter, and 1 to 4 was the registered prediction** - deliberately higher than the third set's registered 0 of 9, because a rule that selects elements skipping over a nearer gene selects for distance. `loci.read_reach` was called, not reimplemented: a gene-**body** test against the scorer's 1,048,576 bp input. The four are TMEM54 (965 kb), GMPR (938 kb), MYC (1967 kb), DOLPP1 (652 kb). Beside the other frames: 3 of 17 unaskable (SHH_ZRS, SOX9_PierreRobin, FTO_IRX3's IRX5), 2 of 11 died, both exhibits placed on a bare offset, 0 of 9, which was the registered prediction there.
+
+The element-to-target distances of the 20 graded loci run 1,199 bp to 518,848 bp, median 135,638 bp.
+
+### What it cost
+
+**1 request for the whole frame.** The finished all-chromosome sweep had already deleted an element inside 19 of the 20 graded intervals, and the registered budget of 30 was never approached. Section 6 spent 2,283 requests on twelve loci; once the sweep is finished, a new locus costs only what the intervals nobody annotated cost.
+
+**The caveat section 21 recorded applies to the one request here too.** `Context.score_region` substitutes an overlapping ENCODE element when there is one, and it did so at PCBP1_WTC11_chr2_70086k. What was deleted is an annotated element *overlapping* the perturbed interval, not the screen's interval itself. It is recorded per locus in `loci_fourth_intervals`.
+
+### The scores, beside the other three frames
+
+The positive control is excluded from every rate below, as registered; it is reported on its own further down.
+
+| field | **the fourth frame** | the third set | the nine candidates | the seventeen panel |
+|---|---|---|---|---|
+| right target, derived, every locus the frame contains | **6/24 (0.250)** | 8/9 (0.889) | 8/9 (0.889) | 15/17 (0.882) |
+| right target, where the model could answer | **6/20 (0.300)** | 8/9 (0.889) | 8/9 (0.889) | 13/15 (0.867) |
+| right target, nearest TSS in node | **0/20 (0.000)** | 7/9 (0.778) | 3/9 (0.333) | 11/17 (0.647) |
+| right target, annotation lookup | **0/20 (0.000)** | 3/9 (0.333) | 1/9 (0.111) | 8/17 (0.471) |
+| chance floor (random coding gene in the window) | **2.73/20 (0.137)** | 2.4/9 | 1.06/9 | 7.12/17 |
+
+**The derived rate is 6/24 (0.250) over every locus the rule returned and 6/20 (0.300) where the model could answer.** The first row is the one comparable with the panel's 15/17, because that rate counts the panel's three unaskable loci as misses; the second is comparable with its 13/15. The three hand-curated frames read 0.882, 0.889 and 0.889 on the first and 0.867, 0.889, 0.889 on the second. This frame is the same benchmark, the same scorers, the same hit rules and the same machine; what changed is that the published target is no longer the nearest gene.
+
+It is **above its own chance floor** - 0.300 against 0.137, so the layers are not guessing - and it is **nowhere near the number this benchmark has been reporting for nine days**. The registration wrote down in advance what each outcome would mean and this one is the middle case: the number is reported with the per-layer split and without a verdict bolted onto it. The split is where the finding is.
+
+### Which layer, and what it named instead - this is the result
+
+| layer | provenance | names the published target first |
+|---|---|---|
+| deletion | derived | 1/20 |
+| eqtl | derived | 3/20 |
+| gene_input | derived | 2/20 |
+| node | heuristic | 0/20 |
+| lookups | looked_up | 0/20 |
+
+**The deletion layer - the model - names the published target at 1/20.** The derived rate above is a union over three derived layers, and the two that carry it are GTEx eQTL (3/20) and the summed-window reading (2/20), neither of which is the model's own answer about the element.
+
+And what it names instead is the whole point of drawing the frame this way:
+
+| what it named | the deletion layer | the nearest-TSS-in-node rule |
+|---|---|---|
+| the published target | 1/20 | 0/20 |
+| the nearest coding TSS | 14/20 | 18/20 |
+| another gene | 5/20 | 0/20 |
+| nothing | 0/20 | 2/20 |
+
+**The model names the nearest coding TSS at 14 of 20 loci and the published target at 1.** At these loci the two are different genes by construction, and when they differ the model goes with the nearer one. The node heuristic does the same thing at 18 of 20. Those two rows are close to each other and far from the publication.
+
+**That is the sharpest reading this benchmark has produced, and it is a negative.** It does not say the deletion layer is the nearest-gene rule in general - at the three curated frames it also got directions and cell types right, which proximity alone cannot do. It says that on the axis this frame isolates, where proximity and the published answer disagree, the model follows proximity; and that the three frames' agreement at 0.88 was measured almost entirely where the two agree, so it could not have shown this.
+
+### The two nearest-gene rules, kept apart, because one of them is arithmetic
+
+| rule | reads | status |
+|---|---|---|
+| nearest coding TSS anywhere | 0/20 | **0 by construction** - it is the rule that drew the frame, and it is printed so the construction is visible |
+| nearest coding TSS in the CTCF node | 0/20 (0.000) | a genuine reading: a different rule, right wherever the node excludes the nearer gene |
+
+The node rule was registered in advance as low but **not** zero by construction, and it came back 0/20: at 18 loci it named the nearer gene and at 2 it named nothing. So the node adds nothing to raw proximity here. The comparison the doc has been making - 0.647, 0.333, 0.778 - is with that rule, and it is 0/20 (0.000) at the one frame where the rule was not allowed to be right by default. **On the where-the-model-could-answer line its spread across four frames is now 0.778 and the derived rate's is 0.589, against 0.022 across the three curated frames alone.** Both numbers move once the geometry is fixed; it is no longer only the baseline that depends on who picked the loci.
+
+### The positive control, and why the run is interpretable at all
+
+**The control passed.** CONTROL_HMGA1_WTC11_chr6_34235k was drawn by the same rule from the same file - among the elements this frame REJECTED for having the shortcut right, the one with the smallest published element-to-TSS distance (1,111 bp), which is the easiest case the data can offer. Deleting it named HMGA1 first at -0.2271, by the deletion layer (deletion). Registered in advance: a failure here would mean the reading is broken and nothing else in the run is interpretable. It is not broken - the same layer that answers correctly at 1.1 kb names the wrong gene at the twenty loci where the right answer is not the nearest one.
+
+### The matched windows, with presence counted before coverage is made a stratum
+
+95 matched windows, the same four covariates and the same hit rules, with the keep-outs extended to every locus in **all four** frames. `genomeos/compare.py` does the standardising; nothing here reimplements it.
+
+| input | kind | targets | controls |
+|---|---|---|---|
+| a deletion spent inside the window | **bought** | 20/20 | 40/95 |
+| a GTEx eQTL distilled for the window | **bought** | 19/20 | 85/95 |
+| the mammalian constraint track over the window | **free** | 20/20 | 95/95 |
+
+| claim | the fourth frame | controls, covariates only | p | controls, **coverage held fixed** | p |
+|---|---|---|---|---|---|
+| target | 1.000 | 0.928 (+0.072) | 0.112 | **1.000** (+0.000) | 0.500 |
+| cell | 1.000 | 0.456 (+0.544) | 0.000 | **0.567** (+0.433) | 0.000 |
+| direction | 1.000 | 0.412 (+0.588) | 0.000 | **0.814** (+0.186) | 0.024 |
+| storage | 0.105 | 0.100 (+0.005) | 0.479 | **0.137** (-0.020) | 0.568 |
+
+**The coverage artefact reproduces on a fourth independent frame.** The target claim - *some* coding gene is named - separates raw and does not survive the coverage stratum, which is what sections 8, 19 and 21 each found. These claims are about whether a layer says anything at all, not about whether it is right, and the rates above are what say whether it is right.
+
+### What this frame cannot say, stated rather than buried
+
+- **A CRISPRi positive is not always a direct target.** The benchmark file carries a `direct_vs_indirect_negative` column estimating exactly that, and this frame did not use it: the rule takes the file's own `Regulated` flag. Some of these twenty published targets may be indirect consequences of silencing the element, in which case naming the nearer gene is not as wrong as the rate makes it look. Using that column would be a different frame and it would have to be registered as one.
+- **2 of the drawn loci have an unnamed novel gene as their nearest coding TSS** (ENSG00000288678, ENSG00000293615), so the shortcut is wrong there because of an annotation rather than because of a genuine gene skip. 1 of those is in the graded twenty (PCBP1_WTC11_chr2_70086k), and it is the one locus where the deletion layer named the published target.
+- **The frame is one cell line more than it looks.** The drawn cells are HCT116 colorectal carcinoma, Jurkat T-lymphoblast, K562, WTC11 induced pluripotent stem cell, and K562 dominates because the held-out arm does. A cell-type imbalance is a property of the field's screens, not of this rule.
+- **The genome-order cap makes the frame chromosome 1 to 10.** That is unrelated to difficulty and was registered before the draw, but it does mean the twenty-four are not a random sample of the sixty.
+- **40 of 95 control windows have a deletion spent inside them against 20/20 of the loci**, so the coverage stratum is a real test here rather than arithmetic.
+
+### Left undone
+
+- **36 loci that pass the same rule are undrawn**, and adding them needs no new registration - only the cap raised in a commit that says so before the run. That is the cheapest way to take this n from 20 to about 56.
+- **The non-coding frame is already drawn and unscored.** The 14 elements dropped at step 4 are the first set this project has ever had of published, perturbation-backed, non-coding targets, which is what section 21 said curation could not produce. They would test the `predicted_coding`-first defect H19 exposed.
+- **The direction axis was registered unaskable here and is.** Every CRISPR positive is an element whose silencing lowers its target, so the repressor arm is empty by construction and section 21's sign question stays open at n = 2.
+- **`loci.STATED_INTERVAL_RESULTS` does not list `loci_fourth_intervals`.** Until it does, `loci_fourth.register_stated_intervals` applies the same one-line change at runtime; the hunk is in `loci_fourth.NEEDED_LOCI_HUNK` and this lane was not permitted to make it.
+- **Whether the earlier frames' rates should now be reported with their element-to-target distances beside them** is the benchmark owner's call. This frame's reading is that a derived rate quoted without that distance is not comparable between frames, and sections 9, 19 and 21 do not carry it.
+- **The four frames are still four frames.** Nothing here pools them, and the fourth one least of all: it was drawn to disagree with the other three and it does.
+
+---

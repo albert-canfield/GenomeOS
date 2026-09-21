@@ -199,6 +199,111 @@ def test_the_control_is_excluded_from_the_reach_count_and_from_the_baselines():
     assert (out["nearest_tss_in_node"]["k"], out["nearest_tss_in_node"]["n"]) == (1, 1)
 
 
+def test_the_control_is_kept_out_of_the_aggregate_the_build_computed_with_it_in():
+    """`loci.build` aggregates every row it is handed and this frame hands it the control, so the
+    frame's own rate has to be recomputed. Reporting build's figure would lift every rate by the one
+    locus chosen for being the easiest case in the data."""
+    result = {
+        "loci": [
+            {
+                "locus": "a",
+                "expected": {
+                    "targets": ["AAA"],
+                    "direction": "activates",
+                    "cells": [],
+                    "gtex_tissues": [],
+                    "nearest_gene_trap": "ZZZ",
+                },
+                "coding_genes_in_window": 10,
+                "score": {
+                    "target_hit_derived": False,
+                    "target_hit_heuristic": False,
+                    "target_hit_looked_up": False,
+                    "cell_hit_derived": False,
+                    "direction_hit_derived": False,
+                    "class_hit_derived": False,
+                    "heuristic_fell_in_trap": True,
+                    "reachable_by_a_derived_target_layer": True,
+                    "deletion_unaskable": None,
+                    "scored": {"direction": {"judged": False}},
+                },
+                "readings": {},
+            },
+            {
+                "locus": "CONTROL_b",
+                "expected": {
+                    "targets": ["BBB"],
+                    "direction": "activates",
+                    "cells": [],
+                    "gtex_tissues": [],
+                    "nearest_gene_trap": None,
+                },
+                "coding_genes_in_window": 10,
+                "score": {
+                    "target_hit_derived": True,
+                    "target_hit_heuristic": True,
+                    "target_hit_looked_up": False,
+                    "cell_hit_derived": False,
+                    "direction_hit_derived": False,
+                    "class_hit_derived": False,
+                    "heuristic_fell_in_trap": False,
+                    "reachable_by_a_derived_target_layer": True,
+                    "deletion_unaskable": None,
+                    "scored": {"direction": {"judged": False}},
+                },
+                "readings": {},
+            },
+        ]
+    }
+    assert loci.aggregate(result["loci"])["target_derived"] == {
+        "k": 1,
+        "n": 2,
+        "rate": 0.5,
+        "hits": ["CONTROL_b"],
+        "misses": ["a"],
+    }
+    without = fourth.without_the_control(result)
+    assert (without["target_derived"]["k"], without["target_derived"]["n"]) == (0, 1)
+    assert without["target_derived"]["hits"] == []
+
+
+def test_what_the_layers_named_separates_the_target_from_the_trap():
+    """The count between `named the target` and `named the nearest coding TSS` is the whole finding
+    this frame exists to produce; a layer that names neither must not fall into either bucket."""
+
+    def row(locus, deletion, trap, targets):
+        return {
+            "locus": locus,
+            "expected": {"targets": targets, "nearest_gene_trap": trap},
+            "readings": {"deletion": {"target": deletion}, "node": {"target": None}},
+            "score": {
+                "scored": {
+                    "target": {
+                        "by_layer": {"deletion": {"provenance": "derived", "hit": deletion in targets}}
+                    }
+                }
+            },
+        }
+
+    result = {
+        "loci": [
+            row("a", "AAA", "ZZZ", ["AAA"]),
+            row("b", "ZZZ", "ZZZ", ["AAA"]),
+            row("c", "QQQ", "ZZZ", ["AAA"]),
+            row("d", None, "ZZZ", ["AAA"]),
+            row("CONTROL_e", "EEE", "ZZZ", ["EEE"]),
+        ]
+    }
+    out = fourth.what_the_layers_named(result)
+    assert out["what_it_named_instead"]["deletion"] == {
+        "the published target": 1,
+        "the nearest coding TSS": 1,
+        "another gene": 1,
+        "nothing": 1,
+    }
+    assert out["by_layer"]["deletion"] == {"provenance": "derived", "hit": 1, "n": 4}
+
+
 def test_the_two_nearest_gene_rules_are_reported_apart():
     """The rule that DREW the frame is 0 by construction; the node rule is a real reading. Reporting
     one as the other is how a constructed frame turns into a beaten baseline."""

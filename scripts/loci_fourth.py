@@ -167,12 +167,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--plan", action="store_true", help="reach and cost per drawn locus; no request")
     ap.add_argument("--intervals", action="store_true", help="delete the elements the sweep missed")
     ap.add_argument("--score", action="store_true", help="read and score the graded loci")
+    ap.add_argument(
+        "--reaggregate",
+        action="store_true",
+        help="recompute the saved result's rates and readings; no request, no network, no re-reading",
+    )
     ap.add_argument("--run", action="store_true", help="with --intervals: actually spend the requests")
     ap.add_argument("--quota-handed", action="store_true")
     ap.add_argument("--no-network", action="store_true", help="local layers only, for a quick check")
     args = ap.parse_args(argv)
-    if not (args.draw or args.plan or args.intervals or args.score):
+    if not (args.draw or args.plan or args.intervals or args.score or args.reaggregate):
         args.draw = True
+
+    if args.reaggregate:
+        out = fourth.reaggregate()
+        a = out["aggregate"]
+        say(f"re-aggregated over {a['loci']} drawn loci, the control excluded")
+        show_scores(out)
+        return 0
 
     draw = fourth.select(progress=say)
     if args.draw or args.plan or args.intervals:
@@ -197,18 +209,22 @@ def main(argv: list[str] | None = None) -> int:
         say(f"saved {save_result(fourth.INTERVALS, out)}")
 
     if args.score:
-        out = fourth.run(network=not args.no_network, progress=say, draw=draw)
-        a = out["aggregate"]
-        say(
-            f"target derived {a['target_derived']['k']}/{a['target_derived']['n']},"
-            f" heuristic {a['target_heuristic']['k']}/{a['target_heuristic']['n']},"
-            f" chance floor {a['target_by_chance']['expected']}"
-        )
-        print(json.dumps(out["reach"], indent=1))
-        print(json.dumps({k: v for k, v in out["baselines"].items() if k != "per_locus"}, indent=1))
-        print(json.dumps(out["positive_control"], indent=1))
-        print(json.dumps(out["beside_the_other_three"], indent=1))
+        show_scores(fourth.run(network=not args.no_network, progress=say, draw=draw))
     return 0
+
+
+def show_scores(out: dict[str, Any]) -> None:
+    a = out["aggregate"]
+    say(
+        f"target derived {a['target_derived']['k']}/{a['target_derived']['n']},"
+        f" heuristic {a['target_heuristic']['k']}/{a['target_heuristic']['n']},"
+        f" chance floor {a['target_by_chance']['expected']}"
+    )
+    print(json.dumps(out["reach"], indent=1))
+    print(json.dumps(out["layers"], indent=1))
+    print(json.dumps({k: v for k, v in out["baselines"].items() if k != "per_locus"}, indent=1))
+    print(json.dumps(out["positive_control"], indent=1))
+    print(json.dumps(out["beside_the_other_three"], indent=1))
 
 
 if __name__ == "__main__":

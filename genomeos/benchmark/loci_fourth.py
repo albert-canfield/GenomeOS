@@ -621,6 +621,27 @@ def reach_fatalities(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def is_control(row: dict[str, Any]) -> bool:
+    return str(row.get("locus", "")).startswith("CONTROL_")
+
+
+def drawn_rows(result: dict[str, Any]) -> list[dict[str, Any]]:
+    """The scored loci without the positive control, which is what every rate is computed over."""
+    return [r for r in result["loci"] if not is_control(r)]
+
+
+def without_the_control(result: dict[str, Any]) -> dict[str, Any]:
+    """Re-aggregate over the drawn loci alone.
+
+    `loci.build` aggregates over every row it was handed, and this frame hands it the positive
+    control as well, because the control has to go through the identical readers to be worth
+    anything. The registration says the control is excluded from every rate, so the rate the frame
+    reports is this one and `aggregate_with_the_control` is kept beside it rather than thrown away.
+    `loci.trim_locus` keeps each row whole, so this is the same function over a smaller list.
+    """
+    return loci.aggregate(drawn_rows(result))
+
+
 def baselines(result: dict[str, Any]) -> dict[str, Any]:
     """The two nearest-gene rules kept apart: the one that drew the frame, and the node one.
 
@@ -629,9 +650,7 @@ def baselines(result: dict[str, Any]) -> dict[str, Any]:
     """
     anywhere_hits, node_hits, n = 0, 0, 0
     per_locus = []
-    for r in result["loci"]:
-        if r["locus"].startswith("CONTROL_"):
-            continue
+    for r in drawn_rows(result):
         node = (r.get("readings") or {}).get("node") or {}
         want = set(r["expected"]["targets"])
         anywhere = node.get("nearest_coding_anywhere")
@@ -674,10 +693,56 @@ def baselines(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def what_the_layers_named(result: dict[str, Any]) -> dict[str, Any]:
+    """Per derived layer: how often it named the published target, and what it named instead.
+
+    This is the reading the frame exists to produce. Every locus here has a nearest coding TSS that
+    the publication says is NOT the target, so `named the trap` and `named the target` are the two
+    answers a layer can give, and the count between them says whether the layer is reading regulation
+    or reading proximity. The three earlier frames could not ask it, because at most of their loci
+    the two answers are the same gene.
+    """
+    rows = drawn_rows(result)
+    layers: dict[str, dict[str, Any]] = {}
+    for r in rows:
+        for name, v in (
+            ((r.get("score") or {}).get("scored") or {}).get("target", {}).get("by_layer", {}).items()
+        ):
+            layers.setdefault(name, {"provenance": v["provenance"], "hit": 0, "n": 0})
+            layers[name]["n"] += 1
+            layers[name]["hit"] += int(v["hit"])
+    instead: dict[str, dict[str, int]] = {}
+    for layer, key in (("deletion", "target"), ("node", "target")):
+        tally = {"the published target": 0, "the nearest coding TSS": 0, "another gene": 0, "nothing": 0}
+        for r in rows:
+            named = ((r.get("readings") or {}).get(layer) or {}).get(key)
+            trap = r["expected"]["nearest_gene_trap"]
+            if named is None:
+                tally["nothing"] += 1
+            elif named in r["expected"]["targets"]:
+                tally["the published target"] += 1
+            elif named == trap:
+                tally["the nearest coding TSS"] += 1
+            else:
+                tally["another gene"] += 1
+        instead[layer] = tally
+    return {
+        "by_layer": layers,
+        "what_it_named_instead": instead,
+        "reading": (
+            "the derived rate is a union over the deletion, eQTL and summed-window layers, so the"
+            " per-layer line says which of them survives a locus where the target is not the nearest"
+            " gene. `what_it_named_instead` is the sharper reading: a layer that names the nearest"
+            " coding TSS at most of these loci is reporting proximity, whatever it scores at a frame"
+            " where proximity and the published answer agree"
+        ),
+    }
+
+
 def direction_readings(result: dict[str, Any]) -> dict[str, Any]:
     """The activator arm only, because the rule can draw nothing else. Registered before the draw."""
     rows = []
-    for r in result["loci"]:
+    for r in drawn_rows(result):
         d = ((r.get("score") or {}).get("scored") or {}).get("direction") or {}
         rows.append(
             {
@@ -705,7 +770,7 @@ def direction_readings(result: dict[str, Any]) -> dict[str, Any]:
 
 def positive_control(result: dict[str, Any]) -> dict[str, Any]:
     """The easiest case the same file can offer. A no here invalidates the rest of the run."""
-    row = next((r for r in result["loci"] if r["locus"].startswith("CONTROL_")), None)
+    row = next((r for r in result["loci"] if is_control(r)), None)
     if row is None:
         return {"ran": False, "passed": None, "registered": PREREGISTRATION["the_rule"]}
     target = ((row.get("score") or {}).get("scored") or {}).get("target") or {}
@@ -744,8 +809,7 @@ def compare_with_controls(result: dict[str, Any]) -> dict[str, Any]:
             "constrained": con,
         }
 
-    scored = [r for r in result["loci"] if not r["locus"].startswith("CONTROL_")]
-    claimed = [(r, loci.claims(r["readings"])) for r in scored]
+    claimed = [(r, loci.claims(r["readings"])) for r in drawn_rows(result)]
     targets = [
         row(r.get("gc"), r.get("distance_to_coding_tss"), r.get("constrained_fraction"), c)
         for r, c in claimed
@@ -831,6 +895,41 @@ def beside_the_other_three(result: dict[str, Any], results_dir: Path = RESULTS_D
     }
 
 
+def readings(out: dict[str, Any], results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """Everything this frame computes from the scored rows. Free, and re-runnable on a saved result.
+
+    Split out of `run` so a result can be re-aggregated without re-reading a single track: the rows
+    are fixed once `loci.build` has written them, and every number below is a function of those rows.
+    """
+    out["aggregate_with_the_control"] = out["aggregate"]
+    out["aggregate"] = without_the_control(out)
+    out["aggregate_reading"] = (
+        "the headline rates are over the DRAWN loci only. The positive control went through the same"
+        " readers, so loci.build aggregated it in; the registration says it is excluded from every"
+        " rate, and `aggregate_with_the_control` is kept beside this one rather than discarded"
+    )
+    out["layers"] = what_the_layers_named(out)
+    out["baselines"] = baselines(out)
+    out["directions"] = direction_readings(out)
+    out["positive_control"] = positive_control(out)
+    out["needed_loci_hunk"] = NEEDED_LOCI_HUNK
+    out["against_controls"] = compare_with_controls(out)
+    out["beside_the_other_three"] = beside_the_other_three(out, results_dir)
+    return out
+
+
+def reaggregate(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """Recompute every derived block of a saved result. No request, no network, no re-reading."""
+    out = load_result(NAME, results_dir)
+    if not out:
+        raise FileNotFoundError(f"no {NAME} result to re-aggregate")
+    if "aggregate_with_the_control" in out:  # idempotent: always aggregate from build's own figure
+        out["aggregate"] = out["aggregate_with_the_control"]
+    readings(out, results_dir)
+    save_result(NAME, out, results_dir)
+    return out
+
+
 def run(
     results_dir: Path = RESULTS_DIR,
     network: bool = True,
@@ -860,12 +959,7 @@ def run(
     out["control_locus"] = draw["control"].as_dict() if draw["control"] else None
     out["plan"] = rows
     out["reach"] = reach_fatalities(rows)
-    out["baselines"] = baselines(out)
-    out["directions"] = direction_readings(out)
-    out["positive_control"] = positive_control(out)
-    out["needed_loci_hunk"] = NEEDED_LOCI_HUNK
-    out["against_controls"] = compare_with_controls(out)
-    out["beside_the_other_three"] = beside_the_other_three(out, results_dir)
+    readings(out, results_dir)
     out["note"] = (
         "A FOURTH, separately registered frame of published enhancer-gene loci, DRAWN BY A RULE"
         " written before the file was read rather than curated locus by locus, and graded by"

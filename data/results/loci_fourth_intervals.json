@@ -1,0 +1,163 @@
+{
+  "result": "loci_fourth_intervals",
+  "date": "2026-09-21",
+  "elements": [
+    {
+      "id": "EH38E2007761",
+      "chrom": "chr2",
+      "start": 70086244,
+      "end": 70086594,
+      "length": 350,
+      "genes_in_window": 31,
+      "tracks": 371,
+      "seconds": 1.5,
+      "predicted": {
+        "gene": "PCBP1",
+        "action": "activates",
+        "log2_fold_change": -0.2304,
+        "tissue": "occipital lobe",
+        "strength": "weak",
+        "confidence": 0.23,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PCBP1",
+        "action": "activates",
+        "log2_fold_change": -0.2304,
+        "tissue": "occipital lobe",
+        "strength": "weak",
+        "confidence": 0.23,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.0928,
+        "IMR-90": -0.092,
+        "K562": -0.1051,
+        "GM12878": -0.1649
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0928,
+        "IMR-90": -0.092,
+        "K562": -0.1051,
+        "GM12878": -0.1649
+      },
+      "top_genes": [
+        {
+          "gene": "PCBP1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1389,
+          "max_drop_log2fc": -0.2304,
+          "max_drop_tissue": "occipital lobe",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.0928,
+            "IMR-90": -0.092,
+            "K562": -0.1051,
+            "GM12878": -0.1649
+          }
+        },
+        {
+          "gene": "PCBP1-AS1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1228,
+          "max_drop_log2fc": -0.2187,
+          "max_drop_tissue": "ascending aorta",
+          "max_rise_log2fc": 0.0072,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": 0.0032,
+            "IMR-90": -0.0553,
+            "K562": 0.0039,
+            "GM12878": -0.0872
+          }
+        },
+        {
+          "gene": "ENSG00000233060",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1039,
+          "max_drop_log2fc": -0.2126,
+          "max_drop_tissue": "B cell",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.0738,
+            "IMR-90": -0.0818,
+            "K562": -0.0692,
+            "GM12878": -0.1389
+          }
+        },
+        {
+          "gene": "ASPRV1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0736,
+          "max_drop_log2fc": -0.2106,
+          "max_drop_tissue": "heart right ventricle",
+          "max_rise_log2fc": 0.0589,
+          "max_rise_tissue": "smooth muscle cell",
+          "by_cell": {
+            "HepG2": -0.0316,
+            "IMR-90": -0.004,
+            "K562": -0.0004,
+            "GM12878": -0.1121
+          }
+        },
+        {
+          "gene": "RN7SL470P",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0479,
+          "max_drop_log2fc": -0.1576,
+          "max_drop_tissue": "tibial nerve",
+          "max_rise_log2fc": 0.0182,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": 0.0114,
+            "IMR-90": -0.0009,
+            "K562": 0.0182,
+            "GM12878": -0.041
+          }
+        }
+      ],
+      "inferred": {
+        "gene": "ENSG00000293615",
+        "distance": 900,
+        "basis": "promoter of",
+        "confidence": 0.8
+      },
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr2:D489",
+      "overlapping_element": "EH38E2007761",
+      "scored_the_stated_interval": false,
+      "locus": "PCBP1_WTC11_chr2_70086k",
+      "substituted_annotated_element": true
+    }
+  ],
+  "read": [
+    {
+      "locus": "PCBP1_WTC11_chr2_70086k",
+      "element": "chr2:70086003-70086502",
+      "substituted_annotated_element": true,
+      "named_first_coding": "PCBP1",
+      "named_first_any": "PCBP1",
+      "log2_fold_change": -0.2304,
+      "action": "activates",
+      "nearest_coding_tss": "ENSG00000293615",
+      "tissue": "occipital lobe",
+      "top_genes": [
+        "PCBP1",
+        "PCBP1-AS1",
+        "ENSG00000233060",
+        "ASPRV1",
+        "RN7SL470P"
+      ],
+      "hit": true,
+      "targets": [
+        "PCBP1"
+      ]
+    }
+  ],
+  "note": "AlphaGenome deletions of the ENCODE CRISPR benchmark's own perturbed intervals, drawn into the fourth frame by genomeos/benchmark/loci_fourth.py and not already covered by the finished sweep. Read by loci._deletion_rows and labelled `stated_interval`, so these rows are never pooled with registry ones. loci.STATED_INTERVAL_RESULTS must list this result's name for that to happen: see loci_fourth.NEEDED_LOCI_HUNK and loci_fourth.register_stated_intervals",
+  "requests_this_run": 1,
+  "seconds": 17.6
+}
