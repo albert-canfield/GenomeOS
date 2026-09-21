@@ -1,0 +1,2176 @@
+{
+  "result": "loci_noncoding",
+  "date": "2026-09-21",
+  "panel": 2,
+  "classes": [
+    "syntax",
+    "storage",
+    "program",
+    "order"
+  ],
+  "provenance": [
+    "derived",
+    "targeted",
+    "heuristic",
+    "looked_up"
+  ],
+  "aggregate": {
+    "loci": 2,
+    "target_derived": {
+      "k": 0,
+      "n": 2,
+      "rate": 0.0,
+      "hits": [],
+      "misses": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ]
+    },
+    "target_by_chance": {
+      "expected": 0.61,
+      "of": 2,
+      "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+    },
+    "target_derived_where_reachable": {
+      "k": 0,
+      "n": 2,
+      "rate": 0.0,
+      "hits": [],
+      "misses": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ]
+    },
+    "target_derived_where_the_model_could_answer": {
+      "k": 0,
+      "n": 2,
+      "rate": 0.0,
+      "hits": [],
+      "misses": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ],
+      "held_out": [],
+      "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
+    },
+    "target_heuristic": {
+      "k": 0,
+      "n": 2,
+      "rate": 0.0,
+      "hits": [],
+      "misses": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ]
+    },
+    "target_looked_up": {
+      "k": 0,
+      "n": 2,
+      "rate": 0.0,
+      "hits": [],
+      "misses": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ]
+    },
+    "target_only_looked_up": [],
+    "nearest_gene_traps": {
+      "loci": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ],
+      "heuristic_fell_in": [
+        "LINC00885_K562_chr3_196194k"
+      ]
+    },
+    "cell_derived_where_judged": {
+      "k": 2,
+      "n": 2,
+      "rate": 1.0,
+      "hits": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ],
+      "misses": []
+    },
+    "cell_unreachable": [],
+    "direction_derived_where_judged": {
+      "k": 0,
+      "n": 0,
+      "rate": null,
+      "hits": [],
+      "misses": []
+    },
+    "direction_not_judged": [
+      "LINC00885_K562_chr3_196194k",
+      "CCDC26_K562_chr8_129581k"
+    ],
+    "class_derived": {
+      "k": 2,
+      "n": 2,
+      "rate": 1.0,
+      "hits": [
+        "LINC00885_K562_chr3_196194k",
+        "CCDC26_K562_chr8_129581k"
+      ],
+      "misses": []
+    },
+    "unreachable_target": [],
+    "published_element_coverage": {
+      "per_locus": {
+        "LINC00885_K562_chr3_196194k": {
+          "ccres_over_element": 2,
+          "elements_scored": 2,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        },
+        "CCDC26_K562_chr8_129581k": {
+          "ccres_over_element": 1,
+          "elements_scored": 1,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        }
+      },
+      "no_ccre_over_the_published_element": [],
+      "no_element_level_reading_at_all": [],
+      "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+    },
+    "target_derived_by_element_source": {
+      "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+      "annotated": {
+        "k": 0,
+        "n": 2,
+        "rate": 0.0,
+        "loci": [
+          "LINC00885_K562_chr3_196194k",
+          "CCDC26_K562_chr8_129581k"
+        ],
+        "hits": [],
+        "scored_at_the_element": [
+          "LINC00885_K562_chr3_196194k",
+          "CCDC26_K562_chr8_129581k"
+        ]
+      },
+      "stated": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "loci": [],
+        "hits": [],
+        "scored_at_the_element": []
+      }
+    }
+  },
+  "negative_controls": {
+    "windows": 0,
+    "per_locus": 5,
+    "matched_on": [
+      "length (exact)",
+      "GC within 0.04",
+      "distance to the nearest coding TSS within 35%",
+      "Zoonomia constrained fraction (closest of the candidates)"
+    ],
+    "excluded": "every panel locus with 200 kb of flank, VISTA elements and GWAS Catalog hits (5 kb)",
+    "positives": {
+      "target": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0
+      },
+      "cell": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0
+      },
+      "direction": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0
+      },
+      "storage": {
+        "k": 0,
+        "n": 2,
+        "rate": 0.0
+      },
+      "deletion_scored": {
+        "k": 2,
+        "n": 2,
+        "rate": 1.0
+      },
+      "eqtl_present": {
+        "k": 1,
+        "n": 2,
+        "rate": 0.5
+      }
+    },
+    "negatives": {
+      "target": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      },
+      "cell": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      },
+      "direction": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      },
+      "storage": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      },
+      "deletion_scored": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      },
+      "eqtl_present": {
+        "k": 0,
+        "n": 0,
+        "rate": null
+      }
+    },
+    "given_deletion_data": {
+      "reading": "the same claims at the windows where an element-level deletion exists, and at the windows where none does: a claim that only a deletion can make is worth nothing until both sides have been asked",
+      "positives": {
+        "with_deletion_data": {
+          "target": {
+            "k": 2,
+            "n": 2,
+            "rate": 1.0
+          },
+          "cell": {
+            "k": 2,
+            "n": 2,
+            "rate": 1.0
+          },
+          "direction": {
+            "k": 2,
+            "n": 2,
+            "rate": 1.0
+          },
+          "storage": {
+            "k": 0,
+            "n": 2,
+            "rate": 0.0
+          }
+        },
+        "without_deletion_data": {
+          "target": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "cell": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "direction": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "storage": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          }
+        }
+      },
+      "negatives": {
+        "with_deletion_data": {
+          "target": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "cell": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "direction": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "storage": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          }
+        },
+        "without_deletion_data": {
+          "target": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "cell": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "direction": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          },
+          "storage": {
+            "k": 0,
+            "n": 0,
+            "rate": null
+          }
+        }
+      }
+    },
+    "on_swept_chromosomes": {
+      "chromosomes": [],
+      "windows": 0,
+      "rates": {
+        "target": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        },
+        "cell": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        },
+        "direction": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        },
+        "storage": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        },
+        "deletion_scored": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        },
+        "eqtl_present": {
+          "k": 0,
+          "n": 0,
+          "rate": null
+        }
+      },
+      "reading": "matched negatives whose chromosome the sweep has finished: the only controls that can be compared with the panel on any claim a deletion makes"
+    },
+    "by_locus": {
+      "LINC00885_K562_chr3_196194k": {
+        "positive": {
+          "target": true,
+          "cell": true,
+          "direction": true,
+          "storage": false,
+          "deletion_scored": true,
+          "eqtl_present": true
+        },
+        "negatives": 0,
+        "target": 0,
+        "cell": 0,
+        "direction": 0,
+        "storage": 0,
+        "deletion_scored": 0,
+        "eqtl_present": 0
+      },
+      "CCDC26_K562_chr8_129581k": {
+        "positive": {
+          "target": true,
+          "cell": true,
+          "direction": true,
+          "storage": false,
+          "deletion_scored": true,
+          "eqtl_present": false
+        },
+        "negatives": 0,
+        "target": 0,
+        "cell": 0,
+        "direction": 0,
+        "storage": 0,
+        "deletion_scored": 0,
+        "eqtl_present": 0
+      }
+    }
+  },
+  "loci": [
+    {
+      "locus": "LINC00885_K562_chr3_196194k",
+      "expected": {
+        "locus": "LINC00885_K562_chr3_196194k",
+        "chrom": "chr3",
+        "element": [
+          196194473,
+          196194973
+        ],
+        "window": [
+          195694723,
+          196694723
+        ],
+        "length": 500,
+        "classes": [
+          "program"
+        ],
+        "targets": [
+          "LINC00885",
+          "TFRC"
+        ],
+        "direction": "activates",
+        "tissues": [
+          "K562 chronic myelogenous leukaemia",
+          "erythroid"
+        ],
+        "gtex_tissues": [],
+        "cells": [
+          "K562"
+        ],
+        "distance": 52087,
+        "variants": [],
+        "nearest_gene_trap": "ZDHHC19",
+        "value_domain": null,
+        "frequency": null,
+        "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": "ENCODE CRISPR benchmark (Gschwind et al. 2025), held-out arm, Morris, K562: silencing chr3:196194473-196194973 significantly lowers LINC00885, TFRC (2 gene(s) tested at this element). The interval is the screen's own perturbed element, not one this panel drew",
+        "citations": [
+          "Gschwind et al. 2025, the ENCODE CRISPR benchmark combined dataset (EngreitzLab/CRISPR_comparison), held-out arm over K562, GM12878, HCT116, Jurkat, WTC11",
+          "the original screen: Morris"
+        ],
+        "answer_from": [
+          "CRISPRi",
+          "Morris"
+        ],
+        "note": "drawn by rule, not chosen: the nearest coding TSS to this element is ZDHHC19 at 16676 bp, and the published target LINC00885 is at 52087 bp. A model that names the nearest gene is wrong here by construction, which is the whole reason the locus is in this frame. This locus is in the NON-CODING frame, not the geometry one: its published target is LINC00885 (lncRNA). Two of the four derived layers cannot name a non-coding gene at all, so a miss here is a fact about the reader before it is a fact about the model"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 2,
+          "classes": [
+            "dELS"
+          ],
+          "ids": [
+            "EH38E3564106",
+            "EH38E2272511"
+          ],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr3:D1427",
+          "domain_span": [
+            196092246,
+            196253775
+          ],
+          "coding_genes_in_node": 2,
+          "genes_in_node": [
+            "ENSG00000228028",
+            "ENSG00000289219",
+            "ENSG00000294113",
+            "ENSG00000295278",
+            "ENSG00000297061",
+            "ENSG00000309772",
+            "LINC00885",
+            "SLC51A",
+            "Y_RNA",
+            "ZDHHC19"
+          ],
+          "target": "ZDHHC19",
+          "distance": 16676,
+          "nearest_coding_anywhere": "ZDHHC19",
+          "nearest_distance": 16676,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 2,
+          "runs": [
+            "enhancer_targets_all"
+          ],
+          "from_stated_interval": false,
+          "targets": [
+            {
+              "gene": "ZDHHC19",
+              "elements": 2,
+              "best": 0.1604,
+              "action": "represses",
+              "tissue": "CD14-positive monocyte"
+            }
+          ],
+          "target": "ZDHHC19",
+          "action": "represses",
+          "tissue": "CD14-positive monocyte",
+          "summed_by_cell": {
+            "HepG2": -0.0033,
+            "IMR-90": -0.0017,
+            "K562": 0.0345,
+            "GM12878": 0.0
+          },
+          "pending": null,
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 322.0,
+            "SK-N-SH": 0.35
+          },
+          "cells_open": [
+            "K562",
+            "SK-N-SH"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              196194715,
+              196194865,
+              322.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 196194723,
+          "targets_in_reach": [
+            "LINC00885",
+            "TFRC"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            195694723,
+            196694723
+          ],
+          "elements_scored": 601,
+          "naming_a_coding_gene": 292,
+          "genes": [
+            {
+              "gene": "NRROS",
+              "elements": 52,
+              "activating": 35,
+              "summed": 13.374
+            },
+            {
+              "gene": "MUC4",
+              "elements": 44,
+              "activating": 27,
+              "summed": 12.543
+            },
+            {
+              "gene": "SLC51A",
+              "elements": 22,
+              "activating": 17,
+              "summed": 12.396
+            },
+            {
+              "gene": "ZDHHC19",
+              "elements": 30,
+              "activating": 16,
+              "summed": 11.343
+            },
+            {
+              "gene": "TM4SF19",
+              "elements": 16,
+              "activating": 10,
+              "summed": 7.494
+            },
+            {
+              "gene": "TNK2",
+              "elements": 28,
+              "activating": 21,
+              "summed": 6.957
+            },
+            {
+              "gene": "MUC20",
+              "elements": 16,
+              "activating": 10,
+              "summed": 5.512
+            },
+            {
+              "gene": "TFRC",
+              "elements": 22,
+              "activating": 17,
+              "summed": 5.011
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "TFRC",
+              "elements": 22,
+              "activating": 17,
+              "summed": 5.011
+            }
+          ],
+          "target": "TFRC",
+          "rank_of_first_published_target": 8,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 500,
+            "mean": 0.096,
+            "maximum": 6.622,
+            "fraction_above": 0.048
+          },
+          "humans": null,
+          "case": null,
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 42,
+          "egenes": [
+            {
+              "gene": "SLC51A",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Artery_Tibial",
+                "Cells_Cultured_fibroblasts",
+                "Esophagus_Gastroesophageal_Junction",
+                "Esophagus_Mucosa",
+                "Esophagus_Muscularis",
+                "Heart_Atrial_Appendage",
+                "Heart_Left_Ventricle"
+              ],
+              "n_tissues": 11,
+              "best_p": 1.31021e-10,
+              "slope": 0.686359
+            },
+            {
+              "gene": "LINC00885",
+              "tissues": [
+                "Skin_Not_Sun_Exposed_Suprapubic",
+                "Skin_Sun_Exposed_Lower_leg"
+              ],
+              "n_tissues": 2,
+              "best_p": 3.01152e-10,
+              "slope": -0.283863
+            },
+            {
+              "gene": "PCYT1A",
+              "tissues": [
+                "Esophagus_Mucosa",
+                "Skin_Sun_Exposed_Lower_leg"
+              ],
+              "n_tissues": 2,
+              "best_p": 3.13482e-06,
+              "slope": 0.23335
+            },
+            {
+              "gene": "DYNLT2B",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Artery_Coronary",
+                "Cells_Cultured_fibroblasts",
+                "Heart_Atrial_Appendage"
+              ],
+              "n_tissues": 5,
+              "best_p": 5.87487e-06,
+              "slope": 0.460857
+            },
+            {
+              "gene": "MUC20",
+              "tissues": [
+                "Lung"
+              ],
+              "n_tissues": 1,
+              "best_p": 3.04599e-05,
+              "slope": -0.382662
+            },
+            {
+              "gene": "RN7SL738P",
+              "tissues": [
+                "Cells_Cultured_fibroblasts"
+              ],
+              "n_tissues": 1,
+              "best_p": 0.00012353,
+              "slope": -0.383417
+            }
+          ],
+          "target": "SLC51A",
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 112,
+          "common": 1,
+          "per_kb": 2.0,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 0,
+          "named_variants": {},
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 0,
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.604,
+      "distance_to_coding_tss": 16676,
+      "ccres_over_element": 2,
+      "coding_genes_in_window": 18,
+      "constrained_fraction": 0.048,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "LINC00885",
+              "TFRC"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [
+                  "ZDHHC19"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [
+                  "SLC51A",
+                  "LINC00885",
+                  "PCYT1A",
+                  "DYNLT2B",
+                  "MUC20",
+                  "RN7SL738P"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "LINC00885",
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "NRROS",
+                  "MUC4",
+                  "SLC51A",
+                  "ZDHHC19",
+                  "TM4SF19",
+                  "TNK2"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "TFRC",
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [
+                  "ZDHHC19"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              }
+            },
+            "derived_unaskable": [],
+            "hit_derived": false,
+            "hit_derived_by": [],
+            "hit_derived_among": true,
+            "hit_heuristic": false,
+            "hit_looked_up": false
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [
+              "K562"
+            ],
+            "expected_gtex": [],
+            "reader_open_in_expected": [
+              "K562"
+            ],
+            "reader_hit": true,
+            "reader_cells_open": 2,
+            "promoter_open_in_expected": [],
+            "promoter_hit": false,
+            "promoter_cells_open": null,
+            "eqtl_tissues_for_target": [
+              "Skin_Not_Sun_Exposed_Suprapubic",
+              "Skin_Sun_Exposed_Lower_leg"
+            ],
+            "eqtl_hit": null,
+            "model_tissue": "CD14-positive monocyte",
+            "model_hit": false,
+            "hit_derived": true,
+            "specific": 0.9,
+            "unreachable": null
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "activates",
+            "model_action": null,
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 52087,
+            "measured": {
+              "layer": "eqtl",
+              "gene": "LINC00885",
+              "distance": 52180
+            },
+            "within_twofold": true,
+            "node_distance": 16676
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [],
+            "variable_in_the_trio": {},
+            "frequencies": {},
+            "constraint_rank": null,
+            "in_the_top_decile_by_constraint": null,
+            "satmut_functional": null,
+            "protein_change": null,
+            "hit_derived": false,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "program"
+            ],
+            "read": [
+              "program"
+            ],
+            "agrees_on": [
+              "program"
+            ],
+            "missed": [],
+            "mammal_fraction": 0.048,
+            "human_fraction": null,
+            "case": null,
+            "values_in_syntax": 0,
+            "published_targets_in_one_node": [
+              "LINC00885"
+            ],
+            "value_domain_expected": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 2.0,
+            "value_domain_hit": null,
+            "hit_derived": true,
+            "hit_derived_all": true
+          }
+        },
+        "target_hit_derived": false,
+        "target_hit_heuristic": false,
+        "target_hit_looked_up": false,
+        "nearest_gene_trap": "ZDHHC19",
+        "heuristic_fell_in_trap": true,
+        "cell_hit_derived": true,
+        "direction_hit_derived": false,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
+        "pending": [
+          "mpra: no lentiMPRA element was tested inside this window",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "CCDC26_K562_chr8_129581k",
+      "expected": {
+        "locus": "CCDC26_K562_chr8_129581k",
+        "chrom": "chr8",
+        "element": [
+          129581954,
+          129582453
+        ],
+        "window": [
+          129082203,
+          130082203
+        ],
+        "length": 499,
+        "classes": [
+          "program"
+        ],
+        "targets": [
+          "CCDC26"
+        ],
+        "direction": "activates",
+        "tissues": [
+          "K562 chronic myelogenous leukaemia",
+          "erythroid"
+        ],
+        "gtex_tissues": [],
+        "cells": [
+          "K562"
+        ],
+        "distance": 7184,
+        "variants": [],
+        "nearest_gene_trap": "GSDMC",
+        "value_domain": null,
+        "frequency": null,
+        "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": "ENCODE CRISPR benchmark (Gschwind et al. 2025), held-out arm, K562_DC_TAP, K562: silencing chr8:129581954-129582453 significantly lowers CCDC26 (1 gene(s) tested at this element). The interval is the screen's own perturbed element, not one this panel drew",
+        "citations": [
+          "Gschwind et al. 2025, the ENCODE CRISPR benchmark combined dataset (EngreitzLab/CRISPR_comparison), held-out arm over K562, GM12878, HCT116, Jurkat, WTC11",
+          "the original screen: K562_DC_TAP"
+        ],
+        "answer_from": [
+          "CRISPRi",
+          "K562_DC_TAP"
+        ],
+        "note": "drawn by rule, not chosen: the nearest coding TSS to this element is GSDMC at 204420 bp, and the published target CCDC26 is at 7184 bp. A model that names the nearest gene is wrong here by construction, which is the whole reason the locus is in this frame. This locus is in the NON-CODING frame, not the geometry one: its published target is CCDC26 (lncRNA). Two of the four derived layers cannot name a non-coding gene at all, so a miss here is a fact about the reader before it is a fact about the model"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 1,
+          "classes": [
+            "dELS"
+          ],
+          "ids": [
+            "EH38E2667782"
+          ],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr8:D972",
+          "domain_span": [
+            129334744,
+            129728708
+          ],
+          "coding_genes_in_node": 0,
+          "genes_in_node": [
+            "CCDC26",
+            "ENSG00000253926",
+            "ENSG00000300417",
+            "ENSG00000308780",
+            "MIR3686"
+          ],
+          "target": null,
+          "distance": null,
+          "nearest_coding_anywhere": "GSDMC",
+          "nearest_distance": 204420,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 1,
+          "runs": [
+            "enhancer_targets_all"
+          ],
+          "from_stated_interval": false,
+          "targets": [
+            {
+              "gene": "GSDMC",
+              "elements": 1,
+              "best": -0.1433,
+              "action": "activates",
+              "tissue": "K562"
+            }
+          ],
+          "target": "GSDMC",
+          "action": "activates",
+          "tissue": "K562",
+          "summed_by_cell": {
+            "HepG2": -0.0086,
+            "IMR-90": 0.0079,
+            "K562": -0.1228,
+            "GM12878": 0.0121
+          },
+          "pending": null,
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 783.0,
+            "CD14-positive monocyte": 0.22
+          },
+          "cells_open": [
+            "CD14-positive monocyte",
+            "K562"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              129582235,
+              129582385,
+              783.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 129582203,
+          "targets_in_reach": [
+            "CCDC26"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            129082203,
+            130082203
+          ],
+          "elements_scored": 498,
+          "naming_a_coding_gene": 36,
+          "genes": [
+            {
+              "gene": "GSDMC",
+              "elements": 19,
+              "activating": 16,
+              "summed": 6.792
+            },
+            {
+              "gene": "CYRIB",
+              "elements": 16,
+              "activating": 11,
+              "summed": 2.44
+            },
+            {
+              "gene": "ASAP1",
+              "elements": 1,
+              "activating": 1,
+              "summed": 0.103
+            }
+          ],
+          "published_targets": [],
+          "target": "GSDMC",
+          "rank_of_first_published_target": null,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 499,
+            "mean": 2.847,
+            "maximum": 8.903,
+            "fraction_above": 0.5671
+          },
+          "humans": {
+            "touched_bin_bases": 2000,
+            "bases": 499,
+            "mean": 0.831,
+            "maximum": 2.351,
+            "fraction_above": 0.5,
+            "constrained_bases": 453,
+            "strong": false
+          },
+          "case": {
+            "case": "syntax",
+            "mammals": "constrained",
+            "humans": "constrained",
+            "confidence": 0.6
+          },
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 0,
+          "egenes": [],
+          "target": null,
+          "pending": "no GTEx hits distilled for chr8 under data/knowledge/loci_noncoding",
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 95,
+          "common": 0,
+          "per_kb": 0.0,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 0,
+          "named_variants": {},
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 0,
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.487,
+      "distance_to_coding_tss": 204420,
+      "ccres_over_element": 1,
+      "coding_genes_in_window": 2,
+      "constrained_fraction": 0.5671,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "CCDC26"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [
+                  "GSDMC"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": "no GTEx hits distilled for chr8 under data/knowledge/loci_noncoding"
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "GSDMC",
+                  "CYRIB",
+                  "ASAP1"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              }
+            },
+            "derived_unaskable": [],
+            "hit_derived": false,
+            "hit_derived_by": [],
+            "hit_derived_among": false,
+            "hit_heuristic": false,
+            "hit_looked_up": false
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [
+              "K562"
+            ],
+            "expected_gtex": [],
+            "reader_open_in_expected": [
+              "K562"
+            ],
+            "reader_hit": true,
+            "reader_cells_open": 2,
+            "promoter_open_in_expected": [],
+            "promoter_hit": false,
+            "promoter_cells_open": null,
+            "eqtl_tissues_for_target": [],
+            "eqtl_hit": null,
+            "model_tissue": "K562",
+            "model_hit": false,
+            "hit_derived": true,
+            "specific": 0.9,
+            "unreachable": null
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "activates",
+            "model_action": null,
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 7184,
+            "measured": null,
+            "within_twofold": null,
+            "node_distance": null
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [],
+            "variable_in_the_trio": {},
+            "frequencies": {},
+            "constraint_rank": null,
+            "in_the_top_decile_by_constraint": null,
+            "satmut_functional": null,
+            "protein_change": null,
+            "hit_derived": false,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "program"
+            ],
+            "read": [
+              "syntax",
+              "program"
+            ],
+            "agrees_on": [
+              "program"
+            ],
+            "missed": [],
+            "mammal_fraction": 0.5671,
+            "human_fraction": 0.5,
+            "case": {
+              "case": "syntax",
+              "mammals": "constrained",
+              "humans": "constrained",
+              "confidence": 0.6
+            },
+            "values_in_syntax": 0,
+            "published_targets_in_one_node": [
+              "CCDC26"
+            ],
+            "value_domain_expected": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 0.0,
+            "value_domain_hit": null,
+            "hit_derived": true,
+            "hit_derived_all": true
+          }
+        },
+        "target_hit_derived": false,
+        "target_hit_heuristic": false,
+        "target_hit_looked_up": false,
+        "nearest_gene_trap": "GSDMC",
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": true,
+        "direction_hit_derived": false,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
+        "pending": [
+          "eqtl: no GTEx hits distilled for chr8 under data/knowledge/loci_noncoding",
+          "mpra: no lentiMPRA element was tested inside this window",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    }
+  ],
+  "negatives": [],
+  "variant_positions": {},
+  "not_in_panel": {
+    "IRX5": "kept inside FTO_IRX3 as a second published target rather than as a locus of its own",
+    "HBB_HS2_alone": "the single HS2 core has no hg38 coordinate we can cite without lifting one over, so the whole locus control region is the element and the hypersensitive ladder is derived from DNase",
+    "HLA_B": "one HLA gene is enough for the value-domain question; DRB1 is the classical exon-2 case",
+    "LCT_African_alleles": "G-13915 and C-14010 are published but their enhancer window overlaps rs4988235's, so the expectation would not be independent",
+    "SMN1_SMN2": "the cleanest dosage phenotype there is, but SMN1 and SMN2 are a segmental duplication differing at a handful of bases, so no element here has an unambiguous hg38 coordinate and every layer's answer would be a statement about read mapping. PMP22 carries dosage instead",
+    "RHD_deletion": "Rh negative is a whole-gene deletion, a two-valued slot whose value is copy number: it asks the same question as PMP22_CMT1A and chr1 is not swept",
+    "FUT2_secretor": "rs601338 is a clean two-valued slot with sharp population structure, but HERC2/OCA2 already tests a two-valued slot and this adds no failure mode the panel is missing",
+    "AMY1_copy_number": "copy number again, and the published association with starch in the diet is contested, so the expectation would not be unambiguous",
+    "EPHA4_IHH_TAD_boundaries": "the Lupianez 2015 rearrangements are the best evidence that node boundaries matter, but the causal unit is a structural variant spanning a boundary and the panel has no way to write one down as an element"
+  },
+  "gtex": {
+    "tissues": 49,
+    "pairs_scanned_this_run": 0,
+    "hits_this_run": 0,
+    "seconds": 0
+  },
+  "evidence": {
+    "expectation": "curated: the published answer per locus, with citations, written down before the run",
+    "derived": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies",
+    "targeted": "experimental: Kircher et al. 2019 saturation mutagenesis, measured at these loci",
+    "heuristic": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)",
+    "looked_up": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+  },
+  "network": true,
+  "note": "The FIFTH registered frame, and the first whose published targets are non-coding. It is n = 2, not the 14 the fourth frame's branch counted: twelve of those fourteen are stale gene symbols, which the benchmark file's own Ensembl ids settle. Two of the four derived layers cannot express a non-coding answer at all and one is unasked, so the derived rate here is very nearly arithmetic and is reported as such. Zero requests. A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
+  "cost": {
+    "seconds": 39.2
+  },
+  "preregistration": {
+    "written": "2026-09-21, before any reading was scored and with a budget of zero requests",
+    "the_frame": "every perturbed element of the ENCODE CRISPR benchmark's held-out arm that `loci_fourth.assess` stopped at its FIRST branch - a regulated target absent from the chromosome's protein-coding symbols in GENCODE. Membership is that branch's own output, re-derived from the same file and checked against the committed verdicts in data/results/loci_fourth.json. No locus is curated, added, dropped or renamed by hand",
+    "n_as_the_branch_reports_it": 14,
+    "n_after_the_ensembl_join": 2,
+    "why_n_falls": "the branch compares SYMBOLS, and the benchmark's `measuredGeneSymbol` column is as old as the screen that filled it. Joining the file's own `measuredGeneEnsemblId` to GENCODE's table shows twelve of the fourteen are protein-coding genes under a current symbol: SSFA2 is ITPRID2 (10 elements), SARS is SARS1 (1), WDR61 is SKIC8 (1). Two are genuinely non-coding: LINC00885 (chr3, alongside the coding co-target TFRC) and CCDC26 (chr8, sole target). This is arithmetic over two files, settled before any scoring, not a result",
+    "request_budget": 0,
+    "what_plan_costs": "zero. Both elements are already covered by the finished all-element sweep, so every reading is a lookup into data already bought. `plan` raises rather than spend one, and a run that needed a request would be abandoned and reported as unaffordable, not funded",
+    "predictions": {
+      "reach_fatalities": "0 of 2. This is not a hope: CCDC26's element at chr8:129,581,954 lies INSIDE the CCDC26 gene body, and the chr3 element is about 1 kb from LINC00885's 3' end, so both published targets are inside the scorer's 1,048,576 bp input by inspection of the annotation. If `loci.read_reach` says otherwise, the reach reader is wrong and that is the finding",
+      "gene_input": "0 of 2, BY CONSTRUCTION: the layer reads `predicted_coding` only",
+      "node": "0 of 2, BY CONSTRUCTION: the layer is the nearest coding TSS inside the CTCF node",
+      "eqtl": "unasked at both, reported as pending. Not a miss and never counted as one",
+      "deletion": "the only derived layer that could be right here. It can return a non-coding gene only where `predicted_coding` is empty, because it breaks at the first key with a gene. See `known_before_the_registration`: the answer at chr8 was already read",
+      "the_derived_rate": "expected 0 of 2, and it is to be read as ARITHMETIC, not as a measurement of the model. Two of the four derived paths are zero before a locus is read, one is unasked, and the fourth discards a non-coding answer whenever a coding one exists. A rate built on that says what the reader is allowed to say, not what the model knows"
+    },
+    "the_right_baseline": "NOT the nearest coding TSS. That rule cannot name a non-coding gene, so it scores 0 of 2 here for the same reason `gene_input` does, and quoting a beaten baseline that is zero by construction would be the same error twice. The baseline this frame is read against is THE MODEL'S OWN ANY-GENE PREDICTION - the `predicted` field the sweep already computed and `read_deletion` declines to look at. It is the right baseline because it is what the pipeline would answer if the one line that ranks coding genes first were removed, so the gap between it and the derived rate measures the READER's defect and nothing about the model's biology. `counterfactual` computes it, and it changes no shipped code",
+    "outcomes": {
+      "the_reader_is_the_limit": "the derived rate is 0 of 2 while the any-gene baseline names a published target at one or both. Then the H19 defect is confirmed with a positive - the model had the answer and the reader threw it away - and the fix is one line in `loci.read_deletion`, named but not made here, because changing a shared reader is its owner's call",
+      "the_model_is_the_limit": "the derived rate is 0 of 2 AND the any-gene baseline is also 0 of 2. Then the defect is real but costs nothing at these two loci, the H19 finding stands untested for want of a case, and this frame has failed to test it",
+      "failure": "this frame FAILS if it reports a derived rate as though it measured the model. It also fails if n is quoted as 14 anywhere, if the eqtl pending is counted as a miss, if a request is spent, or if a locus is added, dropped or renamed to make a number move. A frame of two is a frame of two and is reported as one"
+    },
+    "known_before_the_registration": "the sweep rows over BOTH elements were read while establishing that `read_deletion`'s fallback to `predicted` is reachable at all, which is the arithmetic this registration turns on. At chr8 the row reads `predicted` = CCDC26 at -1.691 and `predicted_coding` = GSDMC at -0.1433; at chr3 both keys read ZDHHC19. The deletion-layer outcome at these two loci was therefore KNOWN when this was written and is not a prediction the run confirms. It is disclosed here and in the section rather than presented as foresight",
+    "what_this_frame_cannot_answer": "whether the pipeline can find non-coding targets in general. n is 2, both are lncRNAs, both come from one screen, and one of them has a coding co-target. Nothing here generalises, and the section says so before it says anything else"
+  },
+  "branch": {
+    "n": 14,
+    "non_coding": 2,
+    "stale_symbol": 12,
+    "resolved": [
+      {
+        "chrom": "chr1",
+        "element": [
+          109239375,
+          109239875
+        ],
+        "cell": "K562",
+        "targets": [
+          "SARS"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SARS",
+            "ensembl_id": "ENSG00000031698",
+            "current_symbol": "SARS1",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181782539,
+          181783039
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181784494,
+          181785367
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181785654,
+          181786154
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181789724,
+          181790410
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181790595,
+          181792502
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181810528,
+          181811596
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181947208,
+          181947708
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181947906,
+          181948794
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181949009,
+          181949704
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181954097,
+          181955405
+        ],
+        "cell": "HCT116",
+        "targets": [
+          "SSFA2"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "SSFA2",
+            "ensembl_id": "ENSG00000138434",
+            "current_symbol": "ITPRID2",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      },
+      {
+        "chrom": "chr3",
+        "element": [
+          196194473,
+          196194973
+        ],
+        "cell": "K562",
+        "targets": [
+          "LINC00885",
+          "TFRC"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "LINC00885",
+            "ensembl_id": "ENSG00000224652",
+            "current_symbol": "LINC00885",
+            "gene_type": "lncRNA",
+            "stale_symbol": false
+          }
+        ]
+      },
+      {
+        "chrom": "chr8",
+        "element": [
+          129581954,
+          129582453
+        ],
+        "cell": "K562",
+        "targets": [
+          "CCDC26"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "CCDC26",
+            "ensembl_id": "ENSG00000229140",
+            "current_symbol": "CCDC26",
+            "gene_type": "lncRNA",
+            "stale_symbol": false
+          }
+        ]
+      },
+      {
+        "chrom": "chr15",
+        "element": [
+          78244070,
+          78244570
+        ],
+        "cell": "K562",
+        "targets": [
+          "WDR61"
+        ],
+        "resolved": [
+          {
+            "published_symbol": "WDR61",
+            "ensembl_id": "ENSG00000140395",
+            "current_symbol": "SKIC8",
+            "gene_type": "protein_coding",
+            "stale_symbol": true
+          }
+        ]
+      }
+    ]
+  },
+  "corrected_rule": {
+    "n": 12,
+    "by_verdict": {
+      "within 200000 bp of a locus in an earlier frame": 1,
+      "would have been DRAWN into the fourth frame": 8,
+      "the nearest coding TSS IS a published target - the shortcut is right here": 3
+    },
+    "per_element": [
+      {
+        "chrom": "chr1",
+        "element": [
+          109239375,
+          109239875
+        ],
+        "cell": "K562",
+        "published": [
+          "SARS"
+        ],
+        "current": [
+          "SARS1"
+        ],
+        "nearest_coding": "CELSR2",
+        "verdict": "within 200000 bp of a locus in an earlier frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181782539,
+          181783039
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "NEUROD1",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181784494,
+          181785367
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "NEUROD1",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181785654,
+          181786154
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "NEUROD1",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181789724,
+          181790410
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "ITPRID2",
+        "verdict": "the nearest coding TSS IS a published target - the shortcut is right here"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181790595,
+          181792502
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "ITPRID2",
+        "verdict": "the nearest coding TSS IS a published target - the shortcut is right here"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181810528,
+          181811596
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "ITPRID2",
+        "verdict": "the nearest coding TSS IS a published target - the shortcut is right here"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181947208,
+          181947708
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "PPP1R1C",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181947906,
+          181948794
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "PPP1R1C",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181949009,
+          181949704
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "PPP1R1C",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr2",
+        "element": [
+          181954097,
+          181955405
+        ],
+        "cell": "HCT116",
+        "published": [
+          "SSFA2"
+        ],
+        "current": [
+          "ITPRID2"
+        ],
+        "nearest_coding": "PPP1R1C",
+        "verdict": "would have been DRAWN into the fourth frame"
+      },
+      {
+        "chrom": "chr15",
+        "element": [
+          78244070,
+          78244570
+        ],
+        "cell": "K562",
+        "published": [
+          "WDR61"
+        ],
+        "current": [
+          "SKIC8"
+        ],
+        "nearest_coding": "ACSBG1",
+        "verdict": "would have been DRAWN into the fourth frame"
+      }
+    ],
+    "reading": "the fourth frame's first branch rejected these for being non-coding when they are not. Under the current symbol most of them pass every step of the rule, so the fourth frame's draw is smaller than its own rule specifies. The correction is the fourth frame owner's to make; it is stated here as a row, not applied"
+  },
+  "plan": [
+    {
+      "locus": "LINC00885_K562_chr3_196194k",
+      "chrom": "chr3",
+      "element": [
+        196194473,
+        196194973
+      ],
+      "targets": [
+        "LINC00885",
+        "TFRC"
+      ],
+      "trap": "ZDHHC19",
+      "distance": 52087,
+      "askable": true,
+      "targets_in_reach": [
+        "LINC00885",
+        "TFRC"
+      ],
+      "targets_out_of_reach": [],
+      "already_scored_over_element": 2,
+      "graded": true,
+      "requests": 0
+    },
+    {
+      "locus": "CCDC26_K562_chr8_129581k",
+      "chrom": "chr8",
+      "element": [
+        129581954,
+        129582453
+      ],
+      "targets": [
+        "CCDC26"
+      ],
+      "trap": "GSDMC",
+      "distance": 7184,
+      "askable": true,
+      "targets_in_reach": [
+        "CCDC26"
+      ],
+      "targets_out_of_reach": [],
+      "already_scored_over_element": 1,
+      "graded": true,
+      "requests": 0
+    }
+  ],
+  "layer_universe": {
+    "per_locus": {
+      "LINC00885_K562_chr3_196194k": {
+        "elements_over_the_element": 2,
+        "predicted_any_gene": [
+          {
+            "gene": "ZDHHC19",
+            "gene_type": "protein_coding"
+          },
+          {
+            "gene": "ZDHHC19",
+            "gene_type": "protein_coding"
+          }
+        ],
+        "predicted_coding": [
+          {
+            "gene": "ZDHHC19",
+            "gene_type": "protein_coding"
+          },
+          {
+            "gene": "ZDHHC19",
+            "gene_type": "protein_coding"
+          }
+        ],
+        "deletion_reaches_the_any_gene_key": false
+      },
+      "CCDC26_K562_chr8_129581k": {
+        "elements_over_the_element": 1,
+        "predicted_any_gene": [
+          {
+            "gene": "CCDC26",
+            "gene_type": "lncRNA"
+          }
+        ],
+        "predicted_coding": [
+          {
+            "gene": "GSDMC",
+            "gene_type": "protein_coding"
+          }
+        ],
+        "deletion_reaches_the_any_gene_key": false
+      }
+    },
+    "gene_input": {
+      "can_name_a_non_coding_gene": false,
+      "why": "`loci.read_gene_input` reads `predicted_coding` and nothing else"
+    },
+    "node": {
+      "can_name_a_non_coding_gene": false,
+      "why": "the heuristic is the nearest coding TSS inside the CTCF node"
+    },
+    "deletion": {
+      "can_name_a_non_coding_gene": "only where `predicted_coding` is empty",
+      "why": "`loci.read_deletion` walks ('predicted_coding', 'predicted') and breaks at the first key with a gene, so a coding prediction hides the non-coding one"
+    },
+    "eqtl": {
+      "can_name_a_non_coding_gene": true,
+      "why": "GTEx gene ids go through `loci.symbols`, the whole GENCODE table, lncRNAs included. Unasked in this frame by registration: see the module docstring"
+    }
+  },
+  "baseline": {
+    "k": 1,
+    "n": 2,
+    "rate": 0.5,
+    "per_locus": [
+      {
+        "locus": "LINC00885_K562_chr3_196194k",
+        "targets": [
+          "LINC00885",
+          "TFRC"
+        ],
+        "would_name": "ZDHHC19",
+        "effect": 0.1604,
+        "hit": false,
+        "ranked": [
+          {
+            "gene": "ZDHHC19",
+            "effect": 0.1604
+          }
+        ]
+      },
+      {
+        "locus": "CCDC26_K562_chr8_129581k",
+        "targets": [
+          "CCDC26"
+        ],
+        "would_name": "CCDC26",
+        "effect": -1.691,
+        "hit": true,
+        "ranked": [
+          {
+            "gene": "CCDC26",
+            "effect": -1.691
+          },
+          {
+            "gene": "GSDMC",
+            "effect": -0.1433
+          }
+        ]
+      }
+    ],
+    "reading": "this is the model's own any-gene prediction, which the sweep computed and stored and which `read_deletion` declines to look at whenever a coding prediction exists. The gap between this and the derived rate is the READER's defect, measured. It is reported as a baseline, not as a score: no hit here was earned by any code that ships"
+  },
+  "layers": {
+    "by_layer": {
+      "deletion": {
+        "provenance": "derived",
+        "hit": 0,
+        "n": 2,
+        "pending": 0
+      },
+      "eqtl": {
+        "provenance": "derived",
+        "hit": 0,
+        "n": 2,
+        "pending": 1
+      },
+      "gene_input": {
+        "provenance": "derived",
+        "hit": 0,
+        "n": 2,
+        "pending": 0
+      },
+      "node": {
+        "provenance": "heuristic",
+        "hit": 0,
+        "n": 2,
+        "pending": 0
+      },
+      "lookups": {
+        "provenance": "looked_up",
+        "hit": 0,
+        "n": 2,
+        "pending": 0
+      }
+    },
+    "what_it_named_instead": {
+      "deletion": {
+        "the published target": 0,
+        "the nearest coding TSS": 2,
+        "another gene": 0,
+        "nothing": 0
+      },
+      "eqtl": {
+        "the published target": 0,
+        "the nearest coding TSS": 0,
+        "another gene": 1,
+        "nothing": 1
+      },
+      "gene_input": {
+        "the published target": 0,
+        "the nearest coding TSS": 1,
+        "another gene": 1,
+        "nothing": 0
+      },
+      "node": {
+        "the published target": 0,
+        "the nearest coding TSS": 1,
+        "another gene": 0,
+        "nothing": 1
+      }
+    },
+    "reading": "read this against `layer_universe` and not on its own. `gene_input` and `node` cannot name a non-coding gene at all, so their zeros are the denominator speaking, and `eqtl` is unasked here by registration. Only `deletion` had a path to a hit, and only where the element has no coding prediction"
+  },
+  "requests_spent": 0
+}

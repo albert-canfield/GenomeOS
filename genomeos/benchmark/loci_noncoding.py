@@ -522,10 +522,17 @@ def what_the_layers_named(result: dict[str, Any]) -> dict[str, Any]:
             layers[name]["hit"] += int(v["hit"])
             layers[name]["pending"] += int(bool(v.get("pending")))
     instead: dict[str, dict[str, int]] = {}
-    for layer in ("deletion", "node", "gene_input"):
+    for layer in ("deletion", "eqtl", "gene_input", "node"):
         tally = {"the published target": 0, "the nearest coding TSS": 0, "another gene": 0, "nothing": 0}
         for r in rows:
-            named = ((r.get("readings") or {}).get(layer) or {}).get("target")
+            # the gene the HIT RULE reads, not the layer's own `target` field. For `deletion` and
+            # `node` the two are the same. For `gene_input` they are not: its `target` prefers a
+            # published target whenever one is anywhere in the summed window, so reading it here
+            # would report a hit the scorer did not give - it named TFRC at the chr3 locus while
+            # ranking another gene first. `by_layer[...]["named"]` is `score_target`'s own list.
+            scored = ((r.get("score") or {}).get("scored") or {}).get("target", {}).get("by_layer", {})
+            named_list = (scored.get(layer) or {}).get("named") or []
+            named = named_list[0] if named_list else None
             trap = r["expected"]["nearest_gene_trap"]
             if named is None:
                 tally["nothing"] += 1

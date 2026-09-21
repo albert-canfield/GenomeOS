@@ -2026,3 +2026,183 @@ The node rule was registered in advance as low but **not** zero by construction,
 - **The four frames are still four frames.** Nothing here pools them, and the fourth one least of all: it was drawn to disagree with the other three and it does.
 
 ---
+
+## 23. The non-coding frame is two loci, not fourteen, and the one clean case was answered correctly and then thrown away by the reader (2026-09-21)
+
+Section 22 left this open: *"The 14 elements dropped at step 4 are the first set this project has ever
+had of published, perturbation-backed, non-coding targets, which is what section 21 said curation
+could not produce."* This is that frame, scored. **It is n = 2, it cost zero requests, and the
+headline is that twelve of the fourteen were never non-coding at all.**
+
+`genomeos/benchmark/loci_noncoding.py`, `scripts/loci_noncoding.py`,
+`tests/test_loci_noncoding.py`, result `loci_noncoding`. The registration is
+`PREREGISTRATION` in the module and was committed (70c1c10) before anything was scored.
+
+### The frame, and why n fell from 14 to 2 before a single reading
+
+Membership is not a new curation. It is `loci_fourth.assess`'s own **first** branch:
+
+```python
+non_coding = [t for t in row["targets"] if t not in coding]
+if non_coding:
+    verdict["reason"] = "a regulated target is not protein coding in GENCODE"
+```
+
+`dropped_for_non_coding` re-derives that branch from the same file and the same GENCODE release, and
+a test asserts it reproduces the committed verdicts in `data/results/loci_fourth.json` element for
+element. It returns 14.
+
+But `coding` is a set of **symbols**, and the ENCODE benchmark's `measuredGeneSymbol` column is as old
+as the screen that filled it. The same file carries `measuredGeneEnsemblId`, which does not go stale.
+Joining that column to GENCODE's own table settles what each target actually is:
+
+| published symbol | Ensembl id | GENCODE now | elements |
+|---|---|---|---|
+| SSFA2 | ENSG00000138434 | **ITPRID2**, protein_coding | 10 |
+| SARS | ENSG00000031698 | **SARS1**, protein_coding | 1 |
+| WDR61 | ENSG00000140395 | **SKIC8**, protein_coding | 1 |
+| LINC00885 | ENSG00000224652 | LINC00885, **lncRNA** | 1 |
+| CCDC26 | ENSG00000229140 | CCDC26, **lncRNA** | 1 |
+
+**Twelve of the fourteen are stale gene symbols.** The frame is LINC00885 (chr3, K562, which also has
+the coding co-target TFRC) and CCDC26 (chr8, K562, sole target). This is arithmetic over two files,
+and it was settled and committed before any scoring, so it is not something the run discovered.
+
+### What the stale symbols do to the fourth frame's own draw
+
+`corrected_rule` re-applies `loci_fourth`'s remaining steps to the twelve with the current symbol:
+
+| once the symbol is current | n |
+|---|---|
+| would have been **DRAWN** into the fourth frame | 8 |
+| rejected one step later: the nearest coding TSS IS the target | 3 |
+| rejected by the 200 kb keep-out against an earlier frame | 1 |
+
+So **the fourth frame's draw is smaller than its own rule specifies**: eight held-out elements that
+pass every step were rejected at step 4 for a symbol that had been renamed. The three that fall to the
+next branch are the sharpest illustration - at those, `assess` reported the nearest coding TSS as
+ITPRID2 *and* the published target as SSFA2, which is the same gene under two names. This is a row for
+the fourth frame's owner, not a correction applied here: n = 50 graded, its denominators and its
+headline are that frame's to change or to leave alone. Nothing in section 22 is edited by this
+section.
+
+### Whether the layers can express a non-coding answer at all
+
+This is the question that decides whether a rate here is a measurement or a division, and the
+registration answered it in advance rather than letting a low number read as a verdict on the model.
+
+| layer | can it name a non-coding gene? | why |
+|---|---|---|
+| `gene_input` | **no** | reads `predicted_coding` and nothing else (`loci.py` 1569) |
+| `node` | **no** | it is the nearest coding TSS inside the CTCF node |
+| `deletion` | **only where `predicted_coding` is empty** | walks `("predicted_coding", "predicted")` and **breaks at the first key with a gene** (`loci.py` 1103-1116) |
+| `eqtl` | yes | GTEx ids go through `loci.symbols`, the whole GENCODE table, lncRNAs included |
+
+**This is why nearest-coding-TSS is not the baseline for this frame.** It cannot name a non-coding
+gene, so it is 0 of 2 for the same reason `gene_input` is, and quoting it as a beaten baseline would
+be the construction error twice over. The registered baseline is **the model's own any-gene
+prediction** - the `predicted` field the sweep already computed and `read_deletion` declines to look
+at. The gap between it and the derived rate measures *the reader's* defect and says nothing about the
+model's biology.
+
+### The result
+
+Zero requests. Both elements are already covered by the finished all-element sweep, so every reading
+is a lookup into data this project had already bought; `loci_noncoding.plan` raises rather than let the
+run buy one. Reach fatalities **0 of 2**, the registered number: the chr8 element lies inside the
+CCDC26 gene body and the chr3 element is about a kilobase from LINC00885.
+
+| rate | k / n |
+|---|---|
+| derived target | **0 / 2** |
+| heuristic (nearest coding TSS in node) | 0 / 2 |
+| looked up (GWAS, ClinVar) | 0 / 2 |
+| **registered baseline: the model's own any-gene prediction** | **1 / 2** |
+
+Per layer, and what each named instead:
+
+| layer | provenance | hit | published target | nearest coding TSS | another gene | nothing |
+|---|---|---|---|---|---|---|
+| deletion | derived | 0/2 | 0 | **2** | 0 | 0 |
+| eqtl | derived | 0/2 (1 pending) | 0 | 0 | 1 | 1 |
+| gene_input | derived | 0/2 | 0 | 1 | 1 | 0 |
+| node | heuristic | 0/2 | 0 | 1 | 0 | 1 |
+| lookups | looked up | 0/2 | — | — | — | — |
+
+Per locus:
+
+| locus | published | trap | deletion | gene_input ranks | eqtl | node |
+|---|---|---|---|---|---|---|
+| CCDC26_K562_chr8_129581k | CCDC26 (lncRNA), 7.2 kb | GSDMC at 204 kb | **GSDMC** (-0.1433) | GSDMC, CYRIB, ASAP1 (498 elements) | no hit distilled | names nothing |
+| LINC00885_K562_chr3_196194k | LINC00885 (lncRNA) + TFRC, 52 kb | ZDHHC19 | **ZDHHC19** (+0.1604) | NRROS, MUC4, SLC51A, ZDHHC19 (601 elements) | SLC51A (42 eQTLs) | ZDHHC19 |
+
+### The finding: at the one clean case the model was right and the reader discarded the answer
+
+The chr8 element has exactly one scored deletion over it, and the row the sweep stored in 2026 reads:
+
+| key | gene | gene_type | log2 fold change |
+|---|---|---|---|
+| `predicted` | **CCDC26** | lncRNA | **-1.691** |
+| `predicted_coding` | GSDMC | protein_coding | -0.1433 |
+
+**`predicted` is the published target, it is the strongest effect in the window by a factor of twelve,
+and `read_deletion` never looks at it**, because `predicted_coding` has a gene and the loop breaks.
+The layer reports GSDMC - a coding gene 204 kb away that the element's silencing barely moves - and
+the locus scores as a miss. That is the `predicted_coding`-first defect section 18 recorded at the
+H19 ICR, caught with a positive rather than as a caveat: at H19 the defect did not change the verdict,
+and here it is the whole verdict.
+
+Drop the `break` and nothing else, and the deletion layer names CCDC26 and the derived rate over this
+frame is 1 of 2 instead of 0 of 2. `loci_noncoding.counterfactual` computes that by replaying
+`read_deletion`'s own loop without the break. **It is reported as a baseline and not as a score: no
+hit there was earned by any code that ships.** The one-line change to `loci.read_deletion` is named
+here and deliberately not made - `loci.py` is a shared reader and its rates belong to the benchmark's
+owner, exactly as section 18 said when it found the defect. `tests/test_loci_noncoding.py` pins the
+current behaviour, so whoever fixes it will be told that this section has to be re-read.
+
+At the other locus the defect costs nothing: `predicted` and `predicted_coding` both read ZDHHC19,
+the nearest coding TSS, so the model itself names the trap and the reader is not what loses it.
+
+### Where the registration was wrong, and it is reported as an error and not smoothed over
+
+The registration predicted the `eqtl` layer would be **unasked at both loci** and reported as pending,
+on the reasoning that distilling GTEx for two windows was not proportionate. That was wrong about the
+mechanism: `loci.build` distils GTEx for the panel's own windows itself, into the directory it is
+handed. So the layer **was** asked, at no cost (`mb_streamed_this_run` 0.0, the archive already local),
+and it is 0 of 2 honestly: 42 eQTLs in the chr3 element naming SLC51A, a miss, and genuinely nothing
+distilled at chr8, which is the one true pending. The precaution that mattered held - this frame wrote
+to `data/knowledge/loci_noncoding` and the fourth frame's cache is untouched at 290 elements indexed,
+because `loci.stream_gtex` clears any directory whose window manifest changed and two frames sharing
+one would delete each other's work.
+
+Also disclosed, because it was known before the registration was written rather than predicted by it:
+establishing that `read_deletion`'s fallback to `predicted` is reachable at all meant reading the sweep
+rows over both elements first. **What the deletion layer does at CCDC26 was known in advance and is not
+a prediction this run confirms.** It is in `PREREGISTRATION["known_before_the_registration"]`.
+
+### What this frame cannot say
+
+- **n is 2.** Both are lncRNAs, both come from one screen in one cell line, and one of them has a coding
+  co-target that the layers could have named and did not. Nothing here generalises to the non-coding
+  genome, and the derived rate of 0/2 is not a measurement of the model: two of the four derived paths
+  are zero before a locus is read, and the third discards a non-coding answer whenever a coding one
+  exists. It is very nearly arithmetic and is reported as arithmetic.
+- **The project still has no non-coding frame worth a rate.** Section 21 said curation could not produce
+  a published non-coding target; the held-out arm turns out to hold two, not fourteen. Getting a real
+  one means a different source, and that is a new registration rather than a wider cap.
+- **The stale-symbol problem is not confined to these fourteen.** Any rule in this benchmark that
+  compares a published symbol against GENCODE symbols can silently reject or mis-route a gene that has
+  been renamed. The fix that generalises is to join on Ensembl ids wherever the source file carries
+  them, and this frame does so; `loci_fourth` and the earlier frames do not.
+
+### Left undone
+
+- **The one-line fix to `loci.read_deletion`** (rank across both keys instead of breaking at the coding
+  one) is the benchmark owner's call. This section measures what it would buy at these two loci and
+  changes nothing.
+- **Eight held-out elements that `loci_fourth`'s rule passes are not in its draw.** Whether the fourth
+  frame is re-drawn with the corrected symbols, and what that does to its 0.200 at n = 50, is the
+  fourth frame's owner's call. The elements, their cells and their current symbols are in
+  `loci_noncoding.json` under `corrected_rule`.
+
+---
