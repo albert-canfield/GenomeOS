@@ -385,12 +385,36 @@ class Context:
         return r
 
     def score_region(
-        self, scorer: Scorer, start: int, end: int, cache: Path = CACHE, min_effect: float = MIN_EFFECT
+        self,
+        scorer: Scorer,
+        start: int,
+        end: int,
+        cache: Path = CACHE,
+        min_effect: float = MIN_EFFECT,
+        substitute: bool = True,
     ) -> dict[str, Any]:
-        """Score an ENCODE element if one overlaps the region, else the region itself as an ad-hoc element."""
+        """Score an ENCODE element if one overlaps the region, else the region itself as an ad-hoc element.
+
+        `substitute=False` scores the coordinates given and never an element that overlaps them, and
+        it exists because substitution quietly changes the question. A caller that passes a *stated*
+        interval — one a panel took from a publication because no registry drew it — is asking about
+        the published sequence; returning the annotation that happens to overlap answers about the
+        annotation instead, and the row then carries a stated-interval label over an annotated
+        reading. On 2026-09-21 a third locus set found it had substituted at all three intervals it
+        paid for, so every "stated" reading in it was an annotated one.
+
+        The default stays `True` so no existing caller changes behaviour. `overlapping_element` is
+        always reported now, whichever branch ran, because whether an annotation exists over a
+        published interval is information either way — when one does, §10's premise that nobody
+        annotated the element is false for that locus, and it should be scored through the ordinary
+        annotated path rather than counted as a stated interval.
+        """
         e = self.element_at(start, end)
-        if e is not None:
-            return self.score(scorer, e, cache, min_effect)
+        if e is not None and substitute:
+            r = self.score(scorer, e, cache, min_effect)
+            r["overlapping_element"] = getattr(e, "id", None)
+            r["scored_the_stated_interval"] = False
+            return r
         r = score_element(
             scorer,
             self.genome.fetch,
@@ -405,6 +429,8 @@ class Context:
             min_effect=min_effect,
         )
         r["domain"] = ""
+        r["overlapping_element"] = getattr(e, "id", None) if e is not None else None
+        r["scored_the_stated_interval"] = True
         return r
 
 

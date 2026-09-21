@@ -2643,6 +2643,34 @@ entire sweep. What is next, in order of what it decides:
    which denominator is the real one, and that the deletion layer takes `predicted_coding`
    first and so can hide a non-coding published target behind a coding read-through (H19 is the
    first locus where that bites; it did not change this verdict). LOCI-BENCHMARK.md §18.
+   **A third set of nine landed 2026-09-21 (`ca50b59`, `loci_third`, §21) for three requests, and
+   the finding is about the BASELINE rather than the model.** Derived target reads 15/17, 8/9 and
+   8/9 across three independently curated sets — a spread of **0.007**. The nearest-gene baseline
+   over the same three reads 0.647, 0.333 and 0.778 — a spread of **0.445**. So a benchmark quoting
+   a derived rate alone looks reproducible while the thing it is measured against depends entirely
+   on who picked the loci, and the baseline's misses here are **silences**: at both long-range loci
+   the node named no gene at all, so a baseline that abstains at distance and answers nearby is not
+   the baseline its rate describes.
+   Reach three frames deep: 3/17 unaskable, then 2/11, now **0/9**, registered as the expectation
+   before it ran. The sharpest instance is that **SHH is unaskable through the ZRS at 979 kb and
+   askable through SBE2 at 456 kb, where it scores a hit** — same gene, different published element,
+   and the difference is the model's input rather than the biology.
+   **The direction axis was asked both ways for the first time, and registered undecidable at n=2
+   before it ran, so it is two readings and not a rate.** MYC: deleting the PVT1 promoter *raises*
+   MYC (+0.139) as published, the opposite sign to the panel's own MYC element on the other side of
+   the gene — the layer disagreed with itself across two elements at one target, correctly. HBG1:
+   deleting the BCL11A −115 motif *lowers* HBG1 (−1.02), where destroying that motif is one of the
+   best-replicated ways to **raise** HbF. Element in the reader's own cell type, target named first
+   and correctly, 115 bp away — every input favoured the model and the sign came back backwards.
+   The coverage artefact reproduces on this third set, and `input_presence` now says why it can: the
+   deletion input is **bought** (9/9 targets, 17/31 controls) and the constraint track is **free**
+   (31/31 both arms), so the direction claim's collapse under a coverage stratum is a test while the
+   value-on-syntax null under the same stratum is arithmetic.
+   **One design consequence, taken 2026-09-21:** `Context.score_region` substituted an overlapping
+   annotated element at all three intervals this set paid for, so every reading it labelled "stated"
+   was an annotated one. It now takes `substitute=False` and the stated-interval driver passes it, so
+   a published coordinate is scored rather than pointed at; the overlap is reported on both branches,
+   because an annotation over a published interval makes §10's premise false for that locus.
    What remains under this item is what it always was: more loci, not more readings.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
    concentrations, holds stage 2 (pools and costs) and is the one blocking code; decision

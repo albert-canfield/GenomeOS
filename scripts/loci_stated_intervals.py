@@ -137,13 +137,24 @@ def run(rows: list[dict[str, Any]]) -> dict[str, Any]:
             ctx = Context(row["chrom"])
             try:
                 say(f"{row['locus']}: deleting {row['chrom']}:{row['start']}-{row['end']}")
-                hit = ctx.score_region(scorer, row["start"], row["end"])
+                # substitute=False: score the PUBLISHED coordinates, never an element that happens
+                # to overlap them. Recording the substitution was not enough - a third locus set
+                # found on 2026-09-21 that it had substituted at all three intervals it paid for, so
+                # every reading it labelled "stated" was an annotated one. A stated interval exists
+                # because no registry drew the element; if one did, the locus belongs in the ordinary
+                # annotated path and §10's premise is false for it, which the row now says.
+                hit = ctx.score_region(scorer, row["start"], row["end"], substitute=False)
             finally:
                 ctx.close()
-            # score_region substitutes an overlapping ENCODE element when there is one, which would
-            # silently answer about a different interval than the published one. Recorded, not hidden.
-            substituted = hit.get("id") != f"{row['chrom']}_{row['start']}_{row['end']}"
-            elements.append({**hit, "locus": row["locus"], "substituted_annotated_element": substituted})
+            overlapped = hit.get("overlapping_element")
+            elements.append(
+                {
+                    **hit,
+                    "locus": row["locus"],
+                    "substituted_annotated_element": False,
+                    "an_annotation_overlaps_the_published_interval": overlapped,
+                }
+            )
             named = [g["gene"] for g in (hit.get("top_genes") or []) if g.get("gene")]
             pred = hit.get("predicted_coding") or hit.get("predicted") or {}
             first = [pred["gene"]] if pred.get("gene") else []
@@ -151,7 +162,8 @@ def run(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 {
                     "locus": row["locus"],
                     "element": f"{row['chrom']}:{row['start']}-{row['end']}",
-                    "substituted_annotated_element": substituted,
+                    "substituted_annotated_element": False,
+                    "an_annotation_overlaps_the_published_interval": overlapped,
                     "named_first": pred.get("gene"),
                     "log2_fold_change": pred.get("log2_fold_change"),
                     "tissue": pred.get("tissue"),

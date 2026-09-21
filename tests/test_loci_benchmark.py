@@ -467,3 +467,67 @@ def test_section_ten_counts_match_the_registry_the_code_actually_reads():
     zero = {r["locus"] for r in RESULT["loci"] if r.get("ccres_over_element") == 0}
 
     assert zero == {"APP", "TP53", "SOX9_PierreRobin", "H19_ICR1"}
+
+
+# ------------------------------------------------ a stated interval is scored, not substituted away
+def test_score_region_can_refuse_to_substitute_an_overlapping_annotation() -> None:
+    """A stated interval asks about published sequence; substituting answers about the annotation.
+
+    `Context.score_region` returns an overlapping ENCODE element when one exists, which is right for
+    a caller that wants "whatever is here" and wrong for a caller that took coordinates from a paper
+    because no registry drew them. Recording the substitution was not enough: on 2026-09-21 a third
+    locus set found it had substituted at all three intervals it paid for, so every reading it
+    labelled "stated" was an annotated one, and the label carried the opposite of what happened.
+
+    The flag defaults to substituting, so no existing caller moved. Built as a unit so it stays
+    offline: `score_region` needs only `element_at`, `score` and the ad-hoc path.
+    """
+    from genomeos.predict.enhancer_target import Context
+
+    class E:
+        id = "EH38E_TEST"
+
+    calls: list[str] = []
+
+    ctx = object.__new__(Context)
+    ctx.element_at = lambda s, e: E()  # an annotation always overlaps
+    ctx.score = lambda *a, **k: (calls.append("annotated"), {"id": E.id})[1]
+
+    substituted = ctx.score_region(None, 100, 200)
+
+    assert calls == ["annotated"]
+    assert substituted["overlapping_element"] == "EH38E_TEST"
+    assert substituted["scored_the_stated_interval"] is False
+
+
+def test_the_overlap_is_reported_even_when_the_stated_interval_is_scored() -> None:
+    """Whether an annotation exists over a published interval is information on both branches.
+
+    When one does, section 10's premise that nobody annotated the element is false for that locus,
+    and the row has to say so rather than leaving the reader to assume the interval was unannotated.
+    """
+    from genomeos.predict import enhancer_target as et
+
+    class E:
+        id = "EH38E_TEST"
+
+    ctx = object.__new__(et.Context)
+    ctx.element_at = lambda s, e: E()
+    ctx.chrom = "chr1"
+    ctx.coding = set()
+    ctx.genome = type("G", (), {"fetch": staticmethod(lambda loc: "ACGT")})()
+    seen = {}
+
+    def fake_score_element(*a, **k):
+        seen["id"] = a[3]
+        return {"id": a[3]}
+
+    original, et.score_element = et.score_element, fake_score_element
+    try:
+        out = ctx.score_region(None, 100, 200, substitute=False)
+    finally:
+        et.score_element = original
+
+    assert out["scored_the_stated_interval"] is True
+    assert out["overlapping_element"] == "EH38E_TEST", "the annotation is named, not hidden"
+    assert seen["id"] == "chr1_100_200", "the published coordinates are what was scored"
