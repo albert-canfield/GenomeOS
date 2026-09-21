@@ -197,6 +197,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="flow" data-tip="How a gene becomes a protein: DNA locus with exons, the spliced mRNA (UTRs and coding sequence), and the translated residues, linked base to codon to residue. Drop a single-base change on the DNA and see what it does to the protein."><i class="ic">🔁</i>Flow</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
     <button data-tab="cells" data-tip="What each of the eleven cell types reads: the same genome, run differently. Genes read, poised and silent per cell, with the per-chromosome spread behind each one."><i class="ic">🧫</i>Cells</button>
+    <button data-tab="cell" data-tip="One cell type inside one BioLang program: the rules it actually runs, the rules it drops and why, the graph of what regulates what, and the trajectory when you run it. The Cells tab measures how much of the genome a cell reads from chromatin; this one reads the program."><i class="ic">🔬</i>Cell</button>
     <button data-tab="evidence" data-tip="Every fact the BioLang programs state, with its evidence kind and confidence. Filter to the weak ones and export them as a review list."><i class="ic">🧾</i>Evidence</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
@@ -385,7 +386,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
-<!-- ================= EVIDENCE ================= -->
+<!-- ================= CELLS ================= -->
 <section id="cells">
   <div class="card" style="margin-bottom:16px">
     <h2><i class="ic">🧫</i>The same genome, eleven ways<span class="help" data-tip="ENCODE DNase-seq and histone ChIP-seq peaks per cell type, read as: a gene is read when its promoter is open and not poised, or closed with H3K4me3 and H3K27ac where the marks were read. Experimental peaks, inferred call.">?</span>
@@ -402,6 +403,48 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div id="cl-chroms" class="scroll" style="max-height:520px"></div>
   </div>
 </section>
+
+<!-- ================= CELL ================= -->
+<section id="cell">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🔬</i>One cell type's rule set<span class="help" data-tip="A BioLang program read in one cell type, the way the engine reads it: a rule survives only when its `when` clause matches the cell type and neither end of it is a gene the type does not express. Every rule the cell drops is listed with the reason it was dropped, and what the program does not say is stated rather than left to look like nothing.">?</span>
+      <span class="muted" id="ce-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div class="row">
+      <label data-tip="Every hand-written BioLang program under data/ that declares a cell type. The 24 generated chromosome programs declare none, so they are not read here.">program <select id="ce-file" style="max-width:340px"></select></label>
+      <label data-tip="The cell types this program declares, each with how many of its rules survive in that cell.">cell type <select id="ce-cell" style="max-width:280px"></select></label>
+      <button class="ghost" id="ce-open" data-tip="Load this program into the Program tab's editor with the cell type as its context."><i class="ic">📂</i>Open the source</button>
+    </div>
+    <div id="ce-kpi" class="kpi" style="margin-top:12px"></div>
+    <div class="muted" id="ce-id" style="font-size:12px"></div>
+    <div id="ce-notes"></div>
+    <div class="note" id="ce-index"></div>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h2><i class="ic">🕸️</i>The graph it runs<span class="help" data-tip="Genes on the left, the proteins they produce on the right. Grey arrows are production (gene to protein), green arrows activation and red bars inhibition, both back from a protein onto a gene. A dashed faded edge is a rule this cell does not run; a gene with a dashed outline is silenced by the cell type's `expresses` list. An empty panel says so in words rather than drawing nothing.">?</span></h2>
+      <svg class="chart" id="ce-graph" style="height:340px"></svg>
+      <div class="legend" id="ce-glegend"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">▶️</i>Run and watch<span class="help" data-tip="Integrate this cell's network (RK4) and draw every mRNA and protein. The runtime gates rules by their `when` clause only, so by default the silenced genes still transcribe; tick the box to hold them at zero, which is what `expresses` means.">?</span></h2>
+      <div class="row">
+        <label data-tip="Simulated time in hours.">hours <input id="ce-hours" type="number" value="60" min="1"></label>
+        <label data-tip="Starting levels, e.g. TetR=10 kicks a symmetric oscillator off zero.">initial <input id="ce-init" placeholder="TetR=10" style="width:150px" class="mono"></label>
+        <label data-tip="Hold the mRNA of every gene this cell type does not express at zero. Off by default so the numbers match `genomeos run`, which does not apply `expresses`."><input type="checkbox" id="ce-silence">hold silenced genes at zero</label>
+        <button class="primary" id="ce-run"><i class="ic">▶️</i>Run</button>
+      </div>
+      <svg class="chart" id="ce-chart"></svg>
+      <div class="legend" id="ce-clegend"></div>
+      <div class="muted" id="ce-runinfo" style="font-size:12px"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2><i class="ic">📜</i>Every rule, and what this cell does with it</h2>
+    <div id="ce-rules" class="scroll" style="max-height:520px"></div>
+  </div>
+</section>
+
+<!-- ================= EVIDENCE ================= -->
 <section id="evidence">
   <div class="card" style="margin-bottom:16px">
     <h2><i class="ic">🧾</i>Evidence explorer<span class="help" data-tip="Every BioLang program (demos, organism programs, the bio.std prelude) read into one row per stated fact. A program is credited only with the facts it declares itself, not those it imports. Confidence at or below 0.5 counts as weak.">?</span>
@@ -938,6 +981,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProjectProgress(); loadFeatures(); }
   if (b.dataset.tab === 'cells') setTimeout(loadCells);
+  if (b.dataset.tab === 'cell') setTimeout(loadCellPrograms);
   if (b.dataset.tab === 'evidence') setTimeout(loadEvidence);  // a deep link clicks this tab before the script has finished defining it
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
@@ -1826,6 +1870,156 @@ function renderCellChroms() {
       <td class="num">${fmt(v.genes_poised || 0)}</td><td class="num">${fmt(v.enhancers_active || 0)}</td>
       <td class="num">${fmt(v.nodes_open || 0)}</td><td class="num">${fmt(v.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
 }
+
+// ---- Cell view: one cell type inside one program — the rules it runs, the graph, the trajectory
+let ceIndex = null, ceData = null;
+async function loadCellPrograms() {
+  if (ceIndex) return;
+  try {
+    $('#ce-status').textContent = 'reading every program that declares a cell type…';
+    ceIndex = await api('/api/cell/programs');
+    const skipped = [`${fmt(ceIndex.without_cell_types)} program${ceIndex.without_cell_types === 1 ? '' : 's'} under data/ declare no cell type and are not offered here`];
+    if (ceIndex.errors.length) skipped.push(`${ceIndex.errors.length} did not compile: ${ceIndex.errors.map(e => escH(e.path)).join(', ')}`);
+    skipped.push('the 24 generated chromosome programs are not read at all: they declare no cell type and are tens of megabytes each');
+    $('#ce-index').innerHTML = skipped.join(' · ');
+    if (!ceIndex.programs.length) { $('#ce-status').textContent = 'no BioLang program under data/ declares a cell type'; return; }
+    $('#ce-file').innerHTML = ceIndex.programs.map(p =>
+      `<option value="${escH(p.path)}">${escH(p.path.replace(/^data\//, ''))} — ${p.rules} rule${p.rules === 1 ? '' : 's'}, ${p.cell_types.length} cell types</option>`).join('');
+    $('#ce-file').onchange = () => renderCellProgram();
+    $('#ce-cell').onchange = () => loadCell();
+    renderCellProgram();
+  } catch (e) { $('#ce-status').textContent = String(e.message || e); }
+}
+const ceProgram = () => ceIndex && ceIndex.programs.find(p => p.path === $('#ce-file').value);
+function renderCellProgram() {
+  const p = ceProgram(); if (!p) return;
+  $('#ce-cell').innerHTML = p.cell_types.map(c =>
+    `<option value="${escH(c.id)}">${escH(c.id)} — ${c.rules_active} of ${p.rules} active</option>`).join('');
+  $('#ce-cell').value = p.default_cell_type;  // a type this program's own rules distinguish, not the imported generic Cell
+  loadCell();
+}
+async function loadCell() {
+  const path = $('#ce-file').value, cell = $('#ce-cell').value;
+  if (!path) return;
+  try {
+    $('#ce-status').textContent = `reading ${cell}…`;
+    const d = ceData = await api(`/api/cell?path=${encodeURIComponent(path)}&cell_type=${encodeURIComponent(cell)}`);
+    const c = d.counts, t = d.cell_type;
+    $('#ce-kpi').innerHTML = `<div><b>${c.active}</b><span>rules active here</span></div>
+      <div><b>${c.gated_out}</b><span>gated out by <code>when</code></span></div>
+      <div><b>${c.silenced_out}</b><span>dropped as silenced</span></div>
+      <div><b>${c.total}</b><span>rules in the program</span></div>
+      <div><b>${d.genes_silenced.length}</b><span>genes silenced</span></div>
+      <div><b>${t.expresses.length || '—'}</b><span>genes it says it expresses</span></div>`;
+    $('#ce-id').innerHTML = `<b>${escH(t.id)}</b>${t.ontology_id ? ` · ${escH(t.ontology_id)}` : ''}`
+      + (t.lineage.length ? ` · lineage ${t.lineage.map(escH).join(' ← ')}` : ' · no parent declared')
+      + ` · <span class="pill ${escH(t.evidence.kind)}">${escH(t.evidence.kind)}</span> ${escH(t.evidence.source)} (confidence ${t.confidence.toFixed(2)})`
+      + ` · in <span class="mono">${escH(d.path)}</span>, module <span class="mono">${escH(d.module)}</span>`
+      + (d.gated_on_cell_type.length ? ` · rules gated on ${d.gated_on_cell_type.map(escH).join(', ')}` : '')
+      + (d.genes_silenced.length ? ` · silenced: ${d.genes_silenced.map(escH).join(', ')}` : '');
+    $('#ce-notes').innerHTML = d.notes.map(n => `<div class="note">⚠︎ ${mdInline(n)}</div>`).join('');
+    const pillOf = s => s === 'active' ? 'experimental' : s === 'silenced' ? 'inferred' : 'none';
+    $('#ce-rules').innerHTML = c.total
+      ? `<table><tr><th>rule</th><th>status</th><th>why not</th><th class="num">strength</th><th class="num">threshold</th><th class="num">hill</th><th>when</th><th>evidence</th><th class="num">confidence</th></tr>`
+        + d.rules.map(r => `<tr><td class="mono">${escH(r.source)} <b>${escH(r.action)}</b> ${escH(r.target)}</td>
+          <td><span class="pill ${pillOf(r.status)}">${escH(r.status)}</span></td>
+          <td class="muted">${escH(r.reason)}</td>
+          <td class="num">${r.strength}</td><td class="num">${r.threshold}${escH(r.threshold_unit)}</td><td class="num">${r.hill}</td>
+          <td class="mono">${escH(Object.entries(r.when).map(([k, v]) => `${k}=${v}`).join(', '))}</td>
+          <td><span class="pill ${escH(r.evidence.kind)}">${escH(r.evidence.kind)}</span> <span class="muted">${escH(r.evidence.source)}</span></td>
+          <td class="num">${r.confidence.toFixed(2)}</td></tr>`).join('') + '</table>'
+      : '<div class="muted">This program states no rule, so there is nothing to list. Its cell types are used by decisions, timers and populations.</div>';
+    drawCellGraph(d);
+    $('#ce-chart').innerHTML = ''; $('#ce-clegend').innerHTML = '';
+    $('#ce-runinfo').textContent = d.runnable ? 'Run to see this cell integrated.' : 'Nothing to run: the program declares no gene.';
+    $('#ce-run').disabled = !d.runnable;
+    $('#ce-status').textContent = c.total ? `${c.active} of ${c.total} rules active in ${cell}` : 'this program states no rule';
+  } catch (e) { $('#ce-status').textContent = String(e.message || e); }
+}
+// genes in a left column, the proteins they produce in a right one, regulation arcing back
+function drawCellGraph(d) {
+  const svg = $('#ce-graph'), nodes = d.graph.nodes, edges = d.graph.edges;
+  const W = svg.clientWidth || 600, H = 340;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg', el = (t, a, txt) => { const e = document.createElementNS(ns, t); for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; return e; };
+  const muted = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+  if (!nodes.length) {
+    svg.appendChild(el('text', {x: W / 2, y: H / 2, 'text-anchor': 'middle', 'font-size': 13, fill: muted},
+      'No gene and no protein: this program has no regulatory graph, not an empty one.'));
+    $('#ce-glegend').innerHTML = ''; return;
+  }
+  const cols = [nodes.filter(n => n.kind === 'gene'), nodes.filter(n => n.kind === 'protein'), nodes.filter(n => n.kind !== 'gene' && n.kind !== 'protein')];
+  const xs = [W * 0.18, W * 0.60, W * 0.88];
+  const pos = {}, half = {};
+  cols.forEach((col, ci) => col.forEach((n, i) => {
+    pos[n.id] = {x: xs[ci], y: 34 + (H - 68) * (col.length === 1 ? 0.5 : i / (col.length - 1))};
+    half[n.id] = Math.max(22, Math.min(W * 0.15, n.label.length * 3.6 + 10));
+  }));
+  const colour = {activates: '#3fb950', inhibits: '#ff6b66', produces: muted};
+  const defs = el('defs');
+  for (const [act, col] of Object.entries(colour)) {
+    const m = el('marker', {id: `ce-a-${act}`, viewBox: '0 0 8 8', refX: 7, refY: 4, markerWidth: 6, markerHeight: 6, orient: 'auto'});
+    m.appendChild(act === 'inhibits' ? el('path', {d: 'M6 0 L6 8', stroke: col, 'stroke-width': 2.5}) : el('path', {d: 'M0 0 L8 4 L0 8 z', fill: col}));
+    defs.appendChild(m);
+  }
+  svg.appendChild(defs);
+  let drawn = 0;
+  for (const e of edges) {
+    const a = pos[e.source], b = pos[e.target]; if (!a || !b) continue;
+    drawn++;
+    const dir = b.x >= a.x ? 1 : -1, x2 = b.x - dir * (half[e.target] + 8);
+    const dx = Math.max(40, Math.abs(x2 - a.x) * 0.5) * dir;
+    const path = el('path', {
+      d: `M${(a.x + dir * half[e.source]).toFixed(1)} ${a.y.toFixed(1)} C${(a.x + dir * half[e.source] + dx).toFixed(1)} ${a.y.toFixed(1)}, ${(x2 - dx).toFixed(1)} ${b.y.toFixed(1)}, ${x2.toFixed(1)} ${b.y.toFixed(1)}`,
+      fill: 'none', stroke: colour[e.action] || muted, 'stroke-width': e.status === 'active' ? 1.8 : 1.2,
+      'stroke-dasharray': e.status === 'active' ? 'none' : '4 3', opacity: e.status === 'active' ? 0.95 : 0.35,
+      'marker-end': `url(#ce-a-${e.action in colour ? e.action : 'produces'})`,
+    });
+    path.appendChild(el('title', {}, `${e.source} ${e.action} ${e.target} — ${e.status}, strength ${e.strength}, confidence ${e.confidence.toFixed(2)}`));
+    svg.appendChild(path);
+  }
+  for (const n of nodes) {
+    const p = pos[n.id], w = half[n.id] * 2, h = 22;
+    const box = el(n.kind === 'protein' ? 'ellipse' : 'rect', n.kind === 'protein'
+      ? {cx: p.x, cy: p.y, rx: half[n.id], ry: h / 2}
+      : {x: p.x - half[n.id], y: p.y - h / 2, width: w, height: h, rx: 4});
+    box.setAttribute('fill', n.kind === 'gene' ? 'rgba(31,111,235,0.14)' : n.kind === 'protein' ? 'rgba(130,80,223,0.14)' : 'transparent');
+    box.setAttribute('stroke', n.silenced ? '#ff6b66' : n.kind === 'gene' ? '#4c8dff' : n.kind === 'protein' ? '#b083ff' : muted);
+    if (n.silenced || n.kind === 'not declared') box.setAttribute('stroke-dasharray', '4 3');
+    box.appendChild(el('title', {}, n.kind === 'gene'
+      ? `${n.id}: gene, basal ${n.basal}, max ${n.max_rate}${n.silenced ? ' — silenced: not in this cell type\'s expresses list' : ''}`
+      : `${n.id}: ${n.kind}`));
+    svg.appendChild(box);
+    const label = el('text', {x: p.x, y: p.y + 4, 'text-anchor': 'middle', 'font-size': 11.5, fill: 'currentColor', opacity: n.silenced ? 0.5 : 1}, n.label);
+    svg.appendChild(label);
+  }
+  if (!drawn) svg.appendChild(el('text', {x: W / 2, y: 18, 'text-anchor': 'middle', 'font-size': 12, fill: '#ff6b66'},
+    d.counts.total ? `No edge: ${$('#ce-cell').value} runs none of this program's ${d.counts.total} rules.` : 'No edge: this program states no rule.'));
+  $('#ce-glegend').innerHTML = '<span><i style="background:#4c8dff"></i>gene</span><span><i style="background:#b083ff"></i>protein</span>'
+    + '<span><i style="background:#3fb950"></i>activates</span><span><i style="background:#ff6b66"></i>inhibits</span>'
+    + `<span><i style="background:${muted}"></i>produces</span><span>dashed = this cell does not run it</span>`;
+}
+$('#ce-run').onclick = async () => {
+  if (!ceData) return;
+  try {
+    $('#ce-runinfo').textContent = 'integrating…';
+    const r = await api('/api/cell/run', {path: ceData.path, cell_type: ceData.cell_type.id, hours: +$('#ce-hours').value,
+      initial: kv($('#ce-init').value), silence: $('#ce-silence').checked});
+    lineChart($('#ce-chart'), $('#ce-clegend'), r.times, r.species.map(s => ({name: s, values: r.levels[s]})), {xunit: 'h', ymin: 0});
+    const gap = r.active_rules !== r.active_rules_in_cell
+      ? ` The runtime integrated ${r.active_rules} rules; only ${r.active_rules_in_cell} survive this cell's <code>expresses</code> list, and the curves are the first number's.`
+      : '';
+    $('#ce-runinfo').innerHTML = `${r.active_rules} of ${r.total_rules} rules integrated over ${$('#ce-hours').value} h · peaks ${Object.entries(r.peaks).filter(([, v]) => v > 1).map(([k, v]) => `${escH(k)} ${v}`).join(', ') || 'none'}`
+      + (r.held_at_zero.length ? ` · held at zero: <span class="mono">${r.held_at_zero.map(escH).join(', ')}</span>` : '') + gap;
+  } catch (e) { $('#ce-runinfo').textContent = String(e.message || e); }
+};
+$('#ce-open').onclick = async () => {
+  if (!ceData) return;
+  $('#p-file').value = ceData.path; await openModule(ceData.path);
+  $('#p-ctx').value = `cell_type=${ceData.cell_type.id}`;
+  document.querySelector('nav button[data-tab="program"]').click();
+};
+
 async function loadEvidence() {
   try {
     const slow = $('#ev-compiled') && $('#ev-compiled').checked;

@@ -18,6 +18,7 @@ from urllib.parse import parse_qs, urlparse
 
 from genomeos import __version__
 from genomeos.genome import Locus, Sequence, read_fasta
+from genomeos.ir import UNKNOWN, Module
 from genomeos.lang import BioLangError, parse
 from genomeos.lib import LIBRARIES
 from genomeos.runtime import (
@@ -185,6 +186,48 @@ class Api:
             },
         }
 
+    def _integrate(
+        self,
+        module: Module,
+        context: dict,
+        hours: float,
+        dt: float,
+        initial: dict | None,
+        seed: int | None,
+        points: int,
+        clamp: dict[str, float] | None = None,
+    ) -> dict:
+        """Integrate a module's network and shape the trajectory the way the views read it.
+
+        `active_rules` is the runtime's own count, which gates on `when` alone; a caller that also
+        cares about `expresses` has to say so, because the two numbers differ (see `cell_run`).
+        """
+        hours = min(max(float(hours), 0.1), 2000.0)
+        dt = min(max(float(dt), 1e-4), 1.0)
+        try:
+            vm = NetworkRuntime(module, context=context, seed=seed)
+        except ValueError as e:  # a concentration threshold with no compartment to divide it
+            raise ApiError(str(e)) from None
+        steps = int(round(hours / dt))
+        record_every = max(1, steps // points)
+        traj = vm.run(
+            hours=hours,
+            dt=dt,
+            initial={k: float(v) for k, v in (initial or {}).items()},
+            record_every=record_every,
+            clamp=clamp,
+        )
+        return {
+            "ok": True,
+            "module": module.name,
+            "active_rules": len(vm.active_rules),
+            "total_rules": len(module.rules),
+            "times": traj.times,
+            "species": traj.species,
+            "levels": traj.levels,
+            "peaks": {s: traj.peaks(s) for s in traj.species},
+        }
+
     def run(
         self,
         source: str,
@@ -199,27 +242,7 @@ class Api:
             module = parse(source, name_hint="editor")
         except BioLangError as e:
             return {"ok": False, "error": str(e)}
-        hours = min(max(float(hours), 0.1), 2000.0)
-        dt = min(max(float(dt), 1e-4), 1.0)
-        vm = NetworkRuntime(module, context=context or {}, seed=seed)
-        steps = int(round(hours / dt))
-        record_every = max(1, steps // points)
-        traj = vm.run(
-            hours=hours,
-            dt=dt,
-            initial={k: float(v) for k, v in (initial or {}).items()},
-            record_every=record_every,
-        )
-        return {
-            "ok": True,
-            "module": module.name,
-            "active_rules": len(vm.active_rules),
-            "total_rules": len(module.rules),
-            "times": traj.times,
-            "species": traj.species,
-            "levels": traj.levels,
-            "peaks": {s: traj.peaks(s) for s in traj.species},
-        }
+        return self._integrate(module, context or {}, hours, dt, initial, seed, points)
 
     # ---- ageing ----------------------------------------------------------
 
@@ -962,6 +985,309 @@ class Api:
             "evidence": r.get("evidence"),
             "cells": rows,
             "chromosomes": sorted(per_chrom),
+        }
+
+    # ---- the Cell view: one cell type inside one program -------------------
+
+    def _cell_program(self, path: str) -> Module:
+        """Parse one hand-written BioLang program, resolving the relative imports its folder uses."""
+        from genomeos.lang import parse_file
+
+        p = self._safe(path)
+        if p.suffix != ".bio":
+            raise ApiError(f"{path} is not a BioLang program")
+        try:
+            return parse_file(p)
+        except BioLangError as e:
+            raise ApiError(f"{path} does not compile: {e}") from None
+
+    @staticmethod
+    def _default_cell_type(module: Module) -> str:
+        """The cell type a program is worth opening on: one its own rules actually distinguish.
+
+        Most of these programs import `bio.std.cell_types`, so the first type declared is usually the
+        generic `Cell` and says nothing about the program. A type named in a rule's `when` gate, or one
+        that states what it expresses, is a type the program treats differently from the rest.
+        """
+        types = module.cell_types()
+        if not types:
+            return ""
+        gated = {r.when["cell_type"] for r in module.rules if "cell_type" in r.when}
+        return next(
+            (c.id for c in types if c.id in gated or c.expresses),
+            types[0].id,
+        )
+
+    @staticmethod
+    def _cell_counts(module: Module, cell_type: str) -> dict:
+        """How a program's rules divide for one cell type: active, gated out by `when`, silenced.
+
+        `Module.active_rules` applies both gates; the difference between it and the `when` gate alone
+        is exactly the rules an `expresses` list drops, which is worth counting separately because
+        the network runtime does not apply that second gate (docs/BIOLANG-v0.2.md).
+        """
+        ctx = {"cell_type": cell_type}
+        matched = [r for r in module.rules if r.applies(ctx)]
+        active = module.active_rules(ctx)
+        return {
+            "rules_active": len(active),
+            "gated_out": len(module.rules) - len(matched),
+            "silenced_out": len(matched) - len(active),
+            "genes_silenced": len(module.silenced_genes(ctx)),
+        }
+
+    def cell_programs(self) -> dict:
+        """Every hand-written BioLang program that declares a cell type, and what each type gates.
+
+        The Cell view's index. The generated chromosome programs under `data/knowledge/compiled` are
+        skipped: they declare no cell type and are tens of megabytes each, so parsing them to find
+        nothing would cost the whole request. A program that does not compile is returned as an error
+        rather than dropped, because a program missing from the list for no stated reason reads as a
+        program that has no cell types.
+        """
+        programs, errors, without = [], [], 0
+        for p in sorted(self.data_dir.rglob("*.bio")):
+            if "compiled" in p.parts:
+                continue
+            rel = str(p.relative_to(self.root))
+            try:
+                m = self._cell_program(rel)
+            except ApiError as e:
+                errors.append({"path": rel, "error": str(e)})
+                continue
+            types = m.cell_types()
+            if not types:
+                without += 1
+                continue
+            programs.append(
+                {
+                    "path": rel,
+                    "module": m.name,
+                    "rules": len(m.rules),
+                    "genes": len(m.genes()),
+                    "proteins": len(m.proteins()),
+                    "gated_on_cell_type": sorted(
+                        {r.when["cell_type"] for r in m.rules if "cell_type" in r.when}
+                    ),
+                    "default_cell_type": self._default_cell_type(m),
+                    "cell_types": [
+                        {"id": c.id, "name": c.name or c.id, **self._cell_counts(m, c.id)} for c in types
+                    ],
+                }
+            )
+        # the programs whose rules are actually gated on cell type first: they are the only ones whose
+        # answer changes with the cell, so one of them is what the view should open on
+        programs.sort(key=lambda x: (not x["gated_on_cell_type"], -x["rules"], x["path"]))
+        return {"programs": programs, "without_cell_types": without, "errors": errors}
+
+    def cell(self, path: str, cell_type: str = "") -> dict:
+        """One cell type's active rule set and graph: what a program runs in it, and what it drops.
+
+        The view area G's UI track promised in 2026-09-10 and never built. The Cells tab next door
+        answers a different question — how much of the genome each ENCODE cell type reads, from
+        chromatin — and says nothing about the rules. This one reads a BioLang program the way the
+        engine does: a rule survives only if its `when` clause matches the cell type and neither end
+        of it is a gene the type does not express, and every rule the cell drops comes back with the
+        reason. `notes` carries what the program does not say, because a cell type with no `expresses`
+        list silences nothing (docs/BIOLANG-v0.2.md) and a graph left empty by that silence would
+        otherwise read as "nothing is regulated here".
+        """
+        module = self._cell_program(path)
+        types = module.cell_types()
+        if not types:
+            raise ApiError(f"{path} declares no cell type", 404)
+        wanted = cell_type or self._default_cell_type(module)
+        cell = next((c for c in types if c.id == wanted or c.name == wanted), None)
+        if cell is None:
+            raise ApiError(
+                f"no cell type {wanted!r} in {path}; it declares {', '.join(c.id for c in types)}", 404
+            )
+
+        by_id = {c.id: c for c in types}
+        lineage: list[str] = []
+        up = cell.parent
+        while up and up not in lineage:  # an undeclared parent is still named, not dropped
+            lineage.append(up)
+            up = by_id[up].parent if up in by_id else ""
+
+        ctx = {"cell_type": cell.id}
+        silenced = module.silenced_genes(ctx)
+        rules = []
+        for r in module.rules:
+            if not r.applies(ctx):
+                status, why = "gated out", "its `when` clause does not match this cell type"
+            elif r.source in silenced or r.target in silenced:
+                off = ", ".join(g for g in (r.source, r.target) if g in silenced)
+                status, why = "silenced", f"{off} is not in this cell type's `expresses` list"
+            else:
+                status, why = "active", ""
+            rules.append(
+                {
+                    "id": r.id,
+                    "source": r.source,
+                    "action": r.action.value,
+                    "target": r.target,
+                    "strength": r.strength,
+                    "threshold": r.threshold,
+                    "threshold_unit": r.threshold_unit,
+                    "hill": r.hill,
+                    "when": dict(r.when),
+                    "status": status,
+                    "reason": why,
+                    "evidence": {"kind": r.evidence.kind.value, "source": r.evidence.source},
+                    "confidence": r.confidence,
+                }
+            )
+
+        nodes = [
+            {
+                "id": g.id,
+                "label": g.symbol or g.id,
+                "kind": "gene",
+                "silenced": g.id in silenced,
+                "basal": g.basal_rate,
+                "max_rate": float(g.attrs.get("max_rate", 0.0)),
+            }
+            for g in module.genes()
+        ] + [
+            {
+                "id": pr.id,
+                "label": pr.id,
+                "kind": "protein",
+                "silenced": False,
+                "half_life_h": None if pr.half_life_h is UNKNOWN else float(pr.half_life_h),
+            }
+            for pr in module.proteins()
+        ]
+        kinds = {e.id: e.kind for e in module.entities.values()}
+        known = {n["id"] for n in nodes}
+        ends = {r.source for r in module.rules} | {r.target for r in module.rules}
+        nodes += [
+            # a rule end this program never declares as a gene or a protein: named as what it is
+            {"id": i, "label": i, "kind": kinds.get(i, "not declared"), "silenced": False}
+            for i in sorted(ends - known)
+        ]
+        edges = [
+            {
+                "source": row["source"],
+                "target": row["target"],
+                "action": row["action"],
+                "status": row["status"],
+                "strength": row["strength"],
+                "confidence": row["confidence"],
+            }
+            for row in rules
+        ]
+
+        counts = {
+            "total": len(module.rules),
+            "active": sum(1 for r in rules if r["status"] == "active"),
+            "gated_out": sum(1 for r in rules if r["status"] == "gated out"),
+            "silenced_out": sum(1 for r in rules if r["status"] == "silenced"),
+        }
+        gates = sorted({r.when["cell_type"] for r in module.rules if "cell_type" in r.when})
+        notes = []
+        if not module.rules:
+            notes.append(
+                f"{module.name} states no rule at all: its {len(types)} cell types are labels for "
+                "decisions, timers and populations, not a regulatory network. There is no graph to draw "
+                "and nothing to run here — grow it in the Organism tab instead."
+            )
+        if not cell.expresses:
+            notes.append(
+                f"{cell.id} states no `expresses` list, and a cell type with no list silences nothing "
+                "(docs/BIOLANG-v0.2.md). That is the program saying nothing about what this cell reads, "
+                "not a claim that it reads every gene."
+            )
+        if module.rules and not gates and not cell.expresses:
+            notes.append(
+                "No rule in this program is gated on cell type, so the rule set below is the whole "
+                f"program's and would be identical in every one of its {len(types)} cell types. Nothing "
+                "here is specific to this cell."
+            )
+        if module.rules and not counts["active"]:
+            notes.append(
+                f"No rule is active in {cell.id}: {counts['gated_out']} gated out by a `when` clause and "
+                f"{counts['silenced_out']} dropped because a gene they touch is not expressed here. The "
+                "graph is empty because this cell runs none of these rules, not because nothing regulates it."
+            )
+        if counts["silenced_out"]:
+            notes.append(
+                "The network runtime gates rules by their `when` clause alone and never applies "
+                f"`expresses`, so the {counts['silenced_out']} silenced rule(s) are integrated anyway "
+                "unless the run is asked to hold the silenced genes at zero."
+            )
+
+        return {
+            "path": path,
+            "module": module.name,
+            "cell_type": {
+                "id": cell.id,
+                "name": cell.name or cell.id,
+                "parent": cell.parent,
+                "lineage": lineage,
+                "ontology_id": cell.ontology_id,
+                "expresses": list(cell.expresses),
+                "evidence": {"kind": cell.evidence.kind.value, "source": cell.evidence.source},
+                "confidence": cell.confidence,
+            },
+            "cell_types": [c.id for c in types],
+            "gated_on_cell_type": gates,
+            "counts": counts,
+            "rules": rules,
+            "genes_silenced": sorted(silenced),
+            "graph": {"nodes": nodes, "edges": edges},
+            "notes": notes,
+            "runnable": bool(module.genes()),
+        }
+
+    def cell_run(
+        self,
+        path: str,
+        cell_type: str = "",
+        hours: float = 60.0,
+        dt: float = 0.01,
+        initial: dict | None = None,
+        seed: int | None = None,
+        points: int = 600,
+        silence: bool = False,
+    ) -> dict:
+        """Run one cell type's rule set and watch it: the trajectory this program gives in this cell.
+
+        `silence` holds the mRNA of every gene the cell type does not express at zero, which is what
+        `expresses` means and what the network runtime does not do on its own. It is off by default so
+        the numbers match `genomeos run` unless the caller asks for the other reading, and the result
+        names the species held either way. `active_rules` is the runtime's count and
+        `active_rules_in_cell` the count after `expresses`; when they differ the trajectory is the
+        first number's, not the second's.
+        """
+        module = self._cell_program(path)
+        types = module.cell_types()
+        wanted = cell_type or self._default_cell_type(module)
+        if types and not any(c.id == wanted or c.name == wanted for c in types):
+            raise ApiError(f"no cell type {wanted!r} in {path}", 404)
+        if not module.genes():
+            raise ApiError(
+                f"{path} declares no gene, so there is no network to integrate: its cell types are "
+                "labels for decisions and populations. Grow it in the Organism tab instead."
+            )
+        ctx = {"cell_type": wanted}
+        held = sorted(module.silenced_genes(ctx)) if silence else []
+        out = self._integrate(
+            module,
+            ctx,
+            hours,
+            dt,
+            initial,
+            seed,
+            points,
+            clamp={f"{g}.mRNA": 0.0 for g in held} or None,
+        )
+        return {
+            **out,
+            "cell_type": wanted,
+            "active_rules_in_cell": len(module.active_rules(ctx)),
+            "held_at_zero": [f"{g}.mRNA" for g in held],
         }
 
     def roadmap(self) -> dict:
@@ -1916,6 +2242,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.decompile(self._q(qs, "symbol", ""), self._q(qs, "chrom", "")))
             if u.path == "/api/cells":
                 return self._json(self.api.cells())
+            if u.path == "/api/cell/programs":
+                return self._json(self.api.cell_programs())
+            if u.path == "/api/cell":
+                return self._json(self.api.cell(self._q(qs, "path", ""), self._q(qs, "cell_type", "")))
             if u.path == "/api/roadmap":
                 return self._json(self.api.roadmap())
             if u.path == "/api/work":
@@ -2068,6 +2398,18 @@ class Handler(BaseHTTPRequestHandler):
                         body.get("initial"),
                         body.get("context"),
                         body.get("seed"),
+                    )
+                )
+            if u.path == "/api/cell/run":
+                return self._json(
+                    self.api.cell_run(
+                        body.get("path", ""),
+                        body.get("cell_type", ""),
+                        body.get("hours", 60),
+                        body.get("dt", 0.01),
+                        body.get("initial"),
+                        body.get("seed"),
+                        silence=bool(body.get("silence", False)),
                     )
                 )
             return self._json({"error": "not found"}, 404)
