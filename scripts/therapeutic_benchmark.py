@@ -2,20 +2,21 @@
 # Part of the GenomeOS application; see LICENSING.md.
 """Retrospective benchmark: does the therapeutic pipeline recover known targets?
 
-Eight tumours whose target and whose approved therapy are public knowledge are
+Nine tumours whose target and whose approved therapy are public knowledge are
 run through `genomeos therapeutic`, and the result is compared with what is
 actually approved for that alteration. The point is falsifiability: until a
 pipeline is asked to reproduce something already known, its rankings are
 assertions.
 
-Six of the eight targets are reached through a point mutation, which for a long
+Six of the nine targets are reached through a point mutation, which for a long
 time was the whole benchmark and was a narrower test than it read as: the
 copy-number, structural and expression routes into the candidate list were
-covered by unit tests and by nothing that scored the pipeline end to end. CD19
-carries no alteration of any kind and is reached only from the patient's own
-RNA; ERBB2 appears a second time reached by nothing but its amplification.
-Each case records the `call` that puts its target on the list, so what the
-benchmark does not cover is visible in the result.
+covered by unit tests and by nothing that scored the pipeline end to end. The
+other three close that. CD19 carries no alteration of any kind and is reached
+only from the patient's own RNA; ERBB2 appears a second time reached by nothing
+but its amplification; ALK is reached by a rearrangement. All four routes into
+the candidate list are now scored, and each case records the `call` that put
+its target there.
 
 The copy-number case earned its place on the first run. It passes all three
 questions and ranks fourth, behind three surface proteins that carry no
@@ -164,6 +165,31 @@ CASES: tuple[dict, ...] = (
             "the amplification is the approved therapy's companion diagnostic, so a pipeline "
             "that needs a coding change to see ERBB2 would miss every patient trastuzumab is "
             "actually given to"
+        ),
+    },
+    {
+        # The structural-variant case, and the one that is a surface receptor
+        # in every database and a cytoplasmic kinase in the patient. It is
+        # scored as out of scope because the approved ALK drugs are small
+        # molecules — and the reason no antibody exists is the thing the
+        # pipeline has to work out for itself: ALK is the fusion's 3' partner,
+        # so the product begins with EML4 and carries neither ALK's signal
+        # peptide nor its ectodomain. A pipeline reading the curated
+        # localisation alone calls this a direct surface target, which is how
+        # it read until 2026-09-21.
+        "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic",
+        "dir": "alterations",
+        "vcf": "alk_eml4_fusion.vcf",
+        "sv": "alk_eml4_fusion.sv",
+        "call": "structural variant",
+        "gene": "ALK",
+        "approved": "crizotinib, alectinib, brigatinib, lorlatinib (small molecules)",
+        "modality": "small_molecule",
+        "expect": "out_of_scope_expected",
+        "why": (
+            "every curated compartment calls ALK a single-pass surface receptor, so the trap is to "
+            "offer an antibody against it; as the 3' partner of the fusion it keeps none of its "
+            "outward-facing part, and the drugs that work are small molecules acting inside the cell"
         ),
     },
     {
@@ -339,12 +365,16 @@ def main() -> int:
             "protein has no established outward-facing part for, or if it heads the list with a hard "
             "requirement unanswered rather than answered. A row with no preferred mechanism names the "
             "open requirement in requirements_unanswered rather than falling silent. "
-            "cases_by_driver_call says which measurement reaches each target: six point mutations, "
-            "one expression call (CD19, which carries no alteration of any kind) and one copy-number "
-            "call (ERBB2 amplified and not mutated, the same target as the point-mutation case, so "
-            "that the route is the only thing that differs). Structural variants reach the ranking "
-            "and are covered by unit tests, but no scored case here turns on one, so the benchmark "
-            "does not yet measure that route. "
+            "cases_by_driver_call says which measurement reaches each target, and all four routes "
+            "into the candidate list are now scored: six point mutations, one copy-number call "
+            "(ERBB2 amplified and not mutated, the same target as the point-mutation case so that "
+            "the route is the only thing that differs), one structural variant (EML4-ALK) and one "
+            "expression call (CD19, which carries no alteration of any kind). The ALK case is the "
+            "one where the curated databases and the patient disagree: ALK is a single-pass surface "
+            "receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither "
+            "its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the "
+            "approved drugs are small molecules. It passes by refusing a surface route rather than "
+            "by leaving the question open. "
             "outranked_by_hypotheses is recorded per row and is the question the copy-number case "
             "made askable: candidates ranked above the target that carry no alteration in this "
             "tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion "

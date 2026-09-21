@@ -65,11 +65,39 @@ def test_no_surface_route_is_claimed_for_an_intracellular_target():
 
 
 def test_an_intracellular_driver_still_gets_the_peptide_route():
-    """GenomeOS's distinctive claim: a nuclear or cytoplasmic mutation is never 'no target'."""
-    missense = [r for r in rows() if r["expected"] == "out_of_scope_expected"]
+    """GenomeOS's distinctive claim: a nuclear or cytoplasmic mutation is never 'no target'.
+
+    Scoped to point mutations, which is what it always meant and could leave
+    implicit while every case was one. A peptide comes from a changed sequence,
+    and for a fusion the changed sequence is the junction, which GenomeOS does
+    not reconstruct: the EML4-ALK case therefore offers no peptide route and
+    must not be read as this claim failing.
+    """
+    missense = [
+        r for r in rows() if r["expected"] == "out_of_scope_expected" and r["driver_call"] == "point mutation"
+    ]
+    assert len(missense) >= 4
     assert all(r.get("peptide_route") for r in missense), (
         "an intracellular missense driver must still offer the peptide/HLA route"
     )
+
+
+def test_a_fusion_is_judged_on_the_product_and_not_the_curated_gene():
+    """The case where every database says surface and the tumour says otherwise.
+
+    ALK is curated as a single-pass receptor with a signal peptide and a
+    1,020-residue ectodomain. As the fusion's 3' partner it keeps none of it,
+    and the approved drugs are small molecules acting inside the cell. The
+    benchmark passes this case by *not* claiming a surface route — the same way
+    the four intracellular missense cases pass — and it could not have done so
+    before the orientation was read.
+    """
+    alk = next(r for r in rows() if r["driver_call"] == "structural variant")
+    assert alk["gene"] == "ALK"
+    assert alk["recovered"] and alk["pass"]
+    assert alk["target_class"] == "intracellular_only"
+    assert alk["surface_accessibility"] == 0.0, "scored from the product the fusion makes"
+    assert not alk["best_mechanism"], "no antibody-like route exists against a cytoplasmic kinase"
 
 
 def test_the_known_mechanism_defects_do_not_grow():
@@ -179,12 +207,28 @@ def test_a_recovered_target_is_not_quietly_buried_under_hypotheses():
         )
 
 
+def test_every_route_into_the_candidate_list_is_scored():
+    """The gap this test used to describe is closed, so it now asserts the closure.
+
+    It read "the two routes no scored case turns on have to be named as
+    uncovered" while copy number and structural variants were measured by unit
+    tests alone. Both are scored now, and the assertion is inverted rather than
+    deleted: an end-to-end case per route, so that a route cannot quietly stop
+    working while its unit test keeps passing.
+    """
+    assert set(RESULT["cases_by_driver_call"]) == {
+        "point mutation",
+        "copy number",
+        "structural variant",
+        "expression",
+    }
+    assert RESULT["cases"] == len(rows()) >= 9
+
+
 def test_the_benchmark_states_what_it_does_not_cover():
+    """What remains out of scope is the modality, not a route: no small molecules."""
     note = RESULT["note"].lower()
     assert "small molecule" in note
-    assert "structural variant" in note, "the route no scored case turns on has to be named as uncovered"
-    assert "copy-number call" in note, "the route a scored case now turns on has to be named as covered"
-    assert "structural variant" not in RESULT["cases_by_driver_call"], (
-        "no scored case is driven by a structural variant yet; when one is, say so here"
-    )
-    assert RESULT["cases"] == len(rows()) >= 8
+    out = [r for r in rows() if r["expected"] == "out_of_scope_expected"]
+    assert len(out) >= 5, "the small-molecule cases are the ones that state the boundary"
+    assert all(r["approved_modality"] == "small_molecule" for r in out)

@@ -273,45 +273,80 @@ def test_a_fusion_product_is_not_given_the_whole_genes_outside():
     and lorlatinib are small molecules that work inside the cell.
 
     The curated compartment describes the full-length protein, and a fusion
-    keeps one side of a junction that GenomeOS does not reconstruct. It does not
-    hold which partner is 5' either, so it cannot say the ectodomain survives.
-    The surface requirement is therefore unanswered, every surface mechanism is
-    provisional, and none of them heads the list.
+    keeps one side of a junction. When this test was written GenomeOS held no
+    orientation, so the surface requirement was unanswered and every surface
+    mechanism was provisional. The orientation arrived on 2026-09-21, and an
+    unanswered question became an answer: ALK is the 3' partner, so the product
+    carries neither its signal peptide nor its ectodomain, and a binder that
+    needs an extracellular epitope is refused rather than left open.
     """
     a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
     alk = next(c for c in a["candidates"] if c.gene == "ALK")
     assert alk.best_mechanism is None, "an antibody against a cytoplasmic kinase headed this list"
-    nearest = alk.best_provisional_mechanism
-    assert nearest is not None, "it is still scored and still listed, with its open requirement"
-    assert "surface_accessible" in nearest.provisional_requirements
     surface = [m for m in alk.therapeutic_mechanisms if m.mechanism == "blocking_antibody"]
-    assert surface and not surface[0].established and surface[0].viable
+    assert surface and not surface[0].viable, (
+        "the surface requirement is answered no, so the mechanism is refused and not merely provisional"
+    )
+    assert not any(m.viable for m in alk.therapeutic_mechanisms), (
+        "every route GenomeOS models needs the outside of the protein; the approved ALK drugs are "
+        "small molecules, which is the honest answer here and not a gap"
+    )
 
 
 @needs_caches
 @needs_knowledge
-def test_the_rest_of_the_fusion_defect_is_recorded_rather_than_argued_away():
-    """What the gate fix does not reach, pinned so the half-fix is not read as whole.
+def test_the_class_and_the_score_describe_the_product_and_not_the_gene():
+    """The half this test used to pin as unreachable, closed by reading one more field.
 
-    The mechanism no longer heads the list, but the candidate is still classed
-    `direct_surface` and still carries an accessibility of 1.0, because both
-    come from the gene's curated localisation rather than from the product the
-    fusion makes. Closing that needs a measurement the project does not hold:
-    the fusion junction, or the partner orientation, or transcript evidence for
-    the retained domains. None of the three is in any table GenomeOS reads, and
-    the demo `.sv` format records a gene and a partner and nothing else.
+    It asserted today's wrong answer on purpose — `direct_surface` and an
+    accessibility of 1.0, both read off the full-length gene — and said the
+    measurement that would close it was in no table GenomeOS reads: the
+    junction, the orientation, or transcript evidence for the retained
+    domains.
 
-    This test asserts today's wrong answer on purpose. When the measurement
-    arrives it will fail, which is the point of writing it down.
+    THAT WAS WRONG, AND IT WAS WRONG BY ONE REQUEST PARAMETER. The cBioPortal
+    structural-variant endpoint carries all of it; the client asked for
+    `projection=SUMMARY`, which drops it. Under DETAILED the same row gives
+    `site1HugoSymbol=EML4` and `site2HugoSymbol=ALK` — site1 is the 5' partner,
+    so ALK is the 3' — the two breakpoint positions, and an annotation reading
+    "EML4 exons 1-20 with ALK exons 20-29", ALK's ectodomain being exons 1-19.
+
+    A test that records a defect has to name what would close it, and this one
+    named something it had not checked was absent.
     """
     a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
     alk = next(c for c in a["candidates"] if c.gene == "ALK")
-    assert alk.target_class == "direct_surface", "still classed from the full-length gene"
-    assert alk.scores.value("surface_accessibility") == 1.0, "still scored from the full-length gene"
     assert alk.origins[0].fusion_partner == "EML4"
-    assert not any(getattr(o, "fusion_orientation", None) for o in alk.origins), (
-        "the measurement that would close this: which partner is 5', and where the junction falls"
+    assert alk.origins[0].fusion_orientation == "3'", "the measurement that closed this"
+    assert alk.target_class == "intracellular_only", "classed from the product, not the curated gene"
+    assert alk.scores.value("surface_accessibility") == 0.0
+    assert "signal peptide" in alk.class_reason and "3'" in alk.class_reason, (
+        "the class has to say why, because 'intracellular' about a curated surface receptor is "
+        "the surprising answer and the reason is the evidence for it"
     )
+
+
+def test_a_five_prime_partner_keeps_its_own_ectodomain():
+    """The rule is about which end the gene contributes, not about fusions.
+
+    Turning the same fixture round must not produce the same answer: a gene
+    contributed as the 5' partner keeps its N-terminus, so its signal peptide
+    and ectodomain are in the product and the surface question is open again
+    rather than refused. Without this the rule would read 'a fusion is never a
+    surface target', which is false — and it is how the previous fix went
+    wrong, by answering a question it had only stopped asking.
+    """
+    import genomeos.therapeutics.mechanisms as mech
+
+    a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
+    alk = next(c for c in a["candidates"] if c.gene == "ALK")
+    assert mech.ectodomain_lost(alk)
+    for o in alk.origins:
+        o.fusion_orientation = "5'"
+    assert not mech.ectodomain_lost(alk), "a 5' partner keeps the N-terminus it contributes"
+    for o in alk.origins:
+        o.fusion_orientation = ""
+    assert not mech.ectodomain_lost(alk), "no orientation reported is unknown, not 'no ectodomain'"
 
 
 @needs_caches

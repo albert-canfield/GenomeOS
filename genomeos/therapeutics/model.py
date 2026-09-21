@@ -742,6 +742,12 @@ class VariantOrigin:
     alteration_kind: str = ""
     gistic: int | None = None
     fusion_partner: str | None = None
+    #: "5'" or "3'" when the caller reported which end of the fusion product
+    #: this gene contributes, empty when it did not. A 3' partner's own
+    #: N-terminus is not in the product.
+    fusion_orientation: str = ""
+    #: The junction as the source stated it, kept verbatim.
+    fusion_junction: str = ""
     recurrent_partner: bool = False
     alteration_label: str = ""
 
@@ -783,6 +789,8 @@ class VariantOrigin:
                     "alteration": self.alteration_label,
                     "gistic": self.gistic,
                     "fusion_partner": self.fusion_partner,
+                    "fusion_orientation": self.fusion_orientation,
+                    "fusion_junction": self.fusion_junction,
                     "recurrent_partner": self.recurrent_partner,
                     "removes_product": self.removes_product,
                 }

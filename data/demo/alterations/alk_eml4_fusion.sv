@@ -1,2 +1,2 @@
-gene	partner	class
-ALK	EML4	INVERSION
+gene	partner	class	end
+ALK	EML4	INVERSION	3

@@ -403,14 +403,53 @@ the same scale (`genomeos/cancer/alterations.py`, distilled knowledge in
   amount. A fusion is recorded as a rearrangement between two genes and its
   junction sequence is not reconstructed, so no novel peptide is claimed
   from it — and, since 2026-09-21, no outward-facing epitope either.
+- A fusion also records **which end of the product this gene contributes**,
+  when the caller reports it: cBioPortal's `site1` is the 5' partner and
+  `site2` the 3'. It is optional and never inferred, because the gene order in
+  a fusion's *name* is a naming convention and not a measurement.
+
+### The fusion that is a surface receptor in every database
+
+ALK is curated as single-pass with its N-terminus outside, a signal peptide at
+residues 1–18 and an extracellular domain at 19–1038. EML4-ALK is treated with
+crizotinib, alectinib and lorlatinib — small molecules, all of them — and no
+antibody against it exists or could. The pipeline offered a blocking antibody
+at 0.75 until 2026-09-21, then held the question open, and now answers it.
+
+**A gene contributed as the 3' partner does not bring its own N-terminus.**
+The product starts with the 5' partner's sequence, so this gene's signal
+peptide is absent and a type-I receptor whose ectodomain lies before its single
+transmembrane segment presents nothing outward. The rule is asked of the
+curated topology rather than assumed, so a multi-pass protein, a C-terminal
+ectodomain or an uncurated one leaves the question open; and a gene
+contributed as the 5' partner keeps its ectodomain, which a test asserts, so
+the rule cannot decay into "a fusion is never a surface target".
+
+The class and the score follow the product: ALK is `intracellular_only` at an
+accessibility of 0.0, every antibody-like mechanism is refused rather than left
+provisional, and the case is scored in the benchmark as out of scope, passing
+the same way the four intracellular missense cases do. It offers no peptide
+route either, because the changed sequence in a fusion is the junction and
+GenomeOS does not reconstruct it.
+
+**The measurement was never missing.** The test that pinned this half as
+unclosable said the junction, the orientation and the retained domains were in
+no table GenomeOS reads. They are all in the structural-variant rows the client
+already fetched; it asked for `projection=SUMMARY`, which drops them. Under
+`DETAILED` the same EML4-ALK row gives the orientation, both breakpoints, and
+an annotation reading "EML4 exons 1-20 with ALK exons 20-29" against an
+ectodomain encoded by exons 1–19. A test that records a defect has to name what
+would close it, and that one named something it had not checked was absent.
 
 These are unit controls, and for a long time they were the only evidence for
 three of the four routes: every scored case in the therapeutic benchmark
 reached its target through a point mutation, so the benchmark measured the
 variant path end to end and the other three not at all. The seventh case, CD19,
-closes that for expression; the eighth closes it for copy number. Structural
-variants are still covered by controls alone, and the benchmark result says so
-in its note rather than leaving the gap to be inferred from the case list.
+closes that for expression, the eighth for copy number and the ninth for
+structural variants. **All four routes into the candidate list are now scored
+end to end**, so a route can no longer stop working while its unit test keeps
+passing. What remains out of scope is a modality and not a route: GenomeOS
+models no small molecules, and five of the nine cases pass by saying so.
 
 The eighth case is ERBB2 a second time, amplified and not mutated, and it is
 deliberately the same target as the point-mutation case so that the route is

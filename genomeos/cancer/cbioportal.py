@@ -259,11 +259,20 @@ class CBioPortal:
         )
 
     def structural_variants(self, profile: str, entrez_ids: list[int]) -> list[dict]:
-        """Structural variants with either breakpoint in one of these genes."""
+        """Structural variants with either breakpoint in one of these genes.
+
+        DETAILED rather than SUMMARY, because SUMMARY drops the two fields
+        that decide what the fusion protein actually is: the breakpoint
+        positions and the `annotation` naming the retained exons. The gene
+        order is the orientation — cBioPortal's site1 is the 5' partner and
+        site2 the 3' — so a SUMMARY response could say ALK was rearranged and
+        not that ALK is the 3' partner, which is the difference between a
+        surface receptor and a cytoplasmic kinase.
+        """
         return self._post(
             "/structural-variant/fetch",
             {"entrezGeneIds": entrez_ids, "molecularProfileIds": [profile]},
-            projection="SUMMARY",
+            projection="DETAILED",
         )
 
     def sample_alterations(
@@ -311,6 +320,11 @@ class CBioPortal:
                             "partner": row.get(f"{other}HugoSymbol") or "",
                             "detail": row.get("variantClass") or "",
                             "in_frame": row.get("site2EffectOnFrame") or "",
+                            # site1 is the 5' partner and site2 the 3': the side
+                            # this gene sits on is the side of the product it
+                            # contributes, and so whether its N-terminus survives.
+                            "orientation": "5'" if side == "site1" else "3'",
+                            "junction": row.get("annotation") or "",
                             "source": f"cBioPortal {sv_profile}",
                         }
                     )

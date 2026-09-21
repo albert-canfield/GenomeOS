@@ -1,19 +1,20 @@
 {
   "result": "therapeutic_benchmark",
   "date": "2026-09-21",
-  "cases": 8,
-  "targets_recovered": 8,
-  "verdicts_correct": 8,
-  "top_mechanism_defensible": 8,
+  "cases": 9,
+  "targets_recovered": 9,
+  "verdicts_correct": 9,
+  "top_mechanism_defensible": 9,
   "cases_by_driver_call": {
     "point mutation": 6,
     "copy number": 1,
+    "structural variant": 1,
     "expression": 1
   },
   "surface_cases": 4,
   "surface_cases_recovered": 4,
   "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
-  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target: six point mutations, one expression call (CD19, which carries no alteration of any kind) and one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case, so that the route is the only thing that differs). Structural variants reach the ranking and are covered by unit tests, but no scored case here turns on one, so the benchmark does not yet measure that route. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target that carry no alteration in this tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, sits behind three of them. The pipeline recovers it and does not prefer it, and the three scored questions cannot tell those apart, so the count is reported beside them rather than folded into a verdict.",
+  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target, and all four routes into the candidate list are now scored: six point mutations, one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case so that the route is the only thing that differs), one structural variant (EML4-ALK) and one expression call (CD19, which carries no alteration of any kind). The ALK case is the one where the curated databases and the patient disagree: ALK is a single-pass surface receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the approved drugs are small molecules. It passes by refusing a surface route rather than by leaving the question open. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target that carry no alteration in this tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, sits behind three of them. The pipeline recovers it and does not prefer it, and the three scored questions cannot tell those apart, so the count is reported beside them rather than folded into a verdict.",
   "rows": [
     {
       "case": "EGFR L858R, lung adenocarcinoma",
@@ -29,7 +30,7 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
-      "seconds": 1.0,
+      "seconds": 1.1,
       "target_class": "direct_surface",
       "score": 0.5,
       "surface_accessibility": 1.0,
@@ -93,7 +94,7 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
-      "seconds": 1.1,
+      "seconds": 1.0,
       "target_class": "neoantigen_hla",
       "score": 0.427,
       "surface_accessibility": 0.36,
@@ -133,7 +134,7 @@
         "PDGFRB",
         "ERBB2"
       ],
-      "seconds": 1.1,
+      "seconds": 1.0,
       "target_class": "neoantigen_hla",
       "score": 0.369,
       "surface_accessibility": 0.0,
@@ -205,7 +206,7 @@
       "outranked_by_hypotheses": [
         "EGFR"
       ],
-      "seconds": 1.0,
+      "seconds": 1.1,
       "target_class": "neoantigen_hla",
       "score": 0.345,
       "surface_accessibility": 0.0,
@@ -243,7 +244,7 @@
         "EGFR",
         "PDGFRB"
       ],
-      "seconds": 1.1,
+      "seconds": 1.0,
       "target_class": "direct_surface",
       "score": 0.494,
       "surface_accessibility": 1.0,
@@ -258,6 +259,42 @@
       "mechanism_concerns": [],
       "mechanism_sane": true,
       "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic",
+      "gene": "ALK",
+      "driver_call": "structural variant",
+      "approved": "crizotinib, alectinib, brigatinib, lorlatinib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "every curated compartment calls ALK a single-pass surface receptor, so the trap is to offer an antibody against it; as the 3' partner of the fusion it keeps none of its outward-facing part, and the drugs that work are small molecules acting inside the cell",
+      "candidates": [
+        "ACVR2A",
+        "ALK",
+        "PIK3CA",
+        "TGFB1",
+        "TGFBR2",
+        "PTN"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "outranked_by_hypotheses": [
+        "ACVR2A"
+      ],
+      "seconds": 1.9,
+      "target_class": "intracellular_only",
+      "score": 0.559,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
       "pass": true
     },
     {
@@ -280,7 +317,7 @@
       "outranked_by_hypotheses": [
         "FCRL5"
       ],
-      "seconds": 1.1,
+      "seconds": 3.1,
       "target_class": "direct_surface",
       "score": 0.5,
       "surface_accessibility": 1.0,

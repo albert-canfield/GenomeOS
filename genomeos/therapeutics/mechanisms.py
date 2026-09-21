@@ -93,16 +93,68 @@ def _fusion_only(c: Any) -> bool:
     return bool(c.origins) and all(o.alteration_kind == "fusion" for o in c.origins)
 
 
+def _ectodomain_is_n_terminal(loc: Any) -> bool:
+    """Everything this protein shows the outside world lies before its first pass.
+
+    True for a type-I receptor: a signal peptide, then the ectodomain, then one
+    transmembrane segment, then the cytoplasmic part. Such a protein cannot
+    present its outward face without the N-terminus that carries it. Asked of
+    the curated topology rather than assumed, so a multi-pass protein, a
+    C-terminal ectodomain or an uncurated one answers no and the question stays
+    open.
+    """
+    tms = [r for r in loc.transmembrane_regions if r.start]
+    ecto = [r for r in loc.extracellular_regions if r.start]
+    if len(tms) != 1 or not ecto or loc.signal_peptide is None:
+        return False
+    return all((r.end or 0) <= tms[0].start for r in ecto)
+
+
+def _n_terminus_lost(c: Any) -> bool:
+    """This gene is the 3' partner of every fusion that put it on the list.
+
+    A 3' partner contributes the product's C-terminal half: the translation
+    starts in the 5' partner, so this gene's own N-terminus — its first
+    residue onwards — is not in the protein the tumour makes.
+    """
+    orientations = {o.fusion_orientation for o in c.origins if o.alteration_kind == "fusion"}
+    return orientations == {"3'"}
+
+
+def ectodomain_lost(c: Any) -> bool:
+    """The tumour's product has none of this gene's outward-facing part.
+
+    True when every fusion that reached this gene contributed it as the 3'
+    partner and its curated topology is the type-I arrangement the N-terminus
+    carries. The pipeline asks this of the product rather than of the gene,
+    which is the distinction the ALK case turns on.
+    """
+    return _fusion_only(c) and _n_terminus_lost(c) and _ectodomain_is_n_terminal(c.localization)
+
+
 def _surface(c: Any) -> bool | None:
     if c.localization.plasma_membrane is False:
         return False
     if _fusion_only(c):
-        # The curated compartment describes the full-length protein, and a
-        # fusion keeps only one side of a junction. GenomeOS reconstructs
-        # neither the junction nor which partner is 5', so for EML4-ALK — a
-        # surface receptor by curation, a cytoplasmic kinase in the tumour,
-        # treated with small molecules and no antibody — it cannot say the
-        # ectodomain survives. That is unanswered, not answered yes.
+        # The curated compartment describes the full-length protein and a
+        # fusion keeps only one side of a junction, so the compartment alone
+        # cannot say whether the ectodomain survives.
+        #
+        # For a type-I receptor the orientation settles it. Such a protein
+        # reaches the surface only because its N-terminal signal peptide takes
+        # it into the ER, and its ectodomain is the N-terminal part that ends
+        # at the first transmembrane segment. A gene contributed as the 3'
+        # partner brings neither: the product begins with the partner's
+        # sequence. EML4-ALK is the case — ALK is curated as single-pass with
+        # its N-terminus outside, a signal peptide at 1-18 and its
+        # extracellular domain at 19-1038, and as the 3' partner it keeps none
+        # of that. It is a cytoplasmic kinase, treated with small molecules
+        # and with no approved antibody, which is the right answer and not
+        # merely an open question.
+        if ectodomain_lost(c):
+            return False
+        # Orientation unknown, or this gene is the 5' partner and keeps its own
+        # N-terminus: unanswered, not answered yes.
         return None
     if c.localization.reachable:
         return True

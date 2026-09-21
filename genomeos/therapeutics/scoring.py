@@ -75,8 +75,21 @@ def component(
     )
 
 
-def surface_accessibility(localisation: Any) -> tuple[float | None, str]:
-    """How reachable the protein is from outside, from curated localisation."""
+def surface_accessibility(localisation: Any, ectodomain_lost: bool = False) -> tuple[float | None, str]:
+    """How reachable the protein is from outside, from curated localisation.
+
+    Curated localisation describes the full-length protein. When the tumour
+    makes a fusion that drops this gene's N-terminal ectodomain, the curated
+    figure is a description of a protein the tumour does not have, so it is
+    not the number to score.
+    """
+    if ectodomain_lost:
+        return 0.0, (
+            "this gene is the 3' partner of the fusion, so the product begins with the partner's "
+            "sequence and carries neither its signal peptide nor its N-terminal extracellular "
+            "domain; the curated topology describes the full-length protein, which this tumour "
+            "does not make"
+        )
     if localisation.plasma_membrane is False:
         return 0.0, (
             f"curated localisation places {localisation.primary} inside the cell; a circulating binder "

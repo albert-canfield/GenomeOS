@@ -306,6 +306,8 @@ def alteration_origin(a: GeneAlteration, sample_id: str) -> VariantOrigin:
         alteration_kind=a.kind,
         gistic=a.gistic,
         fusion_partner=a.partner or None,
+        fusion_orientation=a.orientation,
+        fusion_junction=a.junction,
         recurrent_partner=a.recurrent_partner,
         alteration_label=a.label(),
     )
@@ -562,6 +564,18 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
         )
     if loc.primary == "unknown" or not loc.compartments or max(loc.compartments.values()) == 0.0:
         return "unknown", "no curated localisation evidence, so accessibility cannot be established"
+    if mech.ectodomain_lost(c):
+        # The class describes the protein the tumour makes, not the one the
+        # database describes. A gene curated as a surface receptor and
+        # contributed as a fusion's 3' partner is an intracellular target:
+        # EML4-ALK is a cytoplasmic kinase, which is why it is treated with
+        # small molecules and why no antibody against it exists.
+        return "intracellular_only", (
+            f"{c.gene} is curated as a single-pass surface receptor, and in this tumour it is the 3' "
+            "partner of a fusion: the product starts with the partner's sequence and carries neither "
+            f"{c.gene}'s signal peptide nor its extracellular domain, so it is intracellular however "
+            "the full-length protein is annotated"
+        )
     if loc.reachable and loc.plasma_membrane is not False:
         outside = [r for r in loc.extracellular_regions]
         if outside:
@@ -593,7 +607,7 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
 
 def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) -> Any:
     """Every dimension, each with the sentence that explains it."""
-    sa, sa_basis = surface_accessibility(c.localization)
+    sa, sa_basis = surface_accessibility(c.localization, ectodomain_lost=mech.ectodomain_lost(c))
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)
     nts, nts_basis = normal_tissue_safety(c.normal_tissue)

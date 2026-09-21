@@ -71,6 +71,15 @@ class GeneAlteration:
     partner: str = ""  # the other side of a fusion
     detail: str = ""  # DELETION, INVERSION, TRANSLOCATION, ...
     in_frame: str = ""
+    #: Which end of the fusion product this gene contributes: "5'" or "3'",
+    #: empty when the source does not say. It decides whether the gene's own
+    #: N-terminus — its signal peptide, and for a type-I receptor its whole
+    #: ectodomain — is in the product at all, which is the difference between
+    #: a surface target and a cytoplasmic one.
+    orientation: str = ""
+    #: The junction as the source describes it, e.g. "EML4 exons 1-20 with
+    #: ALK exons 20-29", kept verbatim so the claim can be checked.
+    junction: str = ""
     source: str = ""
     cohort_frequency: float | None = None
     cohort_types: dict[str, float] = field(default_factory=dict)
@@ -206,7 +215,14 @@ def read_cna_table(path: str, fmt: str = "auto") -> list[GeneAlteration]:
 
 
 def read_sv_table(path: str) -> list[GeneAlteration]:
-    """Gene, partner and optionally the event class, from a two- or three-column table."""
+    """Gene, partner, optionally the event class, and optionally the orientation.
+
+    The fourth column is "5" or "3": which end of the fusion product this gene
+    contributes. It is optional because most callers do not report it, and a
+    fusion whose orientation is unknown must stay unknown rather than be
+    guessed — the gene order in a fusion's name is a naming convention, not a
+    measurement.
+    """
     p = Path(path)
     if not p.exists():
         return []
@@ -216,11 +232,16 @@ def read_sv_table(path: str) -> list[GeneAlteration]:
         if gene in ("GENE", "GENE1", "SITE1"):
             continue
         partner = parts[1].upper() if len(parts) > 1 else ""
+        orientation = ""
+        if len(parts) > 3:
+            raw = parts[3].strip().rstrip("'").rstrip("’")
+            orientation = {"5": "5'", "3": "3'"}.get(raw, "")
         a = GeneAlteration(
             gene,
             "fusion",
             partner=partner,
             detail=parts[2] if len(parts) > 2 else "",
+            orientation=orientation,
             source=f"patient structural-variant table ({p.name})",
         )
         a.evidence.append(f"{a.label()} in this tumour's structural-variant table")
@@ -239,6 +260,8 @@ def from_cbioportal(sample: dict[str, Any]) -> list[GeneAlteration]:
             partner=row.get("partner", ""),
             detail=row.get("detail", ""),
             in_frame=row.get("in_frame", ""),
+            orientation=row.get("orientation", ""),
+            junction=row.get("junction", ""),
             source=row.get("source", f"cBioPortal {sample.get('study', '')} {sample.get('sample', '')}"),
         )
         if not a.gene or a.kind not in KIND_SCORE:
