@@ -88,9 +88,22 @@ class MechanismSpec:
 # --- gate predicates ------------------------------------------------------------------
 
 
+def _fusion_only(c: Any) -> bool:
+    """Every event that put this gene on the candidate list is a gene fusion."""
+    return bool(c.origins) and all(o.alteration_kind == "fusion" for o in c.origins)
+
+
 def _surface(c: Any) -> bool | None:
     if c.localization.plasma_membrane is False:
         return False
+    if _fusion_only(c):
+        # The curated compartment describes the full-length protein, and a
+        # fusion keeps only one side of a junction. GenomeOS reconstructs
+        # neither the junction nor which partner is 5', so for EML4-ALK — a
+        # surface receptor by curation, a cytoplasmic kinase in the tumour,
+        # treated with small molecules and no antibody — it cannot say the
+        # ectodomain survives. That is unanswered, not answered yes.
+        return None
     if c.localization.reachable:
         return True
     return None

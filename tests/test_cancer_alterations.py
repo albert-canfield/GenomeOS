@@ -231,6 +231,60 @@ def test_a_fusion_reaches_the_ranking_and_its_junction_is_not_invented():
 
 
 @needs_caches
+@needs_knowledge
+def test_a_fusion_product_is_not_given_the_whole_genes_outside():
+    """The same defect as BRAF's, one layer down, found by the benchmark work.
+
+    ALK is a single-pass receptor and every curated compartment says so, so the
+    pipeline offered a blocking antibody at 0.75 as EML4-ALK's preferred
+    mechanism. In the tumour EML4-ALK is a cytoplasmic kinase: ALK is the 3'
+    partner and its extracellular domain is not in the product. There is no
+    approved antibody against it and there could not be; crizotinib, alectinib
+    and lorlatinib are small molecules that work inside the cell.
+
+    The curated compartment describes the full-length protein, and a fusion
+    keeps one side of a junction that GenomeOS does not reconstruct. It does not
+    hold which partner is 5' either, so it cannot say the ectodomain survives.
+    The surface requirement is therefore unanswered, every surface mechanism is
+    provisional, and none of them heads the list.
+    """
+    a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
+    alk = next(c for c in a["candidates"] if c.gene == "ALK")
+    assert alk.best_mechanism is None, "an antibody against a cytoplasmic kinase headed this list"
+    nearest = alk.best_provisional_mechanism
+    assert nearest is not None, "it is still scored and still listed, with its open requirement"
+    assert "surface_accessible" in nearest.provisional_requirements
+    surface = [m for m in alk.therapeutic_mechanisms if m.mechanism == "blocking_antibody"]
+    assert surface and not surface[0].established and surface[0].viable
+
+
+@needs_caches
+@needs_knowledge
+def test_the_rest_of_the_fusion_defect_is_recorded_rather_than_argued_away():
+    """What the gate fix does not reach, pinned so the half-fix is not read as whole.
+
+    The mechanism no longer heads the list, but the candidate is still classed
+    `direct_surface` and still carries an accessibility of 1.0, because both
+    come from the gene's curated localisation rather than from the product the
+    fusion makes. Closing that needs a measurement the project does not hold:
+    the fusion junction, or the partner orientation, or transcript evidence for
+    the retained domains. None of the three is in any table GenomeOS reads, and
+    the demo `.sv` format records a gene and a partner and nothing else.
+
+    This test asserts today's wrong answer on purpose. When the measurement
+    arrives it will fail, which is the point of writing it down.
+    """
+    a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
+    alk = next(c for c in a["candidates"] if c.gene == "ALK")
+    assert alk.target_class == "direct_surface", "still classed from the full-length gene"
+    assert alk.scores.value("surface_accessibility") == 1.0, "still scored from the full-length gene"
+    assert alk.origins[0].fusion_partner == "EML4"
+    assert not any(getattr(o, "fusion_orientation", None) for o in alk.origins), (
+        "the measurement that would close this: which partner is 5', and where the junction falls"
+    )
+
+
+@needs_caches
 def test_an_amplification_is_never_read_as_a_measurement_of_protein():
     a = _run("erbb2_amplification_only.vcf", cnv=str(DEMO / "erbb2_amplification_only.cnv"))
     erbb2 = a["candidates"][0]

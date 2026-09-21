@@ -1,18 +1,23 @@
 {
   "result": "therapeutic_benchmark",
-  "date": "2026-09-15",
-  "cases": 6,
-  "targets_recovered": 6,
-  "verdicts_correct": 6,
-  "top_mechanism_defensible": 6,
-  "surface_cases": 2,
-  "surface_cases_recovered": 2,
+  "date": "2026-09-21",
+  "cases": 7,
+  "targets_recovered": 7,
+  "verdicts_correct": 7,
+  "top_mechanism_defensible": 7,
+  "cases_by_driver_call": {
+    "point mutation": 6,
+    "expression": 1
+  },
+  "surface_cases": 3,
+  "surface_cases_recovered": 3,
   "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
-  "note": "Two questions scored apart: whether the driver's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately and is where the pipeline currently falls short: see mechanism_concerns per row.",
+  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target: six point mutations and one expression call, CD19, which carries no alteration of any kind. Copy number and structural variants reach the ranking and are covered by unit tests, but no scored case here turns on one, so the benchmark does not yet measure those two routes.",
   "rows": [
     {
       "case": "EGFR L858R, lung adenocarcinoma",
       "gene": "EGFR",
+      "driver_call": "point mutation",
       "approved": "osimertinib (small molecule); cetuximab and panitumumab are approved antibodies against EGFR in colorectal carcinoma",
       "approved_modality": "antibody",
       "expected": "surface",
@@ -28,6 +33,11 @@
       "surface_accessibility": 1.0,
       "best_mechanism": "blocking_antibody",
       "best_compatibility": 0.606,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
       "peptide_route": true,
       "mechanism_concerns": [],
       "mechanism_sane": true,
@@ -37,6 +47,7 @@
     {
       "case": "ERBB2-amplified breast carcinoma",
       "gene": "ERBB2",
+      "driver_call": "point mutation",
       "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
       "approved_modality": "antibody",
       "expected": "surface",
@@ -46,12 +57,17 @@
       ],
       "recovered": true,
       "rank": 1,
-      "seconds": 1.1,
+      "seconds": 1.0,
       "target_class": "direct_surface",
       "score": 0.494,
       "surface_accessibility": 1.0,
       "best_mechanism": "blocking_antibody",
       "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
       "peptide_route": false,
       "mechanism_concerns": [],
       "mechanism_sane": true,
@@ -61,6 +77,7 @@
     {
       "case": "BRAF V600E, melanoma",
       "gene": "BRAF",
+      "driver_call": "point mutation",
       "approved": "vemurafenib, dabrafenib (small molecules)",
       "approved_modality": "small_molecule",
       "expected": "out_of_scope_expected",
@@ -78,6 +95,11 @@
       "surface_accessibility": 0.36,
       "best_mechanism": null,
       "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "blocking_antibody",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
       "peptide_route": true,
       "mechanism_concerns": [],
       "mechanism_sane": true,
@@ -87,6 +109,7 @@
     {
       "case": "KRAS G12C, lung adenocarcinoma",
       "gene": "KRAS",
+      "driver_call": "point mutation",
       "approved": "sotorasib, adagrasib (covalent small molecules)",
       "approved_modality": "small_molecule",
       "expected": "out_of_scope_expected",
@@ -106,6 +129,9 @@
       "surface_accessibility": 0.0,
       "best_mechanism": null,
       "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
       "peptide_route": true,
       "mechanism_concerns": [],
       "mechanism_sane": true,
@@ -115,6 +141,7 @@
     {
       "case": "PIK3CA H1047R, breast carcinoma",
       "gene": "PIK3CA",
+      "driver_call": "point mutation",
       "approved": "alpelisib (small molecule)",
       "approved_modality": "small_molecule",
       "expected": "out_of_scope_expected",
@@ -134,6 +161,11 @@
       "surface_accessibility": 0.36,
       "best_mechanism": null,
       "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "adcp",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
       "peptide_route": true,
       "mechanism_concerns": [],
       "mechanism_sane": true,
@@ -143,6 +175,7 @@
     {
       "case": "IDH1 R132H, glioma and AML",
       "gene": "IDH1",
+      "driver_call": "point mutation",
       "approved": "ivosidenib (small molecule)",
       "approved_modality": "small_molecule",
       "expected": "out_of_scope_expected",
@@ -159,10 +192,47 @@
       "surface_accessibility": 0.0,
       "best_mechanism": null,
       "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
       "peptide_route": true,
       "mechanism_concerns": [],
       "mechanism_sane": true,
       "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA",
+      "gene": "CD19",
+      "driver_call": "expression",
+      "approved": "tafasitamab (Fc-engineered antibody); blinatumomab (CD19xCD3 engager); tisagenlecleucel and axicabtagene ciloleucel (CAR-T); loncastuximab tesirine (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the tumour's only DNA driver is TP53; CD19 carries no alteration at all, so a pipeline that starts from alterations cannot propose the target of the two best-known cell therapies. Every approved CD19 drug is antibody-like, which is the one modality class GenomeOS models, so this case tests the route and not only the recovery",
+      "candidates": [
+        "FCRL5",
+        "CD19",
+        "HSP90AA1",
+        "HMGB1",
+        "TP53"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "seconds": 1.7,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "adcc",
+      "best_compatibility": 0.655,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
       "pass": true
     }
   ]

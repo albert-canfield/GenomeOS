@@ -320,6 +320,31 @@ the "mark the cell for the immune system" concept, and it is classed
 experimental with the note that GenomeOS can cite no clinical precedent for the
 full chain.
 
+#### The same mistake, one layer down: a fusion is not the whole gene
+
+The surface gate read the gene's curated localisation, which describes the
+full-length protein. A fusion keeps one side of a junction. For EML4-ALK the
+pipeline therefore offered a blocking antibody at **0.75** as the preferred
+mechanism against what is, in the tumour, a cytoplasmic kinase: ALK is the 3'
+partner and its extracellular domain is not in the product. There is no
+approved antibody against it and there could not be — crizotinib, alectinib and
+lorlatinib are small molecules that work inside the cell.
+
+GenomeOS reconstructs neither the junction nor the partner orientation, so it
+cannot say the ectodomain survives. For a candidate whose every origin is a
+fusion the surface requirement is now **unanswered** rather than met: every
+surface mechanism is provisional, and none heads the list. ALK stays at rank 1
+with the fusion, its recurrent partner and its cohort frequency intact.
+
+Half of the defect is left, and is pinned in
+`test_the_rest_of_the_fusion_defect_is_recorded_rather_than_argued_away` rather
+than argued away. The candidate is still classed `direct_surface` with an
+accessibility of 1.0, because the class and the score also come from the gene
+rather than from the product. Closing that needs a measurement the project does
+not hold: the junction, the 5'/3' orientation, or transcript evidence for the
+retained domains. The `.sv` format records a gene and a partner and nothing
+else, so there is nowhere to read it from today.
+
 ### Repair is not elimination
 
 Genome editing and tumour-suppressor restoration carry a mandatory caveat:
@@ -377,7 +402,15 @@ the same scale (`genomeos/cancer/alterations.py`, distilled knowledge in
   producing that call would reach, because a call gives a direction and no
   amount. A fusion is recorded as a rearrangement between two genes and its
   junction sequence is not reconstructed, so no novel peptide is claimed
-  from it.
+  from it — and, since 2026-09-21, no outward-facing epitope either.
+
+These are unit controls, and for a long time they were the only evidence for
+three of the four routes: every scored case in the therapeutic benchmark
+reached its target through a point mutation, so the benchmark measured the
+variant path end to end and the other three not at all. The seventh case, CD19,
+closes that for expression. Copy number and structural variants are still
+covered by controls alone, and the benchmark result says so in its note rather
+than leaving the gap to be inferred from the case list.
 
 ## The Therapeutic Design Dataset
 
