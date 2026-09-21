@@ -983,3 +983,87 @@ points more element-gene pairs together than random boundaries do, a weaker
 node-content claim than the 4,800-element sample suggested.
 
 docs/NODES-READER-WRITER.md; `domains_oriented_comparison`.
+
+## 2026-09-21 — a coordinating session, and the day three claims were tested where they had never been tested
+
+**This log had been silent since 2026-09-14 while 150 commits landed**, which
+matters more than it looks: the Progress tab renders this file, so the page
+Albert reads to see what the project is doing had been a week behind the
+project. That is the same defect as the two below, in a third place — a status
+surface that keeps reporting the last thing it was told. The gap itself is not
+back-filled here; `git log --since=2026-09-15` and ROADMAP §5 carry those days,
+and this entry starts the log again from the day the drift was named.
+
+Albert asked for one session to coordinate: to hold the roadmap, assign the
+lanes, and keep what is going on readable from the Progress tab. Three status
+surfaces were wrong on the first look, and each was wrong in the same direction
+— **reporting what was true when someone last wrote it down.**
+
+- **The work board said eleven lanes were in flight. Two were.** A session
+  restart renames a session, so the new name writes a new entry and the old one
+  is never touched again by anyone. `stale` at six hours is a pause;
+  **`abandoned` at 48 hours is nobody coming back**, and `genomeos work retire`
+  now moves those out of the board into `data/work/retired/` — moves, because
+  what a lane held is the only record of it once its session is gone. 25
+  retired on the first run.
+- **The oligo library's size was 597 oligos stale.** 284,598 was the output of
+  the commit that designed it; two rebuilds later the result file says 284,001,
+  and two documents disagreed with themselves.
+- **§5's plan showed two items as "next" whose own bodies report them closed.**
+  The parser had computed the finer reading all along and the page printed the
+  coarse one.
+
+**The day's three measurements all went the same way, and all three are
+negatives that were designed to be able to come back positive.**
+
+**The loci benchmark's 0.88 was measured where the nearest gene is the answer.**
+A fourth frame was drawn by a rule committed before the source file was read:
+every held-out ENCODE CRISPR element whose published target is *not* its own
+nearest coding TSS. The number that reframes the first three frames is not the
+new rate but **85 of 175** — at half the field's own measured pairs the
+published target *is* the nearest gene, so a hand-curated frame inherits that
+geometry without anyone choosing it. On the 50 loci where it does not hold, the
+derived rate is **0.200** against a floor of 0.110, where the curated frames
+read 15/17, 8/9, 8/9. The model's own deletion layer hits **3 of 50** and names
+the nearest coding TSS **26** times. The control says the reading is not broken:
+the same layer, at an element 1,111 bp from its target, names it first. Both
+halves of the frame agree and the second is the weaker, below the interval
+registered for it. 4 requests for the whole frame. §22.
+
+**Stage 2's abundance gate could not have passed, and that was committed before
+the data were fetched.** `Economy._share` hands every demander of a pool one
+scalar with no gene index, so the allocation arm differs from a fitted baseline
+by a constant the baseline already fits. Run anyway on 15,159 genes: log10 MAE
+**0.952005 in both arms**, improvement **0.000000000**, with the pools driven
+short enough to move every prediction 3.8 decades. §5.3 had written the
+consequence in advance and it stands: **the pool layer is optional.** It buys a
+burden, refuses six modelling errors, and improves no abundance prediction.
+`competitive` turns out as gene-blind as `proportional`, which closes decision 5
+with a negative, and the one unfitted number lands — 1.36e10 proteins per cell
+against Milo 2013's 4e9 to 1.2e10.
+
+**The therapeutic benchmark recovers a target and does not prefer it.** Its
+eighth case, ERBB2 amplified and not mutated, is recovered with an established
+antibody and **ranks fourth, behind three surface proteins the tumour never
+altered**. All three of the benchmark's questions still read as a pass. The
+cause is that a surface score reads the gene's curated annotation and not the
+alteration, which is also why the same gene, once with twelve copies and once as
+a guess about a neighbour, scored **0.494 both times**. Recorded per row as
+`outranked_by_hypotheses` and deliberately not fixed, because changing it moves
+every case's numbers.
+
+**And one pinned defect turned out to be a question nobody had asked.** Half the
+EML4-ALK defect was pinned as a test asserting today's wrong answer, naming the
+three measurements that would close it and saying none was in any table GenomeOS
+reads. All three were in rows the client already fetched, dropped by
+`projection=SUMMARY`. ALK is now judged on the protein the tumour makes, and the
+transferable half is in LESSONS.md: **a blocker recorded as "this project holds
+no such measurement" is a statement about what was looked for.**
+
+Milestone 1.2's routes are complete at 9/9 — six point mutations, one copy
+number, one structural variant, one expression — with the pinned mechanism
+defect count at 0 and the preference question open in its place.
+
+docs/ROADMAP.md §5 items 3b, 4, 5 and 9; LOCI-BENCHMARK.md §22;
+BIOLANG-v0.4-ECONOMY.md §9.2; LESSONS.md; `data/results/loci_fourth.json`,
+`abundance_gate.json`, `therapeutic_benchmark.json`.
