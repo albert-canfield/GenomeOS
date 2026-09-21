@@ -387,7 +387,80 @@ NEEDED_LOCI_HUNK = {
     " never read back, and the locus grades as though no request had been made",
 }
 
+ENSEMBL_JOIN: dict[str, Any] = {
+    "landed": "2026-09-21, as the second of the two stages registered in `loci_reread.PREREGISTRATION`",
+    "the_defect": (
+        "step 4 of the rule asks whether a regulated target is protein coding, and it asked it of the"
+        " benchmark file's `measuredGeneSymbol` column, which is as old as the screens that filled"
+        " it. The same file carries `measuredGeneEnsemblId`, which does not go stale. Section 23"
+        " joined it and found SSFA2 is ITPRID2 (10 elements), SARS is SARS1 and WDR61 is SKIC8, so"
+        " twelve of the fourteen elements this frame rejected as non-coding were stale symbols and"
+        " eight of them pass every step of this rule under the current symbol"
+    ),
+    "what_changed": (
+        "`select` resolves every published symbol through the file's own Ensembl id and GENCODE's"
+        " gene table before `assess` sees it. `assess`, the rule itself, is untouched - it is the"
+        " names it is given that were wrong, not the steps it applies to them"
+    ),
+    "it_cuts_both_ways": (
+        "a stale symbol can also have been DRAWN wrongly: if a drawn locus's target resolves to the"
+        " element's nearest coding TSS, the rule's own step 5 rejects it and the frame loses a locus"
+        " it had scored. The re-draw is reported as drawn-as-implemented against drawn-as-written,"
+        " with both denominators, precisely because the correction is not one-directional"
+    ),
+    "why_it_is_a_flag_and_not_a_replacement": (
+        "`join_ensembl_ids=False` reproduces the draw section 22 reported. A frame whose result can"
+        " no longer be regenerated is a frame whose published numbers cannot be checked"
+    ),
+    "the_cap_binds_again_and_what_is_done_about_it": (
+        "WRITTEN AFTER THE FREE DRAW WAS TAKEN AND BEFORE ANYTHING WAS SCORED, and it is disclosed"
+        " that way because the membership of both draws was known when this was decided; no score"
+        " was. The corrected rule passes 68 held-out elements rather than 60, so MAX_LOCI binds"
+        " again, and applying it in genome order would ADD the 8 recovered elements on chr2 and"
+        " chr15 and DROP 8 already-scored loci off the end - VAPA (two), MRPL4, ADGRE2, PDCD5,"
+        " EIF3K, CEBPB and MSN, on chr18 to chrX. That draw would confound the correction with the"
+        " loss of eight loci the correction says nothing about."
+        " `CAP_RAISE` already fixed what the cap means: it set 60 because 60 was every element the"
+        " rule then passed, 'so the cap no longer binds at all and cannot be re-cut later on"
+        " anything that has been seen'. Applied to the rule as written, that principle gives 68, and"
+        " 68 is a SUPERSET of the 60 - nothing section 22 scored is dropped and no locus is chosen -"
+        " which is what makes it the reading that cannot be a cherry-pick. The corrected frame is"
+        " therefore scored uncapped, and the cap-60 membership is reported in the section beside it"
+        " so the alternative draw is visible rather than merely rejected"
+    ),
+}
+
 CHROM_ORDER = {f"chr{c}": i for i, c in enumerate([*range(1, 23), "X", "Y"])}
+
+
+def current_symbols(source: str = SOURCE) -> dict[str, str]:
+    """Published symbol to the symbol GENCODE uses now, for the ones that have been renamed.
+
+    The join is the benchmark file's own `measuredGeneEnsemblId` against GENCODE's gene table. No
+    alias list is written here and no symbol is corrected from memory, which is what makes this a
+    join rather than a curation. `loci_noncoding` is imported inside the function because it imports
+    this module at the top of its own.
+    """
+    from genomeos.benchmark import loci_noncoding
+
+    table = loci_noncoding.gene_table()
+    out: dict[str, str] = {}
+    for published, gid in loci_noncoding.ensembl_ids(source).items():
+        now = (table.get(gid) or {}).get("symbol")
+        if now and now != published:
+            out[published] = now
+    return out
+
+
+def with_current_symbols(rows: list[dict[str, Any]], renamed: dict[str, str]) -> list[dict[str, Any]]:
+    """Rewrite each element's regulated targets to the symbols GENCODE uses now, keeping the old ones."""
+    out = []
+    for r in rows:
+        published = list(r["targets"])
+        targets = sorted({renamed.get(t, t) for t in published})
+        distances = {renamed.get(t, t): d for t, d in r["distances"].items()}
+        out.append({**r, "targets": targets, "distances": distances, "published_targets": published})
+    return out
 
 
 def register_stated_intervals() -> None:
@@ -520,6 +593,15 @@ def as_expect(row: dict[str, Any], verdict: dict[str, Any], length: int) -> Expe
     counterpart = CELL_COUNTERPART.get(row["cell"], {"cells": (), "gtex_tissues": (), "tissues": ()})
     mid = row["mid"]
     targets = tuple(row["targets"])
+    # the symbol the screen published, kept in the citation whenever GENCODE has since renamed it:
+    # the locus is graded against the current symbol and cited under the one the paper used.
+    published = tuple(row.get("published_targets") or targets)
+    renamed = (
+        f". The screen published {', '.join(published)}; GENCODE now calls"
+        f" {'/'.join(targets)} the same gene, joined on the file's own Ensembl id"
+        if published != targets
+        else ""
+    )
     return Expect(
         locus=verdict["locus"],
         chrom=row["chrom"],
@@ -538,7 +620,7 @@ def as_expect(row: dict[str, Any], verdict: dict[str, Any], length: int) -> Expe
             f"ENCODE CRISPR benchmark (Gschwind et al. 2025), held-out arm, {'/'.join(row['datasets'])}"
             f", {row['cell']}: silencing {row['chrom']}:{row['start']}-{row['end']} significantly lowers"
             f" {', '.join(targets)} ({row['tested_genes']} gene(s) tested at this element). The interval"
-            " is the screen's own perturbed element, not one this panel drew"
+            " is the screen's own perturbed element, not one this panel drew" + renamed
         ),
         citations=(
             "Gschwind et al. 2025, the ENCODE CRISPR benchmark combined dataset"
@@ -560,15 +642,23 @@ def select(
     source: str = SOURCE,
     cap: int = MAX_LOCI,
     progress=None,
+    join_ensembl_ids: bool = True,
 ) -> dict[str, Any]:
     """Draw the frame. Free: the file, GENCODE and arithmetic. No request, no network.
 
     Returns the drawn panel, the control locus, and every rejection with its reason, so the frame can
     be checked against the rule by anyone who reads the result file.
+
+    `join_ensembl_ids` resolves each published symbol through the file's own `measuredGeneEnsemblId`
+    before the rule is applied, which is the rule as written; `False` reproduces the draw section 22
+    reported, which is the rule as it was implemented. `ENSEMBL_JOIN` has the reason for both.
     """
     say = progress or (lambda _m: None)
     pairs = heldout(source)
     elements = group_elements(pairs)
+    renamed = current_symbols(source) if join_ensembl_ids else {}
+    if renamed:
+        elements = with_current_symbols(elements, renamed)
     taken = [(e.chrom, (e.element[0] + e.element[1]) // 2) for e in earlier_frames()]
     verdicts: list[dict[str, Any]] = []
     drawn: list[Expect] = []
@@ -604,6 +694,14 @@ def select(
         "kept": len(panel),
         "over_cap": over_cap,
         "rejected_by_reason": reasons,
+        "ensembl_join": {
+            "applied": bool(renamed),
+            "renamed_symbols": dict(sorted(renamed.items())) if renamed else {},
+            "elements_with_a_renamed_target": sum(
+                1 for r in elements if r.get("published_targets", r["targets"]) != r["targets"]
+            ),
+            "registration": ENSEMBL_JOIN,
+        },
         "panel": panel,
         "control": control,
         "verdicts": verdicts,
@@ -1087,8 +1185,15 @@ def run(
     gtex_dir: Path = GTEX_DIR,
     progress=None,
     draw: dict[str, Any] | None = None,
+    name: str = NAME,
 ) -> dict[str, Any]:
-    """Draw the frame, filter by reach and budget, then read and score through `loci.build`."""
+    """Draw the frame, filter by reach and budget, then read and score through `loci.build`.
+
+    `name` is the result the run is saved under, and it exists so a re-drawn frame can be written
+    beside the one that has been published rather than over it. The 2026-09-21 Ensembl join is
+    scored as `loci_fourth_rejoined` for exactly that reason: section 22's numbers stay where they
+    are and the corrected draw is reported next to them.
+    """
     register_stated_intervals()
     draw = draw if draw is not None else select(results_dir, progress=progress)
     rows = plan(draw, results_dir)
@@ -1102,7 +1207,7 @@ def run(
             negatives=negatives,
             progress=progress,
         )
-    out["result"] = NAME
+    out["result"] = name
     out["preregistration"] = PREREGISTRATION
     out["draw"] = {k: v for k, v in draw.items() if k not in ("panel", "control")}
     out["drawn_panel"] = [e.as_dict() for e in draw["panel"]]
@@ -1114,7 +1219,7 @@ def run(
     # are computed so that a defect in a reading costs a re-aggregation (free, `--reaggregate`)
     # rather than the whole read. 2026-09-21: a KeyError in `halves` threw away 25 minutes of reads
     # that were already finished and correct.
-    save_result(NAME, out, results_dir)
+    save_result(name, out, results_dir)
     readings(out, results_dir)
     out["note"] = (
         "A FOURTH, separately registered frame of published enhancer-gene loci, DRAWN BY A RULE"
@@ -1122,5 +1227,5 @@ def run(
         " genomeos.benchmark.loci with no change to any scorer or hit rule. Reported beside the"
         " seventeen, the nine and the third set with each frame named, never pooled. " + loci.NOTE
     )
-    save_result(NAME, out, results_dir)
+    save_result(name, out, results_dir)
     return out
