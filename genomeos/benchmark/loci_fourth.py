@@ -997,7 +997,11 @@ def halves(result: dict[str, Any]) -> dict[str, Any]:
         floor = agg.get("target_by_chance", {})
         return {
             "half": name,
-            "chromosomes": sorted({r["chrom"] for r in mine}, key=lambda c: CHROM_ORDER.get(c, 99)),
+            # the chromosome lives on the expectation, not on the row: `loci.trim_locus` keeps the
+            # `expected` block whole and does not copy the coordinate up to the top level.
+            "chromosomes": sorted(
+                {r["expected"]["chrom"] for r in mine}, key=lambda c: CHROM_ORDER.get(c, 99)
+            ),
             "drawn": drawn,
             "graded": len(mine),
             "died_at_the_reach_filter": drawn - len(mine),
@@ -1105,6 +1109,12 @@ def run(
     out["control_locus"] = draw["control"].as_dict() if draw["control"] else None
     out["plan"] = rows
     out["reach"] = reach_fatalities(rows)
+    # the rows are what the run PAID for - range reads over public tracks, and the requests before
+    # them - and every block below is a pure function of them. They are saved before the readings
+    # are computed so that a defect in a reading costs a re-aggregation (free, `--reaggregate`)
+    # rather than the whole read. 2026-09-21: a KeyError in `halves` threw away 25 minutes of reads
+    # that were already finished and correct.
+    save_result(NAME, out, results_dir)
     readings(out, results_dir)
     out["note"] = (
         "A FOURTH, separately registered frame of published enhancer-gene loci, DRAWN BY A RULE"

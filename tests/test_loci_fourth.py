@@ -405,10 +405,12 @@ def test_the_cap_is_a_prefix_of_genome_order_so_raising_it_cannot_re_cut_the_fir
 
 
 def scored(locus, chrom, hit, first_named, targets=("AAA",)):
+    """A scored row shaped as `loci.trim_locus` writes one: the coordinate is on `expected`, NOT on
+    the row. A fixture that put `chrom` at the top level let a KeyError through to a 25-minute run."""
     return {
         "locus": locus,
-        "chrom": chrom,
         "expected": {
+            "chrom": chrom,
             "targets": list(targets),
             "nearest_gene_trap": "TRAP",
             "distance": 50_000,
@@ -454,6 +456,8 @@ def test_the_halves_are_split_by_the_first_cap_and_never_by_the_score():
     assert out["next_36"]["target_derived_where_the_model_could_answer"]["rate"] == 1.0
     # each half is measured against its own floor, because genome order is not random in gene density
     assert out["first_24"]["chance_floor"]["of"] == 2
+    # and the chromosomes are read off the expectation, which is where a scored row carries them
+    assert out["first_24"]["chromosomes"] == ["chr1"] and out["next_36"]["chromosomes"] == ["chr20"]
 
 
 def test_the_halves_carry_the_registration_that_was_written_before_the_second_one_was_scored():
