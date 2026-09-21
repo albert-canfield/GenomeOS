@@ -1323,11 +1323,46 @@ in order. "Owner" is the session that holds the files today (see §7).
   healthy reference is 20 tissues of population consensus, not a matched
   normal.
 - **Next.** 1. A `NeoantigenProvider`
-  behind a licence-checked optional extra. 2. A benchmark case whose driver is
+  behind a licence-checked optional extra. 2. ~~A benchmark case whose driver is
   a copy-number, structural or expression call, and lowering the pinned defect
-  count from 2 to 0; genomeos-f7 owns both. 3. What a deep deletion is worth:
-  the dependency the loss creates, which nothing models.
-- **Owner.** genomeos-f2 since 2026-09-14; genomeos-f7 takes the benchmark.
+  count from 2 to 0.~~ **Done 2026-09-21 (`e21d34a`), and both halves were
+  smaller and larger than the row said.** The pin was payable: both defects
+  closed on 2026-09-15 with `6b45bfe`, when a preferred mechanism was required
+  to be *established* rather than merely unrefused, and the constant read 2
+  against code that gave 0 for six days because the file belonged to another
+  lane. Lowering it alone would have been vacuous — the zero is reached by
+  `best_mechanism` being `None`, and a `None` cannot be indefensible, so a
+  silent pipeline would have scored as sane. Each row therefore now records
+  whether its preferred mechanism was established, the nearest provisional one
+  and the requirement left open, and a test asserts the property the two
+  defects violated instead of the number they produced. BRAF still reads
+  `blocking_antibody` with `surface_accessible` unanswered and PIK3CA `adcp`
+  with the same: demoted with their reason, not deleted.
+  The seventh case is **CD19 in a B-cell lymphoma, reached by an expression
+  call and by no DNA event at all** — the tumour's only DNA driver is TP53 — so
+  it is the first scored case that is not a point mutation, and it tests the
+  route rather than only the recovery, because every approved CD19 drug is
+  antibody-like. **7/7 recovered, 7/7 verdicts, 7/7 defensible**, CD19 at rank 2
+  with `adcc` 0.655 established, which is tafasitamab's mechanism.
+  **Probing the other routes first turned up a third defect of the same class,
+  and it was the day's finding.** Given EML4-ALK the pipeline offered a blocking
+  antibody at 0.75 against what is, in that tumour, a cytoplasmic kinase: ALK is
+  the 3' partner and its ectodomain is not in the product, so there is no
+  approved antibody against it and there could not be. Same mistake as BRAF's
+  one layer down — a curated compartment describing the full-length protein,
+  asserted for a product that is not it. A fusion-only origin now leaves the
+  surface requirement unanswered. **Half of it is pinned rather than argued
+  away**: the candidate keeps `direct_surface` and accessibility 1.0, because
+  class and score come from the gene and not the product, and closing that needs
+  a measurement this project does not hold — the junction, the 5'/3' orientation
+  or transcript evidence for the retained domains. A test asserts today's wrong
+  answer on purpose so it fails when the measurement arrives. Copy number and
+  structural variants still have no scored case, which `cases_by_driver_call`
+  now states in the result instead of leaving it inferable from the case list.
+  3. What a deep deletion is worth: the dependency the loss creates, which
+  nothing models.
+- **Owner.** genomeos-f2 since 2026-09-14; the benchmark and the 2026-09-21
+  defect work ran as lane-cancerF under the coordinating session.
 
 ### G. Product: web UI, CLI, packaging, CI
 
@@ -2842,15 +2877,18 @@ entire sweep. What is next, in order of what it decides:
    was doing its job and the tab was still misleading, because a stale entry from a dead
    session and a stale entry from a session about to come back look the same.
    **The open lanes, one owner each, and nothing owned by a session that no longer exists:**
-   - **Area F, the last clause of milestone 1.2** — assigned to genomeos-e6, 2026-09-21.
-     `KNOWN_MECHANISM_DEFECTS = 2` in `tests/test_therapeutic_benchmark.py`, both defects
-     described in `tests/test_cancer_alterations.py`: a mechanism that is merely not refused
-     heads the list because everything else scores zero. Then a benchmark case whose driver is
-     a copy-number, structural or expression call, since the reader for those landed and the
-     benchmark still recovers all six targets from point mutations alone.
-   - **Item 4, more loci** — open, unowned since genomeos-79's session ended. The finding that
-     makes it worth more loci is the baseline's spread of 0.445 against the derived rate's
-     0.007, and the merge of the third set into the panel is this session's call to make.
+   - **Area F, the last clause of milestone 1.2** — **done the same day (`e21d34a`)**, and the
+     lane changed hands once on the way: it was assigned to genomeos-e6, whose session ended
+     before it started, and ran as lane-cancerF. The pin is 0, the benchmark is 7/7 on all three
+     readings, its seventh case is reached by an expression call rather than a DNA event, and it
+     turned up a third defect of the same class in EML4-ALK. Area F's row has the detail.
+     **The first test of this row's own rule, and it held**: the board said the lane was gone,
+     so the work was reassigned in minutes rather than sitting under a name nobody was behind.
+   - **Item 4, more loci** — **taken as lane-loci4, 2026-09-21**, with Albert's approval to spend
+     AlphaGenome requests on it; the pre-registration is committed (`2103c5a`) before the set is
+     scored. The finding that makes it worth more loci is the baseline's spread of 0.445 against
+     the derived rate's 0.007, and the merge of the third set into the panel is this session's
+     call to make.
    - **Item 5, stage 2 of the economy** — genomeos-0e, last seen seven hours before this row.
      Pool, cost and allocation are in the language and the arithmetic; the burden and abundance
      gates are what remain.
@@ -2928,7 +2966,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **0.9 whole genome** ✅ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached 2026-09-11; the proteome also ships as a packaged offline library. Version is 0.9.0 and the README states what that means; the git tag is cut when the pull request to `main` is merged |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
-| **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
+| **1.2 therapeutics benchmark** ◑ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. **2026-09-21 (`e21d34a`): 7/7 recovered, 7/7 routes, 7/7 defensible, the pinned mechanism-defect count down from 2 to 0, and the seventh case reached by an expression call rather than a DNA event.** The `cancer.*` libraries landed 2026-09-14 (`9c0e6ce`). Outstanding: **no scored case is driven by a copy number or a structural variant** — both routes have unit controls only — and the fusion candidate keeps a surface class its product may not have, blocked on a junction or orientation measurement this project does not hold and pinned as a failing-when-fixed test |
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (312,129 oligos) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
