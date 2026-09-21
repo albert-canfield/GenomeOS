@@ -2849,6 +2849,46 @@ entire sweep. What is next, in order of what it decides:
    published, perturbation-backed non-coding frame this project has had — what section 21 said
    curation could not produce, and what the `predicted_coding`-first defect exposed at H19 still
    needs. LOCI-BENCHMARK.md §22, `188f4ce`.
+   **The first of those two was done the same night and the frame is now exhausted: n = 50 graded
+   of 60 drawn, and the negative holds in both halves** (`f407915` the raise, `aa1f4be` the run).
+   The cap went from 24 to 60, which is every element the rule passes, so it no longer binds and
+   nothing is left for a later hand to choose; `assess` and `select` were untouched, and the raise
+   was registered before the run with its expected cost, with the interval the remaining 36 would
+   have to read for the frame to be called stable, and with what a divergence would mean.
+   **3 requests, exactly what `plan` costed in advance, and 4 for the whole frame against a budget
+   of 30. Derived target 10/60 (0.167) over every locus the rule returned, 10/50 (0.200) where the
+   model could answer, on a chance floor of 0.110** — against 15/17, 8/9, 8/9. Node heuristic 3/50,
+   lookup 0/50.
+   **The halves diverge, and the registration named the direction before the numbers existed.**
+   The cap ran in genome order, so the first 24 are chr1–chr10 and the next 36 chr11–chrX, and the
+   later chromosomes are the gene-dense ones, where the floor per locus is *lower* — so a weaker
+   second half is the expected direction of a density effect and not a finding. First half 6/20
+   (0.300) on a floor of 0.137; second half **4/30 (0.133), below the registered 0.15 to 0.45**, on
+   a floor of 0.092. The floor did fall as predicted, **but the margin over it fell too, 2.2× to
+   1.4×, so density does not account for the whole drop: the half scored first was the better of
+   the two, and that is reported rather than smoothed.**
+   **The per-layer split is unchanged in kind and worse in degree**: deletion **3/50**, GTEx eQTL
+   3/50, summed window 4/50, node 3/50, lookup 0/50. What the deletion layer named instead over
+   the 50: the published target 3, **the nearest coding TSS 26**, another gene 19, nothing 2 —
+   against a pure proximity rule's 41 of 50. In the second half it named the nearer gene 12 times
+   and a third gene 14, so it is not only proximity; what is stable across both halves is that
+   **the published answer is the rarest of the three things the model says.** The control passed
+   again (HMGA1 at 1,111 bp, -0.2271), and the coverage artefact reproduces a fourth time at the
+   larger n: the target claim reads p 0.006 raw and p 0.188 with coverage held fixed, on 97 of 239
+   control windows bought against 50 of 50 loci.
+   **Two defects were found in the machinery by running it twice, and both would have cost
+   something real.** `score_intervals` writes through `save_result`, which overwrites, and the
+   second run asks only for what the first did not cover — so writing its rows alone would have
+   **deleted the PCBP1 deletion the first run bought** and regraded that locus as unasked; a
+   `merge()` now carries old rows forward by locus, and the result names the one it carried. And a
+   reporting bug that read `chrom` off the scored row rather than off `expected` fired after the
+   build and before the save, costing 25 minutes of reads; `run` now saves the built rows before
+   computing any reading, so a defect in a derived block costs a free `--reaggregate` instead.
+   `loci.STATED_INTERVAL_RESULTS` lists `loci_fourth_intervals` in the file now, with a test that
+   the runtime patch and the file agree.
+   **So this item is closed as a frame**: every element the rule passes is drawn, and taking n past
+   60 means registering a different frame rather than raising a cap. What stays free is the 14
+   non-coding targets. `f407915`, `aa1f4be`.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
    more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
    the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
