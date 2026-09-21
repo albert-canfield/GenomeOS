@@ -2889,6 +2889,38 @@ entire sweep. What is next, in order of what it decides:
    **So this item is closed as a frame**: every element the rule passes is drawn, and taking n past
    60 means registering a different frame rather than raising a cap. What stays free is the 14
    non-coding targets. `f407915`, `aa1f4be`.
+   **The non-coding frame was then run and it is two loci rather than fourteen, and it turned the
+   H19 caveat into a verdict** (`70c1c10` the registration, `1220095` the result). The 14 elements
+   the fourth frame dropped at its first branch are not a non-coding set: that branch compares gene
+   SYMBOLS, and the ENCODE benchmark's symbol column is as old as its screens. Joining the
+   `measuredGeneEnsemblId` the same file carries to GENCODE shows **twelve are stale symbols**
+   (SSFA2 is ITPRID2 and accounts for ten of them, SARS is SARS1, WDR61 is SKIC8), leaving **n = 2**
+   genuine lncRNA targets, LINC00885 and CCDC26. That was settled and committed before scoring, so
+   it is arithmetic rather than a discovery.
+   **Nearest-coding-TSS is not the baseline for a non-coding target**, and the registration said why
+   before the run: two of the four derived layers cannot name a non-coding gene at all — `gene_input`
+   reads `predicted_coding` only and `node` returns a coding TSS — so they are zero by construction
+   and quoting them as beaten baselines would be arithmetic dressed as a result. The registered
+   baseline is instead **the model's own any-gene prediction**, the `predicted` field the sweep
+   already stored.
+   **Scored for 0 requests. Derived 0/2, heuristic 0/2, reach 0/2 as registered — and the registered
+   baseline reads 1/2.** At CCDC26 the stored sweep row names the published lncRNA at **-1.691**,
+   twelve times the strongest coding effect in the window, and `loci.read_deletion` reports **GSDMC
+   at -0.1433** instead — a coding gene 204 kb away that the silencing barely moves — because the
+   reader walks `predicted_coding` first and breaks at the first key holding a gene. **So the
+   `predicted_coding`-first defect that section 18 found at H19 is now confirmed with a positive:
+   the model had the answer and the reader discarded it.** At H19 it did not change the outcome;
+   here it is the whole outcome. The one-line fix is named and deliberately not made, because
+   `read_deletion` is the shared reader every frame is scored through, and a test pins the current
+   behaviour so whoever fixes it is told section 23 must be re-read.
+   **Two consequences for other owners, stated and applied nowhere.** Under the corrected symbols
+   **8 of the 12 pass every step of the fourth frame's own rule and would have been drawn into it**,
+   so that frame's draw is smaller than its rule specifies and "exhausted" holds for the rule as
+   implemented rather than as written; whether it is re-drawn, and what that does to 0.200 at n = 50,
+   is a decision to take with the reader fix rather than separately. And the general form is worth
+   more than either: **any rule matching a published gene symbol against GENCODE symbols can
+   silently reject or mis-route a renamed gene**, and the source files already carry the Ensembl ids
+   that fix it. LOCI-BENCHMARK.md §23.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
    more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
    the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
