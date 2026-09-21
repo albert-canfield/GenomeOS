@@ -234,7 +234,7 @@ verified chrM translation, with UniProt signals:
 
 Falsified if any of the four does not hold on the generated program.
 
-## 5. Economy (stage 2, not implemented)
+## 5. Economy (stage 2, implemented 2026-09-21; gate (a) passed, gate (b) failed)
 
 ### 5.1 `pool` [engine]
 
@@ -301,6 +301,16 @@ objective, always labelled a modelling device, never the default; see §7.3).
   improvement is only credited to terms that differ per gene (length cost,
   half-life, translation efficiency). If (b) fails, the pool layer stays
   optional and this document says so.
+
+**Both gates have now run. (a) passed on its three askable clauses; (b) failed,
+and the trap stated above turned out to be understated.** §9.2 has the numbers.
+The short form: the sentence "cannot change a rank correlation" is true of the
+absolute-error test as well, because `proportional` — and, as implemented,
+`competitive` too — hands every demander of a pool the same scalar, and a
+baseline that fits a constant absorbs it exactly. **So the pool layer stays
+optional, as this paragraph agreed in advance.** It is expressible, it is
+charged, it reproduces a burden of the documented shape, and at proteome scale
+it does not improve a single prediction.
 
 ## 6. Energy and mitochondria (stage 3, not implemented)
 
@@ -1124,6 +1134,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 |---|---|---|---|
 | 1 | compartment, location, signals, transport, regime record | chrM, MitoCarta import, rho0, red blood cell | **passed 2026-09-14** (below) |
 | 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started; **no longer blocked** — decision 2 was resolved 2026-09-19 and the absolute volume it needed is implemented (§4.1), so the gate's concentration arm is now expressible |
+| 2 (superseding the row above, 2026-09-21) | pool, cost, allocation | burden; absolute abundance vs PaxDb | **implemented; gate (a) passed on three clauses of four, gate (b) failed** (§9.2). The burden reproduces the documented shape and vanishes when the pool is switched off; the abundance gate improves nothing, for a reason derived from the runtime and committed before the data were fetched. §5.3's consequence stands: the pool layer is **optional**. The row above is left standing rather than rewritten, the way §9.1 item 4 leaves its own superseded decision standing |
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
@@ -1198,6 +1209,111 @@ it there, and for an imported protein that link is the transport at 0.3.
    still works with import closed, because ribosomes are not yet a resource;
    in a cell the mitoribosome is imported. That dependence is stage 2's, and
    the program says so in its own evidence field.
+
+### 9.2 Stage 2 as measured (2026-09-21)
+
+The language surface is `genomeos/lang/parser.py` and `genomeos/ir/model.py`; the
+arithmetic is `genomeos/runtime/economy.py`; the two gates are
+`genomeos/runtime/burden_gate.py` and `genomeos/runtime/abundance_gate.py`, each
+of which is a **pre-registration committed before the instrument that runs it**.
+The results are `data/results/burden_gate.json` and
+`data/results/abundance_gate.json`.
+
+**Gate (a), burden: passed on three clauses of four, and the fourth was
+registered as unaskable before it was run.** Holding an unrelated gene's own
+demand fixed at 100 and expressing the costly protein at seven registered levels
+from 1e3 to 5e7, the unrelated gene's factor reads 1.0, 1.0, 1.0, 1.0, 0.50,
+0.25, 0.05. It falls, it never rises, and the pools that go short are named at
+every level where it moves. **The falsifier holds:** with every pool multiplied
+by 1e6 and the same demands, every factor stays 1.0, so the reduction is not the
+bug that looks exactly like the finding. The **magnitude** clause — agreement
+with Ceroni 2015 or Frei 2020 in order of magnitude — is *not askable here*: this
+project holds neither measured curve, the verdict prints "not askable" rather
+than an agreement, and a test asserts that clause cannot contribute to a pass.
+So the honest reading is narrow: the implementation produces a burden of the
+documented **shape** where a shared pool is short, and the levels at which the
+curve bends are a property of the demo program's round HeLa-scale capacities
+rather than of a cell.
+
+**Gate (b), absolute abundance: failed, and the failure is algebraic rather than
+empirical.** PaxDb's integrated human whole-organism set (19,483 proteins) against
+GTEx v8 median TPM in *Cells - Cultured fibroblasts* — the tissue declared before
+the fetch — joined on 18,420 symbols, 15,159 analysed after dropping 2,423 with
+zero TPM, 516 below the 10-copy floor and 322 with no residue count.
+
+| Reading | Number |
+|---|---|
+| distinct factors the runtime gives 15,159 genes | **1**, under `proportional` and `competitive` alike, with the pools short and with them not |
+| log10 MAE, one-to-one baseline with a fitted constant | 0.952005 |
+| log10 MAE, allocation arm with a fitted constant | 0.952005 |
+| improvement | **0.000000000** (bar to pass: 0.05, bootstrap 95% [0.0, 0.0]) |
+| Spearman, both arms | 0.529265, identical — reported and **excluded** from the verdict |
+| allocation arm with its constant *derived* rather than fitted | 1.551887, i.e. **worse** by 0.599881 |
+| total protein per cell from the declared ribosome capacity, nothing fitted | **1.36e10**, against Milo 2013's 4e9–1.2e10 |
+| OLS slope of log10 copies on log10 TPM | **0.515** [0.499, 0.531] |
+
+The reason was derived from `Economy._share` and **committed before the transcript
+arm was fetched** (`genomeos/runtime/abundance_gate.py`, `AMENDMENT`). `_share`
+returns `capacity / wanted` to every demander of an oversubscribed pool — one
+scalar with no gene index — and an entity's factor is the min over the pools it
+draws on. Every protein-coding gene draws the same two, so the factor is one
+global constant F and `log10 P_alloc = log10 P_base + log10 F`. The baseline fits
+a constant, so the two arms are the same arm. In the run F was 1.754e-4, which
+moves every prediction by 3.8 decades, and the MAE is unchanged to six decimals.
+**§5.3's trap was understated:** it said the pool layer cannot move a *rank*
+correlation, and the truth is that it cannot move the absolute-error test either.
+
+Three findings the gate bought, none of them about allocation:
+
+1. **At the demand a real transcriptome implies, §5.1's capacities are not even
+   binding.** The pools had to be driven 1e4 times harder before anything was
+   short. At proteome scale the pool layer currently does nothing at all.
+2. **`competitive` is as gene-blind as `proportional`.** It returns
+   `capacity / (capacity + wanted)` where `wanted` is the pool's *total* demand,
+   so it differs from `proportional` only in the value of the global constant.
+   Its own comment says each demander's share falls off; every demander's share
+   is the same number. Three policies of the four are gene-blind; `priority` is
+   the one that is not, and it needs an ordering over 19,000 genes that no
+   measurement supplies. **This is §10 decision 5's answer, and it is a negative:
+   gate (b) cannot choose a default allocation policy, because the policies it
+   was meant to choose between make identical predictions.**
+3. **The secondary is the one number the pool layer supplies and nothing fits,
+   and it lands.** 5e6 ribosomes at 5.6 aa/s over an expression-weighted mean of
+   491 residues is 5.7e4 chains/s; a 46 h median protein half-life
+   (Schwanhäusser et al. 2011, Nature 473:337) makes that 1.36e10 proteins per
+   cell, against Milo 2013's 4e9–1.2e10. It could have been wrong by decades and
+   is high by 1.1×. That is a statement about §5.1's capacity, not about
+   allocation.
+
+**What would make the primary able to move**, named in the registration before
+the run: a term that differs per gene. The measured slope sizes it — protein
+abundance rises 0.515 decades per decade of transcript, so **0.485 decades per
+decade of per-gene compression** is what a future policy would have to supply,
+and allocation as implemented supplies none of it. The form that would do it is a
+*per-demander* saturable share, `capacity / (capacity + demand_i)` rather than the
+per-pool form `competitive` computes today; a per-gene half-life is stage 4's. A
+test asserts the per-demander form does beat the one-to-one arm on a compressed
+truth, so the instrument is not merely asserted to be able to work.
+
+**The coverage trap, registered in advance and then measured.** PaxDb holds a
+protein because somebody could quantify it. The covered set's median transcript
+level is 11 TPM; the 10,505 symbols expressed in GTEx and absent from PaxDb have
+a median of 0.37 TPM, about thirty times lower. Every figure above is about the
+covered set, which carries 86% of the assumed protein count per cell. The protein
+and transcript arms are bought; the residue counts are free, from the packaged
+proteome.
+
+**Population mismatch, stated and not resolved:** GTEx is post-mortem bulk tissue
+and PaxDb is an average over experiments, so even the closest pairing is two
+populations. The gate asks whether a shared-capacity model beats a
+proportionality constant at predicting a steady-state distribution, not whether
+either is right about one cell.
+
+**Consequence, as §5.3 agreed before any of this: the pool layer stays optional.**
+It is expressible, it is charged, it refuses six modelling errors, it reproduces
+a burden of the documented shape, and it improves no prediction of protein
+abundance. A program that wants a burden should declare pools; a program that
+wants abundance gains nothing by declaring them.
 
 ## 10. Open decisions for Albert
 
@@ -1324,10 +1440,10 @@ and it is done.
 | Decision | Settled by | How |
 |---|---|---|
 | 1. opt-in or mandatory locations | **priced, 2026-09-15** | not a truth but a cost, and the cost is countable: 27 of 36 programs unaffected, 2 located already, 163 gene facts a lookup, and **19 proteins with no possible source** whose invented compartments would cap every confidence downstream |
-| 2. amounts or concentrations | **partly measurable** | run stage 2's burden gate both ways on cells of different volume; if only one reproduces the published burden scaling, it decides. Held for Albert until then |
+| 2. amounts or concentrations | **resolved by Albert, 2026-09-19** | a compartment states an absolute volume beside its fraction, so a threshold may be a concentration and is converted where its rule acts (§4.1, §9.1 item 4). The test this row proposed — the burden gate both ways on cells of different volume — was **not** what settled it and has still not been run: gate (a) ran on a demo program that declares no cell (§9.2), so the volume arm of that gate remains open |
 | 3. membranes as nodes or edges | preference, lightly constrained | both passed stage 1; the band-3 transport forced the "across one membrane" rule, which either shape can express |
 | 4. whose cost accounting | **measurable** | the ATP budget gate (Buttgereit & Brand's hierarchy, Lynch & Marinov's totals): the accounting that lands in the published order of magnitude wins |
-| 5. default allocation | **measurable** | gate (b), absolute abundance against PaxDb, run under each policy |
+| 5. default allocation | **asked and answered with a negative, 2026-09-21** | gate (b) ran under each policy and they make identical predictions: `proportional` and `competitive` both hand every demander of a pool one scalar, so no abundance measurement can choose between them (§9.2). `priority` is the only per-gene policy and needs an ordering over 19,000 genes that no measurement supplies. The decision is not Albert's to make on this evidence, because the evidence cannot see the difference |
 | 6. protein turnover set | **measurable** | the dilution gate run with the human and the mouse sets; if they disagree beyond their own spread, the human set is required |
 | 7. which homeostats first | data availability, not preference | the pair whose failure direction is best documented; Na⁺/K⁺ and pH stand |
 | 8. `fates: first` default | **settled by measurement** (resolved above) | |
@@ -1340,4 +1456,6 @@ either construct breaks an arm. The integrated reads landed on 2026-09-15 and
 are area E's to gate; re-decision is §7.5; and the precursor-level `commitment`
 turned out to need no construct at all (§7.2a decision 3). The next engine work
 that needs no preference from Albert is therefore decision 10's construct
-sketch. 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.
+sketch. 4 and 6 still need stage 2 or 4 first; 2 no longer holds stage 2, which
+shipped and was gated on 2026-09-21 (§9.2); and 5 is now closed by a negative
+rather than by a preference.

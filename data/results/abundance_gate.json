@@ -1,0 +1,197 @@
+{
+ "gate": "BioLang v0.4 \u00a75.3 gate (b): absolute abundance",
+ "run": "2026-09-21",
+ "pre_registration": {
+  "written": "2026-09-21, before either dataset was fetched and before any figure existed; committed in this file before the script that runs it",
+  "claim": "the pool layer improves the prediction of absolute protein copy numbers from transcript abundance, against the one-to-one mapping it replaces",
+  "primary": "mean absolute error in log10 protein copies per cell",
+  "secondary": "total protein per cell against Milo 2013 (order of magnitude)",
+  "baseline": "the current one-to-one mapping: protein copies proportional to transcript abundance with a single constant, fitted on the same genes the allocation arm uses so neither arm gets a denominator the other does not",
+  "outcomes": {
+   "pass": "log10 MAE falls by at least 0.05 against the one-to-one baseline, with a bootstrap interval excluding zero, AND total protein per cell stays within an order of magnitude of Milo 2013",
+   "fail": "no improvement, or an improvement that disappears once the covered subset's covariates are matched. \u00a75.3's consequence is already written: the pool layer stays optional and the document says so",
+   "not_creditable": "any improvement in RANK. Proportional allocation rescales every gene equally and cannot move a rank correlation, so a rank gain is evidence about some other term that differs per gene, not about allocation. It is reported and excluded from the verdict"
+  },
+  "denominators": "genes with a value in both arms and at least 10.0 copies per cell. The count, the excluded count and the reason are printed beside every figure, and the covered and uncovered sets have their covariates compared",
+  "cannot_do": "PaxDb is an average over experiments and cell types, and the transcript source will be its own population; the two are not the same cell. So this tests whether a shared-capacity model predicts a steady-state abundance distribution better than a proportionality constant, not whether it is right about any one cell. And it cannot separate allocation from the cost terms that come with it, because a program states both at once"
+ },
+ "transcript_source": {
+  "chosen": "GTEx v8 gene median TPM",
+  "url": "https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+  "size_mb": 7.0,
+  "why": "it answered (HTTP 200 at 7 MB) where the Human Protein Atlas download paths did not (404 on both rna_celline and normal_tissue, so they have moved); it is the RNA source this project already streams and cites for eQTLs, so one citation covers both uses; and 7 MB distils without touching a disk that is at 91%",
+  "tissue": "Cells - Cultured fibroblasts",
+  "why_that_tissue": "one named population rather than a cross-tissue average, fixed before the fetch. PaxDb's human data is weighted toward cultured cells, so a cultured-cell transcript arm is the closest single population on offer. The whole-body median is carried as a declared sensitivity, not as an alternative to be chosen afterwards",
+  "population_mismatch": "STATED, not resolved: GTEx is post-mortem bulk tissue and PaxDb is an average over experiments, so even the closest pairing is two populations. This is why the gate asks whether a shared-capacity model beats a proportionality constant at predicting a steady-state distribution, and not whether either is right about one cell",
+  "rejected": {
+   "Human Protein Atlas": "download paths 404 as of 2026-09-21; it would have paired RNA and protein in one resource",
+   "a cross-tissue GTEx average": "an average over populations is a population nobody sampled"
+  }
+ },
+ "amendment": {
+  "written": "2026-09-21, before the transcript arm was fetched, before either arm was joined and before any figure existed. Reasoned from the runtime source \u2014 Economy._share in genomeos/runtime/economy.py \u2014 and not from data. What had been touched when this was written: PaxDb's header and its first eight rows, to confirm the file exists and carries a gene symbol and a ppm. No transcript abundance had been fetched, nothing had been joined, and no error, rank or slope had been computed",
+  "finding": "THE REGISTERED TRAP IS UNDERSTATED, and understated in a way that disqualifies the primary. \u00a75.3 says a shared pool under proportional cannot move a RANK correlation. Reading the runtime shows the stronger statement: `_share` returns `capacity / wanted` to EVERY demander of an oversubscribed pool, one scalar with no index on the gene, and an entity's factor is the min over the pools it draws on. In a proteome-wide program every protein-coding gene draws the same two pools \u2014 a ribosome per chain and ATP per residue \u2014 so the min is over the same two scalars for everybody and the factor is ONE GLOBAL CONSTANT F. The allocation arm's prediction is therefore the baseline's prediction multiplied by a constant: log10 P_alloc = log10 P_base + log10 F",
+  "consequence_for_the_primary": "the baseline fits a constant, so the two arms span the same one-parameter family and the allocation arm cannot improve mean absolute error in log10 copies. Fitted against fitted they are the SAME ARM and the difference is exactly zero; unfitted, the allocation arm can only be worse, by however far its derived constant sits from the fitted optimum. So the registered pass condition \u2014 MAE falls by at least 0.05 with a bootstrap interval excluding zero \u2014 CANNOT BE MET by the pool layer as implemented, whatever the data say. The registered primary does not measure allocation. What it measures, once the constant is left underived, is whether the declared capacities put the ABSOLUTE SCALE in the right place, which is what the secondary already asks",
+  "why_this_is_recorded_before_the_run": "a pass condition that algebra has already closed is not a measurement, and reporting its 'no improvement' afterwards as though the data had spoken would dress a derived identity up as an empirical negative. The distinction is the same one gate (a) drew when it registered its magnitude clause as not askable",
+  "still_run_and_why": "a derivation asserted is weaker than a derivation shown, so every registered reading is still computed on the real join: the two fitted arms are expected to agree to numerical precision, and a gap above 0.001 log10 falsifies the derivation above rather than the pool layer, at which point this amendment is withdrawn in the open",
+  "what_can_still_fail": {
+   "secondary": "the total protein per cell implied by the DECLARED ribosome capacity, nothing fitted: 5e+06 ribosomes each elongating at 5.6 aa/s over the expression-weighted mean chain length gives a synthesis rate, and a median protein half-life of 46.0 h turns it into a steady-state count. It is compared with Milo 2013's 4e+09-1e+10 and passes only within one order of magnitude of that band. It is not fitted, so it can be wrong by decades, and if it is, \u00a75.3's consequence is the one already written down",
+   "unfitted_allocation_arm": "the allocation arm with its constant DERIVED from capacity rather than fitted, reported as the absolute-scale reading it actually is rather than as a rival to the baseline"
+  },
+  "instrument_that_would_make_the_primary_able_to_move": "a term that differs PER GENE, and none of the three available ones is allocation. (1) `priority` is the only implemented policy whose share carries a gene index, and it needs an ordered list over ~19,000 genes that no measurement supplies, so it is not runnable at proteome scale. (2) A per-demander saturable share, C / (C + demand_i), instead of the per-pool C / (C + demand_total) that `competitive` computes TODAY \u2014 as implemented, `competitive` is as gene-blind as `proportional` and differs from it only in the value of the global constant, which is a finding about this runtime and is reported as one. A per-demander form would compress the dynamic range, which is the documented direction. (3) A per-gene degradation term, which is stage 4's, not stage 2's",
+  "new_registered_quantity": "the ordinary-least-squares slope of log10 protein copies on log10 transcript TPM over the covered set, with a bootstrap interval. It sizes the instrument above in decades per decade: a slope of 1 would say no per-gene compression is needed and the pool layer has nothing left to add even in principle; a slope below 1 states how much compression a future per-demander policy must supply to be worth writing. This number is reported whatever the verdict, and it is the only thing this gate can newly learn",
+  "verdict_rule": "the gate FAILS by its own registered rule, and the report must say that the failure is algebraic rather than empirical. \u00a75.3's consequence stands as written: the pool layer stays optional and the document says so"
+ },
+ "coverage": {
+  "paxdb_rows": 19483,
+  "gtex_symbols": 54592,
+  "symbols_in_both": 18420,
+  "lengths_available": 18162,
+  "analysed": 15159,
+  "dropped": {
+   "below_copy_floor": 516,
+   "zero_tpm": 2423,
+   "no_residue_count": 322
+  },
+  "covariates": {
+   "covered": {
+    "log10_tpm": {
+     "n": 15159.0,
+     "p25": -0.01991159687915771,
+     "median": 1.0463351521675126,
+     "p75": 1.524176647321711,
+     "mean": 0.7204884500528489
+    },
+    "residues": {
+     "n": 15159.0,
+     "p25": 299.0,
+     "median": 474.0,
+     "p75": 752.0,
+     "mean": 629.2066759021044
+    }
+   },
+   "expressed_in_gtex_absent_from_paxdb": {
+    "log10_tpm": {
+     "n": 10505.0,
+     "p25": -0.9045342434664145,
+     "median": -0.43366151701802286,
+     "p75": 0.1127624717531158,
+     "mean": -0.3584126278318067
+    },
+    "residues": {
+     "n": 83.0,
+     "p25": 108.0,
+     "median": 194.0,
+     "p75": 334.0,
+     "mean": 282.0240963855422
+    },
+    "note": "10505 symbols, of which 83 have a residue count. The residue block is the smaller of the two because the packaged proteome is UniProt-reviewed and is tilted toward the same proteins PaxDb could quantify, so it understates the difference rather than measuring it"
+   }
+  },
+  "what_the_comparison_says": "PaxDb holds a protein because somebody could quantify it, so every figure below is about the covered set and the two covariate blocks say which population that is",
+  "input_presence": {
+   "protein_abundance": "bought: PaxDb integrated human whole organism",
+   "transcript_abundance": "bought: GTEx v8 gene median TPM, Cells - Cultured fibroblasts",
+   "residue_count": "free: the packaged proteome already in this repository"
+  }
+ },
+ "runtime_factors_over_the_joined_genes": {
+  "proportional_at_observed_demand": {
+   "policy": "proportional",
+   "demand_multiplier": 1.0,
+   "genes": 15159,
+   "distinct_factors": 1,
+   "factor": 1.0,
+   "constrained": false
+  },
+  "competitive_at_observed_demand": {
+   "policy": "competitive",
+   "demand_multiplier": 1.0,
+   "genes": 15159,
+   "distinct_factors": 1,
+   "factor": 1.0,
+   "constrained": false
+  },
+  "proportional_with_the_pools_short": {
+   "policy": "proportional",
+   "demand_multiplier": 10000.0,
+   "genes": 15159,
+   "distinct_factors": 1,
+   "factor": 0.000175401048,
+   "constrained": true
+  },
+  "competitive_with_the_pools_short": {
+   "policy": "competitive",
+   "demand_multiplier": 10000.0,
+   "genes": 15159,
+   "distinct_factors": 1,
+   "factor": 0.000175370288,
+   "constrained": true
+  },
+  "what_this_shows": "the amendment's claim is about `Economy._share`, so it is tested by calling it rather than by reading it. With the pools short, every one of the joined genes still gets ONE factor \u2014 under `competitive` as much as under `proportional`, which is the runtime finding the amendment registered. And at the demand a real transcriptome implies, \u00a75.1's capacities are not even binding, so at proteome scale the pool layer currently does nothing at all"
+ },
+ "primary": {
+  "metric": "mean absolute error in log10 protein copies per cell",
+  "baseline_one_to_one_fitted": 0.952005,
+  "allocation_fitted": 0.952005,
+  "allocation_factor_used": 0.000175401048,
+  "improvement": 0.0,
+  "bootstrap_95": [
+   0.0,
+   0.0
+  ],
+  "required_to_pass": 0.05,
+  "verdict": "fail",
+  "why": "the two arms are the same arm. The runtime gives every one of the joined genes the same factor, so the allocation arm differs from the baseline by an additive constant in log10 and both arms fit that constant. This was derived from `Economy._share` and committed before the transcript arm was fetched; the number here is the derivation shown rather than the data speaking"
+ },
+ "derivation_check": {
+  "tolerance_log10": 0.001,
+  "observed_absolute_difference": 0.0,
+  "holds": true,
+  "if_it_had_failed": "the amendment would be withdrawn, not defended: a gap here falsifies the derivation rather than the pool layer"
+ },
+ "allocation_unfitted": {
+  "what_it_is": "the same shape with its constant DERIVED from the declared ribosome capacity instead of fitted. It is the absolute-scale reading, not a rival to the baseline",
+  "mae_log10": 1.551887,
+  "worse_than_baseline_by": 0.599881
+ },
+ "secondary": {
+  "metric": "total protein per cell, nothing fitted",
+  "inputs": {
+   "ribosome_capacity": 5000000.0,
+   "elongation_aa_per_s": 5.6,
+   "expression_weighted_mean_residues": 490.8,
+   "protein_half_life_h": 46.0
+  },
+  "chains_per_second": 57050.1,
+  "model_total_proteins_per_cell": 13629858560.13998,
+  "milo_2013_band": [
+   4000000000.0,
+   12000000000.0
+  ],
+  "within_one_order_of_magnitude": true,
+  "measured_total_over_covered_set": 4291224515.0,
+  "covered_share_of_the_assumed_total": 0.8582,
+  "reading": "this is the one number in the gate that the pool layer supplies and nothing fits. It is a statement about \u00a75.1's ribosome capacity and two cited rates, not about allocation, and it is the arm that could have been wrong by decades"
+ },
+ "reported_and_excluded": {
+  "spearman_baseline": 0.529265,
+  "spearman_allocation": 0.529265,
+  "why_excluded": "identical by construction, and \u00a75.3 said so in advance. Reporting it and refusing to use it is what shows the trap was avoided rather than unnoticed"
+ },
+ "new_registered_quantity": {
+  "metric": "OLS slope of log10 protein copies on log10 transcript TPM, decades per decade",
+  "slope": 0.514646,
+  "bootstrap_95": [
+   0.498904,
+   0.531392
+  ],
+  "per_gene_compression_a_future_policy_must_supply": 0.485354,
+  "reading": "a slope of 1 would leave the pool layer nothing to add even in principle. A slope below 1 is the size of the per-gene term that a per-demander saturable policy would have to supply, and allocation as implemented supplies none of it"
+ },
+ "verdict": {
+  "passed": false,
+  "statement": "gate (b) FAILS. The failure is algebraic rather than empirical: the registered pass condition cannot be met by the pool layer as implemented, and that was committed before the transcript arm was fetched. \u00a75.3's consequence was agreed in advance and stands: the pool layer stays optional and the document says so",
+  "what_was_learned": "the absolute scale the declared ribosome capacity implies, and the slope that sizes the per-gene term a future policy would need"
+ }
+}
