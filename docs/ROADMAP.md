@@ -3132,6 +3132,35 @@ a guess about a neighbour, scored **0.494 both times**. The duplicate is fixed a
 scoring is recorded per row as `outranked_by_hypotheses` and deliberately left alone, because
 teaching a score to read the alteration moves every case's numbers and is a decision of its own.
 
+**Then the structural-variant clause closed too, the same night (`deee0a2`), and it closed because
+the measurement a test had called unreachable was in rows the client already fetched.** The pin said
+the junction, the partner orientation and transcript evidence for the retained domains were in no
+table GenomeOS reads; the structural-variant endpoint was being asked for `projection=SUMMARY`, which
+drops all three. Under `DETAILED` the same row gives site1 EML4 and site2 ALK — so ALK is the 3'
+partner — both breakpoints, `breakpointType=PRECISE`, and "EML4 exons 1-20 with ALK exons 20-29"
+against an ectodomain encoded by exons 1-19. **A gene contributed as the 3' partner does not bring
+its own N-terminus**, and ALK is curated as exactly the kind of protein that depends on it:
+single-pass, N-terminus outside, signal peptide 1-18, extracellular 19-1038. Class and score now
+describe the product rather than the gene — `intracellular_only` at accessibility 0.0, antibody-like
+mechanisms refused rather than provisional — which is the clinical picture, since crizotinib,
+alectinib and lorlatinib are all small molecules and no antibody against EML4-ALK exists or could.
+**The rule is about which end the gene contributes, not about fusions**, and a test turns the fixture
+round to keep it that way: a 5' partner keeps its ectodomain and the question reopens, and an
+unreported orientation stays unknown rather than becoming "no ectodomain". Without that guard it
+would decay into "a fusion is never a surface target", which is false — and is how the earlier fix
+went wrong, by answering a question it had only stopped asking.
+**So 1.2's route coverage is complete at 9/9: six point mutations, one copy number, one structural
+variant, one expression, every route into the candidate list scored end to end.** ALK passes by
+refusing a surface route, as the four intracellular missense cases do, and the peptide-route test is
+now scoped to point mutations — what it always meant while every case was one — because a fusion's
+changed sequence is the junction and GenomeOS does not reconstruct it. What is out of scope is now a
+modality rather than a route: no small molecules, and five of nine cases pass by saying so.
+**What remains open is the preference question above, untouched: `BURIED_SURFACE_TARGETS` stands at
+2 and a surface score still reads the annotation rather than the alteration.** LESSONS.md carries
+the transferable half, which is not about fusions: a defect left open because "this project holds no
+such measurement" is a statement about what was looked for, and here looking cost one request
+parameter.
+
 ---
 
 ## 7. Improvement and creativity pool

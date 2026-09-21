@@ -601,3 +601,21 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   lands in the top bands because the calibration's population is regulated 77% of the time, so the
   discriminating axis is the predicted drop, and only 5.5% of coding targets clear the 0.2 where the
   screens called 105 of 105.
+
+- **A test that pins a defect names what would close it, and that name is a claim to be checked
+  like any other (2026-09-21).** Half of the EML4-ALK defect was pinned as a test asserting
+  today's wrong answer on purpose — ALK classed `direct_surface` at accessibility 1.0, both read
+  off the full-length gene — with a docstring naming the three measurements that would close it:
+  the fusion junction, the partner orientation, or transcript evidence for the retained domains,
+  "none of the three in any table GenomeOS reads". **All three were in rows the client already
+  fetched.** cBioPortal's structural-variant endpoint was asked for `projection=SUMMARY`, which
+  drops them; the same row under `DETAILED` gives `site1HugoSymbol=EML4` and `site2HugoSymbol=ALK`
+  — site1 is the 5' partner, so ALK is the 3' — both breakpoints, `breakpointType=PRECISE`, and an
+  annotation reading "EML4 exons 1-20 with ALK exons 20-29" against an ectodomain encoded by exons
+  1-19. The pin was right, the honesty was right, and the sentence that made it durable was wrong:
+  a blocker recorded as "this project holds no such measurement" is a statement about what was
+  looked for, and looking cost one request parameter. **Whenever a defect is left open on the
+  grounds that the data does not exist, the cheapest next act is to check the source already in
+  the code for the field, before the note hardens into a reason.** The lesson is not about fusions
+  and not about cBioPortal: a `SUMMARY` projection, a default column set and a summary endpoint
+  all drop fields silently, and none of them report what they withheld.
