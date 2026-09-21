@@ -82,3 +82,36 @@ def test_motif_strands_scan_and_cache(tmp_path):
     assert got == {"E0": {"+"}, "E1000": {"-"}, "E2000": set()}
     again = ctcf_motif_strands("chrT", ccres, lambda s, e: "", cache=tmp_path)  # read from the cache
     assert again == got
+
+
+def test_site_scores_serve_every_variant_of_the_call(tmp_path):
+    """The stricter site call (registered 2026-09-21): one scan, four ways of reading it."""
+    from genomeos.genome import motifs as mo
+    from genomeos.genome.domains import STRICT_RELATIVE, ctcf_motif_sites, strand_variant
+
+    if not mo.JASPAR_PATH.exists():
+        import pytest
+
+        pytest.skip("JASPAR profiles not cached locally")
+    forward = "AAAAAGCCACCAGGGGGCGCAAAAA"
+    reverse = "TTTTTGCGCCCCCTGGTGGCTTTTT"
+    # a strong forward core with a degenerate reverse-strand hit beside it: the case the loose call
+    # reads as both-strand and drops, and the stricter call orients by its best hit
+    mixed = "GCCACCAGGGGGCGCTGCGCCCCCTGGTAGC"
+    seqs = {0: forward, 1000: reverse, 2000: "A" * 25, 3000: mixed}
+    ccres = [CCRE("chrT", s, s + len(q), f"E{s}", "CTCF-only", True) for s, q in seqs.items()]
+    sites = ctcf_motif_sites("chrT", ccres, lambda s, e: seqs[s], cache=tmp_path)
+    assert ctcf_motif_sites("chrT", ccres, lambda s, e: "", cache=tmp_path) == sites  # cached
+
+    loose = strand_variant(sites)
+    assert loose["E0"] == {"+"} and loose["E1000"] == {"-"} and loose["E2000"] == set()
+    best = strand_variant(sites, best_hit=True)
+    # an element the loose call cannot orient is orientable by its best hit, and never the other way
+    assert all(len(v) <= 1 for v in best.values())
+    assert {c for c, v in loose.items() if v} == {c for c, v in best.items() if v}
+    assert len(loose["E3000"]) == 2 and best["E3000"] == {"+"}
+
+    strict = strand_variant(sites, relative=STRICT_RELATIVE, best_hit=True)
+    assert all(strict[c] <= best[c] for c in sites)  # strictness only ever drops a site
+    for cid, ((fr, _fs), (rr, _rs)) in sites.items():
+        assert bool(strict[cid]) == (max(fr, rr) >= STRICT_RELATIVE)

@@ -509,6 +509,129 @@ so that "improved nothing" can be told apart from "kept nothing": elements
 carrying a site at each threshold, elements the strand rule can orient,
 boundaries and nodes per caller.
 
+### The site call, scored (`scripts/oriented_domains.py`, `domains_oriented_comparison`)
+
+**First, what the two changes do to the sites themselves.** 450,641 elements
+have CTCF ChIP support across the 24 chromosomes.
+
+| | elements with a site | of those, orientable |
+|---|---|---|
+| 0.85, set of hit strands (`oriented`) | 123,166 | 111,470 |
+| 0.85, best hit's strand | 123,166 | **123,166** |
+| 0.95, set of hit strands | 8,616 | 8,613 |
+| 0.95, best hit's strand (`oriented_strict`) | 8,616 | **8,616** |
+
+The two halves of the stricter call turn out to be of very different sizes.
+Best-hit strand recovers the 11,696 elements — 9.5% — that the loose rule drops
+for carrying hits on both strands. The 0.95 threshold removes **93.0%** of the
+elements that have a site at all. And at 0.95 the both-strand problem has
+already vanished: 8,613 of 8,616 are single-strand before the best-hit rule is
+applied, which is why `oriented_strong` and `oriented_strict` are, below, the
+same caller to within one node.
+
+**One change to the denominator, stated before the table.** Node content is
+measured on the deletion archive, which has grown from the 113,399 scored
+elements of 2026-09-14 to **440,377**. Every caller in the table was re-run on
+the new archive in the same job, so the comparison is within-run; the
+2026-09-14 column moves because its denominator did, not because the caller did.
+The old caller's excess over random survives the 3.9-fold growth: +2.6 points on
+113,399, **+2.9 points on 440,377**.
+
+| measurement | ctcf_only (default) | oriented (2026-09-14) | best-hit strand only | **oriented_strict (0.95 + best hit)** | 0.90, post-hoc |
+|---|---|---|---|---|---|
+| nodes, genome | 20,002 | 17,995 | 18,921 | **2,195** | 9,221 |
+| **1. Hi-C: enrichment of edges within 20 kb of a measured boundary** | | | | | |
+| H1 | 1.38 | 1.74 | 1.75 | **1.75** | 2.11 |
+| K562 | 1.36 | 1.96 | 1.96 | **2.36** | 2.69 |
+| HepG2 | 1.30 | 1.99 | 1.99 | **2.27** | 2.64 |
+| IMR-90 | 1.16 | 1.45 | 1.45 | **1.60** | 1.85 |
+| GM12878 (saturated, not judged) | 1.10 | 1.11 | 1.11 | 1.14 | 1.14 |
+| measured boundaries reached, H1 / K562 / HepG2 / IMR-90 (reported, not judged) | 36.6 / 36.0 / 34.5 / 31.1% | 41.2 / 47.5 / 47.9 / 34.8% | 43.4 / 49.9 / 50.2 / 36.4% | **5.1 / 6.9 / 6.9 / 4.4%** | 26.0 / 33.3 / 33.4 / 22.3% |
+| **2. Node content, 440,377 scored elements** | | | | | |
+| share whose most-moved coding gene is in their node | 75.4% | 59.9% | 58.7% | **94.5%** | 79.4% |
+| as many boundaries placed at random | 72.5% | 74.0% | 73.2% | **94.8%** | 83.3% |
+| **excess over random (the judged statistic)** | **+2.9 points** | −14.1 | −14.5 | **−0.3** | −3.9 |
+| at the two callers' matched 17,310 boundaries | 77.4% | 61.0% | 61.3% | too few edges | too few edges |
+| **3. Mouse synteny: mouse nodes in one human neighbourhood (MGI)** | | | | | |
+| chr19 | **95.9%** of 122 | 91.3% of 138 | 91.7% of 144 | 91.8% of **73** | 97.0% of 135 |
+| chr11 | **92.4%** of 331 | 88.0% of 343 | 88.6% of 342 | **85.3%** of 190 | 89.4% of 311 |
+| **4. HOXD: the published HOXD11 to HOXD13 boundary** | | | | | |
+| edge inside 176,096,240 to 176,109,754 | no, 106 kb away | no, 16 kb away | no, 16 kb away | **no, 1,097 kb away** | no, 16 kb away |
+| nodes over the nine genes | 1 | 2 | 3 | **1** | 1 |
+
+**The verdict, read against the conditions registered above.**
+
+1. **Hi-C: passes.** Enrichment is at or above `oriented`'s in all four judged
+   biosources — 1.75, 2.36, 2.27, 1.60 against 1.74, 1.96, 1.99, 1.45 — and the
+   three that move do so well outside the ±0.05 floor. It is a **precision**
+   pass and nothing more: the reach reported beside it collapses from 41 to 48%
+   of measured boundaries down to **5 to 7%**, because the caller keeps 2,171
+   edges where `oriented` keeps 17,971. Its edges land near a boundary more
+   often; there are eight times fewer of them.
+2. **Node content: fails.** Excess over random is **−0.3 points** against the
+   default's +2.9. The raw 94.5% is the highest number in the table and it means
+   nothing: as many boundaries placed at random keep 94.8% of the same pairs
+   together. This is precisely the case the registration fixed the statistic
+   for, and `oriented_ctcf_only` showed it in 2026-09-14 at 93.8% raw and −0.7
+   points. The matched-resolution control cannot be run at all, because the
+   caller has fewer edges than the matched count.
+3. **Mouse synteny: fails.** chr11 gives 85.3% against the default's 92.4%, a
+   7.1-point loss outside the ±2.0 floor, and it is *below* `oriented`'s 88.0%,
+   so strictness made this one worse rather than better. chr19 gives 91.8% but
+   on **73** tested mouse nodes, under the 80 the registration set as the
+   minimum, so it is reported and not judged.
+4. **HOXD: fails.** No edge in the published interval, and the nearest edge is
+   1,097 kb away — `oriented`'s was 16 kb. The nine genes fall back into one
+   node, which is where the default already had them.
+
+**One measurement passes, three fail. The default does not change.** That is
+the case the registration decided in advance, and it decides it the same way
+2026-09-14 was decided: a stricter site call is kept as a named option, the
+committed nodes stay CTCF-only, and the second half of the roadmap item is
+answered **yes** — Hi-C questions and enhancer-to-gene questions need two node
+sets. A site call strict enough to sharpen insulation-boundary agreement is
+strict enough to destroy the node's relation to the gene an element acts on.
+
+**What the two halves each contributed, which is the finding worth keeping.**
+
+- **Best-hit strand changes nothing at all.** Against `oriented` it moves Hi-C
+  enrichment by at most 0.01 (floor 0.05), node content by 0.35 points (floor
+  0.5), synteny by 0.4 and 0.6 points (floor 2.0), and leaves HOXD unrecovered.
+  Every one of the four is unchanged by the registered floors. The 2026-09-14
+  note guessed that the scan "counts an element as both-strand when a weak
+  off-by-two hit sits on the other strand"; the guess was right about the
+  mechanism — 11,696 elements, 9.5% — and wrong about it mattering. Those
+  elements are not where the boundaries are.
+- **Stronger motifs is the entire effect, and the effect is deletion.**
+  `oriented_strong` and `oriented_strict` differ by one node in 2,195. Raising
+  the threshold to 0.95 does not find better sites; it throws away 93% of them
+  and leaves a caller with a tenth of the edges. Everything that moved — the
+  Hi-C enrichment up, the reach down, the node content into its own random
+  control, HOXD a megabase away — follows from having 2,171 edges instead of
+  17,971.
+
+**One observation, registered in advance as unable to decide anything.** After
+the registered run showed that 0.95 keeps 7% of the sites, a 0.90 call was added
+as a diagnostic, to tell "strictness does not help" apart from "0.95 kept
+nothing". It is the last column. It is the best Hi-C caller of the seven (2.11,
+2.69, 2.64, 1.85) while still reaching 22 to 33% of measured boundaries, its node
+content excess is −3.9 rather than −14.1, and its chr19 synteny, 97.0% of 135,
+is the only figure in the table above the default's. It still fails node content,
+still fails chr11 synteny and still misses HOXD by 16 kb. So the answer is not
+that 0.95 was the wrong number: **even at the threshold that trades best, the
+stricter call does not pass all four.** It is a candidate for a future
+pre-registered test on measured rather than modelled enhancer-gene pairs, and it
+changes nothing now.
+
+**What this closes.** The open point left by 2026-09-14 is answered: a stricter
+site call does not move the verdict, the best-hit half of it moves nothing
+measurable at all, and the strong-motif half moves the four measurements only in
+the way that having far fewer boundaries moves them. The site call is not what
+separates these callers. No further site-call variant is worth running against
+these four measurements; what the node comparison needs next is a measured
+enhancer-gene set in place of the model's reading, which is the standing caveat
+on measurement 2.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first

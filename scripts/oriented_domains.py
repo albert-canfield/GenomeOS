@@ -10,6 +10,17 @@ Three node sets, same chromosomes, same code downstream (genome/domains.py infer
               with CTCF ChIP support) flip from reverse to forward
 - oriented_ctcf_only  the same rule on CTCF-only elements alone, so the site set's effect shows
 
+And the stricter site call registered on 2026-09-21 (docs/NODES-READER-WRITER.md), with the two
+halves of it scored separately so that any movement can be attributed to one change:
+
+- oriented_best_hit  the strand of the best-scoring hit, at the same 0.85 threshold
+- oriented_strong    the set of hit strands, at the 0.95 threshold motifs.py calibrated
+- oriented_strict    both: the best hit's strand at 0.95, the call under test
+
+One caller is not registered and cannot decide anything: oriented_strict_0.90 was added after the
+registered run showed that 0.95 keeps a small minority of the sites. It is the diagnostic that tells
+"strictness does not help" apart from "0.95 kept nothing", and it is reported as an observation.
+
 Measured on each:
 
 1. Hi-C support: interior edges within 20 kb of a 4DN boundary call (five biosources), against as
@@ -44,13 +55,29 @@ from genomeos.genome import (  # noqa: E402
     mouse,
 )
 from genomeos.genome import hic as hic_mod  # noqa: E402
-from genomeos.genome.domains import ctcf_motif_strands, infer_domains  # noqa: E402
+from genomeos.genome.domains import (  # noqa: E402
+    STRICT_RELATIVE,
+    ctcf_motif_sites,
+    infer_domains,
+    strand_variant,
+)
 from genomeos.genome.regulatory import load_ccres  # noqa: E402
 from genomeos.predict.contact_maps import TOLERANCE, random_control  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 CHROMS = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
-CALLERS = ("ctcf_only", "oriented", "oriented_ctcf_only")
+LOOSE_RELATIVE = 0.85  # the scan threshold the 2026-09-14 caller reads
+CALLERS = (
+    "ctcf_only",
+    "oriented",
+    "oriented_ctcf_only",
+    "oriented_best_hit",
+    "oriented_strong",
+    "oriented_strict",
+    "oriented_strict_0.90",  # a diagnostic, not a candidate: see the note in main()
+)
+# the pair whose boundary count sets the matched-resolution draw (unchanged from 2026-09-14)
+MATCHED_PAIR = ("ctcf_only", "oriented")
 BIOSOURCES = ("GM12878", "H1-hESC", "K562", "HepG2", "IMR-90")
 ARCHIVE = Path("data/knowledge/alphagenome/all_elements")
 SHUFFLES = 20
@@ -62,16 +89,40 @@ def _tss(g) -> int:
     return g.locus.end - 1 if g.locus.strand.value == "-" else g.locus.start
 
 
-def node_sets(chrom: str, length: int, ccres, ann, fetch, tag: str = "") -> dict[str, list]:
-    strands = ctcf_motif_strands(chrom, ccres, fetch, tag=tag)
+#: caller name -> (score an element's hit must reach, take the best hit's strand)
+SITE_CALLS = {
+    "oriented": (LOOSE_RELATIVE, False),
+    "oriented_ctcf_only": (LOOSE_RELATIVE, False),
+    "oriented_best_hit": (LOOSE_RELATIVE, True),
+    "oriented_strong": (STRICT_RELATIVE, False),
+    "oriented_strict": (STRICT_RELATIVE, True),
+    "oriented_strict_0.90": (0.90, True),
+}
+
+
+def site_call_counts(sites: dict) -> dict[str, int]:
+    """The registered descriptive numbers: how many elements carry a site, and how many the strand
+    rule can orient, under each call. They tell "improved nothing" from "kept nothing"."""
+    out = {"elements": len(sites)}
+    for name, (rel, best) in SITE_CALLS.items():
+        if name == "oriented_ctcf_only":
+            continue
+        v = strand_variant(sites, relative=rel, best_hit=best)
+        out[f"{name}_with_site"] = sum(1 for s in v.values() if s)
+        out[f"{name}_orientable"] = sum(1 for s in v.values() if len(s) == 1)
+    return out
+
+
+def node_sets(chrom: str, length: int, ccres, ann, fetch, tag: str = "") -> tuple[dict[str, list], dict]:
+    sites = ctcf_motif_sites(chrom, ccres, fetch, tag=tag)
     only = {c.id for c in ccres if c.cls == "CTCF-only"}
-    return {
-        "ctcf_only": infer_domains(chrom, length, ccres, ann),
-        "oriented": infer_domains(chrom, length, ccres, ann, orientation=strands),
-        "oriented_ctcf_only": infer_domains(
-            chrom, length, ccres, ann, orientation={k: v for k, v in strands.items() if k in only}
-        ),
-    }
+    sets = {"ctcf_only": infer_domains(chrom, length, ccres, ann)}
+    for name, (rel, best) in SITE_CALLS.items():
+        strands = strand_variant(sites, relative=rel, best_hit=best)
+        if name == "oriented_ctcf_only":
+            strands = {k: v for k, v in strands.items() if k in only}
+        sets[name] = infer_domains(chrom, length, ccres, ann, orientation=strands)
+    return sets, site_call_counts(sites)
 
 
 def _edges(doms) -> list[int]:
@@ -106,7 +157,7 @@ def human_chrom(chrom: str) -> dict:
     length = g.lengths[chrom]
     ann = Annotation.from_gff3(gff, {chrom})
     try:
-        sets = node_sets(
+        sets, site_counts = node_sets(
             chrom, length, ccres, ann, lambda s, e: str(g.fetch(Locus(chrom, s, min(e, length))))
         )
     finally:
@@ -115,7 +166,7 @@ def human_chrom(chrom: str) -> dict:
         x.symbol: x for x in ann.genes.values() if x.locus.chrom == chrom and x.type == "protein_coding"
     }
     anyg = {x.symbol: x for x in ann.genes.values() if x.locus.chrom == chrom}
-    out: dict = {"chrom": chrom, "length": length, "callers": {}}
+    out: dict = {"chrom": chrom, "length": length, "callers": {}, "site_calls": site_counts}
     measured = {b: hic_mod.load_boundaries(b, chrom) for b in BIOSOURCES}
     # the archive's scored elements: (midpoint, TSS of the gene the deletion moves most)
     pairs_coding: list[tuple[int, int]] = []
@@ -192,7 +243,7 @@ def human_chrom(chrom: str) -> dict:
         out["callers"][name] = row
     # placement against resolution: the callers cut to the same number of boundaries
     if pairs_coding:
-        k = min(len(_edges(sets[n])) for n in ("ctcf_only", "oriented"))
+        k = min(len(_edges(sets[n])) for n in MATCHED_PAIR)
         for name in CALLERS:
             edges = _edges(sets[name])
             if len(edges) < k or not k:
@@ -220,7 +271,7 @@ def mouse_chrom(chrom: str) -> dict:
     g = IndexedGenome(fa)
     length = g.lengths[chrom]
     try:
-        sets = node_sets(
+        sets, _ = node_sets(
             chrom, length, ccres, ann, lambda s, e: str(g.fetch(Locus(chrom, s, min(e, length)))), tag="mm10_"
         )
     finally:
@@ -251,6 +302,12 @@ def main() -> None:
         mice = list(pool.map(mouse_chrom, ["chr19", "chr11"]))
     print("chromosomes:", [h["chrom"] for h in human], flush=True)
     result: dict = {"callers": {}, "chromosomes": [h["chrom"] for h in human]}
+    site_calls: dict[str, int] = {}
+    for h in human:
+        for k, v in h.get("site_calls", {}).items():
+            site_calls[k] = site_calls.get(k, 0) + v
+    result["site_calls"] = site_calls
+    print("site calls", json.dumps(site_calls), flush=True)
     orthology = mouse.load_orthology()
     for name in CALLERS:
         agg: dict = {"nodes": 0, "edges": 0, "hic": {}, "content": {}, "mouse": {}}
@@ -331,6 +388,14 @@ def main() -> None:
     result["evidence"] = {
         "ctcf_only": "inferred: CTCF-only ENCODE elements as boundaries (the committed nodes)",
         "oriented": "inferred: reverse-to-forward CTCF motif flips (genome/domains.py oriented_boundaries)",
+        "oriented_strict": (
+            "inferred: the same flips, with each element's strand taken from its best MA0139 hit at a "
+            "relative score of 0.95 (genome/domains.py strand_variant); registered 2026-09-21"
+        ),
+        "oriented_strict_0.90": (
+            "inferred: the same call at 0.90; not registered, a diagnostic for how much of the strict "
+            "call's movement is the sites it drops rather than the strand it picks"
+        ),
         "hic": hic_mod.EVIDENCE,
         "content": "predicted: AlphaGenome deletion archive, most-moved coding gene; no new model call",
         "mouse": "curated: MGI mouse-human homology; mouse nodes on mm10 by the same caller",

@@ -310,6 +310,88 @@ def ctcf_motif_strands(
     return out
 
 
+# ------------------------------------------------------------------------------------------
+# The stricter site call (registered 2026-09-21, docs/NODES-READER-WRITER.md)
+# ------------------------------------------------------------------------------------------
+
+STRICT_RELATIVE = 0.95
+"""The threshold genome/motifs.py calibrated against saturation mutagenesis: at 0.85 some profile
+covers 99.9% of a regulatory element's bases, so a site call at that threshold says almost nothing;
+at 0.95 coverage is 65% and functional bases are 1.1x enriched."""
+
+SITE_CACHE = Path("data/knowledge/ctcf_sites")
+
+
+#: Element id -> the best MA0139 hit on each strand as (relative score, start), forward then reverse.
+#: A strand with no hit at the scan threshold is (0.0, -1).
+SiteScores = dict[str, tuple[tuple[float, int], tuple[float, int]]]
+
+
+def ctcf_motif_sites(
+    chrom: str,
+    ccres: list[CCRE],
+    fetch: Callable[[int, int], str],
+    cache: Path | None = SITE_CACHE,
+    tag: str = "",
+) -> SiteScores:
+    """Element id -> the best MA0139 hit on each strand, for every element with CTCF ChIP support.
+
+    One scan at the 0.85 scan threshold serves every variant of the site call, because the strand
+    set at any higher threshold and the strand of the single best hit both follow from the best
+    hit per strand. Cached per chromosome under data/knowledge/ctcf_sites (git-ignored)."""
+    from genomeos.genome import motifs as mo
+
+    p = cache / f"{tag}{chrom}_sites.tsv.gz" if cache is not None else None
+    if p is not None and p.exists():
+        cached: SiteScores = {}
+        with gzip.open(p, "rt") as fh:
+            for line in fh:
+                cid, fr, fs, rr, rs = line.rstrip("\n").split("\t")
+                cached[cid] = ((float(fr), int(fs)), (float(rr), int(rs)))
+        return cached
+    profiles = [m for m in mo.load_motifs(relative=mo.RELATIVE_SCORE) if m.id.startswith(CTCF_PROFILE)]
+    out: SiteScores = {}
+    for c in ctcf_site_elements(ccres):
+        hits = mo.all_hits(profiles, fetch(c.start, c.end), min_relative=mo.RELATIVE_SCORE)
+        best = [(0.0, -1), (0.0, -1)]
+        for _factor, start, _end, strand, rel in hits:
+            # ties on score go to the earlier start, as the registered rule says
+            if rel > best[strand][0] or (rel == best[strand][0] and 0 <= start < best[strand][1]):
+                best[strand] = (rel, start)
+        out[c.id] = (best[0], best[1])
+    if p is not None:
+        p.parent.mkdir(parents=True, exist_ok=True)
+        part = p.with_name(p.name + ".part")
+        with gzip.open(part, "wt") as fh:
+            for cid, ((fr, fs), (rr, rs)) in out.items():
+                fh.write(f"{cid}\t{fr}\t{fs}\t{rr}\t{rs}\n")
+        part.replace(p)
+    return out
+
+
+def strand_variant(
+    sites: SiteScores, *, relative: float = 0.85, best_hit: bool = False
+) -> dict[str, set[str]]:
+    """One site call out of `ctcf_motif_sites`, in the form `oriented_boundaries` reads.
+
+    `relative` is the score an element's hit must reach. With `best_hit` the element takes the strand
+    of its single best hit — ties by score go to the earlier start, then to the forward strand — so an
+    element carrying hits on both strands is oriented rather than dropped; without it the element
+    carries the set of every strand with a hit, which is the 2026-09-14 rule."""
+    out: dict[str, set[str]] = {}
+    for cid, ((fr, fs), (rr, rs)) in sites.items():
+        fwd, rev = fr >= relative, rr >= relative
+        if not best_hit:
+            out[cid] = {s for s, ok in (("+", fwd), ("-", rev)) if ok}
+        elif not (fwd or rev):
+            out[cid] = set()
+        elif fwd and rev:
+            out[cid] = {"+" if (fr, -fs) >= (rr, -rs) else "-"}
+        else:
+            out[cid] = {"+" if fwd else "-"}
+    return out
+
+
 def oriented_boundaries(
     ccres: list[CCRE], strands: dict[str, set[str]], merge_within: int = MERGE_BOUNDARIES_WITHIN
 ) -> list[int]:
