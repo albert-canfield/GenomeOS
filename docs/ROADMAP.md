@@ -2960,6 +2960,54 @@ entire sweep. What is next, in order of what it decides:
    more than either: **any rule matching a published gene symbol against GENCODE symbols can
    silently reject or mis-route a renamed gene**, and the source files already carry the Ensembl ids
    that fix it. LOCI-BENCHMARK.md §23.
+   **Both defects were then fixed, registered before anything ran, for 0 requests** (`22cbc74` the
+   registration alone, `284b946` the reader, `3374359` the join, `1553abd` the corrected draw,
+   §24). The repaired reader ranks `predicted` and `predicted_coding` together and answers with the
+   largest effect whatever the biotype, and the argument for it is that **the change is net
+   unfavourable by construction**: |predicted| ≥ |predicted_coding| for one element, so a published
+   *coding* target can be displaced and never promoted, and four of the five frames are coding-only
+   — the fourth frame's rule requires a coding target — so in four of five it can only lower the
+   rate. The favourable readings existed and were refused.
+   **It cost the benchmark two of its three curated frames.** §9's seventeen hold at 15/17; §19 and
+   §21 fall 8/9 → **7/9** each; §22 falls 10/50 → **9/50**; §23 rises 0/2 → **1/2**, which was
+   disclosed as known in advance rather than predicted. Every number landed inside its registered
+   bracket. The deletion layer alone, which the union hides: 9/17→6/17, 5/9→4/9, 7/9→4/9, 3/50→2/50.
+   **0 of 400 negative-window claims moved**, so the matched-window tables of §8, §19, §21 and §22
+   are untouched and no p-value changes.
+   **The Ensembl join then corrected the draw and the cap binds again: the rule as written passes
+   68, not 60**, and 68 is a superset of the 60, so the frame was scored uncapped and nothing §22
+   scored was dropped. The corrected frame reads **10/58 (0.172)** graded and 10/68 (0.147) drawn.
+   **It did not rise**, so the registered rise-handling never had to be used and §22's 0.200 is
+   rewritten nowhere.
+   **The sharpest result of the correction goes against this benchmark.** The nearest-coding-TSS
+   baseline jumps 3/50 (0.060) to **10/58 (0.172)** and now ties the derived rate — and **7 of its
+   10 hits are the seven ITPRID2 elements**, seven perturbations of one gene in one cell line
+   recovered together because one symbol went stale. The corrected frame's largest single target is
+   7 of 58, so it is less independent than its n suggests, and that was registered before the draw
+   was scored.
+   **The coordinator's decision of 2026-09-22, on the one thing the lane left open: §22 stays
+   interpretable, and the control is restated rather than waived.** Under the repaired reader the
+   frame's positive control names `ENSG00000288879` at -1.1735 where it named HMGA1 at -0.2271, and
+   §22 registered that a control failure makes nothing in that run interpretable. But
+   `ENSG00000288879`'s body **overlaps HMGA1's** in GENCODE, so what failed is the hit rule's
+   symbol equality and not the reading the control exists to check: the layer still names the
+   published target's locus at 1,111 bp, which is the whole claim the control was carrying. Three
+   conditions come with that, because a criterion restated after it fails is exactly the move this
+   project has caught itself making before. **One**, it is disclosed as post-hoc and judged against
+   a fact that existed before the failure — the GENCODE overlap — and not against whether it
+   rescues the run. **Two**, it does not travel: the hit rule stays symbol equality everywhere, so
+   **no rate moves**, and the control is reported as failing the letter while passing the claim.
+   **Three**, the general question it exposes gets its own registration rather than a ruling here.
+   **That question is now the benchmark's most interesting open one**, and the lane measured it
+   before anyone asked: of the 21 loci where the repaired reader changed the answer, 19 are
+   locatable and **5 promote a gene whose body overlaps the published target** (IGF2-AS over IGF2,
+   ENSG00000259006 over MC1R, ENSG00000288879 over HMGA1, ENSG00000240739 over SLC2A3, CCDC26 over
+   CCDC26), with 7 more inside 100 kb (HAGLROS 3.2 kb from HOXD, SLC25A3P2 19 kb from ERP29,
+   LINC02594 47 kb from SOST, MIR1204 inside PVT1). All are still scored as misses. **So the
+   benchmark's "miss" conflates naming a gene somewhere else with naming the right place under
+   another name**, and which of the two it is has never been measured. Also left undone, and named:
+   `read_gene_input` still reads `predicted_coding` alone, deliberately excluded so two movements
+   would not sit behind one number.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
    more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
    the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
