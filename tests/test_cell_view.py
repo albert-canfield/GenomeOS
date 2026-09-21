@@ -107,22 +107,34 @@ def test_a_path_outside_data_or_of_the_wrong_kind_is_refused() -> None:
         api.cell("data/demo/demo.fa")
 
 
-def test_the_run_reports_the_runtime_gate_and_the_cell_gate_apart() -> None:
-    """The runtime never applies `expresses`, so a silenced gene transcribes unless it is held down.
+def test_a_gene_the_cell_does_not_express_stays_at_zero_without_being_held_down() -> None:
+    """The runtime honours `expresses` since 2026-09-21, so `silence` is no longer what silences.
 
-    The view would otherwise show one rule active in a neuron and then draw MYH6 rising in it.
+    This test was written the day before, when it asserted the opposite: that the runtime transcribed
+    MYH6 in a neuron unless the view clamped it. That was the defect, pinned as behaviour — and the
+    pin did its job, because fixing `NetworkRuntime` made this test fail rather than letting the
+    change pass unnoticed. The fix was two parts, not one: dropping a silenced gene's rules is not
+    enough, because a gene with no activator takes `a = 1.0` and transcribes at its FULL max_rate, so
+    removing the rule drove MYH6 to maximum instead of to zero. The gene itself has to be held off.
+
+    `silence` survives as an explicit option because the view still offers it, and it must now be a
+    no-op on the levels: asking twice for the same thing has to give the same answer.
     """
     api = Api(ROOT)
 
     loose = api.cell_run(CONTEXT, "Neuron2", hours=20)
     held = api.cell_run(CONTEXT, "Neuron2", hours=20, silence=True)
 
-    assert loose["active_rules"] == 3 and loose["active_rules_in_cell"] == 1
-    assert loose["held_at_zero"] == []
-    assert loose["levels"]["MYH6.mRNA"][-1] > 1  # the runtime transcribes a gene the cell silences
+    assert loose["active_rules"] == loose["active_rules_in_cell"] == 1, (
+        "the two gates agree now: the runtime applies `expresses` as well as `when`"
+    )
+    assert loose["levels"]["MYH6.mRNA"][-1] == 0.0, "a gene the neuron does not express is not made"
+    assert loose["levels"]["SYN1.mRNA"][-1] > 1, "what the neuron does express is untouched"
     assert held["held_at_zero"] == ["MYH6.mRNA", "NKX2-5.mRNA"]
     assert held["levels"]["MYH6.mRNA"][-1] == 0.0
-    assert held["levels"]["SYN1.mRNA"][-1] > 1  # what the neuron does express is untouched
+    assert held["levels"]["SYN1.mRNA"][-1] == loose["levels"]["SYN1.mRNA"][-1], (
+        "silence is now a no-op on the levels, because the runtime already did it"
+    )
 
 
 def test_the_index_lists_what_it_skipped_rather_than_only_what_it_found() -> None:

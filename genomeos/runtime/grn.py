@@ -72,7 +72,19 @@ class NetworkRuntime:
 
         self.genes: list[Gene] = module.genes()
         self.proteins: list[Protein] = module.proteins()
-        self.active_rules: list[Rule] = [r for r in module.rules if r.applies(self.context)]
+        # `Module.active_rules` rather than a bare `applies` filter: a rule whose source or target is
+        # not expressed in this cell type is not a rule this cell runs, and docs/BIOLANG-v0.2.md
+        # documents the contextual gate as both the `when` clause AND the `expresses` list. Until
+        # 2026-09-21 this used only the first, so `genomeos run --context cell_type=X` overstated what
+        # a cell expresses.
+        self.active_rules: list[Rule] = module.active_rules(self.context)
+        # and dropping the rules is NOT enough, which is why the silenced set is kept as well. A gene
+        # with no activator takes `a = 1.0` below and transcribes at its FULL max_rate, so removing a
+        # silenced gene's activator would have driven it to maximum instead of to zero — the opposite
+        # of silencing, and a plausible-looking curve either way. Measured on cell_context.bio:
+        # SYN1 read 80.05 before, 80.05 with the rules dropped, and 0 only when the gene itself is
+        # held off.
+        self.silenced: set[str] = module.silenced_genes(self.context)
         # this runtime has no places and therefore no volumes; a concentration threshold is only a
         # number once a compartment divides it, so it belongs to a located program (v0.4 §4.1)
         molar = [r.id for r in self.active_rules if r.threshold_unit]
@@ -116,6 +128,9 @@ class NetworkRuntime:
                 rep *= 1.0 - r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill)
             max_rate = float(g.attrs.get("max_rate", 0.0))
             key = f"{g.id}.mRNA"
+            if g.id in self.silenced:
+                d[key] = -delta_m * state[key]  # not expressed here: it decays and is not made
+                continue
             d[key] = g.basal_rate + max_rate * a * rep - delta_m * state[key]
 
         for p in self.proteins:
