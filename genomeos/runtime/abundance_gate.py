@@ -59,6 +59,43 @@ MIN_IMPROVEMENT_LOG10 = 0.05
 #: under a handful per cell is at the quantification floor and its log is mostly noise.
 MIN_COPIES = 10.0
 
+#: DECLARED 2026-09-21, before either file was fetched and before any figure existed, because the
+#: registration above forbids choosing a transcript source after seeing which one flatters the pool
+#: layer. Two candidates were probed; only one answered.
+TRANSCRIPT_SOURCE: dict[str, Any] = {
+    "chosen": "GTEx v8 gene median TPM",
+    "url": (
+        "https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/"
+        "GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz"
+    ),
+    "size_mb": 7.0,
+    "why": (
+        "it answered (HTTP 200 at 7 MB) where the Human Protein Atlas download paths did not (404 on"
+        " both rna_celline and normal_tissue, so they have moved); it is the RNA source this project"
+        " already streams and cites for eQTLs, so one citation covers both uses; and 7 MB distils"
+        " without touching a disk that is at 91%"
+    ),
+    "tissue": "Cells - Cultured fibroblasts",
+    "why_that_tissue": (
+        "one named population rather than a cross-tissue average, fixed before the fetch. PaxDb's"
+        " human data is weighted toward cultured cells, so a cultured-cell transcript arm is the"
+        " closest single population on offer. The whole-body median is carried as a declared"
+        " sensitivity, not as an alternative to be chosen afterwards"
+    ),
+    "population_mismatch": (
+        "STATED, not resolved: GTEx is post-mortem bulk tissue and PaxDb is an average over"
+        " experiments, so even the closest pairing is two populations. This is why the gate asks"
+        " whether a shared-capacity model beats a proportionality constant at predicting a"
+        " steady-state distribution, and not whether either is right about one cell"
+    ),
+    "rejected": {
+        "Human Protein Atlas": (
+            "download paths 404 as of 2026-09-21; it would have paired RNA and protein in one resource"
+        ),
+        "a cross-tissue GTEx average": "an average over populations is a population nobody sampled",
+    },
+}
+
 PRE_REGISTRATION: dict[str, Any] = {
     "written": (
         "2026-09-21, before either dataset was fetched and before any figure existed; committed in "
