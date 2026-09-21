@@ -10,6 +10,19 @@
 # lookup that used to precompute that read is gone: its threshold was a fraction of the largest path
 # exposure over the finished run, which no deciding cell can hold.
 # Generated rules and scores: scripts/celegans_fate_reads.py, data/results/celegans_fate_reads.json.
+#
+# What this program's 522 of 555 is and is not (measured 2026-09-21,
+# scripts/celegans_fate_credit.py, data/results/celegans_fate_credit.json). The lookup answers every
+# cell no factor rule claims and it is Sulston's answer sheet, so 522 is 555 minus the errors the
+# factors introduce and not a count of what they know. Credited only where a rule decided:
+# 381 of 555 in sample, 374 held out by founder sublineage, and 184 with nothing fitted anywhere
+# (the seven textbook rules and the cited sheath-glia rule), against 226 for naming Neuron for every
+# cell and 364 for the majority tissue of the founder sublineage. Deeper: every factor rule here is
+# guarded on a terminal `cell_type`, which only the lookup ever sets, so no factor rule in this
+# program ever decides a fate the lookup has not already written -- delete its 555 fate decisions and
+# the rules fire on nothing at all. Open the guard so they can fire, and they claim 105 cells that are
+# not terminal against 79 that are, and are right about 44 of the 555. The score is honest; it is just
+# not a measurement of the factors, and nothing below this line changes because of the above.
 # Run: genomeos grow data/organisms/celegans/embryo_factors.bio --until 800 --compare
 module organism.celegans.embryo_factors
 # test: cells >= 2150

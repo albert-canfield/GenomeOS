@@ -127,22 +127,41 @@ def cited_rules() -> list[fr.Rule]:
 # ---- credit, cell by cell -------------------------------------------------------------------------
 
 
-def credit(body: Body, ref: ReferenceLineage, cells: list[str]) -> dict:
+def rule_targets(arm: Arm) -> dict[str, str]:
+    """decision id -> the cell type it differentiates to, for the arm's own generated rules. Needed
+    because credit has to be attributed to the rule that actually set the type, not to the fact that a
+    rule was in the cell's `fired` list."""
+    module = parse_file(arm.dir / "embryo_factors.bio")
+    return {d.id: d.to for d in module.decisions if d.id.startswith("factor_fate_")}
+
+
+def credit(body: Body, ref: ReferenceLineage, cells: list[str], targets: dict[str, str]) -> dict:
     """What the factors can be credited with, and what the lookup answered, for one finished run.
 
     A cell is *claimed* when a `factor_fate_*` decision fired on it; it is right when the type it ends
     with is the observed one. Everything else is *abstained*: the lookup answered, and the lookup is the
     answer sheet, so those cells say nothing about the factors. F2 of the pre-registration is asserted
-    here rather than reported, because if an abstained cell is wrong the whole decomposition is wrong."""
-    claimed_right = claimed_wrong = abstained_right = abstained_wrong = 0
+    here rather than reported, because if an abstained cell is wrong the whole decomposition is wrong.
+
+    Two attributions are asserted rather than reported, for the same reason. A claimed cell must end with
+    the type of the last factor rule that fired on it, or the credit is going to the wrong decision. And
+    `lookup_wrote_it_first` counts the claimed cells on which the lookup's own `fate_<cell>` decision also
+    fired: in this program that is every one of them, because the factor rules are guarded on a terminal
+    `cell_type` that only the lookup ever sets, so they are successors in the same differentiation chain
+    and not competitors. That is the difference between "the factors decided this fate" and "the factors
+    were asked to confirm a fate already written on the cell", and it is reported per arm."""
+    claimed_right = claimed_wrong = abstained_right = abstained_wrong = lookup_first = 0
     claimed: list[str] = []
     wrong_by_tissue: Counter[str] = Counter()
     for cid in cells:
         bc = body.cells.get(cid)
         want = ref.cells[cid].cell_type
         got = bc.cell_type if bc is not None else None
-        if bc is not None and any(d.startswith("factor_fate_") for d in bc.fired):
+        rules = [d for d in bc.fired if d.startswith("factor_fate_")] if bc is not None else []
+        if rules:
+            assert got == targets[rules[-1]], f"credit misattributed on {cid}"
             claimed.append(cid)
+            lookup_first += f"fate_{cid}" in bc.fired
             if got == want:
                 claimed_right += 1
             else:
@@ -161,6 +180,9 @@ def credit(body: Body, ref: ReferenceLineage, cells: list[str]) -> dict:
         "claimed_wrong": claimed_wrong,
         "abstained": abstained_right + abstained_wrong,
         "abstained_wrong": abstained_wrong,
+        "lookup_wrote_it_first": lookup_first,
+        "decided_a_fate_the_lookup_had_not": len(claimed) - lookup_first,
+        "net_effect_on_the_score": -claimed_wrong,
         "with_lookup_fallback": claimed_right + abstained_right,
         "honest": claimed_right,
         "honest_fraction": round(claimed_right / n, 4) if n else None,
@@ -201,13 +223,15 @@ def fold_credit(
     eighth, so no rule is credited on a lineage whose labels it saw."""
     cells = sorted(labels)
     per: dict[str, dict] = {}
-    total = {"cells": 0, "claimed": 0, "claimed_right": 0, "claimed_wrong": 0}
+    total = dict.fromkeys(
+        ("cells", "claimed", "claimed_right", "claimed_wrong", "abstained_wrong", "lookup_wrote_it_first"), 0
+    )
     claimed_all: list[str] = []
     for g in sorted({fr.sublineage(c) for c in cells}):
         held = [c for c in cells if fr.sublineage(c) == g]
         write([c for c in cells if fr.sublineage(c) != g])
         _, body = arm.run(ref)
-        c = credit(body, ref, held)
+        c = credit(body, ref, held, rule_targets(arm))
         claimed_all += c["claimed_cells"]
         per[g] = {k: c[k] for k in ("cells", "claimed", "claimed_right", "claimed_wrong")}
         for k in total:
@@ -216,6 +240,9 @@ def fold_credit(
     return {
         **total,
         "abstained": n - total["claimed"],
+        "decided_a_fate_the_lookup_had_not": total["claimed"] - total["lookup_wrote_it_first"],
+        "net_effect_on_the_score": -total["claimed_wrong"],
+        "with_lookup_fallback": n - total["claimed_wrong"] - total["abstained_wrong"],
         "honest": total["claimed_right"],
         "honest_fraction": round(total["claimed_right"] / n, 4) if n else None,
         "precision": round(total["claimed_right"] / total["claimed"], 4) if total["claimed"] else None,
@@ -307,46 +334,60 @@ def strip_lookup_fates(arm: Arm) -> int:
     return len(lines) - len(kept)
 
 
-def open_the_guard(arm: Arm) -> None:
+def open_the_guard(arm: Arm, types: set[str]) -> str:
     """Replace the factor rules' `cell_type = <terminal types>` guard with the type an undifferentiated
     cell actually has, so a rule may fire on any cell that has not differentiated yet. On the program
-    whose lookup fates are stripped, this is the factors deciding terminality as well as type."""
+    whose lookup fates are stripped, this is the factors deciding terminality as well as type.
+
+    The types are not guessed: they are read off the run, because an undifferentiated cell in this program
+    is not a `Blastomere` for long. `founders.bio` gives it its founder's precursor type (`ABaPrecursor`,
+    `MSPrecursor`, ...) and Z2/Z3 are `GermCell`, so a guard naming `Blastomere` alone would match five
+    cells of 1,439 and the arm would silently measure nothing."""
     path = arm.dir / "fates.bio"
-    path.write_text(path.read_text().replace(f"cell_type = {fr.TERMINAL_TYPES}", "cell_type = Blastomere"))
+    guard = "|".join(sorted(types))
+    path.write_text(path.read_text().replace(f"cell_type = {fr.TERMINAL_TYPES}", f"cell_type = {guard}"))
+    return guard
 
 
-def gate(ref: ReferenceLineage, tmpdir: Path, feats: dict[str, set[str]], labels: dict[str, str]) -> dict:
+def gate(ref: ReferenceLineage, tmpdir: Path, labels: dict[str, str]) -> dict:
     """P6 and P7. The guard the factor rules carry means they are only ever asked about a cell the lookup
-    has already called terminal, so the 555 eligible decision points are the lookup's, not the factors'.
-    Without it the rules would also have to say *when* a cell is done dividing, and this measures how
-    they do at that: every cell born by hatching that is not one of the 555 is a cell they must not
-    claim."""
+    has already called terminal, so the 555 eligible decision points are the lookup's and not the factors'.
+    Without the lookup the rules would have to say *when* a cell is done dividing as well as what it
+    becomes, and this measures how they do at that: every cell born by hatching that is not one of the 555
+    is a cell they must not claim.
+
+    Both arms delete the observed lineage's 555 terminal-fate decisions and keep everything else, so the
+    tree, the timers, the deaths and the measured reader are untouched and the only thing missing is the
+    answer sheet. The first keeps the rules' shipped guard, the second opens it to every undifferentiated
+    type the run actually produces."""
     rules = cited_rules()
-    out = {}
+    terminal = set(labels)
+    out: dict[str, dict] = {}
+    undifferentiated: set[str] = set()
     for name, opened in (("guard as shipped", False), ("guard opened to any undifferentiated cell", True)):
         arm = Arm(tmpdir / f"gate_{int(opened)}")
         (arm.dir / "fates.bio").write_text(fr.to_bio_fates(rules))
         removed = strip_lookup_fates(arm)
-        if opened:
-            open_the_guard(arm)
+        guard = open_the_guard(arm, undifferentiated) if opened else None
         body = Body(parse_file(arm.dir / "embryo_factors.bio"), means=True).run(until=HATCH)
-        fired = {
-            cid: c
-            for cid, c in body.cells.items()
-            if any(d.startswith("factor_fate_") for d in c.fired) and c.born < HATCH
-        }
-        terminal = set(labels)
+        born = [c for c in body.cells.values() if c.born < HATCH]
+        if not opened:  # what an undifferentiated cell is called, with no fate decision anywhere
+            undifferentiated = {c.cell_type for c in born if c.cell_type not in fr.TERMINAL_TYPES.split("|")}
+        fired = {c.name: c for c in born if any(d.startswith("factor_fate_") for d in c.fired)}
         right = sum(
             1 for cid in fired if cid in terminal and fired[cid].cell_type == ref.cells[cid].cell_type
         )
         out[name] = {
             "lookup_fate_decisions_deleted": removed,
+            "guard": guard or f"cell_type = {fr.TERMINAL_TYPES}",
+            "cells_born_by_hatching": len(born),
+            "of_those_terminal_in_the_reference": len(terminal),
             "cells_a_factor_rule_fired_on": len(fired),
             "of_those_terminal": sum(1 for cid in fired if cid in terminal),
             "of_those_not_terminal": sum(1 for cid in fired if cid not in terminal),
             "terminal_and_right": right,
             "honest_of_555": right,
-            "cells_born_by_hatching": sum(1 for c in body.cells.values() if c.born < HATCH),
+            "undifferentiated_types_the_run_produces": sorted(undifferentiated),
         }
         shutil.rmtree(arm.dir, ignore_errors=True)
     return out
@@ -399,6 +440,14 @@ def main() -> None:
         "factors_in_the_atlas": len(factors),
         "tissue_counts": dict(counts.most_common()),
     }
+    # a rule set cannot be right about a tissue it has no rule for, so this is the ceiling on recall
+    # before any factor is read: the cells whose observed tissue some rule in the set can name.
+    denominators["ceiling_from_the_rule_vocabulary"] = {
+        "cited rules (intestine, muscle, hypoderm, sheath)": denominators[
+            "in_a_tissue_a_cited_rule_can_name"
+        ],
+        "cited + the fitted neuron rules": sum(n for t, n in counts.items() if t in nameable | {"neuron"}),
+    }
 
     out: dict = {
         "result": "celegans_fate_credit",
@@ -427,8 +476,31 @@ def main() -> None:
         arm, write = arm_for(tmpdir, "shipped", lambda fit: program_rules(feats, labels, fit))
         write(cells)
         _, body = arm.run(ref)
-        shipped = credit(body, ref, cells)
-        assert shipped["with_lookup_fallback"] == 522 and shipped["claimed"] == 332, "F1: not the program"
+        shipped = credit(body, ref, cells, rule_targets(arm))
+        # F1 has two clauses and they did not resolve the same way, so neither the pre-registration above
+        # nor this check is rewritten to match the run. The clause that identifies the program is the score
+        # and it is asserted: 522 of 555, with a `fates.bio` byte-identical to the shipped one (checked
+        # below). The clause taken from the 2026-09-15 result file -- 332 cells claimed -- is not a property
+        # of the program at all, and the run records what it actually is together with the diagnosis. See
+        # `f1_resolved` in the result file.
+        assert shipped["with_lookup_fallback"] == 522, "F1: not the program that ships"
+        assert (arm.dir / "fates.bio").read_text() == (ORG / "fates.bio").read_text(), "F1: not fates.bio"
+        out["f1_resolved"] = {
+            "clause_the_score": {"predicted": 522, "observed": shipped["with_lookup_fallback"], "held": True},
+            "clause_the_cells_claimed": {
+                "predicted_from_the_2026_09_15_result_file": 332,
+                "observed": shipped["claimed"],
+                "held": shipped["claimed"] == 332,
+                "diagnosis": "the rules are byte-identical to the shipped fates.bio and the reads they are "
+                "written on are recomputed here from the same atlas, so nothing in area E's program moved; "
+                "what moved is the runtime. `share`, `pool`/`cost` and `order` landed after 2026-09-15, and "
+                "the number of cells a factor rule gets a turn on inside a differentiation chain is not "
+                "invariant under them. The published fate score did not move (522 either way), which is "
+                "why nobody noticed: the same score is now reached with the factor rules firing on "
+                f"{shipped['claimed']} cells instead of 332. A score that cannot see that change is the "
+                "reason for this whole measurement.",
+            },
+        }
         arms["cited + fitted, in sample"] = shipped
         arms["cited + fitted, held out by founder sublineage"] = fold_credit(arm, ref, write, labels)
 
@@ -438,14 +510,14 @@ def main() -> None:
         arm_c, write_c = arm_for(tmpdir, "cited", lambda _fit: cited_rules())
         write_c(cells)
         _, body_c = arm_c.run(ref)
-        arms["cited only, nothing fitted"] = credit(body_c, ref, cells)
+        arms["cited only, nothing fitted"] = credit(body_c, ref, cells, rule_targets(arm_c))
         arms["cited only, held out (must be identical)"] = fold_credit(arm_c, ref, write_c, labels)
 
         # 3. the textbook rules without the cited sheath-glia rule, to see what that one rule is worth
         arm_t, write_t = arm_for(tmpdir, "textbook", lambda _fit: fr.textbook_rules())
         write_t(cells)
         _, body_t = arm_t.run(ref)
-        arms["textbook rules only"] = credit(body_t, ref, cells)
+        arms["textbook rules only"] = credit(body_t, ref, cells, rule_targets(arm_t))
 
         # 4. the fitted neuron list with no cited rule in front of it
         arm_f, write_f = arm_for(
@@ -455,7 +527,7 @@ def main() -> None:
         )
         write_f(cells)
         _, body_f = arm_f.run(ref)
-        arms["fitted neuron rules only, in sample"] = credit(body_f, ref, cells)
+        arms["fitted neuron rules only, in sample"] = credit(body_f, ref, cells, rule_targets(arm_f))
         arms["fitted neuron rules only, held out"] = fold_credit(arm_f, ref, write_f, labels)
 
         # 5. P5: the read that looks better with the fallback, scored without one
@@ -469,7 +541,9 @@ def main() -> None:
         )
         write_m(cells)
         _, body_m = arm_m.run(ref)
-        arms["mean(lineage) >= 0.25, cited + fitted, in sample"] = credit(body_m, ref, cells)
+        arms["mean(lineage) >= 0.25, cited + fitted, in sample"] = credit(
+            body_m, ref, cells, rule_targets(arm_m)
+        )
         arms["mean(lineage) >= 0.25, held out"] = fold_credit(arm_m, ref, write_m, labels)
 
         for a in arms.values():
@@ -481,17 +555,80 @@ def main() -> None:
             a, w = arm_for(tmpdir, f"plateau_{thr}", lambda _fit: cited_rules(), threshold=float(thr))
             w(cells)
             _, b = a.run(ref)
-            c = credit(b, ref, cells)
+            c = credit(b, ref, cells, rule_targets(a))
             plateau.append({"threshold": thr, "claimed": c["claimed"], "honest": c["honest"]})
             shutil.rmtree(a.dir, ignore_errors=True)
         out["headline_across_the_threshold_plateau"] = plateau
 
-        out["terminality_gate"] = gate(ref, tmpdir, feats, labels)
+        out["terminality_gate"] = gate(ref, tmpdir, labels)
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
 
     out["arms"] = arms
     out["shuffle_null_for_the_cited_rules"] = shuffle_null(feats, instant, labels)
+
+    # the answer, with the denominator on every line and the borrowing each line still keeps
+    g = out["terminality_gate"]
+    ladder = [
+        (
+            "the published number: a factor rule where one applies, the observed lineage lookup "
+            "everywhere else",
+            arms["cited + fitted, in sample"]["with_lookup_fallback"],
+            "the lookup supplies "
+            f"{arms['cited + fitted, in sample']['abstained']} of these and is right by construction",
+        ),
+        (
+            "factors credited only where a rule decided: cited rules plus the fitted neuron list, in sample",
+            arms["cited + fitted, in sample"]["honest"],
+            f"{arms['cited + fitted, in sample']['claimed']} cells claimed, precision "
+            f"{arms['cited + fitted, in sample']['precision']}; the neuron rules are fitted to the "
+            "observed labels",
+        ),
+        (
+            "the same, held out one founder sublineage at a time",
+            arms["cited + fitted, held out by founder sublineage"]["honest"],
+            "no rule credited on a lineage whose labels it saw; the hypothesis class still came from all 555",
+        ),
+        (
+            "nothing fitted anywhere: the seven textbook rules and the cited sheath-glia rule",
+            arms["cited only, nothing fitted"]["honest"],
+            f"{arms['cited only, nothing fitted']['claimed']} cells claimed, precision "
+            f"{arms['cited only, nothing fitted']['precision']}; ceiling "
+            f"{denominators['in_a_tissue_a_cited_rule_can_name']} because the cited rules name four "
+            "tissues of seventeen",
+        ),
+        (
+            "the same rules with the lineage's terminality gate removed as well: the lookup's 555 fate "
+            "decisions deleted and the rules free to fire on any undifferentiated cell",
+            g["guard opened to any undifferentiated cell"]["honest_of_555"],
+            f"{g['guard opened to any undifferentiated cell']['cells_a_factor_rule_fired_on']} cells "
+            f"claimed of 1,439, of which "
+            f"{g['guard opened to any undifferentiated cell']['of_those_not_terminal']} are not terminal "
+            "cells at all",
+        ),
+        (
+            "the same rules with their shipped guard and the lookup's fate decisions deleted",
+            g["guard as shipped"]["honest_of_555"],
+            "the guard is a terminal `cell_type`, which only the lookup ever sets, so the rules are "
+            "never asked",
+        ),
+    ]
+    out["answer"] = {
+        "denominator": len(cells),
+        "ladder": [{"of_555": n, "arm": name, "what_it_still_borrows": note} for name, n, note in ladder],
+        "the_order_the_program_runs_in": {
+            "claimed_fates_the_lookup_had_already_written": {
+                k: [a["claimed"], a.get("lookup_wrote_it_first")] for k, a in arms.items()
+            },
+            "so": "no factor rule in this program ever decides a fate the observed lineage has not already "
+            "written on the cell: the rules are guarded on a terminal `cell_type` that only the lookup "
+            "sets, so they are successors in the same differentiation chain. Because the lookup is the "
+            "answer sheet, a factor rule can only agree with it or be wrong, never correct it, and the "
+            "net effect of consulting the factors on the published score is "
+            f"{arms['cited + fitted, in sample']['net_effect_on_the_score']} fates.",
+        },
+        "baselines_that_read_no_factors": base_scores,
+    }
 
     # the pre-registered claims, checked
     cited = arms["cited only, nothing fitted"]
@@ -507,11 +644,18 @@ def main() -> None:
             "predicted": "130..160",
             "observed": cited["honest"],
             "held": 130 <= cited["honest"] <= 160,
+            "why_it_broke": "both derived predictions were derived from the cell counts in the "
+            "2026-09-15 result file, and those counts are not invariant under the runtime changes that "
+            "landed after it (see f1_resolved). The cited rules claim 209 cells here against the 164 of "
+            "that file. The break is in the generous direction -- the factors are credited with more, "
+            "not less, than was predicted -- so the negative below is not an artefact of a pessimistic "
+            "instrument.",
         },
         "P2 the shipped set decides 299 in sample and 268 held out": {
             "predicted": [299, 268],
             "observed": [shipped_in["honest"], shipped_out["honest"]],
             "held": shipped_in["honest"] == 299 and shipped_out["honest"] == 268,
+            "why_it_broke": "the same cause as P1, and the same direction.",
         },
         "P3 the honest number is below the factor-free majority-tissue baseline": {
             "predicted": f"cited ({cited['honest']}) < {base_scores['majority_tissue']['right']}",
@@ -546,6 +690,12 @@ def main() -> None:
             "held": mean_in["with_lookup_fallback"] > shipped_in["with_lookup_fallback"]
             and mean_in["honest"] < shipped_in["honest"]
             and mean_out["honest"] < shipped_out["honest"],
+            "why_it_broke": "the fallback does reward abstention, but not enough to reorder these two "
+            "reads: `mean(lineage) >= 0.25` is ahead of the shipped `exposure(lineage) >= 15` on the "
+            "honest metric as well, in sample and held out, while claiming no more cells. This is not on "
+            "its own a reason to switch the program: the published threshold sweep has `mean` flat from "
+            "0.01 to 0.15 and 0.25 on a slope, so that threshold is a knob where 15 min is a plateau, and "
+            "the choice of read belongs to area E's owner and not to this measurement.",
         },
         "P6 without the lookup's fates no factor rule fires at all": {
             "observed": out["terminality_gate"]["guard as shipped"]["cells_a_factor_rule_fired_on"],
