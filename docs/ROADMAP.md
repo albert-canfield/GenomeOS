@@ -2742,7 +2742,45 @@ entire sweep. What is next, in order of what it decides:
    was an annotated one. It now takes `substitute=False` and the stated-interval driver passes it, so
    a published coordinate is scored rather than pointed at; the overlap is reported on both branches,
    because an annotation over a published interval makes §10's premise false for that locus.
-   What remains under this item is what it always was: more loci, not more readings.
+   **A fourth frame answered this item on 2026-09-21, and it is the hardest negative the benchmark
+   has produced: the 0.88 the three curated frames agree on was measured almost entirely where
+   proximity and the publication agree, and on twenty loci where they disagree the model reads 1 of
+   20.** The frame was drawn by a RULE committed before the source file was read (`2103c5a`), not
+   curated: every element in the held-out arm of the ENCODE CRISPR benchmark whose published target
+   is not its own nearest coding TSS. The rule reads no model output, no effect size and no
+   chromatin score, and it selects exactly the geometry on which the cheap answer is wrong by
+   construction — it is adversarial to the benchmark's own headline, which is why it was worth
+   drawing. Of 175 held-out elements with a regulated gene, **85 have their own nearest coding TSS
+   as the published target**: at half of the field's measured pairs, naming the nearest gene is
+   simply correct, and any frame drawn without a geometry rule inherits that. 60 passed the rule,
+   the registered cap drew 24, and 4 died at reach (registered 1 to 4, and registered higher than
+   the third set's 0 of 9 because a rule selecting elements that skip a nearer gene selects for
+   distance). **One request** of a registered budget of 30: the finished sweep had already deleted
+   an element inside 19 of the 20 graded intervals.
+   **Derived target 6/24 (0.250), 6/20 where the model could answer (0.300)**, against 15/17, 8/9,
+   8/9. Above its own chance floor of 0.137, so the layers are not guessing, and nowhere near 0.88.
+   **The split under it is the finding**, because the derived rate is a union and the model's own
+   layer is not what carries it: deletion **1/20**, GTEx eQTL 3/20, summed window 2/20, the node
+   heuristic 0/20, lookup 0/20. What the deletion layer named instead: the published target 1,
+   **the nearest coding TSS 14**, another gene 5. The node rule named the nearest coding TSS at 18
+   of 20. Those two rows sit beside each other and a long way from the publication: **when
+   proximity and the published answer disagree, the model goes with proximity.**
+   **The positive control says the reading is not broken.** Drawn by the same rule from the same
+   file — of the elements this frame rejected for having the shortcut right, the one with the
+   smallest element-to-TSS distance, 1,111 bp — deleting it named HMGA1 first at -0.2271, by the
+   deletion layer. The same layer that is right at 1.1 kb names the wrong gene at the twenty loci
+   where the right answer is not the nearest one.
+   **What it does not say**, and section 22 says so itself: not that the deletion layer is the
+   nearest-gene rule in general, since at the curated frames it also gets directions and cell types
+   right, which proximity cannot do; and a CRISPRi positive can be indirect, a column this frame
+   deliberately did not use. What it does say is that the agreement of the first three frames could
+   never have shown this, because none of them contained the geometry that tests it.
+   **Two things fall out for free and are the next of this item**: 36 loci pass the same rule
+   undrawn, so raising the cap in a commit that says so first takes n from 20 to about 56 at
+   near-zero request cost; and the 14 elements dropped for a non-coding target are the first
+   published, perturbation-backed non-coding frame this project has had — what section 21 said
+   curation could not produce, and what the `predicted_coding`-first defect exposed at H19 still
+   needs. LOCI-BENCHMARK.md §22, `188f4ce`.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
    more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
    the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
@@ -2884,11 +2922,13 @@ entire sweep. What is next, in order of what it decides:
      turned up a third defect of the same class in EML4-ALK. Area F's row has the detail.
      **The first test of this row's own rule, and it held**: the board said the lane was gone,
      so the work was reassigned in minutes rather than sitting under a name nobody was behind.
-   - **Item 4, more loci** — **taken as lane-loci4, 2026-09-21**, with Albert's approval to spend
-     AlphaGenome requests on it; the pre-registration is committed (`2103c5a`) before the set is
-     scored. The finding that makes it worth more loci is the baseline's spread of 0.445 against
-     the derived rate's 0.007, and the merge of the third set into the panel is this session's
-     call to make.
+   - **Item 4, more loci** — **done the same day as lane-loci4 (`2103c5a`, `188f4ce`)**, with
+     Albert's approval to spend AlphaGenome requests on it, and it cost 1 of a registered 30. It
+     is a negative and it is the item's answer rather than another reading of it: a frame drawn
+     by a rule committed before the file was read, on the geometry the first three frames did not
+     contain, takes the derived rate from 0.88 to 0.300 and the model's own layer to 1 of 20. The
+     item's row has it. **Two follow-ons need no new registration**: the 36 undrawn loci that pass
+     the same rule, and the 14 non-coding targets it set aside.
    - **Item 5, stage 2 of the economy** — genomeos-0e, last seen seven hours before this row.
      Pool, cost and allocation are in the language and the arithmetic; the burden and abundance
      gates are what remain.
