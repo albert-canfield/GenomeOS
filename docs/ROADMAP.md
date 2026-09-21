@@ -2590,10 +2590,14 @@ entire sweep. What is next, in order of what it decides:
    Every model built over that space has been extrapolating from half a percent of it, which is what
    the four corrections of 2026-09-16 and 2026-09-17 look like from inside.
    The library that would fix it is written out rather than proposed (`30b2e77`, `a4df8fe`,
-   `e08edf9`): **284,598 oligos** after the unorderable ones are dropped — 92,118 tiling the real
-   unknown at 300 bp with the untouched blocks first (41,113 of them) and the seven CRISPRi-bridge
-   blocks next, 92,117 genomic negatives matched one to one on GC and promoter distance, 8,245
-   lentiMPRA actives as in-batch positives, and 92,118 dinucleotide-preserving shuffles. The synthesis
+   `e08edf9`): **284,001 oligos** after the unorderable ones are dropped — 91,919 tiling the real
+   unknown at 300 bp with the untouched blocks first (41,037 of them) and the seven CRISPRi-bridge
+   blocks next, 91,918 genomic negatives matched one to one on GC and promoter distance, 8,245
+   lentiMPRA actives as in-batch positives, and 91,919 dinucleotide-preserving shuffles. **This row
+   said 284,598 until 2026-09-21, which was `e08edf9`'s own output before `97af38c` charged both
+   low-complexity rules as a union and `b7c9ff4` added the mappability columns; the rebuild dropped
+   597 oligos and the figure was never carried forward here. `data/results/unknown_library.json`
+   is the authority and reads 284,001.** The synthesis
    filter was recomputed independently of genomeos-79's lane and the two agree to **0.4%** (41,113
    orderable against 41,297). Two judgements are recorded as design, not measurement: the repeat flag
    is **not** an exclusion (31.3% of the lentiMPRA windows a reporter already read are majority
@@ -2601,6 +2605,38 @@ entire sweep. What is next, in order of what it decides:
    100.9 kb, so dropping them would remove the blocks nearest genes — the covariate that confounded
    everything corrected this week). Manifest under `data/knowledge/library/`, local and git-ignored;
    a design, not an order.
+   **Asked on 2026-09-21, because an order is a purchase and 284,001 is one: can it be distilled and
+   still meet? It can, and the cut that pays is not the proportional one.** Two arms are sized 1:1 to
+   the test arm for a pairing the analysis never consumes — `compare.py` is stratified direct
+   standardisation and takes controls per stratum, not one per target — and 202 of the 878 blocks
+   tiled are blocks that already hold a measured element, carrying 55% of the test arm. So the
+   recommended distillation, **Design A at about 100k**, keeps every base of the 12.31 Mb nothing has
+   ever measured tiled end to end (the 676 untouched blocks, 41,037 oligos, plus the bridge blocks)
+   and cuts the controls to stratified rather than matched one to one: 30,000 genomic negatives,
+   25,000 shuffles, 2,000 positives across activity deciles. It is 35% of the designed library and
+   forfeits the already-measured blocks and a per-oligo pairing that only the extreme tail could have
+   used. Detectable effect size goes from d 0.009 to **d 0.021 against negatives and 0.022 against
+   shuffle**, still a factor of two inside the smallest effect this project's own evidence predicts
+   (d 0.05 real-against-shuffle, predicted; d 0.13 real-against-neutral, measured at n=227).
+   **The floor is about 12,000 oligos and it is a real floor**: below it the detectable d exceeds
+   0.07, so a null would be produced by the sizing rather than by the biology — an experiment that
+   cannot fail, which is the one outcome this project has spent the week refusing to buy. A 10k design
+   sits on that line, not above it.
+   **The arm to keep is the one it would be most tempting to cut.** The shuffle arm is expected to
+   come out tied, because §18 reading 3 found the count model cannot separate real sequence from its
+   own dinucleotide shuffle over the whole space. But that was a *model score* against a shuffle; the
+   library would be the first *measurement* of real unknown sequence against its own composition, and
+   a measured tie over 12 Mb is the strongest negative available here — the first evidence that the
+   constrained-unexplained sequence holds no reporter activity above its own base composition. Drop
+   the arm and that result cannot be bought at any price. The arm whose size is hardest to defend is
+   the genomic negatives: the comparison it makes was already run and withdrawn once, because the
+   neutral tier is not a control (median TSS distance 418 kb against 42 kb), and the matching leaves
+   a 17% residual gap.
+   **One decision is still open and it changes which oligos go on the plate rather than how many:
+   mappability is carried beside the synthesis filter and folded into nothing.** Over the untouched
+   blocks only 45,550 of 91,919 test oligos are unique at k24 (88,282 at k100), and 8,131 oligos the
+   repeat proxy passes are unmappable at k24. If the follow-up has to find the locus again, roughly
+   half the test arm cannot be attributed. The result file says so itself in `mappability_not_folded`.
    **The comparison itself is now a library function**, `genomeos/compare.py` (`e08edf9`): direct
    standardisation, the control arm carrying the n of the matched targets, the dropped targets counted,
    and both groups' covariate medians in the same result, with nine tests each of a mistake that was
