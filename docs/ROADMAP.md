@@ -642,10 +642,49 @@ in order. "Owner" is the session that holds the files today (see §7).
     interval, which the inherited 50 kb node floor then removes.
   - **Verdict.** Keep both; the default stays CTCF-only. Insulation boundaries
     and the model's enhancer reach disagree about where regulation is bounded.
+- **The stricter site call, closed as a negative (2026-09-21, lane-sites).**
+  Item 1 of the Next list below is answered, both halves. Registered in
+  `ad07dfb` before scoring and run in `56e2c50`: best-hit strand plus a 0.95
+  motif threshold, judged on the same four measurements as the 2026-09-14
+  caller, with the split decision fixed in advance. **Hi-C passes** — enrichment
+  1.75, 2.36, 2.27, 1.60 in H1, K562, HepG2 and IMR-90 against 1.74, 1.96, 1.99,
+  1.45 — and it is a precision bought by keeping 2,171 edges where the old
+  caller keeps 17,971, so reach falls from 41–48% of measured boundaries to
+  5–7%. **Node content fails**: excess over its own random control is **-0.3
+  points against the default's +2.9**, the raw 94.5% being pure resolution — and
+  that raw number being the highest in the table is exactly what fixing the
+  judged statistic in advance was for. **Mouse synteny fails** on chr11, 85.3%
+  against 92.4%, below even the orientation caller's 88.0%; chr19 tests 73 nodes,
+  under the registered minimum of 80, and is not judged. **HOXD fails**, nearest
+  edge 1,097 kb from the published interval against the orientation caller's
+  16 kb. One pass and three failures is the split case the registration decided
+  in advance: **the default stays CTCF-only**, the stricter call is a named
+  option, and the item's second half is answered **yes** — Hi-C questions and
+  enhancer-to-gene questions need two node sets.
+  **The attribution matters more than the verdict, and it is a clean negative on
+  the half that was blamed.** Best-hit strand does recover the 11,696 elements
+  (9.5%) dropped for a weak opposite-strand hit, which is the mechanism the
+  2026-09-14 note guessed — and it moves **all four measurements inside their
+  registered noise floors**. Those elements are not where the boundaries are.
+  The whole effect is the threshold, and what the threshold does is delete: 0.95
+  keeps **8,616 of the 123,166** elements that have a site at 0.85, and 8,613 of
+  the survivors are already single-strand, which makes the strand rule moot.
+  A 0.90 call added **after** the registered run and labelled post-hoc,
+  registered as unable to decide anything, is the best Hi-C caller of the seven
+  and still fails node content, chr11 synteny and HOXD — so 0.95 was not simply
+  the wrong number. **No further site-call variant is worth running against these
+  four measurements**; what the node comparison needs next is a measured
+  enhancer-gene set in place of the model's own reading, which is item 4 of the
+  list below. Node content was re-measured on 440,377 archive elements rather
+  than 2026-09-14's 113,399, every caller re-run in the same job, and the
+  default's excess survives the 3.9× growth (+2.6 → +2.9).
+  NODES-READER-WRITER.md, "A stricter site call, judged on all four measurements
+  at once".
 - **Next (epigenome and nodes).** 1. Done as an alternative; the next test is a
   stricter site call (best-hit strand, stronger motifs) judged on all four
   measurements at once, and whether Hi-C questions and enhancer-to-gene
-  questions need two node sets. 2. The poised call in the Blocks lane:
+  questions need two node sets. *(Closed 2026-09-21 — see the bullet above.)*
+  2. The poised call in the Blocks lane:
   **done 2026-09-17**. Poised genes arrive inside `silent_genes` on purpose, because every
   consumer reads "absent from that list" as read and leaving them out would report a held
   gene as expressed; the lane therefore drew all of them as silent. It now reads the
