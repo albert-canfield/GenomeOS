@@ -17,6 +17,13 @@ from typing import Any
 
 STALE_AFTER = 6 * 3600  # an entry not touched for six hours is shown as stale, not hidden
 KEEP_DONE = 24 * 3600  # finished entries stay visible for a day
+#: Two days untouched and the session that wrote the entry is almost certainly gone, because a
+#: session restart renames it and the new name writes a new file. Such an entry is `abandoned`
+#: rather than `stale`: on 2026-09-21 the board carried eleven entries reading "working" whose
+#: last update was five to eight days old and whose sessions had ended, so a reader of the
+#: Progress tab saw eleven lanes in flight where there were two. Stale means paused; abandoned
+#: means nobody is coming back to it, and only the second is a lie worth removing from the board.
+ABANDONED_AFTER = 48 * 3600
 _WHO = re.compile(r"^[A-Za-z0-9_.-]{1,64}$")
 
 
@@ -135,11 +142,45 @@ def board(root: Path, now: float | None = None) -> list[dict[str, Any]]:
             continue
         updated = e.get("updated")
         e["age"] = round(now - updated) if isinstance(updated, (int, float)) else 0
-        if e.get("state") != "done" and e["age"] > STALE_AFTER:
+        if e.get("state") != "done" and e["age"] > ABANDONED_AFTER:
+            e["state"] = "abandoned"
+        elif e.get("state") != "done" and e["age"] > STALE_AFTER:
             e["state"] = "stale"
         out.append(e)
-    order = {"working": 0, "waiting": 1, "stale": 2, "done": 3}
+    order = {"working": 0, "waiting": 1, "stale": 2, "done": 3, "abandoned": 4}
     return sorted(out, key=lambda e: (order.get(e.get("state"), 9), e["age"]))
+
+
+def retire(root: Path, hours: int = 48, now: float | None = None, dry_run: bool = False) -> list[str]:
+    """Move the entries nobody is coming back to out of the board, into data/work/retired/.
+
+    An entry is retired when it has not been touched for `hours` (the abandoned reading above), or
+    when it is finished and older than the day the board keeps it visible for. The file is moved
+    rather than deleted: what a lane said it was doing and what it held is the only record of that
+    lane once its session is gone, and the board's job is to say what is running now, not to be
+    the archive. Returns the names retired, so a caller can say which lanes it closed.
+    """
+    now = time.time() if now is None else now
+    cutoff = hours * 3600
+    d = _dir(root)
+    dest = d / "retired"
+    names = []
+    for p in sorted(d.glob("*.json")):
+        try:
+            e = json.loads(p.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        updated = e.get("updated") or 0
+        finished = e.get("finished") or 0
+        gone = now - updated > cutoff
+        old_done = e.get("state") == "done" and now - finished > KEEP_DONE
+        if not (gone or old_done):
+            continue
+        names.append(p.stem)
+        if not dry_run:
+            dest.mkdir(parents=True, exist_ok=True)
+            p.replace(dest / p.name)
+    return names
 
 
 def _git(root: Path, *args: str) -> str:

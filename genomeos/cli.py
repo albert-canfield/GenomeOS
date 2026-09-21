@@ -4584,8 +4584,12 @@ def cmd_work(args: argparse.Namespace) -> int:
     root = Path.cwd()
     args.who = args.who or os.environ.get("GENOMEOS_WHO", "")
     try:
-        if args.action != "list" and not args.who:
+        if args.action not in ("list", "retire") and not args.who:
             raise ValueError("say who with --who NAME or GENOMEOS_WHO")
+        if args.action == "retire":
+            names = work.retire(root, args.hours, dry_run=args.dry_run)
+            verb = "would retire" if args.dry_run else "retired"
+            print(f"{verb} {len(names)}: {', '.join(names)}" if names else "nothing to retire")
         if args.action == "start":
             if not args.task:
                 raise ValueError("start needs a task")
@@ -5508,9 +5512,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(fn=cmd_evidence)
 
     p = sub.add_parser("work", help="the work board: say what you are working on, shown on the Progress tab")
-    p.add_argument("action", nargs="?", choices=["list", "start", "update", "done"], default="list")
+    p.add_argument("action", nargs="?", choices=["list", "start", "update", "done", "retire"], default="list")
     p.add_argument("task", nargs="?", help="what is being worked on (start; update replaces it)")
     p.add_argument("--who", help="contributor name (default: the GENOMEOS_WHO environment variable)")
+    p.add_argument(
+        "--hours", type=int, default=48, help="retire: entries untouched for this long (default 48)"
+    )
+    p.add_argument("--dry-run", action="store_true", help="retire: name them without moving anything")
     p.add_argument("--area", help="roadmap area letter, A to J")
     p.add_argument("--files", nargs="*", help="files held (comma or space separated; dir/ holds a directory)")
     p.add_argument("--next", help="what comes after this task")

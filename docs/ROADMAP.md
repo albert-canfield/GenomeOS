@@ -2794,6 +2794,35 @@ entire sweep. What is next, in order of what it decides:
    `.claude/worktrees` at 2.8 GB across 8 agent worktrees, 4 of them locked, clearable when
    their lanes are idle. What remains a real question is whether distilling `data/knowledge`
    is worth it, and that is inside the project rather than Albert's.
+9. **A coordinating session, from 2026-09-21, and the drift it exists to stop.** Albert's
+   direction: the work of the last days was landing but not against a published plan, so what
+   was going on could not be read off the Progress tab. One session (named in §8) now holds
+   this document, assigns the lanes below, and keeps the board honest; every other session
+   builds and sends finished row text rather than editing the roadmap itself.
+   The drift was measurable rather than felt. On the day this row was written the work board
+   carried **31 entries of which 2 were live**: eleven said "working" with their last update
+   between five and eight days old, and the sessions that wrote them are gone. A reader opening
+   the Progress tab saw eleven lanes in flight and two were. The board's own staleness label
+   was doing its job and the tab was still misleading, because a stale entry from a dead
+   session and a stale entry from a session about to come back look the same.
+   **The open lanes, one owner each, and nothing owned by a session that no longer exists:**
+   - **Area F, the last clause of milestone 1.2** — assigned to genomeos-e6, 2026-09-21.
+     `KNOWN_MECHANISM_DEFECTS = 2` in `tests/test_therapeutic_benchmark.py`, both defects
+     described in `tests/test_cancer_alterations.py`: a mechanism that is merely not refused
+     heads the list because everything else scores zero. Then a benchmark case whose driver is
+     a copy-number, structural or expression call, since the reader for those landed and the
+     benchmark still recovers all six targets from point mutations alone.
+   - **Item 4, more loci** — open, unowned since genomeos-79's session ended. The finding that
+     makes it worth more loci is the baseline's spread of 0.445 against the derived rate's
+     0.007, and the merge of the third set into the panel is this session's call to make.
+   - **Item 5, stage 2 of the economy** — genomeos-0e, last seen seven hours before this row.
+     Pool, cost and allocation are in the language and the arithmetic; the burden and abundance
+     gates are what remain.
+   - **Item 3b, the assay over the real unknown** — designed, unordered, and not a lane anyone
+     can open without Albert: 284,598 oligos is a purchase, not a commit.
+   The rule this row establishes, so the drift does not recur: **a lane exists on the board or
+   it does not exist.** An entry whose session is gone is retired rather than left to read as
+   work in flight, and the Progress tab separates what is running from what was run.
 
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 

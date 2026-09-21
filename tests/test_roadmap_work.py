@@ -111,6 +111,27 @@ def test_work_board_lifecycle(tmp_path):
         work.start(tmp_path, "../escape", "x")
 
 
+def test_a_dead_lane_is_abandoned_and_retired(tmp_path):
+    """Two days untouched reads differently from six hours, and retiring moves rather than deletes.
+
+    The board said "working" for eleven lanes on 2026-09-21 whose sessions had ended days before,
+    because a restart renames a session and the old entry is never touched again. Stale is a pause;
+    abandoned is nobody coming back, and only the second should leave the board.
+    """
+    work.start(tmp_path, "paused", "a lane between commits", now=0.0)
+    work.start(tmp_path, "dead", "a lane whose session ended", now=0.0)
+    work.update(tmp_path, "paused", note="still here", now=work.ABANDONED_AFTER)
+    board = work.board(tmp_path, now=work.ABANDONED_AFTER + work.STALE_AFTER + 1)
+    states = {x["who"]: x["state"] for x in board}
+    assert states == {"paused": "stale", "dead": "abandoned"}
+
+    named = work.retire(tmp_path, hours=48, now=work.ABANDONED_AFTER + 1, dry_run=True)
+    assert named == ["dead"] and (tmp_path / "data" / "work" / "dead.json").exists()
+    assert work.retire(tmp_path, hours=48, now=work.ABANDONED_AFTER + 1) == ["dead"]
+    assert [x["who"] for x in work.board(tmp_path, now=work.ABANDONED_AFTER + 1)] == ["paused"]
+    assert (tmp_path / "data" / "work" / "retired" / "dead.json").exists(), "moved, not deleted"
+
+
 def test_api_work_and_roadmap():
     api = Api(ROOT)
     w = api.work()
