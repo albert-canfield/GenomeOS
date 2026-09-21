@@ -276,6 +276,30 @@ BLOCKS: dict[str, dict] = {
             "via_threshold": ("number", "via level giving half capacity"),
         },
     },
+    "pool": {
+        "header": "pool <Id> { ... }",
+        "props": {
+            "location": ("Id", "the compartment the pool is in"),
+            "size": ("number | unknown", "capacity in molecules; unknown refuses a burden claim"),
+            "regenerates": (
+                "number /h | from Id, Id",
+                "a rate, or the processes that refill it when a rate is the wrong shape (ATP)",
+            ),
+            "returns_as": ("Id", "what a drawn unit becomes when the work ends (ATP returns as ADP)"),
+        },
+    },
+    "allocation": {
+        "header": "allocation <Id> { ... }",
+        "props": {
+            "pool": ("Id", "the pool this policy divides; required"),
+            "policy": (
+                "proportional | priority | competitive | optimise",
+                "the scientific claim, named in the program and never hidden in the engine",
+            ),
+            "order": ("Id, Id", "priority: the order demands are served in"),
+            "objective": ("text", "optimise: the declared objective; always a modelling device"),
+        },
+    },
     "regime": {
         "header": "regime <Id> { ... }   (one per program)",
         "props": {

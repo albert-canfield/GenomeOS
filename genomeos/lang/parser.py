@@ -40,6 +40,7 @@ from pathlib import Path
 
 from genomeos.coords import Locus
 from genomeos.ir import (
+    COST_UNITS,
     DECISION_ACTIONS,
     MOLAR_UNITS,
     REGIME_ALLOCATIONS,
@@ -50,10 +51,12 @@ from genomeos.ir import (
     UNKNOWN,
     VOLUME_UNITS,
     Action,
+    Allocation,
     CellType,
     Commitment,
     Compartment,
     Competence,
+    Cost,
     Decision,
     Design,
     Domain,
@@ -68,6 +71,7 @@ from genomeos.ir import (
     Order,
     Organism,
     Parameter,
+    Pool,
     Protein,
     Regime,
     Region,
@@ -109,12 +113,41 @@ _KINDS = (
     "order",
     "compartment",
     "transport",
+    "pool",
+    "allocation",
     "regime",
 )
-_REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary")
+# `cost` repeats because one gene draws on more than one pool: a transcript costs RNAPII once and
+# ATP per nucleotide, and those are two costs rather than one compound value (v0.4 §5.2).
+_REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary", "cost")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+|unknown|UNKNOWN)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
+#: `cost: RNAPII 1 per transcript` — the pool, the amount, and what it is charged per. The unit is
+#: required rather than defaulted, because "ATP 4" is ambiguous between per residue and per chain and
+#: the whole point of stage 2 is that a cost means a definite quantity of work.
+_COST = re.compile(r"^(\w[\w.]*)\s+([-+0-9.eE]+)\s+per\s+(\w+)$")
+
+
+def _costs(raw: str, line: int) -> list[Cost]:
+    """Every `cost:` clause on one entity, which repeat and are joined by the block reader."""
+    out: list[Cost] = []
+    for piece in (x.strip() for x in raw.split(";")):
+        if not piece:
+            continue
+        m = _COST.match(piece)
+        if not m:
+            raise BioLangError(
+                f"line {line}: cost {piece!r}: expected `<pool> <amount> per <unit>`,"
+                f" unit one of {', '.join(COST_UNITS)}"
+            )
+        try:
+            out.append(Cost(pool=m.group(1), amount=float(m.group(2)), per=m.group(3)))
+        except ValueError as e:  # a unit outside the closed set
+            raise BioLangError(f"line {line}: {e}") from e
+    return out
+
+
 STD_DIR = Path(__file__).resolve().parent.parent / "std"
 
 
@@ -327,6 +360,8 @@ def _compile_block(b: Block, module: Module) -> None:
         if "max" in p:
             g.attrs["max_rate"] = _float(p["max"], "max", b.line)
         g.location = _list(p.get("location", ""))
+        if "cost" in p:
+            g.costs = _costs(p["cost"], b.line)
         module.add(g)
         if "produces" in p:
             for target in _list(p["produces"]):
@@ -387,6 +422,8 @@ def _compile_block(b: Block, module: Module) -> None:
         pr.signals = _list(p.get("signals", ""))
         if "initial" in p:
             pr.initial = _float(p["initial"], "initial", b.line)
+        if "cost" in p:
+            pr.costs = _costs(p["cost"], b.line)
         module.add(pr)
     elif b.kind == "region":
         role = p.get("role", "unknown")
@@ -440,6 +477,8 @@ def _compile_block(b: Block, module: Module) -> None:
                 e.rate_unit = parts[1]
         if "when" in p:
             e.when = _parse_when(p["when"])
+        if "cost" in p:
+            e.costs = _costs(p["cost"], b.line)
         for eff in p.get("effect", "").split(" ; "):
             eff = eff.strip()
             if not eff:
@@ -809,6 +848,42 @@ def _compile_block(b: Block, module: Module) -> None:
         if "copies" in p:
             cp.copies = int(_float(p["copies"], "copies", b.line))
         module.add(cp)
+    elif b.kind == "pool":
+        pl = Pool(id=b.header, kind="pool", evidence=ev, confidence=conf)
+        pl.location = p.get("location", "")
+        if "size" in p:
+            raw = p["size"].strip()
+            pl.size = UNKNOWN if raw.lower() == "unknown" else _float(raw, "size", b.line)
+            if pl.size is not UNKNOWN and pl.size <= 0:
+                raise BioLangError(f"line {b.line}: a pool's size is a capacity in molecules, above 0")
+        if "regenerates" in p:
+            # two shapes: a rate ("1e5 /h") or the processes that refill it ("from Glycolysis, OXPHOS").
+            # ATP is the reason for the second: it is not restored at a constant rate.
+            raw = p["regenerates"].strip()
+            if raw.lower().startswith("from "):
+                pl.regenerates_from = _list(raw[5:])
+            else:
+                pl.regeneration = _float(raw.split("/")[0], "regenerates", b.line)
+        pl.returns_as = p.get("returns_as", "")
+        module.add(pl)
+    elif b.kind == "allocation":
+        al = Allocation(id=b.header, kind="allocation", evidence=ev, confidence=conf)
+        al.pool = p.get("pool", "")
+        if not al.pool:
+            raise BioLangError(f"line {b.line}: an allocation must name the pool it divides")
+        al.policy = p.get("policy", "proportional").strip()
+        if al.policy not in REGIME_ALLOCATIONS:
+            raise BioLangError(
+                f"line {b.line}: allocation policy {al.policy!r}:"
+                f" expected one of {', '.join(REGIME_ALLOCATIONS)}"
+            )
+        al.order = _list(p.get("order", ""))
+        if al.policy == "priority" and not al.order:
+            raise BioLangError(f"line {b.line}: policy priority needs an order to follow")
+        al.objective = p.get("objective", "")
+        if al.policy == "optimise" and not al.objective:
+            raise BioLangError(f"line {b.line}: policy optimise must declare its objective")
+        module.add(al)
     elif b.kind == "transport":
         tr = Transport(id=b.header, kind="transport", evidence=ev, confidence=conf)
         tr.from_compartment, tr.to_compartment = p.get("from", ""), p.get("to", "")

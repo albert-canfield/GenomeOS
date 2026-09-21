@@ -9,7 +9,7 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 - A file is directives followed by blocks. `#` starts a comment. Blocks are
   `kind header { props }`; props are `key: value`, one per line or `;`-separated; a block may sit
   on one line.
-- Only `transcript` nests (inside `gene`). Repeatable keys: assert, effect, keep, observe, source, target, vary.
+- Only `transcript` nests (inside `gene`). Repeatable keys: assert, cost, effect, keep, observe, source, target, vary.
 - Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
   `>=n` `<=n` `>n` `<n`.
@@ -318,6 +318,28 @@ May contain `transcript` blocks.
 | `via` | `Id` | protein whose presence gates the capacity |
 | `via_threshold` | `number` | via level giving half capacity |
 
+### `pool`
+
+`pool <Id> { ... }`
+
+| property | form | meaning |
+|---|---|---|
+| `location` | `Id` | the compartment the pool is in |
+| `size` | `number | unknown` | capacity in molecules; unknown refuses a burden claim |
+| `regenerates` | `number /h | from Id, Id` | a rate, or the processes that refill it when a rate is the wrong shape (ATP) |
+| `returns_as` | `Id` | what a drawn unit becomes when the work ends (ATP returns as ADP) |
+
+### `allocation`
+
+`allocation <Id> { ... }`
+
+| property | form | meaning |
+|---|---|---|
+| `pool` | `Id` | the pool this policy divides; required |
+| `policy` | `proportional | priority | competitive | optimise` | the scientific claim, named in the program and never hidden in the engine |
+| `order` | `Id, Id` | priority: the order demands are served in |
+| `objective` | `text` | optimise: the declared objective; always a modelling device |
+
 ### `regime`
 
 `regime <Id> { ... }   (one per program)`
@@ -346,12 +368,12 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **RegulatoryElement**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `cls`, `targets`, `domain`, `source`
 - **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
 - **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`, `reads`
-- **Gene**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `symbol`, `locus`, `transcripts`, `basal_rate`, `location`
+- **Gene**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `symbol`, `locus`, `transcripts`, `basal_rate`, `location`, `costs`
 - **Transcript**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `gene_id`, `exons`, `cds`, `cds_segments`, `cds_phase`, `tags`
-- **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`
+- **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`, `costs`
 - **CellType**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `name`, `parent`, `expresses`, `ontology_id`
 - **Effect**: `target`, `op`, `value`, `unit`
-- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `evidence`, `confidence`
+- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
 - **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
