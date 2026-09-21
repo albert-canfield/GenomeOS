@@ -19,7 +19,7 @@ import json
 import sys
 
 from genomeos.benchmark import loci_reread as rr
-from genomeos.results import save_result
+from genomeos.results import load_result, save_result
 
 
 def say(msg: str) -> None:
@@ -56,6 +56,15 @@ def show(frame: dict) -> None:
             f"    {m['locus']:38s} {m['was']} ({m['was_log2']}) -> {m['now']} ({m['now_log2']})"
             f"  published {m['published']}  {flip}"
         )
+    db, da = frame["drawn_only_before"]["target_derived"], frame["drawn_only_after"]["target_derived"]
+    print(f"  drawn loci only, the control excluded:   {db['k']}/{db['n']} -> {da['k']}/{da['n']}")
+    print("  per layer, names a published target first:")
+    for layer, v in frame["by_layer_after"].items():
+        w = frame["by_layer_before"].get(layer) or {}
+        print(f"    {layer:12s} {w.get('k')}/{w.get('n')} -> {v['k']}/{v['n']}  ({v['provenance']})")
+    print("  the deletion layer named, before -> after:")
+    for what, n in frame["named_instead_before"].items():
+        print(f"    {what:26s} {n} -> {frame['named_instead_after'][what]}")
     neg = frame["negatives"]
     print(
         f"  negatives: {neg['checked']} checked, {len(neg['claims_changed'])} claim(s) moved,"
@@ -69,10 +78,39 @@ def main() -> int:
     ap.add_argument("--frame")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--save", action="store_true", help="with --all, write data/results/loci_reread.json")
+    ap.add_argument(
+        "--neighbourhood",
+        action="store_true",
+        help="where each promoted gene sits relative to the target it displaced; reads the saved result",
+    )
     args = ap.parse_args()
 
     if args.registration:
         print(json.dumps(rr.PREREGISTRATION, indent=1))
+        return 0
+    if args.neighbourhood:
+        n = rr.neighbourhood()
+        print(
+            f"{n['movements']} movements, {n['locatable_unambiguously']} of them locatable:"
+            f" {n['the_promoted_gene_overlaps_the_published_target']} promote a gene that OVERLAPS the"
+            f" published target, {n['outside_it_but_within_100_kb']} within 100 kb of it"
+        )
+        for p in n["per_movement"]:
+            if not p["distance_is_meaningful"]:
+                gap = f"NOT LOCATABLE, {p['copies_of_this_symbol_on_the_chromosome']} copies of the symbol"
+            else:
+                gap = "overlapping" if p["gap_bp"] == 0 else f"{p['gap_bp']} bp away"
+            print(f"  {p['frame']:16s} {p['locus']:38s} {p['was']} -> {p['now']}  ({gap})")
+        for p in n["not_locatable"]:
+            print(f"  excluded from the counts: {p['locus']} -> {p['now']} ({p['copies']} copies)")
+        if args.save:
+            saved = load_result("loci_reread") or {}
+            if not saved:
+                say("no loci_reread result to merge into; run --all --save first")
+                return 1
+            saved["neighbourhood"] = n
+            save_result("loci_reread", saved)
+            say("merged the neighbourhood reading into data/results/loci_reread.json")
         return 0
     if args.frame:
         show(rr.reread_frame(args.frame))

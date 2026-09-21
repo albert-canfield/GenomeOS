@@ -292,6 +292,128 @@ def _comparable(reading: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def named_instead(rows: list[dict[str, Any]], layer: str = "deletion") -> dict[str, int]:
+    """Section 22's own table for one layer: the published target, the trap, another gene, nothing.
+
+    The categories are the frame's, not new ones: `nearest_gene_trap` is the element's nearest coding
+    TSS, which the fourth frame's drawing rule guarantees is NOT a published target.
+    """
+    tally = {"the published target": 0, "the nearest coding TSS": 0, "another gene": 0, "nothing": 0}
+    for r in rows:
+        named = (r["score"]["scored"]["target"]["by_layer"].get(layer) or {}).get("named") or []
+        first = named[0] if named else None
+        want = set(r["expected"]["targets"])
+        trap = r["expected"].get("nearest_gene_trap")
+        if first is None:
+            tally["nothing"] += 1
+        elif first in want:
+            tally["the published target"] += 1
+        elif trap and first == trap:
+            tally["the nearest coding TSS"] += 1
+        else:
+            tally["another gene"] += 1
+    return tally
+
+
+def layer_hits(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Per layer, how often it ranks a published target first. The same `hit` the headline uses."""
+    out: dict[str, dict[str, Any]] = {}
+    for r in rows:
+        for layer, v in r["score"]["scored"]["target"]["by_layer"].items():
+            slot = out.setdefault(layer, {"k": 0, "n": 0, "provenance": v.get("provenance")})
+            slot["n"] += 1
+            slot["k"] += int(bool(v.get("hit")))
+    for slot in out.values():
+        slot["rate"] = round(slot["k"] / slot["n"], 3) if slot["n"] else None
+    return out
+
+
+def neighbourhood(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """Where each gene the repaired reader promoted sits relative to the target it displaced.
+
+    Read off the saved `loci_reread` movements and GENCODE, free. It answers the question the
+    movements raise on sight: the reader stopped naming LCT, SOST, MC1R and HBA2 and started naming
+    Y_RNA, LINC02594, ENSG00000259006 and ENSG00000290010, and whether that is the model pointing
+    somewhere else or the model pointing at the same place under a non-coding name is a fact about
+    GENCODE coordinates rather than a matter of opinion.
+    """
+    saved = load_result("loci_reread", results_dir) or {}
+    chroms: dict[str, loci.Chromosome] = {}
+    per: list[dict[str, Any]] = []
+    try:
+        for frame, v in (saved.get("frames") or {}).items():
+            where_each = {
+                r["locus"]: r["expected"]["chrom"]
+                for r in (load_result(frame, results_dir) or {}).get("loci", [])
+            }
+            for m in v.get("movements") or []:
+                chrom = where_each.get(m["locus"])
+                if chrom is None:
+                    continue
+                ch = chroms.get(chrom) or chroms.setdefault(chrom, loci.Chromosome(chrom, results_dir))
+                copies = [x for x in ch.annotation.genes.values() if x.symbol == m["now"]]
+                promoted = ch.annotation.genes.get(m["now"]) or (copies[0] if copies else None)
+                where = "no GENCODE record on this chromosome for the promoted name"
+                gap = None
+                for t in m["published"]:
+                    pub = ch.annotation.genes.get(t) or next(
+                        (x for x in ch.annotation.genes.values() if x.symbol == t), None
+                    )
+                    if promoted is None or pub is None:
+                        continue
+                    if promoted.locus.start < pub.locus.end and promoted.locus.end > pub.locus.start:
+                        where, gap = "overlaps the published target's gene body", 0
+                        break
+                    d = min(
+                        abs(promoted.locus.start - pub.locus.end), abs(pub.locus.start - promoted.locus.end)
+                    )
+                    if gap is None or d < gap:
+                        where, gap = "outside it", d
+                per.append(
+                    {
+                        "frame": frame,
+                        "locus": m["locus"],
+                        "was": m["was"],
+                        "now": m["now"],
+                        "published": m["published"],
+                        "where": where,
+                        "gap_bp": gap,
+                        # Y_RNA, and symbols like it, name many genes on one chromosome. A distance
+                        # to "the first one" is arithmetic about the wrong copy, so it is flagged
+                        # rather than quoted, and such a row is excluded from the counts below.
+                        "copies_of_this_symbol_on_the_chromosome": len(copies),
+                        "distance_is_meaningful": bool(promoted is not None and len(copies) <= 1),
+                    }
+                )
+    finally:
+        for ch in chroms.values():
+            ch.close()
+    usable = [p for p in per if p["distance_is_meaningful"]]
+    overlapping = [p for p in usable if p["where"].startswith("overlaps")]
+    within_100k = [p for p in usable if p["gap_bp"] is not None and 0 < p["gap_bp"] <= 100_000]
+    return {
+        "movements": len(per),
+        "locatable_unambiguously": len(usable),
+        "not_locatable": [
+            {"locus": p["locus"], "now": p["now"], "copies": p["copies_of_this_symbol_on_the_chromosome"]}
+            for p in per
+            if not p["distance_is_meaningful"]
+        ],
+        "the_promoted_gene_overlaps_the_published_target": len(overlapping),
+        "outside_it_but_within_100_kb": len(within_100k),
+        "per_movement": per,
+        "reading": (
+            "a promoted gene that overlaps the target it displaced means the model named the right"
+            " PLACE and the coding-only reader was reporting a different gene at that place; one far"
+            " away means the repaired reader moved the answer somewhere else. The two are not the"
+            " same finding and the split is what says which happened. The counts are over the"
+            " movements whose promoted gene can be located unambiguously: a symbol GENCODE uses at"
+            " many loci on one chromosome, Y_RNA above all, gives a distance to whichever copy comes"
+            " first, which is arithmetic about the wrong gene, and those rows are listed apart"
+        ),
+    }
+
+
 def reread_frame(name: str, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     """Re-read one saved frame's deletion layer and re-score it. No request, no network.
 
@@ -367,6 +489,16 @@ def reread_frame(name: str, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
         },
         "before": loci.aggregate(out["loci"]),
         "after": loci.aggregate(after),
+        # the positive control goes through the same readers, so `loci.build` aggregates it in; every
+        # frame that has one reports its headline over the DRAWN loci, and the split is kept here.
+        "drawn_only_before": loci.aggregate(
+            [r for r in out["loci"] if not r["locus"].startswith("CONTROL_")]
+        ),
+        "drawn_only_after": loci.aggregate([r for r in after if not r["locus"].startswith("CONTROL_")]),
+        "by_layer_before": layer_hits(out["loci"]),
+        "by_layer_after": layer_hits(after),
+        "named_instead_before": named_instead(out["loci"]),
+        "named_instead_after": named_instead(after),
         "rank_one_changed": len(moved),
         "movements": moved,
         "negatives": negatives,

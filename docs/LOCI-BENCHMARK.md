@@ -513,6 +513,12 @@ subset than on the whole: 50% against 8%.
 
 ## 9. The panel widened to seventeen (2026-09-15)
 
+> **Re-read on 2026-09-21 (section 24).** `loci.read_deletion` was repaired and this panel was
+> re-scored through it with the draw held fixed and no request spent. The derived rate below is
+> **unchanged at 15/17**, but the deletion layer loses three loci on its own (MCM6_LCT, HOXD, MC1R)
+> and the headline holds only because it is a union over three derived layers. The matched-window
+> table is untouched. The numbers in this section are left exactly as they were published.
+
 Section 8 said the sweep had nothing left to give twelve loci, so the panel was widened instead:
 a second long-range case (SOX9/Pierre Robin), an imprinted locus (H19/IGF2 ICR1), a dosage locus
 (PMP22/CMT1A) and two more value domains (CYP2D6, MC1R). Seventeen loci, 85 matched negatives,
@@ -1145,6 +1151,11 @@ last.
 
 ## 18. The question the model was never asked: reach, and 11a spent one request (2026-09-17)
 
+> **The `predicted_coding`-first defect this section recorded as a caveat was fixed on 2026-09-21
+> (section 24).** It was right about the mechanism and right that H19 was the first locus where it
+> bit. At the H19 ICR the repaired reader promotes IGF2-AS, whose body overlaps IGF2, over
+> INS-IGF2, and the locus does not flip. The caveat below stands as written.
+
 11a has been waiting for a free key since section 12. The key came free, and the first thing the
 driver did was refuse to spend most of it.
 
@@ -1230,6 +1241,11 @@ results `loci_stated_intervals` and `loci_benchmark`. One model request was spen
 ---
 
 ## 19. Nine more loci, one request, and the last claim standing falls over (2026-09-17)
+
+> **Re-read on 2026-09-21 (section 24).** With `loci.read_deletion` repaired and the draw held
+> fixed, the derived rate here falls from **8/9 (0.889) to 7/9 (0.778)**: at HBA_HS40 the layer
+> named HBA2 and now names ENSG00000290010. The matched-window table is untouched. The numbers
+> below are left exactly as they were published, and the second reading is in section 24.
 
 The roadmap item was "the known-locus benchmark with more loci, not more readings of the one it
 has" - the conclusion sections 8 and 16 both reached. Eleven candidates were assembled from
@@ -1665,6 +1681,13 @@ because it was computed after the number was known and the registration says wha
 
 ## 21. A third set, the direction axis asked both ways, and an answer that was registered as undecidable (2026-09-21)
 
+> **Re-read on 2026-09-21 (section 24).** With `loci.read_deletion` repaired and the draw held
+> fixed, the derived rate here falls from **8/9 (0.889) to 7/9 (0.778)** and the deletion layer
+> alone falls from 7/9 to 4/9: at CDKN2A_9p21, SOST_VanBuchem and MYC_PVT1promoter the layer's
+> strongest call is on a non-coding transcript of the same locus (LINC02594 47 kb from SOST,
+> MIR1204 inside PVT1). The matched-window table is untouched. The numbers below are left exactly
+> as they were published.
+
 `genomeos/benchmark/loci_third.py`, `scripts/loci_third.py`, `tests/test_loci_third.py`, results `loci_third` and `loci_third_intervals`. **3 model requests spent.** 237 seconds of range reads over public tracks for the rest.
 
 Section 19's own "left undone" named three gaps. This set is aimed at two of them and records the third as unfillable. **Every one of the nine candidates activates**, so the benchmark has never asked whether the deletion layer's sign means anything when the published element's job is to hold a gene *down*; and section 20 asked for a set whose element lengths span the panel's rather than sitting at a uniform 500 bp. Two of the nine loci here are published **repressors** with a perturbation behind them, and the element lengths run 300 bp to 52,000 bp.
@@ -1812,6 +1835,18 @@ A coverage stratum can only bite a claim whose input somebody had to **buy**. Th
 ---
 
 ## 22. A fourth frame, drawn by a rule instead of chosen, and the headline does not survive it, at n = 50 and in both halves (2026-09-21)
+
+> **Re-read and re-drawn on 2026-09-21 (section 24), and two things below have to be read with it.**
+> With `loci.read_deletion` repaired and this draw held fixed, the derived rate falls from
+> **10/50 (0.200) to 9/50 (0.180)**, the deletion layer from 3/50 to 2/50, and its "named the
+> nearest coding TSS" column from 26/50 to 20/50 while "another gene" rises from 19 to 27. **The
+> positive control fails under the repaired reader** - it named HMGA1 and now names
+> ENSG00000288879, whose body overlaps HMGA1's - so the interpretability argument this section
+> registered has to be re-made; section 24 states that and does not make it on this section's
+> behalf. Separately, the draw's step 4 was matching stale symbols: under the file's own Ensembl
+> ids **68 elements pass this rule rather than 60**, so "the frame is exhausted" below is true of
+> the rule as implemented and not as written. The matched-window table is untouched and the
+> numbers below are left exactly as they were published.
 
 `genomeos/benchmark/loci_fourth.py` (the registration and the rule), `scripts/loci_fourth.py`, `scripts/loci_fourth_section.py`, `tests/test_loci_fourth.py`, results `loci_fourth` and `loci_fourth_intervals`. **4 model requests spent.** 1009 seconds of range reads over public tracks for the rest.
 
@@ -2029,6 +2064,14 @@ The node rule was registered in advance as low but **not** zero by construction,
 
 ## 23. The non-coding frame is two loci, not fourteen, and the one clean case was answered correctly and then thrown away by the reader (2026-09-21)
 
+> **Re-read on 2026-09-21 (section 24), which is what this section asked for.** The one-line fix to
+> `loci.read_deletion` named here was registered, made and measured across every frame. At CCDC26
+> the deletion layer now reports the published lncRNA at -1.691 and **the derived rate over this
+> frame is 1/2 rather than 0/2** - the counterfactual below, earned by code that ships. It is the
+> only rate in the benchmark that the repair raised; it lowered two of the three curated frames and
+> the fourth. The eight recovered elements were handed to the fourth frame's rule and it now passes
+> 68. The numbers below are left exactly as they were published.
+
 Section 22 left this open: *"The 14 elements dropped at step 4 are the first set this project has ever
 had of published, perturbation-backed, non-coding targets, which is what section 21 said curation
 could not produce."* This is that frame, scored. **It is n = 2, it cost zero requests, and the
@@ -2204,5 +2247,303 @@ a prediction this run confirms.** It is in `PREREGISTRATION["known_before_the_re
   frame is re-drawn with the corrected symbols, and what that does to its 0.200 at n = 50, is the
   fourth frame's owner's call. The elements, their cells and their current symbols are in
   `loci_noncoding.json` under `corrected_rule`.
+
+---
+
+## 24. The shared reader is repaired, it costs the benchmark more than it returns, and the corrected draw hands the baseline seven elements of one gene (2026-09-21/22)
+
+`genomeos/benchmark/loci_reread.py` (the registration and the harness), `scripts/loci_reread.py`,
+`scripts/loci_fourth_rejoin.py`, `tests/test_loci_reread.py`, `tests/test_loci_fourth_rejoin.py`,
+results `loci_reread` and `loci_fourth_rejoined`. **0 AlphaGenome requests for the whole of it**, and
+that is not an estimate: the reader makes none, and every element the corrected draw recovers was
+already covered by the finished all-element sweep, which was checked before anything was written.
+
+Sections 18, 22 and 23 each found a defect, said it was not theirs to fix, and left it. This section
+fixes both and reports what they did, in both directions.
+
+### Why a registration came first, and what it had to say
+
+`loci.read_deletion` is the reader **every** frame is scored through, so repairing it moves sections
+9, 19, 21, 22 and 23 at once - and the session that makes the change is the session that decides
+which of the new numbers get reported. That is the temptation, stated plainly, and it is why
+`loci_reread.PREREGISTRATION` was written and committed (22cbc74) before a single number was
+recomputed. It had to state, and does:
+
+- **what the reader will do instead**: both stored keys ranked together, a gene named by both keys of
+  one element counted once, the answer being the gene with the largest absolute predicted log2 fold
+  change whatever its biotype; ties broken in favour of the old answer; the pre-2026-09-21 reading
+  kept in the same dict as `coding_first_target`.
+- **why that is the right reading and not the flattering one.** The layer's own first line is "which
+  gene moves when an element here is deleted", and the answer to that question does not depend on the
+  gene's biotype. `predicted_coding` is not a better estimate than `predicted`; it is the same
+  computation with the candidate set cut down, and it exists because the panel's first loci all had
+  coding targets. And the change is **net unfavourable by construction**: |predicted| >=
+  |predicted_coding| holds for one element, so a published *coding* target that ranked first can be
+  displaced and can never be promoted. Four of the five frames contain coding targets only - the
+  fourth frame's drawing rule *requires* a coding target - so in four of five the repair can lower
+  the rate and cannot raise it. The readings that would have been favourable were available and are
+  not taken: the lenient `among` reading rises monotonically under this change and stays excluded
+  from every headline, and choosing per locus whichever key names the published target would be
+  reading the answer rather than reading the data.
+- **the direction and rough size of every affected rate, per section, before the re-run** - the
+  bracket is in the table below beside what happened.
+- **five falsifiers**, and what would make the change wrong rather than right.
+- **that the reader and the Ensembl join are registered together and measured apart**, because the
+  reader changes the readings over a draw held fixed while the join changes the draw itself, and
+  applying both at once would leave no way to say which of them moved the fourth frame's 0.200.
+- **what happens if the fourth frame's 0.200 rises**: reported in the same table and the same
+  sentence as the fall it would partly undo, with both readings kept in the record permanently.
+
+### The falsifiers, and that none of them tripped
+
+This is the part that decides whether anything below is admissible, so it is first.
+
+| falsifier, registered in advance | result |
+|---|---|
+| the frozen pre-2026-09-21 loop must reproduce every stored reading field for field | **88 loci and 400 negatives replayed, 0 mismatches** |
+| a frame whose published targets are all coding must not RISE | none did |
+| `elements_scored` must be identical at every window | 0 moved |
+| no claim over a negative window may move | **0 of 400 moved** |
+| the rank-1 gene must not change at more than half the fourth frame's loci | 11 of 51, 22% |
+
+The first line is what makes the rest of this section a measurement rather than an assertion: the
+harness keeps `read_deletion`'s pre-fix loop verbatim in `loci_reread.historical_deletion_reading`,
+and `reread_frame` refuses to report anything unless that loop reproduces the stored readings. It
+does, so the re-read is reading the rows the original runs read and the only difference between
+before and after is the change to the reader.
+
+The fourth line matters for four earlier sections: **the matched-window comparisons of sections 8,
+19, 21 and 22 are untouched, and not one p-value in them moves.** `loci.claims` asks whether a layer
+named a gene at all, never which one, and the repair only ever enlarges the candidate set.
+
+### Stage one: the reader, with every draw held fixed
+
+| frame | section | derived target, before | after | registered bracket |
+|---|---|---|---|---|
+| the seventeen panel | 9 | 15/17 (0.882) | **15/17 (0.882)** | fall by 0 to 2 |
+| the nine candidates | 19 | 8/9 (0.889) | **7/9 (0.778)** | fall by 0 or 1 |
+| the third set | 21 | 8/9 (0.889) | **7/9 (0.778)** | fall by 0 or 1 |
+| the fourth frame, graded | 22 | 10/50 (0.200) | **9/50 (0.180)** | 0.140 to 0.200 |
+| the fourth frame, every drawn locus | 22 | 10/60 (0.167) | **9/60 (0.150)** | - |
+| the non-coding frame | 23 | 0/2 | **1/2** | known in advance, not a prediction |
+
+**The repair costs the benchmark two of its three curated frames and returns one locus at n = 2.**
+That is the direction the registration said it would take, which is the whole reason the direction
+could be registered. Every number landed inside its bracket.
+
+The seventeen hold at 15/17 only because the headline is a **union** over three derived layers: the
+deletion layer loses three loci on its own there and the eQTL and summed-window layers absorb them.
+
+### What moved, locus by locus, including what got worse
+
+The deletion layer's rank-1 gene changed at 21 loci across the five frames. The three columns that
+matter are what it named, what it names now, and whether the locus flipped.
+
+| frame | locus | was | now | flip |
+|---|---|---|---|---|
+| 9 | MCM6_LCT | LCT (-0.3558) | Y_RNA (-0.3709) | **hit -> miss** |
+| 9 | MYC_8q24 | POU5F1B (-0.5327) | CCAT2 (-0.8688) | no flip |
+| 9 | HOXD | HOXD1 (-2.5611) | HAGLROS (-4.0493) | **hit -> miss** |
+| 9 | H19_ICR1 | INS-IGF2 (0.1492) | IGF2-AS (0.4031) | no flip |
+| 9 | MC1R | MC1R (-1.3073) | ENSG00000259006 (-1.864) | **hit -> miss** |
+| 19 | HBA_HS40 | HBA2 (-0.7656) | ENSG00000290010 (-0.8452) | **hit -> miss** |
+| 21 | CDKN2A_9p21 | CDKN2B (-0.1957) | ENSG00000277653 (-0.3474) | **hit -> miss** |
+| 21 | SOST_VanBuchem | SOST (-0.6479) | LINC02594 (-1.3252) | **hit -> miss** |
+| 21 | MYC_PVT1promoter | MYC (0.1392) | MIR1204 (-2.2059) | **hit -> miss** |
+| 22 | DHRS13_K562_chr17_28864k | DHRS13 (-0.6048) | MIR451A (-5.2441) | **hit -> miss** |
+| 22 | CONTROL_HMGA1_WTC11_chr6_34235k | HMGA1 (-0.2271) | ENSG00000288879 (-1.1735) | **hit -> miss** |
+| 23 | CCDC26_K562_chr8_129581k | GSDMC (-0.1433) | CCDC26 (-1.691) | **miss -> hit** |
+
+Ten losses and one gain at the layer itself, and the ten further movements in the fourth frame that
+did not flip anything are in `loci_reread.json`.
+
+The deletion layer on its own, which is the model's own answer about the element, and which the
+headline's union hides:
+
+| frame | deletion layer, before | after |
+|---|---|---|
+| the seventeen panel | 9/17 | **6/17** |
+| the nine candidates | 5/9 | **4/9** |
+| the third set | 7/9 | **4/9** |
+| the fourth frame, graded | 3/50 | **2/50** |
+| the non-coding frame | 0/2 | **1/2** |
+
+No other layer moved anywhere: `eqtl`, `gene_input`, `node` and `lookups` read identically before and
+after in all five frames, which is what a change confined to one reader should look like.
+
+And in the fourth frame, what the deletion layer named instead - section 22's own table, re-read:
+
+| what the deletion layer named | before | after |
+|---|---|---|
+| the published target | 4 | **2** |
+| the nearest coding TSS | 26 | **20** |
+| another gene | 19 | **27** |
+| nothing | 2 | 2 |
+
+(over 51, the control included; section 22 reports these over the 50 drawn). **The registration
+predicted the 26 would fall**, because a non-coding gene displacing the nearest coding TSS moves a
+locus out of that column and into "another gene", and it did, by six. So the repaired reader is
+*less* of a proximity rule than the coding-only one was - and it is no better at the published answer.
+
+### The fourth frame's positive control FAILS under the repaired reader
+
+This is the most serious thing in this section and it is not smoothed over. Section 22 drew
+CONTROL_HMGA1_WTC11_chr6_34235k as the easiest case its data could offer - the rejected element with
+the smallest published element-to-TSS distance, 1,111 bp - and registered that **"a failure here
+would mean the reading is broken and nothing else in the run is interpretable"**. Under the repaired
+reader it fails: the layer named HMGA1 at -0.2271 and now names ENSG00000288879 at -1.1735, an
+unnamed gene whose body **overlaps HMGA1's**.
+
+Two things follow and both are reported rather than one chosen.
+
+1. **Section 22's interpretability argument has to be re-made, and it is not this section's to
+   re-make.** Its exact sentence - "the same layer that answers correctly at 1.1 kb names the wrong
+   gene at 47 of the 50 loci where the right answer is not the nearest one" - is a statement about
+   the coding-first reader, and it remains true *of that reader*, which is why
+   `coding_first_target` is kept in the shipped reading rather than deleted.
+2. **The control's failure mode is not the one it was designed to catch.** It was there to catch a
+   broken reading, and what it caught is a promoted gene that lies *inside the published target*.
+   That is the pattern of the whole movement set, below. Whether that counts as a failure of the
+   reader or a limit of a hit rule that compares symbols is the benchmark owner's call, and the
+   honest statement is that under the rule as written the control is a miss and the frame's own
+   registration says what that means.
+
+### What the promoted genes actually are, which is the finding
+
+`loci_reread.neighbourhood` asks, of each of the 21 movements, where the promoted gene sits relative
+to the target it displaced. It is GENCODE coordinates, free, and it is a fact rather than a reading.
+
+| | n |
+|---|---|
+| movements | 21 |
+| locatable unambiguously | 19 |
+| **the promoted gene OVERLAPS the published target's gene body** | **5** |
+| outside it but within 100 kb | 7 |
+| further than 100 kb | 7 |
+
+Two are excluded from the counts and said so: Y_RNA is a symbol GENCODE uses at **57** loci on
+chr2, so a distance to whichever copy comes first is arithmetic about the wrong gene; and
+ENSG00000290010 has no record under that name on its chromosome at all.
+
+The five overlaps are IGF2-AS over IGF2 at the H19 ICR, ENSG00000259006 over MC1R, ENSG00000240739
+over SLC2A3, ENSG00000288879 over HMGA1 - the control - and CCDC26 over CCDC26, the one gain. Read
+with the seven within 100 kb - HAGLROS 3.2 kb from the HOXD cluster, SLC25A3P2 19 kb from ERP29,
+MIR451A 36 kb from DHRS13, LINC02594 47 kb from SOST, MIR1204 53 kb inside PVT1 - **the repaired
+reader is very largely naming a non-coding companion of the right place rather than a gene somewhere
+else.** The coding-only reader was hiding that in both directions at once: it hid CCDC26 at the one
+locus where the companion *was* the published answer, and it hid the fact that at a dozen others the
+model's strongest call is on an antisense, host or microRNA transcript of the locus the paper names.
+
+**This is not offered as a reason to score those as hits.** Every one of them is a miss under the
+benchmark's own rule, and the rule is right that MIR451A is not DHRS13. It is offered as the reason
+the headline fell: the falls are not the model losing the locus, they are the model naming the locus
+under a name the panel did not write down.
+
+### Stage two: the Ensembl-id join, and the cap that binds again
+
+Step 4 of `loci_fourth`'s rule asks whether a regulated target is protein coding, and it asked a
+symbol column as old as the screens that filled it. `loci_fourth.current_symbols` joins the file's
+own `measuredGeneEnsemblId` to GENCODE's gene table; `assess`, the rule itself, is untouched.
+
+**Thirteen symbols in the held-out arm have been renamed** - SSFA2 to ITPRID2, SARS to SARS1, WDR61
+to SKIC8, and QARS1, NARS1, YARS1, PHB1, CYRIB, GFUS, UQCC4, BBLN, SLC33A2, NUP42 - and twelve
+elements carry one.
+
+| step | as implemented (section 22) | as written |
+|---|---|---|
+| rejected: a regulated target is not protein coding | 14 | **2** |
+| rejected: the nearest coding TSS IS a published target | 85 | **88** |
+| rejected: within 200,000 bp of an earlier frame | 16 | **17** |
+| **passed the rule** | **60** | **68** |
+
+**The correction is not one-directional, and the draw proves it**: three more elements now fail step
+5 because the nearest coding TSS *is* the target once the target has its current name, and one more
+falls to the keep-out. The two that remain non-coding are the two genuine lncRNAs section 23 scored.
+
+**The cap binds again**, and that was registered in `loci_fourth.ENSEMBL_JOIN` before anything was
+scored, with the disclosure that both draws' membership was known when it was decided and no score
+was. 68 pass; MAX_LOCI is 60; applying it in genome order would add the 8 recovered elements on chr2
+and chr15 and **drop 8 already-scored loci off the end** - VAPA twice, MRPL4, ADGRE2, PDCD5, EIF3K,
+CEBPB and MSN - confounding the correction with the loss of eight loci it says nothing about.
+`CAP_RAISE` had already fixed what the cap means when it moved it from 24 to 60: 60 was every element
+the rule then passed, set so the cap could not act as a filter. Applied to the rule as written that
+gives 68, and **68 is a superset of the 60**, so nothing section 22 scored is dropped and no locus is
+chosen. The corrected frame is scored uncapped for that reason and written to `loci_fourth_rejoined`,
+never over `loci_fourth`, so section 22 stays reproducible from its own result and its own GTEx cache.
+
+### What the re-drawn frame reads, on both readings
+
+**0 AlphaGenome requests**, as costed before it ran: 69 rows drawn including the control, 59 askable
+after the free reach filter, and all 59 already covered by the finished sweep. 1,368 seconds of range
+reads over public tracks. 10 of the 68 died at the reach filter, the same rate as before.
+
+| reading | n drawn | n graded | derived target |
+|---|---|---|---|
+| as published, section 22 | 60 | 50 | 10/50 (0.200) |
+| the reader repaired, the draw held fixed | 60 | 50 | **9/50 (0.180)** |
+| the reader repaired and the draw corrected | 68 | 58 | **10/58 (0.172)** |
+| the same, over every drawn locus | 68 | 68 | **10/68 (0.147)** |
+
+**It did not rise.** The registration said in advance what a rise would get - the same table, the same
+sentence, the same emphasis as the fall - and it is recorded here that the question did not arise:
+the corrected draw recovers one derived hit (ITPRID2_HCT116_chr2_181782k) and adds eight loci, so
+the rate falls again on both denominators. Section 22's 0.200 is not rewritten anywhere.
+
+**But the second stage produced a sharper result than the rate did, and it goes the wrong way for
+this benchmark.** The heuristic baseline - nearest coding TSS inside the CTCF node - jumps from
+**3/50 (0.060) to 10/58 (0.172)**, which is exactly the derived rate.
+
+| layer | as published (of 50) | corrected draw (of 58) |
+|---|---|---|
+| deletion, derived | 3 | **2** |
+| eqtl, derived | 3 | **4** |
+| gene_input, derived | 4 | **4** |
+| node, heuristic | 3 | **10** |
+| lookups, looked up | 0 | 0 |
+| **derived, the union** | **10 (0.200)** | **10 (0.172)** |
+| chance floor | 5.48/50 (0.110) | 6.82/58 (0.118) |
+
+**Seven of the node rule's ten hits are the seven ITPRID2 elements**, and that is the thing to read
+before the rate. They are seven perturbed elements of **one gene in one cell line**, recovered
+together because one symbol went stale, and at all seven the CTCF node excludes the nearer TSS and
+names ITPRID2. So the corrected frame is *less* independent than n = 58 suggests - its largest
+single target is 7 of the 58 - and the baseline it was drawn to defeat now ties it. That was written
+into the registration before the draw was scored, in the clause about what a rise would mean: "a rate
+over 58 loci that contains seven elements of ITPRID2 is less independent than a rate over 50 that
+does not". It applies to the fall in the same way.
+
+**The corrected frame's positive control fails too**, for the same reason as in stage one: the same
+control element, the same promoted gene, ENSG00000288879 over HMGA1.
+
+### What this section does not claim
+
+- **Nothing here re-writes an earlier number.** Sections 9, 18, 19, 21, 22 and 23 keep the rates they
+  published, each with a line saying it has been re-read and where the second reading is. Both
+  readings are in the record, and the shipped reader computes both: `target` is the ranking,
+  `coding_first_target` is what the reader said before today.
+- **The fall is not evidence the model got worse**, and the rise at n = 2 is not evidence it got
+  better. One reader changed; no deletion was re-scored and no request was spent. What moved is which
+  of the genes the model had already named gets reported.
+- **n is still what it was.** Two of the frames are 9 loci, one is 17, and the non-coding frame is 2.
+  A one-locus change is 0.111 at n = 9, which is most of the movement in the table above.
+- **The control question is left open on purpose.** This section states that the fourth frame's
+  positive control fails under the repaired reader and what its own registration says that means. It
+  does not decide the fourth frame's interpretability on the fourth frame's behalf.
+
+### Left undone
+
+- **`read_gene_input` still reads `predicted_coding` and nothing else.** Section 23 registered that
+  as a property of a separate layer - a summed-window reading rather than an element answer - and it
+  was deliberately left out of this change so that two movements did not sit behind one number. It is
+  the next thing anyone looking at this should measure.
+- **Whether a hit rule that compares symbols is the right hit rule.** Five of the 21 movements promote
+  a gene whose body overlaps the published target's. Scoring those as hits would be a different
+  benchmark and it would need its own registration; saying so is not the same as doing it.
+- **The corrected frame is not independent of itself.** Its largest single target is 7 of 58, and
+  seven of the node baseline's ten hits are those seven. Nothing here treats 58 as 58 independent
+  loci, and a frame that recovers ten elements of one gene by fixing one symbol is a reason to
+  report the composition beside the rate rather than to celebrate the n.
+- **The earlier frames are not re-drawn.** Only the fourth frame's rule is mechanical enough to
+  re-draw. Whether the three curated panels carry stale symbols anywhere has not been checked.
 
 ---
