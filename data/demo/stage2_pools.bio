@@ -3,12 +3,16 @@
 # capacity, expressing one protein cannot reduce another and the burden gate has nothing to measure.
 module demo.stage2_pools
 
-compartment Cytosol { volume: 1.0; absolute_volume: 2000 fL; translation: yes
+compartment Cytosol { volume: 0.7; absolute_volume: 1400 fL; translation: yes
   evidence: experimental "a HeLa-scale cell, for a demonstration"; confidence: 0.4 }
+compartment Nucleus { parent: Cytosol; volume: 0.06; absolute_volume: 120 fL; genome: nuclear
+  evidence: experimental "Alberts MBoC 6e Table 12-1"; confidence: 0.6 }
 
 pool Ribosomes { location: Cytosol; size: 5e6; regenerates: 1e5 /h; returns_as: Ribosomes
   evidence: experimental "HeLa, BioNumbers BNID 100118 (to verify against the primary source)"
   confidence: 0.5 }
+pool RNAPII { location: Nucleus; size: 6.5e4; returns_as: RNAPII
+  evidence: experimental "Kimura et al. 1999, Mol Cell Biol 19:5383 (HeLa)"; confidence: 0.6 }
 pool ATP { location: Cytosol; size: 3e9; regenerates: from Glycolysis, OXPHOS; returns_as: ADP
   evidence: experimental "Milo 2013, BioEssays 35:1050"; confidence: 0.5 }
 
