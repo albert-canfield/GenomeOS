@@ -84,6 +84,35 @@ def worktrees(root: Path) -> list[dict[str, Any]]:
     return out
 
 
+def superseded(root: Path, entry: dict[str, Any]) -> dict[str, Any]:
+    """Whether a stale entry's claim is dead because somebody else has since moved its files.
+
+    "Stale" alone is not actionable: on 2026-09-21 the board held eleven stale entries and reported
+    that their files were "not free", which read as eleven blocked lanes. Every one had in fact
+    finished — nine had their claimed files moved on by later commits, and the tenth (the human
+    panel's last four chromosomes) had left all four untouched but its work had landed anyway, which
+    only the results could say.
+
+    So a stale entry gets two readings instead of one: `files_moved_since` is git's answer to "has
+    anyone else worked here", and `held` is only true when nothing has moved, which is the single case
+    worth a human's attention.
+    """
+    files = [f.rstrip("/") for f in (entry.get("files") or [])]
+    moved = []
+    for f in files:
+        when = git(root, "log", "-1", "--format=%ct", "--", f)
+        if when and int(when) > entry.get("updated", 0):
+            moved.append(f)
+    return {
+        "who": entry["who"],
+        "hours": round(entry["age"] / 3600.0, 1),
+        "files": len(files),
+        "files_moved_since": len(moved),
+        "held": bool(files) and not moved,
+        "task": entry["task"][:70],
+    }
+
+
 def collisions(board: list[dict[str, Any]], dirty: list[dict[str, str]]) -> dict[str, Any]:
     """Two kinds: two live sessions declaring one file, and a dirty file nobody live has declared."""
     live = [e for e in board if e["state"] != "done" and e["age"] / 3600.0 <= STALE_HOURS]
@@ -128,9 +157,7 @@ def report(root: Path) -> dict[str, Any]:
             {"who": e["who"], "area": e["area"], "task": e["task"][:90], "files": e.get("files") or []}
             for e in live
         ],
-        "sessions_stale": [
-            {"who": e["who"], "hours": round(e["age"] / 3600.0, 1), "task": e["task"][:70]} for e in stale
-        ],
+        "sessions_stale": [superseded(root, e) for e in stale],
         "steps": [
             {"number": s["number"], "progress": s["progress"], "title": s["title"][:80]} for s in steps
         ],
@@ -174,9 +201,19 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {s['who']:<13} [{s['area'] or '-'}] {s['task']}")
     if not r["sessions_live"]:
         print("  nobody")
-    print(f"\nSTALE ({len(r['sessions_stale'])}) — their files are not free, but nobody is watching them")
-    for s in r["sessions_stale"][:8]:
-        print(f"  {s['who']:<13} {s['hours']:>6.1f}h  {s['task']}")
+    held = [s for s in r["sessions_stale"] if s["held"]]
+    gone = [s for s in r["sessions_stale"] if not s["held"]]
+    print(f"\nSTALE ({len(r['sessions_stale'])}): {len(gone)} superseded, {len(held)} still holding files")
+    for s in held:
+        print(f"  HOLDS  {s['who']:<13} {s['hours']:>6.1f}h  none of its {s['files']} file(s) moved")
+        print(f"         {s['task']}")
+    for s in gone[:6]:
+        print(
+            f"  spent  {s['who']:<13} {s['hours']:>6.1f}h  "
+            f"{s['files_moved_since']} of {s['files']} file(s) moved on since"
+        )
+    if len(gone) > 6:
+        print(f"         ... and {len(gone) - 6} more, all superseded")
 
     print("\nROADMAP §5")
     for s in r["steps"]:

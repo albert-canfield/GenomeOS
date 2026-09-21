@@ -2672,10 +2672,19 @@ entire sweep. What is next, in order of what it decides:
    a published coordinate is scored rather than pointed at; the overlap is reported on both branches,
    because an annotation over a published interval makes §10's premise false for that locus.
    What remains under this item is what it always was: more loci, not more readings.
-5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
-   concentrations, holds stage 2 (pools and costs) and is the one blocking code; decision
-   9 (refusal or rate) waits on Fukushige & Krause's per-stage conversion tables; 3 and 7
-   are preference; 1 is priced.
+5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
+   more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
+   the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
+   because `volume` is a fraction and a concentration needs an absolute one, so the blocker was a
+   language field costing two citations at that scale), then **resolved by Albert on 2026-09-19** and
+   **implemented the same day** — a compartment now states an absolute volume beside its fraction,
+   and §9's table reads stage 2 as "not started; no longer blocked". Decision 1 is priced, decision 8
+   was settled by measurement. Of what remains, decision 9 (refusal or rate) waits on Fukushige &
+   Krause's per-stage conversion tables, 4, 5 and 6 are each named measurable with the gate that would
+   settle them, and 3 and 7 are preference. **So the live item here is no longer a decision but a
+   build: stage 2 — pool, cost, allocation — gated on burden (Ceroni 2015, Frei 2020) and absolute
+   abundance against PaxDb, with the burden gate's own stated trap that a shared pool with
+   proportional allocation rescales every gene equally and so cannot move a rank correlation.**
 6. **Four lanes opened by genomeos-79 on 2026-09-16, running in worktrees and merged onto dev one
    piece at a time** (proposed by that session, folded here as the roadmap's rows). They follow from
    the CRISPRi benchmark, `138824f`: on held-out K562, adding the AlphaGenome deletion to activity

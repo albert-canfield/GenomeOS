@@ -157,3 +157,26 @@ def test_progress_never_contradicts_a_struck_through_item() -> None:
 
     assert step["state"] == "done"
     assert step["progress"] == "done"
+
+
+def test_a_sentence_denying_a_block_does_not_read_as_blocked() -> None:
+    """The substring test could not tell a claim from its negation.
+
+    On 2026-09-21 item 5 was rewritten to say that no decision blocks code any more and that the one
+    which had was resolved and implemented. It still reported "blocked", because "no longer blocked"
+    contains "blocked". A status that inverts when you correct it is worse than no status.
+    """
+    assert roadmap.step_state("This one is blocked on a decision.") == "blocked"
+    assert roadmap.step_state("It waits on the paper's own tables.") == "blocked"
+    assert roadmap.step_state("No decision blocks code any more; decision 2 was resolved.") == "partial"
+    assert roadmap.step_state("Stage 2 is no longer blocked and the field is implemented.") == "partial"
+    # denial without any evidence of progress is planned, not partial
+    assert roadmap.step_state("Nothing blocks this; nobody has started it.") == "planned"
+
+
+def test_priced_and_resolved_count_as_progress_not_only_built() -> None:
+    """Two language decisions were settled by pricing and by a ruling rather than by being built."""
+    assert roadmap.step_state("Priced 2026-09-17: the blocker is one field.") == "partial"
+    assert roadmap.step_state("Resolved by Albert on 2026-09-19.") == "partial"
+    assert roadmap.step_state("Implemented the same day.") == "partial"
+    assert roadmap.step_state("A thing somebody should look at one day.") == "planned"

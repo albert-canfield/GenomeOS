@@ -92,6 +92,15 @@ def split_steps(body: str) -> list[str]:
 # attached so that prose about being not done, or about what would be done next, cannot trip it.
 _DONE_MARKER = re.compile(r"\*\*done\b[^*]{0,40}?\d{4}-\d{2}-\d{2}[^*]{0,20}\*\*", re.I)
 _NOT_DONE = re.compile(r"\bnot done\b|\buntil (?:it is )?done\b|\bwould be done\b", re.I)
+#: phrases that deny a block. Checked before the blocked test, because "no longer blocked" contains
+#: "blocked" and a substring test reads the negation as the thing it denies.
+_NOT_BLOCKED = re.compile(
+    r"no longer blocked|not blocked|nothing blocks|no decision blocks|unblocked|blocks? (?:code )?any more",
+    re.I,
+)
+#: evidence of work having happened, whatever remains. `priced`, `resolved` and `implemented` count:
+#: two of the language decisions were settled that way rather than by being built.
+_PROGRESS = re.compile(r"\bbuilt\b|\brunning\b|\blanded\b|\bpriced\b|\bresolved\b|\bimplemented\b", re.I)
 
 
 def step_state(step: str) -> str:
@@ -103,9 +112,14 @@ def step_state(step: str) -> str:
         or (_DONE_MARKER.search(step) and not _NOT_DONE.search(step))
     ):
         return "partial" if re.search(r"\bnext\b|still to|remains", low) else "done"
+    # a sentence DENYING a block used to read as blocked, because the test was a substring: on
+    # 2026-09-21 an item rewritten to say "no decision blocks code any more" and "no longer blocked"
+    # was still reported blocked, which is a check that cannot tell a claim from its negation.
+    if _NOT_BLOCKED.search(low):
+        return "partial" if _PROGRESS.search(low) else "planned"
     if "blocked" in low or "waits for" in low or "waits on" in low:
         return "blocked"
-    if re.search(r"\bbuilt\b|\brunning\b|\blanded\b", low):
+    if _PROGRESS.search(low):
         return "partial"
     return "planned"
 
