@@ -37,6 +37,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+# the constraint lane's threshold, imported rather than restated (Zoonomia FDR 5%)
+from genomeos.attribution.constraint import PHYLOP_THRESHOLD as PHYLOP_CONSTRAINED
 from genomeos.results import RESULTS_DIR, save_result
 
 DATA_URL = (
@@ -50,7 +52,6 @@ SITE_THRESHOLD = (
     0.95  # below it JASPAR sites cover 97% or more of an element's bases (measured: see the sweep)
 )
 STRONG_EFFECT = 0.25  # |log2 coefficient| for the "strong" definition, about a 19% change in activity
-PHYLOP_CONSTRAINED = 2.27
 BASES = set("ACGT")
 EVIDENCE = {
     "measurement": "experimental: saturation mutagenesis MPRA, Kircher et al. 2019 (GSE126550), GRCh38",

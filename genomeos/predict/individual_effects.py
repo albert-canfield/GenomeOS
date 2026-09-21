@@ -24,8 +24,9 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from genomeos.predict.enhancer_target import MIN_EFFECT
+
 CACHE = Path("data/knowledge/alphagenome/variants")
-MIN_EFFECT = 0.1
 MAX_INDEL = 50
 Scorer = Callable[
     [str, int, str, str], list[tuple[str, str, float]]

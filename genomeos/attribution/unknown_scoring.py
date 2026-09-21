@@ -35,9 +35,12 @@ from pathlib import Path
 from typing import Any
 
 from genomeos.attribution.closure import attributed_elements, judge
+
+# imported rather than restated: this scoring writes it into its result as `min_effect_log2`,
+# so two homes would publish two bars under one name
+from genomeos.predict.enhancer_target import MIN_EFFECT
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
-MIN_EFFECT = 0.1  # log2 fold change from which a deletion counts as moving a gene (the scoring's own bar)
 LENGTH_BINS = 3
 GC_BINS = 4
 TSS_BINS = 40  # distance is the covariate an unknown block shifts most: 8 bins left it 260 kb against 173 kb

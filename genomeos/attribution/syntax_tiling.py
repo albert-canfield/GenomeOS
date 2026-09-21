@@ -25,12 +25,15 @@ from typing import Any
 # than an unused import.
 from genomeos.compare import difference as difference
 
+# the sweep's own threshold, imported rather than restated: this module's registration text
+# interpolates it, so a divergence would silently change what the registration said
+from genomeos.predict.enhancer_target import MIN_EFFECT
+
 # The design, fixed before any window was scored.
 WINDOW = 300  # bp, close to the median length of an ENCODE cCRE, so the arms are comparable to the sweep
 MAX_PER_BLOCK = 12  # evenly spaced, so a 40 kb block cannot outvote a 2 kb one
 GC_TOL = 0.04  # the project's matching convention (human panel, unknown_scoring)
 TSS_TOL = 0.35  # relative distance to the nearest coding TSS
-MIN_EFFECT = 0.1  # the sweep's own threshold for "this deletion moved a gene"
 ARMS = ("syntax", "relaxed", "neutral")
 
 # NOT RUN. Assembling the arms showed they do not overlap in the covariate that decides the outcome:
