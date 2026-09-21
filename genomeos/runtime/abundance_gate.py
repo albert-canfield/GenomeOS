@@ -142,3 +142,112 @@ PRE_REGISTRATION: dict[str, Any] = {
         "from the cost terms that come with it, because a program states both at once"
     ),
 }
+
+# ---------------------------------------------------------------------------------------------
+# Amendment 1
+# ---------------------------------------------------------------------------------------------
+
+#: the mammalian cell's total protein count, used to turn PaxDb's ppm into copies per cell. Milo 2013
+#: (BioEssays 35:1050) puts it at 2-4 million proteins per cubic micron; a cultured human fibroblast
+#: is of order 2,000-3,000 cubic microns, which is 4e9 to 1.2e10. The midpoint is taken and the band
+#: is carried beside it. THE PRIMARY IS INVARIANT TO THIS CHOICE — in log10 it is an additive
+#: constant, and both arms fit a constant — so it is load-bearing only for the secondary, which is
+#: exactly where a chosen number should sit rather than hide.
+MEASURED_TOTAL_PROTEINS = 5.0e9
+MILO_BAND = (4.0e9, 1.2e10)
+
+#: declared before the run, for the secondary's model side. None is fitted: the ribosome capacity is
+#: §5.1's, and the two rates are cited measurements.
+RIBOSOME_CAPACITY = 5.0e6  # §5.1, HeLa, BioNumbers
+ELONGATION_AA_PER_S = 5.6  # mammalian ribosome elongation, Ingolia et al. 2011 / BioNumbers
+PROTEIN_HALF_LIFE_H = 46.0  # median, Schwanhausser et al. 2011, Nature 473:337 (NIH3T3)
+
+#: if the derivation in AMENDMENT below is right, the two fitted arms are the same arm and their MAE
+#: difference is zero to numerical precision. A difference larger than this falsifies the derivation,
+#: not the pool layer, and the amendment is withdrawn rather than defended.
+DERIVATION_TOLERANCE_LOG10 = 0.001
+
+AMENDMENT: dict[str, Any] = {
+    "written": (
+        "2026-09-21, before the transcript arm was fetched, before either arm was joined and before "
+        "any figure existed. Reasoned from the runtime source — Economy._share in "
+        "genomeos/runtime/economy.py — and not from data. What had been touched when this was "
+        "written: PaxDb's header and its first eight rows, to confirm the file exists and carries a "
+        "gene symbol and a ppm. No transcript abundance had been fetched, nothing had been joined, "
+        "and no error, rank or slope had been computed"
+    ),
+    "finding": (
+        "THE REGISTERED TRAP IS UNDERSTATED, and understated in a way that disqualifies the primary. "
+        "§5.3 says a shared pool under proportional cannot move a RANK correlation. Reading the "
+        "runtime shows the stronger statement: `_share` returns `capacity / wanted` to EVERY "
+        "demander of an oversubscribed pool, one scalar with no index on the gene, and an entity's "
+        "factor is the min over the pools it draws on. In a proteome-wide program every "
+        "protein-coding gene draws the same two pools — a ribosome per chain and ATP per residue — "
+        "so the min is over the same two scalars for everybody and the factor is ONE GLOBAL "
+        "CONSTANT F. The allocation arm's prediction is therefore the baseline's prediction "
+        "multiplied by a constant: log10 P_alloc = log10 P_base + log10 F"
+    ),
+    "consequence_for_the_primary": (
+        "the baseline fits a constant, so the two arms span the same one-parameter family and the "
+        "allocation arm cannot improve mean absolute error in log10 copies. Fitted against fitted "
+        "they are the SAME ARM and the difference is exactly zero; unfitted, the allocation arm can "
+        "only be worse, by however far its derived constant sits from the fitted optimum. So the "
+        "registered pass condition — MAE falls by at least 0.05 with a bootstrap interval excluding "
+        "zero — CANNOT BE MET by the pool layer as implemented, whatever the data say. The "
+        "registered primary does not measure allocation. What it measures, once the constant is "
+        "left underived, is whether the declared capacities put the ABSOLUTE SCALE in the right "
+        "place, which is what the secondary already asks"
+    ),
+    "why_this_is_recorded_before_the_run": (
+        "a pass condition that algebra has already closed is not a measurement, and reporting its "
+        "'no improvement' afterwards as though the data had spoken would dress a derived identity "
+        "up as an empirical negative. The distinction is the same one gate (a) drew when it "
+        "registered its magnitude clause as not askable"
+    ),
+    "still_run_and_why": (
+        "a derivation asserted is weaker than a derivation shown, so every registered reading is "
+        "still computed on the real join: the two fitted arms are expected to agree to numerical "
+        f"precision, and a gap above {DERIVATION_TOLERANCE_LOG10} log10 falsifies the derivation "
+        "above rather than the pool layer, at which point this amendment is withdrawn in the open"
+    ),
+    "what_can_still_fail": {
+        "secondary": (
+            "the total protein per cell implied by the DECLARED ribosome capacity, nothing fitted: "
+            f"{RIBOSOME_CAPACITY:.0e} ribosomes each elongating at {ELONGATION_AA_PER_S} aa/s over "
+            "the expression-weighted mean chain length gives a synthesis rate, and a median protein "
+            f"half-life of {PROTEIN_HALF_LIFE_H} h turns it into a steady-state count. It is "
+            f"compared with Milo 2013's {MILO_BAND[0]:.0e}-{MILO_BAND[1]:.0e} and passes only "
+            "within one order of magnitude of that band. It is not fitted, so it can be wrong by "
+            "decades, and if it is, §5.3's consequence is the one already written down"
+        ),
+        "unfitted_allocation_arm": (
+            "the allocation arm with its constant DERIVED from capacity rather than fitted, "
+            "reported as the absolute-scale reading it actually is rather than as a rival to the "
+            "baseline"
+        ),
+    },
+    "instrument_that_would_make_the_primary_able_to_move": (
+        "a term that differs PER GENE, and none of the three available ones is allocation. (1) "
+        "`priority` is the only implemented policy whose share carries a gene index, and it needs an "
+        "ordered list over ~19,000 genes that no measurement supplies, so it is not runnable at "
+        "proteome scale. (2) A per-demander saturable share, C / (C + demand_i), instead of the "
+        "per-pool C / (C + demand_total) that `competitive` computes TODAY — as implemented, "
+        "`competitive` is as gene-blind as `proportional` and differs from it only in the value of "
+        "the global constant, which is a finding about this runtime and is reported as one. A "
+        "per-demander form would compress the dynamic range, which is the documented direction. (3) "
+        "A per-gene degradation term, which is stage 4's, not stage 2's"
+    ),
+    "new_registered_quantity": (
+        "the ordinary-least-squares slope of log10 protein copies on log10 transcript TPM over the "
+        "covered set, with a bootstrap interval. It sizes the instrument above in decades per "
+        "decade: a slope of 1 would say no per-gene compression is needed and the pool layer has "
+        "nothing left to add even in principle; a slope below 1 states how much compression a "
+        "future per-demander policy must supply to be worth writing. This number is reported "
+        "whatever the verdict, and it is the only thing this gate can newly learn"
+    ),
+    "verdict_rule": (
+        "the gate FAILS by its own registered rule, and the report must say that the failure is "
+        "algebraic rather than empirical. §5.3's consequence stands as written: the pool layer stays "
+        "optional and the document says so"
+    ),
+}
