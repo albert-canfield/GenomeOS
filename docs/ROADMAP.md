@@ -150,6 +150,42 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** Every construct has evidence and confidence; programs
   test themselves (`# test:` and `assert:`); a `.bio` file runs without the
   rest of GenomeOS; the same program runs on any engine that fits it.
+- **Stage 2 of v0.4: the economy, built and gated, and one of its two gates
+  is a negative (2026-09-21).** `pool`, `cost` and `allocation` parse and
+  refuse (`lang/parser.py`, `ir/model.py`); `runtime/economy.py` charges a
+  cost, compares demand with capacity and scales each entity by its tightest
+  pool. **Gate (a), burden:** the unrelated gene's factor falls 1.0 → 0.05
+  over seven pre-registered demand levels and returns to 1.0 for all of them
+  when the pools are multiplied by 1e6, which is the clause a bug would have
+  passed; the order-of-magnitude clause against Ceroni 2015 and Frei 2020 is
+  registered **not askable**, because neither curve is held here, and a test
+  stops it contributing to a pass. **Gate (b), absolute abundance: failed.**
+  PaxDb's integrated human set against GTEx v8 fibroblast median TPM, 15,159
+  genes: log10 MAE **0.952005** for the one-to-one baseline and **0.952005**
+  for the allocation arm, improvement **0.000000000**, bootstrap [0.0, 0.0],
+  bar 0.05. The reason was derived from the runtime and committed before the
+  transcript arm was fetched (`b57de43`): `_share` returns `capacity / wanted`
+  to every demander, so the pool layer multiplies every gene's prediction by
+  one constant and a fitted baseline absorbs it exactly. The run was done with
+  the factor at 1.754e-4, moving every prediction 3.8 decades, and the error
+  did not change in the sixth decimal. §5.3 had already written the
+  consequence: **the pool layer stays optional.** It buys a burden, it refuses
+  six modelling errors, and it improves no abundance prediction. Findings
+  beside the verdict: at a real transcriptome's demand §5.1's capacities never
+  bind; **`competitive` is as gene-blind as `proportional`**, saturating on the
+  pool's total demand rather than per demander, which closes §10 decision 5
+  with a negative; the unfitted secondary lands at **1.36e10 proteins per cell**
+  against Milo 2013's 4e9 to 1.2e10; and the newly registered slope of log10
+  protein on log10 transcript, **0.515 [0.499, 0.531]**, says a future
+  per-demander policy would have to supply 0.485 decades per decade of
+  compression. 20 tests across `tests/test_pools.py`, `test_economy.py`,
+  `test_burden_gate.py` and `test_abundance_gate.py`, three of the eight new
+  ones being contrasts that would catch machinery unable to see a difference at
+  all. Spec BIOLANG-v0.4-ECONOMY.md §5 and §9.2; results
+  `data/results/burden_gate.json` and `abundance_gate.json`, from
+  `scripts/burden_gate.py` and `scripts/abundance_gate.py`. **Missing after
+  this:** a per-demander saturable policy, the only change that could make gate
+  (b) answerable, and stage 3.
 - **Missing.** A `biolang` package with its own tests; imports from a
   remote registry (the resolver hook exists: `import protein:TP53` reads the
   packaged proteome through `IMPORT_RESOLVERS`). Done 2026-09-11: the grammar
@@ -2794,6 +2830,43 @@ entire sweep. What is next, in order of what it decides:
    build: stage 2 — pool, cost, allocation — gated on burden (Ceroni 2015, Frei 2020) and absolute
    abundance against PaxDb, with the burden gate's own stated trap that a shared pool with
    proportional allocation rescales every gene equally and so cannot move a rank correlation.**
+   *The sentence above is left as it was written and is wrong in one particular: that trap belongs
+   to the ABUNDANCE gate, where §5.3 states it, not to the burden gate, which had no such problem
+   and had already passed when this row was written.*
+   **Stage 2 is built and gated as of 2026-09-21, and one of its two gates is a negative that was
+   derived before the data were fetched.** Four commits after the language surface (`d334b48`) and
+   the arithmetic (`eaa603d`): gate (a) `6929a40` and `26b76bc`, gate (b) `e6d4e4f`, `6ebc0b2`,
+   `b57de43` and `a9f566f`.
+   **Gate (a), burden: passed on three clauses of four.** The unrelated gene's factor falls 1.0,
+   1.0, 1.0, 1.0, 0.50, 0.25, 0.05 across seven registered demand levels and returns to 1.0 at
+   every one of them when the pools are multiplied by 1e6 — the clause a bug would have passed.
+   The order-of-magnitude clause against Ceroni and Frei is **registered not askable**, because
+   this project holds neither measured curve, and a test stops it contributing to a pass.
+   **Gate (b), absolute abundance: FAILED, on 15,159 genes joining PaxDb's integrated human set to
+   GTEx v8 fibroblast median TPM. log10 MAE 0.952005 for the one-to-one baseline and 0.952005 for
+   the allocation arm — improvement 0.000000000, bootstrap [0.0, 0.0], against a 0.05 bar.** The
+   failure is **algebraic, and it was committed before the transcript arm was fetched** (`b57de43`):
+   `Economy._share` returns `capacity / wanted` to every demander of a pool, with no gene index, so
+   the allocation arm differs from the baseline by one global constant and a fitted baseline
+   absorbs it exactly. The run was done with the pools driven short on purpose, factor 1.754e-4,
+   moving every prediction 3.8 decades; the error did not change in the sixth decimal.
+   **§5.3's consequence was agreed in advance and stands: the pool layer is optional.** It is
+   expressible, it charges a cost, it refuses six modelling errors, it reproduces a burden of the
+   documented shape — and it improves no abundance prediction.
+   **Three things the gate bought, none of them about allocation.** At a real transcriptome's
+   demand §5.1's capacities **are not even binding**; the pools had to be driven 1e4 times harder
+   before anything went short, so at proteome scale the layer currently does nothing. **`competitive`
+   is as gene-blind as `proportional`** — it saturates on the pool's total demand rather than per
+   demander — which **closes decision 5 with a negative**, since gate (b) was the named instrument
+   for choosing between policies that turn out to make identical predictions. And the one unfitted
+   number lands: total protein per cell from the declared ribosome capacity reads **1.36e10 against
+   Milo 2013's 4e9 to 1.2e10**, when it could have been wrong by decades. The newly registered
+   quantity, the slope of log10 protein on log10 transcript at **0.515 [0.499, 0.531]**, sizes what
+   a future per-demander policy would have to supply and allocation supplies none of.
+   **Still open and named rather than dropped:** gate (a)'s magnitude clause, which needs a
+   published curve digitised with its axis stated, and decision 2's proposed volume arm, which was
+   never what resolved decision 2 and has still not been run. BIOLANG-v0.4-ECONOMY.md §9.2,
+   `data/results/abundance_gate.json`.
 6. **Four lanes opened by genomeos-79 on 2026-09-16, running in worktrees and merged onto dev one
    piece at a time** (proposed by that session, folded here as the roadmap's rows). They follow from
    the CRISPRi benchmark, `138824f`: on held-out K562, adding the AlphaGenome deletion to activity
