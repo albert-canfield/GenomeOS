@@ -394,6 +394,121 @@ Two open points:
   motifs, is the refinement to try, judged on all four measurements at once
   rather than tuned on one.
 
+## A stricter site call, judged on all four measurements at once (2026-09-21)
+
+The open point above is this section. The site call the orientation rule reads
+is loose, and a loose site call is close to vacuous: `genome/motifs.py` records
+that at a relative score of 0.85 some JASPAR profile covers 99.9% of a
+regulatory element's bases, calibrated against Kircher 2019 saturation
+mutagenesis. The honest test of a stricter call is therefore not a new number
+that suits it, but the four measurements that already exist.
+
+### The registration, written and committed before anything was scored
+
+**The site call as it stands** (`genome/domains.py` `ctcf_motif_strands`, read
+by `infer_domains(..., orientation=...)`):
+
+- **Sites.** `ctcf_site_elements`: the CTCF-only registry class plus any class
+  flagged CTCF-bound.
+- **Hits.** JASPAR MA0139, `motifs.all_hits(..., min_relative=0.85)`: every
+  window scoring at least 0.85 of the matrix's minimum-to-maximum range, on
+  either strand.
+- **Strand.** The element's value is the *set* of strands over all such hits.
+  `oriented_boundaries` then uses only elements whose set has exactly one
+  member; an element with hits on both strands is dropped.
+
+**The stricter call, in parameters.** Two changes, both of them the ones the
+open point named, and nothing else:
+
+1. **Best-hit strand.** The element's strand is the strand of its single
+   highest-scoring MA0139 hit (ties broken by higher relative score, then lower
+   start, then forward). An element with hits on both strands is no longer
+   dropped; it is oriented by its best hit.
+2. **Stronger motifs.** `min_relative` 0.85 → **0.95**. The 0.95 is not chosen
+   for this test: it is the threshold `genome/motifs.py` already carries from
+   the saturation-mutagenesis calibration, where site coverage falls to 65% of
+   bases and functional bases are 1.1x enriched.
+
+Everything downstream is untouched: a boundary midway between a reverse site
+and the forward site after it, merged within 5 kb, the inherited 50 kb minimum
+node; the same chromosomes, the same five 4DN biosources, the same 113,399-element
+deletion archive, the same mm10 chr19 and chr11, the same HOXD interval.
+
+Three callers are added beside the three already in
+`domains_oriented_comparison`, so that any movement can be attributed to one
+change rather than to the pair:
+
+| caller | threshold | strand rule |
+|---|---|---|
+| `oriented` (2026-09-14) | 0.85 | set of all hit strands, both-strand dropped |
+| `oriented_best_hit` | 0.85 | best hit's strand |
+| `oriented_strong` | 0.95 | set of all hit strands, both-strand dropped |
+| `oriented_strict` | 0.95 | best hit's strand — **the call under test** |
+
+**Every measurement it will be judged on, all four named here before any was
+run**, as `scripts/oriented_domains.py` computes them:
+
+1. **Hi-C.** Enrichment: the share of interior edges within 20 kb of a 4DN
+   boundary call, over the same share for as many uniformly random positions,
+   in H1-hESC, K562, HepG2 and IMR-90. GM12878 is reported but **not judged**,
+   because its random control is 0.54 and it has no resolving power. The share
+   of measured boundaries reached is reported, not judged.
+2. **Node content.** **Excess over random**: `coding_inside_share` minus
+   `coding_inside_random_share` on the 113,399 scored archive elements, plus
+   the share at the two callers' matched boundary count. The excess and not the
+   raw share is the judged statistic, because a caller with fewer boundaries
+   keeps pairs together by construction — `oriented_ctcf_only` reads 93.8% raw
+   and −0.7 points against its own control.
+3. **Mouse synteny.** `fraction_same_neighbourhood` on mm10 chr19 and chr11
+   through MGI orthology, judged only if at least 80 mouse nodes are tested on
+   chr19 and 100 on chr11, and reported with the mouse node count so that a
+   coarser caller cannot pass by having fewer nodes to place.
+4. **HOXD.** Whether an edge falls inside 176,096,240 to 176,109,754, and how
+   many nodes hold the nine HOXD genes.
+
+**The pass condition on each.** `oriented_strict` is held against `oriented`,
+the caller whose site call it changes, and against `ctcf_only`, the committed
+default:
+
+1. **Hi-C passes** if enrichment is at least `oriented`'s in all four judged
+   biosources: 1.74 (H1), 1.96 (K562), 1.99 (HepG2), 1.45 (IMR-90).
+2. **Node content passes** if excess over random is greater than `ctcf_only`'s
+   **+2.6 points**.
+3. **Mouse synteny passes** if `fraction_same_neighbourhood` is at least
+   `ctcf_only`'s on both chromosomes: 95.9% (chr19), 92.4% (chr11).
+4. **HOXD passes** if an edge lands inside the published interval.
+
+**Noise floor, fixed now.** Hi-C enrichment ±0.05; node content ±0.5 points;
+mouse synteny ±2.0 points; HOXD is binary. A move inside the floor is recorded
+as unchanged.
+
+**If it improves one measurement and costs another — decided here, in advance.**
+That is not a hypothetical: it is what happened on 2026-09-14, when the
+orientation-aware caller won Hi-C, lost node content and mouse synteny, did not
+recover HOXD, and the default did not change.
+
+- The **default node set changes** to the stricter call **only if all four
+  pass**. Nothing less moves the default.
+- If it **passes Hi-C and fails node content or synteny**, the verdict is that
+  the loose site call was not what cost the orientation caller those two, and
+  the second half of the roadmap item is answered yes: Hi-C questions and
+  enhancer-to-gene questions need two node sets. The stricter call is then kept
+  as a named option only, as `oriented` is, and the default stays CTCF-only.
+- If it **fails Hi-C and passes node content**, the same treatment the other way
+  round: the strictness traded away the one thing the orientation rule was built
+  for, and it is adopted nowhere.
+- If **every measurement moves inside its noise floor**, the step closes
+  **negative**: the strictness of the site call is not what separates these
+  callers, and no further site-call variant is worth running against these four.
+- **No measurement outside this list may decide the verdict.** A number the run
+  produces that is not one of the four is reported as an observation and stays
+  out of the decision.
+
+**Descriptive numbers, registered as descriptions and not as pass conditions**,
+so that "improved nothing" can be told apart from "kept nothing": elements
+carrying a site at each threshold, elements the strand rule can orient,
+boundaries and nodes per caller.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
