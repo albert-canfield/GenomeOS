@@ -630,3 +630,17 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   where the claim fell over. **A limit inherited from a summary of the data is not a limit of the
   data**, and the cheapest thing to do with any sentence of the form "we only have one X per Y" is
   to look for what the run wrote before it was summarised.
+
+- **A curve is honest on the population it was fitted on and nowhere else, and the gate that chose
+  that population is usually invisible (2026-09-22).** The confidence attached to every predicted
+  enhancer target was fitted on the **245** training pairs where the measured gene happened to be
+  the element's top predicted target — a population whose base rate is **76.7%** — and then used to
+  band all **612,323** targets the sweep names. Applied to the held-out pairs its own gate excludes,
+  it quotes **0.4126 against a measured 0.0603, ×6.85**, while landing at ×0.93 on the 40 it admits.
+  Re-fitting it through the uncensored window barely moved that (×6.40): **the error is the
+  population, not the features.** The reliability diagram never showed it, because a reliability
+  diagram is drawn on the fitted population by construction. What shows it is one question, and it
+  costs nothing: **quote the curve for the cases the gate threw away and compare with what was
+  measured there.** Any confidence, band or calibrated probability in this project should carry the
+  population it was fitted on beside it, and a consumer applying it off that population is quoting a
+  number the curve was never asked about.

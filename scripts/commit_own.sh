@@ -70,6 +70,12 @@ guard=$?
 set -e
 if [ $guard -ne 0 ]; then
   echo "commit_own: the guard refused (exit $guard). Look at what it named, then re-run with --force" >&2
+  # Every commit in this checkout is authored by Albert, so the author the guard prints does NOT
+  # say whose lane wrote it. Read the named commit's MESSAGE to tell your own earlier work from a
+  # peer's: your own is the common case (a fixture or a list you are editing again) and is safe to
+  # force past; a peer's is not, and is what the check exists for.
+  echo "  The author it names is Albert for every commit here: read the commit's message, not its" >&2
+  echo "  author, to tell your own earlier commit from a peer's." >&2
   exit "$guard"
 fi
 

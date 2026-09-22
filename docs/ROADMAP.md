@@ -2524,6 +2524,53 @@ in order. "Owner" is the session that holds the files today (see §7).
   is the broadest structural fix. `scripts/crispri_contact.py` needs the same
   re-run but costs 4DN Hi-C range requests rather than model requests, and its
   stored result now says which reader it used.
+- **The calibration's `top_target` gate, counted and removed — and the number
+  that matters is not the reliability but what the curve quotes off its own
+  population (2026-09-22, lane-calib, `839d3c5` registration, `5881d45` result,
+  0 requests).** The gate admitted **245 of 8,796** training pairs at a 76.7%
+  base rate and excluded **8,551 at 2.91%**; two thirds of the excluded carry a
+  number the sweep did predict, one third are genuinely outside the scorer's
+  window and now say so by name. The gate turned out to act in **three** places,
+  not one: the magnitude (`score()` called `crispri.annotate` with no cache, so
+  today's fix never reached this module — `deletion_drop` was a structural zero
+  on 97.6% of training pairs), the element (the fallback ranked candidates on
+  the magnitude predicted for *whatever other gene the table named*), and the
+  population (245 pairs band all **612,323** sweep targets).
+  **The registered direction was wrong and is reported first: reliability
+  improved and crossed its threshold** — 6/10 bins to **7/10** on the same
+  held-out 1,715 pairs, AUPRC **0.559 → 0.677**, Brier 0.0418 → 0.0345. The
+  registration's own improvement protocol is what stops that becoming an
+  upgrade: a rise counts only beside a non-narrowing predicted range, a
+  non-falling AUPRC **and a prevalence gap that closed**. The range widened and
+  AUPRC rose, so it is a real ranking gain and not a flattening — but the gap
+  did not close: the fixing shift goes **+0.6793 → +0.7025, larger**, and all
+  three remaining bin failures are in the same direction as before. **The
+  2026-09-17 verdict of failed stands.**
+  **The clause registered as mattering most returned the sharpest result in the
+  area.** The 245-pair curve that prices every predicted target, applied to the
+  held-out pairs its own gate excludes, quotes **0.4126 against a measured
+  0.0603 — ×6.85** — while landing at ×0.93 on the 40 it admits. Re-fitting
+  through the window barely moves it (0.3855, ×6.40), so **the problem is the
+  population, not the features**. That is the registered "the failure is
+  happening" signature, unambiguously: a curve fitted on the calls a gate admits
+  is honest on that population and nowhere else.
+  **And it is wrong twice, because the excluded set is not flat.** On genes that
+  are not the element's top target, a predicted rise or zero was called
+  regulated **33 of 2,079 (1.6%)** and a predicted drop above 0.1 **58 of 67
+  (86.6%)** — a fifty-five-fold separation on a population that used to score a
+  structural zero. 67 pairs, 34 of them held out, and the row says so.
+  **Coverage goes from 2.7% to 63.1% of training pairs and 2.3% to 66.1% held
+  out**; on chr21 the answerable (element, gene) questions go from 7,846 to
+  347,591. The published `score()` keeps its no-cache default as the control and
+  was not re-run.
+- **Next, open, and the first is now the area's highest-value item: re-band the
+  genome from an off-gate curve.** An off-gate confidence is quoted from an
+  off-gate curve or it is not quoted. Then the model's **second** targets as a
+  shortlist, held against an independent perturbation, since the 86.6% against
+  1.6% separation is something no compact one-gene table could ever offer. Then
+  the prevalence term, unchanged since 2026-09-17 and now confirmed on 23.7× the
+  pairs (×1.23 to ×1.44 on every slicing): re-fit the intercept per screen with
+  that screen's own base rate as an offset before any band is quoted.
   *(Two of this list closed within the hour and the bullet above has them: the
   reader landed as `ElementResponses`, `eqtl.py` was re-run through it, and the
   Evidence view now carries both eGene columns. What remains is
