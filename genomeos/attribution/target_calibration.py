@@ -53,7 +53,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from genomeos.attribution import crispri
+from genomeos.attribution import crispri, targets
 from genomeos.attribution.element_types import gene_starts, registry_classes
 
 ELEMENTS = crispri.ELEMENTS
@@ -149,6 +149,77 @@ FALSIFIES_TRANSFER = (
     "base rate differs from these screens' 5% will need its own intercept, and a band quoted without "
     "the population's rate beside it is not a measurement of anything"
 )
+PREREGISTERED_GATE = (
+    "Registered 2026-09-22, before the calibration was re-fitted through the sweep's own per-element "
+    "response cache and before any re-fitted held-out pair was scored.\n"
+    "\n"
+    "WHAT IS GATED. `top_target` is the flag that the pair's measured gene is the single gene the "
+    "compact all_elements table kept for that element. It gates this module in three places. (1) The "
+    "magnitude: `deletion_drop` is read from the compact table, so it is a structural zero for every "
+    "pair whose gene is not that one gene, and the zero is a property of the projection, not of what "
+    "the sweep predicted. On the fitted population it is zero for 8,589 of 8,796 K562 training pairs "
+    "(97.6%) and 1,680 of 1,715 held-out K562 pairs (97.9%). (2) The element: `matched_element` picks "
+    "the overlapping element whose top predicted target is the pair's gene, and otherwise the element "
+    "with the largest predicted magnitude for whatever other gene the table named, which is the "
+    "element the class and distance features are then taken from. (3) The population: the "
+    "predicted-target calibration is fitted on the 245 training pairs the gate admits (188 regulated, "
+    "76.7%) and read on 40 held-out pairs (36 regulated, 90.0%), and it is that fit whose weights band "
+    "all 612,323 sweep targets.\n"
+    "\n"
+    "WHAT THE GATE EXCLUDES. 8,551 of the 8,796 fitted training pairs (249 regulated, 2.91%) and 1,675 "
+    "of the 1,715 held-out K562 pairs (76 regulated, 4.54%). Asked through `targets.ElementResponses`, "
+    "which carries every gene in the scorer's 1 Mb window with a signed change on the cell's own "
+    "track, 5,571 of the excluded training pairs (65.1%) and 1,112 of the excluded held-out pairs "
+    "(66.4%) carry a number the sweep did predict; the remaining 2,980 and 563 are the named silence "
+    "`the gene is not in the scorer's window at this element` and stay unanswerable. No excluded pair "
+    "is a `not on this cell's own track` or a `not cached` silence. So the gate is two thirds a "
+    "censoring and one third a real limit, and the calibration can be fitted with a magnitude that "
+    "means something on 5,816 training pairs instead of 245.\n"
+    "\n"
+    "WHAT IS RE-FITTED AND WHAT IS NOT. The published 2026-09-17 curve is annotated, never rewritten: "
+    "`score()` keeps its default of no cache and reproduces the published numbers exactly, and the "
+    "re-fit is a second arm that passes the cache. `SWEEP_FEATURES` and `TARGET_FEATURES` do not "
+    "change, because a feature the sweep does not have cannot be fitted; only what `deletion_drop` "
+    "means changes, from `the compact table's entry for the one gene it kept` to `what the sweep "
+    "predicted for this pair's own gene at this element`.\n"
+    "\n"
+    "THE DIRECTION EXPECTED, AND WHY. Reliability is expected NOT to improve. The 2026-09-17 claim "
+    "failed on the population and not on the curve: 6 of 10 bins inside their intervals, all four "
+    "failures in the same direction, mean predicted 0.0441 against an observed 0.0653, and a single "
+    "log-odds shift of +0.679 restoring 9 of 10. An uncensored magnitude is a better feature; it is "
+    "not an intercept, and it cannot move a prevalence that is a property of how a screen chose its "
+    "pairs. The registered expectation is therefore 6 of 10 bins give or take one, with the prevalence "
+    "ratio still near 1.31, and a rise in AUPRC as the only movement a better feature buys.\n"
+    "\n"
+    "WHAT A CONFIDENCE MEANS FOR A PAIR THE GATE WOULD HAVE EXCLUDED. This is the clause that decides "
+    "whether the re-fit is worth anything. The predicted-target curve is fitted on 245 pairs whose "
+    "base rate is 76.7% -- the model's most confident calls, the one gene per element it was surest "
+    "of -- and the sweep quotes it for 612,323 targets. A user who now asks about any other gene in "
+    "the window, which the reader makes askable and which is about fifty genes per element rather "
+    "than one, would be quoted a curve fitted on a population whose base rate is twenty-six times "
+    "theirs. That is the classic form of a calibration that looks reliable and is not. The measurement "
+    "registered here is direct: score the shipped 245-pair curve on the held-out pairs the gate "
+    "excluded but the sweep did answer, and report its mean predicted probability against their "
+    "observed rate. WHAT WOULD SHOW THE FAILURE IS HAPPENING: the shipped curve's mean predicted "
+    "probability on those pairs sits far above their observed rate -- a gap of the order of the 0.767 "
+    "against 0.029 base-rate gap rather than of the 1.31 prevalence ratio already found -- and its "
+    "bins fall outside their intervals in one direction. WHAT WOULD SHOW IT IS NOT: the shipped curve "
+    "lands near their observed rate, which would mean the three features carry the population "
+    "difference and the gate was only selecting on them. Either way the number is reported, and a "
+    "confidence for an off-gate pair is quoted from a curve fitted on off-gate pairs or it is not "
+    "quoted at all.\n"
+    "\n"
+    "IF RELIABILITY IMPROVES. An improvement is the outcome that would tempt a lane to stop checking, "
+    "so the checks are fixed in advance and run whether it improves or not. A curve that predicts the "
+    "base rate everywhere is trivially inside every equal-count bin, so a rise in bins_consistent is "
+    "reported only beside (a) the width of the predicted range across the ten bins, which must not "
+    "shrink, (b) AUPRC on the same held-out pairs, which must not fall, and (c) the prevalence ratio "
+    "and the log-odds shift, which must have moved towards 1 and 0 for the improvement to be a "
+    "calibration rather than a flattening. If bins_consistent reaches 7 or more while the predicted "
+    "range narrows or AUPRC falls, the improvement is recorded as a flattening and the 2026-09-17 "
+    "verdict of failed is not upgraded. The verdict is only upgraded if the prevalence gap itself "
+    "closes, and nothing in this change acts on the intercept, so that is not expected."
+)
 
 
 # ------------------------------------------------------------------------------------------
@@ -227,6 +298,76 @@ def add_features(
 
 def scored(pairs: list[crispri.Pair]) -> list[crispri.Pair]:
     return [p for p in pairs if p.covered and p.features.get("scored")]
+
+
+# ------------------------------------------------------------------------------------------
+# The gate: which pairs `top_target` admits, and what the window reader says about the rest
+# ------------------------------------------------------------------------------------------
+
+
+def gate_population(rows: list[crispri.Pair]) -> dict[str, Any]:
+    """Split a set of pairs by the top-target gate and report each side's rate.
+
+    The two sides are the whole point: the gate admits the model's most confident calls, and a
+    calibration fitted on them alone is a curve fitted on a base rate that is not the population's.
+    """
+
+    def arm(rs: list[crispri.Pair]) -> dict[str, Any]:
+        k = sum(p.regulated for p in rs)
+        return {"pairs": len(rs), "regulated": k, "rate": round(k / len(rs), 4) if rs else None}
+
+    return {
+        "all": arm(rows),
+        "admitted, the gene is the top target": arm([p for p in rows if p.features["top_target"]]),
+        "excluded by the gate": arm([p for p in rows if not p.features["top_target"]]),
+        "deletion_drop is zero": sum(1 for p in rows if p.features["deletion_drop"] == 0.0),
+        "the sweep answered this gene": sum(1 for p in rows if p.features.get("deletion_answered")),
+    }
+
+
+def gate_silences(
+    rows: list[crispri.Pair], table: crispri.DeletionTable, responses: targets.ElementResponses
+) -> dict[str, Any]:
+    """For each pair, what the sweep's per-element cache says about its own gene, or which silence.
+
+    An excluded pair is either a censoring — the sweep predicted a change for this gene and the
+    compact table dropped it — or a real limit, the gene lying outside the scorer's window. Only the
+    second is a reason the calibration cannot speak. The pairs are walked chromosome by chromosome
+    because the reader holds one chromosome's archive at a time.
+    """
+    out: dict[str, Counter[str]] = {"admitted": Counter(), "excluded": Counter()}
+    ranks: list[int] = []
+    window: list[int] = []
+    by_chrom: dict[str, list[crispri.Pair]] = defaultdict(list)
+    for p in rows:
+        by_chrom[p.chrom].append(p)
+    for chrom in sorted(by_chrom):
+        for p in by_chrom[chrom]:
+            els = table.overlapping(p.chrom, p.start, p.end)
+            best: targets.Response | None = None
+            for e in els:
+                r = responses.response(p.chrom, e["id"], p.gene, p.cell)
+                if best is None or (r.answered and (not best.answered or r.value < best.value)):
+                    best = r
+            side = "admitted" if p.features["top_target"] else "excluded"
+            out[side][best.reason if best is not None else "no overlapping deleted element"] += 1
+            if els:
+                order = [g for g, _ in responses.ranked(p.chrom, els[0]["id"], p.cell)]
+                if order:
+                    window.append(len(order))
+                    if p.gene in order:
+                        ranks.append(order.index(p.gene) + 1)
+    return {
+        "by_side": {k: dict(sorted(v.items())) for k, v in out.items()},
+        "measured_gene_rank_in_the_window": {
+            "pairs": len(ranks),
+            "median_rank": sorted(ranks)[len(ranks) // 2] if ranks else None,
+            "rank_1": sum(1 for r in ranks if r == 1),
+            "top_3": sum(1 for r in ranks if r <= 3),
+            "top_5": sum(1 for r in ranks if r <= 5),
+            "median_genes_in_the_window": sorted(window)[len(window) // 2] if window else None,
+        },
+    }
 
 
 def distance_agreement(pairs: list[crispri.Pair]) -> dict[str, Any]:

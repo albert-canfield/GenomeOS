@@ -5196,6 +5196,102 @@ gene", and the re-run must reproduce it exactly — that is the control. Zero Al
 every number here is on disk. The rank of the measured eGene in the model's own ordering, which the
 compact table could not express at all, is reported as new information rather than as a comparison.
 
+## Pre-registration: the calibration is conditioned on `top_target`, counted before it is re-fitted (2026-09-22)
+
+The published calibration ("A measured confidence for a predicted target, and the prevalence that
+breaks it", 2026-09-17) attaches a probability to every predicted enhancer-to-gene target, and it is
+the module with the most at stake in the compact table's one-gene projection: it is what downstream
+work quotes when it says how sure the project is that an element acts on a gene. Its pre-registered
+reliability claim already failed once, and it failed on the population rather than on the curve — the
+held-out screens call 6.53% of pairs regulated against 4.97% in the screens the fit saw, and one
+log-odds shift of +0.679 restores 9 of the 10 bins. This section counts the gate before anything is
+re-fitted; `PREREGISTERED_GATE` in `attribution/target_calibration.py` carries the same text, fixed
+in the module before the re-fit ran. `scripts/target_calibration_gate.py --census`, 137 s, 0
+AlphaGenome requests, nothing fetched.
+
+**Where the gate acts — three places, not one.** `top_target` is the flag that a pair's measured gene
+is the single gene the compact `all_elements` table kept for that element.
+
+1. *The magnitude.* `deletion_drop` is read from that table, so it is zero for every pair whose gene
+   is not that one gene — a statement about the projection, consumed as a statement about the model.
+   On the fitted population that is 8,589 of 8,796 K562 training pairs (97.6%) and 1,680 of 1,715
+   held-out K562 pairs (97.9%).
+2. *The element.* `matched_element` (`target_calibration.py:164`, the function the assignment names
+   `element_for_pair`) picks the overlapping element whose top predicted target is the pair's gene,
+   and failing that the element with the largest predicted magnitude **for whatever other gene the
+   table named** — and the class and distance features are then taken from that element.
+3. *The population.* The predicted-target calibration is fitted on the 245 training pairs the gate
+   admits and read on 40 held-out ones, and it is that fit whose weights band all 612,323 sweep
+   targets.
+
+**What the gate excludes, and what the excluded pairs are when asked properly.** Through
+`targets.ElementResponses`, which carries every gene in the scorer's 1 Mb window with a signed change
+on the cell's own track:
+
+| | training, every feature present | held-out K562 |
+|---|---|---|
+| pairs the calibration is fitted or judged on | 8,796 (437 regulated, 4.97%) | 1,715 (112, 6.53%) |
+| admitted by the gate | 245 (188, **76.7%**) | 40 (36, **90.0%**) |
+| excluded by the gate | 8,551 (249, **2.91%**) | 1,675 (76, **4.54%**) |
+| of the excluded, the sweep did predict a change for this gene | 5,571 (65.1%) | 1,112 (66.4%) |
+| of the excluded, the gene is not in the scorer's window at this element | 2,980 (34.9%) | 563 (33.6%) |
+| of the excluded, not on this cell's track, or not cached | 0 | 0 |
+
+So the gate is two thirds a censoring the sweep's own cache can undo and one third a real limit, and
+the calibration can be fitted with a magnitude that means something on **5,816 training pairs instead
+of 245**, a factor of 23.7. The base rate on the two sides differs by a factor of 26, which is the
+whole difficulty: `top_target` separates this set almost perfectly on its own.
+
+**How far down the window the screens test.** New, and not expressible in a one-gene table: the
+measured gene's rank in the sweep's own ordering of the window. Median rank **24** of a median 50
+genes in the window on the training pairs (53 held out); rank 1 on 128 of 5,814, in the top 3 on 359
+and the top 5 on 566. A CRISPRi screen tests genes the model is not confident about, which is exactly
+why a calibration fitted only on the ones it *is* confident about is the wrong curve for them.
+
+**What is re-fitted and what is not.** The published curve is annotated, never rewritten. `score()`
+keeps its default of no cache and reproduces the 2026-09-17 numbers exactly — that is the control —
+and the re-fit is a second arm that passes the cache. `SWEEP_FEATURES` and `TARGET_FEATURES` do not
+change, because a feature the sweep does not have cannot be fitted; only what `deletion_drop` *means*
+changes, from "the compact table's entry for the one gene it kept" to "what the sweep predicted for
+this pair's own gene at this element".
+
+**The direction expected, and why.** Reliability is expected **not** to improve. The 2026-09-17 claim
+failed on the population: 6 of 10 bins, all four failures in the same direction, mean predicted
+0.0441 against an observed 0.0653. An uncensored magnitude is a better feature; it is not an
+intercept, and it cannot move a prevalence that is a property of how a screen chose its pairs. The
+registered expectation is 6 of 10 bins give or take one, the prevalence ratio still near 1.31, and a
+rise in AUPRC as the only movement a better feature buys.
+
+**What a confidence means for a pair the gate would have excluded.** This is the clause that decides
+whether the re-fit is worth anything. The predicted-target curve is fitted on 245 pairs whose base
+rate is 76.7% — the model's most confident calls, the one gene per element it was surest of — and the
+sweep quotes it for 612,323 targets. A user who now asks about any *other* gene in the window, which
+the reader makes askable and which is about fifty genes per element rather than one, would be quoted
+a curve fitted on a population whose base rate is twenty-six times theirs. That is the classic form
+of a calibration that looks reliable and is not. The registered measurement is direct: score the
+shipped 245-pair curve on the held-out pairs the gate excluded but the sweep did answer, and report
+its mean predicted probability against their observed rate.
+
+- **What would show the failure is happening:** the shipped curve's mean predicted probability on
+  those pairs sits far above their observed rate — a gap of the order of the 0.767-against-0.029
+  base-rate gap, not of the 1.31 prevalence ratio already found — and its bins fall outside their
+  intervals in one direction.
+- **What would show it is not:** the shipped curve lands near their observed rate, which would mean
+  the three features carry the population difference and the gate was only selecting on them.
+
+Either way the number is reported, and a confidence for an off-gate pair is quoted from a curve
+fitted on off-gate pairs or it is not quoted at all.
+
+**If reliability improves.** That is the outcome that would tempt a lane to stop checking, so the
+checks are fixed here and run whether it improves or not. A curve that predicts the base rate
+everywhere is trivially inside every equal-count bin, so a rise in `bins_consistent` is reported only
+beside (a) the width of the predicted range across the ten bins, which must not shrink, (b) AUPRC on
+the same held-out pairs, which must not fall, and (c) the prevalence ratio and the log-odds shift,
+which must have moved towards 1 and 0. If `bins_consistent` reaches 7 or more while the predicted
+range narrows or AUPRC falls, the improvement is recorded as a **flattening** and the 2026-09-17
+verdict of failed is not upgraded. The verdict is upgraded only if the prevalence gap itself closes,
+and nothing in this change acts on the intercept.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
