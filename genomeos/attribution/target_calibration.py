@@ -232,12 +232,25 @@ def class_features(cls: str) -> dict[str, float]:
     return {f"class_{c}": 1.0 if c == cls else 0.0 for c in CLASS_LEVELS}
 
 
-def matched_element(elements: list[dict[str, Any]], gene: str) -> dict[str, Any] | None:
+def matched_element(
+    elements: list[dict[str, Any]],
+    gene: str,
+    responses: targets.ElementResponses | None = None,
+    chrom: str = "",
+    cell: str = CELL,
+) -> dict[str, Any] | None:
     """The one overlapping element a pair's features come from.
 
     A pair can sit on more than one deleted element. The element whose top predicted target is the
     pair's gene is the one the deletion feature already speaks for; failing that, the one with the
     largest predicted magnitude in K562; failing that, the first.
+
+    That fallback is itself conditioned on the compact table's one gene: the largest magnitude it
+    ranks on is the magnitude predicted for *whatever other gene the table named*, not for the pair's
+    own gene, and the class and distance features are then taken from an element chosen on a number
+    about a different gene. With `responses`, the sweep's own per-element cache is asked about this
+    pair's gene at each candidate and the element with the strongest predicted fall for it wins; the
+    old rule is kept for the pairs the cache cannot answer, so `responses=None` reproduces exactly.
     """
     if not elements:
         return None
@@ -246,6 +259,11 @@ def matched_element(elements: list[dict[str, Any]], gene: str) -> dict[str, Any]
             p = e.get(key)
             if p and p["gene"] == gene:
                 return e
+    if responses is not None and chrom:
+        asked = [(e, responses.value(chrom, e["id"], gene, cell)) for e in elements]
+        answered = [(e, v) for e, v in asked if v is not None]
+        if answered:
+            return min(answered, key=lambda ev: ev[1])[0]
     return max(elements, key=lambda e: abs((e.get("predicted_by_cell") or {}).get(CELL) or 0.0))
 
 
@@ -258,6 +276,7 @@ def add_features(
     table: crispri.DeletionTable,
     reference: Path = REFERENCE,
     results: Path = RESULTS,
+    responses: targets.ElementResponses | None = None,
 ) -> dict[str, Any]:
     """Add the transferable features to already-annotated pairs; count every value that is missing.
 
@@ -276,7 +295,7 @@ def add_features(
             counts["chromosomes_without_a_gencode_file"] += 1
         for p in rows:
             els = table.overlapping(p.chrom, p.start, p.end)
-            el = matched_element(els, p.gene)
+            el = matched_element(els, p.gene, responses, p.chrom, p.cell)
             cls = classes.get((el or {}).get("id", ""), ("unknown", False))[0]
             d = tss_distance(p.midpoint, starts.get(p.gene))
             arm = "regulated" if p.regulated else "not regulated"
@@ -1068,3 +1087,274 @@ def sweep(
             "missing": dict(sorted(missing.items())),
         }
     return {"genome_wide": totals, "per_chromosome": per}
+
+
+# ------------------------------------------------------------------------------------------
+# The gate removed: the same calibration fitted through the sweep's own window
+# ------------------------------------------------------------------------------------------
+
+
+def answered(pairs: list[crispri.Pair]) -> list[crispri.Pair]:
+    """The pairs the sweep actually predicted a change for, on this gene, in this cell.
+
+    This is the population the magnitude feature means anything on. Without the cache it is the
+    top-target pairs and nothing else, which is the gate; with it, every pair whose gene the scorer
+    kept in its window.
+    """
+    return [p for p in pairs if p.features.get("deletion_answered")]
+
+
+def flattening_check(before: dict[str, Any], after: dict[str, Any]) -> dict[str, Any]:
+    """Did reliability improve, or did the curve merely flatten onto the base rate?
+
+    Registered in `PREREGISTERED_GATE` before the re-fit: a curve that predicts the base rate
+    everywhere sits inside every equal-count bin and has learnt nothing, so a rise in the bin count
+    is only an improvement if the spread of the predicted probabilities held and the ranking did not
+    get worse. `flattened` is True when the bins improved on a narrower range or a lower AUPRC.
+    """
+
+    def spread(cal: dict[str, Any]) -> float:
+        rows = cal["reliability"]["rows"]
+        return round(max(r["mean_predicted"] for r in rows) - min(r["mean_predicted"] for r in rows), 4)
+
+    bins = (before["reliability"]["bins_consistent"], after["reliability"]["bins_consistent"])
+    rng = (spread(before), spread(after))
+    auprc = (before.get("auprc"), after.get("auprc"))
+    improved = bins[1] > bins[0]
+    return {
+        "bins_consistent": list(bins),
+        "predicted_range_across_the_bins": list(rng),
+        "auprc": list(auprc),
+        "reliability_improved": improved,
+        "range_narrowed": rng[1] < rng[0],
+        "auprc_fell": bool(auprc[0] is not None and auprc[1] is not None and auprc[1] < auprc[0]),
+        "flattened": bool(improved and (rng[1] < rng[0] or (auprc[1] is not None and auprc[1] < auprc[0]))),
+    }
+
+
+def off_gate_quote(
+    weights: list[float], cols: tuple[str, ...], rows: list[crispri.Pair], what: str
+) -> dict[str, Any]:
+    """What a curve says about pairs its own population excludes, against what those pairs did.
+
+    The registered clause: the predicted-target curve is fitted on 245 pairs at a base rate of 76.7%
+    and the sweep quotes it for every target. Asked about a pair the gate would have excluded, does
+    it land near that pair's own rate or near the rate it was fitted on?
+    """
+    if not rows:
+        return {"pairs": 0, "what": what}
+    p = predict(weights, rows, cols)
+    k = sum(r.regulated for r in rows)
+    observed = k / len(rows)
+    mean_p = sum(p) / len(p)
+    lo, hi = wilson(k, len(rows))
+    return {
+        "what": what,
+        "pairs": len(rows),
+        "regulated": k,
+        "observed_rate": round(observed, 4),
+        "observed_ci95": [round(lo, 4), round(hi, 4)],
+        "mean_predicted": round(mean_p, 4),
+        "quoted_over_observed": round(mean_p / observed, 2) if observed else None,
+        "log_odds_gap": round(logit(mean_p) - logit(observed), 4),
+        "inside_the_observed_interval": bool(lo <= mean_p <= hi),
+    }
+
+
+def window_coverage(
+    responses: targets.ElementResponses,
+    chroms: tuple[str, ...],
+    elements: Path = ELEMENTS,
+    cell: str = CELL,
+) -> dict[str, Any]:
+    """How many (element, gene) questions the sweep can be asked, against the one it used to answer.
+
+    The compact table keeps one gene per element, so a user could ask about one gene per element and
+    got a structural zero for every other. The cache holds the scorer's whole window, so the
+    denominator of "what fraction of the pairs a user would ask about can be answered" changes by the
+    number of genes in a window. Measured on the named chromosomes only: the tree is 775 MB and one
+    archive is held at a time.
+    """
+    out: dict[str, Any] = {}
+    for chrom in chroms:
+        p = elements / f"{chrom}.json"
+        if not p.exists():
+            out[chrom] = {"refused": "no deleted elements cached for this chromosome"}
+            continue
+        els = json.loads(p.read_text())
+        named = sum(1 for e in els if (e.get("predicted") or {}).get("gene"))
+        genes, cached, sizes = 0, 0, []
+        for e in els:
+            window = responses.ranked(chrom, e["id"], cell)
+            if window:
+                cached += 1
+                genes += len(window)
+                sizes.append(len(window))
+        out[chrom] = {
+            "elements": len(els),
+            "elements_the_compact_table_names_a_gene_for": named,
+            "elements_in_the_response_cache": cached,
+            "askable_pairs_before": named,
+            "askable_pairs_now": genes,
+            "genes_per_window_median": sorted(sizes)[len(sizes) // 2] if sizes else None,
+            "factor": round(genes / named, 1) if named else None,
+        }
+    return out
+
+
+def compare_the_gate(
+    training: list[crispri.Pair],
+    heldout: list[crispri.Pair],
+    table: crispri.DeletionTable,
+    cache: crispri.ElementCache,
+    responses: targets.ElementResponses,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+    coverage_chroms: tuple[str, ...] = ("chr21", "chr22"),
+) -> dict[str, Any]:
+    """The published calibration and the same calibration re-fitted through the window, side by side.
+
+    Two arms on the same pairs. The shipped arm annotates from the compact table, exactly as
+    `score()` does, and reproduces the published numbers — that is the control. The re-fitted arm
+    passes the sweep's per-element cache, so `deletion_drop` is what the sweep predicted for the
+    pair's own gene and `matched_element` chooses on the same. Nothing else moves: the feature
+    columns, the bins, the Wilson rule and the held-out population are the published ones, so the
+    bin counts are comparable.
+    """
+    # Which held-out pairs the gate excludes but the sweep did answer, fixed once and by index:
+    # both arms annotate the same Pair objects in place, so the membership cannot be carried on them.
+    crispri.annotate(heldout, table, cache)
+    add_features(heldout, table, reference, results, responses)
+    k562 = [p for p in heldout if p.cell == CELL]
+    off_idx = [
+        i
+        for i, p in enumerate(k562)
+        if p.covered
+        and p.features.get("scored")
+        and not p.features["top_target"]
+        and p.features.get("deletion_answered")
+    ]
+    top_idx = [
+        i for i, p in enumerate(k562) if p.covered and p.features.get("scored") and p.features["top_target"]
+    ]
+
+    arms: dict[str, Any] = {}
+    kept: dict[str, Any] = {}
+    for arm, c, r in (
+        ("shipped, the compact table", None, None),
+        ("re-fitted, the window", cache, responses),
+    ):
+        crispri.annotate(training, table, c)
+        crispri.annotate(heldout, table, c)
+        add_features(training, table, reference, results, r)
+        add_features(heldout, table, reference, results, r)
+        train = scored(training)
+        held = scored([p for p in heldout if p.cell == CELL])
+        held_labels = [p.regulated for p in held]
+        train_top = [p for p in train if p.features["top_target"]]
+        w = {
+            "sweep": fit(train, SWEEP_FEATURES),
+            "drop": fit(train, ("deletion_drop",)),
+            "target": fit(train_top, TARGET_FEATURES),
+        }
+        held_cov = stratum_coverage([p for p in heldout if p.cell == CELL])
+        held_strata = [stratum(p) for p in held]
+        cal = {
+            name: calibration(s, held_labels, BINS, held_strata, held_cov)
+            for name, s in scorers(held, w).items()
+        }
+        passed, checks = judge(cal)
+        train_ans, held_ans = answered(train), answered(held)
+        off = [k562[i] for i in off_idx]
+        on = [k562[i] for i in top_idx]
+        arms[arm] = {
+            "populations": {
+                "training, every feature present": gate_population(train),
+                "held-out K562, every feature present": gate_population(held),
+                "training, the sweep answered this gene": gate_population(train_ans),
+                "held-out K562, the sweep answered this gene": gate_population(held_ans),
+            },
+            "heldout_k562": cal,
+            "verdict": "passed" if passed else "failed",
+            "checks": checks,
+            "prevalence_shift": {
+                name: prevalence_shift(s, held_labels) for name, s in scorers(held, w).items()
+            },
+            "weights": dict(
+                zip(("intercept", *SWEEP_FEATURES), (round(v, 4) for v in w["sweep"]), strict=True)
+            ),
+            "predicted_target_weights": dict(
+                zip(("intercept", *TARGET_FEATURES), (round(v, 4) for v in w["target"]), strict=True)
+            ),
+            "measured_by_drop_band, the answered held-out pairs": by_drop_band(held_ans),
+            "measured_by_drop_band, the answered pairs the gate excludes": by_drop_band(off),
+            "measured_by_drop_band, the answered training pairs the gate excludes": by_drop_band(
+                [p for p in train_ans if not p.features["top_target"]]
+            ),
+            "measured_by_drop_band, both, after the held-out test": by_drop_band(
+                [p for p in train_ans if not p.features["top_target"]] + off
+            ),
+            "what_a_confidence_means_off_the_gate": {
+                "the predicted-target curve, on the pairs the gate excludes": off_gate_quote(
+                    w["target"],
+                    TARGET_FEATURES,
+                    off,
+                    "fitted on the top-target pairs alone; the curve the sweep's bands come from",
+                ),
+                "the predicted-target curve, on the pairs it admits": off_gate_quote(
+                    w["target"], TARGET_FEATURES, on, "its own population, for comparison"
+                ),
+                "the tested-pair curve, on the pairs the gate excludes": off_gate_quote(
+                    w["sweep"], SWEEP_FEATURES, off, "fitted on every scored training pair"
+                ),
+            },
+        }
+        kept[arm] = {"w": w, "held": held}
+
+    ship, refit = kept["shipped, the compact table"], kept["re-fitted, the window"]
+    return {
+        "preregistered": PREREGISTERED_GATE,
+        "arms": arms,
+        "off_gate_note": (
+            "the registered clause: what a confidence means when it is quoted for a pair the gate "
+            "would have excluded. Each arm reports it with its own features, so the shipped arm says "
+            "what a user is quoted today and the re-fitted arm says what the same curve says once the "
+            "sweep's own answer for that gene reaches it"
+        ),
+        "the_same_heldout_population": {
+            "pairs": len(ship["held"]),
+            "regulated": sum(p.regulated for p in ship["held"]),
+            "identical_in_both_arms": len(ship["held"]) == len(refit["held"]),
+            "pairs_the_gate_excludes_and_the_sweep_answers": len(off_idx),
+            "pairs_the_gate_admits": len(top_idx),
+        },
+        "flattening_check": flattening_check(
+            arms["shipped, the compact table"]["heldout_k562"]["calibrated, sweep features"],
+            arms["re-fitted, the window"]["heldout_k562"]["calibrated, sweep features"],
+        ),
+        "coverage": {
+            "note": (
+                "what fraction of the pairs a user would ask about can be answered at all: on the "
+                "benchmark, the pairs whose own gene the sweep predicted a change for; on the sweep, "
+                "the (element, gene) questions the window makes askable against the one gene the "
+                "compact table kept. The sweep figure is measured on two chromosomes, not genome-wide"
+            ),
+            "benchmark, training K562 on a deleted element": {
+                "pairs": sum(1 for p in training if p.covered),
+                "answerable_before": sum(1 for p in training if p.covered and p.features["top_target"]),
+                "answerable_now": sum(
+                    1 for p in training if p.covered and p.features.get("deletion_answered")
+                ),
+            },
+            "benchmark, held-out K562 on a deleted element": {
+                "pairs": sum(1 for p in heldout if p.cell == CELL and p.covered),
+                "answerable_before": sum(
+                    1 for p in heldout if p.cell == CELL and p.covered and p.features["top_target"]
+                ),
+                "answerable_now": sum(
+                    1 for p in heldout if p.cell == CELL and p.covered and p.features.get("deletion_answered")
+                ),
+            },
+            "sweep": window_coverage(responses, coverage_chroms),
+        },
+    }

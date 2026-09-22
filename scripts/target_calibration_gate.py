@@ -77,6 +77,37 @@ def main() -> int:
         print(f"census only, nothing re-fitted ({time.time() - t0:.0f} s)")
         return 0
 
+    out["comparison"] = tc.compare_the_gate(
+        training, heldout, table, crispri.ElementCache(), tg.ElementResponses()
+    )
+    for arm, v in out["comparison"]["arms"].items():
+        cal = v["heldout_k562"]["calibrated, sweep features"]
+        r = cal["reliability"]
+        print(
+            f"\n{arm}: bins inside {r['bins_consistent']}/{r['bins']}  ECE {r['ece']:.4f}  "
+            f"Brier {cal['brier']:.5f}  AUPRC {cal['auprc']}  verdict {v['verdict']}"
+        )
+        shift = v["prevalence_shift"]["calibrated, sweep features"]
+        print(
+            f"    prevalence: mean predicted {shift['mean_predicted_before']} against an observed "
+            f"{shift['observed_rate']}, log-odds shift {shift['log_odds_shift']} "
+            f"-> {shift['bins_consistent']}/{shift['bins']} bins"
+        )
+        for name, q in v["what_a_confidence_means_off_the_gate"].items():
+            if q.get("pairs"):
+                print(
+                    f"    {name}: {q['pairs']} pairs, quoted {q['mean_predicted']} against an "
+                    f"observed {q['observed_rate']} {q['observed_ci95']} "
+                    f"(x{q['quoted_over_observed']})"
+                )
+    print(f"\nflattening check: {json.dumps(out['comparison']['flattening_check'])}")
+    print(f"coverage: {json.dumps(out['comparison']['coverage']['sweep'])}")
+    for key in (
+        "benchmark, training K562 on a deleted element",
+        "benchmark, held-out K562 on a deleted element",
+    ):
+        print(f"  {key}: {json.dumps(out['comparison']['coverage'][key])}")
+
     path = save_result("target_calibration_gate", out)
     print(f"saved {path} ({time.time() - t0:.0f} s)")
     return 0

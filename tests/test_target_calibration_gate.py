@@ -64,16 +64,28 @@ def _world(tmp_path):
             },
             fh,
         )
-    return elements, cache
+    results = tmp_path / "results"
+    results.mkdir()
+    with gzip.open(results / "ccres_chr1.bed.gz", "wt") as fh:
+        fh.write("# synthetic\nchr1\t1000\t1500\tEH1\tdELS\t0\n")
+    reference = tmp_path / "reference"
+    reference.mkdir()
+    with gzip.open(reference / "gencode_v50_chr1.gff3.gz", "wt") as fh:
+        fh.write("##gff-version 3\n")
+        for name, start in (("TOP", 31_000), ("OTHER", 41_000), ("RISES", 51_000)):
+            fh.write(f"chr1\tHAVANA\tgene\t{start}\t{start + 900}\t.\t+\t.\tID=g;gene_name={name}\n")
+    return elements, cache, reference, results
 
 
 def _pairs(tmp_path, cache_on):
-    elements, cache = _world(tmp_path)
+    elements, cache, reference, results = _world(tmp_path)
     text = HEADER + _row("TOP", True) + _row("OTHER", True) + _row("RISES", False) + _row("ABSENT", False)
     pairs = crispri.parse(io.StringIO(text))
     table = crispri.DeletionTable(elements)
+    responses = ElementResponses(cache)
     crispri.annotate(pairs, table, crispri.ElementCache(cache) if cache_on else None)
-    return pairs, table, ElementResponses(cache)
+    tc.add_features(pairs, table, reference, results, responses if cache_on else None)
+    return pairs, table, responses
 
 
 def test_the_gate_admits_one_pair_of_four_and_the_two_sides_have_different_rates(tmp_path):
@@ -114,6 +126,66 @@ def test_the_rank_of_the_measured_gene_says_how_far_down_the_window_it_sits(tmp_
     rank = tc.gate_silences(pairs, table, responses)["measured_gene_rank_in_the_window"]
     assert rank["median_genes_in_the_window"] == 3
     assert rank["pairs"] == 3 and rank["rank_1"] == 1 and rank["top_3"] == 3  # ABSENT has no rank
+
+
+def test_matched_element_stops_choosing_on_a_number_about_a_different_gene(tmp_path):
+    """The fallback ranks elements on the magnitude predicted for whatever gene the table named."""
+    _, cache, _ref, _res = _world(tmp_path)
+    with gzip.open(cache / "chrZ.json.gz", "wt") as fh:
+        json.dump(
+            {
+                "BIG": {"genes": [{"gene": "MINE", "by_cell": {"K562": -0.05}}]},
+                "SMALL": {"genes": [{"gene": "MINE", "by_cell": {"K562": -0.60}}]},
+            },
+            fh,
+        )
+    els = [
+        {"id": "BIG", "predicted": {"gene": "SOMEONE_ELSE"}, "predicted_by_cell": {"K562": -0.9}},
+        {"id": "SMALL", "predicted": {"gene": "SOMEONE_ELSE"}, "predicted_by_cell": {"K562": -0.1}},
+    ]
+    assert tc.matched_element(els, "MINE")["id"] == "BIG"  # the old rule: the biggest number, any gene
+    responses = ElementResponses(cache)
+    assert tc.matched_element(els, "MINE", responses, "chrZ")["id"] == "SMALL"  # the biggest for MINE
+    # a gene the cache cannot answer falls back to the old rule rather than to nothing
+    assert tc.matched_element(els, "ABSENT", responses, "chrZ")["id"] == "BIG"
+
+
+def test_off_gate_quote_says_how_far_a_curve_is_from_the_pairs_it_was_not_fitted_on(tmp_path):
+    pairs, _, _ = _pairs(tmp_path, cache_on=True)
+    high = [10.0, 0.0, 0.0, 0.0]  # an intercept of 10: this curve says ~1.0 for everything
+    got = tc.off_gate_quote(high, tc.TARGET_FEATURES, pairs, "a curve fitted on the sure calls")
+    assert got["pairs"] == 4 and got["observed_rate"] == 0.5
+    assert got["mean_predicted"] > 0.99 and got["quoted_over_observed"] > 1.9
+    assert got["inside_the_observed_interval"] is False and got["log_odds_gap"] > 0
+    assert tc.off_gate_quote(high, tc.TARGET_FEATURES, [], "nothing")["pairs"] == 0
+
+
+def _cal(bins_inside, spread, auprc):
+    rows = [{"mean_predicted": 0.1, "pairs": 1, "regulated": 0}, {"mean_predicted": 0.1 + spread}]
+    return {"auprc": auprc, "reliability": {"bins_consistent": bins_inside, "rows": rows}}
+
+
+def test_a_flattened_curve_is_not_allowed_to_pass_as_an_improvement():
+    # bins improve, but the predicted range collapses: the registered name for that is a flattening
+    flat = tc.flattening_check(_cal(6, 0.4, 0.56), _cal(9, 0.05, 0.56))
+    assert flat["reliability_improved"] and flat["range_narrowed"] and flat["flattened"]
+    # bins improve with the range held and the ranking held: a real improvement
+    real = tc.flattening_check(_cal(6, 0.4, 0.56), _cal(9, 0.45, 0.60))
+    assert real["reliability_improved"] and not real["flattened"]
+    # bins improve but the ranking gets worse: also a flattening
+    worse = tc.flattening_check(_cal(6, 0.4, 0.56), _cal(9, 0.45, 0.40))
+    assert worse["auprc_fell"] and worse["flattened"]
+    # no improvement to explain away
+    assert not tc.flattening_check(_cal(6, 0.4, 0.56), _cal(6, 0.1, 0.4))["flattened"]
+
+
+def test_window_coverage_counts_the_questions_the_window_makes_askable(tmp_path):
+    elements, cache, _ref, _res = _world(tmp_path)
+    got = tc.window_coverage(ElementResponses(cache), ("chr1", "chrNONE"), elements)
+    assert got["chr1"]["elements"] == 1
+    assert got["chr1"]["askable_pairs_before"] == 1  # the one gene the compact table kept
+    assert got["chr1"]["askable_pairs_now"] == 3 and got["chr1"]["factor"] == 3.0
+    assert "refused" in got["chrNONE"]
 
 
 def test_the_registration_names_the_three_places_the_gate_acts(tmp_path):

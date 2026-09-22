@@ -4336,6 +4336,20 @@ resolution, does not improve this model.
 
 ## A measured confidence for a predicted target, and the prevalence that breaks it (2026-09-17)
 
+> **Annotation, 2026-09-22.** Every number in this section stands as measured and none of it is
+> rewritten; what follows says what was later found to be conditional on the compact table's one-gene
+> projection. The `deletion_drop` feature below is a structural zero on 8,589 of the 8,796 training
+> pairs (97.6%) and 1,680 of the 1,715 held-out ones (97.9%), because the table keeps one gene per
+> element — so the magnitude is only ever spoken on the 245 pairs of the predicted-target row. Asked
+> through `attribution/targets.ElementResponses`, two thirds of the excluded pairs carry a number the
+> sweep did predict and one third are the named silence "the gene is not in the scorer's window".
+> Re-fitting through that window on the same held-out pairs moves reliability 6 of 10 bins to 7 and
+> AUPRC 0.559 to 0.677, but the prevalence gap this section names does not close (the +0.679 shift
+> becomes +0.703), so **the verdict of failed below stands**. The predicted-target curve of the row
+> at 245 pairs and 76.7%, whose weights band all 612,323 sweep targets, quotes 0.41 for the held-out
+> pairs the gate excludes against a measured 0.0603 — ×6.85. See "The gate removed" (2026-09-22,
+> later) and its pre-registration.
+
 Three measurements of chromatin structure have now failed to say which element acts on which gene —
 CTCF orientation, measured boundary strength, measured Hi-C contact at 5 kb — while the predicted
 deletion works (LESSONS.md, "Three measurements of chromatin structure, three nulls"). The deletion's
@@ -5291,6 +5305,122 @@ which must have moved towards 1 and 0. If `bins_consistent` reaches 7 or more wh
 range narrows or AUPRC falls, the improvement is recorded as a **flattening** and the 2026-09-17
 verdict of failed is not upgraded. The verdict is upgraded only if the prevalence gap itself closes,
 and nothing in this change acts on the intercept.
+
+## The gate removed: the registered direction was wrong, and the confidence quoted off the gate was seven times the measured rate (2026-09-22, later)
+
+The registration above expected reliability not to improve. It improved, from 6 of 10 bins to 7,
+which is exactly the pre-registered threshold, so `judge()` reads **passed** where it read failed.
+That is the outcome the registration named as the one that would tempt a lane to stop checking, so
+the checks fixed in advance were run, and what they show is that the improvement is real but is in
+**ranking, not in level**: the prevalence failure the 2026-09-17 section diagnosed is untouched. The
+larger result is elsewhere. `scripts/target_calibration_gate.py`, result `target_calibration_gate`,
+518 s, **0 AlphaGenome requests**, nothing fetched.
+
+**The control held exactly.** The shipped arm annotates from the compact table, as `score()` does,
+and reproduces the published numbers to the digit: 8,796 training and 1,715 held-out K562 pairs, 6 of
+10 bins, ECE 0.0231, Brier 0.04184, AUPRC 0.559, mean predicted 0.0441 against an observed 0.0653, a
+log-odds shift of +0.6793 restoring 9 of 10. The held-out population is identical in the two arms
+(1,715 pairs, 112 regulated), so the bin counts are comparable.
+
+| held-out K562, the same 1,715 pairs | bins inside | ECE | Brier | AUPRC | `judge()` |
+|---|---|---|---|---|---|
+| shipped, the compact table (published 2026-09-17) | 6/10 | 0.0231 | 0.04184 | 0.559 | failed |
+| re-fitted, the sweep's own window | **7/10** | 0.0214 | **0.03453** | **0.677** | passed |
+
+**Why the pass is not an upgrade.** All three bins still outside fail in the same direction as before,
+the observed rate above the predicted one (bins 1, 8 and 10; bin 10 predicts 0.3570 against an
+observed 0.4593). The mean predicted probability moves 0.0441 → 0.0469 against an unchanged observed
+0.0653, so the prevalence ratio only goes 1.48 → 1.39, and the single log-odds shift that fixes it
+goes **+0.6793 → +0.7025 — larger, not smaller** — and still restores 9 of 10 bins. The registered
+condition for upgrading the verdict was that the prevalence gap itself close; it did not, and nothing
+in this change acts on the intercept. **The 2026-09-17 verdict of failed stands.** What moved is the
+ranking: AUPRC +0.119 and Brier −17.5%, and the extra bin is bin 9 crossing its interval because the
+better ranking reshuffled which pairs land in it. The registered flattening test clears the
+improvement of the other explanation — the predicted range across the ten bins *widened*, 0.3007 →
+0.3521, and AUPRC rose, so this is not a curve collapsing onto the base rate — but a real ranking
+gain and an unmoved level are two different things and only the first happened.
+
+The two deletion terms are not redundant once the magnitude is real: `deletion_drop` takes 20.72 →
+**31.57** while `top_target` keeps its own weight (1.234 → 1.355) and the intercept falls 7.16 → 4.79.
+The flag says the table named this gene; the magnitude says how far the sweep thinks it moves, and
+before today the second was only ever spoken on the 2.8% of pairs where the first was true.
+
+**The registered clause, measured: what a confidence means off the gate.** The predicted-target curve
+is fitted on 245 pairs at a base rate of 76.7%, and its weights band all 612,323 sweep targets. Asked
+about the 1,112 held-out pairs the gate excludes but the sweep does answer:
+
+| curve | pairs | quoted | observed | 95% interval | ratio |
+|---|---|---|---|---|---|
+| the predicted-target curve, on the pairs the gate excludes | 1,112 | **0.4126** | **0.0603** | 0.0477–0.0758 | **×6.85** |
+| the same curve, on the 40 pairs it admits | 40 | 0.8355 | 0.9000 | 0.7695–0.9604 | ×0.93 |
+| the tested-pair curve, on the same excluded pairs | 1,112 | 0.0359 | 0.0603 | 0.0477–0.0758 | ×0.60 |
+
+This is the signature the registration named for the failure happening, and it is not marginal. On
+its own population the curve is honest to within 7%; one step off it, it quotes seven times the
+measured rate. Re-fitting it through the window barely helps (0.4126 → 0.3855, ×6.40), because the
+problem is the population it was fitted on and not the features it was fitted with. A confidence for
+a pair the gate would have excluded, quoted from this curve, is not a probability of anything.
+
+**And it is wrong twice, because the off-gate set is not flat.** With the sweep's own magnitude
+restored, the pairs the gate excludes separate by more than fifty-fold. Training and held-out pooled,
+legitimate only because the held-out arm above was scored first:
+
+| predicted K562 drop, on genes that are *not* the element's top target | pairs | regulated | rate | 95% interval | elements |
+|---|---|---|---|---|---|
+| = 0 (the sweep predicts a rise or no change) | 2,079 | 33 | **0.0159** | 0.0113–0.0222 | 1,286 |
+| 0 < drop ≤ 0.1 | 4,537 | 209 | 0.0461 | 0.0403–0.0526 | 2,363 |
+| 0.1 < drop ≤ 0.2 | 34 | 30 | 0.8824 | 0.7338–0.9533 | 33 |
+| 0.2 < drop ≤ 0.5 | 29 | 24 | 0.8276 | 0.6545–0.9240 | 26 |
+| 0.5 < drop | 4 | 4 | 1.0000 | 0.5101–1.0000 | 3 |
+
+A drop above 0.1 on a gene the compact table never named was called regulated **58 times out of 67
+(86.6%)**, against 33 of 2,079 (1.6%) where the sweep predicted a rise or nothing — a fifty-five-fold
+separation on a population that until today scored a structural zero and would have been quoted 0.41
+by the sweep's own curve. The model names second and third targets, and the projection was throwing
+them away. The caution is the size: 67 pairs above 0.1 off the gate, 34 of them held out, so the top
+three rows are a direction with an interval and not a rate to quote to three figures.
+
+**The base-rate problem, re-read on the wider set.** It does not go away and it is not an artefact of
+the gate. The held-out screens call pairs regulated more often than the training screens on every
+slicing: 6.53% against 4.97% on the published population (×1.31), 8.94% against 7.24% on the answered
+population (×1.23), 6.03% against 4.18% on the answered pairs the gate excludes (×1.44). Widening the
+population by a factor of 23.7 changed the prevalence ratio by less than a fifth of itself. The
+2026-09-17 conclusion stands unchanged and is now measured on 5,816 training pairs rather than 245: a
+band quoted without its population's base rate beside it measures nothing.
+
+**Coverage: what fraction of the questions can now be answered at all.**
+
+| | askable before | askable now | factor |
+|---|---|---|---|
+| training K562 pairs on a deleted element | 246 of 9,237 (2.7%) | 5,827 (63.1%) | ×23.7 |
+| held-out K562 pairs on a deleted element | 40 of 1,744 (2.3%) | 1,152 (66.1%) | ×28.8 |
+| chr21 (element, gene) questions | 7,846 | 347,591 | ×44.3 |
+| chr22 (element, gene) questions | 13,108 | 873,596 | ×66.6 |
+
+The benchmark's remaining third is a real limit and now says so: 2,980 training and 563 held-out
+pairs carry the named silence "the gene is not in the scorer's window at this element", and not one
+pair is a "not on this cell's own track" or a "not cached". The sweep rows are two chromosomes, not
+genome-wide — the response tree is 775 MB and one archive is held at a time — and they count every
+gene in the scorer's window with a K562 value, a median of 28 and 41 genes per element against the
+one the compact table kept.
+
+**What is not touched.** `score()` keeps its default of no cache and its published output; the
+2026-09-17 result file and the genome-wide band table are unchanged and were not re-run. The feature
+columns are the published ones. `matched_element` takes the reader as an optional argument and
+reproduces its old choice exactly without one, so the control above is the shipped code path and not
+a reconstruction of it.
+
+**Next, proposed as roadmap rows** (for the roadmap editor to fold; not written into ROADMAP.md):
+
+1. Area I: the sweep's bands are produced by the 245-pair curve, which overstates by ×6.85 one step
+   off its population. Re-band the genome from the curve fitted on the answered pairs, and quote an
+   off-gate confidence only from an off-gate curve.
+2. Area I: 67 off-gate pairs above a drop of 0.1 carry 86.6% regulated. That is the shortlist to
+   hold against an independent perturbation — the model's second targets, which no compact table has
+   ever offered.
+3. Area I: the prevalence term, unchanged from 2026-09-17 and now confirmed on 23.7 times the pairs.
+   Re-fit the intercept per screen with the screen's own base rate as an offset before any band is
+   quoted.
 
 ## What comes next, in order
 
