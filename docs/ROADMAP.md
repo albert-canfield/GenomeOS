@@ -2452,6 +2452,49 @@ in order. "Owner" is the session that holds the files today (see §7).
   882 non-copy constrained-unknown blocks and their flanks read across the panel on the
   chromosomes that carry them. A repeat-aware reading of long VNTRs is the instrument's
   one known failure.
+- **The one-target-per-element limit is the compact table's, not the sweep's
+  (2026-09-22, lane-cache, `df6c5f4` registration, `bda8a83` fix).**
+  `crispri.py`'s `deletion_drop` scored a **structural zero** whenever the
+  measured gene was not the element's top predicted target — and a zero there
+  means "the table had nothing to say", while every consumer read it as "the
+  model predicts no effect". It was **8,991 of 9,237** covered K562 training
+  pairs (97.3%) and **1,704 of 1,744** held out (97.7%); 78 of the 114 held-out
+  positives were structural zeros. The same sweep's per-element response cache,
+  written at `threshold=0.0` with every gene in the 1 Mb window signed and per
+  cell line, answers **62.1%** and **65.3%** of them, so the fix cost **0
+  AlphaGenome requests** and 107 seconds.
+  **The registration expected the gain to shrink or hold, and committed that
+  before the re-run. It nearly doubled on the arm that has the pairs and fell by
+  two thirds on the arm that has fourteen**, and both are reported in one table
+  at the same size. Held-out K562 AUPRC **0.633 → 0.691**, gain +0.083 (+0.031
+  to +0.166) → **+0.141 (+0.082 to +0.231)**; elements not in training 0.587 →
+  0.646; leave-chromosome-out 0.674 → 0.740. **GM12878 falls, 0.962 → 0.900,
+  +0.097 → +0.035 with the interval crossing zero** — on 14 regulated pairs, 6
+  of them structural zeros, an interval that already touched zero in September.
+  The verdict stands on the same pre-registration, the same split and the same
+  200 resamples; only where one feature reads its number changed.
+  **Half the registered reasoning was right and the half that was wrong is the
+  interesting half**: `top_target` is untouched and its weight barely moves
+  (1.284 → 1.329), so the old gain was indeed carried by the indicator — but
+  calling the newly visible magnitudes noise was wrong, and the weight on
+  `deletion_drop` rises **15.94 → 25.30**.
+  **Wherever the compact table and the cache both speak they agree exactly: 0
+  disagreements over every covered pair on all 24 chromosomes.** The cache is
+  the same run with the censoring removed, not a re-score. The 2026-09-16
+  section of ATTRIBUTION.md is annotated rather than rewritten, including its
+  "Limits" sentence, which said a full per-gene table "would cost the sweep
+  again" — it would not have, and it was already on disk.
+- **Next, open: the rest of the one-target consumers, all at 0 requests.** About
+  twenty modules read the compact table through `attribution/targets.py:25`
+  (`run_elements`). Highest value first: `eqtl.py:246`, which asks whether the
+  model's target is an eGene of one gene per element and whose answer the web UI
+  displays at `index.html:1661`; `target_calibration.py:173`, where the whole
+  calibration is conditioned on `top_target`; `motif_transfer.py:1025` and
+  `syntax_tiling.py:252`, where an element that moves a non-top gene reads as
+  "did not move"; then a cache-backed reader beside `run_elements` itself, which
+  is the broadest structural fix. `scripts/crispri_contact.py` needs the same
+  re-run but costs 4DN Hi-C range requests rather than model requests, and its
+  stored result now says which reader it used.
 - **Owner.** genomeos-i1 since 2026-09-13 (this lane's files; earlier genomeos-f7 and genomeos-c6); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.
