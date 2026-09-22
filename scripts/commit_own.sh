@@ -37,6 +37,20 @@ done
 [ -f "$msg_file" ] || { echo "no such message file: $msg_file" >&2; exit 64; }
 [ ${#paths[@]} -gt 0 ] || { echo "name the paths to commit; this never adds -A" >&2; exit 64; }
 
+# A message file left in the shared scratchpad by another lane is silently reusable, and on
+# 2026-09-22 one was: a lane's own heredoc had been refused by the guard inside a compound call,
+# so `-F msg1.txt` picked up the previous lane's text and 45e4f92 went in describing work it does
+# not contain. Nothing in git noticed, because a commit message is never wrong to git. The check
+# is the cheap half of the lesson: a message identical to the one already at HEAD is a stale file
+# far more often than it is a deliberate repeat.
+if [ "$(cat "$msg_file")" = "$(git log -1 --pretty=%B)" ]; then
+  echo "REFUSED: this message is byte-identical to HEAD's." >&2
+  echo "  $msg_file is almost certainly another lane's file, or your own from the last commit:" >&2
+  echo "  the scratchpad is shared between lanes. Write the message to a lane-unique name" >&2
+  echo "  (msg-\$LANE-\$(date +%s).txt) and run again; --force if the repeat is deliberate." >&2
+  [ -n "${force:-}" ] || exit 66
+fi
+
 branch=$(git rev-parse --abbrev-ref HEAD)
 [ "$branch" != "main" ] || { echo "refusing to commit to main; work on dev" >&2; exit 65; }
 

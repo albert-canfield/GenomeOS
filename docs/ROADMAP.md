@@ -2484,6 +2484,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   section of ATTRIBUTION.md is annotated rather than rewritten, including its
   "Limits" sentence, which said a full per-gene table "would cost the sweep
   again" — it would not have, and it was already on disk.
+- **The reader under the one-gene tables, and the second consumer moved
+  (2026-09-22, lane-reader2, `45e4f92` and `350c4c3`, 0 requests).**
+  `attribution/targets.py` gained `ElementResponses`, the general form of
+  `crispri.ElementCache`: ask what the sweep predicted for a gene at an element
+  on a cell's track and get a signed value **or a named silence** — not in the
+  window, not on that track, not cached — **never a zero standing in for a
+  missing answer**. It reproduces the compact tables exactly where they speak,
+  6,239 of 6,239 elements including the log2 fold change, and costs one
+  chromosome at a time (chr21 0.6 s, chr1 5.7 s and a peak near 2.9 GB; the tree
+  is 775 MB and is never read whole).
+  **`eqtl.py` is the second consumer, and the registration was wrong in a way
+  worth more than being right.** It predicted the eGene rate would FALL when the
+  1,353 elements the threshold had been skipping were asked too. It moved by
+  **one thousandth**: uniform 0.529 (2,372 elements) → **0.528 (3,613)**,
+  constrained 0.448 → 0.449, VISTA 0.412 → 0.423. The decomposition shows it was
+  wrong twice by the same amount — dropping the 75 elements with no answer
+  available is +0.017, adding the 1,316 unnamed at 0.496 is −0.018.
+  **So the falsifier fired and the threshold got priced instead: `MIN_EFFECT` =
+  0.1 excludes a third of the elements to buy five points** (54.6 against 49.6,
+  chance 12.7; 7.5 and 7.9 points on the other two sets). And the window the
+  compact table could not express says something new: **the measured eGene's
+  median rank is 1 of 34.1 genes, top-3 0.776, top-5 0.851** — when the model is
+  wrong about which gene, it is usually wrong by one or two places.
+  **A distinct defect class was separated on the way, and it is not the CRISPRi
+  one:** a compact `predicted = null` is a **threshold**, not a silence. The
+  sweep scored everything and nothing cleared 0.1 — all 3,045 null elements have
+  a head below `MIN_EFFECT`. CRISPRi's zero meant "the table had no row"; this
+  means "the table had a rule", and **any consumer conditioned on `predicted` is
+  quoting a rate conditional on that gate**.
 - **Next, open: the rest of the one-target consumers, all at 0 requests.** About
   twenty modules read the compact table through `attribution/targets.py:25`
   (`run_elements`). Highest value first: `eqtl.py:246`, which asks whether the
@@ -2495,6 +2524,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   is the broadest structural fix. `scripts/crispri_contact.py` needs the same
   re-run but costs 4DN Hi-C range requests rather than model requests, and its
   stored result now says which reader it used.
+  *(Two of this list closed within the hour and the bullet above has them: the
+  reader landed as `ElementResponses`, `eqtl.py` was re-run through it, and the
+  Evidence view now carries both eGene columns. What remains is
+  `target_calibration.py`, `motif_transfer.py` and `syntax_tiling.py`, each
+  needing its own registration.)*
 - **Owner.** genomeos-i1 since 2026-09-13 (this lane's files; earlier genomeos-f7 and genomeos-c6); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.
