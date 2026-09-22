@@ -1,9 +1,88 @@
 {
   "result": "crispri_benchmark",
-  "date": "2026-09-16",
+  "date": "2026-09-22",
   "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: AlphaGenome deletion per element",
   "preregistered": "fitted on the K562 training pairs, 'activity + distance + deletion' has a higher AUPRC than 'activity + distance' on the held-out K562 pairs and on the held-out GM12878 pairs",
   "verdict": "passed",
+  "deletion_reader": "the sweep's per-element response cache (data/knowledge/alphagenome/elements), every gene in the scorer's 1 Mb window on the cell's own track",
+  "deletion_census": {
+    "training": {
+      "K562": {
+        "covered": 9237,
+        "regulated": 451,
+        "gene_is_the_top_target": 246,
+        "structural_zero": 8991,
+        "structural_zero_regulated": 262,
+        "structural_zero_answered": 5581,
+        "structural_zero_answered_regulated": 234,
+        "structural_zero_answered_as_a_fall": 3841,
+        "structural_zero_answered_as_a_rise_or_flat": 1740,
+        "share_answered": 0.6207
+      }
+    },
+    "heldout": {
+      "GM12878": {
+        "covered": 62,
+        "regulated": 14,
+        "gene_is_the_top_target": 8,
+        "structural_zero": 54,
+        "structural_zero_regulated": 6,
+        "structural_zero_answered": 53,
+        "structural_zero_answered_regulated": 5,
+        "structural_zero_answered_as_a_fall": 33,
+        "structural_zero_answered_as_a_rise_or_flat": 20,
+        "share_answered": 0.9815
+      },
+      "HCT116": {
+        "covered": 363,
+        "regulated": 34,
+        "gene_is_the_top_target": 0,
+        "structural_zero": 363,
+        "structural_zero_regulated": 34,
+        "structural_zero_answered": 0,
+        "structural_zero_answered_regulated": 0,
+        "structural_zero_answered_as_a_fall": 0,
+        "structural_zero_answered_as_a_rise_or_flat": 0,
+        "share_answered": 0.0
+      },
+      "Jurkat": {
+        "covered": 64,
+        "regulated": 6,
+        "gene_is_the_top_target": 0,
+        "structural_zero": 64,
+        "structural_zero_regulated": 6,
+        "structural_zero_answered": 0,
+        "structural_zero_answered_regulated": 0,
+        "structural_zero_answered_as_a_fall": 0,
+        "structural_zero_answered_as_a_rise_or_flat": 0,
+        "share_answered": 0.0
+      },
+      "K562": {
+        "covered": 1744,
+        "regulated": 114,
+        "gene_is_the_top_target": 40,
+        "structural_zero": 1704,
+        "structural_zero_regulated": 78,
+        "structural_zero_answered": 1112,
+        "structural_zero_answered_regulated": 67,
+        "structural_zero_answered_as_a_fall": 769,
+        "structural_zero_answered_as_a_rise_or_flat": 343,
+        "share_answered": 0.6526
+      },
+      "WTC11": {
+        "covered": 1616,
+        "regulated": 14,
+        "gene_is_the_top_target": 0,
+        "structural_zero": 1616,
+        "structural_zero_regulated": 14,
+        "structural_zero_answered": 0,
+        "structural_zero_answered_regulated": 0,
+        "structural_zero_answered_as_a_fall": 0,
+        "structural_zero_answered_as_a_rise_or_flat": 0,
+        "share_answered": 0.0
+      }
+    }
+  },
   "coverage": {
     "training_pairs": 10356,
     "training_pairs_on_a_deleted_element": 9237,
@@ -134,8 +213,8 @@
       "pairs": 9237,
       "positives": 451,
       "baseline_precision": 0.0488,
-      "auprc": 0.4613,
-      "auroc": 0.7071
+      "auprc": 0.4647,
+      "auroc": 0.7072
     }
   },
   "training_leave_chromosome_out": {
@@ -158,15 +237,15 @@
         "pairs": 9237,
         "positives": 451,
         "baseline_precision": 0.0488,
-        "auprc": 0.6741,
-        "auroc": 0.9338
+        "auprc": 0.7395,
+        "auroc": 0.9428
       }
     },
     "deletion_gain": {
-      "gain": 0.1628,
+      "gain": 0.2282,
       "ci95": [
-        0.1212,
-        0.2104
+        0.1854,
+        0.2772
       ],
       "resamples": 200
     }
@@ -183,12 +262,12 @@
       "activity_over_distance": 0.7818
     },
     "activity + distance + deletion": {
-      "intercept": 6.9915,
-      "log_distance": -0.3624,
-      "log_activity": 0.3294,
-      "activity_over_distance": 0.6918,
-      "top_target": 1.284,
-      "deletion_drop": 15.9416
+      "intercept": 5.2275,
+      "log_distance": -0.3231,
+      "log_activity": 0.2465,
+      "activity_over_distance": 0.5696,
+      "top_target": 1.3287,
+      "deletion_drop": 25.2989
     }
   },
   "heldout": {
@@ -212,15 +291,15 @@
           "pairs": 62,
           "positives": 14,
           "baseline_precision": 0.2258,
-          "auprc": 0.9618,
-          "auroc": 0.9851
+          "auprc": 0.9001,
+          "auroc": 0.9688
         }
       },
       "deletion_gain": {
-        "gain": 0.0969,
+        "gain": 0.0352,
         "ci95": [
-          0.0,
-          0.2273
+          -0.0261,
+          0.1686
         ],
         "resamples": 200
       },
@@ -252,15 +331,15 @@
           "pairs": 1744,
           "positives": 114,
           "baseline_precision": 0.0654,
-          "auprc": 0.6332,
-          "auroc": 0.9015
+          "auprc": 0.6909,
+          "auroc": 0.9109
         }
       },
       "deletion_gain": {
-        "gain": 0.0831,
+        "gain": 0.1407,
         "ci95": [
-          0.031,
-          0.1657
+          0.082,
+          0.2313
         ],
         "resamples": 200
       },
@@ -291,15 +370,15 @@
           "pairs": 62,
           "positives": 14,
           "baseline_precision": 0.2258,
-          "auprc": 0.9618,
-          "auroc": 0.9851
+          "auprc": 0.9001,
+          "auroc": 0.9688
         }
       },
       "deletion_gain": {
-        "gain": 0.0969,
+        "gain": 0.0352,
         "ci95": [
-          0.0,
-          0.2273
+          -0.0261,
+          0.1686
         ],
         "resamples": 200
       }
@@ -324,15 +403,15 @@
           "pairs": 1580,
           "positives": 91,
           "baseline_precision": 0.0576,
-          "auprc": 0.5874,
-          "auroc": 0.8922
+          "auprc": 0.646,
+          "auroc": 0.9013
         }
       },
       "deletion_gain": {
-        "gain": 0.0903,
+        "gain": 0.1489,
         "ci95": [
-          0.0374,
-          0.1726
+          0.0761,
+          0.2484
         ],
         "resamples": 200
       }
@@ -360,26 +439,26 @@
           "precision": 0.457
         },
         "deletion": {
-          "calls": 207,
-          "right": 166,
-          "precision": 0.8019
+          "calls": 225,
+          "right": 179,
+          "precision": 0.7956
         }
       },
       "deletion_elements": {
         "closest gene": {
-          "calls": 207,
-          "right": 163,
-          "precision": 0.7874
+          "calls": 225,
+          "right": 176,
+          "precision": 0.7822
         },
         "activity over distance": {
-          "calls": 207,
-          "right": 163,
-          "precision": 0.7874
+          "calls": 225,
+          "right": 176,
+          "precision": 0.7822
         },
         "deletion": {
-          "calls": 207,
-          "right": 166,
-          "precision": 0.8019
+          "calls": 225,
+          "right": 179,
+          "precision": 0.7956
         }
       }
     },
@@ -404,26 +483,26 @@
           "precision": 0.457
         },
         "deletion": {
-          "calls": 124,
-          "right": 119,
-          "precision": 0.9597
+          "calls": 128,
+          "right": 123,
+          "precision": 0.9609
         }
       },
       "deletion_elements": {
         "closest gene": {
-          "calls": 124,
-          "right": 117,
-          "precision": 0.9435
+          "calls": 128,
+          "right": 121,
+          "precision": 0.9453
         },
         "activity over distance": {
-          "calls": 124,
-          "right": 117,
-          "precision": 0.9435
+          "calls": 128,
+          "right": 121,
+          "precision": 0.9453
         },
         "deletion": {
-          "calls": 124,
-          "right": 119,
-          "precision": 0.9597
+          "calls": 128,
+          "right": 123,
+          "precision": 0.9609
         }
       }
     },
@@ -448,25 +527,25 @@
           "precision": 0.457
         },
         "deletion": {
-          "calls": 84,
-          "right": 84,
+          "calls": 86,
+          "right": 86,
           "precision": 1.0
         }
       },
       "deletion_elements": {
         "closest gene": {
-          "calls": 84,
-          "right": 83,
-          "precision": 0.9881
+          "calls": 86,
+          "right": 85,
+          "precision": 0.9884
         },
         "activity over distance": {
-          "calls": 84,
-          "right": 83,
-          "precision": 0.9881
+          "calls": 86,
+          "right": 85,
+          "precision": 0.9884
         },
         "deletion": {
-          "calls": 84,
-          "right": 84,
+          "calls": 86,
+          "right": 86,
           "precision": 1.0
         }
       }
@@ -492,8 +571,8 @@
         "pairs": 3472,
         "positives": 400,
         "baseline_precision": 0.1152,
-        "auprc": 0.5234,
-        "auroc": 0.7028
+        "auprc": 0.7526,
+        "auroc": 0.8915
       }
     },
     "GM12878 held out": {
@@ -515,8 +594,8 @@
         "pairs": 62,
         "positives": 14,
         "baseline_precision": 0.2258,
-        "auprc": 0.6741,
-        "auroc": 0.7857
+        "auprc": 0.6465,
+        "auroc": 0.7946
       }
     },
     "HCT116 held out": {
@@ -584,8 +663,8 @@
         "pairs": 635,
         "positives": 101,
         "baseline_precision": 0.1591,
-        "auprc": 0.5601,
-        "auroc": 0.657
+        "auprc": 0.7608,
+        "auroc": 0.8492
       }
     },
     "WTC11 held out": {

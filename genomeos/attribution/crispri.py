@@ -16,8 +16,16 @@ by overlap, and three predictors are compared on the same pairs:
 - distance: the inverse distance from the element to the gene's TSS;
 - activity over distance: sqrt(DNase x H3K27ac) measured in the screen's own cell, divided by
   distance (the activity-by-contact idea with a power-law contact of exponent 1; no Hi-C);
-- the deletion: the predicted expression drop in the screen's cell line when the gene is the
-  element's top predicted target, zero otherwise (the table keeps one gene per element).
+- the deletion: the predicted expression drop for the pair's own gene in the screen's cell line.
+
+Until 2026-09-22 that drop was read from the compact all_elements table, which keeps one gene per
+element, so a pair whose measured gene is not that gene scored zero — a zero that said "the table
+had nothing to say" and was consumed as "the model predicts no effect". The same sweep wrote a
+per-element response cache (`ElementCache`, data/knowledge/alphagenome/elements) with threshold 0.0,
+carrying every gene in the scorer's 1 Mb window with a signed log2 fold change on each of K562,
+HepG2, GM12878 and IMR-90's own track, so the drop is now read from there at no model request.
+`top_target` still means what it always meant and stays a separate feature; `deletion_census`
+counts the pairs the compact table could not answer and how many of them the cache answers.
 
 The pre-registered test (fixed in PREREGISTERED before the held-out pairs were scored): a logistic
 model fitted on the K562 training pairs with activity, distance and the deletion beats the same
@@ -55,6 +63,7 @@ TRAINING = "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz"
 HELDOUT = "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz"
 KNOWLEDGE = Path("data/knowledge/crispri")
 ELEMENTS = Path("data/knowledge/alphagenome/all_elements")
+ELEMENT_CACHE = Path("data/knowledge/alphagenome/elements")
 EVIDENCE = (
     "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, "
     "Gschwind et al. 2025); predicted: AlphaGenome deletion per element"
@@ -200,14 +209,68 @@ class DeletionTable:
         return out
 
 
-def deletion_for(elements: list[dict[str, Any]], gene: str, cell: str) -> tuple[float, float]:
-    """(1 if the gene is an overlapping element's top predicted target, the predicted drop in `cell`).
+class ElementCache:
+    """The sweep's per-element response cache: every gene it scored, not only the top target.
 
-    The deletion's log2 fold change is negative for an activating element, so the drop is its
-    negation, floored at zero: a predicted rise is not evidence for the activation the screens call.
+    `all_elements` is a compact derived table that keeps one gene per element, so a pair whose
+    measured gene is not that gene scored a drop of zero — a zero that said "the table had nothing
+    to say", not "no effect is predicted". The same run wrote this cache with `threshold=0.0`
+    (scripts/enhancer_targets_all.py, `worker_scorer`), so every gene in the scorer's 1 Mb window
+    carries a signed log2 fold change on each of K562, HepG2, GM12878 and IMR-90's own track,
+    uncensored. One chromosome's archive is held at a time, so `annotate` walks chromosome by
+    chromosome; elements the archive does not carry are looked up as loose per-element files.
     """
-    top, drop = 0.0, 0.0
+
+    def __init__(self, root: Path = ELEMENT_CACHE) -> None:
+        self.root = root
+        self._chrom: str | None = None
+        self._archive: dict[str, Any] = {}
+
+    def _load(self, chrom: str) -> None:
+        if self._chrom == chrom:
+            return
+        p = self.root / f"{chrom}.json.gz"
+        archive: dict[str, Any] = {}
+        if p.exists():
+            with gzip.open(p, "rt") as fh:
+                archive = json.load(fh)
+        self._chrom, self._archive = chrom, archive
+
+    def value(self, chrom: str, element_id: str, gene: str, cell: str) -> float | None:
+        """This gene's signed predicted log2 fold change on this cell's own track, or None."""
+        self._load(chrom)
+        hit = self._archive.get(element_id)
+        if hit is None:
+            p = self.root / chrom / f"{element_id}.json"
+            if p.exists():
+                hit = json.loads(p.read_text())
+        for g in (hit or {}).get("genes") or []:
+            if g["gene"] == gene:
+                v = (g.get("by_cell") or {}).get(cell)
+                if v is not None:
+                    return float(v)
+        return None
+
+
+def deletion_values(
+    elements: list[dict[str, Any]],
+    gene: str,
+    cell: str,
+    cache: ElementCache | None = None,
+    chrom: str = "",
+) -> tuple[float, list[float]]:
+    """(1 if the gene is an overlapping element's top predicted target, every signed change found).
+
+    `top` is what the compact table records: the gene IS the element's single top predicted target.
+    The values are the sweep's own per-element responses for this gene on this cell's own track when
+    a `cache` is given, and the compact table's single entry otherwise — so with a cache a pair whose
+    gene is not the top target carries the change the sweep predicted for it, and without one the
+    values are exactly the old ones. An empty list means nothing was scored for this gene in this
+    cell, which is a different statement from a scored change of zero.
+    """
+    top, values = 0.0, []
     for e in elements:
+        compact: list[float] = []
         for key, by_cell in (
             ("predicted_coding", "predicted_coding_by_cell"),
             ("predicted", "predicted_by_cell"),
@@ -218,26 +281,95 @@ def deletion_for(elements: list[dict[str, Any]], gene: str, cell: str) -> tuple[
             top = 1.0
             v = (e.get(by_cell) or {}).get(cell)
             if v is not None:
-                drop = max(drop, -v)
-    return top, drop
+                compact.append(float(v))
+        cached = cache.value(chrom, e["id"], gene, cell) if cache is not None else None
+        values.extend([cached] if cached is not None else compact)
+    return top, values
 
 
-def annotate(pairs: list[Pair], table: DeletionTable) -> None:
-    """Fill each pair's features; a pair counts as covered when a deleted element overlaps it."""
+def deletion_drop(values: list[float]) -> float:
+    """The predicted drop: the largest fall, floored at zero.
+
+    The deletion's log2 fold change is negative for an activating element, so the drop is its
+    negation, floored at zero: a predicted rise is not evidence for the activation the screens call.
+    """
+    return max([0.0, *(-v for v in values)])
+
+
+def deletion_for(
+    elements: list[dict[str, Any]],
+    gene: str,
+    cell: str,
+    cache: ElementCache | None = None,
+    chrom: str = "",
+) -> tuple[float, float]:
+    """(1 if the gene is an overlapping element's top predicted target, the predicted drop in `cell`)."""
+    top, values = deletion_values(elements, gene, cell, cache, chrom)
+    return top, deletion_drop(values)
+
+
+def annotate(pairs: list[Pair], table: DeletionTable, cache: ElementCache | None = None) -> None:
+    """Fill each pair's features; a pair counts as covered when a deleted element overlaps it.
+
+    The pairs are walked chromosome by chromosome so that the per-element cache, which holds one
+    chromosome's archive at a time, is read once per chromosome rather than once per pair.
+    """
+    by_chrom: dict[str, list[Pair]] = defaultdict(list)
     for p in pairs:
-        els = table.overlapping(p.chrom, p.start, p.end)
-        p.covered = bool(els)
-        d = max(MIN_DISTANCE, p.distance)
-        activity = math.sqrt(max(p.dhs, 0.0) * max(p.h3k27ac, 0.0))
-        top, drop = deletion_for(els, p.gene, p.cell) if p.cell in MODEL_CELLS else (0.0, 0.0)
-        p.features = {
-            "node_nearest": float(any((e.get("inferred") or {}).get("gene") == p.gene for e in els)),
-            "log_distance": math.log(d),
-            "log_activity": math.log1p(activity),
-            "activity_over_distance": math.log1p(activity) - math.log(d),
-            "top_target": top,
-            "deletion_drop": drop,
+        by_chrom[p.chrom].append(p)
+    for chrom in sorted(by_chrom):
+        for p in by_chrom[chrom]:
+            _annotate_one(p, table, cache)
+
+
+def _annotate_one(p: Pair, table: DeletionTable, cache: ElementCache | None) -> None:
+    els = table.overlapping(p.chrom, p.start, p.end)
+    p.covered = bool(els)
+    d = max(MIN_DISTANCE, p.distance)
+    activity = math.sqrt(max(p.dhs, 0.0) * max(p.h3k27ac, 0.0))
+    top, values = deletion_values(els, p.gene, p.cell, cache, p.chrom) if p.cell in MODEL_CELLS else (0.0, [])
+    p.features = {
+        "node_nearest": float(any((e.get("inferred") or {}).get("gene") == p.gene for e in els)),
+        "log_distance": math.log(d),
+        "log_activity": math.log1p(activity),
+        "activity_over_distance": math.log1p(activity) - math.log(d),
+        "top_target": top,
+        "deletion_drop": deletion_drop(values),
+        # not a model column: whether the sweep scored this gene in this cell at all, so that a
+        # drop of zero can be told apart from a table that had nothing to say about the pair
+        "deletion_answered": float(bool(values)),
+    }
+
+
+def deletion_census(pairs: list[Pair]) -> dict[str, Any]:
+    """How many covered pairs the compact table could not answer, and how many carry a value now.
+
+    The named defect this counts: `deletion_drop` was 0 for every pair whose measured gene is not
+    the element's single top predicted target, whatever the sweep predicted for that gene. The zero
+    meant "the table had nothing to say" and was consumed as "the model predicts no effect".
+    `structural_zero` is that population; `answered` is how many of them the per-element cache
+    scored, split into the ones that carry a fall (a non-zero `deletion_drop` now) and the ones the
+    sweep predicted would rise, which still read zero but now mean it.
+    """
+    out: dict[str, Any] = {}
+    for cell in sorted({p.cell for p in pairs if p.covered}):
+        rows = [p for p in pairs if p.covered and p.cell == cell]
+        zeros = [p for p in rows if not p.features["top_target"]]
+        answered = [p for p in zeros if p.features.get("deletion_answered")]
+        fell = [p for p in answered if p.features["deletion_drop"] > 0]
+        out[cell] = {
+            "covered": len(rows),
+            "regulated": sum(p.regulated for p in rows),
+            "gene_is_the_top_target": len(rows) - len(zeros),
+            "structural_zero": len(zeros),
+            "structural_zero_regulated": sum(p.regulated for p in zeros),
+            "structural_zero_answered": len(answered),
+            "structural_zero_answered_regulated": sum(p.regulated for p in answered),
+            "structural_zero_answered_as_a_fall": len(fell),
+            "structural_zero_answered_as_a_rise_or_flat": len(answered) - len(fell),
+            "share_answered": round(len(answered) / len(zeros), 4) if zeros else None,
         }
+    return out
 
 
 def average_precision(scores: list[float], labels: list[bool]) -> float | None:
@@ -460,10 +592,14 @@ def coverage_by_arm(pairs: list[Pair]) -> dict[str, Any]:
     }
 
 
-def score(training: list[Pair], heldout: list[Pair], table: DeletionTable) -> dict[str, Any]:
+def score(
+    training: list[Pair],
+    heldout: list[Pair],
+    table: DeletionTable,
+    cache: ElementCache | None = None,
+) -> dict[str, Any]:
     """The whole comparison: coverage, leave-chromosome-out on training, the pre-registered held-out test."""
-    annotate(training, table)
-    annotate(heldout, table)
+    annotate(training + heldout, table, cache)  # both arms in one chromosome-major pass over the cache
     train = [p for p in training if p.covered]
     labels = [p.regulated for p in train]
 
@@ -521,6 +657,16 @@ def score(training: list[Pair], heldout: list[Pair], table: DeletionTable) -> di
         "evidence": EVIDENCE,
         "preregistered": PREREGISTERED,
         "verdict": "passed" if judged and all(v["passes"] for v in judged) else "failed",
+        "deletion_reader": (
+            "the sweep's per-element response cache (data/knowledge/alphagenome/elements), every "
+            "gene in the scorer's 1 Mb window on the cell's own track"
+            if cache is not None
+            else "the compact all_elements table, one gene per element"
+        ),
+        "deletion_census": {
+            "training": deletion_census(training),
+            "heldout": deletion_census(heldout),
+        },
         "coverage": {
             "training_pairs": len(training),
             "training_pairs_on_a_deleted_element": len(train),

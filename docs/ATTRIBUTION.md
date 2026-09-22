@@ -4163,6 +4163,15 @@ every time a chromosome lands rather than being quoted from this table.
 
 ## Measured perturbations: the deletion held against CRISPRi screens (2026-09-16)
 
+> **Annotation, 2026-09-22.** Every figure in this section is the 2026-09-16 record and is left
+> exactly as it was scored. It was scored with `deletion_drop` read from the compact
+> one-target-per-element table, which gave a structural zero to 97.7% of the held-out K562 pairs.
+> The feature now reads the sweep's own per-element cache instead, and the held-out K562 gain is
+> +0.141 (+0.082 to +0.231) rather than the +0.083 below, while GM12878's falls to +0.035. The
+> re-scored figures and what moved are in *The deletion feature read from the sweep's own cache, not
+> from the compact table (2026-09-22)*, near the end of this document; `data/results/crispri_benchmark.json`
+> now holds that later run.
+
 Every enhancer-to-gene target so far came from a predicted deletion or the nearest TSS in the
 node; none had been held against an element silenced in a cell and its genes measured. The ENCODE
 enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025) is that
@@ -4220,7 +4229,11 @@ CTCF node names a tested gene on 488 elements and is right on 223 (46%). The nod
 recall here without buying precision.
 
 **Limits.** One gene per element was kept by the sweep, so the deletion cannot rank a second
-target; a full per-gene table would cost the sweep again. The benchmark's activity columns are
+target; a full per-gene table would cost the sweep again. *(Annotation, 2026-09-22: this sentence
+is wrong in its second half and is the reason for the section at the end of this document. One gene
+per element was kept by the compact table, not by the sweep; the sweep's per-element cache holds
+every gene in the 1 Mb window, so the full per-gene table cost nothing — it was already on disk.)*
+The benchmark's activity columns are
 measured in the screen's cell, while the table's per-element DNase is not used. The screens test
 elements chosen near expressed genes, mostly in K562.
 
@@ -4996,6 +5009,64 @@ split are all unchanged, and the only thing that changes is where `deletion_drop
 `top_target` keeps its old meaning and stays a separate feature. `scripts/crispri_contact.py` and
 `target_calibration.py` still read the compact table and their stored results are unchanged by this;
 they are listed as limited consumers rather than silently re-run.
+
+### The result: the registered direction was wrong on K562 and right on GM12878
+
+`scripts/crispri_score.py` re-run the same way (107 s, **0 AlphaGenome requests**, same tables, same
+`PREREGISTERED`, same split, same 200 resamples). The registration expected the gain to shrink or
+hold. **On held-out K562 it nearly doubled**; on held-out GM12878 it fell by two thirds and its
+interval now crosses zero. Both are below, in the same table, at the same size.
+
+| held out | pairs (reg.) | activity + distance | + deletion, 2026-09-16 | + deletion, 2026-09-22 | gain then | gain now |
+|---|---|---|---|---|---|---|
+| K562 | 1,744 (114) | 0.550 | 0.633 | **0.691** | +0.083 (+0.031 to +0.166) | **+0.141 (+0.082 to +0.231)** |
+| K562, elements not in training | 1,580 (91) | 0.497 | 0.587 | **0.646** | +0.090 (+0.037 to +0.173) | **+0.149 (+0.076 to +0.248)** |
+| GM12878 | 62 (14) | 0.865 | 0.962 | **0.900** | +0.097 (0.000 to +0.227) | **+0.035 (−0.026 to +0.169)** |
+
+K562 leave-chromosome-out on the training pairs moves the same way: 0.674 → **0.740** AUPRC with the
+deletion, against an unchanged 0.511 without it, so the gain goes +0.163 (+0.121 to +0.210) →
+**+0.228 (+0.185 to +0.277)**. The verdict is still **passed**, and it is the same pre-registration
+that passed in September: nothing about the test was changed, only where one feature reads its number.
+
+**The registered reasoning was half right.** The expectation rested on `top_target` carrying the old
+gain, and that part holds — the indicator is untouched and its weight barely moves (1.284 → 1.329).
+What the registration got wrong was calling the newly-visible magnitudes noise. They are not: the
+fitted weight on `deletion_drop` rises 15.94 → **25.30**, which is the model leaning harder on a
+column it can now read on 1,112 of the 1,704 held-out pairs it previously read as zero. The
+predicted fall for a gene that is *not* the element's top target carries real signal about whether
+silencing that element lowers that gene, and the compact table was throwing it away.
+
+**GM12878 fell, and that is the honest caveat.** 0.962 → 0.900, gain +0.097 → +0.035 with an
+interval from −0.026 to +0.169. It rests on 14 regulated pairs, 6 of them structural zeros of which
+the cache answers 5, so a handful of newly-valued pairs move it either way; it was already the arm
+whose interval touched zero in September. The arm that carries the weight of evidence is K562, with
+114 regulated pairs of 1,744, and it rose. Neither arm is the whole answer and both are stated.
+
+**What still cannot be read, and is not claimed.** Two diagnostics in the same result are gated on
+`top_target` by construction and so barely move: the single predictor `top_target × (1 + drop)`
+(AUPRC 0.4613 → 0.4647) and the one-call-per-element table (at threshold 0.1, 124 calls / 119 right
+→ 128 / 123). Those numbers describe "which elements did the compact table select", which is a real
+question with a correct answer, and they were not changed. The whole of the gain above lives in the
+logistic model, where `deletion_drop` is a free column.
+
+**A consistency check worth recording.** Over every covered pair on all 24 chromosomes, wherever the
+compact table and the per-element cache both carry a value for the same (element, gene, cell), they
+agree exactly: **0 disagreements**. The cache is not a different measurement or a later re-score; it
+is the same numbers with the censoring removed. Where a top-target pair's drop changes at all, it is
+because a *second* overlapping element also scored that gene, and the existing rule — the largest
+fall across overlapping elements — can now see it.
+
+**The other consumers of the one-target-per-element table**, found while doing this and left alone,
+so the list exists: `crispri_direction.py:118` (`model_value`, superseded by
+`crispri_direction_both.py`, which already reads the cache), `target_calibration.py:173`
+(`element_for_pair`, the whole calibration is conditioned on `top_target`), `eqtl.py:246` (asks "is
+the model's target an eGene" of one gene per element, and is directly improvable from the cache),
+`motif_transfer.py:1025` and `syntax_tiling.py:252` (an element that moves a non-top gene reads as
+"did not move"), `unknown_scoring.py:510`, `candidates.py:734`, `closure.py:69`, `compile.py:112`,
+`organise.py:91`, `confidence_calibration.py:244`, `vista.py:278`, `decompile.py:113`,
+`benchmark/loci.py:1137`, `cli.py:3832`, and the loader `attribution/targets.py:25` (`run_elements`)
+that about twenty of them go through. `scripts/crispri_contact.py` is the nearest neighbour of this
+fix and is deliberately not re-run here: its stored result still reads the compact table and says so.
 
 ## What comes next, in order
 

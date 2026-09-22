@@ -5,6 +5,11 @@
 
 Streams the ENCODE enhancer-gene benchmark tables into data/knowledge/crispri once, joins them to
 the all-enhancer deletion table and saves data/results/crispri_benchmark.json. No model request.
+
+Since 2026-09-22 the deletion's size is read from the sweep's per-element response cache
+(`crispri.ElementCache`) rather than from the compact one-target-per-element table, so a pair whose
+measured gene is not the element's top predicted target carries the change the sweep actually
+predicted for it instead of a structural zero. Still no model request: the cache is that same run.
 """
 
 from __future__ import annotations
@@ -20,7 +25,7 @@ def main() -> int:
     for name in (crispri.TRAINING, crispri.HELDOUT):
         crispri.fetch(name)
     training, heldout = crispri.load(crispri.TRAINING), crispri.load(crispri.HELDOUT)
-    result = crispri.score(training, heldout, crispri.DeletionTable())
+    result = crispri.score(training, heldout, crispri.DeletionTable(), crispri.ElementCache())
     path = save_result("crispri_benchmark", result)
     loco = result["training_leave_chromosome_out"]
     print(f"coverage: {result['coverage']}")

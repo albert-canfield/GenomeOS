@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """CRISPRi benchmark parsed, joined to the deletion table, and the predictors compared honestly."""
 
+import gzip
 import io
 import json
 import math
@@ -186,6 +187,67 @@ def pairs_for_contact(tmp_path, cell="K562"):
             text += row_tss(chrom, start, start + 500, far, far_is_contacted, start + FAR_TSS, cell=cell)
         (tmp_path / f"{chrom}.json").write_text(json.dumps(rows))
     return crispri.parse(io.StringIO(text))
+
+
+def test_the_cache_answers_a_pair_the_compact_table_censored(tmp_path):
+    """The named defect: a gene that is not the element's top target scored a structural zero."""
+    elements, cache = tmp_path / "els", tmp_path / "cache"
+    elements.mkdir()
+    (cache / "chr1").mkdir(parents=True)
+    (elements / "chr1.json").write_text(
+        json.dumps([element("e1", 100, 600, "A", -0.5), element("e2", 5_000, 5_500, "A", -0.5)])
+    )
+    with gzip.open(cache / "chr1.json.gz", "wt") as fh:
+        json.dump(
+            {
+                "e1": {
+                    "genes": [
+                        {"gene": "A", "by_cell": {"K562": -0.5}},
+                        {"gene": "B", "by_cell": {"K562": -0.9, "HepG2": 0.2}},
+                        {"gene": "C", "by_cell": {"K562": 0.7}},
+                    ]
+                }
+            },
+            fh,
+        )
+    # e2 is not in the archive; its response is on disk as a loose per-element file
+    (cache / "chr1" / "e2.json").write_text(json.dumps({"genes": [{"gene": "D", "by_cell": {"K562": -0.3}}]}))
+    table, store = crispri.DeletionTable(elements), crispri.ElementCache(cache)
+    els = table.overlapping("chr1", 150, 200)
+
+    # B is not the element's top target: the compact table has nothing to say, the cache does
+    assert crispri.deletion_for(els, "B", "K562") == (0.0, 0.0)
+    assert crispri.deletion_for(els, "B", "K562", store, "chr1") == (0.0, 0.9)
+    # top_target is untouched by the change; only the magnitude beside it moves
+    assert crispri.deletion_for(els, "A", "K562", store, "chr1") == (1.0, 0.5)
+    # a predicted rise is still not the activation the screens call, but now it is a measured zero
+    assert crispri.deletion_for(els, "C", "K562", store, "chr1") == (0.0, 0.0)
+    # a gene the sweep never scored stays unanswered
+    assert crispri.deletion_for(els, "Z", "K562", store, "chr1") == (0.0, 0.0)
+    assert crispri.deletion_values(els, "Z", "K562", store, "chr1") == (0.0, [])
+    assert crispri.deletion_values(els, "C", "K562", store, "chr1") == (0.0, [0.7])
+    # the loose per-element file is read when the archive does not carry the element
+    loose = table.overlapping("chr1", 5_100, 5_200)
+    assert crispri.deletion_for(loose, "D", "K562", store, "chr1") == (0.0, 0.3)
+
+    text = HEADER + row("chr1", 100, 600, "B", True, 5_000) + row("chr1", 100, 600, "A", True, 5_000)
+    pairs = crispri.parse(io.StringIO(text))
+    crispri.annotate(pairs, table, store)
+    censored, top = pairs[0], pairs[1]
+    assert (censored.features["top_target"], censored.features["deletion_drop"]) == (0.0, 0.9)
+    assert censored.features["deletion_answered"] == 1.0
+    assert (top.features["top_target"], top.features["deletion_drop"]) == (1.0, 0.5)
+    # without the cache the module reads exactly what it always read
+    crispri.annotate(pairs, table)
+    assert pairs[0].features["deletion_drop"] == 0.0 and pairs[0].features["deletion_answered"] == 0.0
+
+    census = crispri.deletion_census(pairs)["K562"]
+    assert census["structural_zero"] == 1 and census["structural_zero_answered"] == 0
+    crispri.annotate(pairs, table, store)
+    census = crispri.deletion_census(pairs)["K562"]
+    assert census["gene_is_the_top_target"] == 1 and census["structural_zero"] == 1
+    assert census["structural_zero_answered"] == 1 and census["structural_zero_answered_as_a_fall"] == 1
+    assert census["share_answered"] == 1.0
 
 
 def test_parse_reads_the_tss_column_when_it_is_there():
