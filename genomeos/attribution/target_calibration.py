@@ -1930,3 +1930,515 @@ def compare_the_gate(
             "sweep": window_coverage(responses, coverage_chroms),
         },
     }
+
+
+# ------------------------------------------------------------------------------------------
+# The prevalence term: a per-screen intercept, registered before it is fitted
+# ------------------------------------------------------------------------------------------
+
+SCREEN_MIN_PAIRS = 100  # a base rate read on fewer pairs than this is not a base rate
+SCREEN_MIN_POSITIVES = 10
+SMALL_SCREEN = "small screens, pooled"
+SCREENS_IMPROVING_REQUIRED = 4  # of the 6 screens that clear the size rule
+ECE_FALL_REQUIRED = 0.005  # half the gap the single pooled shift closed (0.0231 -> 0.0100)
+RESIDUAL_SHIFT_BAR = 0.34  # half the +0.679 / +0.7025 the single pooled correction needed
+PREREGISTERED_PREVALENCE = (
+    "Registered 2026-09-22 (sixth), after the screen census below was counted and before any offset "
+    "was fitted or any reliability table was read.\n"
+    "\n"
+    "THE CENSUS, COUNTED FIRST. On the scored population (covered, every feature present) the "
+    "calibration is fitted on three screens -- Gasperini2019 4,776 pairs / 335 regulated / 7.01%, "
+    "Nasser2021 2,931 / 80 / 2.73%, Schraivogel2020 1,089 / 22 / 2.02% -- pooling to 8,796 at 4.97%. "
+    "It is read on five -- K562_DC_TAP 1,084 / 11 / 1.01%, Xie 416 / 41 / 9.86%, Morris 177 / 34 / "
+    "19.21%, Klann 32 / 20 / 62.50%, Reilly 6 / 6 / 100% -- pooling to 1,715 at 6.53%. The spread "
+    "within each table is larger than the gap between them: 3.5x across the fitted screens and 99x "
+    "across the read ones, against the 1.31x the 2026-09-17 section named. NOT ONE SCREEN NAME IS IN "
+    "BOTH TABLES: the intersection of the two screen sets is empty. On the gate, which is the "
+    "population that bands the genome, there are 285 pairs and Gasperini2019 is 207 of them (72.6%); "
+    "no other screen reaches 30, so no rule of any kind can fit a per-screen intercept there.\n"
+    "\n"
+    "THE MODEL. logit p_i = logit(pi_s(i)) + a + b.x_i, where pi_s is screen s's own measured base "
+    "rate on the scored population, entering as an OFFSET -- a known constant with its coefficient "
+    "fixed at 1 and no parameter spent -- while a single intercept a and a single shape b are shared "
+    "by every screen. The comparator is the shipped model, logit p_i = a + b.x_i, fitted and read on "
+    "the same pairs.\n"
+    "\n"
+    "WHY AN OFFSET AND NOT A RE-FIT OR A RECALIBRATION. A free per-screen intercept spends one "
+    "parameter per screen, and Reilly's 6 pairs at 6 of 6 separate, so that parameter is infinite; "
+    "the offset spends none and a screen of any size can carry one. A recalibration on the held-out "
+    "labels (Platt, isotonic) moves slope and level together, so it cannot be checked out of sample "
+    "at all and it would dissolve the pre-registered claim rather than correct it. The offset also "
+    "states the hypothesis the 2026-09-17 failure actually supports and no more: the shape transfers "
+    "and the level does not -- all four failing bins failed in the same direction, none in the other "
+    "-- so exactly one number per screen should move, and that number is a property the screen "
+    "reports about itself, its own base rate, with no model in it.\n"
+    "\n"
+    "WHICH SCREENS GET THEIR OWN TERM, DECIDED ON SIZE ALONE. A screen carries its own offset when "
+    "its scored population has at least 100 pairs AND at least 10 regulated pairs; below either "
+    "threshold it joins one `small screens, pooled` stratum which takes the pooled base rate of the "
+    "below-threshold screens in its own table. On the census that admits all three fitted screens and "
+    "three of the five read ones (K562_DC_TAP, Xie, Morris), and pools Klann and Reilly into 38 pairs "
+    "at 68.42%. Six screens carry a term. This rule was fixed on the census counts above, before any "
+    "reliability table was read.\n"
+    "\n"
+    "WHAT IS EXPECTED, AND WHAT CAN FAIL. (E1) Read on the held-out K562 pairs with each screen's own "
+    "held-out base rate, bins inside their Wilson intervals go 6 of 10 to 9 or 10 of 10. This is "
+    "registered as a DESCRIPTION THAT CANNOT FAIL and it upgrades nothing: five numbers fitted to the "
+    "same labels must beat the one number that already gave 9 of 10. It is reported because the "
+    "per-screen shifts are the quantity of interest, not because it tests anything. (E2) The test "
+    "that can fail is leave-one-screen-out over the six screens that carry a term: b is fitted on the "
+    "other five with their offsets, and the held-back screen is scored with its own base rate as its "
+    "offset and nothing else of its own. Each screen is read in 10 equal-count bins if it has at "
+    "least 300 scored pairs and in 3 below that, the same count for both models, so the comparison is "
+    "like for like; a tie does not count as an improvement. Registered: the offset model puts more "
+    "bins inside their Wilson intervals than the pooled model on at least 4 of the 6 screens, and the "
+    "pairs-weighted expected calibration error over the six falls by at least 0.005. (E3) The "
+    "residual per-screen "
+    "log-odds shift still needed AFTER the offset is applied has a median absolute value below 0.34, "
+    "half of what the single pooled correction needed; if the base rate is the whole story it is near "
+    "zero.\n"
+    "\n"
+    "THE FALSIFIER. The prevalence term is the wrong correction if fewer than 4 of the 6 screens "
+    "improve their bin count under leave-one-screen-out, or if the pairs-weighted expected "
+    "calibration error does not fall by 0.005, or if the median residual shift is not below 0.34 -- "
+    "any of the three, and the level gap is not a per-screen prevalence and something else moved. A "
+    "fourth kills it even if the three pass: if the offset model's AUPRC under leave-one-screen-out "
+    "falls below the pooled model's, the bins were bought by flattening the curve onto the base rate, "
+    "which `flattening_check` refuses everywhere else in this module and which is refused here.\n"
+    "\n"
+    "WHAT A BAND MEANS FOR A TARGET IN NO SCREEN AT ALL, WHICH IS ALMOST THE WHOLE GENOME. Registered "
+    "before the fit, because the honest answer is negative and no result of this fit can change it: "
+    "IT CANNOT BE QUOTED. (a) The offset's input is a screen's own base rate. A sweep target is in no "
+    "screen, so that number does not exist for it; the only substitute is a guess at what some future "
+    "screen's base rate would be, and across the six K562 screens of this one benchmark that number "
+    "runs from 1.01% to 100%, a hundredfold. A correction whose input spans a hundredfold is not a "
+    "correction. (b) The two screen sets do not intersect, so the term is not transportable even "
+    "between TESTED pairs: Xie's intercept cannot be fitted on Gasperini, Nasser and Schraivogel, it "
+    "can only be read off Xie's own labels. A per-screen intercept is a thing that exists after a "
+    "screen has been run and never before it. (c) The population that bands the genome is the on-gate "
+    "one, 285 pairs, 72.6% of them one screen, where no size rule can fit per-screen terms at all. "
+    "WHAT SHOULD BE QUOTED INSTEAD, registered now: the two quantities that need no intercept. The "
+    "SHAPE -- what leave-one-screen-out tests -- reported as an ordering or a likelihood ratio and "
+    "never as a probability; and the MEASURED BAND ON A STRATUM, which is the 2026-09-22 re-banding's "
+    "answer, a rate read directly on a stratum of pairs with its population and its interval beside "
+    "it and a refusal where the stratum is thin. The prevalence term does not unlock the 593,765 "
+    "targets the 2026-09-17 table priced. It says why that table was never quotable, and it leaves "
+    "the re-banding's 5.8% and the union axis's 9.70% as the honest genome-wide coverage"
+)
+
+
+def screen_key(p: crispri.Pair) -> str:
+    """A screen is a dataset in a cell line: Nasser2021 in K562 and in GM12878 chose pairs differently."""
+    return f"{p.dataset}|{p.cell}"
+
+
+def screen_census(pairs: list[crispri.Pair]) -> dict[str, Any]:
+    """Every screen contributing to a scored population, with its size, its rate and its on-gate share.
+
+    Counted before anything is fitted. `own_term` applies the registered size rule and nothing else.
+    """
+    n: Counter[str] = Counter()
+    k: Counter[str] = Counter()
+    gn: Counter[str] = Counter()
+    gk: Counter[str] = Counter()
+    for p in pairs:
+        s = screen_key(p)
+        n[s] += 1
+        k[s] += int(p.regulated)
+        if p.features.get("top_target"):
+            gn[s] += 1
+            gk[s] += int(p.regulated)
+    return {
+        s: {
+            "pairs": n[s],
+            "regulated": k[s],
+            "rate": round(k[s] / n[s], 4),
+            "on_gate_pairs": gn[s],
+            "on_gate_regulated": gk[s],
+            "on_gate_rate": round(gk[s] / gn[s], 4) if gn[s] else None,
+            "own_term": bool(n[s] >= SCREEN_MIN_PAIRS and k[s] >= SCREEN_MIN_POSITIVES),
+        }
+        for s in sorted(n, key=lambda s: (-n[s], s))
+    }
+
+
+def screen_strata(pairs: list[crispri.Pair]) -> dict[str, str]:
+    """Screen name to the stratum that carries its offset: itself, or the pooled small one."""
+    census = screen_census(pairs)
+    return {s: (s if c["own_term"] else SMALL_SCREEN) for s, c in census.items()}
+
+
+def screen_base_rates(pairs: list[crispri.Pair], strata: dict[str, str]) -> dict[str, float]:
+    """Each stratum's own measured base rate: the one number the offset carries, with no model in it."""
+    n: Counter[str] = Counter()
+    k: Counter[str] = Counter()
+    for p in pairs:
+        s = strata[screen_key(p)]
+        n[s] += 1
+        k[s] += int(p.regulated)
+    return {s: k[s] / n[s] for s in n}
+
+
+def screen_offsets(
+    pairs: list[crispri.Pair], strata: dict[str, str], rates: dict[str, float], fallback: float
+) -> list[float]:
+    """The log odds of each pair's own screen's base rate, which enters the fit with coefficient 1."""
+    return [logit(rates.get(strata.get(screen_key(p), SMALL_SCREEN), fallback)) for p in pairs]
+
+
+def logistic_fit_offset(
+    x: list[list[float]], y: list[bool], off: list[float], lam: float = 1e-3, rounds: int = 25
+) -> list[float]:
+    """`crispri.logistic_fit` with a per-row offset: a known constant added to the linear predictor.
+
+    The offset spends no parameter, so a screen of six pairs can carry one and nothing separates.
+    """
+    k = len(x[0]) + 1
+    rows = [[1.0, *r] for r in x]
+    w = [0.0] * k
+    for _ in range(rounds):
+        grad = [0.0] * k
+        hess = [[0.0] * k for _ in range(k)]
+        for r, yi, o in zip(rows, y, off, strict=True):
+            z = o + sum(a * b for a, b in zip(w, r, strict=True))
+            p = sigmoid(z)
+            g, h = (1.0 if yi else 0.0) - p, p * (1 - p)
+            for i in range(k):
+                grad[i] += g * r[i]
+                hi = hess[i]
+                for j in range(i, k):
+                    hi[j] += h * r[i] * r[j]
+        for i in range(k):
+            for j in range(i):
+                hess[i][j] = hess[j][i]
+            if i:
+                hess[i][i] += lam
+                grad[i] -= lam * w[i]
+        step = crispri.solve(hess, grad)
+        w = [a + b for a, b in zip(w, step, strict=True)]
+        if max(abs(s) for s in step) < 1e-6:
+            break
+    return w
+
+
+def fit_with_offset(
+    pairs: list[crispri.Pair], cols: tuple[str, ...], off: list[float], lam: float = 1e-3
+) -> list[float]:
+    return logistic_fit_offset(crispri.matrix(pairs, cols), [p.regulated for p in pairs], off, lam=lam)
+
+
+def predict_with_offset(
+    w: list[float], pairs: list[crispri.Pair], cols: tuple[str, ...], off: list[float]
+) -> list[float]:
+    z = crispri.logistic_score(w, crispri.matrix(pairs, cols))
+    return [sigmoid(a + b) for a, b in zip(z, off, strict=True)]
+
+
+def residual_shift(p: list[float], labels: list[bool]) -> float:
+    """The log-odds constant still needed to match this set's own rate once the offset is in place."""
+    n = len(labels)
+    if not n:
+        return 0.0
+    observed = sum(labels) / n
+    lo, hi = -12.0, 12.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        if sum(sigmoid(logit(x) + mid) for x in p) / n < observed:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+SCREEN_BINS_FULL = 300  # a screen with fewer scored pairs than this is read in SMALL_BINS, not BINS
+
+
+def screen_bins(n: int) -> int:
+    return BINS if n >= SCREEN_BINS_FULL else SMALL_BINS
+
+
+def one_screen(p: list[float], labels: list[bool]) -> dict[str, Any]:
+    """One screen's reliability, at the registered bin count for its size, plus its residual shift."""
+    bins = screen_bins(len(labels))
+    cal = calibration(p, labels, bins)
+    return {
+        "pairs": len(labels),
+        "regulated": sum(labels),
+        "observed_rate": round(sum(labels) / len(labels), 4) if labels else None,
+        "mean_predicted": cal["mean_predicted"],
+        "bins": bins,
+        "bins_consistent": cal["reliability"]["bins_consistent"],
+        "ece": cal["reliability"]["ece"],
+        "brier": cal["brier"],
+        "auprc": cal["auprc"],
+        "residual_log_odds_shift": round(residual_shift(p, labels), 4),
+    }
+
+
+def by_screen(rows: list[crispri.Pair], p: list[float], strata: dict[str, str]) -> dict[str, dict[str, Any]]:
+    """The same probabilities split by the screen that produced the pair, each judged on its own size."""
+    idx: dict[str, list[int]] = defaultdict(list)
+    for i, pair in enumerate(rows):
+        idx[strata.get(screen_key(pair), SMALL_SCREEN)].append(i)
+    return {
+        s: one_screen([p[i] for i in ii], [rows[i].regulated for i in ii])
+        for s, ii in sorted(idx.items(), key=lambda kv: -len(kv[1]))
+    }
+
+
+def leave_one_screen_out(rows: list[crispri.Pair], cols: tuple[str, ...] = SWEEP_FEATURES) -> dict[str, Any]:
+    """The registered test (E2): the shape fitted without a screen, the level taken from the screen.
+
+    For each screen that carries its own term, the shape `b` is fitted on every other screen with
+    their offsets in place, and the held-back screen is then scored with its own measured base rate
+    as its offset and nothing else of its own. The comparator is the identical split with no offset
+    anywhere. Nothing in the held-back screen's labels enters the shape; only the one number the
+    screen reports about itself enters the level, which is the whole of the claim being tested.
+    """
+    census = screen_census(rows)
+    own = [s for s, c in census.items() if c["own_term"]]
+    per: dict[str, Any] = {}
+    for s in own:
+        held = [r for r in rows if screen_key(r) == s]
+        rest = [r for r in rows if screen_key(r) != s]
+        if not held or not rest or len(set(r.regulated for r in rest)) < 2:
+            continue
+        rest_strata = screen_strata(rest)
+        rest_rates = screen_base_rates(rest, rest_strata)
+        rest_pooled = sum(r.regulated for r in rest) / len(rest)
+        w_off = fit_with_offset(rest, cols, screen_offsets(rest, rest_strata, rest_rates, rest_pooled))
+        own_rate = census[s]["rate"]
+        p_off = predict_with_offset(w_off, held, cols, [logit(own_rate)] * len(held))
+        w_pool = fit(rest, cols)
+        p_pool = predict(w_pool, held, cols)
+        a = one_screen(p_pool, [r.regulated for r in held])
+        b = one_screen(p_off, [r.regulated for r in held])
+        per[s] = {
+            "own_base_rate": round(own_rate, 4),
+            "base_rate_of_the_other_screens": round(rest_pooled, 4),
+            "pooled_model": a,
+            "offset_model": b,
+            "bins_improved": b["bins_consistent"] > a["bins_consistent"],
+            "auprc_fell": bool(a["auprc"] is not None and b["auprc"] is not None and b["auprc"] < a["auprc"]),
+        }
+    total = sum(v["pooled_model"]["pairs"] for v in per.values())
+    ece_pool = sum(v["pooled_model"]["ece"] * v["pooled_model"]["pairs"] for v in per.values())
+    ece_off = sum(v["offset_model"]["ece"] * v["offset_model"]["pairs"] for v in per.values())
+    residuals = sorted(abs(v["offset_model"]["residual_log_odds_shift"]) for v in per.values())
+    median = (
+        0.0
+        if not residuals
+        else (
+            residuals[len(residuals) // 2]
+            if len(residuals) % 2
+            else (residuals[len(residuals) // 2 - 1] + residuals[len(residuals) // 2]) / 2
+        )
+    )
+    improved = sum(1 for v in per.values() if v["bins_improved"])
+    fell = round((ece_pool - ece_off) / total, 5) if total else 0.0
+    flattened = any(v["auprc_fell"] for v in per.values())
+    return {
+        "what": (
+            "leave one screen out: the shape fitted without the screen, the level taken from the "
+            "screen's own base rate, against the same split with no offset anywhere"
+        ),
+        "screens_with_their_own_term": own,
+        "per_screen": per,
+        "screens_improving": [improved, len(per)],
+        "screens_improving_required": SCREENS_IMPROVING_REQUIRED,
+        "weighted_ece": [round(ece_pool / total, 5), round(ece_off / total, 5)] if total else None,
+        "weighted_ece_fell_by": fell,
+        "weighted_ece_fall_required": ECE_FALL_REQUIRED,
+        "median_absolute_residual_shift": round(median, 4),
+        "residual_shift_bar": RESIDUAL_SHIFT_BAR,
+        "any_auprc_fell": flattened,
+        "verdict": (
+            "passed"
+            if (
+                improved >= SCREENS_IMPROVING_REQUIRED
+                and fell >= ECE_FALL_REQUIRED
+                and median < RESIDUAL_SHIFT_BAR
+                and not flattened
+            )
+            else "failed"
+        ),
+    }
+
+
+def smoothed(k: int, n: int) -> float:
+    """(k + 0.5) / (n + 1): a rate a screen of 7 of 7 can still have a finite log odds for."""
+    return (k + 0.5) / (n + 1)
+
+
+def genome_under_each_screen(
+    weights: dict[str, list[float]],
+    shifts: dict[str, float],
+    chroms: tuple[str, ...] = CHROMS,
+    elements: Path = ELEMENTS,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+) -> dict[str, Any]:
+    """The published band table recomputed under one log-odds offset per screen, on the same walk.
+
+    The published band is the `published` column, taken at a shift of zero on the same pass, so the
+    table is its own control. Every other column is what the sweep would quote if the target it is
+    quoting for belonged to that screen's population — which no sweep target does, and which is the
+    point the columns are here to make visible.
+    """
+    counts: dict[str, dict[str, Counter[str]]] = {
+        label: defaultdict(Counter) for label in ("any gene", "coding gene")
+    }
+    totals: Counter[str] = Counter()
+    for chrom in chroms:
+        p = elements / f"{chrom}.json"
+        if not p.exists():
+            continue
+        els = json.loads(p.read_text())
+        starts = gene_starts(chrom, reference)
+        classes = registry_classes(chrom, results) if (results / f"ccres_{chrom}.bed.gz").exists() else {}
+        for key, label in (("predicted", "any gene"), ("predicted_coding", "coding gene")):
+            for el in els:
+                row = element_row(el, key, starts, classes)
+                if row is None or "missing" in row:
+                    continue
+                xt = [[row["features"][n] for n in TARGET_FEATURES]]
+                z = crispri.logistic_score(weights["target"], xt)[0]
+                totals[label] += 1
+                counts[label]["published"][band_of(sigmoid(z))] += 1
+                for name, d in shifts.items():
+                    counts[label][name][band_of(sigmoid(z + d))] += 1
+    return {
+        label: {
+            "targets": totals[label],
+            "bands": {name: dict(sorted(c.items())) for name, c in counts[label].items()},
+            "top_band_0.9_1": {name: c.get("0.9-1", 0) for name, c in counts[label].items()},
+        }
+        for label in ("any gene", "coding gene")
+    }
+
+
+def prevalence_terms(
+    training: list[crispri.Pair],
+    heldout: list[crispri.Pair],
+    table: crispri.DeletionTable,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+    chroms: tuple[str, ...] = CHROMS,
+) -> dict[str, Any]:
+    """The registered prevalence work: the census, the two reads, and what it leaves the genome."""
+    crispri.annotate(training, table)
+    crispri.annotate(heldout, table)
+    add_features(training, table, reference, results)
+    add_features(heldout, table, reference, results)
+    train = scored(training)
+    held = scored([p for p in heldout if p.cell == CELL])
+    held_labels = [p.regulated for p in held]
+
+    train_census, held_census = screen_census(train), screen_census(held)
+    train_strata, held_strata = screen_strata(train), screen_strata(held)
+    train_rates, held_rates = (
+        screen_base_rates(train, train_strata),
+        screen_base_rates(held, held_strata),
+    )
+    train_pooled = sum(p.regulated for p in train) / len(train)
+    held_pooled = sum(held_labels) / len(held)
+
+    shipped = predict(fit(train, SWEEP_FEATURES), held, SWEEP_FEATURES)
+    before = calibration(shipped, held_labels, BINS)
+    pooled_shift = prevalence_shift(shipped, held_labels, BINS)
+    w_off = fit_with_offset(
+        train, SWEEP_FEATURES, screen_offsets(train, train_strata, train_rates, train_pooled)
+    )
+    after_p = predict_with_offset(
+        w_off, held, SWEEP_FEATURES, screen_offsets(held, held_strata, held_rates, held_pooled)
+    )
+    after = calibration(after_p, held_labels, BINS)
+
+    both = train + held
+    loso = leave_one_screen_out(both)
+
+    on_gate = [p for p in both if p.features["top_target"]]
+    gate_census = screen_census(on_gate)
+    gate_total = len(on_gate)
+    shifts = {}
+    base = logit(smoothed(sum(p.regulated for p in on_gate), gate_total))
+    for s, c in gate_census.items():
+        if c["on_gate_pairs"]:
+            shifts[s] = logit(smoothed(c["on_gate_regulated"], c["on_gate_pairs"])) - base
+    weights = {"target": fit([p for p in train if p.features["top_target"]], TARGET_FEATURES)}
+    genome = genome_under_each_screen(weights, shifts, chroms, ELEMENTS, reference, results)
+
+    return {
+        "evidence": EVIDENCE,
+        "preregistered": PREREGISTERED_PREVALENCE,
+        "census": {
+            "what": "every screen in each population, counted before anything was fitted",
+            "fitted (training K562)": {
+                "pairs": len(train),
+                "regulated": sum(p.regulated for p in train),
+                "rate": round(train_pooled, 4),
+                "screens": train_census,
+            },
+            "read (held-out K562)": {
+                "pairs": len(held),
+                "regulated": sum(held_labels),
+                "rate": round(held_pooled, 4),
+                "screens": held_census,
+            },
+            "screens_in_both_populations": sorted(set(train_census) & set(held_census)),
+            "base_rate_strata": {
+                "training": {k: round(v, 4) for k, v in sorted(train_rates.items())},
+                "held_out": {k: round(v, 4) for k, v in sorted(held_rates.items())},
+            },
+            "on_the_gate": {
+                "what": "the population whose curve bands the genome",
+                "pairs": gate_total,
+                "regulated": sum(p.regulated for p in on_gate),
+                "screens_with_their_own_term_under_the_registered_rule": [
+                    s for s, c in gate_census.items() if c["on_gate_pairs"] >= SCREEN_MIN_PAIRS
+                ],
+                "largest_screen_share": max(
+                    (round(c["on_gate_pairs"] / gate_total, 4) for c in gate_census.values()),
+                    default=None,
+                ),
+                "screens": {
+                    s: {
+                        "pairs": c["on_gate_pairs"],
+                        "regulated": c["on_gate_regulated"],
+                        "rate": c["on_gate_rate"],
+                    }
+                    for s, c in gate_census.items()
+                    if c["on_gate_pairs"]
+                },
+            },
+        },
+        "held_out_before_and_after": {
+            "what": (
+                "E1, registered as a description that cannot fail: the offset takes each held-out "
+                "screen's level from that screen's own held-out labels"
+            ),
+            "shipped curve": {
+                "bins_consistent": before["reliability"]["bins_consistent"],
+                "bins": before["reliability"]["bins"],
+                "ece": before["reliability"]["ece"],
+                "brier": before["brier"],
+                "auprc": before["auprc"],
+                "mean_predicted": before["mean_predicted"],
+                "observed_rate": round(held_pooled, 4),
+                "per_screen": by_screen(held, shipped, held_strata),
+            },
+            "one pooled shift (the published description)": pooled_shift,
+            "per-screen offsets": {
+                "bins_consistent": after["reliability"]["bins_consistent"],
+                "bins": after["reliability"]["bins"],
+                "ece": after["reliability"]["ece"],
+                "brier": after["brier"],
+                "auprc": after["auprc"],
+                "mean_predicted": after["mean_predicted"],
+                "per_screen": by_screen(held, after_p, held_strata),
+            },
+        },
+        "leave_one_screen_out": loso,
+        "verdict": loso["verdict"],
+        "genome_under_each_screen": genome,
+    }
