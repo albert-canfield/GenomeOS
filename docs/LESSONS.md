@@ -507,6 +507,20 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   quantity, the check cannot see the defect — so ask what a wrong version would *not* conserve, and
   assert that instead.
 
+  **A sixth instance, 2026-09-22, and this one is about the guard rather than the defect.**
+  `crispri.logistic_fit` took the whole Newton step, and where classes nearly separate one full step
+  saturates every linear predictor; a saturated row then offers a curvature of 9.4e-14 against a
+  gradient of order one and the next solve sends the weights to **1e12**. Seven call sites inherited
+  it. **What divergence preserves is the ordering**: on the eight-row design now pinned in the
+  tests, the diverged fit gives seven of eight rows a probability of exactly 0 — three of them
+  positives — and still scores **AUROC 1.0**, the same as the correct fit. The test guarding the
+  function asserted the ordering and the sign of a weight, which are exactly the two properties a
+  divergence leaves alone, so it passed on a broken solver. The repaired tests assert what a
+  divergence cannot conserve: that the weights stay finite, and that the fit never returns a point
+  whose objective is worse than the zero start it began from (the old solver: −4.4e12 against
+  −5.55). **A test written from the quantity a result is read through will pass on the failure that
+  leaves that quantity alone.**
+
 - **The fifth instance of that class, and it is a search: a grep that returns nothing looks
   identical to a thing that is not there (2026-09-17).** Asked what was left to build, I ran
   `ls genomeos/biovm/*methyl*`, got no matches, concluded "no module at all", told the user that the

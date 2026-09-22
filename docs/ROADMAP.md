@@ -2791,6 +2791,38 @@ in order. "Owner" is the session that holds the files today (see §7).
   distinguish "these sub-populations differ" from "too small to say", and here
   it is mostly the second — reported as a defect rather than claimed as a
   heterogeneity finding.
+- **The shared logistic fit was undamped and seven call sites inherited it, and
+  no published number moves (2026-09-22, lane-solver, `9abed00` registration,
+  `b9a5489` repair, 0 requests).** `crispri.logistic_fit` took the whole Newton
+  step, 25 times. Where the classes nearly separate one full step saturates
+  every linear predictor, a saturated row on the wrong side then offers a
+  curvature of **9.4e-14** against a gradient of order one, and the next solve
+  sends the weights to **1e12**. On a random family of ill-conditioned designs
+  the old solver returns a point **worse than the zero start it began from in 64
+  of 3,738 fits (1.7%)**, worst at |w| = 5.0e12; the repaired one loses none.
+  **What makes it a hazard rather than a bug is what divergence preserves: the
+  ordering.** On the eight-row design now pinned in the tests the diverged fit
+  hands seven of eight rows a probability of exactly 0 — three of them positives
+  — and still scores **AUROC 1.0**, the same as the correct fit. The test that
+  guarded the function asserted the ordering and a weight's sign, exactly the
+  two properties a divergence leaves alone, so it passed on a broken solver. The
+  new tests assert what divergence cannot conserve, and two of them fail on the
+  old implementation.
+  **Four call sites read only AUPRC and AUROC, where this would have been
+  invisible; `target_calibration.fit` and its fold are read as probabilities and
+  feed four published result files, where a diverged fit reads as "confident and
+  wrong" rather than as a broken solver.**
+  **Repaired, and nothing moved — checked against the committed copies rather
+  than against figures in a document**, because those figures moved today for
+  other reasons. Four files byte-identical, two identical but for a date stamp,
+  one +550/−0 from another lane's same-day field. The 55,957 top band, the
+  CRISPRi verdict and the held-out AUPRC of 0.6909 all reproduce exactly. The
+  reason is measured rather than assumed: across all 72 real fits the two
+  solvers disagree by at most **3.4e-7** against a largest weight of 27.5. The
+  defect was live and inherited; it had simply never fired on this project's
+  data. **Left knowingly undone**: the second copy of the line search in
+  `target_calibration` is pinned by an equivalence test so it cannot drift, and
+  merging it waits for the staging guard's two-day window.
 - **The second copy of the median node-open threshold, and why it was not a
   defect (2026-09-22, lane-nodes, `1e57e3e` registration, `c6fc229` result).**
   `candidates.py:398` re-derived, line for line and floor for floor, the split
