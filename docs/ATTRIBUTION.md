@@ -5433,6 +5433,12 @@ a reconstruction of it.
 
 ## Pre-registration: band the genome from a curve fitted on the population each band is quoted for (2026-09-22, third)
 
+> *Annotation, 2026-09-22 (fifth), added later and changing nothing below.* This registration's
+> falsifier fired on the axis, and the axis that replaced it was in turn superseded by their union,
+> which is registered separately in `PREREGISTERED_UNION` and measured two sections down. Nothing
+> in this registration is withdrawn: its direction, its count of 34,158 and its thin-stratum rule
+> all survive and are reused unchanged by the union registration.
+
 The section above found that the curve pricing every predicted enhancer target is fitted on 245
 pairs and quotes ×6.85 one step off its own gate, and proposed re-banding the genome as the first
 roadmap row that follows. This registers that re-banding before any target is re-banded, and it
@@ -5645,6 +5651,14 @@ TSS are removed from the banded set. **It is not adopted here**, because it was 
 picking it now would be the same post-hoc choice this lane exists to correct. It is the next
 registration, and it is the row sent to the roadmap.
 
+> *Annotation, 2026-09-22 (fifth), added later and changing nothing above.* That next registration
+> was written and run. The union axis **separates** on two populations that took no part in
+> choosing it, so the refusal here was right to hold it open rather than to kill it — but the same
+> test shows the `1.0000` in the table above is a property of the population and not of the axis:
+> off the gate the identical union stratum reads **0.0895**, a factor of 11 lower. The counts here
+> are over all 612,323 named targets; over the 593,765 actually banded they are 31,838 K562-named,
+> 34,158 above a drop of 0.2, 8,370 both and **57,626 in the union**. See the section below.
+
 **What is not touched.** `sweep()` keeps its output and its keys and the published band table is
 unchanged on disk; the re-banding is a separate result carrying the published band beside the new
 one, on both axes, so a reader can take either and compare. The weights, `CONFIDENCE_BANDS` and
@@ -5652,6 +5666,124 @@ one, on both axes, so a reader can take either and compare. The weights, `CONFID
 `genomeos/web/static/index.html` and `genomeos/cli.py` contain no reference to this result and no
 band label, and the only other consumer in the tree, `scripts/shortlist_in_real_unknown.py`, already
 keys off the drop band at 0.2 and cites the 105 of 105 this section re-measures.
+
+## The union axis, registered before it was fitted: the separation survives, the level does not (2026-09-22, fifth)
+
+The section above measured that the union of the two axes bands 128 of 128 on-gate pairs and
+**refused to adopt it**, because an axis chosen after seeing it win is priced by the search that
+found it. This lane adopts it the right way round: registered first, in
+`target_calibration.PREREGISTERED_UNION`, before a single rate was computed; then fitted.
+`scripts/union_axis.py`, result `union_axis`, **0 AlphaGenome requests**, nothing fetched.
+
+**What the registration had to do that the earlier ones did not.** The axis was chosen after its
+result was seen, and no amount of care undoes that, so the registration separates three questions
+the 128 of 128 runs together and gives each the evidence it can actually have.
+
+| | what it asks | evidence available | status |
+|---|---|---|---|
+| **level** | is the union stratum inside 0.9–1 | only the 285 pairs that chose the axis | registered as a **description**, not a test |
+| **search** | could two empty axes hand the search a stratum this clean | the same 285, permuted | a real test of a null already known false |
+| **separation** | does either arm carry information where nobody looked | off-gate pairs; GTEx eQTLs | the only real test, and it is the one that ran |
+
+The populations were counted before any rate, by functions that never touch `regulated`: on the
+gate 70 / 35 / 23 / 157 over both signals, drop only, track only and neither; off the gate through
+the sweep's own window 19 / 14 / 1,419 / 8,774; genome-wide, of 593,765 banded `any gene` targets,
+8,370 / 25,788 / 23,468 / 536,139, so the union is **57,626 (9.70%)** and neither is 536,139
+(90.30%). 72.6% of the on-gate evidence for this axis is one screen (Gasperini2019, 207 of 285).
+
+**The search is not what produced it.** Permuting the labels with the crossing held at its sizes,
+over all 14 groupings of the four cells the search really ran over: **1 of 20,000 permutations**
+reached a Wilson lower bound of 0.9, p = 0.0001, and the best grouping in the real data is the
+union itself. Registered in advance as nearly worthless, and it is: the null it rejects — that
+neither axis carries information — was already known false on 2026-09-22.
+
+**The separation is real, and the registration predicted the wrong way.** The registered prediction
+was that the off-gate track arm would **not** separate, on the argument that "named on K562" is a
+marker of what a K562 screen could test rather than a mechanism. It separated, on 1,419 pairs that
+took no part in choosing the axis:
+
+| off the gate, through the sweep's own window | pairs | regulated | observed | 95% interval |
+|---|---|---|---|---|
+| track only | 1,419 | 102 | **0.0719** | 0.0596–0.0865 |
+| neither | 8,774 | 195 | 0.0222 | 0.0193–0.0255 |
+| union (either signal) | 1,452 | 130 | **0.0895** | 0.0759–0.1053 |
+
+The intervals clear each other by a wide margin — ×3.2 for the track arm alone, ×4.0 for the union.
+**Recorded as registered: wrong on the prediction, and the arm is not a testability marker.** The
+independent assay agrees, weakly: on the 3,331 banded targets whose elements carry a distilled GTEx
+cis-eQTL, the element's predicted target is among its eGenes for **155 of 261** union targets
+(0.5939, 0.5333–0.6517) against 1,554 of 3,070 neither (0.5062, 0.4885–0.5239). The intervals clear
+by 0.0094 — a ×1.17 effect on a pre-selected index of elements, which is support for a direction and
+nothing more. The third arm was registered in advance as unusable and is: the five non-K562 held-out
+cell lines contribute **8 scored on-gate pairs** out of 2,063, which fail the gate rather than the
+cell.
+
+**And the same test destroys the level.** The union stratum reads **1.0000 on the gate and 0.0895
+off it** — one axis, one definition, two populations, a factor of **11**. The 0.9–1 band is
+therefore not a property of the union axis. It is a property of *union ∧ on the gate ∧ K562 ∧
+tested by a screen*, which is the third time this project has found the same thing on a third axis,
+after the ×6.85 and the ×7. **No population on this disk can confirm that the union stratum sits at
+0.9–1 genome-wide**, and the one independent population that can be read on the same axis says it
+does not sit there.
+
+**The sharpest thing against the banding below, stated because it is ours.** The `track only` cell
+carries 23 pairs, and under the registered rule 23 pairs **buy no band at all** — its own interval,
+0.8569–1.0, spans two. The union stratum clears the rule only by pooling those 23 with the 105 the
+drop axis had already banded. So the 23,468 genome-wide targets the union adds over the drop axis
+rest on evidence the rule refuses when it is read alone. The increment is not priced by the pairs
+that justify the increment, and the next registration should price it that way.
+
+**The verdict, applied as registered rather than reinterpreted.** (a) the search prices below 0.01:
+**yes**. (b) a population that took no part in the choice separates: **yes**, on both the off-gate
+pairs and the eQTLs. (c) the `neither` stratum is one population: **no** — its drop sub-strata read
+0.5714 on 42 pairs, 0.5889 on 90 and 0.7600 on 25, and none of them carries a band of its own. So
+the registered fallback fires: **the union stratum is banded and `neither` is banded 'not calibrated
+here'.** One honest qualification on clause (c): as written it cannot tell *these sub-populations
+differ* from *these sub-populations are too small to say*, and here it is mostly the second. The
+outcome is the conservative one either way, but the clause is a defect in this registration and is
+reported as one rather than claimed as a heterogeneity finding.
+
+**The banding.** `any gene`, of 593,765 targets: **57,626 (9.70%) banded 0.9–1**, 536,139 (90.30%)
+`not calibrated here`. Moves: 536,139 lost their band, 37,333 unchanged, **20,293 up, none down**.
+`coding gene`, of 440,377: 44,775 (10.17%) at 0.9–1, 395,602 (89.83%) refused; 26,375 unchanged,
+18,400 up, none down. Against the two readings already published:
+
+| reading | banded 0.9–1 | refused | of the 55,957 published at 0.9–1 |
+|---|---|---|---|
+| published 2026-09-17 | 55,957 | 0 | — |
+| drop axis (2026-09-22, fourth) | 34,158 (5.8%) | 559,607 | 34,096 keep it, 21,861 uncalibrated |
+| track axis (the falsifier that fired) | 31,838 | 0 | 44,372 fall two bands to 0.5–0.75 |
+| **union axis (here)** | **57,626 (9.70%)** | **536,139** | **37,333 keep it, 18,624 (33.3%) uncalibrated** |
+
+The union's gain over the drop axis is exactly the `track only` cell, 23,468 targets, and its whole
+disagreement with the track axis is that it refuses to price the 536,139 the track axis banded at
+0.5–0.75.
+
+**Coverage, and which failure mode this is nearer.** The question the last two sections leave is
+whether a method refuses too much or aggregates too much. The drop axis banded 5.8% and refused
+94.2%; the track axis banded 100% by giving one number to populations reading 0.58, 0.60 and 0.87.
+**The union axis is squarely in the drop axis's mode**: it bands 9.70% and refuses 90.30%. It buys
+3.9 percentage points of the genome over the drop axis and declines to say anything about the rest,
+which is the right failure to have but is a small return for an axis that looked, on the 285 pairs
+that chose it, like the one that would band everything.
+
+**What would settle the level**, none of it reachable at 0 requests: a CRISPRi screen outside the
+EngreitzLab benchmark with on-gate union pairs; the benchmark's other five cell lines rescored so
+their pairs reach the gate at all (8 of 2,063 do now); or the prospective form — publish the union
+stratum's top targets as a list and have them tested.
+
+**What is not touched.** The published 2026-09-17 table, the drop-axis re-banding and the track-axis
+re-banding all keep their values and keys; the union is a third axis beside them under its own
+result, so all four readings can be held against each other from disk. `CONFIDENCE_BANDS`, the
+fitted weights and `TARGET_FEATURES` do not change. No web UI or CLI hunk: `server.py`,
+`index.html` and `cli.py` hold no reference to this result and no band label. One consumer is worth
+naming — `scripts/shortlist_in_real_unknown.py` keys off a drop of 0.2, and its 24,114 coding
+targets are exactly this census's coding `drop only` + `both` (17,521 + 6,593), so its shortlist is
+the union's magnitude arm and nothing else. Two corrections to the section above, both reported
+rather than quietly fixed: its windowed off-gate table was **training-only**, because the driver
+called `add_features` on one arm, which is why the off-gate population is 10,226 here and 8,549
+there; and its track axis returned `another track` for every off-gate pair, so `pair_track` now
+reads the track at the element and the axis means one thing on both populations. 21 tests.
 
 ## What comes next, in order
 

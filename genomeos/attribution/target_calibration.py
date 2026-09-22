@@ -311,6 +311,151 @@ PREREGISTERED_BANDS = (
 )
 
 
+PREREGISTERED_UNION = (
+    "Registered 2026-09-22, after the two axes were crossed and BEFORE the union of them was fitted "
+    "to anything or used to band a single target. Every count below was computed with no label "
+    "read: `crossing_counts` and `crossing_census` take pairs and elements and return sizes, and "
+    "neither touches `regulated`.\n"
+    "\n"
+    "HOW THIS AXIS WAS CHOSEN, WHICH IS THE WHOLE PROBLEM. On 2026-09-22 the re-banding lane "
+    "measured both axes it had registered -- the predicted K562 deletion drop and the track the "
+    "sweep named the element's target on -- crossed them on the 285 on-gate pairs, and found that "
+    "three of the four cells are at 100%: 70 of 70 with both signals, 35 of 35 with the drop alone, "
+    "23 of 23 with the track alone, against 96 of 157 with neither. Their union is 128 of 128, "
+    "1.0000 [0.9709, 1.0]. It refused to adopt that, and this registration exists because of the "
+    "refusal. The axis was chosen AFTER its result was seen, on the only 285 pairs that can be read, "
+    "so the interval it reports is the interval of the subset that won a search, and the search is "
+    "not in the interval. Nothing below is allowed to forget this.\n"
+    "\n"
+    "THE AXIS, AND HOW A TARGET IS ASSIGNED TO A STRATUM. Two binary signals, both already computed "
+    "for every swept target and every benchmark pair with no extra data. (a) MAGNITUDE: the "
+    "predicted deletion drop exceeds UNION_DROP = 0.2, which is the boundary between the two bottom "
+    "and the two top `DROP_BANDS` strata and is the split the 2026-09-22 registration already named. "
+    "(b) TRACK: the element's predicted target was named on the K562 track, the one cell line this "
+    "curve speaks for. A target is in the `union` stratum if either signal is present and in "
+    "`neither` if both are absent; `crossing` keeps all four cells (`both`, `drop only`, "
+    "`track only`, `neither`) so the union's own homogeneity can be read. For a benchmark pair the "
+    "track is read at the element (`pair_track`): on the gate the pair's gene IS the element's "
+    "predicted target so this is exactly the axis of 2026-09-22, and off the gate it is the only "
+    "reading that exists and is also precisely what a swept target carries, so the axis means one "
+    "thing on both populations instead of collapsing to a constant off the gate. The drop for a "
+    "benchmark pair is read in that pair's own screen cell line; off the gate it is the sweep's own "
+    "windowed value, because the compact table has nothing to say about a gene it did not name.\n"
+    "\n"
+    "THE POPULATIONS AND THEIR SIZES, COUNTED BEFORE ANY RATE. On the gate, K562, the 285 pairs "
+    "that suggested the axis (245 training + 40 held out): both 70, drop only 35, track only 23, "
+    "neither 157; union 128. Their screens: Gasperini2019 207, Nasser2021 28, Xie 19, "
+    "Schraivogel2020 10, Morris 8, Klann 7, K562_DC_TAP 5, Reilly 1 -- so 72.6% of the evidence for "
+    "this axis is one screen. Off the gate, read through the sweep's own window, 10,226 pairs: both "
+    "19, drop only 14, track only 1,419, neither 8,774; union 1,452. (That 10,226 pools both "
+    "benchmark arms. The 2026-09-22 driver called `add_features` on the training arm only in its "
+    "windowed pass, so `scored` dropped every held-out pair and its windowed off-gate table was "
+    "training-only; corrected here.) Held out in the five cell lines that are not K562, on the gate "
+    "and scored: 8 pairs -- drop only 2, track only 1, neither 5 -- out of 2,063 non-K562 held-out "
+    "pairs (WTC11 1,602, HCT116 335, Jurkat 64, GM12878 62), which fail the gate rather than the "
+    "cell. Genome-wide, `any gene`, of 593,765 banded targets: both 8,370, drop only 25,788, track "
+    "only 23,468, neither 536,139 -- union 57,626 (9.70%), neither 536,139 (90.30%). `coding gene`, "
+    "of 440,377: both 6,593, drop only 17,521, track only 20,661, neither 395,602; union 44,775 "
+    "(10.17%). These reconcile with 2026-09-22's 32,597 K562-named and 35,217 above a drop of 0.2, "
+    "which counted all 612,323 swept targets; over the 593,765 that carry a GENCODE TSS and are "
+    "actually banded the same counts are 31,838 and 34,158, and 34,158 is to the digit the count "
+    "that registration predicted for its two top strata. On the elements GTEx has distilled eQTLs "
+    "for: 6,619 elements carry a hit, 5,100 of them are in the all-enhancer table, and they hold "
+    "3,331 banded `any gene` targets -- both 43, drop only 100, track only 118, neither 3,070; "
+    "union 261 -- and 2,758 `coding gene` targets, union 228.\n"
+    "\n"
+    "THE RULE, UNCHANGED FROM 2026-09-22. A stratum is given a numeric band only if it holds at "
+    "least MIN_POOLED_FOR_A_BAND = 30 pooled pairs and the 95% Wilson interval of its pooled "
+    "observed rate lies inside a single one of the eight `CONFIDENCE_BANDS`. Otherwise its targets "
+    "are banded NOT_CALIBRATED = 'not calibrated here' and carry the stratum's count, rate and "
+    "interval in place of a number. Training and held-out pairs are pooled for the rate, declared "
+    "here for the same reason as before: the quantity bounded is a base rate, not a fitted curve's "
+    "error, and the 40 held-out pairs alone bound nothing.\n"
+    "\n"
+    "THE CLAUSE THAT MATTERS: WHAT IS A TEST HERE AND WHAT IS NOT. The 128 of 128 runs three "
+    "questions together, and they are separated here because only one of them has evidence that is "
+    "not the hypothesis restated.\n"
+    "  (1) THE LEVEL -- is the union stratum's rate inside 0.9-1. The only pairs on which this can "
+    "be read are the 285 that chose the axis. A hypothesis and its confirmation cannot be the same "
+    "128 pairs, so THIS IS REGISTERED AS A DESCRIPTION AND NOT AS A TEST. No prediction is made for "
+    "it, no falsifier is offered for it, and its interval is reported with the statement that it is "
+    "the interval of a subset selected for having exactly that interval. Whatever it reads, it "
+    "prices no genome-wide target.\n"
+    "  (2) THE SEARCH -- could a crossing this clean come out of two axes that carry nothing. This "
+    "is priced by permuting the labels over the 285 with the four cells held at their sizes, and "
+    "taking as the statistic the best Wilson lower bound any grouping of the four cells reaches "
+    "under the adoption rule, so the whole family the search really ran over is inside the null. It "
+    "is a genuine test of 'neither axis carries information'. It is ALSO nearly worthless, and that "
+    "is registered in advance: the drop axis was registered and measured to separate on 2026-09-22, "
+    "so that null is already known to be false, and a small p here is not evidence for the union "
+    "over the drop axis alone. It bounds the search; it does not choose the axis.\n"
+    "  (3) THE SEPARATION -- does either arm carry information on a population that took no part in "
+    "choosing it. This is the only real test available, and it is run on populations that were not "
+    "looked at when the union was picked.\n"
+    "\n"
+    "WHAT INDEPENDENT EVIDENCE WOULD LOOK LIKE, AND WHAT IS REACHABLE AT 0 REQUESTS. It would be a "
+    "set of measured element-gene pairs, in the union stratum, that took no part in this choice, "
+    "and enough of them to bound a rate inside one published band. Reachable at 0 requests, in "
+    "descending order of what it can settle: (i) THE OFF-GATE PAIRS, 1,452 union against 8,774 "
+    "neither, read through the sweep's own window; the drop arm there is already known to separate "
+    "(2026-09-22 measured 0.0091 at drop = 0 against 84.6% and 83.3% above 0.1) so it is not news, "
+    "but the TRACK arm's 1,419 off-gate pairs were never looked at and are the sharpest thing this "
+    "lane can ask. (ii) THE GTEx eQTL ARM, an independent assay: 261 union against 3,070 neither "
+    "banded targets on elements with distilled cis-eQTLs, asking how often the element's predicted "
+    "target is among its eGenes. Three caveats registered in advance -- the 6,619 elements were "
+    "distilled against a pre-selected index of 9,286, not a random draw from the sweep; the label "
+    "is association in bulk GTEx tissue, not a CRISPRi call, so its base rate is not this one's; "
+    "and GTEx has no K562, so the track arm is being asked a cross-context question. It prices "
+    "direction and nothing else. (iii) THE NON-K562 HELD-OUT PAIRS, registered in advance as "
+    "UNUSABLE: 8 scored on-gate pairs cannot bound anything, and saying so is the result for that "
+    "arm. NOT reachable at 0 requests, and named here as what would actually settle the level: a "
+    "CRISPRi screen outside the EngreitzLab benchmark with on-gate union pairs; the benchmark's "
+    "other cell lines rescored so their pairs reach the gate at all; or the prospective form, which "
+    "is to publish the union stratum's top targets as a list and have them tested. The level of "
+    "this axis is not confirmable from anything on this disk, and if the separation tests come back "
+    "empty then the honest result of this lane is that the union axis cannot be adopted yet.\n"
+    "\n"
+    "REGISTERED PREDICTIONS AND WHAT EACH OUTCOME MEANS.\n"
+    "  P1 (level): none registered; it is a description.\n"
+    "  P2 (search): the permutation prices the search at p < 0.01. If it does not, the crossing is "
+    "inside what the search can produce from noise and the axis is dead on the spot.\n"
+    "  P3 (off the gate, the track arm): the 1,419 track-only pairs are predicted NOT to separate "
+    "from the 8,774 neither pairs with non-overlapping 95% intervals. The reason for expecting a "
+    "null is stated in advance: 'named on K562' is a property of the element's top target, and the "
+    "on-gate association is as easily an account of which pairs a K562 screen could test as of a "
+    "mechanism. If the intervals DO separate, the track arm carries information where it was never "
+    "looked at and the union has one arm that is more than a testability marker; if they do not, "
+    "the union's 23 track-only pairs are a selection artefact and the union collapses to the drop "
+    "axis, which was already registered.\n"
+    "  P4 (the union's own falsifier): the `neither` stratum is predicted to be HETEROGENEOUS on the "
+    "drop axis that was registered first -- its sub-strata were measured at 0.5789, 0.5663 and "
+    "0.8750 on the training 245, which no single band contains. If that holds, then banding "
+    "`neither` with one number aggregates populations with different rates over 536,139 targets, "
+    "90.30% of the genome, which is precisely the failure the track axis was refused for, and the "
+    "union axis does not fix the genome: it fixes 9.70% of it and repeats the mistake on the rest.\n"
+    "  P5 (eQTL): the union stratum is predicted to carry its predicted target among the element's "
+    "eGenes more often than `neither` does. A separation supports the direction of the axis on an "
+    "independent assay. No outcome here licenses the 0.9-1 level.\n"
+    "\n"
+    "THE ADOPTION RULE, FIXED NOW. The union axis is adopted and the genome banded from it only if "
+    "(a) P2 holds, AND (b) at least one population that took no part in the choice separates with "
+    "non-overlapping 95% intervals, AND (c) the `neither` stratum is homogeneous enough for one "
+    "number -- every drop sub-stratum of it with at least 30 pairs has its interval inside the band "
+    "the pooled `neither` rate names. If (c) fails but (a) and (b) hold, only the union stratum is "
+    "banded and `neither` is banded 'not calibrated here', which bands 9.70% of the genome and "
+    "refuses 90.30% of it; that is the registered fallback and it is not a failure. If (b) fails, "
+    "NOTHING is banded from this axis and the lane reports that the union cannot be confirmed from "
+    "anything on this disk. Under every outcome the union stratum's 0.9-1 is written down as a "
+    "description of the 128 pairs that chose it.\n"
+    "\n"
+    "WHAT IS NOT TOUCHED. The published 2026-09-17 band table and the 2026-09-22 re-banding are "
+    "annotated and kept, never overwritten. `sweep()`, `reband()` on the `drop` and `track` axes, "
+    "the eight `CONFIDENCE_BANDS` and the fitted weights do not change; the union is a third axis "
+    "beside them under its own key, so all four readings can be held against each other from disk. "
+    "0 AlphaGenome requests: every number here is cached."
+)
+
+
 # ------------------------------------------------------------------------------------------
 # Features: what the benchmark and the sweep both have
 # ------------------------------------------------------------------------------------------
@@ -1242,6 +1387,168 @@ def element_tissue(el: dict[str, Any], key: str) -> str:
     return CELL if ((el.get(key) or {}).get("tissue") or "?") == CELL else "another track"
 
 
+UNION_DROP = 0.2  # the drop above which a target sits in the union axis's magnitude arm
+UNION_CELLS = ("both", "drop only", "track only", "neither")
+UNION_STRATA = ("union", "neither")
+
+
+def union_cell(drop: float, track: str) -> str:
+    """Which of the four cells of the two measured axes crossed a target or a pair sits in."""
+    a, b = drop > UNION_DROP, track == CELL
+    if a and b:
+        return "both"
+    if a:
+        return "drop only"
+    return "track only" if b else "neither"
+
+
+def union_stratum_of(drop: float, track: str) -> str:
+    """The two-stratum union axis: either signal present, or neither."""
+    return "neither" if union_cell(drop, track) == "neither" else "union"
+
+
+def pair_track(p: crispri.Pair, table: crispri.DeletionTable) -> str:
+    """The track the sweep named this pair's element's target on, read the element's way.
+
+    On the gate the pair's gene *is* that target, so this returns exactly what the 2026-09-22
+    alternative axis read. Off the gate the pair's gene is not the element's target and only the
+    element-level reading exists — which is also precisely what a swept target carries, so the axis
+    means the same thing on both populations instead of collapsing to one value off the gate.
+    """
+    el = matched_element(table.overlapping(p.chrom, p.start, p.end), p.gene)
+    if el is None:
+        return "another track"
+    for k in ("predicted_coding", "predicted"):
+        q = el.get(k)
+        if q and q.get("gene") == p.gene:
+            return CELL if (q.get("tissue") or "?") == CELL else "another track"
+    return element_tissue(el, "predicted")
+
+
+def pair_union_cell(p: crispri.Pair, table: crispri.DeletionTable) -> str:
+    return union_cell(p.features["deletion_drop"], pair_track(p, table))
+
+
+def pair_union_stratum(p: crispri.Pair, table: crispri.DeletionTable) -> str:
+    return union_stratum_of(p.features["deletion_drop"], pair_track(p, table))
+
+
+def crossing_counts(pairs: list[crispri.Pair], table: crispri.DeletionTable) -> dict[str, int]:
+    """How many pairs sit in each cell of the crossing. Counts only: no label is read here."""
+    acc: Counter[str] = Counter()
+    for p in pairs:
+        acc[pair_union_cell(p, table)] += 1
+    return {c: acc.get(c, 0) for c in UNION_CELLS}
+
+
+def crossing_census(
+    chroms: tuple[str, ...] = CHROMS,
+    elements: Path = ELEMENTS,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+    progress: Any = None,
+) -> dict[str, Any]:
+    """How many swept targets sit in each cell of the crossing, genome-wide.
+
+    No weight is fitted and no label is read, so this can be counted before the registration is
+    written -- which is the point: a registration that states its population sizes in advance has
+    to be able to count them without touching the outcome.
+    """
+    per: dict[str, Any] = {}
+    for chrom in chroms:
+        p = elements / f"{chrom}.json"
+        if not p.exists():
+            continue
+        els = json.loads(p.read_text())
+        starts = gene_starts(chrom, reference)
+        classes = registry_classes(chrom, results) if (results / f"ccres_{chrom}.bed.gz").exists() else {}
+        row: dict[str, Any] = {}
+        for key, label in (("predicted", "any gene"), ("predicted_coding", "coding gene")):
+            acc: Counter[str] = Counter()
+            for el in els:
+                r = element_row(el, key, starts, classes)
+                if r is None or "missing" in r:
+                    continue
+                acc[union_cell(r["drop"], element_tissue(el, key))] += 1
+            row[label] = {c: acc.get(c, 0) for c in UNION_CELLS}
+        per[chrom] = row
+        if progress:
+            progress(f"{chrom}: {sum(row['any gene'].values())} targets counted")
+    totals: dict[str, Any] = {}
+    for label in ("any gene", "coding gene"):
+        acc = Counter()
+        for v in per.values():
+            acc.update(v[label])
+        cells = {c: acc.get(c, 0) for c in UNION_CELLS}
+        totals[label] = {
+            "targets": sum(cells.values()),
+            "by_crossing_cell": cells,
+            "union": sum(v for k, v in cells.items() if k != "neither"),
+            "neither": cells["neither"],
+        }
+    return {"genome_wide": totals, "per_chromosome": per}
+
+
+def eqtl_separation(
+    hits: dict[str, list[dict[str, Any]]],
+    symbol_of: dict[str, str],
+    chroms: tuple[str, ...] = CHROMS,
+    elements: Path = ELEMENTS,
+    reference: Path = REFERENCE,
+    progress: Any = None,
+) -> dict[str, Any]:
+    """Does the union stratum's predicted target turn up among the element's measured eGenes?
+
+    An independent assay, and the only one on this disk that speaks about *which gene* rather than
+    whether a sequence is an enhancer: a significant cis-eQTL inside an element ties a gene to it in
+    hundreds of donors. The label is association in bulk GTEx tissue rather than a CRISPRi call, so
+    this prices the direction of the axis and never the level of a band; the registration says so,
+    along with the fact that the distilled elements are a pre-selected index rather than a draw.
+    """
+    per: dict[str, dict[str, list[int]]] = {
+        label: {c: [0, 0] for c in UNION_CELLS} for label in ("any gene", "coding gene")
+    }
+    for chrom in chroms:
+        p = elements / f"{chrom}.json"
+        if not p.exists():
+            continue
+        els = [e for e in json.loads(p.read_text()) if f"{chrom}:{e['start']}-{e['end']}" in hits]
+        if not els:
+            continue
+        starts = gene_starts(chrom, reference)
+        for el in els:
+            egenes = {
+                symbol_of.get(h["gene_id"], h["gene_id"]) for h in hits[f"{chrom}:{el['start']}-{el['end']}"]
+            }
+            for key, label in (("predicted", "any gene"), ("predicted_coding", "coding gene")):
+                row = element_row(el, key, starts, {})
+                if row is None or "missing" in row:
+                    continue
+                cell = union_cell(row["drop"], element_tissue(el, key))
+                per[label][cell][0] += 1
+                per[label][cell][1] += int((el.get(key) or {}).get("gene") in egenes)
+        if progress:
+            progress(f"{chrom}: {len(els)} elements with an eQTL")
+    out: dict[str, Any] = {}
+    for label, cells in per.items():
+        n = sum(v[0] for c, v in cells.items() if c != "neither")
+        k = sum(v[1] for c, v in cells.items() if c != "neither")
+        out[label] = {
+            "by crossing cell": {c: observed_band(kk, nn, min_pooled=1) for c, (nn, kk) in cells.items()},
+            "union": observed_band(k, n, min_pooled=1),
+            "neither": observed_band(cells["neither"][1], cells["neither"][0], min_pooled=1),
+        }
+        out[label]["separated"] = separated(out[label]["union"], out[label]["neither"])
+    return out
+
+
+def separated(a: dict[str, Any], b: dict[str, Any]) -> bool | None:
+    """Do two measured rates have non-overlapping 95% intervals? None when either has no pairs."""
+    if not a.get("pairs") or not b.get("pairs"):
+        return None
+    return bool(a["ci95"][0] > b["ci95"][1] or b["ci95"][0] > a["ci95"][1])
+
+
 def move_of(old: str, new: str) -> str:
     """Which way a target's band went: `lost`, `up`, `down` or `unchanged`."""
     if new == NOT_CALIBRATED:
@@ -1265,6 +1572,10 @@ def reband_chromosome(
     `axis` picks which population a target belongs to: `drop`, the registered axis, is the predicted
     K562 deletion drop in its `DROP_BANDS` stratum; `track` is the alternative the registration named
     as the thing that would replace it, the track the sweep named this element's target on.
+
+    Two more since 2026-09-22: `union` is the two-stratum axis registered as `PREREGISTERED_UNION`,
+    either signal present or neither, and `crossing` keeps the same two axes as four cells so the
+    union stratum's own homogeneity can be read rather than assumed.
     """
     p = elements / f"{chrom}.json"
     if not p.exists():
@@ -1279,6 +1590,7 @@ def reband_chromosome(
         moves: Counter[str] = Counter()
         transitions: Counter[str] = Counter()
         by_tissue: Counter[str] = Counter()
+        by_stratum: Counter[str] = Counter()
         total = 0
         for el in els:
             row = element_row(el, key, starts, classes)
@@ -1288,12 +1600,17 @@ def reband_chromosome(
             old = band_of(sigmoid(crispri.logistic_score(weights["target"], xt)[0]))
             tissue = element_tissue(el, key)
             s = tissue if axis == "track" else drop_band_label(row["drop"])
+            if axis == "union":  # registered 2026-09-22, beside the two axes above, not over them
+                s = union_stratum_of(row["drop"], tissue)
+            elif axis == "crossing":
+                s = union_cell(row["drop"], tissue)
             new = stratum_band.get(s, {}).get("band", NOT_CALIBRATED)
             published[old] += 1
             rebanded[new] += 1
             moves[move_of(old, new)] += 1
             transitions[f"{old} -> {new}"] += 1
             by_tissue[tissue] += 1
+            by_stratum[s] += 1
             total += 1
         out[label] = {
             "targets": total,
@@ -1302,6 +1619,7 @@ def reband_chromosome(
             "moves": dict(sorted(moves.items())),
             "transitions": dict(sorted(transitions.items())),
             "named_on_track": dict(sorted(by_tissue.items())),
+            "by_stratum": dict(sorted(by_stratum.items())),
         }
     return out
 
@@ -1327,6 +1645,7 @@ def reband(
         acc = {
             k: Counter() for k in ("published_bands", "rebanded", "moves", "transitions", "named_on_track")
         }
+        acc["by_stratum"] = Counter()  # added 2026-09-22: coverage has to be readable whatever the bands are
         total = 0
         for v in per.values():
             d = v.get(label)
