@@ -15,6 +15,7 @@ off the data, which makes it the rare small-n result that does not depend on n.
 `genomeos/organism/forge.py:143` writes
 
 ```python
+# fmt: off
 confidence=0.3,
 ```
 
