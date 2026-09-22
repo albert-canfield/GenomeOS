@@ -1428,8 +1428,47 @@ in order. "Owner" is the session that holds the files today (see §7).
   same kind §7.3 removed for fates. Until it lands both generators state both
   numbers on every line, which is honest but is a sentence standing in for a
   construct.
+- **The two things `542d613` left open, settled and the shipped read left alone
+  (2026-09-22, lane-worm2, `dddda7b` registration, `d5215bf` result).**
+  **The 332 → 414 move in cells claimed is §7.5 `recheck: crossings`**
+  (`9d42485`) and nothing in area E's program, which is byte-identical in the
+  measuring arm: `recheck="none"` reproduces **332 exactly**, 82 cells join, all
+  82 claimed-and-right and **not one wrong**, and the score is 522 either way.
+  The mechanism is the lock rather than luck — the lookup writes the terminal
+  type at the cell's birth, `commitment terminal_fate` is established at the end
+  of that same decision point, and `_pick_fate` thereafter refuses any decision
+  whose target differs. **250 of the 414 claimed cells fire only at a later
+  crossing, every one already committed to the very type the rule then names.**
+  So the added cells were decided before the factors were asked, and the score
+  cannot see them because there is nothing there to see.
+  **`mean(lineage)` wins every number this area has published and the shipped
+  read does not change.** It takes honest credit 392/383 against 381/374,
+  precision 0.947/0.905 against 0.920/0.839, and the fallback score 533/515
+  against 522/483 — and it **loses free credit 56 to 136**, because 354 of its
+  414 claims are made after the fate is locked, against 164 that fire at the
+  cell's own birth under `exposure`. A fraction of a growing window crosses its
+  threshold later than an absolute total crosses 15 minutes. The generous
+  reading of "free" orders them the same way, 263 to 299.
+  **The registration named that trap before the run, in its own words**: no
+  factor rule has ever decided a fate the lineage had not already written, 414
+  of 414, so a read that scores higher while that count stays at **0** has not
+  made the factors decide one more thing — it has agreed with the answer sheet
+  more often on cells already filled in. Both reads decide 0, and **no read can
+  move that**, because every rule is guarded on a terminal `cell_type` that only
+  the lookup sets. All six registered predictions held and nothing in the
+  program was rewritten; both numbers are published side by side.
+  **Four numbers now belong together** and the doc prints them that way: 522
+  with the fallback, 381 honest, 136 free, **0 decided without the lookup having
+  written the fate first**. The metric had removed the lookup as a fallback and
+  not as a lock, and the second borrowing is the larger one.
+  **Next in this area, and it is not a read choice**: the terminality gate — 44
+  of 555 when the lookup's fates are deleted and the guard opened, with more
+  non-terminal cells claimed than terminal ones. A rule set that can say *when*
+  a cell is done dividing, not only what it becomes, is the next real
+  measurement here.
 - **Owner.** genomeos-d3 (from 2026-09-15; genomeos-d2, genomeos-d1 and
-  genomeos-73 before).
+  genomeos-73 before); **ownerless since that session ended, and lane-worm2 took
+  the two open items on 2026-09-22.**
 
 ### F. Cancer and therapeutics
 
