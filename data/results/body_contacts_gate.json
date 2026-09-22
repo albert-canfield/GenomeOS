@@ -1,0 +1,32 @@
+{
+  "result": "body_contacts_gate",
+  "date": "2026-09-14",
+  "runs": 200,
+  "noise_on": {
+    "exactly_one_anchor": 200,
+    "winners": {
+      "Z4.aaa": 104,
+      "Z1.ppp": 96
+    },
+    "first_cell_share": 0.48,
+    "both_or_neither": 0
+  },
+  "noise_off": {
+    "exactly_one_anchor": 0,
+    "max_delta_gap": 0.0,
+    "fates": {
+      "Progenitor+Progenitor": 200
+    }
+  },
+  "daughters_swapped": {
+    "same_winner_per_seed": 200,
+    "winners": {
+      "Z4.aaa": 104,
+      "Z1.ppp": 96
+    }
+  },
+  "seconds": 31.4,
+  "pass": true,
+  "reference": "area E, genomeos/organism/lateral.py: 198 of 200 diverge, first cell 51% (noise sd 0.02)",
+  "note": "the Body's noise is multiplicative on every network species (Euler-Maruyama, per-cell streams seeded by run seed and cell name); Collier's reference adds Gaussian noise to Delta only, so the comparison is qualitative: divergence, balance and order-independence, not the exact rates"
+}

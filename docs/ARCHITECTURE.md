@@ -118,6 +118,13 @@ an individual's chromosome is a path; `fetch(locus)` is the contract that
 must survive that change. Diploid genomes are two `Genome` objects labelled
 `maternal` / `paternal` until phased-graph support lands.
 
+Large public files are read, not downloaded: two standard-library readers
+fetch byte ranges over HTTP and decode only what a question needs,
+`attribution/bigwig.py` for bigWig tracks (a 9.6 GB constraint track costs a
+chromosome tens of megabytes) and `genome/bam_range.py` for indexed BAMs (a
+600 GB alignment costs a telomere estimate 218 MB). Whatever is kept is the
+distilled answer under `data/knowledge` or `data/results`, never the file.
+
 ## 8. Resolution levels
 
 Simulating every molecule of every cell is impossible. BioVM will let each
@@ -179,3 +186,41 @@ The step that turns the language into a runtime is the v0.3 program layer:
 breakpoints, observe, assert, report, fork and compare), executed by a small
 scheduler that maps clauses onto the engines. After that, the engine can be
 packaged separately with its own tests, and GenomeOS becomes its first user.
+
+### 10.1 The engine leaves home, and it runs (2026-09-15)
+
+`tests/test_engine_boundary.py` shows that no engine file *imports* the
+application. That is a weaker claim than the milestone's, which is that the
+engine subtree is **complete**: that nothing it needs is left behind when the
+rest of the project is not there. Only building it proves that, so
+`scripts/package_engine.py` builds it, and `tests/test_engine_package.py` keeps
+it true.
+
+It copies the Apache-2.0 half — `lang`, `ir`, `runtime`, `std` and the three
+loose modules (`coords`, `version`, `bio`) — into a package called `biolang`,
+rewrites its imports to that name, and gives it a `pyproject.toml` of its own
+declaring **Apache-2.0 and no dependencies** (the heavy engines stay optional
+extras, as rule 5 above says). It then runs that package in a Python started
+with `-S`, from a directory holding nothing else: **no site-packages, so the
+venv where GenomeOS is installed is not on the path and `import genomeos` fails
+outright.** Anything the engine still needed from the other half would fail
+there rather than being quietly satisfied.
+
+**Result, 2026-09-15: it runs. 31 files, 20 with imports rewritten, no
+dependencies.** In that interpreter: GenomeOS is not importable; every module in
+the package imports; all four verbs work (`check`, `compile`, `run`, `test`); the
+standard library's six `.bio` modules test themselves; and an organism program
+runs, so the Body is exercised and not only the network. The engine's own test
+set is the toolchain's own idiom — programs testing themselves — which is what
+lets it ship without the application's pytest suite.
+
+Two things the build found, both now fixed: the engine named two application
+modules in docstrings (`genomeos.molecules.compiler` and
+`genomeos.genome.variants`), which import nothing and break no run but point at
+something that is not there in a package of its own. The packaging script scans
+for such references and the test fails on any new one.
+
+What is deliberately *not* done: the copy is generated rather than the tree being
+split, so `genomeos/` remains one repository with one history. Splitting it is a
+release decision, not an engineering one, and the generated package is the proof
+that the decision is available whenever it is wanted.

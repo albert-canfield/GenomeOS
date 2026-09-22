@@ -1,0 +1,420 @@
+{
+  "result": "celegans_fate_read_choice",
+  "date": "2026-09-22",
+  "question": "should the worm's fate rules read exposure(lineage) or mean(lineage), and what moved the cells a factor rule fires on from 332 to 414 with the score unchanged?",
+  "metric": {
+    "honest": "terminal fates a factor rule set and got right; no credit for a lookup answer",
+    "decided_a_fate_the_lookup_had_not": "claimed cells the lookup's own fate_<cell> decision had not already fired on -- the count the bar is on",
+    "free_credit": "honest minus the claimed-and-right cells on which the cell was already committed to the very type the rule named, so no other answer was reachable"
+  },
+  "the_332_to_414_move": {
+    "cells_claimed_with_the_crossing_re_decisions": 414,
+    "cells_claimed_without_them": 332,
+    "score_with_the_lookup_as_fallback": [
+      522,
+      522
+    ],
+    "honest_credit": [
+      381,
+      299
+    ],
+    "claimed_and_wrong": [
+      33,
+      33
+    ],
+    "decided_a_fate_the_lookup_had_not": [
+      0,
+      0
+    ],
+    "cells_only_the_crossings_arm_claims": 82,
+    "cells_only_the_recheck_none_arm_claims": 0,
+    "of_the_added_cells_claimed_and_right": 82,
+    "of_the_added_cells_claimed_and_wrong": 0,
+    "the_added_cells": [
+      "ABalaaaarlp",
+      "ABalaaapalr",
+      "ABalaappapa",
+      "ABalaapppaa",
+      "ABalapaaapa",
+      "ABalapaappp",
+      "ABalapapapp",
+      "ABalapappap",
+      "ABalapapppa",
+      "ABalappappa",
+      "ABalapppapp",
+      "ABalapppppa",
+      "ABalpaapppa",
+      "ABalpaapppp",
+      "ABalpapaaap",
+      "ABalpapapaa",
+      "ABalpapppaa",
+      "ABalppapapa",
+      "ABalpppaaaa",
+      "ABarapaappp",
+      "ABarapapapp",
+      "ABarapappaa",
+      "ABarappaapa",
+      "ABarappapaa",
+      "ABarapppaaa",
+      "ABarpaapaa",
+      "ABarpaapap",
+      "ABarpaappa",
+      "ABarpaappp",
+      "ABarpapapa",
+      "ABarpapapp",
+      "ABarpappaa",
+      "ABarpappap",
+      "ABarpapppa",
+      "ABarpppapa",
+      "ABplaaaapa",
+      "ABplaaaapp",
+      "ABplaaapaa",
+      "ABplaaapap",
+      "ABplaaappa",
+      "ABplaapaapa",
+      "ABplaapappa",
+      "ABplappppa",
+      "ABplpaaapaa",
+      "ABplpapappa",
+      "ABplpapappp",
+      "ABplpappaaa",
+      "ABplpapppap",
+      "ABplpppapap",
+      "ABplppppaaa",
+      "ABplppppppp",
+      "ABpraapaapa",
+      "ABpraapappa",
+      "ABprappppa",
+      "ABprpapaapa",
+      "ABprpapaapp",
+      "ABprpapapap",
+      "ABprpapappa",
+      "ABprpapappp",
+      "ABprpappaap",
+      "ABprpppapap",
+      "ABprppppaaa",
+      "ABprppppapp",
+      "ABprppppppp",
+      "Caaaaa",
+      "Caaaap",
+      "Cpaaaa",
+      "Cpaapp",
+      "MSaaaaapaa",
+      "MSaaaapaa",
+      "MSapaaap",
+      "MSapapap",
+      "MSapappa",
+      "MSapappp",
+      "MSappapp",
+      "MSpaaaaaa",
+      "MSpaaapaa",
+      "MSpappaa",
+      "MSpappap",
+      "MSppaaap",
+      "MSppapap",
+      "MSpppapp"
+    ],
+    "crossings_taken": [
+      1057,
+      0
+    ],
+    "the_same_under_mean": {
+      "claimed": [
+        414,
+        285
+      ],
+      "honest": [
+        392,
+        263
+      ],
+      "with_lookup_fallback": [
+        533,
+        533
+      ]
+    },
+    "so": "the 82 cells the crossing re-decisions add are claimed 82 right and 0 wrong, and the published score is 522 either way. A cell whose fate the lookup wrote at its birth is committed to that type, and _pick_fate refuses any decision naming another, so a factor rule firing at a later crossing can only re-assert the type already on the cell. The score cannot see the move because there is nothing there to see: the added cells were decided by the lookup and locked before the factors were asked."
+  },
+  "arms": {
+    "exposure(lineage) >= 15 (shipped) | recheck=crossings": {
+      "cells": 555,
+      "claimed": 414,
+      "claimed_right": 381,
+      "claimed_wrong": 33,
+      "abstained": 141,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 414,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -33,
+      "with_lookup_fallback": 522,
+      "honest": 381,
+      "honest_fraction": 0.6865,
+      "precision": 0.9203,
+      "confusion": {
+        "neuron->Hypodermis": 14,
+        "neuron->Muscle": 4,
+        "other->Neuron": 4,
+        "coelomocyte->Muscle": 4,
+        "sheath->Neuron": 2,
+        "socket->Hypodermis": 2,
+        "muscle->Neuron": 1,
+        "excretory->Muscle": 1,
+        "gland->Neuron": 1
+      },
+      "when_the_rule_fired": {
+        "claimed": 414,
+        "fired_only_at_the_cell_s_birth": 164,
+        "fired_again_at_a_crossing": 250,
+        "already_committed_to_the_type_the_rule_named": 250,
+        "of_those_right": 245,
+        "of_those_wrong": 5
+      },
+      "rechecks": 1057,
+      "recheck": "crossings"
+    },
+    "exposure(lineage) >= 15 (shipped) | recheck=none": {
+      "cells": 555,
+      "claimed": 332,
+      "claimed_right": 299,
+      "claimed_wrong": 33,
+      "abstained": 223,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 332,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -33,
+      "with_lookup_fallback": 522,
+      "honest": 299,
+      "honest_fraction": 0.5387,
+      "precision": 0.9006,
+      "confusion": {
+        "neuron->Hypodermis": 14,
+        "neuron->Muscle": 4,
+        "other->Neuron": 4,
+        "coelomocyte->Muscle": 4,
+        "sheath->Neuron": 2,
+        "socket->Hypodermis": 2,
+        "muscle->Neuron": 1,
+        "excretory->Muscle": 1,
+        "gland->Neuron": 1
+      },
+      "when_the_rule_fired": {
+        "claimed": 332,
+        "fired_only_at_the_cell_s_birth": 332,
+        "fired_again_at_a_crossing": 0,
+        "already_committed_to_the_type_the_rule_named": 0,
+        "of_those_right": 0,
+        "of_those_wrong": 0
+      },
+      "rechecks": 0,
+      "recheck": "none"
+    },
+    "exposure(lineage) >= 15 (shipped) | held out by founder sublineage": {
+      "cells": 555,
+      "claimed": 446,
+      "claimed_right": 374,
+      "claimed_wrong": 72,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 446,
+      "honest": 374,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "precision": 0.8386,
+      "with_lookup_fallback": 483
+    },
+    "mean(lineage) >= 0.25 | recheck=crossings": {
+      "cells": 555,
+      "claimed": 414,
+      "claimed_right": 392,
+      "claimed_wrong": 22,
+      "abstained": 141,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 414,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -22,
+      "with_lookup_fallback": 533,
+      "honest": 392,
+      "honest_fraction": 0.7063,
+      "precision": 0.9469,
+      "confusion": {
+        "hypoderm->Neuron": 7,
+        "neuron->Hypodermis": 4,
+        "socket->Neuron": 3,
+        "muscle->Neuron": 3,
+        "sheath->Neuron": 3,
+        "excretory->Neuron": 2
+      },
+      "when_the_rule_fired": {
+        "claimed": 414,
+        "fired_only_at_the_cell_s_birth": 60,
+        "fired_again_at_a_crossing": 354,
+        "already_committed_to_the_type_the_rule_named": 354,
+        "of_those_right": 336,
+        "of_those_wrong": 18
+      },
+      "rechecks": 1925,
+      "recheck": "crossings"
+    },
+    "mean(lineage) >= 0.25 | recheck=none": {
+      "cells": 555,
+      "claimed": 285,
+      "claimed_right": 263,
+      "claimed_wrong": 22,
+      "abstained": 270,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 285,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -22,
+      "with_lookup_fallback": 533,
+      "honest": 263,
+      "honest_fraction": 0.4739,
+      "precision": 0.9228,
+      "confusion": {
+        "hypoderm->Neuron": 7,
+        "neuron->Hypodermis": 4,
+        "socket->Neuron": 3,
+        "muscle->Neuron": 3,
+        "sheath->Neuron": 3,
+        "excretory->Neuron": 2
+      },
+      "when_the_rule_fired": {
+        "claimed": 285,
+        "fired_only_at_the_cell_s_birth": 285,
+        "fired_again_at_a_crossing": 0,
+        "already_committed_to_the_type_the_rule_named": 0,
+        "of_those_right": 0,
+        "of_those_wrong": 0
+      },
+      "rechecks": 0,
+      "recheck": "none"
+    },
+    "mean(lineage) >= 0.25 | held out by founder sublineage": {
+      "cells": 555,
+      "claimed": 423,
+      "claimed_right": 383,
+      "claimed_wrong": 40,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 423,
+      "honest": 383,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "precision": 0.9054,
+      "with_lookup_fallback": 515
+    }
+  },
+  "the_registered_bar": {
+    "decided_a_fate_the_lookup_had_not_in_sample_and_held_out": {
+      "exposure": [
+        0,
+        0
+      ],
+      "mean": [
+        0,
+        0
+      ]
+    },
+    "honest_in_sample_and_held_out": {
+      "exposure": [
+        381,
+        374
+      ],
+      "mean": [
+        392,
+        383
+      ]
+    },
+    "free_credit_in_sample": {
+      "exposure": 136,
+      "mean": 56
+    },
+    "precision_in_sample_and_held_out": {
+      "exposure": [
+        0.9203,
+        0.8386
+      ],
+      "mean": [
+        0.9469,
+        0.9054
+      ]
+    },
+    "published_score_with_the_lookup_as_fallback": {
+      "exposure": [
+        522,
+        483
+      ],
+      "mean": [
+        533,
+        515
+      ]
+    },
+    "clause_a_independence_rises": false,
+    "clause_b_free_credit_rises_by_more_than_5_fates": false,
+    "registered_bar_met": false,
+    "decision": "the shipped read stays as it is: exposure(lineage) >= 15, and both numbers are published"
+  },
+  "preregistered": {
+    "R1 the shipped arm reproduces 542d613": {
+      "predicted": [
+        414,
+        381,
+        0.9203,
+        522,
+        0
+      ],
+      "observed": [
+        414,
+        381,
+        0.9203,
+        522,
+        0
+      ],
+      "held": true
+    },
+    "R2 mean scores 392 in sample and 383 held out on honest credit": {
+      "predicted": [
+        392,
+        383
+      ],
+      "observed": [
+        392,
+        383
+      ],
+      "held": true
+    },
+    "R3 mean decides no fate the lineage had not written either": {
+      "predicted": [
+        0,
+        0
+      ],
+      "observed": [
+        0,
+        0
+      ],
+      "held": true
+    },
+    "R4 without the crossing re-decisions the shipped read claims 332 again": {
+      "predicted": "332 +/- 3",
+      "observed": 332,
+      "held": true
+    },
+    "R5 every cell only the crossings arm claims is right, and was locked to that type": {
+      "predicted": "all right, none wrong",
+      "observed": [
+        82,
+        82,
+        0,
+        250
+      ],
+      "held": true
+    },
+    "R6 free credit is materially below honest credit for both reads": {
+      "observed": {
+        "exposure": [
+          381,
+          136
+        ],
+        "mean": [
+          392,
+          56
+        ]
+      },
+      "held": true
+    }
+  }
+}

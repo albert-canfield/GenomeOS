@@ -1,0 +1,52 @@
+{
+  "result": "amounts_or_concentrations",
+  "date": "2026-09-17",
+  "decision": "BIOLANG-v0.4-ECONOMY.md section 10, open decision 2",
+  "why_the_registered_test_cannot_be_run": "section 9 proposes running stage 2's burden gate both ways on cells of different volume. `volume` on a compartment is documented in two places as a FRACTION of the cell's volume, and a fraction cannot express cells of different volume. A concentration is molecules over an absolute volume and v0.4 has no construct carrying one, so the concentration arm has nothing to divide by. The test is blocked on a language change, not on data",
+  "programs_read": 39,
+  "programs_declaring_a_compartment": 2,
+  "programs_with_a_volume_fraction": 2,
+  "cell_types_needing_an_absolute_volume": 2,
+  "of_those_with_a_published_source": 2,
+  "published_volumes": {
+    "human.erythrocyte": "the mature human erythrocyte, about 90 fL (Alberts MBoC 6e; BioNumbers BNID 101711)",
+    "human.oxphos": "the hepatocyte, whose volume FRACTIONS this program already cites from Alberts MBoC 6e Table 12-1; the absolute volume is about 3,400 um^3 and comes from the same literature"
+  },
+  "stage_two_constructs_committed": {
+    "pools": 0,
+    "entities_with_a_cost": 0
+  },
+  "the_price": "one language field (an absolute volume, which no construct carries) and one citation per cell type that declares a compartment. Both cell types here have a published absolute volume, so neither would be invented, and section 2's penalty for an uncited fact does not apply. That is the whole cost of making concentrations expressible today",
+  "why_it_does_not_stay_this_small": "the price is low because stage 2 is not built: no committed program declares a pool or a cost, so almost nothing is denominated in either unit yet. Every program stage 2 adds raises the cost of changing the answer, so this is the cheapest moment the decision will have. That is an argument about timing, not about which unit is right",
+  "what_this_does_not_decide": "nothing about which unit is correct. Amounts and concentrations are not distinguished by this count, and the burden gate still cannot separate them until the language can express an absolute volume. What the count says is that the blocker is one field rather than a data problem, and that the objection recorded against concentrations - that volumes vary per cell type - costs two citations at today's scale",
+  "per_program": [
+    {
+      "path": "data/organisms/human/erythrocyte.bio",
+      "module": "human.erythrocyte",
+      "compartments": 3,
+      "compartments_with_a_volume_fraction": 1,
+      "volume_fractions": {
+        "Cytosol": 1.0
+      },
+      "entities": 7,
+      "pools": 0,
+      "costs": 0
+    },
+    {
+      "path": "data/organisms/human/oxphos.bio",
+      "module": "human.oxphos",
+      "compartments": 6,
+      "compartments_with_a_volume_fraction": 4,
+      "volume_fractions": {
+        "Cytosol": 0.54,
+        "Nucleus": 0.06,
+        "Mitochondrion": 0.22,
+        "ER": 0.09
+      },
+      "entities": 214,
+      "pools": 0,
+      "costs": 0
+    }
+  ],
+  "seconds": 1.14
+}

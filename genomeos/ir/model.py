@@ -1,4 +1,4 @@
-"""BioIR v0.1 - the Biological Intermediate Representation.
+"""BioIR v0.4 - the Biological Intermediate Representation (v0.4 adds places: docs/BIOLANG-v0.4-ECONOMY.md).
 
 Everything the compiler emits and the VM executes is one of these types.
 Three principles are enforced by the types themselves:
@@ -65,6 +65,34 @@ class Action(StrEnum):
     DEGRADE = "degrades"
 
 
+def matches(when: dict[str, str], context: dict[str, str]) -> bool:
+    """`when` clauses against a context. `any` matches anything present or absent;
+    `a|b` lists alternatives; `>=n` / `<=n` / `>n` / `<n` compare numerically."""
+    for key, wanted in when.items():
+        if wanted == "any":
+            continue
+        got = context.get(key)
+        if got == wanted:  # the common case: plain equality
+            continue
+        if wanted == "absent":
+            if got is not None:
+                return False
+            continue
+        if got is None:
+            return False
+        if wanted[:2] in (">=", "<=") or wanted[:1] in (">", "<"):
+            op = wanted[:2] if wanted[:2] in (">=", "<=") else wanted[:1]
+            try:
+                a, b = float(got), float(wanted[len(op) :])
+            except ValueError:
+                return False
+            if not {">=": a >= b, "<=": a <= b, ">": a > b, "<": a < b}[op]:
+                return False
+        elif got not in wanted.split("|"):
+            return False
+    return True
+
+
 @dataclass(slots=True)
 class Entity:
     """Base for anything the VM can hold state for."""
@@ -88,11 +116,32 @@ class Region(Entity):
 
 
 @dataclass(slots=True)
+class RegulatoryElement(Entity):
+    """A promoter, enhancer or insulator and the genes it reaches.
+
+    `targets` are {gene, distance, basis}; an enhancer's reach is bounded by the
+    domain (CTCF boundaries) it sits in, and each target carries its own basis:
+    "promoter of" (curated), "nearest TSS in domain" or "same domain" (inferred).
+    """
+
+    locus: Locus | None = None
+    cls: str = "unknown"  # promoter | enhancer | insulator | open_chromatin | unknown
+    targets: list[dict] = field(default_factory=list)
+    domain: str = ""  # node id that bounds its reach
+    source: str = ""
+
+    def __post_init__(self) -> None:
+        self.kind = "regulatory_element"
+
+
+@dataclass(slots=True)
 class Gene(Entity):
     symbol: str = ""
     locus: Locus | None = None
     transcripts: list[Transcript] = field(default_factory=list)
     basal_rate: float = 0.0  # transcription with no regulators (a.u./h)
+    location: list[str] = field(default_factory=list)  # v0.4: the compartment where it is read
+    costs: list[Cost] = field(default_factory=list)  # v0.4 §5.2: draws on pools per unit of work
 
     def __post_init__(self) -> None:
         self.kind = "gene"
@@ -113,8 +162,23 @@ class Transcript(Entity):
 
 @dataclass(slots=True)
 class Protein(Entity):
+    """A protein definition: what the molecule is. One protein in one place at one
+    time is a ProteinState, which an application builds on top of this, kept separate on purpose.
+    Gene → Transcript(s) → Protein isoform(s) → modified states; never Gene → Protein."""
+
     sequence: str = ""
     half_life_h: float | _Unknown = UNKNOWN
+    accession: str = ""  # UniProt accession, the primary external identifier
+    isoforms: list[str] = field(default_factory=list)  # UniProt isoform ids (P04637-1, ...)
+    domains: list[dict] = field(default_factory=list)  # {id, name} InterPro, or {type, start, end}
+    structures: list[dict] = field(default_factory=list)  # {source: PDB|AlphaFold, id, method, ...}
+    pathways: list[str] = field(default_factory=list)  # Reactome ids
+    interactions: list[str] = field(default_factory=list)  # partner symbols with evidence kept in the source
+    location: list[str] = field(default_factory=list)  # v0.4: compartments it occupies when it works
+    signals: list[str] = field(default_factory=list)  # v0.4: targeting signals a transport recognises
+    initial: float = 0.0  # v0.4: amount in each declared location at time 0 (the bootstrap state)
+
+    costs: list[Cost] = field(default_factory=list)  # v0.4 §5.2: draws on pools per unit of work
 
     def __post_init__(self) -> None:
         self.kind = "protein"
@@ -150,6 +214,7 @@ class Event:
     rate_unit: str = "1/yr"
     when: dict[str, str] = field(default_factory=dict)
     effects: list[Effect] = field(default_factory=list)
+    costs: list[Cost] = field(default_factory=list)  # v0.4 §5.2: what the event spends
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
 
@@ -159,10 +224,14 @@ class Event:
 
 @dataclass(slots=True)
 class Parameter:
-    """A numeric fact used by the runtime, with provenance attached."""
+    """A numeric fact used by the runtime, with provenance attached.
+
+    `value` is UNKNOWN when the literature does not establish the number; an engine that needs
+    it says so rather than substituting one of its own.
+    """
 
     name: str
-    value: float
+    value: float | _Unknown
     unit: str = ""
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
@@ -175,6 +244,11 @@ class Rule:
     strength: 0..1 for regulatory rules. For ACTIVATE/INHIBIT the runtime uses a
     Hill function with `threshold` (the source level giving half-maximal effect)
     and `hill` (cooperativity).
+
+    `threshold_unit` is empty when the threshold is an amount, as it always was, and names a molar
+    unit when the program stated a concentration instead (v0.4 §4.1). A concentration is only a
+    number once a volume divides it, so the located runtime converts it at the compartment where the
+    rule acts and refuses if that compartment declares no absolute volume.
     """
 
     id: str
@@ -187,6 +261,7 @@ class Rule:
     when: dict[str, str] = field(default_factory=dict)
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
+    threshold_unit: str = ""  # "" = an amount; "nM", "uM", ... = a concentration
 
     def applies(self, context: dict[str, str]) -> bool:
         for key, wanted in self.when.items():
@@ -195,6 +270,509 @@ class Rule:
             if context.get(key) != wanted:
                 return False
         return True
+
+
+@dataclass(slots=True)
+class Domain(Entity):
+    """A node of the genome: the genes and regulatory elements between two CTCF boundaries,
+    read and silenced as a unit (docs/NODES-READER-WRITER.md)."""
+
+    locus: Locus | None = None
+    genes: list[str] = field(default_factory=list)
+    boundaries: list[str] = field(default_factory=list)  # regulatory element ids (insulators)
+
+    def __post_init__(self) -> None:
+        self.kind = "domain"
+
+
+@dataclass(slots=True)
+class Order(Entity):
+    """A sequence the runtime can be wrong about (BioLang v0.4 §7.6).
+
+    An order drives nothing: it sets no time, fires no rule and changes no level. `stage` and `timer`
+    cause things to happen; an order states what must be true of the things that happen, and is
+    checked. `axis: position` is checked against the members' own coordinates at compile time;
+    `axis: time` is checked against a run, which reports the order taken and the inversions."""
+
+    groups: list[list[str]] = field(default_factory=list)  # members that happen together share a group
+    axis: str = "position"  # position | time
+    direction: str = ""  # position: increasing | decreasing along the chromosome
+    observe: str = "birth"  # time: what counts as a step having happened
+    threshold: float = 0.5  # the level at which a member counts as on
+
+    def __post_init__(self) -> None:
+        self.kind = "order"
+
+    @property
+    def members(self) -> list[str]:
+        return [m for g in self.groups for m in g]
+
+
+@dataclass(slots=True)
+class Signal(Entity):
+    """A cue one cell sends and another reads: contact (ligand on a neighbour), gradient
+    (a diffusing morphogen) or systemic (hormone). When a sender and a receiver coexist the
+    receiver's factor `sets` takes `value`."""
+
+    mode: str = "contact"  # contact | gradient | systemic
+    ligand: str = ""
+    receptor: str = ""
+    sender: dict[str, str] = field(default_factory=dict)
+    receiver: dict[str, str] = field(default_factory=dict)
+    sets: str = ""
+    value: str = "active"
+    field_name: str = ""  # gradient signals: the field read at the cell's position
+    threshold: float = 0.0  # the factor is set while the local value is at or above this
+    reads: str = (
+        "presence"  # v0.4 contact: presence (a named sender exists) | amount (summed over neighbours)
+    )
+
+    def __post_init__(self) -> None:
+        self.kind = "signal"
+
+
+@dataclass(slots=True)
+class Compartment(Entity):
+    """A place in the cell (BioLang v0.4, docs/BIOLANG-v0.4-ECONOMY.md §4.1).
+
+    Compartments form a containment tree through `parent`; two are adjacent when one contains the
+    other. A membrane faces its parent and its children at once. `genome` lists the chromosomes read
+    here ("nuclear" stands for every chromosome except chrM/MT); `translation` says ribosomes are
+    present. `volume` (fraction of the cell) and `copies` are recorded for the economy stages.
+
+    `absolute_volume_fl` is this compartment's own volume in femtolitres, beside the fraction rather
+    than instead of it (§10 decision 2, resolved 2026-09-19). The fraction is what the tree needs and
+    what the programs state; the absolute volume is what a threshold can be divided by, and a fraction
+    of a cell cannot express cells of different volume. UNKNOWN means the program did not say, and a
+    concentration at this compartment is then refused rather than guessed."""
+
+    parent: str = ""
+    membrane: bool = False
+    volume: float | _Unknown = UNKNOWN
+    genome: list[str] = field(default_factory=list)
+    translation: bool = False
+    copies: int = 1
+    absolute_volume_fl: float | _Unknown = UNKNOWN
+
+    def __post_init__(self) -> None:
+        self.kind = "compartment"
+
+    def reads(self, chrom: str) -> bool:
+        """Whether a gene on `chrom` is read in this compartment."""
+        mito = chrom in ("chrM", "MT", "M")
+        return chrom in self.genome or ("nuclear" in self.genome and not mito)
+
+
+#: what a cost is charged per. The unit decides what multiplies the amount, so it is a closed set
+#: rather than free text: a transcript and a nucleotide are different questions about one gene.
+COST_UNITS = ("transcript", "nucleotide", "chain", "residue", "event", "division")
+
+
+@dataclass(slots=True)
+class Cost:
+    """One draw on one pool, per unit of work (BioLang v0.4 §5.2).
+
+    `cost: Ribosomes 1 per chain` and `cost: ATP 4 per residue` are two costs on one protein. They are
+    not an Entity because a cost has no identity of its own — it is a property of the work, and two
+    genes charging the same pool are not sharing an object.
+
+    Defaults for the per-residue and per-nucleotide amounts live in `bio.std.energetics` with their
+    citations; a program that states its own overrides them and says so through its evidence.
+    """
+
+    pool: str
+    amount: float
+    per: str = "event"
+
+    def __post_init__(self) -> None:
+        if self.per not in COST_UNITS:
+            raise ValueError(f"cost per {self.per!r}: expected one of {', '.join(COST_UNITS)}")
+
+
+@dataclass(slots=True)
+class Pool(Entity):
+    """A finite counted resource with a capacity, a location and a way of coming back (§5.1).
+
+    Pools are what make a cost mean anything: without one, a cost is an annotation. `size` is the
+    capacity in molecules, `regeneration` a rate per hour, and `regenerates_from` names the processes
+    that refill it when a rate is the wrong shape (ATP is regenerated by glycolysis and OXPHOS, not at
+    a constant rate). `returns_as` is what a drawn unit becomes when the work finishes, which is the
+    difference between a ribosome being freed and ATP becoming ADP: one is returned to its own pool,
+    the other to a different species.
+
+    UNKNOWN size is a statement, not a silence. §2's rules make an uncited capacity `inferred`, and a
+    pool whose size nobody measured cannot support a burden claim — the engine must refuse to run such
+    a program rather than invent a ceiling, which is the same rule `param x = unknown` already follows.
+    """
+
+    location: str = ""
+    size: float | _Unknown = UNKNOWN
+    regeneration: float | _Unknown = UNKNOWN
+    regenerates_from: list[str] = field(default_factory=list)
+    returns_as: str = ""
+
+
+@dataclass(slots=True)
+class Allocation(Entity):
+    """How a pool is divided when demand exceeds it — a scientific claim, so it is named (§5.3).
+
+    The policy is never hidden in the engine because it is the thing under test. `proportional` shares
+    by demand, `priority` follows a stated order, `competitive` saturates as a transport does, and
+    `optimise` pursues a declared objective and is always labelled a modelling device.
+
+    **Stated in advance, and this is the trap the abundance gate must avoid:** a shared pool under
+    `proportional` rescales every gene by the same factor, so it cannot change a rank correlation.
+    Any rank improvement credited to allocation would be credited to something else — length cost,
+    half-life, translation efficiency — so the gate reads absolute error in log copy numbers and total
+    protein per cell, not rank.
+    """
+
+    pool: str = ""
+    policy: str = "proportional"
+    order: list[str] = field(default_factory=list)
+    objective: str = ""
+
+
+@dataclass(slots=True)
+class Transport(Entity):
+    """A route between two adjacent compartments with a finite, shared capacity (v0.4 §4.3).
+
+    `cargo` entries are species ids, `mRNA` (every mRNA) or `signal=S` (proteins carrying signal S).
+    Flux of cargo i is capacity * (x_i/K) / (1 + sum_j x_j/K), x read in the `from` compartment, so
+    one flooding cargo slows every other; `via` names a protein whose presence gates the capacity."""
+
+    from_compartment: str = ""
+    to_compartment: str = ""
+    cargo: list[str] = field(default_factory=list)
+    capacity: float = 0.0  # amount per hour
+    affinity: float = 1.0  # cargo amount giving half-maximal flux
+    via: str = ""
+    via_threshold: float = 1.0
+
+    def __post_init__(self) -> None:
+        self.kind = "transport"
+
+    def carries(self, species: str, signals: list[str] | tuple[str, ...] = (), mrna: bool = False) -> bool:
+        for c in self.cargo:
+            if c == species or (mrna and c == "mRNA"):
+                return True
+            if not mrna and c.startswith("signal=") and c[len("signal=") :] in signals:
+                return True
+        return False
+
+
+@dataclass(slots=True)
+class Regime:
+    """How a run is executed, declared rather than assumed (v0.4 §8), and recorded in every result.
+
+    treatment: continuous | stochastic | auto (species under `threshold` copies run stochastically);
+    update: continuous | synchronous | asynchronous | event; allocation: the default policy for shared
+    capacities with none named. Stochastic treatment needs `units: copies`."""
+
+    name: str = "default"
+    treatment: str = "continuous"
+    threshold: float = 50.0
+    units: str = "au"  # au | copies
+    update: str = "continuous"
+    fates: str = "first"  # one fate per decision point by precedence | last (legacy: last match wins)
+    recheck: str = "crossings"  # a cell decides again when a read it names reaches a threshold | none
+    allocation: str = "competitive"
+    seed: int | None = None
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
+REGIME_UPDATES = ("continuous", "synchronous", "asynchronous", "event")
+REGIME_ALLOCATIONS = ("competitive", "proportional", "priority", "optimise")
+REGIME_FATES = ("first", "last")
+REGIME_RECHECKS = ("crossings", "none")
+
+
+_UNIT_MIN = {
+    "min": 1.0,
+    "minute": 1.0,
+    "minutes": 1.0,
+    "h": 60.0,
+    "hr": 60.0,
+    "hour": 60.0,
+    "hours": 60.0,
+    "d": 1440.0,
+    "day": 1440.0,
+    "days": 1440.0,
+    "wk": 10080.0,
+    "week": 10080.0,
+    "weeks": 10080.0,
+    "y": 525960.0,
+    "yr": 525960.0,
+    "year": 525960.0,
+    "years": 525960.0,
+    "": 1.0,
+}
+
+
+def to_minutes(value: float, unit: str) -> float:
+    try:
+        return value * _UNIT_MIN[unit]
+    except KeyError:
+        raise ValueError(f"unknown time unit {unit!r}") from None
+
+
+# Absolute volumes are held in femtolitres, and 1 um^3 is exactly 1 fL, which is why the literature
+# quotes a red cell in fL and a hepatocyte in um^3 and means the same unit. Accepting both spellings
+# means a citation is transcribed rather than converted by hand (BIOLANG-v0.4-ECONOMY.md §4.1).
+_UNIT_VOLUME_FL = {
+    "L": 1e15,
+    "l": 1e15,
+    "mL": 1e12,
+    "ml": 1e12,
+    "uL": 1e9,
+    "ul": 1e9,
+    "µL": 1e9,
+    "nL": 1e6,
+    "nl": 1e6,
+    "pL": 1e3,
+    "pl": 1e3,
+    "fL": 1.0,
+    "fl": 1.0,
+    "aL": 1e-3,
+    "um3": 1.0,
+    "µm3": 1.0,
+    "um^3": 1.0,
+    "µm^3": 1.0,
+}
+VOLUME_UNITS = ("L", "mL", "uL", "nL", "pL", "fL", "aL", "um3")
+
+# Avogadro's number, exact by the 2019 SI definition of the mole.
+AVOGADRO = 6.02214076e23
+_UNIT_MOLAR = {"M": 1.0, "mM": 1e-3, "uM": 1e-6, "µM": 1e-6, "nM": 1e-9, "pM": 1e-12, "fM": 1e-15}
+MOLAR_UNITS = ("M", "mM", "uM", "nM", "pM", "fM")
+
+
+def to_femtolitres(value: float, unit: str) -> float:
+    """An absolute volume in femtolitres. A volume with no unit is not a volume, so `unit` is required."""
+    try:
+        return value * _UNIT_VOLUME_FL[unit]
+    except KeyError:
+        raise ValueError(f"unknown volume unit {unit!r}; expected one of {', '.join(VOLUME_UNITS)}") from None
+
+
+def to_molar(value: float, unit: str) -> float:
+    """A concentration in mol/L."""
+    try:
+        return value * _UNIT_MOLAR[unit]
+    except KeyError:
+        raise ValueError(f"unknown molar unit {unit!r}; expected one of {', '.join(MOLAR_UNITS)}") from None
+
+
+def molecules_in(molar: float, volume_fl: float) -> float:
+    """Molecules of a species at `molar` in a compartment of `volume_fl` femtolitres.
+
+    This is the one place a concentration becomes an amount: 1 fL is 1e-15 L, so the count is
+    c * V * N_A. Everything the located runtime holds is an amount, so a threshold stated as a
+    concentration is converted here, once, at the compartment where the rule acts."""
+    return molar * volume_fl * 1e-15 * AVOGADRO
+
+
+@dataclass(slots=True)
+class Field:
+    """A diffusing, decaying scalar field on the organism's grid, fed by point sources (amount per hour)."""
+
+    name: str
+    diffusion: float = 0.2  # grid^2 per hour
+    decay: float = 0.01  # per hour
+    sources: list[tuple[int, int, float]] = field(default_factory=list)  # (x, y, rate per hour)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Timer:
+    """A delay: how long a cell waits before its next decision (cell-cycle length, moult, ...).
+    `lengthening` multiplies the duration per generation past the one the timer was measured at."""
+
+    name: str
+    duration: float
+    unit: str = "min"
+    sd: float = 0.0
+    lengthening: float = 1.0
+    when: dict[str, str] = field(default_factory=dict)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def applies(self, context: dict[str, str]) -> bool:
+        return matches(self.when, context)
+
+    def minutes(self) -> float:
+        return to_minutes(self.duration, self.unit)
+
+
+@dataclass(slots=True)
+class Stage:
+    """A named developmental window on the organism clock; decisions can be gated on it."""
+
+    name: str
+    start: float = 0.0
+    end: float | None = None
+    unit: str = "min"
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def contains(self, t_min: float) -> bool:
+        s = to_minutes(self.start, self.unit)
+        e = float("inf") if self.end is None else to_minutes(self.end, self.unit)
+        return s <= t_min < e
+
+
+DECISION_ACTIONS = ("divide", "differentiate", "migrate", "quiesce", "die", "express")
+
+
+@dataclass(slots=True)
+class Decision:
+    """One of the five things a cell can do, under `when` conditions.
+
+    divide: two daughters (`daughters` names them; else a/p or l/r suffixes), waiting `timer`
+    (or the first matching Timer); `asymmetric` says which daughter keeps which factor.
+    differentiate: become cell type `to` (optionally taking terminal `name`).
+    die: after `after` minutes from birth (or at once). quiesce: stop dividing. migrate: move.
+    express: the cell carries the factors in `sets` (its measured or inferred reader state).
+    `fraction` and `share` apply to populations and differ in what they are a share *of*: `fraction`
+    takes that much of what is left when it runs, so sibling splits multiply and their values depend
+    on the order they are written in; `share` takes that much of the population as it stood at the
+    start of the decision point (or of the instant, for recurring flows), so siblings are independent
+    of each other and a program can state a published share as the number it is."""
+
+    id: str
+    action: str = "divide"
+    when: dict[str, str] = field(default_factory=dict)
+    daughters: list[str] = field(default_factory=list)
+    to: str = ""
+    name: str = ""
+    asymmetric: dict[str, str] = field(default_factory=dict)
+    lineages: dict[str, str] = field(default_factory=dict)  # daughter -> lineage it founds (generation 0)
+    sets: list[str] = field(default_factory=list)  # express: factors present in the cell
+    toward: str = ""  # migrate: climb this field's gradient
+    direction: str = ""  # migrate: +x, -x, +y or -y
+    steps: int = 1  # migrate: grid steps per move
+    timer: str = ""
+    after: float | None = None  # minutes
+    fraction: float = 1.0  # a share of what is LEFT when this decision runs (order-dependent)
+    share: float | None = None  # a share of the population as it stood at this decision point (absolute)
+    priority: int = 0  # among matching decisions of one action the highest wins; ties: first in module order
+    competence: str = ""  # differentiate: the window this fate change needs open (v0.4 §7.2a)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def applies(self, context: dict[str, str]) -> bool:
+        return matches(self.when, context)
+
+
+@dataclass(slots=True)
+class Competence:
+    """A window during which the fate changes it governs may be taken (BioLang v0.4 §7.2a).
+
+    A `differentiate` decision names the window it needs (`competence: early_muscle`); outside the
+    window that decision is refused and counted as *outside competence*, which is a different answer
+    from UNKNOWN: the program said no rather than saying nothing. The window closes at a time or a
+    generation, and `closed_by` names the machinery that closes it, so removing that machinery keeps
+    the window open — the third arm of the perturbation series (Yuzyuk et al. 2009)."""
+
+    name: str
+    when: dict[str, str] = field(default_factory=dict)  # cells the window governs (empty = every cell)
+    allows: list[str] = field(default_factory=list)  # the fates it permits; the decisions it governs agree
+    closes_at: float | None = None  # minutes
+    closes_generation: int | None = None
+    closes_on_commitment: bool = False
+    closed_by: str = ""  # factor whose presence in the cell is needed for the window to close
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Commitment:
+    """An irreversible fate: once `establish` matches, the cell is committed to its programme and a
+    later fate change is refused and counted (BioLang v0.4 §7.2a). `inherit` makes the state pass to
+    the daughters, so it is mechanism rather than bookkeeping."""
+
+    name: str
+    programme: str = ""  # what the cell commits to; empty = the cell_type it holds when it commits
+    establish: dict[str, str] = field(default_factory=dict)  # a when clause on the cell's context
+    locks: str = "cell_type"
+    inherit: bool = False  # `inherit: daughters`
+    release: str = "never"
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Experiment:
+    """A perturbation of the organism run against the wild type: factors or signals knocked out,
+    factors added, the environment changed; `asserts` are checked on the perturbed body."""
+
+    name: str
+    knockouts: list[str] = field(default_factory=list)  # factor names, signal ids or ligands
+    adds: list[str] = field(default_factory=list)  # factors present in the zygote in addition
+    # factors forced later instead of at the zygote: name -> minutes ("add: HLH-1 at 350 min"). A forced
+    # factor is held in every cell alive from then on and in every cell born after it, so a perturbation
+    # series can ask what the same factor does inside and outside a competence window.
+    add_at: dict[str, float] = field(default_factory=dict)
+    environment: dict[str, str] = field(default_factory=dict)
+    until: float | None = None  # minutes; None = the organism's last stage or 800
+    asserts: list[str] = field(default_factory=list)
+    expect: str = ""  # the published phenotype, in words
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Design:
+    """A goal for BioForge over an organism: which perturbations it may try (factors to knock out or add,
+    continuous knobs), what to reach (`targets`, loss terms) and what must hold (`keeps`, constraints).
+    The result is an experiment, labelled predicted until the bench confirms it."""
+
+    name: str
+    knockout_any_of: list[str] = field(default_factory=list)
+    add_any_of: list[str] = field(default_factory=list)
+    at_most: int = 1  # perturbations combined per candidate
+    vary: list[str] = field(
+        default_factory=list
+    )  # "timer NAME duration LO..HI", "decision ID fraction LO..HI"
+    until: float | None = None  # minutes
+    targets: list[str] = field(default_factory=list)  # assert grammar; distance from holding is the loss
+    keeps: list[str] = field(default_factory=list)  # assert grammar; must hold
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Organism:
+    """The program root: one genome, one bootstrap cell state, one environment."""
+
+    name: str
+    species: str = ""
+    genome: str = ""
+    tempo: float = 1.0  # multiplies every timer (species pace; Rayon 2020, Matsuda 2020)
+    resolution: str = "cells"  # cells: every division makes a named cell; populations: counts grow in place
+    seed: int | None = None  # default seed for timer spread; None = deterministic means
+    width: int = 0  # space: grid size; 0 = no space, cells have no position
+    height: int = 0
+    origin: tuple[int, int] = (0, 0)  # where the first cell sits
+    sense: float = 30.0  # minutes between gradient readings
+    root: str = "Zygote"  # name of the first cell
+    cell_type: str = ""  # bootstrap cell type
+    factors: list[str] = field(default_factory=list)  # maternal factors present in the zygote
+    environment: dict[str, str] = field(default_factory=dict)
+    observe: list[str] = field(default_factory=list)
+    asserts: list[str] = field(default_factory=list)
+    reference: str = ""  # name of the ground truth to compare against
+    contacts: str = (
+        ""  # v0.4: a time-resolved contact table (time, cell, cell[, area]), path resolved at parse
+    )
+    cell_network: float = 0.0  # v0.4: minutes between synchronous steps of every cell's own network; 0 = off
+    replicates: int = 0  # v0.4: runs with seeds 0..N-1 over which `exactly one of` asserts are scored
+    placement: str = "nearest"  # v0.4: nearest free site, or names (a/p along x, l/r and d/v along y)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
 
 
 @dataclass(slots=True)
@@ -208,6 +786,16 @@ class Module:
     parameters: dict[str, Parameter] = field(default_factory=dict)
     imports: list[str] = field(default_factory=list)
     events: list[Event] = field(default_factory=list)
+    timers: list[Timer] = field(default_factory=list)
+    stages: list[Stage] = field(default_factory=list)
+    decisions: list[Decision] = field(default_factory=list)
+    experiments: list[Experiment] = field(default_factory=list)
+    fields: list[Field] = field(default_factory=list)
+    designs: list[Design] = field(default_factory=list)
+    competences: list[Competence] = field(default_factory=list)
+    commitments: list[Commitment] = field(default_factory=list)
+    organism: Organism | None = None
+    regime: Regime | None = None
 
     def add(self, entity: Entity) -> None:
         if entity.id in self.entities:
@@ -223,12 +811,50 @@ class Module:
     def cell_types(self) -> list[CellType]:
         return [e for e in self.entities.values() if isinstance(e, CellType)]
 
+    def signals(self) -> list[Signal]:
+        return [e for e in self.entities.values() if isinstance(e, Signal)]
+
+    def domains(self) -> list[Domain]:
+        return [e for e in self.entities.values() if isinstance(e, Domain)]
+
+    def orders(self) -> list[Order]:
+        return [e for e in self.entities.values() if isinstance(e, Order)]
+
+    def compartments(self) -> list[Compartment]:
+        return [e for e in self.entities.values() if isinstance(e, Compartment)]
+
+    def transports(self) -> list[Transport]:
+        return [e for e in self.entities.values() if isinstance(e, Transport)]
+
+    @property
+    def located(self) -> bool:
+        """A program that declares a compartment is located: every gene and protein then has a place."""
+        return any(isinstance(e, Compartment) for e in self.entities.values())
+
+    def timer(self, name: str) -> Timer | None:
+        return next((t for t in self.timers if t.name == name), None)
+
+    def stage_at(self, t_min: float) -> str:
+        return next((s.name for s in self.stages if s.contains(t_min)), "")
+
     def merge(self, other: Module) -> None:
         """Import another module's content (ids must not collide)."""
         for e in other.entities.values():
             self.add(e)
         self.rules.extend(other.rules)
         self.events.extend(other.events)
+        self.timers.extend(other.timers)
+        self.stages.extend(other.stages)
+        self.decisions.extend(other.decisions)
+        self.experiments.extend(other.experiments)
+        self.fields.extend(other.fields)
+        self.designs.extend(other.designs)
+        self.competences.extend(other.competences)
+        self.commitments.extend(other.commitments)
+        if self.organism is None:
+            self.organism = other.organism
+        if self.regime is None:
+            self.regime = other.regime
         for k, v in other.parameters.items():
             self.parameters.setdefault(k, v)
 
@@ -285,13 +911,23 @@ class Module:
             return obj
 
         return {
-            "bioir_version": "0.1",
+            "bioir_version": "0.4",
             "name": self.name,
             "imports": list(self.imports),
             "entities": [conv(e) for e in self.entities.values()],
             "rules": [conv(r) for r in self.rules],
             "events": [conv(e) for e in self.events],
             "parameters": [conv(p) for p in self.parameters.values()],
+            "timers": [conv(t) for t in self.timers],
+            "stages": [conv(st) for st in self.stages],
+            "decisions": [conv(d) for d in self.decisions],
+            "experiments": [conv(x) for x in self.experiments],
+            "fields": [conv(f) for f in self.fields],
+            "designs": [conv(d) for d in self.designs],
+            "competences": [conv(c) for c in self.competences],
+            "commitments": [conv(c) for c in self.commitments],
+            "organism": conv(self.organism) if self.organism else None,
+            "regime": conv(self.regime) if self.regime else None,
         }
 
     @classmethod
@@ -303,6 +939,14 @@ class Module:
             "Transcript": Transcript,
             "Entity": Entity,
             "CellType": CellType,
+            "RegulatoryElement": RegulatoryElement,
+            "Domain": Domain,
+            "Signal": Signal,
+            "Compartment": Compartment,
+            "Order": Order,
+            "Transport": Transport,
+            "Pool": Pool,
+            "Allocation": Allocation,
         }
 
         def evid(d: dict) -> Evidence:
@@ -332,7 +976,7 @@ class Module:
                 ed["cds_segments"] = [Locus.parse(x) for x in ed["cds_segments"]]
             if "transcripts" in ed:
                 ed["transcripts"] = []  # transcripts are top-level entities too
-            for key in ("role", "half_life_h"):
+            for key in ("role", "half_life_h", "volume", "absolute_volume_fl"):
                 if key in ed:
                     ed[key] = unk(ed[key])
             m.add(t(**ed))
@@ -351,5 +995,89 @@ class Module:
         for pd in data.get("parameters", []):
             pd.pop("__type__", None)
             pd["evidence"] = evid(pd.get("evidence", {}))
+            pd["value"] = unk(pd.get("value"))
             m.parameters[pd["name"]] = Parameter(**pd)
+        for fd in data.get("fields", []):
+            fd["sources"] = [tuple(x) for x in fd.get("sources", [])]
+        for key, typ, target in (
+            ("timers", Timer, m.timers),
+            ("stages", Stage, m.stages),
+            ("decisions", Decision, m.decisions),
+            ("experiments", Experiment, m.experiments),
+            ("fields", Field, m.fields),
+            ("designs", Design, m.designs),
+            ("competences", Competence, m.competences),
+            ("commitments", Commitment, m.commitments),
+        ):
+            for d in data.get(key, []):
+                d.pop("__type__", None)
+                d["evidence"] = evid(d.get("evidence", {}))
+                target.append(typ(**d))
+        if data.get("organism"):
+            od = dict(data["organism"])
+            od.pop("__type__", None)
+            od["evidence"] = evid(od.get("evidence", {}))
+            if isinstance(od.get("origin"), list):
+                od["origin"] = tuple(od["origin"])
+            m.organism = Organism(**od)
+        if data.get("regime"):
+            rd = dict(data["regime"])
+            rd.pop("__type__", None)
+            rd["evidence"] = evid(rd.get("evidence", {}))
+            m.regime = Regime(**rd)
         return m
+
+
+__all__ = [
+    "AVOGADRO",
+    "COST_UNITS",
+    "DECISION_ACTIONS",
+    "MOLAR_UNITS",
+    "REGIME_ALLOCATIONS",
+    "REGIME_FATES",
+    "REGIME_RECHECKS",
+    "REGIME_TREATMENTS",
+    "REGIME_UPDATES",
+    "UNKNOWN",
+    "VOLUME_UNITS",
+    "Action",
+    "CellType",
+    "Cost",
+    "Commitment",
+    "Compartment",
+    "Competence",
+    "Confidence",
+    "Decision",
+    "Design",
+    "Domain",
+    "Effect",
+    "Entity",
+    "Event",
+    "Evidence",
+    "EvidenceKind",
+    "Experiment",
+    "Field",
+    "Gene",
+    "Locus",
+    "Module",
+    "Order",
+    "Pool",
+    "Allocation",
+    "Organism",
+    "Parameter",
+    "Protein",
+    "Regime",
+    "Region",
+    "RegulatoryElement",
+    "Rule",
+    "Signal",
+    "Stage",
+    "Timer",
+    "Transcript",
+    "Transport",
+    "matches",
+    "molecules_in",
+    "to_femtolitres",
+    "to_minutes",
+    "to_molar",
+]

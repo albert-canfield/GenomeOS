@@ -76,3 +76,19 @@ of one percent of the genome, and in a compact layout a few megabases.
 Building the cells is laboratory work outside this project. What the project
 adds is the honest count of what a design has to contain and what it would
 cost in bases, before anyone tries.
+
+## The confidence on a BioForge design (2026-09-22)
+
+Area H's third open item asked how often a design's answer matches the
+published outcome, which presumes the number beside the answer is a
+probability. It is not: `organism/forge.py:143` writes the literal `0.3` onto
+every feasible answer, ignoring the loss, the feasibility, the evaluations and
+the design's own stated confidence, and the same constant marks an unrelated
+quantity in area I. A single-valued predictor has one reliability bin at every
+sample size, so no calibration curve over it exists at any n. The repository
+holds 2 designs with a published outcome cited in the file (4 counting two
+recorded only in prose), all four solved, and the answers were written into the
+module's rules from the same papers they are scored against. Verdict
+`UNCHECKABLE_BY_CONSTRUCTION`, with the registration, the census, the interval
+that was computed and withheld, and the five things that would change it, in
+docs/BIOFORGE-CONFIDENCE.md.

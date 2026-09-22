@@ -1,0 +1,316 @@
+{
+ "variant": "chr1:109274968 G>T",
+ "rsid": "rs12740374",
+ "model": "AlphaGenome (google-deepmind/alphagenome 0.9)",
+ "evidence": "predicted",
+ "threshold_log2fc": 0.05,
+ "scanned": {
+  "genes": 48,
+  "tracks": 371,
+  "max_abs_log2fc": 0.8051087856292725
+ },
+ "effects_above_threshold": 320,
+ "top_effects": [
+  {
+   "gene": "PSRC1",
+   "tissue": "left lobe of liver",
+   "log2_fold_change": 0.8051,
+   "direction": "activates",
+   "confidence": 0.401
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "liver",
+   "log2_fold_change": 0.7199,
+   "direction": "activates",
+   "confidence": 0.38
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "right lobe of liver",
+   "log2_fold_change": 0.6883,
+   "direction": "activates",
+   "confidence": 0.372
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "Liver",
+   "log2_fold_change": 0.676,
+   "direction": "activates",
+   "confidence": 0.369
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "Liver",
+   "log2_fold_change": 0.5095,
+   "direction": "activates",
+   "confidence": 0.327
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "liver",
+   "log2_fold_change": 0.4458,
+   "direction": "activates",
+   "confidence": 0.311
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "left lobe of liver",
+   "log2_fold_change": 0.4396,
+   "direction": "activates",
+   "confidence": 0.31
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.4036,
+   "direction": "activates",
+   "confidence": 0.301
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.383,
+   "direction": "activates",
+   "confidence": 0.296
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "right lobe of liver",
+   "log2_fold_change": 0.3802,
+   "direction": "activates",
+   "confidence": 0.295
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.3663,
+   "direction": "activates",
+   "confidence": 0.292
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "CD14-positive monocyte",
+   "log2_fold_change": 0.3495,
+   "direction": "activates",
+   "confidence": 0.287
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "Whole_Blood",
+   "log2_fold_change": 0.3045,
+   "direction": "activates",
+   "confidence": 0.276
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "liver",
+   "log2_fold_change": 0.2914,
+   "direction": "activates",
+   "confidence": 0.273
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.2796,
+   "direction": "activates",
+   "confidence": 0.27
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "mesenteric fat pad",
+   "log2_fold_change": 0.2648,
+   "direction": "activates",
+   "confidence": 0.266
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "subcutaneous adipose tissue",
+   "log2_fold_change": 0.2516,
+   "direction": "activates",
+   "confidence": 0.263
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "CD14-positive monocyte",
+   "log2_fold_change": 0.2514,
+   "direction": "activates",
+   "confidence": 0.263
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "liver",
+   "log2_fold_change": 0.2381,
+   "direction": "activates",
+   "confidence": 0.26
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "left lobe of liver",
+   "log2_fold_change": 0.2378,
+   "direction": "activates",
+   "confidence": 0.259
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "right lobe of liver",
+   "log2_fold_change": 0.2323,
+   "direction": "activates",
+   "confidence": 0.258
+  },
+  {
+   "gene": "CELSR2",
+   "tissue": "Whole_Blood",
+   "log2_fold_change": 0.2309,
+   "direction": "activates",
+   "confidence": 0.258
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.2284,
+   "direction": "activates",
+   "confidence": 0.257
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "upper lobe of right lung",
+   "log2_fold_change": 0.2265,
+   "direction": "activates",
+   "confidence": 0.257
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "Liver",
+   "log2_fold_change": 0.2213,
+   "direction": "activates",
+   "confidence": 0.255
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "adipose tissue",
+   "log2_fold_change": 0.2212,
+   "direction": "activates",
+   "confidence": 0.255
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "omental fat pad",
+   "log2_fold_change": 0.2196,
+   "direction": "activates",
+   "confidence": 0.255
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "mononuclear cell",
+   "log2_fold_change": 0.2193,
+   "direction": "activates",
+   "confidence": 0.255
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "nasal cavity respiratory epithelium epithelial cell of viscerocranial mucosa",
+   "log2_fold_change": 0.2191,
+   "direction": "activates",
+   "confidence": 0.255
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "pancreas",
+   "log2_fold_change": 0.217,
+   "direction": "activates",
+   "confidence": 0.254
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "Pancreas",
+   "log2_fold_change": 0.2167,
+   "direction": "activates",
+   "confidence": 0.254
+  },
+  {
+   "gene": "MYBPHL",
+   "tissue": "HepG2",
+   "log2_fold_change": 0.2163,
+   "direction": "activates",
+   "confidence": 0.254
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "bronchial epithelial cell",
+   "log2_fold_change": 0.2159,
+   "direction": "activates",
+   "confidence": 0.254
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "lower lobe of left lung",
+   "log2_fold_change": 0.2144,
+   "direction": "activates",
+   "confidence": 0.254
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "body of pancreas",
+   "log2_fold_change": 0.2123,
+   "direction": "activates",
+   "confidence": 0.253
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "lower lobe of right lung",
+   "log2_fold_change": 0.2093,
+   "direction": "activates",
+   "confidence": 0.252
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "left lung",
+   "log2_fold_change": 0.1952,
+   "direction": "activates",
+   "confidence": 0.249
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "breast epithelium",
+   "log2_fold_change": 0.1926,
+   "direction": "activates",
+   "confidence": 0.248
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "psoas muscle",
+   "log2_fold_change": 0.1915,
+   "direction": "activates",
+   "confidence": 0.248
+  },
+  {
+   "gene": "PSRC1",
+   "tissue": "hepatocyte",
+   "log2_fold_change": 0.1871,
+   "direction": "activates",
+   "confidence": 0.247
+  }
+ ],
+ "note": "Known liver eQTL: the minor allele creates a C/EBP site and raises SORT1/PSRC1/CELSR2 expression in liver (Musunuru et al., Nature 2010). AlphaGenome predicts PSRC1 and CELSR2 up in liver tracks with the largest effects; SORT1 itself is further from the variant.",
+ "source": "AlphaGenome API, google-deepmind/alphagenome 0.9, RNA_SEQ recommended variant scorer, 1 Mb window",
+ "licence": "non-commercial use of the AlphaGenome API; summary only",
+ "per_gene": {
+  "PSRC1": {
+   "tracks": 181,
+   "max_log2fc": 0.8051
+  },
+  "CELSR2": {
+   "tracks": 118,
+   "max_log2fc": 0.5095
+  },
+  "MYBPHL": {
+   "tracks": 17,
+   "max_log2fc": 0.2381
+  },
+  "SORT1": {
+   "tracks": 4,
+   "max_log2fc": 0.0598
+  }
+ }
+}

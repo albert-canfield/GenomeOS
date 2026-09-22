@@ -1,0 +1,259 @@
+{
+  "result": "epigenome_direction_chr21_chr22",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr21",
+    "chr22"
+  ],
+  "cell_types": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "units": 83814,
+  "elements": 20954,
+  "acts_threshold_abs_log2fc": 0.1,
+  "window": "element midpoint +/- 500 bp for marks and methylation; the element for DNase",
+  "outcome": "AlphaGenome predicted_by_cell: signed log2 fold change of the gene the deletion moves most, per cell line; positive = expression rises on deletion (silencer-like)",
+  "metrics": "acts and silencer: out-of-fold AUC; magnitude: Spearman of out-of-fold prediction with log10 |lfc|; 5 folds grouped by element; ridge linear model on standardised features",
+  "models": {
+    "registry": "registry class (pELS/dELS, CTCF-bound)",
+    "registry+dnase": "registry class + DNase in the cell (reader v1)",
+    "marks": "registry + DNase + measured marks and methylation in the cell",
+    "other_cell": "control: same, marks from another of the four lines",
+    "permuted": "control: same, marks shuffled within chromosome x cell x class x DNase",
+    "marks_only": "measured marks and methylation alone (with cell and chromosome)"
+  },
+  "results": {
+    "acts": {
+      "n": 83814,
+      "registry": 0.6256,
+      "registry+dnase": 0.6451,
+      "marks": 0.6764,
+      "other_cell": 0.6537,
+      "permuted": 0.6448,
+      "marks_only": 0.6621,
+      "bootstrap_95": {
+        "marks-registry+dnase": [
+          0.0275,
+          0.0345,
+          0.0
+        ],
+        "marks-other_cell": [
+          0.02,
+          0.0252,
+          0.0
+        ],
+        "marks-permuted": [
+          0.0283,
+          0.0347,
+          0.0
+        ]
+      }
+    },
+    "silencer_among_acting": {
+      "n": 16613,
+      "registry": 0.5322,
+      "registry+dnase": 0.594,
+      "marks": 0.6161,
+      "other_cell": 0.6051,
+      "permuted": 0.5927,
+      "marks_only": 0.603,
+      "bootstrap_95": {
+        "marks-registry+dnase": [
+          0.0133,
+          0.0299,
+          0.0
+        ],
+        "marks-other_cell": [
+          0.0045,
+          0.0186,
+          0.0
+        ],
+        "marks-permuted": [
+          0.0146,
+          0.0314,
+          0.0
+        ]
+      }
+    },
+    "magnitude": {
+      "n": 83814,
+      "registry": 0.1833,
+      "registry+dnase": 0.2165,
+      "marks": 0.3331,
+      "other_cell": 0.2528,
+      "permuted": 0.2163,
+      "marks_only": 0.3257,
+      "bootstrap_95": {
+        "marks-registry+dnase": [
+          0.1079,
+          0.1225,
+          0.0
+        ],
+        "marks-other_cell": [
+          0.0745,
+          0.085,
+          0.0
+        ],
+        "marks-permuted": [
+          0.1084,
+          0.1225,
+          0.0
+        ]
+      }
+    }
+  },
+  "bootstrap": "95% interval of the difference over 200 element resamples, and the share of resamples with no gain",
+  "tables": {
+    "by_class": {
+      "dELS": {
+        "acting": 9463,
+        "silencer": 3588,
+        "silencer_share": 0.3792,
+        "median_abs_lfc": 0.1575
+      },
+      "pELS": {
+        "acting": 7150,
+        "silencer": 2359,
+        "silencer_share": 0.3299,
+        "median_abs_lfc": 0.2129
+      }
+    },
+    "by_state": {
+      "no mark": {
+        "acting": 6636,
+        "silencer": 2696,
+        "silencer_share": 0.4063,
+        "median_abs_lfc": 0.1579
+      },
+      "heterochromatin": {
+        "acting": 160,
+        "silencer": 66,
+        "silencer_share": 0.4125,
+        "median_abs_lfc": 0.1384
+      },
+      "active promoter": {
+        "acting": 3655,
+        "silencer": 875,
+        "silencer_share": 0.2394,
+        "median_abs_lfc": 0.2247
+      },
+      "active enhancer": {
+        "acting": 1082,
+        "silencer": 274,
+        "silencer_share": 0.2532,
+        "median_abs_lfc": 0.1874
+      },
+      "acetylated element": {
+        "acting": 149,
+        "silencer": 41,
+        "silencer_share": 0.2752,
+        "median_abs_lfc": 0.174
+      },
+      "primed enhancer": {
+        "acting": 1988,
+        "silencer": 754,
+        "silencer_share": 0.3793,
+        "median_abs_lfc": 0.17
+      },
+      "promoter mark, not acetylated": {
+        "acting": 966,
+        "silencer": 345,
+        "silencer_share": 0.3571,
+        "median_abs_lfc": 0.2129
+      },
+      "Polycomb-repressed": {
+        "acting": 1131,
+        "silencer": 517,
+        "silencer_share": 0.4571,
+        "median_abs_lfc": 0.1576
+      },
+      "bivalent": {
+        "acting": 408,
+        "silencer": 185,
+        "silencer_share": 0.4534,
+        "median_abs_lfc": 0.2307
+      },
+      "poised enhancer": {
+        "acting": 438,
+        "silencer": 194,
+        "silencer_share": 0.4429,
+        "median_abs_lfc": 0.1703
+      }
+    },
+    "by_h3k27me3": {
+      "no H3K27me3 peak": {
+        "acting": 14635,
+        "silencer": 5051,
+        "silencer_share": 0.3451,
+        "median_abs_lfc": 0.1762
+      },
+      "H3K27me3 peak": {
+        "acting": 1978,
+        "silencer": 896,
+        "silencer_share": 0.453,
+        "median_abs_lfc": 0.1684
+      }
+    },
+    "acting_by_state": {
+      "no mark": {
+        "units": 44266,
+        "acting": 6636,
+        "acting_share": 0.1499
+      },
+      "heterochromatin": {
+        "units": 1891,
+        "acting": 160,
+        "acting_share": 0.0846
+      },
+      "active promoter": {
+        "units": 9238,
+        "acting": 3655,
+        "acting_share": 0.3956
+      },
+      "active enhancer": {
+        "units": 4212,
+        "acting": 1082,
+        "acting_share": 0.2569
+      },
+      "acetylated element": {
+        "units": 608,
+        "acting": 149,
+        "acting_share": 0.2451
+      },
+      "primed enhancer": {
+        "units": 9394,
+        "acting": 1988,
+        "acting_share": 0.2116
+      },
+      "promoter mark, not acetylated": {
+        "units": 2687,
+        "acting": 966,
+        "acting_share": 0.3595
+      },
+      "Polycomb-repressed": {
+        "units": 8725,
+        "acting": 1131,
+        "acting_share": 0.1296
+      },
+      "poised enhancer": {
+        "units": 1810,
+        "acting": 438,
+        "acting_share": 0.242
+      },
+      "bivalent": {
+        "units": 983,
+        "acting": 408,
+        "acting_share": 0.4151
+      }
+    }
+  },
+  "caveat": "the outcome is a model's prediction, and AlphaGenome was trained on ENCODE histone ChIP-seq, DNase and expression for these same cell lines: marks predicting its direction partly measures what the model learned from those tracks, not the biology of the element",
+  "evidence": {
+    "marks": "experimental: ENCODE Histone ChIP-seq (GRCh38, default analysis)",
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl)",
+    "outcome": "predicted: AlphaGenome deletion scoring, chain tables, no new model call"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "result": "rmsk_chr16",
+  "date": "2026-09-11",
+  "chrom": "chr16",
+  "copies": 174004,
+  "repeat_bp": 42317817,
+  "repeat_fraction": null,
+  "by_class": {
+    "SINE": {
+      "copies": 73211,
+      "bp": 16226697,
+      "mean_divergence": 0.173
+    },
+    "LINE": {
+      "copies": 40469,
+      "bp": 12884167,
+      "mean_divergence": 0.245
+    },
+    "LTR": {
+      "copies": 20334,
+      "bp": 6303990,
+      "mean_divergence": 0.212
+    },
+    "DNA": {
+      "copies": 15508,
+      "bp": 2729524,
+      "mean_divergence": 0.228
+    },
+    "Satellite": {
+      "copies": 222,
+      "bp": 2567125,
+      "mean_divergence": 0.209
+    },
+    "Simple_repeat": {
+      "copies": 20562,
+      "bp": 1206481,
+      "mean_divergence": 0.112
+    },
+    "Low_complexity": {
+      "copies": 2932,
+      "bp": 215383,
+      "mean_divergence": 0.197
+    },
+    "Retroposon": {
+      "copies": 180,
+      "bp": 117674,
+      "mean_divergence": 0.153
+    },
+    "RC": {
+      "copies": 86,
+      "bp": 17728,
+      "mean_divergence": 0.276
+    },
+    "Unknown": {
+      "copies": 116,
+      "bp": 12998,
+      "mean_divergence": 0.236
+    },
+    "rRNA": {
+      "copies": 97,
+      "bp": 10729,
+      "mean_divergence": 0.18
+    },
+    "snRNA": {
+      "copies": 128,
+      "bp": 9877,
+      "mean_divergence": 0.128
+    },
+    "srpRNA": {
+      "copies": 47,
+      "bp": 5800,
+      "mean_divergence": 0.166
+    },
+    "tRNA": {
+      "copies": 60,
+      "bp": 3728,
+      "mean_divergence": 0.095
+    },
+    "scRNA": {
+      "copies": 40,
+      "bp": 3582,
+      "mean_divergence": 0.12
+    },
+    "RNA": {
+      "copies": 12,
+      "bp": 2334,
+      "mean_divergence": 0.21
+    }
+  },
+  "top_families": {
+    "SINE/Alu": 13175684,
+    "LINE/L1": 9873797,
+    "SINE/MIR": 3031669,
+    "LTR/ERVL-MaLR": 2953417,
+    "LINE/L2": 2708432,
+    "Satellite/centr": 2466853,
+    "LTR/ERV1": 1757550,
+    "DNA/hAT-Charlie": 1592547,
+    "LTR/ERVL": 1246166,
+    "Simple_repeat/Simple_repeat": 1206481,
+    "DNA/TcMar-Tigger": 651427,
+    "LINE/CR1": 220229,
+    "LTR/ERVK": 216370,
+    "Low_complexity/Low_complexity": 215383,
+    "DNA/hAT-Tip100": 201799
+  },
+  "evidence": "RepeatMasker annotation of hg38 (UCSC rmsk track, Dfam/Repbase library)",
+  "confidence": 0.9
+}

@@ -1,0 +1,185 @@
+{
+  "result": "mandatory_locations",
+  "date": "2026-09-15",
+  "decision": "BIOLANG-v0.4-ECONOMY.md \u00a710 open decision 1: locations opt-in or mandatory",
+  "source": "packaged human proteome (UniProt subcellular location) via genomeos.lib.proteome",
+  "mapping": {
+    "Cytoplasm": "Cytosol",
+    "Cytosol": "Cytosol",
+    "Nucleus": "Nucleus",
+    "Mitochondrion": "Mitochondrion",
+    "Mitochondrion inner membrane": "Mitochondrion",
+    "Mitochondrion matrix": "Mitochondrion",
+    "Mitochondrion outer membrane": "Mitochondrion",
+    "Endoplasmic reticulum": "ER",
+    "Endoplasmic reticulum membrane": "ER",
+    "Cell membrane": "PlasmaMembrane",
+    "Membrane": "PlasmaMembrane",
+    "Secreted": "Extracellular"
+  },
+  "totals": {
+    "programs unaffected (no genes or proteins)": 27,
+    "programs with genes or proteins": 9,
+    "located already": 2,
+    "genes needing a fact": 210,
+    "proteins needing a fact": 19,
+    "of those, UniProt has a location": 0,
+    "genes that are a lookup, not an invention": 163,
+    "of those, it maps to a declared compartment": 0,
+    "human proteins UniProt places nowhere": 0,
+    "proteins with no possible source (not human symbols)": 19
+  },
+  "programs": [
+    {
+      "program": "data/demo/cell_context.bio",
+      "located": false,
+      "genes": 3,
+      "proteins": 3,
+      "genes needing a fact": 3,
+      "of those, a symbol we hold (a lookup)": 3,
+      "proteins needing a fact": 3,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "Myh6",
+        "Nkx2-5",
+        "Syn1"
+      ]
+    },
+    {
+      "program": "data/demo/gastrulation.bio",
+      "located": false,
+      "genes": 4,
+      "proteins": 4,
+      "genes needing a fact": 4,
+      "of those, a symbol we hold (a lookup)": 4,
+      "proteins needing a fact": 4,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "Nodal",
+        "Sox17",
+        "Sox2",
+        "Tbxt"
+      ]
+    },
+    {
+      "program": "data/demo/lateral_inhibition.bio",
+      "located": false,
+      "genes": 2,
+      "proteins": 3,
+      "genes needing a fact": 2,
+      "of those, a symbol we hold (a lookup)": 0,
+      "proteins needing a fact": 3,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "Dext",
+        "Dp",
+        "Np"
+      ]
+    },
+    {
+      "program": "data/demo/repressilator.bio",
+      "located": false,
+      "genes": 3,
+      "proteins": 3,
+      "genes needing a fact": 3,
+      "of those, a symbol we hold (a lookup)": 0,
+      "proteins needing a fact": 3,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "CI",
+        "LacI",
+        "TetR"
+      ]
+    },
+    {
+      "program": "data/demo/segmentation_clock.bio",
+      "located": false,
+      "genes": 3,
+      "proteins": 3,
+      "genes needing a fact": 3,
+      "of those, a symbol we hold (a lookup)": 3,
+      "proteins needing a fact": 3,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "Fgf8",
+        "Hes7",
+        "Lfng"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/acvu.bio",
+      "located": false,
+      "genes": 2,
+      "proteins": 3,
+      "genes needing a fact": 2,
+      "of those, a symbol we hold (a lookup)": 0,
+      "proteins needing a fact": 3,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": [
+        "Dext",
+        "Dp",
+        "Np"
+      ]
+    },
+    {
+      "program": "data/organisms/human/erythrocyte.bio",
+      "located": true,
+      "genes": 0,
+      "proteins": 4,
+      "genes needing a fact": 0,
+      "of those, a symbol we hold (a lookup)": 0,
+      "proteins needing a fact": 0,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": []
+    },
+    {
+      "program": "data/organisms/human/noncoding_chr21.bio",
+      "located": false,
+      "genes": 193,
+      "proteins": 0,
+      "genes needing a fact": 193,
+      "of those, a symbol we hold (a lookup)": 153,
+      "proteins needing a fact": 0,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": []
+    },
+    {
+      "program": "data/organisms/human/oxphos.bio",
+      "located": true,
+      "genes": 100,
+      "proteins": 105,
+      "genes needing a fact": 0,
+      "of those, a symbol we hold (a lookup)": 0,
+      "proteins needing a fact": 0,
+      "of those, UniProt has a location": 0,
+      "of those, it maps to a declared compartment": 0,
+      "UniProt location we cannot map": [],
+      "human, but UniProt places it nowhere": [],
+      "not a human symbol, so no source exists": []
+    }
+  ]
+}

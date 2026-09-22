@@ -1,0 +1,878 @@
+{
+  "result": "celegans_fate_credit",
+  "date": "2026-09-21",
+  "question": "of the 555 embryonic terminal fates, how many do the measured transcription factors decide on their own -- with no credit for a fate the observed lineage lookup supplied, and none for a rule fitted to the observed labels?",
+  "what_this_cannot_do": [
+    "the 555 cells, their birth times, the tree above them, the fact that each is terminal and the vocabulary of 17 terminal types all come from the observed lineage",
+    "100 of the 555 are not in Ma 2021 and inherit the factor set of the nearest tracked ancestor, along the observed tree",
+    "the atlas ends at the bean stage, so a fate whose terminal genes come later is not in the measurement",
+    "holding a fitted rule out by founder sublineage does not make it unfitted: the hypothesis class was chosen with all 555 labels in view"
+  ],
+  "denominators": {
+    "embryonic_terminal_cells": 555,
+    "in_a_tissue_a_cited_rule_can_name": 247,
+    "tissues_a_cited_rule_can_name": [
+      "hypoderm",
+      "intestine",
+      "muscle",
+      "sheath"
+    ],
+    "terminal_types_in_the_lineage_labelling": 17,
+    "tracked_in_the_atlas_themselves": 455,
+    "inheriting_an_ancestor_factor_set": 100,
+    "factors_in_the_atlas": 266,
+    "tissue_counts": {
+      "neuron": 226,
+      "muscle": 122,
+      "hypoderm": 69,
+      "intestine": 34,
+      "sheath": 22,
+      "socket": 18,
+      "other": 15,
+      "epithelium": 13,
+      "marginal": 9,
+      "valve": 8,
+      "excretory": 5,
+      "gland": 5,
+      "coelomocyte": 4,
+      "rectal": 2,
+      "repro": 2,
+      "mesoderm": 1
+    },
+    "ceiling_from_the_rule_vocabulary": {
+      "cited rules (intestine, muscle, hypoderm, sheath)": 247,
+      "cited + the fitted neuron rules": 473
+    }
+  },
+  "baselines_that_use_no_factors": {
+    "majority_tissue": {
+      "right": 226,
+      "of": 555,
+      "fraction": 0.4072,
+      "names": "neuron"
+    },
+    "sublineage_majority": {
+      "right": 364,
+      "of": 555,
+      "fraction": 0.6559
+    },
+    "draw_from_the_composition": {
+      "expected_right": 132.1,
+      "of": 555
+    }
+  },
+  "f1_resolved": {
+    "clause_the_score": {
+      "predicted": 522,
+      "observed": 522,
+      "held": true
+    },
+    "clause_the_cells_claimed": {
+      "predicted_from_the_2026_09_15_result_file": 332,
+      "observed": 414,
+      "held": false,
+      "diagnosis": "the rules are byte-identical to the shipped fates.bio and the reads they are written on are recomputed here from the same atlas, so nothing in area E's program moved; what moved is the runtime. `share`, `pool`/`cost` and `order` landed after 2026-09-15, and the number of cells a factor rule gets a turn on inside a differentiation chain is not invariant under them. The published fate score did not move (522 either way), which is why nobody noticed: the same score is now reached with the factor rules firing on 414 cells instead of 332. A score that cannot see that change is the reason for this whole measurement."
+    }
+  },
+  "headline_across_the_threshold_plateau": [
+    {
+      "threshold": 1,
+      "claimed": 209,
+      "honest": 184
+    },
+    {
+      "threshold": 15,
+      "claimed": 209,
+      "honest": 184
+    },
+    {
+      "threshold": 30,
+      "claimed": 209,
+      "honest": 184
+    },
+    {
+      "threshold": 45,
+      "claimed": 209,
+      "honest": 184
+    },
+    {
+      "threshold": 60,
+      "claimed": 209,
+      "honest": 184
+    },
+    {
+      "threshold": 90,
+      "claimed": 207,
+      "honest": 184
+    },
+    {
+      "threshold": 120,
+      "claimed": 194,
+      "honest": 180
+    }
+  ],
+  "terminality_gate": {
+    "guard as shipped": {
+      "lookup_fate_decisions_deleted": 555,
+      "guard": "cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve",
+      "cells_born_by_hatching": 1439,
+      "of_those_terminal_in_the_reference": 555,
+      "cells_a_factor_rule_fired_on": 0,
+      "of_those_terminal": 0,
+      "of_those_not_terminal": 0,
+      "terminal_and_right": 0,
+      "honest_of_555": 0,
+      "undifferentiated_types_the_run_produces": [
+        "ABaPrecursor",
+        "ABpPrecursor",
+        "Blastomere",
+        "CPrecursor",
+        "DPrecursor",
+        "EMSPrecursor",
+        "EPrecursor",
+        "GermCell",
+        "MSPrecursor"
+      ]
+    },
+    "guard opened to any undifferentiated cell": {
+      "lookup_fate_decisions_deleted": 555,
+      "guard": "ABaPrecursor|ABpPrecursor|Blastomere|CPrecursor|DPrecursor|EMSPrecursor|EPrecursor|GermCell|MSPrecursor",
+      "cells_born_by_hatching": 1439,
+      "of_those_terminal_in_the_reference": 555,
+      "cells_a_factor_rule_fired_on": 184,
+      "of_those_terminal": 79,
+      "of_those_not_terminal": 105,
+      "terminal_and_right": 44,
+      "honest_of_555": 44,
+      "undifferentiated_types_the_run_produces": [
+        "ABaPrecursor",
+        "ABpPrecursor",
+        "Blastomere",
+        "CPrecursor",
+        "DPrecursor",
+        "EMSPrecursor",
+        "EPrecursor",
+        "GermCell",
+        "MSPrecursor"
+      ]
+    }
+  },
+  "arms": {
+    "cited + fitted, in sample": {
+      "cells": 555,
+      "claimed": 414,
+      "claimed_right": 381,
+      "claimed_wrong": 33,
+      "abstained": 141,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 414,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -33,
+      "with_lookup_fallback": 522,
+      "honest": 381,
+      "honest_fraction": 0.6865,
+      "precision": 0.9203,
+      "confusion": {
+        "neuron->Hypodermis": 14,
+        "neuron->Muscle": 4,
+        "other->Neuron": 4,
+        "coelomocyte->Muscle": 4,
+        "sheath->Neuron": 2,
+        "socket->Hypodermis": 2,
+        "muscle->Neuron": 1,
+        "excretory->Muscle": 1,
+        "gland->Neuron": 1
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 215,
+          "of": 414,
+          "fraction": 0.5193
+        },
+        "sublineage_majority": {
+          "right": 335,
+          "of": 414,
+          "fraction": 0.8092
+        }
+      }
+    },
+    "cited + fitted, held out by founder sublineage": {
+      "cells": 555,
+      "claimed": 446,
+      "claimed_right": 374,
+      "claimed_wrong": 72,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 446,
+      "abstained": 109,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -72,
+      "with_lookup_fallback": 483,
+      "honest": 374,
+      "honest_fraction": 0.6739,
+      "precision": 0.8386,
+      "per_sublineage": {
+        "ABal": {
+          "cells": 91,
+          "claimed": 70,
+          "claimed_right": 58,
+          "claimed_wrong": 12
+        },
+        "ABar": {
+          "cells": 81,
+          "claimed": 48,
+          "claimed_right": 33,
+          "claimed_wrong": 15
+        },
+        "ABpl": {
+          "cells": 88,
+          "claimed": 72,
+          "claimed_right": 67,
+          "claimed_wrong": 5
+        },
+        "ABpr": {
+          "cells": 95,
+          "claimed": 82,
+          "claimed_right": 71,
+          "claimed_wrong": 11
+        },
+        "C": {
+          "cells": 47,
+          "claimed": 45,
+          "claimed_right": 43,
+          "claimed_wrong": 2
+        },
+        "D": {
+          "cells": 20,
+          "claimed": 20,
+          "claimed_right": 20,
+          "claimed_wrong": 0
+        },
+        "E": {
+          "cells": 34,
+          "claimed": 34,
+          "claimed_right": 34,
+          "claimed_wrong": 0
+        },
+        "MS": {
+          "cells": 77,
+          "claimed": 55,
+          "claimed_right": 32,
+          "claimed_wrong": 23
+        },
+        "other": {
+          "cells": 22,
+          "claimed": 20,
+          "claimed_right": 16,
+          "claimed_wrong": 4
+        }
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 212,
+          "of": 446,
+          "fraction": 0.4753
+        },
+        "sublineage_majority": {
+          "right": 336,
+          "of": 446,
+          "fraction": 0.7534
+        }
+      }
+    },
+    "cited only, nothing fitted": {
+      "cells": 555,
+      "claimed": 209,
+      "claimed_right": 184,
+      "claimed_wrong": 25,
+      "abstained": 346,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 209,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -25,
+      "with_lookup_fallback": 530,
+      "honest": 184,
+      "honest_fraction": 0.3315,
+      "precision": 0.8804,
+      "confusion": {
+        "neuron->Hypodermis": 14,
+        "neuron->Muscle": 4,
+        "coelomocyte->Muscle": 4,
+        "socket->Hypodermis": 2,
+        "excretory->Muscle": 1
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 18,
+          "of": 209,
+          "fraction": 0.0861
+        },
+        "sublineage_majority": {
+          "right": 143,
+          "of": 209,
+          "fraction": 0.6842
+        }
+      }
+    },
+    "cited only, held out (must be identical)": {
+      "cells": 555,
+      "claimed": 209,
+      "claimed_right": 184,
+      "claimed_wrong": 25,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 209,
+      "abstained": 346,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -25,
+      "with_lookup_fallback": 530,
+      "honest": 184,
+      "honest_fraction": 0.3315,
+      "precision": 0.8804,
+      "per_sublineage": {
+        "ABal": {
+          "cells": 91,
+          "claimed": 8,
+          "claimed_right": 6,
+          "claimed_wrong": 2
+        },
+        "ABar": {
+          "cells": 81,
+          "claimed": 15,
+          "claimed_right": 12,
+          "claimed_wrong": 3
+        },
+        "ABpl": {
+          "cells": 88,
+          "claimed": 18,
+          "claimed_right": 15,
+          "claimed_wrong": 3
+        },
+        "ABpr": {
+          "cells": 95,
+          "claimed": 17,
+          "claimed_right": 10,
+          "claimed_wrong": 7
+        },
+        "C": {
+          "cells": 47,
+          "claimed": 45,
+          "claimed_right": 43,
+          "claimed_wrong": 2
+        },
+        "D": {
+          "cells": 20,
+          "claimed": 20,
+          "claimed_right": 20,
+          "claimed_wrong": 0
+        },
+        "E": {
+          "cells": 34,
+          "claimed": 34,
+          "claimed_right": 34,
+          "claimed_wrong": 0
+        },
+        "MS": {
+          "cells": 77,
+          "claimed": 32,
+          "claimed_right": 28,
+          "claimed_wrong": 4
+        },
+        "other": {
+          "cells": 22,
+          "claimed": 20,
+          "claimed_right": 16,
+          "claimed_wrong": 4
+        }
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 18,
+          "of": 209,
+          "fraction": 0.0861
+        },
+        "sublineage_majority": {
+          "right": 143,
+          "of": 209,
+          "fraction": 0.6842
+        }
+      }
+    },
+    "textbook rules only": {
+      "cells": 555,
+      "claimed": 204,
+      "claimed_right": 179,
+      "claimed_wrong": 25,
+      "abstained": 351,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 204,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -25,
+      "with_lookup_fallback": 530,
+      "honest": 179,
+      "honest_fraction": 0.3225,
+      "precision": 0.8775,
+      "confusion": {
+        "neuron->Hypodermis": 14,
+        "neuron->Muscle": 4,
+        "coelomocyte->Muscle": 4,
+        "socket->Hypodermis": 2,
+        "excretory->Muscle": 1
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 18,
+          "of": 204,
+          "fraction": 0.0882
+        },
+        "sublineage_majority": {
+          "right": 143,
+          "of": 204,
+          "fraction": 0.701
+        }
+      }
+    },
+    "fitted neuron rules only, in sample": {
+      "cells": 555,
+      "claimed": 260,
+      "claimed_right": 213,
+      "claimed_wrong": 47,
+      "abstained": 295,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 260,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -47,
+      "with_lookup_fallback": 508,
+      "honest": 213,
+      "honest_fraction": 0.3838,
+      "precision": 0.8192,
+      "confusion": {
+        "muscle->Neuron": 27,
+        "hypoderm->Neuron": 7,
+        "intestine->Neuron": 4,
+        "other->Neuron": 4,
+        "sheath->Neuron": 2,
+        "coelomocyte->Neuron": 2,
+        "gland->Neuron": 1
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 213,
+          "of": 260,
+          "fraction": 0.8192
+        },
+        "sublineage_majority": {
+          "right": 241,
+          "of": 260,
+          "fraction": 0.9269
+        }
+      }
+    },
+    "fitted neuron rules only, held out": {
+      "cells": 555,
+      "claimed": 301,
+      "claimed_right": 210,
+      "claimed_wrong": 91,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 301,
+      "abstained": 254,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -91,
+      "with_lookup_fallback": 464,
+      "honest": 210,
+      "honest_fraction": 0.3784,
+      "precision": 0.6977,
+      "per_sublineage": {
+        "ABal": {
+          "cells": 91,
+          "claimed": 66,
+          "claimed_right": 54,
+          "claimed_wrong": 12
+        },
+        "ABar": {
+          "cells": 81,
+          "claimed": 38,
+          "claimed_right": 26,
+          "claimed_wrong": 12
+        },
+        "ABpl": {
+          "cells": 88,
+          "claimed": 56,
+          "claimed_right": 54,
+          "claimed_wrong": 2
+        },
+        "ABpr": {
+          "cells": 95,
+          "claimed": 73,
+          "claimed_right": 67,
+          "claimed_wrong": 6
+        },
+        "C": {
+          "cells": 47,
+          "claimed": 3,
+          "claimed_right": 1,
+          "claimed_wrong": 2
+        },
+        "D": {
+          "cells": 20,
+          "claimed": 18,
+          "claimed_right": 0,
+          "claimed_wrong": 18
+        },
+        "E": {
+          "cells": 34,
+          "claimed": 4,
+          "claimed_right": 0,
+          "claimed_wrong": 4
+        },
+        "MS": {
+          "cells": 77,
+          "claimed": 35,
+          "claimed_right": 6,
+          "claimed_wrong": 29
+        },
+        "other": {
+          "cells": 22,
+          "claimed": 8,
+          "claimed_right": 2,
+          "claimed_wrong": 6
+        }
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 210,
+          "of": 301,
+          "fraction": 0.6977
+        },
+        "sublineage_majority": {
+          "right": 246,
+          "of": 301,
+          "fraction": 0.8173
+        }
+      }
+    },
+    "mean(lineage) >= 0.25, cited + fitted, in sample": {
+      "cells": 555,
+      "claimed": 414,
+      "claimed_right": 392,
+      "claimed_wrong": 22,
+      "abstained": 141,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 414,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -22,
+      "with_lookup_fallback": 533,
+      "honest": 392,
+      "honest_fraction": 0.7063,
+      "precision": 0.9469,
+      "confusion": {
+        "hypoderm->Neuron": 7,
+        "neuron->Hypodermis": 4,
+        "socket->Neuron": 3,
+        "muscle->Neuron": 3,
+        "sheath->Neuron": 3,
+        "excretory->Neuron": 2
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 225,
+          "of": 414,
+          "fraction": 0.5435
+        },
+        "sublineage_majority": {
+          "right": 340,
+          "of": 414,
+          "fraction": 0.8213
+        }
+      }
+    },
+    "mean(lineage) >= 0.25, held out": {
+      "cells": 555,
+      "claimed": 423,
+      "claimed_right": 383,
+      "claimed_wrong": 40,
+      "abstained_wrong": 0,
+      "lookup_wrote_it_first": 423,
+      "abstained": 132,
+      "decided_a_fate_the_lookup_had_not": 0,
+      "net_effect_on_the_score": -40,
+      "with_lookup_fallback": 515,
+      "honest": 383,
+      "honest_fraction": 0.6901,
+      "precision": 0.9054,
+      "per_sublineage": {
+        "ABal": {
+          "cells": 91,
+          "claimed": 62,
+          "claimed_right": 61,
+          "claimed_wrong": 1
+        },
+        "ABar": {
+          "cells": 81,
+          "claimed": 44,
+          "claimed_right": 38,
+          "claimed_wrong": 6
+        },
+        "ABpl": {
+          "cells": 88,
+          "claimed": 81,
+          "claimed_right": 69,
+          "claimed_wrong": 12
+        },
+        "ABpr": {
+          "cells": 95,
+          "claimed": 86,
+          "claimed_right": 77,
+          "claimed_wrong": 9
+        },
+        "C": {
+          "cells": 47,
+          "claimed": 45,
+          "claimed_right": 45,
+          "claimed_wrong": 0
+        },
+        "D": {
+          "cells": 20,
+          "claimed": 20,
+          "claimed_right": 18,
+          "claimed_wrong": 2
+        },
+        "E": {
+          "cells": 34,
+          "claimed": 34,
+          "claimed_right": 34,
+          "claimed_wrong": 0
+        },
+        "MS": {
+          "cells": 77,
+          "claimed": 31,
+          "claimed_right": 30,
+          "claimed_wrong": 1
+        },
+        "other": {
+          "cells": 22,
+          "claimed": 20,
+          "claimed_right": 11,
+          "claimed_wrong": 9
+        }
+      },
+      "baselines_on_the_same_cells": {
+        "majority_tissue": {
+          "right": 221,
+          "of": 423,
+          "fraction": 0.5225
+        },
+        "sublineage_majority": {
+          "right": 336,
+          "of": 423,
+          "fraction": 0.7943
+        }
+      }
+    }
+  },
+  "shuffle_null_for_the_cited_rules": {
+    "permutations": 200,
+    "claimed_mean": 169.0,
+    "right_mean": 26.05,
+    "right_sd": 4.27,
+    "right_max": 37
+  },
+  "answer": {
+    "denominator": 555,
+    "ladder": [
+      {
+        "of_555": 522,
+        "arm": "the published number: a factor rule where one applies, the observed lineage lookup everywhere else",
+        "what_it_still_borrows": "the lookup supplies 141 of these and is right by construction"
+      },
+      {
+        "of_555": 381,
+        "arm": "factors credited only where a rule decided: cited rules plus the fitted neuron list, in sample",
+        "what_it_still_borrows": "414 cells claimed, precision 0.9203; the neuron rules are fitted to the observed labels"
+      },
+      {
+        "of_555": 374,
+        "arm": "the same, held out one founder sublineage at a time",
+        "what_it_still_borrows": "no rule credited on a lineage whose labels it saw; the hypothesis class still came from all 555"
+      },
+      {
+        "of_555": 184,
+        "arm": "nothing fitted anywhere: the seven textbook rules and the cited sheath-glia rule",
+        "what_it_still_borrows": "209 cells claimed, precision 0.8804; ceiling 247 because the cited rules name four tissues of seventeen"
+      },
+      {
+        "of_555": 44,
+        "arm": "the same rules with the lineage's terminality gate removed as well: the lookup's 555 fate decisions deleted and the rules free to fire on any undifferentiated cell",
+        "what_it_still_borrows": "184 cells claimed of 1,439, of which 105 are not terminal cells at all"
+      },
+      {
+        "of_555": 0,
+        "arm": "the same rules with their shipped guard and the lookup's fate decisions deleted",
+        "what_it_still_borrows": "the guard is a terminal `cell_type`, which only the lookup ever sets, so the rules are never asked"
+      }
+    ],
+    "the_order_the_program_runs_in": {
+      "claimed_fates_the_lookup_had_already_written": {
+        "cited + fitted, in sample": [
+          414,
+          414
+        ],
+        "cited + fitted, held out by founder sublineage": [
+          446,
+          446
+        ],
+        "cited only, nothing fitted": [
+          209,
+          209
+        ],
+        "cited only, held out (must be identical)": [
+          209,
+          209
+        ],
+        "textbook rules only": [
+          204,
+          204
+        ],
+        "fitted neuron rules only, in sample": [
+          260,
+          260
+        ],
+        "fitted neuron rules only, held out": [
+          301,
+          301
+        ],
+        "mean(lineage) >= 0.25, cited + fitted, in sample": [
+          414,
+          414
+        ],
+        "mean(lineage) >= 0.25, held out": [
+          423,
+          423
+        ]
+      },
+      "so": "no factor rule in this program ever decides a fate the observed lineage has not already written on the cell: the rules are guarded on a terminal `cell_type` that only the lookup sets, so they are successors in the same differentiation chain. Because the lookup is the answer sheet, a factor rule can only agree with it or be wrong, never correct it, and the net effect of consulting the factors on the published score is -33 fates."
+    },
+    "baselines_that_read_no_factors": {
+      "majority_tissue": {
+        "right": 226,
+        "of": 555,
+        "fraction": 0.4072,
+        "names": "neuron"
+      },
+      "sublineage_majority": {
+        "right": 364,
+        "of": 555,
+        "fraction": 0.6559
+      },
+      "draw_from_the_composition": {
+        "expected_right": 132.1,
+        "of": 555
+      }
+    }
+  },
+  "preregistered": {
+    "P1 cited rules alone decide 130 to 160 of 555 correctly": {
+      "predicted": "130..160",
+      "observed": 184,
+      "held": false,
+      "why_it_broke": "both derived predictions were derived from the cell counts in the 2026-09-15 result file, and those counts are not invariant under the runtime changes that landed after it (see f1_resolved). The cited rules claim 209 cells here against the 164 of that file. The break is in the generous direction -- the factors are credited with more, not less, than was predicted -- so the negative below is not an artefact of a pessimistic instrument."
+    },
+    "P2 the shipped set decides 299 in sample and 268 held out": {
+      "predicted": [
+        299,
+        268
+      ],
+      "observed": [
+        381,
+        374
+      ],
+      "held": false,
+      "why_it_broke": "the same cause as P1, and the same direction."
+    },
+    "P3 the honest number is below the factor-free majority-tissue baseline": {
+      "predicted": "cited (184) < 226",
+      "observed": [
+        184,
+        226
+      ],
+      "held": true
+    },
+    "P4 where they speak the factors beat the majority tissue on the same cells": {
+      "observed": {
+        "cited only, nothing fitted": [
+          184,
+          18
+        ],
+        "cited + fitted, in sample": [
+          381,
+          215
+        ],
+        "cited + fitted, held out by founder sublineage": [
+          374,
+          212
+        ]
+      },
+      "held": true
+    },
+    "P5 the honest metric reverses the two reads": {
+      "predicted": "mean(lineage) above exposure with the fallback, below it without one",
+      "observed": {
+        "with_fallback": [
+          533,
+          522
+        ],
+        "honest_in_sample": [
+          392,
+          381
+        ],
+        "honest_held_out": [
+          383,
+          374
+        ]
+      },
+      "held": false,
+      "why_it_broke": "the fallback does reward abstention, but not enough to reorder these two reads: `mean(lineage) >= 0.25` is ahead of the shipped `exposure(lineage) >= 15` on the honest metric as well, in sample and held out, while claiming no more cells. This is not on its own a reason to switch the program: the published threshold sweep has `mean` flat from 0.01 to 0.15 and 0.25 on a slope, so that threshold is a knob where 15 min is a plateau, and the choice of read belongs to area E's owner and not to this measurement."
+    },
+    "P6 without the lookup's fates no factor rule fires at all": {
+      "observed": 0,
+      "held": true
+    },
+    "P7 with the guard opened the cited rules claim more non-terminal cells than terminal ones": {
+      "observed": [
+        105,
+        79
+      ],
+      "held": true
+    },
+    "F2 the lookup is a clean fallback: no abstained cell is wrong": {
+      "observed": {
+        "cited + fitted, in sample": 0,
+        "cited + fitted, held out by founder sublineage": 0,
+        "cited only, nothing fitted": 0,
+        "cited only, held out (must be identical)": 0,
+        "textbook rules only": 0,
+        "fitted neuron rules only, in sample": 0,
+        "fitted neuron rules only, held out": 0,
+        "mean(lineage) >= 0.25, cited + fitted, in sample": 0,
+        "mean(lineage) >= 0.25, held out": 0
+      },
+      "held": true
+    },
+    "F3 the headline is flat to within 10 fates across the 1 to 60 min plateau": {
+      "observed": [
+        184,
+        184,
+        184,
+        184,
+        184
+      ],
+      "held": true
+    },
+    "F4 the shuffle null stays more than two sd below the cited number": {
+      "observed": [
+        26.05,
+        4.27,
+        184
+      ],
+      "held": true
+    }
+  }
+}

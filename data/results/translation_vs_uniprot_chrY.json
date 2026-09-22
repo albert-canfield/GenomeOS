@@ -1,0 +1,17 @@
+{
+  "result": "translation_vs_uniprot_chrY",
+  "date": "2026-09-11",
+  "chrom": "chrY",
+  "genes_checked": 61,
+  "exact_canonical": 51,
+  "exact_canonical_fraction": 0.8361,
+  "exact_some_isoform": 59,
+  "exact_some_isoform_fraction": 0.9672,
+  "canonical_differs_but_another_isoform_matches": 8,
+  "same_protein_different_boundaries": 2,
+  "disagreements": [],
+  "disagreement_count": 0,
+  "out_of_frame_canonical": [],
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

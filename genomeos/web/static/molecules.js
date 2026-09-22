@@ -25,7 +25,166 @@
   function tick() { if (spin) angle += 0.012; draw(); if ($('#molecules').classList.contains('active')) requestAnimationFrame(tick); else setTimeout(() => requestAnimationFrame(tick), 500); }
   requestAnimationFrame(tick);
   canvas.onclick = () => { spin = !spin; };
+  function pill(sec) { const k = sec && sec.evidence || 'none'; return `<span class="pill ${k === 'curated' ? 'curated' : k === 'predicted' ? 'predicted' : k === 'experimental' ? 'measured' : 'none'}" data-tip="${(sec && sec.source || '').replace(/"/g, '')} · confidence ${sec ? sec.confidence : 0}">${k}</span>`; }
+  function renderDefinition(d) {
+    const s = d.sections || {}; const id = (s.identity || {}).items;
+    if (!id) { $('#m-def').innerHTML = `<span class="muted">no reviewed UniProt entry${s.identity && s.identity.error ? ': ' + s.identity.error : ''}</span>`; return; }
+    const go = (s.genomic_origin || {}).items; const iso = (s.isoforms || {}).items || []; const fn = (s.function || {}).items || {};
+    const dom = (s.domains || {}).items || {}; const exp = s.structures_experimental || {}; const pred = s.structures_predicted || {};
+    const pw = (s.pathways || {}).items || []; const it = (s.interactions || {}); const its = it.items || []; const ex = (s.expression || {}).items || {};
+    const dis = (s.diseases || {}).items || []; const mods = (s.modifications || {}).items || [];
+    const methods = {}; for (const x of exp.items || []) methods[x.method] = (methods[x.method] || 0) + 1;
+    const cov = d.coverage || {}; const covRow = Object.entries(cov).map(([k, v]) => `<span class="chip" style="opacity:${v ? 1 : .45}" data-tip="${k.replace(/_/g, ' ')}">${v ? '✓' : '·'} ${k.replace(/_/g, ' ')}</span>`).join(' ');
+    const canon = go ? (go.transcripts.find(t => t.canonical) || {}) : {};
+    const ntpm = ex.tissue_ntpm ? Object.entries(ex.tissue_ntpm).sort((a, b) => b[1] - a[1]).slice(0, 8) : [];
+    const sec = (title, body, p) => `<div style="margin-top:8px"><b>${title}</b> ${p}<div style="font-size:12.5px;margin-top:2px">${body}</div></div>`;
+    $('#m-def').innerHTML = `
+      <div style="font-size:12px;margin-bottom:6px">${covRow}</div>
+      <div><b>${d.id}</b> ${id.name} · ${id.length} aa · ${id.existence || ''} ${pill(s.identity)}</div>
+      ${go ? sec('Genomic origin', `${go.gene_id} ${go.locus} · ${go.transcripts.length} transcripts → ${go.protein_products} protein products; canonical ${canon.name || '?'} (${canon.protein_length || '?'} aa). Gene → transcripts → isoforms, never gene → protein.`, pill(s.genomic_origin)) : sec('Genomic origin', `<span class="muted">${(s.genomic_origin || {}).error || 'not fetched'}</span>`, pill(s.genomic_origin))}
+      ${sec('Isoforms (UniProt)', iso.length ? iso.map(i => `<span class="mono">${i.id}</span>${i.name ? ' ' + i.name : ''}${i.status === 'Displayed' ? ' <span class="muted">(canonical sequence)</span>' : ''}`).join(' · ') : '<span class="muted">one form recorded</span>', pill(s.isoforms))}
+      ${sec('Function', `${(fn.summary || [])[0] ? fn.summary[0].slice(0, 400) + (fn.summary[0].length > 400 ? '…' : '') : '<span class="muted">not characterised</span>'}${fn.location && fn.location.length ? `<div class="muted">location: ${fn.location.slice(0, 5).join('; ')}</div>` : ''}`, pill(s.function))}
+      ${sec('Domains', `${(dom.interpro || []).map(x => `<span class="chip" data-tip="${x.id}">${x.name || x.id}</span>`).join(' ') || '<span class="muted">none</span>'}${dom.features && dom.features.length ? `<div class="muted">${dom.features.length} annotated features (domains, regions, sites)</div>` : ''}`, pill(s.domains))}
+      ${sec('Modifications', mods.length ? (() => { const cls = f => { const d = (f.description || '').toLowerCase(); return f.type === 'Disulfide bond' ? 'disulfide' : f.type === 'Glycosylation' ? 'glyco' : f.type === 'Lipidation' ? 'lipid' : d.includes('phospho') ? 'phospho' : d.includes('acetyl') ? 'acetyl' : d.includes('methyl') ? 'methyl' : d.includes('ubiquitin') ? 'ubiquitin' : d.includes('sumo') ? 'sumo' : d.includes('hydroxy') ? 'hydroxy' : 'other'; };
+        const byClass = mods.reduce((a, f) => { const c = cls(f); a[c] = (a[c] || 0) + 1; return a; }, {});
+        const writers = {}; for (const f of mods) { const m = /;\s*by\s+([^;.]+)/.exec(f.description || ''); if (m && !/autocatal/i.test(m[1])) for (const w of m[1].split(/,|\band\b|\/|\bor\b/)) { const s = w.trim().replace(/\s*\(.*?\)/g, ''); if (s && s.length <= 15 && /^[A-Za-z0-9][A-Za-z0-9-]*$/.test(s)) writers[s.toUpperCase()] = (writers[s.toUpperCase()] || 0) + 1; } }
+        const top = Object.entries(writers).sort((a, b) => b[1] - a[1]).slice(0, 10);
+        return `${mods.length} modifiable sites: ${Object.entries(byClass).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}${top.length ? `<div class="muted">written by: ${top.map(([w, n]) => `<span class="chip" data-tip="${n} site${n === 1 ? '' : 's'} on this protein named as written by ${w} (UniProt)">${w} ${n}</span>`).join(' ')}</div>` : ''}<div class="muted" style="font-size:11.5px">a site that can be modified (UniProt, from the literature it cites), not a measurement that it is; <span class="mono">genomeos ptm ${d.gene}</span> lists them</div>`; })() : '<span class="muted">none recorded</span>', pill(s.modifications))}
+      ${sec('Structures', `experimental <b>${exp.count || 0}</b> ${Object.keys(methods).length ? '(' + Object.entries(methods).map(([k, v]) => `${k} ${v}`).join(', ') + ')' : ''} ${pill(exp)} · predicted <b>${(pred.items || []).length}</b> ${pill(pred)} <span class="muted">— predicted is never treated as observed</span>`, '')}
+      ${sec('Pathways (Reactome)', pw.length ? pw.slice(0, 12).map(x => `<span class="chip" data-pw="${x.id}" data-tip="${x.id} · click to run with ${d.gene} knocked out">${x.name}</span>`).join(' ') + (pw.length > 12 ? ` <span class="muted">+${pw.length - 12} more</span>` : '') : '<span class="muted">none</span>', pill(s.pathways))}
+      ${sec('Associations (STRING ≥ 0.7)', its.length ? its.slice(0, 20).map(x => `<span class="chip" data-tip="combined ${x.score}; experimental ${x.experimental}, database ${x.database}, text-mining ${x.textmining}${x.physical_evidence ? ' · experimental support' : ''}" style="${x.physical_evidence ? '' : 'opacity:.6'}">${x.partner}</span>`).join(' ') + ` <span class="muted">${its.length} total, ${its.filter(x => x.physical_evidence).length} with experimental support; dimmed = association without physical evidence</span>` : `<span class="muted">${it.error || 'none'}</span>`, pill(it))}
+      ${sec('Expression (Human Protein Atlas)', ex.tissue_specificity ? `${ex.tissue_specificity}; ${ex.tissue_distribution || ''}; main location ${(ex.subcellular_main || []).join(', ') || '?'}; cell types: ${ex.cell_type_specificity || '?'}${ntpm.length ? `<table style="margin-top:4px">${ntpm.map(([k, v]) => `<tr><td>${k}</td><td class="num mono">${v.toFixed(0)} nTPM</td></tr>`).join('')}</table>` : ''}` : `<span class="muted">${(s.expression || {}).error || 'not fetched'}</span>`, pill(s.expression))}
+      ${dis.length ? sec('Diseases (UniProt)', dis.map(x => `<span class="chip" data-tip="${(x.description || '').replace(/"/g, '')}">${x.name}${x.mim ? ' · MIM ' + x.mim : ''}</span>`).join(' '), pill(s.diseases)) : ''}
+      ${d.states && d.states.length ? `<div class="muted" style="margin-top:8px;font-size:12px">${d.states.length} ProteinState records derived (protein × tissue/cell type × level × location); the definition above is what the protein <i>is</i>, a state is where it is and how much.</div>` : ''}`;
+  }
+  window.moleculesPathway = async function (id, ko) {
+    $('#m-pw-status').textContent = 'fetching Reactome export and running…';
+    try {
+      const d = await window.api(`/api/pathway?id=${encodeURIComponent(id)}${ko ? '&knockout=' + encodeURIComponent(ko) : ''}`);
+      const s = d.summary, k = d.knockout;
+      $('#m-pw-status').textContent = `${s.name} · Reactome v${s.version}`;
+      const lostIds = new Set(k ? k.reactions_lost.map(r => r.id) : []);
+      $('#m-pw-out').innerHTML = `
+        <div><b>${s.pathway}</b> ${s.name} <span class="pill curated">curated</span> · ${s.species} entities (${s.proteins} proteins), ${s.reactions} reactions, ${s.reactions_reachable_from_sources} reachable from the pathway's inputs, ${s.catalysed} catalysed, ${s.inhibited} inhibited</div>
+        ${k ? `<div style="margin-top:6px"><b>knockout ${k.symbol || k.knockout}</b> <span class="pill inferred">inferred</span> <span class="muted">${k.logic} · confidence ${k.confidence}</span><br>${k.entities_containing.length} entities contain it · <b>${k.reactions_lost.length} of ${k.reactions_reachable_baseline} reachable reactions lost (${(k.fraction_lost * 100).toFixed(0)}%)</b> · ${k.products_unreachable.length} products can no longer be made${k.products_unreachable.length ? ': <span class="muted">' + k.products_unreachable.slice(0, 8).join('; ') + (k.products_unreachable.length > 8 ? '…' : '') + '</span>' : ''}</div>` : ''}
+        <table style="margin-top:8px;font-size:12px"><tr><th></th><th>reaction</th><th>inputs</th><th>outputs</th><th>catalyst / inhibitor</th></tr>
+        ${d.reactions.map(r => `<tr style="${lostIds.has(r.id) ? 'color:var(--bad)' : ''}"><td>${lostIds.has(r.id) ? '✗' : '✓'}</td><td>${r.name}</td><td class="muted">${r.inputs.join(' + ')}</td><td class="muted">${r.outputs.join(' + ')}</td><td class="muted">${r.catalysts.map(c => '⚙ ' + c).concat(r.inhibitors.map(i => '⊣ ' + i)).join('; ')}</td></tr>`).join('')}</table>`;
+    } catch (e) { $('#m-pw-status').textContent = e.message; }
+  };
+  window.moleculesKinetic = async function () {
+    const raw = $('#m-kin-model').value.trim(), ko = $('#m-kin-ko').value.trim(), hours = +$('#m-kin-hours').value || 100;
+    const isId = /^(BIOMD|MODEL)\d+$/.test(raw);
+    const query = !isId ? (raw || ($('#m-pw-status').textContent.split(' · ')[0] || '')) : '';
+    if (!isId && !query) { $('#m-kin-status').textContent = 'run a Reactome pathway first, or type a model name or BIOMD id'; return; }
+    $('#m-kin-status').textContent = 'searching BioModels and integrating…';
+    try {
+      const d = await window.api(`/api/pathway_kinetic?${isId ? 'model=' + encodeURIComponent(raw) : 'query=' + encodeURIComponent(query)}${ko ? '&knockout=' + encodeURIComponent(ko) : ''}&hours=${hours}`);
+      const m = d.model, k = d.knockout;
+      $('#m-kin-status').textContent = `${m.model} ${m.name}`;
+      const hits = d.hits && d.hits.length ? `<div class="muted" style="font-size:12px">BioModels, curated, matching “${d.query_used}”: ${d.hits.map(h => `<span class="chip" data-kin="${h.id}" title="${h.name}">${h.id === m.model ? '▶ ' : ''}${h.name.slice(0, 40)}</span>`).join(' ')}</div>` : '';
+      $('#m-kin-out').innerHTML = `${hits}
+        <div style="margin-top:6px"><b>${m.model}</b> ${m.name} <span class="pill curated">curated: BioModels</span> <span class="pill derived">derived: in-house RK4 run</span> · ${m.species} species, ${m.reactions} reactions, ${m.functions} functions, ${m.rate_rules} rate rules · ${m.duration} time units</div>
+        ${k ? (k.held.length ? `<div style="margin-top:6px"><b>knockout ${k.term}</b>${k.accession ? ` <span class="mono muted">${k.accession}</span>` : ''} → held at 0: <span class="mono">${k.held.join(', ')}</span> <span class="pill inferred">inferred from the run</span> · ${k.changed.length} species change final level or peak by ≥ 10% of their range</div>
+          <table style="margin-top:6px;font-size:12px"><tr><th>species</th><th class="num">final</th><th class="num">→ knockout</th><th class="num">peak</th><th class="num">→ knockout</th><th class="num">peaks</th></tr>${k.changed.slice(0, 12).map(r => `<tr><td>${r.name}</td><td class="num">${r.baseline_final.toFixed(3)}</td><td class="num" style="color:${r.final_change < 0 ? 'var(--bad)' : 'var(--ok, #2ea043)'}">${r.knockout_final.toFixed(3)} (${(r.final_change * 100).toFixed(0)}%)</td><td class="num">${r.baseline_peak.toFixed(3)}</td><td class="num" style="color:${r.peak_change < 0 ? 'var(--bad)' : 'var(--ok, #2ea043)'}">${r.knockout_peak.toFixed(3)} (${(r.peak_change * 100).toFixed(0)}%)</td><td class="num">${r.peaks_before} → ${r.peaks_after}</td></tr>`).join('')}</table>` : `<div class="muted" style="margin-top:6px">knockout ${k.term}: no species of the model matches that name${k.accession ? ' or accession ' + k.accession : ''}</div>`) : ''}`;
+      $('#m-kin-out').querySelectorAll('[data-kin]').forEach(c => c.onclick = () => { $('#m-kin-model').value = c.dataset.kin; window.moleculesKinetic(); });
+      const svg = $('#m-kin-chart'); svg.style.display = 'block';
+      const series = [];
+      const names = Object.keys(d.series).slice(0, 6);
+      names.forEach(s => series.push({name: d.levels[s].name, values: d.series[s]}));
+      if (k && k.series) Object.entries(k.series).slice(0, 3).forEach(([s, v]) => series.push({name: d.levels[s].name + ' (knockout)', values: v, dash: true}));
+      if (window.lineChart) window.lineChart(svg, $('#m-kin-legend'), d.times, series, {xunit: ''});
+    } catch (e) { $('#m-kin-status').textContent = e.message; }
+  };
+  document.addEventListener('DOMContentLoaded', () => { const b = $('#m-kin-run'); if (b) b.onclick = window.moleculesKinetic; });
+  // ---- knowledge-graph neighbourhood: a small force layout on a canvas
+  const G = {nodes: [], edges: [], drag: null, raf: 0, ticks: 0};
+  const KIND_COL = {protein: '#1f6feb', pathway: '#1a7f37', domain: '#8250df', tissue: '#bf8700'};
+  function gCanvas() { return $('#m-graph'); }
+  function gDraw() {
+    const c = gCanvas(); if (!c) return; const dpr = window.devicePixelRatio || 1; const W = c.clientWidth, H = c.clientHeight; if (!W) return;
+    c.width = W * dpr; c.height = H * dpr; const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const byId = Object.fromEntries(G.nodes.map(n => [n.id, n]));
+    for (const e of G.edges) { const a = byId[e.a], b = byId[e.b]; if (!a || !b) continue; ctx.strokeStyle = e.rel === 'associates' ? (e.physical ? '#1f6feb' : '#8b949e') : KIND_COL[b.kind] || '#999'; ctx.globalAlpha = 0.25 + e.confidence * 0.5; ctx.lineWidth = e.rel === 'associates' ? 0.6 + (e.score || 0.7) : 1; ctx.setLineDash(e.rel === 'associates' && !e.physical ? [3, 3] : []); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+    const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#222';
+    for (const n of G.nodes) { const r = n.centre ? 9 : n.kind === 'protein' ? 6 : 5; ctx.fillStyle = KIND_COL[n.kind] || '#999'; ctx.globalAlpha = n.compiled === false ? 0.55 : 1; ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; if (n.centre || n.kind === 'protein' || G.nodes.length <= 25) { ctx.fillStyle = ink; ctx.fillText(n.kind === 'tissue' ? n.name : (n.kind === 'pathway' || n.kind === 'domain') ? (n.name || n.id).slice(0, 22) : n.id, n.x, n.y - r - 3); } }
+  }
+  function gStep() {
+    const c = gCanvas(); const W = c.clientWidth, H = c.clientHeight; const byId = Object.fromEntries(G.nodes.map(n => [n.id, n]));
+    for (const n of G.nodes) { n.vx = (n.vx || 0) * 0.85; n.vy = (n.vy || 0) * 0.85; }
+    for (let i = 0; i < G.nodes.length; i++) for (let k = i + 1; k < G.nodes.length; k++) { const a = G.nodes[i], b = G.nodes[k]; let dx = b.x - a.x, dy = b.y - a.y; const d2 = dx * dx + dy * dy + 0.01; const f = 900 / d2; const d = Math.sqrt(d2); dx /= d; dy /= d; a.vx -= dx * f; a.vy -= dy * f; b.vx += dx * f; b.vy += dy * f; }
+    for (const e of G.edges) { const a = byId[e.a], b = byId[e.b]; if (!a || !b) continue; const dx = b.x - a.x, dy = b.y - a.y; const d = Math.sqrt(dx * dx + dy * dy) + 0.01; const want = e.rel === 'associates' ? 90 : 70; const f = (d - want) * 0.02; a.vx += dx / d * f; a.vy += dy / d * f; b.vx -= dx / d * f; b.vy -= dy / d * f; }
+    for (const n of G.nodes) { if (n === G.drag) continue; n.vx += (W / 2 - n.x) * 0.002; n.vy += (H / 2 - n.y) * 0.002; n.x = Math.max(10, Math.min(W - 10, n.x + n.vx)); n.y = Math.max(14, Math.min(H - 10, n.y + n.vy)); }
+    gDraw(); if (G.ticks++ < 300) G.raf = requestAnimationFrame(gStep);
+  }
+  window.moleculesGraph = async function (gene) {
+    $('#m-graph-status').textContent = 'building from the local definitions…';
+    try {
+      const n = await window.api(`/api/graph?gene=${encodeURIComponent(gene)}&max=40`);
+      if (!n.nodes.length) { $('#m-graph-status').textContent = 'not compiled locally yet'; G.nodes = []; G.edges = []; gDraw(); return; }
+      const c = gCanvas(); const W = c.clientWidth || 800, H = c.clientHeight || 380;
+      G.nodes = n.nodes.map((x, i) => ({...x, centre: x.id === n.centre, x: W / 2 + (x.id === n.centre ? 0 : Math.cos(i) * 120), y: H / 2 + (x.id === n.centre ? 0 : Math.sin(i) * 120)}));
+      G.edges = n.edges; G.ticks = 0; cancelAnimationFrame(G.raf); gStep();
+      const d = n.degree; $('#m-graph-status').textContent = `${n.centre}: ${d.associates} associations, ${d.member_of} pathways, ${d.has_domain} domains, ${d.expressed_in} tissues with nTPM`;
+      const uncompiled = n.nodes.filter(x => x.kind === 'protein' && x.compiled === false).map(x => x.id);
+      $('#m-graph-info').innerHTML = `showing ${n.nodes.length - 1} of its neighbours (highest confidence first) · blue protein (faded = not compiled locally), green pathway, purple domain, amber tissue · solid blue association = STRING experimental channel, dashed = other channels${uncompiled.length ? ` · <button class="ghost" id="m-graph-grow" style="padding:1px 8px;font-size:11px" data-tip="Compile the ${Math.min(8, uncompiled.length)} nearest uncompiled partners from the public databases (a few seconds each) so the graph grows around this protein.">🌱 compile ${Math.min(8, uncompiled.length)} partners</button>` : ''}`;
+      const grow = $('#m-graph-grow');
+      if (grow) grow.onclick = async () => {
+        const todo = uncompiled.slice(0, 8);
+        for (let i = 0; i < todo.length; i++) {
+          $('#m-graph-status').textContent = `compiling ${todo[i]} (${i + 1}/${todo.length})…`;
+          try { await window.api(`/api/protein_definition?gene=${encodeURIComponent(todo[i])}`); } catch (e) { /* a partner without a reviewed entry is skipped */ }
+        }
+        window.moleculesGraph(gene);
+      };
+    } catch (e) { $('#m-graph-status').textContent = e.message; }
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    const c = gCanvas(); if (!c) return;
+    const pick = ev => { const r = c.getBoundingClientRect(); const x = ev.clientX - r.left, y = ev.clientY - r.top; return G.nodes.find(n => (n.x - x) ** 2 + (n.y - y) ** 2 < 100); };
+    c.addEventListener('mousedown', ev => { G.drag = pick(ev); });
+    c.addEventListener('mousemove', ev => { if (G.drag) { const r = c.getBoundingClientRect(); G.drag.x = ev.clientX - r.left; G.drag.y = ev.clientY - r.top; gDraw(); } else { const n = pick(ev); c.title = n ? `${n.kind}: ${n.name || n.id}` : ''; } });
+    window.addEventListener('mouseup', () => { G.drag = null; });
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    const b = $('#m-report'); if (!b) return;
+    b.onclick = async () => {
+      const out = $('#m-report-out'); out.style.display = 'block'; out.textContent = 'assembling the dossier…';
+      try { const r = await window.api(`/api/report?gene=${encodeURIComponent($('#m-gene').value.trim())}&chrom=${encodeURIComponent($('#m-chrom').value.trim())}`); out.textContent = r.markdown; }
+      catch (e) { out.textContent = e.message; }
+    };
+  });
+  window.moleculesRna = async function (gene, chrom) {
+    $('#m-rna-status').textContent = 'listing transcripts, fetching GTEx…';
+    try {
+      const r = await window.api(`/api/rna?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);
+      const tx = r.transcripts, e = r.expression;
+      let html = '';
+      if (tx) {
+        html += `<div><b>${tx.count} transcripts</b>, ${tx.coding_isoforms} coding · ${Object.entries(tx.by_biotype).map(([k, v]) => `${k.replace(/_/g, ' ')} ${v}`).join(', ')} <span class="pill curated">curated: GENCODE</span></div>
+          <div class="scroll" style="max-height:220px"><table style="margin-top:6px;font-size:12px"><tr><th>transcript</th><th>biotype</th><th class="num">exons</th><th class="num">spliced nt</th><th class="num">CDS nt</th><th class="num">aa</th><th>tags</th></tr>
+          ${tx.transcripts.map(x => `<tr><td class="mono">${x.name}</td><td>${x.biotype_label}</td><td class="num">${x.exons}</td><td class="num">${x.spliced_nt ?? '-'}</td><td class="num">${x.cds_nt ?? '-'}</td><td class="num">${x.protein_aa ?? '-'}</td><td class="muted">${x.tags.join(', ')}</td></tr>`).join('')}</table></div>`;
+      } else if (chrom) html += `<div class="muted">no local gene models for ${chrom}; transcripts need chr21 or chrM</div>`;
+      if (e && e.tissues && Object.keys(e.tissues).length) {
+        const mx = e.max_tpm || 1;
+        html += `<div style="margin-top:8px"><b>expression</b> ${e.pattern}; median ${e.median_tpm} TPM over ${e.tissues_measured} tissues, ${e.tissues_expressed} with ≥ 1 TPM <span class="pill experimental">measured: GTEx v8</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;font-size:11.5px;margin-top:4px">${Object.entries(e.tissues).map(([t, v]) => `<div style="display:flex;align-items:center;gap:6px"><span style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t}">${t.replace(/_/g, ' ')}</span><i style="display:inline-block;height:8px;width:${Math.max(1, v / mx * 90)}px;background:var(--c1);border-radius:2px"></i><span class="muted num">${v.toFixed(0)}</span></div>`).join('')}</div>`;
+      } else if (e) html += `<div class="muted" style="margin-top:6px">expression: ${e.error || 'unavailable'}</div>`;
+      $('#m-rna').innerHTML = html || '<span class="muted">nothing found</span>';
+      $('#m-rna-status').textContent = tx ? `${tx.gene} · ${tx.gene_type}` : '';
+    } catch (err) { $('#m-rna-status').textContent = err.message; }
+  };
+  window.moleculesDefinition = async function (gene) {
+    $('#m-def-status').textContent = 'compiling from Ensembl, UniProt, STRING, HPA…';
+    try { const d = await window.api(`/api/protein_definition?gene=${encodeURIComponent(gene)}`); renderDefinition(d); $('#m-def-status').textContent = 'from local knowledge cache after the first compile'; }
+    catch (e) { $('#m-def-status').textContent = e.message; }
+    $('#m-def').querySelectorAll('[data-pw]').forEach(c => c.onclick = () => { $('#m-pw').value = c.dataset.pw; $('#m-ko').value = gene; window.moleculesPathway(c.dataset.pw, gene); });
+  };
+  document.addEventListener('DOMContentLoaded', () => { const b = $('#m-pw-run'); if (b) b.onclick = () => window.moleculesPathway($('#m-pw').value.trim(), $('#m-ko').value.trim()); });
   window.moleculesLoad = async function (gene, chrom) {
+    window.moleculesDefinition(gene);
+    window.moleculesRna(gene, chrom);
+    window.moleculesGraph(gene);
     $('#m-status').textContent = 'fetching UniProt and AlphaFold…';
     try {
       const r = await window.api(`/api/protein?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);

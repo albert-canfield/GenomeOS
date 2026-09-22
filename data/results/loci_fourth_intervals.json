@@ -1,0 +1,606 @@
+{
+  "result": "loci_fourth_intervals",
+  "date": "2026-09-21",
+  "elements": [
+    {
+      "id": "EH38E2007761",
+      "chrom": "chr2",
+      "start": 70086244,
+      "end": 70086594,
+      "length": 350,
+      "genes_in_window": 31,
+      "tracks": 371,
+      "seconds": 1.5,
+      "predicted": {
+        "gene": "PCBP1",
+        "action": "activates",
+        "log2_fold_change": -0.2304,
+        "tissue": "occipital lobe",
+        "strength": "weak",
+        "confidence": 0.23,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "PCBP1",
+        "action": "activates",
+        "log2_fold_change": -0.2304,
+        "tissue": "occipital lobe",
+        "strength": "weak",
+        "confidence": 0.23,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.0928,
+        "IMR-90": -0.092,
+        "K562": -0.1051,
+        "GM12878": -0.1649
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0928,
+        "IMR-90": -0.092,
+        "K562": -0.1051,
+        "GM12878": -0.1649
+      },
+      "top_genes": [
+        {
+          "gene": "PCBP1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1389,
+          "max_drop_log2fc": -0.2304,
+          "max_drop_tissue": "occipital lobe",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.0928,
+            "IMR-90": -0.092,
+            "K562": -0.1051,
+            "GM12878": -0.1649
+          }
+        },
+        {
+          "gene": "PCBP1-AS1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1228,
+          "max_drop_log2fc": -0.2187,
+          "max_drop_tissue": "ascending aorta",
+          "max_rise_log2fc": 0.0072,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": 0.0032,
+            "IMR-90": -0.0553,
+            "K562": 0.0039,
+            "GM12878": -0.0872
+          }
+        },
+        {
+          "gene": "ENSG00000233060",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1039,
+          "max_drop_log2fc": -0.2126,
+          "max_drop_tissue": "B cell",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.0738,
+            "IMR-90": -0.0818,
+            "K562": -0.0692,
+            "GM12878": -0.1389
+          }
+        },
+        {
+          "gene": "ASPRV1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0736,
+          "max_drop_log2fc": -0.2106,
+          "max_drop_tissue": "heart right ventricle",
+          "max_rise_log2fc": 0.0589,
+          "max_rise_tissue": "smooth muscle cell",
+          "by_cell": {
+            "HepG2": -0.0316,
+            "IMR-90": -0.004,
+            "K562": -0.0004,
+            "GM12878": -0.1121
+          }
+        },
+        {
+          "gene": "RN7SL470P",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0479,
+          "max_drop_log2fc": -0.1576,
+          "max_drop_tissue": "tibial nerve",
+          "max_rise_log2fc": 0.0182,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": 0.0114,
+            "IMR-90": -0.0009,
+            "K562": 0.0182,
+            "GM12878": -0.041
+          }
+        }
+      ],
+      "inferred": {
+        "gene": "ENSG00000293615",
+        "distance": 900,
+        "basis": "promoter of",
+        "confidence": 0.8
+      },
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "another gene in the same domain",
+      "domain": "chr2:D489",
+      "overlapping_element": "EH38E2007761",
+      "scored_the_stated_interval": false,
+      "locus": "PCBP1_WTC11_chr2_70086k",
+      "substituted_annotated_element": true
+    },
+    {
+      "id": "EH38E1811448",
+      "chrom": "chr16",
+      "start": 30472445,
+      "end": 30472793,
+      "length": 348,
+      "genes_in_window": 104,
+      "tracks": 371,
+      "seconds": 1.4,
+      "predicted": {
+        "gene": "ENSG00000261346",
+        "action": "activates",
+        "log2_fold_change": -3.7252,
+        "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ITGAL",
+        "action": "activates",
+        "log2_fold_change": -3.3652,
+        "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.0018,
+        "IMR-90": 0.0001,
+        "K562": -0.0004,
+        "GM12878": 0.1542
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -1.0538,
+        "IMR-90": -0.0809,
+        "K562": -1.2163,
+        "GM12878": -0.8894
+      },
+      "top_genes": [
+        {
+          "gene": "ENSG00000261346",
+          "n_tracks": 371,
+          "mean_log2fc": -0.3462,
+          "max_drop_log2fc": -3.7252,
+          "max_drop_tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.1646,
+          "max_rise_tissue": "GM12878",
+          "by_cell": {
+            "HepG2": -0.0018,
+            "IMR-90": 0.0001,
+            "K562": -0.0004,
+            "GM12878": 0.1542
+          }
+        },
+        {
+          "gene": "ITGAL-AS1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.3038,
+          "max_drop_log2fc": -3.4571,
+          "max_drop_tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.6087,
+          "max_rise_tissue": "GM12878",
+          "by_cell": {
+            "HepG2": -0.0016,
+            "IMR-90": 0.0004,
+            "K562": 0.0057,
+            "GM12878": 0.3849
+          }
+        },
+        {
+          "gene": "MIR4518",
+          "n_tracks": 371,
+          "mean_log2fc": -0.5449,
+          "max_drop_log2fc": -3.3688,
+          "max_drop_tissue": "CD4-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.0939,
+          "max_rise_tissue": "testis",
+          "by_cell": {
+            "HepG2": -0.0665,
+            "IMR-90": -0.0017,
+            "K562": -0.302,
+            "GM12878": -0.9885
+          }
+        },
+        {
+          "gene": "ITGAL",
+          "n_tracks": 371,
+          "mean_log2fc": -0.9221,
+          "max_drop_log2fc": -3.3652,
+          "max_drop_tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.1633,
+          "max_rise_tissue": "foreskin melanocyte",
+          "by_cell": {
+            "HepG2": -1.0538,
+            "IMR-90": -0.0809,
+            "K562": -1.2163,
+            "GM12878": -0.8894
+          }
+        },
+        {
+          "gene": "RNU7-61P",
+          "n_tracks": 367,
+          "mean_log2fc": -0.1305,
+          "max_drop_log2fc": -2.8409,
+          "max_drop_tissue": "CD4-positive, alpha-beta T cell",
+          "max_rise_log2fc": 0.1747,
+          "max_rise_tissue": "sigmoid colon",
+          "by_cell": {
+            "HepG2": -0.0,
+            "IMR-90": -0.0,
+            "K562": -0.0003,
+            "GM12878": 0.0078
+          }
+        }
+      ],
+      "inferred": {
+        "gene": "ITGAL",
+        "distance": 38,
+        "basis": "promoter of",
+        "confidence": 0.8
+      },
+      "verdict": "another gene in the same domain",
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chr16:D226",
+      "overlapping_element": "EH38E1811448",
+      "scored_the_stated_interval": false,
+      "locus": "SEPHS2_Jurkat_chr16_30472k",
+      "substituted_annotated_element": true
+    },
+    {
+      "id": "chr16_88496084_88496583",
+      "chrom": "chr16",
+      "start": 88496084,
+      "end": 88496583,
+      "length": 499,
+      "genes_in_window": 41,
+      "tracks": 371,
+      "seconds": 1.5,
+      "predicted": {
+        "gene": "ZFPM1",
+        "action": "activates",
+        "log2_fold_change": -0.1095,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.11,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "ZFPM1",
+        "action": "activates",
+        "log2_fold_change": -0.1095,
+        "tissue": "placenta",
+        "strength": "weak",
+        "confidence": 0.11,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.0241,
+        "IMR-90": -0.0177,
+        "K562": 0.0185,
+        "GM12878": 0.0179
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0241,
+        "IMR-90": -0.0177,
+        "K562": 0.0185,
+        "GM12878": 0.0179
+      },
+      "top_genes": [
+        {
+          "gene": "ZFPM1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0025,
+          "max_drop_log2fc": -0.1095,
+          "max_drop_tissue": "placenta",
+          "max_rise_log2fc": 0.0886,
+          "max_rise_tissue": "Whole_Blood",
+          "by_cell": {
+            "HepG2": -0.0241,
+            "IMR-90": -0.0177,
+            "K562": 0.0185,
+            "GM12878": 0.0179
+          }
+        },
+        {
+          "gene": "ZFPM1-AS1",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0066,
+          "max_drop_log2fc": -0.0829,
+          "max_drop_tissue": "Karpas-422",
+          "max_rise_log2fc": 0.0784,
+          "max_rise_tissue": "CD4-positive, alpha-beta T cell",
+          "by_cell": {
+            "HepG2": -0.0012,
+            "IMR-90": 0.0091,
+            "K562": -0.0198,
+            "GM12878": -0.0492
+          }
+        },
+        {
+          "gene": "MIR5189",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0009,
+          "max_drop_log2fc": -0.0342,
+          "max_drop_tissue": "endothelial cell of coronary artery",
+          "max_rise_log2fc": 0.0321,
+          "max_rise_tissue": "heart left ventricle",
+          "by_cell": {
+            "HepG2": -0.0191,
+            "IMR-90": -0.008,
+            "K562": 0.0136,
+            "GM12878": 0.0028
+          }
+        },
+        {
+          "gene": "SNAI3",
+          "n_tracks": 371,
+          "mean_log2fc": 0.001,
+          "max_drop_log2fc": -0.0191,
+          "max_drop_tissue": "left ventricle myocardium inferior",
+          "max_rise_log2fc": 0.0131,
+          "max_rise_tissue": "left lobe of liver",
+          "by_cell": {
+            "HepG2": 0.0106,
+            "IMR-90": 0.0052,
+            "K562": -0.0028,
+            "GM12878": 0.0008
+          }
+        },
+        {
+          "gene": "IL17C",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0008,
+          "max_drop_log2fc": -0.0176,
+          "max_drop_tissue": "colonic mucosa",
+          "max_rise_log2fc": 0.0104,
+          "max_rise_tissue": "natural killer cell",
+          "by_cell": {
+            "HepG2": 0.0028,
+            "IMR-90": 0.0021,
+            "K562": 0.0016,
+            "GM12878": 0.005
+          }
+        }
+      ],
+      "domain": "",
+      "overlapping_element": null,
+      "scored_the_stated_interval": true,
+      "locus": "TRAPPC2L_K562_chr16_88496k",
+      "substituted_annotated_element": false
+    },
+    {
+      "id": "chr18_9889157_9889957",
+      "chrom": "chr18",
+      "start": 9889157,
+      "end": 9889957,
+      "length": 800,
+      "genes_in_window": 27,
+      "tracks": 371,
+      "seconds": 1.1,
+      "predicted": {
+        "gene": "TXNDC2",
+        "action": "activates",
+        "log2_fold_change": -0.119,
+        "tissue": "prostate gland",
+        "strength": "weak",
+        "confidence": 0.119,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "TXNDC2",
+        "action": "activates",
+        "log2_fold_change": -0.119,
+        "tissue": "prostate gland",
+        "strength": "weak",
+        "confidence": 0.119,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.0008,
+        "IMR-90": 0.0061,
+        "K562": -0.0413,
+        "GM12878": 0.0045
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0008,
+        "IMR-90": 0.0061,
+        "K562": -0.0413,
+        "GM12878": 0.0045
+      },
+      "top_genes": [
+        {
+          "gene": "TXNDC2",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0119,
+          "max_drop_log2fc": -0.119,
+          "max_drop_tissue": "prostate gland",
+          "max_rise_log2fc": 0.0525,
+          "max_rise_tissue": "right lung",
+          "by_cell": {
+            "HepG2": -0.0008,
+            "IMR-90": 0.0061,
+            "K562": -0.0413,
+            "GM12878": 0.0045
+          }
+        },
+        {
+          "gene": "ENSG00000272799",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0138,
+          "max_drop_log2fc": -0.0458,
+          "max_drop_tissue": "MCF 10A",
+          "max_rise_log2fc": 0.0334,
+          "max_rise_tissue": "Adrenal_Gland",
+          "by_cell": {
+            "HepG2": -0.0094,
+            "IMR-90": -0.0325,
+            "K562": -0.0342,
+            "GM12878": -0.0146
+          }
+        },
+        {
+          "gene": "RNA5SP450",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0031,
+          "max_drop_log2fc": -0.0269,
+          "max_drop_tissue": "HT1080",
+          "max_rise_log2fc": 0.0194,
+          "max_rise_tissue": "placenta",
+          "by_cell": {
+            "HepG2": 0.0004,
+            "IMR-90": -0.0148,
+            "K562": -0.0232,
+            "GM12878": -0.0147
+          }
+        },
+        {
+          "gene": "RAB31",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0048,
+          "max_drop_log2fc": -0.0251,
+          "max_drop_tissue": "GM12891",
+          "max_rise_log2fc": 0.0117,
+          "max_rise_tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+          "by_cell": {
+            "HepG2": -0.0089,
+            "IMR-90": -0.0018,
+            "K562": 0.0064,
+            "GM12878": -0.0217
+          }
+        },
+        {
+          "gene": "ENSG00000266891",
+          "n_tracks": 368,
+          "mean_log2fc": -0.0007,
+          "max_drop_log2fc": -0.0193,
+          "max_drop_tissue": "GM12892",
+          "max_rise_log2fc": 0.0078,
+          "max_rise_tissue": "CD8-positive, alpha-beta T cell",
+          "by_cell": {
+            "HepG2": 0.0,
+            "IMR-90": -0.0001,
+            "K562": 0.0003,
+            "GM12878": -0.0003
+          }
+        }
+      ],
+      "domain": "",
+      "overlapping_element": null,
+      "scored_the_stated_interval": true,
+      "locus": "VAPA_K562_chr18_9889k",
+      "substituted_annotated_element": false
+    }
+  ],
+  "read": [
+    {
+      "locus": "PCBP1_WTC11_chr2_70086k",
+      "element": "chr2:70086003-70086502",
+      "substituted_annotated_element": true,
+      "named_first_coding": "PCBP1",
+      "named_first_any": "PCBP1",
+      "log2_fold_change": -0.2304,
+      "action": "activates",
+      "nearest_coding_tss": "ENSG00000293615",
+      "tissue": "occipital lobe",
+      "top_genes": [
+        "PCBP1",
+        "PCBP1-AS1",
+        "ENSG00000233060",
+        "ASPRV1",
+        "RN7SL470P"
+      ],
+      "hit": true,
+      "targets": [
+        "PCBP1"
+      ]
+    },
+    {
+      "locus": "SEPHS2_Jurkat_chr16_30472k",
+      "element": "chr16:30472349-30472911",
+      "substituted_annotated_element": true,
+      "named_first_coding": "ITGAL",
+      "named_first_any": "ENSG00000261346",
+      "log2_fold_change": -3.3652,
+      "action": "activates",
+      "nearest_coding_tss": "ITGAL",
+      "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell",
+      "top_genes": [
+        "ENSG00000261346",
+        "ITGAL-AS1",
+        "MIR4518",
+        "ITGAL",
+        "RNU7-61P"
+      ],
+      "hit": false,
+      "targets": [
+        "SEPHS2"
+      ]
+    },
+    {
+      "locus": "TRAPPC2L_K562_chr16_88496k",
+      "element": "chr16:88496084-88496583",
+      "substituted_annotated_element": false,
+      "named_first_coding": "ZFPM1",
+      "named_first_any": "ZFPM1",
+      "log2_fold_change": -0.1095,
+      "action": "activates",
+      "nearest_coding_tss": "ZFPM1",
+      "tissue": "placenta",
+      "top_genes": [
+        "ZFPM1",
+        "ZFPM1-AS1",
+        "MIR5189",
+        "SNAI3",
+        "IL17C"
+      ],
+      "hit": false,
+      "targets": [
+        "TRAPPC2L"
+      ]
+    },
+    {
+      "locus": "VAPA_K562_chr18_9889k",
+      "element": "chr18:9889157-9889957",
+      "substituted_annotated_element": false,
+      "named_first_coding": "TXNDC2",
+      "named_first_any": "TXNDC2",
+      "log2_fold_change": -0.119,
+      "action": "activates",
+      "nearest_coding_tss": "TXNDC2",
+      "tissue": "prostate gland",
+      "top_genes": [
+        "TXNDC2",
+        "ENSG00000272799",
+        "RNA5SP450",
+        "RAB31",
+        "ENSG00000266891"
+      ],
+      "hit": false,
+      "targets": [
+        "VAPA"
+      ]
+    }
+  ],
+  "carried_forward_from_an_earlier_run": [
+    "PCBP1_WTC11_chr2_70086k"
+  ],
+  "note": "AlphaGenome deletions of the ENCODE CRISPR benchmark's own perturbed intervals, drawn into the fourth frame by genomeos/benchmark/loci_fourth.py and not already covered by the finished sweep. Read by loci._deletion_rows and labelled `stated_interval`, so these rows are never pooled with registry ones. loci.STATED_INTERVAL_RESULTS lists this result's name since 2026-09-21, which is what makes them readable back. Rows a previous run of this frame paid for are carried forward rather than overwritten: see `carried_forward`, and `requests_this_run` counts only what this run spent",
+  "requests_this_run": 3,
+  "seconds": 22.3
+}

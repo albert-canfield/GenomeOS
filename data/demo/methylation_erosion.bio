@@ -1,0 +1,65 @@
+# Why an isolated CpG loses its methylation and a clustered one keeps it.
+#
+# bio.std.methylation holds the mechanism's rates with their evidence, and says `unknown` for the
+# ones nobody has measured per CpG per division. The engine refuses to run until a program binds
+# them, so this program binds them — as its own assumptions, marked inferred and low-confidence,
+# inside the ranges the literature does report. Change one and the prediction changes: that is
+# what makes the ordering below a claim about these numbers rather than about the code.
+#
+# Run it:  bio run data/demo/methylation_erosion.bio
+module methylation_erosion
+
+import bio.std.methylation
+
+# The program's own assumptions (the engine will not supply them):
+param methylation.maintenance_fidelity_solo_wcgw = 0.90 /division {
+  evidence: inferred "assumption: a solo-WCGW CpG is a poor DNMT1 substrate. Zhou et al. 2018 (Nat Genet 50:591) show the loss, not the rate; 0.90 is below the measured whole-genome range of 0.95-0.99"
+  confidence: 0.2
+}
+param methylation.maintenance_fidelity_solo_scgs = 0.95 /division {
+  evidence: inferred "assumption: an isolated CpG with a G/C flank sits at the bottom of the measured range rather than below it"
+  confidence: 0.2
+}
+param methylation.de_novo_dense = 0.05 /division {
+  evidence: inferred "assumption: inside the 0.01-0.2 per strand per division reported at single loci (Laird et al. 2004; Genereux et al. 2005)"
+  confidence: 0.2
+}
+param methylation.de_novo_solo = 0.01 /division {
+  evidence: inferred "assumption: the bottom of the same reported range, because DNMT3A/B recruitment is neighbour-dependent"
+  confidence: 0.2
+}
+param methylation.tet_erasure = 0.0 /division {
+  evidence: inferred "assumption: no active TET turnover, so every loss below comes from replication and imperfect maintenance. An engine default of 0 would have been an invented number; declared here it is a scenario"
+  confidence: 0.2
+}
+param methylation.neighbour_scale = 2.0 CpGs {
+  evidence: inferred "assumption: two CpGs inside the 35 bp window already recruit the enzymes most of the way (collaborative models: Haerter et al. 2014; Lovkvist et al. 2016)"
+  confidence: 0.2
+}
+
+# How far to run it, and from where:
+param methylation.divisions = 100 divisions {
+  evidence: inferred "assumption: a hundred divisions, the order of a long-cultured line's history"
+  confidence: 0.3
+}
+param methylation.initial_level = 0.95 fraction {
+  evidence: experimental "Lister et al. 2009, Nature 462:315 — non-island CpGs in H1 embryonic stem cells are methylated at roughly 0.9 or above"
+  confidence: 0.6
+}
+param methylation.cpgs = 500 sites {
+  evidence: inferred "sampling: 500 sites per context, enough that the sampled mean tracks the exact one"
+  confidence: 0.5
+}
+param methylation.seed = 0 {
+  evidence: inferred "the run is deterministic under this seed"
+  confidence: 1.0
+}
+
+# The prediction: with context-dependent maintenance, an isolated CpG erodes and a clustered one
+# does not, and the two run apart as divisions accumulate.
+# test: unknown_parameters == 0
+# test: methylation.dense final > 0.6
+# test: methylation.sparse final > 0.3
+# test: methylation.solo_wcgw final < 0.3
+# test: methylation.gap final > 0.3
+# test: methylation.gap min < 0.05

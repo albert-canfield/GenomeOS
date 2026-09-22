@@ -1,0 +1,28 @@
+# Design questions put to BioForge over the haematopoiesis module: which single knockout reaches a
+# stated goal while the stated constraints hold. Every answer is a prediction from the module's
+# cited rules, labelled as such. Run: genomeos grow data/organisms/human/haematopoiesis_designs.bio --design
+module organism.human.haematopoiesis_designs
+import haematopoiesis.bio
+
+design lose_neutrophils_keep_the_rest {
+  knockout_any_of: TAL1, GATA1, KLF1, SPI1, CEBPA, GFI1, IRF8, PAX5, NOTCH1, IKZF1
+  at_most: 1
+  until: 3 yr
+  target: type Neutrophil at 3 yr = 0
+  keep: type Erythrocyte at 3 yr >= 2e13
+  keep: type Monocyte at 3 yr >= 1e9
+  keep: type BCell at 3 yr >= 1e11
+  keep: type TCell at 3 yr >= 1e11
+  evidence: curated "the module's requirements: GFI1 is needed by myeloblasts only, C/EBPa also by the GMP"; confidence: 0.5
+}
+
+design no_lymphocytes_at_all {
+  knockout_any_of: SPI1, PAX5, NOTCH1, IKZF1, TCF3, EBF1, GATA3
+  at_most: 2
+  until: 3 yr
+  target: type BCell at 3 yr = 0
+  target: type TCell at 3 yr = 0
+  keep: type Erythrocyte at 3 yr >= 2e13
+  keep: type Neutrophil at 3 yr >= 1e11
+  evidence: curated "one factor upstream of both lineages, or one per lineage"; confidence: 0.5
+}

@@ -1,0 +1,78 @@
+# The first divisions of C. elegans decided by who touches whom, not by who is named.
+#
+# This is founders.bio with one change of kind. Its three signals named their sender and their
+# receiver (`from: cell = P2; to: cell = ABp`), so the geometry of the embryo was written into the
+# rule and could not be wrong. Here a signal names neither cell. A receiver reads the amount of
+# ligand summed over the cells that touch it at that moment (BioLang v0.4 §7.4, `mode: contact;
+# reads: amount`); who touches it comes from contacts_embryo.tsv; which cells present a ligand at
+# all is an `express` decision carrying the measurement that showed it; and which cells can hear a
+# Delta is the maternal GLP-1 protein, inherited by the AB lineage.
+#
+# ABp therefore differs from ABa here for the reason it differs in the embryo: ABp touches P2 and
+# ABa does not. Move that contact in the table and the fates move with it, which is the experiment
+# Priess & Thomson 1987 and Hutter & Schnabel 1994 did by rearranging blastomeres, and which
+# founders.bio cannot state at all. scripts/celegans_contacts.py runs it.
+#
+# One thing here is a workaround rather than biology, and is marked as such below. `EMSPolarised`:
+# the Wnt contact is transient (P2 divides before EMS does), while the polarity it establishes is
+# not, so the read is latched into a cell type, which persists. That part is biology (Goldstein
+# 1992); needing a cell type rather than a state to hold it is the language's limit.
+#
+# A receiver born before its sender (ABp at 28 min, P2 at 36 to 42 min depending on the timer draw)
+# hears the signal because the Body re-resolves a newborn's neighbours, so what matters is that the
+# contact table already lists the pair at the moment the sender is born. contacts_embryo.tsv says
+# why its snapshots are taken at AB divisions rather than P ones.
+#
+# The PAR rules are the same in founders.bio: the first two divisions segregate the maternal factors
+# only while the PAR domain that does the segregating is there, which is what makes the par-2 and
+# par-3 knockouts of Du et al. 2014 come out (scripts/celegans_par.py).
+#
+# Review: Maduro 2010, Dev Dyn 239:1315; Priess 2005, WormBook (Notch).
+# test: entities >= 16
+# test: unknowns == 0
+module organism.celegans.founders_contacts
+import bio.std.development
+
+cell_type ABaPrecursor { parent: Blastomere; evidence: experimental "Priess & Thomson 1987, Cell 48:241 (ABa: anterior pharynx, neurons, hypodermis)"; confidence: 0.9 }
+cell_type ABpPrecursor { parent: Blastomere; evidence: experimental "Priess & Thomson 1987 (ABp fates need the P2 signal)"; confidence: 0.9 }
+cell_type EMSPrecursor { parent: Blastomere; evidence: experimental "Mello et al. 1992 (EMS: pharynx, intestine, muscle)"; confidence: 0.9 }
+cell_type EMSPolarised { parent: EMSPrecursor; evidence: experimental "Goldstein 1992, Nature 357:255; Goldstein 1995, Development 121:1227 (the P2 contact polarises EMS, and is needed only before EMS divides)"; confidence: 0.85 }
+cell_type MSPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 (MS: pharynx, body muscle, coelomocytes)"; confidence: 0.9 }
+cell_type EPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 (E: the 20 intestinal cells)"; confidence: 0.9 }
+cell_type CPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 (C: hypodermis, body muscle)"; confidence: 0.9 }
+cell_type DPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 (D: 20 body muscle cells)"; confidence: 0.9 }
+
+# --- which cells present a ligand: measured, and independent of who hears it ---------------------
+decision presents_apx1 { action: express; when: cell = P2, PIE-1 = present; sets: APX-1; evidence: experimental "Mickey et al. 1996, Development 122:1791 (APX-1 acts in P2); Mello et al. 1994, Cell 77:95; Du et al. 2014, Cell 156:359 (without PIE-1 the P2 identity is lost and ABp becomes ABa-like)"; confidence: 0.9 }
+decision presents_mom2 { action: express; when: cell = P2, PIE-1 = present; sets: MOM-2; evidence: experimental "Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707 (MOM-2 from P2)"; confidence: 0.9 }
+decision presents_lag2 { action: express; when: cell = MS; sets: LAG-2; evidence: experimental "Priess 2005, WormBook (the second Notch interaction is signalled by MS)"; confidence: 0.8 }
+
+# --- the signals: no sender named, no receiver named --------------------------------------------
+# The amount is the ligand summed over the cells touching this one now, weighted by contact area.
+signal Notch_at_contact { mode: contact; ligand: APX-1; receptor: GLP-1; reads: amount; from: APX-1 = present; sets: Notch_amount; evidence: experimental "Mello et al. 1994, Cell 77:95; Mickey et al. 1996, Development 122:1791"; confidence: 0.9 }
+signal Wnt_at_contact { mode: contact; ligand: MOM-2; receptor: MOM-5; reads: amount; from: MOM-2 = present; sets: Wnt_amount; evidence: experimental "Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707"; confidence: 0.9 }
+signal Notch2_at_contact { mode: contact; ligand: LAG-2; receptor: GLP-1; reads: amount; from: LAG-2 = present; sets: Notch2_amount; evidence: experimental "Priess 2005, WormBook (second Notch interaction, anterior pharynx from ABa)"; confidence: 0.8 }
+
+# --- divisions: which daughter keeps which maternal factor --------------------------------------
+# GLP-1 is maternal and its protein is restricted to the AB lineage, which is why only AB cells can
+# hear a Delta at a contact: the restriction is inheritance, not a name in the signal.
+decision div_P0 { action: divide; when: cell = P0, PAR-3 = present; daughters: AB, P1; lineages: AB = AB, P1 = P; after: 0 min; asymmetric: PIE-1 -> P1, SKN-1 -> P1, PAL-1 -> P1, PAR-2 -> P1, PAR-3 -> AB, GLP-1 -> AB; evidence: experimental "Sulston 1983; Kemphues et al. 1988, Cell 52:311 (PAR); Mello 1992 (PIE-1); Bowerman 1992 (SKN-1); Evans et al. 1994, Cell 77:183 (GLP-1 protein in AB only)"; confidence: 0.9 }
+decision div_P0_no_par3 { action: divide; when: cell = P0; daughters: AB, P1; lineages: AB = AB, P1 = P; after: 0 min; asymmetric: PIE-1 -> P1, PAR-2 -> P1, PAR-3 -> AB, GLP-1 -> AB; evidence: experimental "Kemphues et al. 1988, Cell 52:311; Bowerman et al. 1993, Cell 74:443; Boyd et al. 1996, Development 122:3075 (without the anterior PAR domain the somatic specification factors are no longer kept out of AB, so AB inherits SKN-1 and PAL-1 too and takes the EMS fate: Du et al. 2014 observe AB adopting EMS in par-3)"; confidence: 0.7 }
+decision div_P1 { action: divide; when: cell = P1, PAR-2 = present; daughters: EMS, P2; lineages: EMS = EMS, P2 = P; asymmetric: PIE-1 -> P2; evidence: experimental "Sulston 1983; Mello et al. 1992, Cell 70:163 (PIE-1 to the germline side; SKN-1 and PAL-1 in both)"; confidence: 0.9 }
+decision div_P1_no_par2 { action: divide; when: cell = P1; daughters: EMS, P2; lineages: EMS = EMS, P2 = P; asymmetric: PIE-1 -> none; evidence: experimental "Boyd et al. 1996, Development 122:3075; Cheeks et al. 2004, Curr Biol 14:851 (without the posterior PAR domain the germline determinants are not retained on the posterior side, so neither daughter keeps PIE-1 and P2 takes the EMS fate: Du et al. 2014 observe P2 adopting EMS, ABp adopting ABa and E adopting MS in par-2, all three of which follow from P2 losing its identity)"; confidence: 0.7 }
+decision div_EMS_polarised { action: divide; when: cell_type = EMSPolarised; daughters: MS, E; lineages: MS = MS, E = E; asymmetric: POP-1 -> MS; evidence: experimental "Sulston 1983; Lin et al. 1998, Cell 92:229 (the Wnt signal lowers POP-1 in the posterior daughter, E)"; confidence: 0.9 }
+decision div_EMS { action: divide; when: cell = EMS; daughters: MS, E; lineages: MS = MS, E = E; evidence: experimental "Thorpe et al. 1997; Rocheleau et al. 1997 (with no Wnt at the contact both daughters keep POP-1 high and E takes the MS fate)"; confidence: 0.9 }
+decision div_P2 { action: divide; when: cell = P2; daughters: C, P3; lineages: C = C, P3 = P; asymmetric: PIE-1 -> P3, SKN-1 -> P3; evidence: experimental "Sulston 1983; SKN-1 is not maintained in C; PAL-1 in both (Hunter & Kenyon 1996, Cell 87:217)"; confidence: 0.8 }
+decision div_P3 { action: divide; when: cell = P3; daughters: D, P4; lineages: D = D, P4 = P4; asymmetric: PIE-1 -> P4, SKN-1 -> P4; evidence: experimental "Sulston 1983; Hunter & Kenyon 1996"; confidence: 0.8 }
+
+# --- founder fates from the factors each cell holds and the ligand it hears ----------------------
+# ABa and ABp are one rule: the only thing that separates them is how much Delta each hears.
+decision fate_ABp { action: differentiate; when: cell = ABa|ABp, GLP-1 = present, Notch_amount = >=0.5; to: ABpPrecursor; evidence: experimental "Mello et al. 1994, Cell 77:95 (APX-1/GLP-1); Hutter & Schnabel 1994, Development 120:2051 (the fate follows the contact, not the lineage)"; confidence: 0.9 }
+decision fate_ABa { action: differentiate; when: cell = ABa|ABp; to: ABaPrecursor; evidence: experimental "Priess & Thomson 1987, Cell 48:241; Mello et al. 1994, Cell 77:95 (ABa-like is what an AB daughter is when it hears no Delta: the rule above takes precedence when it does)"; confidence: 0.9 }
+decision fate_EMS_polarised { action: differentiate; when: cell_type = EMSPrecursor, Wnt_amount = >=0.5; to: EMSPolarised; evidence: experimental "Goldstein 1992, Nature 357:255 (the P2 contact polarises EMS); Thorpe et al. 1997, Cell 90:695"; confidence: 0.85 }
+decision fate_EMS { action: differentiate; when: cell = AB|EMS|P2, SKN-1 = present, PIE-1 = absent; to: EMSPrecursor; evidence: experimental "Bowerman et al. 1992, Cell 68:1061 (SKN-1); Mello et al. 1992 (without PIE-1, P2 takes the EMS fate); the rule is about what a cell holds, not which cell it is, so AB takes it too when par-3 lets AB inherit SKN-1 (Du et al. 2014)"; confidence: 0.9 }
+decision fate_MS { action: differentiate; when: cell = MS|E, SKN-1 = present, POP-1 = present; to: MSPrecursor; evidence: experimental "Lin et al. 1995, Cell 83:599; Broitman-Maduro et al. 2006 (TBX-35)"; confidence: 0.9 }
+decision fate_E { action: differentiate; when: cell = MS|E, SKN-1 = present, POP-1 = absent; to: EPrecursor; evidence: experimental "Lin et al. 1995 (without POP-1, MS takes the E fate); Maduro et al. 2005 (END-1/END-3)"; confidence: 0.9 }
+decision fate_C { action: differentiate; when: cell = MS|E|C, SKN-1 = absent, PAL-1 = present; to: CPrecursor; evidence: experimental "Hunter & Kenyon 1996, Cell 87:217 (PAL-1 for C; without SKN-1, EMS daughters take the C fate)"; confidence: 0.9 }
+decision fate_D { action: differentiate; when: cell = D, PAL-1 = present, SKN-1 = absent; to: DPrecursor; evidence: experimental "Hunter & Kenyon 1996 (PAL-1 for D)"; confidence: 0.8 }
+decision germline { action: differentiate; when: cell = P4, PIE-1 = present; to: GermCell; evidence: experimental "Mello et al. 1996, Nature 382:710 (PIE-1 keeps the germline transcriptionally silent)"; confidence: 0.9 }

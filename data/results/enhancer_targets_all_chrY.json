@@ -1,0 +1,55 @@
+{
+  "result": "enhancer_targets_all_chrY",
+  "date": "2026-09-13",
+  "chrom": "chrY",
+  "elements_total": 907,
+  "scored": 907,
+  "requests_this_run": 0,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 907,
+    "with_predicted_target": 554,
+    "fraction_with_target": 0.611,
+    "strong": 215,
+    "weak": 339,
+    "silencer_like": 182,
+    "verdicts": {
+      "another gene in the same domain": 431,
+      "no predicted effect": 353,
+      "gene outside the domain": 82,
+      "agrees with nearest TSS in domain": 41
+    },
+    "verdicts_coding": {
+      "no predicted effect": 782,
+      "agrees with nearest TSS in domain": 61,
+      "gene outside the domain": 36,
+      "another gene in the same domain": 28
+    },
+    "coding_target_agrees_with_nearest": 0.488,
+    "fraction_agreeing_with_nearest": 0.074,
+    "fraction_inside_domain": 0.852,
+    "top_tissues": {
+      "placenta": 35,
+      "K562": 31,
+      "testis": 27,
+      "keratinocyte": 18,
+      "GM23338": 18,
+      "kidney": 18,
+      "CD14-positive monocyte": 15,
+      "Karpas-422": 15,
+      "GM12878": 14,
+      "HepG2": 13,
+      "GM23248": 11,
+      "SK-MEL-5": 10
+    },
+    "median_distance_when_agreeing": 2126
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chrY.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

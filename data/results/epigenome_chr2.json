@@ -1,0 +1,4180 @@
+{
+  "result": "epigenome_chr2",
+  "date": "2026-09-22",
+  "chrom": "chr2",
+  "coding_genes": 1252,
+  "registry_elements": 87538,
+  "cell_types": {
+    "K562": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2793,
+          "bp": 3330965
+        },
+        "H3K27ac": {
+          "n": 3004,
+          "bp": 3584599
+        },
+        "H3K4me1": {
+          "n": 5675,
+          "bp": 3944707
+        },
+        "H3K27me3": {
+          "n": 11660,
+          "bp": 11045536
+        },
+        "H3K9me3": {
+          "n": 2026,
+          "bp": 608933
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 953,
+          "H3K4me3": {
+            "n": 723,
+            "share": 0.7587
+          },
+          "H3K27ac": {
+            "n": 625,
+            "share": 0.6558
+          },
+          "H3K4me1": {
+            "n": 638,
+            "share": 0.6695
+          },
+          "states": {
+            "active promoter": 610,
+            "promoter mark, not acetylated": 48,
+            "poised enhancer": 72,
+            "no mark": 73,
+            "primed enhancer": 36,
+            "active enhancer": 6,
+            "Polycomb-repressed": 42,
+            "bivalent": 65,
+            "acetylated element": 1
+          },
+          "H3K27me3": {
+            "n": 179,
+            "share": 0.1878
+          },
+          "H3K9me3": {
+            "n": 20,
+            "share": 0.021
+          }
+        },
+        "silent": {
+          "n": 299,
+          "H3K27me3": {
+            "n": 105,
+            "share": 0.3512
+          },
+          "states": {
+            "Polycomb-repressed": 73,
+            "no mark": 158,
+            "poised enhancer": 32,
+            "primed enhancer": 22,
+            "active enhancer": 2,
+            "active promoter": 6,
+            "acetylated element": 1,
+            "promoter mark, not acetylated": 4,
+            "heterochromatin": 1
+          },
+          "H3K4me1": {
+            "n": 60,
+            "share": 0.2007
+          },
+          "H3K27ac": {
+            "n": 9,
+            "share": 0.0301
+          },
+          "H3K4me3": {
+            "n": 10,
+            "share": 0.0334
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.0033
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.0953,
+        "silent": 0.0827
+      },
+      "promoter_methylation_n": {
+        "read": 951,
+        "silent": 287
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 9630,
+          "states": {
+            "no mark": 51881,
+            "Polycomb-repressed": 7888,
+            "heterochromatin": 256,
+            "promoter mark, not acetylated": 689,
+            "primed enhancer": 2601,
+            "bivalent": 88,
+            "poised enhancer": 580,
+            "active promoter": 1914,
+            "acetylated element": 1041,
+            "active enhancer": 655
+          },
+          "H3K27me3": {
+            "n": 8560,
+            "share": 0.1266
+          },
+          "H3K9me3": {
+            "n": 315,
+            "share": 0.0047
+          },
+          "H3K4me3": {
+            "n": 2691,
+            "share": 0.0398
+          },
+          "H3K4me1": {
+            "n": 5050,
+            "share": 0.0747
+          },
+          "H3K27ac": {
+            "n": 3613,
+            "share": 0.0535
+          },
+          "open_share": 0.1425
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3008,
+          "states": {
+            "Polycomb-repressed": 1397,
+            "no mark": 4954,
+            "primed enhancer": 732,
+            "active promoter": 3209,
+            "promoter mark, not acetylated": 812,
+            "poised enhancer": 525,
+            "acetylated element": 104,
+            "active enhancer": 121,
+            "heterochromatin": 34,
+            "bivalent": 158
+          },
+          "H3K27me3": {
+            "n": 2080,
+            "share": 0.1727
+          },
+          "H3K4me1": {
+            "n": 3160,
+            "share": 0.2623
+          },
+          "H3K4me3": {
+            "n": 4179,
+            "share": 0.3469
+          },
+          "H3K27ac": {
+            "n": 3436,
+            "share": 0.2852
+          },
+          "H3K9me3": {
+            "n": 68,
+            "share": 0.0056
+          },
+          "open_share": 0.2497
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1419,
+          "states": {
+            "no mark": 764,
+            "primed enhancer": 168,
+            "active promoter": 1180,
+            "Polycomb-repressed": 268,
+            "bivalent": 64,
+            "promoter mark, not acetylated": 183,
+            "poised enhancer": 166,
+            "active enhancer": 20,
+            "acetylated element": 23,
+            "heterochromatin": 4
+          },
+          "H3K4me1": {
+            "n": 1096,
+            "share": 0.3859
+          },
+          "H3K4me3": {
+            "n": 1427,
+            "share": 0.5025
+          },
+          "H3K27ac": {
+            "n": 1224,
+            "share": 0.431
+          },
+          "H3K27me3": {
+            "n": 498,
+            "share": 0.1754
+          },
+          "H3K9me3": {
+            "n": 13,
+            "share": 0.0046
+          },
+          "open_share": 0.4996
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 586,
+          "states": {
+            "no mark": 2610,
+            "Polycomb-repressed": 240,
+            "poised enhancer": 10,
+            "promoter mark, not acetylated": 4,
+            "primed enhancer": 30,
+            "heterochromatin": 18,
+            "acetylated element": 2
+          },
+          "H3K27me3": {
+            "n": 250,
+            "share": 0.0858
+          },
+          "H3K4me1": {
+            "n": 40,
+            "share": 0.0137
+          },
+          "H3K4me3": {
+            "n": 4,
+            "share": 0.0014
+          },
+          "H3K9me3": {
+            "n": 19,
+            "share": 0.0065
+          },
+          "H3K27ac": {
+            "n": 2,
+            "share": 0.0007
+          },
+          "open_share": 0.2011
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 300,
+          "states": {
+            "Polycomb-repressed": 261,
+            "no mark": 1725,
+            "poised enhancer": 40,
+            "promoter mark, not acetylated": 23,
+            "heterochromatin": 36,
+            "primed enhancer": 56,
+            "bivalent": 2,
+            "acetylated element": 1,
+            "active promoter": 1
+          },
+          "H3K27me3": {
+            "n": 303,
+            "share": 0.1413
+          },
+          "H3K4me1": {
+            "n": 105,
+            "share": 0.049
+          },
+          "H3K4me3": {
+            "n": 26,
+            "share": 0.0121
+          },
+          "H3K9me3": {
+            "n": 39,
+            "share": 0.0182
+          },
+          "H3K27ac": {
+            "n": 2,
+            "share": 0.0009
+          },
+          "open_share": 0.1399
+        }
+      },
+      "cpg_calls": 4001243,
+      "cpg_calls_covered": 2271250,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 553143,
+          "covered": 303935,
+          "fraction": 0.1532
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 269217,
+          "covered": 172186,
+          "fraction": 0.0537
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 61090,
+          "covered": 37283,
+          "fraction": 0.0453
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 40545,
+          "covered": 27139,
+          "fraction": 0.0791
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 14590,
+          "covered": 7406,
+          "fraction": 0.0387
+        }
+      }
+    },
+    "HepG2": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2615,
+          "bp": 4091512
+        },
+        "H3K27ac": {
+          "n": 3258,
+          "bp": 4764277
+        },
+        "H3K4me1": {
+          "n": 10430,
+          "bp": 18490283
+        },
+        "H3K27me3": {
+          "n": 13732,
+          "bp": 11981349
+        },
+        "H3K9me3": {
+          "n": 13138,
+          "bp": 17245835
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 882,
+          "H3K4me3": {
+            "n": 785,
+            "share": 0.89
+          },
+          "H3K4me1": {
+            "n": 743,
+            "share": 0.8424
+          },
+          "H3K27me3": {
+            "n": 173,
+            "share": 0.1961
+          },
+          "states": {
+            "bivalent": 127,
+            "active promoter": 626,
+            "promoter mark, not acetylated": 32,
+            "Polycomb-repressed": 21,
+            "primed enhancer": 20,
+            "active enhancer": 4,
+            "poised enhancer": 25,
+            "no mark": 27
+          },
+          "H3K27ac": {
+            "n": 652,
+            "share": 0.7392
+          },
+          "H3K9me3": {
+            "n": 4,
+            "share": 0.0045
+          }
+        },
+        "silent": {
+          "n": 370,
+          "H3K27me3": {
+            "n": 178,
+            "share": 0.4811
+          },
+          "states": {
+            "Polycomb-repressed": 128,
+            "no mark": 151,
+            "bivalent": 25,
+            "poised enhancer": 25,
+            "primed enhancer": 26,
+            "active enhancer": 2,
+            "active promoter": 5,
+            "promoter mark, not acetylated": 6,
+            "heterochromatin": 2
+          },
+          "H3K4me3": {
+            "n": 36,
+            "share": 0.0973
+          },
+          "H3K4me1": {
+            "n": 84,
+            "share": 0.227
+          },
+          "H3K27ac": {
+            "n": 7,
+            "share": 0.0189
+          },
+          "H3K9me3": {
+            "n": 2,
+            "share": 0.0054
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.1738,
+        "silent": 0.4672
+      },
+      "promoter_methylation_n": {
+        "read": 882,
+        "silent": 362
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 8232,
+          "states": {
+            "no mark": 41419,
+            "heterochromatin": 1997,
+            "Polycomb-repressed": 7129,
+            "primed enhancer": 9614,
+            "poised enhancer": 1083,
+            "active promoter": 1840,
+            "active enhancer": 2782,
+            "bivalent": 389,
+            "promoter mark, not acetylated": 1303,
+            "acetylated element": 37
+          },
+          "H3K9me3": {
+            "n": 2120,
+            "share": 0.0314
+          },
+          "H3K27me3": {
+            "n": 8601,
+            "share": 0.1272
+          },
+          "H3K4me1": {
+            "n": 16807,
+            "share": 0.2487
+          },
+          "H3K4me3": {
+            "n": 3532,
+            "share": 0.0523
+          },
+          "H3K27ac": {
+            "n": 4661,
+            "share": 0.069
+          },
+          "open_share": 0.1218
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 2425,
+          "states": {
+            "no mark": 3409,
+            "bivalent": 693,
+            "poised enhancer": 422,
+            "active promoter": 3399,
+            "primed enhancer": 1135,
+            "promoter mark, not acetylated": 958,
+            "Polycomb-repressed": 1616,
+            "active enhancer": 308,
+            "heterochromatin": 97,
+            "acetylated element": 9
+          },
+          "H3K4me3": {
+            "n": 5050,
+            "share": 0.4192
+          },
+          "H3K27me3": {
+            "n": 2733,
+            "share": 0.2269
+          },
+          "H3K4me1": {
+            "n": 5010,
+            "share": 0.4159
+          },
+          "H3K27ac": {
+            "n": 3729,
+            "share": 0.3096
+          },
+          "H3K9me3": {
+            "n": 118,
+            "share": 0.0098
+          },
+          "open_share": 0.2013
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1245,
+          "states": {
+            "bivalent": 216,
+            "active promoter": 1180,
+            "no mark": 633,
+            "promoter mark, not acetylated": 221,
+            "Polycomb-repressed": 331,
+            "primed enhancer": 137,
+            "active enhancer": 29,
+            "heterochromatin": 15,
+            "poised enhancer": 78
+          },
+          "H3K4me3": {
+            "n": 1617,
+            "share": 0.5694
+          },
+          "H3K27me3": {
+            "n": 625,
+            "share": 0.2201
+          },
+          "H3K4me1": {
+            "n": 809,
+            "share": 0.2849
+          },
+          "H3K27ac": {
+            "n": 1214,
+            "share": 0.4275
+          },
+          "H3K9me3": {
+            "n": 15,
+            "share": 0.0053
+          },
+          "open_share": 0.4384
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 741,
+          "states": {
+            "no mark": 2320,
+            "Polycomb-repressed": 263,
+            "primed enhancer": 116,
+            "heterochromatin": 192,
+            "promoter mark, not acetylated": 7,
+            "poised enhancer": 11,
+            "active enhancer": 5
+          },
+          "H3K27me3": {
+            "n": 274,
+            "share": 0.094
+          },
+          "H3K4me1": {
+            "n": 139,
+            "share": 0.0477
+          },
+          "H3K9me3": {
+            "n": 194,
+            "share": 0.0666
+          },
+          "H3K4me3": {
+            "n": 7,
+            "share": 0.0024
+          },
+          "H3K27ac": {
+            "n": 5,
+            "share": 0.0017
+          },
+          "open_share": 0.2543
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 248,
+          "states": {
+            "Polycomb-repressed": 292,
+            "no mark": 1440,
+            "heterochromatin": 242,
+            "bivalent": 12,
+            "primed enhancer": 88,
+            "poised enhancer": 28,
+            "promoter mark, not acetylated": 36,
+            "active enhancer": 4,
+            "active promoter": 2,
+            "acetylated element": 1
+          },
+          "H3K27me3": {
+            "n": 332,
+            "share": 0.1548
+          },
+          "H3K9me3": {
+            "n": 248,
+            "share": 0.1156
+          },
+          "H3K4me3": {
+            "n": 50,
+            "share": 0.0233
+          },
+          "H3K4me1": {
+            "n": 161,
+            "share": 0.0751
+          },
+          "H3K27ac": {
+            "n": 7,
+            "share": 0.0033
+          },
+          "open_share": 0.1156
+        }
+      },
+      "cpg_calls": 4108298,
+      "cpg_calls_covered": 2943446,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 564281,
+          "covered": 389648,
+          "fraction": 0.4173
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 278741,
+          "covered": 215412,
+          "fraction": 0.2352
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 62770,
+          "covered": 48482,
+          "fraction": 0.2183
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41321,
+          "covered": 32858,
+          "fraction": 0.2557
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 21084,
+          "covered": 12485,
+          "fraction": 0.3709
+        }
+      }
+    },
+    "GM12878": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 4029,
+          "bp": 3147651
+        },
+        "H3K27ac": {
+          "n": 3941,
+          "bp": 4617531
+        },
+        "H3K4me1": {
+          "n": 6089,
+          "bp": 5127770
+        },
+        "H3K27me3": {
+          "n": 2213,
+          "bp": 499354
+        },
+        "H3K9me3": {
+          "n": 2774,
+          "bp": 915664
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 637,
+          "H3K4me3": {
+            "n": 602,
+            "share": 0.9451
+          },
+          "H3K27ac": {
+            "n": 557,
+            "share": 0.8744
+          },
+          "states": {
+            "active promoter": 545,
+            "promoter mark, not acetylated": 36,
+            "active enhancer": 4,
+            "bivalent": 21,
+            "primed enhancer": 5,
+            "no mark": 14,
+            "acetylated element": 3,
+            "Polycomb-repressed": 7,
+            "poised enhancer": 1,
+            "heterochromatin": 1
+          },
+          "H3K4me1": {
+            "n": 240,
+            "share": 0.3768
+          },
+          "H3K9me3": {
+            "n": 9,
+            "share": 0.0141
+          },
+          "H3K27me3": {
+            "n": 29,
+            "share": 0.0455
+          }
+        },
+        "silent": {
+          "n": 615,
+          "states": {
+            "no mark": 341,
+            "active promoter": 55,
+            "Polycomb-repressed": 113,
+            "promoter mark, not acetylated": 37,
+            "bivalent": 36,
+            "poised enhancer": 7,
+            "acetylated element": 4,
+            "active enhancer": 7,
+            "primed enhancer": 12,
+            "heterochromatin": 3
+          },
+          "H3K4me3": {
+            "n": 128,
+            "share": 0.2081
+          },
+          "H3K27ac": {
+            "n": 67,
+            "share": 0.1089
+          },
+          "H3K4me1": {
+            "n": 95,
+            "share": 0.1545
+          },
+          "H3K27me3": {
+            "n": 156,
+            "share": 0.2537
+          },
+          "H3K9me3": {
+            "n": 7,
+            "share": 0.0114
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.1083,
+        "silent": 0.3679
+      },
+      "promoter_methylation_n": {
+        "read": 637,
+        "silent": 602
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 3795,
+          "states": {
+            "no mark": 57384,
+            "primed enhancer": 3020,
+            "Polycomb-repressed": 640,
+            "active enhancer": 2442,
+            "active promoter": 2440,
+            "heterochromatin": 373,
+            "promoter mark, not acetylated": 620,
+            "acetylated element": 629,
+            "bivalent": 27,
+            "poised enhancer": 18
+          },
+          "H3K4me1": {
+            "n": 7512,
+            "share": 0.1111
+          },
+          "H3K27me3": {
+            "n": 686,
+            "share": 0.0101
+          },
+          "H3K27ac": {
+            "n": 5512,
+            "share": 0.0815
+          },
+          "H3K4me3": {
+            "n": 3087,
+            "share": 0.0457
+          },
+          "H3K9me3": {
+            "n": 496,
+            "share": 0.0073
+          },
+          "open_share": 0.0561
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 805,
+          "states": {
+            "no mark": 6456,
+            "promoter mark, not acetylated": 956,
+            "active promoter": 3017,
+            "Polycomb-repressed": 608,
+            "primed enhancer": 471,
+            "heterochromatin": 39,
+            "active enhancer": 250,
+            "acetylated element": 133,
+            "bivalent": 79,
+            "poised enhancer": 37
+          },
+          "H3K4me3": {
+            "n": 4052,
+            "share": 0.3364
+          },
+          "H3K27ac": {
+            "n": 3404,
+            "share": 0.2826
+          },
+          "H3K27me3": {
+            "n": 724,
+            "share": 0.0601
+          },
+          "H3K4me1": {
+            "n": 1730,
+            "share": 0.1436
+          },
+          "H3K9me3": {
+            "n": 79,
+            "share": 0.0066
+          },
+          "open_share": 0.0668
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 802,
+          "states": {
+            "no mark": 1196,
+            "promoter mark, not acetylated": 264,
+            "active promoter": 1047,
+            "primed enhancer": 72,
+            "active enhancer": 38,
+            "acetylated element": 67,
+            "bivalent": 31,
+            "Polycomb-repressed": 113,
+            "poised enhancer": 5,
+            "heterochromatin": 7
+          },
+          "H3K4me3": {
+            "n": 1342,
+            "share": 0.4725
+          },
+          "H3K27ac": {
+            "n": 1152,
+            "share": 0.4056
+          },
+          "H3K4me1": {
+            "n": 285,
+            "share": 0.1004
+          },
+          "H3K27me3": {
+            "n": 149,
+            "share": 0.0525
+          },
+          "H3K9me3": {
+            "n": 12,
+            "share": 0.0042
+          },
+          "open_share": 0.2824
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 143,
+          "states": {
+            "no mark": 2879,
+            "Polycomb-repressed": 13,
+            "primed enhancer": 11,
+            "heterochromatin": 11
+          },
+          "H3K27me3": {
+            "n": 13,
+            "share": 0.0045
+          },
+          "H3K4me1": {
+            "n": 11,
+            "share": 0.0038
+          },
+          "H3K9me3": {
+            "n": 11,
+            "share": 0.0038
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0491
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 66,
+          "states": {
+            "no mark": 2021,
+            "heterochromatin": 57,
+            "Polycomb-repressed": 33,
+            "promoter mark, not acetylated": 7,
+            "primed enhancer": 19,
+            "poised enhancer": 2,
+            "active enhancer": 3,
+            "active promoter": 2,
+            "acetylated element": 1
+          },
+          "H3K9me3": {
+            "n": 58,
+            "share": 0.027
+          },
+          "H3K27me3": {
+            "n": 35,
+            "share": 0.0163
+          },
+          "H3K4me3": {
+            "n": 9,
+            "share": 0.0042
+          },
+          "H3K4me1": {
+            "n": 27,
+            "share": 0.0126
+          },
+          "H3K27ac": {
+            "n": 6,
+            "share": 0.0028
+          },
+          "open_share": 0.0308
+        }
+      },
+      "cpg_calls": 4134168,
+      "cpg_calls_covered": 3139335,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 570425,
+          "covered": 431119,
+          "fraction": 0.446
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 276958,
+          "covered": 219418,
+          "fraction": 0.3188
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 62699,
+          "covered": 50501,
+          "fraction": 0.2864
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41358,
+          "covered": 34129,
+          "fraction": 0.3134
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 18271,
+          "covered": 9922,
+          "fraction": 0.3932
+        }
+      }
+    },
+    "H1": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2341,
+          "bp": 4256666
+        },
+        "H3K27ac": {
+          "n": 3918,
+          "bp": 1550966
+        },
+        "H3K4me1": {
+          "n": 7597,
+          "bp": 3647407
+        },
+        "H3K27me3": {
+          "n": 2935,
+          "bp": 1958936
+        },
+        "H3K9me3": {
+          "n": 5288,
+          "bp": 3023486
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 1004,
+          "H3K4me3": {
+            "n": 912,
+            "share": 0.9084
+          },
+          "H3K27ac": {
+            "n": 515,
+            "share": 0.5129
+          },
+          "H3K4me1": {
+            "n": 458,
+            "share": 0.4562
+          },
+          "states": {
+            "active promoter": 474,
+            "bivalent": 275,
+            "promoter mark, not acetylated": 163,
+            "primed enhancer": 23,
+            "no mark": 55,
+            "active enhancer": 4,
+            "poised enhancer": 3,
+            "acetylated element": 1,
+            "Polycomb-repressed": 4,
+            "heterochromatin": 2
+          },
+          "H3K27me3": {
+            "n": 282,
+            "share": 0.2809
+          },
+          "H3K9me3": {
+            "n": 12,
+            "share": 0.012
+          }
+        },
+        "silent": {
+          "n": 248,
+          "H3K4me3": {
+            "n": 17,
+            "share": 0.0685
+          },
+          "states": {
+            "promoter mark, not acetylated": 12,
+            "no mark": 205,
+            "primed enhancer": 13,
+            "bivalent": 3,
+            "heterochromatin": 8,
+            "Polycomb-repressed": 3,
+            "poised enhancer": 2,
+            "active promoter": 2
+          },
+          "H3K4me1": {
+            "n": 21,
+            "share": 0.0847
+          },
+          "H3K27me3": {
+            "n": 8,
+            "share": 0.0323
+          },
+          "H3K9me3": {
+            "n": 8,
+            "share": 0.0323
+          },
+          "H3K27ac": {
+            "n": 2,
+            "share": 0.0081
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.2146,
+        "silent": 0.8803
+      },
+      "promoter_methylation_n": {
+        "read": 1003,
+        "silent": 237
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 7343,
+          "states": {
+            "no mark": 58511,
+            "heterochromatin": 677,
+            "primed enhancer": 3636,
+            "promoter mark, not acetylated": 1169,
+            "active promoter": 858,
+            "bivalent": 717,
+            "Polycomb-repressed": 605,
+            "active enhancer": 767,
+            "acetylated element": 519,
+            "poised enhancer": 134
+          },
+          "H3K9me3": {
+            "n": 703,
+            "share": 0.0104
+          },
+          "H3K4me1": {
+            "n": 5949,
+            "share": 0.088
+          },
+          "H3K4me3": {
+            "n": 2744,
+            "share": 0.0406
+          },
+          "H3K27ac": {
+            "n": 2157,
+            "share": 0.0319
+          },
+          "H3K27me3": {
+            "n": 1465,
+            "share": 0.0217
+          },
+          "open_share": 0.1086
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3269,
+          "states": {
+            "promoter mark, not acetylated": 2892,
+            "no mark": 5230,
+            "active promoter": 1420,
+            "primed enhancer": 439,
+            "bivalent": 1521,
+            "active enhancer": 67,
+            "Polycomb-repressed": 319,
+            "acetylated element": 43,
+            "heterochromatin": 57,
+            "poised enhancer": 58
+          },
+          "H3K4me3": {
+            "n": 5833,
+            "share": 0.4842
+          },
+          "H3K4me1": {
+            "n": 2355,
+            "share": 0.1955
+          },
+          "H3K27ac": {
+            "n": 1540,
+            "share": 0.1278
+          },
+          "H3K27me3": {
+            "n": 1900,
+            "share": 0.1577
+          },
+          "H3K9me3": {
+            "n": 71,
+            "share": 0.0059
+          },
+          "open_share": 0.2714
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1747,
+          "states": {
+            "active promoter": 837,
+            "promoter mark, not acetylated": 674,
+            "bivalent": 403,
+            "primed enhancer": 92,
+            "no mark": 779,
+            "active enhancer": 12,
+            "heterochromatin": 13,
+            "Polycomb-repressed": 17,
+            "acetylated element": 10,
+            "poised enhancer": 3
+          },
+          "H3K4me3": {
+            "n": 1914,
+            "share": 0.6739
+          },
+          "H3K27ac": {
+            "n": 863,
+            "share": 0.3039
+          },
+          "H3K27me3": {
+            "n": 424,
+            "share": 0.1493
+          },
+          "H3K4me1": {
+            "n": 414,
+            "share": 0.1458
+          },
+          "H3K9me3": {
+            "n": 15,
+            "share": 0.0053
+          },
+          "open_share": 0.6151
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 587,
+          "states": {
+            "no mark": 2798,
+            "primed enhancer": 43,
+            "heterochromatin": 52,
+            "Polycomb-repressed": 18,
+            "poised enhancer": 2,
+            "active enhancer": 1
+          },
+          "H3K4me1": {
+            "n": 46,
+            "share": 0.0158
+          },
+          "H3K9me3": {
+            "n": 53,
+            "share": 0.0182
+          },
+          "H3K27me3": {
+            "n": 20,
+            "share": 0.0069
+          },
+          "H3K27ac": {
+            "n": 1,
+            "share": 0.0003
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.2014
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 350,
+          "states": {
+            "bivalent": 65,
+            "no mark": 1825,
+            "primed enhancer": 32,
+            "heterochromatin": 117,
+            "promoter mark, not acetylated": 45,
+            "Polycomb-repressed": 52,
+            "poised enhancer": 7,
+            "active enhancer": 1,
+            "acetylated element": 1
+          },
+          "H3K4me3": {
+            "n": 110,
+            "share": 0.0513
+          },
+          "H3K27me3": {
+            "n": 124,
+            "share": 0.0578
+          },
+          "H3K4me1": {
+            "n": 90,
+            "share": 0.042
+          },
+          "H3K9me3": {
+            "n": 122,
+            "share": 0.0569
+          },
+          "H3K27ac": {
+            "n": 2,
+            "share": 0.0009
+          },
+          "open_share": 0.1632
+        }
+      },
+      "cpg_calls": 4094977,
+      "cpg_calls_covered": 2912026,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 565379,
+          "covered": 391950,
+          "fraction": 0.8468
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 275528,
+          "covered": 207555,
+          "fraction": 0.8781
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 62415,
+          "covered": 47587,
+          "fraction": 0.8792
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41086,
+          "covered": 32495,
+          "fraction": 0.87
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 16085,
+          "covered": 7992,
+          "fraction": 0.8022
+        }
+      }
+    },
+    "IMR-90": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 1646,
+          "bp": 2001455
+        },
+        "H3K27ac": {
+          "n": 6253,
+          "bp": 3594126
+        },
+        "H3K4me1": {
+          "n": 13096,
+          "bp": 4649821
+        },
+        "H3K27me3": {
+          "n": 9815,
+          "bp": 4680601
+        },
+        "H3K9me3": {
+          "n": 11523,
+          "bp": 3680073
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 929,
+          "H3K4me3": {
+            "n": 791,
+            "share": 0.8515
+          },
+          "H3K27ac": {
+            "n": 681,
+            "share": 0.733
+          },
+          "states": {
+            "active promoter": 653,
+            "bivalent": 80,
+            "primed enhancer": 24,
+            "active enhancer": 18,
+            "promoter mark, not acetylated": 58,
+            "Polycomb-repressed": 30,
+            "no mark": 60,
+            "acetylated element": 2,
+            "poised enhancer": 3,
+            "heterochromatin": 1
+          },
+          "H3K4me1": {
+            "n": 311,
+            "share": 0.3348
+          },
+          "H3K27me3": {
+            "n": 113,
+            "share": 0.1216
+          },
+          "H3K9me3": {
+            "n": 12,
+            "share": 0.0129
+          }
+        },
+        "silent": {
+          "n": 323,
+          "states": {
+            "no mark": 184,
+            "bivalent": 22,
+            "heterochromatin": 11,
+            "Polycomb-repressed": 94,
+            "promoter mark, not acetylated": 3,
+            "active promoter": 4,
+            "primed enhancer": 4,
+            "active enhancer": 1
+          },
+          "H3K4me3": {
+            "n": 29,
+            "share": 0.0898
+          },
+          "H3K27me3": {
+            "n": 116,
+            "share": 0.3591
+          },
+          "H3K9me3": {
+            "n": 29,
+            "share": 0.0898
+          },
+          "H3K4me1": {
+            "n": 13,
+            "share": 0.0402
+          },
+          "H3K27ac": {
+            "n": 7,
+            "share": 0.0217
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.0456,
+        "silent": 0.5938
+      },
+      "promoter_methylation_n": {
+        "read": 789,
+        "silent": 177
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 15350,
+          "states": {
+            "no mark": 50580,
+            "heterochromatin": 1622,
+            "acetylated element": 1182,
+            "promoter mark, not acetylated": 342,
+            "primed enhancer": 6116,
+            "Polycomb-repressed": 3263,
+            "active enhancer": 3973,
+            "active promoter": 412,
+            "poised enhancer": 37,
+            "bivalent": 66
+          },
+          "H3K9me3": {
+            "n": 1743,
+            "share": 0.0258
+          },
+          "H3K27ac": {
+            "n": 5567,
+            "share": 0.0824
+          },
+          "H3K4me3": {
+            "n": 820,
+            "share": 0.0121
+          },
+          "H3K4me1": {
+            "n": 10320,
+            "share": 0.1527
+          },
+          "H3K27me3": {
+            "n": 3368,
+            "share": 0.0498
+          },
+          "open_share": 0.2271
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3076,
+          "states": {
+            "no mark": 5425,
+            "acetylated element": 138,
+            "promoter mark, not acetylated": 1150,
+            "active promoter": 2589,
+            "primed enhancer": 679,
+            "bivalent": 220,
+            "Polycomb-repressed": 1259,
+            "heterochromatin": 137,
+            "active enhancer": 423,
+            "poised enhancer": 26
+          },
+          "H3K27ac": {
+            "n": 3153,
+            "share": 0.2617
+          },
+          "H3K4me3": {
+            "n": 3959,
+            "share": 0.3287
+          },
+          "H3K4me1": {
+            "n": 1690,
+            "share": 0.1403
+          },
+          "H3K27me3": {
+            "n": 1507,
+            "share": 0.1251
+          },
+          "H3K9me3": {
+            "n": 239,
+            "share": 0.0198
+          },
+          "open_share": 0.2554
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1478,
+          "states": {
+            "no mark": 760,
+            "promoter mark, not acetylated": 325,
+            "active promoter": 1174,
+            "Polycomb-repressed": 225,
+            "bivalent": 113,
+            "heterochromatin": 37,
+            "primed enhancer": 97,
+            "active enhancer": 89,
+            "acetylated element": 19,
+            "poised enhancer": 1
+          },
+          "H3K4me3": {
+            "n": 1612,
+            "share": 0.5676
+          },
+          "H3K27ac": {
+            "n": 1285,
+            "share": 0.4525
+          },
+          "H3K27me3": {
+            "n": 339,
+            "share": 0.1194
+          },
+          "H3K9me3": {
+            "n": 56,
+            "share": 0.0197
+          },
+          "H3K4me1": {
+            "n": 275,
+            "share": 0.0968
+          },
+          "open_share": 0.5204
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 575,
+          "states": {
+            "heterochromatin": 144,
+            "no mark": 2600,
+            "Polycomb-repressed": 152,
+            "primed enhancer": 18
+          },
+          "H3K9me3": {
+            "n": 150,
+            "share": 0.0515
+          },
+          "H3K27me3": {
+            "n": 152,
+            "share": 0.0522
+          },
+          "H3K4me1": {
+            "n": 18,
+            "share": 0.0062
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.1973
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 202,
+          "states": {
+            "heterochromatin": 180,
+            "no mark": 1760,
+            "primed enhancer": 16,
+            "Polycomb-repressed": 174,
+            "bivalent": 4,
+            "promoter mark, not acetylated": 6,
+            "poised enhancer": 5
+          },
+          "H3K9me3": {
+            "n": 185,
+            "share": 0.0862
+          },
+          "H3K4me1": {
+            "n": 23,
+            "share": 0.0107
+          },
+          "H3K27me3": {
+            "n": 183,
+            "share": 0.0853
+          },
+          "H3K4me3": {
+            "n": 10,
+            "share": 0.0047
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0942
+        }
+      },
+      "cpg_calls": 2124549,
+      "cpg_calls_covered": 224804,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 309942,
+          "covered": 33393,
+          "fraction": 0.6831
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 113224,
+          "covered": 8687,
+          "fraction": 0.5898
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 26231,
+          "covered": 2128,
+          "fraction": 0.6183
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 17686,
+          "covered": 1602,
+          "fraction": 0.6394
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 4533,
+          "covered": 1436,
+          "fraction": 0.5618
+        }
+      }
+    },
+    "SK-N-SH": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2157,
+          "bp": 3065694
+        },
+        "H3K27ac": {
+          "n": 7107,
+          "bp": 7524478
+        },
+        "H3K4me1": {
+          "n": 5020,
+          "bp": 4781365
+        },
+        "H3K27me3": {
+          "n": 1843,
+          "bp": 1939717
+        },
+        "H3K9me3": {
+          "n": 1996,
+          "bp": 1285300
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 983,
+          "states": {
+            "no mark": 99,
+            "active promoter": 671,
+            "bivalent": 74,
+            "acetylated element": 19,
+            "promoter mark, not acetylated": 73,
+            "primed enhancer": 9,
+            "Polycomb-repressed": 30,
+            "active enhancer": 8
+          },
+          "H3K4me3": {
+            "n": 818,
+            "share": 0.8321
+          },
+          "H3K27ac": {
+            "n": 711,
+            "share": 0.7233
+          },
+          "H3K27me3": {
+            "n": 107,
+            "share": 0.1089
+          },
+          "H3K4me1": {
+            "n": 150,
+            "share": 0.1526
+          },
+          "H3K9me3": {
+            "n": 3,
+            "share": 0.0031
+          }
+        },
+        "silent": {
+          "n": 269,
+          "H3K4me3": {
+            "n": 19,
+            "share": 0.0706
+          },
+          "H3K27ac": {
+            "n": 19,
+            "share": 0.0706
+          },
+          "states": {
+            "active promoter": 10,
+            "no mark": 216,
+            "acetylated element": 5,
+            "Polycomb-repressed": 18,
+            "primed enhancer": 6,
+            "promoter mark, not acetylated": 8,
+            "active enhancer": 4,
+            "bivalent": 1,
+            "heterochromatin": 1
+          },
+          "H3K27me3": {
+            "n": 19,
+            "share": 0.0706
+          },
+          "H3K4me1": {
+            "n": 16,
+            "share": 0.0595
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.0037
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.2657,
+        "silent": 0.7063
+      },
+      "promoter_methylation_n": {
+        "read": 982,
+        "silent": 259
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 8281,
+          "states": {
+            "no mark": 53388,
+            "heterochromatin": 122,
+            "bivalent": 92,
+            "acetylated element": 4371,
+            "active promoter": 1065,
+            "primed enhancer": 4041,
+            "active enhancer": 2646,
+            "promoter mark, not acetylated": 910,
+            "Polycomb-repressed": 955,
+            "poised enhancer": 3
+          },
+          "H3K9me3": {
+            "n": 127,
+            "share": 0.0019
+          },
+          "H3K4me3": {
+            "n": 2067,
+            "share": 0.0306
+          },
+          "H3K27me3": {
+            "n": 1076,
+            "share": 0.0159
+          },
+          "H3K27ac": {
+            "n": 8093,
+            "share": 0.1197
+          },
+          "H3K4me1": {
+            "n": 7559,
+            "share": 0.1118
+          },
+          "open_share": 0.1225
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3231,
+          "states": {
+            "no mark": 5592,
+            "Polycomb-repressed": 539,
+            "promoter mark, not acetylated": 1462,
+            "active promoter": 2922,
+            "bivalent": 264,
+            "primed enhancer": 382,
+            "active enhancer": 279,
+            "acetylated element": 597,
+            "heterochromatin": 5,
+            "poised enhancer": 4
+          },
+          "H3K27me3": {
+            "n": 848,
+            "share": 0.0704
+          },
+          "H3K4me3": {
+            "n": 4648,
+            "share": 0.3859
+          },
+          "H3K27ac": {
+            "n": 3839,
+            "share": 0.3187
+          },
+          "H3K4me1": {
+            "n": 1212,
+            "share": 0.1006
+          },
+          "H3K9me3": {
+            "n": 9,
+            "share": 0.0007
+          },
+          "open_share": 0.2682
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1638,
+          "states": {
+            "no mark": 879,
+            "promoter mark, not acetylated": 268,
+            "active promoter": 1257,
+            "acetylated element": 129,
+            "active enhancer": 47,
+            "heterochromatin": 1,
+            "primed enhancer": 55,
+            "Polycomb-repressed": 95,
+            "bivalent": 109
+          },
+          "H3K4me3": {
+            "n": 1634,
+            "share": 0.5754
+          },
+          "H3K27ac": {
+            "n": 1448,
+            "share": 0.5099
+          },
+          "H3K4me1": {
+            "n": 171,
+            "share": 0.0602
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.0004
+          },
+          "H3K27me3": {
+            "n": 216,
+            "share": 0.0761
+          },
+          "open_share": 0.5768
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 632,
+          "states": {
+            "no mark": 2812,
+            "heterochromatin": 14,
+            "acetylated element": 46,
+            "primed enhancer": 4,
+            "Polycomb-repressed": 30,
+            "promoter mark, not acetylated": 8
+          },
+          "H3K9me3": {
+            "n": 14,
+            "share": 0.0048
+          },
+          "H3K27ac": {
+            "n": 46,
+            "share": 0.0158
+          },
+          "H3K4me1": {
+            "n": 4,
+            "share": 0.0014
+          },
+          "H3K27me3": {
+            "n": 30,
+            "share": 0.0103
+          },
+          "H3K4me3": {
+            "n": 8,
+            "share": 0.0027
+          },
+          "open_share": 0.2169
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 324,
+          "states": {
+            "no mark": 1962,
+            "heterochromatin": 41,
+            "acetylated element": 35,
+            "promoter mark, not acetylated": 25,
+            "Polycomb-repressed": 79,
+            "bivalent": 2,
+            "active promoter": 1
+          },
+          "H3K9me3": {
+            "n": 41,
+            "share": 0.0191
+          },
+          "H3K27ac": {
+            "n": 36,
+            "share": 0.0168
+          },
+          "H3K4me3": {
+            "n": 28,
+            "share": 0.0131
+          },
+          "H3K27me3": {
+            "n": 82,
+            "share": 0.0382
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.151
+        }
+      },
+      "cpg_calls": 4064033,
+      "cpg_calls_covered": 2705305,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 558586,
+          "covered": 356258,
+          "fraction": 0.6041
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 277239,
+          "covered": 204331,
+          "fraction": 0.3677
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 62626,
+          "covered": 47299,
+          "fraction": 0.4124
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41159,
+          "covered": 31181,
+          "fraction": 0.4431
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 20729,
+          "covered": 11159,
+          "fraction": 0.3512
+        }
+      }
+    },
+    "cardiac muscle cell": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": false,
+      "peaks": {
+        "H3K4me3": {
+          "n": 1180,
+          "bp": 2353209
+        },
+        "H3K27ac": {
+          "n": 5519,
+          "bp": 6966404
+        },
+        "H3K4me1": {
+          "n": 7469,
+          "bp": 7605867
+        },
+        "H3K27me3": {
+          "n": 2960,
+          "bp": 4541239
+        },
+        "H3K9me3": {
+          "n": 105,
+          "bp": 43741
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 1010,
+          "H3K4me3": {
+            "n": 816,
+            "share": 0.8079
+          },
+          "H3K27me3": {
+            "n": 216,
+            "share": 0.2139
+          },
+          "states": {
+            "bivalent": 174,
+            "active promoter": 586,
+            "active enhancer": 23,
+            "promoter mark, not acetylated": 56,
+            "primed enhancer": 13,
+            "no mark": 104,
+            "Polycomb-repressed": 35,
+            "acetylated element": 11,
+            "heterochromatin": 1,
+            "poised enhancer": 7
+          },
+          "H3K27ac": {
+            "n": 643,
+            "share": 0.6366
+          },
+          "H3K4me1": {
+            "n": 329,
+            "share": 0.3257
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.001
+          }
+        },
+        "silent": {
+          "n": 242,
+          "states": {
+            "no mark": 174,
+            "Polycomb-repressed": 27,
+            "bivalent": 9,
+            "active enhancer": 6,
+            "acetylated element": 8,
+            "active promoter": 6,
+            "primed enhancer": 7,
+            "promoter mark, not acetylated": 3,
+            "poised enhancer": 2
+          },
+          "H3K27me3": {
+            "n": 38,
+            "share": 0.157
+          },
+          "H3K4me3": {
+            "n": 18,
+            "share": 0.0744
+          },
+          "H3K4me1": {
+            "n": 23,
+            "share": 0.095
+          },
+          "H3K27ac": {
+            "n": 20,
+            "share": 0.0826
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        }
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 15729,
+          "states": {
+            "no mark": 54391,
+            "poised enhancer": 59,
+            "Polycomb-repressed": 2022,
+            "active enhancer": 4493,
+            "primed enhancer": 4009,
+            "bivalent": 188,
+            "acetylated element": 1901,
+            "active promoter": 325,
+            "promoter mark, not acetylated": 199,
+            "heterochromatin": 6
+          },
+          "H3K4me1": {
+            "n": 8841,
+            "share": 0.1308
+          },
+          "H3K27me3": {
+            "n": 2269,
+            "share": 0.0336
+          },
+          "H3K27ac": {
+            "n": 6723,
+            "share": 0.0995
+          },
+          "H3K4me3": {
+            "n": 712,
+            "share": 0.0105
+          },
+          "H3K9me3": {
+            "n": 8,
+            "share": 0.0001
+          },
+          "open_share": 0.2327
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3535,
+          "states": {
+            "Polycomb-repressed": 1045,
+            "bivalent": 767,
+            "no mark": 5335,
+            "active promoter": 2502,
+            "promoter mark, not acetylated": 1095,
+            "primed enhancer": 430,
+            "active enhancer": 506,
+            "acetylated element": 326,
+            "poised enhancer": 40
+          },
+          "H3K27me3": {
+            "n": 1852,
+            "share": 0.1537
+          },
+          "H3K4me3": {
+            "n": 4364,
+            "share": 0.3623
+          },
+          "H3K27ac": {
+            "n": 3346,
+            "share": 0.2778
+          },
+          "H3K4me1": {
+            "n": 1926,
+            "share": 0.1599
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.2935
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1638,
+          "states": {
+            "bivalent": 287,
+            "active promoter": 1116,
+            "no mark": 826,
+            "active enhancer": 80,
+            "promoter mark, not acetylated": 230,
+            "acetylated element": 57,
+            "Polycomb-repressed": 166,
+            "primed enhancer": 70,
+            "poised enhancer": 8
+          },
+          "H3K4me3": {
+            "n": 1633,
+            "share": 0.575
+          },
+          "H3K27me3": {
+            "n": 461,
+            "share": 0.1623
+          },
+          "H3K27ac": {
+            "n": 1258,
+            "share": 0.443
+          },
+          "H3K4me1": {
+            "n": 245,
+            "share": 0.0863
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.5768
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 663,
+          "states": {
+            "no mark": 2789,
+            "Polycomb-repressed": 66,
+            "primed enhancer": 46,
+            "acetylated element": 9,
+            "active enhancer": 4
+          },
+          "H3K27me3": {
+            "n": 66,
+            "share": 0.0226
+          },
+          "H3K4me1": {
+            "n": 50,
+            "share": 0.0172
+          },
+          "H3K27ac": {
+            "n": 13,
+            "share": 0.0045
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.2275
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 279,
+          "states": {
+            "bivalent": 12,
+            "Polycomb-repressed": 171,
+            "no mark": 1899,
+            "promoter mark, not acetylated": 2,
+            "primed enhancer": 35,
+            "poised enhancer": 7,
+            "active enhancer": 10,
+            "heterochromatin": 3,
+            "acetylated element": 6
+          },
+          "H3K4me3": {
+            "n": 14,
+            "share": 0.0065
+          },
+          "H3K27me3": {
+            "n": 190,
+            "share": 0.0886
+          },
+          "H3K4me1": {
+            "n": 52,
+            "share": 0.0242
+          },
+          "H3K27ac": {
+            "n": 16,
+            "share": 0.0075
+          },
+          "H3K9me3": {
+            "n": 3,
+            "share": 0.0014
+          },
+          "open_share": 0.1301
+        }
+      }
+    },
+    "keratinocyte": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": false,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2950,
+          "bp": 2902364
+        },
+        "H3K27ac": {
+          "n": 4479,
+          "bp": 5222060
+        },
+        "H3K4me1": {
+          "n": 9049,
+          "bp": 9017619
+        },
+        "H3K27me3": {
+          "n": 3707,
+          "bp": 3012476
+        },
+        "H3K9me3": {
+          "n": 1495,
+          "bp": 427013
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 561,
+          "H3K4me3": {
+            "n": 529,
+            "share": 0.943
+          },
+          "H3K27ac": {
+            "n": 489,
+            "share": 0.8717
+          },
+          "states": {
+            "active promoter": 474,
+            "bivalent": 36,
+            "active enhancer": 7,
+            "promoter mark, not acetylated": 19,
+            "primed enhancer": 6,
+            "no mark": 16,
+            "Polycomb-repressed": 3
+          },
+          "H3K4me1": {
+            "n": 372,
+            "share": 0.6631
+          },
+          "H3K27me3": {
+            "n": 39,
+            "share": 0.0695
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.0018
+          }
+        },
+        "silent": {
+          "n": 691,
+          "H3K4me3": {
+            "n": 324,
+            "share": 0.4689
+          },
+          "H3K27ac": {
+            "n": 191,
+            "share": 0.2764
+          },
+          "H3K4me1": {
+            "n": 241,
+            "share": 0.3488
+          },
+          "states": {
+            "active promoter": 178,
+            "Polycomb-repressed": 100,
+            "no mark": 230,
+            "bivalent": 101,
+            "promoter mark, not acetylated": 45,
+            "primed enhancer": 23,
+            "active enhancer": 10,
+            "heterochromatin": 1,
+            "poised enhancer": 3
+          },
+          "H3K27me3": {
+            "n": 204,
+            "share": 0.2952
+          },
+          "H3K9me3": {
+            "n": 3,
+            "share": 0.0043
+          }
+        }
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 4704,
+          "states": {
+            "no mark": 51956,
+            "active enhancer": 4370,
+            "active promoter": 1895,
+            "promoter mark, not acetylated": 556,
+            "primed enhancer": 6012,
+            "bivalent": 174,
+            "Polycomb-repressed": 1965,
+            "heterochromatin": 162,
+            "acetylated element": 416,
+            "poised enhancer": 87
+          },
+          "H3K27ac": {
+            "n": 6685,
+            "share": 0.0989
+          },
+          "H3K4me1": {
+            "n": 12647,
+            "share": 0.1871
+          },
+          "H3K4me3": {
+            "n": 2625,
+            "share": 0.0388
+          },
+          "H3K27me3": {
+            "n": 2226,
+            "share": 0.0329
+          },
+          "H3K9me3": {
+            "n": 207,
+            "share": 0.0031
+          },
+          "open_share": 0.0696
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 675,
+          "states": {
+            "active promoter": 3219,
+            "promoter mark, not acetylated": 915,
+            "no mark": 5055,
+            "Polycomb-repressed": 1076,
+            "bivalent": 526,
+            "primed enhancer": 708,
+            "active enhancer": 430,
+            "acetylated element": 71,
+            "poised enhancer": 40,
+            "heterochromatin": 6
+          },
+          "H3K4me3": {
+            "n": 4660,
+            "share": 0.3869
+          },
+          "H3K27ac": {
+            "n": 3728,
+            "share": 0.3095
+          },
+          "H3K4me1": {
+            "n": 3154,
+            "share": 0.2618
+          },
+          "H3K27me3": {
+            "n": 1642,
+            "share": 0.1363
+          },
+          "H3K9me3": {
+            "n": 19,
+            "share": 0.0016
+          },
+          "open_share": 0.056
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 650,
+          "states": {
+            "active promoter": 1180,
+            "Polycomb-repressed": 238,
+            "no mark": 786,
+            "promoter mark, not acetylated": 257,
+            "active enhancer": 70,
+            "acetylated element": 18,
+            "bivalent": 188,
+            "poised enhancer": 8,
+            "primed enhancer": 90,
+            "heterochromatin": 5
+          },
+          "H3K4me3": {
+            "n": 1625,
+            "share": 0.5722
+          },
+          "H3K27ac": {
+            "n": 1272,
+            "share": 0.4479
+          },
+          "H3K27me3": {
+            "n": 434,
+            "share": 0.1528
+          },
+          "H3K4me1": {
+            "n": 521,
+            "share": 0.1835
+          },
+          "H3K9me3": {
+            "n": 6,
+            "share": 0.0021
+          },
+          "open_share": 0.2289
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 163,
+          "states": {
+            "no mark": 2794,
+            "Polycomb-repressed": 66,
+            "primed enhancer": 43,
+            "promoter mark, not acetylated": 1,
+            "heterochromatin": 9,
+            "poised enhancer": 1
+          },
+          "H3K27me3": {
+            "n": 67,
+            "share": 0.023
+          },
+          "H3K4me1": {
+            "n": 45,
+            "share": 0.0154
+          },
+          "H3K4me3": {
+            "n": 1,
+            "share": 0.0003
+          },
+          "H3K9me3": {
+            "n": 9,
+            "share": 0.0031
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0559
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 67,
+          "states": {
+            "Polycomb-repressed": 135,
+            "no mark": 1921,
+            "heterochromatin": 37,
+            "bivalent": 11,
+            "primed enhancer": 22,
+            "promoter mark, not acetylated": 11,
+            "poised enhancer": 5,
+            "active promoter": 3
+          },
+          "H3K27me3": {
+            "n": 151,
+            "share": 0.0704
+          },
+          "H3K9me3": {
+            "n": 37,
+            "share": 0.0172
+          },
+          "H3K4me3": {
+            "n": 25,
+            "share": 0.0117
+          },
+          "H3K4me1": {
+            "n": 41,
+            "share": 0.0191
+          },
+          "H3K27ac": {
+            "n": 3,
+            "share": 0.0014
+          },
+          "open_share": 0.0312
+        }
+      }
+    },
+    "hepatocyte": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 1587,
+          "bp": 2004192
+        },
+        "H3K27ac": {
+          "n": 8705,
+          "bp": 10039787
+        },
+        "H3K4me1": {
+          "n": 5173,
+          "bp": 4970045
+        },
+        "H3K27me3": {
+          "n": 662,
+          "bp": 1502455
+        },
+        "H3K9me3": {
+          "n": 972,
+          "bp": 629182
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 1024,
+          "H3K4me3": {
+            "n": 791,
+            "share": 0.7725
+          },
+          "H3K27ac": {
+            "n": 792,
+            "share": 0.7734
+          },
+          "H3K27me3": {
+            "n": 149,
+            "share": 0.1455
+          },
+          "states": {
+            "bivalent": 95,
+            "active promoter": 664,
+            "no mark": 90,
+            "promoter mark, not acetylated": 32,
+            "active enhancer": 46,
+            "acetylated element": 43,
+            "Polycomb-repressed": 31,
+            "poised enhancer": 19,
+            "primed enhancer": 4
+          },
+          "H3K4me1": {
+            "n": 344,
+            "share": 0.3359
+          },
+          "H3K9me3": {
+            "n": 2,
+            "share": 0.002
+          }
+        },
+        "silent": {
+          "n": 228,
+          "H3K4me3": {
+            "n": 7,
+            "share": 0.0307
+          },
+          "H3K27ac": {
+            "n": 25,
+            "share": 0.1096
+          },
+          "states": {
+            "active promoter": 6,
+            "no mark": 187,
+            "primed enhancer": 4,
+            "bivalent": 1,
+            "active enhancer": 6,
+            "acetylated element": 13,
+            "Polycomb-repressed": 9,
+            "poised enhancer": 2
+          },
+          "H3K4me1": {
+            "n": 16,
+            "share": 0.0702
+          },
+          "H3K27me3": {
+            "n": 13,
+            "share": 0.057
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.1957,
+        "silent": 0.8674
+      },
+      "promoter_methylation_n": {
+        "read": 1023,
+        "silent": 219
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 11941,
+          "states": {
+            "acetylated element": 7383,
+            "active promoter": 410,
+            "no mark": 51332,
+            "poised enhancer": 90,
+            "primed enhancer": 1967,
+            "active enhancer": 5407,
+            "promoter mark, not acetylated": 139,
+            "Polycomb-repressed": 708,
+            "bivalent": 91,
+            "heterochromatin": 66
+          },
+          "H3K27ac": {
+            "n": 13243,
+            "share": 0.1959
+          },
+          "H3K4me3": {
+            "n": 640,
+            "share": 0.0095
+          },
+          "H3K4me1": {
+            "n": 7660,
+            "share": 0.1133
+          },
+          "H3K27me3": {
+            "n": 946,
+            "share": 0.014
+          },
+          "H3K9me3": {
+            "n": 68,
+            "share": 0.001
+          },
+          "open_share": 0.1767
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3680,
+          "states": {
+            "active enhancer": 864,
+            "bivalent": 330,
+            "active promoter": 3332,
+            "acetylated element": 1153,
+            "no mark": 4878,
+            "Polycomb-repressed": 614,
+            "promoter mark, not acetylated": 382,
+            "primed enhancer": 324,
+            "poised enhancer": 161,
+            "heterochromatin": 8
+          },
+          "H3K27ac": {
+            "n": 5446,
+            "share": 0.4521
+          },
+          "H3K4me1": {
+            "n": 2068,
+            "share": 0.1717
+          },
+          "H3K27me3": {
+            "n": 1141,
+            "share": 0.0947
+          },
+          "H3K4me3": {
+            "n": 4044,
+            "share": 0.3357
+          },
+          "H3K9me3": {
+            "n": 13,
+            "share": 0.0011
+          },
+          "open_share": 0.3055
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1742,
+          "states": {
+            "active promoter": 1250,
+            "Polycomb-repressed": 113,
+            "no mark": 801,
+            "active enhancer": 145,
+            "acetylated element": 222,
+            "primed enhancer": 37,
+            "bivalent": 119,
+            "promoter mark, not acetylated": 122,
+            "poised enhancer": 31
+          },
+          "H3K4me3": {
+            "n": 1491,
+            "share": 0.525
+          },
+          "H3K27ac": {
+            "n": 1654,
+            "share": 0.5824
+          },
+          "H3K27me3": {
+            "n": 270,
+            "share": 0.0951
+          },
+          "H3K4me1": {
+            "n": 287,
+            "share": 0.1011
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.6134
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 645,
+          "states": {
+            "no mark": 2884,
+            "Polycomb-repressed": 11,
+            "heterochromatin": 3,
+            "acetylated element": 8,
+            "active enhancer": 1,
+            "primed enhancer": 7
+          },
+          "H3K27me3": {
+            "n": 11,
+            "share": 0.0038
+          },
+          "H3K9me3": {
+            "n": 3,
+            "share": 0.001
+          },
+          "H3K27ac": {
+            "n": 9,
+            "share": 0.0031
+          },
+          "H3K4me1": {
+            "n": 8,
+            "share": 0.0027
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.2213
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 260,
+          "states": {
+            "Polycomb-repressed": 101,
+            "no mark": 1998,
+            "heterochromatin": 27,
+            "primed enhancer": 5,
+            "poised enhancer": 3,
+            "promoter mark, not acetylated": 3,
+            "bivalent": 3,
+            "acetylated element": 5
+          },
+          "H3K27me3": {
+            "n": 107,
+            "share": 0.0499
+          },
+          "H3K9me3": {
+            "n": 27,
+            "share": 0.0126
+          },
+          "H3K4me1": {
+            "n": 10,
+            "share": 0.0047
+          },
+          "H3K4me3": {
+            "n": 6,
+            "share": 0.0028
+          },
+          "H3K27ac": {
+            "n": 5,
+            "share": 0.0023
+          },
+          "open_share": 0.1212
+        }
+      },
+      "cpg_calls": 4160808,
+      "cpg_calls_covered": 3473632,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 572909,
+          "covered": 477573,
+          "fraction": 0.8271
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 281652,
+          "covered": 247393,
+          "fraction": 0.8415
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 63689,
+          "covered": 56281,
+          "fraction": 0.8388
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41837,
+          "covered": 37904,
+          "fraction": 0.8415
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 23349,
+          "covered": 13220,
+          "fraction": 0.722
+        }
+      }
+    },
+    "astrocyte": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": false,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2491,
+          "bp": 2971378
+        },
+        "H3K27ac": {
+          "n": 4983,
+          "bp": 5519638
+        },
+        "H3K4me1": {
+          "n": 8428,
+          "bp": 7250238
+        },
+        "H3K27me3": {
+          "n": 3300,
+          "bp": 2283979
+        },
+        "H3K9me3": {
+          "n": 2407,
+          "bp": 1030159
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 926,
+          "H3K27me3": {
+            "n": 117,
+            "share": 0.1263
+          },
+          "states": {
+            "Polycomb-repressed": 24,
+            "active promoter": 620,
+            "promoter mark, not acetylated": 112,
+            "primed enhancer": 15,
+            "active enhancer": 10,
+            "bivalent": 89,
+            "no mark": 49,
+            "poised enhancer": 4,
+            "acetylated element": 3
+          },
+          "H3K4me3": {
+            "n": 821,
+            "share": 0.8866
+          },
+          "H3K27ac": {
+            "n": 643,
+            "share": 0.6944
+          },
+          "H3K4me1": {
+            "n": 582,
+            "share": 0.6285
+          },
+          "H3K9me3": {
+            "n": 3,
+            "share": 0.0032
+          }
+        },
+        "silent": {
+          "n": 326,
+          "H3K4me3": {
+            "n": 43,
+            "share": 0.1319
+          },
+          "H3K27ac": {
+            "n": 9,
+            "share": 0.0276
+          },
+          "H3K4me1": {
+            "n": 29,
+            "share": 0.089
+          },
+          "states": {
+            "active promoter": 6,
+            "poised enhancer": 5,
+            "no mark": 217,
+            "heterochromatin": 3,
+            "Polycomb-repressed": 50,
+            "bivalent": 19,
+            "promoter mark, not acetylated": 18,
+            "primed enhancer": 5,
+            "active enhancer": 3
+          },
+          "H3K27me3": {
+            "n": 74,
+            "share": 0.227
+          },
+          "H3K9me3": {
+            "n": 11,
+            "share": 0.0337
+          }
+        }
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 14710,
+          "states": {
+            "no mark": 51807,
+            "heterochromatin": 307,
+            "Polycomb-repressed": 1357,
+            "primed enhancer": 5152,
+            "promoter mark, not acetylated": 697,
+            "active promoter": 1558,
+            "active enhancer": 5365,
+            "acetylated element": 1087,
+            "bivalent": 199,
+            "poised enhancer": 64
+          },
+          "H3K9me3": {
+            "n": 362,
+            "share": 0.0054
+          },
+          "H3K27me3": {
+            "n": 1623,
+            "share": 0.024
+          },
+          "H3K4me1": {
+            "n": 12347,
+            "share": 0.1827
+          },
+          "H3K4me3": {
+            "n": 2454,
+            "share": 0.0363
+          },
+          "H3K27ac": {
+            "n": 8048,
+            "share": 0.1191
+          },
+          "open_share": 0.2176
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 2900,
+          "states": {
+            "no mark": 5246,
+            "Polycomb-repressed": 740,
+            "promoter mark, not acetylated": 1618,
+            "active promoter": 2784,
+            "primed enhancer": 608,
+            "active enhancer": 486,
+            "poised enhancer": 70,
+            "heterochromatin": 25,
+            "acetylated element": 110,
+            "bivalent": 359
+          },
+          "H3K27me3": {
+            "n": 1176,
+            "share": 0.0976
+          },
+          "H3K4me3": {
+            "n": 4761,
+            "share": 0.3952
+          },
+          "H3K27ac": {
+            "n": 3410,
+            "share": 0.2831
+          },
+          "H3K4me1": {
+            "n": 3162,
+            "share": 0.2625
+          },
+          "H3K9me3": {
+            "n": 64,
+            "share": 0.0053
+          },
+          "open_share": 0.2407
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1453,
+          "states": {
+            "no mark": 790,
+            "promoter mark, not acetylated": 446,
+            "active promoter": 1171,
+            "bivalent": 108,
+            "poised enhancer": 8,
+            "active enhancer": 82,
+            "Polycomb-repressed": 116,
+            "primed enhancer": 94,
+            "acetylated element": 20,
+            "heterochromatin": 5
+          },
+          "H3K4me3": {
+            "n": 1725,
+            "share": 0.6074
+          },
+          "H3K27ac": {
+            "n": 1279,
+            "share": 0.4504
+          },
+          "H3K4me1": {
+            "n": 611,
+            "share": 0.2151
+          },
+          "H3K27me3": {
+            "n": 232,
+            "share": 0.0817
+          },
+          "H3K9me3": {
+            "n": 12,
+            "share": 0.0042
+          },
+          "open_share": 0.5116
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 429,
+          "states": {
+            "no mark": 2827,
+            "Polycomb-repressed": 52,
+            "heterochromatin": 20,
+            "primed enhancer": 14,
+            "poised enhancer": 1
+          },
+          "H3K27me3": {
+            "n": 53,
+            "share": 0.0182
+          },
+          "H3K9me3": {
+            "n": 20,
+            "share": 0.0069
+          },
+          "H3K4me1": {
+            "n": 15,
+            "share": 0.0051
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.1472
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 172,
+          "states": {
+            "poised enhancer": 6,
+            "no mark": 1929,
+            "heterochromatin": 61,
+            "Polycomb-repressed": 116,
+            "acetylated element": 1,
+            "primed enhancer": 14,
+            "bivalent": 5,
+            "promoter mark, not acetylated": 13
+          },
+          "H3K4me1": {
+            "n": 23,
+            "share": 0.0107
+          },
+          "H3K27me3": {
+            "n": 127,
+            "share": 0.0592
+          },
+          "H3K9me3": {
+            "n": 65,
+            "share": 0.0303
+          },
+          "H3K27ac": {
+            "n": 1,
+            "share": 0.0005
+          },
+          "H3K4me3": {
+            "n": 18,
+            "share": 0.0084
+          },
+          "open_share": 0.0802
+        }
+      }
+    },
+    "CD14-positive monocyte": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 3911,
+          "bp": 5437953
+        },
+        "H3K27ac": {
+          "n": 6438,
+          "bp": 9249595
+        },
+        "H3K4me1": {
+          "n": 7468,
+          "bp": 12789886
+        },
+        "H3K27me3": {
+          "n": 3902,
+          "bp": 6575564
+        },
+        "H3K9me3": {
+          "n": 6111,
+          "bp": 5289501
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 875,
+          "H3K4me3": {
+            "n": 801,
+            "share": 0.9154
+          },
+          "H3K27ac": {
+            "n": 649,
+            "share": 0.7417
+          },
+          "H3K4me1": {
+            "n": 801,
+            "share": 0.9154
+          },
+          "H3K27me3": {
+            "n": 238,
+            "share": 0.272
+          },
+          "states": {
+            "bivalent": 205,
+            "active promoter": 580,
+            "no mark": 27,
+            "Polycomb-repressed": 20,
+            "poised enhancer": 13,
+            "promoter mark, not acetylated": 16,
+            "active enhancer": 7,
+            "primed enhancer": 6,
+            "acetylated element": 1
+          },
+          "H3K9me3": {
+            "n": 82,
+            "share": 0.0937
+          }
+        },
+        "silent": {
+          "n": 377,
+          "H3K27me3": {
+            "n": 135,
+            "share": 0.3581
+          },
+          "H3K9me3": {
+            "n": 71,
+            "share": 0.1883
+          },
+          "states": {
+            "Polycomb-repressed": 85,
+            "active promoter": 8,
+            "no mark": 206,
+            "bivalent": 41,
+            "acetylated element": 7,
+            "active enhancer": 2,
+            "promoter mark, not acetylated": 9,
+            "poised enhancer": 9,
+            "primed enhancer": 6,
+            "heterochromatin": 4
+          },
+          "H3K4me3": {
+            "n": 58,
+            "share": 0.1538
+          },
+          "H3K27ac": {
+            "n": 17,
+            "share": 0.0451
+          },
+          "H3K4me1": {
+            "n": 66,
+            "share": 0.1751
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.0349,
+        "silent": 0.8393
+      },
+      "promoter_methylation_n": {
+        "read": 847,
+        "silent": 305
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 8429,
+          "states": {
+            "no mark": 48965,
+            "heterochromatin": 782,
+            "Polycomb-repressed": 2951,
+            "bivalent": 454,
+            "active promoter": 4740,
+            "primed enhancer": 3760,
+            "active enhancer": 3446,
+            "promoter mark, not acetylated": 748,
+            "poised enhancer": 286,
+            "acetylated element": 1461
+          },
+          "H3K9me3": {
+            "n": 1393,
+            "share": 0.0206
+          },
+          "H3K27me3": {
+            "n": 3700,
+            "share": 0.0547
+          },
+          "H3K4me3": {
+            "n": 5942,
+            "share": 0.0879
+          },
+          "H3K4me1": {
+            "n": 13199,
+            "share": 0.1953
+          },
+          "H3K27ac": {
+            "n": 9685,
+            "share": 0.1433
+          },
+          "open_share": 0.1247
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 2724,
+          "states": {
+            "Polycomb-repressed": 1449,
+            "no mark": 4008,
+            "bivalent": 1207,
+            "active promoter": 3488,
+            "poised enhancer": 232,
+            "primed enhancer": 520,
+            "promoter mark, not acetylated": 614,
+            "active enhancer": 355,
+            "acetylated element": 134,
+            "heterochromatin": 39
+          },
+          "H3K27me3": {
+            "n": 2888,
+            "share": 0.2397
+          },
+          "H3K9me3": {
+            "n": 891,
+            "share": 0.074
+          },
+          "H3K4me3": {
+            "n": 5309,
+            "share": 0.4407
+          },
+          "H3K4me1": {
+            "n": 5655,
+            "share": 0.4695
+          },
+          "H3K27ac": {
+            "n": 4066,
+            "share": 0.3375
+          },
+          "open_share": 0.2261
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1374,
+          "states": {
+            "Polycomb-repressed": 311,
+            "bivalent": 400,
+            "active promoter": 1230,
+            "no mark": 617,
+            "promoter mark, not acetylated": 121,
+            "primed enhancer": 62,
+            "active enhancer": 38,
+            "poised enhancer": 35,
+            "acetylated element": 12,
+            "heterochromatin": 14
+          },
+          "H3K27me3": {
+            "n": 746,
+            "share": 0.2627
+          },
+          "H3K4me3": {
+            "n": 1751,
+            "share": 0.6165
+          },
+          "H3K4me1": {
+            "n": 1263,
+            "share": 0.4447
+          },
+          "H3K27ac": {
+            "n": 1302,
+            "share": 0.4585
+          },
+          "H3K9me3": {
+            "n": 164,
+            "share": 0.0577
+          },
+          "open_share": 0.4838
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 297,
+          "states": {
+            "no mark": 2712,
+            "heterochromatin": 63,
+            "Polycomb-repressed": 82,
+            "primed enhancer": 43,
+            "acetylated element": 7,
+            "active enhancer": 5,
+            "promoter mark, not acetylated": 2
+          },
+          "H3K9me3": {
+            "n": 66,
+            "share": 0.0226
+          },
+          "H3K27me3": {
+            "n": 82,
+            "share": 0.0281
+          },
+          "H3K4me1": {
+            "n": 50,
+            "share": 0.0172
+          },
+          "H3K27ac": {
+            "n": 12,
+            "share": 0.0041
+          },
+          "H3K4me3": {
+            "n": 2,
+            "share": 0.0007
+          },
+          "open_share": 0.1019
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 161,
+          "states": {
+            "Polycomb-repressed": 207,
+            "no mark": 1651,
+            "promoter mark, not acetylated": 19,
+            "heterochromatin": 179,
+            "primed enhancer": 30,
+            "poised enhancer": 21,
+            "active promoter": 13,
+            "bivalent": 16,
+            "acetylated element": 5,
+            "active enhancer": 4
+          },
+          "H3K27me3": {
+            "n": 244,
+            "share": 0.1138
+          },
+          "H3K4me3": {
+            "n": 48,
+            "share": 0.0224
+          },
+          "H3K4me1": {
+            "n": 93,
+            "share": 0.0434
+          },
+          "H3K9me3": {
+            "n": 250,
+            "share": 0.1166
+          },
+          "H3K27ac": {
+            "n": 22,
+            "share": 0.0103
+          },
+          "open_share": 0.0751
+        }
+      },
+      "cpg_calls": 2551228,
+      "cpg_calls_covered": 752047,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 369980,
+          "covered": 109940,
+          "fraction": 0.7584
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 143392,
+          "covered": 31541,
+          "fraction": 0.8515
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 33089,
+          "covered": 7992,
+          "fraction": 0.8559
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 22061,
+          "covered": 5224,
+          "fraction": 0.84
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 5696,
+          "covered": 2355,
+          "fraction": 0.6805
+        }
+      }
+    },
+    "testis": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 2337,
+          "bp": 3507648
+        },
+        "H3K27ac": {
+          "n": 3234,
+          "bp": 3810880
+        },
+        "H3K4me1": {
+          "n": 6697,
+          "bp": 5392633
+        },
+        "H3K27me3": {
+          "n": 171,
+          "bp": 92811
+        },
+        "H3K9me3": {
+          "n": 22,
+          "bp": 7775
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 1010,
+          "H3K4me3": {
+            "n": 912,
+            "share": 0.903
+          },
+          "H3K27ac": {
+            "n": 732,
+            "share": 0.7248
+          },
+          "H3K4me1": {
+            "n": 543,
+            "share": 0.5376
+          },
+          "states": {
+            "active promoter": 712,
+            "active enhancer": 18,
+            "promoter mark, not acetylated": 176,
+            "primed enhancer": 15,
+            "bivalent": 24,
+            "no mark": 62,
+            "Polycomb-repressed": 2,
+            "acetylated element": 1
+          },
+          "H3K27me3": {
+            "n": 26,
+            "share": 0.0257
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        },
+        "silent": {
+          "n": 242,
+          "H3K4me3": {
+            "n": 27,
+            "share": 0.1116
+          },
+          "H3K27ac": {
+            "n": 11,
+            "share": 0.0455
+          },
+          "H3K4me1": {
+            "n": 19,
+            "share": 0.0785
+          },
+          "states": {
+            "active promoter": 7,
+            "no mark": 202,
+            "primed enhancer": 7,
+            "promoter mark, not acetylated": 12,
+            "active enhancer": 2,
+            "bivalent": 8,
+            "Polycomb-repressed": 2,
+            "poised enhancer": 1,
+            "acetylated element": 1
+          },
+          "H3K27me3": {
+            "n": 11,
+            "share": 0.0455
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.1363,
+        "silent": 0.8203
+      },
+      "promoter_methylation_n": {
+        "read": 1009,
+        "silent": 232
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 8260,
+          "states": {
+            "no mark": 57607,
+            "promoter mark, not acetylated": 985,
+            "active enhancer": 2472,
+            "primed enhancer": 5025,
+            "active promoter": 562,
+            "acetylated element": 800,
+            "bivalent": 67,
+            "Polycomb-repressed": 61,
+            "poised enhancer": 14
+          },
+          "H3K4me3": {
+            "n": 1614,
+            "share": 0.0239
+          },
+          "H3K27ac": {
+            "n": 3842,
+            "share": 0.0568
+          },
+          "H3K4me1": {
+            "n": 7968,
+            "share": 0.1179
+          },
+          "H3K27me3": {
+            "n": 144,
+            "share": 0.0021
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.1222
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 3171,
+          "states": {
+            "primed enhancer": 782,
+            "promoter mark, not acetylated": 1874,
+            "active promoter": 3165,
+            "no mark": 5510,
+            "acetylated element": 125,
+            "active enhancer": 437,
+            "bivalent": 94,
+            "Polycomb-repressed": 46,
+            "poised enhancer": 13
+          },
+          "H3K4me1": {
+            "n": 2844,
+            "share": 0.2361
+          },
+          "H3K4me3": {
+            "n": 5133,
+            "share": 0.4261
+          },
+          "H3K27ac": {
+            "n": 3729,
+            "share": 0.3096
+          },
+          "H3K27me3": {
+            "n": 153,
+            "share": 0.0127
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.2632
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1691,
+          "states": {
+            "active promoter": 1348,
+            "no mark": 741,
+            "promoter mark, not acetylated": 542,
+            "primed enhancer": 89,
+            "acetylated element": 9,
+            "active enhancer": 71,
+            "bivalent": 30,
+            "poised enhancer": 4,
+            "Polycomb-repressed": 6
+          },
+          "H3K4me3": {
+            "n": 1920,
+            "share": 0.6761
+          },
+          "H3K27ac": {
+            "n": 1429,
+            "share": 0.5032
+          },
+          "H3K4me1": {
+            "n": 388,
+            "share": 0.1366
+          },
+          "H3K27me3": {
+            "n": 40,
+            "share": 0.0141
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.5954
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 466,
+          "states": {
+            "no mark": 2891,
+            "primed enhancer": 20,
+            "promoter mark, not acetylated": 3
+          },
+          "H3K4me1": {
+            "n": 20,
+            "share": 0.0069
+          },
+          "H3K4me3": {
+            "n": 3,
+            "share": 0.001
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.1599
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 333,
+          "states": {
+            "promoter mark, not acetylated": 176,
+            "no mark": 1937,
+            "primed enhancer": 20,
+            "heterochromatin": 1,
+            "Polycomb-repressed": 7,
+            "acetylated element": 1,
+            "poised enhancer": 2,
+            "bivalent": 1
+          },
+          "H3K4me3": {
+            "n": 177,
+            "share": 0.0825
+          },
+          "H3K4me1": {
+            "n": 33,
+            "share": 0.0154
+          },
+          "H3K9me3": {
+            "n": 1,
+            "share": 0.0005
+          },
+          "H3K27me3": {
+            "n": 10,
+            "share": 0.0047
+          },
+          "H3K27ac": {
+            "n": 1,
+            "share": 0.0005
+          },
+          "open_share": 0.1552
+        }
+      },
+      "cpg_calls": 4210566,
+      "cpg_calls_covered": 3624358,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 579002,
+          "covered": 499343,
+          "fraction": 0.8065
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 284438,
+          "covered": 255847,
+          "fraction": 0.8309
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 64151,
+          "covered": 57915,
+          "fraction": 0.823
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 42077,
+          "covered": 38750,
+          "fraction": 0.8328
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 21912,
+          "covered": 11108,
+          "fraction": 0.6613
+        }
+      }
+    },
+    "ovary": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 1948,
+          "bp": 2665951
+        },
+        "H3K27ac": {
+          "n": 3162,
+          "bp": 4280133
+        },
+        "H3K4me1": {
+          "n": 11350,
+          "bp": 3353502
+        },
+        "H3K27me3": {
+          "n": 813,
+          "bp": 327002
+        },
+        "H3K9me3": {
+          "n": 719,
+          "bp": 318770
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 931,
+          "H3K4me3": {
+            "n": 838,
+            "share": 0.9001
+          },
+          "H3K27ac": {
+            "n": 699,
+            "share": 0.7508
+          },
+          "states": {
+            "active promoter": 688,
+            "no mark": 68,
+            "promoter mark, not acetylated": 129,
+            "active enhancer": 10,
+            "bivalent": 21,
+            "primed enhancer": 5,
+            "Polycomb-repressed": 7,
+            "heterochromatin": 2,
+            "poised enhancer": 1
+          },
+          "H3K4me1": {
+            "n": 444,
+            "share": 0.4769
+          },
+          "H3K27me3": {
+            "n": 29,
+            "share": 0.0311
+          },
+          "H3K9me3": {
+            "n": 5,
+            "share": 0.0054
+          }
+        },
+        "silent": {
+          "n": 321,
+          "H3K4me3": {
+            "n": 54,
+            "share": 0.1682
+          },
+          "H3K27ac": {
+            "n": 26,
+            "share": 0.081
+          },
+          "H3K4me1": {
+            "n": 49,
+            "share": 0.1526
+          },
+          "states": {
+            "active promoter": 15,
+            "bivalent": 12,
+            "no mark": 230,
+            "active enhancer": 5,
+            "promoter mark, not acetylated": 27,
+            "primed enhancer": 14,
+            "acetylated element": 6,
+            "Polycomb-repressed": 9,
+            "poised enhancer": 2,
+            "heterochromatin": 1
+          },
+          "H3K27me3": {
+            "n": 23,
+            "share": 0.0717
+          },
+          "H3K9me3": {
+            "n": 4,
+            "share": 0.0125
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.0752,
+        "silent": 0.7489
+      },
+      "promoter_methylation_n": {
+        "read": 931,
+        "silent": 313
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 67593,
+          "open": 6800,
+          "states": {
+            "no mark": 57519,
+            "primed enhancer": 3780,
+            "active enhancer": 2905,
+            "promoter mark, not acetylated": 760,
+            "heterochromatin": 87,
+            "active promoter": 785,
+            "acetylated element": 1479,
+            "Polycomb-repressed": 250,
+            "poised enhancer": 12,
+            "bivalent": 16
+          },
+          "H3K4me1": {
+            "n": 7191,
+            "share": 0.1064
+          },
+          "H3K27ac": {
+            "n": 5169,
+            "share": 0.0765
+          },
+          "H3K4me3": {
+            "n": 1561,
+            "share": 0.0231
+          },
+          "H3K9me3": {
+            "n": 95,
+            "share": 0.0014
+          },
+          "H3K27me3": {
+            "n": 280,
+            "share": 0.0041
+          },
+          "open_share": 0.1006
+        },
+        "pELS": {
+          "n": 12046,
+          "open": 2639,
+          "states": {
+            "no mark": 5978,
+            "promoter mark, not acetylated": 1599,
+            "active promoter": 3036,
+            "primed enhancer": 463,
+            "Polycomb-repressed": 158,
+            "active enhancer": 403,
+            "acetylated element": 344,
+            "bivalent": 43,
+            "poised enhancer": 14,
+            "heterochromatin": 8
+          },
+          "H3K4me3": {
+            "n": 4678,
+            "share": 0.3883
+          },
+          "H3K4me1": {
+            "n": 1947,
+            "share": 0.1616
+          },
+          "H3K27ac": {
+            "n": 3783,
+            "share": 0.314
+          },
+          "H3K27me3": {
+            "n": 215,
+            "share": 0.0178
+          },
+          "H3K9me3": {
+            "n": 16,
+            "share": 0.0013
+          },
+          "open_share": 0.2191
+        },
+        "PLS": {
+          "n": 2840,
+          "open": 1510,
+          "states": {
+            "active promoter": 1337,
+            "promoter mark, not acetylated": 431,
+            "no mark": 833,
+            "active enhancer": 68,
+            "primed enhancer": 80,
+            "Polycomb-repressed": 33,
+            "bivalent": 21,
+            "acetylated element": 30,
+            "heterochromatin": 4,
+            "poised enhancer": 3
+          },
+          "H3K4me3": {
+            "n": 1789,
+            "share": 0.6299
+          },
+          "H3K27ac": {
+            "n": 1435,
+            "share": 0.5053
+          },
+          "H3K4me1": {
+            "n": 335,
+            "share": 0.118
+          },
+          "H3K27me3": {
+            "n": 57,
+            "share": 0.0201
+          },
+          "H3K9me3": {
+            "n": 13,
+            "share": 0.0046
+          },
+          "open_share": 0.5317
+        },
+        "CTCF-only": {
+          "n": 2914,
+          "open": 219,
+          "states": {
+            "no mark": 2872,
+            "Polycomb-repressed": 12,
+            "acetylated element": 1,
+            "primed enhancer": 25,
+            "heterochromatin": 4
+          },
+          "H3K27me3": {
+            "n": 12,
+            "share": 0.0041
+          },
+          "H3K27ac": {
+            "n": 1,
+            "share": 0.0003
+          },
+          "H3K4me1": {
+            "n": 25,
+            "share": 0.0086
+          },
+          "H3K9me3": {
+            "n": 4,
+            "share": 0.0014
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0752
+        },
+        "DNase-H3K4me3": {
+          "n": 2145,
+          "open": 239,
+          "states": {
+            "no mark": 2036,
+            "primed enhancer": 27,
+            "heterochromatin": 23,
+            "promoter mark, not acetylated": 22,
+            "Polycomb-repressed": 35,
+            "poised enhancer": 1,
+            "active enhancer": 1
+          },
+          "H3K4me1": {
+            "n": 33,
+            "share": 0.0154
+          },
+          "H3K9me3": {
+            "n": 23,
+            "share": 0.0107
+          },
+          "H3K4me3": {
+            "n": 22,
+            "share": 0.0103
+          },
+          "H3K27me3": {
+            "n": 36,
+            "share": 0.0168
+          },
+          "H3K27ac": {
+            "n": 1,
+            "share": 0.0005
+          },
+          "open_share": 0.1114
+        }
+      },
+      "cpg_calls": 4182593,
+      "cpg_calls_covered": 4072088,
+      "methylation_by_tier": {
+        "regulatory": {
+          "blocks": 1159,
+          "bp": 28905004,
+          "calls": 577426,
+          "covered": 563794,
+          "fraction": 0.7569
+        },
+        "fossil": {
+          "blocks": 480,
+          "bp": 22940136,
+          "calls": 278809,
+          "covered": 271634,
+          "fraction": 0.7808
+        },
+        "neutral": {
+          "blocks": 194,
+          "bp": 4993850,
+          "calls": 63139,
+          "covered": 61844,
+          "fraction": 0.7827
+        },
+        "constrained_unknown": {
+          "blocks": 102,
+          "bp": 3257850,
+          "calls": 41687,
+          "covered": 40800,
+          "fraction": 0.7971
+        },
+        "structural": {
+          "blocks": 8,
+          "bp": 3961008,
+          "calls": 16392,
+          "covered": 12615,
+          "fraction": 0.7221
+        }
+      }
+    }
+  },
+  "evidence": {
+    "marks": "experimental: ENCODE Histone ChIP-seq (GRCh38, default analysis), replicated peaks overlapping the locus",
+    "promoters": "TSS +/- 1 kb; read or silent by the DNase reader (inferred)",
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl), calls with 5+ reads, promoters with 4+",
+    "state": "inferred: fixed rules over the five measured marks' peak calls (bivalent, active promoter, active enhancer, poised or primed enhancer, Polycomb, heterochromatin); not a ChromHMM model"
+  },
+  "manifest": "epigenome_manifest"
+}

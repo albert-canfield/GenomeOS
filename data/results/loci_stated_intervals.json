@@ -1,0 +1,165 @@
+{
+  "result": "loci_stated_intervals",
+  "date": "2026-09-17",
+  "prediction": {
+    "written": "2026-09-17, before any stated interval was scored",
+    "expected": "trap or neither, not a hit",
+    "why": "the ICR acts through parent-of-origin methylation, which no layer in this project carries and which a sequence model reading one allele cannot express; and the ZRS precedent is that an element-level deletion names what it sits in or beside",
+    "outcomes": {
+      "hit": "IGF2 or H19 named first",
+      "trap": "MRPL23 named first, the nearest coding TSS",
+      "neither": "some third gene named first"
+    }
+  },
+  "elements": [
+    {
+      "id": "chr11_1999800_2001900",
+      "chrom": "chr11",
+      "start": 1999800,
+      "end": 2001900,
+      "length": 2100,
+      "genes_in_window": 62,
+      "tracks": 371,
+      "seconds": 1.5,
+      "predicted": {
+        "gene": "IGF2-AS",
+        "action": "represses",
+        "log2_fold_change": 0.4031,
+        "tissue": "myocyte",
+        "strength": "strong",
+        "confidence": 0.403,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "INS-IGF2",
+        "action": "represses",
+        "log2_fold_change": 0.1492,
+        "tissue": "gastrocnemius medialis",
+        "strength": "weak",
+        "confidence": 0.149,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": 0.03,
+        "IMR-90": 0.0214,
+        "K562": 0.032,
+        "GM12878": 0.0107
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0031,
+        "IMR-90": 0.0343,
+        "K562": 0.0537,
+        "GM12878": 0.0074
+      },
+      "top_genes": [
+        {
+          "gene": "MIR675",
+          "n_tracks": 371,
+          "mean_log2fc": -0.1163,
+          "max_drop_log2fc": -0.2431,
+          "max_drop_tissue": "mesenteric fat pad",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.2008,
+            "IMR-90": -0.0952,
+            "K562": -0.0186,
+            "GM12878": -0.0121
+          }
+        },
+        {
+          "gene": "ENSG00000274866",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0297,
+          "max_drop_log2fc": -0.2406,
+          "max_drop_tissue": "hindlimb muscle",
+          "max_rise_log2fc": 0.0002,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": -0.0014,
+            "IMR-90": -0.0,
+            "K562": 0.0,
+            "GM12878": -0.0001
+          }
+        },
+        {
+          "gene": "H19",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0569,
+          "max_drop_log2fc": -0.178,
+          "max_drop_tissue": "pulmonary artery endothelial cell",
+          "max_rise_log2fc": 0.0315,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": -0.0236,
+            "IMR-90": -0.0576,
+            "K562": 0.0315,
+            "GM12878": -0.0299
+          }
+        },
+        {
+          "gene": "ENSG00000275266",
+          "n_tracks": 370,
+          "mean_log2fc": -0.0245,
+          "max_drop_log2fc": -0.1399,
+          "max_drop_tissue": "spleen",
+          "max_rise_log2fc": 0.0306,
+          "max_rise_tissue": "LHCN-M2",
+          "by_cell": {
+            "HepG2": -0.0117,
+            "IMR-90": 0.0,
+            "K562": 0.0006,
+            "GM12878": -0.0
+          }
+        },
+        {
+          "gene": "LINC01219",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0404,
+          "max_drop_log2fc": -0.1101,
+          "max_drop_tissue": "heart right ventricle",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.0399,
+            "IMR-90": -0.0085,
+            "K562": -0.0109,
+            "GM12878": -0.0092
+          }
+        }
+      ],
+      "domain": "",
+      "locus": "H19_ICR1",
+      "substituted_annotated_element": false
+    }
+  ],
+  "read": [
+    {
+      "locus": "H19_ICR1",
+      "element": "chr11:1999800-2001900",
+      "substituted_annotated_element": false,
+      "named_first": "INS-IGF2",
+      "log2_fold_change": 0.1492,
+      "tissue": "gastrocnemius medialis",
+      "action": "represses",
+      "genes_in_window": 62,
+      "top_genes": [
+        "MIR675",
+        "ENSG00000274866",
+        "H19",
+        "ENSG00000275266",
+        "LINC01219"
+      ],
+      "verdict": "neither: INS-IGF2 named first, neither a published target nor the nearest-TSS trap"
+    }
+  ],
+  "unaskable": [
+    {
+      "locus": "SOX9_PierreRobin",
+      "why": "SOX9 is 1450 kb from the element and the model's input reaches 524 kb each way: no request can name it"
+    }
+  ],
+  "note": "AlphaGenome deletions of intervals the panel STATED from a publication, which no registry drew an element over (docs/LOCI-BENCHMARK.md 11a). Read first and labelled `stated_interval` by the benchmark so these rows are never pooled with registry ones",
+  "requests_this_run": 1,
+  "seconds": 11.5
+}

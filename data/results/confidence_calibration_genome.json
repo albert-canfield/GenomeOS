@@ -1,0 +1,1963 @@
+{
+  "result": "confidence_calibration_genome",
+  "date": "2026-09-18",
+  "question": "GenomeOS states a confidence on every fact. Is it a probability? For the compiled facts a measurement touches, the observed agreement rate is binned by the stated confidence and reported per assay, with an interval",
+  "claim_under_test": "the compiled element block and its rule say that deleting this element moves this gene, and the number beside them is read by every reader of the Evidence explorer as the probability that it does. The question here is whether that reading survives contact with a measurement",
+  "stated_confidence_formula": "round(min(PREDICTED_CAP, max(0.05, |log2 fold change|)), 2), as attribution/compile.py writes it on the element block and on the rule beside it; PREDICTED_CAP = 0.7, so no compiled element can state more than that however large the predicted effect",
+  "bands": {
+    "edges": [
+      [
+        0.0,
+        0.02
+      ],
+      [
+        0.02,
+        0.05
+      ],
+      [
+        0.05,
+        0.1
+      ],
+      [
+        0.1,
+        0.25
+      ],
+      [
+        0.25,
+        0.5
+      ],
+      [
+        0.5,
+        0.75
+      ],
+      [
+        0.75,
+        0.9
+      ],
+      [
+        0.9,
+        1.01
+      ]
+    ],
+    "half_open": "[lo, hi)",
+    "where_they_come_from": "imported unchanged from genomeos/attribution/target_calibration.CONFIDENCE_BANDS, fixed there on 2026-09-17 for a different quantity and before this lane existed. They were not chosen after seeing a rate, and they are not adjusted by anything here",
+    "min_for_a_band": 30,
+    "min_bands_for_a_verdict": 3,
+    "min_share_consistent": 0.7
+  },
+  "pre_stated_patterns": {
+    "uninformative": "the observed agreement rate does not rise with the stated confidence: the highest judged band's rate is at or below the lowest judged band's, or their 95% Wilson intervals overlap. If this is the pattern, the number on a compiled fact orders nothing, and a reader who preferred a 0.6 fact to a 0.2 one gained nothing by it",
+    "ordered_but_miscalibrated": "the rate rises - the highest judged band is above the lowest and their intervals are disjoint - but the band's mean stated confidence lies outside the 95% Wilson interval of its observed rate in more than 30% of the judged bands. The number ranks and its level is wrong. This is the ordinary outcome for a scoring system read as a probability, and it is a useful result: a rank is worth having. The offset is reported as the median signed gap, and a level is a property of the population and not of the scorer - target_calibration's curve transferred while its level did not, because the base rate of the new population differed",
+    "calibrated": "the rate rises AND the band's mean stated confidence lies inside the 95% Wilson interval of its observed rate in at least 70% of the judged bands. Then the number may be read as a probability, within the scope below and nowhere else",
+    "level_withheld_ordering_only": "the assay's agreement is not the compiled claim's own event, so the ordering may be read and the level may not: a rate of 0.19 against a stated 0.25 is not a miscalibration when the rate being measured is 'a 200 bp sequence drives a reporter' and the claim is 'deleting the element in its own chromosome moves this gene'. The level verdict is withheld rather than computed and ignored"
+  },
+  "why_pooling_is_refused": "one agreement rate over all four assays would be a rate whose event changes with the denominator. A CRISPRi negative on the named gene contradicts the compiled claim; a lentiMPRA silence says a 200 bp copy does not drive a reporter out of its chromosome; a VISTA negative says a mouse embryo did not stain at e11.5; saturation mutagenesis cannot disagree at all and so contributes agreements and never disagreements. Pooling them would also pool their sizes - lentiMPRA's 17,869 matched elements against CRISPRi's 128 tested pairs is 140 to 1 - so the pooled number would be the reporter's number wearing the perturbation's name. Every table here is per assay and the result holds no pooled rate",
+  "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
+  "per_chromosome": {
+    "chr1": {
+      "compiled_elements_with_a_stated_confidence": 43681,
+      "elements_in_any_assay_footprint": 2923,
+      "elements_measured": 2124,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.2,
+      "measured_by_assay": {
+        "crispri": 134,
+        "lentimpra": 2022,
+        "vista": 12,
+        "satmut": 2
+      }
+    },
+    "chr2": {
+      "compiled_elements_with_a_stated_confidence": 32917,
+      "elements_in_any_assay_footprint": 1923,
+      "elements_measured": 1397,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 73,
+        "lentimpra": 1340,
+        "vista": 6,
+        "satmut": 1
+      }
+    },
+    "chr3": {
+      "compiled_elements_with_a_stated_confidence": 27682,
+      "elements_in_any_assay_footprint": 1502,
+      "elements_measured": 1119,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 79,
+        "lentimpra": 1056,
+        "vista": 2,
+        "satmut": 0
+      }
+    },
+    "chr4": {
+      "compiled_elements_with_a_stated_confidence": 20646,
+      "elements_in_any_assay_footprint": 1007,
+      "elements_measured": 774,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 15,
+        "lentimpra": 763,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr5": {
+      "compiled_elements_with_a_stated_confidence": 22772,
+      "elements_in_any_assay_footprint": 1151,
+      "elements_measured": 845,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 36,
+        "lentimpra": 818,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr6": {
+      "compiled_elements_with_a_stated_confidence": 23769,
+      "elements_in_any_assay_footprint": 1524,
+      "elements_measured": 1125,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 73,
+        "lentimpra": 1062,
+        "vista": 6,
+        "satmut": 1
+      }
+    },
+    "chr7": {
+      "compiled_elements_with_a_stated_confidence": 22596,
+      "elements_in_any_assay_footprint": 1391,
+      "elements_measured": 982,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 49,
+        "lentimpra": 941,
+        "vista": 7,
+        "satmut": 0
+      }
+    },
+    "chr8": {
+      "compiled_elements_with_a_stated_confidence": 18552,
+      "elements_in_any_assay_footprint": 1223,
+      "elements_measured": 778,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 103,
+        "lentimpra": 689,
+        "vista": 7,
+        "satmut": 0
+      }
+    },
+    "chr9": {
+      "compiled_elements_with_a_stated_confidence": 19272,
+      "elements_in_any_assay_footprint": 1048,
+      "elements_measured": 778,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 15,
+        "lentimpra": 765,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr10": {
+      "compiled_elements_with_a_stated_confidence": 21023,
+      "elements_in_any_assay_footprint": 1269,
+      "elements_measured": 923,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 46,
+        "lentimpra": 883,
+        "vista": 4,
+        "satmut": 0
+      }
+    },
+    "chr11": {
+      "compiled_elements_with_a_stated_confidence": 25731,
+      "elements_in_any_assay_footprint": 1740,
+      "elements_measured": 1149,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.19,
+      "measured_by_assay": {
+        "crispri": 224,
+        "lentimpra": 980,
+        "vista": 3,
+        "satmut": 0
+      }
+    },
+    "chr12": {
+      "compiled_elements_with_a_stated_confidence": 22814,
+      "elements_in_any_assay_footprint": 1178,
+      "elements_measured": 888,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.19,
+      "measured_by_assay": {
+        "crispri": 72,
+        "lentimpra": 826,
+        "vista": 6,
+        "satmut": 0
+      }
+    },
+    "chr13": {
+      "compiled_elements_with_a_stated_confidence": 9711,
+      "elements_in_any_assay_footprint": 417,
+      "elements_measured": 342,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.17,
+      "measured_by_assay": {
+        "crispri": 0,
+        "lentimpra": 341,
+        "vista": 1,
+        "satmut": 0
+      }
+    },
+    "chr14": {
+      "compiled_elements_with_a_stated_confidence": 13385,
+      "elements_in_any_assay_footprint": 689,
+      "elements_measured": 503,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 22,
+        "lentimpra": 487,
+        "vista": 3,
+        "satmut": 0
+      }
+    },
+    "chr15": {
+      "compiled_elements_with_a_stated_confidence": 14474,
+      "elements_in_any_assay_footprint": 762,
+      "elements_measured": 581,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.19,
+      "measured_by_assay": {
+        "crispri": 16,
+        "lentimpra": 566,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr16": {
+      "compiled_elements_with_a_stated_confidence": 14799,
+      "elements_in_any_assay_footprint": 911,
+      "elements_measured": 669,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.2,
+      "measured_by_assay": {
+        "crispri": 55,
+        "lentimpra": 625,
+        "vista": 3,
+        "satmut": 0
+      }
+    },
+    "chr17": {
+      "compiled_elements_with_a_stated_confidence": 21608,
+      "elements_in_any_assay_footprint": 1407,
+      "elements_measured": 1019,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.2,
+      "measured_by_assay": {
+        "crispri": 88,
+        "lentimpra": 947,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr18": {
+      "compiled_elements_with_a_stated_confidence": 9250,
+      "elements_in_any_assay_footprint": 550,
+      "elements_measured": 358,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.17,
+      "measured_by_assay": {
+        "crispri": 28,
+        "lentimpra": 334,
+        "vista": 5,
+        "satmut": 0
+      }
+    },
+    "chr19": {
+      "compiled_elements_with_a_stated_confidence": 17265,
+      "elements_in_any_assay_footprint": 1328,
+      "elements_measured": 942,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.22,
+      "measured_by_assay": {
+        "crispri": 211,
+        "lentimpra": 777,
+        "vista": 1,
+        "satmut": 0
+      }
+    },
+    "chr20": {
+      "compiled_elements_with_a_stated_confidence": 12702,
+      "elements_in_any_assay_footprint": 819,
+      "elements_measured": 607,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.19,
+      "measured_by_assay": {
+        "crispri": 50,
+        "lentimpra": 569,
+        "vista": 4,
+        "satmut": 0
+      }
+    },
+    "chr21": {
+      "compiled_elements_with_a_stated_confidence": 5174,
+      "elements_in_any_assay_footprint": 259,
+      "elements_measured": 200,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.18,
+      "measured_by_assay": {
+        "crispri": 18,
+        "lentimpra": 188,
+        "vista": 0,
+        "satmut": 0
+      }
+    },
+    "chr22": {
+      "compiled_elements_with_a_stated_confidence": 9612,
+      "elements_in_any_assay_footprint": 571,
+      "elements_measured": 421,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.19,
+      "measured_by_assay": {
+        "crispri": 14,
+        "lentimpra": 409,
+        "vista": 3,
+        "satmut": 0
+      }
+    },
+    "chrX": {
+      "compiled_elements_with_a_stated_confidence": 10817,
+      "elements_in_any_assay_footprint": 723,
+      "elements_measured": 542,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.2,
+      "measured_by_assay": {
+        "crispri": 84,
+        "lentimpra": 475,
+        "vista": 0,
+        "satmut": 0
+      }
+    },
+    "chrY": {
+      "compiled_elements_with_a_stated_confidence": 125,
+      "elements_in_any_assay_footprint": 9,
+      "elements_measured": 6,
+      "elements_without_covariates": 0,
+      "stated_confidence_median": 0.25,
+      "measured_by_assay": {
+        "crispri": 0,
+        "lentimpra": 6,
+        "vista": 0,
+        "satmut": 0
+      }
+    }
+  },
+  "the_measured_slice": {
+    "compiled_elements_with_a_stated_confidence": 440377,
+    "elements_without_covariates": 0,
+    "measured_by_any_assay": 19072,
+    "never_measured": 421305,
+    "coverage": 0.04331,
+    "imbalance": {
+      "length": {
+        "target_median": 340.0,
+        "control_median": 293.0,
+        "ratio": 1.16
+      },
+      "gc": {
+        "target_median": 0.5014,
+        "control_median": 0.4793,
+        "ratio": 1.046
+      },
+      "nearest_coding_tss": {
+        "target_median": 27826.0,
+        "control_median": 22717.0,
+        "ratio": 1.225
+      },
+      "stated_confidence": {
+        "target_median": 0.21,
+        "control_median": 0.19,
+        "ratio": 1.105
+      }
+    },
+    "band_counts_measured": {
+      "0-0.02": 0,
+      "0.02-0.05": 0,
+      "0.05-0.1": 0,
+      "0.1-0.25": 11227,
+      "0.25-0.5": 4879,
+      "0.5-0.75": 2966,
+      "0.75-0.9": 0,
+      "0.9-1": 0
+    },
+    "band_counts_never_measured": {
+      "0-0.02": 0,
+      "0.02-0.05": 0,
+      "0.05-0.1": 0,
+      "0.1-0.25": 281434,
+      "0.25-0.5": 93399,
+      "0.5-0.75": 46472,
+      "0.75-0.9": 0,
+      "0.9-1": 0
+    },
+    "coverage_by_band": {
+      "0-0.02": null,
+      "0.02-0.05": null,
+      "0.05-0.1": null,
+      "0.1-0.25": 0.03836,
+      "0.25-0.5": 0.04964,
+      "0.5-0.75": 0.05999,
+      "0.75-0.9": null,
+      "0.9-1": null
+    },
+    "reading": "the two arms' medians are the size of the extrapolation. A coverage that rises with the stated confidence is the selection this lane cannot undo: the bands would then be comparing differently-selected populations, and coverage_by_band is where that shows"
+  },
+  "per_assay": {
+    "crispri": {
+      "assay": "crispri",
+      "source": "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)",
+      "what_agreement_means": {
+        "question": "silencing this element in its own chromosome, does the predicted gene fall?",
+        "is_the_compiled_claim": true,
+        "level_interpretable": true,
+        "why": "the screen perturbs the element where it lives and measures the very gene the deletion named, which is the compiled claim asked directly. A negative here is a strong contradiction and the rate may be read as a probability"
+      },
+      "elements_in_the_footprint": 3908,
+      "elements_measured": 1505,
+      "elements_where_the_predicted_gene_was_tested": 128,
+      "denominators_coincide": false,
+      "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
+      "where_the_predicted_gene_was_tested": {
+        "table": {
+          "denominator": "the predicted gene was tested by this assay",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "elements": 128,
+          "agrees": 97,
+          "observed_overall": 0.7578,
+          "mean_stated_confidence_overall": 0.347,
+          "bands_populated": 3,
+          "bands_judged": 2,
+          "min_for_a_band": 30,
+          "expected_calibration_error": 0.4108,
+          "rows": [
+            {
+              "band": "0-0.02",
+              "stated_range": [
+                0.0,
+                0.02
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.02-0.05",
+              "stated_range": [
+                0.02,
+                0.05
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.05-0.1",
+              "stated_range": [
+                0.05,
+                0.1
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.1-0.25",
+              "stated_range": [
+                0.1,
+                0.25
+              ],
+              "compiled_elements_in_the_band": 292661,
+              "in_this_assays_footprint": 2142,
+              "measured_by_this_assay": 62,
+              "coverage_of_the_band": 0.00021,
+              "share_of_the_eligible_raised": 0.0289,
+              "mean_stated_confidence": 0.1566,
+              "agrees": 39,
+              "observed": 0.629,
+              "ci95": [
+                0.5046,
+                0.7384
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": 0.4724,
+              "judged": true,
+              "median_length": 347.0,
+              "median_gc": 0.5215,
+              "median_nearest_coding_tss": 22951.5,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.25-0.5",
+              "stated_range": [
+                0.25,
+                0.5
+              ],
+              "compiled_elements_in_the_band": 98278,
+              "in_this_assays_footprint": 992,
+              "measured_by_this_assay": 29,
+              "coverage_of_the_band": 0.0003,
+              "share_of_the_eligible_raised": 0.0292,
+              "mean_stated_confidence": 0.3486,
+              "agrees": 25,
+              "observed": 0.8621,
+              "ci95": [
+                0.6944,
+                0.945
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": 0.5134,
+              "judged": false,
+              "median_length": 348.0,
+              "median_gc": 0.4942,
+              "median_nearest_coding_tss": 21183.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.5-0.75",
+              "stated_range": [
+                0.5,
+                0.75
+              ],
+              "compiled_elements_in_the_band": 49438,
+              "in_this_assays_footprint": 774,
+              "measured_by_this_assay": 37,
+              "coverage_of_the_band": 0.00075,
+              "share_of_the_eligible_raised": 0.0478,
+              "mean_stated_confidence": 0.6649,
+              "agrees": 33,
+              "observed": 0.8919,
+              "ci95": [
+                0.7529,
+                0.9571
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": 0.227,
+              "judged": true,
+              "median_length": 349.0,
+              "median_gc": 0.5,
+              "median_nearest_coding_tss": 12723.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.75-0.9",
+              "stated_range": [
+                0.75,
+                0.9
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.9-1",
+              "stated_range": [
+                0.9,
+                1.0
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            }
+          ]
+        },
+        "verdict": {
+          "bands_judged": 2,
+          "min_bands_for_a_verdict": 3,
+          "level_interpretable": true,
+          "described_not_judged": {
+            "bands_populated": 3,
+            "gap_per_populated_band": {
+              "0.1-0.25": 0.4724,
+              "0.25-0.5": 0.5134,
+              "0.5-0.75": 0.227
+            },
+            "median_gap_over_populated_bands": 0.4724
+          },
+          "pattern": "refused",
+          "bands_populated_but_below_the_bar": {
+            "0.25-0.5": {
+              "measured": 29,
+              "short_of_the_bar_by": 1
+            }
+          },
+          "reading": "2 bands hold at least 30 measured elements, below the 3 this lane fixed before computing anything. The table is printed and no verdict is drawn from it: a curve through fewer than three points is a line by construction. The bands that are populated and below the bar are named with the size of the shortfall, because a bar missed by one is still a bar and moving it after seeing the counts is how a pre-registration stops being one"
+        },
+        "carries_information": {
+          "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "input_presence": {
+            "a stated confidence on the compiled fact": {
+              "key": "stated_confidence",
+              "targets_with_the_input": 128,
+              "targets": 128,
+              "controls_with_the_input": 438872,
+              "controls": 438872,
+              "universal": true,
+              "kind": "free",
+              "reading": "free: the input covers every row in both arms, so a stratum on it cannot bite and a null result is arithmetic rather than evidence"
+            },
+            "a verdict from crispri over this element": {
+              "key": "assay_verdict",
+              "targets_with_the_input": 128,
+              "targets": 128,
+              "controls_with_the_input": 0,
+              "controls": 438872,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 128/128, controls 0/438872"
+            }
+          },
+          "targets_high_confidence": 37,
+          "controls_low_confidence": 91,
+          "imbalance": {
+            "length": {
+              "target_median": 349.0,
+              "control_median": 347.0,
+              "ratio": 1.006
+            },
+            "gc": {
+              "target_median": 0.5,
+              "control_median": 0.5101,
+              "ratio": 0.98
+            },
+            "nearest_coding_tss": {
+              "target_median": 12723.0,
+              "control_median": 22027.0,
+              "ratio": 0.578
+            }
+          },
+          "standardised": {
+            "targets": 37,
+            "controls": 91,
+            "targets_matched": 34,
+            "dropped_for_want_of_a_control": 3,
+            "strata": {
+              "length": [
+                200.0,
+                400.0
+              ],
+              "gc": [
+                0.35,
+                0.45,
+                0.55
+              ],
+              "nearest_coding_tss": [
+                1000,
+                5000,
+                20000,
+                100000
+              ]
+            },
+            "raw": {
+              "a": 0.8919,
+              "b": 0.7033,
+              "difference": 0.1886,
+              "p_one_sided": 0.003525,
+              "upper_95": 0.3037
+            },
+            "matched": {
+              "a": 0.8824,
+              "b": 0.745,
+              "difference": 0.1374,
+              "p_one_sided": 0.06975,
+              "upper_95": 0.2903
+            },
+            "imbalance": {
+              "length": {
+                "target_median": 349.0,
+                "control_median": 347.0,
+                "ratio": 1.006
+              },
+              "gc": {
+                "target_median": 0.5,
+                "control_median": 0.5101,
+                "ratio": 0.98
+              },
+              "nearest_coding_tss": {
+                "target_median": 12723.0,
+                "control_median": 22027.0,
+                "ratio": 0.578
+              }
+            }
+          }
+        }
+      },
+      "over_all_matched_elements": {
+        "table": {
+          "denominator": "every element this assay measured, whether or not it asked about the predicted gene",
+          "denominator_name": "over_all_matched_elements",
+          "elements": 1505,
+          "agrees": 97,
+          "observed_overall": 0.0645,
+          "mean_stated_confidence_overall": 0.3268,
+          "bands_populated": 3,
+          "bands_judged": 3,
+          "min_for_a_band": 30,
+          "expected_calibration_error": 0.2623,
+          "rows": [
+            {
+              "band": "0-0.02",
+              "stated_range": [
+                0.0,
+                0.02
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.02-0.05",
+              "stated_range": [
+                0.02,
+                0.05
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.05-0.1",
+              "stated_range": [
+                0.05,
+                0.1
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.1-0.25",
+              "stated_range": [
+                0.1,
+                0.25
+              ],
+              "compiled_elements_in_the_band": 292661,
+              "in_this_assays_footprint": 2142,
+              "measured_by_this_assay": 739,
+              "coverage_of_the_band": 0.00253,
+              "share_of_the_eligible_raised": 0.345,
+              "mean_stated_confidence": 0.1587,
+              "agrees": 39,
+              "observed": 0.0528,
+              "ci95": [
+                0.0388,
+                0.0713
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.106,
+              "judged": true,
+              "median_length": 346.0,
+              "median_gc": 0.5059,
+              "median_nearest_coding_tss": 21583.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.25-0.5",
+              "stated_range": [
+                0.25,
+                0.5
+              ],
+              "compiled_elements_in_the_band": 98278,
+              "in_this_assays_footprint": 992,
+              "measured_by_this_assay": 417,
+              "coverage_of_the_band": 0.00424,
+              "share_of_the_eligible_raised": 0.4204,
+              "mean_stated_confidence": 0.3512,
+              "agrees": 25,
+              "observed": 0.06,
+              "ci95": [
+                0.0409,
+                0.087
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.2913,
+              "judged": true,
+              "median_length": 346.0,
+              "median_gc": 0.5115,
+              "median_nearest_coding_tss": 12146.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.5-0.75",
+              "stated_range": [
+                0.5,
+                0.75
+              ],
+              "compiled_elements_in_the_band": 49438,
+              "in_this_assays_footprint": 774,
+              "measured_by_this_assay": 349,
+              "coverage_of_the_band": 0.00706,
+              "share_of_the_eligible_raised": 0.4509,
+              "mean_stated_confidence": 0.6533,
+              "agrees": 33,
+              "observed": 0.0946,
+              "ci95": [
+                0.0681,
+                0.1298
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.5587,
+              "judged": true,
+              "median_length": 347.0,
+              "median_gc": 0.5447,
+              "median_nearest_coding_tss": 6227.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.75-0.9",
+              "stated_range": [
+                0.75,
+                0.9
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.9-1",
+              "stated_range": [
+                0.9,
+                1.0
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            }
+          ]
+        },
+        "verdict": {
+          "bands_judged": 3,
+          "min_bands_for_a_verdict": 3,
+          "level_interpretable": false,
+          "described_not_judged": {
+            "bands_populated": 3,
+            "gap_per_populated_band": {
+              "0.1-0.25": -0.106,
+              "0.25-0.5": -0.2913,
+              "0.5-0.75": -0.5587
+            },
+            "median_gap_over_populated_bands": -0.2913
+          },
+          "lowest_judged_band": "0.1-0.25",
+          "lowest_observed": 0.0528,
+          "highest_judged_band": "0.5-0.75",
+          "highest_observed": 0.0946,
+          "point_estimates_rise": true,
+          "intervals_disjoint": false,
+          "ordering": "the point estimates rise but the intervals overlap",
+          "bands_where_the_stated_confidence_is_inside_the_interval": 0,
+          "share_consistent": 0.0,
+          "min_share_consistent": 0.7,
+          "median_signed_offset_observed_minus_stated": -0.2913,
+          "offset_range": [
+            -0.5587,
+            -0.106
+          ],
+          "pattern": "uninformative",
+          "pattern_text": "the observed agreement rate does not rise with the stated confidence: the highest judged band's rate is at or below the lowest judged band's, or their 95% Wilson intervals overlap. If this is the pattern, the number on a compiled fact orders nothing, and a reader who preferred a 0.6 fact to a 0.2 one gained nothing by it"
+        },
+        "carries_information": {
+          "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
+          "denominator_name": "over_all_matched_elements",
+          "input_presence": {
+            "a stated confidence on the compiled fact": {
+              "key": "stated_confidence",
+              "targets_with_the_input": 1505,
+              "targets": 1505,
+              "controls_with_the_input": 438872,
+              "controls": 438872,
+              "universal": true,
+              "kind": "free",
+              "reading": "free: the input covers every row in both arms, so a stratum on it cannot bite and a null result is arithmetic rather than evidence"
+            },
+            "a verdict from crispri over this element": {
+              "key": "assay_verdict",
+              "targets_with_the_input": 1505,
+              "targets": 1505,
+              "controls_with_the_input": 0,
+              "controls": 438872,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 1505/1505, controls 0/438872"
+            }
+          },
+          "targets_high_confidence": 349,
+          "controls_low_confidence": 1156,
+          "imbalance": {
+            "length": {
+              "target_median": 347.0,
+              "control_median": 346.0,
+              "ratio": 1.003
+            },
+            "gc": {
+              "target_median": 0.5447,
+              "control_median": 0.5086,
+              "ratio": 1.071
+            },
+            "nearest_coding_tss": {
+              "target_median": 6227.0,
+              "control_median": 17747.0,
+              "ratio": 0.351
+            }
+          },
+          "standardised": {
+            "targets": 349,
+            "controls": 1156,
+            "targets_matched": 349,
+            "dropped_for_want_of_a_control": 0,
+            "strata": {
+              "length": [
+                200.0,
+                400.0
+              ],
+              "gc": [
+                0.35,
+                0.45,
+                0.55
+              ],
+              "nearest_coding_tss": [
+                1000,
+                5000,
+                20000,
+                100000
+              ]
+            },
+            "raw": {
+              "a": 0.0946,
+              "b": 0.0554,
+              "difference": 0.0392,
+              "p_one_sided": 0.010745,
+              "upper_95": 0.0672
+            },
+            "matched": {
+              "a": 0.0946,
+              "b": 0.0582,
+              "difference": 0.0364,
+              "p_one_sided": 0.034782,
+              "upper_95": 0.0694
+            },
+            "imbalance": {
+              "length": {
+                "target_median": 347.0,
+                "control_median": 346.0,
+                "ratio": 1.003
+              },
+              "gc": {
+                "target_median": 0.5447,
+                "control_median": 0.5086,
+                "ratio": 1.071
+              },
+              "nearest_coding_tss": {
+                "target_median": 6227.0,
+                "control_median": 17747.0,
+                "ratio": 0.351
+              }
+            }
+          }
+        },
+        "level_withheld": "the wide denominator counts 'the screen never asked' as a non-agreement, so its rate is bounded above by the share of elements whose predicted gene the screen chose to test. A confidence cannot be calibrated against a bound; the ordering can still be read, and is"
+      }
+    },
+    "lentimpra": {
+      "assay": "lentimpra",
+      "source": "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp",
+      "what_agreement_means": {
+        "question": "out of its chromosome, does a 200 bp copy of this sequence drive a reporter?",
+        "is_the_compiled_claim": false,
+        "level_interpretable": false,
+        "why": "episomal: it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
+      },
+      "elements_in_the_footprint": 21133,
+      "elements_measured": 17869,
+      "elements_where_the_predicted_gene_was_tested": 17869,
+      "denominators_coincide": true,
+      "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
+      "where_the_predicted_gene_was_tested": {
+        "table": {
+          "denominator": "the predicted gene was tested by this assay",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "elements": 17869,
+          "agrees": 3361,
+          "observed_overall": 0.1881,
+          "mean_stated_confidence_overall": 0.2786,
+          "bands_populated": 3,
+          "bands_judged": 3,
+          "min_for_a_band": 30,
+          "expected_calibration_error": 0.0905,
+          "rows": [
+            {
+              "band": "0-0.02",
+              "stated_range": [
+                0.0,
+                0.02
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.02-0.05",
+              "stated_range": [
+                0.02,
+                0.05
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.05-0.1",
+              "stated_range": [
+                0.05,
+                0.1
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.1-0.25",
+              "stated_range": [
+                0.1,
+                0.25
+              ],
+              "compiled_elements_in_the_band": 292661,
+              "in_this_assays_footprint": 12621,
+              "measured_by_this_assay": 10627,
+              "coverage_of_the_band": 0.03631,
+              "share_of_the_eligible_raised": 0.842,
+              "mean_stated_confidence": 0.1584,
+              "agrees": 1618,
+              "observed": 0.1523,
+              "ci95": [
+                0.1455,
+                0.1592
+              ],
+              "stated_inside_the_interval": true,
+              "gap_observed_minus_stated": -0.0061,
+              "judged": true,
+              "median_length": 334.0,
+              "median_gc": 0.4957,
+              "median_nearest_coding_tss": 37713.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.25-0.5",
+              "stated_range": [
+                0.25,
+                0.5
+              ],
+              "compiled_elements_in_the_band": 98278,
+              "in_this_assays_footprint": 5377,
+              "measured_by_this_assay": 4570,
+              "coverage_of_the_band": 0.0465,
+              "share_of_the_eligible_raised": 0.8499,
+              "mean_stated_confidence": 0.3421,
+              "agrees": 937,
+              "observed": 0.205,
+              "ci95": [
+                0.1936,
+                0.217
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.1371,
+              "judged": true,
+              "median_length": 342.0,
+              "median_gc": 0.5029,
+              "median_nearest_coding_tss": 23825.5,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.5-0.75",
+              "stated_range": [
+                0.5,
+                0.75
+              ],
+              "compiled_elements_in_the_band": 49438,
+              "in_this_assays_footprint": 3135,
+              "measured_by_this_assay": 2672,
+              "coverage_of_the_band": 0.05405,
+              "share_of_the_eligible_raised": 0.8523,
+              "mean_stated_confidence": 0.6483,
+              "agrees": 806,
+              "observed": 0.3016,
+              "ci95": [
+                0.2845,
+                0.3193
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.3467,
+              "judged": true,
+              "median_length": 344.0,
+              "median_gc": 0.5171,
+              "median_nearest_coding_tss": 14798.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.75-0.9",
+              "stated_range": [
+                0.75,
+                0.9
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.9-1",
+              "stated_range": [
+                0.9,
+                1.0
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            }
+          ]
+        },
+        "verdict": {
+          "bands_judged": 3,
+          "min_bands_for_a_verdict": 3,
+          "level_interpretable": false,
+          "described_not_judged": {
+            "bands_populated": 3,
+            "gap_per_populated_band": {
+              "0.1-0.25": -0.0061,
+              "0.25-0.5": -0.1371,
+              "0.5-0.75": -0.3467
+            },
+            "median_gap_over_populated_bands": -0.1371
+          },
+          "lowest_judged_band": "0.1-0.25",
+          "lowest_observed": 0.1523,
+          "highest_judged_band": "0.5-0.75",
+          "highest_observed": 0.3016,
+          "point_estimates_rise": true,
+          "intervals_disjoint": true,
+          "ordering": "rises with the stated confidence",
+          "bands_where_the_stated_confidence_is_inside_the_interval": 1,
+          "share_consistent": 0.3333,
+          "min_share_consistent": 0.7,
+          "median_signed_offset_observed_minus_stated": -0.1371,
+          "offset_range": [
+            -0.3467,
+            -0.0061
+          ],
+          "pattern": "level_withheld_ordering_only",
+          "pattern_text": "the assay's agreement is not the compiled claim's own event, so the ordering may be read and the level may not: a rate of 0.19 against a stated 0.25 is not a miscalibration when the rate being measured is 'a 200 bp sequence drives a reporter' and the claim is 'deleting the element in its own chromosome moves this gene'. The level verdict is withheld rather than computed and ignored"
+        },
+        "carries_information": {
+          "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "input_presence": {
+            "a stated confidence on the compiled fact": {
+              "key": "stated_confidence",
+              "targets_with_the_input": 17869,
+              "targets": 17869,
+              "controls_with_the_input": 422508,
+              "controls": 422508,
+              "universal": true,
+              "kind": "free",
+              "reading": "free: the input covers every row in both arms, so a stratum on it cannot bite and a null result is arithmetic rather than evidence"
+            },
+            "a verdict from lentimpra over this element": {
+              "key": "assay_verdict",
+              "targets_with_the_input": 17869,
+              "targets": 17869,
+              "controls_with_the_input": 0,
+              "controls": 422508,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 17869/17869, controls 0/422508"
+            }
+          },
+          "targets_high_confidence": 2672,
+          "controls_low_confidence": 15197,
+          "imbalance": {
+            "length": {
+              "target_median": 344.0,
+              "control_median": 337.0,
+              "ratio": 1.021
+            },
+            "gc": {
+              "target_median": 0.5171,
+              "control_median": 0.498,
+              "ratio": 1.038
+            },
+            "nearest_coding_tss": {
+              "target_median": 14798.0,
+              "control_median": 32599.0,
+              "ratio": 0.454
+            }
+          },
+          "standardised": {
+            "targets": 2672,
+            "controls": 15197,
+            "targets_matched": 2672,
+            "dropped_for_want_of_a_control": 0,
+            "strata": {
+              "length": [
+                200.0,
+                400.0
+              ],
+              "gc": [
+                0.35,
+                0.45,
+                0.55
+              ],
+              "nearest_coding_tss": [
+                1000,
+                5000,
+                20000,
+                100000
+              ]
+            },
+            "raw": {
+              "a": 0.3016,
+              "b": 0.1681,
+              "difference": 0.1335,
+              "p_one_sided": 0.0,
+              "upper_95": 0.149
+            },
+            "matched": {
+              "a": 0.3016,
+              "b": 0.1724,
+              "difference": 0.1293,
+              "p_one_sided": 0.0,
+              "upper_95": 0.1482
+            },
+            "imbalance": {
+              "length": {
+                "target_median": 344.0,
+                "control_median": 337.0,
+                "ratio": 1.021
+              },
+              "gc": {
+                "target_median": 0.5171,
+                "control_median": 0.498,
+                "ratio": 1.038
+              },
+              "nearest_coding_tss": {
+                "target_median": 14798.0,
+                "control_median": 32599.0,
+                "ratio": 0.454
+              }
+            }
+          }
+        }
+      },
+      "over_all_matched_elements": {
+        "identical_to": "where_the_predicted_gene_was_tested",
+        "why": "every element this assay measured was tested by it, so the wide and the narrow denominator are the same rows. The key is kept so the narrow rate is never the only rate on the page"
+      }
+    },
+    "vista": {
+      "assay": "vista",
+      "source": "VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL), hg38 coordinates",
+      "what_agreement_means": {
+        "question": "in a transgenic mouse embryo at e11.5, is this sequence an enhancer?",
+        "is_the_compiled_claim": false,
+        "level_interpretable": false,
+        "why": "a different organism, one developmental stage and a reporter construct. A negative is a negative in a mouse embryo, which is not a measurement of a human cell's transcription, and the assay's own positives are enriched by how its sequences were chosen. Ordering only"
+      },
+      "elements_in_the_footprint": 2375,
+      "elements_measured": 98,
+      "elements_where_the_predicted_gene_was_tested": 98,
+      "denominators_coincide": true,
+      "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
+      "where_the_predicted_gene_was_tested": {
+        "table": {
+          "denominator": "the predicted gene was tested by this assay",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "elements": 98,
+          "agrees": 69,
+          "observed_overall": 0.7041,
+          "mean_stated_confidence_overall": 0.3262,
+          "bands_populated": 3,
+          "bands_judged": 1,
+          "min_for_a_band": 30,
+          "expected_calibration_error": 0.3779,
+          "rows": [
+            {
+              "band": "0-0.02",
+              "stated_range": [
+                0.0,
+                0.02
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.02-0.05",
+              "stated_range": [
+                0.02,
+                0.05
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.05-0.1",
+              "stated_range": [
+                0.05,
+                0.1
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.1-0.25",
+              "stated_range": [
+                0.1,
+                0.25
+              ],
+              "compiled_elements_in_the_band": 292661,
+              "in_this_assays_footprint": 1644,
+              "measured_by_this_assay": 55,
+              "coverage_of_the_band": 0.00019,
+              "share_of_the_eligible_raised": 0.0335,
+              "mean_stated_confidence": 0.1676,
+              "agrees": 39,
+              "observed": 0.7091,
+              "ci95": [
+                0.5786,
+                0.8123
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": 0.5415,
+              "judged": true,
+              "median_length": 346.0,
+              "median_gc": 0.4711,
+              "median_nearest_coding_tss": 63594.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.25-0.5",
+              "stated_range": [
+                0.25,
+                0.5
+              ],
+              "compiled_elements_in_the_band": 98278,
+              "in_this_assays_footprint": 491,
+              "measured_by_this_assay": 14,
+              "coverage_of_the_band": 0.00014,
+              "share_of_the_eligible_raised": 0.0285,
+              "mean_stated_confidence": 0.3393,
+              "agrees": 12,
+              "observed": 0.8571,
+              "ci95": [
+                0.6006,
+                0.9599
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": 0.5179,
+              "judged": false,
+              "median_length": 347.5,
+              "median_gc": 0.5602,
+              "median_nearest_coding_tss": 39688.5,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.5-0.75",
+              "stated_range": [
+                0.5,
+                0.75
+              ],
+              "compiled_elements_in_the_band": 49438,
+              "in_this_assays_footprint": 240,
+              "measured_by_this_assay": 29,
+              "coverage_of_the_band": 0.00059,
+              "share_of_the_eligible_raised": 0.1208,
+              "mean_stated_confidence": 0.6207,
+              "agrees": 18,
+              "observed": 0.6207,
+              "ci95": [
+                0.44,
+                0.7731
+              ],
+              "stated_inside_the_interval": true,
+              "gap_observed_minus_stated": 0.0,
+              "judged": false,
+              "median_length": 347.0,
+              "median_gc": 0.5536,
+              "median_nearest_coding_tss": 21559.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.75-0.9",
+              "stated_range": [
+                0.75,
+                0.9
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.9-1",
+              "stated_range": [
+                0.9,
+                1.0
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            }
+          ]
+        },
+        "verdict": {
+          "bands_judged": 1,
+          "min_bands_for_a_verdict": 3,
+          "level_interpretable": false,
+          "described_not_judged": {
+            "bands_populated": 3,
+            "gap_per_populated_band": {
+              "0.1-0.25": 0.5415,
+              "0.25-0.5": 0.5179,
+              "0.5-0.75": 0.0
+            },
+            "median_gap_over_populated_bands": 0.5179
+          },
+          "pattern": "refused",
+          "bands_populated_but_below_the_bar": {
+            "0.25-0.5": {
+              "measured": 14,
+              "short_of_the_bar_by": 16
+            },
+            "0.5-0.75": {
+              "measured": 29,
+              "short_of_the_bar_by": 1
+            }
+          },
+          "reading": "1 band holds at least 30 measured elements, below the 3 this lane fixed before computing anything. The table is printed and no verdict is drawn from it: a curve through fewer than three points is a line by construction. The bands that are populated and below the bar are named with the size of the shortfall, because a bar missed by one is still a bar and moving it after seeing the counts is how a pre-registration stops being one"
+        },
+        "carries_information": {
+          "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "input_presence": {
+            "a stated confidence on the compiled fact": {
+              "key": "stated_confidence",
+              "targets_with_the_input": 98,
+              "targets": 98,
+              "controls_with_the_input": 440279,
+              "controls": 440279,
+              "universal": true,
+              "kind": "free",
+              "reading": "free: the input covers every row in both arms, so a stratum on it cannot bite and a null result is arithmetic rather than evidence"
+            },
+            "a verdict from vista over this element": {
+              "key": "assay_verdict",
+              "targets_with_the_input": 98,
+              "targets": 98,
+              "controls_with_the_input": 0,
+              "controls": 440279,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 98/98, controls 0/440279"
+            }
+          },
+          "targets_high_confidence": 29,
+          "controls_low_confidence": 69,
+          "imbalance": {
+            "length": {
+              "target_median": 347.0,
+              "control_median": 346.0,
+              "ratio": 1.003
+            },
+            "gc": {
+              "target_median": 0.5536,
+              "control_median": 0.4839,
+              "ratio": 1.144
+            },
+            "nearest_coding_tss": {
+              "target_median": 21559.0,
+              "control_median": 48378.0,
+              "ratio": 0.446
+            }
+          },
+          "standardised": {
+            "targets": 29,
+            "controls": 69,
+            "targets_matched": 27,
+            "dropped_for_want_of_a_control": 2,
+            "strata": {
+              "length": [
+                200.0,
+                400.0
+              ],
+              "gc": [
+                0.35,
+                0.45,
+                0.55
+              ],
+              "nearest_coding_tss": [
+                1000,
+                5000,
+                20000,
+                100000
+              ]
+            },
+            "raw": {
+              "a": 0.6207,
+              "b": 0.7391,
+              "difference": -0.1184,
+              "p_one_sided": 0.871558,
+              "upper_95": 0.0534
+            },
+            "matched": {
+              "a": 0.6296,
+              "b": 0.7692,
+              "difference": -0.1395,
+              "p_one_sided": 0.871033,
+              "upper_95": 0.0634
+            },
+            "imbalance": {
+              "length": {
+                "target_median": 347.0,
+                "control_median": 346.0,
+                "ratio": 1.003
+              },
+              "gc": {
+                "target_median": 0.5536,
+                "control_median": 0.4839,
+                "ratio": 1.144
+              },
+              "nearest_coding_tss": {
+                "target_median": 21559.0,
+                "control_median": 48378.0,
+                "ratio": 0.446
+              }
+            }
+          }
+        }
+      },
+      "over_all_matched_elements": {
+        "identical_to": "where_the_predicted_gene_was_tested",
+        "why": "every element this assay measured was tested by it, so the wide and the narrow denominator are the same rows. The key is kept so the narrow rate is never the only rate on the page"
+      }
+    },
+    "satmut": {
+      "assay": "satmut",
+      "source": "saturation mutagenesis MPRA, Kircher et al. 2019 (GSE126550), single-base substitutions of 21 regulatory elements, GRCh38",
+      "what_agreement_means": {
+        "question": "which single bases inside this element change a reporter's activity?",
+        "is_the_compiled_claim": false,
+        "level_interpretable": false,
+        "why": "it cannot disagree at all: substituting one base at a time never deletes the element and never measures the predicted gene, so its agreement rate is 1.0 by construction wherever any base is functional. A reliability table over it would measure nothing twice over, and at four matched elements it would not measure it. See measured.SATMUT_CANNOT_DISAGREE"
+      },
+      "elements_in_the_footprint": 15,
+      "elements_measured": 4,
+      "elements_where_the_predicted_gene_was_tested": 4,
+      "denominators_coincide": true,
+      "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
+      "refused": "4 matched elements, and the assay cannot disagree: zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only. A reliability table needs an event that can come out false, and this one cannot, so no table is computed. The group is described in `the_measured_slice` with the rest",
+      "agrees": 4,
+      "stated_confidences": [
+        0.12,
+        0.22,
+        0.41,
+        0.54
+      ],
+      "medians": {
+        "median_length": 350.0,
+        "median_gc": 0.5622,
+        "median_nearest_coding_tss": 9506.0,
+        "elements_without_covariates": 0
+      }
+    }
+  },
+  "the_answer": {
+    "per_denominator": {
+      "crispri:where_the_predicted_gene_was_tested": {
+        "elements": 128,
+        "observed_overall": 0.7578,
+        "mean_stated_confidence_overall": 0.347,
+        "expected_calibration_error": 0.4108,
+        "pattern": "refused",
+        "ordering": null,
+        "level_interpretable": true,
+        "median_gap_over_populated_bands": 0.4724,
+        "gap_per_populated_band": {
+          "0.1-0.25": 0.4724,
+          "0.25-0.5": 0.5134,
+          "0.5-0.75": 0.227
+        },
+        "standardised_difference": 0.1374,
+        "standardised_p": 0.06975
+      },
+      "crispri:over_all_matched_elements": {
+        "elements": 1505,
+        "observed_overall": 0.0645,
+        "mean_stated_confidence_overall": 0.3268,
+        "expected_calibration_error": 0.2623,
+        "pattern": "uninformative",
+        "ordering": "the point estimates rise but the intervals overlap",
+        "level_interpretable": false,
+        "median_gap_over_populated_bands": -0.2913,
+        "gap_per_populated_band": {
+          "0.1-0.25": -0.106,
+          "0.25-0.5": -0.2913,
+          "0.5-0.75": -0.5587
+        },
+        "standardised_difference": 0.0364,
+        "standardised_p": 0.034782
+      },
+      "lentimpra:where_the_predicted_gene_was_tested": {
+        "elements": 17869,
+        "observed_overall": 0.1881,
+        "mean_stated_confidence_overall": 0.2786,
+        "expected_calibration_error": 0.0905,
+        "pattern": "level_withheld_ordering_only",
+        "ordering": "rises with the stated confidence",
+        "level_interpretable": false,
+        "median_gap_over_populated_bands": -0.1371,
+        "gap_per_populated_band": {
+          "0.1-0.25": -0.0061,
+          "0.25-0.5": -0.1371,
+          "0.5-0.75": -0.3467
+        },
+        "standardised_difference": 0.1293,
+        "standardised_p": 0.0
+      },
+      "vista:where_the_predicted_gene_was_tested": {
+        "elements": 98,
+        "observed_overall": 0.7041,
+        "mean_stated_confidence_overall": 0.3262,
+        "expected_calibration_error": 0.3779,
+        "pattern": "refused",
+        "ordering": null,
+        "level_interpretable": false,
+        "median_gap_over_populated_bands": 0.5179,
+        "gap_per_populated_band": {
+          "0.1-0.25": 0.5415,
+          "0.25-0.5": 0.5179,
+          "0.5-0.75": 0.0
+        },
+        "standardised_difference": -0.1395,
+        "standardised_p": 0.871033
+      },
+      "satmut": {
+        "table": "refused",
+        "why": "4 matched elements, and the assay cannot disagree: zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only. A reliability table needs an event that can come out false, and this one cannot, so no table is computed. The group is described in `the_measured_slice` with the rest"
+      }
+    },
+    "tables": 4,
+    "entries_with_no_table_at_all": [
+      "satmut"
+    ],
+    "bands_populated_across_every_table": 12,
+    "bands_where_the_stated_level_is_inside_its_own_interval": 2,
+    "bands_where_it_is_not": 10,
+    "tables_where_the_rate_rises_with_the_confidence": [
+      "lentimpra:where_the_predicted_gene_was_tested"
+    ],
+    "tables_where_it_does_not": [
+      "crispri:over_all_matched_elements"
+    ],
+    "tables_refused": [
+      "crispri:where_the_predicted_gene_was_tested",
+      "vista:where_the_predicted_gene_was_tested",
+      "satmut"
+    ],
+    "level_is_a_property_of_the_population": "the same stated number, measured against two populations, is off in OPPOSITE DIRECTIONS. That is not an inconsistency in the tables; it is what a level is. target_calibration found the same thing for a different quantity - the curve transferred and the level did not, because the base rate of the new population differed - and it is the reason no single offset can be added to the compiler's formula to fix it. An offset quoted without the population it was measured on is not a number",
+    "offsets_by_table": {
+      "crispri:where_the_predicted_gene_was_tested": 0.4724,
+      "crispri:over_all_matched_elements": -0.2913,
+      "lentimpra:where_the_predicted_gene_was_tested": -0.1371,
+      "vista:where_the_predicted_gene_was_tested": 0.5179
+    }
+  },
+  "no_pooled_rate": "there is deliberately no pooled agreement rate in this result. See why_pooling_is_refused",
+  "scope": "This is a reliability table over MEASURED compiled elements, and that is not a random sample of the compiled genome. 4.33% of compiled elements are measured at all (19,072 of 440,377) and only 5.98% were ever eligible, because an assay's footprint had to reach them. The measured slice is longer, more GC-rich and closer to a coding TSS than the rest - the assays chose candidate regulatory sequence, which is the same property the deletion scores highly - so the bands' rates are conditional on an element having been chosen for an assay. The table says how often the project's confidence is borne out ON MEASURED ELEMENTS. It says nothing directly about the 414,053 elements no assay ever covered, and the imbalance between the two arms is printed in the result rather than described here, so the size of the extrapolation is a number",
+  "falsifies_transfer": "The transfer from measured elements to the compiled genome fails if any of these is observed. (a) A screen that tiles a region without choosing candidate sequence - an unbiased tiling rather than a cCRE list - finds the top band's rate far below what it is here, which is what selection on testability looks like from outside. (b) The agreement rate moves with the measured slice's own covariates once they are held fixed: if the standardised difference between the high and low confidence arms collapses toward zero when length, GC and distance to a coding TSS are matched, then the band was reading the covariate and not the confidence, and on unmeasured elements the covariate distribution is different. (c) A new assay extends the footprint into elements that look unlike the measured ones - far from a promoter, AT-rich, short - and the bands do not hold there. (d) The prevalence shift target_calibration already found: a population whose base rate of agreement differs from this one's needs its own intercept, so a band quoted without its population's rate beside it has stopped being a measurement of anything",
+  "chromosomes_not_read": {},
+  "seconds": 70.2
+}

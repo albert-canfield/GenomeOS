@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chrX",
+  "date": "2026-09-15",
+  "chrom": "chrX",
+  "elements_total": 22894,
+  "scored": 22894,
+  "requests_this_run": 22911,
+  "workers": 8,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 22894,
+    "with_predicted_target": 13889,
+    "fraction_with_target": 0.607,
+    "strong": 4317,
+    "weak": 9572,
+    "silencer_like": 4658,
+    "verdicts": {
+      "no predicted effect": 9005,
+      "agrees with nearest TSS in domain": 5955,
+      "another gene in the same domain": 4998,
+      "gene outside the domain": 2936
+    },
+    "verdicts_coding": {
+      "no predicted effect": 12077,
+      "agrees with nearest TSS in domain": 7002,
+      "gene outside the domain": 2438,
+      "another gene in the same domain": 1377
+    },
+    "coding_target_agrees_with_nearest": 0.647,
+    "fraction_agreeing_with_nearest": 0.429,
+    "fraction_inside_domain": 0.789,
+    "top_tissues": {
+      "K562": 948,
+      "placenta": 730,
+      "HepG2": 589,
+      "CD14-positive monocyte": 425,
+      "GM23338": 299,
+      "CD8-positive, alpha-beta T cell": 261,
+      "Purkinje cell": 226,
+      "neural cell": 225,
+      "psoas muscle": 223,
+      "Whole_Blood": 219,
+      "common myeloid progenitor, CD34-positive": 197,
+      "small intestine": 196
+    },
+    "median_distance_when_agreeing": 12065
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chrX.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

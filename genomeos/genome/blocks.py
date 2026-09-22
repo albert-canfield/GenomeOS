@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from genomeos.genome.sequence import Sequence
@@ -237,10 +238,67 @@ def blocks_for_window(
                     0.9,
                 )
             )
+    ccres_all = None
     if (end - start) <= ELEMENT_WINDOW:
+        # curated repeats (RepeatMasker) replace the sequence-derived simple repeats when present
+        from genomeos.genome.repeats import EVIDENCE as RMSK_EVIDENCE
+        from genomeos.genome.repeats import load_repeats
+
+        reps = load_repeats(chrom)
+        if reps:
+            blocks = [b for b in blocks if b.type != "repeat"]
+            for r in reps:
+                if r.end > start and r.start < end:
+                    blocks.append(
+                        Block(
+                            f"rmsk:{r.start}",
+                            "repeat",
+                            r.start,
+                            r.end,
+                            ".",
+                            f"{r.name} ({r.cls})",
+                            None,
+                            "curated",
+                            0.9,
+                            {
+                                "cls": r.cls,
+                                "family": r.family,
+                                "divergence": f"{r.divergence:.0%}",
+                                "note": RMSK_EVIDENCE,
+                            },
+                        )
+                    )
+        # reader v1: open chromatin per cell type, for every cell type distilled for this chromosome
+        from genomeos.genome.reader import EVIDENCE as DNASE_EVIDENCE
+        from genomeos.genome.reader import RESULTS as READER_DIR
+
+        for peaks_file in sorted(READER_DIR.glob(f"dnase_*_{chrom}.bed.gz")):
+            cell = peaks_file.name[len("dnase_") : -len(f"_{chrom}.bed.gz")]
+            with __import__("gzip").open(peaks_file, "rt") as fh:
+                for line in fh:
+                    if line.startswith("#"):
+                        continue
+                    a, b, v = line.rstrip("\n").split("\t")
+                    a, b = int(a), int(b)
+                    if b > start and a < end:
+                        blocks.append(
+                            Block(
+                                f"open:{cell}:{a}",
+                                "open",
+                                a,
+                                b,
+                                ".",
+                                f"open in {cell}",
+                                None,
+                                "experimental",
+                                0.9,
+                                {"cell": cell, "signal": v, "note": DNASE_EVIDENCE},
+                            )
+                        )
         from genomeos.genome.regulatory import EVIDENCE, load_ccres
 
-        for c in load_ccres(chrom):
+        ccres_all = load_ccres(chrom)
+        for c in ccres_all:
             if c.end > start and c.start < end:
                 blocks.append(
                     Block(
@@ -256,7 +314,37 @@ def blocks_for_window(
                         {"cls": c.cls, "ctcf_bound": c.ctcf_bound, "source": EVIDENCE},
                     )
                 )
+    # nodes: domains inferred from CTCF boundaries (any window size)
+    from genomeos.genome.domains import infer_domains
+    from genomeos.genome.regulatory import load_ccres as _load
+
+    ccres_dom = ccres_all if ccres_all is not None else _load(chrom)
+    if ccres_dom and chrom_length:
+        for d in infer_domains(chrom, chrom_length, ccres_dom, annotation):
+            if d.end > start and d.start < end:
+                blocks.append(
+                    Block(
+                        d.id,
+                        "domain",
+                        d.start,
+                        d.end,
+                        ".",
+                        f"node {d.id.split(':')[1]}",
+                        None,
+                        "inferred",
+                        0.4,
+                        {
+                            "coding_genes": d.coding_genes,
+                            "genes": ", ".join(d.genes[:12]) + ("…" if len(d.genes) > 12 else ""),
+                            "promoters": d.promoters,
+                            "enhancers": d.enhancers,
+                            "note": "CTCF-only sites as boundaries; no Hi-C",
+                        },
+                    )
+                )
     _apply_unknown_classes(blocks, chrom)
+    _apply_variation_case(blocks, chrom)
+    reader_cells = _apply_reader(blocks, chrom)
     return {
         "chrom": chrom,
         "start": start,
@@ -265,7 +353,44 @@ def blocks_for_window(
         "coarse": coarse,
         "blocks": [b.to_dict() for b in blocks],
         "counts": _counts(blocks),
+        "reader_cells": reader_cells,
     }
+
+
+def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = None) -> list[str]:
+    """Reader v1 on the map: for every cell type read on this chromosome, each node carries its open
+    fraction and whether the reader calls it silent, each coding gene whether its promoter is open
+    (read) or not (silent). Returns the cell types found."""
+    from genomeos.results import RESULTS_DIR, load_result
+
+    rd = results_dir or RESULTS_DIR
+    cells = []
+    for f in sorted(rd.glob(f"reader_*_{chrom}.json")):
+        cell = f.name[len("reader_") : -len(f"_{chrom}.json")]
+        r = load_result(f.stem, rd)
+        if not r or "node_table" not in r:
+            continue
+        cells.append(cell)
+        nodes = {n["id"]: n for n in r["node_table"]}
+        silent_nodes = set(r.get("silent_node_ids", []))
+        silent_genes = set(r.get("silent_genes", []))
+        # poised genes are inside silent_genes on purpose - a consumer reads "absent" as read, so a
+        # poised gene left out of that list would be reported as expressed - but poised is not silent:
+        # it is H3K27me3 over a promoter that also carries H3K4me3, a gene held ready rather than shut.
+        # Reading the narrower list first is what tells the two apart, and until 2026-09-17 nothing did.
+        poised_genes = set(r.get("poised_genes") or [])
+        for b in blocks:
+            if b.type == "domain":
+                n = nodes.get(b.id)
+                if n:
+                    b.attrs[f"{cell}_open_fraction"] = n["open_fraction"]
+                    b.attrs[f"{cell}_peaks"] = n["peaks"]
+                    b.attrs[f"{cell}_node"] = "silent" if b.id in silent_nodes else "open"
+            elif b.type == "gene" and b.attrs.get("gene_type") == "protein_coding":
+                b.attrs[f"{cell}_read"] = (
+                    "poised" if b.name in poised_genes else "silent" if b.name in silent_genes else "read"
+                )
+    return cells
 
 
 def _apply_unknown_classes(blocks: list[Block], chrom: str) -> None:
@@ -296,6 +421,44 @@ def _apply_unknown_classes(blocks: list[Block], chrom: str) -> None:
             )
             if hit.get("similar_to"):
                 b.attrs["similar_to"] = "; ".join(hit["similar_to"][:3])
+
+
+def _apply_variation_case(blocks: list[Block], chrom: str, results_dir: Path | None = None) -> None:
+    """Area J's two axes per UNKNOWN block: held across mammals, and constrained among people.
+
+    The case is the pair read together - `syntax` held on both, `relaxed` held across mammals and
+    variable among people, `recent` the other way round, `tolerant` neither - and until 2026-09-17 it
+    was computed, committed and shown nowhere. A block's case is the sharpest thing this project can
+    say about it without a model, so it belongs on the block.
+    """
+    from genomeos.results import RESULTS_DIR, load_result
+
+    r = load_result(f"variation_{chrom}", results_dir or RESULTS_DIR)
+    if not r:
+        return
+    by_span = {(b["start"], b["end"]): b for b in r.get("blocks", [])}
+    for b in blocks:
+        if b.type != "unknown":
+            continue
+        hit = by_span.get((b.start, b.end)) or next(
+            (c for c in r.get("blocks", []) if c["start"] <= b.start and b.end <= c["end"]), None
+        )
+        case = hit.get("case") if hit else None
+        if isinstance(case, dict):  # the result carries the pair and its confidence, not a bare label
+            b.attrs["case_mammals"] = case.get("mammals")
+            b.attrs["case_humans"] = case.get("humans")
+            b.attrs["case_confidence"] = case.get("confidence")
+            case = case.get("case")
+        if not case:
+            continue
+        b.attrs["case"] = case
+        if hit.get("mammal_fraction") is not None:
+            b.attrs["mammal_fraction"] = hit["mammal_fraction"]
+        g = hit.get("gnocchi") or {}
+        # the mean is a ratio and survives the 2026-09-17 bin-crediting fix; the base COUNT does not,
+        # so it is deliberately not carried onto the block
+        if g.get("mean") is not None:
+            b.attrs["gnocchi_mean"] = g["mean"]
 
 
 def _counts(blocks: list[Block]) -> dict[str, int]:

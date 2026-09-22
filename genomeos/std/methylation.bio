@@ -1,0 +1,56 @@
+# bio.std.methylation — the CpG methylation state machine's rates, with their evidence.
+#
+# The mechanism is in genomeos/runtime/methylation.py: per CpG dyad, replication turns
+# methylated into hemimethylated, UHRF1 + DNMT1 restore it with a fidelity below 1, DNMT3A/B
+# methylate de novo, TET1-3 erase, and maintenance and de novo efficiency both rise with the
+# local CpG density. This module is the parameter sheet: one number where the literature
+# establishes one, `unknown` where it does not.
+#
+# A program that wants to run the engine imports this module and binds the unknown rates as its
+# own, labelled assumptions (data/demo/methylation_erosion.bio does). The engine refuses to run
+# while any of them is UNKNOWN, which is the point: a per-division rate nobody has measured is
+# not the engine's to invent.
+module bio.std.methylation
+
+# test: parameters >= 8
+# test: unknown_parameters >= 6
+
+param methylation.maintenance_fidelity_dense = 0.97 /division {
+  evidence: experimental "Laird et al. 2004, PNAS 101:204; Genereux et al. 2005, PNAS 102:5802 — hairpin bisulfite: maintenance fidelity roughly 0.95-0.99 per CpG per division; Ushijima et al. 2003, PNAS 100:2709 puts clonal per-site fidelity above 0.99"
+  confidence: 0.5
+}
+
+param methylation.maintenance_fidelity_solo_wcgw = unknown /division {
+  evidence: experimental "Zhou et al. 2018, Nat Genet 50:591 — solo-WCGW CpGs (no other CpG within 35 bp, A or T on both sides) lose methylation with mitotic age; no per-division fidelity is reported"
+  confidence: 0.0
+}
+
+param methylation.maintenance_fidelity_solo_scgs = unknown /division {
+  evidence: experimental "Zhou et al. 2018, Nat Genet 50:591 — an isolated CpG with a G/C flank loses less than a WCGW one; the rate is not reported"
+  confidence: 0.0
+}
+
+param methylation.de_novo_dense = unknown /division {
+  evidence: experimental "Okano et al. 1999, Cell 99:247 (DNMT3A/B); rates of 0.01-0.2 per strand per division are reported at single loci (Laird 2004, Genereux 2005) and not established genome-wide per cell type"
+  confidence: 0.0
+}
+
+param methylation.de_novo_solo = unknown /division {
+  evidence: experimental "Okano et al. 1999, Cell 99:247; de novo methylation of an isolated CpG is expected to be the lower end of the reported range and is not measured per division"
+  confidence: 0.0
+}
+
+param methylation.tet_erasure = unknown /division {
+  evidence: experimental "Tahiliani et al. 2009, Science 324:930; Ito et al. 2011, Science 333:1300 — TET1-3 oxidise 5mC; genome-average active turnover per division in a somatic cell is not established"
+  confidence: 0.0
+}
+
+param methylation.neighbour_scale = unknown CpGs {
+  evidence: curated "Haerter et al. 2014, NAR 42:2235; Lovkvist et al. 2016, NAR 44:5123 — collaborative methylation: nearby methylated CpGs recruit the enzymes. The CpG count at which the effect saturates is not established"
+  confidence: 0.0
+}
+
+param methylation.neighbour_window_bp = 35 bp {
+  evidence: experimental "Zhou et al. 2018, Nat Genet 50:591 — the published definition of an isolated (solo) CpG: no other CpG within 35 bp on either side"
+  confidence: 0.9
+}

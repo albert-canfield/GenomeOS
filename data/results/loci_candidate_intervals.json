@@ -1,0 +1,152 @@
+{
+  "result": "loci_candidate_intervals",
+  "date": "2026-09-17",
+  "elements": [
+    {
+      "id": "chr10_23219045_23219445",
+      "chrom": "chr10",
+      "start": 23219045,
+      "end": 23219445,
+      "length": 400,
+      "genes_in_window": 17,
+      "tracks": 371,
+      "seconds": 1.4,
+      "predicted": {
+        "gene": "C10orf67",
+        "action": "activates",
+        "log2_fold_change": -0.1264,
+        "tissue": "right cardiac atrium",
+        "strength": "weak",
+        "confidence": 0.126,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "C10orf67",
+        "action": "activates",
+        "log2_fold_change": -0.1264,
+        "tissue": "right cardiac atrium",
+        "strength": "weak",
+        "confidence": 0.126,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_by_cell": {
+        "HepG2": -0.004,
+        "IMR-90": -0.0101,
+        "K562": -0.0098,
+        "GM12878": -0.0067
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.004,
+        "IMR-90": -0.0101,
+        "K562": -0.0098,
+        "GM12878": -0.0067
+      },
+      "top_genes": [
+        {
+          "gene": "C10orf67",
+          "n_tracks": 371,
+          "mean_log2fc": -0.0244,
+          "max_drop_log2fc": -0.1264,
+          "max_drop_tissue": "right cardiac atrium",
+          "max_rise_log2fc": 0.0,
+          "max_rise_tissue": "",
+          "by_cell": {
+            "HepG2": -0.004,
+            "IMR-90": -0.0101,
+            "K562": -0.0098,
+            "GM12878": -0.0067
+          }
+        },
+        {
+          "gene": "PTF1A",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0027,
+          "max_drop_log2fc": -0.0565,
+          "max_drop_tissue": "cardiac muscle cell",
+          "max_rise_log2fc": 0.0876,
+          "max_rise_tissue": "HepG2",
+          "by_cell": {
+            "HepG2": 0.0876,
+            "IMR-90": -0.0004,
+            "K562": 0.002,
+            "GM12878": 0.0002
+          }
+        },
+        {
+          "gene": "ENSG00000227537",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0018,
+          "max_drop_log2fc": -0.0395,
+          "max_drop_tissue": "Panc1",
+          "max_rise_log2fc": 0.073,
+          "max_rise_tissue": "testis",
+          "by_cell": {
+            "HepG2": 0.0012,
+            "IMR-90": 0.0004,
+            "K562": 0.0007,
+            "GM12878": 0.0003
+          }
+        },
+        {
+          "gene": "ENSG00000252049",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0001,
+          "max_drop_log2fc": -0.0248,
+          "max_drop_tissue": "cardiac muscle cell",
+          "max_rise_log2fc": 0.042,
+          "max_rise_tissue": "Pancreas",
+          "by_cell": {
+            "HepG2": 0.0005,
+            "IMR-90": -0.0002,
+            "K562": -0.0001,
+            "GM12878": -0.0
+          }
+        },
+        {
+          "gene": "RNU6-413P",
+          "n_tracks": 369,
+          "mean_log2fc": -0.0003,
+          "max_drop_log2fc": -0.014,
+          "max_drop_tissue": "dorsolateral prefrontal cortex",
+          "max_rise_log2fc": 0.0046,
+          "max_rise_tissue": "Purkinje cell",
+          "by_cell": {
+            "HepG2": -0.0,
+            "IMR-90": -0.0,
+            "K562": -0.0006,
+            "GM12878": -0.0007
+          }
+        }
+      ],
+      "domain": "",
+      "locus": "PTF1A_enhancer",
+      "substituted_annotated_element": false
+    }
+  ],
+  "read": [
+    {
+      "locus": "PTF1A_enhancer",
+      "element": "chr10:23219045-23219445",
+      "substituted_annotated_element": false,
+      "named_first_coding": "C10orf67",
+      "named_first_any": "C10orf67",
+      "log2_fold_change": -0.1264,
+      "action": "activates",
+      "tissue": "right cardiac atrium",
+      "top_genes": [
+        "C10orf67",
+        "PTF1A",
+        "ENSG00000227537",
+        "ENSG00000252049",
+        "RNU6-413P"
+      ],
+      "hit": false,
+      "targets": [
+        "PTF1A"
+      ]
+    }
+  ],
+  "note": "AlphaGenome deletions of intervals genomeos/benchmark/loci_candidates.py STATED from a publication, which no registry drew an element over. Read by loci._deletion_rows and labelled `stated_interval`, so these rows are never pooled with registry ones",
+  "requests_this_run": 1,
+  "seconds": 26.8
+}

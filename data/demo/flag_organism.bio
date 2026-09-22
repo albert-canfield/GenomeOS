@@ -1,0 +1,43 @@
+# Wolpert's French flag grown from one cell: a founder at the left edge divides along a
+# 30-cell strip until there is no room, a morphogen diffuses from the same edge, and once
+# the gradient has formed each cell reads its local concentration against two thresholds
+# and takes blue, white or red. The same three bands as `genomeos develop flag`, now as
+# an organism program: growth, contact inhibition and positional information together.
+# test: alive == 30
+module demo.flag_organism
+import bio.std.development
+
+organism FlagFromOneCell {
+  species: model
+  root: Founder
+  cell_type: Zygote
+  space: 30 x 1
+  origin: 0,0
+  sense: 30 min
+  observe: count, fates
+  assert: count at 60 h = 30
+  assert: type Blue at 200 h in 6..14
+  assert: type White at 200 h in 4..14
+  assert: type Red at 200 h in 6..18
+  evidence: curated "Wolpert 1969, J Theor Biol 25:1 (positional information)"; confidence: 0.6
+}
+
+stage Growth { from: 0 h; to: 100 h; evidence: curated "the strip fills first"; confidence: 0.5 }
+stage Read { from: 100 h; evidence: curated "cells read the gradient once it is established"; confidence: 0.5 }
+
+field Morphogen { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0; evidence: curated "Wolpert 1969; a source at one edge, diffusion and decay"; confidence: 0.6 }
+
+cell_type Blue { parent: PostMitotic; evidence: curated "high concentration fate"; confidence: 0.6 }
+cell_type White { parent: PostMitotic; evidence: curated "intermediate concentration fate"; confidence: 0.6 }
+cell_type Red { parent: PostMitotic; evidence: curated "low concentration fate"; confidence: 0.6 }
+
+timer cycle { duration: 2 h; when: cell_type = Zygote|Blastomere; evidence: inferred "one division every two hours while there is room"; confidence: 0.3 }
+
+signal High { mode: gradient; field: Morphogen; threshold: 2.0; sets: High = present; evidence: curated "Wolpert 1969: threshold_high"; confidence: 0.6 }
+signal Low  { mode: gradient; field: Morphogen; threshold: 0.5; sets: Low = present; evidence: curated "Wolpert 1969: threshold_low"; confidence: 0.6 }
+
+decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "cleavage-stage cells"; confidence: 0.9 }
+decision grow { action: divide; when: cell_type = Blastomere, stage = Growth; direction: +x; evidence: inferred "daughters are laid down along the strip; division stops when no neighbouring site is free"; confidence: 0.3 }
+decision blue { action: differentiate; when: cell_type = Blastomere, stage = Read, High = present; to: Blue; evidence: curated "Wolpert 1969"; confidence: 0.6 }
+decision white { action: differentiate; when: cell_type = Blastomere, stage = Read, Low = present, High = absent; to: White; evidence: curated "Wolpert 1969"; confidence: 0.6 }
+decision red { action: differentiate; when: cell_type = Blastomere, stage = Read, Low = absent; to: Red; evidence: curated "Wolpert 1969"; confidence: 0.6 }

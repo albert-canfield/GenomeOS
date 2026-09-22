@@ -1,5 +1,7 @@
 # Action plan: to an operative and functional GenomeOS
 
+> Historical plan (2026-09-10), executed. The living plan is [ROADMAP.md](ROADMAP.md).
+
 Written 2026-09-10 after the research pass (see LANDSCAPE.md and DATA.md).
 The plan is ordered so that every phase produces something runnable and a
 test that proves it against known biology.

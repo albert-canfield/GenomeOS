@@ -1,0 +1,36 @@
+# bio.std.human_stages — the Carnegie stages of human embryonic development as stages
+# on the organism clock (days after fertilisation), and the timers that pace them.
+# Ages follow O'Rahilly & Müller 1987 (Developmental Stages in Human Embryos, Carnegie
+# Institution publication 637) as summarised in O'Rahilly & Müller 2010, Cells Tissues
+# Organs 192:73; the fetal period continues to birth at about 266 days.
+module bio.std.human_stages
+
+stage CS1 { from: 0 d; to: 1.5 d; evidence: curated "O'Rahilly & Müller 1987 (fertilised oocyte)"; confidence: 0.8 }
+stage CS2 { from: 1.5 d; to: 4 d; evidence: curated "O'Rahilly & Müller 1987 (2 to 16 cells)"; confidence: 0.8 }
+stage CS3 { from: 4 d; to: 5 d; evidence: curated "O'Rahilly & Müller 1987 (free blastocyst)"; confidence: 0.8 }
+stage CS4 { from: 5 d; to: 6 d; evidence: curated "O'Rahilly & Müller 1987 (attaching blastocyst)"; confidence: 0.8 }
+stage CS5 { from: 7 d; to: 12 d; evidence: curated "O'Rahilly & Müller 1987 (implanted, bilaminar)"; confidence: 0.8 }
+stage CS6 { from: 13 d; to: 15 d; evidence: curated "O'Rahilly & Müller 1987 (primitive streak appears)"; confidence: 0.8 }
+stage CS7 { from: 15 d; to: 17 d; evidence: curated "O'Rahilly & Müller 1987 (notochordal process; gastrulation)"; confidence: 0.8 }
+stage CS8 { from: 17 d; to: 19 d; evidence: curated "O'Rahilly & Müller 1987 (primitive pit, neural groove)"; confidence: 0.8 }
+stage CS9 { from: 19 d; to: 21 d; evidence: curated "O'Rahilly & Müller 1987 (first somites, 1 to 3)"; confidence: 0.8 }
+stage CS10 { from: 22 d; to: 23 d; evidence: curated "O'Rahilly & Müller 1987 (4 to 12 somites, neural folds fuse)"; confidence: 0.8 }
+stage CS11 { from: 23 d; to: 26 d; evidence: curated "O'Rahilly & Müller 1987 (13 to 20 somites, rostral neuropore closes)"; confidence: 0.8 }
+stage CS12 { from: 26 d; to: 30 d; evidence: curated "O'Rahilly & Müller 1987 (21 to 29 somites, upper limb buds)"; confidence: 0.8 }
+stage CS13 { from: 28 d; to: 32 d; evidence: curated "O'Rahilly & Müller 1987 (30 or more somites, lower limb buds)"; confidence: 0.8 }
+stage CS14 { from: 31 d; to: 35 d; evidence: curated "O'Rahilly & Müller 1987 (lens pit, optic cup)"; confidence: 0.8 }
+stage CS15 { from: 35 d; to: 38 d; evidence: curated "O'Rahilly & Müller 1987 (lens vesicle, hand plate)"; confidence: 0.8 }
+stage CS16 { from: 37 d; to: 42 d; evidence: curated "O'Rahilly & Müller 1987 (nasal pits, foot plate)"; confidence: 0.8 }
+stage CS17 { from: 42 d; to: 44 d; evidence: curated "O'Rahilly & Müller 1987 (finger rays)"; confidence: 0.8 }
+stage CS18 { from: 44 d; to: 48 d; evidence: curated "O'Rahilly & Müller 1987 (toe rays, eyelids begin)"; confidence: 0.8 }
+stage CS19 { from: 48 d; to: 51 d; evidence: curated "O'Rahilly & Müller 1987 (trunk elongates, limbs extend)"; confidence: 0.8 }
+stage CS20 { from: 51 d; to: 53 d; evidence: curated "O'Rahilly & Müller 1987 (upper limbs bend at elbow)"; confidence: 0.8 }
+stage CS21 { from: 53 d; to: 54 d; evidence: curated "O'Rahilly & Müller 1987 (fingers free, longer)"; confidence: 0.8 }
+stage CS22 { from: 54 d; to: 56 d; evidence: curated "O'Rahilly & Müller 1987 (eyelids and ears more developed)"; confidence: 0.8 }
+stage CS23 { from: 56 d; to: 60 d; evidence: curated "O'Rahilly & Müller 1987 (end of the embryonic period)"; confidence: 0.8 }
+stage Fetal { from: 60 d; to: 266 d; evidence: curated "fetal period to birth at about 38 weeks after fertilisation"; confidence: 0.8 }
+
+timer human_cleavage { duration: 20 h; when: stage = CS2; evidence: curated "2-cell at ~24 h, 8-cell at day 3: about one division per 20 h"; confidence: 0.6 }
+timer human_segmentation_clock { duration: 5 h; evidence: experimental "Matsuda et al. 2020, Science 369:1450 (human presomitic mesoderm period 5 to 6 h)"; confidence: 0.8 }
+timer human_somite_period { duration: 5 h; when: stage = CS9|CS10|CS11|CS12|CS13; evidence: curated "one somite pair per clock period; 4 to 12 somites at CS10 (days 22 to 23)"; confidence: 0.6 }
+timer human_embryonic_cell_cycle { duration: 24 h; evidence: curated "typical cycle of human embryonic and fetal progenitors, order of magnitude (Rayon et al. 2020: twice the mouse)"; confidence: 0.4 }

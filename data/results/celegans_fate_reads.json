@@ -1,0 +1,1209 @@
+{
+  "result": "celegans_fate_reads",
+  "date": "2026-09-15",
+  "question": "with the Body computing F.exposure(window) and F.mean(window) itself, can the worm's terminal fate rules be written on a read a deciding cell could hold, and does that score better or worse than the precomputed lookup it replaces?",
+  "reads_are": "absolute (minutes, or a fraction of the named window) and integrate carriage, not concentration: this program declares no cell_network, so a factor counts 1 while carried (BIOLANG-v0.4-ECONOMY.md \u00a77.2a)",
+  "decision_points_per_terminal_cell": {
+    "1": 555
+  },
+  "terminal_cells_whose_cell_window_is_empty_when_they_decide": 555,
+  "threshold_plateau": [
+    {
+      "read": "exposure(lineage)",
+      "threshold": 1,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 15,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 30,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 45,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 60,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 75,
+      "decided": 146,
+      "right": 121,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 90,
+      "decided": 133,
+      "right": 110,
+      "wrong": 23,
+      "with_lookup_fallback": 532
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 105,
+      "decided": 112,
+      "right": 94,
+      "wrong": 18,
+      "with_lookup_fallback": 537
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 120,
+      "decided": 100,
+      "right": 86,
+      "wrong": 14,
+      "with_lookup_fallback": 541
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 150,
+      "decided": 89,
+      "right": 85,
+      "wrong": 4,
+      "with_lookup_fallback": 551
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 180,
+      "decided": 76,
+      "right": 72,
+      "wrong": 4,
+      "with_lookup_fallback": 551
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.01,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.05,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.1,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.15,
+      "decided": 164,
+      "right": 139,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.2,
+      "decided": 150,
+      "right": 125,
+      "wrong": 25,
+      "with_lookup_fallback": 530
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.22,
+      "decided": 119,
+      "right": 108,
+      "wrong": 11,
+      "with_lookup_fallback": 544
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.25,
+      "decided": 91,
+      "right": 87,
+      "wrong": 4,
+      "with_lookup_fallback": 551
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.3,
+      "decided": 89,
+      "right": 85,
+      "wrong": 4,
+      "with_lookup_fallback": 551
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.4,
+      "decided": 66,
+      "right": 64,
+      "wrong": 2,
+      "with_lookup_fallback": 553
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.5,
+      "decided": 2,
+      "right": 0,
+      "wrong": 2,
+      "with_lookup_fallback": 553
+    },
+    {
+      "read": "exposure(cell)",
+      "threshold": 1,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "exposure(cell)",
+      "threshold": 15,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "exposure(cell)",
+      "threshold": 30,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "mean(cell)",
+      "threshold": 0.01,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "mean(cell)",
+      "threshold": 0.1,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "mean(cell)",
+      "threshold": 0.2,
+      "decided": 0,
+      "right": 0,
+      "wrong": 0,
+      "with_lookup_fallback": 555
+    },
+    {
+      "read": "instantaneous (F = present)",
+      "threshold": null,
+      "decided": 225,
+      "right": 164,
+      "wrong": 61,
+      "with_lookup_fallback": 494
+    }
+  ],
+  "arms": {
+    "exposure(lineage) >= 15": {
+      "in_sample": {
+        "fates_correct": 522,
+        "fates_checked": 555,
+        "decided_by_factors": 332,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          928,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 208,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 121,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 69,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 20,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 16,
+            "cells": 18
+          },
+          "other": {
+            "correct": 11,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 13,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 9,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 8,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 4,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 4,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 0,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 2,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {
+          "neuron->Hypodermis": 14,
+          "neuron->Muscle": 4,
+          "other->Neuron": 4,
+          "coelomocyte->Muscle": 4,
+          "sheath->Neuron": 2,
+          "socket->Hypodermis": 2,
+          "muscle->Neuron": 1,
+          "excretory->Muscle": 1,
+          "gland->Neuron": 1
+        }
+      },
+      "held_out": {
+        "fates_correct": 483,
+        "fates_checked": 555,
+        "decided_by_factors": 340
+      }
+    },
+    "mean(lineage) >= 0.25": {
+      "in_sample": {
+        "fates_correct": 533,
+        "fates_checked": 555,
+        "decided_by_factors": 285,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          939,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 222,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 119,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 62,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 19,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 15,
+            "cells": 18
+          },
+          "other": {
+            "correct": 15,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 13,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 9,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 8,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 3,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 5,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 4,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 2,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {
+          "hypoderm->Neuron": 7,
+          "neuron->Hypodermis": 4,
+          "socket->Neuron": 3,
+          "muscle->Neuron": 3,
+          "sheath->Neuron": 3,
+          "excretory->Neuron": 2
+        }
+      },
+      "held_out": {
+        "fates_correct": 515,
+        "fates_checked": 555,
+        "decided_by_factors": 251
+      }
+    },
+    "exposure(cell) >= 1": {
+      "in_sample": {
+        "fates_correct": 555,
+        "fates_checked": 555,
+        "decided_by_factors": 5,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          961,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 226,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 122,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 69,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 22,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 18,
+            "cells": 18
+          },
+          "other": {
+            "correct": 15,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 13,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 9,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 8,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 5,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 5,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 4,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 2,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {}
+      },
+      "held_out": {
+        "fates_correct": 555,
+        "fates_checked": 555,
+        "decided_by_factors": 5
+      }
+    },
+    "mean(cell) >= 0.01": {
+      "in_sample": {
+        "fates_correct": 555,
+        "fates_checked": 555,
+        "decided_by_factors": 5,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          961,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 226,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 122,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 69,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 22,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 18,
+            "cells": 18
+          },
+          "other": {
+            "correct": 15,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 13,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 9,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 8,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 5,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 5,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 4,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 2,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {}
+      },
+      "held_out": {
+        "fates_correct": 555,
+        "fates_checked": 555,
+        "decided_by_factors": 5
+      }
+    },
+    "instantaneous (F = present)": {
+      "in_sample": {
+        "fates_correct": 483,
+        "fates_checked": 555,
+        "decided_by_factors": 412,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          889,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 199,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 113,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 67,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 10,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 7,
+            "cells": 18
+          },
+          "other": {
+            "correct": 14,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 12,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 8,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 7,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 3,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 5,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 0,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 1,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {
+          "neuron->Hypodermis": 16,
+          "neuron->Muscle": 11,
+          "sheath->Hypodermis": 10,
+          "muscle->Neuron": 7,
+          "socket->Hypodermis": 6,
+          "socket->Neuron": 5,
+          "coelomocyte->Muscle": 4,
+          "sheath->Neuron": 1,
+          "marginal->Neuron": 1,
+          "excretory->Hypodermis": 1
+        }
+      },
+      "held_out": {
+        "fates_correct": 467,
+        "fates_checked": 555,
+        "decided_by_factors": 393
+      }
+    },
+    "baseline: precomputed _integrated lookup": {
+      "in_sample": {
+        "fates_correct": 501,
+        "fates_checked": 555,
+        "decided_by_factors": 437,
+        "cells_born": 1439,
+        "deaths_matched": 110,
+        "to_adult": [
+          907,
+          961
+        ],
+        "per_tissue": {
+          "neuron": {
+            "correct": 212,
+            "cells": 226
+          },
+          "muscle": {
+            "correct": 113,
+            "cells": 122
+          },
+          "hypoderm": {
+            "correct": 69,
+            "cells": 69
+          },
+          "intestine": {
+            "correct": 34,
+            "cells": 34
+          },
+          "sheath": {
+            "correct": 11,
+            "cells": 22
+          },
+          "socket": {
+            "correct": 9,
+            "cells": 18
+          },
+          "other": {
+            "correct": 14,
+            "cells": 15
+          },
+          "epithelium": {
+            "correct": 12,
+            "cells": 13
+          },
+          "marginal": {
+            "correct": 8,
+            "cells": 9
+          },
+          "valve": {
+            "correct": 6,
+            "cells": 8
+          },
+          "excretory": {
+            "correct": 4,
+            "cells": 5
+          },
+          "gland": {
+            "correct": 5,
+            "cells": 5
+          },
+          "coelomocyte": {
+            "correct": 0,
+            "cells": 4
+          },
+          "rectal": {
+            "correct": 1,
+            "cells": 2
+          },
+          "repro": {
+            "correct": 2,
+            "cells": 2
+          },
+          "mesoderm": {
+            "correct": 1,
+            "cells": 1
+          }
+        },
+        "confusion": {
+          "neuron->Hypodermis": 14,
+          "muscle->Neuron": 9,
+          "sheath->Hypodermis": 8,
+          "socket->Neuron": 5,
+          "socket->Hypodermis": 4,
+          "coelomocyte->Muscle": 4,
+          "sheath->Neuron": 3,
+          "valve->Neuron": 2,
+          "marginal->Neuron": 1,
+          "rectal->Hypodermis": 1
+        }
+      },
+      "held_out": {
+        "fates_correct": 476,
+        "fates_checked": 555,
+        "decided_by_factors": 449
+      }
+    }
+  },
+  "threshold_curve_through_the_body": [
+    {
+      "read": "exposure(lineage)",
+      "threshold": 1,
+      "in_sample": 522,
+      "in_sample_decided": 332,
+      "held_out": 483,
+      "held_out_decided": 340
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 15,
+      "in_sample": 522,
+      "in_sample_decided": 332,
+      "held_out": 483,
+      "held_out_decided": 340
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 30,
+      "in_sample": 522,
+      "in_sample_decided": 332,
+      "held_out": 483,
+      "held_out_decided": 340
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 60,
+      "in_sample": 512,
+      "in_sample_decided": 350,
+      "held_out": 492,
+      "held_out_decided": 329
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 90,
+      "in_sample": 522,
+      "in_sample_decided": 300,
+      "held_out": 491,
+      "held_out_decided": 314
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 120,
+      "in_sample": 531,
+      "in_sample_decided": 270,
+      "held_out": 515,
+      "held_out_decided": 245
+    },
+    {
+      "read": "exposure(lineage)",
+      "threshold": 180,
+      "in_sample": 537,
+      "in_sample_decided": 226,
+      "held_out": 511,
+      "held_out_decided": 225
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.1,
+      "in_sample": 523,
+      "in_sample_decided": 330,
+      "held_out": 476,
+      "held_out_decided": 345
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.2,
+      "in_sample": 517,
+      "in_sample_decided": 329,
+      "held_out": 490,
+      "held_out_decided": 334
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.25,
+      "in_sample": 533,
+      "in_sample_decided": 285,
+      "held_out": 515,
+      "held_out_decided": 251
+    },
+    {
+      "read": "mean(lineage)",
+      "threshold": 0.4,
+      "in_sample": 540,
+      "in_sample_decided": 211,
+      "held_out": 516,
+      "held_out_decided": 215
+    }
+  ],
+  "stability_under_a_re_decision_cadence": {
+    "exposure(lineage) >= 15, cadence 0 min, as shipped": {
+      "fates_correct": 522,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "exposure(lineage) >= 15, cadence 6 min, as shipped": {
+      "fates_correct": 522,
+      "fates_checked": 555,
+      "overruled_fates": 104,
+      "revised_fates": 372,
+      "refused_committed": 269,
+      "network_steps": 133
+    },
+    "exposure(lineage) >= 15, cadence 0 min, commitment removed": {
+      "fates_correct": 522,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "exposure(lineage) >= 15, cadence 6 min, commitment removed": {
+      "fates_correct": 386,
+      "fates_checked": 555,
+      "overruled_fates": 188,
+      "revised_fates": 473,
+      "refused_committed": 0,
+      "network_steps": 133
+    },
+    "mean(lineage) >= 0.25, cadence 0 min, as shipped": {
+      "fates_correct": 503,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "mean(lineage) >= 0.25, cadence 6 min, as shipped": {
+      "fates_correct": 503,
+      "fates_checked": 555,
+      "overruled_fates": 293,
+      "revised_fates": 420,
+      "refused_committed": 733,
+      "network_steps": 133
+    },
+    "mean(lineage) >= 0.25, cadence 0 min, commitment removed": {
+      "fates_correct": 503,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "mean(lineage) >= 0.25, cadence 6 min, commitment removed": {
+      "fates_correct": 327,
+      "fates_checked": 555,
+      "overruled_fates": 568,
+      "revised_fates": 528,
+      "refused_committed": 0,
+      "network_steps": 133
+    }
+  },
+  "program_rules": [
+    {
+      "tissue": "intestine",
+      "factors": [
+        "ELT-2"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Fukushige et al. 1998, Dev Biol 198:286; Sommermann et al. 2010, Dev Biol 347:154"
+    },
+    {
+      "tissue": "intestine",
+      "factors": [
+        "ELT-7"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Fukushige et al. 1998, Dev Biol 198:286; Sommermann et al. 2010, Dev Biol 347:154"
+    },
+    {
+      "tissue": "muscle",
+      "factors": [
+        "HLH-1"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Krause et al. 1990, Cell 63:907; Fukushige et al. 2006, Genes Dev 20:3395"
+    },
+    {
+      "tissue": "muscle",
+      "factors": [
+        "UNC-120"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Krause et al. 1990, Cell 63:907; Fukushige et al. 2006, Genes Dev 20:3395"
+    },
+    {
+      "tissue": "sheath",
+      "factors": [
+        "PROS-1",
+        "NHR-25",
+        "SOX-2"
+      ],
+      "read": "instantaneous",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Wallace et al. 2016, Development 143:3016 (PROS-1/Prospero drives the sheath-glia programme); Gissendanner & Sluder 2000, Dev Biol 221:259 (NHR-25 in the non-neuronal ectoderm); read as instantaneous presence, because the lineage-integrated read carries no sheath signal"
+    },
+    {
+      "tissue": "hypoderm",
+      "factors": [
+        "ELT-1"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259"
+    },
+    {
+      "tissue": "hypoderm",
+      "factors": [
+        "LIN-26"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259"
+    },
+    {
+      "tissue": "hypoderm",
+      "factors": [
+        "NHR-25"
+      ],
+      "read": "integrated",
+      "precision": 0.0,
+      "support": 0,
+      "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "LIN-32"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 41,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "NGN-1",
+        "ZTF-11"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 29,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-13",
+        "CND-1"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 18,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-39",
+        "EGL-44"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 12,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-36",
+        "NHR-127"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 8,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "FKH-2",
+        "GMEB-2"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 8,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "ELT-3",
+        "ETS-8"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 6,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "ATF-7",
+        "CEH-22"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 5,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "BCL-11",
+        "CND-1"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 5,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-39",
+        "HLH-3"
+      ],
+      "read": "integrated",
+      "precision": 0.9,
+      "support": 9,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "APTF-1",
+        "LSL-1"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 7,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "BNC-1",
+        "ELT-4"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 4,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "C16A3.4",
+        "CEH-30"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 4,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-14",
+        "CEH-22"
+      ],
+      "read": "integrated",
+      "precision": 1.0,
+      "support": 4,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "CEH-32",
+        "CND-1"
+      ],
+      "read": "integrated",
+      "precision": 0.857,
+      "support": 6,
+      "source": "learned from Ma 2021 x WormWeb"
+    },
+    {
+      "tissue": "neuron",
+      "factors": [
+        "ATFS-1",
+        "CEH-36"
+      ],
+      "read": "integrated",
+      "precision": 0.833,
+      "support": 5,
+      "source": "learned from Ma 2021 x WormWeb"
+    }
+  ],
+  "threshold": {
+    "minutes": 15.0,
+    "basis": "threshold 15 min = one AB cell cycle at 20 C (Sulston et al. 1983, Dev Biol 100:64), so the read is 'carried along the lineage path across at least one division'; 1 to 30 min give the identical program and score, and the cited rules alone are flat to 60 min (scripts/celegans_fate_reads.py)"
+  },
+  "generated": [
+    "data/organisms/celegans/fates.bio"
+  ]
+}

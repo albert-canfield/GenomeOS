@@ -1,0 +1,1441 @@
+{
+  "result": "unknown_scoring_chr22",
+  "date": "2026-09-16",
+  "chrom": "chr22",
+  "elements_scored": 19708,
+  "elements_over_unknown_blocks": 3544,
+  "by_tier": {
+    "neutral": 32,
+    "fossil": 99,
+    "regulatory": 3389,
+    "constrained_unknown": 7,
+    "structural": 17
+  },
+  "blocks_touched_by_tier": {
+    "constrained_unknown": 6,
+    "fossil": 41,
+    "neutral": 20,
+    "regulatory": 440,
+    "structural": 5
+  },
+  "ablation": {
+    "elements_in_input": 9612,
+    "elements_over_unknown_blocks": 1090,
+    "genes_losing_every_element": 2,
+    "full_input": {
+      "genes_tested": 375,
+      "most_active_cell_is_most_expressed": 0.321,
+      "shuffled": 0.251,
+      "p_value": 0.003,
+      "mean_rho": 0.103,
+      "rejected": 220,
+      "unexplained": 59
+    },
+    "reproduces_committed_closure": true,
+    "without_unknown_block_elements": {
+      "genes_tested": 374,
+      "most_active_cell_is_most_expressed": 0.302,
+      "shuffled": 0.25,
+      "p_value": 0.013,
+      "mean_rho": 0.081,
+      "rejected": 209,
+      "unexplained": 64
+    },
+    "random_removal_of_the_same_size": {
+      "draws": 50,
+      "mean_hit": 0.31,
+      "min_hit": 0.296,
+      "max_hit": 0.324,
+      "mean_genes_tested": 374.5,
+      "draws_at_or_below_observed": 0.14
+    },
+    "only_unknown_block_elements": {
+      "genes_tested": 151,
+      "most_active_cell_is_most_expressed": 0.257,
+      "shuffled": 0.25,
+      "p_value": 0.4156,
+      "mean_rho": 0.086,
+      "rejected": 98,
+      "unexplained": 142
+    },
+    "random_subset_of_the_same_size": {
+      "draws": 50,
+      "mean_hit": 0.3158,
+      "min_hit": 0.229,
+      "max_hit": 0.403,
+      "mean_genes_tested": 136.4,
+      "draws_at_or_below_observed": 0.06
+    }
+  },
+  "comparison": {
+    "moves_gene": {
+      "metric": "moves_gene",
+      "unknown_n": 3544,
+      "rest_n": 16164,
+      "unknown_raw": 0.5683,
+      "rest_raw": 0.6863,
+      "unknown_matched": 0.5683,
+      "rest_matched": 0.6847,
+      "difference_matched": -0.1164,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 480,
+      "unknown_in_shared_strata": 3544
+    },
+    "names_coding": {
+      "metric": "names_coding",
+      "unknown_n": 3544,
+      "rest_n": 16164,
+      "unknown_raw": 0.3076,
+      "rest_raw": 0.5272,
+      "unknown_matched": 0.3076,
+      "rest_matched": 0.5,
+      "difference_matched": -0.1925,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 480,
+      "unknown_in_shared_strata": 3544
+    },
+    "abs_log2": {
+      "metric": "abs_log2",
+      "unknown_n": 2014,
+      "rest_n": 11094,
+      "unknown_raw": 0.4396,
+      "rest_raw": 0.3485,
+      "unknown_matched": 0.4398,
+      "rest_matched": 0.3576,
+      "difference_matched": 0.0822,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 458,
+      "unknown_in_shared_strata": 2013
+    },
+    "silencer": {
+      "metric": "silencer",
+      "unknown_n": 2014,
+      "rest_n": 11094,
+      "unknown_raw": 0.3798,
+      "rest_raw": 0.3774,
+      "unknown_matched": 0.38,
+      "rest_matched": 0.371,
+      "difference_matched": 0.009,
+      "p_permuted_within_strata": 0.4348,
+      "strata_shared": 458,
+      "unknown_in_shared_strata": 2013
+    },
+    "cells_acting": {
+      "metric": "cells_acting",
+      "unknown_n": 2014,
+      "rest_n": 11094,
+      "unknown_raw": 0.641,
+      "rest_raw": 0.8814,
+      "unknown_matched": 0.6413,
+      "rest_matched": 0.8821,
+      "difference_matched": -0.2408,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 458,
+      "unknown_in_shared_strata": 2013
+    },
+    "target_tss_distance": {
+      "metric": "target_tss_distance",
+      "unknown_n": 1090,
+      "rest_n": 8522,
+      "unknown_raw": 23481.7312,
+      "rest_raw": 46076.7733,
+      "unknown_matched": 23481.7312,
+      "rest_matched": 30037.6277,
+      "difference_matched": -6555.8965,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 353,
+      "unknown_in_shared_strata": 1090
+    },
+    "balance_inside_strata": {
+      "length": {
+        "unknown_matched": 269.7407,
+        "rest_matched": 269.6452
+      },
+      "gc": {
+        "unknown_matched": 0.5314,
+        "rest_matched": 0.5311
+      },
+      "nearest_coding_tss": {
+        "unknown_matched": 90051.9018,
+        "rest_matched": 86594.9975
+      }
+    },
+    "covariates": {
+      "unknown": {
+        "n": 3544,
+        "length": 269.7,
+        "gc": 0.5314,
+        "nearest_coding_tss": 90051.9,
+        "overlapping_a_gene_body": 0.0655
+      },
+      "rest": {
+        "n": 16164,
+        "length": 268.8,
+        "gc": 0.5313,
+        "nearest_coding_tss": 56235.0,
+        "overlapping_a_gene_body": 0.999
+      }
+    }
+  },
+  "syntax": {
+    "per_case": {
+      "recent": {
+        "elements": 1040,
+        "blocks": 130,
+        "moves_gene": 0.5442,
+        "abs_log2_when_moving": 0.37,
+        "cells_acting": 0.673
+      },
+      "relaxed": {
+        "elements": 140,
+        "blocks": 23,
+        "moves_gene": 0.6071,
+        "abs_log2_when_moving": 0.4819,
+        "cells_acting": 0.953
+      },
+      "syntax": {
+        "elements": 138,
+        "blocks": 16,
+        "moves_gene": 0.7754,
+        "abs_log2_when_moving": 0.3931,
+        "cells_acting": 0.785
+      },
+      "tolerant": {
+        "elements": 2063,
+        "blocks": 311,
+        "moves_gene": 0.5647,
+        "abs_log2_when_moving": 0.4622,
+        "cells_acting": 0.575
+      },
+      "unmeasured": {
+        "elements": 163,
+        "blocks": 32,
+        "moves_gene": 0.5583,
+        "abs_log2_when_moving": 0.6,
+        "cells_acting": 0.824
+      }
+    },
+    "mammal_constrained_block": {
+      "moves_gene": {
+        "metric": "moves_gene",
+        "unknown_n": 289,
+        "rest_n": 3255,
+        "unknown_raw": 0.7024,
+        "rest_raw": 0.5564,
+        "unknown_matched": 0.6996,
+        "rest_matched": 0.5762,
+        "difference_matched": 0.1235,
+        "p_permuted_within_strata": 0.0005,
+        "strata_shared": 180,
+        "unknown_in_shared_strata": 283,
+        "block_level": {
+          "constrained_blocks": 40,
+          "other_blocks": 472,
+          "difference": 0.1202,
+          "p_permuted_over_blocks": 0.0315
+        }
+      },
+      "abs_log2": {
+        "metric": "abs_log2",
+        "unknown_n": 203,
+        "rest_n": 1811,
+        "unknown_raw": 0.4258,
+        "rest_raw": 0.4412,
+        "unknown_matched": 0.3974,
+        "rest_matched": 0.4308,
+        "difference_matched": -0.0334,
+        "p_permuted_within_strata": 0.4778,
+        "strata_shared": 128,
+        "unknown_in_shared_strata": 186,
+        "block_level": {
+          "constrained_blocks": 38,
+          "other_blocks": 433,
+          "difference": -0.0392,
+          "p_permuted_over_blocks": 0.7346
+        }
+      },
+      "cells_acting": {
+        "metric": "cells_acting",
+        "unknown_n": 203,
+        "rest_n": 1811,
+        "unknown_raw": 0.8571,
+        "rest_raw": 0.6168,
+        "unknown_matched": 0.8871,
+        "rest_matched": 0.7393,
+        "difference_matched": 0.1478,
+        "p_permuted_within_strata": 0.1254,
+        "strata_shared": 128,
+        "unknown_in_shared_strata": 186,
+        "block_level": {
+          "constrained_blocks": 38,
+          "other_blocks": 433,
+          "difference": 0.2588,
+          "p_permuted_over_blocks": 0.048
+        }
+      }
+    },
+    "cases_present": [
+      "recent",
+      "relaxed",
+      "syntax",
+      "tolerant",
+      "unmeasured"
+    ],
+    "syntax_blocks": 16
+  },
+  "syntax_candidates": {
+    "candidates": 69,
+    "on_completely_scored_chromosomes": 69,
+    "chromosomes": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr22",
+      "chr3",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX"
+    ],
+    "rows": [
+      {
+        "block": "chr1:29326813-29329619",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:32245397-32247214",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:47001087-47002994",
+        "reading_before": "regulatory",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:47498341-47504506",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:152512177-152514481",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:156070514-156072012",
+        "reading_before": "transcript_extension",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr1:213329327-213374554",
+        "reading_before": "regulatory",
+        "elements_scored": 4,
+        "elements_moving_a_gene": 3,
+        "target": "ENSG00000225233",
+        "target_is_coding": false,
+        "log2": -0.6302,
+        "tissue": "HepG2",
+        "cells_at_bar": [
+          "HepG2"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr10:75412413-75428875",
+        "reading_before": "unexplained",
+        "elements_scored": 3,
+        "elements_moving_a_gene": 3,
+        "target": "ZNF503",
+        "target_is_coding": true,
+        "log2": -0.144,
+        "tissue": "CD14-positive monocyte",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr10:112821878-112823489",
+        "reading_before": "regulatory",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr10:128696482-128709400",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr11:126176035-126179496",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000254833",
+        "target_is_coding": false,
+        "log2": -0.6123,
+        "tissue": "left kidney",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr11:127006058-127017064",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr12:49094807-49096549",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr12:53293643-53295290",
+        "reading_before": "regulatory",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr12:53930791-53935249",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr14:35537054-35538351",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr15:34720865-34722043",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "GJD2",
+        "target_is_coding": true,
+        "log2": -0.4442,
+        "tissue": "endodermal cell",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr15:81005788-81007032",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr15:96415047-96416235",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr16:46575094-46578564",
+        "reading_before": "transcript_extension",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr17:7712943-7715646",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr17:9244897-9250148",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000273816",
+        "target_is_coding": false,
+        "log2": -0.1755,
+        "tissue": "Brain_Spinal_cord_cervical_c-1",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr17:40365372-40367951",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "GJD3",
+        "target_is_coding": true,
+        "log2": -1.3884,
+        "tissue": "CD4-positive, alpha-beta memory T cell",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr18:37232172-37234118",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr18:75110683-75112132",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000285915",
+        "target_is_coding": false,
+        "log2": -0.2868,
+        "tissue": "Testis",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr19:53943950-53945679",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:11349288-11351626",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:26674464-26678218",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "CIB4",
+        "target_is_coding": true,
+        "log2": -0.1229,
+        "tissue": "Artery_Tibial",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr2:55924271-55945832",
+        "reading_before": "unexplained",
+        "elements_scored": 2,
+        "elements_moving_a_gene": 1,
+        "target": "EFEMP1",
+        "target_is_coding": true,
+        "log2": 0.2109,
+        "tissue": "HT-29",
+        "cells_at_bar": [
+          "GM12878"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr2:136229381-136230752",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:136327707-136329440",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "UBBP1",
+        "target_is_coding": false,
+        "log2": -0.3706,
+        "tissue": "T-cell",
+        "cells_at_bar": [
+          "GM12878",
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr2:206641282-206642416",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:208054258-208057247",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:221574454-221581214",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr2:232368697-232370707",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr22:38571213-38574930",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "DMC1",
+        "target_is_coding": true,
+        "log2": 0.1078,
+        "tissue": "psoas muscle",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr3:38825302-38827230",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr3:50189075-50191585",
+        "reading_before": "coding_exon",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "GNAT1",
+        "target_is_coding": true,
+        "log2": 0.7282,
+        "tissue": "Skin_Not_Sun_Exposed_Suprapubic",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr3:133397775-133400055",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr3:168924590-168927474",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr3:171938715-171941606",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr5:14874711-14877666",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "HNRNPKP5",
+        "target_is_coding": false,
+        "log2": -0.1442,
+        "tissue": "testis",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr5:52669060-52673185",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "MFSD4BP1",
+        "target_is_coding": false,
+        "log2": -0.1042,
+        "tissue": "testis",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr5:141851257-141853089",
+        "reading_before": "coding_exon",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "PCDH1",
+        "target_is_coding": true,
+        "log2": 0.1428,
+        "tissue": "OCI-LY7",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr6:16161411-16163376",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000218073",
+        "target_is_coding": false,
+        "log2": -1.4296,
+        "tissue": "testis",
+        "cells_at_bar": [
+          "GM12878",
+          "HepG2",
+          "IMR-90",
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr6:30359911-30363111",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr6:31223093-31224341",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr6:36675270-36676440",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr6:108188805-108193118",
+        "reading_before": "transcript_extension",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr6:108276546-108292765",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr6:143383639-143386580",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr7:8428871-8431550",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr7:21213673-21215536",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr7:25257129-25260025",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "NPVF",
+        "target_is_coding": true,
+        "log2": -0.3931,
+        "tissue": "testis",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr7:27458849-27461765",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "PSMC1P2",
+        "target_is_coding": false,
+        "log2": -0.2232,
+        "tissue": "placenta",
+        "cells_at_bar": [
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr7:27462969-27472110",
+        "reading_before": "coding_exon",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "PSMC1P2",
+        "target_is_coding": false,
+        "log2": 0.2392,
+        "tissue": "testis",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr7:55588336-55592073",
+        "reading_before": "coding_exon",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr7:135651416-135656780",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "RPL15P11",
+        "target_is_coding": false,
+        "log2": 0.3302,
+        "tissue": "SK-N-DZ",
+        "cells_at_bar": [
+          "GM12878",
+          "HepG2",
+          "IMR-90",
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr8:43271960-43276269",
+        "reading_before": "coding_exon",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr8:101169629-101171213",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ZNNT1",
+        "target_is_coding": false,
+        "log2": 0.2105,
+        "tissue": "IgD-negative memory B cell",
+        "cells_at_bar": [
+          "GM12878",
+          "HepG2",
+          "IMR-90",
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr9:102518308-102519635",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000289079",
+        "target_is_coding": false,
+        "log2": -0.1442,
+        "tissue": "SK-MEL-5",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chr9:107108686-107115783",
+        "reading_before": "unexplained",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr9:124516056-124517274",
+        "reading_before": "promoter",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr9:125967379-126051029",
+        "reading_before": "regulatory",
+        "elements_scored": 8,
+        "elements_moving_a_gene": 1,
+        "target": "PBX3",
+        "target_is_coding": true,
+        "log2": -0.5425,
+        "tissue": "Purkinje cell",
+        "cells_at_bar": [
+          "GM12878",
+          "HepG2",
+          "IMR-90",
+          "K562"
+        ],
+        "gain": "target, cell and magnitude"
+      },
+      {
+        "block": "chr9:126053006-126057579",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "ENSG00000232413",
+        "target_is_coding": false,
+        "log2": 0.2378,
+        "tissue": "sigmoid colon",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      },
+      {
+        "block": "chrX:41077750-41083666",
+        "reading_before": "unexplained",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chrX:49202457-49205062",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chrX:119244468-119249345",
+        "reading_before": "transcript_extension",
+        "elements_scored": 0,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chrX:134166932-134168910",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "CCDC160",
+        "target_is_coding": true,
+        "log2": -0.1194,
+        "tissue": "PC-9",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      }
+    ]
+  },
+  "mpra": {
+    "elements_covered_by_both": 856,
+    "K562": {
+      "n": 670,
+      "rho_abs_effect_vs_activity": 0.04639153159151071,
+      "rho_signed_effect_vs_activity": 0.07697915382841787,
+      "p_signed_permuted": 0.047,
+      "p_abs_permuted": 0.2274,
+      "unknown": {
+        "n": 171,
+        "rho": -0.03393906520765744
+      },
+      "rest": {
+        "n": 499,
+        "rho": 0.06775174092548295
+      }
+    },
+    "HepG2": {
+      "n": 670,
+      "rho_abs_effect_vs_activity": 0.08126822215319263,
+      "rho_signed_effect_vs_activity": 0.12120463867989935,
+      "p_signed_permuted": 0.002,
+      "p_abs_permuted": 0.0325,
+      "unknown": {
+        "n": 171,
+        "rho": 0.12056946133732363
+      },
+      "rest": {
+        "n": 499,
+        "rho": 0.06488848737663065
+      }
+    }
+  },
+  "vista": {
+    "elements": 31,
+    "positives": 15,
+    "negatives": 16,
+    "positives_with_a_moving_element": 11,
+    "negatives_with_a_moving_element": 14,
+    "mean_max_abs_log2_positive": 0.6388,
+    "mean_max_abs_log2_negative": 0.486,
+    "note": "too few VISTA elements here to conclude from; reported, not read"
+  },
+  "coverage": {
+    "unknown_blocks": 635,
+    "unknown_bp": 22866245,
+    "by_tier": {
+      "constrained_unknown": {
+        "blocks": 14,
+        "bp": 59276,
+        "elements_scored": 7,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 3,
+        "blocks_with_a_target_and_a_cell": 1,
+        "bp_with_a_named_target_after": 11171
+      },
+      "fossil": {
+        "blocks": 108,
+        "bp": 1691159,
+        "elements_scored": 99,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 12,
+        "blocks_with_a_target_and_a_cell": 6,
+        "bp_with_a_named_target_after": 258549
+      },
+      "neutral": {
+        "blocks": 51,
+        "bp": 553985,
+        "elements_scored": 32,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 2,
+        "blocks_with_a_target_and_a_cell": 1,
+        "bp_with_a_named_target_after": 15025
+      },
+      "regulatory": {
+        "blocks": 443,
+        "bp": 5396402,
+        "elements_scored": 3389,
+        "blocks_with_a_named_target_before": 15,
+        "blocks_with_a_named_target_after": 272,
+        "blocks_with_a_target_and_a_cell": 196,
+        "bp_with_a_named_target_after": 3512636
+      },
+      "structural": {
+        "blocks": 19,
+        "bp": 15165423,
+        "elements_scored": 17,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 0,
+        "blocks_with_a_target_and_a_cell": 0,
+        "bp_with_a_named_target_after": 0
+      }
+    },
+    "blocks_with_a_named_target_before": 15,
+    "blocks_with_a_named_target_after": 289,
+    "blocks_with_a_target_and_a_cell": 204,
+    "bp_with_a_named_target_after": 3797381,
+    "element_bp_with_a_named_target_inside_unknown": 295974,
+    "element_bp_with_a_named_target_inside_unknown_before": 4053,
+    "elements_over_unknown_blocks": 3544,
+    "elements_over_unknown_naming_a_gene": 1090,
+    "elements_over_unknown_moving_any_gene": 2014
+  },
+  "cost": {
+    "per_chromosome": {
+      "chr1": {
+        "elements_total": 88109,
+        "scored": 88109,
+        "requests_this_run": 85664,
+        "complete": true
+      },
+      "chr10": {
+        "elements_total": 47419,
+        "scored": 47419,
+        "requests_this_run": 47466,
+        "complete": true
+      },
+      "chr11": {
+        "elements_total": 48380,
+        "scored": 48380,
+        "requests_this_run": 48377,
+        "complete": true
+      },
+      "chr12": {
+        "elements_total": 46582,
+        "scored": 46582,
+        "requests_this_run": 7651,
+        "complete": true
+      },
+      "chr13": {
+        "elements_total": 25634,
+        "scored": 25634,
+        "requests_this_run": 25697,
+        "complete": true
+      },
+      "chr14": {
+        "elements_total": 31794,
+        "scored": 31794,
+        "requests_this_run": 17261,
+        "complete": true
+      },
+      "chr15": {
+        "elements_total": 31058,
+        "scored": 31058,
+        "requests_this_run": 31890,
+        "complete": true
+      },
+      "chr16": {
+        "elements_total": 32314,
+        "scored": 32314,
+        "requests_this_run": 33210,
+        "complete": true
+      },
+      "chr17": {
+        "elements_total": 41396,
+        "scored": 41396,
+        "requests_this_run": 22215,
+        "complete": true
+      },
+      "chr18": {
+        "elements_total": 21973,
+        "scored": 21973,
+        "requests_this_run": 22549,
+        "complete": true
+      },
+      "chr19": {
+        "elements_total": 29374,
+        "scored": 29374,
+        "requests_this_run": 21590,
+        "complete": true
+      },
+      "chr2": {
+        "elements_total": 79639,
+        "scored": 79639,
+        "requests_this_run": 14010,
+        "complete": true
+      },
+      "chr20": {
+        "elements_total": 26954,
+        "scored": 26954,
+        "requests_this_run": 27356,
+        "complete": true
+      },
+      "chr21": {
+        "elements_total": 12139,
+        "scored": 12139,
+        "requests_this_run": 5409,
+        "complete": true
+      },
+      "chr22": {
+        "elements_total": 19708,
+        "scored": 19708,
+        "requests_this_run": 19708,
+        "complete": true
+      },
+      "chr3": {
+        "elements_total": 62502,
+        "scored": 62502,
+        "requests_this_run": 62536,
+        "complete": true
+      },
+      "chr4": {
+        "elements_total": 46124,
+        "scored": 46124,
+        "requests_this_run": 46151,
+        "complete": true
+      },
+      "chr5": {
+        "elements_total": 53114,
+        "scored": 53114,
+        "requests_this_run": 53142,
+        "complete": true
+      },
+      "chr6": {
+        "elements_total": 56945,
+        "scored": 56945,
+        "requests_this_run": 56847,
+        "complete": true
+      },
+      "chr7": {
+        "elements_total": 49296,
+        "scored": 49296,
+        "requests_this_run": 48922,
+        "complete": true
+      },
+      "chr8": {
+        "elements_total": 45332,
+        "scored": 45332,
+        "requests_this_run": 18067,
+        "complete": true
+      },
+      "chr9": {
+        "elements_total": 41640,
+        "scored": 41640,
+        "requests_this_run": 40151,
+        "complete": true
+      },
+      "chrX": {
+        "elements_total": 22894,
+        "scored": 22894,
+        "requests_this_run": 22911,
+        "complete": true
+      },
+      "chrY": {
+        "elements_total": 907,
+        "scored": 907,
+        "requests_this_run": 0,
+        "complete": true
+      }
+    },
+    "requests_per_element_on_complete_runs": 0.811,
+    "registry_elements_genome": 1063878,
+    "share_inside_a_node_on_this_chromosome": 0.913,
+    "elements_scored_so_far": 961227,
+    "elements_remaining_estimate": 10453,
+    "requests_remaining_estimate": 8477
+  },
+  "thresholds": {
+    "min_effect_log2": 0.1,
+    "strata": "3 length x 4 GC x 40 distance-to-nearest-coding-TSS bins",
+    "permutations": 2000,
+    "random_draws": 50
+  },
+  "evidence": {
+    "elements": "predicted: AlphaGenome deletion per element, per gene and per cell line (already scored)",
+    "blocks": "inferred: genomeos unknown classes and the budget's tiers; curated sequence classes",
+    "axes": "inferred: Zoonomia phyloP against gnomAD Gnocchi per block (area J)",
+    "closure": "experimental: ENCODE total RNA-seq and DNase (the committed closure table)",
+    "measured": "experimental: ENCODE4 lentiMPRA, VISTA e11.5"
+  },
+  "seconds": 95.3
+}

@@ -186,3 +186,38 @@ cell types and stages), and its tests (known phenotypes the module must
 reproduce). At that point "genetic building" means composing libraries under
 constraints and running the result, with the platform reporting where the
 prediction is grounded and where it is a guess.
+
+## 7. The mapping, extended by comparison (2026-09-12)
+
+A second conversation proposed a fuller dictionary between programming and
+biology and, more usefully, a method: infer the grammar by comparing many
+genomes. The method and its plan are in GRAMMAR-BY-COMPARISON.md. The
+dictionary is kept here with the GenomeOS construct each row lands on, so
+that the analogy stays tied to something that runs.
+
+| Programming concept | Biological analogue | GenomeOS construct | Held by data? |
+|---|---|---|---|
+| Token | motif, splice signal, codon | `signal`, learned matrices | yes, as a score (SEQUENCE-GRAMMAR.md) |
+| Statement | regulatory element, gene module | `element`, `gene` | yes |
+| Function | protein domain, rule, pathway (not the gene: one gene, several proteins) | `protein.domains`, `rule`, library | yes |
+| Arguments | concentrations, cofactors, cell state | `when:` clauses, the reader per cell type | yes |
+| Operator | binding site logic, splicing rule | `rule` with `threshold`, `hill`; motif combinations (planned) | partly |
+| Constant | highly conserved sequence | Zoonomia phyloP per block, the tiers | yes |
+| Variable | expression level, methylation state | `CellState`, GTEx per tissue, the clocks | yes |
+| Type | cell type, protein family | `cell_type`, InterPro family | yes |
+| Library, import | conserved pathway reused across tissues | BioLib, `import bio.std.*` | yes, without an age |
+| Configuration | epigenetic state | the reader (DNase per cell type) | yes |
+| Runtime state | RNA and protein concentrations | `S(t)` in the runtime | yes |
+| Event | division, death, differentiation | `event`, `decision` | yes |
+| Loop | circadian, segmentation, cell cycle | `timer.*`, the Boolean cell cycle | yes |
+| Exception | damage, misfolding | `core.dna_repair`, senescence hazard | partly |
+| Patch, variant | SNV, indel, SV | the twin, HG002 and any imported genome | yes |
+| Fork | evolutionary lineage | orthologue by clade (planned) | no |
+| Refactor | rearrangement preserving function | synteny: mouse nodes in human neighbourhoods 93 to 94% | yes, two chromosomes |
+| Dead code | pseudogenes, fossils | the `fossil` tier (328 Mb) | yes |
+| Copy and paste | gene duplication | paralogues, segmental duplications (planned) | no |
+| Package version | orthologous family across species | Ensembl or OrthoDB groups (planned) | no |
+| Pointer | enhancer to promoter contact | `element.targets`, the CTCF node | yes, inside the node 90% |
+
+The rows marked "no" are all comparisons across the tree of life that
+GenomeOS has not yet made; they are steps 2 and 3 of GRAMMAR-BY-COMPARISON.md.

@@ -1,0 +1,3578 @@
+{
+  "result": "target_rebanding",
+  "date": "2026-09-22",
+  "preregistered": "Registered 2026-09-22, after the gate was counted and removed and before any swept target was re-banded. The band table this judges is `genome_wide.predicted_target_bands` in the `target_calibration` result, written by `sweep()`.\n\nWHY THE OBVIOUS SPLIT IS THE WRONG ONE, AND HOW THAT WAS ESTABLISHED. The lesson of 2026-09-22 is that the 245-pair curve quotes 0.4126 against a measured 0.0603 one step off its gate, so the expected repair was to split the swept targets by whether the target is the element's top predicted target and band the two sides from two curves. That split does not exist in the sweep. `crispri.deletion_values` sets `top_target` to 1.0 when the pair's gene matches EITHER `predicted` OR `predicted_coding` at an overlapping element, and `sweep_chromosome` bands exactly those two keys and nothing else. Every one of the 612,323 swept targets is therefore inside the gate, and the x6.85 is not an error in the published table: it is the error the module would make on the population `targets.ElementResponses` has just made askable and which the sweep does not yet band. Counted before anything was re-fitted: of the 440,377 coding-arm targets, 331,209 are the element's window head and 109,168 are the coding head only -- but both are compact-table entries, so both carry `top_target` = 1 and both were inside the fit's population. The split is real and it is not the one that separates the sweep from its curve.\n\nWHAT THE POPULATION MISMATCH ACTUALLY IS. The fitted 245 and the banded 612,323 are both inside the gate and are nevertheless different populations, on two measured axes. (a) MAGNITUDE: 34.3% of the fitted pairs carry a predicted K562 drop above 0.2, against 5.8% of the swept targets, and 15.5% of the fitted pairs sit at a drop of exactly zero against 46.5% of the swept ones. (b) CELL: 78 of the 245 fitted pairs (31.8%) sit on an element whose target the sweep named on K562, the one cell line this curve is measured in, against 32,597 of 612,323 swept targets (5.3%) -- a factor of 6.0. The remaining 94.7% were named on placenta, CD14-positive monocyte, HepG2, testis, psoas muscle and 300-odd other tracks, and enter a K562 curve through a K562 drop that is zero for most of them.\n\nTHE POPULATIONS, AND HOW A TARGET IS ASSIGNED TO ONE. The axis is the predicted K562 deletion drop, in the five `DROP_BANDS` strata the module already reports `measured_by_drop_band` on. It is chosen over the top-target axis because it is the axis the two populations actually differ on, it is computable for every swept target and for every benchmark pair with no extra data, and it is the axis the fitted rate moves along (0.579, 0.566, 0.875, 1.000, 1.000 on the 245). Each swept target is assigned the stratum of its own predicted K562 drop -- the same number `element_row` already computes -- and each benchmark pair the stratum of its own. The counts registered in advance, 'any gene' arm: drop = 0, 275,821 swept targets against 38 training and 5 held-out pairs; 0 < drop <= 0.1, 239,487 against 83 and 9; 0.1 < drop <= 0.2, 44,299 against 40 and 5; 0.2 < drop <= 0.5, 24,281 against 35 and 11; 0.5 < drop, 9,877 against 49 and 10. So 86.8% of the genome's bands rest on 121 training and 14 held-out pairs. The 'coding gene' arm is 205,541 / 173,234 / 37,488 / 18,338 / 5,776 on the same strata.\n\nTHE RULE. A stratum is given a numeric band only if (a) it holds at least MIN_POOLED_FOR_A_BAND = 30 pooled training and held-out pairs, and (b) the 95% Wilson interval of its pooled observed rate lies inside a single one of the eight `CONFIDENCE_BANDS`. Otherwise the stratum's targets are banded NOT_CALIBRATED = 'not calibrated here' and carry the stratum's pair count, observed rate and interval in place of a number. Pooling training with held-out pairs for the rate is deliberate and is declared here: the held-out 40 alone give intervals of width 0.65 and would mark every stratum uncalibrated, which is true but says nothing, so the interval is read on all 285 on-gate pairs and the quantity being interval-bounded is a base rate rather than a fitted curve's error. WHAT IS DONE IF A STRATUM IS TOO THIN TO FIT AT ALL: it is banded 'not calibrated here' with its count, and no curve is fitted for it. That is the expected outcome for the drop = 0 stratum, whose 43 pooled pairs give 0.5814 [0.4335, 0.7160], an interval spanning two published bands.\n\nTHE DIRECTION EXPECTED, AND BY HOW MUCH. Most of the genome loses its number. The registered prediction is that the two bottom strata (515,308 of 593,765 'any gene' targets, 86.8%) and the 0.1-0.2 stratum (44,299, 7.5%) all fail clause (b) and become 'not calibrated here', and that only the two top strata (34,158 targets, 5.8%) keep a numeric band, which will be 0.9-1 for both. That is between 80% and 95% of the table losing its band, and the direction for every target that keeps one is unchanged or up, never down -- because within the gate the curve was measured honest in every stratum (quoted 0.4932 against an observed 0.5789 at drop = 0, 0.6139 against 0.5663, 0.8746 against 0.8750, 0.9808 against 1.0000, 0.9999 against 1.0000). The correction this lane makes is therefore NOT that the published levels are wrong. It is that the published table states eight-way bands to two decimal places for 593,765 targets on the evidence of 285 pairs, 86.8% of them priced by 135, and a band is a claim about a rate whose interval has to fit inside it.\n\nTHE FALSIFIER. The split is the wrong one if the two bottom strata's pooled intervals do fit inside a single published band, because then the drop axis separates nothing the curve has not already absorbed and the published table stands as written. It is also the wrong one if the alternative axis measured here -- the target named on K562 against named on another track -- yields single-band intervals where the drop axis does not; both are computed and both are reported, and if the cell axis is the cleaner one it replaces the drop axis and this registration is recorded as wrong on the axis while right on the direction. A third way to fail: if re-banding moves fewer than half the targets, the registered magnitude was wrong and is reported as wrong rather than rounded towards.\n\nWHAT IS NOT TOUCHED. The published 2026-09-17 band table is annotated and kept, never overwritten. `sweep()` keeps its output and its keys, the re-banding is a second block beside it under a new key, and both can be read side by side from the same result. The eight `CONFIDENCE_BANDS` and the fitted weights do not change, so a reader who wants the old number still has it; what is added is the population each number was fitted on and whether that population can carry it. 0 AlphaGenome requests: every number here is on disk.",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), K562; predicted: AlphaGenome deletion per element; curated: ENCODE cCRE classes and GENCODE v50 gene starts; inferred: CTCF-only nodes",
+  "scope": "The calibration is measured on one cell line and one kind of element: K562 CRISPRi pairs whose element is an ENCODE cCRE inside a CTCF node and whose gene a screen chose to test, which means a gene expressed in K562 within about a megabase. The probability is conditional on that test happening: it says how often a K562 screen calls such a pair regulated, not how often an element regulates a gene. Applying it to another cell line, to elements outside the registry, to genes not expressed in the line, or to distances the screens do not reach is extrapolation, and for a sweep element whose strongest predicted tissue is not K562 the drop entering the calibration is the K562 drop, so the band is a statement about K562 and about nothing else. The objection that AlphaGenome was trained on ENCODE tracks of these same cell lines is narrowed and not closed: E1's 2,260 fresh pairs (commit 2a07c80) have units agreeing 637 of 1,096 (0.581) against matched nulls 490 of 968 (0.506), +0.075 with an upper 95% bound of 0.111 at one-sided p 0.00037 \u2014 the weak band, since the pre-registration asked for 0.10 in size, and a small p does not convert a weak effect into the declared one. One cell line carries it: GM12878 +0.089 on 1,895 pairs, Jurkat -0.001 on 365. So in lymphoblastoid cells the model weakly and detectably tracks a reporter assay's direction, and outside them that endpoint says nothing. The declared secondary did pass, and it is the first met prediction of that series: agreement is higher where DAP-G fine-maps the variant, +0.198 on 132 units against 90 controls (p 0.0018) against +0.057 for the rest, which is a reason to expect the transfer where the causal variant is known, not evidence that it happens. A calibration fitted on K562 CRISPRi is therefore a calibration against measurement in K562.",
+  "what": "the published band table kept as written, beside a band drawn from the population it is quoted for; a population whose measured rate has an interval spanning more than one published band, or fewer than 30 pooled pairs, is banded 'not calibrated here'",
+  "min_pooled_for_a_band": 30,
+  "populations": {
+    "on the gate, by predicted K562 drop (the registered axis)": {
+      "0 < drop <= 0.1": {
+        "pairs": 92,
+        "regulated": 55,
+        "observed_rate": 0.5978,
+        "ci95": [
+          0.4957,
+          0.6922
+        ],
+        "bands_the_interval_touches": [
+          "0.25-0.5",
+          "0.5-0.75"
+        ],
+        "band": "not calibrated here",
+        "why": "the interval spans 2 published bands"
+      },
+      "0.1 < drop <= 0.2": {
+        "pairs": 45,
+        "regulated": 39,
+        "observed_rate": 0.8667,
+        "ci95": [
+          0.7382,
+          0.9374
+        ],
+        "bands_the_interval_touches": [
+          "0.5-0.75",
+          "0.75-0.9",
+          "0.9-1"
+        ],
+        "band": "not calibrated here",
+        "why": "the interval spans 3 published bands"
+      },
+      "0.2 < drop <= 0.5": {
+        "pairs": 46,
+        "regulated": 46,
+        "observed_rate": 1.0,
+        "ci95": [
+          0.9229,
+          1.0
+        ],
+        "bands_the_interval_touches": [
+          "0.9-1"
+        ],
+        "band": "0.9-1",
+        "why": "the interval fits inside one published band"
+      },
+      "0.5 < drop <= inf": {
+        "pairs": 59,
+        "regulated": 59,
+        "observed_rate": 1.0,
+        "ci95": [
+          0.9389,
+          1.0
+        ],
+        "bands_the_interval_touches": [
+          "0.9-1"
+        ],
+        "band": "0.9-1",
+        "why": "the interval fits inside one published band"
+      },
+      "= 0": {
+        "pairs": 43,
+        "regulated": 25,
+        "observed_rate": 0.5814,
+        "ci95": [
+          0.4333,
+          0.7162
+        ],
+        "bands_the_interval_touches": [
+          "0.25-0.5",
+          "0.5-0.75"
+        ],
+        "band": "not calibrated here",
+        "why": "the interval spans 2 published bands"
+      }
+    },
+    "on the gate, by the track the target was named on (the alternative axis)": {
+      "K562": {
+        "pairs": 93,
+        "regulated": 93,
+        "observed_rate": 1.0,
+        "ci95": [
+          0.9603,
+          1.0
+        ],
+        "bands_the_interval_touches": [
+          "0.9-1"
+        ],
+        "band": "0.9-1",
+        "why": "the interval fits inside one published band"
+      },
+      "another track": {
+        "pairs": 192,
+        "regulated": 131,
+        "observed_rate": 0.6823,
+        "ci95": [
+          0.6134,
+          0.744
+        ],
+        "bands_the_interval_touches": [
+          "0.5-0.75"
+        ],
+        "band": "0.5-0.75",
+        "why": "the interval fits inside one published band"
+      }
+    },
+    "off the gate, by predicted K562 drop (the population the sweep does not band)": {
+      "= 0": {
+        "pairs": 10226,
+        "regulated": 325,
+        "observed_rate": 0.0318,
+        "ci95": [
+          0.0286,
+          0.0354
+        ],
+        "bands_the_interval_touches": [
+          "0.02-0.05"
+        ],
+        "band": "0.02-0.05",
+        "why": "the interval fits inside one published band"
+      }
+    },
+    "pooled_on_gate_pairs": 285,
+    "pooled_off_gate_pairs": 10226,
+    "off the gate, through the sweep's own window (its magnitude is real here)": {
+      "0 < drop <= 0.1": {
+        "pairs": 3783,
+        "regulated": 162,
+        "observed_rate": 0.0428,
+        "ci95": [
+          0.0368,
+          0.0498
+        ],
+        "bands_the_interval_touches": [
+          "0.02-0.05"
+        ],
+        "band": "0.02-0.05",
+        "why": "the interval fits inside one published band"
+      },
+      "0.1 < drop <= 0.2": {
+        "pairs": 26,
+        "regulated": 22,
+        "observed_rate": 0.8462,
+        "ci95": [
+          0.6647,
+          0.9385
+        ],
+        "bands_the_interval_touches": [
+          "0.5-0.75",
+          "0.75-0.9",
+          "0.9-1"
+        ],
+        "band": "not calibrated here",
+        "why": "fewer than 30 pooled pairs"
+      },
+      "0.2 < drop <= 0.5": {
+        "pairs": 24,
+        "regulated": 20,
+        "observed_rate": 0.8333,
+        "ci95": [
+          0.6415,
+          0.9332
+        ],
+        "bands_the_interval_touches": [
+          "0.5-0.75",
+          "0.75-0.9",
+          "0.9-1"
+        ],
+        "band": "not calibrated here",
+        "why": "fewer than 30 pooled pairs"
+      },
+      "0.5 < drop <= inf": {
+        "pairs": 2,
+        "regulated": 2,
+        "observed_rate": 1.0,
+        "ci95": [
+          0.3424,
+          1.0
+        ],
+        "bands_the_interval_touches": [
+          "0.25-0.5",
+          "0.5-0.75",
+          "0.75-0.9",
+          "0.9-1"
+        ],
+        "band": "not calibrated here",
+        "why": "fewer than 30 pooled pairs"
+      },
+      "= 0": {
+        "pairs": 4716,
+        "regulated": 43,
+        "observed_rate": 0.0091,
+        "ci95": [
+          0.0068,
+          0.0123
+        ],
+        "bands_the_interval_touches": [
+          "0-0.02"
+        ],
+        "band": "0-0.02",
+        "why": "the interval fits inside one published band"
+      }
+    }
+  },
+  "weights": {
+    "target": [
+      2.813194,
+      15.034229,
+      -0.26063,
+      -0.505969
+    ],
+    "sweep": [
+      7.161117,
+      20.71985,
+      1.234079,
+      -0.900504,
+      0.231481,
+      -0.475722,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "rebanding, drop axis": {
+    "genome_wide": {
+      "any gene": {
+        "targets": 593765,
+        "published_bands": {
+          "0.05-0.1": 45,
+          "0.1-0.25": 3837,
+          "0.25-0.5": 178387,
+          "0.5-0.75": 293568,
+          "0.75-0.9": 61971,
+          "0.9-1": 55957
+        },
+        "rebanded": {
+          "0.9-1": 34158,
+          "not calibrated here": 559607
+        },
+        "moves": {
+          "lost its band": 559607,
+          "unchanged": 34096,
+          "up": 62
+        },
+        "transitions": {
+          "0.05-0.1 -> not calibrated here": 45,
+          "0.1-0.25 -> not calibrated here": 3837,
+          "0.25-0.5 -> not calibrated here": 178387,
+          "0.5-0.75 -> 0.9-1": 5,
+          "0.5-0.75 -> not calibrated here": 293563,
+          "0.75-0.9 -> 0.9-1": 57,
+          "0.75-0.9 -> not calibrated here": 61914,
+          "0.9-1 -> 0.9-1": 34096,
+          "0.9-1 -> not calibrated here": 21861
+        },
+        "named_on_track": {
+          "K562": 31838,
+          "another track": 561927
+        }
+      },
+      "coding gene": {
+        "targets": 440377,
+        "published_bands": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 184256,
+          "0.5-0.75": 175655,
+          "0.75-0.9": 42552,
+          "0.9-1": 37913
+        },
+        "rebanded": {
+          "0.9-1": 24114,
+          "not calibrated here": 416263
+        },
+        "moves": {
+          "lost its band": 416263,
+          "unchanged": 24100,
+          "up": 14
+        },
+        "transitions": {
+          "0.1-0.25 -> not calibrated here": 1,
+          "0.25-0.5 -> not calibrated here": 184256,
+          "0.5-0.75 -> not calibrated here": 175655,
+          "0.75-0.9 -> 0.9-1": 14,
+          "0.75-0.9 -> not calibrated here": 42538,
+          "0.9-1 -> 0.9-1": 24100,
+          "0.9-1 -> not calibrated here": 13813
+        },
+        "named_on_track": {
+          "K562": 27254,
+          "another track": 413123
+        }
+      }
+    },
+    "per_chromosome": {
+      "chr1": {
+        "elements": 88109,
+        "any gene": {
+          "targets": 56803,
+          "published_bands": {
+            "0.05-0.1": 36,
+            "0.1-0.25": 377,
+            "0.25-0.5": 15723,
+            "0.5-0.75": 28678,
+            "0.75-0.9": 6102,
+            "0.9-1": 5887
+          },
+          "rebanded": {
+            "0.9-1": 3647,
+            "not calibrated here": 53156
+          },
+          "moves": {
+            "lost its band": 53156,
+            "unchanged": 3638,
+            "up": 9
+          },
+          "transitions": {
+            "0.05-0.1 -> not calibrated here": 36,
+            "0.1-0.25 -> not calibrated here": 377,
+            "0.25-0.5 -> not calibrated here": 15723,
+            "0.5-0.75 -> 0.9-1": 4,
+            "0.5-0.75 -> not calibrated here": 28674,
+            "0.75-0.9 -> 0.9-1": 5,
+            "0.75-0.9 -> not calibrated here": 6097,
+            "0.9-1 -> 0.9-1": 3638,
+            "0.9-1 -> not calibrated here": 2249
+          },
+          "named_on_track": {
+            "K562": 2946,
+            "another track": 53857
+          }
+        },
+        "coding gene": {
+          "targets": 43681,
+          "published_bands": {
+            "0.25-0.5": 16891,
+            "0.5-0.75": 18148,
+            "0.75-0.9": 4416,
+            "0.9-1": 4226
+          },
+          "rebanded": {
+            "0.9-1": 2728,
+            "not calibrated here": 40953
+          },
+          "moves": {
+            "lost its band": 40953,
+            "unchanged": 2728
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 16891,
+            "0.5-0.75 -> not calibrated here": 18148,
+            "0.75-0.9 -> not calibrated here": 4416,
+            "0.9-1 -> 0.9-1": 2728,
+            "0.9-1 -> not calibrated here": 1498
+          },
+          "named_on_track": {
+            "K562": 2566,
+            "another track": 41115
+          }
+        }
+      },
+      "chr2": {
+        "elements": 79639,
+        "any gene": {
+          "targets": 46873,
+          "published_bands": {
+            "0.05-0.1": 9,
+            "0.1-0.25": 311,
+            "0.25-0.5": 15313,
+            "0.5-0.75": 22846,
+            "0.75-0.9": 4649,
+            "0.9-1": 3745
+          },
+          "rebanded": {
+            "0.9-1": 2307,
+            "not calibrated here": 44566
+          },
+          "moves": {
+            "lost its band": 44566,
+            "unchanged": 2304,
+            "up": 3
+          },
+          "transitions": {
+            "0.05-0.1 -> not calibrated here": 9,
+            "0.1-0.25 -> not calibrated here": 311,
+            "0.25-0.5 -> not calibrated here": 15313,
+            "0.5-0.75 -> 0.9-1": 1,
+            "0.5-0.75 -> not calibrated here": 22845,
+            "0.75-0.9 -> 0.9-1": 2,
+            "0.75-0.9 -> not calibrated here": 4647,
+            "0.9-1 -> 0.9-1": 2304,
+            "0.9-1 -> not calibrated here": 1441
+          },
+          "named_on_track": {
+            "K562": 2860,
+            "another track": 44013
+          }
+        },
+        "coding gene": {
+          "targets": 32917,
+          "published_bands": {
+            "0.25-0.5": 14950,
+            "0.5-0.75": 12536,
+            "0.75-0.9": 3046,
+            "0.9-1": 2385
+          },
+          "rebanded": {
+            "0.9-1": 1574,
+            "not calibrated here": 31343
+          },
+          "moves": {
+            "lost its band": 31343,
+            "unchanged": 1573,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 14950,
+            "0.5-0.75 -> not calibrated here": 12536,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 3045,
+            "0.9-1 -> 0.9-1": 1573,
+            "0.9-1 -> not calibrated here": 812
+          },
+          "named_on_track": {
+            "K562": 2461,
+            "another track": 30456
+          }
+        }
+      },
+      "chr3": {
+        "elements": 62502,
+        "any gene": {
+          "targets": 37740,
+          "published_bands": {
+            "0.1-0.25": 315,
+            "0.25-0.5": 13134,
+            "0.5-0.75": 17497,
+            "0.75-0.9": 3649,
+            "0.9-1": 3145
+          },
+          "rebanded": {
+            "0.9-1": 1913,
+            "not calibrated here": 35827
+          },
+          "moves": {
+            "lost its band": 35827,
+            "unchanged": 1904,
+            "up": 9
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 315,
+            "0.25-0.5 -> not calibrated here": 13134,
+            "0.5-0.75 -> not calibrated here": 17497,
+            "0.75-0.9 -> 0.9-1": 9,
+            "0.75-0.9 -> not calibrated here": 3640,
+            "0.9-1 -> 0.9-1": 1904,
+            "0.9-1 -> not calibrated here": 1241
+          },
+          "named_on_track": {
+            "K562": 2165,
+            "another track": 35575
+          }
+        },
+        "coding gene": {
+          "targets": 27682,
+          "published_bands": {
+            "0.1-0.25": 1,
+            "0.25-0.5": 13109,
+            "0.5-0.75": 10074,
+            "0.75-0.9": 2447,
+            "0.9-1": 2051
+          },
+          "rebanded": {
+            "0.9-1": 1303,
+            "not calibrated here": 26379
+          },
+          "moves": {
+            "lost its band": 26379,
+            "unchanged": 1299,
+            "up": 4
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 1,
+            "0.25-0.5 -> not calibrated here": 13109,
+            "0.5-0.75 -> not calibrated here": 10074,
+            "0.75-0.9 -> 0.9-1": 4,
+            "0.75-0.9 -> not calibrated here": 2443,
+            "0.9-1 -> 0.9-1": 1299,
+            "0.9-1 -> not calibrated here": 752
+          },
+          "named_on_track": {
+            "K562": 1788,
+            "another track": 25894
+          }
+        }
+      },
+      "chr4": {
+        "elements": 46124,
+        "any gene": {
+          "targets": 28054,
+          "published_bands": {
+            "0.1-0.25": 199,
+            "0.25-0.5": 10068,
+            "0.5-0.75": 12763,
+            "0.75-0.9": 2773,
+            "0.9-1": 2251
+          },
+          "rebanded": {
+            "0.9-1": 1378,
+            "not calibrated here": 26676
+          },
+          "moves": {
+            "lost its band": 26676,
+            "unchanged": 1378
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 199,
+            "0.25-0.5 -> not calibrated here": 10068,
+            "0.5-0.75 -> not calibrated here": 12763,
+            "0.75-0.9 -> not calibrated here": 2773,
+            "0.9-1 -> 0.9-1": 1378,
+            "0.9-1 -> not calibrated here": 873
+          },
+          "named_on_track": {
+            "K562": 1886,
+            "another track": 26168
+          }
+        },
+        "coding gene": {
+          "targets": 20646,
+          "published_bands": {
+            "0.25-0.5": 9836,
+            "0.5-0.75": 7358,
+            "0.75-0.9": 1927,
+            "0.9-1": 1525
+          },
+          "rebanded": {
+            "0.9-1": 958,
+            "not calibrated here": 19688
+          },
+          "moves": {
+            "lost its band": 19688,
+            "unchanged": 958
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 9836,
+            "0.5-0.75 -> not calibrated here": 7358,
+            "0.75-0.9 -> not calibrated here": 1927,
+            "0.9-1 -> 0.9-1": 958,
+            "0.9-1 -> not calibrated here": 567
+          },
+          "named_on_track": {
+            "K562": 1591,
+            "another track": 19055
+          }
+        }
+      },
+      "chr5": {
+        "elements": 53114,
+        "any gene": {
+          "targets": 31849,
+          "published_bands": {
+            "0.1-0.25": 224,
+            "0.25-0.5": 11165,
+            "0.5-0.75": 14549,
+            "0.75-0.9": 3202,
+            "0.9-1": 2709
+          },
+          "rebanded": {
+            "0.9-1": 1677,
+            "not calibrated here": 30172
+          },
+          "moves": {
+            "lost its band": 30172,
+            "unchanged": 1674,
+            "up": 3
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 224,
+            "0.25-0.5 -> not calibrated here": 11165,
+            "0.5-0.75 -> not calibrated here": 14549,
+            "0.75-0.9 -> 0.9-1": 3,
+            "0.75-0.9 -> not calibrated here": 3199,
+            "0.9-1 -> 0.9-1": 1674,
+            "0.9-1 -> not calibrated here": 1035
+          },
+          "named_on_track": {
+            "K562": 1855,
+            "another track": 29994
+          }
+        },
+        "coding gene": {
+          "targets": 22772,
+          "published_bands": {
+            "0.25-0.5": 10754,
+            "0.5-0.75": 8134,
+            "0.75-0.9": 2094,
+            "0.9-1": 1790
+          },
+          "rebanded": {
+            "0.9-1": 1143,
+            "not calibrated here": 21629
+          },
+          "moves": {
+            "lost its band": 21629,
+            "unchanged": 1142,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 10754,
+            "0.5-0.75 -> not calibrated here": 8134,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 2093,
+            "0.9-1 -> 0.9-1": 1142,
+            "0.9-1 -> not calibrated here": 648
+          },
+          "named_on_track": {
+            "K562": 1500,
+            "another track": 21272
+          }
+        }
+      },
+      "chr6": {
+        "elements": 56945,
+        "any gene": {
+          "targets": 33908,
+          "published_bands": {
+            "0.1-0.25": 202,
+            "0.25-0.5": 10388,
+            "0.5-0.75": 16619,
+            "0.75-0.9": 3534,
+            "0.9-1": 3165
+          },
+          "rebanded": {
+            "0.9-1": 1934,
+            "not calibrated here": 31974
+          },
+          "moves": {
+            "lost its band": 31974,
+            "unchanged": 1932,
+            "up": 2
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 202,
+            "0.25-0.5 -> not calibrated here": 10388,
+            "0.5-0.75 -> not calibrated here": 16619,
+            "0.75-0.9 -> 0.9-1": 2,
+            "0.75-0.9 -> not calibrated here": 3532,
+            "0.9-1 -> 0.9-1": 1932,
+            "0.9-1 -> not calibrated here": 1233
+          },
+          "named_on_track": {
+            "K562": 2201,
+            "another track": 31707
+          }
+        },
+        "coding gene": {
+          "targets": 23769,
+          "published_bands": {
+            "0.25-0.5": 10310,
+            "0.5-0.75": 9124,
+            "0.75-0.9": 2311,
+            "0.9-1": 2024
+          },
+          "rebanded": {
+            "0.9-1": 1276,
+            "not calibrated here": 22493
+          },
+          "moves": {
+            "lost its band": 22493,
+            "unchanged": 1275,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 10310,
+            "0.5-0.75 -> not calibrated here": 9124,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 2310,
+            "0.9-1 -> 0.9-1": 1275,
+            "0.9-1 -> not calibrated here": 749
+          },
+          "named_on_track": {
+            "K562": 1704,
+            "another track": 22065
+          }
+        }
+      },
+      "chr7": {
+        "elements": 49296,
+        "any gene": {
+          "targets": 30213,
+          "published_bands": {
+            "0.1-0.25": 161,
+            "0.25-0.5": 9550,
+            "0.5-0.75": 14299,
+            "0.75-0.9": 3292,
+            "0.9-1": 2911
+          },
+          "rebanded": {
+            "0.9-1": 1790,
+            "not calibrated here": 28423
+          },
+          "moves": {
+            "lost its band": 28423,
+            "unchanged": 1784,
+            "up": 6
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 161,
+            "0.25-0.5 -> not calibrated here": 9550,
+            "0.5-0.75 -> not calibrated here": 14299,
+            "0.75-0.9 -> 0.9-1": 6,
+            "0.75-0.9 -> not calibrated here": 3286,
+            "0.9-1 -> 0.9-1": 1784,
+            "0.9-1 -> not calibrated here": 1127
+          },
+          "named_on_track": {
+            "K562": 1852,
+            "another track": 28361
+          }
+        },
+        "coding gene": {
+          "targets": 22596,
+          "published_bands": {
+            "0.25-0.5": 9749,
+            "0.5-0.75": 8820,
+            "0.75-0.9": 2206,
+            "0.9-1": 1821
+          },
+          "rebanded": {
+            "0.9-1": 1157,
+            "not calibrated here": 21439
+          },
+          "moves": {
+            "lost its band": 21439,
+            "unchanged": 1155,
+            "up": 2
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 9749,
+            "0.5-0.75 -> not calibrated here": 8820,
+            "0.75-0.9 -> 0.9-1": 2,
+            "0.75-0.9 -> not calibrated here": 2204,
+            "0.9-1 -> 0.9-1": 1155,
+            "0.9-1 -> not calibrated here": 666
+          },
+          "named_on_track": {
+            "K562": 1506,
+            "another track": 21090
+          }
+        }
+      },
+      "chr8": {
+        "elements": 45332,
+        "any gene": {
+          "targets": 26342,
+          "published_bands": {
+            "0.1-0.25": 151,
+            "0.25-0.5": 8617,
+            "0.5-0.75": 12665,
+            "0.75-0.9": 2715,
+            "0.9-1": 2194
+          },
+          "rebanded": {
+            "0.9-1": 1297,
+            "not calibrated here": 25045
+          },
+          "moves": {
+            "lost its band": 25045,
+            "unchanged": 1292,
+            "up": 5
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 151,
+            "0.25-0.5 -> not calibrated here": 8617,
+            "0.5-0.75 -> not calibrated here": 12665,
+            "0.75-0.9 -> 0.9-1": 5,
+            "0.75-0.9 -> not calibrated here": 2710,
+            "0.9-1 -> 0.9-1": 1292,
+            "0.9-1 -> not calibrated here": 902
+          },
+          "named_on_track": {
+            "K562": 1713,
+            "another track": 24629
+          }
+        },
+        "coding gene": {
+          "targets": 18552,
+          "published_bands": {
+            "0.25-0.5": 8638,
+            "0.5-0.75": 6826,
+            "0.75-0.9": 1713,
+            "0.9-1": 1375
+          },
+          "rebanded": {
+            "0.9-1": 869,
+            "not calibrated here": 17683
+          },
+          "moves": {
+            "lost its band": 17683,
+            "unchanged": 868,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 8638,
+            "0.5-0.75 -> not calibrated here": 6826,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 1712,
+            "0.9-1 -> 0.9-1": 868,
+            "0.9-1 -> not calibrated here": 507
+          },
+          "named_on_track": {
+            "K562": 1379,
+            "another track": 17173
+          }
+        }
+      },
+      "chr9": {
+        "elements": 41640,
+        "any gene": {
+          "targets": 25613,
+          "published_bands": {
+            "0.1-0.25": 126,
+            "0.25-0.5": 8315,
+            "0.5-0.75": 12431,
+            "0.75-0.9": 2587,
+            "0.9-1": 2154
+          },
+          "rebanded": {
+            "0.9-1": 1311,
+            "not calibrated here": 24302
+          },
+          "moves": {
+            "lost its band": 24302,
+            "unchanged": 1310,
+            "up": 1
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 126,
+            "0.25-0.5 -> not calibrated here": 8315,
+            "0.5-0.75 -> not calibrated here": 12431,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 2586,
+            "0.9-1 -> 0.9-1": 1310,
+            "0.9-1 -> not calibrated here": 844
+          },
+          "named_on_track": {
+            "K562": 1255,
+            "another track": 24358
+          }
+        },
+        "coding gene": {
+          "targets": 19272,
+          "published_bands": {
+            "0.25-0.5": 8306,
+            "0.5-0.75": 7607,
+            "0.75-0.9": 1872,
+            "0.9-1": 1487
+          },
+          "rebanded": {
+            "0.9-1": 954,
+            "not calibrated here": 18318
+          },
+          "moves": {
+            "lost its band": 18318,
+            "unchanged": 954
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 8306,
+            "0.5-0.75 -> not calibrated here": 7607,
+            "0.75-0.9 -> not calibrated here": 1872,
+            "0.9-1 -> 0.9-1": 954,
+            "0.9-1 -> not calibrated here": 533
+          },
+          "named_on_track": {
+            "K562": 1107,
+            "another track": 18165
+          }
+        }
+      },
+      "chr10": {
+        "elements": 47419,
+        "any gene": {
+          "targets": 28134,
+          "published_bands": {
+            "0.1-0.25": 225,
+            "0.25-0.5": 9544,
+            "0.5-0.75": 13577,
+            "0.75-0.9": 2609,
+            "0.9-1": 2179
+          },
+          "rebanded": {
+            "0.9-1": 1354,
+            "not calibrated here": 26780
+          },
+          "moves": {
+            "lost its band": 26780,
+            "unchanged": 1350,
+            "up": 4
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 225,
+            "0.25-0.5 -> not calibrated here": 9544,
+            "0.5-0.75 -> not calibrated here": 13577,
+            "0.75-0.9 -> 0.9-1": 4,
+            "0.75-0.9 -> not calibrated here": 2605,
+            "0.9-1 -> 0.9-1": 1350,
+            "0.9-1 -> not calibrated here": 829
+          },
+          "named_on_track": {
+            "K562": 1471,
+            "another track": 26663
+          }
+        },
+        "coding gene": {
+          "targets": 21023,
+          "published_bands": {
+            "0.25-0.5": 9912,
+            "0.5-0.75": 7773,
+            "0.75-0.9": 1833,
+            "0.9-1": 1505
+          },
+          "rebanded": {
+            "0.9-1": 986,
+            "not calibrated here": 20037
+          },
+          "moves": {
+            "lost its band": 20037,
+            "unchanged": 984,
+            "up": 2
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 9912,
+            "0.5-0.75 -> not calibrated here": 7773,
+            "0.75-0.9 -> 0.9-1": 2,
+            "0.75-0.9 -> not calibrated here": 1831,
+            "0.9-1 -> 0.9-1": 984,
+            "0.9-1 -> not calibrated here": 521
+          },
+          "named_on_track": {
+            "K562": 1390,
+            "another track": 19633
+          }
+        }
+      },
+      "chr11": {
+        "elements": 48380,
+        "any gene": {
+          "targets": 32644,
+          "published_bands": {
+            "0.1-0.25": 150,
+            "0.25-0.5": 9761,
+            "0.5-0.75": 16355,
+            "0.75-0.9": 3293,
+            "0.9-1": 3085
+          },
+          "rebanded": {
+            "0.9-1": 1897,
+            "not calibrated here": 30747
+          },
+          "moves": {
+            "lost its band": 30747,
+            "unchanged": 1897
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 150,
+            "0.25-0.5 -> not calibrated here": 9761,
+            "0.5-0.75 -> not calibrated here": 16355,
+            "0.75-0.9 -> not calibrated here": 3293,
+            "0.9-1 -> 0.9-1": 1897,
+            "0.9-1 -> not calibrated here": 1188
+          },
+          "named_on_track": {
+            "K562": 1633,
+            "another track": 31011
+          }
+        },
+        "coding gene": {
+          "targets": 25731,
+          "published_bands": {
+            "0.25-0.5": 10533,
+            "0.5-0.75": 10422,
+            "0.75-0.9": 2490,
+            "0.9-1": 2286
+          },
+          "rebanded": {
+            "0.9-1": 1436,
+            "not calibrated here": 24295
+          },
+          "moves": {
+            "lost its band": 24295,
+            "unchanged": 1436
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 10533,
+            "0.5-0.75 -> not calibrated here": 10422,
+            "0.75-0.9 -> not calibrated here": 2490,
+            "0.9-1 -> 0.9-1": 1436,
+            "0.9-1 -> not calibrated here": 850
+          },
+          "named_on_track": {
+            "K562": 1498,
+            "another track": 24233
+          }
+        }
+      },
+      "chr12": {
+        "elements": 46582,
+        "any gene": {
+          "targets": 30232,
+          "published_bands": {
+            "0.1-0.25": 218,
+            "0.25-0.5": 8599,
+            "0.5-0.75": 15199,
+            "0.75-0.9": 3259,
+            "0.9-1": 2957
+          },
+          "rebanded": {
+            "0.9-1": 1762,
+            "not calibrated here": 28470
+          },
+          "moves": {
+            "lost its band": 28470,
+            "unchanged": 1761,
+            "up": 1
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 218,
+            "0.25-0.5 -> not calibrated here": 8599,
+            "0.5-0.75 -> not calibrated here": 15199,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 3258,
+            "0.9-1 -> 0.9-1": 1761,
+            "0.9-1 -> not calibrated here": 1196
+          },
+          "named_on_track": {
+            "K562": 1468,
+            "another track": 28764
+          }
+        },
+        "coding gene": {
+          "targets": 22814,
+          "published_bands": {
+            "0.25-0.5": 9345,
+            "0.5-0.75": 9269,
+            "0.75-0.9": 2240,
+            "0.9-1": 1960
+          },
+          "rebanded": {
+            "0.9-1": 1195,
+            "not calibrated here": 21619
+          },
+          "moves": {
+            "lost its band": 21619,
+            "unchanged": 1195
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 9345,
+            "0.5-0.75 -> not calibrated here": 9269,
+            "0.75-0.9 -> not calibrated here": 2240,
+            "0.9-1 -> 0.9-1": 1195,
+            "0.9-1 -> not calibrated here": 765
+          },
+          "named_on_track": {
+            "K562": 1228,
+            "another track": 21586
+          }
+        }
+      },
+      "chr13": {
+        "elements": 25634,
+        "any gene": {
+          "targets": 14716,
+          "published_bands": {
+            "0.1-0.25": 6,
+            "0.25-0.5": 5076,
+            "0.5-0.75": 7344,
+            "0.75-0.9": 1274,
+            "0.9-1": 1016
+          },
+          "rebanded": {
+            "0.9-1": 595,
+            "not calibrated here": 14121
+          },
+          "moves": {
+            "lost its band": 14121,
+            "unchanged": 595
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 6,
+            "0.25-0.5 -> not calibrated here": 5076,
+            "0.5-0.75 -> not calibrated here": 7344,
+            "0.75-0.9 -> not calibrated here": 1274,
+            "0.9-1 -> 0.9-1": 595,
+            "0.9-1 -> not calibrated here": 421
+          },
+          "named_on_track": {
+            "K562": 771,
+            "another track": 13945
+          }
+        },
+        "coding gene": {
+          "targets": 9711,
+          "published_bands": {
+            "0.25-0.5": 4705,
+            "0.5-0.75": 3641,
+            "0.75-0.9": 746,
+            "0.9-1": 619
+          },
+          "rebanded": {
+            "0.9-1": 380,
+            "not calibrated here": 9331
+          },
+          "moves": {
+            "lost its band": 9331,
+            "unchanged": 380
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 4705,
+            "0.5-0.75 -> not calibrated here": 3641,
+            "0.75-0.9 -> not calibrated here": 746,
+            "0.9-1 -> 0.9-1": 380,
+            "0.9-1 -> not calibrated here": 239
+          },
+          "named_on_track": {
+            "K562": 690,
+            "another track": 9021
+          }
+        }
+      },
+      "chr14": {
+        "elements": 31794,
+        "any gene": {
+          "targets": 18985,
+          "published_bands": {
+            "0.1-0.25": 162,
+            "0.25-0.5": 5463,
+            "0.5-0.75": 9791,
+            "0.75-0.9": 1978,
+            "0.9-1": 1591
+          },
+          "rebanded": {
+            "0.9-1": 923,
+            "not calibrated here": 18062
+          },
+          "moves": {
+            "lost its band": 18062,
+            "unchanged": 917,
+            "up": 6
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 162,
+            "0.25-0.5 -> not calibrated here": 5463,
+            "0.5-0.75 -> not calibrated here": 9791,
+            "0.75-0.9 -> 0.9-1": 6,
+            "0.75-0.9 -> not calibrated here": 1972,
+            "0.9-1 -> 0.9-1": 917,
+            "0.9-1 -> not calibrated here": 674
+          },
+          "named_on_track": {
+            "K562": 825,
+            "another track": 18160
+          }
+        },
+        "coding gene": {
+          "targets": 13385,
+          "published_bands": {
+            "0.25-0.5": 5695,
+            "0.5-0.75": 5434,
+            "0.75-0.9": 1215,
+            "0.9-1": 1041
+          },
+          "rebanded": {
+            "0.9-1": 612,
+            "not calibrated here": 12773
+          },
+          "moves": {
+            "lost its band": 12773,
+            "unchanged": 612
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 5695,
+            "0.5-0.75 -> not calibrated here": 5434,
+            "0.75-0.9 -> not calibrated here": 1215,
+            "0.9-1 -> 0.9-1": 612,
+            "0.9-1 -> not calibrated here": 429
+          },
+          "named_on_track": {
+            "K562": 760,
+            "another track": 12625
+          }
+        }
+      },
+      "chr15": {
+        "elements": 31058,
+        "any gene": {
+          "targets": 20194,
+          "published_bands": {
+            "0.1-0.25": 175,
+            "0.25-0.5": 5867,
+            "0.5-0.75": 10091,
+            "0.75-0.9": 2190,
+            "0.9-1": 1871
+          },
+          "rebanded": {
+            "0.9-1": 1107,
+            "not calibrated here": 19087
+          },
+          "moves": {
+            "lost its band": 19087,
+            "unchanged": 1103,
+            "up": 4
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 175,
+            "0.25-0.5 -> not calibrated here": 5867,
+            "0.5-0.75 -> not calibrated here": 10091,
+            "0.75-0.9 -> 0.9-1": 4,
+            "0.75-0.9 -> not calibrated here": 2186,
+            "0.9-1 -> 0.9-1": 1103,
+            "0.9-1 -> not calibrated here": 768
+          },
+          "named_on_track": {
+            "K562": 1075,
+            "another track": 19119
+          }
+        },
+        "coding gene": {
+          "targets": 14474,
+          "published_bands": {
+            "0.25-0.5": 6151,
+            "0.5-0.75": 5779,
+            "0.75-0.9": 1407,
+            "0.9-1": 1137
+          },
+          "rebanded": {
+            "0.9-1": 737,
+            "not calibrated here": 13737
+          },
+          "moves": {
+            "lost its band": 13737,
+            "unchanged": 736,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 6151,
+            "0.5-0.75 -> not calibrated here": 5779,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 1406,
+            "0.9-1 -> 0.9-1": 736,
+            "0.9-1 -> not calibrated here": 401
+          },
+          "named_on_track": {
+            "K562": 913,
+            "another track": 13561
+          }
+        }
+      },
+      "chr16": {
+        "elements": 32314,
+        "any gene": {
+          "targets": 19927,
+          "published_bands": {
+            "0.1-0.25": 119,
+            "0.25-0.5": 4390,
+            "0.5-0.75": 10769,
+            "0.75-0.9": 2343,
+            "0.9-1": 2306
+          },
+          "rebanded": {
+            "0.9-1": 1331,
+            "not calibrated here": 18596
+          },
+          "moves": {
+            "lost its band": 18596,
+            "unchanged": 1329,
+            "up": 2
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 119,
+            "0.25-0.5 -> not calibrated here": 4390,
+            "0.5-0.75 -> not calibrated here": 10769,
+            "0.75-0.9 -> 0.9-1": 2,
+            "0.75-0.9 -> not calibrated here": 2341,
+            "0.9-1 -> 0.9-1": 1329,
+            "0.9-1 -> not calibrated here": 977
+          },
+          "named_on_track": {
+            "K562": 703,
+            "another track": 19224
+          }
+        },
+        "coding gene": {
+          "targets": 14799,
+          "published_bands": {
+            "0.25-0.5": 5092,
+            "0.5-0.75": 6609,
+            "0.75-0.9": 1570,
+            "0.9-1": 1528
+          },
+          "rebanded": {
+            "0.9-1": 948,
+            "not calibrated here": 13851
+          },
+          "moves": {
+            "lost its band": 13851,
+            "unchanged": 948
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 5092,
+            "0.5-0.75 -> not calibrated here": 6609,
+            "0.75-0.9 -> not calibrated here": 1570,
+            "0.9-1 -> 0.9-1": 948,
+            "0.9-1 -> not calibrated here": 580
+          },
+          "named_on_track": {
+            "K562": 560,
+            "another track": 14239
+          }
+        }
+      },
+      "chr17": {
+        "elements": 41396,
+        "any gene": {
+          "targets": 27501,
+          "published_bands": {
+            "0.1-0.25": 160,
+            "0.25-0.5": 5791,
+            "0.5-0.75": 15155,
+            "0.75-0.9": 3119,
+            "0.9-1": 3276
+          },
+          "rebanded": {
+            "0.9-1": 1957,
+            "not calibrated here": 25544
+          },
+          "moves": {
+            "lost its band": 25544,
+            "unchanged": 1956,
+            "up": 1
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 160,
+            "0.25-0.5 -> not calibrated here": 5791,
+            "0.5-0.75 -> not calibrated here": 15155,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 3118,
+            "0.9-1 -> 0.9-1": 1956,
+            "0.9-1 -> not calibrated here": 1320
+          },
+          "named_on_track": {
+            "K562": 1122,
+            "another track": 26379
+          }
+        },
+        "coding gene": {
+          "targets": 21608,
+          "published_bands": {
+            "0.25-0.5": 6770,
+            "0.5-0.75": 10249,
+            "0.75-0.9": 2287,
+            "0.9-1": 2302
+          },
+          "rebanded": {
+            "0.9-1": 1434,
+            "not calibrated here": 20174
+          },
+          "moves": {
+            "lost its band": 20174,
+            "unchanged": 1434
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 6770,
+            "0.5-0.75 -> not calibrated here": 10249,
+            "0.75-0.9 -> not calibrated here": 2287,
+            "0.9-1 -> 0.9-1": 1434,
+            "0.9-1 -> not calibrated here": 868
+          },
+          "named_on_track": {
+            "K562": 1008,
+            "another track": 20600
+          }
+        }
+      },
+      "chr18": {
+        "elements": 21973,
+        "any gene": {
+          "targets": 12910,
+          "published_bands": {
+            "0.1-0.25": 100,
+            "0.25-0.5": 4613,
+            "0.5-0.75": 6260,
+            "0.75-0.9": 1090,
+            "0.9-1": 847
+          },
+          "rebanded": {
+            "0.9-1": 480,
+            "not calibrated here": 12430
+          },
+          "moves": {
+            "lost its band": 12430,
+            "unchanged": 480
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 100,
+            "0.25-0.5 -> not calibrated here": 4613,
+            "0.5-0.75 -> not calibrated here": 6260,
+            "0.75-0.9 -> not calibrated here": 1090,
+            "0.9-1 -> 0.9-1": 480,
+            "0.9-1 -> not calibrated here": 367
+          },
+          "named_on_track": {
+            "K562": 705,
+            "another track": 12205
+          }
+        },
+        "coding gene": {
+          "targets": 9250,
+          "published_bands": {
+            "0.25-0.5": 4898,
+            "0.5-0.75": 3141,
+            "0.75-0.9": 716,
+            "0.9-1": 495
+          },
+          "rebanded": {
+            "0.9-1": 296,
+            "not calibrated here": 8954
+          },
+          "moves": {
+            "lost its band": 8954,
+            "unchanged": 296
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 4898,
+            "0.5-0.75 -> not calibrated here": 3141,
+            "0.75-0.9 -> not calibrated here": 716,
+            "0.9-1 -> 0.9-1": 296,
+            "0.9-1 -> not calibrated here": 199
+          },
+          "named_on_track": {
+            "K562": 690,
+            "another track": 8560
+          }
+        }
+      },
+      "chr19": {
+        "elements": 29374,
+        "any gene": {
+          "targets": 20149,
+          "published_bands": {
+            "0.1-0.25": 76,
+            "0.25-0.5": 2655,
+            "0.5-0.75": 11332,
+            "0.75-0.9": 2771,
+            "0.9-1": 3315
+          },
+          "rebanded": {
+            "0.9-1": 2141,
+            "not calibrated here": 18008
+          },
+          "moves": {
+            "lost its band": 18008,
+            "unchanged": 2141
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 76,
+            "0.25-0.5 -> not calibrated here": 2655,
+            "0.5-0.75 -> not calibrated here": 11332,
+            "0.75-0.9 -> not calibrated here": 2771,
+            "0.9-1 -> 0.9-1": 2141,
+            "0.9-1 -> not calibrated here": 1174
+          },
+          "named_on_track": {
+            "K562": 693,
+            "another track": 19456
+          }
+        },
+        "coding gene": {
+          "targets": 17265,
+          "published_bands": {
+            "0.25-0.5": 3389,
+            "0.5-0.75": 8955,
+            "0.75-0.9": 2253,
+            "0.9-1": 2668
+          },
+          "rebanded": {
+            "0.9-1": 1740,
+            "not calibrated here": 15525
+          },
+          "moves": {
+            "lost its band": 15525,
+            "unchanged": 1740
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 3389,
+            "0.5-0.75 -> not calibrated here": 8955,
+            "0.75-0.9 -> not calibrated here": 2253,
+            "0.9-1 -> 0.9-1": 1740,
+            "0.9-1 -> not calibrated here": 928
+          },
+          "named_on_track": {
+            "K562": 622,
+            "another track": 16643
+          }
+        }
+      },
+      "chr20": {
+        "elements": 26954,
+        "any gene": {
+          "targets": 16444,
+          "published_bands": {
+            "0.1-0.25": 82,
+            "0.25-0.5": 4889,
+            "0.5-0.75": 8334,
+            "0.75-0.9": 1691,
+            "0.9-1": 1448
+          },
+          "rebanded": {
+            "0.9-1": 900,
+            "not calibrated here": 15544
+          },
+          "moves": {
+            "lost its band": 15544,
+            "unchanged": 899,
+            "up": 1
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 82,
+            "0.25-0.5 -> not calibrated here": 4889,
+            "0.5-0.75 -> not calibrated here": 8334,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 1690,
+            "0.9-1 -> 0.9-1": 899,
+            "0.9-1 -> not calibrated here": 549
+          },
+          "named_on_track": {
+            "K562": 698,
+            "another track": 15746
+          }
+        },
+        "coding gene": {
+          "targets": 12702,
+          "published_bands": {
+            "0.25-0.5": 5155,
+            "0.5-0.75": 5324,
+            "0.75-0.9": 1192,
+            "0.9-1": 1031
+          },
+          "rebanded": {
+            "0.9-1": 666,
+            "not calibrated here": 12036
+          },
+          "moves": {
+            "lost its band": 12036,
+            "unchanged": 666
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 5155,
+            "0.5-0.75 -> not calibrated here": 5324,
+            "0.75-0.9 -> not calibrated here": 1192,
+            "0.9-1 -> 0.9-1": 666,
+            "0.9-1 -> not calibrated here": 365
+          },
+          "named_on_track": {
+            "K562": 655,
+            "another track": 12047
+          }
+        }
+      },
+      "chr21": {
+        "elements": 12139,
+        "any gene": {
+          "targets": 7575,
+          "published_bands": {
+            "0.1-0.25": 16,
+            "0.25-0.5": 2238,
+            "0.5-0.75": 3797,
+            "0.75-0.9": 806,
+            "0.9-1": 718
+          },
+          "rebanded": {
+            "0.9-1": 451,
+            "not calibrated here": 7124
+          },
+          "moves": {
+            "lost its band": 7124,
+            "unchanged": 451
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 16,
+            "0.25-0.5 -> not calibrated here": 2238,
+            "0.5-0.75 -> not calibrated here": 3797,
+            "0.75-0.9 -> not calibrated here": 806,
+            "0.9-1 -> 0.9-1": 451,
+            "0.9-1 -> not calibrated here": 267
+          },
+          "named_on_track": {
+            "K562": 448,
+            "another track": 7127
+          }
+        },
+        "coding gene": {
+          "targets": 5174,
+          "published_bands": {
+            "0.25-0.5": 2448,
+            "0.5-0.75": 1876,
+            "0.75-0.9": 466,
+            "0.9-1": 384
+          },
+          "rebanded": {
+            "0.9-1": 247,
+            "not calibrated here": 4927
+          },
+          "moves": {
+            "lost its band": 4927,
+            "unchanged": 247
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 2448,
+            "0.5-0.75 -> not calibrated here": 1876,
+            "0.75-0.9 -> not calibrated here": 466,
+            "0.9-1 -> 0.9-1": 247,
+            "0.9-1 -> not calibrated here": 137
+          },
+          "named_on_track": {
+            "K562": 371,
+            "another track": 4803
+          }
+        }
+      },
+      "chr22": {
+        "elements": 19708,
+        "any gene": {
+          "targets": 12676,
+          "published_bands": {
+            "0.1-0.25": 137,
+            "0.25-0.5": 2768,
+            "0.5-0.75": 6925,
+            "0.75-0.9": 1454,
+            "0.9-1": 1392
+          },
+          "rebanded": {
+            "0.9-1": 853,
+            "not calibrated here": 11823
+          },
+          "moves": {
+            "lost its band": 11823,
+            "unchanged": 853
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 137,
+            "0.25-0.5 -> not calibrated here": 2768,
+            "0.5-0.75 -> not calibrated here": 6925,
+            "0.75-0.9 -> not calibrated here": 1454,
+            "0.9-1 -> 0.9-1": 853,
+            "0.9-1 -> not calibrated here": 539
+          },
+          "named_on_track": {
+            "K562": 530,
+            "another track": 12146
+          }
+        },
+        "coding gene": {
+          "targets": 9612,
+          "published_bands": {
+            "0.25-0.5": 3224,
+            "0.5-0.75": 4461,
+            "0.75-0.9": 951,
+            "0.9-1": 976
+          },
+          "rebanded": {
+            "0.9-1": 609,
+            "not calibrated here": 9003
+          },
+          "moves": {
+            "lost its band": 9003,
+            "unchanged": 609
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 3224,
+            "0.5-0.75 -> not calibrated here": 4461,
+            "0.75-0.9 -> not calibrated here": 951,
+            "0.9-1 -> 0.9-1": 609,
+            "0.9-1 -> not calibrated here": 367
+          },
+          "named_on_track": {
+            "K562": 467,
+            "another track": 9145
+          }
+        }
+      },
+      "chrX": {
+        "elements": 22894,
+        "any gene": {
+          "targets": 13744,
+          "published_bands": {
+            "0.1-0.25": 145,
+            "0.25-0.5": 4351,
+            "0.5-0.75": 5996,
+            "0.75-0.9": 1531,
+            "0.9-1": 1721
+          },
+          "rebanded": {
+            "0.9-1": 1110,
+            "not calibrated here": 12634
+          },
+          "moves": {
+            "lost its band": 12634,
+            "unchanged": 1105,
+            "up": 5
+          },
+          "transitions": {
+            "0.1-0.25 -> not calibrated here": 145,
+            "0.25-0.5 -> not calibrated here": 4351,
+            "0.5-0.75 -> not calibrated here": 5996,
+            "0.75-0.9 -> 0.9-1": 5,
+            "0.75-0.9 -> not calibrated here": 1526,
+            "0.9-1 -> 0.9-1": 1105,
+            "0.9-1 -> not calibrated here": 616
+          },
+          "named_on_track": {
+            "K562": 933,
+            "another track": 12811
+          }
+        },
+        "coding gene": {
+          "targets": 10817,
+          "published_bands": {
+            "0.25-0.5": 4344,
+            "0.5-0.75": 4057,
+            "0.75-0.9": 1139,
+            "0.9-1": 1277
+          },
+          "rebanded": {
+            "0.9-1": 854,
+            "not calibrated here": 9963
+          },
+          "moves": {
+            "lost its band": 9963,
+            "unchanged": 853,
+            "up": 1
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 4344,
+            "0.5-0.75 -> not calibrated here": 4057,
+            "0.75-0.9 -> 0.9-1": 1,
+            "0.75-0.9 -> not calibrated here": 1138,
+            "0.9-1 -> 0.9-1": 853,
+            "0.9-1 -> not calibrated here": 424
+          },
+          "named_on_track": {
+            "K562": 794,
+            "another track": 10023
+          }
+        }
+      },
+      "chrY": {
+        "elements": 907,
+        "any gene": {
+          "targets": 539,
+          "published_bands": {
+            "0.25-0.5": 109,
+            "0.5-0.75": 296,
+            "0.75-0.9": 60,
+            "0.9-1": 74
+          },
+          "rebanded": {
+            "0.9-1": 43,
+            "not calibrated here": 496
+          },
+          "moves": {
+            "lost its band": 496,
+            "unchanged": 43
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 109,
+            "0.5-0.75 -> not calibrated here": 296,
+            "0.75-0.9 -> not calibrated here": 60,
+            "0.9-1 -> 0.9-1": 43,
+            "0.9-1 -> not calibrated here": 31
+          },
+          "named_on_track": {
+            "K562": 30,
+            "another track": 509
+          }
+        },
+        "coding gene": {
+          "targets": 125,
+          "published_bands": {
+            "0.25-0.5": 52,
+            "0.5-0.75": 38,
+            "0.75-0.9": 15,
+            "0.9-1": 20
+          },
+          "rebanded": {
+            "0.9-1": 12,
+            "not calibrated here": 113
+          },
+          "moves": {
+            "lost its band": 113,
+            "unchanged": 12
+          },
+          "transitions": {
+            "0.25-0.5 -> not calibrated here": 52,
+            "0.5-0.75 -> not calibrated here": 38,
+            "0.75-0.9 -> not calibrated here": 15,
+            "0.9-1 -> 0.9-1": 12,
+            "0.9-1 -> not calibrated here": 8
+          },
+          "named_on_track": {
+            "K562": 6,
+            "another track": 119
+          }
+        }
+      }
+    }
+  },
+  "rebanding, track axis": {
+    "genome_wide": {
+      "any gene": {
+        "targets": 593765,
+        "published_bands": {
+          "0.05-0.1": 45,
+          "0.1-0.25": 3837,
+          "0.25-0.5": 178387,
+          "0.5-0.75": 293568,
+          "0.75-0.9": 61971,
+          "0.9-1": 55957
+        },
+        "rebanded": {
+          "0.5-0.75": 561927,
+          "0.9-1": 31838
+        },
+        "moves": {
+          "down": 100692,
+          "unchanged": 298948,
+          "up": 194125
+        },
+        "transitions": {
+          "0.05-0.1 -> 0.5-0.75": 45,
+          "0.1-0.25 -> 0.5-0.75": 3758,
+          "0.1-0.25 -> 0.9-1": 79,
+          "0.25-0.5 -> 0.5-0.75": 170069,
+          "0.25-0.5 -> 0.9-1": 8318,
+          "0.5-0.75 -> 0.5-0.75": 287363,
+          "0.5-0.75 -> 0.9-1": 6205,
+          "0.75-0.9 -> 0.5-0.75": 56320,
+          "0.75-0.9 -> 0.9-1": 5651,
+          "0.9-1 -> 0.5-0.75": 44372,
+          "0.9-1 -> 0.9-1": 11585
+        },
+        "named_on_track": {
+          "K562": 31838,
+          "another track": 561927
+        }
+      },
+      "coding gene": {
+        "targets": 440377,
+        "published_bands": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 184256,
+          "0.5-0.75": 175655,
+          "0.75-0.9": 42552,
+          "0.9-1": 37913
+        },
+        "rebanded": {
+          "0.5-0.75": 413123,
+          "0.9-1": 27254
+        },
+        "moves": {
+          "down": 65942,
+          "unchanged": 180153,
+          "up": 194282
+        },
+        "transitions": {
+          "0.1-0.25 -> 0.5-0.75": 1,
+          "0.25-0.5 -> 0.5-0.75": 175888,
+          "0.25-0.5 -> 0.9-1": 8368,
+          "0.5-0.75 -> 0.5-0.75": 171292,
+          "0.5-0.75 -> 0.9-1": 4363,
+          "0.75-0.9 -> 0.5-0.75": 36890,
+          "0.75-0.9 -> 0.9-1": 5662,
+          "0.9-1 -> 0.5-0.75": 29052,
+          "0.9-1 -> 0.9-1": 8861
+        },
+        "named_on_track": {
+          "K562": 27254,
+          "another track": 413123
+        }
+      }
+    },
+    "per_chromosome": {
+      "chr1": {
+        "elements": 88109,
+        "any gene": {
+          "targets": 56803,
+          "published_bands": {
+            "0.05-0.1": 36,
+            "0.1-0.25": 377,
+            "0.25-0.5": 15723,
+            "0.5-0.75": 28678,
+            "0.75-0.9": 6102,
+            "0.9-1": 5887
+          },
+          "rebanded": {
+            "0.5-0.75": 53857,
+            "0.9-1": 2946
+          },
+          "moves": {
+            "down": 10358,
+            "unchanged": 29202,
+            "up": 17243
+          },
+          "transitions": {
+            "0.05-0.1 -> 0.5-0.75": 36,
+            "0.1-0.25 -> 0.5-0.75": 371,
+            "0.1-0.25 -> 0.9-1": 6,
+            "0.25-0.5 -> 0.5-0.75": 15046,
+            "0.25-0.5 -> 0.9-1": 677,
+            "0.5-0.75 -> 0.5-0.75": 28046,
+            "0.5-0.75 -> 0.9-1": 632,
+            "0.75-0.9 -> 0.5-0.75": 5627,
+            "0.75-0.9 -> 0.9-1": 475,
+            "0.9-1 -> 0.5-0.75": 4731,
+            "0.9-1 -> 0.9-1": 1156
+          },
+          "named_on_track": {
+            "K562": 2946,
+            "another track": 53857
+          }
+        },
+        "coding gene": {
+          "targets": 43681,
+          "published_bands": {
+            "0.25-0.5": 16891,
+            "0.5-0.75": 18148,
+            "0.75-0.9": 4416,
+            "0.9-1": 4226
+          },
+          "rebanded": {
+            "0.5-0.75": 41115,
+            "0.9-1": 2566
+          },
+          "moves": {
+            "down": 7244,
+            "unchanged": 18599,
+            "up": 17838
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 16175,
+            "0.25-0.5 -> 0.9-1": 716,
+            "0.5-0.75 -> 0.5-0.75": 17696,
+            "0.5-0.75 -> 0.9-1": 452,
+            "0.75-0.9 -> 0.5-0.75": 3921,
+            "0.75-0.9 -> 0.9-1": 495,
+            "0.9-1 -> 0.5-0.75": 3323,
+            "0.9-1 -> 0.9-1": 903
+          },
+          "named_on_track": {
+            "K562": 2566,
+            "another track": 41115
+          }
+        }
+      },
+      "chr2": {
+        "elements": 79639,
+        "any gene": {
+          "targets": 46873,
+          "published_bands": {
+            "0.05-0.1": 9,
+            "0.1-0.25": 311,
+            "0.25-0.5": 15313,
+            "0.5-0.75": 22846,
+            "0.75-0.9": 4649,
+            "0.9-1": 3745
+          },
+          "rebanded": {
+            "0.5-0.75": 44013,
+            "0.9-1": 2860
+          },
+          "moves": {
+            "down": 6887,
+            "unchanged": 23272,
+            "up": 16714
+          },
+          "transitions": {
+            "0.05-0.1 -> 0.5-0.75": 9,
+            "0.1-0.25 -> 0.5-0.75": 306,
+            "0.1-0.25 -> 0.9-1": 5,
+            "0.25-0.5 -> 0.5-0.75": 14460,
+            "0.25-0.5 -> 0.9-1": 853,
+            "0.5-0.75 -> 0.5-0.75": 22351,
+            "0.5-0.75 -> 0.9-1": 495,
+            "0.75-0.9 -> 0.5-0.75": 4063,
+            "0.75-0.9 -> 0.9-1": 586,
+            "0.9-1 -> 0.5-0.75": 2824,
+            "0.9-1 -> 0.9-1": 921
+          },
+          "named_on_track": {
+            "K562": 2860,
+            "another track": 44013
+          }
+        },
+        "coding gene": {
+          "targets": 32917,
+          "published_bands": {
+            "0.25-0.5": 14950,
+            "0.5-0.75": 12536,
+            "0.75-0.9": 3046,
+            "0.9-1": 2385
+          },
+          "rebanded": {
+            "0.5-0.75": 30456,
+            "0.9-1": 2461
+          },
+          "moves": {
+            "down": 4178,
+            "unchanged": 12860,
+            "up": 15879
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 14090,
+            "0.25-0.5 -> 0.9-1": 860,
+            "0.5-0.75 -> 0.5-0.75": 12188,
+            "0.5-0.75 -> 0.9-1": 348,
+            "0.75-0.9 -> 0.5-0.75": 2465,
+            "0.75-0.9 -> 0.9-1": 581,
+            "0.9-1 -> 0.5-0.75": 1713,
+            "0.9-1 -> 0.9-1": 672
+          },
+          "named_on_track": {
+            "K562": 2461,
+            "another track": 30456
+          }
+        }
+      },
+      "chr3": {
+        "elements": 62502,
+        "any gene": {
+          "targets": 37740,
+          "published_bands": {
+            "0.1-0.25": 315,
+            "0.25-0.5": 13134,
+            "0.5-0.75": 17497,
+            "0.75-0.9": 3649,
+            "0.9-1": 3145
+          },
+          "rebanded": {
+            "0.5-0.75": 35575,
+            "0.9-1": 2165
+          },
+          "moves": {
+            "down": 5648,
+            "unchanged": 17859,
+            "up": 14233
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 310,
+            "0.1-0.25 -> 0.9-1": 5,
+            "0.25-0.5 -> 0.5-0.75": 12506,
+            "0.25-0.5 -> 0.9-1": 628,
+            "0.5-0.75 -> 0.5-0.75": 17111,
+            "0.5-0.75 -> 0.9-1": 386,
+            "0.75-0.9 -> 0.5-0.75": 3251,
+            "0.75-0.9 -> 0.9-1": 398,
+            "0.9-1 -> 0.5-0.75": 2397,
+            "0.9-1 -> 0.9-1": 748
+          },
+          "named_on_track": {
+            "K562": 2165,
+            "another track": 35575
+          }
+        },
+        "coding gene": {
+          "targets": 27682,
+          "published_bands": {
+            "0.1-0.25": 1,
+            "0.25-0.5": 13109,
+            "0.5-0.75": 10074,
+            "0.75-0.9": 2447,
+            "0.9-1": 2051
+          },
+          "rebanded": {
+            "0.5-0.75": 25894,
+            "0.9-1": 1788
+          },
+          "moves": {
+            "down": 3562,
+            "unchanged": 10359,
+            "up": 13761
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 1,
+            "0.25-0.5 -> 0.5-0.75": 12528,
+            "0.25-0.5 -> 0.9-1": 581,
+            "0.5-0.75 -> 0.5-0.75": 9803,
+            "0.5-0.75 -> 0.9-1": 271,
+            "0.75-0.9 -> 0.5-0.75": 2067,
+            "0.75-0.9 -> 0.9-1": 380,
+            "0.9-1 -> 0.5-0.75": 1495,
+            "0.9-1 -> 0.9-1": 556
+          },
+          "named_on_track": {
+            "K562": 1788,
+            "another track": 25894
+          }
+        }
+      },
+      "chr4": {
+        "elements": 46124,
+        "any gene": {
+          "targets": 28054,
+          "published_bands": {
+            "0.1-0.25": 199,
+            "0.25-0.5": 10068,
+            "0.5-0.75": 12763,
+            "0.75-0.9": 2773,
+            "0.9-1": 2251
+          },
+          "rebanded": {
+            "0.5-0.75": 26168,
+            "0.9-1": 1886
+          },
+          "moves": {
+            "down": 4036,
+            "unchanged": 13079,
+            "up": 10939
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 197,
+            "0.1-0.25 -> 0.9-1": 2,
+            "0.25-0.5 -> 0.5-0.75": 9488,
+            "0.25-0.5 -> 0.9-1": 580,
+            "0.5-0.75 -> 0.5-0.75": 12447,
+            "0.5-0.75 -> 0.9-1": 316,
+            "0.75-0.9 -> 0.5-0.75": 2417,
+            "0.75-0.9 -> 0.9-1": 356,
+            "0.9-1 -> 0.5-0.75": 1619,
+            "0.9-1 -> 0.9-1": 632
+          },
+          "named_on_track": {
+            "K562": 1886,
+            "another track": 26168
+          }
+        },
+        "coding gene": {
+          "targets": 20646,
+          "published_bands": {
+            "0.25-0.5": 9836,
+            "0.5-0.75": 7358,
+            "0.75-0.9": 1927,
+            "0.9-1": 1525
+          },
+          "rebanded": {
+            "0.5-0.75": 19055,
+            "0.9-1": 1591
+          },
+          "moves": {
+            "down": 2615,
+            "unchanged": 7639,
+            "up": 10392
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 9295,
+            "0.25-0.5 -> 0.9-1": 541,
+            "0.5-0.75 -> 0.5-0.75": 7145,
+            "0.5-0.75 -> 0.9-1": 213,
+            "0.75-0.9 -> 0.5-0.75": 1584,
+            "0.75-0.9 -> 0.9-1": 343,
+            "0.9-1 -> 0.5-0.75": 1031,
+            "0.9-1 -> 0.9-1": 494
+          },
+          "named_on_track": {
+            "K562": 1591,
+            "another track": 19055
+          }
+        }
+      },
+      "chr5": {
+        "elements": 53114,
+        "any gene": {
+          "targets": 31849,
+          "published_bands": {
+            "0.1-0.25": 224,
+            "0.25-0.5": 11165,
+            "0.5-0.75": 14549,
+            "0.75-0.9": 3202,
+            "0.9-1": 2709
+          },
+          "rebanded": {
+            "0.5-0.75": 29994,
+            "0.9-1": 1855
+          },
+          "moves": {
+            "down": 4867,
+            "unchanged": 14888,
+            "up": 12094
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 219,
+            "0.1-0.25 -> 0.9-1": 5,
+            "0.25-0.5 -> 0.5-0.75": 10698,
+            "0.25-0.5 -> 0.9-1": 467,
+            "0.5-0.75 -> 0.5-0.75": 14210,
+            "0.5-0.75 -> 0.9-1": 339,
+            "0.75-0.9 -> 0.5-0.75": 2836,
+            "0.75-0.9 -> 0.9-1": 366,
+            "0.9-1 -> 0.5-0.75": 2031,
+            "0.9-1 -> 0.9-1": 678
+          },
+          "named_on_track": {
+            "K562": 1855,
+            "another track": 29994
+          }
+        },
+        "coding gene": {
+          "targets": 22772,
+          "published_bands": {
+            "0.25-0.5": 10754,
+            "0.5-0.75": 8134,
+            "0.75-0.9": 2094,
+            "0.9-1": 1790
+          },
+          "rebanded": {
+            "0.5-0.75": 21272,
+            "0.9-1": 1500
+          },
+          "moves": {
+            "down": 3070,
+            "unchanged": 8384,
+            "up": 11318
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 10312,
+            "0.25-0.5 -> 0.9-1": 442,
+            "0.5-0.75 -> 0.5-0.75": 7890,
+            "0.5-0.75 -> 0.9-1": 244,
+            "0.75-0.9 -> 0.5-0.75": 1774,
+            "0.75-0.9 -> 0.9-1": 320,
+            "0.9-1 -> 0.5-0.75": 1296,
+            "0.9-1 -> 0.9-1": 494
+          },
+          "named_on_track": {
+            "K562": 1500,
+            "another track": 21272
+          }
+        }
+      },
+      "chr6": {
+        "elements": 56945,
+        "any gene": {
+          "targets": 33908,
+          "published_bands": {
+            "0.1-0.25": 202,
+            "0.25-0.5": 10388,
+            "0.5-0.75": 16619,
+            "0.75-0.9": 3534,
+            "0.9-1": 3165
+          },
+          "rebanded": {
+            "0.5-0.75": 31707,
+            "0.9-1": 2201
+          },
+          "moves": {
+            "down": 5543,
+            "unchanged": 16953,
+            "up": 11412
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 199,
+            "0.1-0.25 -> 0.9-1": 3,
+            "0.25-0.5 -> 0.5-0.75": 9778,
+            "0.25-0.5 -> 0.9-1": 610,
+            "0.5-0.75 -> 0.5-0.75": 16187,
+            "0.5-0.75 -> 0.9-1": 432,
+            "0.75-0.9 -> 0.5-0.75": 3144,
+            "0.75-0.9 -> 0.9-1": 390,
+            "0.9-1 -> 0.5-0.75": 2399,
+            "0.9-1 -> 0.9-1": 766
+          },
+          "named_on_track": {
+            "K562": 2201,
+            "another track": 31707
+          }
+        },
+        "coding gene": {
+          "targets": 23769,
+          "published_bands": {
+            "0.25-0.5": 10310,
+            "0.5-0.75": 9124,
+            "0.75-0.9": 2311,
+            "0.9-1": 2024
+          },
+          "rebanded": {
+            "0.5-0.75": 22065,
+            "0.9-1": 1704
+          },
+          "moves": {
+            "down": 3446,
+            "unchanged": 9372,
+            "up": 10951
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 9762,
+            "0.25-0.5 -> 0.9-1": 548,
+            "0.5-0.75 -> 0.5-0.75": 8857,
+            "0.5-0.75 -> 0.9-1": 267,
+            "0.75-0.9 -> 0.5-0.75": 1937,
+            "0.75-0.9 -> 0.9-1": 374,
+            "0.9-1 -> 0.5-0.75": 1509,
+            "0.9-1 -> 0.9-1": 515
+          },
+          "named_on_track": {
+            "K562": 1704,
+            "another track": 22065
+          }
+        }
+      },
+      "chr7": {
+        "elements": 49296,
+        "any gene": {
+          "targets": 30213,
+          "published_bands": {
+            "0.1-0.25": 161,
+            "0.25-0.5": 9550,
+            "0.5-0.75": 14299,
+            "0.75-0.9": 3292,
+            "0.9-1": 2911
+          },
+          "rebanded": {
+            "0.5-0.75": 28361,
+            "0.9-1": 1852
+          },
+          "moves": {
+            "down": 5231,
+            "unchanged": 14573,
+            "up": 10409
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 155,
+            "0.1-0.25 -> 0.9-1": 6,
+            "0.25-0.5 -> 0.5-0.75": 9018,
+            "0.25-0.5 -> 0.9-1": 532,
+            "0.5-0.75 -> 0.5-0.75": 13957,
+            "0.5-0.75 -> 0.9-1": 342,
+            "0.75-0.9 -> 0.5-0.75": 2936,
+            "0.75-0.9 -> 0.9-1": 356,
+            "0.9-1 -> 0.5-0.75": 2295,
+            "0.9-1 -> 0.9-1": 616
+          },
+          "named_on_track": {
+            "K562": 1852,
+            "another track": 28361
+          }
+        },
+        "coding gene": {
+          "targets": 22596,
+          "published_bands": {
+            "0.25-0.5": 9749,
+            "0.5-0.75": 8820,
+            "0.75-0.9": 2206,
+            "0.9-1": 1821
+          },
+          "rebanded": {
+            "0.5-0.75": 21090,
+            "0.9-1": 1506
+          },
+          "moves": {
+            "down": 3242,
+            "unchanged": 9043,
+            "up": 10311
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 9254,
+            "0.25-0.5 -> 0.9-1": 495,
+            "0.5-0.75 -> 0.5-0.75": 8594,
+            "0.5-0.75 -> 0.9-1": 226,
+            "0.75-0.9 -> 0.5-0.75": 1870,
+            "0.75-0.9 -> 0.9-1": 336,
+            "0.9-1 -> 0.5-0.75": 1372,
+            "0.9-1 -> 0.9-1": 449
+          },
+          "named_on_track": {
+            "K562": 1506,
+            "another track": 21090
+          }
+        }
+      },
+      "chr8": {
+        "elements": 45332,
+        "any gene": {
+          "targets": 26342,
+          "published_bands": {
+            "0.1-0.25": 151,
+            "0.25-0.5": 8617,
+            "0.5-0.75": 12665,
+            "0.75-0.9": 2715,
+            "0.9-1": 2194
+          },
+          "rebanded": {
+            "0.5-0.75": 24629,
+            "0.9-1": 1713
+          },
+          "moves": {
+            "down": 4012,
+            "unchanged": 12906,
+            "up": 9424
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 150,
+            "0.1-0.25 -> 0.9-1": 1,
+            "0.25-0.5 -> 0.5-0.75": 8145,
+            "0.25-0.5 -> 0.9-1": 472,
+            "0.5-0.75 -> 0.5-0.75": 12322,
+            "0.5-0.75 -> 0.9-1": 343,
+            "0.75-0.9 -> 0.5-0.75": 2402,
+            "0.75-0.9 -> 0.9-1": 313,
+            "0.9-1 -> 0.5-0.75": 1610,
+            "0.9-1 -> 0.9-1": 584
+          },
+          "named_on_track": {
+            "K562": 1713,
+            "another track": 24629
+          }
+        },
+        "coding gene": {
+          "targets": 18552,
+          "published_bands": {
+            "0.25-0.5": 8638,
+            "0.5-0.75": 6826,
+            "0.75-0.9": 1713,
+            "0.9-1": 1375
+          },
+          "rebanded": {
+            "0.5-0.75": 17173,
+            "0.9-1": 1379
+          },
+          "moves": {
+            "down": 2392,
+            "unchanged": 6993,
+            "up": 9167
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 8184,
+            "0.25-0.5 -> 0.9-1": 454,
+            "0.5-0.75 -> 0.5-0.75": 6597,
+            "0.5-0.75 -> 0.9-1": 229,
+            "0.75-0.9 -> 0.5-0.75": 1413,
+            "0.75-0.9 -> 0.9-1": 300,
+            "0.9-1 -> 0.5-0.75": 979,
+            "0.9-1 -> 0.9-1": 396
+          },
+          "named_on_track": {
+            "K562": 1379,
+            "another track": 17173
+          }
+        }
+      },
+      "chr9": {
+        "elements": 41640,
+        "any gene": {
+          "targets": 25613,
+          "published_bands": {
+            "0.1-0.25": 126,
+            "0.25-0.5": 8315,
+            "0.5-0.75": 12431,
+            "0.75-0.9": 2587,
+            "0.9-1": 2154
+          },
+          "rebanded": {
+            "0.5-0.75": 24358,
+            "0.9-1": 1255
+          },
+          "moves": {
+            "down": 4085,
+            "unchanged": 12617,
+            "up": 8911
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 120,
+            "0.1-0.25 -> 0.9-1": 6,
+            "0.25-0.5 -> 0.5-0.75": 7954,
+            "0.25-0.5 -> 0.9-1": 361,
+            "0.5-0.75 -> 0.5-0.75": 12199,
+            "0.5-0.75 -> 0.9-1": 232,
+            "0.75-0.9 -> 0.5-0.75": 2349,
+            "0.75-0.9 -> 0.9-1": 238,
+            "0.9-1 -> 0.5-0.75": 1736,
+            "0.9-1 -> 0.9-1": 418
+          },
+          "named_on_track": {
+            "K562": 1255,
+            "another track": 24358
+          }
+        },
+        "coding gene": {
+          "targets": 19272,
+          "published_bands": {
+            "0.25-0.5": 8306,
+            "0.5-0.75": 7607,
+            "0.75-0.9": 1872,
+            "0.9-1": 1487
+          },
+          "rebanded": {
+            "0.5-0.75": 18165,
+            "0.9-1": 1107
+          },
+          "moves": {
+            "down": 2794,
+            "unchanged": 7765,
+            "up": 8713
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 7935,
+            "0.25-0.5 -> 0.9-1": 371,
+            "0.5-0.75 -> 0.5-0.75": 7436,
+            "0.5-0.75 -> 0.9-1": 171,
+            "0.75-0.9 -> 0.5-0.75": 1636,
+            "0.75-0.9 -> 0.9-1": 236,
+            "0.9-1 -> 0.5-0.75": 1158,
+            "0.9-1 -> 0.9-1": 329
+          },
+          "named_on_track": {
+            "K562": 1107,
+            "another track": 18165
+          }
+        }
+      },
+      "chr10": {
+        "elements": 47419,
+        "any gene": {
+          "targets": 28134,
+          "published_bands": {
+            "0.1-0.25": 225,
+            "0.25-0.5": 9544,
+            "0.5-0.75": 13577,
+            "0.75-0.9": 2609,
+            "0.9-1": 2179
+          },
+          "rebanded": {
+            "0.5-0.75": 26663,
+            "0.9-1": 1471
+          },
+          "moves": {
+            "down": 4005,
+            "unchanged": 13829,
+            "up": 10300
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 215,
+            "0.1-0.25 -> 0.9-1": 10,
+            "0.25-0.5 -> 0.5-0.75": 9140,
+            "0.25-0.5 -> 0.9-1": 404,
+            "0.5-0.75 -> 0.5-0.75": 13303,
+            "0.5-0.75 -> 0.9-1": 274,
+            "0.75-0.9 -> 0.5-0.75": 2352,
+            "0.75-0.9 -> 0.9-1": 257,
+            "0.9-1 -> 0.5-0.75": 1653,
+            "0.9-1 -> 0.9-1": 526
+          },
+          "named_on_track": {
+            "K562": 1471,
+            "another track": 26663
+          }
+        },
+        "coding gene": {
+          "targets": 21023,
+          "published_bands": {
+            "0.25-0.5": 9912,
+            "0.5-0.75": 7773,
+            "0.75-0.9": 1833,
+            "0.9-1": 1505
+          },
+          "rebanded": {
+            "0.5-0.75": 19633,
+            "0.9-1": 1390
+          },
+          "moves": {
+            "down": 2607,
+            "unchanged": 8006,
+            "up": 10410
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 9445,
+            "0.25-0.5 -> 0.9-1": 467,
+            "0.5-0.75 -> 0.5-0.75": 7581,
+            "0.5-0.75 -> 0.9-1": 192,
+            "0.75-0.9 -> 0.5-0.75": 1527,
+            "0.75-0.9 -> 0.9-1": 306,
+            "0.9-1 -> 0.5-0.75": 1080,
+            "0.9-1 -> 0.9-1": 425
+          },
+          "named_on_track": {
+            "K562": 1390,
+            "another track": 19633
+          }
+        }
+      },
+      "chr11": {
+        "elements": 48380,
+        "any gene": {
+          "targets": 32644,
+          "published_bands": {
+            "0.1-0.25": 150,
+            "0.25-0.5": 9761,
+            "0.5-0.75": 16355,
+            "0.75-0.9": 3293,
+            "0.9-1": 3085
+          },
+          "rebanded": {
+            "0.5-0.75": 31011,
+            "0.9-1": 1633
+          },
+          "moves": {
+            "down": 5493,
+            "unchanged": 16668,
+            "up": 10483
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 150,
+            "0.25-0.5 -> 0.5-0.75": 9326,
+            "0.25-0.5 -> 0.9-1": 435,
+            "0.5-0.75 -> 0.5-0.75": 16042,
+            "0.5-0.75 -> 0.9-1": 313,
+            "0.75-0.9 -> 0.5-0.75": 3034,
+            "0.75-0.9 -> 0.9-1": 259,
+            "0.9-1 -> 0.5-0.75": 2459,
+            "0.9-1 -> 0.9-1": 626
+          },
+          "named_on_track": {
+            "K562": 1633,
+            "another track": 31011
+          }
+        },
+        "coding gene": {
+          "targets": 25731,
+          "published_bands": {
+            "0.25-0.5": 10533,
+            "0.5-0.75": 10422,
+            "0.75-0.9": 2490,
+            "0.9-1": 2286
+          },
+          "rebanded": {
+            "0.5-0.75": 24233,
+            "0.9-1": 1498
+          },
+          "moves": {
+            "down": 3977,
+            "unchanged": 10710,
+            "up": 11044
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 10058,
+            "0.25-0.5 -> 0.9-1": 475,
+            "0.5-0.75 -> 0.5-0.75": 10198,
+            "0.5-0.75 -> 0.9-1": 224,
+            "0.75-0.9 -> 0.5-0.75": 2203,
+            "0.75-0.9 -> 0.9-1": 287,
+            "0.9-1 -> 0.5-0.75": 1774,
+            "0.9-1 -> 0.9-1": 512
+          },
+          "named_on_track": {
+            "K562": 1498,
+            "another track": 24233
+          }
+        }
+      },
+      "chr12": {
+        "elements": 46582,
+        "any gene": {
+          "targets": 30232,
+          "published_bands": {
+            "0.1-0.25": 218,
+            "0.25-0.5": 8599,
+            "0.5-0.75": 15199,
+            "0.75-0.9": 3259,
+            "0.9-1": 2957
+          },
+          "rebanded": {
+            "0.5-0.75": 28764,
+            "0.9-1": 1468
+          },
+          "moves": {
+            "down": 5404,
+            "unchanged": 15465,
+            "up": 9363
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 214,
+            "0.1-0.25 -> 0.9-1": 4,
+            "0.25-0.5 -> 0.5-0.75": 8255,
+            "0.25-0.5 -> 0.9-1": 344,
+            "0.5-0.75 -> 0.5-0.75": 14891,
+            "0.5-0.75 -> 0.9-1": 308,
+            "0.75-0.9 -> 0.5-0.75": 3021,
+            "0.75-0.9 -> 0.9-1": 238,
+            "0.9-1 -> 0.5-0.75": 2383,
+            "0.9-1 -> 0.9-1": 574
+          },
+          "named_on_track": {
+            "K562": 1468,
+            "another track": 28764
+          }
+        },
+        "coding gene": {
+          "targets": 22814,
+          "published_bands": {
+            "0.25-0.5": 9345,
+            "0.5-0.75": 9269,
+            "0.75-0.9": 2240,
+            "0.9-1": 1960
+          },
+          "rebanded": {
+            "0.5-0.75": 21586,
+            "0.9-1": 1228
+          },
+          "moves": {
+            "down": 3543,
+            "unchanged": 9480,
+            "up": 9791
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 8989,
+            "0.25-0.5 -> 0.9-1": 356,
+            "0.5-0.75 -> 0.5-0.75": 9054,
+            "0.5-0.75 -> 0.9-1": 215,
+            "0.75-0.9 -> 0.5-0.75": 2009,
+            "0.75-0.9 -> 0.9-1": 231,
+            "0.9-1 -> 0.5-0.75": 1534,
+            "0.9-1 -> 0.9-1": 426
+          },
+          "named_on_track": {
+            "K562": 1228,
+            "another track": 21586
+          }
+        }
+      },
+      "chr13": {
+        "elements": 25634,
+        "any gene": {
+          "targets": 14716,
+          "published_bands": {
+            "0.1-0.25": 6,
+            "0.25-0.5": 5076,
+            "0.5-0.75": 7344,
+            "0.75-0.9": 1274,
+            "0.9-1": 1016
+          },
+          "rebanded": {
+            "0.5-0.75": 13945,
+            "0.9-1": 771
+          },
+          "moves": {
+            "down": 1872,
+            "unchanged": 7443,
+            "up": 5401
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 6,
+            "0.25-0.5 -> 0.5-0.75": 4874,
+            "0.25-0.5 -> 0.9-1": 202,
+            "0.5-0.75 -> 0.5-0.75": 7193,
+            "0.5-0.75 -> 0.9-1": 151,
+            "0.75-0.9 -> 0.5-0.75": 1106,
+            "0.75-0.9 -> 0.9-1": 168,
+            "0.9-1 -> 0.5-0.75": 766,
+            "0.9-1 -> 0.9-1": 250
+          },
+          "named_on_track": {
+            "K562": 771,
+            "another track": 13945
+          }
+        },
+        "coding gene": {
+          "targets": 9711,
+          "published_bands": {
+            "0.25-0.5": 4705,
+            "0.5-0.75": 3641,
+            "0.75-0.9": 746,
+            "0.9-1": 619
+          },
+          "rebanded": {
+            "0.5-0.75": 9021,
+            "0.9-1": 690
+          },
+          "moves": {
+            "down": 1008,
+            "unchanged": 3724,
+            "up": 4979
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 4484,
+            "0.25-0.5 -> 0.9-1": 221,
+            "0.5-0.75 -> 0.5-0.75": 3529,
+            "0.5-0.75 -> 0.9-1": 112,
+            "0.75-0.9 -> 0.5-0.75": 584,
+            "0.75-0.9 -> 0.9-1": 162,
+            "0.9-1 -> 0.5-0.75": 424,
+            "0.9-1 -> 0.9-1": 195
+          },
+          "named_on_track": {
+            "K562": 690,
+            "another track": 9021
+          }
+        }
+      },
+      "chr14": {
+        "elements": 31794,
+        "any gene": {
+          "targets": 18985,
+          "published_bands": {
+            "0.1-0.25": 162,
+            "0.25-0.5": 5463,
+            "0.5-0.75": 9791,
+            "0.75-0.9": 1978,
+            "0.9-1": 1591
+          },
+          "rebanded": {
+            "0.5-0.75": 18160,
+            "0.9-1": 825
+          },
+          "moves": {
+            "down": 3123,
+            "unchanged": 9941,
+            "up": 5921
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 156,
+            "0.1-0.25 -> 0.9-1": 6,
+            "0.25-0.5 -> 0.5-0.75": 5239,
+            "0.25-0.5 -> 0.9-1": 224,
+            "0.5-0.75 -> 0.5-0.75": 9642,
+            "0.5-0.75 -> 0.9-1": 149,
+            "0.75-0.9 -> 0.5-0.75": 1831,
+            "0.75-0.9 -> 0.9-1": 147,
+            "0.9-1 -> 0.5-0.75": 1292,
+            "0.9-1 -> 0.9-1": 299
+          },
+          "named_on_track": {
+            "K562": 825,
+            "another track": 18160
+          }
+        },
+        "coding gene": {
+          "targets": 13385,
+          "published_bands": {
+            "0.25-0.5": 5695,
+            "0.5-0.75": 5434,
+            "0.75-0.9": 1215,
+            "0.9-1": 1041
+          },
+          "rebanded": {
+            "0.5-0.75": 12625,
+            "0.9-1": 760
+          },
+          "moves": {
+            "down": 1854,
+            "unchanged": 5568,
+            "up": 5963
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 5446,
+            "0.25-0.5 -> 0.9-1": 249,
+            "0.5-0.75 -> 0.5-0.75": 5325,
+            "0.5-0.75 -> 0.9-1": 109,
+            "0.75-0.9 -> 0.5-0.75": 1056,
+            "0.75-0.9 -> 0.9-1": 159,
+            "0.9-1 -> 0.5-0.75": 798,
+            "0.9-1 -> 0.9-1": 243
+          },
+          "named_on_track": {
+            "K562": 760,
+            "another track": 12625
+          }
+        }
+      },
+      "chr15": {
+        "elements": 31058,
+        "any gene": {
+          "targets": 20194,
+          "published_bands": {
+            "0.1-0.25": 175,
+            "0.25-0.5": 5867,
+            "0.5-0.75": 10091,
+            "0.75-0.9": 2190,
+            "0.9-1": 1871
+          },
+          "rebanded": {
+            "0.5-0.75": 19119,
+            "0.9-1": 1075
+          },
+          "moves": {
+            "down": 3482,
+            "unchanged": 10294,
+            "up": 6418
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 166,
+            "0.1-0.25 -> 0.9-1": 9,
+            "0.25-0.5 -> 0.5-0.75": 5579,
+            "0.25-0.5 -> 0.9-1": 288,
+            "0.5-0.75 -> 0.5-0.75": 9892,
+            "0.5-0.75 -> 0.9-1": 199,
+            "0.75-0.9 -> 0.5-0.75": 2013,
+            "0.75-0.9 -> 0.9-1": 177,
+            "0.9-1 -> 0.5-0.75": 1469,
+            "0.9-1 -> 0.9-1": 402
+          },
+          "named_on_track": {
+            "K562": 1075,
+            "another track": 19119
+          }
+        },
+        "coding gene": {
+          "targets": 14474,
+          "published_bands": {
+            "0.25-0.5": 6151,
+            "0.5-0.75": 5779,
+            "0.75-0.9": 1407,
+            "0.9-1": 1137
+          },
+          "rebanded": {
+            "0.5-0.75": 13561,
+            "0.9-1": 913
+          },
+          "moves": {
+            "down": 2058,
+            "unchanged": 5942,
+            "up": 6474
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 5859,
+            "0.25-0.5 -> 0.9-1": 292,
+            "0.5-0.75 -> 0.5-0.75": 5644,
+            "0.5-0.75 -> 0.9-1": 135,
+            "0.75-0.9 -> 0.5-0.75": 1219,
+            "0.75-0.9 -> 0.9-1": 188,
+            "0.9-1 -> 0.5-0.75": 839,
+            "0.9-1 -> 0.9-1": 298
+          },
+          "named_on_track": {
+            "K562": 913,
+            "another track": 13561
+          }
+        }
+      },
+      "chr16": {
+        "elements": 32314,
+        "any gene": {
+          "targets": 19927,
+          "published_bands": {
+            "0.1-0.25": 119,
+            "0.25-0.5": 4390,
+            "0.5-0.75": 10769,
+            "0.75-0.9": 2343,
+            "0.9-1": 2306
+          },
+          "rebanded": {
+            "0.5-0.75": 19224,
+            "0.9-1": 703
+          },
+          "moves": {
+            "down": 4245,
+            "unchanged": 10902,
+            "up": 4780
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 118,
+            "0.1-0.25 -> 0.9-1": 1,
+            "0.25-0.5 -> 0.5-0.75": 4249,
+            "0.25-0.5 -> 0.9-1": 141,
+            "0.5-0.75 -> 0.5-0.75": 10612,
+            "0.5-0.75 -> 0.9-1": 157,
+            "0.75-0.9 -> 0.5-0.75": 2229,
+            "0.75-0.9 -> 0.9-1": 114,
+            "0.9-1 -> 0.5-0.75": 2016,
+            "0.9-1 -> 0.9-1": 290
+          },
+          "named_on_track": {
+            "K562": 703,
+            "another track": 19224
+          }
+        },
+        "coding gene": {
+          "targets": 14799,
+          "published_bands": {
+            "0.25-0.5": 5092,
+            "0.5-0.75": 6609,
+            "0.75-0.9": 1570,
+            "0.9-1": 1528
+          },
+          "rebanded": {
+            "0.5-0.75": 14239,
+            "0.9-1": 560
+          },
+          "moves": {
+            "down": 2784,
+            "unchanged": 6707,
+            "up": 5308
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 4957,
+            "0.25-0.5 -> 0.9-1": 135,
+            "0.5-0.75 -> 0.5-0.75": 6498,
+            "0.5-0.75 -> 0.9-1": 111,
+            "0.75-0.9 -> 0.5-0.75": 1465,
+            "0.75-0.9 -> 0.9-1": 105,
+            "0.9-1 -> 0.5-0.75": 1319,
+            "0.9-1 -> 0.9-1": 209
+          },
+          "named_on_track": {
+            "K562": 560,
+            "another track": 14239
+          }
+        }
+      },
+      "chr17": {
+        "elements": 41396,
+        "any gene": {
+          "targets": 27501,
+          "published_bands": {
+            "0.1-0.25": 160,
+            "0.25-0.5": 5791,
+            "0.5-0.75": 15155,
+            "0.75-0.9": 3119,
+            "0.9-1": 3276
+          },
+          "rebanded": {
+            "0.5-0.75": 26379,
+            "0.9-1": 1122
+          },
+          "moves": {
+            "down": 5749,
+            "unchanged": 15333,
+            "up": 6419
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 153,
+            "0.1-0.25 -> 0.9-1": 7,
+            "0.25-0.5 -> 0.5-0.75": 5589,
+            "0.25-0.5 -> 0.9-1": 202,
+            "0.5-0.75 -> 0.5-0.75": 14888,
+            "0.5-0.75 -> 0.9-1": 267,
+            "0.75-0.9 -> 0.5-0.75": 2918,
+            "0.75-0.9 -> 0.9-1": 201,
+            "0.9-1 -> 0.5-0.75": 2831,
+            "0.9-1 -> 0.9-1": 445
+          },
+          "named_on_track": {
+            "K562": 1122,
+            "another track": 26379
+          }
+        },
+        "coding gene": {
+          "targets": 21608,
+          "published_bands": {
+            "0.25-0.5": 6770,
+            "0.5-0.75": 10249,
+            "0.75-0.9": 2287,
+            "0.9-1": 2302
+          },
+          "rebanded": {
+            "0.5-0.75": 20600,
+            "0.9-1": 1008
+          },
+          "moves": {
+            "down": 4000,
+            "unchanged": 10426,
+            "up": 7182
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 6556,
+            "0.25-0.5 -> 0.9-1": 214,
+            "0.5-0.75 -> 0.5-0.75": 10044,
+            "0.5-0.75 -> 0.9-1": 205,
+            "0.75-0.9 -> 0.5-0.75": 2080,
+            "0.75-0.9 -> 0.9-1": 207,
+            "0.9-1 -> 0.5-0.75": 1920,
+            "0.9-1 -> 0.9-1": 382
+          },
+          "named_on_track": {
+            "K562": 1008,
+            "another track": 20600
+          }
+        }
+      },
+      "chr18": {
+        "elements": 21973,
+        "any gene": {
+          "targets": 12910,
+          "published_bands": {
+            "0.1-0.25": 100,
+            "0.25-0.5": 4613,
+            "0.5-0.75": 6260,
+            "0.75-0.9": 1090,
+            "0.9-1": 847
+          },
+          "rebanded": {
+            "0.5-0.75": 12205,
+            "0.9-1": 705
+          },
+          "moves": {
+            "down": 1583,
+            "unchanged": 6333,
+            "up": 4994
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 100,
+            "0.25-0.5 -> 0.5-0.75": 4398,
+            "0.25-0.5 -> 0.9-1": 215,
+            "0.5-0.75 -> 0.5-0.75": 6124,
+            "0.5-0.75 -> 0.9-1": 136,
+            "0.75-0.9 -> 0.5-0.75": 945,
+            "0.75-0.9 -> 0.9-1": 145,
+            "0.9-1 -> 0.5-0.75": 638,
+            "0.9-1 -> 0.9-1": 209
+          },
+          "named_on_track": {
+            "K562": 705,
+            "another track": 12205
+          }
+        },
+        "coding gene": {
+          "targets": 9250,
+          "published_bands": {
+            "0.25-0.5": 4898,
+            "0.5-0.75": 3141,
+            "0.75-0.9": 716,
+            "0.9-1": 495
+          },
+          "rebanded": {
+            "0.5-0.75": 8560,
+            "0.9-1": 690
+          },
+          "moves": {
+            "down": 880,
+            "unchanged": 3198,
+            "up": 5172
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 4648,
+            "0.25-0.5 -> 0.9-1": 250,
+            "0.5-0.75 -> 0.5-0.75": 3032,
+            "0.5-0.75 -> 0.9-1": 109,
+            "0.75-0.9 -> 0.5-0.75": 551,
+            "0.75-0.9 -> 0.9-1": 165,
+            "0.9-1 -> 0.5-0.75": 329,
+            "0.9-1 -> 0.9-1": 166
+          },
+          "named_on_track": {
+            "K562": 690,
+            "another track": 8560
+          }
+        }
+      },
+      "chr19": {
+        "elements": 29374,
+        "any gene": {
+          "targets": 20149,
+          "published_bands": {
+            "0.1-0.25": 76,
+            "0.25-0.5": 2655,
+            "0.5-0.75": 11332,
+            "0.75-0.9": 2771,
+            "0.9-1": 3315
+          },
+          "rebanded": {
+            "0.5-0.75": 19456,
+            "0.9-1": 693
+          },
+          "moves": {
+            "down": 5659,
+            "unchanged": 11482,
+            "up": 3008
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 76,
+            "0.25-0.5 -> 0.5-0.75": 2591,
+            "0.25-0.5 -> 0.9-1": 64,
+            "0.5-0.75 -> 0.5-0.75": 11130,
+            "0.5-0.75 -> 0.9-1": 202,
+            "0.75-0.9 -> 0.5-0.75": 2696,
+            "0.75-0.9 -> 0.9-1": 75,
+            "0.9-1 -> 0.5-0.75": 2963,
+            "0.9-1 -> 0.9-1": 352
+          },
+          "named_on_track": {
+            "K562": 693,
+            "another track": 19456
+          }
+        },
+        "coding gene": {
+          "targets": 17265,
+          "published_bands": {
+            "0.25-0.5": 3389,
+            "0.5-0.75": 8955,
+            "0.75-0.9": 2253,
+            "0.9-1": 2668
+          },
+          "rebanded": {
+            "0.5-0.75": 16643,
+            "0.9-1": 622
+          },
+          "moves": {
+            "down": 4524,
+            "unchanged": 9118,
+            "up": 3623
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 3314,
+            "0.25-0.5 -> 0.9-1": 75,
+            "0.5-0.75 -> 0.5-0.75": 8805,
+            "0.5-0.75 -> 0.9-1": 150,
+            "0.75-0.9 -> 0.5-0.75": 2169,
+            "0.75-0.9 -> 0.9-1": 84,
+            "0.9-1 -> 0.5-0.75": 2355,
+            "0.9-1 -> 0.9-1": 313
+          },
+          "named_on_track": {
+            "K562": 622,
+            "another track": 16643
+          }
+        }
+      },
+      "chr20": {
+        "elements": 26954,
+        "any gene": {
+          "targets": 16444,
+          "published_bands": {
+            "0.1-0.25": 82,
+            "0.25-0.5": 4889,
+            "0.5-0.75": 8334,
+            "0.75-0.9": 1691,
+            "0.9-1": 1448
+          },
+          "rebanded": {
+            "0.5-0.75": 15746,
+            "0.9-1": 698
+          },
+          "moves": {
+            "down": 2749,
+            "unchanged": 8489,
+            "up": 5206
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 82,
+            "0.25-0.5 -> 0.5-0.75": 4703,
+            "0.25-0.5 -> 0.9-1": 186,
+            "0.5-0.75 -> 0.5-0.75": 8212,
+            "0.5-0.75 -> 0.9-1": 122,
+            "0.75-0.9 -> 0.5-0.75": 1578,
+            "0.75-0.9 -> 0.9-1": 113,
+            "0.9-1 -> 0.5-0.75": 1171,
+            "0.9-1 -> 0.9-1": 277
+          },
+          "named_on_track": {
+            "K562": 698,
+            "another track": 15746
+          }
+        },
+        "coding gene": {
+          "targets": 12702,
+          "published_bands": {
+            "0.25-0.5": 5155,
+            "0.5-0.75": 5324,
+            "0.75-0.9": 1192,
+            "0.9-1": 1031
+          },
+          "rebanded": {
+            "0.5-0.75": 12047,
+            "0.9-1": 655
+          },
+          "moves": {
+            "down": 1857,
+            "unchanged": 5465,
+            "up": 5380
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 4962,
+            "0.25-0.5 -> 0.9-1": 193,
+            "0.5-0.75 -> 0.5-0.75": 5228,
+            "0.5-0.75 -> 0.9-1": 96,
+            "0.75-0.9 -> 0.5-0.75": 1063,
+            "0.75-0.9 -> 0.9-1": 129,
+            "0.9-1 -> 0.5-0.75": 794,
+            "0.9-1 -> 0.9-1": 237
+          },
+          "named_on_track": {
+            "K562": 655,
+            "another track": 12047
+          }
+        }
+      },
+      "chr21": {
+        "elements": 12139,
+        "any gene": {
+          "targets": 7575,
+          "published_bands": {
+            "0.1-0.25": 16,
+            "0.25-0.5": 2238,
+            "0.5-0.75": 3797,
+            "0.75-0.9": 806,
+            "0.9-1": 718
+          },
+          "rebanded": {
+            "0.5-0.75": 7127,
+            "0.9-1": 448
+          },
+          "moves": {
+            "down": 1281,
+            "unchanged": 3876,
+            "up": 2418
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 16,
+            "0.25-0.5 -> 0.5-0.75": 2126,
+            "0.25-0.5 -> 0.9-1": 112,
+            "0.5-0.75 -> 0.5-0.75": 3704,
+            "0.5-0.75 -> 0.9-1": 93,
+            "0.75-0.9 -> 0.5-0.75": 735,
+            "0.75-0.9 -> 0.9-1": 71,
+            "0.9-1 -> 0.5-0.75": 546,
+            "0.9-1 -> 0.9-1": 172
+          },
+          "named_on_track": {
+            "K562": 448,
+            "another track": 7127
+          }
+        },
+        "coding gene": {
+          "targets": 5174,
+          "published_bands": {
+            "0.25-0.5": 2448,
+            "0.5-0.75": 1876,
+            "0.75-0.9": 466,
+            "0.9-1": 384
+          },
+          "rebanded": {
+            "0.5-0.75": 4803,
+            "0.9-1": 371
+          },
+          "moves": {
+            "down": 656,
+            "unchanged": 1942,
+            "up": 2576
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 2332,
+            "0.25-0.5 -> 0.9-1": 116,
+            "0.5-0.75 -> 0.5-0.75": 1815,
+            "0.5-0.75 -> 0.9-1": 61,
+            "0.75-0.9 -> 0.5-0.75": 399,
+            "0.75-0.9 -> 0.9-1": 67,
+            "0.9-1 -> 0.5-0.75": 257,
+            "0.9-1 -> 0.9-1": 127
+          },
+          "named_on_track": {
+            "K562": 371,
+            "another track": 4803
+          }
+        }
+      },
+      "chr22": {
+        "elements": 19708,
+        "any gene": {
+          "targets": 12676,
+          "published_bands": {
+            "0.1-0.25": 137,
+            "0.25-0.5": 2768,
+            "0.5-0.75": 6925,
+            "0.75-0.9": 1454,
+            "0.9-1": 1392
+          },
+          "rebanded": {
+            "0.5-0.75": 12146,
+            "0.9-1": 530
+          },
+          "moves": {
+            "down": 2555,
+            "unchanged": 7013,
+            "up": 3108
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 137,
+            "0.25-0.5 -> 0.5-0.75": 2665,
+            "0.25-0.5 -> 0.9-1": 103,
+            "0.5-0.75 -> 0.5-0.75": 6789,
+            "0.5-0.75 -> 0.9-1": 136,
+            "0.75-0.9 -> 0.5-0.75": 1387,
+            "0.75-0.9 -> 0.9-1": 67,
+            "0.9-1 -> 0.5-0.75": 1168,
+            "0.9-1 -> 0.9-1": 224
+          },
+          "named_on_track": {
+            "K562": 530,
+            "another track": 12146
+          }
+        },
+        "coding gene": {
+          "targets": 9612,
+          "published_bands": {
+            "0.25-0.5": 3224,
+            "0.5-0.75": 4461,
+            "0.75-0.9": 951,
+            "0.9-1": 976
+          },
+          "rebanded": {
+            "0.5-0.75": 9145,
+            "0.9-1": 467
+          },
+          "moves": {
+            "down": 1656,
+            "unchanged": 4556,
+            "up": 3400
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 3121,
+            "0.25-0.5 -> 0.9-1": 103,
+            "0.5-0.75 -> 0.5-0.75": 4368,
+            "0.5-0.75 -> 0.9-1": 93,
+            "0.75-0.9 -> 0.5-0.75": 868,
+            "0.75-0.9 -> 0.9-1": 83,
+            "0.9-1 -> 0.5-0.75": 788,
+            "0.9-1 -> 0.9-1": 188
+          },
+          "named_on_track": {
+            "K562": 467,
+            "another track": 9145
+          }
+        }
+      },
+      "chrX": {
+        "elements": 22894,
+        "any gene": {
+          "targets": 13744,
+          "published_bands": {
+            "0.1-0.25": 145,
+            "0.25-0.5": 4351,
+            "0.5-0.75": 5996,
+            "0.75-0.9": 1531,
+            "0.9-1": 1721
+          },
+          "rebanded": {
+            "0.5-0.75": 12811,
+            "0.9-1": 933
+          },
+          "moves": {
+            "down": 2709,
+            "unchanged": 6228,
+            "up": 4807
+          },
+          "transitions": {
+            "0.1-0.25 -> 0.5-0.75": 142,
+            "0.1-0.25 -> 0.9-1": 3,
+            "0.25-0.5 -> 0.5-0.75": 4137,
+            "0.25-0.5 -> 0.9-1": 214,
+            "0.5-0.75 -> 0.5-0.75": 5823,
+            "0.5-0.75 -> 0.9-1": 173,
+            "0.75-0.9 -> 0.5-0.75": 1393,
+            "0.75-0.9 -> 0.9-1": 138,
+            "0.9-1 -> 0.5-0.75": 1316,
+            "0.9-1 -> 0.9-1": 405
+          },
+          "named_on_track": {
+            "K562": 933,
+            "another track": 12811
+          }
+        },
+        "coding gene": {
+          "targets": 10817,
+          "published_bands": {
+            "0.25-0.5": 4344,
+            "0.5-0.75": 4057,
+            "0.75-0.9": 1139,
+            "0.9-1": 1277
+          },
+          "rebanded": {
+            "0.5-0.75": 10023,
+            "0.9-1": 794
+          },
+          "moves": {
+            "down": 1964,
+            "unchanged": 4255,
+            "up": 4598
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 4132,
+            "0.25-0.5 -> 0.9-1": 212,
+            "0.5-0.75 -> 0.5-0.75": 3927,
+            "0.5-0.75 -> 0.9-1": 130,
+            "0.75-0.9 -> 0.5-0.75": 1015,
+            "0.75-0.9 -> 0.9-1": 124,
+            "0.9-1 -> 0.5-0.75": 949,
+            "0.9-1 -> 0.9-1": 328
+          },
+          "named_on_track": {
+            "K562": 794,
+            "another track": 10023
+          }
+        }
+      },
+      "chrY": {
+        "elements": 907,
+        "any gene": {
+          "targets": 539,
+          "published_bands": {
+            "0.25-0.5": 109,
+            "0.5-0.75": 296,
+            "0.75-0.9": 60,
+            "0.9-1": 74
+          },
+          "rebanded": {
+            "0.5-0.75": 509,
+            "0.9-1": 30
+          },
+          "moves": {
+            "down": 116,
+            "unchanged": 303,
+            "up": 120
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 105,
+            "0.25-0.5 -> 0.9-1": 4,
+            "0.5-0.75 -> 0.5-0.75": 288,
+            "0.5-0.75 -> 0.9-1": 8,
+            "0.75-0.9 -> 0.5-0.75": 57,
+            "0.75-0.9 -> 0.9-1": 3,
+            "0.9-1 -> 0.5-0.75": 59,
+            "0.9-1 -> 0.9-1": 15
+          },
+          "named_on_track": {
+            "K562": 30,
+            "another track": 509
+          }
+        },
+        "coding gene": {
+          "targets": 125,
+          "published_bands": {
+            "0.25-0.5": 52,
+            "0.5-0.75": 38,
+            "0.75-0.9": 15,
+            "0.9-1": 20
+          },
+          "rebanded": {
+            "0.5-0.75": 119,
+            "0.9-1": 6
+          },
+          "moves": {
+            "down": 31,
+            "unchanged": 42,
+            "up": 52
+          },
+          "transitions": {
+            "0.25-0.5 -> 0.5-0.75": 50,
+            "0.25-0.5 -> 0.9-1": 2,
+            "0.5-0.75 -> 0.5-0.75": 38,
+            "0.75-0.9 -> 0.5-0.75": 15,
+            "0.9-1 -> 0.5-0.75": 16,
+            "0.9-1 -> 0.9-1": 4
+          },
+          "named_on_track": {
+            "K562": 6,
+            "another track": 119
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr14",
+  "date": "2026-09-14",
+  "chrom": "chr14",
+  "elements_total": 31794,
+  "scored": 31794,
+  "requests_this_run": 17261,
+  "workers": 8,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 31794,
+    "with_predicted_target": 19805,
+    "fraction_with_target": 0.623,
+    "strong": 5554,
+    "weak": 14251,
+    "silencer_like": 7543,
+    "verdicts": {
+      "no predicted effect": 11989,
+      "another gene in the same domain": 9239,
+      "agrees with nearest TSS in domain": 5914,
+      "gene outside the domain": 4652
+    },
+    "verdicts_coding": {
+      "no predicted effect": 18409,
+      "agrees with nearest TSS in domain": 8087,
+      "gene outside the domain": 3051,
+      "another gene in the same domain": 2247
+    },
+    "coding_target_agrees_with_nearest": 0.604,
+    "fraction_agreeing_with_nearest": 0.299,
+    "fraction_inside_domain": 0.765,
+    "top_tissues": {
+      "K562": 852,
+      "placenta": 692,
+      "CD14-positive monocyte": 547,
+      "HepG2": 534,
+      "Karpas-422": 382,
+      "testis": 365,
+      "Whole_Blood": 339,
+      "small intestine": 330,
+      "psoas muscle": 319,
+      "kidney": 310,
+      "GM23338": 308,
+      "naive thymus-derived CD4-positive, alpha-beta T cell": 308
+    },
+    "median_distance_when_agreeing": 12525
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr14.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

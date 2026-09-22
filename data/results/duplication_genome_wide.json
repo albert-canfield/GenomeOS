@@ -1,0 +1,192 @@
+{
+  "result": "duplication_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": 24,
+  "pairs": 64216,
+  "intra_chromosomal": 21834,
+  "bands": {
+    "young": 5281,
+    "middle": 17825,
+    "old": 41110
+  },
+  "duplicated_bp": 166854980,
+  "duplicated_fraction_of_genome": 0.054,
+  "by_tier": {
+    "structural": {
+      "blocks": 238,
+      "bp": 229707851,
+      "duplicated_bp": 8336904,
+      "blocks_mostly_duplicated": 56,
+      "duplicated_fraction": 0.0363,
+      "share_blocks_mostly_duplicated": 0.235
+    },
+    "fossil": {
+      "blocks": 7302,
+      "bp": 328523829,
+      "duplicated_bp": 28064826,
+      "blocks_mostly_duplicated": 1240,
+      "duplicated_fraction": 0.0854,
+      "share_blocks_mostly_duplicated": 0.17
+    },
+    "constrained_unknown": {
+      "blocks": 1098,
+      "bp": 32025494,
+      "duplicated_bp": 1493025,
+      "blocks_mostly_duplicated": 216,
+      "duplicated_fraction": 0.0466,
+      "share_blocks_mostly_duplicated": 0.197
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "bp": 345170726,
+      "duplicated_bp": 9640171,
+      "blocks_mostly_duplicated": 689,
+      "duplicated_fraction": 0.0279,
+      "share_blocks_mostly_duplicated": 0.044
+    },
+    "neutral": {
+      "blocks": 2632,
+      "bp": 73328371,
+      "duplicated_bp": 7527980,
+      "blocks_mostly_duplicated": 693,
+      "duplicated_fraction": 0.1027,
+      "share_blocks_mostly_duplicated": 0.263
+    }
+  },
+  "similar_to_pairs": {
+    "pairs": 1,
+    "supported": 1,
+    "share": 1.0
+  },
+  "elements": {
+    "scored": 7063,
+    "inside": 142,
+    "share": 0.02
+  },
+  "per_chromosome": {
+    "chr1": {
+      "pairs": 7147,
+      "duplicated_fraction": 0.0595,
+      "constrained_unknown_duplicated": 0.0726
+    },
+    "chr10": {
+      "pairs": 2558,
+      "duplicated_fraction": 0.0566,
+      "constrained_unknown_duplicated": 0.0768
+    },
+    "chr11": {
+      "pairs": 1968,
+      "duplicated_fraction": 0.0423,
+      "constrained_unknown_duplicated": 0.0424
+    },
+    "chr12": {
+      "pairs": 1180,
+      "duplicated_fraction": 0.0227,
+      "constrained_unknown_duplicated": 0.0388
+    },
+    "chr13": {
+      "pairs": 2164,
+      "duplicated_fraction": 0.0294,
+      "constrained_unknown_duplicated": 0.0245
+    },
+    "chr14": {
+      "pairs": 1153,
+      "duplicated_fraction": 0.0276,
+      "constrained_unknown_duplicated": 0.0284
+    },
+    "chr15": {
+      "pairs": 3619,
+      "duplicated_fraction": 0.085,
+      "constrained_unknown_duplicated": 0.1124
+    },
+    "chr16": {
+      "pairs": 5686,
+      "duplicated_fraction": 0.1006,
+      "constrained_unknown_duplicated": 0.0247
+    },
+    "chr17": {
+      "pairs": 2847,
+      "duplicated_fraction": 0.0926,
+      "constrained_unknown_duplicated": 0.0767
+    },
+    "chr18": {
+      "pairs": 899,
+      "duplicated_fraction": 0.0241,
+      "constrained_unknown_duplicated": 0.0153
+    },
+    "chr19": {
+      "pairs": 1381,
+      "duplicated_fraction": 0.068,
+      "constrained_unknown_duplicated": 0.0664
+    },
+    "chr2": {
+      "pairs": 4478,
+      "duplicated_fraction": 0.0427,
+      "constrained_unknown_duplicated": 0.0281
+    },
+    "chr20": {
+      "pairs": 1165,
+      "duplicated_fraction": 0.0449,
+      "constrained_unknown_duplicated": 0.0402
+    },
+    "chr21": {
+      "pairs": 1627,
+      "duplicated_fraction": 0.132,
+      "constrained_unknown_duplicated": 0.6064
+    },
+    "chr22": {
+      "pairs": 2830,
+      "duplicated_fraction": 0.118,
+      "constrained_unknown_duplicated": 0.4238
+    },
+    "chr3": {
+      "pairs": 2180,
+      "duplicated_fraction": 0.0184,
+      "constrained_unknown_duplicated": 0.0176
+    },
+    "chr4": {
+      "pairs": 2662,
+      "duplicated_fraction": 0.0266,
+      "constrained_unknown_duplicated": 0.0286
+    },
+    "chr5": {
+      "pairs": 2326,
+      "duplicated_fraction": 0.0328,
+      "constrained_unknown_duplicated": 0.0062
+    },
+    "chr6": {
+      "pairs": 1330,
+      "duplicated_fraction": 0.0238,
+      "constrained_unknown_duplicated": 0.0262
+    },
+    "chr7": {
+      "pairs": 5623,
+      "duplicated_fraction": 0.0859,
+      "constrained_unknown_duplicated": 0.0887
+    },
+    "chr8": {
+      "pairs": 1851,
+      "duplicated_fraction": 0.0217,
+      "constrained_unknown_duplicated": 0.0087
+    },
+    "chr9": {
+      "pairs": 4062,
+      "duplicated_fraction": 0.0979,
+      "constrained_unknown_duplicated": 0.0165
+    },
+    "chrX": {
+      "pairs": 2175,
+      "duplicated_fraction": 0.0661,
+      "constrained_unknown_duplicated": 0.1075
+    },
+    "chrY": {
+      "pairs": 1305,
+      "duplicated_fraction": 0.2306,
+      "constrained_unknown_duplicated": 0.7166
+    }
+  },
+  "evidence": {
+    "pairs": "curated: UCSC hg38 genomicSuperDups (segmental duplications >= 1 kb, >= 90% identity)",
+    "blocks": "inferred: a block's duplicated fraction from the curated pairs; what the copy does is not said"
+  }
+}

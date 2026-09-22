@@ -1,0 +1,130 @@
+{
+  "result": "burden_gate",
+  "date": "2026-09-21",
+  "pre_registration": {
+    "written": "2026-09-21, before the instrument existed and before any level was run; committed in this file before the script that runs it",
+    "claim": "expressing a costly protein reduces the output of an unrelated gene that shares its pools, and does so only because the pool is the constraint",
+    "design": "one program, two genes and two proteins sharing a ribosome pool and an ATP pool (data/demo/stage2_pools.bio). The unrelated gene's own demand is held at 100.0 at every level, so any change in its output comes from sharing rather than from itself. The costly protein is expressed at 7 fixed levels, 1e+03 to 5e+07, chosen before the run",
+    "outcomes": {
+      "direction": "the unrelated gene's factor at the highest level is strictly below its factor at the lowest. A reduction is the documented direction; an increase or no change fails",
+      "monotonicity": "the factor never rises as the costly protein is expressed harder. One reversal fails it: a resource that is competed for does not become more available under more demand",
+      "falsifier": "with the pool multiplied by 1e+06 and the same demands, every factor stays 1.0. This is the clause \u00a75.3 names explicitly, and it is the one a bug passes: a model that cuts an unrelated gene whatever the capacity is not reproducing a burden",
+      "magnitude": "NOT ASKABLE with what this project holds, and registered so before the run. It needs Ceroni's or Frei's measured output of an unrelated reporter at two or more expression levels, digitised with its axis stated; no such dataset is in the repository. The run reports the model's own curve so a later comparison has something to be held against, and claims nothing about agreement"
+    },
+    "verdict_rule": "pass only if direction, monotonicity and the falsifier all hold. Any one failing fails the gate. The magnitude clause cannot contribute to a pass, because an unasked question is not evidence",
+    "cannot_do": "this is the model against its own declared capacities, not against a measurement. It shows that the implementation produces a burden of the documented SHAPE where a shared pool is short, and it cannot show that the shape matches any organism. The capacities themselves are cited but they are HeLa-scale round numbers, so the levels at which the curve bends are a property of the demo program rather than of a cell"
+  },
+  "program": "data/demo/stage2_pools.bio",
+  "lengths": {
+    "BURDEN": 900.0,
+    "HOUSEKEEPER": 900.0,
+    "BURDENp": 300.0,
+    "HOUSEKEEPERp": 300.0
+  },
+  "constrained_arm": [
+    {
+      "level": 1000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 10000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 100000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 1000000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 5000000.0,
+      "unrelated_factor": 0.49999,
+      "costly_factor": 0.49999,
+      "oversubscribed": [
+        "ATP",
+        "Ribosomes"
+      ]
+    },
+    {
+      "level": 10000000.0,
+      "unrelated_factor": 0.249998,
+      "costly_factor": 0.249998,
+      "oversubscribed": [
+        "ATP",
+        "Ribosomes"
+      ]
+    },
+    {
+      "level": 50000000.0,
+      "unrelated_factor": 0.05,
+      "costly_factor": 0.05,
+      "oversubscribed": [
+        "ATP",
+        "Ribosomes"
+      ]
+    }
+  ],
+  "unconstrained_arm": [
+    {
+      "level": 1000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 10000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 100000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 1000000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 5000000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 10000000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    },
+    {
+      "level": 50000000.0,
+      "unrelated_factor": 1.0,
+      "costly_factor": 1.0,
+      "oversubscribed": []
+    }
+  ],
+  "direction": true,
+  "direction_reads": "1.0 at the lowest level, 0.05 at the highest",
+  "monotonic": true,
+  "falsifier_holds": true,
+  "falsifier_reads": "every factor stays 1.0 when no pool is the constraint",
+  "magnitude": "not askable: no measured burden curve is held by this project (registered)",
+  "passed": true,
+  "verdict": "gate (a) passes on the three askable clauses; the magnitude clause is unasked and contributes nothing to this",
+  "seconds": 0.0
+}

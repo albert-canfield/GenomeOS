@@ -1,0 +1,725 @@
+{
+ "schema": "GenomeOS.TherapeuticDesignDataset.NegativeTargets",
+ "schema_version": "1.0",
+ "sample_id": "cancer_tumour",
+ "purpose": "what a designed binder must not recognise. Optimising affinity against the positive target without this set produces cross-reactivity, which is the usual reason a selective binder fails.",
+ "targets": [
+  {
+   "target_id": "APP:P05067",
+   "gene": "APP",
+   "avoid": [
+    {
+     "label": "APP on healthy cells",
+     "kind": "same_protein_healthy_tissue",
+     "protein": "APP",
+     "uniprot": "P05067",
+     "state": "identical protein, lower density",
+     "reason": "the tumour and healthy cells carry the same sequence here, so the only available discriminator is display density and no sequence-level discrimination exists",
+     "discrimination_required": "density threshold, which requires quantitative surface data"
+    },
+    {
+     "label": "APP in healthy heart muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "heart muscle",
+     "value": 356.3,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy heart muscle carries 356.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy cerebral cortex",
+     "kind": "healthy_tissue_expression",
+     "tissue": "cerebral cortex",
+     "value": 669.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy cerebral cortex carries 669.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy cerebellum",
+     "kind": "healthy_tissue_expression",
+     "tissue": "cerebellum",
+     "value": 316.4,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy cerebellum carries 316.4 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy hypothalamus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "hypothalamus",
+     "value": 437.7,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy hypothalamus carries 437.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy bone marrow",
+     "kind": "healthy_tissue_expression",
+     "tissue": "bone marrow",
+     "value": 119.8,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy bone marrow carries 119.8 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy lung",
+     "kind": "healthy_tissue_expression",
+     "tissue": "lung",
+     "value": 255.6,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy lung carries 255.6 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy liver",
+     "kind": "healthy_tissue_expression",
+     "tissue": "liver",
+     "value": 251.5,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy liver carries 251.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy kidney",
+     "kind": "healthy_tissue_expression",
+     "tissue": "kidney",
+     "value": 464.8,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy kidney carries 464.8 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy adrenal gland",
+     "kind": "healthy_tissue_expression",
+     "tissue": "adrenal gland",
+     "value": 422.0,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy adrenal gland carries 422 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy pancreas",
+     "kind": "healthy_tissue_expression",
+     "tissue": "pancreas",
+     "value": 305.2,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy pancreas carries 305.2 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy skeletal muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "skeletal muscle",
+     "value": 99.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy skeletal muscle carries 99.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy spleen",
+     "kind": "healthy_tissue_expression",
+     "tissue": "spleen",
+     "value": 140.4,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy spleen carries 140.4 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy thyroid gland",
+     "kind": "healthy_tissue_expression",
+     "tissue": "thyroid gland",
+     "value": 434.2,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy thyroid gland carries 434.2 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy colon",
+     "kind": "healthy_tissue_expression",
+     "tissue": "colon",
+     "value": 322.5,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy colon carries 322.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy esophagus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "esophagus",
+     "value": 163.0,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy esophagus carries 163 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy retina",
+     "kind": "healthy_tissue_expression",
+     "tissue": "retina",
+     "value": 189.1,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy retina carries 189.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy testis",
+     "kind": "healthy_tissue_expression",
+     "tissue": "testis",
+     "value": 146.3,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy testis carries 146.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APP in healthy placenta",
+     "kind": "healthy_tissue_expression",
+     "tissue": "placenta",
+     "value": 417.2,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy placenta carries 417.2 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "APLP2",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000084234",
+     "sequence_identity_percent": 49.7,
+     "reason": "APLP2 is the closest human relative of APP at 50% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "APLP1",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000105290",
+     "sequence_identity_percent": 36.7,
+     "reason": "APLP1 is a human paralogue of APP at 37% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "common polymorphic variants of the target",
+     "kind": "polymorphism",
+     "reason": "population variation at or near the epitope can abolish binding in some patients or create unintended recognition; not screened here",
+     "status": "not_assessed"
+    }
+   ]
+  },
+  {
+   "target_id": "CSF1R:P07333",
+   "gene": "CSF1R",
+   "avoid": [
+    {
+     "label": "CSF1R on healthy cells",
+     "kind": "same_protein_healthy_tissue",
+     "protein": "CSF1R",
+     "uniprot": "P07333",
+     "state": "identical protein, lower density",
+     "reason": "the tumour and healthy cells carry the same sequence here, so the only available discriminator is display density and no sequence-level discrimination exists",
+     "discrimination_required": "density threshold, which requires quantitative surface data"
+    },
+    {
+     "label": "CSF1R in healthy heart muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "heart muscle",
+     "value": 15.5,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy heart muscle carries 15.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy cerebral cortex",
+     "kind": "healthy_tissue_expression",
+     "tissue": "cerebral cortex",
+     "value": 30.5,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy cerebral cortex carries 30.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy hypothalamus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "hypothalamus",
+     "value": 14.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy hypothalamus carries 14.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy lung",
+     "kind": "healthy_tissue_expression",
+     "tissue": "lung",
+     "value": 34.5,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy lung carries 34.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy liver",
+     "kind": "healthy_tissue_expression",
+     "tissue": "liver",
+     "value": 25.7,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy liver carries 25.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy adrenal gland",
+     "kind": "healthy_tissue_expression",
+     "tissue": "adrenal gland",
+     "value": 29.3,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy adrenal gland carries 29.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy spleen",
+     "kind": "healthy_tissue_expression",
+     "tissue": "spleen",
+     "value": 106.8,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy spleen carries 106.8 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy colon",
+     "kind": "healthy_tissue_expression",
+     "tissue": "colon",
+     "value": 20.5,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy colon carries 20.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy esophagus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "esophagus",
+     "value": 19.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy esophagus carries 19.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CSF1R in healthy placenta",
+     "kind": "healthy_tissue_expression",
+     "tissue": "placenta",
+     "value": 97.1,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy placenta carries 97.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "KIT",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000157404",
+     "sequence_identity_percent": 38.7,
+     "reason": "KIT is the closest human relative of CSF1R at 39% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "FLT3",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000122025",
+     "sequence_identity_percent": 30.1,
+     "reason": "FLT3 is a human paralogue of CSF1R at 30% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "PDGFRA",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000134853",
+     "sequence_identity_percent": 29.3,
+     "reason": "PDGFRA is a human paralogue of CSF1R at 29% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "PDGFRB",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000113721",
+     "sequence_identity_percent": 29.2,
+     "reason": "PDGFRB is a human paralogue of CSF1R at 29% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "FGFR1",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000077782",
+     "sequence_identity_percent": 24.5,
+     "reason": "FGFR1 is a human paralogue of CSF1R at 24% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "FGFR2",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000066468",
+     "sequence_identity_percent": 23.9,
+     "reason": "FGFR2 is a human paralogue of CSF1R at 24% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "common polymorphic variants of the target",
+     "kind": "polymorphism",
+     "reason": "population variation at or near the epitope can abolish binding in some patients or create unintended recognition; not screened here",
+     "status": "not_assessed"
+    }
+   ]
+  },
+  {
+   "target_id": "SOD1:P00441",
+   "gene": "SOD1",
+   "avoid": [
+    {
+     "label": "SOD1 on healthy cells",
+     "kind": "same_protein_healthy_tissue",
+     "protein": "SOD1",
+     "uniprot": "P00441",
+     "state": "identical protein, lower density",
+     "reason": "the tumour and healthy cells carry the same sequence here, so the only available discriminator is display density and no sequence-level discrimination exists",
+     "discrimination_required": "density threshold, which requires quantitative surface data"
+    },
+    {
+     "label": "SOD1 in healthy heart muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "heart muscle",
+     "value": 491.9,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy heart muscle carries 491.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy cerebral cortex",
+     "kind": "healthy_tissue_expression",
+     "tissue": "cerebral cortex",
+     "value": 613.2,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy cerebral cortex carries 613.2 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy cerebellum",
+     "kind": "healthy_tissue_expression",
+     "tissue": "cerebellum",
+     "value": 297.4,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy cerebellum carries 297.4 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy hypothalamus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "hypothalamus",
+     "value": 597.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy hypothalamus carries 597.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy bone marrow",
+     "kind": "healthy_tissue_expression",
+     "tissue": "bone marrow",
+     "value": 156.8,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy bone marrow carries 156.8 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy lung",
+     "kind": "healthy_tissue_expression",
+     "tissue": "lung",
+     "value": 160.9,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy lung carries 160.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy liver",
+     "kind": "healthy_tissue_expression",
+     "tissue": "liver",
+     "value": 1537.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy liver carries 1537.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy kidney",
+     "kind": "healthy_tissue_expression",
+     "tissue": "kidney",
+     "value": 528.5,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy kidney carries 528.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy adrenal gland",
+     "kind": "healthy_tissue_expression",
+     "tissue": "adrenal gland",
+     "value": 619.0,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy adrenal gland carries 619 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy pancreas",
+     "kind": "healthy_tissue_expression",
+     "tissue": "pancreas",
+     "value": 120.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy pancreas carries 120.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy skeletal muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "skeletal muscle",
+     "value": 448.0,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy skeletal muscle carries 448 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy spleen",
+     "kind": "healthy_tissue_expression",
+     "tissue": "spleen",
+     "value": 154.5,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy spleen carries 154.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy thyroid gland",
+     "kind": "healthy_tissue_expression",
+     "tissue": "thyroid gland",
+     "value": 205.6,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy thyroid gland carries 205.6 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy colon",
+     "kind": "healthy_tissue_expression",
+     "tissue": "colon",
+     "value": 262.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy colon carries 262.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy esophagus",
+     "kind": "healthy_tissue_expression",
+     "tissue": "esophagus",
+     "value": 230.9,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy esophagus carries 230.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy retina",
+     "kind": "healthy_tissue_expression",
+     "tissue": "retina",
+     "value": 230.3,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy retina carries 230.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy testis",
+     "kind": "healthy_tissue_expression",
+     "tissue": "testis",
+     "value": 136.1,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy testis carries 136.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "SOD1 in healthy placenta",
+     "kind": "healthy_tissue_expression",
+     "tissue": "placenta",
+     "value": 146.3,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy placenta carries 146.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "CCS",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000173992",
+     "sequence_identity_percent": 27.4,
+     "reason": "CCS is the closest human relative of SOD1 at 27% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "SOD3",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000109610",
+     "sequence_identity_percent": 25.4,
+     "reason": "SOD3 is a human paralogue of SOD1 at 25% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "common polymorphic variants of the target",
+     "kind": "polymorphism",
+     "reason": "population variation at or near the epitope can abolish binding in some patients or create unintended recognition; not screened here",
+     "status": "not_assessed"
+    }
+   ]
+  },
+  {
+   "target_id": "RUNX1:Q01196",
+   "gene": "RUNX1",
+   "avoid": [
+    {
+     "label": "RUNX1 on healthy cells",
+     "kind": "same_protein_healthy_tissue",
+     "protein": "RUNX1",
+     "uniprot": "Q01196",
+     "state": "identical protein, lower density",
+     "reason": "the tumour and healthy cells carry the same sequence here, so the only available discriminator is display density and no sequence-level discrimination exists",
+     "discrimination_required": "density threshold, which requires quantitative surface data"
+    },
+    {
+     "label": "RUNX1 in healthy bone marrow",
+     "kind": "healthy_tissue_expression",
+     "tissue": "bone marrow",
+     "value": 42.9,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy bone marrow carries 42.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "RUNX1 in healthy lung",
+     "kind": "healthy_tissue_expression",
+     "tissue": "lung",
+     "value": 21.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy lung carries 21.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "RUNX1 in healthy skeletal muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "skeletal muscle",
+     "value": 17.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy skeletal muscle carries 17.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "RUNX3",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000020633",
+     "sequence_identity_percent": 65.3,
+     "reason": "RUNX3 is the closest human relative of RUNX1 at 65% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "RUNX2",
+     "kind": "human_paralogue",
+     "ensembl_gene": "ENSG00000124813",
+     "sequence_identity_percent": 59.7,
+     "reason": "RUNX2 is a human paralogue of RUNX1 at 60% identity; a binder raised against a conserved surface may engage it too"
+    },
+    {
+     "label": "common polymorphic variants of the target",
+     "kind": "polymorphism",
+     "reason": "population variation at or near the epitope can abolish binding in some patients or create unintended recognition; not screened here",
+     "status": "not_assessed"
+    }
+   ]
+  },
+  {
+   "target_id": "NRIP1:P48552",
+   "gene": "NRIP1",
+   "avoid": [
+    {
+     "label": "NRIP1 on healthy cells",
+     "kind": "same_protein_healthy_tissue",
+     "protein": "NRIP1",
+     "uniprot": "P48552",
+     "state": "identical protein, lower density",
+     "reason": "the tumour and healthy cells carry the same sequence here, so the only available discriminator is display density and no sequence-level discrimination exists",
+     "discrimination_required": "density threshold, which requires quantitative surface data"
+    },
+    {
+     "label": "NRIP1 in healthy bone marrow",
+     "kind": "healthy_tissue_expression",
+     "tissue": "bone marrow",
+     "value": 24.9,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy bone marrow carries 24.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy liver",
+     "kind": "healthy_tissue_expression",
+     "tissue": "liver",
+     "value": 25.1,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy liver carries 25.1 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy kidney",
+     "kind": "healthy_tissue_expression",
+     "tissue": "kidney",
+     "value": 14.9,
+     "unit": "nTPM",
+     "essential_organ": true,
+     "reason": "healthy kidney carries 14.9 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy pancreas",
+     "kind": "healthy_tissue_expression",
+     "tissue": "pancreas",
+     "value": 13.5,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy pancreas carries 13.5 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy skeletal muscle",
+     "kind": "healthy_tissue_expression",
+     "tissue": "skeletal muscle",
+     "value": 20.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy skeletal muscle carries 20.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy spleen",
+     "kind": "healthy_tissue_expression",
+     "tissue": "spleen",
+     "value": 12.3,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy spleen carries 12.3 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy colon",
+     "kind": "healthy_tissue_expression",
+     "tissue": "colon",
+     "value": 17.0,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy colon carries 17 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy retina",
+     "kind": "healthy_tissue_expression",
+     "tissue": "retina",
+     "value": 29.4,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy retina carries 29.4 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "NRIP1 in healthy placenta",
+     "kind": "healthy_tissue_expression",
+     "tissue": "placenta",
+     "value": 13.7,
+     "unit": "nTPM",
+     "essential_organ": false,
+     "reason": "healthy placenta carries 13.7 nTPM of this transcript; binding there is on-target off-tumour toxicity"
+    },
+    {
+     "label": "human paralogues",
+     "kind": "human_paralogue",
+     "reason": "no human paralogue of NRIP1 reaches 20% sequence identity, so paralogue cross-reactivity is a smaller concern for this target than usual",
+     "status": "none_found"
+    },
+    {
+     "label": "common polymorphic variants of the target",
+     "kind": "polymorphism",
+     "reason": "population variation at or near the epitope can abolish binding in some patients or create unintended recognition; not screened here",
+     "status": "not_assessed"
+    }
+   ]
+  }
+ ]
+}
