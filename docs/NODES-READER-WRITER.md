@@ -2207,3 +2207,158 @@ peaks — and that is recorded as the next test rather than assumed away.
   Cells view read it, but it is labelled in `evidence.depth` as a median split
   that distinguishes nothing, and the property is pinned in
   `tests/test_reader_depth_family.py`.
+
+## The second copy of that threshold, in the attribution candidates (2026-09-22)
+
+The withdrawal above names one line of one file. The same rule is written a
+second time, 200 lines into a different module, and the lane that found the
+first copy correctly left the second alone because it was outside that claim.
+`genomeos/attribution/candidates.py:398-404` builds `Chromosome.node_open` by
+loading each `reader_{cell}_{chrom}.json`, taking the median `peaks_per_100kb`
+over that biosample's nodes on that chromosome, and calling a node open at or
+above `max(1.0, median)` — the same expression, including the floor, as
+`reader.py:197-198`.
+
+The copies do not merely resemble each other. Re-deriving `candidates.py:404`
+over all 312 `reader_*_chr*.json` files on disk returns the genome-wide totals
+the withdrawal quoted to the node: 9,988 to 10,016 open of 20,002 for each of
+the thirteen biosamples. So whatever is true of one copy is true of the other,
+and the question is not whether the rule is a median split — it is — but what
+this copy's output is used *for*.
+
+### The inventory, established before anything is changed
+
+`ch.node_open` is read at exactly one place, `candidates.py:596`, inside
+`reader()` (`candidates.py:586-604`), which emits two fields:
+
+- `node_open` (`:602`) — the cells in which the CTCF node containing this block
+  is at or above that cell's own median node density.
+- `node_open_element_closed` (`:603`) — the set difference of that list and
+  `open_on_element`: cells where the neighbourhood ranks high and the block
+  itself carries no DNase peak.
+
+`reader()` has one call site, `candidates.py:803` in `read_window()`, and the
+dict is copied verbatim into the candidate record at `candidates.py:856`, so in
+the saved file the path is
+`data/results/syntax_candidates_genome_wide.json` → `candidates[i].reader.node_open`.
+
+**Both fields are write-only.** Repo-wide, `node_open` appears at
+`candidates.py:398`, `:404`, `:596` and `:602`, all producers;
+`node_open_element_closed` appears once in the entire repository, at `:603`,
+the line that writes it. Nothing in `genomeos/`, `scripts/`, `tests/`, the web
+UI or the docs reads either. The fixtures in `tests/test_candidates.py:117`,
+`:152` and `:212` build reader dicts carrying only `cells` and
+`open_on_element`, which is the same fact from the other side.
+
+**The scoring path does not touch the median split.** The one reader-derived
+gate is built from `open_on_element`, a raw DNase peak overlap on the block:
+`candidates.py:913` takes `cells = ev["reader"]["open_on_element"]` and `:915`
+sets `reader_ok = len(cells) >= READER_MIN_CELLS and len(cells) >=
+READER_MIN_RATIO * max(expected, 0.5)`. `reader_ok` is what moves confidence at
+`:987` and `:994` and class inclusion at `:1009` and `:1051`, and the
+control-relative openness statistics at `:833`, `:881`, `:1167` and `:1177`
+count `open_on_element` as well. No class, no confidence, no shortlist, no
+threshold and no published count reads `node_open`.
+
+**The field has no control arm.** `candidates.py:824` builds every control
+window through `read_window` without a `node_id`, so `node_open` is `[]` for
+all of them by construction. Even a consumer that wanted to read the field
+against chance could not.
+
+What the two fields actually hold, over the 69 published candidates (every one
+of which has a node id, and all at `cells: 11`, the run predating testis and
+ovary): `len(node_open)` runs 0 to 11, with 25 blocks at 11 and 2 at 0;
+`len(node_open_element_closed)` runs 0 to 11, with 8 at 0;
+`len(open_on_element)` runs 0 to 11, with 18 at 0.
+
+### The judgement, registered before the change
+
+**Within, not between — and for a reason that is worth stating exactly.** The
+reader's `nodes_open` is a *count* of a median split, and a count of a median
+split is half the nodes whatever the depth: that is why it distinguishes
+nothing and was withdrawn. The *membership* it throws away is a different
+object. "Is this node in the top half of this cell's own nodes on this
+chromosome" is a within-biosample rank, and it is depth-invariant in the way a
+count is not: multiply every density in a cell by a constant and the median
+scales with it, so the top half is unchanged. A shallow experiment and a deep
+one rank the same node the same way.
+
+It follows that comparing those memberships across cells — which is what
+`node_open` does — is a rank-normalised between-biosample comparison, which is
+legitimate in kind, and not the error the withdrawal named. What it may not be
+read as is an absolute statement. "Open in K562 and not in GM12878" here means
+"above its own cell's median in the first and not in the second", not
+"accessible in one and closed in the other". Half the nodes of every cell are
+on the open side, so `node_open` can never be evidence that a node is shut.
+
+That is the whole of the problem, and it is a labelling problem rather than a
+numerical one, because the field sits in the record beside `open_on_element`,
+which *is* absolute, and the module docstring at `candidates.py:17-18`
+describes it as "the node's openness in the same cells" with no distinction
+drawn. Nothing computes on it, so nothing is wrong; a future consumer reading
+the record without this section would have no way to know.
+
+**What happens to any published number that rests on the between-biosample
+reading: nothing, because there is none.** The 69 candidates' classes, their
+confidences, the mean confidence of 0.21, the `by_class` and `by_group` counts,
+the `set_tests` and every control comparison are computed from
+`open_on_element`, the registry, the conserved segments, the codon score, the
+parser and the ground-truth layers. No sentence in any doc cites `node_open` or
+`node_open_element_closed`; `node_open_element_closed` is not mentioned in a
+single markdown file. So this is not a defect and it is not reported as one.
+What is left is a real maintenance hazard: one rule, two definitions, which can
+be changed in one place and not the other.
+
+**The one case where this copy would produce the between-biosample artefact
+anyway.** The floor, `max(1.0, median)`, is not a rank. Where a chromosome's
+median node density falls below 1.0 peaks per 100 kb the call stops being a
+median split and becomes an absolute threshold, and an absolute threshold on a
+density *is* depth. Across the 312 `reader_*_chr*.json` files on disk the floor
+binds in 9 of them, all chrY, and there the open share runs from 0.00 (GM12878,
+keratinocyte) and 0.02 (SK-N-SH) to 0.49 (CD14-positive monocyte) — depth and
+donor sex, not rank. `chrY` is in `CHROMS` at `candidates.py:44`, so a run that
+placed a block there would emit a `node_open` list that means the other thing.
+No published candidate is on chrY: the 69 sit on chr1 (7), chr2 (9), chr3 (5),
+chr5 (3), chr6 (7), chr7 (7), chr8 (2), chr9 (5), chr10 (3), chr11 (2), chr12
+(3), chr14 (1), chr15 (3), chr16 (1), chr17 (3), chr18 (2), chr19 (1), chr22
+(1) and chrX (4), and the floor binds on none of those chromosomes for any of
+the thirteen biosamples.
+
+### The change, registered before it is made
+
+1. **One definition, called twice.** The threshold and the open-node call move
+   into named functions in `genomeos/genome/reader.py`, and both
+   `read_chromosome` and `candidates.Chromosome` call them. The expression,
+   including the 1.0 floor, is carried over unchanged.
+2. **The label travels with the field.** `reader()` gains a `node_open_basis`
+   string saying that the call is a per-cell rank against that biosample's own
+   median and cannot be read as absolute, so a consumer opening a
+   `syntax_candidates_*.json` sees it without coming here; the module docstring
+   stops calling it "openness"; the `EVIDENCE["reader"]` entry names the two
+   different kinds of call the block carries.
+3. **A test that the copies cannot drift**, pinning that the shared function
+   reproduces the literal expression and that the floor case is the one place
+   the rule changes character.
+
+**What I expect to move: nothing numeric.** Every `node_open` list and every
+`node_open_element_closed` list is expected byte-identical, on chrY as well as
+off it, because the floor goes into the shared function unchanged rather than
+being tidied away.
+
+**What would show this judgement is wrong.**
+
+1. *A consumer the grep missed.* If re-deriving the two fields for the 69
+   published blocks under the shared function disagrees with the file on even
+   one block, or if any candidate's class, confidence or count moves, then
+   something reads the split that the inventory says does not. Bar: 69 of 69
+   identical on both fields, and if not, this is a defect and reported as one.
+2. *A count consumer rather than a membership consumer.* If a consumer turns up
+   that takes `len(node_open)` and compares two biosamples on that number, it
+   has the reader's defect exactly and the field must be withdrawn like
+   `nodes_open`, not relabelled.
+3. *The floor binding where a candidate lives.* If the floor binds off chrY on
+   any chromosome a block sits on, the rank reading fails there and one label
+   for the field is not enough; it would have to be stated per chromosome. This
+   is checked over all 312 files on disk, not asserted.
+
+No data is fetched for any of this and no model request is made.
