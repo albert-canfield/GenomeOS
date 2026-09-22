@@ -4947,6 +4947,56 @@ reciprocal rule was built to stop: 15 bases of a 237 bp element and 350 of a 350
 same evidence and must not print as the same row. No threshold is imposed; the fraction is printed
 instead, because a cut chosen after looking at twenty-one experiments is a cut chosen to fit them.
 
+## The deletion feature read from the sweep's own cache, not from the compact table (2026-09-22)
+
+The CRISPRi benchmark above scored `deletion_drop` as zero whenever the screen's measured gene was
+not the element's single top predicted target. That zero said "the compact table had nothing to say
+about this pair", and the logistic model consumed it as "the model predicts no effect". Those are
+different statements and only one of them is a measurement.
+
+The limit belongs to the derived table, not to the run. `data/knowledge/alphagenome/all_elements/<chrom>.json`
+is a compact projection that keeps one gene per element (`compact()`, `scripts/enhancer_targets_all.py`),
+but the same sweep also wrote a per-element response cache at
+`data/knowledge/alphagenome/elements/<chrom>.json.gz` with `threshold=0.0` (`worker_scorer`), and that
+cache carries **every gene in the scorer's 1 Mb window with a signed log2 fold change on each of
+K562, HepG2, GM12878 and IMR-90's own track, uncensored**. `crispri_direction_both.py` already reads
+it; this section moves `crispri.py` onto it. **Zero AlphaGenome requests**: the answer was on disk.
+
+### The registration, written and committed before the benchmark was re-run
+
+**How large the defect is, counted first.** This is the check that decides whether the change is
+worth making, so it was run before anything was re-scored (`crispri.deletion_census`, folded into the
+result file so it can be read back):
+
+| arm | covered pairs | gene is the top target | structural zeros | of those, the cache scores | of those, a predicted fall |
+|---|---|---|---|---|---|
+| K562 training | 9,237 (451 reg.) | 246 | **8,991 (97.3%)** | 5,581 (62.1%) | 3,841 |
+| K562 held out | 1,744 (114 reg.) | 40 | **1,704 (97.7%)** | 1,112 (65.3%) | 769 |
+| GM12878 held out | 62 (14 reg.) | 8 | 54 (87.1%) | 53 (98.1%) | 33 |
+
+So the answer to "does almost nothing change?" is **no, almost everything changes**. `deletion_drop`
+was non-zero on 207 of 9,237 training pairs and on 35 of 1,744 held-out K562 pairs; after the fix it
+carries a value the sweep actually predicted on 5,581 and 1,112 of them. Among the regulated pairs,
+78 of the 114 held-out K562 positives were structural zeros and the cache answers 67 of them.
+
+**Which direction the AUPRC is expected to move, and why.** Down, or to no change — not up. The
+reason is in the same counts: `top_target` is a near-perfect separator on this set (36 of the 40
+top-target pairs in held-out K562 are regulated, 90%, against 78 of 1,704, 4.6%), and the
+2026-09-16 gain of +0.083 was carried by that indicator far more than by the magnitude beside it,
+which was non-zero on 35 pairs. The fix leaves `top_target` exactly as it was and gives the other
+1,704 pairs a magnitude that may be signal or may be noise. If the gain shrinks, the reading is that
+the deletion's contribution was always "which elements the sweep selected" and never "how much the
+gene moves"; if it grows, the cache's per-gene drops carry signal the compact table was censoring.
+**Both outcomes are reported here with equal prominence**, in the same table, in the next section,
+whichever way it goes. A correctness fix that lowers a headline is still a correctness fix.
+
+**What is not touched.** The 2026-09-16 figures above are annotated, never rewritten: the
+pre-registration `PREREGISTERED`, the feature set, the fitted model, the resampling and the held-out
+split are all unchanged, and the only thing that changes is where `deletion_drop` reads its number.
+`top_target` keeps its old meaning and stays a separate feature. `scripts/crispri_contact.py` and
+`target_calibration.py` still read the compact table and their stored results are unchanged by this;
+they are listed as limited consumers rather than silently re-run.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
