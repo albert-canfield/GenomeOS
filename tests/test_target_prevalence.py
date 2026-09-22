@@ -133,3 +133,23 @@ def test_the_registration_says_a_band_cannot_be_quoted_for_an_untested_target():
     assert "IT CANNOT BE QUOTED" in text
     assert "NOT ONE SCREEN NAME IS IN BOTH TABLES" in text
     assert "WHAT SHOULD BE QUOTED INSTEAD" in text
+
+
+def test_the_offset_solver_reproduces_the_shipped_one_when_every_offset_is_zero():
+    """The comparator must differ from the offset model in the offset and in nothing else."""
+    rows = screen("a", 300, 40, drop=0.4) + screen("b", 300, 20, drop=0.2)
+    shipped = tc.fit(rows, tc.SWEEP_FEATURES)
+    same = tc.fit_with_offset(rows, tc.SWEEP_FEATURES, [0.0] * len(rows))
+    assert all(abs(a - b) < 1e-6 for a, b in zip(shipped, same, strict=True)), (shipped, same)
+
+
+def test_the_offset_fit_is_calibrated_in_sample_on_a_near_separable_problem():
+    """An undamped Newton step diverges here; the line search is what keeps the fit finite."""
+    rows = screen("a", 400, 380, drop=0.9) + screen("b", 400, 20, drop=0.0)
+    strata = tc.screen_strata(rows)
+    rates = tc.screen_base_rates(rows, strata)
+    off = tc.screen_offsets(rows, strata, rates, 0.5)
+    w = tc.fit_with_offset(rows, tc.SWEEP_FEATURES, off)
+    assert all(abs(v) < 1e4 for v in w), w
+    p = tc.predict_with_offset(w, rows, tc.SWEEP_FEATURES, off)
+    assert abs(sum(p) / len(p) - 400 / 800) < 0.02

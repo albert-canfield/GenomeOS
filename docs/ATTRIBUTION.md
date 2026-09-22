@@ -4420,6 +4420,16 @@ bin (`CRITERION_NOTE`).
 | 9 | 171 | 0.974 | 0.983 | 0.0443 | 0.0936 | 0.0584–0.1466 **outside** |
 | 10 | 172 | 0.983 | 0.983 | 0.3053 | 0.3895 | 0.3198–0.4641 **outside** |
 
+> **Annotation, 2026-09-22 (sixth).** The `+0.679` below stands as computed and its meaning is
+> narrower than the sentence around it. Split by screen, the held-out pairs need shifts of
+> **-1.303** (K562_DC_TAP, 1,084 pairs), +0.945 (Xie, 416), +2.050 (Morris, 177) and +4.228
+> (Klann and Reilly, 38): the one constant is their mean, and its sign is wrong for the screen
+> that carries 63% of the population. "The held-out screens call 6.53% against 4.97%" is true
+> and is not a fact about the two tables -- the spread inside each is larger than the gap
+> between them, 3.5x across the fitted screens and 99x across the read ones. Not one screen
+> here is in both tables. See "The prevalence term, registered before it was fitted"
+> (2026-09-22, sixth).
+
 The coverage columns come before the rate columns on purpose, and they are flat: no bin's rate is
 inflated by having collected the better-covered elements. On training the leave-chromosome-out curve
 is reliable by the same rule (9 of 10 bins, ECE 0.0061, Brier 0.02812, AUPRC 0.635).
@@ -5308,6 +5318,12 @@ and nothing in this change acts on the intercept.
 
 ## The gate removed: the registered direction was wrong, and the confidence quoted off the gate was seven times the measured rate (2026-09-22, later)
 
+> **Annotation, 2026-09-22 (sixth).** The registered condition for upgrading this section's verdict
+> was that the prevalence gap itself close. It has now been attacked directly with per-screen
+> intercepts and does not close: the repair fails 3 of its own 4 registered clauses, and the gap
+> was never the two-population fact it was stated as -- it is a per-screen level that moves in both
+> directions inside each table. See the sixth section below.
+
 > **Annotation, 2026-09-22 (third).** Every number in this section stands as measured. Two sentences
 > of its prose are narrowed by the inventory in the section below, and neither changes a measurement.
 > (1) "its weights band all 612,323 sweep targets" — 593,765 are banded; the other 18,558 carry
@@ -5552,6 +5568,14 @@ change. Registered in full as `PREREGISTERED_BANDS` in `genomeos/attribution/tar
 
 ## The genome re-banded: every registered count correct, and the registration's own falsifier fired on the axis (2026-09-22, fourth)
 
+> **Annotation, 2026-09-22 (sixth).** The published band table this section reproduces to the digit
+> -- 45 / 3,837 / 178,387 / 293,568 / 61,971 / 55,957 -- is, to within **0.37%**, the band table of
+> one screen. Banded under Gasperini2019's own on-gate base rate it reads 32 / 3,843 / 176,025 /
+> 295,305 / 62,394 / **56,166**, and that screen is 207 of the 285 on-gate pairs. Under the other
+> seven screens of the same benchmark the top band runs from 27,514 to 198,475. So this section's
+> 94.2% that lose their band were never carrying a property of the genome. See the sixth section
+> below.
+
 The registration above was met on every quantity it predicted and defeated on the one thing it was
 least sure of. `scripts/target_rebanding.py`, result `target_rebanding`, **0 AlphaGenome requests**,
 nothing fetched.
@@ -5669,6 +5693,11 @@ keys off the drop band at 0.2 and cites the 105 of 105 this section re-measures.
 
 ## The union axis, registered before it was fitted: the separation survives, the level does not (2026-09-22, fifth)
 
+> **Annotation, 2026-09-22 (sixth).** Nothing here changes. The 9.70% this section bands and the
+> refusal of the rest are now the honest genome-wide coverage in a stronger sense than when they
+> were written: the prevalence term the roadmap held open as the repair for the other 90% has
+> been registered and fitted, and it does not transport. See the sixth section below.
+
 The section above measured that the union of the two axes bands 128 of 128 on-gate pairs and
 **refused to adopt it**, because an axis chosen after seeing it win is priced by the search that
 found it. This lane adopts it the right way round: registered first, in
@@ -5784,6 +5813,186 @@ rather than quietly fixed: its windowed off-gate table was **training-only**, be
 called `add_features` on one arm, which is why the off-gate population is 10,226 here and 8,549
 there; and its track axis returned `another track` for every off-gate pair, so `pair_track` now
 reads the track at the element and the axis means one thing on both populations. 21 tests.
+
+## The prevalence term, registered before it was fitted: the one constant was a mean over shifts that run both ways, and the genome's band table is one screen's (2026-09-22, sixth)
+
+**The correction cannot be applied where it is needed, and that is the result.** The repair the
+roadmap has carried since 2026-09-17 — re-fit the intercept per screen with that screen's own base
+rate as an offset — was registered in `PREREGISTERED_PREVALENCE` (commit 1a1a852) after the screen
+census was counted and before a single offset was fitted. The census alone settles the scope: **not
+one screen the calibration is read on is a screen it was fitted on.** The intersection of the two
+screen sets is empty. A per-screen intercept is therefore a thing that exists after a screen has been
+run and never before it, so it says nothing about a target in no screen at all, which is the whole
+genome. What the fit then found is worse for the published table than the failure it was meant to
+repair: the single log-odds shift of **+0.679** that the 2026-09-17 section reported as the
+description of its failure is a mean over per-screen shifts running from **−1.303 to +4.228**, and
+its sign is wrong for the largest held-out screen, 1,084 of the 1,715 pairs. And the genome-wide band
+table that prices 593,765 targets is, to within **0.4%**, the band table of one screen.
+`scripts/target_prevalence.py`, result `target_prevalence`, 55 s, **0 AlphaGenome requests**, nothing
+fetched.
+
+**The census, counted before anything was fitted.** On the scored population — covered, on a deleted
+element, every feature present — the two tables are made of eight screens and share none of them.
+
+| | screen | pairs | regulated | rate | on the gate | on-gate rate | own term |
+|---|---|---|---|---|---|---|---|
+| fitted | Gasperini2019 | 4,776 | 335 | 7.01% | **207** | 0.7874 | yes |
+| fitted | Nasser2021 | 2,931 | 80 | 2.73% | 28 | 0.6786 | yes |
+| fitted | Schraivogel2020 | 1,089 | 22 | 2.02% | 10 | 0.6000 | yes |
+| read | K562_DC_TAP | 1,084 | 11 | 1.01% | 5 | 0.4000 | yes |
+| read | Xie | 416 | 41 | 9.86% | 19 | 0.9474 | yes |
+| read | Morris | 177 | 34 | 19.21% | 8 | 1.0000 | yes |
+| read | Klann | 32 | 20 | 62.50% | 7 | 1.0000 | pooled |
+| read | Reilly | 6 | 6 | 100% | 1 | 1.0000 | pooled |
+
+The three fitted screens pool to 8,796 at 4.97% and the five read ones to 1,715 at 6.53%, which is
+the ×1.31 the failure was named for. **The spread inside each table is larger than the gap between
+them**: 3.5× across the fitted screens and 99× across the read ones. So "the held-out screens have a
+higher prevalence" was never one fact; it is a pooled summary of five populations that have almost
+nothing to do with each other. The registered size rule — at least 100 scored pairs and at least 10
+regulated — admits six screens and pools Klann and Reilly into 38 pairs at 68.42%.
+
+**On the gate, which is the population whose curve bands the genome, per-screen terms are
+unfittable.** There are 285 on-gate pairs. Gasperini2019 is **207 of them (72.6%)** and no other
+screen reaches 30. Whatever size rule is written, one screen carries the population, so the
+correction the roadmap asked for degenerates there to the fit that is already shipped.
+
+**The same held-out pairs, before and after.** 1,715 K562 pairs, 112 regulated, observed 6.53%. The
+offset model is fitted on the training screens with their offsets and read on the held-out screens
+with each held-out screen's own base rate, so like the published pooled shift it is **fitted on the
+labels it is read against and is a description, not a test.**
+
+| on held-out K562 | bins inside | ECE | Brier | AUPRC | mean predicted |
+|---|---|---|---|---|---|
+| the shipped curve | **6/10** | 0.0231 | 0.04184 | 0.559 | 0.0441 |
+| one pooled shift, +0.6793 (the published description) | **9/10** | 0.0100 | 0.04065 | 0.559 | 0.0653 |
+| per-screen offsets | **8/10** | 0.0158 | **0.03082** | **0.737** | 0.0551 |
+
+The registration expected the per-screen offsets to reach 9 or 10 of 10 and called that a description
+that could not fail. **It reached 8, below the one constant it was supposed to beat**, and that is the
+first thing the split explains. Per screen:
+
+| held-out screen | pairs | observed | shipped mean | shift it needs | offset mean | shift it still needs |
+|---|---|---|---|---|---|---|
+| K562_DC_TAP | 1,084 | 0.0101 | 0.0269 | **−1.303** | 0.0085 | +0.262 |
+| Xie | 416 | 0.0986 | 0.0611 | +0.945 | 0.0877 | +0.216 |
+| Morris | 177 | 0.1921 | 0.0701 | +2.050 | 0.1466 | +0.516 |
+| Klann and Reilly, pooled | 38 | 0.6842 | 0.2271 | **+4.228** | 0.6038 | +0.524 |
+
+**The published +0.679 is a mean over shifts of −1.303, +0.945, +2.050 and +4.228.** The screen that
+carries 63% of the held-out pairs needs the correction in the *opposite* direction, so applying the
+published constant to K562_DC_TAP makes it worse, and the pooled table only looks repaired because
+the 38 pairs needing +4.2 are averaged against the 1,084 needing −1.3. The 2026-09-17 diagnosis that
+"the held-out screens call 6.53% against 4.97%" is arithmetically true and mechanistically empty: the
+level does not move between the two tables, it moves between every screen and every other screen,
+inside each table as much as across them. Per-screen ECE falls on all four strata — 0.0183 → 0.0048,
+0.0442 → 0.0342, 0.1220 → 0.0455, 0.4571 → 0.0971 — while the pooled bin count drops from the
+constant's 9 to 8, because the constant is tuned on exactly the pooled table the bins are read on.
+
+**The test that could fail: leave one screen out.** The shape is fitted on the other five screens with
+their offsets in place; the held-back screen contributes nothing of its own but its base rate. The
+comparator is the identical split with no offset anywhere, through the same solver.
+
+| screen held back | own rate | rest's rate | pooled: bins, ECE, AUPRC | offset: bins, ECE, AUPRC | residual shift |
+|---|---|---|---|---|---|
+| Gasperini2019 | 7.01% | 3.73% | 9/10, 0.0096, 0.717 | 7/10, 0.0154, 0.715 | −0.442 |
+| Nasser2021 | 2.73% | 6.19% | 5/10, 0.0190, 0.410 | **9/10**, 0.0094, 0.410 | +0.173 |
+| Schraivogel2020 | 2.02% | 5.59% | 9/10, 0.0147, 0.397 | 9/10, 0.0141, 0.419 | +0.521 |
+| K562_DC_TAP | 1.01% | 5.71% | 9/10, 0.0223, 0.268 | 7/10, **0.0049**, 0.264 | +0.205 |
+| Xie | 9.86% | 5.03% | 7/10, 0.0422, 0.725 | **9/10**, 0.0339, 0.720 | +0.159 |
+| Morris | 19.21% | 4.98% | 0/3, 0.1204, 0.727 | **2/3**, **0.0507**, 0.733 | +0.475 |
+
+**Verdict: FAILED, on three of the four registered clauses.** Bins improve on **3 of 6** screens
+against the registered 4. The pairs-weighted expected calibration error falls 0.01724 → 0.01383, a
+fall of **0.00341** against the registered 0.005. AUPRC falls on three screens — Gasperini 0.7174 →
+0.7152, K562_DC_TAP 0.2678 → 0.2640, Xie 0.7245 → 0.7204 — and the flattening clause is absolute, so
+it fires. The one clause that passed is the third and it is the informative one: the median absolute
+residual shift after the offset is **0.3235**, under the registered bar of 0.34 and less than half of
+the +0.6793 the single pooled correction needed. **So a screen's own base rate accounts for rather
+more than half of the level error and leaves the rest**, which is a real finding and not the repair
+that was asked for.
+
+**Why it fails where it fails, which was not registered.** ECE improves on five of the six screens,
+sometimes by a factor of four; the bin count does not follow, and the screen that loses most is
+Gasperini2019. Its own rate is 7.01% and the other five screens pool to 3.73%, so the offset pushes
+its mean predicted from 0.0649 up to 0.0856 against an observed 0.0701 and it now **over**-predicts,
+residual −0.442. The mechanism is that Gasperini is 54% of the pooled pairs, so "the rest" is a
+different population from the one whose intercept the shape absorbed, and the offset and the fitted
+intercept double-count. A correction that needs the held-back screen not to dominate the pool cannot
+be applied to a population that is 72.6% one screen, which is the on-gate population.
+
+**What it does to the genome-wide band, which is the first paragraph's claim.** The same 593,765
+banded targets, walked once, banded under each screen's own on-gate base rate as an offset. The
+`published` row is the same walk at a shift of zero, so the table is its own control and reproduces
+the 2026-09-17 table to the digit.
+
+| offset taken from | 0.02–0.05 | 0.05–0.1 | 0.1–0.25 | 0.25–0.5 | 0.5–0.75 | 0.75–0.9 | **0.9–1** |
+|---|---|---|---|---|---|---|---|
+| **published** | — | 45 | 3,837 | 178,387 | 293,568 | 61,971 | **55,957** |
+| K562_DC_TAP | 3,590 | 23,723 | 339,732 | 147,518 | 36,427 | 15,261 | **27,514** |
+| Schraivogel2020 | 712 | 2,990 | 118,803 | 321,280 | 88,191 | 25,973 | **35,816** |
+| Nasser2021 | — | 2,764 | 30,714 | 343,756 | 139,609 | 34,999 | **41,923** |
+| Reilly | — | 791 | 4,250 | 247,643 | 240,350 | 50,219 | **50,512** |
+| Gasperini2019 | — | 32 | 3,843 | 176,025 | 295,305 | 62,394 | **56,166** |
+| Xie | — | — | — | 3,758 | 136,452 | 311,554 | **142,001** |
+| Klann | — | — | — | 3,415 | 75,423 | 340,928 | **173,999** |
+| Morris | — | — | — | 3,138 | 45,702 | 346,450 | **198,475** |
+
+**The top band runs from 27,514 to 198,475, a factor of 7.2**, on the identical 593,765 targets with
+the identical weights; for the coding target it is 17,642 to 116,456, a factor of 6.6. Under
+K562_DC_TAP's rate 367,045 targets (61.8%) fall below 0.25 and under Morris's rate none do. **And the
+published table is Gasperini2019's table**: 55,957 against 56,166 on `any gene`, a difference of
+0.37%, and 37,913 against 38,065 on the coding target, 0.40%. That is not a coincidence and it is the
+finding — Gasperini2019 is 72.6% of the on-gate pairs the predicted-target curve was fitted on, so the
+intercept the genome inherits is that screen's intercept. The band a swept element's target receives
+is, to within a fifth of a percent, an answer to the question *what would Gasperini2019 have called
+this*, and the other seven screens of the same benchmark in the same cell line would have answered
+between half and three and a half times as often.
+
+**What a band means for a target in no screen at all.** Exactly what the registration said before the
+fit, and the fit did not move it: **it cannot be quoted.** The offset's input is a screen's own base
+rate; a swept target has no screen, and the only substitute is a guess at some future screen's base
+rate, which across six K562 screens of one benchmark runs from 1.01% to 100% and moves the top band
+by a factor of 7. The term is not transportable even between *tested* pairs, because the two screen
+sets do not intersect: Xie's intercept cannot be fitted on Gasperini, Nasser and Schraivogel, only
+read off Xie's own labels. **So the prevalence term does not unlock the 593,765 targets the 2026-09-17
+table priced. It gives the reason that table was never quotable**, and it leaves standing the two
+things that need no intercept and that this project already has: the **shape**, which leave-one-screen-out
+leaves almost untouched (per-screen AUPRC 0.264 to 0.733 under the offset, moving by at most
+0.022 against the pooled model and by less than 0.005 on four of the six), reported as an ordering
+and never as a probability; and the **measured band on a
+stratum**, which is the re-banding's answer — a rate read directly on a stratum with its population
+and its interval beside it, and a refusal where the stratum is thin. The re-banding's **5.8%** and the
+union axis's **9.70%** of the genome remain the honest coverage, and this section removes the last
+reason to think the other 90% was waiting on an intercept.
+
+**What is not touched.** Additive throughout. `score()`, `sweep()` and `reband()` keep their behaviour
+and their keys, `data/results/target_calibration.json` and `data/results/target_rebanding.json` are
+unchanged on disk, and `SWEEP_FEATURES`, `TARGET_FEATURES` and `CONFIDENCE_BANDS` do not move. The
+one change inside the shared fit is a backtracking line search in the new offset solver, which is
+required because an undamped Newton step diverges on this near-separable problem; with every offset
+set to zero it reproduces `crispri.logistic_fit`'s weights to 1e-6, which is a test, so the
+comparator differs from the offset model in the offset and in nothing else. 13 tests.
+
+**Limits.** Every base rate used as an offset is measured on the same pairs the reliability is read
+on, so E1 is a description and only the leave-one-screen-out arm is a test. Klann and Reilly are 38
+pairs pooled and carry one stratum between them. The on-gate rates that drive the genome table are
+smoothed as (k + 0.5)/(n + 1) because four of the eight screens are at 100% on the gate, so the
+factor of 7.2 is if anything an understatement of the spread. Six screens is a small number to read a
+"4 of 6" clause on, and three of them are the screens the shape was fitted on.
+
+**Next, proposed as roadmap rows** (for the roadmap editor to fold; not written into ROADMAP.md):
+
+1. Area I: retire the 593,765-target band table rather than correct it. The prevalence term is now
+   measured and it does not transport; the published confidence is one screen's intercept to within
+   0.4%. Quote the re-banding's strata and the union axis, and say "no band" for the rest.
+2. Area I: a screen's base rate as a declared input. If a band must be quoted for a planned
+   experiment, quote it as a function of that experiment's expected base rate with the range shown,
+   not as a single number — the machinery for it is `genome_under_each_screen`.
+3. Area I: the shape, tested on its own. Leave-one-screen-out moves AUPRC by less than 0.005 in
+   either direction, so the ranking is the part that survives; register a ranking claim (top-k
+   precision on a screen that took no part in the fit) and stop registering level claims until a
+   screen exists on both sides of the split.
 
 ## What comes next, in order
 

@@ -1,0 +1,664 @@
+{
+  "result": "target_prevalence",
+  "date": "2026-09-22",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), K562; predicted: AlphaGenome deletion per element; curated: ENCODE cCRE classes and GENCODE v50 gene starts; inferred: CTCF-only nodes",
+  "preregistered": "Registered 2026-09-22 (sixth), after the screen census below was counted and before any offset was fitted or any reliability table was read.\n\nTHE CENSUS, COUNTED FIRST. On the scored population (covered, every feature present) the calibration is fitted on three screens -- Gasperini2019 4,776 pairs / 335 regulated / 7.01%, Nasser2021 2,931 / 80 / 2.73%, Schraivogel2020 1,089 / 22 / 2.02% -- pooling to 8,796 at 4.97%. It is read on five -- K562_DC_TAP 1,084 / 11 / 1.01%, Xie 416 / 41 / 9.86%, Morris 177 / 34 / 19.21%, Klann 32 / 20 / 62.50%, Reilly 6 / 6 / 100% -- pooling to 1,715 at 6.53%. The spread within each table is larger than the gap between them: 3.5x across the fitted screens and 99x across the read ones, against the 1.31x the 2026-09-17 section named. NOT ONE SCREEN NAME IS IN BOTH TABLES: the intersection of the two screen sets is empty. On the gate, which is the population that bands the genome, there are 285 pairs and Gasperini2019 is 207 of them (72.6%); no other screen reaches 30, so no rule of any kind can fit a per-screen intercept there.\n\nTHE MODEL. logit p_i = logit(pi_s(i)) + a + b.x_i, where pi_s is screen s's own measured base rate on the scored population, entering as an OFFSET -- a known constant with its coefficient fixed at 1 and no parameter spent -- while a single intercept a and a single shape b are shared by every screen. The comparator is the shipped model, logit p_i = a + b.x_i, fitted and read on the same pairs.\n\nWHY AN OFFSET AND NOT A RE-FIT OR A RECALIBRATION. A free per-screen intercept spends one parameter per screen, and Reilly's 6 pairs at 6 of 6 separate, so that parameter is infinite; the offset spends none and a screen of any size can carry one. A recalibration on the held-out labels (Platt, isotonic) moves slope and level together, so it cannot be checked out of sample at all and it would dissolve the pre-registered claim rather than correct it. The offset also states the hypothesis the 2026-09-17 failure actually supports and no more: the shape transfers and the level does not -- all four failing bins failed in the same direction, none in the other -- so exactly one number per screen should move, and that number is a property the screen reports about itself, its own base rate, with no model in it.\n\nWHICH SCREENS GET THEIR OWN TERM, DECIDED ON SIZE ALONE. A screen carries its own offset when its scored population has at least 100 pairs AND at least 10 regulated pairs; below either threshold it joins one `small screens, pooled` stratum which takes the pooled base rate of the below-threshold screens in its own table. On the census that admits all three fitted screens and three of the five read ones (K562_DC_TAP, Xie, Morris), and pools Klann and Reilly into 38 pairs at 68.42%. Six screens carry a term. This rule was fixed on the census counts above, before any reliability table was read.\n\nWHAT IS EXPECTED, AND WHAT CAN FAIL. (E1) Read on the held-out K562 pairs with each screen's own held-out base rate, bins inside their Wilson intervals go 6 of 10 to 9 or 10 of 10. This is registered as a DESCRIPTION THAT CANNOT FAIL and it upgrades nothing: five numbers fitted to the same labels must beat the one number that already gave 9 of 10. It is reported because the per-screen shifts are the quantity of interest, not because it tests anything. (E2) The test that can fail is leave-one-screen-out over the six screens that carry a term: b is fitted on the other five with their offsets, and the held-back screen is scored with its own base rate as its offset and nothing else of its own. Each screen is read in 10 equal-count bins if it has at least 300 scored pairs and in 3 below that, the same count for both models, so the comparison is like for like; a tie does not count as an improvement. Registered: the offset model puts more bins inside their Wilson intervals than the pooled model on at least 4 of the 6 screens, and the pairs-weighted expected calibration error over the six falls by at least 0.005. (E3) The residual per-screen log-odds shift still needed AFTER the offset is applied has a median absolute value below 0.34, half of what the single pooled correction needed; if the base rate is the whole story it is near zero.\n\nTHE FALSIFIER. The prevalence term is the wrong correction if fewer than 4 of the 6 screens improve their bin count under leave-one-screen-out, or if the pairs-weighted expected calibration error does not fall by 0.005, or if the median residual shift is not below 0.34 -- any of the three, and the level gap is not a per-screen prevalence and something else moved. A fourth kills it even if the three pass: if the offset model's AUPRC under leave-one-screen-out falls below the pooled model's, the bins were bought by flattening the curve onto the base rate, which `flattening_check` refuses everywhere else in this module and which is refused here.\n\nWHAT A BAND MEANS FOR A TARGET IN NO SCREEN AT ALL, WHICH IS ALMOST THE WHOLE GENOME. Registered before the fit, because the honest answer is negative and no result of this fit can change it: IT CANNOT BE QUOTED. (a) The offset's input is a screen's own base rate. A sweep target is in no screen, so that number does not exist for it; the only substitute is a guess at what some future screen's base rate would be, and across the six K562 screens of this one benchmark that number runs from 1.01% to 100%, a hundredfold. A correction whose input spans a hundredfold is not a correction. (b) The two screen sets do not intersect, so the term is not transportable even between TESTED pairs: Xie's intercept cannot be fitted on Gasperini, Nasser and Schraivogel, it can only be read off Xie's own labels. A per-screen intercept is a thing that exists after a screen has been run and never before it. (c) The population that bands the genome is the on-gate one, 285 pairs, 72.6% of them one screen, where no size rule can fit per-screen terms at all. WHAT SHOULD BE QUOTED INSTEAD, registered now: the two quantities that need no intercept. The SHAPE -- what leave-one-screen-out tests -- reported as an ordering or a likelihood ratio and never as a probability; and the MEASURED BAND ON A STRATUM, which is the 2026-09-22 re-banding's answer, a rate read directly on a stratum of pairs with its population and its interval beside it and a refusal where the stratum is thin. The prevalence term does not unlock the 593,765 targets the 2026-09-17 table priced. It says why that table was never quotable, and it leaves the re-banding's 5.8% and the union axis's 9.70% as the honest genome-wide coverage",
+  "census": {
+    "what": "every screen in each population, counted before anything was fitted",
+    "fitted (training K562)": {
+      "pairs": 8796,
+      "regulated": 437,
+      "rate": 0.0497,
+      "screens": {
+        "Gasperini2019|K562": {
+          "pairs": 4776,
+          "regulated": 335,
+          "rate": 0.0701,
+          "on_gate_pairs": 207,
+          "on_gate_regulated": 163,
+          "on_gate_rate": 0.7874,
+          "own_term": true
+        },
+        "Nasser2021|K562": {
+          "pairs": 2931,
+          "regulated": 80,
+          "rate": 0.0273,
+          "on_gate_pairs": 28,
+          "on_gate_regulated": 19,
+          "on_gate_rate": 0.6786,
+          "own_term": true
+        },
+        "Schraivogel2020|K562": {
+          "pairs": 1089,
+          "regulated": 22,
+          "rate": 0.0202,
+          "on_gate_pairs": 10,
+          "on_gate_regulated": 6,
+          "on_gate_rate": 0.6,
+          "own_term": true
+        }
+      }
+    },
+    "read (held-out K562)": {
+      "pairs": 1715,
+      "regulated": 112,
+      "rate": 0.0653,
+      "screens": {
+        "K562_DC_TAP|K562": {
+          "pairs": 1084,
+          "regulated": 11,
+          "rate": 0.0101,
+          "on_gate_pairs": 5,
+          "on_gate_regulated": 2,
+          "on_gate_rate": 0.4,
+          "own_term": true
+        },
+        "Xie|K562": {
+          "pairs": 416,
+          "regulated": 41,
+          "rate": 0.0986,
+          "on_gate_pairs": 19,
+          "on_gate_regulated": 18,
+          "on_gate_rate": 0.9474,
+          "own_term": true
+        },
+        "Morris|K562": {
+          "pairs": 177,
+          "regulated": 34,
+          "rate": 0.1921,
+          "on_gate_pairs": 8,
+          "on_gate_regulated": 8,
+          "on_gate_rate": 1.0,
+          "own_term": true
+        },
+        "Klann|K562": {
+          "pairs": 32,
+          "regulated": 20,
+          "rate": 0.625,
+          "on_gate_pairs": 7,
+          "on_gate_regulated": 7,
+          "on_gate_rate": 1.0,
+          "own_term": false
+        },
+        "Reilly|K562": {
+          "pairs": 6,
+          "regulated": 6,
+          "rate": 1.0,
+          "on_gate_pairs": 1,
+          "on_gate_regulated": 1,
+          "on_gate_rate": 1.0,
+          "own_term": false
+        }
+      }
+    },
+    "screens_in_both_populations": [],
+    "base_rate_strata": {
+      "training": {
+        "Gasperini2019|K562": 0.0701,
+        "Nasser2021|K562": 0.0273,
+        "Schraivogel2020|K562": 0.0202
+      },
+      "held_out": {
+        "K562_DC_TAP|K562": 0.0101,
+        "Morris|K562": 0.1921,
+        "Xie|K562": 0.0986,
+        "small screens, pooled": 0.6842
+      }
+    },
+    "on_the_gate": {
+      "what": "the population whose curve bands the genome",
+      "pairs": 285,
+      "regulated": 224,
+      "screens_with_their_own_term_under_the_registered_rule": [
+        "Gasperini2019|K562"
+      ],
+      "largest_screen_share": 0.7263,
+      "screens": {
+        "Gasperini2019|K562": {
+          "pairs": 207,
+          "regulated": 163,
+          "rate": 0.7874
+        },
+        "Nasser2021|K562": {
+          "pairs": 28,
+          "regulated": 19,
+          "rate": 0.6786
+        },
+        "Xie|K562": {
+          "pairs": 19,
+          "regulated": 18,
+          "rate": 0.9474
+        },
+        "Schraivogel2020|K562": {
+          "pairs": 10,
+          "regulated": 6,
+          "rate": 0.6
+        },
+        "Morris|K562": {
+          "pairs": 8,
+          "regulated": 8,
+          "rate": 1.0
+        },
+        "Klann|K562": {
+          "pairs": 7,
+          "regulated": 7,
+          "rate": 1.0
+        },
+        "K562_DC_TAP|K562": {
+          "pairs": 5,
+          "regulated": 2,
+          "rate": 0.4
+        },
+        "Reilly|K562": {
+          "pairs": 1,
+          "regulated": 1,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "held_out_before_and_after": {
+    "what": "E1, registered as a description that cannot fail: the offset takes each held-out screen's level from that screen's own held-out labels",
+    "shipped curve": {
+      "bins_consistent": 6,
+      "bins": 10,
+      "ece": 0.0231,
+      "brier": 0.04184,
+      "auprc": 0.5589,
+      "mean_predicted": 0.0441,
+      "observed_rate": 0.0653,
+      "per_screen": {
+        "K562_DC_TAP|K562": {
+          "pairs": 1084,
+          "regulated": 11,
+          "observed_rate": 0.0101,
+          "mean_predicted": 0.0269,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0183,
+          "brier": 0.01077,
+          "auprc": 0.2671,
+          "residual_log_odds_shift": -1.303
+        },
+        "Xie|K562": {
+          "pairs": 416,
+          "regulated": 41,
+          "observed_rate": 0.0986,
+          "mean_predicted": 0.0611,
+          "bins": 10,
+          "bins_consistent": 6,
+          "ece": 0.0442,
+          "brier": 0.05199,
+          "auprc": 0.7258,
+          "residual_log_odds_shift": 0.9452
+        },
+        "Morris|K562": {
+          "pairs": 177,
+          "regulated": 34,
+          "observed_rate": 0.1921,
+          "mean_predicted": 0.0701,
+          "bins": 3,
+          "bins_consistent": 0,
+          "ece": 0.122,
+          "brier": 0.1259,
+          "auprc": 0.7281,
+          "residual_log_odds_shift": 2.05
+        },
+        "small screens, pooled": {
+          "pairs": 38,
+          "regulated": 26,
+          "observed_rate": 0.6842,
+          "mean_predicted": 0.2271,
+          "bins": 3,
+          "bins_consistent": 0,
+          "ece": 0.4571,
+          "brier": 0.42538,
+          "auprc": 0.9167,
+          "residual_log_odds_shift": 4.228
+        }
+      }
+    },
+    "one pooled shift (the published description)": {
+      "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+      "mean_predicted_before": 0.0441,
+      "observed_rate": 0.0653,
+      "log_odds_shift": 0.6793,
+      "bins_consistent": 9,
+      "bins": 10,
+      "ece": 0.01,
+      "brier": 0.04065,
+      "hosmer_lemeshow": {
+        "chi2": 14.08,
+        "df": 8,
+        "p": 0.0797
+      }
+    },
+    "per-screen offsets": {
+      "bins_consistent": 8,
+      "bins": 10,
+      "ece": 0.0158,
+      "brier": 0.03082,
+      "auprc": 0.7368,
+      "mean_predicted": 0.0551,
+      "per_screen": {
+        "K562_DC_TAP|K562": {
+          "pairs": 1084,
+          "regulated": 11,
+          "observed_rate": 0.0101,
+          "mean_predicted": 0.0085,
+          "bins": 10,
+          "bins_consistent": 7,
+          "ece": 0.0048,
+          "brier": 0.00874,
+          "auprc": 0.2629,
+          "residual_log_odds_shift": 0.2619
+        },
+        "Xie|K562": {
+          "pairs": 416,
+          "regulated": 41,
+          "observed_rate": 0.0986,
+          "mean_predicted": 0.0877,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0342,
+          "brier": 0.0474,
+          "auprc": 0.7224,
+          "residual_log_odds_shift": 0.2159
+        },
+        "Morris|K562": {
+          "pairs": 177,
+          "regulated": 34,
+          "observed_rate": 0.1921,
+          "mean_predicted": 0.1466,
+          "bins": 3,
+          "bins_consistent": 2,
+          "ece": 0.0455,
+          "brier": 0.0971,
+          "auprc": 0.7355,
+          "residual_log_odds_shift": 0.516
+        },
+        "small screens, pooled": {
+          "pairs": 38,
+          "regulated": 26,
+          "observed_rate": 0.6842,
+          "mean_predicted": 0.6038,
+          "bins": 3,
+          "bins_consistent": 3,
+          "ece": 0.0971,
+          "brier": 0.1706,
+          "auprc": 0.914,
+          "residual_log_odds_shift": 0.5239
+        }
+      }
+    }
+  },
+  "leave_one_screen_out": {
+    "what": "leave one screen out: the shape fitted without the screen, the level taken from the screen's own base rate, against the same split with no offset anywhere",
+    "screens_with_their_own_term": [
+      "Gasperini2019|K562",
+      "Nasser2021|K562",
+      "Schraivogel2020|K562",
+      "K562_DC_TAP|K562",
+      "Xie|K562",
+      "Morris|K562"
+    ],
+    "per_screen": {
+      "Gasperini2019|K562": {
+        "own_base_rate": 0.0701,
+        "base_rate_of_the_other_screens": 0.0373,
+        "pooled_model": {
+          "pairs": 4776,
+          "regulated": 335,
+          "observed_rate": 0.0701,
+          "mean_predicted": 0.0649,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0096,
+          "brier": 0.03524,
+          "auprc": 0.7174,
+          "residual_log_odds_shift": 0.1802
+        },
+        "offset_model": {
+          "pairs": 4776,
+          "regulated": 335,
+          "observed_rate": 0.0701,
+          "mean_predicted": 0.0856,
+          "bins": 10,
+          "bins_consistent": 7,
+          "ece": 0.0154,
+          "brier": 0.03546,
+          "auprc": 0.7152,
+          "residual_log_odds_shift": -0.4424
+        },
+        "bins_improved": false,
+        "auprc_fell": true
+      },
+      "Nasser2021|K562": {
+        "own_base_rate": 0.0273,
+        "base_rate_of_the_other_screens": 0.0619,
+        "pooled_model": {
+          "pairs": 2931,
+          "regulated": 80,
+          "observed_rate": 0.0273,
+          "mean_predicted": 0.0438,
+          "bins": 10,
+          "bins_consistent": 5,
+          "ece": 0.019,
+          "brier": 0.0212,
+          "auprc": 0.4098,
+          "residual_log_odds_shift": -0.6471
+        },
+        "offset_model": {
+          "pairs": 2931,
+          "regulated": 80,
+          "observed_rate": 0.0273,
+          "mean_predicted": 0.0241,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0094,
+          "brier": 0.02052,
+          "auprc": 0.4104,
+          "residual_log_odds_shift": 0.173
+        },
+        "bins_improved": true,
+        "auprc_fell": false
+      },
+      "Schraivogel2020|K562": {
+        "own_base_rate": 0.0202,
+        "base_rate_of_the_other_screens": 0.0559,
+        "pooled_model": {
+          "pairs": 1089,
+          "regulated": 22,
+          "observed_rate": 0.0202,
+          "mean_predicted": 0.0321,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0147,
+          "brier": 0.01544,
+          "auprc": 0.3971,
+          "residual_log_odds_shift": -0.5546
+        },
+        "offset_model": {
+          "pairs": 1089,
+          "regulated": 22,
+          "observed_rate": 0.0202,
+          "mean_predicted": 0.013,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0141,
+          "brier": 0.01611,
+          "auprc": 0.4188,
+          "residual_log_odds_shift": 0.5205
+        },
+        "bins_improved": false,
+        "auprc_fell": false
+      },
+      "K562_DC_TAP|K562": {
+        "own_base_rate": 0.0101,
+        "base_rate_of_the_other_screens": 0.0571,
+        "pooled_model": {
+          "pairs": 1084,
+          "regulated": 11,
+          "observed_rate": 0.0101,
+          "mean_predicted": 0.0318,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0223,
+          "brier": 0.01132,
+          "auprc": 0.2678,
+          "residual_log_odds_shift": -1.5047
+        },
+        "offset_model": {
+          "pairs": 1084,
+          "regulated": 11,
+          "observed_rate": 0.0101,
+          "mean_predicted": 0.0088,
+          "bins": 10,
+          "bins_consistent": 7,
+          "ece": 0.0049,
+          "brier": 0.00881,
+          "auprc": 0.264,
+          "residual_log_odds_shift": 0.2045
+        },
+        "bins_improved": false,
+        "auprc_fell": true
+      },
+      "Xie|K562": {
+        "own_base_rate": 0.0986,
+        "base_rate_of_the_other_screens": 0.0503,
+        "pooled_model": {
+          "pairs": 416,
+          "regulated": 41,
+          "observed_rate": 0.0986,
+          "mean_predicted": 0.0635,
+          "bins": 10,
+          "bins_consistent": 7,
+          "ece": 0.0422,
+          "brier": 0.05166,
+          "auprc": 0.7245,
+          "residual_log_odds_shift": 0.8503
+        },
+        "offset_model": {
+          "pairs": 416,
+          "regulated": 41,
+          "observed_rate": 0.0986,
+          "mean_predicted": 0.0903,
+          "bins": 10,
+          "bins_consistent": 9,
+          "ece": 0.0339,
+          "brier": 0.04735,
+          "auprc": 0.7204,
+          "residual_log_odds_shift": 0.1586
+        },
+        "bins_improved": true,
+        "auprc_fell": true
+      },
+      "Morris|K562": {
+        "own_base_rate": 0.1921,
+        "base_rate_of_the_other_screens": 0.0498,
+        "pooled_model": {
+          "pairs": 177,
+          "regulated": 34,
+          "observed_rate": 0.1921,
+          "mean_predicted": 0.0717,
+          "bins": 3,
+          "bins_consistent": 0,
+          "ece": 0.1204,
+          "brier": 0.12549,
+          "auprc": 0.7265,
+          "residual_log_odds_shift": 1.9811
+        },
+        "offset_model": {
+          "pairs": 177,
+          "regulated": 34,
+          "observed_rate": 0.1921,
+          "mean_predicted": 0.1494,
+          "bins": 3,
+          "bins_consistent": 2,
+          "ece": 0.0507,
+          "brier": 0.09711,
+          "auprc": 0.7327,
+          "residual_log_odds_shift": 0.4753
+        },
+        "bins_improved": true,
+        "auprc_fell": false
+      }
+    },
+    "screens_improving": [
+      3,
+      6
+    ],
+    "screens_improving_required": 4,
+    "weighted_ece": [
+      0.01724,
+      0.01383
+    ],
+    "weighted_ece_fell_by": 0.00341,
+    "weighted_ece_fall_required": 0.005,
+    "median_absolute_residual_shift": 0.3235,
+    "residual_shift_bar": 0.34,
+    "any_auprc_fell": true,
+    "verdict": "failed"
+  },
+  "verdict": "failed",
+  "genome_under_each_screen": {
+    "any gene": {
+      "targets": 593765,
+      "bands": {
+        "published": {
+          "0.05-0.1": 45,
+          "0.1-0.25": 3837,
+          "0.25-0.5": 178387,
+          "0.5-0.75": 293568,
+          "0.75-0.9": 61971,
+          "0.9-1": 55957
+        },
+        "Gasperini2019|K562": {
+          "0.05-0.1": 32,
+          "0.1-0.25": 3843,
+          "0.25-0.5": 176025,
+          "0.5-0.75": 295305,
+          "0.75-0.9": 62394,
+          "0.9-1": 56166
+        },
+        "Nasser2021|K562": {
+          "0.05-0.1": 2764,
+          "0.1-0.25": 30714,
+          "0.25-0.5": 343756,
+          "0.5-0.75": 139609,
+          "0.75-0.9": 34999,
+          "0.9-1": 41923
+        },
+        "Xie|K562": {
+          "0.25-0.5": 3758,
+          "0.5-0.75": 136452,
+          "0.75-0.9": 311554,
+          "0.9-1": 142001
+        },
+        "Schraivogel2020|K562": {
+          "0.02-0.05": 712,
+          "0.05-0.1": 2990,
+          "0.1-0.25": 118803,
+          "0.25-0.5": 321280,
+          "0.5-0.75": 88191,
+          "0.75-0.9": 25973,
+          "0.9-1": 35816
+        },
+        "Morris|K562": {
+          "0.25-0.5": 3138,
+          "0.5-0.75": 45702,
+          "0.75-0.9": 346450,
+          "0.9-1": 198475
+        },
+        "Klann|K562": {
+          "0.25-0.5": 3415,
+          "0.5-0.75": 75423,
+          "0.75-0.9": 340928,
+          "0.9-1": 173999
+        },
+        "K562_DC_TAP|K562": {
+          "0.02-0.05": 3590,
+          "0.05-0.1": 23723,
+          "0.1-0.25": 339732,
+          "0.25-0.5": 147518,
+          "0.5-0.75": 36427,
+          "0.75-0.9": 15261,
+          "0.9-1": 27514
+        },
+        "Reilly|K562": {
+          "0.05-0.1": 791,
+          "0.1-0.25": 4250,
+          "0.25-0.5": 247643,
+          "0.5-0.75": 240350,
+          "0.75-0.9": 50219,
+          "0.9-1": 50512
+        }
+      },
+      "top_band_0.9_1": {
+        "published": 55957,
+        "Gasperini2019|K562": 56166,
+        "Nasser2021|K562": 41923,
+        "Xie|K562": 142001,
+        "Schraivogel2020|K562": 35816,
+        "Morris|K562": 198475,
+        "Klann|K562": 173999,
+        "K562_DC_TAP|K562": 27514,
+        "Reilly|K562": 50512
+      }
+    },
+    "coding gene": {
+      "targets": 440377,
+      "bands": {
+        "published": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 184256,
+          "0.5-0.75": 175655,
+          "0.75-0.9": 42552,
+          "0.9-1": 37913
+        },
+        "Gasperini2019|K562": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 182398,
+          "0.5-0.75": 177109,
+          "0.75-0.9": 42804,
+          "0.9-1": 38065
+        },
+        "Nasser2021|K562": {
+          "0.1-0.25": 38943,
+          "0.25-0.5": 276135,
+          "0.5-0.75": 72626,
+          "0.75-0.9": 24796,
+          "0.9-1": 27877
+        },
+        "Xie|K562": {
+          "0.5-0.75": 149871,
+          "0.75-0.9": 201559,
+          "0.9-1": 88947
+        },
+        "Schraivogel2020|K562": {
+          "0.1-0.25": 134002,
+          "0.25-0.5": 213444,
+          "0.5-0.75": 50925,
+          "0.75-0.9": 18472,
+          "0.9-1": 23534
+        },
+        "Morris|K562": {
+          "0.5-0.75": 57332,
+          "0.75-0.9": 266589,
+          "0.9-1": 116456
+        },
+        "Klann|K562": {
+          "0.5-0.75": 90905,
+          "0.75-0.9": 244742,
+          "0.9-1": 104730
+        },
+        "K562_DC_TAP|K562": {
+          "0.05-0.1": 31204,
+          "0.1-0.25": 278730,
+          "0.25-0.5": 76146,
+          "0.5-0.75": 25834,
+          "0.75-0.9": 10821,
+          "0.9-1": 17642
+        },
+        "Reilly|K562": {
+          "0.1-0.25": 1340,
+          "0.25-0.5": 232707,
+          "0.5-0.75": 137014,
+          "0.75-0.9": 35391,
+          "0.9-1": 33925
+        }
+      },
+      "top_band_0.9_1": {
+        "published": 37913,
+        "Gasperini2019|K562": 38065,
+        "Nasser2021|K562": 27877,
+        "Xie|K562": 88947,
+        "Schraivogel2020|K562": 23534,
+        "Morris|K562": 116456,
+        "Klann|K562": 104730,
+        "K562_DC_TAP|K562": 17642,
+        "Reilly|K562": 33925
+      }
+    }
+  }
+}

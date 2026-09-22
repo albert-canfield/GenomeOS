@@ -2115,15 +2115,52 @@ def logistic_fit_offset(
                 hess[i][i] += lam
                 grad[i] -= lam * w[i]
         step = crispri.solve(hess, grad)
+        step = damped(rows, y, off, w, step, lam)
         w = [a + b for a, b in zip(w, step, strict=True)]
         if max(abs(s) for s in step) < 1e-6:
             break
     return w
 
 
+def damped(
+    rows: list[list[float]],
+    y: list[bool],
+    off: list[float],
+    w: list[float],
+    step: list[float],
+    lam: float,
+) -> list[float]:
+    """The Newton step halved until it stops making the fit worse, or zeroed if it never does.
+
+    An undamped step diverges on this problem: `deletion_drop` nearly separates the on-gate pairs,
+    so the full step from a poor start sends the weights to 1e12 and every prediction to zero. A
+    zero step ends the iteration through the caller's own convergence check.
+    """
+    base = penalised_log_likelihood(rows, y, off, w, lam)
+    scale = 1.0
+    for _ in range(20):
+        trial = [a + scale * b for a, b in zip(w, step, strict=True)]
+        if penalised_log_likelihood(rows, y, off, trial, lam) >= base:
+            return [scale * s for s in step]
+        scale /= 2
+    return [0.0] * len(step)
+
+
+def penalised_log_likelihood(
+    rows: list[list[float]], y: list[bool], off: list[float], w: list[float], lam: float
+) -> float:
+    """What the backtracking line search must not decrease; the ridge spares the intercept."""
+    total = 0.0
+    for r, yi, o in zip(rows, y, off, strict=True):
+        z = max(-30.0, min(30.0, o + sum(a * b for a, b in zip(w, r, strict=True))))
+        total += (z if yi else 0.0) - math.log1p(math.exp(z))
+    return total - 0.5 * lam * sum(v * v for v in w[1:])
+
+
 def fit_with_offset(
     pairs: list[crispri.Pair], cols: tuple[str, ...], off: list[float], lam: float = 1e-3
 ) -> list[float]:
+    """The offset fit. `off` all zeros gives the pooled comparator through identical numerics."""
     return logistic_fit_offset(crispri.matrix(pairs, cols), [p.regulated for p in pairs], off, lam=lam)
 
 
