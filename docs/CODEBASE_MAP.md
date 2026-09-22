@@ -3,15 +3,30 @@ last_mapped: 2026-09-21T18:29:32Z
 commit: 9a40c18
 total_files: 542
 total_tokens: 1809245
+remapped: 2026-09-22T21:05:00Z
+remapped_commit: 005803f
+remapped_files: 1365
+remapped_python_lines: 152160
 ---
 
 # Codebase map
 
 A guide to where things are and why they sit where they do. It describes the
 code at commit `9a40c18`; `data/` and `docs/` are named but not described.
+
+**Re-read on 2026-09-22 at `005803f`, eighty commits later.** The frontmatter's
+`last_mapped` and `commit` are left at the first mapping and the re-reading is
+carried in `remapped*` beside them, because a commit that removes lines another
+commit added is refused in this checkout and a map is a poor place to force one.
+Every section below that those eighty commits touched has been rewritten from a
+fresh reading; the rest stands as first written.
 For what the project is for, read [README.md](../README.md); for why the code
 is shaped this way, [ARCHITECTURE.md](ARCHITECTURE.md) and
 [DECISIONS.md](DECISIONS.md).
+
+Measured at `005803f`: **1,365 tracked files** — `genomeos/` 235, `tests/` 199,
+`scripts/` 123, `docs/` 35, `data/` 761 — and **152,160 lines of Python**. The
+token figures below are from the 2026-09-21 scan and were not re-measured.
 
 Measured at that commit: `genomeos/` 222 files and about 991k tokens,
 `tests/` 180 files and 316k, `scripts/` 107 files and 246k, `docs/` 33 files
@@ -42,6 +57,43 @@ no GenomeOS and no site-packages present.
 
 Two console entry points follow the same line: `bio` is the engine
 toolchain and works standalone; `genomeos` is the application.
+
+## The second rule, added 2026-09-22
+
+**A number is trusted for the population it was measured on and no further.**
+
+Eighty commits in one day were one finding in four areas, and the code now
+carries the rule in three shapes. A newcomer who learns only this will read the
+result files correctly.
+
+1. **A silence is named, never a zero.** `attribution/targets.py` defines
+   `Response(value, reason)` with `SCORED`, `NOT_IN_WINDOW`, `NOT_ON_TRACK`,
+   `NOT_CACHED`. The idiom exists because a table that had *no row* for a gene
+   was returning `0.0` and every consumer read it as *the model predicts no
+   effect* — 97.7% of the CRISPRi benchmark's held-out pairs. The same idiom is
+   in `eqtl.py` (`cache_silence`), `crispri.py` (`deletion_answered`) and
+   `target_calibration.py` (`gate_silences`).
+2. **A threshold is not a measurement.** `MIN_EFFECT`, `UNION_DROP`,
+   `MIN_POOLED_FOR_A_BAND`, `STRICT_RELATIVE`, `node_open_threshold` and
+   `PROVISIONAL_CEILING` are decision bars. A compact `predicted = null` means
+   *nothing cleared the bar*, not *nothing was scored*. Any rate conditioned on
+   such a field is conditional on the gate.
+3. **A curve is honest only on the population it was fitted on.** The
+   confidence that banded the genome was fitted on 245 pairs at a 76.7% base
+   rate and, one stratum off, quoted 0.4126 where the screens measured 0.0603.
+   `target_calibration.py` now carries the gate census, the re-banding, the
+   union axis and the prevalence offset — and the genome-wide band table is
+   **retired**, not corrected. What stands is a measured rate per stratum, with
+   `NOT_CALIBRATED = "not calibrated here"` said out loud for the 90% that
+   cannot carry a number.
+
+The convention that produced all of it: **a module carries its own
+pre-registration as a constant, committed before the measurement runs.** Look
+for `PREREGISTRATION`, `PREREGISTERED_*`, `CAP_RAISE`, `ENSEMBL_JOIN`,
+`AMENDMENT`, `THE_GATE`. They fix the metric, the baselines, the expected
+direction and the falsifiers in advance, and several of them record that their
+own prediction was wrong. `genomeos/forge/calibration.py` is the extreme case:
+a module whose entire result is a registered refusal to publish a rate.
 
 ## System overview
 
@@ -259,6 +311,61 @@ method per route, so routes are testable without HTTP. About 50 GET and 15
 POST endpoints back a 19-tab UI. `cli.py` (245 KB) defers almost every
 import into its `cmd_*` function, which is why the CLI starts fast.
 
+### Added or reshaped on 2026-09-22
+
+**`attribution/targets.py`** gained `ElementResponses`, the reader everything
+else now plugs into. The sweep wrote two outputs: a **compact table** with one
+gene per element, and a **per-element response cache** written at
+`threshold=0.0` holding every gene in the scorer's 1 Mb window, signed, per
+cell. The compact table was being read as though it were the measurement. The
+cache is chromosome-major and costly (chr1 is 77 MB gzipped, ~5.7 s and ~2.9 GB
+resident), so callers iterate by chromosome and never hop.
+
+**`attribution/crispri_direction.py`** and **`crispri_direction_both.py`** test
+whether the deletion layer gets the *sign* right. The first found that every
+answerable pair carried a measured decrease, so a constant-down caller would
+score 1.000 — its registered chance level is the sweep's own down-rate, not
+0.5. The second reads the cache to reach the upward arm for **0 requests**, and
+its primary statistic is balanced accuracy, whose chance level is 0.5 for any
+class mix. `PRIOR` is a frozen re-derivation target: the run refuses to proceed
+if the earlier module's 44 pairs do not reproduce.
+
+**`attribution/target_calibration.py`** is now the densest pre-registration file
+in the project: `PREREGISTERED_CALIBRATION`, `_GATE`, `_BANDS`, `_UNION`,
+`_PREVALENCE`. Two calibrations live here on two populations — a tested-pair fit
+on 8,796 pairs, and the 245-pair fit that actually bands the genome. The union
+axis records in its own registration that it was chosen *after* seeing its
+128/128 result, so that number is demoted to a description and the real tests
+run on populations that took no part in choosing it.
+
+**`benchmark/loci_fourth.py`** is the first locus frame drawn by a **rule**
+rather than curated: every held-out ENCODE CRISPR element whose published target
+is not its own nearest coding TSS. `loci_noncoding.py` scores what that rule
+rejects at step 4. `loci_reread.py` re-reads every earlier frame through the
+repaired `loci.read_deletion` and **raises** if a frozen copy of the old loop
+fails to reproduce the stored readings. `loci_miss.py` classifies every miss by
+overlap and distance without touching the hit rule, which stays symbol equality
+so that no published rate moves.
+
+**`genome/reader.py`** now states, in its own `EVIDENCE["depth"]`, which of its
+per-biosample readings are absolute, which are ranks and which are assay depth.
+`enhancers_active` is depth (rho 0.83 against peak count); the rate
+`enhancers_active_per_100k_peaks` ships beside it. `nodes_open` is a median
+split of a biosample against itself and is withdrawn as a between-biosample
+reading; `node_open_threshold` is the one shared definition, called from both
+here and `attribution/candidates.py` so the two copies cannot drift.
+
+**`organism/terminality.py`**, **`runtime/abundance_gate.py`** and
+**`forge/calibration.py`** are three registration-first modules whose docstrings
+*are* the experiment: a circularity audit, an algebraic proof that a gate could
+not pass, and a refusal to publish a rate whose population was authored with the
+answer already in it.
+
+**`work.py`** gained `ABANDONED_AFTER` (48 h) and `retire()`. `stale` at six
+hours is a pause; `abandoned` is nobody coming back, because a session restart
+writes a new file under a new name. `retire()` **moves** entries to
+`data/work/retired/` rather than deleting them.
+
 ## scripts/
 
 107 standalone runners. Nothing imports them; tests load them through
@@ -364,6 +471,24 @@ checked from both entry points.
 
 ## Gotchas
 
+Five of these were found in one day by sending a lane to check who *believed* a
+broken reading. Each time, the consumers were worse than the reading.
+
+- **A zero may mean "the table had no row".** `deletion_drop` was a structural
+  zero for 97.7% of held-out pairs. Fixed; the pattern is the thing to watch.
+- **A `null` may mean "nothing cleared the bar".** The compact table's
+  `predicted = null` is a threshold at `MIN_EFFECT`, not a silence — every one
+  of those 3,045 elements *was* scored.
+- **A count may be the assay.** `enhancers_active` is predicted out of sample by
+  DNase peak count alone (z = −0.11 on a lineage the layer had never held).
+- **A field may be a median split.** `nodes_open` returns half the nodes for
+  every biosample by construction — a span of 1.00 where depth spans 6.81.
+- **A confidence may be a literal.** BioForge stamps `0.3` on every design it
+  emits, and the same constant caps an unrelated quantity in `attribution/`.
+- **A test can pass on a broken solver.** `logistic_fit` was undamped and
+  diverged to weights of 1e12 while preserving the ordering and the AUROC —
+  which is exactly what its guard test asserted. Ask what a wrong version would
+  *not* conserve.
 - **`data/results/` files are large.** The largest is 6.4 MB; the
   `human_panel_chr*` files are 2 to 6 MB. They are pretty-printed, up to
   327k lines. Load one with `json.load` and read the field you need.
