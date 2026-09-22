@@ -1466,6 +1466,48 @@ in order. "Owner" is the session that holds the files today (see §7).
   non-terminal cells claimed than terminal ones. A rule set that can say *when*
   a cell is done dividing, not only what it becomes, is the next real
   measurement here.
+- **The terminality gate, asked and answered: no (2026-09-22, lane-terminal,
+  `de7a135` registration, `9d266a3` result, 0 requests).** On **1,326**
+  embryonic cells — 555 terminal, 771 dividing — with the lookup's terminality
+  deleted and **every cell called**, so that abstaining cannot help, the
+  measured factors reach **0.8079** balanced accuracy held out by founder
+  sublineage. That is **ahead of a single depth threshold (0.7815)** and
+  **behind a per-founder depth threshold: 0.8998 in sample, 0.8773 held out** —
+  and giving the factors depth as well makes them **worse**, 0.8148, an
+  increment of **−0.085**. Both registered gate clauses fail.
+  **So the 0 of 414 is no longer only an artefact of the `cell_type` guard: it
+  now has a measurement behind it.** There is nothing behind that guard to lift
+  it to. A rule set calling terminality at 0.65–0.81 where the lineage calls it
+  at 0.88–0.90 would not be a better program, it would be a worse one that owed
+  the lineage less. **522 / 381 / 136 / 0 stands as the ceiling**, and the last
+  of those four is now measured rather than structural.
+  **The circularity audit came first and excluded the signal that would have
+  looked most like a measurement**: tracked lifetime ends at the cell's division
+  *or at the last frame*, and the movie stops at 400.0 minutes where **454 cells
+  end — 322 terminal against 78 dividing**, so a short lifetime is a division
+  that was seen. Also excluded: the cell's own cycle length (defined only for a
+  cell that divides), atlas coverage (455 of 555 terminal named against 717 of
+  771 dividing, eleven points of signal about which cells the imaging resolved),
+  `cell_type`, and the lineage name itself, which spells out its divisions.
+  **The lane then corrected its own registered statistic, which is the part to
+  keep.** Clause (c)'s pooled within-band accuracy is inflated by the stratum
+  prior: a caller naming each stratum's own majority scores **0.7886** while
+  scoring **exactly 0.500 inside every stratum**. The committed number stays,
+  the macro average is published beside it, and a test pins both — including
+  that the naive pooling exceeds 0.70, so the artefact cannot come back
+  unnoticed. On the corrected statistic the factors do know something real:
+  **0.6541** with depth and founder both fixed and sisters split across folds,
+  against a floor of exactly 0.500 and a shuffle null of 0.5003 ± 0.0087. They
+  are not silent, only quieter than the lineage's own count of how many times
+  each founder divides. **Generation 7 is at chance** — a whole band where the
+  atlas says nothing.
+  **Four of six registered predictions broke, every one in the factors' favour**,
+  which is the right direction for a lane reporting a negative: they beat the
+  held-out depth threshold, they read factor identities and not only the clock
+  (0.8079 against 0.6721 for a count with identities erased), and the shortfall
+  is not the rule language.
+  **Area E's next real number is not in Ma 2021.** It needs contact and geometry
+  at the moment of division, or a measured cell-cycle regulator.
 - **Owner.** genomeos-d3 (from 2026-09-15; genomeos-d2, genomeos-d1 and
   genomeos-73 before); **ownerless since that session ended, and lane-worm2 took
   the two open items on 2026-09-22.**
