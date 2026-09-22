@@ -5068,6 +5068,81 @@ the model's target an eGene" of one gene per element, and is directly improvable
 that about twenty of them go through. `scripts/crispri_contact.py` is the nearest neighbour of this
 fix and is deliberately not re-run here: its stored result still reads the compact table and says so.
 
+## The eGene question asked of every element, not of the one gene a table kept (2026-09-22)
+
+The fix above moved one consumer off the compact table. This section does two things: it puts the
+reader under all of them — `ElementResponses` in `attribution/targets.py`, beside `run_elements` and
+`attributed`, which about twenty modules load their elements through — and it moves the second
+consumer, `eqtl.py`, with its own registration.
+
+**The reader.** `ElementResponses.response(chrom, element_id, gene, cell)` returns a `Response` that
+is either a signed log2 fold change or a `None` with the reason named: the gene is not in the
+scorer's window, the gene was scored but not on that cell's own track, or the element is not in the
+cache. It never returns a zero for a question it cannot answer, and `bool(response)` asks "did the
+sweep answer", never "is the number non-zero", so a scored 0.0 is truthy and a silence is not.
+`ranked(..., by="effect")` returns every gene in the window in the order
+`predict.enhancer_target.predict_target` ranks them, so the head is the gene the compact table keeps
+and the tail is what it dropped. `crispri.ElementCache` is the same reader written first, for the
+CRISPRi benchmark; its `value()` and this one's agree by construction.
+
+**What it costs**, measured: the tree is 775 MB gzipped over 24 chromosomes and must never be read
+whole. One chromosome is held at a time and switching drops the previous one, so the bill is the
+largest chromosome — chr21 (9.8 MB gzipped, 12,158 elements) 0.6 s and about 0.6 GB resident, chr1
+(77 MB, 88,302 elements) 5.7 s and a peak near 2.9 GB. A caller therefore walks its elements
+chromosome by chromosome; hopping costs a full decompression each time.
+
+**That the cache is the same run, checked before any of it was used.** Over the 6,239 uniform,
+constrained and VISTA elements that carry a prediction, the cache's effect-ordered head reproduces
+the compact table's `predicted` gene **and** its log2 fold change exactly: 6,239 of 6,239, 0
+disagreements. Where both carry per-cell values they agree exactly as well (800 comparisons, 0
+disagreements). And every one of the 3,045 elements whose compact prediction is `null` has a cached
+head below `MIN_EFFECT` = 0.1 — so `null` means "the best gene in the window moved by less than
+0.1", not "nothing was scored". The cache is the censoring removed, not a re-score.
+
+### The registration, written and committed before the eQTL score was re-run
+
+`eqtl.py:246` asks, per element, "is the gene the model named among the genes GTEx ties to this
+element?" — of one gene, chosen out of a window the sweep scored in full, and only where that one
+gene cleared 0.1. Counted before anything is re-scored:
+
+| set | elements with an eQTL | the question is asked of | never asked (no compact target) | genes in the window, median | eGene mentions in the window | elements with no eGene in the window |
+|---|---|---|---|---|---|---|
+| uniform | 3,725 | **2,372 (63.7%)**, rate 0.529 | **1,353 (36.3%)**, all cached | 30 (mean 34.1) | 15,292 of 17,834 (85.7%) | 112 (3.0%) |
+| constrained | 1,394 | 1,054 (75.6%), rate 0.448 | 340, all cached | 29 (mean 33.1) | 4,993 of 5,881 (84.9%) | 65 (4.7%) |
+| VISTA | 1,519 | 1,119 (73.7%), rate 0.412 | 400, of which 361 cached | 21 (mean 24.9) | 5,004 of 6,595 (75.9%) | 127 of the 1,480 cached |
+
+Two things are wrong with the current number and they pull in opposite directions. **The denominator
+is gated**: a third of the elements that carry an eQTL are dropped from it because the sweep's best
+gene moved by less than 0.1, so the published 0.529 is the rate *given that the model was confident
+enough to speak*, quoted as if it were the rate. **The negatives are conflated**: a `False` today
+means either "the model named a different gene" or "the measured gene was never in the scorer's
+window", and 14.3% of the uniform eGene mentions are of the second kind, with 112 elements that have
+no answerable eGene at all and are counted as misses.
+
+**The direction expected, and why.** Down. Adding the 1,353 ungated elements should lower the
+headline, because on those the sweep's best gene moves by less than 0.1 and a top-1 pick out of a
+30-gene window at that size is close to guessing; removing the 112 unanswerable elements should
+raise it a little, and 1,353 outweighs 112. So `cache_target_is_an_egene` over every answerable
+element is registered to come in **below 0.529 on uniform**, and the same way on the other two sets.
+The floor to compare against is picking a gene at random from the window, about 4.1 eGenes in a
+window of 34, near 0.12; the number to beat is the nearest-coding-TSS rule, 0.662, which already
+beats the model on this test.
+
+**The falsifier.** If the ungated elements are right about as often as the gated ones — if the
+headline holds at 0.529 or rises — then `MIN_EFFECT` is not selecting the elements the model can
+answer, and the gate is not earning the conditioning it imposes. That would be a finding about the
+threshold and it is to be reported as one.
+
+**Reported first if it falls.** A fall is the expected outcome and goes at the top of the result
+section, in the same table as anything that rises.
+
+**What is not touched.** Every field the current result carries keeps its name and its meaning, so
+the figures above stay comparable and the web view keeps working; the new fields are added beside
+them. `predicted_target_is_an_egene` still means "of the elements where the compact table named a
+gene", and the re-run must reproduce it exactly — that is the control. Zero AlphaGenome requests:
+every number here is on disk. The rank of the measured eGene in the model's own ordering, which the
+compact table could not express at all, is reported as new information rather than as a comparison.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
