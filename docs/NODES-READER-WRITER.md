@@ -632,6 +632,131 @@ these four measurements; what the node comparison needs next is a measured
 enhancer-gene set in place of the model's reading, which is the standing caveat
 on measurement 2.
 
+## Measured perturbations, and the direction question (2026-09-22)
+
+The section above closes by naming what the node comparison needs next: **a
+measured enhancer-gene set in place of the model's reading.** Measurement 2,
+node content, is judged on 440,377 scored archive elements, and those are the
+model's answers, not measurements. This section brings a measured set to bear,
+and it asks the one question of it that has never been asked at scale:
+**direction.** Every enhancer-gene call GenomeOS makes carries an `action`,
+`activates` or `represses`, and that word is nothing but the sign of a predicted
+log2 fold change on deleting the element. The sign has never been checked
+against a measurement. It was registered undecidable at n=2 on the third locus
+set (LOCI-BENCHMARK section 21), and the fourth frame then showed what an
+unchecked layer costs: 3 of 50 where the nearest gene is not the answer, with
+the nearest coding TSS named 26 times instead (sections 22 and 24).
+
+The measured set is already on disk and already parsed. The ENCODE CRISPRi
+enhancer-gene benchmark (`data/knowledge/crispri`, streamed 2026-09-16) carries
+**`EffectSize`, the signed measured effect** of silencing an element on a gene,
+beside a two-sided `Significant` flag. `attribution/crispri.py` has never used
+it: that module reads `Regulated`, which the benchmark defines as `Significant
+AND EffectSize < 0`, so the entire upward half of the measured signal is
+discarded before it sees it. Reading `Significant` two-sided and keeping the
+sign is the whole of the new input, and it costs nothing.
+
+### The registration, written and committed before any sign was compared
+
+**The arm.** The **held-out** arm (`heldout_5_cell_types`) decides. The
+`training_K562` arm was fitted on by the 2026-09-16 lane, which put logistic
+weights on it (`data/results/crispri_benchmark.json`), so a claim made on it is
+not a test. It is computed and reported for shape only, under a field named
+`training_arm_fitted_on_not_a_test`, and it never touches the verdict.
+
+**The cell types: K562 and GM12878**, fixed here before any result. They are the
+only held-out cell types with an AlphaGenome line in the deletion sweep, which is
+the same refusal `crispri.py` already makes. HCT116 (40 signed pairs), WTC11 (35)
+and Jurkat (7) are refused with that reason and are not scored.
+
+**n = 44** — 36 in K562, 8 in GM12878. The filter chain is fixed here, every step
+of it derived and free:
+
+| step | K562 | GM12878 |
+|---|---|---|
+| valid, `Significant`, `EffectSize` ≠ 0 | 171 | 21 |
+| and within the scorer's reach, ‖distanceToTSS‖ ≤ 524,288 | 142 | 20 |
+| and a swept element overlaps the perturbed element | 137 | 18 |
+| **and the measured gene is that element's top predicted target** | **36** | **8** |
+
+The reach is `MODEL_WINDOW // 2`, the same arithmetic `benchmark/loci.py`
+`read_reach` uses: the scorer resizes its input to 1 Mb around the element, so a
+TSS further than 524 kb was never a candidate and asking would buy a guaranteed
+negative. The last row is the sweep's one-target-per-element storage: the table
+keeps a single `predicted` and `predicted_coding` gene per element, so a pair
+whose measured gene is some other gene has no signed value to read.
+
+**The statistic.** Sign agreement: the share of the 44 where the sign of the
+sweep's predicted log2 fold change, in the screen's own cell line, equals the
+sign of the measured `EffectSize`. Both are loss-of-function of the same element
+— CRISPRi silences it, the model deletes it — so the signs are compared
+directly, with no flip. Where several overlapping elements carry a value, the
+registered rule takes the largest absolute predicted change, ties broken toward
+`predicted_coding`, then by element id; every match is kept so that pairs whose
+matches disagree in sign are counted rather than hidden by the choice. A
+predicted value of exactly 0.0 is no direction: such pairs leave the denominator
+and are reported. The interval is Wilson 95%, because the normal interval has
+zero width at k = n and this measurement may well land there.
+
+**The chance level, and why 0.5 is the wrong one.** The census above was run and
+committed before this registration, and it found something that governs
+everything: **all 44 answerable held-out pairs carry a measured decrease.** Zero
+upward. On the training arm it is 189 of 191. Two selections stack to produce
+that. The screens' power and the benchmark's own framing make downward effects
+dominate; and then the sweep's single stored target filters again, because an
+upward effect is typically indirect and its gene is almost never the element's
+top predicted target. With the measured side constant, **sign agreement is not a
+comparison between two varying signs — it is the model's own rate of emitting
+"down" on this subset, and a caller that says "down" and nothing else scores
+1.000.** Reporting that against 0.5 would manufacture a success.
+
+So the binding comparison registered here is **the model's marginal down-rate**:
+the share of every element in the genome-wide sweep whose predicted change in the
+same cell line is negative, taken by the same key precedence the join uses. That
+number is not yet computed. The outcomes are fixed against it:
+
+- **PASS** requires both margins at once: agreement ≥ 0.65 (0.5 cleared by
+  0.15), **and** agreement exceeding the marginal down-rate by at least 0.10
+  with the Wilson lower bound above that marginal rate.
+- **FAIL** if agreement ≤ 0.65 — the direction is at or near chance outright.
+- **UNDECIDABLE** if agreement is high but does not clear the constant-sign
+  caller by the stated margin. This is registered **in advance as the likely
+  outcome**, and as a first-class result rather than a soft pass, precisely so
+  that a high agreement on a one-sign subset cannot be written up as direction
+  skill. Its reading is that the layer emits essentially one sign, the only
+  measured subset it can be asked about carries only that sign, and the
+  direction claim is therefore unsupported rather than refuted.
+
+The margins, 0.15 over chance and 0.10 over the marginal rate, are fixed here.
+
+**Falsifier.** If the answerable set turns out to carry both measured signs after
+all, the marginal-rate comparison is dropped and the plain 0.65 rule governs.
+The census says it will not fire; it is registered so that the rule is not
+chosen after the fact.
+
+**The request budget: 0.** Every input is on disk — the CRISPRi tables and the
+finished genome-wide sweep. No AlphaGenome call is made anywhere in this
+measurement.
+
+**Costed in advance, and deliberately not spent.** The only route to a subset
+carrying both measured signs is to score the elements behind the upward
+significant held-out pairs, which the sweep's stored single target cannot answer
+for. There are **33 such pairs on 30 distinct elements in K562**, and 38 on 35
+elements with GM12878 added. At one deletion request per element that is **30 to
+35 requests, over this lane's ceiling of 20**, so it is not run and the decision
+goes to the coordinator. A partial draw of 20 of the 30 is refused explicitly: an
+arm sampled *because of its sign* and then scored in part is not the set
+registered here and would need its own registration.
+
+**The confound that has caught this benchmark before: coverage.** An element the
+sweep already scored is not a random element (LOCI-BENCHMARK sections 19, 21 and
+22). `input_presence` and every stratum of the table above are reported beside
+the headline rather than after it. The selection here is severe and it is
+one-sided by construction, which is the point: of 171 signed K562 pairs only 36
+survive to the headline, and the 101 that are covered but whose gene is not the
+element's top target are exactly the cases where the model named something else.
+What it named instead is reported with them.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
