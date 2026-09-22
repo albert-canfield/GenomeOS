@@ -1088,3 +1088,133 @@ carried **so far**, and nothing in `when:` can say "as of now, once". So the cad
 invariant **for time-invariant guards**, and any program whose fate guards are integrated reads needs
 a `commitment` to have a stable fate at all. That belongs in §7.2a beside the two limits the engine
 already states there.
+
+## The shipped read stays, and 332 became 414 because the runtime asks twice (2026-09-22, lane-worm2)
+
+Two things were left open by the credit measurement of 2026-09-21 (`542d613`), which established that
+the factors decide **184 of 555** terminal fates with nothing fitted and that **no factor rule has ever
+decided a fate the lineage had not already written — 414 of 414**. First, `mean(lineage) >= 0.25` beat
+the shipped `exposure(lineage) >= 15` on the honest credit metric and the lane did not make the change
+because the runtime was not its file. Second, the same `fates.bio` and the same reads had the rules
+firing on **414** cells where the 2026-09-15 result file recorded **332**, with the score unchanged at
+522. The second had to be settled first, because it turned out to be what the first one is made of.
+
+Pre-registered in `dddda7b` before the instrument had been run and before its result file existed;
+measured by `scripts/celegans_fate_read_choice.py` into `data/results/celegans_fate_read_choice.json`.
+All six predictions held, and that is not a sign of a hard registration: four of them were mechanism
+read off the runtime before it was run rather than guesses at a number, which is the only reason a
+prediction like "332 again, exactly" could be made at all.
+
+### What the two reads actually compute
+
+Both are `_read` in `genomeos/runtime/body.py:318`, and both integrate the same thing: the reader's
+presence call (Ma et al. 2021, max adjusted expression ≥ 20% of the factor's own maximum), banked at
+every decision point, a factor counting 1 for every minute the cell carries it — this program declares
+no `cell_network`, so there is no level to integrate. **They differ only in the denominator.**
+
+- `F.exposure(lineage)` is the total: minutes the path from the zygote to this cell carried F.
+  Absolute, monotone and unbounded, and it grows with how late the cell is born, because the path is
+  longer. A threshold of 15 min is met by a late-born cell partly for having a long ancestry.
+- `F.mean(lineage)` divides that total by the window's span, which for the lineage window is `t` itself.
+  So it is the **fraction of the elapsed embryo** that this cell's path spent carrying F, and it asks
+  the same question of a cell born at 100 min and one born at 500 min. It is not monotone: it falls
+  whenever the path is not carrying F.
+
+That is a real argument for `mean`, and it is why `mean` scores higher. It is also why its threshold is
+not on a plateau where 15 min is flat from 1 to 30 min: a fraction of a growing window has no dead band.
+
+### 332 → 414: the runtime started asking a second time, and the second answer was already locked
+
+**It is not a change in area E's program and it is not drift in the rules.** `fates.bio` is
+byte-identical to the shipped one in the measuring arm (asserted, or the run stops). What landed after
+2026-09-15 is §7.5, `recheck: crossings` (`9d42485`), now the default: when a cell finishes deciding,
+the runtime computes the instant at which an unmet threshold of an integrated read named by a decision
+that could apply to it would be reached at the rate now in force, and schedules one re-decision there.
+
+Run the identical program with `recheck="none"` and the count comes back exactly:
+
+| the shipped program | claimed | claimed right | claimed wrong | fates the lookup had not written | score with the lookup as fallback |
+|---|---|---|---|---|---|
+| `recheck: crossings` (as shipped) | **414** | 381 | 33 | **0** | 522 / 555 |
+| `recheck: none` | **332** | 299 | 33 | **0** | 522 / 555 |
+
+1,057 crossings are taken. **82 cells are claimed only under `crossings`, none only under `none`, and
+all 82 are claimed-and-right — not one of them is wrong.** That is not luck, and the mechanism is
+exact: the lookup writes the cell's terminal type at its birth decision point, `_commit` establishes
+`commitment terminal_fate` at the end of that same decision point (`body.py:565`), and from then on
+`_pick_fate` refuses any decision whose `to` differs from the lock (`body.py:456`). So a factor rule
+firing at a later crossing **can only name the type already on the cell**; `body.py:553` then records
+that it revises nothing, and it is appended to the cell's `fired` list all the same. That last line is
+what the credit instrument counts.
+
+Measured on the shipped arm: of the 414 claimed cells, **164 had the rule fire only at the cell's own
+birth, and 250 had it fire again at a crossing — and on all 250 the cell was already committed to the
+very type the rule went on to name** (245 of them right, 5 wrong, the 5 being cells where a factor rule
+had overridden the lookup at birth and the lock then held the error). So the published score cannot see
+the move because there is nothing there to see: 82 fates moved from "the lookup answered" to "a rule
+agreed with an answer it was not allowed to contradict", and both count as right.
+
+### The registration, and the bar it set before the numbers
+
+The metric is the one `542d613` established — honest credit (fates a factor rule set and got right, no
+credit for a lookup answer), and beside it the count the bar is on: **claimed cells the lookup's own
+`fate_<cell>` decision had not already fired on**. This measurement adds a third, because of the 250
+above:
+
+> **free credit** — honest credit minus the claimed-and-right cells on which the rule fired while the
+> cell was already committed to that very type, where no other answer was reachable.
+
+Registered as the bar: *the shipped read changes to `mean(lineage) >= 0.25` only if (a) it decides at
+least one fate the lineage had not written, in sample and held out, or (b) its free credit is more than
+5 fates higher without losing precision.* And registered as **not** an improvement, in advance and
+whatever its size: a rise in honest credit alone, or in the published 522-style score, which rewards
+abstention. The trap in the registration's own words: *no factor rule in this program has ever decided a
+fate the lineage had not already written, 414 of 414, so a read that scores higher while that count
+stays at 0 has not made the factors decide one more thing — it has agreed with the answer sheet more
+often on cells the answer sheet had already filled in.* This project has spent two days establishing
+that a rise in a headline is not a result unless the thing it is measured against moves too; a band
+table was retired the day before this for failing exactly that test.
+
+### Both reads, on the same 555 cells, through the same Body
+
+| read | claimed | honest | held out | fates the lookup had not written | precision | free credit | score with the fallback |
+|---|---|---|---|---|---|---|---|
+| `exposure(lineage) >= 15` **(shipped)** | 414 | 381 | 374 | **0 / 0** | 0.920 | **136** | 522 / 483 |
+| `mean(lineage) >= 0.25` | 414 | **392** | **383** | **0 / 0** | **0.947** | **56** | **533 / 515** |
+
+**The bar is not met, and the shipped read does not change.** `mean` wins every number the earlier
+measurement reported — +11 honest in sample, +9 held out, +11 with the fallback, higher precision in
+both — and **the ordering reverses on the only measure that is not credit for agreeing with a lock**.
+The reason is in the firing counts: under `mean` only **60** of the 414 claimed cells had the rule fire
+at the cell's own birth against the shipped read's 164, and **354** fired only after the fate was
+written and locked. `mean(lineage)` rises through its threshold *later* than `exposure(lineage)` rises
+through 15 min — the denominator is `t`, so the fraction is smallest early and the crossing comes after
+the cell has already decided. Nearly all of its extra score is collected at crossings.
+
+The strict free credit above disqualifies a cell whose rule fired at both its birth and a later
+crossing, so it is a lower bound. The generous reading — a cell is free if the rule ever fired on it
+before any lock — is measured exactly by the `recheck: none` arms, and it orders the two reads the same
+way: **299 against 263**, the shipped read ahead by 36. Under both readings `mean` is behind.
+
+So the decision is the one the area has made before: **nothing changes, and both numbers are
+published.** `mean(lineage)` remains what it was in the 2026-09-15 table, the alternative that scores
+better, and there are now two reasons not to take it rather than one — its threshold is a point on a
+slope where 15 min is a plateau, and its advantage is entirely in credit for cells no rule was free to
+be wrong about.
+
+### What this says about the metric, which is the part worth keeping
+
+The honest credit metric of `542d613` removed the lookup as a *fallback* and did not remove it as a
+*lock*. Those are two different borrowings and the second is larger than it looks: 250 of 414 claimed
+cells for the shipped read and 354 of 414 for `mean`. A number that can be raised by making a rule fire
+later, on a cell whose answer is already fixed, is not yet measuring what the factors know, and any
+future rule set will be able to raise it the same way. The three numbers to publish together, in
+descending order of what they borrow, are now: 522 with the lookup as fallback, 381 honest, 136 free,
+and **0 decided without the lookup having written the fate first**.
+
+That last number is still the one that matters, and neither read moves it, because neither can: the
+rules are guarded on a terminal `cell_type` and only the lookup ever sets one. Changing the read cannot
+move a count that the guard fixes at zero. What would move it is the terminality gate, which
+`542d613` already measured — with the lookup's 555 fate decisions deleted and the guard opened, the same
+rules reach 44 of 555 and claim more non-terminal cells than terminal ones. That is where area E's next
+real number is, and it is not a read choice.
