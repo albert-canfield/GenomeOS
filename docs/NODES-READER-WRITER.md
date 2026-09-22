@@ -1933,3 +1933,130 @@ the dominant axis is not cell type at all but whether the biosample was
 transformed. The fetch did not merely add two rows — but the row it was most
 expected to move, germline methylation, it did not move, and that is reported
 here as the result it is.
+
+## Is the rest of the reader's family assay depth too? (2026-09-22)
+
+The section above retired one reading. `enhancers_active` is not a lone field,
+though. `read_chromosome` in `genomeos/genome/reader.py` returns a row of
+per-biosample counts and `scripts/reader_genome_wide.py` rolls eight of them up
+genome-wide, and the mechanism that caught `enhancers_active` — a count of
+things that overlap a peak set grows with the peak set — is a property of the
+pipeline, not of that one field. So it is asked of the whole family before
+anything is repaired, and the repair is registered before it is built.
+
+### The family, as the code defines it
+
+Per (biosample, chromosome), `genomeos/genome/reader.py:202-243`: `peaks`,
+`coding_genes`, `genes_read`, `genes_read_open`, `genes_read_by_marks`,
+`genes_poised`, `genes_silent`, `genes_closed`, `read_fraction`, `enhancers`,
+`enhancers_active`, `enhancers_active_fraction`, `nodes`, `nodes_open`,
+`nodes_silent`. Twelve of those travel per chromosome into
+`reader_genome_wide.json` and eight are summed into its `totals`.
+`coding_genes`, `enhancers` and `nodes` are the same for every biosample —
+they come from the annotation and the registry, not from the experiment — so
+the readings that can carry a claim about a cell type are the other nine.
+
+### Span and DNase depth across the thirteen, measured
+
+Spearman rho is against the biosample's genome-wide DNase peak count. `span` is
+max/min over the thirteen; `rho 11` is the same statistic on the original
+eleven, for comparison with the fit the section above registered.
+
+| reading | min | max | span | rho 13 | rho 11 |
+|---|---|---|---|---|---|
+| DNase `peaks` (the covariate) | 76,119 | 518,503 | 6.81 | 1.0000 | 1.0000 |
+| `enhancers_active` | 57,321 | 233,853 | 4.08 | **0.8297** | 0.8818 |
+| `genes_read_by_marks` | 60 | 2,836 | 47.27 | **−0.6264** | −0.7364 |
+| `nodes_silent` | 382 | 4,933 | 12.91 | −0.5604 | −0.5727 |
+| `genes_read_open` | 8,432 | 15,489 | 1.84 | 0.5934 | 0.6818 |
+| `genes_read` | 10,698 | 15,078 | 1.41 | 0.5330 | 0.7182 |
+| `genes_poised` | 200 | 3,151 | 15.76 | 0.3791 | 0.3727 |
+| `nodes_open` | 9,988 | 10,016 | 1.00 | −0.1898 | −0.0957 |
+
+`enhancers_active_fraction` and `read_fraction` are not listed separately: the
+denominators are biosample-independent, so each is its numerator rescaled and
+has the same rho to four places.
+
+Three things fall out of that table before any repair is designed.
+
+**`nodes_open` is a tautology and has never measured anything.** Line 197 of
+`reader.py` takes the median peak density over the nodes *of that biosample* and
+line 198 calls a node open if it is at or above it. A median split returns half
+the nodes by construction, and it does: every one of the thirteen reads between
+9,988 and 10,016 open nodes out of 20,002, a span of 1.00 across a set whose
+DNase depth spans 6.81. This is not a depth confound; it is a field that cannot
+distinguish two biosamples even in principle. It is withdrawn below rather than
+normalised.
+
+**`genes_read_by_marks` is depth with the sign reversed.** It counts promoters
+the marks rescue *where the DNase file called nothing*, so it is large exactly
+when the DNase experiment was shallow — keratinocyte 2,836 and GM12878 1,096 at
+the two lowest peak counts, hepatocyte 60 and H1 64 at the high end. rho −0.63
+understates it: this field is a measure of the DNase file, wearing the label of
+the marks.
+
+**DNase depth is the wrong covariate for the two mark-derived readings.**
+`genes_poised` is called from H3K27me3 and H3K27ac peaks, not from DNase, so its
+low rho against DNase depth is not evidence that it is free of assay depth. The
+section above already showed why this matters: testis reads 284 poised genes,
+the lowest of the thirteen, and testis's H3K27me3 peak call is under-called at
+1,902 peaks against a floor of 8,540. The covariate for a mark-derived reading
+is that mark's peak count, and it has not been tested.
+
+### The repair, registered before it is built
+
+Treatment per reading, fixed here:
+
+- `nodes_open`: **withdrawn**, not normalised. A median split of the biosample
+  against itself cannot be repaired by rescaling.
+- `enhancers_active`, `enhancers_active_fraction`: **relabelled** as
+  depth-dominated wherever they are reported, and a normalised reading is
+  offered beside the raw one *only if* it passes the tests below.
+- `genes_read_by_marks`: **relabelled** as a property of the DNase file rather
+  than of the marks.
+- `genes_poised`: **tested against H3K27me3 peak count** before anything is
+  said about it, and banded on that, not on DNase.
+- `genes_read`, `genes_read_open`, `nodes_silent`: **raw, banded**. These are
+  the readings the section above found partly escape the confound, and the
+  existing caveat at "Eleven cell types, every chromosome" already says peak
+  depth moves the read shares.
+
+The candidate normalised reading is `enhancers_active_per_100k_peaks` =
+`enhancers_active` / `peaks` × 100,000 — a rate rather than a count, computable
+from numbers already on disk and, unlike a regression residual, not redefined
+every time a biosample is added.
+
+**What it must do to be worth reporting.** It must move at least one conclusion
+already published in this file. Concretely: it must either reverse or make
+unclaimable the active-enhancer comparison at "Every chromosome" (K562 193,255
+against HepG2 124,478) or change the ordering of the active-enhancer column in
+the eleven-row table at "Eleven cell types, every chromosome". If it re-ranks
+the thirteen and no published sentence changes, it is decoration and it is not
+shipped.
+
+**What would show normalisation is the wrong answer.** Three ways, each with its
+threshold fixed now.
+
+1. **The residual does not replicate.** Split the autosomes into two disjoint
+   halves — odd (chr1, chr3, … chr21) and even (chr2, chr4, … chr22); chrX and
+   chrY are excluded because donor sex is a known confound on them. Within each
+   half, fit `enhancers_active` ~ a + b × (that half's DNase peak count) by least
+   squares over the thirteen biosamples and take the residuals. Statistic:
+   Spearman rho between the half-A and half-B residuals across the thirteen. A
+   residual that is a property of the biosample must show up in both halves of
+   its own genome. **Normalisation is built only if rho ≥ 0.5 and a permutation
+   test over 10,000 shuffles of one half's labels gives p < 0.05.** Below that
+   the residual is noise, and the only honest repair is the label.
+2. **The residual replicates but is a second assay property.** Mean DNase peak
+   width per biosample is computed from the peak files already on disk. If the
+   half-genome residuals replicate but the full-genome residual tracks mean peak
+   width at |rho| ≥ 0.7, then what survives depth is peak-calling shape, which
+   is still the assay, and the normalised reading is renaming one artefact as
+   another. Reported as that, not shipped as biology.
+3. **The ratio over-corrects.** If `enhancers_active_per_100k_peaks` has rho
+   against DNase peak count of ≤ −0.7 over the thirteen, dividing has induced the
+   opposite confound and the rate is no better than the count. The target band
+   for a normalisation that has actually removed depth is |rho| < 0.4.
+
+No new data is fetched for any of this and no model request is made; every
+number above and every number the tests need is already on disk.
