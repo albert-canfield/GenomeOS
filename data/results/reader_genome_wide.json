@@ -12,7 +12,9 @@
     "keratinocyte",
     "hepatocyte",
     "astrocyte",
-    "CD14-positive monocyte"
+    "CD14-positive monocyte",
+    "testis",
+    "ovary"
   ],
   "chromosomes": {
     "chr1": {
@@ -234,7 +236,35 @@
         "CTTNBP2NL",
         "CYP4A11"
       ],
-      "read_in_both": 1036
+      "read_in_both": 1036,
+      "testis": {
+        "peaks": 20246,
+        "coding_genes": 2066,
+        "genes_read": 1513,
+        "genes_read_open": 1527,
+        "genes_poised": 25,
+        "genes_read_by_marks": 11,
+        "read_fraction": 0.7323,
+        "enhancers_active": 13584,
+        "enhancers_active_fraction": 0.1542,
+        "nodes": 1639,
+        "nodes_open": 822,
+        "nodes_silent": 61
+      },
+      "ovary": {
+        "peaks": 21513,
+        "coding_genes": 2066,
+        "genes_read": 1425,
+        "genes_read_open": 1426,
+        "genes_poised": 23,
+        "genes_read_by_marks": 22,
+        "read_fraction": 0.6897,
+        "enhancers_active": 9930,
+        "enhancers_active_fraction": 0.1127,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_silent": 175
+      }
     },
     "chr2": {
       "K562": {
@@ -455,7 +485,35 @@
         "EDAR",
         "EHBP1"
       ],
-      "read_in_both": 644
+      "read_in_both": 644,
+      "testis": {
+        "peaks": 18628,
+        "coding_genes": 1252,
+        "genes_read": 993,
+        "genes_read_open": 1010,
+        "genes_poised": 25,
+        "genes_read_by_marks": 8,
+        "read_fraction": 0.7931,
+        "enhancers_active": 11431,
+        "enhancers_active_fraction": 0.1435,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 65
+      },
+      "ovary": {
+        "peaks": 21423,
+        "coding_genes": 1252,
+        "genes_read": 918,
+        "genes_read_open": 931,
+        "genes_poised": 28,
+        "genes_read_by_marks": 15,
+        "read_fraction": 0.7332,
+        "enhancers_active": 9439,
+        "enhancers_active_fraction": 0.1185,
+        "nodes": 1654,
+        "nodes_open": 828,
+        "nodes_silent": 196
+      }
     },
     "chr3": {
       "K562": {
@@ -676,7 +734,35 @@
         "FETUB",
         "FILIP1L"
       ],
-      "read_in_both": 597
+      "read_in_both": 597,
+      "testis": {
+        "peaks": 13604,
+        "coding_genes": 1084,
+        "genes_read": 849,
+        "genes_read_open": 858,
+        "genes_poised": 11,
+        "genes_read_by_marks": 2,
+        "read_fraction": 0.7832,
+        "enhancers_active": 8529,
+        "enhancers_active_fraction": 0.1365,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_silent": 83
+      },
+      "ovary": {
+        "peaks": 13064,
+        "coding_genes": 1084,
+        "genes_read": 802,
+        "genes_read_open": 813,
+        "genes_poised": 18,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.7399,
+        "enhancers_active": 5921,
+        "enhancers_active_fraction": 0.0947,
+        "nodes": 1441,
+        "nodes_open": 722,
+        "nodes_silent": 174
+      }
     },
     "chr4": {
       "K562": {
@@ -897,7 +983,35 @@
         "FGB",
         "FHIP1A"
       ],
-      "read_in_both": 329
+      "read_in_both": 329,
+      "testis": {
+        "peaks": 10000,
+        "coding_genes": 759,
+        "genes_read": 563,
+        "genes_read_open": 577,
+        "genes_poised": 15,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7418,
+        "enhancers_active": 5665,
+        "enhancers_active_fraction": 0.1228,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 73
+      },
+      "ovary": {
+        "peaks": 10221,
+        "coding_genes": 759,
+        "genes_read": 522,
+        "genes_read_open": 537,
+        "genes_poised": 21,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.6877,
+        "enhancers_active": 3987,
+        "enhancers_active_fraction": 0.0864,
+        "nodes": 1322,
+        "nodes_open": 662,
+        "nodes_silent": 145
+      }
     },
     "chr5": {
       "K562": {
@@ -1118,7 +1232,35 @@
         "HCN1",
         "HEXB"
       ],
-      "read_in_both": 426
+      "read_in_both": 426,
+      "testis": {
+        "peaks": 11972,
+        "coding_genes": 895,
+        "genes_read": 685,
+        "genes_read_open": 700,
+        "genes_poised": 19,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.7654,
+        "enhancers_active": 7157,
+        "enhancers_active_fraction": 0.1347,
+        "nodes": 1245,
+        "nodes_open": 624,
+        "nodes_silent": 93
+      },
+      "ovary": {
+        "peaks": 12558,
+        "coding_genes": 895,
+        "genes_read": 615,
+        "genes_read_open": 632,
+        "genes_poised": 24,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.6872,
+        "enhancers_active": 5436,
+        "enhancers_active_fraction": 0.1023,
+        "nodes": 1245,
+        "nodes_open": 624,
+        "nodes_silent": 168
+      }
     },
     "chr6": {
       "K562": {
@@ -1339,7 +1481,35 @@
         "HLA-C",
         "HLA-DQB1"
       ],
-      "read_in_both": 551
+      "read_in_both": 551,
+      "testis": {
+        "peaks": 12164,
+        "coding_genes": 1052,
+        "genes_read": 807,
+        "genes_read_open": 817,
+        "genes_poised": 11,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7671,
+        "enhancers_active": 7827,
+        "enhancers_active_fraction": 0.1374,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 67
+      },
+      "ovary": {
+        "peaks": 11056,
+        "coding_genes": 1052,
+        "genes_read": 759,
+        "genes_read_open": 782,
+        "genes_poised": 29,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.7215,
+        "enhancers_active": 5240,
+        "enhancers_active_fraction": 0.092,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 152
+      }
     },
     "chr7": {
       "K562": {
@@ -1560,7 +1730,35 @@
         "HERPUD2",
         "HOXA4"
       ],
-      "read_in_both": 454
+      "read_in_both": 454,
+      "testis": {
+        "peaks": 11304,
+        "coding_genes": 935,
+        "genes_read": 695,
+        "genes_read_open": 704,
+        "genes_poised": 17,
+        "genes_read_by_marks": 8,
+        "read_fraction": 0.7433,
+        "enhancers_active": 6951,
+        "enhancers_active_fraction": 0.141,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 46
+      },
+      "ovary": {
+        "peaks": 13569,
+        "coding_genes": 935,
+        "genes_read": 643,
+        "genes_read_open": 656,
+        "genes_poised": 23,
+        "genes_read_by_marks": 10,
+        "read_fraction": 0.6877,
+        "enhancers_active": 5270,
+        "enhancers_active_fraction": 0.1069,
+        "nodes": 1133,
+        "nodes_open": 568,
+        "nodes_silent": 126
+      }
     },
     "chr8": {
       "K562": {
@@ -1781,7 +1979,35 @@
         "MBOAT4",
         "MCMDC2"
       ],
-      "read_in_both": 318
+      "read_in_both": 318,
+      "testis": {
+        "peaks": 10318,
+        "coding_genes": 706,
+        "genes_read": 523,
+        "genes_read_open": 533,
+        "genes_poised": 11,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7408,
+        "enhancers_active": 6218,
+        "enhancers_active_fraction": 0.1372,
+        "nodes": 1112,
+        "nodes_open": 557,
+        "nodes_silent": 79
+      },
+      "ovary": {
+        "peaks": 11211,
+        "coding_genes": 706,
+        "genes_read": 480,
+        "genes_read_open": 504,
+        "genes_poised": 28,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.6799,
+        "enhancers_active": 4713,
+        "enhancers_active_fraction": 0.104,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 155
+      }
     },
     "chr9": {
       "K562": {
@@ -2002,7 +2228,35 @@
         "PBX3",
         "PLGRKT"
       ],
-      "read_in_both": 407
+      "read_in_both": 407,
+      "testis": {
+        "peaks": 10407,
+        "coding_genes": 776,
+        "genes_read": 609,
+        "genes_read_open": 617,
+        "genes_poised": 12,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.7848,
+        "enhancers_active": 6556,
+        "enhancers_active_fraction": 0.1574,
+        "nodes": 814,
+        "nodes_open": 408,
+        "nodes_silent": 42
+      },
+      "ovary": {
+        "peaks": 11461,
+        "coding_genes": 776,
+        "genes_read": 557,
+        "genes_read_open": 560,
+        "genes_poised": 13,
+        "genes_read_by_marks": 10,
+        "read_fraction": 0.7178,
+        "enhancers_active": 4954,
+        "enhancers_active_fraction": 0.119,
+        "nodes": 814,
+        "nodes_open": 411,
+        "nodes_silent": 91
+      }
     },
     "chr10": {
       "K562": {
@@ -2223,7 +2477,35 @@
         "MPP7",
         "NODAL"
       ],
-      "read_in_both": 382
+      "read_in_both": 382,
+      "testis": {
+        "peaks": 10813,
+        "coding_genes": 732,
+        "genes_read": 562,
+        "genes_read_open": 571,
+        "genes_poised": 12,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.7678,
+        "enhancers_active": 7013,
+        "enhancers_active_fraction": 0.1479,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_silent": 38
+      },
+      "ovary": {
+        "peaks": 14820,
+        "coding_genes": 732,
+        "genes_read": 535,
+        "genes_read_open": 549,
+        "genes_poised": 21,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.7309,
+        "enhancers_active": 6218,
+        "enhancers_active_fraction": 0.1311,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 102
+      }
     },
     "chr11": {
       "K562": {
@@ -2444,7 +2726,35 @@
         "LRP4",
         "MMP10"
       ],
-      "read_in_both": 595
+      "read_in_both": 595,
+      "testis": {
+        "peaks": 11428,
+        "coding_genes": 1319,
+        "genes_read": 859,
+        "genes_read_open": 868,
+        "genes_poised": 16,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.6513,
+        "enhancers_active": 7482,
+        "enhancers_active_fraction": 0.1547,
+        "nodes": 947,
+        "nodes_open": 474,
+        "nodes_silent": 54
+      },
+      "ovary": {
+        "peaks": 13779,
+        "coding_genes": 1319,
+        "genes_read": 829,
+        "genes_read_open": 832,
+        "genes_poised": 17,
+        "genes_read_by_marks": 14,
+        "read_fraction": 0.6285,
+        "enhancers_active": 6143,
+        "enhancers_active_fraction": 0.127,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_silent": 108
+      }
     },
     "chr12": {
       "K562": {
@@ -2665,7 +2975,35 @@
         "KLRF2",
         "KRT5"
       ],
-      "read_in_both": 560
+      "read_in_both": 560,
+      "testis": {
+        "peaks": 10199,
+        "coding_genes": 1041,
+        "genes_read": 784,
+        "genes_read_open": 799,
+        "genes_poised": 20,
+        "genes_read_by_marks": 5,
+        "read_fraction": 0.7531,
+        "enhancers_active": 6667,
+        "enhancers_active_fraction": 0.1431,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 48
+      },
+      "ovary": {
+        "peaks": 9826,
+        "coding_genes": 1041,
+        "genes_read": 732,
+        "genes_read_open": 736,
+        "genes_poised": 16,
+        "genes_read_by_marks": 12,
+        "read_fraction": 0.7032,
+        "enhancers_active": 4665,
+        "enhancers_active_fraction": 0.1001,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 123
+      }
     },
     "chr13": {
       "K562": {
@@ -2879,7 +3217,35 @@
         "URAD",
         "UTP14C"
       ],
-      "read_in_both": 162
+      "read_in_both": 162,
+      "testis": {
+        "peaks": 5513,
+        "coding_genes": 322,
+        "genes_read": 255,
+        "genes_read_open": 262,
+        "genes_poised": 7,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.7919,
+        "enhancers_active": 3210,
+        "enhancers_active_fraction": 0.1252,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 37
+      },
+      "ovary": {
+        "peaks": 5873,
+        "coding_genes": 322,
+        "genes_read": 232,
+        "genes_read_open": 249,
+        "genes_poised": 18,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7205,
+        "enhancers_active": 2406,
+        "enhancers_active_fraction": 0.0939,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 73
+      }
     },
     "chr14": {
       "K562": {
@@ -3100,7 +3466,35 @@
         "LGALS3",
         "LGMN"
       ],
-      "read_in_both": 357
+      "read_in_both": 357,
+      "testis": {
+        "peaks": 7516,
+        "coding_genes": 619,
+        "genes_read": 489,
+        "genes_read_open": 492,
+        "genes_poised": 5,
+        "genes_read_by_marks": 2,
+        "read_fraction": 0.79,
+        "enhancers_active": 4819,
+        "enhancers_active_fraction": 0.1516,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 25
+      },
+      "ovary": {
+        "peaks": 8384,
+        "coding_genes": 619,
+        "genes_read": 456,
+        "genes_read_open": 464,
+        "genes_poised": 13,
+        "genes_read_by_marks": 5,
+        "read_fraction": 0.7367,
+        "enhancers_active": 3711,
+        "enhancers_active_fraction": 0.1167,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_silent": 65
+      }
     },
     "chr15": {
       "K562": {
@@ -3321,7 +3715,35 @@
         "PRTG",
         "RNF111"
       ],
-      "read_in_both": 322
+      "read_in_both": 322,
+      "testis": {
+        "peaks": 7794,
+        "coding_genes": 603,
+        "genes_read": 485,
+        "genes_read_open": 488,
+        "genes_poised": 6,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.8043,
+        "enhancers_active": 4935,
+        "enhancers_active_fraction": 0.1589,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 19
+      },
+      "ovary": {
+        "peaks": 9144,
+        "coding_genes": 603,
+        "genes_read": 436,
+        "genes_read_open": 446,
+        "genes_poised": 17,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.7231,
+        "enhancers_active": 3759,
+        "enhancers_active_fraction": 0.121,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 61
+      }
     },
     "chr16": {
       "K562": {
@@ -3542,7 +3964,35 @@
         "METTL9",
         "MPV17L"
       ],
-      "read_in_both": 488
+      "read_in_both": 488,
+      "testis": {
+        "peaks": 7727,
+        "coding_genes": 856,
+        "genes_read": 644,
+        "genes_read_open": 647,
+        "genes_poised": 12,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.7523,
+        "enhancers_active": 5067,
+        "enhancers_active_fraction": 0.1568,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 20
+      },
+      "ovary": {
+        "peaks": 9122,
+        "coding_genes": 856,
+        "genes_read": 603,
+        "genes_read_open": 614,
+        "genes_poised": 20,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.7044,
+        "enhancers_active": 3860,
+        "enhancers_active_fraction": 0.1195,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 83
+      }
     },
     "chr17": {
       "K562": {
@@ -3763,7 +4213,35 @@
         "G6PC1",
         "GFAP"
       ],
-      "read_in_both": 642
+      "read_in_both": 642,
+      "testis": {
+        "peaks": 10153,
+        "coding_genes": 1187,
+        "genes_read": 884,
+        "genes_read_open": 897,
+        "genes_poised": 23,
+        "genes_read_by_marks": 10,
+        "read_fraction": 0.7447,
+        "enhancers_active": 7063,
+        "enhancers_active_fraction": 0.1706,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 15
+      },
+      "ovary": {
+        "peaks": 11681,
+        "coding_genes": 1187,
+        "genes_read": 842,
+        "genes_read_open": 841,
+        "genes_poised": 15,
+        "genes_read_by_marks": 16,
+        "read_fraction": 0.7094,
+        "enhancers_active": 5636,
+        "enhancers_active_fraction": 0.1361,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 53
+      }
     },
     "chr18": {
       "K562": {
@@ -3969,7 +4447,35 @@
         "SYT4",
         "TUBB8B"
       ],
-      "read_in_both": 138
+      "read_in_both": 138,
+      "testis": {
+        "peaks": 5318,
+        "coding_genes": 267,
+        "genes_read": 220,
+        "genes_read_open": 222,
+        "genes_poised": 3,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.824,
+        "enhancers_active": 3159,
+        "enhancers_active_fraction": 0.1438,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 40
+      },
+      "ovary": {
+        "peaks": 5037,
+        "coding_genes": 267,
+        "genes_read": 201,
+        "genes_read_open": 209,
+        "genes_poised": 10,
+        "genes_read_by_marks": 2,
+        "read_fraction": 0.7528,
+        "enhancers_active": 2258,
+        "enhancers_active_fraction": 0.1028,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 78
+      }
     },
     "chr19": {
       "K562": {
@@ -4190,7 +4696,35 @@
         "PRODH2",
         "PSG5"
       ],
-      "read_in_both": 891
+      "read_in_both": 891,
+      "testis": {
+        "peaks": 8268,
+        "coding_genes": 1479,
+        "genes_read": 1121,
+        "genes_read_open": 1133,
+        "genes_poised": 18,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.7579,
+        "enhancers_active": 5792,
+        "enhancers_active_fraction": 0.1972,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 2
+      },
+      "ovary": {
+        "peaks": 7980,
+        "coding_genes": 1479,
+        "genes_read": 1045,
+        "genes_read_open": 1035,
+        "genes_poised": 14,
+        "genes_read_by_marks": 24,
+        "read_fraction": 0.7066,
+        "enhancers_active": 4194,
+        "enhancers_active_fraction": 0.1428,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 12
+      }
     },
     "chr20": {
       "K562": {
@@ -4411,7 +4945,35 @@
         "XKR7",
         "ZNF334"
       ],
-      "read_in_both": 294
+      "read_in_both": 294,
+      "testis": {
+        "peaks": 6584,
+        "coding_genes": 548,
+        "genes_read": 418,
+        "genes_read_open": 423,
+        "genes_poised": 8,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.7628,
+        "enhancers_active": 4365,
+        "enhancers_active_fraction": 0.1619,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 13
+      },
+      "ovary": {
+        "peaks": 7622,
+        "coding_genes": 548,
+        "genes_read": 388,
+        "genes_read_open": 388,
+        "genes_poised": 9,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.708,
+        "enhancers_active": 3419,
+        "enhancers_active_fraction": 0.1268,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 60
+      }
     },
     "chr21": {
       "K562": {
@@ -4609,7 +5171,35 @@
         "RIPK4",
         "TFF3"
       ],
-      "read_in_both": 90
+      "read_in_both": 90,
+      "testis": {
+        "peaks": 3139,
+        "coding_genes": 221,
+        "genes_read": 139,
+        "genes_read_open": 141,
+        "genes_poised": 2,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.629,
+        "enhancers_active": 1866,
+        "enhancers_active_fraction": 0.1537,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 8
+      },
+      "ovary": {
+        "peaks": 4196,
+        "coding_genes": 221,
+        "genes_read": 140,
+        "genes_read_open": 143,
+        "genes_poised": 3,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.6335,
+        "enhancers_active": 1671,
+        "enhancers_active_fraction": 0.1377,
+        "nodes": 228,
+        "nodes_open": 115,
+        "nodes_silent": 24
+      }
     },
     "chr22": {
       "K562": {
@@ -4830,7 +5420,35 @@
         "USP18",
         "XKR3"
       ],
-      "read_in_both": 249
+      "read_in_both": 249,
+      "testis": {
+        "peaks": 5483,
+        "coding_genes": 447,
+        "genes_read": 351,
+        "genes_read_open": 353,
+        "genes_poised": 6,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.7852,
+        "enhancers_active": 3458,
+        "enhancers_active_fraction": 0.1755,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 4
+      },
+      "ovary": {
+        "peaks": 7512,
+        "coding_genes": 447,
+        "genes_read": 317,
+        "genes_read_open": 313,
+        "genes_poised": 5,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.7092,
+        "enhancers_active": 2877,
+        "enhancers_active_fraction": 0.146,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 12
+      }
     },
     "chrX": {
       "K562": {
@@ -5051,7 +5669,35 @@
         "MAP7D2",
         "MBNL3"
       ],
-      "read_in_both": 346
+      "read_in_both": 346,
+      "testis": {
+        "peaks": 6702,
+        "coding_genes": 867,
+        "genes_read": 612,
+        "genes_read_open": 608,
+        "genes_poised": 0,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.7059,
+        "enhancers_active": 3481,
+        "enhancers_active_fraction": 0.152,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 41
+      },
+      "ovary": {
+        "peaks": 7424,
+        "coding_genes": 867,
+        "genes_read": 529,
+        "genes_read_open": 533,
+        "genes_poised": 13,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.6101,
+        "enhancers_active": 2346,
+        "enhancers_active_fraction": 0.1025,
+        "nodes": 822,
+        "nodes_open": 412,
+        "nodes_silent": 92
+      }
     },
     "chrY": {
       "K562": {
@@ -5220,7 +5866,35 @@
         "TMSB4Y",
         "ZFY"
       ],
-      "read_in_both": 0
+      "read_in_both": 0,
+      "testis": {
+        "peaks": 464,
+        "coding_genes": 61,
+        "genes_read": 18,
+        "genes_read_open": 18,
+        "genes_poised": 0,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.2951,
+        "enhancers_active": 104,
+        "enhancers_active_fraction": 0.1147,
+        "nodes": 49,
+        "nodes_open": 25,
+        "nodes_silent": 1
+      },
+      "ovary": {
+        "peaks": 135,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "genes_read_open": 0,
+        "genes_poised": 0,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 0,
+        "enhancers_active_fraction": 0.0,
+        "nodes": 49,
+        "nodes_open": 9,
+        "nodes_silent": 21
+      }
     }
   },
   "totals": {
@@ -5334,7 +6008,27 @@
       "enhancers_active": 141431,
       "nodes_silent": 2989
     },
-    "seconds": 247
+    "testis": {
+      "coding_genes": 20094,
+      "genes_read": 15078,
+      "genes_read_open": 15265,
+      "genes_poised": 284,
+      "genes_read_by_marks": 97,
+      "marks_used_on": 24,
+      "enhancers_active": 142399,
+      "nodes_silent": 974
+    },
+    "ovary": {
+      "coding_genes": 20094,
+      "genes_read": 14006,
+      "genes_read_open": 14193,
+      "genes_poised": 398,
+      "genes_read_by_marks": 211,
+      "marks_used_on": 24,
+      "enhancers_active": 108053,
+      "nodes_silent": 2349
+    },
+    "seconds": 164
   },
   "evidence": "experimental: ENCODE DNase-seq peaks and Histone ChIP-seq peaks; inferred: read = promoter open and not poised (H3K27me3 without H3K27ac), or closed with H3K4me3 and H3K27ac, where the marks were read"
 }

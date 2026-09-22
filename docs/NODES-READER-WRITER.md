@@ -1845,3 +1845,91 @@ prediction: every one of the eleven uses ENCODE **replicated** peaks, and every
 tissue experiment on offer for testis and ovary has only **pseudoreplicated**
 peaks. Tissue is a single-replicate donor in this portal, and the manifest rule
 prefers replicated calls that tissue cannot supply.
+
+### Ingested and scored (`reader_genome_wide.py`, `epigenome.py summary`/`genome`, 0 model requests)
+
+The fetch cost **1.91 GB over the wire and 113 MB on disk** — 5.1 MB of DNase
+peak files streamed whole, 8.7 MB of mark peak files streamed whole, and
+1,897.7 MB of WGBS bigBed read by range and kept as 200 bp bins. Signal
+profiles were deliberately not fetched: `summarise_chromosome` builds its
+`Layer` with `signal=False`, so nothing re-run here reads them, and skipping
+them saves about 400 MB. The consequence is recorded rather than hidden — the
+direction, fossil and transfer analyses cannot include testis or ovary until
+those profiles exist. Ingest took 290 s over 58 tasks with no failures, the
+reader 164 s, the per-chromosome summaries 23 chromosomes, the roll-up
+seconds. No AlphaGenome request was made.
+
+The layer now holds **thirteen biosamples, all thirteen with five marks and ten
+with methylation**. Re-running the summaries recomputed all 264
+(chromosome, biosample) blocks of the original eleven, and every one reproduced
+byte-identically: the two new biosamples are purely additive.
+
+**P1, the confound: confirmed, and it holds out of sample.** Fitted on the
+eleven, `enhancers_active` = 57,968 + 0.3910 × DNase peaks, residual sd 36,400.
+Testis has 225,744 DNase peaks, predicting 146,226 active enhancers; it has
+142,399, **z = −0.11**. Ovary predicts 155,167 and has 108,053, z = −1.29. Both
+inside ±2 sd, testis to within a tenth of a standard deviation. A biosample from
+a lineage and a material the layer had never seen has its enhancer count
+predicted by nothing but how many peaks its DNase experiment called. Spearman
+rho over thirteen is 0.8297 against 0.8818 over eleven. The layer's count of
+active enhancers per cell type is substantially a statement about assay depth
+wearing a biology label, and it should not be read as a count of enhancers.
+
+**The one reading that escapes it.** Testis reads **15,078 of 20,094 coding
+genes**, above the eleven's whole range (10,698 GM12878 to 14,135 hepatocyte)
+and the highest of all thirteen — on a mid-range DNase depth. Rho between peak
+count and `genes_read` falls from 0.7182 to 0.5330 when the two tissues are
+added, the largest movement of any reading. This is the expected direction:
+testis has the broadest transcriptome of any human tissue. It is also the only
+registered reading that moved outside the range.
+
+**P2, germline methylation: refuted, and the test was not discriminating.**
+Testis sits inside the somatic range on all five tiers — structural, fossil,
+constrained-unknown, regulatory and neutral — which was the stated refutation
+condition. Worse for the test than for the prediction, the somatic "range" is a
+union of two non-overlapping populations with an empty gap between them. Mean
+methylation fraction across the five tiers: transformed lines run 0.0742 (K562),
+0.2673 (HepG2), 0.3463 (GM12878), 0.3792 (SK-N-SH), 0.6044 (IMR-90);
+non-transformed cultures run 0.8047 (CD14-positive monocyte), 0.8069
+(hepatocyte), 0.8517 (H1). Nothing lies between 0.604 and 0.805, so a range
+built from all eight is a test no value could fail. Against the
+non-transformed subset alone testis is not hypermethylated at all: it is
+slightly *below* every one of them on every tier (fossil 0.818 against
+0.823–0.871). The germline reset is not visible in bulk adult testis at this
+resolution, and the honest reason is dilution — spermatogenic cells are averaged
+with Sertoli, Leydig, peritubular and blood cells into one 200 bp binned track.
+What the methylation layer actually separates is transformed from
+non-transformed, by a margin far larger than any lineage effect.
+
+**P3, tissue against culture: half confirmed.** Both tissues read more genes
+than the cultured median, in the same direction, as a mixture predicts:
+`genes_read` 15,078 and 14,006 against 12,639; `genes_read_open` 15,265 and
+14,193 against 14,057. But `nodes_silent` splits — testis 974 against a median
+of 1,411, ovary 2,349 — so the silent-node count is not a mixture effect and the
+second clause fails. Both tissues also have strikingly few poised genes (284 and
+398, against 200 to 3,151 across the eleven), which the mixture argument
+predicts: a gene poised in one constituent and active in another reads as
+active.
+
+**P4, the two under-called marks: confirmed exactly as registered.** Predicted
+from portal byte sizes before anything was downloaded, and measured after:
+testis H3K9me3 yields **321 peaks genome-wide** and H3K27me3 **1,902**, against
+floors of 1,770 (cardiac muscle cell) and 8,540 (hepatocyte) across the eleven —
+5.5× and 4.5× below. Testis's three active marks are unremarkable (H3K4me3
+33,963, H3K27ac 43,062, H3K4me1 84,315, all inside range), so this is specific
+to the broad repressive marks, not a bad sample. Ovary is clean on both (12,003
+and 12,359). Accordingly **testis H3K27me3 and H3K9me3 are to be read as
+under-called, not as measured absence**, and its `H3K27me3 0.0209` share among
+silent promoters in the genome-wide table is an artefact of the peak call, not
+evidence that testis lacks Polycomb repression. One thing not registered in
+advance and reported as such: ovary's H3K27ac, at 40,854, is 4% below the
+eleven's floor of 42,465.
+
+**What this biosample is for, answered.** The layer assumes node openness is a
+property of the cell type. Two tissues from an unoccupied lineage say: for
+`enhancers_active` the assumption fails and the reading is assay depth; for
+`genes_read` it holds and testis proves it by leaving the range; for methylation
+the dominant axis is not cell type at all but whether the biosample was
+transformed. The fetch did not merely add two rows — but the row it was most
+expected to move, germline methylation, it did not move, and that is reported
+here as the result it is.

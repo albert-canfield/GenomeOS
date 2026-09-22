@@ -1,6 +1,6 @@
 {
   "result": "epigenome_chrY",
-  "date": "2026-09-14",
+  "date": "2026-09-22",
   "chrom": "chrY",
   "coding_genes": 61,
   "registry_elements": 1034,
@@ -2812,6 +2812,546 @@
           "calls": 234,
           "covered": 17,
           "fraction": 0.9365
+        }
+      }
+    },
+    "testis": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 28,
+          "bp": 45531
+        },
+        "H3K27ac": {
+          "n": 18,
+          "bp": 26870
+        },
+        "H3K4me1": {
+          "n": 1,
+          "bp": 427
+        },
+        "H3K27me3": {
+          "n": 0,
+          "bp": 0
+        },
+        "H3K9me3": {
+          "n": 2,
+          "bp": 1104
+        }
+      },
+      "promoters": {
+        "read": {
+          "n": 18,
+          "H3K4me3": {
+            "n": 11,
+            "share": 0.6111
+          },
+          "states": {
+            "promoter mark, not acetylated": 5,
+            "active promoter": 6,
+            "no mark": 7
+          },
+          "H3K27ac": {
+            "n": 6,
+            "share": 0.3333
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        },
+        "silent": {
+          "n": 43,
+          "states": {
+            "no mark": 43
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": 0.376,
+        "silent": 0.6563
+      },
+      "promoter_methylation_n": {
+        "read": 16,
+        "silent": 2
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 774,
+          "open": 62,
+          "states": {
+            "no mark": 765,
+            "acetylated element": 3,
+            "active promoter": 2,
+            "heterochromatin": 2,
+            "promoter mark, not acetylated": 2
+          },
+          "H3K27ac": {
+            "n": 5,
+            "share": 0.0065
+          },
+          "H3K4me3": {
+            "n": 4,
+            "share": 0.0052
+          },
+          "H3K9me3": {
+            "n": 2,
+            "share": 0.0026
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0801
+        },
+        "pELS": {
+          "n": 133,
+          "open": 42,
+          "states": {
+            "promoter mark, not acetylated": 25,
+            "acetylated element": 2,
+            "active promoter": 36,
+            "no mark": 70
+          },
+          "H3K4me3": {
+            "n": 61,
+            "share": 0.4586
+          },
+          "H3K27ac": {
+            "n": 38,
+            "share": 0.2857
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.3158
+        },
+        "PLS": {
+          "n": 43,
+          "open": 34,
+          "states": {
+            "promoter mark, not acetylated": 13,
+            "active promoter": 23,
+            "no mark": 7
+          },
+          "H3K4me3": {
+            "n": 36,
+            "share": 0.8372
+          },
+          "H3K27ac": {
+            "n": 23,
+            "share": 0.5349
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.7907
+        },
+        "CTCF-only": {
+          "n": 56,
+          "open": 24,
+          "states": {
+            "no mark": 56
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.4286
+        },
+        "DNase-H3K4me3": {
+          "n": 28,
+          "open": 4,
+          "states": {
+            "no mark": 27,
+            "promoter mark, not acetylated": 1
+          },
+          "H3K4me3": {
+            "n": 1,
+            "share": 0.0357
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.1429
+        }
+      },
+      "cpg_calls": 212580,
+      "cpg_calls_covered": 137341,
+      "methylation_by_tier": {
+        "structural": {
+          "blocks": 19,
+          "bp": 31558013,
+          "calls": 16125,
+          "covered": 10685,
+          "fraction": 0.5999
+        },
+        "fossil": {
+          "blocks": 217,
+          "bp": 12565564,
+          "calls": 94640,
+          "covered": 62774,
+          "fraction": 0.7318
+        },
+        "regulatory": {
+          "blocks": 20,
+          "bp": 641418,
+          "calls": 4020,
+          "covered": 2256,
+          "fraction": 0.6855
+        },
+        "neutral": {
+          "blocks": 89,
+          "bp": 1667092,
+          "calls": 11276,
+          "covered": 6947,
+          "fraction": 0.7024
+        },
+        "constrained_unknown": {
+          "blocks": 30,
+          "bp": 301071,
+          "calls": 820,
+          "covered": 505,
+          "fraction": 0.6795
+        }
+      }
+    },
+    "ovary": {
+      "marks_measured": [
+        "H3K4me3",
+        "H3K27ac",
+        "H3K4me1",
+        "H3K27me3",
+        "H3K9me3"
+      ],
+      "marks_unknown": {},
+      "dnase": true,
+      "methylation": true,
+      "peaks": {
+        "H3K4me3": {
+          "n": 0,
+          "bp": 0
+        },
+        "H3K27ac": {
+          "n": 0,
+          "bp": 0
+        },
+        "H3K4me1": {
+          "n": 0,
+          "bp": 0
+        },
+        "H3K27me3": {
+          "n": 0,
+          "bp": 0
+        },
+        "H3K9me3": {
+          "n": 0,
+          "bp": 0
+        }
+      },
+      "promoters": {
+        "silent": {
+          "n": 61,
+          "states": {
+            "no mark": 61
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          }
+        }
+      },
+      "promoter_methylation_median": {
+        "read": null,
+        "silent": 0.8425
+      },
+      "promoter_methylation_n": {
+        "read": 0,
+        "silent": 1
+      },
+      "registry_classes": {
+        "dELS": {
+          "n": 774,
+          "open": 0,
+          "states": {
+            "no mark": 774
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0
+        },
+        "pELS": {
+          "n": 133,
+          "open": 0,
+          "states": {
+            "no mark": 133
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0
+        },
+        "PLS": {
+          "n": 43,
+          "open": 0,
+          "states": {
+            "no mark": 43
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0
+        },
+        "CTCF-only": {
+          "n": 56,
+          "open": 1,
+          "states": {
+            "no mark": 56
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0179
+        },
+        "DNase-H3K4me3": {
+          "n": 28,
+          "open": 2,
+          "states": {
+            "no mark": 28
+          },
+          "H3K4me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27ac": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K4me1": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K27me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "H3K9me3": {
+            "n": 0,
+            "share": 0.0
+          },
+          "open_share": 0.0714
+        }
+      },
+      "cpg_calls": 15022,
+      "cpg_calls_covered": 6244,
+      "methylation_by_tier": {
+        "structural": {
+          "blocks": 19,
+          "bp": 31558013,
+          "calls": 1955,
+          "covered": 1372,
+          "fraction": 0.5181
+        },
+        "fossil": {
+          "blocks": 217,
+          "bp": 12565564,
+          "calls": 7553,
+          "covered": 2788,
+          "fraction": 0.5263
+        },
+        "regulatory": {
+          "blocks": 20,
+          "bp": 641418,
+          "calls": 417,
+          "covered": 208,
+          "fraction": 0.5907
+        },
+        "neutral": {
+          "blocks": 89,
+          "bp": 1667092,
+          "calls": 641,
+          "covered": 273,
+          "fraction": 0.5698
+        },
+        "constrained_unknown": {
+          "blocks": 30,
+          "bp": 301071,
+          "calls": 19,
+          "covered": 2,
+          "fraction": 0.5
         }
       }
     }

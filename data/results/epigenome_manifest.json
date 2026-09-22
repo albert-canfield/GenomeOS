@@ -6,7 +6,8 @@
     "experiment": "released, GRCh38, no drug treatment; per cell type the biosample covering the most marks, then complete files (peaks and signal), then the largest peak file",
     "peaks": "default analysis, replicated narrowPeak before pseudoreplicated",
     "signal": "default analysis, fold change over control, most pooled replicates",
-    "methylation": "WGBS 'methylation state at CpG' bigBed, the largest over the biosample's experiments"
+    "methylation": "WGBS 'methylation state at CpG' bigBed, the largest over the biosample's experiments",
+    "tissue": "testis and ovary are bulk tissue: a single donor, so only pseudoreplicated peaks exist and the replicated-before-pseudoreplicated preference cannot be met"
   },
   "cell_types": {
     "K562": {
@@ -1886,6 +1887,330 @@
         },
         "candidates": 1
       }
+    },
+    "testis": {
+      "dnase": "ENCFF761JZU",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "testis",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR611DJQ",
+          "biosample": "Homo sapiens testis tissue male adult (37 years)",
+          "project": "ENCODE",
+          "released": "2017-08-28",
+          "analysis": "/analyses/ENCAN086XHF/",
+          "peaks": {
+            "accession": "ENCFF612RSR",
+            "output_type": "pseudoreplicated peaks",
+            "size": 872966,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/eb83dd9a-6795-4e90-92ff-64e818b11793/ENCFF612RSR.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF229BGF",
+            "output_type": "fold change over control",
+            "size": 1132948936,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/c1660d9d-c210-43f9-9e45-dac2b83c32a8/ENCFF229BGF.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27ac": {
+          "cell_type": "testis",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR136ZQZ",
+          "biosample": "Homo sapiens testis tissue male adult (37 years)",
+          "project": "ENCODE",
+          "released": "2019-02-12",
+          "analysis": "/analyses/ENCAN142PDR/",
+          "peaks": {
+            "accession": "ENCFF540YUQ",
+            "output_type": "pseudoreplicated peaks",
+            "size": 1028162,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/fb02adad-a5f1-4fce-b19e-22e559fdabd5/ENCFF540YUQ.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF487SXN",
+            "output_type": "fold change over control",
+            "size": 1220147811,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/80e7dd44-801b-48a3-beec-a80b67f9a128/ENCFF487SXN.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K4me1": {
+          "cell_type": "testis",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR956VQB",
+          "biosample": "Homo sapiens testis tissue male adult (37 years)",
+          "project": "ENCODE",
+          "released": "2019-02-12",
+          "analysis": "/analyses/ENCAN859SHN/",
+          "peaks": {
+            "accession": "ENCFF600MJO",
+            "output_type": "pseudoreplicated peaks",
+            "size": 1753390,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/21/d8bc0de3-e7fb-435c-a1a9-6e2e8bec24e8/ENCFF600MJO.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF015KVF",
+            "output_type": "fold change over control",
+            "size": 1596790609,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/21/69a0e380-b632-4f0c-8242-7dd632587237/ENCFF015KVF.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "testis",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR503QSX",
+          "biosample": "Homo sapiens testis tissue male adult (37 years)",
+          "project": "ENCODE",
+          "released": "2018-12-14",
+          "analysis": "/analyses/ENCAN300UBR/",
+          "peaks": {
+            "accession": "ENCFF389XVY",
+            "output_type": "pseudoreplicated peaks",
+            "size": 35646,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/23/d280fa72-8b3a-4553-9565-18fbd65b4323/ENCFF389XVY.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF910MGV",
+            "output_type": "fold change over control",
+            "size": 1673437770,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/23/b67c31f8-81c4-4bab-900d-d4cb5f0f50f0/ENCFF910MGV.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "testis",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR376JOC",
+          "biosample": "Homo sapiens testis tissue male adult (37 years)",
+          "project": "ENCODE",
+          "released": "2017-08-28",
+          "analysis": "/analyses/ENCAN229NDS/",
+          "peaks": {
+            "accession": "ENCFF844BMU",
+            "output_type": "pseudoreplicated peaks",
+            "size": 6919,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/674d0709-ea26-4596-b3f0-c41c98b8d310/ENCFF844BMU.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF010BPD",
+            "output_type": "fold change over control",
+            "size": 1680489311,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/22/c3192c8b-ed5e-467d-b759-93fb1d16590a/ENCFF010BPD.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "testis",
+        "experiment": "ENCSR806NNG",
+        "biosample": "Homo sapiens testis tissue male adult (37 years)",
+        "project": "ENCODE",
+        "released": "2018-01-18",
+        "cpg": {
+          "accession": "ENCFF544SOH",
+          "output_type": "methylation state at CpG",
+          "size": 1282404029,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/03/01/a5271128-58d5-421b-8b88-765e4d9e478f/ENCFF544SOH.bigBed"
+        },
+        "candidates": 2
+      }
+    },
+    "ovary": {
+      "dnase": "ENCFF456CHU",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "ovary",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR139TLA",
+          "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN033NLI/",
+          "peaks": {
+            "accession": "ENCFF112KXI",
+            "output_type": "pseudoreplicated peaks",
+            "size": 771222,
+            "replicates": [
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/02/01/79767e37-ae28-4f5b-bea2-2994898aa9c2/ENCFF112KXI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF410REW",
+            "output_type": "fold change over control",
+            "size": 440049636,
+            "replicates": [
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/02/01/69a6f1a3-c77d-47d5-9dae-debf06bd02b7/ENCFF410REW.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27ac": {
+          "cell_type": "ovary",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR268JQE",
+          "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN449PDZ/",
+          "peaks": {
+            "accession": "ENCFF554TER",
+            "output_type": "pseudoreplicated peaks",
+            "size": 1049493,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/02/01/59b92668-661d-495a-85dd-601a79cb3c7a/ENCFF554TER.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF104SEZ",
+            "output_type": "fold change over control",
+            "size": 380875707,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/02/01/75ad9187-c207-409d-ae64-d95946ad5c43/ENCFF104SEZ.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K4me1": {
+          "cell_type": "ovary",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR113AFY",
+          "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN910OID/",
+          "peaks": {
+            "accession": "ENCFF030RVT",
+            "output_type": "pseudoreplicated peaks",
+            "size": 2665719,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/6bcc7d85-72f4-4a2e-9022-7ae549693588/ENCFF030RVT.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF083TRJ",
+            "output_type": "fold change over control",
+            "size": 496162724,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/c17e15e8-9950-4ec0-8438-dc0aafc5cb80/ENCFF083TRJ.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "ovary",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR037SNV",
+          "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN992BFK/",
+          "peaks": {
+            "accession": "ENCFF503FCF",
+            "output_type": "pseudoreplicated peaks",
+            "size": 237218,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/1d46dc5d-71bb-444a-9573-0c43258eceb9/ENCFF503FCF.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF530BYF",
+            "output_type": "fold change over control",
+            "size": 584329603,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/a3852282-0d9a-4e6c-83a2-7a0a40aa9201/ENCFF530BYF.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "ovary",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR956UFV",
+          "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN526UTI/",
+          "peaks": {
+            "accession": "ENCFF483FPH",
+            "output_type": "pseudoreplicated peaks",
+            "size": 233297,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/f9700b35-c583-4a08-b980-594927a70979/ENCFF483FPH.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF631VUV",
+            "output_type": "fold change over control",
+            "size": 566691061,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/31/df3a857a-4802-414d-bba8-d1452585a25e/ENCFF631VUV.bigWig"
+          },
+          "candidates": 2
+        }
+      },
+      "methylation": {
+        "cell_type": "ovary",
+        "experiment": "ENCSR417YFD",
+        "biosample": "Homo sapiens ovary tissue female adult (30 years)",
+        "project": "Roadmap",
+        "released": "2013-07-31",
+        "cpg": {
+          "accession": "ENCFF475SIO",
+          "output_type": "methylation state at CpG",
+          "size": 1318616809,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2022/01/17/67003c31-335b-47c7-9075-dee2e6ac4735/ENCFF475SIO.bigBed"
+        },
+        "candidates": 3
+      }
     }
   },
   "coverage": {
@@ -1988,11 +2313,29 @@
         "H3K27me3": true,
         "H3K9me3": true,
         "methylation": true
+      },
+      "testis": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "ovary": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
       }
     },
-    "biosamples": 11,
-    "with_all_five_marks": 11,
-    "with_methylation": 8,
+    "biosamples": 13,
+    "with_all_five_marks": 13,
+    "with_methylation": 10,
     "complete": [
       "K562",
       "HepG2",
@@ -2001,7 +2344,9 @@
       "IMR-90",
       "SK-N-SH",
       "hepatocyte",
-      "CD14-positive monocyte"
+      "CD14-positive monocyte",
+      "testis",
+      "ovary"
     ],
     "missing": {
       "cardiac muscle cell": [

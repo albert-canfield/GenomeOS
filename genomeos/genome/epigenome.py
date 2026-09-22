@@ -65,7 +65,10 @@ RESULTS = Path("data/results")
 MANIFEST = "epigenome_manifest"
 USER_AGENT = "GenomeOS/0.9 (epigenome layer; released GRCh38 files read by range)"
 
-#: the reader's eleven biosamples (scripts/reader_genome_wide.py DEFAULT_CELLS)
+#: the reader's biosamples (scripts/reader_genome_wide.py DEFAULT_CELLS). The first eleven are
+#: cultured -- six lines, two differentiated from a stem line, three primary cells; testis and
+#: ovary (2026-09-22) are the first bulk tissue and the first gonadal lineage in the layer, and
+#: carry peaks and methylation but no fold-change signal profiles yet.
 CELL_TYPES = (
     "K562",
     "HepG2",
@@ -78,7 +81,12 @@ CELL_TYPES = (
     "hepatocyte",
     "astrocyte",
     "CD14-positive monocyte",
+    "testis",
+    "ovary",
 )
+#: biosamples that are bulk post-mortem tissue rather than a cultured population: a single donor,
+#: a mixture of cell types, and only pseudoreplicated peak calls on this portal.
+TISSUE_CELL_TYPES = ("testis", "ovary")
 MARKS = {
     "H3K4me3": "promoter",
     "H3K27ac": "active enhancer or active promoter",
