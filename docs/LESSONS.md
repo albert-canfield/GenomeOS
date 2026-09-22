@@ -631,6 +631,19 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   data**, and the cheapest thing to do with any sentence of the form "we only have one X per Y" is
   to look for what the run wrote before it was summarised.
 
+- **When nothing appears on both sides of a split, a correction fitted on one side cannot be
+  checked for the other (2026-09-22).** The calibration's level error was blamed on prevalence, and
+  the repair was to carry each screen's own base rate as an offset. The census written before the
+  fit ended the question: **the screens it was fitted on and the screens it is read on are disjoint
+  sets.** So the correction exists only after a screen has been run, and the targets that need it —
+  everything in no screen at all — are exactly the ones it can never be quoted for. The same
+  arithmetic shows how little the pooled number meant: one shift of +0.6793 restored 9 of 10 bins
+  and is **a mean over per-screen shifts of −1.303 to +4.228**, with the wrong sign for the screen
+  holding 63% of the pairs. **Before fitting a per-group correction, count the groups on each side
+  of the split; if the intersection is empty, the thing being built is a description of the groups
+  you have.** The honest output then is the part that transports — here the ordering, which moved
+  by at most 0.022 AUPRC — and "no number" for the rest.
+
 - **A reading that a new sample cannot surprise is a reading of the instrument (2026-09-22).** The
   epigenome layer reports `enhancers_active` per biosample, and across eleven biosamples it spans
   4.1× while `genes_read` spans 1.3×. The wide one correlates with DNase peak count at rho 0.8818,

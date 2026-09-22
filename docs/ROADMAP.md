@@ -2752,6 +2752,54 @@ in order. "Owner" is the session that holds the files today (see §7).
   distinguish "these sub-populations differ" from "too small to say", and here
   it is mostly the second — reported as a defect rather than claimed as a
   heterogeneity finding.
+- **The prevalence term, registered then fitted — it does not transport, and
+  the genome-wide band table is withdrawn as a quotable confidence
+  (2026-09-22, lane-prevalence, `1a1a852` registration, `e4914ef` fit, 0
+  requests).** The census that had to be written first settles the question on
+  its own: **not one screen the calibration is READ on is a screen it was FITTED
+  on** — the two sets are disjoint — so a per-screen intercept is a thing that
+  exists only after a screen has been run, and says nothing about a target in no
+  screen at all, which is almost the whole genome. That was registered as the
+  expected answer before the fit and the fit did not move it.
+  **Two things the fit found are worse for the published table than the failure
+  it was sent to repair.** The single +0.6793 shift that restored 9 of 10 bins
+  is **a mean over per-screen shifts that run in both directions**: −1.303 for
+  K562_DC_TAP, which is 63% of the held-out population, then +0.945, +2.050 and
+  +4.228. **It has the wrong sign for the largest screen**, and the pooled table
+  looks repaired only because 38 pairs needing +4.2 are averaged against 1,084
+  needing −1.3. And **the genome-wide band table is one screen's**: under
+  Gasperini2019's own base rate the top band reads 56,166 against the published
+  **55,957 — a difference of 0.37%** — because Gasperini2019 is 207 of the 285
+  on-gate pairs. The spread *inside* each screen set is far larger than the gap
+  between them: 3.5× across the fitted screens and 99× across the read ones,
+  against the ×1.31 the whole failure was named for.
+  **The same 593,765 targets band from 27,514 to 198,475 in 0.9–1 depending on
+  whose base rate is used — a factor of 7.2.** Under one screen's rate 61.8% of
+  targets fall below 0.25; under another, none do. So the prevalence term does
+  not unlock that table: **it is the reason the table was never quotable.**
+  **Decision, 2026-09-22: the 593,765-target band table is retired rather than
+  corrected.** What stands is the re-banding's strata and the union axis —
+  **5.8% and 9.70% coverage** — with "no band" said plainly for the rest, and
+  **the shape rather than the level**: leave-one-screen-out moves AUPRC by at
+  most 0.022 and by under 0.005 on four of six screens, so the ordering is what
+  survives. **No level claim is registered again until a screen exists on both
+  sides of a split.** If a band is wanted for a planned experiment it is quoted
+  as a function of that experiment's expected base rate with the range shown,
+  never as one number; `genome_under_each_screen` is the machinery for it.
+  The offset itself failed leave-one-screen-out on 3 of 4 clauses (3 of 6
+  screens improving against a needed 4, weighted ECE falling 0.0034 against
+  0.005, AUPRC falling on three). **The clause that passed is the informative
+  one**: median absolute residual **0.3235**, less than half of +0.6793, so a
+  screen's own base rate removes rather more than half the level error and
+  leaves the rest — and it fails worst on the screen that is 54% of the pooled
+  pairs, where offset and fitted intercept double-count.
+  **A hazard for every lane, found mid-run and fixed beside rather than in
+  place**: `crispri.logistic_fit` is an undamped Newton fit and blows up on a
+  near-separable problem — weights to 1e12 and every prediction 0. The first run
+  of this lane would have reported "0 of 10 bins, failed" for the opposite
+  reason. A backtracking line search fixes it, reproduces the shared fit to 1e-6
+  with every offset zero, and that equivalence is now a test. **The shared
+  `logistic_fit` is still undamped.**
 - **The next item, ahead of the list below, which item 1 of that list is now
   answered by the bullet above: price the increment on the pairs that justify
   it.** The union's whole gain over the drop axis is the 23,468-target
