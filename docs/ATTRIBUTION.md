@@ -5544,6 +5544,115 @@ keeps its output and its keys and the re-banding is a second block under a new k
 read side by side from the same result. The eight `CONFIDENCE_BANDS` and the fitted weights do not
 change. Registered in full as `PREREGISTERED_BANDS` in `genomeos/attribution/target_calibration.py`.
 
+## The genome re-banded: every registered count correct, and the registration's own falsifier fired on the axis (2026-09-22, fourth)
+
+The registration above was met on every quantity it predicted and defeated on the one thing it was
+least sure of. `scripts/target_rebanding.py`, result `target_rebanding`, **0 AlphaGenome requests**,
+nothing fetched.
+
+**The control held.** The re-banding walk recomputes the published band for every target as it goes,
+and reproduces the published table to the digit: 593,765 `any gene` targets at 45 / 3,837 / 178,387 /
+293,568 / 61,971 / 55,957 and 440,377 `coding gene` targets at 1 / 184,256 / 175,655 / 42,552 /
+37,913. So the two bands below are read off the same walk over the same elements.
+
+**The populations, measured.** Pooled over the 245 training and 40 held-out on-gate pairs:
+
+| predicted K562 drop | pairs | observed | 95% interval | band it can carry |
+|---|---|---|---|---|
+| = 0 | 43 | 0.5814 | 0.4333–0.7162 | **not calibrated here** (spans 2 bands) |
+| 0 < drop ≤ 0.1 | 92 | 0.5978 | 0.4957–0.6922 | **not calibrated here** (spans 2 bands) |
+| 0.1 < drop ≤ 0.2 | 45 | 0.8667 | 0.7382–0.9374 | **not calibrated here** (spans 3 bands) |
+| 0.2 < drop ≤ 0.5 | 46 | 1.0000 | 0.9229–1.0 | 0.9–1 |
+| 0.5 < drop | 59 | 1.0000 | 0.9389–1.0 | 0.9–1 |
+
+**The re-banding, on the registered axis.** `any gene`: **559,607 of 593,765 targets (94.2%) lose
+their band**, 34,158 (5.8%) keep one and it is 0.9–1 — 34,096 unchanged, **62 up, none down**.
+`coding gene`: 416,263 of 440,377 (94.5%) lose theirs, 24,114 keep 0.9–1, 24,100 unchanged, 14 up,
+none down. The registration predicted 80–95% losing their band, the two top strata keeping 0.9–1,
+and the count 34,158; all three are exact, and so is the direction clause.
+
+**What the bands were actually called by the screens, per population.** This is the number the
+correction is for. The published curve, scored on the pairs it bands and on the pairs it does not:
+
+| published band | on the gate: pairs → observed | off the gate: pairs → observed | ratio |
+|---|---|---|---|
+| 0.25–0.5 | 37 → **0.3514** | 9,599 → **0.0188** | ×18.7 |
+| 0.5–0.75 | 89 → **0.6629** | 627 → **0.2313** | ×2.9 |
+| 0.75–0.9 | 37 → 0.8919 | never reached off the gate | — |
+| 0.9–1 | 122 → **0.9754** | never reached off the gate | — |
+
+**On the gate every published band is honest** — 0.3514 inside 0.25–0.5, 0.6629 inside 0.5–0.75,
+0.8919 inside 0.75–0.9, 0.9754 inside 0.9–1. The ×6.85 of the section above is therefore not a level
+error in the shipped table; it is what the same label means one population over, where 0.25–0.5 buys
+1.9% and 0.5–0.75 buys 23%. **After re-banding, the top band means 105 of 105** (1.0000, 0.9647–1.0):
+the screens called every pair in the two top drop strata regulated.
+
+**The off-gate population now has a table of its own**, read through the sweep's own window so its
+magnitude is real — the thing the shipped curve had no honest number for:
+
+| off-gate, predicted K562 drop | pairs | observed | band |
+|---|---|---|---|
+| = 0 | 4,716 | 0.0091 | **0–0.02** |
+| 0 < drop ≤ 0.1 | 3,783 | 0.0428 | **0.02–0.05** |
+| 0.1 < drop ≤ 0.2 | 26 | 0.8462 | not calibrated here (26 pairs) |
+| 0.2 < drop ≤ 0.5 | 24 | 0.8333 | not calibrated here (24 pairs) |
+| 0.5 < drop | 2 | 1.0000 | not calibrated here (2 pairs) |
+
+An off-gate target is banded 0–0.02 or 0.02–0.05 where the shipped curve quoted **0.4126**. And the
+registered thin-stratum rule does its work on precisely the interesting rows: the 52 off-gate pairs
+above a drop of 0.1 carry 84.6% and 83.3% and are still refused a number, because 26 and 24 pairs
+cannot carry one. That is the model's second and third targets, and the honest answer there today is
+a direction with an interval, not a band.
+
+**The falsifier fired, on the axis.** The registration named one rival — the track the sweep named
+the target on — and said that if it gave single-band intervals where the drop axis did not, it
+replaces the drop axis and the registration is wrong on the axis while right on the direction. It
+did: K562-named, 93 pairs, 1.0000 [0.9603, 1.0] → 0.9–1; named on another track, 192 pairs, 0.6823
+[0.6134, 0.744] → 0.5–0.75. **Both strata carry a band, so the track axis bands 100% of the genome
+where the drop axis bands 5.8%.** The registered verdict is recorded as written: **wrong on the
+axis.**
+
+**And on that axis the published top band is the band that falls.** Re-banded on the track,
+`any gene` goes to 561,927 at 0.5–0.75 and 31,838 at 0.9–1: 194,125 targets up, 298,948 unchanged
+and **100,692 down**. The fall is concentrated exactly where the table was most confident —
+**44,372 of the 55,957 targets published at 0.9–1 (79.3%) drop to 0.5–0.75**, and 56,320 of the
+61,971 at 0.75–0.9 (90.9%) drop with them, while 170,069 of the 178,387 at 0.25–0.5 rise to
+0.5–0.75. `coding gene` is the same shape: 29,052 of 37,913 at 0.9–1 (76.6%) fall. The registered
+axis reaches the same targets by a different route — of the 55,957 at 0.9–1 it leaves 34,096 there
+and declares **21,861 (39.1%) not calibrated at all**. Whichever axis is read, **the claim that
+55,957 element–gene pairs are at least 90% likely does not survive contact with the population it
+was quoted for**; between a third and four fifths of that band is either uncalibrated or two bands
+lower.
+
+**Why neither axis is the answer, which is new and was not registered.** The two axes are nearly
+independent, not two readings of one thing. Genome-wide, 32,597 targets are K562-named and 35,217
+carry a drop above 0.2, and only **8,572 are both** — a Jaccard overlap of 14.5%. Crossed on the 285
+on-gate pairs:
+
+| named on K562 | drop > 0.2 | pairs | regulated | rate |
+|---|---|---|---|---|
+| no | no | 157 | 96 | 0.6115 |
+| no | yes | 35 | 35 | **1.0000** |
+| yes | no | 23 | 23 | **1.0000** |
+| yes | yes | 70 | 70 | **1.0000** |
+
+Either signal alone is sufficient and the two are close to disjoint, so the union is the better
+split: **128 of 128 pairs with either signal were called regulated** (1.0000, 0.9709–1.0 → 0.9–1),
+against 96 of 157 with neither (0.6115, 0.5334–0.6842 → 0.5–0.75). That bands the whole genome from
+two populations that each carry a single-band interval on more than 128 pairs — of the 612,323 named
+targets, 59,242 carry either signal and 553,081 carry neither, before the 18,558 without a GENCODE
+TSS are removed from the banded set. **It is not adopted here**, because it was not registered and
+picking it now would be the same post-hoc choice this lane exists to correct. It is the next
+registration, and it is the row sent to the roadmap.
+
+**What is not touched.** `sweep()` keeps its output and its keys and the published band table is
+unchanged on disk; the re-banding is a separate result carrying the published band beside the new
+one, on both axes, so a reader can take either and compare. The weights, `CONFIDENCE_BANDS` and
+`TARGET_FEATURES` do not change. No web UI or CLI hunk is needed: `genomeos/web/server.py`,
+`genomeos/web/static/index.html` and `genomeos/cli.py` contain no reference to this result and no
+band label, and the only other consumer in the tree, `scripts/shortlist_in_real_unknown.py`, already
+keys off the drop band at 0.2 and cites the 105 of 105 this section re-measures.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

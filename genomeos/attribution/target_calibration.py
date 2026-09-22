@@ -1179,6 +1179,170 @@ def sweep(
 
 
 # ------------------------------------------------------------------------------------------
+# Re-banding: a band drawn from the population it is quoted for, or none at all
+# ------------------------------------------------------------------------------------------
+
+BAND_LABELS = tuple(f"{lo:g}-{hi if hi <= 1 else 1:g}" for lo, hi in CONFIDENCE_BANDS)
+
+
+def bands_touched(lo: float, hi: float) -> list[str]:
+    """Every published band the interval [lo, hi] reaches into."""
+    return [f"{a:g}-{b if b <= 1 else 1:g}" for a, b in CONFIDENCE_BANDS if b > lo and a <= hi]
+
+
+def observed_band(k: int, n: int, min_pooled: int = MIN_POOLED_FOR_A_BAND) -> dict[str, Any]:
+    """The band a measured population can carry, or the reason it can carry none.
+
+    A band is a claim about a rate, so the claim is allowed only when the rate's 95% Wilson
+    interval fits inside one band and rests on enough pairs to be worth stating. Anything else
+    returns `NOT_CALIBRATED` and carries the count and the interval in place of a number, which is
+    the honest answer for a stratum the benchmark barely reaches.
+    """
+    if n == 0:
+        return {"band": NOT_CALIBRATED, "why": "no measured pair in this population", "pairs": 0}
+    rate = k / n
+    lo, hi = wilson(k, n)
+    touched = bands_touched(lo, hi)
+    out = {
+        "pairs": n,
+        "regulated": k,
+        "observed_rate": round(rate, 4),
+        "ci95": [round(lo, 4), round(hi, 4)],
+        "bands_the_interval_touches": touched,
+    }
+    if n < min_pooled:
+        return {**out, "band": NOT_CALIBRATED, "why": f"fewer than {min_pooled} pooled pairs"}
+    if len(touched) != 1:
+        return {
+            **out,
+            "band": NOT_CALIBRATED,
+            "why": f"the interval spans {len(touched)} published bands",
+        }
+    return {**out, "band": touched[0], "why": "the interval fits inside one published band"}
+
+
+def population_bands(
+    pairs: list[crispri.Pair], key: Any, min_pooled: int = MIN_POOLED_FOR_A_BAND
+) -> dict[str, Any]:
+    """Split pairs by `key` and give each population the band its own measured rate can carry."""
+    acc: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    for p in pairs:
+        s = key(p)
+        acc[s][0] += 1
+        acc[s][1] += int(p.regulated)
+    return {s: observed_band(k, n, min_pooled) for s, (n, k) in sorted(acc.items())}
+
+
+def drop_stratum(p: crispri.Pair) -> str:
+    return drop_band_label(p.features["deletion_drop"])
+
+
+def element_tissue(el: dict[str, Any], key: str) -> str:
+    """The alternative axis: the track the sweep named this element's target on."""
+    return CELL if ((el.get(key) or {}).get("tissue") or "?") == CELL else "another track"
+
+
+def move_of(old: str, new: str) -> str:
+    """Which way a target's band went: `lost`, `up`, `down` or `unchanged`."""
+    if new == NOT_CALIBRATED:
+        return "lost its band"
+    if old == new:
+        return "unchanged"
+    return "up" if BAND_LABELS.index(new) > BAND_LABELS.index(old) else "down"
+
+
+def reband_chromosome(
+    chrom: str,
+    weights: dict[str, list[float]],
+    stratum_band: dict[str, Any],
+    elements: Path = ELEMENTS,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+    axis: str = "drop",
+) -> dict[str, Any]:
+    """One chromosome's targets, banded from their own stratum, beside the band they carry today.
+
+    `axis` picks which population a target belongs to: `drop`, the registered axis, is the predicted
+    K562 deletion drop in its `DROP_BANDS` stratum; `track` is the alternative the registration named
+    as the thing that would replace it, the track the sweep named this element's target on.
+    """
+    p = elements / f"{chrom}.json"
+    if not p.exists():
+        return {"refused": "no deleted elements cached for this chromosome"}
+    els = json.loads(p.read_text())
+    starts = gene_starts(chrom, reference)
+    classes = registry_classes(chrom, results) if (results / f"ccres_{chrom}.bed.gz").exists() else {}
+    out: dict[str, Any] = {"elements": len(els)}
+    for key, label in (("predicted", "any gene"), ("predicted_coding", "coding gene")):
+        published: Counter[str] = Counter()
+        rebanded: Counter[str] = Counter()
+        moves: Counter[str] = Counter()
+        transitions: Counter[str] = Counter()
+        by_tissue: Counter[str] = Counter()
+        total = 0
+        for el in els:
+            row = element_row(el, key, starts, classes)
+            if row is None or "missing" in row:
+                continue
+            xt = [[row["features"][n] for n in TARGET_FEATURES]]
+            old = band_of(sigmoid(crispri.logistic_score(weights["target"], xt)[0]))
+            tissue = element_tissue(el, key)
+            s = tissue if axis == "track" else drop_band_label(row["drop"])
+            new = stratum_band.get(s, {}).get("band", NOT_CALIBRATED)
+            published[old] += 1
+            rebanded[new] += 1
+            moves[move_of(old, new)] += 1
+            transitions[f"{old} -> {new}"] += 1
+            by_tissue[tissue] += 1
+            total += 1
+        out[label] = {
+            "targets": total,
+            "published_bands": dict(sorted(published.items())),
+            "rebanded": dict(sorted(rebanded.items())),
+            "moves": dict(sorted(moves.items())),
+            "transitions": dict(sorted(transitions.items())),
+            "named_on_track": dict(sorted(by_tissue.items())),
+        }
+    return out
+
+
+def reband(
+    weights: dict[str, list[float]],
+    stratum_band: dict[str, Any],
+    chroms: tuple[str, ...] = CHROMS,
+    elements: Path = ELEMENTS,
+    reference: Path = REFERENCE,
+    results: Path = RESULTS,
+    progress: Any = None,
+    axis: str = "drop",
+) -> dict[str, Any]:
+    """Every chromosome re-banded, with the published band kept beside the new one."""
+    per: dict[str, Any] = {}
+    for c in chroms:
+        per[c] = reband_chromosome(c, weights, stratum_band, elements, reference, results, axis)
+        if progress:
+            progress(f"{c}: {per[c].get('any gene', {}).get('targets', 0)} targets re-banded")
+    totals: dict[str, Any] = {}
+    for label in ("any gene", "coding gene"):
+        acc = {
+            k: Counter() for k in ("published_bands", "rebanded", "moves", "transitions", "named_on_track")
+        }
+        total = 0
+        for v in per.values():
+            d = v.get(label)
+            if not d:
+                continue
+            total += d["targets"]
+            for k, c in acc.items():
+                c.update(d[k])
+        totals[label] = {
+            "targets": total,
+            **{k: dict(sorted(c.items())) for k, c in acc.items()},
+        }
+    return {"genome_wide": totals, "per_chromosome": per}
+
+
+# ------------------------------------------------------------------------------------------
 # The gate removed: the same calibration fitted through the sweep's own window
 # ------------------------------------------------------------------------------------------
 
