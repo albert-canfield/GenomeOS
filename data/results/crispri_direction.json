@@ -1,0 +1,2890 @@
+{
+  "result": "crispri_direction",
+  "date": "2026-09-22",
+  "evidence": "experimental: signed EffectSize of CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: signed AlphaGenome deletion log2 fold change per cell line, from the finished genome-wide sweep. No request",
+  "preregistered": "on the held-out arm only, in K562 and GM12878 (the only held-out cell types with an AlphaGenome line in the sweep), sign agreement between the measured EffectSize and the sweep's predicted log2 fold change in the screen's own cell line clears 0.5 by at least 0.15 AND clears the model's marginal down-rate over the whole sweep by at least 0.10, with the Wilson lower bound above that marginal rate. Clearing 0.5 but not the marginal rate is registered in advance as UNDECIDABLE, not as a pass",
+  "requests": 0,
+  "cells": [
+    "K562",
+    "GM12878"
+  ],
+  "headline": {
+    "rate": 0.9318,
+    "ci95": [
+      0.8177,
+      0.9765
+    ],
+    "k": 41,
+    "n": 44,
+    "predicted_zero_excluded": 0,
+    "measured_down": 44,
+    "measured_up": 0,
+    "predicted_down": 41,
+    "predicted_up": 3,
+    "both_measured_signs_present": false
+  },
+  "marginal_down_rate": {
+    "K562": {
+      "rate": 0.5344,
+      "ci95": [
+        0.5331,
+        0.5356
+      ],
+      "k": 325989,
+      "n": 610034,
+      "zero": 2288,
+      "no_value": 348905,
+      "by_magnitude": {
+        "0.0": {
+          "upper": 0.01,
+          "down": 68175,
+          "elements": 133541,
+          "down_rate": 0.5105
+        },
+        "0.01": {
+          "upper": 0.025,
+          "down": 56185,
+          "elements": 111153,
+          "down_rate": 0.5055
+        },
+        "0.025": {
+          "upper": 0.05,
+          "down": 59691,
+          "elements": 116990,
+          "down_rate": 0.5102
+        },
+        "0.05": {
+          "upper": 0.1,
+          "down": 63560,
+          "elements": 120645,
+          "down_rate": 0.5268
+        },
+        "0.1": {
+          "upper": 0.25,
+          "down": 55415,
+          "elements": 97179,
+          "down_rate": 0.5702
+        },
+        "0.25": {
+          "upper": 0.5,
+          "down": 14786,
+          "elements": 21000,
+          "down_rate": 0.7041
+        },
+        "0.5": {
+          "upper": 1.0,
+          "down": 5725,
+          "elements": 6827,
+          "down_rate": 0.8386
+        },
+        "1.0": {
+          "upper": null,
+          "down": 2452,
+          "elements": 2699,
+          "down_rate": 0.9085
+        }
+      },
+      "counts": {
+        "with_value": 612322,
+        "via_predicted": 171945,
+        "down": 325989,
+        "no_value": 348905,
+        "up": 284045,
+        "via_predicted_coding": 440377,
+        "zero": 2288
+      }
+    },
+    "GM12878": {
+      "rate": 0.5438,
+      "ci95": [
+        0.5426,
+        0.5451
+      ],
+      "k": 331714,
+      "n": 609973,
+      "zero": 2349,
+      "no_value": 348905,
+      "by_magnitude": {
+        "0.0": {
+          "upper": 0.01,
+          "down": 75604,
+          "elements": 147121,
+          "down_rate": 0.5139
+        },
+        "0.01": {
+          "upper": 0.025,
+          "down": 58898,
+          "elements": 115128,
+          "down_rate": 0.5116
+        },
+        "0.025": {
+          "upper": 0.05,
+          "down": 61657,
+          "elements": 118556,
+          "down_rate": 0.5201
+        },
+        "0.05": {
+          "upper": 0.1,
+          "down": 64338,
+          "elements": 118530,
+          "down_rate": 0.5428
+        },
+        "0.1": {
+          "upper": 0.25,
+          "down": 49569,
+          "elements": 83011,
+          "down_rate": 0.5971
+        },
+        "0.25": {
+          "upper": 0.5,
+          "down": 13720,
+          "elements": 18494,
+          "down_rate": 0.7419
+        },
+        "0.5": {
+          "upper": 1.0,
+          "down": 5598,
+          "elements": 6543,
+          "down_rate": 0.8556
+        },
+        "1.0": {
+          "upper": null,
+          "down": 2330,
+          "elements": 2590,
+          "down_rate": 0.8996
+        }
+      },
+      "counts": {
+        "with_value": 612322,
+        "via_predicted": 171945,
+        "down": 331714,
+        "no_value": 348905,
+        "up": 278259,
+        "via_predicted_coding": 440377,
+        "zero": 2349
+      }
+    },
+    "elements_in_the_sweep": 961227
+  },
+  "pooled_marginal_down_rate": 0.5361,
+  "verdict": "passed",
+  "why": "agreement 0.9318 clears both 0.65 and the marginal 0.5361; the answerable subset carries one measured sign only, so agreement is the model's own rate of emitting that sign",
+  "posthoc_magnitude_matched": {
+    "marginal": {
+      "K562": {
+        "rate": 0.6648,
+        "pairs": 36
+      },
+      "GM12878": {
+        "rate": 0.604,
+        "pairs": 8
+      },
+      "pooled": 0.6537
+    },
+    "verdict_against_it": {
+      "verdict": "passed",
+      "why": "agreement 0.9318 clears both 0.65 and the marginal 0.6537; the answerable subset carries one measured sign only, so agreement is the model's own rate of emitting that sign"
+    },
+    "agreement_by_magnitude": {
+      "0.025": {
+        "agree": 4,
+        "pairs": 5
+      },
+      "0.05": {
+        "agree": 7,
+        "pairs": 8
+      },
+      "0.01": {
+        "agree": 1,
+        "pairs": 2
+      },
+      "0.1": {
+        "agree": 9,
+        "pairs": 9
+      },
+      "1.0": {
+        "agree": 5,
+        "pairs": 5
+      },
+      "0.25": {
+        "agree": 8,
+        "pairs": 8
+      },
+      "0.5": {
+        "agree": 6,
+        "pairs": 6
+      },
+      "0.0": {
+        "agree": 1,
+        "pairs": 1
+      }
+    },
+    "note": "not the registered baseline. The answerable pairs are selected for being the element's top predicted target, which selects for a large predicted change, and the sweep's own down-rate rises steeply with that magnitude. This re-weights the constant-sign caller to the magnitude profile of the pairs actually scored, which is the harder comparison; the registered verdict above is computed against the flat rate"
+  },
+  "per_cell": {
+    "K562": {
+      "rate": 0.9167,
+      "ci95": [
+        0.7817,
+        0.9713
+      ],
+      "k": 33,
+      "n": 36,
+      "predicted_zero_excluded": 0,
+      "measured_down": 36,
+      "measured_up": 0,
+      "predicted_down": 33,
+      "predicted_up": 3,
+      "both_measured_signs_present": false
+    },
+    "GM12878": {
+      "rate": 1.0,
+      "ci95": [
+        0.6756,
+        1.0
+      ],
+      "k": 8,
+      "n": 8,
+      "predicted_zero_excluded": 0,
+      "measured_down": 8,
+      "measured_up": 0,
+      "predicted_down": 8,
+      "predicted_up": 0,
+      "both_measured_signs_present": false
+    }
+  },
+  "training_arm_fitted_on_not_a_test": {
+    "agreement": {
+      "rate": 0.8586,
+      "ci95": [
+        0.8021,
+        0.901
+      ],
+      "k": 164,
+      "n": 191,
+      "predicted_zero_excluded": 0,
+      "measured_down": 189,
+      "measured_up": 2,
+      "predicted_down": 162,
+      "predicted_up": 29,
+      "both_measured_signs_present": true
+    },
+    "strata": {
+      "signed::K562": 546,
+      "input_presence::K562": 481,
+      "covered_but_gene_not_the_top_target::K562": 290,
+      "answerable::K562": 191,
+      "out_of_reach::K562": 41,
+      "element_not_in_the_sweep::K562": 24
+    },
+    "note": "the 2026-09-16 lane fitted logistic weights on this arm (data/results/crispri_benchmark.json), so it is reported for shape only and never decides the verdict"
+  },
+  "coverage": {
+    "heldout": {
+      "signed::K562": 171,
+      "input_presence::K562": 137,
+      "covered_but_gene_not_the_top_target::K562": 101,
+      "answerable::K562": 36,
+      "out_of_reach::K562": 29,
+      "signed::WTC11": 35,
+      "refused_no_model_line::WTC11": 35,
+      "signed::GM12878": 21,
+      "input_presence::GM12878": 18,
+      "covered_but_gene_not_the_top_target::GM12878": 10,
+      "answerable::GM12878": 8,
+      "signed::Jurkat": 7,
+      "refused_no_model_line::Jurkat": 7,
+      "signed::HCT116": 40,
+      "refused_no_model_line::HCT116": 40,
+      "element_not_in_the_sweep::K562": 5,
+      "element_not_in_the_sweep::GM12878": 2,
+      "out_of_reach::GM12878": 1
+    },
+    "heldout_signed_pairs": 274,
+    "note": "an element the sweep already scored is not a random element (LOCI-BENCHMARK sections 19, 21, 22): input_presence and every stratum between the signed pairs and the answerable subset are reported beside the headline, not after it"
+  },
+  "what_it_named_instead": {
+    "pairs": 111,
+    "rows": [
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          11798254,
+          11798873
+        ],
+        "gene": "AGTRAP",
+        "measured": -0.12,
+        "measured_sign": "down",
+        "distance_to_tss": 62478,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "C1orf167"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          12038207,
+          12039433
+        ],
+        "gene": "AGTRAP",
+        "measured": 0.1191,
+        "measured_sign": "up",
+        "distance_to_tss": 302735,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "RN7SL649P"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          12038207,
+          12039433
+        ],
+        "gene": "TNFRSF8",
+        "measured": -0.4623,
+        "measured_sign": "down",
+        "distance_to_tss": 24555,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "RN7SL649P"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          17487712,
+          17488305
+        ],
+        "gene": "RCC2",
+        "measured": 0.188,
+        "measured_sign": "up",
+        "distance_to_tss": 48253,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          26284661,
+          26285505
+        ],
+        "gene": "CD52",
+        "measured": -0.2783,
+        "measured_sign": "down",
+        "distance_to_tss": 32835,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "SH3BGRL3",
+          "UBXN11"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          26286905,
+          26287800
+        ],
+        "gene": "SH3BGRL3",
+        "measured": -0.1975,
+        "measured_sign": "down",
+        "distance_to_tss": 7630,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CD52",
+          "ENSG00000225854"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          26321184,
+          26321972
+        ],
+        "gene": "CD52",
+        "measured": -0.6666,
+        "measured_sign": "down",
+        "distance_to_tss": 3658,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "CRYBG2",
+          "ENSG00000225854"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          26321184,
+          26321972
+        ],
+        "gene": "SH3BGRL3",
+        "measured": -0.0911,
+        "measured_sign": "down",
+        "distance_to_tss": 41856,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "CRYBG2",
+          "ENSG00000225854"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          26377452,
+          26379163
+        ],
+        "gene": "AUNIP",
+        "measured": -0.2323,
+        "measured_sign": "down",
+        "distance_to_tss": 518848,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ZNF683"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          67700116,
+          67701585
+        ],
+        "gene": "GADD45A",
+        "measured": -0.0962,
+        "measured_sign": "down",
+        "distance_to_tss": 15673,
+        "dataset": "Morris",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          109239375,
+          109239875
+        ],
+        "gene": "SARS",
+        "measured": -0.1541,
+        "measured_sign": "down",
+        "distance_to_tss": 25732,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          156119466,
+          156120399
+        ],
+        "gene": "CCT3",
+        "measured": -0.0909,
+        "measured_sign": "down",
+        "distance_to_tss": 218482,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "LMNA"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          159921814,
+          159922623
+        ],
+        "gene": "DUSP23",
+        "measured": -0.1386,
+        "measured_sign": "down",
+        "distance_to_tss": 141272,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "TAGLN2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          182200305,
+          182200995
+        ],
+        "gene": "GLUL",
+        "measured": 0.3315,
+        "measured_sign": "up",
+        "distance_to_tss": 191555,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "YPEL5P1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          182256842,
+          182258273
+        ],
+        "gene": "GLUL",
+        "measured": -0.0911,
+        "measured_sign": "down",
+        "distance_to_tss": 134648,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "LINC01344",
+          "YPEL5P1",
+          "ZNF648"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          184031227,
+          184031862
+        ],
+        "gene": "TSEN15",
+        "measured": -0.213,
+        "measured_sign": "down",
+        "distance_to_tss": 20105,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "COLGALT2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          206671959,
+          206673955
+        ],
+        "gene": "FCMR",
+        "measured": -0.5327,
+        "measured_sign": "down",
+        "distance_to_tss": 249075,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "DYRK3",
+          "MAPKAPK2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr1",
+        "element": [
+          234368637,
+          234369136
+        ],
+        "gene": "COA6",
+        "measured": -0.0674,
+        "measured_sign": "down",
+        "distance_to_tss": 4795,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ENSG00000236358"
+        ]
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79023191,
+          79023691
+        ],
+        "gene": "PPIF",
+        "measured": 0.0519,
+        "measured_sign": "up",
+        "distance_to_tss": 324021,
+        "dataset": "Nasser2021",
+        "model_named_instead": [
+          "ENSG00000229569"
+        ]
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79242666,
+          79243166
+        ],
+        "gene": "PPIF",
+        "measured": 0.1617,
+        "measured_sign": "up",
+        "distance_to_tss": 104546,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79244524,
+          79245356
+        ],
+        "gene": "PPIF",
+        "measured": 0.0533,
+        "measured_sign": "up",
+        "distance_to_tss": 102522,
+        "dataset": "Nasser2021",
+        "model_named_instead": [
+          "ZMIZ1"
+        ]
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79285232,
+          79285732
+        ],
+        "gene": "PPIF",
+        "measured": -0.216,
+        "measured_sign": "down",
+        "distance_to_tss": 61980,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79286318,
+          79286818
+        ],
+        "gene": "PPIF",
+        "measured": -0.2634,
+        "measured_sign": "down",
+        "distance_to_tss": 60894,
+        "dataset": "Nasser2021",
+        "model_named_instead": [
+          "ZMIZ1"
+        ]
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79293802,
+          79294632
+        ],
+        "gene": "PPIF",
+        "measured": 0.0413,
+        "measured_sign": "up",
+        "distance_to_tss": 53245,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79316579,
+          79317079
+        ],
+        "gene": "PPIF",
+        "measured": -0.126,
+        "measured_sign": "down",
+        "distance_to_tss": 30633,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79317427,
+          79318156
+        ],
+        "gene": "PPIF",
+        "measured": -0.2023,
+        "measured_sign": "down",
+        "distance_to_tss": 29671,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr10",
+        "element": [
+          79331716,
+          79332216
+        ],
+        "gene": "PPIF",
+        "measured": -0.2825,
+        "measured_sign": "down",
+        "distance_to_tss": 15496,
+        "dataset": "Nasser2021",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr10",
+        "element": [
+          17029282,
+          17030231
+        ],
+        "gene": "VIM",
+        "measured": -0.0947,
+        "measured_sign": "down",
+        "distance_to_tss": 198501,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CUBN",
+          "ENSG00000234961"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr10",
+        "element": [
+          17425572,
+          17426534
+        ],
+        "gene": "VIM",
+        "measured": -0.0752,
+        "measured_sign": "down",
+        "distance_to_tss": 197794,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ST8SIA6"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr10",
+        "element": [
+          61765101,
+          61766128
+        ],
+        "gene": "ARID5B",
+        "measured": -0.4631,
+        "measured_sign": "down",
+        "distance_to_tss": 135638,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CABCOCO1",
+          "ENSG00000272592"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr10",
+        "element": [
+          61781930,
+          61782430
+        ],
+        "gene": "ARID5B",
+        "measured": -0.4969,
+        "measured_sign": "down",
+        "distance_to_tss": 119072,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "LINC02625"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr10",
+        "element": [
+          92755668,
+          92757563
+        ],
+        "gene": "EXOC6",
+        "measured": -0.2381,
+        "measured_sign": "down",
+        "distance_to_tss": 91838,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "HHEX"
+        ]
+      },
+      {
+        "cell": "GM12878",
+        "chrom": "chr11",
+        "element": [
+          128693560,
+          128694292
+        ],
+        "gene": "ETS1",
+        "measured": 0.0528,
+        "measured_sign": "up",
+        "distance_to_tss": 171615,
+        "dataset": "Nasser2021",
+        "model_named_instead": [
+          "FLI1",
+          "SENCR"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          2299228,
+          2299728
+        ],
+        "gene": "ASCL2",
+        "measured": 0.5108,
+        "measured_sign": "up",
+        "distance_to_tss": 28525,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "C11orf21"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          5253147,
+          5253547
+        ],
+        "gene": "HBG1",
+        "measured": -0.7356,
+        "measured_sign": "down",
+        "distance_to_tss": 3489,
+        "dataset": "Reilly",
+        "model_named_instead": [
+          "HBG2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          5275847,
+          5276247
+        ],
+        "gene": "HBG1",
+        "measured": -0.6908,
+        "measured_sign": "down",
+        "distance_to_tss": 26189,
+        "dataset": "Reilly",
+        "model_named_instead": [
+          "HBE1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          5284543,
+          5285042
+        ],
+        "gene": "HBD",
+        "measured": -0.3465,
+        "measured_sign": "down",
+        "distance_to_tss": 50163,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "HBE1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          5288040,
+          5288539
+        ],
+        "gene": "HBD",
+        "measured": -0.3154,
+        "measured_sign": "down",
+        "distance_to_tss": 53660,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "HBE1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          57432648,
+          57433148
+        ],
+        "gene": "SLC43A3",
+        "measured": -0.3402,
+        "measured_sign": "down",
+        "distance_to_tss": 5749,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "PRG2",
+          "RN7SKP259"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          61833892,
+          61835375
+        ],
+        "gene": "FADS3",
+        "measured": -0.2719,
+        "measured_sign": "down",
+        "distance_to_tss": 56911,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "FADS2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          61833892,
+          61835375
+        ],
+        "gene": "FEN1",
+        "measured": -0.0759,
+        "measured_sign": "down",
+        "distance_to_tss": 41996,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "FADS2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          61841500,
+          61842900
+        ],
+        "gene": "FADS3",
+        "measured": -0.5904,
+        "measured_sign": "down",
+        "distance_to_tss": 49344,
+        "dataset": "Reilly",
+        "model_named_instead": [
+          "FADS2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          65429979,
+          65430478
+        ],
+        "gene": "CCDC85B",
+        "measured": 0.1171,
+        "measured_sign": "up",
+        "distance_to_tss": 460174,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          65501951,
+          65502450
+        ],
+        "gene": "DRAP1",
+        "measured": 0.0758,
+        "measured_sign": "up",
+        "distance_to_tss": 417055,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          78290169,
+          78290887
+        ],
+        "gene": "NDUFC2",
+        "measured": -0.2158,
+        "measured_sign": "down",
+        "distance_to_tss": 210308,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ENSG00000288853",
+          "GAB2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          78291733,
+          78292875
+        ],
+        "gene": "NDUFC2",
+        "measured": -0.1587,
+        "measured_sign": "down",
+        "distance_to_tss": 212084,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "GAB2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          95152782,
+          95153802
+        ],
+        "gene": "SRSF8",
+        "measured": -0.105,
+        "measured_sign": "down",
+        "distance_to_tss": 86415,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "SESN3"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          114216234,
+          114217571
+        ],
+        "gene": "RBM7",
+        "measured": -0.1909,
+        "measured_sign": "down",
+        "distance_to_tss": 183625,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ZBTB16"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr11",
+        "element": [
+          125433397,
+          125433897
+        ],
+        "gene": "TMEM218",
+        "measured": 0.4091,
+        "measured_sign": "up",
+        "distance_to_tss": 321938,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr12",
+        "element": [
+          14257483,
+          14258716
+        ],
+        "gene": "ATF7IP",
+        "measured": -0.5351,
+        "measured_sign": "down",
+        "distance_to_tss": 107531,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ENSG00000256084"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr12",
+        "element": [
+          93991018,
+          93991518
+        ],
+        "gene": "PLXNC1",
+        "measured": 4.0677,
+        "measured_sign": "up",
+        "distance_to_tss": 157453,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ENSG00000257283",
+          "RN7SKP263"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr12",
+        "element": [
+          111994126,
+          111994726
+        ],
+        "gene": "ERP29",
+        "measured": -0.7614,
+        "measured_sign": "down",
+        "distance_to_tss": 18920,
+        "dataset": "Reilly",
+        "model_named_instead": [
+          "SLC25A3P2",
+          "TMEM116"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr12",
+        "element": [
+          111995026,
+          111995626
+        ],
+        "gene": "ERP29",
+        "measured": -0.6677,
+        "measured_sign": "down",
+        "distance_to_tss": 18020,
+        "dataset": "Reilly",
+        "model_named_instead": [
+          "SLC25A3P2",
+          "TMEM116"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr14",
+        "element": [
+          23694485,
+          23695075
+        ],
+        "gene": "RNF31",
+        "measured": 3.1048,
+        "measured_sign": "up",
+        "distance_to_tss": 452668,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "DHRS2",
+          "ENSG00000258464"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr14",
+        "element": [
+          55438015,
+          55438514
+        ],
+        "gene": "MAPK1IP1L",
+        "measured": 0.1887,
+        "measured_sign": "up",
+        "distance_to_tss": 386620,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "TBPL2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr14",
+        "element": [
+          68719655,
+          68720248
+        ],
+        "gene": "ZFP36L1",
+        "measured": -0.3098,
+        "measured_sign": "down",
+        "distance_to_tss": 73962,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "RNU6-921P"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr14",
+        "element": [
+          102551749,
+          102552488
+        ],
+        "gene": "HSP90AA1",
+        "measured": -0.0604,
+        "measured_sign": "down",
+        "distance_to_tss": 464942,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ENSG00000289862"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr15",
+        "element": [
+          66632242,
+          66633128
+        ],
+        "gene": "SMAD6",
+        "measured": -0.3455,
+        "measured_sign": "down",
+        "distance_to_tss": 69649,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr15",
+        "element": [
+          78244070,
+          78244570
+        ],
+        "gene": "WDR61",
+        "measured": -0.0685,
+        "measured_sign": "down",
+        "distance_to_tss": 55405,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ACSBG1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          142367,
+          144053
+        ],
+        "gene": "HBA1",
+        "measured": -0.1391,
+        "measured_sign": "down",
+        "distance_to_tss": 33439,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "HBZ"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          142367,
+          144053
+        ],
+        "gene": "HBA2",
+        "measured": -0.1451,
+        "measured_sign": "down",
+        "distance_to_tss": 29635,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "HBZ"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          1828755,
+          1829254
+        ],
+        "gene": "C16orf91",
+        "measured": 0.0915,
+        "measured_sign": "up",
+        "distance_to_tss": 408203,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ENSG00000260541",
+          "FAHD1",
+          "MEIOB"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          1828755,
+          1829254
+        ],
+        "gene": "GFER",
+        "measured": -0.1298,
+        "measured_sign": "down",
+        "distance_to_tss": 155143,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ENSG00000260541",
+          "FAHD1",
+          "MEIOB"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          2140522,
+          2141021
+        ],
+        "gene": "ECI1",
+        "measured": -0.0603,
+        "measured_sign": "down",
+        "distance_to_tss": 110829,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "RAB26"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          88772885,
+          88774284
+        ],
+        "gene": "APRT",
+        "measured": 0.0531,
+        "measured_sign": "up",
+        "distance_to_tss": 38349,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ENSG00000260617",
+          "MIR4722",
+          "PIEZO1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          88772885,
+          88774284
+        ],
+        "gene": "CTU2",
+        "measured": 0.2265,
+        "measured_sign": "up",
+        "distance_to_tss": 67121,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ENSG00000260617",
+          "MIR4722",
+          "PIEZO1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          88971775,
+          88972275
+        ],
+        "gene": "CDT1",
+        "measured": 0.125,
+        "measured_sign": "up",
+        "distance_to_tss": 168247,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "CBFA2T3"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr16",
+        "element": [
+          88978412,
+          88979814
+        ],
+        "gene": "CDT1",
+        "measured": 0.1113,
+        "measured_sign": "up",
+        "distance_to_tss": 175335,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CBFA2T3",
+          "ENSG00000259989",
+          "ENSG00000261226"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr17",
+        "element": [
+          28864868,
+          28866626
+        ],
+        "gene": "ERAL1",
+        "measured": 0.1217,
+        "measured_sign": "up",
+        "distance_to_tss": 10790,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "DHRS13",
+          "MIR451A"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr17",
+        "element": [
+          42319595,
+          42320668
+        ],
+        "gene": "STAT5A",
+        "measured": -0.3638,
+        "measured_sign": "down",
+        "distance_to_tss": 32075,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CAVIN1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr17",
+        "element": [
+          42319595,
+          42320668
+        ],
+        "gene": "STAT5B",
+        "measured": -0.1657,
+        "measured_sign": "down",
+        "distance_to_tss": 43724,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "CAVIN1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr17",
+        "element": [
+          78257711,
+          78258455
+        ],
+        "gene": "SOCS3",
+        "measured": -0.5017,
+        "measured_sign": "down",
+        "distance_to_tss": 101995,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "LINC01993"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr18",
+        "element": [
+          9404306,
+          9405587
+        ],
+        "gene": "PPP4R1",
+        "measured": 0.2578,
+        "measured_sign": "up",
+        "distance_to_tss": 209660,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ENSG00000287509",
+          "TWSG1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr18",
+        "element": [
+          9802941,
+          9805250
+        ],
+        "gene": "VAPA",
+        "measured": -0.0832,
+        "measured_sign": "down",
+        "distance_to_tss": 109861,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ENSG00000285653",
+          "RAB31",
+          "ZNF415P1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr18",
+        "element": [
+          9898666,
+          9899734
+        ],
+        "gene": "VAPA",
+        "measured": -0.0657,
+        "measured_sign": "down",
+        "distance_to_tss": 14756,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ENSG00000272799"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr18",
+        "element": [
+          12491322,
+          12492335
+        ],
+        "gene": "ANKRD62",
+        "measured": 3.2956,
+        "measured_sign": "up",
+        "distance_to_tss": 397979,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "SPIRE1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          10291158,
+          10291657
+        ],
+        "gene": "ICAM4",
+        "measured": 0.2034,
+        "measured_sign": "up",
+        "distance_to_tss": 4440,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ICAM5"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          14355708,
+          14356714
+        ],
+        "gene": "ADGRE2",
+        "measured": -0.3955,
+        "measured_sign": "down",
+        "distance_to_tss": 422329,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ADGRE5",
+          "LINC01841"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          14355708,
+          14356714
+        ],
+        "gene": "DDX39A",
+        "measured": -0.1184,
+        "measured_sign": "down",
+        "distance_to_tss": 63171,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ADGRE5",
+          "LINC01841"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          32686989,
+          32688162
+        ],
+        "gene": "PDCD5",
+        "measured": -0.1514,
+        "measured_sign": "down",
+        "distance_to_tss": 106387,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          39258161,
+          39259541
+        ],
+        "gene": "LGALS4",
+        "measured": 3.2495,
+        "measured_sign": "up",
+        "distance_to_tss": 445750,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "IFNL2",
+          "IFNL4P1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          41793052,
+          41793552
+        ],
+        "gene": "RABAC1",
+        "measured": 0.278,
+        "measured_sign": "up",
+        "distance_to_tss": 166073,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ENSG00000267881"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          44909661,
+          44910762
+        ],
+        "gene": "APOC1",
+        "measured": -0.2859,
+        "measured_sign": "down",
+        "distance_to_tss": 4034,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "APOE"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          44909661,
+          44910762
+        ],
+        "gene": "NECTIN2",
+        "measured": -0.1784,
+        "measured_sign": "down",
+        "distance_to_tss": 64075,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "APOE"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          48875653,
+          48876720
+        ],
+        "gene": "GRWD1",
+        "measured": 0.8753,
+        "measured_sign": "up",
+        "distance_to_tss": 430413,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "PPP1R15A",
+          "TULP2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr19",
+        "element": [
+          48875653,
+          48876720
+        ],
+        "gene": "RUVBL2",
+        "measured": 0.4982,
+        "measured_sign": "up",
+        "distance_to_tss": 117260,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "PPP1R15A",
+          "TULP2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr21",
+        "element": [
+          45150818,
+          45151317
+        ],
+        "gene": "SUMO3",
+        "measured": 0.0598,
+        "measured_sign": "up",
+        "distance_to_tss": 332937,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ADARB1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr21",
+        "element": [
+          45386832,
+          45387331
+        ],
+        "gene": "PTTG1IP",
+        "measured": 0.0927,
+        "measured_sign": "up",
+        "distance_to_tss": 513177,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "ENSG00000228355"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr3",
+        "element": [
+          14232088,
+          14233010
+        ],
+        "gene": "XPC",
+        "measured": -0.241,
+        "measured_sign": "down",
+        "distance_to_tss": 53876,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "ENSG00000255021"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr3",
+        "element": [
+          138877047,
+          138877842
+        ],
+        "gene": "PIK3CB",
+        "measured": -0.2126,
+        "measured_sign": "down",
+        "distance_to_tss": 118084,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ATP5MC1P3"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr3",
+        "element": [
+          196183317,
+          196183967
+        ],
+        "gene": "SMCO1",
+        "measured": 2.5476,
+        "measured_sign": "up",
+        "distance_to_tss": 331723,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "Y_RNA"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr3",
+        "element": [
+          196194473,
+          196194973
+        ],
+        "gene": "LINC00885",
+        "measured": -0.5045,
+        "measured_sign": "down",
+        "distance_to_tss": 52087,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ZDHHC19"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr3",
+        "element": [
+          196194473,
+          196194973
+        ],
+        "gene": "TFRC",
+        "measured": -0.1029,
+        "measured_sign": "down",
+        "distance_to_tss": 112561,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ZDHHC19"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr4",
+        "element": [
+          5003097,
+          5003889
+        ],
+        "gene": "STX18",
+        "measured": -0.3355,
+        "measured_sign": "down",
+        "distance_to_tss": 461426,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "CYTL1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr5",
+        "element": [
+          54325410,
+          54326414
+        ],
+        "gene": "ARL15",
+        "measured": -0.565,
+        "measured_sign": "down",
+        "distance_to_tss": 15338,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "HSPB3",
+          "LINC01033",
+          "RPL37P25"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr5",
+        "element": [
+          177390358,
+          177390920
+        ],
+        "gene": "RGS14",
+        "measured": -0.1304,
+        "measured_sign": "down",
+        "distance_to_tss": 32796,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "PFN3"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr6",
+        "element": [
+          42229413,
+          42230186
+        ],
+        "gene": "MRPS10",
+        "measured": -0.1357,
+        "measured_sign": "down",
+        "distance_to_tss": 11903,
+        "dataset": "Morris",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr6",
+        "element": [
+          52416394,
+          52416973
+        ],
+        "gene": "TMEM14A",
+        "measured": 0.4718,
+        "measured_sign": "up",
+        "distance_to_tss": 254401,
+        "dataset": "Klann",
+        "model_named_instead": [
+          "PAQR8"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr6",
+        "element": [
+          109239716,
+          109240856
+        ],
+        "gene": "CD164",
+        "measured": -0.0875,
+        "measured_sign": "down",
+        "distance_to_tss": 142525,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ENSG00000293470"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr6",
+        "element": [
+          119137438,
+          119137937
+        ],
+        "gene": "MAN1A1",
+        "measured": -0.1823,
+        "measured_sign": "down",
+        "distance_to_tss": 212078,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "FAM184A"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr6",
+        "element": [
+          135320956,
+          135321739
+        ],
+        "gene": "MYB",
+        "measured": -0.192,
+        "measured_sign": "down",
+        "distance_to_tss": 140032,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ENSG00000287094"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr7",
+        "element": [
+          5450637,
+          5451370
+        ],
+        "gene": "SLC29A4",
+        "measured": 2.2,
+        "measured_sign": "up",
+        "distance_to_tss": 168073,
+        "dataset": "Klann",
+        "model_named_instead": []
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr7",
+        "element": [
+          100545673,
+          100546172
+        ],
+        "gene": "POP7",
+        "measured": 0.0521,
+        "measured_sign": "up",
+        "distance_to_tss": 160129,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "AGFG2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr7",
+        "element": [
+          101138234,
+          101138832
+        ],
+        "gene": "AP1S1",
+        "measured": -0.0548,
+        "measured_sign": "down",
+        "distance_to_tss": 15870,
+        "dataset": "K562_DC_TAP",
+        "model_named_instead": [
+          "SERPINE1"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr7",
+        "element": [
+          150317641,
+          150318432
+        ],
+        "gene": "LRRC61",
+        "measured": -0.1886,
+        "measured_sign": "down",
+        "distance_to_tss": 5169,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ACTR3C",
+          "ENSG00000286912"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr7",
+        "element": [
+          150320779,
+          150321279
+        ],
+        "gene": "LRRC61",
+        "measured": -0.327,
+        "measured_sign": "down",
+        "distance_to_tss": 2176,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "ACTR3C",
+          "RARRES2"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr9",
+        "element": [
+          4852343,
+          4852926
+        ],
+        "gene": "JAK2",
+        "measured": -0.253,
+        "measured_sign": "down",
+        "distance_to_tss": 132594,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "ENSG00000228165"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr9",
+        "element": [
+          132983785,
+          132985248
+        ],
+        "gene": "GTF3C5",
+        "measured": 0.1106,
+        "measured_sign": "up",
+        "distance_to_tss": 46157,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "GFI1B"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr9",
+        "element": [
+          133003651,
+          133004673
+        ],
+        "gene": "RPL7A",
+        "measured": 0.0197,
+        "measured_sign": "up",
+        "distance_to_tss": 344050,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "GFI1B"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chr9",
+        "element": [
+          133003651,
+          133004673
+        ],
+        "gene": "SURF2",
+        "measured": 0.0772,
+        "measured_sign": "up",
+        "distance_to_tss": 352381,
+        "dataset": "Morris",
+        "model_named_instead": [
+          "GFI1B"
+        ]
+      },
+      {
+        "cell": "K562",
+        "chrom": "chrX",
+        "element": [
+          66005342,
+          66006525
+        ],
+        "gene": "MSN",
+        "measured": -0.1188,
+        "measured_sign": "down",
+        "distance_to_tss": 338289,
+        "dataset": "Xie",
+        "model_named_instead": [
+          "MIR223",
+          "MIR223HG",
+          "VSIG4"
+        ]
+      }
+    ]
+  },
+  "answered": [
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        26275469,
+        26276652
+      ],
+      "gene": "CD52",
+      "measured": -0.2143,
+      "measured_sign": "down",
+      "distance_to_tss": 41858,
+      "dataset": "Xie",
+      "predicted": -0.0422,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        26275469,
+        26276652
+      ],
+      "gene": "SH3BGRL3",
+      "measured": -0.1594,
+      "measured_sign": "down",
+      "distance_to_tss": 3660,
+      "dataset": "Xie",
+      "predicted": 0.0545,
+      "predicted_sign": "up",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        26284661,
+        26285505
+      ],
+      "gene": "SH3BGRL3",
+      "measured": -0.1516,
+      "measured_sign": "down",
+      "distance_to_tss": 5361,
+      "dataset": "Xie",
+      "predicted": 0.0111,
+      "predicted_sign": "up",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        26286905,
+        26287800
+      ],
+      "gene": "CD52",
+      "measured": -0.4243,
+      "measured_sign": "down",
+      "distance_to_tss": 30566,
+      "dataset": "Xie",
+      "predicted": -0.1749,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        30768019,
+        30769461
+      ],
+      "gene": "LAPTM5",
+      "measured": -0.4746,
+      "measured_sign": "down",
+      "distance_to_tss": 10903,
+      "dataset": "Xie",
+      "predicted": -1.5988,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        167627373,
+        167628784
+      ],
+      "gene": "RCSD1",
+      "measured": -0.6487,
+      "measured_sign": "down",
+      "distance_to_tss": 2113,
+      "dataset": "Xie",
+      "predicted": -1.3753,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        182299456,
+        182301359
+      ],
+      "gene": "GLUL",
+      "measured": -0.235,
+      "measured_sign": "down",
+      "distance_to_tss": 91798,
+      "dataset": "Xie",
+      "predicted": -0.4059,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        203311436,
+        203312526
+      ],
+      "gene": "BTG2",
+      "measured": -0.1384,
+      "measured_sign": "down",
+      "distance_to_tss": 6445,
+      "dataset": "Morris",
+      "predicted": -0.744,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr1",
+      "element": [
+        206671959,
+        206673955
+      ],
+      "gene": "MAPKAPK2",
+      "measured": -0.377,
+      "measured_sign": "down",
+      "distance_to_tss": 12061,
+      "dataset": "Morris",
+      "predicted": -0.247,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 4,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr10",
+      "element": [
+        79322747,
+        79323659
+      ],
+      "gene": "PPIF",
+      "measured": -0.1375,
+      "measured_sign": "down",
+      "distance_to_tss": 24259,
+      "dataset": "Nasser2021",
+      "predicted": -0.0146,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 4,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr10",
+      "element": [
+        17215948,
+        17217110
+      ],
+      "gene": "VIM",
+      "measured": -0.334,
+      "measured_sign": "down",
+      "distance_to_tss": 11728,
+      "dataset": "Xie",
+      "predicted": -0.2457,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr11",
+      "element": [
+        128552905,
+        128553405
+      ],
+      "gene": "ETS1",
+      "measured": -0.2927,
+      "measured_sign": "down",
+      "distance_to_tss": 30844,
+      "dataset": "Nasser2021",
+      "predicted": -0.0441,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr11",
+      "element": [
+        128610420,
+        128612069
+      ],
+      "gene": "ETS1",
+      "measured": -0.1323,
+      "measured_sign": "down",
+      "distance_to_tss": 88933,
+      "dataset": "Nasser2021",
+      "predicted": -0.0428,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr11",
+      "element": [
+        324082,
+        325336
+      ],
+      "gene": "IFITM1",
+      "measured": -0.2083,
+      "measured_sign": "down",
+      "distance_to_tss": 10718,
+      "dataset": "Klann",
+      "predicted": -0.0084,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr11",
+      "element": [
+        324082,
+        325336
+      ],
+      "gene": "IFITM3",
+      "measured": -0.3466,
+      "measured_sign": "down",
+      "distance_to_tss": 3794,
+      "dataset": "Klann",
+      "predicted": -0.1982,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr14",
+      "element": [
+        35365425,
+        35366523
+      ],
+      "gene": "NFKBIA",
+      "measured": -0.3985,
+      "measured_sign": "down",
+      "distance_to_tss": 38779,
+      "dataset": "Klann",
+      "predicted": -0.0995,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr14",
+      "element": [
+        91264121,
+        91265082
+      ],
+      "gene": "GPR68",
+      "measured": -0.5459,
+      "measured_sign": "down",
+      "distance_to_tss": 10720,
+      "dataset": "Klann",
+      "predicted": -0.8638,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr15",
+      "element": [
+        96272725,
+        96274073
+      ],
+      "gene": "NR2F2",
+      "measured": -0.3937,
+      "measured_sign": "down",
+      "distance_to_tss": 57481,
+      "dataset": "Klann",
+      "predicted": -1.2158,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr16",
+      "element": [
+        30458649,
+        30460051
+      ],
+      "gene": "ITGAL",
+      "measured": -0.2599,
+      "measured_sign": "down",
+      "distance_to_tss": 13310,
+      "dataset": "Nasser2021",
+      "predicted": -0.1007,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr16",
+      "element": [
+        88978412,
+        88979814
+      ],
+      "gene": "CBFA2T3",
+      "measured": -0.225,
+      "measured_sign": "down",
+      "distance_to_tss": 2016,
+      "dataset": "Xie",
+      "predicted": -1.0432,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr16",
+      "element": [
+        88991726,
+        88994106
+      ],
+      "gene": "CBFA2T3",
+      "measured": -0.2809,
+      "measured_sign": "down",
+      "distance_to_tss": 15819,
+      "dataset": "Xie",
+      "predicted": -0.3251,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr17",
+      "element": [
+        28864868,
+        28866626
+      ],
+      "gene": "DHRS13",
+      "measured": -0.1965,
+      "measured_sign": "down",
+      "distance_to_tss": 37323,
+      "dataset": "Morris",
+      "predicted": -0.3837,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr17",
+      "element": [
+        42312155,
+        42313479
+      ],
+      "gene": "STAT5A",
+      "measured": -0.1592,
+      "measured_sign": "down",
+      "distance_to_tss": 24761,
+      "dataset": "Xie",
+      "predicted": -0.2122,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr17",
+      "element": [
+        42456391,
+        42457323
+      ],
+      "gene": "ATP6V0A1",
+      "measured": -0.2488,
+      "measured_sign": "down",
+      "distance_to_tss": 1985,
+      "dataset": "Xie",
+      "predicted": -0.0655,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr19",
+      "element": [
+        38636860,
+        38637359
+      ],
+      "gene": "EIF3K",
+      "measured": -0.0565,
+      "measured_sign": "down",
+      "distance_to_tss": 18035,
+      "dataset": "K562_DC_TAP",
+      "predicted": -0.6688,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr19",
+      "element": [
+        44909661,
+        44910762
+      ],
+      "gene": "APOE",
+      "measured": -0.4067,
+      "measured_sign": "down",
+      "distance_to_tss": 4462,
+      "dataset": "Morris",
+      "predicted": -0.2409,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 6,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr2",
+      "element": [
+        38643254,
+        38644249
+      ],
+      "gene": "GALM",
+      "measured": -0.5858,
+      "measured_sign": "down",
+      "distance_to_tss": 22157,
+      "dataset": "Xie",
+      "predicted": -0.4774,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr2",
+      "element": [
+        38652294,
+        38652945
+      ],
+      "gene": "GALM",
+      "measured": -0.1625,
+      "measured_sign": "down",
+      "distance_to_tss": 13289,
+      "dataset": "Xie",
+      "predicted": -0.0304,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr2",
+      "element": [
+        47336014,
+        47337614
+      ],
+      "gene": "EPCAM",
+      "measured": -0.2361,
+      "measured_sign": "down",
+      "distance_to_tss": 32332,
+      "dataset": "Klann",
+      "predicted": -0.5573,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 6,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr2",
+      "element": [
+        62296004,
+        62298086
+      ],
+      "gene": "B3GNT2",
+      "measured": -0.4317,
+      "measured_sign": "down",
+      "distance_to_tss": 100918,
+      "dataset": "Morris",
+      "predicted": -0.1316,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr21",
+      "element": [
+        44196186,
+        44196686
+      ],
+      "gene": "ICOSLG",
+      "measured": -0.2051,
+      "measured_sign": "down",
+      "distance_to_tss": 44567,
+      "dataset": "Nasser2021",
+      "predicted": -0.0728,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr5",
+      "element": [
+        40490507,
+        40490507
+      ],
+      "gene": "PTGER4",
+      "measured": -0.5926,
+      "measured_sign": "down",
+      "distance_to_tss": 189421,
+      "dataset": "Nasser2021",
+      "predicted": -0.3163,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr5",
+      "element": [
+        89054814,
+        89055614
+      ],
+      "gene": "MEF2C",
+      "measured": -0.474,
+      "measured_sign": "down",
+      "distance_to_tss": 231286,
+      "dataset": "Reilly",
+      "predicted": -0.3157,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr6",
+      "element": [
+        14095336,
+        14095836
+      ],
+      "gene": "CD83",
+      "measured": -0.2488,
+      "measured_sign": "down",
+      "distance_to_tss": 22046,
+      "dataset": "Nasser2021",
+      "predicted": -0.0968,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr6",
+      "element": [
+        16215105,
+        16216155
+      ],
+      "gene": "GMPR",
+      "measured": -0.4498,
+      "measured_sign": "down",
+      "distance_to_tss": 22948,
+      "dataset": "Klann",
+      "predicted": -0.8013,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 4,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr6",
+      "element": [
+        135306217,
+        135307427
+      ],
+      "gene": "MYB",
+      "measured": -0.1763,
+      "measured_sign": "down",
+      "distance_to_tss": 125507,
+      "dataset": "Xie",
+      "predicted": 0.0378,
+      "predicted_sign": "up",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr6",
+      "element": [
+        139517787,
+        139519177
+      ],
+      "gene": "CITED2",
+      "measured": -0.1699,
+      "measured_sign": "down",
+      "distance_to_tss": 143831,
+      "dataset": "Morris",
+      "predicted": -0.0961,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr6",
+      "element": [
+        146875908,
+        146877348
+      ],
+      "gene": "STXBP5",
+      "measured": -0.2714,
+      "measured_sign": "down",
+      "distance_to_tss": 327728,
+      "dataset": "Xie",
+      "predicted": -0.0999,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr6",
+      "element": [
+        147161822,
+        147162440
+      ],
+      "gene": "STXBP5",
+      "measured": -0.1999,
+      "measured_sign": "down",
+      "distance_to_tss": 42225,
+      "dataset": "Xie",
+      "predicted": -0.2557,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "GM12878",
+      "chrom": "chr8",
+      "element": [
+        11491746,
+        11493006
+      ],
+      "gene": "BLK",
+      "measured": -0.3598,
+      "measured_sign": "down",
+      "distance_to_tss": 1634,
+      "dataset": "Nasser2021",
+      "predicted": -0.5011,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 3,
+      "matches_disagree": true
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr8",
+      "element": [
+        128044629,
+        128045447
+      ],
+      "gene": "MYC",
+      "measured": -0.1427,
+      "measured_sign": "down",
+      "distance_to_tss": 308969,
+      "dataset": "Xie",
+      "predicted": -0.1043,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr8",
+      "element": [
+        129581954,
+        129582453
+      ],
+      "gene": "CCDC26",
+      "measured": -0.5438,
+      "measured_sign": "down",
+      "distance_to_tss": 7184,
+      "dataset": "K562_DC_TAP",
+      "predicted": -1.5642,
+      "predicted_sign": "down",
+      "via": "predicted",
+      "matches": 1,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr9",
+      "element": [
+        132998625,
+        132999653
+      ],
+      "gene": "GFI1B",
+      "measured": -0.4726,
+      "measured_sign": "down",
+      "distance_to_tss": 53594,
+      "dataset": "Morris",
+      "predicted": -0.2971,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 6,
+      "matches_disagree": false
+    },
+    {
+      "cell": "K562",
+      "chrom": "chr9",
+      "element": [
+        136644329,
+        136647072
+      ],
+      "gene": "EGFL7",
+      "measured": -0.119,
+      "measured_sign": "down",
+      "distance_to_tss": 17225,
+      "dataset": "Morris",
+      "predicted": -0.0512,
+      "predicted_sign": "down",
+      "via": "predicted_coding",
+      "matches": 2,
+      "matches_disagree": false
+    }
+  ]
+}

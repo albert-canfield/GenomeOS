@@ -52,6 +52,8 @@ HALF_WINDOW = 524_288  # MODEL_WINDOW // 2, the scorer's reach each way (benchma
 CHANCE = 0.5
 CHANCE_MARGIN = 0.15  # agreement must clear 0.5 by this much
 MARGINAL_MARGIN = 0.10  # and clear the constant-sign caller by this much
+# post-hoc only, for the magnitude-matched robustness check; not part of the registered rule
+MAGNITUDE_EDGES = [0.0, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 1e9]
 EVIDENCE = (
     "experimental: signed EffectSize of CRISPRi enhancer-gene screens, ENCODE benchmark "
     "(EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: signed AlphaGenome deletion "
@@ -212,6 +214,46 @@ def collect(table: list[dict[str, str]], cells: tuple[str, ...], elements: Path 
     return {"answered": answered, "not_top_target": other, "strata": dict(strata), "signed": len(pairs)}
 
 
+def magnitude_bin(v: float) -> int:
+    a = abs(v)
+    for i in range(len(MAGNITUDE_EDGES) - 1):
+        if MAGNITUDE_EDGES[i] <= a < MAGNITUDE_EDGES[i + 1]:
+            return i
+    return len(MAGNITUDE_EDGES) - 2
+
+
+def magnitude_matched_marginal(
+    answered: list[dict[str, Any]], marginal: dict[str, Any], cells: tuple[str, ...]
+) -> dict[str, Any]:
+    """Post-hoc, NOT the registered baseline: the constant-sign caller re-weighted to the 44's own magnitudes.
+
+    The answerable pairs are not a random draw from the sweep. They are pairs whose measured gene is
+    the element's *top* predicted target, and that selects for a large predicted change. If the
+    sweep's own down-rate rises with the magnitude of the change — it does, steeply — then the flat
+    marginal is too easy a baseline and part of the headline is the selection rather than direction
+    skill. This re-weights the sweep's per-magnitude down-rate by the magnitude profile of the pairs
+    actually scored, which is the harder and more honest comparison.
+
+    It is computed after the registered verdict and reported beside it; it never replaces it.
+    """
+    usable = [r for r in answered if r["predicted_sign"] != "zero"]
+    out: dict[str, Any] = {}
+    for cell in cells:
+        rows = [r for r in usable if r["cell"] == cell]
+        by_mag = marginal.get(cell, {}).get("by_magnitude", {})
+        num = den = 0.0
+        for r in rows:
+            b = by_mag.get(MAGNITUDE_EDGES[magnitude_bin(r["predicted"])])
+            if b and b["down_rate"] is not None:
+                num += b["down_rate"]
+                den += 1
+        out[cell] = {"rate": round(num / den, 4) if den else None, "pairs": int(den)}
+    num = sum((out[c]["rate"] or 0) * out[c]["pairs"] for c in cells)
+    den = sum(out[c]["pairs"] for c in cells)
+    out["pooled"] = round(num / den, 4) if den else None
+    return out
+
+
 def marginal_down_rate(cells: tuple[str, ...], elements: Path = ELEMENTS) -> dict[str, Any]:
     """The constant-sign caller's score: what share of the whole sweep predicts a decrease.
 
@@ -221,6 +263,7 @@ def marginal_down_rate(cells: tuple[str, ...], elements: Path = ELEMENTS) -> dic
     """
     out: dict[str, Any] = {}
     counts: dict[str, dict[str, int]] = {c: defaultdict(int) for c in cells}
+    bins: dict[str, dict[int, list[int]]] = {c: defaultdict(lambda: [0, 0]) for c in cells}
     total = 0
     for p in sorted(elements.glob("*.json")):
         els = json.loads(p.read_text())
@@ -238,6 +281,8 @@ def marginal_down_rate(cells: tuple[str, ...], elements: Path = ELEMENTS) -> dic
                 counts[cell]["with_value"] += 1
                 counts[cell][f"via_{key}"] += 1
                 counts[cell]["down" if v < 0 else ("up" if v > 0 else "zero")] += 1
+                if v:
+                    bins[cell][magnitude_bin(v)][0 if v < 0 else 1] += 1
         del els
     for cell in cells:
         c = counts[cell]
@@ -246,6 +291,15 @@ def marginal_down_rate(cells: tuple[str, ...], elements: Path = ELEMENTS) -> dic
             **wilson(c["down"], n),
             "zero": c["zero"],
             "no_value": c["no_value"],
+            "by_magnitude": {
+                MAGNITUDE_EDGES[b]: {
+                    "upper": None if MAGNITUDE_EDGES[b + 1] > 1e8 else MAGNITUDE_EDGES[b + 1],
+                    "down": d,
+                    "elements": d + u,
+                    "down_rate": round(d / (d + u), 4) if d + u else None,
+                }
+                for b, (d, u) in sorted(bins[cell].items())
+            },
             "counts": dict(c),
         }
     out["elements_in_the_sweep"] = total
@@ -329,6 +383,13 @@ def direction(cells: tuple[str, ...] = ("K562", "GM12878"), elements: Path = ELE
             w[r["cell"]] += 1
         num = sum(w[c] * (marginal[c]["rate"] or 0) for c in w)
         pooled_marginal = num / sum(w.values())
+    matched = magnitude_matched_marginal(held["answered"], marginal, cells)
+    by_mag: dict[str, Any] = {}
+    for r in usable:
+        lo = MAGNITUDE_EDGES[magnitude_bin(r["predicted"])]
+        slot = by_mag.setdefault(str(lo), {"agree": 0, "pairs": 0})
+        slot["pairs"] += 1
+        slot["agree"] += r["predicted_sign"] == r["measured_sign"]
     return {
         "result": "crispri_direction",
         "evidence": EVIDENCE,
@@ -339,6 +400,18 @@ def direction(cells: tuple[str, ...] = ("K562", "GM12878"), elements: Path = ELE
         "marginal_down_rate": marginal,
         "pooled_marginal_down_rate": None if pooled_marginal is None else round(pooled_marginal, 4),
         **judge(head, pooled_marginal),
+        "posthoc_magnitude_matched": {
+            "marginal": matched,
+            "verdict_against_it": judge(head, (matched or {}).get("pooled")),
+            "agreement_by_magnitude": by_mag,
+            "note": (
+                "not the registered baseline. The answerable pairs are selected for being the "
+                "element's top predicted target, which selects for a large predicted change, and the "
+                "sweep's own down-rate rises steeply with that magnitude. This re-weights the "
+                "constant-sign caller to the magnitude profile of the pairs actually scored, which is "
+                "the harder comparison; the registered verdict above is computed against the flat rate"
+            ),
+        },
         "per_cell": per_cell,
         "training_arm_fitted_on_not_a_test": {
             "agreement": agreement(train["answered"]),

@@ -757,6 +757,103 @@ survive to the headline, and the 101 that are covered but whose gene is not the
 element's top target are exactly the cases where the model named something else.
 What it named instead is reported with them.
 
+### The direction, scored (`scripts/crispri_direction.py`, 12 s, 0 requests)
+
+**The registered rule passes, and it passes against a harder baseline than the
+one registered.** The headline, on the 44 held-out pairs fixed above:
+
+| | agreement | 95% (Wilson) |
+|---|---|---|
+| **pooled (the registered headline)** | **41/44 = 0.9318** | **[0.8177, 0.9765]** |
+| K562 | 33/36 = 0.9167 | [0.7817, 0.9713] |
+| GM12878 | 8/8 = 1.0000 | [0.6756, 1.0] |
+
+No pair was excluded for a predicted value of exactly zero. The measured side is
+44 down and 0 up, as the census said it would be; the model's side is 41 down and
+3 up.
+
+**The comparison that decides it.** The registration expected the model to be a
+constant-down caller, which would have made 0.9318 worthless. **It is not.** Over
+the whole genome-wide sweep the model predicts a decrease only slightly more
+often than an increase: 325,989 of 610,034 elements in K562 (0.5344, 95%
+[0.5331, 0.5356]) and 331,714 of 609,973 in GM12878 (0.5438). The pooled
+constant-sign caller therefore scores **0.5361**, and the headline clears it by
+0.396 with a lower bound of 0.8177 far above it. Both registered margins are met,
+so the verdict is **passed**.
+
+**The confound a positive deserves, run post-hoc and reported whatever it did.**
+The 44 are not a random draw: they are pairs whose measured gene is the element's
+*top* predicted target, which selects for a large predicted change. And the
+sweep's own down-rate is not flat in that magnitude — it climbs steeply:
+
+| ‖predicted log2fc‖ | sweep down-rate, K562 | elements | the 44 |
+|---|---|---|---|
+| 0 – 0.01 | 0.5105 | 133,541 | 1/1 |
+| 0.01 – 0.025 | 0.5055 | 111,153 | 1/2 |
+| 0.025 – 0.05 | 0.5102 | 116,990 | 4/5 |
+| 0.05 – 0.1 | 0.5268 | 120,645 | 7/8 |
+| 0.1 – 0.25 | 0.5702 | 97,179 | 9/9 |
+| 0.25 – 0.5 | 0.7041 | 21,000 | 8/8 |
+| 0.5 – 1.0 | 0.8386 | 6,827 | 6/6 |
+| ≥ 1.0 | 0.9085 | 2,699 | 5/5 |
+
+So the flat 0.5361 **is** too easy a baseline. Re-weighting the sweep's
+per-magnitude down-rate by the magnitude profile of the pairs actually scored
+gives a magnitude-matched marginal of **0.6537** (K562 0.6648, GM12878 0.6040).
+The headline still clears it by 0.278 with the lower bound 0.8177 above it, so
+the verdict survives the harder comparison. This check was not registered; it is
+reported beside the registered verdict, not in place of it.
+
+**Where the errors are, and what that is worth.** All three disagreements sit at
+the bottom of the magnitude ladder — SH3BGRL3 twice on chr1 (predicted +0.0545
+and +0.0111 against measured −0.159 and −0.152) and MYB on chr6 (predicted
++0.0378 against measured −0.176). Above ‖log2fc‖ 0.1 the model is **28 of 28**.
+The usable reading is therefore not "the direction is right 93% of the time" but
+**the direction is worth reading in proportion to the magnitude it is read from**:
+below about 0.05 the model sits on its own coin-flip base rate and got 6 of 8
+there by luck as much as anything, and above 0.1 it did not miss.
+
+**What the layer still cannot be said to do.** Call an increase. Zero upward
+measured pairs are answerable, so nothing here tests the `represses` half of
+`action` at all. The only three upward calls the model made were all wrong, 0 of
+3. The positive is one-sided by construction and must be quoted that way.
+
+**Coverage, beside the headline.** Of 171 signed K562 pairs: 29 out of the
+scorer's reach, 5 on an element the sweep never scored, 137 with `input_presence`
+true, and 101 covered but with the measured gene not the element's top target,
+leaving 36. GM12878 runs 21 → 18 → 8 the same way. HCT116 (40), WTC11 (35) and
+Jurkat (7) are refused for having no AlphaGenome line, as registered. The
+selection is not gentle and it is legible: the 111 pairs the model could not be
+asked about have a median element-to-TSS distance of **102,522 bp against 22,553
+for the 44 it answered**, so the answerable set is the close half. **37 of those
+111 are the upward pairs** — direct confirmation of the mechanism the
+registration predicted, that the single stored target filters the upward arm out.
+
+**What it named instead**, on those 111: 89 distinct measured genes, and **the
+measured gene appears nowhere in the model's named set for any of them**. It
+named exactly one gene for 63, two for 23, three for 9, and **nothing at all for
+16** (the overlapping elements carry no predicted target). No single wrong gene
+dominates — the most frequent, HBE1, FADS2 and GFI1B, appear three times each. A
+caveat on the 44 themselves: 8 had more than one overlapping scored element whose
+matches disagreed in sign, resolved by the registered largest-magnitude rule.
+
+**The training arm, fitted on, not a test**: 164/191 = 0.8586, reported for shape
+only. It is lower than the held-out 0.9318, which is the opposite of what fitting
+would buy and is worth one line: the arm is bigger and reaches further down the
+magnitude ladder, where the census already showed the model is weakest.
+
+**Requests: 0.** The costed extension — 30 elements in K562, 35 with GM12878, to
+put upward pairs into the answerable set — was not run, as registered, and is the
+coordinator's call.
+
+**What this closes and what it opens.** The standing caveat on measurement 2 is
+partly discharged: the node comparison now has one measured enhancer-gene result
+rather than only the model's reading, and the direction the fourth locus frame
+went unchecked on is, for the first time, measured at n=44 rather than n=2. It is
+a real positive above a magnitude-matched baseline. What it does not give is an
+upward arm, and until 30 more requests are spent the `represses` half of every
+`action` GenomeOS writes rests on 3 calls that were all wrong.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first

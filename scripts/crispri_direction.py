@@ -40,6 +40,14 @@ def main() -> int:
     for cell in result["cells"]:
         m = result["marginal_down_rate"].get(cell, {})
         print(f"    {cell:8s} {m.get('k')}/{m.get('n')} = {m.get('rate')}  95% {m.get('ci95')}")
+    ph = result["posthoc_magnitude_matched"]
+    print(f"post-hoc magnitude-matched marginal: {ph['marginal']['pooled']}")
+    for cell in result["cells"]:
+        print(f"    {cell:8s} {ph['marginal'][cell]['rate']}  over {ph['marginal'][cell]['pairs']} pairs")
+    print(f"  verdict against it: {ph['verdict_against_it']['verdict']}")
+    print("  agreement by |predicted log2fc|:")
+    for lo, s in sorted(ph["agreement_by_magnitude"].items(), key=lambda t: float(t[0])):
+        print(f"    >= {lo:<6} {s['agree']}/{s['pairs']}")
     train = result["training_arm_fitted_on_not_a_test"]["agreement"]
     print(f"training arm (fitted on, not a test): {train['k']}/{train['n']} = {train['rate']}")
     print(f"covered but the gene is not the top target: {result['what_it_named_instead']['pairs']} pairs")
