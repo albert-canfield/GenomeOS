@@ -1767,10 +1767,52 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Goal.** In-silico experiments and design search whose outputs are
   labelled predicted with a confidence, validated by reproducing published
   perturbation results.
-- **Code.** `forge.py`, `design.py`, `runtime/debugger.py`.
+- **Code.** `forge/design.py`, `organism/forge.py`, `forge/calibration.py`,
+  `runtime/debugger.py`. *(This row said `forge.py` until 2026-09-22; there is
+  no `genomeos/forge.py`.)*
 - **Design.** DESIGN-MINIMAL-CELL.md, ACTION-PLAN.md Phase 5.
 - **Data.** `design_neuron`.
-- **Missing.** No calibration of the predicted confidence against outcomes;
+- **The predicted confidence cannot be calibrated, and the obstruction is not n
+  (2026-09-22, lane-forge, `e13df9e` registration, `eea443e` result, 0
+  requests).** It is **a hand-set literal `0.3`** written onto every experiment
+  a `design` block emits (`organism/forge.py:143`), plus six `min(x, 0.3)` caps
+  — one of them in **area I, for an unrelated quantity**, which is the tell: a
+  number that means the same thing for a worm-embryo design search and a phyloP
+  budget is not a probability about either. It is a provenance marker reading
+  *predicted, not validated*. It ignores loss, feasibility, evaluations and the
+  count of rival candidates — across the four shipped designs the feasible
+  counts run 2, 6, 2, 22 and all four answers are stamped 0.3 — and it
+  overwrites the design's own stated 0.5 and 0.6. **A single-valued predictor
+  has one reliability bin at every sample size, so no curve exists at any n**,
+  which is read off the source rather than the data.
+  **Census, counted before anything was designed: 2 designs whose published
+  outcome is cited in the file, 4 counting two recorded only in prose, 0
+  fixtures and 0 tests pairing a design with an outcome** — and all four solve
+  at loss 0.0, so the outcome column is degenerate too. The 31 `experiment`
+  blocks cannot substitute: an experiment *states* a perturbation and checks the
+  simulator, while a design must *find* it.
+  **The rate was computed and is withheld, which is the part worth keeping.**
+  At 4 of 4 the exact 95% interval is [0.3976, 1.0000] and **excludes 0.3**,
+  so the arithmetic invites raising the number. It is not published because the
+  answer is planted in the population: `founders.bio:47` carries the same Lin
+  1995 clause as the design's own answer key, at confidence 0.9, and every
+  candidate list contains the published factor because the author put it there.
+  BioForge is not predicting POP-1; it is evaluating a rule authored from POP-1
+  over a list containing POP-1, so 4 of 4 measures that the simulator reads its
+  own rules correctly — which existing tests already establish.
+  **Five obstructions are named with n deliberately last**: a negative case, a
+  blind candidate list, a design whose answer is not already in the module, a
+  varying confidence, and then n. n is the smallest of the five and the only one
+  more of the same work would fix, so "collect more designs" would have been the
+  wrong response. Verdict **`UNCHECKABLE_BY_CONSTRUCTION`**, in
+  docs/BIOFORGE-CONFIDENCE.md and `genomeos/forge/calibration.py`, with tests
+  pinning the two claims a later edit could falsify. **Two description-only
+  defects are named and not fixed**: the CLI prints the constant directly
+  beneath a truthful loss-based verdict it bears no relation to, and the parser
+  stores a stated confidence the emitter discards — one of those two behaviours
+  is wrong.
+- **Missing.** ~~No calibration of the predicted confidence against outcomes~~
+  *(resolved 2026-09-22, above: it is not calibratable and not for want of n)*;
   knockouts of network species (the `experiment` block perturbs organisms;
   network perturbations are covered by tests: the repressilator's `# test:`
   claims and the Fauré cell-cycle knockout in `test_boolean.py`). Done
@@ -1778,7 +1820,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   knockouts, additions and knobs searched toward targets under constraints,
   the answer emitted as a predicted experiment; POP-1, PIE-1, GFI1 and IKZF1
   found), eight worm mutants and nine blood mutants as experiment programs
-  in CI, Digital Development as the published set.
+  in CI, Digital Development as the published set. *(The worm mutants are
+  **ten** since `par2` and `par3` were added; the nine blood mutants are right.
+  And `haematopoiesis_designs.bio` is referenced only from prose — `bio test`
+  runs `experiment` blocks, not `design` blocks, so no CI path executes it.)*
 - **Next.** 1. Budget constraints in `design` (genes, bases, perturbations
   already there). 2. Network knockouts in `experiment` (a species held at
   zero). 3. Calibrate predicted confidence: how often a design's answer
