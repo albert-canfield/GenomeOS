@@ -145,6 +145,39 @@ converges monotonically and has no step to damp; its decision threshold is chose
 to maximise training balanced accuracy and is never touched on the held-out fold.
 
 0 model requests. Nothing is fetched.
+
+============================================================================================
+ADDENDUM, written after the registered arms were run. The registration above keeps every number
+it was committed with (`de7a135`); nothing in it is edited.
+============================================================================================
+
+CLAUSE (c) WAS REGISTERED ON THE WRONG STATISTIC, AND THIS IS THE CORRECTION.  "Pooled
+within-generation-band balanced accuracy" was meant to be the clause a clock cannot pass, because
+depth is constant inside a band. Pooling the four counts across bands does not do that. Strata with
+different class priors, pooled, let a predictor that names **each stratum's own majority** -- which
+reads nothing but the stratum, that is nothing but depth and founder -- score far above 0.5 while
+scoring exactly 0.500 inside every single stratum. Measured, on these strata:
+
+    stratum-majority caller, within band            pooled 0.7575   macro 0.5000
+    stratum-majority caller, within band + founder  pooled 0.7886   macro 0.5000
+
+So the registered clause (c) figure was mostly the prior it was meant to remove. The corrected
+statistic is the MACRO AVERAGE of the per-stratum balanced accuracies, whose floor is exactly 0.500
+by construction and is what the stratum-majority baseline scores. Both are published, the registered
+one first, and the registered clause (c) verdict stands as computed as well as being corrected.
+
+THREE POST-HOC CIRCULARITY CONTROLS on the within-band result, each labelled as post-hoc:
+
+    D1  no per-band arm selection: one arm fixed across all bands, so the number is not the best of
+        four chosen on the held-out fold.
+    D2  atlas-named cells only, so a cell that inherits a distant ancestor's factor set cannot let
+        the excluded coverage signal back in through the read.
+    D3  depth AND founder sublineage both held constant, with the folds taken by GRANDPARENT so a
+        cell is never tested on a model that saw its sister. This is the strictest form available:
+        within one stratum both lookup-derived variables are fixed and the only thing left varying
+        between the cells is what was measured in them.
+
+0 model requests in the addendum either.
 """
 
 from __future__ import annotations
@@ -439,3 +472,99 @@ def bands(gen: dict[str, int], labels: dict[str, str], min_each: int = 20) -> li
     for cid, lab in labels.items():
         per[gen[cid]][lab] += 1
     return sorted(g for g, c in per.items() if c[TERMINAL] >= min_each and c[DIVIDING] >= min_each)
+
+
+def strata(
+    gen: dict[str, int],
+    labels: dict[str, str],
+    founder: bool = False,
+    min_cells: int = 40,
+    min_each: int = 10,
+) -> list[tuple[str, list[str]]]:
+    """Cells grouped by generation, and optionally by founder sublineage too. Inside one stratum both
+    lookup-derived variables are constant, so nothing a clock or a founder knows can call a cell."""
+    by: dict[tuple, list[str]] = defaultdict(list)
+    for cid in labels:
+        by[(gen[cid], sublineage(cid) if founder else "")].append(cid)
+    out = []
+    for key, cs in sorted(by.items()):
+        n_t = sum(1 for c in cs if labels[c] == TERMINAL)
+        if len(cs) >= min_cells and n_t >= min_each and len(cs) - n_t >= min_each:
+            out.append((f"{key[0]}/{key[1]}" if founder else str(key[0]), cs))
+    return out
+
+
+def stratum_majority(cells: list[str], labels: dict[str, str]) -> dict[str, str]:
+    """The baseline the macro average exists to expose: name the stratum's own majority. It reads
+    nothing but the stratum -- that is, nothing but depth and founder -- and it scores exactly 0.500
+    inside every stratum while scoring far above 0.5 when the strata are pooled."""
+    n_t = sum(1 for c in cells if labels[c] == TERMINAL)
+    return dict.fromkeys(cells, TERMINAL if n_t * 2 > len(cells) else DIVIDING)
+
+
+def stratified(
+    groups: list[tuple[str, list[str]]], labels: dict[str, str], predict
+) -> tuple[dict[str, float], float, float]:
+    """Per-stratum balanced accuracy (its floor is exactly 0.500), the MACRO average of those, and the
+    naive pooled figure that the macro average replaces."""
+    per: dict[str, float] = {}
+    tot = [0, 0, 0, 0]
+    for key, cells in groups:
+        lab = {c: labels[c] for c in cells}
+        if len(set(lab.values())) < 2:
+            continue
+        pred = predict(cells, lab)
+        tp = fn = tn = fp = 0
+        for c, truth in lab.items():
+            call = pred.get(c) or DEFAULT_CALL
+            if truth == TERMINAL:
+                tp, fn = tp + (call == TERMINAL), fn + (call != TERMINAL)
+            else:
+                fp, tn = fp + (call == TERMINAL), tn + (call != TERMINAL)
+        per[key] = (tp / (tp + fn) + tn / (tn + fp)) / 2
+        tot = [tot[0] + tp, tot[1] + fn, tot[2] + tn, tot[3] + fp]
+    macro = sum(per.values()) / len(per) if per else 0.0
+    tp, fn, tn, fp = tot
+    pooled = (tp / (tp + fn) + tn / (tn + fp)) / 2 if (tp + fn) and (tn + fp) else 0.0
+    return per, macro, pooled
+
+
+def grandparent_folds(parents: dict[str, str], cells: list[str], k: int = 5) -> dict[str, int]:
+    """Fold assignment by grandparent, so a cell is never tested on a model that saw its sister. A
+    parent link says nothing about whether this cell divides, so it is not the answer restated."""
+    gp = {}
+    for c in cells:
+        p = parents.get(c) or c
+        gp[c] = parents.get(p) or p
+    order = sorted(set(gp.values()))
+    at = {g: i % k for i, g in enumerate(order)}
+    return {c: at[gp[c]] for c in cells}
+
+
+def within_stratum(
+    cells: list[str],
+    labels: dict[str, str],
+    feats: dict[str, set[str]],
+    parents: dict[str, str],
+    kind: str = "rules",
+    k: int = 5,
+) -> dict[str, str]:
+    """One stratum, held out by grandparent fold. Depth and founder are already constant here, so what
+    is left for a rule to read is what was measured in the cell."""
+    fold = grandparent_folds(parents, cells, k)
+    sub = {c: feats[c] for c in cells}
+    lab = {c: labels[c] for c in cells}
+    pred: dict[str, str] = {}
+    for i in range(k):
+        held = [c for c in cells if fold[c] == i]
+        train = [c for c in cells if fold[c] != i]
+        if not held or len({lab[c] for c in train}) < 2:
+            continue
+        if kind == "logistic":
+            pred.update(
+                logistic_held_out(sub, lab, groups={c: ("H" if fold[c] == i else "T") for c in cells})
+            )
+        else:
+            rules = learn_rules({c: sub[c] for c in train}, {c: lab[c] for c in train})
+            pred.update(apply_rules(rules, {c: sub[c] for c in held}))
+    return pred

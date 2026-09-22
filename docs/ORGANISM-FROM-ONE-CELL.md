@@ -1218,3 +1218,153 @@ move a count that the guard fixes at zero. What would move it is the terminality
 `542d613` already measured — with the lookup's 555 fate decisions deleted and the guard opened, the same
 rules reach 44 of 555 and claim more non-terminal cells than terminal ones. That is where area E's next
 real number is, and it is not a read choice.
+
+## The terminality gate: the factors do know something, and it is not enough (2026-09-22, lane-terminal)
+
+**The gate does not open.** A rule set built on the measured factors cannot say when a cell is done
+dividing well enough to be worth having: held out by founder sublineage it calls terminal against
+dividing at **0.8079 balanced accuracy**, against **0.8998** for a depth threshold fitted per founder
+lineage and **0.8773** for the held-out form of the same thing — and adding depth to the factors makes
+them *worse* than depth alone, 0.8148 against 0.8998. Both registered clauses of the gate fail. So the
+**0 of 414** that `542d613` established — no factor rule in this program has ever decided a fate the
+lineage had not already written — is not an artefact of the guard that can be lifted by writing the
+guard differently. There is nothing behind the guard to lift it to. Every fate number area E publishes
+stays conditional on a terminality call the factors did not make, and that is the ceiling on the whole
+fate claim: 522 with the lookup as fallback, 381 honest, 136 free, 0 decided, and now a measured reason
+why the last number cannot be raised.
+
+**What the factors do know is real, and smaller than it first appeared.** With generation *and* founder
+sublineage both held constant — so neither the clock nor the lineage can make the call — and with folds
+taken by grandparent so no cell is ever tested on a model that saw its sister, the measured factors
+still call terminality at a macro balanced accuracy of **0.654** (0.678 on atlas-named cells only),
+against a floor of **exactly 0.500**, with the shuffle null at 0.5003 ± 0.0087. The atlas is not silent
+about terminality. It is just quieter about it than the lineage's own statement of how many times each
+founder divides.
+
+### The circularity audit, done before any rule was written
+
+Three candidate signals look like measurements and are the answer sheet in a second handwriting. The
+first is the one that would have been easiest to publish.
+
+| Signal | Ruling | Why |
+| --- | --- | --- |
+| tracked lifetime (Ma 2021 `_lifetimes`) | **circular, excluded** | a tracked lifetime ends at the cell's division *or* at the last frame; the movie stops at frame 320 = 400.0 min and 454 cells end there, 322 terminal against 78 dividing, so a short lifetime is a division that was seen |
+| the cell's own cycle length | **the answer itself** | `divides - born` is defined only for a cell that divides |
+| atlas coverage | **lineage-derived, excluded** | 455 of 555 terminal cells are named in Ma 2021 (82.0%) against 717 of 771 dividing (93.0%): eleven points of signal about which cells the imaging resolved |
+| `cell_type` | **the answer restated** | only the lookup's `fate_<cell>` ever sets one; this is the guard that pins 0 of 414 |
+| the lineage name | **the lookup's own address** | `ABalaaaalal` spells out eleven divisions, and `when: cell = X` is the form of every lookup row |
+| `generation`, birth time, stage, founder | **permitted, but a baseline** | the cell's own division history, and not the answer restated — but every division here is scheduled by a lookup `div_<cell>`, so these are numbers the lookup produced |
+| measured transcription factors | **a measurement** | the only candidate that is a fact about the cell rather than about the tree |
+| factor *count*, identities erased | **a measurement, but a clock** | terminal cells carry more factors (74.2 against 46.9) and are born later (468.7 min against 308.5) |
+
+Coverage is excluded as a rule term but cannot be excluded from the read: a cell the atlas does not name
+inherits its nearest tracked ancestor's factor set, which is what the reader gives it in the Body today.
+That is why every within-stratum figure is also reported on atlas-named cells only, where it does not
+fall.
+
+### The registration, and the metric that abstention cannot game
+
+Registered in `de7a135`, before any factor arm was run and before the result file existed
+(`genomeos/organism/terminality.py`). The universe is the **1,326** embryonic cells that are not
+programmed deaths: **555 terminal, 771 dividing**. The metric is balanced accuracy with the lookup's
+terminality deleted, and **every cell is called** — an abstention is called `Dividing`, the majority
+class, and is scored. That was registered deliberately, because the cited fate rules claim more
+non-terminal cells than terminal ones (105 against 79), so a rule set that merely abstains more would
+look better on any claimed-cell metric and cannot look better on this one. Two void conditions, neither
+triggered. 0 model requests.
+
+### The baselines, and the arms against them
+
+| | balanced | accuracy | MCC | claimed |
+| --- | --- | --- | --- | --- |
+| T1 always-dividing | 0.5000 | 0.5814 | 0.000 | 0 |
+| T2 always-terminal | 0.5000 | 0.4186 | 0.000 | 1326 |
+| T3 depth `gen >= 9`, in sample | 0.7815 | 0.8069 | +0.607 | 1326 |
+| T3cv the same, held out by founder | 0.7815 | 0.8069 | +0.607 | 1326 |
+| **T4 a depth threshold per founder, in sample** | **0.8998** | 0.8967 | +0.792 | 1326 |
+| T4cv the same, leave-one-cell-out | 0.8773 | 0.8778 | +0.751 | 1326 |
+| T5cv factor *count* alone, held out | 0.6721 | 0.6463 | +0.352 | 1326 |
+| F instantaneous rules, held out | 0.7322 | 0.7655 | +0.524 | 727 |
+| **F integrated rules, held out** | **0.8079** | 0.8250 | +0.639 | 787 |
+| C instantaneous logistic ceiling, held out | 0.8028 | 0.7941 | +0.598 | 1326 |
+| C integrated logistic ceiling, held out | 0.7926 | 0.7821 | +0.578 | 1326 |
+| FD integrated rules **+ depth**, held out | 0.8148 | 0.8348 | +0.663 | 1164 |
+| CD integrated logistic **+ depth**, held out | 0.8086 | 0.7956 | +0.610 | 1326 |
+
+The per-founder threshold is `ABal 9, ABar 9, ABpl 9, ABpr 9, MS 6, E 5, C 6, D 4`. It is fitted on the
+whole universe on purpose: a depth rule is what a factor rule has to be worth more than, and it should
+be met at its strongest. Even at its held-out strength, 0.8773, no factor arm reaches it.
+
+Clause (a) — the best factor-only arm beats every trivial baseline by 0.05 — **fails**, 0.8079 against a
+bar of 0.9498. Clause (b) — the factors add 0.03 to depth — **fails in the wrong direction**: the best
+factor-plus-depth arm is 0.085 *below* depth alone, because the greedy decision list cannot express a
+threshold that differs per founder and spends its rules elsewhere.
+
+### The within-band statistic was registered wrong, and this is the correction
+
+Clause (c) was meant to be the clause a clock cannot pass: inside one generation band depth is constant,
+so a call made there is not a call made by the clock. Pooling the four counts across bands does not do
+that. Strata with different class priors, pooled, let a predictor that names **each stratum's own
+majority** — reading nothing but the stratum, that is nothing but depth and founder — score far above
+0.5 while scoring exactly 0.500 inside every single stratum:
+
+| stratum-majority caller | per stratum | naive pooled |
+| --- | --- | --- |
+| within a generation band | 0.5000 | **0.7575** |
+| within band **and** founder | 0.5000 | **0.7886** |
+
+So the registered clause (c) figure of 0.7846 was mostly the prior it was meant to remove. The
+registration keeps the number it was committed with; the statistic reported beside it is the **macro
+average** of the per-stratum balanced accuracies, whose floor is exactly 0.500 by construction. A test
+pins that floor.
+
+| | macro (floor 0.500) | naive pooled |
+| --- | --- | --- |
+| stratum majority, within band | 0.5000 | 0.7575 |
+| rules integrated, within band | 0.6302 | 0.7849 |
+| **logistic instantaneous, within band** | **0.6964** | 0.7563 |
+| logistic integrated, within band, atlas-named only | 0.7506 | 0.7431 |
+| stratum majority, within band **and** founder | 0.5000 | 0.7886 |
+| **rules instantaneous, band + founder, folds by grandparent** | **0.6541** | 0.7974 |
+| the same, atlas-named cells only | 0.6775 | 0.8014 |
+
+Three post-hoc controls, each labelled as post-hoc in the result file. **D1**, one arm fixed across all
+bands rather than the best of four chosen on the held-out fold: the figure does not fall. **D2**,
+atlas-named cells only, so the excluded coverage signal cannot re-enter through an inherited factor set:
+it does not fall, and for one arm it rises. **D3**, depth *and* founder both held constant with folds by
+grandparent so no cell is tested on a model that saw its sister: 0.6541, still well clear of 0.500.
+Generation 7 is the exception and is worth naming — every arm sits at chance there (0.4962 for the best,
+0.447 for one), so there is a whole band in which the atlas says nothing at all about terminality.
+
+### Four of the six predictions broke, all in the factors' favour
+
+| | | |
+| --- | --- | --- |
+| P1 | every factor-only arm is below the held-out depth threshold | **broke** — three of four beat it (0.8079, 0.8028, 0.7926 against 0.7815) |
+| P2 | clause (b) fails | **held**, and by more than expected: the increment is negative |
+| P3 | the within-band figure is below 0.60 | **broke** on both statistics (0.7846 registered, 0.6964 corrected) |
+| P4 | the shuffle null sits within 0.03 of 0.500 | **held**, 0.5003 ± 0.0087 |
+| P5 | a bare factor *count* comes within 0.03 of the best learned rule set | **broke**, 0.6721 against 0.8079 — the rules read factor identities and not only the clock |
+| P6 | the logistic ceiling does not reach the depth threshold either | **broke**, 0.8028 against 0.7815 |
+
+Four breaks, every one of them saying the measured factors carry more terminality information than this
+lane expected. The gate still does not open, because the thing the factors have to beat is not the
+single depth threshold they do beat — it is the lineage's statement of how many times each founder
+divides, and that is 0.8998 in sample and 0.8773 held out. The registration was written so that this
+distinction decides the verdict rather than the headline, and it did.
+
+### What this bounds
+
+The fate claim of area E is capped by a terminality call the factors cannot make. A rule set that called
+terminality at 0.65 to 0.70 where the lineage calls it at 0.88 would not be a better program; it would
+be a worse one that owed the lineage less, which is a different thing from knowing more. So the four
+numbers stay as `d5215bf` published them — **522 with the lookup as fallback, 381 honest, 136 free, 0
+decided without the lookup having written the fate first** — and the last one now has a measured reason
+rather than a structural one. Area E's next real number is not in this atlas. It is in an organism, a
+measurement or a signal that says something about the *decision to divide* rather than about the
+identity a cell has already been given: contact and geometry at the moment of the division, or a
+measured cell-cycle regulator, neither of which Ma 2021 carries.
+
+Instrument `genomeos/organism/terminality.py`, runner `scripts/celegans_terminality.py`, result
+`data/results/celegans_terminality.json`, properties `tests/test_terminality.py`. Registration
+`de7a135`, committed before the run.

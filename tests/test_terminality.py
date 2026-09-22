@@ -107,6 +107,38 @@ def test_the_logistic_ceiling_converges_monotonically() -> None:
     assert bool(np.isfinite(w).all())
 
 
+def test_a_stratum_majority_caller_scores_exactly_half_inside_every_stratum(ref: ReferenceLineage) -> None:
+    """The correction the addendum records. Naming each stratum's own majority reads nothing but depth
+    and founder, so it must score exactly 0.500 inside every stratum -- and far above that when the
+    strata are pooled, which is why the registered pooled figure was replaced by the macro average."""
+    labels = tg.universe(ref)
+    gen = tg.depths(ref, labels)
+    for founder, min_cells, min_each in ((False, 1, 20), (True, 40, 10)):  # the run's own strata
+        groups = tg.strata(gen, labels, founder=founder, min_cells=min_cells, min_each=min_each)
+        assert groups
+        per, macro, pooled = tg.stratified(groups, labels, tg.stratum_majority)
+        assert all(round(v, 10) == 0.5 for v in per.values()), per
+        assert round(macro, 10) == 0.5
+        assert pooled > 0.70, "the artefact the macro average exists to remove"
+
+
+def test_grandparent_folds_split_sisters(ref: ReferenceLineage) -> None:
+    """A cell must never be tested on a model that saw its sister, or the within-stratum arms would be
+    reading the sister's label through a shared factor set."""
+    labels = tg.universe(ref)
+    parents = {c: (ref.cells[c].parent or "") for c in labels}
+    cells = [c for c in labels if parents[c]]
+    fold = tg.grandparent_folds(parents, cells)
+    sisters = 0
+    for c in cells:
+        p = parents[c]
+        for s in cells:
+            if s != c and parents[s] == p:
+                assert fold[s] == fold[c]  # sisters share a grandparent, so they share a fold
+                sisters += 1
+    assert sisters > 100
+
+
 @pytest.mark.skipif(not RESULT.exists(), reason="the terminality result has not been run here")
 def test_the_result_file_accounts_for_every_cell() -> None:
     """V2, pinned on the committed result: every arm calls all 1,326 cells."""
@@ -121,3 +153,12 @@ def test_the_result_file_accounts_for_every_cell() -> None:
         assert row["n"] == 1326, row["arm"]
         assert row["called_terminal"] + row["called_dividing"] == 1326, row["arm"]
     assert d["model_requests"] == 0
+    # the registered clauses (a) and (b) are the gate, and they are recorded as failed
+    assert d["clauses"]["a_factor_only"] is False
+    assert d["clauses"]["b_adds_to_depth"] is False
+    # every post-hoc block carries its stratum-majority baseline at exactly 0.5 macro
+    for block in d["post_hoc_stratified"]["blocks"].values():
+        floor = [v for k, v in block.items() if k.startswith("STRATUM")]
+        assert len(floor) == 1
+        assert floor[0]["macro"] == 0.5
+        assert floor[0]["naive_pooled"] > 0.70

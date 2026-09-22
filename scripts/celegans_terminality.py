@@ -189,6 +189,58 @@ def main() -> int:
         pooled = (pooled_tp / (pooled_tp + pooled_fn) + pooled_tn / (pooled_tn + pooled_fp)) / 2
     print(f"  pooled within-band balanced {pooled:.4f}  (best arm per band, held out)", flush=True)
 
+    # ---- POST-HOC: the macro average, and the three circularity controls -------------------
+    # The registered pooling lets a caller that names each stratum's own majority -- depth and founder
+    # and nothing else -- score far above 0.5 while scoring exactly 0.500 inside every stratum. The
+    # macro average of the per-stratum figures has a floor of exactly 0.500. Both are published.
+    print("POST-HOC: macro average per stratum (floor exactly 0.500), and the majority baseline")
+    parents = {c: (ref.cells[c].parent or "") for c in labels}
+    named = set(load_cells())
+    posthoc: dict[str, dict] = {}
+
+    def arms(group_cells, restrict=None, by_parent=False):
+        out = {"STRATUM MAJORITY (depth" + (" + founder)" if by_parent else ")"): tg.stratum_majority}
+        for read in reads:
+            for kind in ("rules", "logistic"):
+                out[f"{kind} {read}"] = _arm(read, kind, by_parent)
+        _ = group_cells, restrict
+        return out
+
+    def _arm(read, kind, by_parent):
+        def f(cells, lab):
+            sub = {c: reads[read][c] for c in cells}
+            if by_parent:
+                return tg.within_stratum(cells, lab, sub, parents, kind=kind)
+            return tg.held_out_rules(sub, lab) if kind == "rules" else tg.logistic_held_out(sub, lab)
+
+        return f
+
+    def run_block(title: str, groups, by_parent: bool) -> dict:
+        print(f"  {title}: {[(k, len(v)) for k, v in groups]}", flush=True)
+        block = {}
+        for name, fn in arms(groups, by_parent=by_parent).items():
+            per, macro, pooled_naive = tg.stratified(groups, labels, fn)
+            block[name] = {
+                "macro": round(macro, 4),
+                "naive_pooled": round(pooled_naive, 4),
+                "per_stratum": {k: round(v, 4) for k, v in sorted(per.items())},
+            }
+            print(f"    {name:<34} macro {macro:.4f}   naive-pooled {pooled_naive:.4f}", flush=True)
+        return block
+
+    g_band = tg.strata(gen, labels, founder=False, min_cells=1, min_each=20)
+    posthoc["D1 within band, one arm fixed across bands"] = run_block("bands", g_band, False)
+
+    g_named = [(k, [c for c in cs if c in named]) for k, cs in g_band]
+    posthoc["D2 within band, atlas-named cells only"] = run_block("bands, named only", g_named, False)
+
+    g_bf = tg.strata(gen, labels, founder=True)
+    posthoc["D3 within band AND founder, folds by grandparent"] = run_block("band x founder", g_bf, True)
+
+    g_bfn = [(k, [c for c in cs if c in named]) for k, cs in g_bf]
+    g_bfn = [(k, cs) for k, cs in g_bfn if len(cs) >= 30]
+    posthoc["D3n within band AND founder, atlas-named only"] = run_block("band x founder, named", g_bfn, True)
+
     # ---- the null -------------------------------------------------------------------------
     print("shuffle null", flush=True)
     null = tg.shuffle_null(reads["integrated"], labels)
@@ -227,12 +279,30 @@ def main() -> int:
         b = int(r["arm"].split()[1])
         per_band_best[b] = max(per_band_best.get(b, 0.0), r["balanced"])
     clause_c = pooled >= 0.55 and sum(1 for v in per_band_best.values() if v >= 0.55) >= 2
+
+    # clause (c) recomputed on the statistic whose floor really is 0.500, with the strictest control
+    d1 = posthoc["D1 within band, one arm fixed across bands"]
+    d3 = posthoc["D3 within band AND founder, folds by grandparent"]
+    factor_macro = [v["macro"] for k, v in d1.items() if not k.startswith("STRATUM")]
+    strict_macro = [v["macro"] for k, v in d3.items() if not k.startswith("STRATUM")]
+    best_macro = max(factor_macro)
+    clause_c_corrected = (
+        best_macro >= 0.55
+        and sum(
+            1 for v in max(d1.items(), key=lambda kv: kv[1]["macro"])[1]["per_stratum"].values() if v >= 0.55
+        )
+        >= 2
+    )
+
     knows = clause_a and clause_b and clause_c
     verdict = (
         "THE RULES KNOW SOMETHING"
         if knows
         else (
             "NEGATIVE: the measured factors do not say when a cell is done dividing"
+            " well enough to build a rule on -- they lose to a per-founder depth threshold and add"
+            " nothing to one -- though they do carry a real signal that is not depth, founder"
+            " or coverage"
             if not clause_a and not clause_b
             else "PARTIAL: some clauses passed"
         )
@@ -241,6 +311,10 @@ def main() -> int:
     print(f"\nclause (a) factor-only beats every trivial baseline by 0.05: {clause_a}", flush=True)
     print(f"clause (b) factors add 0.03 over depth alone:                 {clause_b}", flush=True)
     print(f"clause (c) within-band pooled >= 0.55 and two bands >= 0.55:  {clause_c}", flush=True)
+    print(f"clause (c) CORRECTED, macro (floor 0.500) >= 0.55:            {clause_c_corrected}", flush=True)
+    print(f"    best factor macro within band        {best_macro:.4f}", flush=True)
+    print(f"    best factor macro within band+founder {max(strict_macro):.4f}", flush=True)
+    print("    the same statistic for a stratum-majority caller  0.5000 by construction", flush=True)
     print(f"VERDICT: {verdict}", flush=True)
 
     result = {
@@ -279,10 +353,23 @@ def main() -> int:
         "bands": band_rows,
         "pooled_within_band_balanced": round(pooled, 4),
         "per_band_best_balanced": {str(b): round(v, 4) for b, v in sorted(per_band_best.items())},
+        "post_hoc_stratified": {
+            "why": "the registered pooling lets a stratum-majority caller -- depth and founder and "
+            "nothing else -- score 0.7575 within band and 0.7886 within band+founder while scoring "
+            "exactly 0.500 inside every stratum; the macro average has a floor of exactly 0.500",
+            "blocks": posthoc,
+        },
         "shuffle_null": null,
         "secondary_universe_deaths_counted": sec,
         "learned_rules": learned_rules,
         "clauses": {"a_factor_only": clause_a, "b_adds_to_depth": clause_b, "c_within_band": clause_c},
+        "clauses_corrected": {
+            "why": "the registered clause (c) pooling is inflated by the stratum prior; the macro "
+            "average of the per-stratum figures has a floor of exactly 0.500",
+            "c_within_band_corrected_macro": clause_c_corrected,
+            "best_factor_macro_within_band": round(best_macro, 4),
+            "best_factor_macro_within_band_and_founder": round(max(strict_macro), 4),
+        },
         "best": {
             "factor_only": best_factor_only.row(),
             "factors_plus_depth": best_plus_depth.row(),
