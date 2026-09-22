@@ -2011,6 +2011,13 @@ And what it names instead is the whole point of drawing the frame this way:
 
 **That is the sharpest reading this benchmark has produced, and it is a negative.** It does not say the deletion layer is the nearest-gene rule in general - at the three curated frames it also got directions and cell types right, which proximity alone cannot do. It says that on the axis this frame isolates, where proximity and the published answer disagree, the model names the published target 3 times in 50 and the nearer gene 8 times as often; and that the three frames' agreement at 0.88 was measured almost entirely where the two agree, so it could not have shown this.
 
+*Note added 2026-09-22 (§25), and the paragraph above is left exactly as written.* The question of
+whether "the wrong gene" sometimes means the right place under another name has now been measured
+over every scored frame. It does not rescue this reading: under an overlap-tolerant description the
+deletion layer reads 4/50 here rather than 2/50 under the repaired reader, against roughly 20 loci
+where it names the nearer gene, and the same tolerance lifts the nearest-TSS-in-node rule from 3/50
+to 7/50. The model was not naming the right locus more often than its symbol-matched rate says.
+
 ### The two nearest-gene rules, kept apart, because one of them is arithmetic
 
 | rule | reads | status |
@@ -2539,11 +2546,226 @@ control element, the same promoted gene, ENSG00000288879 over HMGA1.
 - **Whether a hit rule that compares symbols is the right hit rule.** Five of the 21 movements promote
   a gene whose body overlaps the published target's. Scoring those as hits would be a different
   benchmark and it would need its own registration; saying so is not the same as doing it.
+  *Measured in §25 (2026-09-22), classes registered first: of 98 strict misses over the six frames,
+  15 overlap the published target's body, 11 more are within 10 kb and 50 within 100 kb, so the
+  typical miss is a neighbour rather than an alias. An overlap-tolerant description lifts the
+  corrected draw from 10/58 to 16/58 and lifts the nearest-TSS-in-node baseline it is measured
+  against from 10/58 to 15/58, so the comparison does not move. No rate here changes.*
 - **The corrected frame is not independent of itself.** Its largest single target is 7 of 58, and
   seven of the node baseline's ten hits are those seven. Nothing here treats 58 as 58 independent
   loci, and a frame that recovers ten elements of one gene by fixing one symbol is a reason to
   report the composition beside the rate rather than to celebrate the n.
 - **The earlier frames are not re-drawn.** Only the fourth frame's rule is mechanical enough to
   re-draw. Whether the three curated panels carry stale symbols anywhere has not been checked.
+
+---
+
+## 25. What a miss means: the classes were fixed first, and the tolerance that would rescue the model rescues its baseline by the same amount (2026-09-22)
+
+`genomeos/benchmark/loci_miss.py` (the registration and the classifier), `scripts/loci_miss.py`,
+`tests/test_loci_miss.py`, result `loci_miss`. **0 AlphaGenome requests**, and that is checked rather
+than estimated: every reading classified here is on disk - the frames' saved results and
+`loci_reread`'s re-read of them - and GENCODE coordinates are a local annotation.
+
+Section 24 left this open and named it: "**whether a hit rule that compares symbols is the right hit
+rule**". The benchmark scores a miss whenever the gene a derived layer ranks first is not one of the
+published target's symbols, and it has never measured whether a miss means *named a gene somewhere
+else* or *named the right place under another name*. The coordinator's decision of 2026-09-22
+(docs/ROADMAP.md item 4) ruled that the hit rule stays symbol equality everywhere so that no rate
+moves, and sent the general question here with its own registration.
+
+### The registration, committed before a single miss was classified
+
+`loci_miss.PREREGISTRATION` and `loci_miss.CLASSES` were committed on their own in `bf33233`, ahead
+of any counting. They state:
+
+- **eight classes and the order they are tested in**, in GENCODE coordinates: the named gene IS a
+  published target symbol; a different symbol whose gene **body intersects** a published target's;
+  no overlap and within **10 kb**; within **100 kb**; further but inside the element's own **CTCF
+  node**, read off the `node` layer's stored gene list; **elsewhere** on the chromosome; **not
+  locatable**, meaning no GENCODE record on that chromosome or a symbol GENCODE uses at more than
+  one locus there; and **named nothing**. The order is part of the definition, so a gene 4 kb away
+  is reported as near rather than as a node member.
+- **that this is a description of misses that already exist and not a new hit rule.**
+  `loci.score_locus` is untouched, no saved result is rewritten, and no rate published in sections 9,
+  18, 19, 21, 22, 23 or 24 moves by this work.
+- **which gene is classified**: the locus takes the best class over the rank-1 gene of every
+  *derived* layer, because the headline hit is a union over those layers; the deletion layer's own
+  class is kept beside it.
+- **that only overlap can ever be tolerated.** The distance classes are description and feed no rate,
+  ever - not because distance is uninteresting but because **a rule that admitted the 10 kb class
+  would score the nearest-gene baseline as a hit, and that baseline is the control the whole fourth
+  frame was drawn to beat.** A benchmark whose hit rule tolerates distance cannot then report that
+  the model follows proximity.
+- **the two numbers, fixed in advance.** The case for a second, overlap-tolerant rate reported
+  *beside* the strict one requires **both** that at least **15%** of pooled strict misses overlap the
+  target body **and** that the tolerant rate exceeds the strict rate by at least **0.05** in a frame
+  of n >= 50. The question **closes**, and the strict rule is confirmed right, on **both** an overlap
+  share under **5%** **and** no frame moving by more than one locus. Anything between publishes the
+  distribution and adopts nothing.
+- **the trap, stated plainly: a benchmark that widens what counts as a hit after seeing its rate is a
+  benchmark tuning itself.** Three rates here have fallen in two days - 0.200, then 0.180, then
+  0.172 - and a session that then finds a rule under which several misses become hits is exactly
+  where a benchmark stops measuring anything. Hence the classes first, the thresholds with them, only
+  overlap ever tolerated, and any tolerant rate reported **beside** the strict one and never in place
+  of it. If the thresholds are met the output is a **proposal to the benchmark's owner carrying its
+  own registration**, not a rate changed here.
+
+### The controls, which decide whether anything below is admissible
+
+| control, registered in advance | result |
+|---|---|
+| every strict **hit** must classify as an exact symbol match | **42 hits, 42 exact, 0 elsewhere** |
+| the strict rate recomputed here must reproduce what section 24 published, frame by frame | **6 of 6 reproduced: 15/17, 7/9, 7/9, 9/50, 1/2, 10/58** |
+| no AlphaGenome request may be spent | **0** |
+
+`classify_all` raises on either of the first two rather than reporting, because a classifier that
+puts a hit anywhere but `exact` has a broken symbol lookup or a broken chromosome join, and a strict
+rate that does not reproduce the published one is describing a different scoring than the benchmark's.
+
+### Every miss in every frame, sorted into the classes
+
+98 strict misses across the six frames. The two columns are the locus class - the best over the
+derived layers, which is what the union headline is - and the deletion layer's own class beside it.
+
+| class | §9 | §19 | §21 | §22 | §23 | §24 draw | **pooled** | pooled, deletion only |
+|---|---|---|---|---|---|---|---|---|
+| exact | 0 | 0 | 0 | 0 | 0 | 0 | **0** | 0 |
+| **overlaps the target's body** | 1 | 0 | 0 | 7 | 0 | 7 | **15** | 7 |
+| within 10 kb | 0 | 0 | 0 | 5 | 1 | 5 | **11** | 11 |
+| within 100 kb | 0 | 2 | 1 | 20 | 0 | 27 | **50** | 35 |
+| same CTCF node | 0 | 0 | 0 | 3 | 0 | 3 | **6** | 12 |
+| elsewhere | 1 | 0 | 1 | 7 | 0 | 7 | **16** | 25 |
+| not locatable | 0 | 0 | 0 | 0 | 0 | 0 | **0** | 3 |
+| named nothing | 0 | 0 | 1 | 0 | 0 | 0 | **0** | 5 |
+| **misses** | 2 | 2 | 2 | 42 | 1 | 49 | **98** | 98 |
+
+**The first thing to read is not the overlap row.** 76 of the 98 misses - **50 within 100 kb, 11
+within 10 kb, 15 overlapping** - name a gene inside 100 kb of the published target, and only 22 name
+one further away or in the node. So the benchmark's "miss" is overwhelmingly **"named a neighbour"**,
+which is neither of the two things the question asked about. That is the honest shape of the
+distribution and it is why the distance classes were registered as description: the model is
+answering in the right neighbourhood at three quarters of the loci it gets wrong, and a hit rule that
+counted neighbourhoods would be the nearest-gene rule.
+
+### The tolerant rate as a description, with the same tolerance applied to the baseline
+
+The tolerant column counts a locus when a derived layer's rank-1 gene is the published symbol **or**
+overlaps its body. **It is a description of what the strict rate would read. It is not this
+benchmark's rate and it is never reported in place of the strict one.**
+
+The baseline column is the addition this section made after seeing the distribution, and it is
+disclosed as such: **a tolerance applied to the model and not to the control it is measured against
+flatters the model by construction.** It is the one addition that can only make the tolerant reading
+look worse, which is why it was admissible to make it late.
+
+| frame | n | strict | tolerant, A DESCRIPTION | nearest-TSS-in-node, strict | the same baseline, tolerant |
+|---|---|---|---|---|---|
+| §9 the seventeen panel | 17 | 15/17 (0.882) | 16/17 (0.941) | 11/17 | 11/17 |
+| §19 the nine candidates | 9 | 7/9 (0.778) | 7/9 (0.778) | 3/9 | 4/9 |
+| §21 the third set | 9 | 7/9 (0.778) | 7/9 (0.778) | 7/9 | 7/9 |
+| §22 the fourth frame | 50 | 9/50 (0.180) | 15/50 (0.300) | 3/50 | 7/50 |
+| §23 the non-coding frame | 2 | 1/2 | 1/2 | 0/2 | 0/2 |
+| §24 the corrected draw | 58 | 10/58 (0.172) | 16/58 (0.276) | 10/58 | **15/58** |
+
+**And that is the finding.** On the corrected draw the tolerance moves the model from 10 to 16 and
+the proximity baseline from 10 to 15. On the fourth frame as published it moves the model from 9 to
+15 and the baseline from 3 to 7. **The gap between the model and the rule it is measured against does
+not move**: one locus on the corrected draw before and after, six before and eight after on the
+fourth frame. A second rate computed this way would raise the headline and change nothing the
+benchmark concludes, because the thing the benchmark reports is a comparison and the comparison is
+untouched.
+
+### Does section 22's "the model follows proximity" survive? Yes, and not narrowly
+
+Section 22's sharpest reading is about the deletion layer at the fourth frame: it names the nearest
+coding TSS at 26 of 50 and the published target at 3 (20 and 2 under the repaired reader). Under the
+overlap tolerance the deletion layer reads **4/50** on the fourth frame and **4/58** on the corrected
+draw, against roughly 20 loci where it names the nearer gene. **The model was not naming the right
+locus more often than its symbol-matched rate says.** At the locus level the tolerant union reaches
+0.300 only by collecting overlaps from the eQTL layer, and the same tolerance lifts the pure
+proximity rule from 0.060 to 0.140 on the same frame.
+
+Section 22's paragraph stands as written. Nothing in it is edited.
+
+### What the overlap class actually contains, which the threshold does not see
+
+The registered test is "the bodies intersect", and that is what was counted. Reading the 8 distinct
+loci behind the 15 pooled overlaps - the fourth frame's 7 are counted once as drawn and once in the
+corrected draw - shows the class is not homogeneous:
+
+| locus | named | biotype | over | overlap | one body inside the other |
+|---|---|---|---|---|---|
+| H19_ICR1 (§9) | IGF2-AS | lncRNA | IGF2 | 8,166 bp | **yes** |
+| SLC2A3_WTC11_chr12_7995k | ENSG00000240739 | unprocessed pseudogene | SLC2A3 | 315 bp | **yes** |
+| CONTROL_HMGA1_WTC11_chr6_34235k | ENSG00000288879 | lncRNA | HMGA1 | 965 bp | **yes** |
+| STXBP5_K562_chr6_146875k | STXBP5-AS1 | lncRNA | STXBP5 | 1,176 bp | no |
+| FADS3_K562_chr11_61833k | FADS2 | protein coding | FEN1 | 4,259 bp | no |
+| ERP29_K562_chr12_111994k / …111995k | TMEM116 | protein coding | ERP29 | 1,457 bp | no |
+| ENO2_WTC11_chr12_6925k | LRRC23 | protein coding | ENO2 | 499 bp | no |
+
+**Three of the eight are the case the question was about** - a non-coding gene lying inside the
+published target's body, which is the right place under another name. **Three are tail overlaps
+between two distinct protein-coding genes**, and LRRC23 over ENO2 is 499 bp of two genes that run
+into each other. Calling those "the same place" is a stretch the registered test does not make and
+this section will not make for it.
+
+**The class is not re-cut.** Narrowing "bodies intersect" to "one body inside the other" after seeing
+that the wider test cleared the threshold is precisely the move the registration was written to
+prevent, and it is not made. The composition is reported beside the count so the owner can see what
+the count is made of.
+
+### The verdict against the numbers fixed in advance, and how fragile it is
+
+| registered quantity | threshold | measured |
+|---|---|---|
+| overlap share of pooled misses | >= 0.15 for the case, < 0.05 to close | **0.153** (15 of 98) |
+| largest tolerant-minus-strict gap at n >= 50 | >= 0.05 for the case | **0.120** |
+| frames moving by more than one locus | 0 to close | 2 (both fourth-frame readings, by 6) |
+
+**Both halves of the registered case are met, so the registration's answer is that a second rate has
+earned a proposal.** It is recorded exactly as the thresholds computed it and not adjusted, and the
+proposal goes to the benchmark's owner with its own registration rather than being adopted here.
+
+**Three things have to be read with it, and they all point the other way.**
+
+1. **The threshold cleared by 0.003.** One overlap fewer reads 0.143. Dropping the superseded
+   `loci_fourth` draw from the pool - the two fourth-frame entries are two readings of one draw and
+   share most of their loci, so the pool is not six independent frames - reads **0.143**. Dropping
+   the corrected draw instead reads 0.163. The verdict flips on which of two readings of the same
+   frame is counted.
+2. **The tolerance buys the model nothing against its baseline**, which is the table above and the
+   reason this section does not read as a win.
+3. **Three of the eight overlapping loci are tail overlaps between distinct coding genes.**
+
+So the honest summary is: **the misses are mostly neighbours, not aliases; the aliases that exist are
+real but few; and tolerating them lifts the proximity rule as much as it lifts the model.** The
+question is not closed by the registered test, and the measurement argues against the thing the test
+licensed.
+
+### What this section does not claim
+
+- **No rate moves.** `loci.score_locus` is untouched, every published figure stands, and the hit rule
+  is still symbol equality everywhere. The tolerant column exists in `loci_miss.json` and in the
+  table above, labelled a description, and nowhere else.
+- **It does not settle whether the fourth frame's positive control passes.** That was the
+  coordinator's call of 2026-09-22 and it stands: the control fails the letter and passes the claim.
+  This section adds only that ENSG00000288879 is a 965 bp lncRNA lying inside HMGA1's body, which is
+  the strong form of the overlap and not the tail form.
+- **It does not measure whether the neighbours are right.** 50 misses within 100 kb is the largest
+  number here and this section says nothing about whether those genes are wrong; the benchmark's own
+  answer is that they are, and a frame drawn to ask otherwise would be a different frame.
+
+### Left undone
+
+- **A frame drawn for this question.** Every overlap here was found in frames drawn for something
+  else, and the pooled share is dominated by one frame counted twice. If the owner wants the second
+  rate, the registration for it should be tested on loci selected without knowing their overlaps.
+- **`read_gene_input` still reads `predicted_coding` alone**, as section 24 left it. Four of the
+  seven overlaps in the fourth frame come from the eQTL layer, so the layer that has not been
+  repaired is also the one contributing least to this reading.
+- **The overlap test is symmetric and unweighted.** It asks whether two bodies intersect, not by how
+  much or in which direction, and the table of contents above is the reason someone will eventually
+  want it to ask.
 
 ---
