@@ -1115,6 +1115,15 @@ not.
 | silent nodes | 23 of 228 | 34 of 228 |
 | read only here | RUNX1, ITGB2, S100B, GRIK1, KCNJ6 … | TFF1, TFF3, ABCG1, FTCD, MX2 … |
 
+**Softened 2026-09-22.** The "enhancers active" row of that table is not a
+comparison between two cell types. K562 keeps 5,159 peaks on chr21 and HepG2
+1,849, a factor of 2.8, and the active-enhancer counts differ by 1.4 — the
+enhancer row is reading the depth difference in the peak row directly above it.
+Per 100,000 peaks the order reverses: HepG2 75,771 against K562 38,864. The
+gene row survives, because the genes named in the last row are cell-specific in
+the direction the biology says; the enhancer row should be read as depth. See
+"Is the rest of the reader's family assay depth too?" below.
+
 RUNX1 and ITGB2 open in the blood line and TFF1/TFF3 and FTCD in the liver
 line is what the biology says; 106 genes are read in both. Evidence:
 experimental for the peaks, inferred for "read" (an open promoter is
@@ -1152,6 +1161,18 @@ looking at all. Every cell type is a reader lane on the Blocks tab and a
 column on the Progress tab; chr21's per-cell results are committed, the
 other chromosomes stay local.
 
+**Softened 2026-09-22.** That caveat was right and too narrow: it was applied to
+the read shares, which turn out to be the *least* affected column, and not to
+the active-enhancer column, which turns out to be almost entirely the assay.
+Over the thirteen biosamples now in the layer, Spearman rho against DNase peak
+count is 0.83 for `active enhancers`, −0.56 for `silent nodes` and 0.53 for
+`read`. **The active-enhancer column of this table is withdrawn as a statement
+about cell types.** Read per 100,000 peaks it re-orders completely: cardiac
+muscle cell and IMR-90, first and second by count, sit fifth and eighth by rate,
+while GM12878 and keratinocyte, last and second-last by count, are second and
+first. The silent-node column is to be read with the same caveat as the read
+shares, not without one.
+
 ### The reader lane in the block map (2026-09-11)
 
 The Blocks tab has a `reader` selector listing every cell type read on the
@@ -1174,6 +1195,14 @@ proof of it.
 | enhancers active | 193,255 | 124,478 |
 | silent nodes | 2,085 | 1,465 |
 | read in both | 11,987 | |
+
+**Softened 2026-09-22.** The "enhancers active" row here is withdrawn as a
+statement about the two cell types, and it is the sharpest case in the file.
+K562's DNase experiment called 518,503 peaks genome-wide and HepG2's 176,634, a
+factor of 2.9. Per 100,000 peaks K562 reads **37,272** active enhancers and
+HepG2 **70,472**: the published comparison is not merely weakened, it points the
+other way. The "silent nodes" row carries the same caveat at rho −0.56. The
+coding-genes-read row stands, with the depth caveat already stated above.
 
 Two checks fall out of the numbers. K562 reads no gene on chrY (0 of 61)
 because the line is female; HepG2, male, reads 9. And the two cell types
@@ -1911,6 +1940,18 @@ second clause fails. Both tissues also have strikingly few poised genes (284 and
 predicts: a gene poised in one constituent and active in another reads as
 active.
 
+**Softened the same day, by the sweep below.** Half of that last sentence has to
+go. `genes_poised` tracks its own mark's peak call — Spearman 0.49 against
+H3K27me3 peak count over the thirteen — and P4 two paragraphs down already
+records testis's H3K27me3 as under-called at 1,902 peaks against a floor of
+8,540. Testis's 284 poised genes are therefore explained by the same assay
+defect this section flags, and cannot also be counted as evidence for the
+mixture argument; that would be reading one artefact twice. **Testis is
+withdrawn from the poised-gene claim.** Ovary survives it: its H3K27me3 call is
+clean at 12,359 peaks, inside the eleven's range, and it still reads only 398
+poised genes. So the mixture prediction is carried by one tissue, not two,
+which is weaker evidence than the sentence above claimed.
+
 **P4, the two under-called marks: confirmed exactly as registered.** Predicted
 from portal byte sizes before anything was downloaded, and measured after:
 testis H3K9me3 yields **321 peaks genome-wide** and H3K27me3 **1,902**, against
@@ -2060,3 +2101,109 @@ threshold fixed now.
 
 No new data is fetched for any of this and no model request is made; every
 number above and every number the tests need is already on disk.
+
+### Scored (`scripts/reader_depth_family.py`, seconds, 0 model requests)
+
+Run against the registration above, which was committed as 41bc7d6 before the
+script existed. Result: `data/results/reader_depth_family.json`.
+
+**The family, each reading against the covariate that actually drives it.**
+`genes_poised` is called from H3K27me3 and H3K27ac peaks, so it is banded
+against the H3K27me3 peak count; the rest are banded against DNase depth.
+
+| reading | covariate | span | rho | band |
+|---|---|---|---|---|
+| `enhancers_active` | DNase peaks | 4.08 | 0.8297 | assay depth |
+| `genes_read_by_marks` | DNase peaks | 47.27 | −0.6264 | inverse depth, by construction |
+| `genes_read_open` | DNase peaks | 1.84 | 0.5934 | partly depth |
+| `nodes_silent` | DNase peaks | 12.91 | −0.5604 | partly depth |
+| `genes_read` | DNase peaks | 1.41 | 0.5330 | partly depth |
+| `genes_poised` | H3K27me3 peaks | 15.76 | **0.4945** | partly mark depth |
+| `nodes_open` | — | 1.00 | — | withdrawn: a median split |
+
+`genes_poised` is the field the registration was right to re-cover: against
+DNase depth it reads 0.3791 and looks clean, against the mark that actually
+calls it, 0.4945. Against H3K27ac it is 0.2308, so it is the repressive call
+that carries it. A biosample whose broad mark is under-called reads as
+un-poised, which is exactly what happened to testis above.
+
+**Kill test 1, residual replication: passed, and not narrowly.** Fitted
+separately on the odd autosomes (slope 0.3730) and the even autosomes (slope
+0.4137), the residuals of `enhancers_active` correlate across the thirteen
+biosamples at Spearman **rho 0.9835**, permutation p = 0.0001 over 10,000 label
+shuffles against a registered bar of rho ≥ 0.5 at p < 0.05. Whatever is left
+after depth is a property of the biosample, present in both halves of its own
+genome, not noise.
+
+**Kill test 2, peak-calling shape: passed.** Mean DNase peak width across the
+thirteen runs 149.9 bp (K562) to 274.7 bp (H1). The full-genome depth residual
+correlates with it at **rho −0.033**, against a registered failure bar of
+|rho| ≥ 0.7. What survives depth is not peak width.
+
+**Kill test 3, over-correction: passed, but the registered candidate missed its
+own target band.** `enhancers_active_per_100k_peaks` reads rho **−0.522**
+against DNase peak count. That clears the failure bar of ≤ −0.7, so the rate has
+not induced the opposite confound, but it does not reach the |rho| < 0.4 band
+the registration set for a normalisation that has actually removed depth. This
+is reported as the partial result it is: the rate takes a reading that was 0.83
+with depth and leaves one that is −0.52 against it. It is better than the count
+and it is not clean.
+
+**A fourth check, not registered in advance, run because the replication was so
+strong.** A residual that replicates can still be depth if the relationship is
+curved and the fit is a straight line: every shallow biosample would then sit
+above the line in both halves. Two things rule it out. Active enhancers reach at
+most 24.3% of the 961,175 registry enhancers (cardiac muscle cell), so the count
+is nowhere near saturating. And refitting against log(DNase peaks) — which
+absorbs curvature — leaves the split-half replication *higher* at rho 0.9945,
+with the residual sd falling from 32,769 to 27,116 and the residual's own rho
+against peak count falling to 0.1374. The residual is not curvature. It is also
+worth recording that the log-fit residual lands inside the |rho| < 0.4 band that
+the registered rate missed, so on the registration's own criterion the residual
+is the better-behaved normalisation and the rate is the more portable one.
+
+**Does the repair move a published conclusion? Yes, it reverses one.** The rate
+and the log residual agree, and they disagree with the file. Genome-wide, K562
+reads 193,255 active enhancers and HepG2 124,478; per 100,000 peaks K562 reads
+37,272 and HepG2 70,472, and on the log-fit residual K562 is −1.30 sd and HepG2
+−0.21 sd. The comparison published at "Every chromosome" points the other way
+once depth is out, and it is withdrawn there. The eleven-row table at "Eleven
+cell types" re-orders almost completely and its active-enhancer column is
+withdrawn there too. By the registration's own test the normalised reading has
+earned its place: it is not decoration.
+
+**What the residual actually says.** Standardised residuals of the log-depth
+fit, positive meaning more active enhancers than that biosample's depth
+predicts: cardiac muscle cell +1.69, IMR-90 +1.16, hepatocyte +1.09, astrocyte
++0.99, GM12878 +0.16, keratinocyte +0.05, CD14-positive monocyte −0.04, HepG2
+−0.21, testis −0.37, SK-N-SH −0.44, H1 −0.82, K562 −1.30, ovary −1.97. The four
+at the top are the non-transformed and directed-differentiation samples; the two
+at the bottom are a cancer line and a bulk tissue.
+
+**The limit of what this establishes, stated rather than glossed.** The residual
+replicates across disjoint halves of the genome and is not explained by peak
+count, peak width or curvature. That makes it a stable property of the
+biosample. It does *not* make it biology: FRiP, fragment-length distribution,
+crosslinking and library complexity are all biosample-stable assay properties
+and none of them is on disk here. The honest statement is that
+`enhancers_active` splits into a large depth component and a small stable
+component of unknown kind, and that the small one is worth reporting because it
+reverses a published comparison, not because it has been shown to be regulatory.
+Settling it needs a covariate the layer does not currently keep — signal in
+peaks — and that is recorded as the next test rather than assumed away.
+
+### What changed in the code
+
+- `genomeos/genome/reader.py`: `enhancers_active_per_100k_peaks` is returned
+  beside `enhancers_active`, and the row's `evidence` dict carries a new `depth`
+  entry naming the band of every reading in the family, so a consumer reading a
+  `reader_*.json` sees the banding without coming here.
+- `scripts/reader_genome_wide.py`: the rate travels per chromosome, and the
+  genome-wide `totals` now carry both `peaks` and
+  `enhancers_active_per_100k_peaks` so any consumer can re-normalise. The
+  existing result files gain these at the next roll-up; the banded table for the
+  thirteen already on disk is `data/results/reader_depth_family.json`.
+- `nodes_open` is left in place rather than deleted, because the CLI and the
+  Cells view read it, but it is labelled in `evidence.depth` as a median split
+  that distinguishes nothing, and the property is pinned in
+  `tests/test_reader_depth_family.py`.

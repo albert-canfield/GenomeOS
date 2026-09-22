@@ -1,0 +1,191 @@
+{
+ "result": "reader_depth_family",
+ "registration": "docs/NODES-READER-WRITER.md, committed 41bc7d6 before this ran",
+ "biosamples": [
+  "K562",
+  "HepG2",
+  "GM12878",
+  "H1",
+  "IMR-90",
+  "SK-N-SH",
+  "cardiac muscle cell",
+  "keratinocyte",
+  "hepatocyte",
+  "astrocyte",
+  "CD14-positive monocyte",
+  "testis",
+  "ovary"
+ ],
+ "dnase_peaks": {
+  "K562": 518503,
+  "HepG2": 176634,
+  "GM12878": 76119,
+  "H1": 232709,
+  "IMR-90": 312250,
+  "SK-N-SH": 232038,
+  "cardiac muscle cell": 332799,
+  "keratinocyte": 83639,
+  "hepatocyte": 267741,
+  "astrocyte": 294713,
+  "CD14-positive monocyte": 202328,
+  "testis": 225744,
+  "ovary": 248611
+ },
+ "family": {
+  "enhancers_active": {
+   "covariate": "DNase peaks",
+   "min": 57321,
+   "max": 233853,
+   "span": 4.08,
+   "rho": 0.8297
+  },
+  "genes_read_by_marks": {
+   "covariate": "DNase peaks",
+   "min": 60,
+   "max": 2836,
+   "span": 47.27,
+   "rho": -0.6264
+  },
+  "nodes_silent": {
+   "covariate": "DNase peaks",
+   "min": 382,
+   "max": 4933,
+   "span": 12.91,
+   "rho": -0.5604
+  },
+  "genes_read_open": {
+   "covariate": "DNase peaks",
+   "min": 8432,
+   "max": 15489,
+   "span": 1.84,
+   "rho": 0.5934
+  },
+  "genes_read": {
+   "covariate": "DNase peaks",
+   "min": 10698,
+   "max": 15078,
+   "span": 1.41,
+   "rho": 0.533
+  },
+  "nodes_open": {
+   "covariate": "DNase peaks",
+   "min": 9988,
+   "max": 10016,
+   "span": 1.0,
+   "rho": -0.1898
+  },
+  "genes_poised": {
+   "covariate": "H3K27me3 peaks",
+   "min": 200,
+   "max": 3151,
+   "span": 15.76,
+   "rho": 0.4945,
+   "rho_vs_dnase": 0.3791,
+   "rho_vs_h3k27ac": 0.2308
+  }
+ },
+ "residual_replication": {
+  "halves": {
+   "odd": {
+    "intercept": 30246.0,
+    "slope": 0.373,
+    "chroms": 11
+   },
+   "even": {
+    "intercept": 22579.5,
+    "slope": 0.4137,
+    "chroms": 11
+   }
+  },
+  "rho": 0.9835,
+  "p_permutation": 0.0001,
+  "permutations": 10000,
+  "threshold": "rho >= 0.5 and p < 0.05",
+  "replicates": true
+ },
+ "residual_vs_peak_width": {
+  "full_fit": {
+   "intercept": 54086.0,
+   "slope": 0.3908
+  },
+  "mean_width_bp": {
+   "K562": 149.86,
+   "HepG2": 190.35,
+   "GM12878": 203.32,
+   "H1": 274.74,
+   "IMR-90": 185.67,
+   "SK-N-SH": 204.9,
+   "cardiac muscle cell": 187.55,
+   "keratinocyte": 181.08,
+   "hepatocyte": 197.07,
+   "astrocyte": 192.76,
+   "CD14-positive monocyte": 187.51,
+   "testis": 183.73,
+   "ovary": 198.68
+  },
+  "rho": -0.033,
+  "threshold": "|rho| >= 0.7 means peak-calling shape, still the assay",
+  "is_shape": false
+ },
+ "rate": {
+  "enhancers_active_per_100k_peaks": {
+   "K562": 37271.7,
+   "HepG2": 70472.3,
+   "GM12878": 75304.5,
+   "H1": 57201.9,
+   "IMR-90": 68455.7,
+   "SK-N-SH": 61712.7,
+   "cardiac muscle cell": 70268.5,
+   "keratinocyte": 75397.8,
+   "hepatocyte": 73788.1,
+   "astrocyte": 69137.1,
+   "CD14-positive monocyte": 69901.8,
+   "testis": 63079.9,
+   "ovary": 43462.7
+  },
+  "rho_vs_dnase_peaks": -0.522,
+  "over_corrects": false,
+  "removes_depth": false,
+  "order_by_count": [
+   "cardiac muscle cell",
+   "IMR-90",
+   "astrocyte",
+   "hepatocyte",
+   "K562",
+   "SK-N-SH",
+   "testis",
+   "CD14-positive monocyte",
+   "H1",
+   "HepG2",
+   "ovary",
+   "keratinocyte",
+   "GM12878"
+  ],
+  "order_by_rate": [
+   "keratinocyte",
+   "GM12878",
+   "hepatocyte",
+   "HepG2",
+   "cardiac muscle cell",
+   "CD14-positive monocyte",
+   "astrocyte",
+   "IMR-90",
+   "testis",
+   "SK-N-SH",
+   "H1",
+   "ovary",
+   "K562"
+  ],
+  "published_comparison": {
+   "K562_count": 193255,
+   "HepG2_count": 124478,
+   "K562_rate": 37271.7,
+   "HepG2_rate": 70472.3,
+   "count_says": "K562 > HepG2",
+   "rate_says": "HepG2 > K562",
+   "reverses": true
+  }
+ },
+ "verdict": "ship the rate beside the count",
+ "evidence": "derived: ENCODE DNase-seq and Histone ChIP-seq peak counts already on disk; no request made"
+}

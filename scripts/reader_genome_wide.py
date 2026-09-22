@@ -73,6 +73,7 @@ def main() -> None:
                     "read_fraction",
                     "enhancers_active",
                     "enhancers_active_fraction",
+                    "enhancers_active_per_100k_peaks",
                     "nodes",
                     "nodes_open",
                     "nodes_silent",
@@ -107,6 +108,15 @@ def main() -> None:
             "genes_read_by_marks": sum(r[cell].get("genes_read_by_marks") or 0 for r in ch.values()),
             "marks_used_on": sum(1 for r in ch.values() if r[cell].get("genes_poised") is not None),
             "enhancers_active": sum(r[cell]["enhancers_active"] for r in ch.values()),
+            # the count is substantially DNase depth, so the rate travels with it; `peaks` is
+            # carried into the totals so any consumer can re-derive or re-normalise it
+            "peaks": sum(r[cell]["peaks"] for r in ch.values()),
+            "enhancers_active_per_100k_peaks": round(
+                sum(r[cell]["enhancers_active"] for r in ch.values())
+                / max(1, sum(r[cell]["peaks"] for r in ch.values()))
+                * 100_000,
+                1,
+            ),
             "nodes_silent": sum(r[cell]["nodes_silent"] for r in ch.values()),
         }
         for cell in cells

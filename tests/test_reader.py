@@ -44,6 +44,10 @@ def test_peak_index_and_reader(tmp_path, monkeypatch):
     assert r["genes_read"] == 2 and r["genes_silent"] == 1 and r["silent_genes"] == ["B"]
     assert r["top_read"][0]["gene"] == "C" and r["top_read"][0]["signal"] == 9.0
     assert r["enhancers_active"] == 1 and r["enhancers"] == 2
+    # the count is mostly DNase depth, so the depth-normalised rate travels beside it:
+    # 1 active enhancer over 3 peaks is 33,333.3 per 100k peaks
+    assert r["enhancers_active_per_100k_peaks"] == round(1 / 3 * 100_000, 1)
+    assert "depth-dominated" in r["evidence"]["depth"]
     assert r["nodes_silent"] == 1 and r["silent_node_ids"] == ["c:D2"]
     other = dict(
         r,

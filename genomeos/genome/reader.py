@@ -223,6 +223,11 @@ def read_chromosome(
         "enhancers": len(enh),
         "enhancers_active": active,
         "enhancers_active_fraction": round(active / max(1, len(enh)), 4),
+        # enhancers_active is dominated by how deeply this biosample's DNase experiment was
+        # sequenced (Spearman 0.83 against peak count over thirteen biosamples, and an
+        # out-of-sample fit put testis at z = -0.11), so the rate is reported beside the count.
+        # See docs/NODES-READER-WRITER.md, "Is the rest of the reader's family assay depth too?"
+        "enhancers_active_per_100k_peaks": round(active / max(1, len(idx.peaks)) * 100_000, 1),
         "nodes": len(nodes),
         "nodes_open": len(open_nodes),
         "nodes_silent": len(silent_nodes),
@@ -241,6 +246,20 @@ def read_chromosome(
                 "chromosome, so a poised promoter counts as read)"
             ),
             "nodes": "inferred: CTCF domains",
+            # measured over thirteen biosamples, 2026-09-22 (data/results/reader_depth_family.json):
+            # how much of each reading is the assay rather than the cell type
+            "depth": (
+                "enhancers_active and enhancers_active_fraction are depth-dominated (Spearman 0.83 "
+                "against DNase peak count; use enhancers_active_per_100k_peaks for a comparison "
+                "between biosamples). genes_read_by_marks is inverse DNase depth by construction: "
+                "it counts promoters the marks rescue where the DNase file called nothing. "
+                "nodes_open is a median split of this biosample against itself and therefore "
+                "returns half the nodes for every biosample (9,988 to 10,016 of 20,002 across "
+                "thirteen); it distinguishes nothing and is withdrawn as a between-biosample "
+                "reading. genes_poised tracks the H3K27me3 peak call at 0.49, so a biosample with "
+                "an under-called broad mark reads as un-poised. genes_read, genes_read_open and "
+                "nodes_silent are banded as partly independent of depth (|rho| 0.53 to 0.59)."
+            ),
         },
     }
 
