@@ -5308,6 +5308,15 @@ and nothing in this change acts on the intercept.
 
 ## The gate removed: the registered direction was wrong, and the confidence quoted off the gate was seven times the measured rate (2026-09-22, later)
 
+> **Annotation, 2026-09-22 (third).** Every number in this section stands as measured. Two sentences
+> of its prose are narrowed by the inventory in the section below, and neither changes a measurement.
+> (1) "its weights band all 612,323 sweep targets" — 593,765 are banded; the other 18,558 carry
+> `no_gencode_tss_for_the_predicted_gene` and get no band. (2) The ×6.85 is read on pairs the gate
+> excludes, and **no swept target is off the gate**: `crispri.deletion_values` sets `top_target` for
+> a match on either `predicted` or `predicted_coding`, and `sweep_chromosome` bands exactly those two
+> keys. So ×6.85 is the error the module would make on the newly askable off-gate population, not an
+> error in the published band table, and the correction to that table is a different one.
+
 The registration above expected reliability not to improve. It improved, from 6 of 10 bins to 7,
 which is exactly the pre-registered threshold, so `judge()` reads **passed** where it read failed.
 That is the outcome the registration named as the one that would tempt a lane to stop checking, so
@@ -5421,6 +5430,119 @@ a reconstruction of it.
 3. Area I: the prevalence term, unchanged from 2026-09-17 and now confirmed on 23.7 times the pairs.
    Re-fit the intercept per screen with the screen's own base rate as an offset before any band is
    quoted.
+
+## Pre-registration: band the genome from a curve fitted on the population each band is quoted for (2026-09-22, third)
+
+The section above found that the curve pricing every predicted enhancer target is fitted on 245
+pairs and quotes ×6.85 one step off its own gate, and proposed re-banding the genome as the first
+roadmap row that follows. This registers that re-banding before any target is re-banded, and it
+begins by establishing that the repair everybody expected is not the repair the sweep needs.
+Inventory and counts: 0 AlphaGenome requests, everything read from disk.
+
+**Where the band table is, and what it is.** `sweep_chromosome()` and `sweep()` in
+`genomeos/attribution/target_calibration.py` produce it; `scripts/target_calibration.py` drives them
+and writes `data/results/target_calibration.json`. It is **not** a per-element row table — the
+per-(element, gene) probability is computed in memory and never persisted. What is stored is an
+aggregated counter, keyed on **(chromosome) × (`any gene` | `coding gene`) × band label → count**,
+with a second cut by ENCODE registry class, and `genome_wide` is the same structure summed over the
+24 chromosomes. `band_of()` buckets a probability into the eight half-open `CONFIDENCE_BANDS`.
+
+**How many targets carry which band today**, from `genome_wide.predicted_target_bands`:
+
+| band | `any gene` | `coding gene` |
+|---|---|---|
+| 0.05–0.1 | 45 | — |
+| 0.1–0.25 | 3,837 | 1 |
+| 0.25–0.5 | 178,387 | 184,256 |
+| 0.5–0.75 | **293,568** | 175,655 |
+| 0.75–0.9 | 61,971 | 42,552 |
+| 0.9–1 | **55,957** | 37,913 |
+| total banded | **593,765** | 440,377 |
+
+**The 612,323 is not the banded count and never was.** 593,765 banded + 18,558
+`no_gencode_tss_for_the_predicted_gene` = 612,323, and 612,323 + 348,904 `no_predicted_target` =
+961,227 elements. So **18,558 of the 612,323 (3.0%) carry no band at all**, and the sentence "the
+weights band all 612,323 sweep targets" — in this document twice above, in `LESSONS.md`, in
+`ROADMAP.md` and in the module's own prose — overstates by that many. Nothing downstream consumes
+the table: `genomeos/web/server.py` and `genomeos/web/static/index.html` contain no band label and
+no reference to this result, `genomeos/cli.py` has no command that prints it, and the only reader is
+`scripts/target_calibration.py`'s own stdout. **No web UI hunk is needed for the correction itself.**
+
+**The expected repair does not exist in the sweep.** The obvious split — band on-gate and off-gate
+targets from two curves — assumes some swept targets are off-gate. None are.
+`crispri.deletion_values` sets `top_target` to 1.0 when the pair's gene matches **either**
+`predicted` **or** `predicted_coding` at an overlapping element, and `sweep_chromosome` bands
+exactly those two keys. Of the 440,377 coding-arm targets, 331,209 are the element's window head and
+109,168 are the coding head only — a real distinction, and not this one, because both are compact
+table entries and both carried `top_target` = 1 inside the fit. **The ×6.85 is therefore not an
+error in the published table.** It is the error the module would make on the population
+`targets.ElementResponses` has just made askable — the median 28 to 41 other genes per element — and
+which the sweep does not yet band at all.
+
+**What the population mismatch actually is.** The fitted 245 and the banded 593,765 are both inside
+the gate and are still different populations, on two axes measured before this registration:
+
+| | fitted 245 | swept targets | factor |
+|---|---|---|---|
+| predicted K562 drop above 0.2 | 34.3% | 5.8% | ×5.9 |
+| predicted K562 drop exactly 0 | 15.5% | 46.5% | ×0.33 |
+| target named on **K562**, the one cell this curve speaks for | 78 (31.8%) | 32,597 of 612,323 (5.3%) | **×6.0** |
+
+The other 94.7% were named on placenta, CD14-positive monocyte, HepG2, testis, psoas muscle and
+some three hundred other tracks, and enter a K562 curve through a K562 drop that is zero for most
+of them.
+
+**The populations, and how a target is assigned to one.** The axis is the predicted K562 deletion
+drop, in the five `DROP_BANDS` strata the module already reports `measured_by_drop_band` on. It is
+chosen over the top-target axis because it is the axis the two populations demonstrably differ on,
+it is computable for every swept target and every benchmark pair with no extra data, and it is the
+axis along which the fitted rate moves. Registered in advance, `any gene` arm:
+
+| stratum | swept targets | training pairs | held-out | observed rate (pooled) |
+|---|---|---|---|---|
+| = 0 | 275,821 (46.5%) | 38 | 5 | 0.5814 |
+| 0 < drop ≤ 0.1 | 239,487 (40.3%) | 83 | 9 | 0.5978 |
+| 0.1 < drop ≤ 0.2 | 44,299 (7.5%) | 40 | 5 | 0.8667 |
+| 0.2 < drop ≤ 0.5 | 24,281 (4.1%) | 35 | 11 | 1.0000 |
+| 0.5 < drop | 9,877 (1.7%) | 49 | 10 | 1.0000 |
+
+**86.8% of the genome's bands rest on 121 training and 14 held-out pairs.** The `coding gene` arm is
+205,541 / 173,234 / 37,488 / 18,338 / 5,776 on the same strata.
+
+**The rule.** A stratum keeps a numeric band only if it holds at least `MIN_POOLED_FOR_A_BAND` = 30
+pooled pairs **and** the 95% Wilson interval of its pooled observed rate lies inside a single one of
+the eight `CONFIDENCE_BANDS`. Otherwise its targets are banded `not calibrated here` and carry the
+stratum's pair count, observed rate and interval instead of a number. Pooling training with held-out
+pairs for the rate is declared here rather than discovered later: the 40 held-out pairs alone give
+intervals of width 0.65 and would mark every stratum uncalibrated, which is true and says nothing,
+so the interval is read on all 285 on-gate pairs, and what is being interval-bounded is a base rate
+rather than a fitted curve's error. **If a stratum is too thin to fit at all it is banded `not
+calibrated here` with its count and no curve is fitted for it** — the expected outcome at drop = 0,
+whose 43 pooled pairs give 0.5814 [0.4335, 0.7160], spanning two published bands.
+
+**The direction expected.** Most of the genome loses its number: the two bottom strata (515,308 of
+593,765, 86.8%) and the 0.1–0.2 stratum (44,299, 7.5%) all fail the interval clause and become `not
+calibrated here`, leaving only the two top strata (34,158 targets, 5.8%) with a numeric band, which
+will be 0.9–1 for both. That is 80% to 95% of the table losing its band. For every target that keeps
+one the direction is unchanged or up, never down — because **within the gate the curve was measured
+honest in every stratum**: quoted 0.4932 against an observed 0.5789 at drop = 0, 0.6139 against
+0.5663, 0.8746 against 0.8750, 0.9808 against 1.0000, 0.9999 against 1.0000. So the correction is
+**not** that the published levels are wrong. It is that the table states eight-way bands to two
+decimal places for 593,765 targets on the evidence of 285 pairs.
+
+**The falsifier.** The split is wrong if the two bottom strata's pooled intervals do fit inside a
+single published band, because the drop axis would then separate nothing the curve has not already
+absorbed and the published table would stand as written. It is also wrong if the alternative axis
+measured here — named on K562 against named on another track — yields single-band intervals where
+the drop axis does not; both are computed, both are reported, and if the cell axis is cleaner it
+replaces the drop axis and this registration is recorded as wrong on the axis while right on the
+direction. Third: if re-banding moves fewer than half the targets, the registered magnitude was
+wrong and is reported as wrong rather than rounded towards.
+
+**What is not touched.** The published band table is annotated and kept, never overwritten. `sweep()`
+keeps its output and its keys and the re-banding is a second block under a new key, so both can be
+read side by side from the same result. The eight `CONFIDENCE_BANDS` and the fitted weights do not
+change. Registered in full as `PREREGISTERED_BANDS` in `genomeos/attribution/target_calibration.py`.
 
 ## What comes next, in order
 
