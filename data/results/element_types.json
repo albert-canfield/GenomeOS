@@ -1,0 +1,837 @@
+{
+  "result": "element_types",
+  "date": "2026-09-14",
+  "chromosomes": {
+    "fit": [
+      "chr21",
+      "chr22"
+    ],
+    "transfer": [
+      "chr19",
+      "chr20"
+    ],
+    "described": [
+      "chr17",
+      "chr18",
+      "chrY"
+    ]
+  },
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "features": [
+    "log_strongest",
+    "sign_strongest",
+    "net_direction",
+    "log_genes_moving",
+    "share_window_moving",
+    "lines_acting",
+    "direction_differs",
+    "log_line_spread",
+    "acts_on_nearest",
+    "log_target_distance",
+    "log_mean_effect"
+  ],
+  "k_criterion": "highest mean silhouette on a fixed 5000-element subsample (seed 21) over k = 2..10, among the k whose smallest cluster holds at least 2% of the elements; fixed before any result was read",
+  "k": 4,
+  "silhouette_curve": {
+    "2": {
+      "silhouette": 0.2729,
+      "smallest_share": 0.4466,
+      "inertia": 162118.0
+    },
+    "3": {
+      "silhouette": 0.2476,
+      "smallest_share": 0.1057,
+      "inertia": 140258.5
+    },
+    "4": {
+      "silhouette": 0.2765,
+      "smallest_share": 0.0571,
+      "inertia": 122118.3
+    },
+    "5": {
+      "silhouette": 0.2374,
+      "smallest_share": 0.057,
+      "inertia": 107915.3
+    },
+    "6": {
+      "silhouette": 0.2492,
+      "smallest_share": 0.0565,
+      "inertia": 96986.2
+    },
+    "7": {
+      "silhouette": 0.2482,
+      "smallest_share": 0.0565,
+      "inertia": 90472.1
+    },
+    "8": {
+      "silhouette": 0.2502,
+      "smallest_share": 0.0148,
+      "inertia": 85022.3
+    },
+    "9": {
+      "silhouette": 0.255,
+      "smallest_share": 0.0131,
+      "inertia": 80409.8
+    },
+    "10": {
+      "silhouette": 0.2558,
+      "smallest_share": 0.0073,
+      "inertia": 76235.3
+    }
+  },
+  "elements_fit": 20954,
+  "clusters": {
+    "centroids_in_feature_units": {
+      "0": {
+        "log_strongest": -1.27,
+        "sign_strongest": -0.0435,
+        "net_direction": 0.0079,
+        "log_genes_moving": 0.0055,
+        "share_window_moving": 0.0001,
+        "lines_acting": 0.002,
+        "direction_differs": 0.0,
+        "log_line_spread": -1.2068,
+        "acts_on_nearest": 0.3144,
+        "log_target_distance": 4.4033,
+        "log_mean_effect": -2.3379
+      },
+      "1": {
+        "log_strongest": -0.7629,
+        "sign_strongest": 0.9833,
+        "net_direction": 0.4882,
+        "log_genes_moving": 0.8245,
+        "share_window_moving": 0.0433,
+        "lines_acting": 0.4038,
+        "direction_differs": 0.0,
+        "log_line_spread": -0.7807,
+        "acts_on_nearest": 0.4504,
+        "log_target_distance": 4.0714,
+        "log_mean_effect": -2.1333
+      },
+      "2": {
+        "log_strongest": -0.6399,
+        "sign_strongest": -0.9996,
+        "net_direction": -0.5021,
+        "log_genes_moving": 0.8871,
+        "share_window_moving": 0.049,
+        "lines_acting": 0.4713,
+        "direction_differs": 0.0,
+        "log_line_spread": -0.6911,
+        "acts_on_nearest": 0.4194,
+        "log_target_distance": 4.0056,
+        "log_mean_effect": -2.0589
+      },
+      "3": {
+        "log_strongest": -0.5441,
+        "sign_strongest": -0.2164,
+        "net_direction": -0.0475,
+        "log_genes_moving": 1.1117,
+        "share_window_moving": 0.0697,
+        "lines_acting": 0.6848,
+        "direction_differs": 0.995,
+        "log_line_spread": -0.3447,
+        "acts_on_nearest": 0.5038,
+        "log_target_distance": 3.9251,
+        "log_mean_effect": -1.9514
+      }
+    },
+    "context": {
+      "0": {
+        "elements": 10798,
+        "share": 0.5153,
+        "registry_class": {
+          "dELS": 0.7964,
+          "pELS": 0.2036
+        },
+        "ctcf_bound": 0.4128,
+        "budget_tier": {
+          "annotated (outside UNKNOWN blocks)": 0.8316,
+          "regulatory": 0.1561,
+          "fossil": 0.0055,
+          "neutral": 0.0054,
+          "constrained_unknown": 0.0007,
+          "structural": 0.0006
+        },
+        "conserved_fraction_mean": 0.0737,
+        "share_with_conserved_bases": 0.3546,
+        "length_median": 286,
+        "gc_mean": 0.5096,
+        "nearest_gene_distance_median": 7898,
+        "dnase_open_share": 0.1452,
+        "h3k27me3_peak_share": 0.1309,
+        "state": {
+          "no mark": 0.5743,
+          "primed enhancer": 0.1127,
+          "Polycomb-repressed": 0.1055,
+          "active promoter": 0.0757,
+          "active enhancer": 0.0491,
+          "heterochromatin": 0.0265,
+          "promoter mark, not acetylated": 0.0234,
+          "poised enhancer": 0.0189,
+          "acetylated element": 0.0073,
+          "bivalent": 0.0065
+        }
+      },
+      "1": {
+        "elements": 3466,
+        "share": 0.1654,
+        "registry_class": {
+          "dELS": 0.6746,
+          "pELS": 0.3254
+        },
+        "ctcf_bound": 0.4758,
+        "budget_tier": {
+          "annotated (outside UNKNOWN blocks)": 0.8722,
+          "regulatory": 0.1154,
+          "fossil": 0.0072,
+          "neutral": 0.0046,
+          "structural": 0.0003,
+          "constrained_unknown": 0.0003
+        },
+        "conserved_fraction_mean": 0.0773,
+        "share_with_conserved_bases": 0.3656,
+        "length_median": 277,
+        "gc_mean": 0.5332,
+        "nearest_gene_distance_median": 5259,
+        "dnase_open_share": 0.1504,
+        "h3k27me3_peak_share": 0.1604,
+        "state": {
+          "no mark": 0.5056,
+          "Polycomb-repressed": 0.1163,
+          "primed enhancer": 0.1145,
+          "active promoter": 0.1099,
+          "active enhancer": 0.0428,
+          "promoter mark, not acetylated": 0.0404,
+          "poised enhancer": 0.0256,
+          "heterochromatin": 0.0198,
+          "bivalent": 0.0185,
+          "acetylated element": 0.0066
+        }
+      },
+      "2": {
+        "elements": 5493,
+        "share": 0.2621,
+        "registry_class": {
+          "dELS": 0.647,
+          "pELS": 0.353
+        },
+        "ctcf_bound": 0.4895,
+        "budget_tier": {
+          "annotated (outside UNKNOWN blocks)": 0.8784,
+          "regulatory": 0.1114,
+          "neutral": 0.0051,
+          "fossil": 0.0046,
+          "structural": 0.0004,
+          "constrained_unknown": 0.0002
+        },
+        "conserved_fraction_mean": 0.107,
+        "share_with_conserved_bases": 0.4679,
+        "length_median": 304,
+        "gc_mean": 0.5319,
+        "nearest_gene_distance_median": 4926,
+        "dnase_open_share": 0.2262,
+        "h3k27me3_peak_share": 0.1303,
+        "state": {
+          "no mark": 0.4769,
+          "active promoter": 0.1628,
+          "primed enhancer": 0.11,
+          "Polycomb-repressed": 0.0944,
+          "active enhancer": 0.0559,
+          "promoter mark, not acetylated": 0.038,
+          "poised enhancer": 0.0216,
+          "heterochromatin": 0.0186,
+          "bivalent": 0.0142,
+          "acetylated element": 0.0076
+        }
+      },
+      "3": {
+        "elements": 1197,
+        "share": 0.0571,
+        "registry_class": {
+          "dELS": 0.5681,
+          "pELS": 0.4319
+        },
+        "ctcf_bound": 0.5798,
+        "budget_tier": {
+          "annotated (outside UNKNOWN blocks)": 0.8872,
+          "regulatory": 0.1069,
+          "fossil": 0.0025,
+          "neutral": 0.0017,
+          "constrained_unknown": 0.0017
+        },
+        "conserved_fraction_mean": 0.1147,
+        "share_with_conserved_bases": 0.5522,
+        "length_median": 325,
+        "gc_mean": 0.5505,
+        "nearest_gene_distance_median": 3526,
+        "dnase_open_share": 0.2807,
+        "h3k27me3_peak_share": 0.1625,
+        "state": {
+          "no mark": 0.4123,
+          "active promoter": 0.1815,
+          "primed enhancer": 0.1092,
+          "Polycomb-repressed": 0.1003,
+          "promoter mark, not acetylated": 0.0585,
+          "active enhancer": 0.0562,
+          "poised enhancer": 0.0343,
+          "bivalent": 0.028,
+          "heterochromatin": 0.0129,
+          "acetylated element": 0.0069
+        }
+      }
+    },
+    "states_beyond_the_class_mix": {
+      "0": {
+        "largest_departures": {
+          "no mark": 0.028,
+          "active promoter": -0.0183,
+          "promoter mark, not acetylated": -0.0045,
+          "bivalent": -0.0035
+        },
+        "total_variation": 0.0323
+      },
+      "1": {
+        "largest_departures": {
+          "Polycomb-repressed": 0.0122,
+          "active promoter": -0.0114,
+          "no mark": -0.0102,
+          "active enhancer": -0.0066
+        },
+        "total_variation": 0.0307
+      },
+      "2": {
+        "largest_departures": {
+          "active promoter": 0.0353,
+          "no mark": -0.0319,
+          "Polycomb-repressed": -0.0097,
+          "active enhancer": 0.007
+        },
+        "total_variation": 0.045
+      },
+      "3": {
+        "largest_departures": {
+          "no mark": -0.0768,
+          "active promoter": 0.0364,
+          "promoter mark, not acetylated": 0.0176,
+          "bivalent": 0.0125
+        },
+        "total_variation": 0.088
+      }
+    },
+    "cramers_v": {
+      "cluster_vs_registry_class": 0.1739,
+      "cluster_vs_ctcf_bound": 0.094,
+      "cluster_vs_budget_tier": 0.0404,
+      "cluster_vs_state_per_line": 0.0976,
+      "registry_class_vs_state_per_line": 0.3869,
+      "cluster_vs_conserved_bases": 0.1257
+    }
+  },
+  "controls": {
+    "features_permuted_independently": {
+      "silhouette_real": 0.2765,
+      "silhouette_permuted_same_k": 0.0897,
+      "inertia_real": 122118.3,
+      "inertia_permuted_same_k": 188754.9,
+      "k_the_criterion_picks_on_permuted": 8,
+      "silhouette_curve_permuted": {
+        "2": 0.1075,
+        "3": 0.087,
+        "4": 0.0897,
+        "5": 0.1164,
+        "6": 0.1159,
+        "7": 0.1134,
+        "8": 0.1325,
+        "9": 0.1127,
+        "10": 0.1175
+      },
+      "reading": "marginals kept, dependence between features destroyed; the real silhouette must clear the permuted one for the clusters to be more than the shape of each feature"
+    },
+    "vectors_shuffled_within_class_ctcf_and_open_lines": {
+      "strata": 20,
+      "cramers_v_real": {
+        "cluster_vs_registry_class": 0.1739,
+        "cluster_vs_ctcf_bound": 0.094,
+        "cluster_vs_budget_tier": 0.0404,
+        "cluster_vs_state_per_line": 0.0976,
+        "registry_class_vs_state_per_line": 0.3869,
+        "cluster_vs_conserved_bases": 0.1257
+      },
+      "cramers_v_shuffled": {
+        "cluster_vs_registry_class": 0.1739,
+        "cluster_vs_budget_tier": 0.0156,
+        "cluster_vs_state_per_line": 0.0626,
+        "cluster_vs_conserved_bases": 0.0289
+      },
+      "states_beyond_the_class_mix_shuffled": {
+        "0": {
+          "largest_departures": {
+            "active promoter": -0.0088,
+            "no mark": 0.0085,
+            "Polycomb-repressed": 0.0046,
+            "active enhancer": -0.0017
+          },
+          "total_variation": 0.0134
+        },
+        "1": {
+          "largest_departures": {
+            "no mark": 0.0062,
+            "primed enhancer": -0.005,
+            "active promoter": -0.0041,
+            "heterochromatin": 0.003
+          },
+          "total_variation": 0.0115
+        },
+        "2": {
+          "largest_departures": {
+            "active promoter": 0.0134,
+            "no mark": -0.0126,
+            "Polycomb-repressed": -0.0072,
+            "active enhancer": 0.0032
+          },
+          "total_variation": 0.0206
+        },
+        "3": {
+          "largest_departures": {
+            "no mark": -0.0367,
+            "active promoter": 0.0293,
+            "primed enhancer": 0.0174,
+            "Polycomb-repressed": -0.0117
+          },
+          "total_variation": 0.0582
+        }
+      },
+      "reading": "whole vectors move between elements of one stratum, so the cloud (and its silhouette) is unchanged by construction; what the shuffle removes is which element carries which behaviour. Associations with class survive by design; associations with state, tier and constraint that survive are carried by class and openness, not by the behaviour"
+    },
+    "length_gc_nearest_gene_distance": {
+      "auc_of_cluster_membership_from_length_gc_distance": {
+        "0": 0.6006,
+        "1": 0.5499,
+        "2": 0.5753,
+        "3": 0.629
+      },
+      "out_of_fold_r2_of_each_behaviour_feature": {
+        "log_strongest": 0.0763,
+        "sign_strongest": 0.0035,
+        "net_direction": 0.0029,
+        "log_genes_moving": 0.0496,
+        "share_window_moving": 0.0105,
+        "lines_acting": 0.0915,
+        "direction_differs": 0.0124,
+        "log_line_spread": 0.0405,
+        "acts_on_nearest": 0.0209,
+        "log_target_distance": 0.4092,
+        "log_mean_effect": 0.0343
+      },
+      "adjusted_rand_with_clusters_of_length_gc_distance": 0.0173,
+      "reading": "AUC 0.5 and r2 0 would mean geometry explains nothing; 1 would mean the clusters are geometry renamed"
+    }
+  },
+  "transfer": {
+    "fit": [
+      "chr21",
+      "chr22"
+    ],
+    "applied_to": [
+      "chr19",
+      "chr20"
+    ],
+    "adjusted_rand_transferred_vs_refit": 0.996,
+    "matched_agreement_transferred_vs_refit": 0.9987,
+    "k_the_criterion_picks_on_the_transfer_set": 2,
+    "silhouette_of_transferred_labels": 0.275,
+    "shares": {
+      "fit": {
+        "0": 0.5153,
+        "1": 0.1654,
+        "2": 0.2621,
+        "3": 0.0571
+      },
+      "transferred": {
+        "0": 0.4999,
+        "1": 0.1595,
+        "2": 0.2803,
+        "3": 0.0603
+      }
+    },
+    "shares_by_chromosome": {
+      "chr21": {
+        "elements": 7846,
+        "0": 0.5296,
+        "1": 0.1635,
+        "2": 0.2534,
+        "3": 0.0535
+      },
+      "chr22": {
+        "elements": 13108,
+        "0": 0.5068,
+        "1": 0.1665,
+        "2": 0.2674,
+        "3": 0.0593
+      },
+      "chr19": {
+        "elements": 20800,
+        "0": 0.4636,
+        "1": 0.1658,
+        "2": 0.3013,
+        "3": 0.0694
+      },
+      "chr20": {
+        "elements": 16990,
+        "0": 0.5445,
+        "1": 0.1517,
+        "2": 0.2547,
+        "3": 0.049
+      },
+      "chr17": {
+        "elements": 28330,
+        "0": 0.4958,
+        "1": 0.1646,
+        "2": 0.2708,
+        "3": 0.0688
+      },
+      "chr18": {
+        "elements": 13650,
+        "0": 0.5469,
+        "1": 0.1582,
+        "2": 0.2411,
+        "3": 0.0538
+      },
+      "chrY": {
+        "elements": 554,
+        "0": 0.491,
+        "1": 0.1462,
+        "2": 0.269,
+        "3": 0.0939
+      }
+    },
+    "profile_transferred": {
+      "0": {
+        "log_strongest": -1.2823,
+        "sign_strongest": -0.0494,
+        "net_direction": 0.0081,
+        "log_genes_moving": 0.0101,
+        "share_window_moving": 0.0002,
+        "lines_acting": 0.0038,
+        "direction_differs": 0.0,
+        "log_line_spread": -1.23,
+        "acts_on_nearest": 0.3588,
+        "log_target_distance": 4.2736,
+        "log_mean_effect": -2.3684
+      },
+      "1": {
+        "log_strongest": -0.744,
+        "sign_strongest": 0.9834,
+        "net_direction": 0.4624,
+        "log_genes_moving": 0.8102,
+        "share_window_moving": 0.0355,
+        "lines_acting": 0.4453,
+        "direction_differs": 0.0,
+        "log_line_spread": -0.7886,
+        "acts_on_nearest": 0.4842,
+        "log_target_distance": 3.8902,
+        "log_mean_effect": -2.1764
+      },
+      "2": {
+        "log_strongest": -0.6161,
+        "sign_strongest": -0.9992,
+        "net_direction": -0.4843,
+        "log_genes_moving": 0.875,
+        "share_window_moving": 0.0396,
+        "lines_acting": 0.5234,
+        "direction_differs": 0.0,
+        "log_line_spread": -0.7084,
+        "acts_on_nearest": 0.4664,
+        "log_target_distance": 3.856,
+        "log_mean_effect": -2.0995
+      },
+      "3": {
+        "log_strongest": -0.5243,
+        "sign_strongest": -0.2139,
+        "net_direction": -0.0482,
+        "log_genes_moving": 1.1037,
+        "share_window_moving": 0.0514,
+        "lines_acting": 0.7118,
+        "direction_differs": 0.9991,
+        "log_line_spread": -0.3218,
+        "acts_on_nearest": 0.5595,
+        "log_target_distance": 3.7462,
+        "log_mean_effect": -2.0165
+      }
+    },
+    "cramers_v_transferred": {
+      "cluster_vs_registry_class": 0.1927,
+      "cluster_vs_budget_tier": 0.0423
+    }
+  },
+  "held_out_task": {
+    "outcome": "AlphaGenome predicted_by_cell: signed log2 fold change of the element's predicted target on each line's own track; positive = rise on deletion",
+    "types_for_a_line": "k-means with the same k on the other three lines' behaviour vectors, fitted on the fit chromosomes; each element assigned to the nearest centroid",
+    "leave_the_line_out_types_vs_four_line_types_adjusted_rand": {
+      "K562": 0.368,
+      "HepG2": 0.3731,
+      "GM12878": 0.781,
+      "IMR-90": 0.8151
+    },
+    "models": {
+      "registry": "curated: registry class (pELS/dELS, CTCF-bound)",
+      "registry+dnase": "curated: class + DNase in the line (reader v1)",
+      "registry+dnase+marks": "curated: class + DNase + the line's five marks (peaks and fold change) and methylation",
+      "registry+dnase+marks_peaks": "curated: class + DNase + the line's mark peaks and methylation (no fold change: no signal profile is cached beyond chr21 and chr22)",
+      "types": "discovered: the element's type, assigned from the other three lines' deletion behaviour",
+      "types+registry+dnase+marks_peaks": "discovered type on top of the curated features (peaks)",
+      "types_shuffled": "control: types taken from another element of the same class and DNase openness",
+      "behaviour_vector": "ceiling: the leave-the-line-out behaviour vector itself, uncompressed",
+      "other_line_direction": "two columns of that vector: the sign and the net direction of the deletion in the other three lines, which is what a type mostly carries"
+    },
+    "within_fit_chromosomes_cv": {
+      "acts": {
+        "n": 83815,
+        "registry": 0.6256,
+        "registry+dnase": 0.6451,
+        "registry+dnase+marks": 0.6764,
+        "registry+dnase+marks_peaks": 0.6677,
+        "types": 0.6442,
+        "types+registry+dnase+marks_peaks": 0.7018,
+        "types_shuffled": 0.5507,
+        "behaviour_vector": 0.7722,
+        "other_line_direction": 0.5748
+      },
+      "rise_among_acting": {
+        "n": 16613,
+        "registry": 0.5322,
+        "registry+dnase": 0.594,
+        "registry+dnase+marks": 0.6161,
+        "registry+dnase+marks_peaks": 0.6099,
+        "types": 0.6686,
+        "types+registry+dnase+marks_peaks": 0.6982,
+        "types_shuffled": 0.5212,
+        "behaviour_vector": 0.8415,
+        "other_line_direction": 0.8379
+      },
+      "magnitude": {
+        "n": 83815,
+        "registry": 0.1833,
+        "registry+dnase": 0.2165,
+        "registry+dnase+marks": 0.3331,
+        "registry+dnase+marks_peaks": 0.3068,
+        "types": 0.1946,
+        "types+registry+dnase+marks_peaks": 0.3416,
+        "types_shuffled": 0.1051,
+        "behaviour_vector": 0.4332,
+        "other_line_direction": 0.1216
+      }
+    },
+    "fit_to_transfer_chromosomes": {
+      "acts": {
+        "n_train": 83815,
+        "n_test": 151155,
+        "registry": 0.639,
+        "registry+dnase": 0.6576,
+        "registry+dnase+marks": 0.6393,
+        "registry+dnase+marks_peaks": 0.6778,
+        "types": 0.6587,
+        "types+registry+dnase+marks_peaks": 0.7169,
+        "types_shuffled": 0.534,
+        "behaviour_vector": 0.8086,
+        "other_line_direction": 0.5779,
+        "bootstrap_95": {
+          "types - registry+dnase+marks_peaks": [
+            -0.024,
+            -0.0145,
+            1.0
+          ],
+          "types+registry+dnase+marks_peaks - registry+dnase+marks_peaks": [
+            0.0371,
+            0.0412,
+            0.0
+          ],
+          "types - types_shuffled": [
+            0.1209,
+            0.1289,
+            0.0
+          ],
+          "behaviour_vector - registry+dnase+marks_peaks": [
+            0.1259,
+            0.1345,
+            0.0
+          ],
+          "types - other_line_direction": [
+            0.076,
+            0.0863,
+            0.0
+          ]
+        }
+      },
+      "rise_among_acting": {
+        "n_train": 16613,
+        "n_test": 34538,
+        "registry": 0.5225,
+        "registry+dnase": 0.5838,
+        "registry+dnase+marks": 0.5671,
+        "registry+dnase+marks_peaks": 0.6037,
+        "types": 0.6861,
+        "types+registry+dnase+marks_peaks": 0.705,
+        "types_shuffled": 0.5139,
+        "behaviour_vector": 0.8701,
+        "other_line_direction": 0.8645,
+        "bootstrap_95": {
+          "types - registry+dnase+marks_peaks": [
+            0.0724,
+            0.0917,
+            0.0
+          ],
+          "types+registry+dnase+marks_peaks - registry+dnase+marks_peaks": [
+            0.095,
+            0.107,
+            0.0
+          ],
+          "types - types_shuffled": [
+            0.1645,
+            0.1796,
+            0.0
+          ],
+          "behaviour_vector - registry+dnase+marks_peaks": [
+            0.2571,
+            0.2743,
+            0.0
+          ],
+          "types - other_line_direction": [
+            -0.1842,
+            -0.1726,
+            1.0
+          ]
+        }
+      },
+      "magnitude": {
+        "n_train": 83815,
+        "n_test": 151155,
+        "registry": 0.22,
+        "registry+dnase": 0.2506,
+        "registry+dnase+marks": 0.0815,
+        "registry+dnase+marks_peaks": 0.3256,
+        "types": 0.2057,
+        "types+registry+dnase+marks_peaks": 0.3681,
+        "types_shuffled": 0.094,
+        "behaviour_vector": 0.5057,
+        "other_line_direction": 0.1295,
+        "bootstrap_95": {
+          "types - registry+dnase+marks_peaks": [
+            -0.1267,
+            -0.1134,
+            1.0
+          ],
+          "types+registry+dnase+marks_peaks - registry+dnase+marks_peaks": [
+            0.0404,
+            0.0444,
+            0.0
+          ],
+          "types - types_shuffled": [
+            0.1071,
+            0.117,
+            0.0
+          ],
+          "behaviour_vector - registry+dnase+marks_peaks": [
+            0.1732,
+            0.187,
+            0.0
+          ],
+          "types - other_line_direction": [
+            0.0699,
+            0.0822,
+            0.0
+          ]
+        }
+      }
+    },
+    "fit_to_transfer_note": "no mark fold-change profile is cached for chr19 or chr20, so the registry+dnase+marks model meets constant columns there and is not a fair transfer; registry+dnase+marks_peaks is the curated comparison on held-out chromosomes",
+    "types_alone_at_every_k_fit_to_transfer": {
+      "2": {
+        "acts": 0.61,
+        "rise_among_acting": 0.5146,
+        "magnitude": 0.1893
+      },
+      "3": {
+        "acts": 0.7059,
+        "rise_among_acting": 0.5249,
+        "magnitude": 0.3254
+      },
+      "4": {
+        "acts": 0.6587,
+        "rise_among_acting": 0.6861,
+        "magnitude": 0.2057
+      },
+      "5": {
+        "acts": 0.6621,
+        "rise_among_acting": 0.742,
+        "magnitude": 0.2216
+      },
+      "6": {
+        "acts": 0.6822,
+        "rise_among_acting": 0.8308,
+        "magnitude": 0.2723
+      },
+      "7": {
+        "acts": 0.576,
+        "rise_among_acting": 0.7509,
+        "magnitude": 0.1024
+      },
+      "8": {
+        "acts": 0.6184,
+        "rise_among_acting": 0.7835,
+        "magnitude": 0.1783
+      },
+      "9": {
+        "acts": 0.6597,
+        "rise_among_acting": 0.7678,
+        "magnitude": 0.2593
+      },
+      "10": {
+        "acts": 0.6344,
+        "rise_among_acting": 0.7496,
+        "magnitude": 0.2214
+      }
+    },
+    "reference": "docs/NODES-READER-WRITER.md: registry 0.532, + DNase 0.594, + marks 0.616 for rise among acting on chr21 and chr22"
+  },
+  "caveat": "every behaviour value is AlphaGenome's prediction, and AlphaGenome was trained on ENCODE histone ChIP-seq, DNase and RNA-seq of these same lines: clusters that agree with ENCODE-derived marks partly read the model's inputs back, and types assigned from three lines that predict the fourth measure the model's consistency across lines rather than an element's biology",
+  "evidence": "predicted: AlphaGenome deletion scoring (archive, no new model call); experimental: ENCODE marks, DNase, WGBS; curated: ENCODE cCREs v3, GENCODE 50; UCSC phastConsElements100way",
+  "efficiency": {
+    "wall_clock_seconds_total": 765.3,
+    "stages_seconds": {
+      "load deletion archive, chain table, registry, GENCODE, sequence, constraint": 29.5,
+      "behaviour vectors": 0.3,
+      "choose k and cluster (k-means, silhouette over k = 2..10)": 2.9,
+      "chromatin per element and cell line (epigenome layer)": 9.3,
+      "map clusters onto class, state, tier, constraint": 0.5,
+      "controls: permuted features, stratified shuffle, geometry": 5.8,
+      "transfer to held-out chromosomes": 6.5,
+      "leave-the-line-out clusterings": 1.8,
+      "held-out task: five folds grouped by element (fit chromosomes)": 55.9,
+      "held-out task: fit chromosomes to transfer chromosomes": 619.0,
+      "held-out task: types alone at every k (sensitivity)": 33.8
+    },
+    "peak_memory_mb": 3094.9,
+    "bytes_read": 352596701,
+    "files_read": 49,
+    "elements": 101278,
+    "element_cell_units": 234970,
+    "chromosomes_loaded_mb": 441.4,
+    "classification_seconds": 32.7,
+    "classification_seconds_per_1000_elements": 0.32,
+    "alphagenome_seconds_already_spent_on_these_elements": 395510,
+    "genome_wide_estimate": {
+      "method": "linear in sequence length from the chromosomes loaded here",
+      "elements": 708524,
+      "bytes_read_gb": 2.5,
+      "classification_minutes": 3.8,
+      "alphagenome_hours_needed_first": 768.6,
+      "peak_memory": "set by the largest chromosome's archive, parsed whole (chr1 would be the largest); not by the genome, since chromosomes are read one at a time"
+    }
+  }
+}

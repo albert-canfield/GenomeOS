@@ -1,0 +1,42 @@
+# Colinearity as a claim the compiler can refuse: the HOXD cluster ordered along the chromosome.
+#
+# The known-locus benchmark added HOXD because position on the chromosome IS the order of execution
+# there — the cluster is read 3' to 5', anterior genes first — and the benchmark's verdict was that
+# the order is untestable with any layer the project holds, because nothing in BioLang could write it
+# down. This is that sentence, written down (BIOLANG-v0.4-ECONOMY.md §7.6). It drives nothing: an
+# `order` sets no time and fires no rule, it states a sequence and is checked against the coordinates
+# the program already carries. Scramble two members below and the program stops compiling.
+#
+# What it cannot do, and the file says so rather than pretending: this checks that the declared
+# sequence agrees with the genome, NOT that the genes come on in that sequence, because the project
+# holds no expression time course for a human HOX cluster. That would need per-gene expression for
+# these nine at three or more time points in a differentiating limb bud or ES cell line.
+#
+# What writing it found on the first try: on GENCODE v50 the HOXD3 gene record (chr2:176,136,077-
+# 176,174,483) SPANS HOXD4 (chr2:176,151,544-176,156,078), so the canonical textbook sequence
+# HOXD1, HOXD3, HOXD4 is not monotonic in transcription start and the compiler refuses it. The order
+# below is the one this annotation supports. Which of the two is right is a question about HOXD3's
+# annotated start, not about colinearity, and the refusal is the construct doing its job.
+#
+# Loci: GENCODE v50 (data/cache/gencode_genes.tsv). Colinearity: Dollé et al. 1989, Nature 342:767;
+# Izpisúa-Belmonte et al. 1991, EMBO J 10:2279; Montavon & Duboule 2013, Phil Trans R Soc B 368:20120367.
+module demo.hoxd_order
+# test: entities >= 10
+
+gene HOXD1  { locus: chr2:176188658-176190926(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD4  { locus: chr2:176151544-176156078(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD3  { locus: chr2:176136077-176174483(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD8  { locus: chr2:176129327-176132695(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD9  { locus: chr2:176121228-176127570(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD10 { locus: chr2:176108789-176119937(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD11 { locus: chr2:176104215-176109754(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD12 { locus: chr2:176099794-176102489(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+gene HOXD13 { locus: chr2:176092689-176096240(+); evidence: curated "GENCODE v50"; confidence: 0.9 }
+
+order hoxd_colinear {
+  members: HOXD1, HOXD4, HOXD3, HOXD8, HOXD9, HOXD10, HOXD11, HOXD12, HOXD13
+  axis: position
+  direction: decreasing
+  evidence: experimental "Dollé et al. 1989, Nature 342:767 (HOXD genes are activated in the order they lie in the cluster, 3' first); Montavon & Duboule 2013 (review)"
+  confidence: 0.8
+}

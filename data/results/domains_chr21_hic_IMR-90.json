@@ -1,0 +1,22 @@
+{
+  "result": "domains_chr21_hic_IMR-90",
+  "date": "2026-09-12",
+  "chrom": "chr21",
+  "biosource": "IMR-90",
+  "file": "4DNFIOSQFOPV",
+  "comparison": {
+    "inferred": 227,
+    "predicted": 126,
+    "tolerance": 20000,
+    "inferred_on_a_predicted_boundary": 28,
+    "fraction_inferred_supported": 0.123,
+    "predicted_on_an_inferred_boundary": 28,
+    "fraction_predicted_matched": 0.222,
+    "median_distance_inferred_to_predicted": 69850,
+    "random_control": 0.11
+  },
+  "evidence": {
+    "inferred": "inferred: CTCF-only ENCODE elements as boundaries",
+    "measured": "experimental: 4D Nucleome boundary calls (insulation score) on released GRCh38 Hi-C and Micro-C"
+  }
+}

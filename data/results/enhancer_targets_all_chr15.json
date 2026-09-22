@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr15",
+  "date": "2026-09-14",
+  "chrom": "chr15",
+  "elements_total": 31058,
+  "scored": 31058,
+  "requests_this_run": 31890,
+  "workers": 16,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 31058,
+    "with_predicted_target": 20831,
+    "fraction_with_target": 0.671,
+    "strong": 5763,
+    "weak": 15068,
+    "silencer_like": 8061,
+    "verdicts": {
+      "no predicted effect": 10227,
+      "another gene in the same domain": 9612,
+      "agrees with nearest TSS in domain": 6091,
+      "gene outside the domain": 5128
+    },
+    "verdicts_coding": {
+      "no predicted effect": 16584,
+      "agrees with nearest TSS in domain": 8452,
+      "gene outside the domain": 3807,
+      "another gene in the same domain": 2215
+    },
+    "coding_target_agrees_with_nearest": 0.584,
+    "fraction_agreeing_with_nearest": 0.292,
+    "fraction_inside_domain": 0.754,
+    "top_tissues": {
+      "K562": 1104,
+      "placenta": 696,
+      "CD14-positive monocyte": 627,
+      "HepG2": 439,
+      "Whole_Blood": 405,
+      "psoas muscle": 396,
+      "small intestine": 393,
+      "testis": 371,
+      "GM23338": 369,
+      "common myeloid progenitor, CD34-positive": 361,
+      "neural cell": 350,
+      "left lobe of liver": 330
+    },
+    "median_distance_when_agreeing": 14656
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr15.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

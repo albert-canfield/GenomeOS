@@ -1,0 +1,777 @@
+{
+  "result": "syntax_blocks_matched",
+  "date": "2026-09-17",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX"
+  ],
+  "elements": 960320,
+  "syntax": {
+    "elements": 40,
+    "elements_in_a_shared_stratum": 40,
+    "median_tss_distance": 80962.0,
+    "median_tss_distance_of_the_pool": 41557.0,
+    "raw": {
+      "a": 0.575,
+      "b": 0.6838,
+      "difference": -0.1088,
+      "p_one_sided": 0.918051,
+      "upper_95": 0.0444
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.575,
+      "b": 0.6724,
+      "difference": -0.0974,
+      "p_one_sided": 0.816872,
+      "upper_95": 0.1139
+    },
+    "imbalance": {
+      "length": {
+        "target_median": 272.0,
+        "control_median": 285.0,
+        "ratio": 0.954
+      },
+      "gc": {
+        "target_median": 0.4899,
+        "control_median": 0.4657,
+        "ratio": 1.052
+      },
+      "tss": {
+        "target_median": 80962.0,
+        "control_median": 41557.0,
+        "ratio": 1.948
+      }
+    }
+  },
+  "relaxed": {
+    "elements": 1430,
+    "elements_in_a_shared_stratum": 1430,
+    "median_tss_distance": 239622.0,
+    "median_tss_distance_of_the_pool": 41557.0,
+    "raw": {
+      "a": 0.2545,
+      "b": 0.6838,
+      "difference": -0.4293,
+      "p_one_sided": 1.0,
+      "upper_95": -0.4067
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.2545,
+      "b": 0.5917,
+      "difference": -0.3372,
+      "p_one_sided": 1.0,
+      "upper_95": -0.3031
+    },
+    "imbalance": {
+      "length": {
+        "target_median": 315.0,
+        "control_median": 285.0,
+        "ratio": 1.105
+      },
+      "gc": {
+        "target_median": 0.4157,
+        "control_median": 0.4657,
+        "ratio": 0.893
+      },
+      "tss": {
+        "target_median": 239622.0,
+        "control_median": 41557.0,
+        "ratio": 5.766
+      }
+    }
+  },
+  "neutral": {
+    "elements": 5675,
+    "elements_in_a_shared_stratum": 5675,
+    "median_tss_distance": 417764,
+    "median_tss_distance_of_the_pool": 41557.0,
+    "raw": {
+      "a": 0.2923,
+      "b": 0.6838,
+      "difference": -0.3915,
+      "p_one_sided": 1.0,
+      "upper_95": -0.3796
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.2923,
+      "b": 0.5946,
+      "difference": -0.3022,
+      "p_one_sided": 1.0,
+      "upper_95": -0.2848
+    },
+    "imbalance": {
+      "length": {
+        "target_median": 314,
+        "control_median": 285.0,
+        "ratio": 1.102
+      },
+      "gc": {
+        "target_median": 0.4085,
+        "control_median": 0.4657,
+        "ratio": 0.877
+      },
+      "tss": {
+        "target_median": 417764,
+        "control_median": 41557.0,
+        "ratio": 10.053
+      }
+    }
+  },
+  "by_label": {
+    "constrained_unknown_copy": {
+      "elements": 38,
+      "elements_in_a_shared_stratum": 38,
+      "median_tss_distance": 98080.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.5526,
+        "b": 0.6838,
+        "difference": -0.1312,
+        "p_one_sided": 0.948056,
+        "upper_95": 0.0269
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.5526,
+        "b": 0.6545,
+        "difference": -0.1019,
+        "p_one_sided": 0.81939,
+        "upper_95": 0.1168
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 260.5,
+          "control_median": 285.0,
+          "ratio": 0.914
+        },
+        "gc": {
+          "target_median": 0.4455,
+          "control_median": 0.4657,
+          "ratio": 0.957
+        },
+        "tss": {
+          "target_median": 98080.0,
+          "control_median": 41557.0,
+          "ratio": 2.36
+        }
+      }
+    },
+    "fossil": {
+      "elements": 23248,
+      "elements_in_a_shared_stratum": 23248,
+      "median_tss_distance": 246525.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.3032,
+        "b": 0.6838,
+        "difference": -0.3806,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3746
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.3032,
+        "b": 0.6073,
+        "difference": -0.3041,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2955
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 314.0,
+          "control_median": 285.0,
+          "ratio": 1.102
+        },
+        "gc": {
+          "target_median": 0.4169,
+          "control_median": 0.4657,
+          "ratio": 0.895
+        },
+        "tss": {
+          "target_median": 246525.0,
+          "control_median": 41557.0,
+          "ratio": 5.932
+        }
+      }
+    },
+    "neutral": {
+      "elements": 5675,
+      "elements_in_a_shared_stratum": 5675,
+      "median_tss_distance": 417764,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2923,
+        "b": 0.6838,
+        "difference": -0.3915,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3796
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2923,
+        "b": 0.5946,
+        "difference": -0.3022,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2848
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 314,
+          "control_median": 285.0,
+          "ratio": 1.102
+        },
+        "gc": {
+          "target_median": 0.4085,
+          "control_median": 0.4657,
+          "ratio": 0.877
+        },
+        "tss": {
+          "target_median": 417764,
+          "control_median": 41557.0,
+          "ratio": 10.053
+        }
+      }
+    },
+    "real_unknown_recent": {
+      "elements": 22,
+      "elements_in_a_shared_stratum": 22,
+      "median_tss_distance": 43319.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.6364,
+        "b": 0.6838,
+        "difference": -0.0474,
+        "p_one_sided": 0.678184,
+        "upper_95": 0.1536
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.6364,
+        "b": 0.6641,
+        "difference": -0.0277,
+        "p_one_sided": 0.576521,
+        "upper_95": 0.254
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 326.5,
+          "control_median": 285.0,
+          "ratio": 1.146
+        },
+        "gc": {
+          "target_median": 0.4418,
+          "control_median": 0.4657,
+          "ratio": 0.949
+        },
+        "tss": {
+          "target_median": 43319.0,
+          "control_median": 41557.0,
+          "ratio": 1.042
+        }
+      }
+    },
+    "real_unknown_relaxed": {
+      "elements": 1430,
+      "elements_in_a_shared_stratum": 1430,
+      "median_tss_distance": 239622.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2545,
+        "b": 0.6838,
+        "difference": -0.4293,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4067
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2545,
+        "b": 0.5917,
+        "difference": -0.3372,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3031
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 315.0,
+          "control_median": 285.0,
+          "ratio": 1.105
+        },
+        "gc": {
+          "target_median": 0.4157,
+          "control_median": 0.4657,
+          "ratio": 0.893
+        },
+        "tss": {
+          "target_median": 239622.0,
+          "control_median": 41557.0,
+          "ratio": 5.766
+        }
+      }
+    },
+    "real_unknown_syntax": {
+      "elements": 40,
+      "elements_in_a_shared_stratum": 40,
+      "median_tss_distance": 80962.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.575,
+        "b": 0.6838,
+        "difference": -0.1088,
+        "p_one_sided": 0.918051,
+        "upper_95": 0.0444
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.575,
+        "b": 0.6724,
+        "difference": -0.0974,
+        "p_one_sided": 0.816872,
+        "upper_95": 0.1139
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 272.0,
+          "control_median": 285.0,
+          "ratio": 0.954
+        },
+        "gc": {
+          "target_median": 0.4899,
+          "control_median": 0.4657,
+          "ratio": 1.052
+        },
+        "tss": {
+          "target_median": 80962.0,
+          "control_median": 41557.0,
+          "ratio": 1.948
+        }
+      }
+    },
+    "real_unknown_tolerant": {
+      "elements": 1784,
+      "elements_in_a_shared_stratum": 1784,
+      "median_tss_distance": 391495.5,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2287,
+        "b": 0.6838,
+        "difference": -0.4551,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4356
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2287,
+        "b": 0.5851,
+        "difference": -0.3564,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3264
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 310.0,
+          "control_median": 285.0,
+          "ratio": 1.088
+        },
+        "gc": {
+          "target_median": 0.4057,
+          "control_median": 0.4657,
+          "ratio": 0.871
+        },
+        "tss": {
+          "target_median": 391495.5,
+          "control_median": 41557.0,
+          "ratio": 9.421
+        }
+      }
+    },
+    "regulatory": {
+      "elements": 144977,
+      "elements_in_a_shared_stratum": 144977,
+      "median_tss_distance": 36181,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.4615,
+        "b": 0.6838,
+        "difference": -0.2223,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2196
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.4615,
+        "b": 0.6861,
+        "difference": -0.2246,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2211
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 291,
+          "control_median": 285.0,
+          "ratio": 1.021
+        },
+        "gc": {
+          "target_median": 0.4692,
+          "control_median": 0.4657,
+          "ratio": 1.008
+        },
+        "tss": {
+          "target_median": 36181,
+          "control_median": 41557.0,
+          "ratio": 0.871
+        }
+      }
+    },
+    "structural": {
+      "elements": 337,
+      "elements_in_a_shared_stratum": 337,
+      "median_tss_distance": 354818,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.181,
+        "b": 0.6838,
+        "difference": -0.5028,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4617
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.181,
+        "b": 0.6133,
+        "difference": -0.4322,
+        "p_one_sided": 1.0,
+        "upper_95": -0.366
+      },
+      "imbalance": {
+        "length": {
+          "target_median": 277,
+          "control_median": 285.0,
+          "ratio": 0.972
+        },
+        "gc": {
+          "target_median": 0.5263,
+          "control_median": 0.4657,
+          "ratio": 1.13
+        },
+        "tss": {
+          "target_median": 354818,
+          "control_median": 41557.0,
+          "ratio": 8.538
+        }
+      }
+    }
+  },
+  "against_neutral": {
+    "constrained_unknown_copy": {
+      "raw": {
+        "a": 0.5526,
+        "b": 0.2923,
+        "difference": 0.2603,
+        "p_one_sided": 0.000645,
+        "upper_95": 0.4188
+      },
+      "matched": {
+        "a": 0.5526,
+        "b": 0.4437,
+        "difference": 0.109,
+        "p_one_sided": 0.169611,
+        "upper_95": 0.3325
+      },
+      "left_in_a_shared_stratum": 38,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 260.5,
+          "control_median": 314,
+          "ratio": 0.83
+        },
+        "gc": {
+          "target_median": 0.4455,
+          "control_median": 0.4085,
+          "ratio": 1.09
+        },
+        "tss": {
+          "target_median": 98080.0,
+          "control_median": 417764,
+          "ratio": 0.235
+        }
+      }
+    },
+    "fossil": {
+      "raw": {
+        "a": 0.3032,
+        "b": 0.2923,
+        "difference": 0.0109,
+        "p_one_sided": 0.053552,
+        "upper_95": 0.0241
+      },
+      "matched": {
+        "a": 0.3032,
+        "b": 0.3261,
+        "difference": -0.0229,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0145
+      },
+      "left_in_a_shared_stratum": 23242,
+      "dropped_for_want_of_a_control": 6,
+      "imbalance": {
+        "length": {
+          "target_median": 314.0,
+          "control_median": 314,
+          "ratio": 1.0
+        },
+        "gc": {
+          "target_median": 0.4169,
+          "control_median": 0.4085,
+          "ratio": 1.021
+        },
+        "tss": {
+          "target_median": 246525.0,
+          "control_median": 417764,
+          "ratio": 0.59
+        }
+      }
+    },
+    "real_unknown_recent": {
+      "raw": {
+        "a": 0.6364,
+        "b": 0.2923,
+        "difference": 0.344,
+        "p_one_sided": 0.000406,
+        "upper_95": 0.5454
+      },
+      "matched": {
+        "a": 0.6364,
+        "b": 0.4777,
+        "difference": 0.1586,
+        "p_one_sided": 0.141672,
+        "upper_95": 0.4484
+      },
+      "left_in_a_shared_stratum": 22,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 326.5,
+          "control_median": 314,
+          "ratio": 1.04
+        },
+        "gc": {
+          "target_median": 0.4418,
+          "control_median": 0.4085,
+          "ratio": 1.081
+        },
+        "tss": {
+          "target_median": 43319.0,
+          "control_median": 417764,
+          "ratio": 0.104
+        }
+      }
+    },
+    "real_unknown_relaxed": {
+      "raw": {
+        "a": 0.2545,
+        "b": 0.2923,
+        "difference": -0.0378,
+        "p_one_sided": 0.998167,
+        "upper_95": -0.0123
+      },
+      "matched": {
+        "a": 0.2545,
+        "b": 0.2851,
+        "difference": -0.0305,
+        "p_one_sided": 0.967219,
+        "upper_95": 0.002
+      },
+      "left_in_a_shared_stratum": 1430,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 315.0,
+          "control_median": 314,
+          "ratio": 1.003
+        },
+        "gc": {
+          "target_median": 0.4157,
+          "control_median": 0.4085,
+          "ratio": 1.018
+        },
+        "tss": {
+          "target_median": 239622.0,
+          "control_median": 417764,
+          "ratio": 0.574
+        }
+      }
+    },
+    "real_unknown_syntax": {
+      "raw": {
+        "a": 0.575,
+        "b": 0.2923,
+        "difference": 0.2827,
+        "p_one_sided": 0.000156,
+        "upper_95": 0.4363
+      },
+      "matched": {
+        "a": 0.575,
+        "b": 0.4772,
+        "difference": 0.0978,
+        "p_one_sided": 0.189416,
+        "upper_95": 0.3156
+      },
+      "left_in_a_shared_stratum": 40,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 272.0,
+          "control_median": 314,
+          "ratio": 0.866
+        },
+        "gc": {
+          "target_median": 0.4899,
+          "control_median": 0.4085,
+          "ratio": 1.199
+        },
+        "tss": {
+          "target_median": 80962.0,
+          "control_median": 417764,
+          "ratio": 0.194
+        }
+      }
+    },
+    "real_unknown_tolerant": {
+      "raw": {
+        "a": 0.2287,
+        "b": 0.2923,
+        "difference": -0.0636,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0408
+      },
+      "matched": {
+        "a": 0.2287,
+        "b": 0.2692,
+        "difference": -0.0405,
+        "p_one_sided": 0.997444,
+        "upper_95": -0.0121
+      },
+      "left_in_a_shared_stratum": 1784,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 310.0,
+          "control_median": 314,
+          "ratio": 0.987
+        },
+        "gc": {
+          "target_median": 0.4057,
+          "control_median": 0.4085,
+          "ratio": 0.993
+        },
+        "tss": {
+          "target_median": 391495.5,
+          "control_median": 417764,
+          "ratio": 0.937
+        }
+      }
+    },
+    "regulatory": {
+      "raw": {
+        "a": 0.4615,
+        "b": 0.2923,
+        "difference": 0.1691,
+        "p_one_sided": 0.0,
+        "upper_95": 0.1812
+      },
+      "matched": {
+        "a": 0.4615,
+        "b": 0.5112,
+        "difference": -0.0497,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0461
+      },
+      "left_in_a_shared_stratum": 144875,
+      "dropped_for_want_of_a_control": 102,
+      "imbalance": {
+        "length": {
+          "target_median": 291,
+          "control_median": 314,
+          "ratio": 0.927
+        },
+        "gc": {
+          "target_median": 0.4692,
+          "control_median": 0.4085,
+          "ratio": 1.149
+        },
+        "tss": {
+          "target_median": 36181,
+          "control_median": 417764,
+          "ratio": 0.087
+        }
+      }
+    },
+    "structural": {
+      "raw": {
+        "a": 0.181,
+        "b": 0.2923,
+        "difference": -0.1113,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0685
+      },
+      "matched": {
+        "a": 0.181,
+        "b": 0.3286,
+        "difference": -0.1476,
+        "p_one_sided": 0.999996,
+        "upper_95": -0.0828
+      },
+      "left_in_a_shared_stratum": 337,
+      "dropped_for_want_of_a_control": 0,
+      "imbalance": {
+        "length": {
+          "target_median": 277,
+          "control_median": 314,
+          "ratio": 0.882
+        },
+        "gc": {
+          "target_median": 0.5263,
+          "control_median": 0.4085,
+          "ratio": 1.288
+        },
+        "tss": {
+          "target_median": 354818,
+          "control_median": 417764,
+          "ratio": 0.849
+        }
+      }
+    }
+  },
+  "strata": {
+    "length": [
+      200,
+      400
+    ],
+    "gc": [
+      0.35,
+      0.45,
+      0.55
+    ],
+    "tss": [
+      1000,
+      5000,
+      20000,
+      100000
+    ]
+  },
+  "reading": "the raw difference is the comparison that produced the observation; the matched one holds length, GC and distance to the nearest coding TSS fixed. Where they disagree, the raw one was measuring what the strata hold fixed",
+  "seconds": 177.8
+}

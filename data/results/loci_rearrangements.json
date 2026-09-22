@@ -1,0 +1,1441 @@
+{
+  "result": "loci_rearrangements",
+  "date": "2026-09-15",
+  "prediction_registered_before_the_run": "Cutting the genome at random destroys boundaries and creates adjacencies constantly, so the first two claims will fire at most control rearrangements, and naming the recipient gene will land near the 90% that naming a target already reaches at matched windows. What should separate the published rearrangements is which gene, and nothing else - if it does not, the node model has failed its sharpest test.",
+  "cases": [
+    {
+      "locus": "EPHA4_PAX3_deletion",
+      "expected": {
+        "locus": "EPHA4_PAX3_deletion",
+        "chrom": "chr2",
+        "kind": "deletion",
+        "donor": "EPHA4",
+        "recipient": "PAX3",
+        "phenotype": "brachydactyly: short digits on the preaxial side, from PAX3 falling under the EPHA4 limb enhancers once the boundary between their domains is gone",
+        "span": null,
+        "span_source": "stated",
+        "published_size_range": [
+          1750000,
+          1900000
+        ],
+        "anchor": "the 3' end is PAX3's GENCODE gene start (chr2:222,199,886): the published deletions extend into the NON-CODING part of the PAX3 domain and PAX3 itself survives to be misexpressed, so the deletion must stop before the gene. The 5' end follows from the published size, and at every size in the range it falls below EPHA4's start (chr2:221,418,026), so EPHA4 is removed entire, as published",
+        "span_citation": "Lupianez et al. 2015, Cell 161:1012: heterozygous deletions of 1.75 to 1.9 Mb at 2q35-36 remove EPHA4 with much of its domain and extend into the non-coding part of the PAX3 domain, taking the boundary with them. The SIZE is cited and the breakpoints are not - the paper states no human coordinates anywhere in its accessible text - so this span is STATED, not cited: anchored at PAX3's gene start and run at every size across the published range, so the uncertainty is reported rather than hidden. An earlier version of this file stated a 626 kb intergenic span that excluded EPHA4; that was wrong in kind and the case was withdrawn until it could be stated faithfully",
+        "citations": [
+          "Lupianez et al. 2015, Cell 161:1012 (disruptions of topological chromatin domains cause pathogenic rewiring of gene-enhancer interactions)",
+          "Lupianez, Spielmann and Mundlos 2016, Trends Genet 32:225 (breaking TADs)"
+        ],
+        "answer_from": [
+          "human pedigrees with aCGH",
+          "4C-seq in patient fibroblasts",
+          "mouse models"
+        ],
+        "note": "the only claim this case can still decide is the third one - which gene the machinery names - because the first two are guaranteed by how the node model is built"
+      },
+      "boundary_census": {
+        "ctcf_only_between_donor_and_recipient": 7,
+        "elements": [
+          {
+            "id": "EH38E2077520",
+            "start": 222174536,
+            "end": 222174723
+          },
+          {
+            "id": "EH38E3402367",
+            "start": 221823217,
+            "end": 221823376
+          },
+          {
+            "id": "EH38E3402283",
+            "start": 221576609,
+            "end": 221576911
+          },
+          {
+            "id": "EH38E3402290",
+            "start": 221591346,
+            "end": 221591525
+          },
+          {
+            "id": "EH38E3402319",
+            "start": 221689169,
+            "end": 221689511
+          },
+          {
+            "id": "EH38E2077416",
+            "start": 221847357,
+            "end": 221847575
+          },
+          {
+            "id": "EH38E3402411",
+            "start": 222017325,
+            "end": 222017608
+          }
+        ],
+        "there_is_a_boundary_at_all": true,
+        "evidence": "curated: ENCODE cCRE registry, CTCF-only class (an annotation lookup)"
+      },
+      "spans_across_the_published_size_range": [
+        {
+          "span": [
+            220449886,
+            222199886
+          ],
+          "length": 1750000,
+          "removes_the_donor_entire": true,
+          "leaves_the_recipient_intact": true,
+          "ctcf_crossed": 18,
+          "claims": {
+            "donor_or_recipient_deleted": true,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1512",
+              "recipient": "chr2:D1517"
+            },
+            "node_after": {
+              "donor": null,
+              "recipient": "chr2:D1504"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 2626,
+            "boundary_lost": null,
+            "new_adjacency": null,
+            "nodes_before": 1654,
+            "nodes_after": 1641,
+            "recipient_named": true
+          }
+        },
+        {
+          "span": [
+            220399886,
+            222199886
+          ],
+          "length": 1800000,
+          "removes_the_donor_entire": true,
+          "leaves_the_recipient_intact": true,
+          "ctcf_crossed": 18,
+          "claims": {
+            "donor_or_recipient_deleted": true,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1512",
+              "recipient": "chr2:D1517"
+            },
+            "node_after": {
+              "donor": null,
+              "recipient": "chr2:D1504"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 2626,
+            "boundary_lost": null,
+            "new_adjacency": null,
+            "nodes_before": 1654,
+            "nodes_after": 1641,
+            "recipient_named": true
+          }
+        },
+        {
+          "span": [
+            220349886,
+            222199886
+          ],
+          "length": 1850000,
+          "removes_the_donor_entire": true,
+          "leaves_the_recipient_intact": true,
+          "ctcf_crossed": 19,
+          "claims": {
+            "donor_or_recipient_deleted": true,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1512",
+              "recipient": "chr2:D1517"
+            },
+            "node_after": {
+              "donor": null,
+              "recipient": "chr2:D1503"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 2625,
+            "boundary_lost": null,
+            "new_adjacency": null,
+            "nodes_before": 1654,
+            "nodes_after": 1640,
+            "recipient_named": true
+          }
+        },
+        {
+          "span": [
+            220299886,
+            222199886
+          ],
+          "length": 1900000,
+          "removes_the_donor_entire": true,
+          "leaves_the_recipient_intact": true,
+          "ctcf_crossed": 20,
+          "claims": {
+            "donor_or_recipient_deleted": true,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1512",
+              "recipient": "chr2:D1517"
+            },
+            "node_after": {
+              "donor": null,
+              "recipient": "chr2:D1502"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 2624,
+            "boundary_lost": null,
+            "new_adjacency": null,
+            "nodes_before": 1654,
+            "nodes_after": 1639,
+            "recipient_named": true
+          }
+        }
+      ],
+      "published": {
+        "span": [
+          220299886,
+          222199886
+        ],
+        "length": 1900000,
+        "removes_the_donor_entire": true,
+        "leaves_the_recipient_intact": true,
+        "ctcf_crossed": 20,
+        "claims": {
+          "donor_or_recipient_deleted": true,
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D1512",
+            "recipient": "chr2:D1517"
+          },
+          "node_after": {
+            "donor": null,
+            "recipient": "chr2:D1502"
+          },
+          "ctcf_between_before": 7,
+          "ctcf_between_after": 2624,
+          "boundary_lost": null,
+          "new_adjacency": null,
+          "nodes_before": 1654,
+          "nodes_after": 1639,
+          "recipient_named": true
+        }
+      },
+      "recipient_named": {
+        "elements_scored": 117,
+        "genes_named": [
+          "CCDC140",
+          "CT75",
+          "ENSG00000288658",
+          "PAX3",
+          "SGPP2"
+        ],
+        "names_the_recipient": true,
+        "pending": null
+      },
+      "measured_boundaries": {
+        "preregistered": "What the measured boundaries can and cannot change, stated before looking. Claim three - does an already-computed deletion near the recipient name it - does NOT depend on the boundary model at all, so swapping CTCF-only proxies for Hi-C calls cannot move it and a change there would mean a bug. Claims one and two are askable at the matched random rearrangements but not at the published case, whose faithful span deletes the donor gene. What is left, and what this test is really for, is the precondition: does a measured boundary separate EPHA4 from PAX3, and does it do so more than it separates a matched random pair the same distance apart. The prediction is that the yes/no form saturates - at 1.8 Mb apart almost any pair of genes has some boundary between it in any model - so the reading to trust is the COUNT of boundaries between the pair, per cell type, against the count at matched pairs. If the published pair is not unusual on that count in any of the five cell types, then the negative belongs to boundaries and not to our proxy for them, which is the larger statement. Reported per cell type and never pooled: a boundary is a cell's boundary, and GM12878's calls are dense enough (3,909 on chr2 against 683 for K562) to dominate any pooled figure.",
+        "by_cell": {
+          "GM12878": {
+            "boundaries_on_the_chromosome": 3909,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 11,
+            "published_per_mb": 15.14,
+            "control_per_mb": [
+              13.6,
+              15.73,
+              16.7,
+              17.69,
+              20.43
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 32,
+                "per_mb": 16.7,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 37,
+                "per_mb": 20.43,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 26,
+                "per_mb": 15.73,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 24,
+                "per_mb": 13.6,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 37,
+                "per_mb": 17.69,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              24,
+              26,
+              32,
+              37,
+              37
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "H1-hESC": {
+            "boundaries_on_the_chromosome": 1091,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 3,
+            "published_per_mb": 4.13,
+            "control_per_mb": [
+              3.02,
+              3.97,
+              4.42,
+              4.7,
+              5.74
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 9,
+                "per_mb": 4.7,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 8,
+                "per_mb": 4.42,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 5,
+                "per_mb": 3.02,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 7,
+                "per_mb": 3.97,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 12,
+                "per_mb": 5.74,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              5,
+              7,
+              8,
+              9,
+              12
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "HepG2": {
+            "boundaries_on_the_chromosome": 710,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              1.43,
+              1.57,
+              2.27,
+              2.42,
+              2.76
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 3,
+                "per_mb": 1.57,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 5,
+                "per_mb": 2.76,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 4,
+                "per_mb": 2.42,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 4,
+                "per_mb": 2.27,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 3,
+                "per_mb": 1.43,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              3,
+              3,
+              4,
+              4,
+              5
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "IMR-90": {
+            "boundaries_on_the_chromosome": 900,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              3.4,
+              3.65,
+              3.86,
+              4.23,
+              5.26
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": true,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 7,
+                "per_mb": 3.65,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 7,
+                "per_mb": 3.86,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 7,
+                "per_mb": 4.23,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 6,
+                "per_mb": 3.4,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 11,
+                "per_mb": 5.26,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              6,
+              7,
+              7,
+              7,
+              11
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "K562": {
+            "boundaries_on_the_chromosome": 683,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              1.57,
+              1.81,
+              1.91,
+              2.21,
+              2.27
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 3,
+                "per_mb": 1.57,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 4,
+                "per_mb": 2.21,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 3,
+                "per_mb": 1.81,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 4,
+                "per_mb": 2.27,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 4,
+                "per_mb": 1.91,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              3,
+              3,
+              4,
+              4,
+              4
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          }
+        }
+      },
+      "boundary_strength": {
+        "preregistered": "WHICH QUANTITY, decided before looking, and why. The denominator problem is already known: the published gene pair is 727 kb apart and the control pairs about 1.8 Mb, so anything of the form 'the deepest point in the interval between the genes' is biased, and biased TOWARDS the controls - a longer interval has more chances to contain a deep minimum. The primary reading therefore does not use the interval between the genes at all. It uses THE DELETED SPAN, which the matched controls were matched on for length (within 35%), so the comparison is length-matched by construction and needs no normalising: the deepest insulation minimum inside the span the rearrangement removes, published against the five matched control spans, per cell type. That is also the biologically right question, because the deletion removes whatever boundary lies in its span, and the published claim is that the boundary it removes is the one that mattered. The mean insulation inside the span is reported beside it as a length-independent second reading, and the span lengths are reported so the match can be checked rather than assumed. PREDICTION: on the evidence of the call-count reading, no separation - the published span's deepest minimum will sit inside the range of the controls'. If it is instead deeper than every control's in most cell types, then the project's boundary layer has been discarding the informative part by reading threshold crossings instead of the score, and genome/hic.py is where that is fixed. Reported per cell type and never pooled.",
+        "by_cell": {
+          "GM12878": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 29,
+            "published_strongest": 1.8975,
+            "published_mean": 0.5949,
+            "published_strong_calls": 11,
+            "control_strongest": [
+              1.6996,
+              1.7456,
+              1.9914,
+              2.0515,
+              2.2516
+            ],
+            "control_mean": [
+              0.5203,
+              0.5805,
+              0.5879,
+              0.6253,
+              0.6296
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 32,
+                "strongest": 1.9914,
+                "mean": 0.6296,
+                "strong_calls": 14
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 37,
+                "strongest": 1.7456,
+                "mean": 0.5203,
+                "strong_calls": 14
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 26,
+                "strongest": 2.0515,
+                "mean": 0.6253,
+                "strong_calls": 11
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 24,
+                "strongest": 2.2516,
+                "mean": 0.5879,
+                "strong_calls": 9
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 37,
+                "strongest": 1.6996,
+                "mean": 0.5805,
+                "strong_calls": 17
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "H1-hESC": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 8,
+            "published_strongest": 1.8264,
+            "published_mean": 0.7371,
+            "published_strong_calls": 4,
+            "control_strongest": [
+              0.8846,
+              1.3134,
+              1.3612,
+              1.3929,
+              1.7285
+            ],
+            "control_mean": [
+              0.4362,
+              0.5517,
+              0.6428,
+              0.6823,
+              0.7042
+            ],
+            "published_stronger_than_every_control": true,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 9,
+                "strongest": 1.3929,
+                "mean": 0.5517,
+                "strong_calls": 3
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 8,
+                "strongest": 1.3612,
+                "mean": 0.6428,
+                "strong_calls": 4
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 5,
+                "strongest": 1.7285,
+                "mean": 0.6823,
+                "strong_calls": 2
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 7,
+                "strongest": 1.3134,
+                "mean": 0.7042,
+                "strong_calls": 4
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 12,
+                "strongest": 0.8846,
+                "mean": 0.4362,
+                "strong_calls": 4
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "HepG2": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 3,
+            "published_strongest": 0.6807,
+            "published_mean": 0.4936,
+            "published_strong_calls": 2,
+            "control_strongest": [
+              0.7335,
+              1.1021,
+              1.279,
+              1.3723,
+              2.0526
+            ],
+            "control_mean": [
+              0.4667,
+              0.5707,
+              0.6267,
+              0.6645,
+              0.6807
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 3,
+                "strongest": 1.3723,
+                "mean": 0.6645,
+                "strong_calls": 1
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 5,
+                "strongest": 2.0526,
+                "mean": 0.6807,
+                "strong_calls": 2
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 4,
+                "strongest": 0.7335,
+                "mean": 0.4667,
+                "strong_calls": 2
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 4,
+                "strongest": 1.1021,
+                "mean": 0.5707,
+                "strong_calls": 2
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 3,
+                "strongest": 1.279,
+                "mean": 0.6267,
+                "strong_calls": 1
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "IMR-90": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 6,
+            "published_strongest": 1.3939,
+            "published_mean": 0.6361,
+            "published_strong_calls": 2,
+            "control_strongest": [
+              0.4754,
+              0.7379,
+              0.7559,
+              1.1675,
+              1.4609
+            ],
+            "control_mean": [
+              0.3496,
+              0.3654,
+              0.3724,
+              0.3956,
+              0.4219
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 7,
+                "strongest": 1.1675,
+                "mean": 0.3956,
+                "strong_calls": 1
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 7,
+                "strongest": 0.7559,
+                "mean": 0.3724,
+                "strong_calls": 2
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 7,
+                "strongest": 0.7379,
+                "mean": 0.3496,
+                "strong_calls": 1
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 6,
+                "strongest": 0.4754,
+                "mean": 0.3654,
+                "strong_calls": 0
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 11,
+                "strongest": 1.4609,
+                "mean": 0.4219,
+                "strong_calls": 3
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "K562": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 3,
+            "published_strongest": 0.5879,
+            "published_mean": 0.4439,
+            "published_strong_calls": 1,
+            "control_strongest": [
+              0.5718,
+              0.8275,
+              1.0264,
+              1.0824,
+              1.6245
+            ],
+            "control_mean": [
+              0.3389,
+              0.4239,
+              0.5534,
+              0.6563,
+              0.8459
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 3,
+                "strongest": 1.6245,
+                "mean": 0.8459,
+                "strong_calls": 2
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 4,
+                "strongest": 0.5718,
+                "mean": 0.3389,
+                "strong_calls": 1
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 3,
+                "strongest": 1.0824,
+                "mean": 0.6563,
+                "strong_calls": 1
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 4,
+                "strongest": 1.0264,
+                "mean": 0.5534,
+                "strong_calls": 1
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 4,
+                "strongest": 0.8275,
+                "mean": 0.4239,
+                "strong_calls": 1
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          }
+        }
+      },
+      "controls": [
+        {
+          "span": [
+            12716936,
+            14632716
+          ],
+          "kind": "deletion",
+          "length": 1915780,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 21,
+          "donor_tss": 12716935,
+          "recipient_tss": 14632716,
+          "donor": "TRIB2",
+          "recipient": "LRATD1",
+          "claims": {
+            "donor_or_recipient_deleted": false,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D95",
+              "recipient": "chr2:D108"
+            },
+            "node_after": {
+              "donor": "chr2:D95",
+              "recipient": "chr2:D95"
+            },
+            "ctcf_between_before": 21,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1641,
+            "recipient_named": true
+          },
+          "recipient_named": {
+            "elements_scored": 50,
+            "genes_named": [
+              "LRATD1"
+            ],
+            "names_the_recipient": true,
+            "pending": null
+          }
+        },
+        {
+          "span": [
+            75710915,
+            77522375
+          ],
+          "kind": "deletion",
+          "length": 1811460,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 19,
+          "donor_tss": 75710914,
+          "recipient_tss": 77522375,
+          "donor": "GCFC2",
+          "recipient": "LRRTM4",
+          "claims": {
+            "donor_or_recipient_deleted": false,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D530",
+              "recipient": "chr2:D541"
+            },
+            "node_after": {
+              "donor": "chr2:D530",
+              "recipient": "chr2:D530"
+            },
+            "ctcf_between_before": 19,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1643,
+            "recipient_named": true
+          },
+          "recipient_named": {
+            "elements_scored": 17,
+            "genes_named": [
+              "ENSG00000286932",
+              "LRRTM4"
+            ],
+            "names_the_recipient": true,
+            "pending": null
+          }
+        },
+        {
+          "span": [
+            197804593,
+            199457938
+          ],
+          "kind": "deletion",
+          "length": 1653345,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 18,
+          "donor_tss": 197804592,
+          "recipient_tss": 199457938,
+          "donor": "PLCL1",
+          "recipient": "SATB2",
+          "claims": {
+            "donor_or_recipient_deleted": false,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1352",
+              "recipient": "chr2:D1364"
+            },
+            "node_after": {
+              "donor": "chr2:D1352",
+              "recipient": "chr2:D1352"
+            },
+            "ctcf_between_before": 18,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1642,
+            "recipient_named": true
+          },
+          "recipient_named": {
+            "elements_scored": 79,
+            "genes_named": [
+              "SATB2",
+              "SATB2-AS1"
+            ],
+            "names_the_recipient": true,
+            "pending": null
+          }
+        },
+        {
+          "span": [
+            6917412,
+            8682055
+          ],
+          "kind": "deletion",
+          "length": 1764643,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 23,
+          "donor_tss": 6917411,
+          "recipient_tss": 8682055,
+          "donor": "RNF144A",
+          "recipient": "ID2",
+          "claims": {
+            "donor_or_recipient_deleted": false,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D54",
+              "recipient": "chr2:D65"
+            },
+            "node_after": {
+              "donor": "chr2:D54",
+              "recipient": "chr2:D54"
+            },
+            "ctcf_between_before": 23,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1643,
+            "recipient_named": true
+          },
+          "recipient_named": {
+            "elements_scored": 138,
+            "genes_named": [
+              "ENSG00000231083",
+              "ID2",
+              "ID2-AS1",
+              "KIDINS220",
+              "LINC01814",
+              "SNRPEP5"
+            ],
+            "names_the_recipient": true,
+            "pending": null
+          }
+        },
+        {
+          "span": [
+            102762031,
+            104854114
+          ],
+          "kind": "deletion",
+          "length": 2092083,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 23,
+          "donor_tss": 102762030,
+          "recipient_tss": 104854114,
+          "donor": "TMEM182",
+          "recipient": "POU3F3",
+          "claims": {
+            "donor_or_recipient_deleted": false,
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D677",
+              "recipient": "chr2:D693"
+            },
+            "node_after": {
+              "donor": "chr2:D677",
+              "recipient": "chr2:D677"
+            },
+            "ctcf_between_before": 23,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1638,
+            "recipient_named": true
+          },
+          "recipient_named": {
+            "elements_scored": 145,
+            "genes_named": [
+              "ENSG00000269707",
+              "ENSG00000287135",
+              "ENSG00000288565",
+              "ENSG00000289498",
+              "HMGB3P11",
+              "LINC01114",
+              "LINC01159",
+              "MRPS9-AS2"
+            ],
+            "names_the_recipient": true,
+            "pending": null
+          }
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "published": {
+      "separated_before": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "not_applicable": 0
+      },
+      "boundary_lost": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "not_applicable": 1
+      },
+      "new_adjacency": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "not_applicable": 1
+      },
+      "recipient_named": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0,
+        "not_applicable": 0
+      }
+    },
+    "controls": {
+      "separated_before": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0,
+        "not_applicable": 0
+      },
+      "boundary_lost": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0,
+        "not_applicable": 0
+      },
+      "new_adjacency": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0,
+        "not_applicable": 0
+      },
+      "recipient_named": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0,
+        "not_applicable": 0
+      }
+    },
+    "recipient_named_where_a_deletion_was_scored": {
+      "published": {
+        "k": 1,
+        "n": 1,
+        "of": 1,
+        "not_scored": 0
+      },
+      "controls": {
+        "k": 5,
+        "n": 5,
+        "of": 5,
+        "not_scored": 0
+      },
+      "judgeable": true,
+      "reading": "claim three is only meaningful where both sides have deletion data; where the controls have none it is not judgeable and must not be quoted"
+    },
+    "reading": "claims one and two are expected to fire at most control rearrangements: cutting a chromosome anywhere destroys boundaries. Only the identity of the gene can separate the published cases, which is what the registered prediction says to look at"
+  },
+  "withdrawn_and_reinstated": "The EPHA4-to-PAX3 deletion was withdrawn when hunting its breakpoints showed the span stated for it was wrong in kind (626 kb intergenic, excluding EPHA4, where the published deletions are 1.75 to 1.9 Mb and include it) and its phenotype was wrong (brachydactyly, not polydactyly). It is reinstated here with a span that matches the published construction, still STATED and not cited, run at every size across the published range. The other three cases stay withdrawn: no coordinate for them exists.",
+  "no_case_is_runnable": "Every published case needs human breakpoint coordinates and the paper states none: the accessible text gives sizes and gene content only. Two routes were tried (the PMC full text and POSTRE's re-curation) and neither carries a coordinate, so there is nothing to lift over. The rule is to drop rather than place approximately, and it is applied here to the EPHA4-to-PAX3 deletion as well, which an earlier run placed approximately.",
+  "boundary_behaviour": {
+    "chrom": "chr2",
+    "published_deletion_size": [
+      1750000,
+      1900000
+    ],
+    "candidate_pairs_at_that_size": 4,
+    "deletions": [
+      {
+        "span": [
+          6917412,
+          8682055
+        ],
+        "kind": "deletion",
+        "length": 1764643,
+        "coding_tss_inside": 0,
+        "ctcf_crossed": 23,
+        "donor_tss": 6917411,
+        "recipient_tss": 8682055,
+        "donor": "RNF144A",
+        "recipient": "ID2",
+        "claims": {
+          "donor_or_recipient_deleted": false,
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D54",
+            "recipient": "chr2:D65"
+          },
+          "node_after": {
+            "donor": "chr2:D54",
+            "recipient": "chr2:D54"
+          },
+          "ctcf_between_before": 23,
+          "ctcf_between_after": 0,
+          "boundary_lost": true,
+          "new_adjacency": true,
+          "nodes_before": 1654,
+          "nodes_after": 1643,
+          "recipient_named": true
+        },
+        "recipient_named": {
+          "elements_scored": 138,
+          "genes_named": [
+            "ENSG00000231083",
+            "ID2",
+            "ID2-AS1",
+            "KIDINS220",
+            "LINC01814",
+            "SNRPEP5"
+          ],
+          "names_the_recipient": true,
+          "pending": null
+        }
+      },
+      {
+        "span": [
+          49154515,
+          51032131
+        ],
+        "kind": "deletion",
+        "length": 1877616,
+        "coding_tss_inside": 0,
+        "ctcf_crossed": 29,
+        "donor_tss": 49154514,
+        "recipient_tss": 51032131,
+        "donor": "FSHR",
+        "recipient": "NRXN1",
+        "claims": {
+          "donor_or_recipient_deleted": false,
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D344",
+            "recipient": "chr2:D362"
+          },
+          "node_after": {
+            "donor": "chr2:D344",
+            "recipient": "chr2:D344"
+          },
+          "ctcf_between_before": 29,
+          "ctcf_between_after": 0,
+          "boundary_lost": true,
+          "new_adjacency": true,
+          "nodes_before": 1654,
+          "nodes_after": 1636,
+          "recipient_named": true
+        },
+        "recipient_named": {
+          "elements_scored": 37,
+          "genes_named": [
+            "ENSG00000286412",
+            "KNOP1P3",
+            "NRXN1"
+          ],
+          "names_the_recipient": true,
+          "pending": null
+        }
+      },
+      {
+        "span": [
+          56183990,
+          58046805
+        ],
+        "kind": "deletion",
+        "length": 1862815,
+        "coding_tss_inside": 0,
+        "ctcf_crossed": 15,
+        "donor_tss": 56183989,
+        "recipient_tss": 58046805,
+        "donor": "CCDC85A",
+        "recipient": "VRK2",
+        "claims": {
+          "donor_or_recipient_deleted": false,
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D396",
+            "recipient": "chr2:D407"
+          },
+          "node_after": {
+            "donor": "chr2:D396",
+            "recipient": "chr2:D396"
+          },
+          "ctcf_between_before": 15,
+          "ctcf_between_after": 0,
+          "boundary_lost": true,
+          "new_adjacency": true,
+          "nodes_before": 1654,
+          "nodes_after": 1643,
+          "recipient_named": true
+        },
+        "recipient_named": {
+          "elements_scored": 52,
+          "genes_named": [
+            "ENSG00000287875",
+            "ENSG00000293318",
+            "VRK2"
+          ],
+          "names_the_recipient": true,
+          "pending": null
+        }
+      },
+      {
+        "span": [
+          75710915,
+          77522375
+        ],
+        "kind": "deletion",
+        "length": 1811460,
+        "coding_tss_inside": 0,
+        "ctcf_crossed": 19,
+        "donor_tss": 75710914,
+        "recipient_tss": 77522375,
+        "donor": "GCFC2",
+        "recipient": "LRRTM4",
+        "claims": {
+          "donor_or_recipient_deleted": false,
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D530",
+            "recipient": "chr2:D541"
+          },
+          "node_after": {
+            "donor": "chr2:D530",
+            "recipient": "chr2:D530"
+          },
+          "ctcf_between_before": 19,
+          "ctcf_between_after": 0,
+          "boundary_lost": true,
+          "new_adjacency": true,
+          "nodes_before": 1654,
+          "nodes_after": 1643,
+          "recipient_named": true
+        },
+        "recipient_named": {
+          "elements_scored": 17,
+          "genes_named": [
+            "ENSG00000286932",
+            "LRRTM4"
+          ],
+          "names_the_recipient": true,
+          "pending": null
+        }
+      }
+    ],
+    "rates": {
+      "separated_before": {
+        "k": 4,
+        "n": 4
+      },
+      "boundary_lost": {
+        "k": 4,
+        "n": 4
+      },
+      "new_adjacency": {
+        "k": 4,
+        "n": 4
+      },
+      "recipient_named": {
+        "k": 4,
+        "n": 4
+      }
+    },
+    "scored_near_the_recipient": 4,
+    "analytic_note": "Claims one and two are guaranteed by construction and cannot separate anything. The node model puts its boundaries at CTCF-only elements; a deletion removes every element inside its span, so any deletion spanning a boundary loses that boundary, and any deletion of the whole interval between two genes puts them in one node. This is arithmetic, not biology, and the size-matched deletions below confirm it at every one tried. Only claim three - WHICH gene the machinery then names - could ever have discriminated, which is exactly what the registered prediction said. The right reading of this module is therefore: two of its three claims were incapable of discriminating by construction, and the third needs chr2 swept before it can be scored at the controls at all."
+  },
+  "analytic_note": "Claims one and two are guaranteed by construction and cannot separate anything. The node model puts its boundaries at CTCF-only elements; a deletion removes every element inside its span, so any deletion spanning a boundary loses that boundary, and any deletion of the whole interval between two genes puts them in one node. This is arithmetic, not biology, and the size-matched deletions below confirm it at every one tried. Only claim three - WHICH gene the machinery then names - could ever have discriminated, which is exactly what the registered prediction said. The right reading of this module is therefore: two of its three claims were incapable of discriminating by construction, and the third needs chr2 swept before it can be scored at the controls at all.",
+  "not_yet_runnable": {
+    "EPHA4_IHH_duplication": "polydactyly: a duplication of about 900 kb at 2q35 brings IHH under the EPHA4 enhancers (Lupianez et al. 2015). The effect depends on where the breakpoints fall INSIDE the domains, so no intergenic stand-in is faithful. Needs the real breakpoints",
+    "EPHA4_WNT6_inversion": "F-syndrome: a heterozygous inversion of about 1.1 Mb, its telomeric breakpoint about 1.4 Mb from EPHA4, moves WNT6 under the EPHA4 enhancers; a second family carries a 1.4 Mb duplication with a breakpoint about 1.2 Mb away (Lupianez et al. 2015). Sizes and offsets are published, the breakpoints are not. Needs the real breakpoints",
+    "SOX9_KCNJ2_duplication": "Cooks syndrome, duplications at the SOX9/KCNJ2 boundary (Franke et al. 2016, Nature 538:265). Same breakpoint problem, and it would overlap SOX9_PierreRobin's window in the locus panel, so the expectation would not be independent"
+  },
+  "evidence": {
+    "expectation": "curated: the published rearrangement and its phenotype, written down before the run",
+    "boundary_census": "curated: ENCODE cCRE registry, CTCF-only class (an annotation lookup)",
+    "node_model": "inferred: CTCF-only elements as boundary proxies, confidence 0.4 (genome/domains.py). The node model is the thing under test here, so it takes the heuristic slot that nearest-coding-TSS holds in the locus benchmark, never the derived one",
+    "derived": "predicted: AlphaGenome asked on the rearranged sequence. NOT RUN - the scorer deletes one element and cannot construct a rearranged input. The free half reports first"
+  },
+  "note": "The free half of docs/LOCI-BENCHMARK.md 11b: no model request was made. The node model is INFERRED at confidence 0.4 and is the thing under test, so it is never counted as a derived hit. One published case is an anecdote by the panel's own standard; the other three are recorded in not_yet_runnable with what each is waiting for.",
+  "cost": {
+    "seconds": 33.5
+  }
+}

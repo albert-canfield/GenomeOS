@@ -1,0 +1,41 @@
+{
+  "result": "clinvar_pathogenic_summary",
+  "date": "2026-09-12",
+  "source": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz",
+  "rows_read": 4469028,
+  "rows_kept": 346571,
+  "by_significance": {
+    "pathogenic": 226268,
+    "likely_pathogenic": 120303
+  },
+  "by_chromosome": {
+    "chr1": 26043,
+    "chr2": 37198,
+    "chr3": 17516,
+    "chr4": 9321,
+    "chr5": 16235,
+    "chr6": 15397,
+    "chr7": 14858,
+    "chr8": 10648,
+    "chr9": 13680,
+    "chr10": 10428,
+    "chr11": 21268,
+    "chr12": 14706,
+    "chr13": 11736,
+    "chr14": 8469,
+    "chr15": 13700,
+    "chr16": 18214,
+    "chr17": 28139,
+    "chr18": 4995,
+    "chr19": 13041,
+    "chr20": 5311,
+    "chr21": 3620,
+    "chr22": 6868,
+    "chrX": 24939,
+    "chrY": 52,
+    "chrM": 189
+  },
+  "seconds": 23,
+  "kept_where": "data/knowledge/clinvar/pathogenic.tsv.gz",
+  "evidence": "curated: ClinVar (NCBI) pathogenic and likely pathogenic assertions, with their review status"
+}

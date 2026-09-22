@@ -1,0 +1,1681 @@
+{
+ "result": "celegans_terminality",
+ "date": "2026-09-22",
+ "question": "can a rule set say WHEN a cell is done dividing, and not only what it becomes",
+ "registered_in": "genomeos/organism/terminality.py docstring, committed before this ran",
+ "universe": {
+  "embryonic_cells": 1326,
+  "terminal": 555,
+  "dividing": 771,
+  "programmed_deaths_excluded": 113
+ },
+ "circularity_audit": {
+  "excluded_cell_type": "only the lookup's fate_<cell> ever sets one; the guard that pins 0 of 414",
+  "excluded_cell_name": "the lookup's own address form; a lineage name spells out the divisions",
+  "excluded_tracked_lifetime": {
+   "why": "it ends at the cell's division or at the last frame, so it is the answer",
+   "last_frame_min": 400.0,
+   "cells_ending_at_the_last_frame": 454
+  },
+  "excluded_own_cycle_length": "defined only for a cell that divides",
+  "excluded_atlas_coverage": {
+   "why": "which cells the imaging resolved, not a property of the cell",
+   "terminal_named": 455,
+   "terminal_total": 555,
+   "dividing_named": 717,
+   "dividing_total": 771
+  },
+  "baseline_not_result_depth": "every division in this program is scheduled by a lookup div_<cell>",
+  "measurement": "Ma et al. 2021 transcription-factor presence, instantaneous or integrated"
+ },
+ "baselines": [
+  {
+   "arm": "T1 always-dividing",
+   "balanced": 0.5,
+   "accuracy": 0.5814,
+   "mcc": 0.0,
+   "sensitivity": 0.0,
+   "specificity": 1.0,
+   "claimed": 0,
+   "called_terminal": 0,
+   "called_dividing": 1326,
+   "n": 1326
+  },
+  {
+   "arm": "T2 always-terminal",
+   "balanced": 0.5,
+   "accuracy": 0.4186,
+   "mcc": 0.0,
+   "sensitivity": 1.0,
+   "specificity": 0.0,
+   "claimed": 1326,
+   "called_terminal": 1326,
+   "called_dividing": 0,
+   "n": 1326
+  },
+  {
+   "arm": "T3 depth gen>=9, in sample",
+   "balanced": 0.7815,
+   "accuracy": 0.8069,
+   "mcc": 0.6073,
+   "sensitivity": 0.6252,
+   "specificity": 0.9377,
+   "claimed": 1326,
+   "called_terminal": 395,
+   "called_dividing": 931,
+   "n": 1326
+  },
+  {
+   "arm": "T4 depth per founder, in sample",
+   "balanced": 0.8998,
+   "accuracy": 0.8967,
+   "mcc": 0.7923,
+   "sensitivity": 0.9189,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 602,
+   "called_dividing": 724,
+   "n": 1326
+  },
+  {
+   "arm": "T3cv depth threshold, held out by founder",
+   "balanced": 0.7815,
+   "accuracy": 0.8069,
+   "mcc": 0.6073,
+   "sensitivity": 0.6252,
+   "specificity": 0.9377,
+   "claimed": 1326,
+   "called_terminal": 395,
+   "called_dividing": 931,
+   "n": 1326
+  },
+  {
+   "arm": "T4cv depth per founder, leave-one-cell-out",
+   "balanced": 0.8773,
+   "accuracy": 0.8778,
+   "mcc": 0.7508,
+   "sensitivity": 0.8739,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 577,
+   "called_dividing": 749,
+   "n": 1326
+  },
+  {
+   "arm": "T5 factor COUNT >= 44, in sample",
+   "balanced": 0.683,
+   "accuracy": 0.6584,
+   "mcc": 0.3723,
+   "sensitivity": 0.8342,
+   "specificity": 0.5318,
+   "claimed": 1326,
+   "called_terminal": 824,
+   "called_dividing": 502,
+   "n": 1326
+  },
+  {
+   "arm": "T5cv factor COUNT, held out",
+   "balanced": 0.6721,
+   "accuracy": 0.6463,
+   "mcc": 0.3518,
+   "sensitivity": 0.8306,
+   "specificity": 0.5136,
+   "claimed": 1326,
+   "called_terminal": 836,
+   "called_dividing": 490,
+   "n": 1326
+  }
+ ],
+ "depth_thresholds_per_founder": {
+  "other": 1,
+  "ABal": 9,
+  "ABar": 9,
+  "ABpl": 9,
+  "ABpr": 9,
+  "E": 5,
+  "MS": 6,
+  "C": 6,
+  "D": 4
+ },
+ "arms": [
+  {
+   "arm": "T1 always-dividing",
+   "balanced": 0.5,
+   "accuracy": 0.5814,
+   "mcc": 0.0,
+   "sensitivity": 0.0,
+   "specificity": 1.0,
+   "claimed": 0,
+   "called_terminal": 0,
+   "called_dividing": 1326,
+   "n": 1326
+  },
+  {
+   "arm": "T2 always-terminal",
+   "balanced": 0.5,
+   "accuracy": 0.4186,
+   "mcc": 0.0,
+   "sensitivity": 1.0,
+   "specificity": 0.0,
+   "claimed": 1326,
+   "called_terminal": 1326,
+   "called_dividing": 0,
+   "n": 1326
+  },
+  {
+   "arm": "T3 depth gen>=9, in sample",
+   "balanced": 0.7815,
+   "accuracy": 0.8069,
+   "mcc": 0.6073,
+   "sensitivity": 0.6252,
+   "specificity": 0.9377,
+   "claimed": 1326,
+   "called_terminal": 395,
+   "called_dividing": 931,
+   "n": 1326
+  },
+  {
+   "arm": "T4 depth per founder, in sample",
+   "balanced": 0.8998,
+   "accuracy": 0.8967,
+   "mcc": 0.7923,
+   "sensitivity": 0.9189,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 602,
+   "called_dividing": 724,
+   "n": 1326
+  },
+  {
+   "arm": "T3cv depth threshold, held out by founder",
+   "balanced": 0.7815,
+   "accuracy": 0.8069,
+   "mcc": 0.6073,
+   "sensitivity": 0.6252,
+   "specificity": 0.9377,
+   "claimed": 1326,
+   "called_terminal": 395,
+   "called_dividing": 931,
+   "n": 1326
+  },
+  {
+   "arm": "T4cv depth per founder, leave-one-cell-out",
+   "balanced": 0.8773,
+   "accuracy": 0.8778,
+   "mcc": 0.7508,
+   "sensitivity": 0.8739,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 577,
+   "called_dividing": 749,
+   "n": 1326
+  },
+  {
+   "arm": "T5 factor COUNT >= 44, in sample",
+   "balanced": 0.683,
+   "accuracy": 0.6584,
+   "mcc": 0.3723,
+   "sensitivity": 0.8342,
+   "specificity": 0.5318,
+   "claimed": 1326,
+   "called_terminal": 824,
+   "called_dividing": 502,
+   "n": 1326
+  },
+  {
+   "arm": "T5cv factor COUNT, held out",
+   "balanced": 0.6721,
+   "accuracy": 0.6463,
+   "mcc": 0.3518,
+   "sensitivity": 0.8306,
+   "specificity": 0.5136,
+   "claimed": 1326,
+   "called_terminal": 836,
+   "called_dividing": 490,
+   "n": 1326
+  },
+  {
+   "arm": "F instantaneous rules, in sample",
+   "balanced": 0.7964,
+   "accuracy": 0.8296,
+   "mcc": 0.6771,
+   "sensitivity": 0.5928,
+   "specificity": 1.0,
+   "claimed": 797,
+   "called_terminal": 329,
+   "called_dividing": 997,
+   "n": 1326
+  },
+  {
+   "arm": "F instantaneous rules, held out",
+   "balanced": 0.7322,
+   "accuracy": 0.7655,
+   "mcc": 0.5236,
+   "sensitivity": 0.5279,
+   "specificity": 0.9364,
+   "claimed": 727,
+   "called_terminal": 342,
+   "called_dividing": 984,
+   "n": 1326
+  },
+  {
+   "arm": "F integrated rules, in sample",
+   "balanced": 0.8517,
+   "accuracy": 0.8748,
+   "mcc": 0.7566,
+   "sensitivity": 0.7099,
+   "specificity": 0.9935,
+   "claimed": 544,
+   "called_terminal": 399,
+   "called_dividing": 927,
+   "n": 1326
+  },
+  {
+   "arm": "F integrated rules, held out",
+   "balanced": 0.8079,
+   "accuracy": 0.825,
+   "mcc": 0.6392,
+   "sensitivity": 0.7027,
+   "specificity": 0.9131,
+   "claimed": 787,
+   "called_terminal": 457,
+   "called_dividing": 869,
+   "n": 1326
+  },
+  {
+   "arm": "C instantaneous logistic, held out",
+   "balanced": 0.8028,
+   "accuracy": 0.7941,
+   "mcc": 0.5975,
+   "sensitivity": 0.8559,
+   "specificity": 0.7497,
+   "claimed": 1326,
+   "called_terminal": 668,
+   "called_dividing": 658,
+   "n": 1326
+  },
+  {
+   "arm": "C integrated logistic, held out",
+   "balanced": 0.7926,
+   "accuracy": 0.7821,
+   "mcc": 0.5778,
+   "sensitivity": 0.8577,
+   "specificity": 0.7276,
+   "claimed": 1326,
+   "called_terminal": 686,
+   "called_dividing": 640,
+   "n": 1326
+  },
+  {
+   "arm": "FD instantaneous rules + depth, held out",
+   "balanced": 0.7831,
+   "accuracy": 0.8077,
+   "mcc": 0.6078,
+   "sensitivity": 0.6324,
+   "specificity": 0.9339,
+   "claimed": 908,
+   "called_terminal": 402,
+   "called_dividing": 924,
+   "n": 1326
+  },
+  {
+   "arm": "CD instantaneous logistic + depth, held out",
+   "balanced": 0.7949,
+   "accuracy": 0.7979,
+   "mcc": 0.5871,
+   "sensitivity": 0.7766,
+   "specificity": 0.8132,
+   "claimed": 1326,
+   "called_terminal": 575,
+   "called_dividing": 751,
+   "n": 1326
+  },
+  {
+   "arm": "FD integrated rules + depth, held out",
+   "balanced": 0.8148,
+   "accuracy": 0.8348,
+   "mcc": 0.6628,
+   "sensitivity": 0.6919,
+   "specificity": 0.9377,
+   "claimed": 1164,
+   "called_terminal": 432,
+   "called_dividing": 894,
+   "n": 1326
+  },
+  {
+   "arm": "CD integrated logistic + depth, held out",
+   "balanced": 0.8086,
+   "accuracy": 0.7956,
+   "mcc": 0.61,
+   "sensitivity": 0.8883,
+   "specificity": 0.7289,
+   "claimed": 1326,
+   "called_terminal": 702,
+   "called_dividing": 624,
+   "n": 1326
+  },
+  {
+   "arm": "D depth alone, logistic, held out",
+   "balanced": 0.7815,
+   "accuracy": 0.8069,
+   "mcc": 0.6073,
+   "sensitivity": 0.6252,
+   "specificity": 0.9377,
+   "claimed": 1326,
+   "called_terminal": 395,
+   "called_dividing": 931,
+   "n": 1326
+  }
+ ],
+ "bands": [
+  {
+   "arm": "band 5 rules instantaneous",
+   "balanced": 0.5001,
+   "accuracy": 0.5385,
+   "mcc": 0.0003,
+   "sensitivity": 0.3617,
+   "specificity": 0.6386,
+   "claimed": 114,
+   "called_terminal": 47,
+   "called_dividing": 83,
+   "n": 130
+  },
+  {
+   "arm": "band 5 logistic instantaneous",
+   "balanced": 0.8231,
+   "accuracy": 0.8154,
+   "mcc": 0.6257,
+   "sensitivity": 0.8511,
+   "specificity": 0.7952,
+   "claimed": 130,
+   "called_terminal": 57,
+   "called_dividing": 73,
+   "n": 130
+  },
+  {
+   "arm": "band 5 rules integrated",
+   "balanced": 0.5752,
+   "accuracy": 0.6462,
+   "mcc": 0.1737,
+   "sensitivity": 0.3191,
+   "specificity": 0.8313,
+   "claimed": 127,
+   "called_terminal": 29,
+   "called_dividing": 101,
+   "n": 130
+  },
+  {
+   "arm": "band 5 logistic integrated",
+   "balanced": 0.6961,
+   "accuracy": 0.7769,
+   "mcc": 0.5223,
+   "sensitivity": 0.4043,
+   "specificity": 0.988,
+   "claimed": 130,
+   "called_terminal": 20,
+   "called_dividing": 110,
+   "n": 130
+  },
+  {
+   "arm": "band 6 rules instantaneous",
+   "balanced": 0.6089,
+   "accuracy": 0.6625,
+   "mcc": 0.2707,
+   "sensitivity": 0.3231,
+   "specificity": 0.8947,
+   "claimed": 147,
+   "called_terminal": 31,
+   "called_dividing": 129,
+   "n": 160
+  },
+  {
+   "arm": "band 6 logistic instantaneous",
+   "balanced": 0.7753,
+   "accuracy": 0.7562,
+   "mcc": 0.5436,
+   "sensitivity": 0.8769,
+   "specificity": 0.6737,
+   "claimed": 160,
+   "called_terminal": 88,
+   "called_dividing": 72,
+   "n": 160
+  },
+  {
+   "arm": "band 6 rules integrated",
+   "balanced": 0.7482,
+   "accuracy": 0.75,
+   "mcc": 0.4907,
+   "sensitivity": 0.7385,
+   "specificity": 0.7579,
+   "claimed": 153,
+   "called_terminal": 71,
+   "called_dividing": 89,
+   "n": 160
+  },
+  {
+   "arm": "band 6 logistic integrated",
+   "balanced": 0.849,
+   "accuracy": 0.8438,
+   "mcc": 0.6875,
+   "sensitivity": 0.8769,
+   "specificity": 0.8211,
+   "claimed": 160,
+   "called_terminal": 74,
+   "called_dividing": 86,
+   "n": 160
+  },
+  {
+   "arm": "band 7 rules instantaneous",
+   "balanced": 0.4924,
+   "accuracy": 0.7207,
+   "mcc": -0.0643,
+   "sensitivity": 0.0,
+   "specificity": 0.9847,
+   "claimed": 147,
+   "called_terminal": 2,
+   "called_dividing": 177,
+   "n": 179
+  },
+  {
+   "arm": "band 7 logistic instantaneous",
+   "balanced": 0.4466,
+   "accuracy": 0.6536,
+   "mcc": -0.1763,
+   "sensitivity": 0.0,
+   "specificity": 0.8931,
+   "claimed": 128,
+   "called_terminal": 14,
+   "called_dividing": 165,
+   "n": 179
+  },
+  {
+   "arm": "band 7 rules integrated",
+   "balanced": 0.4962,
+   "accuracy": 0.7263,
+   "mcc": -0.0454,
+   "sensitivity": 0.0,
+   "specificity": 0.9924,
+   "claimed": 176,
+   "called_terminal": 1,
+   "called_dividing": 178,
+   "n": 179
+  },
+  {
+   "arm": "band 7 logistic integrated",
+   "balanced": 0.4847,
+   "accuracy": 0.7095,
+   "mcc": -0.0915,
+   "sensitivity": 0.0,
+   "specificity": 0.9695,
+   "claimed": 128,
+   "called_terminal": 4,
+   "called_dividing": 175,
+   "n": 179
+  },
+  {
+   "arm": "band 8 rules instantaneous",
+   "balanced": 0.7563,
+   "accuracy": 0.9231,
+   "mcc": 0.6172,
+   "sensitivity": 0.5312,
+   "specificity": 0.9814,
+   "claimed": 237,
+   "called_terminal": 21,
+   "called_dividing": 226,
+   "n": 247
+  },
+  {
+   "arm": "band 8 logistic instantaneous",
+   "balanced": 0.7624,
+   "accuracy": 0.8178,
+   "mcc": 0.4182,
+   "sensitivity": 0.6875,
+   "specificity": 0.8372,
+   "claimed": 247,
+   "called_terminal": 57,
+   "called_dividing": 190,
+   "n": 247
+  },
+  {
+   "arm": "band 8 rules integrated",
+   "balanced": 0.6839,
+   "accuracy": 0.8664,
+   "mcc": 0.3836,
+   "sensitivity": 0.4375,
+   "specificity": 0.9302,
+   "claimed": 243,
+   "called_terminal": 29,
+   "called_dividing": 218,
+   "n": 247
+  },
+  {
+   "arm": "band 8 logistic integrated",
+   "balanced": 0.7873,
+   "accuracy": 0.8381,
+   "mcc": 0.4668,
+   "sensitivity": 0.7188,
+   "specificity": 0.8558,
+   "claimed": 247,
+   "called_terminal": 54,
+   "called_dividing": 193,
+   "n": 247
+  },
+  {
+   "arm": "band 9 rules instantaneous",
+   "balanced": 0.6009,
+   "accuracy": 0.8146,
+   "mcc": 0.2077,
+   "sensitivity": 0.8975,
+   "specificity": 0.3043,
+   "claimed": 317,
+   "called_terminal": 286,
+   "called_dividing": 43,
+   "n": 329
+  },
+  {
+   "arm": "band 9 logistic instantaneous",
+   "balanced": 0.6748,
+   "accuracy": 0.7538,
+   "mcc": 0.275,
+   "sensitivity": 0.7845,
+   "specificity": 0.5652,
+   "claimed": 329,
+   "called_terminal": 242,
+   "called_dividing": 87,
+   "n": 329
+  },
+  {
+   "arm": "band 9 rules integrated",
+   "balanced": 0.6477,
+   "accuracy": 0.848,
+   "mcc": 0.3205,
+   "sensitivity": 0.9258,
+   "specificity": 0.3696,
+   "claimed": 326,
+   "called_terminal": 291,
+   "called_dividing": 38,
+   "n": 329
+  },
+  {
+   "arm": "band 9 logistic integrated",
+   "balanced": 0.6347,
+   "accuracy": 0.6535,
+   "mcc": 0.1928,
+   "sensitivity": 0.6608,
+   "specificity": 0.6087,
+   "claimed": 329,
+   "called_terminal": 205,
+   "called_dividing": 124,
+   "n": 329
+  }
+ ],
+ "pooled_within_band_balanced": 0.7846,
+ "per_band_best_balanced": {
+  "5": 0.8231,
+  "6": 0.849,
+  "7": 0.4962,
+  "8": 0.7873,
+  "9": 0.6748
+ },
+ "post_hoc_stratified": {
+  "why": "the registered pooling lets a stratum-majority caller -- depth and founder and nothing else -- score 0.7575 within band and 0.7886 within band+founder while scoring exactly 0.500 inside every stratum; the macro average has a floor of exactly 0.500",
+  "blocks": {
+   "D1 within band, one arm fixed across bands": {
+    "STRATUM MAJORITY (depth)": {
+     "macro": 0.5,
+     "naive_pooled": 0.7575,
+     "per_stratum": {
+      "5": 0.5,
+      "6": 0.5,
+      "7": 0.5,
+      "8": 0.5,
+      "9": 0.5
+     }
+    },
+    "rules instantaneous": {
+     "macro": 0.5917,
+     "naive_pooled": 0.7568,
+     "per_stratum": {
+      "5": 0.5001,
+      "6": 0.6089,
+      "7": 0.4924,
+      "8": 0.7563,
+      "9": 0.6009
+     }
+    },
+    "logistic instantaneous": {
+     "macro": 0.6964,
+     "naive_pooled": 0.7563,
+     "per_stratum": {
+      "5": 0.8231,
+      "6": 0.7753,
+      "7": 0.4466,
+      "8": 0.7624,
+      "9": 0.6748
+     }
+    },
+    "rules integrated": {
+     "macro": 0.6302,
+     "naive_pooled": 0.7849,
+     "per_stratum": {
+      "5": 0.5752,
+      "6": 0.7482,
+      "7": 0.4962,
+      "8": 0.6839,
+      "9": 0.6477
+     }
+    },
+    "logistic integrated": {
+     "macro": 0.6904,
+     "naive_pooled": 0.7388,
+     "per_stratum": {
+      "5": 0.6961,
+      "6": 0.849,
+      "7": 0.4847,
+      "8": 0.7873,
+      "9": 0.6347
+     }
+    }
+   },
+   "D2 within band, atlas-named cells only": {
+    "STRATUM MAJORITY (depth)": {
+     "macro": 0.5,
+     "naive_pooled": 0.772,
+     "per_stratum": {
+      "5": 0.5,
+      "6": 0.5,
+      "7": 0.5,
+      "8": 0.5,
+      "9": 0.5
+     }
+    },
+    "rules instantaneous": {
+     "macro": 0.5848,
+     "naive_pooled": 0.7543,
+     "per_stratum": {
+      "5": 0.5083,
+      "6": 0.5561,
+      "7": 0.4924,
+      "8": 0.7534,
+      "9": 0.6139
+     }
+    },
+    "logistic instantaneous": {
+     "macro": 0.6811,
+     "naive_pooled": 0.7329,
+     "per_stratum": {
+      "5": 0.7259,
+      "6": 0.8018,
+      "7": 0.4542,
+      "8": 0.7734,
+      "9": 0.6504
+     }
+    },
+    "rules integrated": {
+     "macro": 0.6344,
+     "naive_pooled": 0.7834,
+     "per_stratum": {
+      "5": 0.7041,
+      "6": 0.5895,
+      "7": 0.5,
+      "8": 0.6863,
+      "9": 0.6921
+     }
+    },
+    "logistic integrated": {
+     "macro": 0.7506,
+     "naive_pooled": 0.7431,
+     "per_stratum": {
+      "5": 0.8459,
+      "6": 0.9316,
+      "7": 0.4847,
+      "8": 0.8105,
+      "9": 0.6803
+     }
+    }
+   },
+   "D3 within band AND founder, folds by grandparent": {
+    "STRATUM MAJORITY (depth + founder)": {
+     "macro": 0.5,
+     "naive_pooled": 0.7886,
+     "per_stratum": {
+      "6/MS": 0.5,
+      "8/ABar": 0.5,
+      "8/ABpl": 0.5,
+      "9/ABal": 0.5,
+      "9/ABpl": 0.5,
+      "9/ABpr": 0.5
+     }
+    },
+    "rules instantaneous": {
+     "macro": 0.6541,
+     "naive_pooled": 0.7974,
+     "per_stratum": {
+      "6/MS": 0.8394,
+      "8/ABar": 0.6695,
+      "8/ABpl": 0.5804,
+      "9/ABal": 0.5889,
+      "9/ABpl": 0.6333,
+      "9/ABpr": 0.613
+     }
+    },
+    "logistic instantaneous": {
+     "macro": 0.6414,
+     "naive_pooled": 0.73,
+     "per_stratum": {
+      "6/MS": 0.6516,
+      "8/ABar": 0.8571,
+      "8/ABpl": 0.6225,
+      "9/ABal": 0.6913,
+      "9/ABpl": 0.475,
+      "9/ABpr": 0.5507
+     }
+    },
+    "rules integrated": {
+     "macro": 0.5945,
+     "naive_pooled": 0.7413,
+     "per_stratum": {
+      "6/MS": 0.7155,
+      "8/ABar": 0.7284,
+      "8/ABpl": 0.5706,
+      "9/ABal": 0.5759,
+      "9/ABpl": 0.4333,
+      "9/ABpr": 0.5435
+     }
+    },
+    "logistic integrated": {
+     "macro": 0.6265,
+     "naive_pooled": 0.785,
+     "per_stratum": {
+      "6/MS": 0.6716,
+      "8/ABar": 0.6923,
+      "8/ABpl": 0.7627,
+      "9/ABal": 0.6793,
+      "9/ABpl": 0.475,
+      "9/ABpr": 0.4783
+     }
+    }
+   },
+   "D3n within band AND founder, atlas-named only": {
+    "STRATUM MAJORITY (depth + founder)": {
+     "macro": 0.5,
+     "naive_pooled": 0.7878,
+     "per_stratum": {
+      "6/MS": 0.5,
+      "8/ABar": 0.5,
+      "8/ABpl": 0.5,
+      "9/ABal": 0.5,
+      "9/ABpl": 0.5,
+      "9/ABpr": 0.5
+     }
+    },
+    "rules instantaneous": {
+     "macro": 0.6775,
+     "naive_pooled": 0.8014,
+     "per_stratum": {
+      "6/MS": 0.8394,
+      "8/ABar": 0.6695,
+      "8/ABpl": 0.5804,
+      "9/ABal": 0.5889,
+      "9/ABpl": 0.6822,
+      "9/ABpr": 0.7044
+     }
+    },
+    "logistic instantaneous": {
+     "macro": 0.6353,
+     "naive_pooled": 0.7413,
+     "per_stratum": {
+      "6/MS": 0.6516,
+      "8/ABar": 0.8571,
+      "8/ABpl": 0.6225,
+      "9/ABal": 0.6913,
+      "9/ABpl": 0.5332,
+      "9/ABpr": 0.4559
+     }
+    },
+    "rules integrated": {
+     "macro": 0.6095,
+     "naive_pooled": 0.759,
+     "per_stratum": {
+      "6/MS": 0.7155,
+      "8/ABar": 0.7284,
+      "8/ABpl": 0.5706,
+      "9/ABal": 0.5759,
+      "9/ABpl": 0.4477,
+      "9/ABpr": 0.6191
+     }
+    },
+    "logistic integrated": {
+     "macro": 0.6377,
+     "naive_pooled": 0.7863,
+     "per_stratum": {
+      "6/MS": 0.6716,
+      "8/ABar": 0.6923,
+      "8/ABpl": 0.7627,
+      "9/ABal": 0.6793,
+      "9/ABpl": 0.5494,
+      "9/ABpr": 0.4706
+     }
+    }
+   }
+  }
+ },
+ "shuffle_null": {
+  "draws": 20,
+  "balanced_mean": 0.5003,
+  "balanced_sd": 0.0087
+ },
+ "secondary_universe_deaths_counted": [
+  {
+   "arm": "S depth gen>=9, in sample (deaths counted)",
+   "balanced": 0.7922,
+   "accuracy": 0.8026,
+   "mcc": 0.6182,
+   "sensitivity": 0.6467,
+   "specificity": 0.9377,
+   "claimed": 1439,
+   "called_terminal": 480,
+   "called_dividing": 959,
+   "n": 1439
+  },
+  {
+   "arm": "S integrated rules, held out (deaths counted)",
+   "balanced": 0.8067,
+   "accuracy": 0.8124,
+   "mcc": 0.6247,
+   "sensitivity": 0.7275,
+   "specificity": 0.8859,
+   "claimed": 837,
+   "called_terminal": 574,
+   "called_dividing": 865,
+   "n": 1439
+  }
+ ],
+ "learned_rules": {
+  "instantaneous": [
+   {
+    "calls": "Terminal",
+    "factors": [
+     "M03D4.4",
+     "Y75B8A.6"
+    ],
+    "precision": 1.0,
+    "support": 43
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "HBL-1",
+     "HLH-1"
+    ],
+    "precision": 1.0,
+    "support": 38
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "HAM-2",
+     "SOX-2"
+    ],
+    "precision": 1.0,
+    "support": 35
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "HMBX-1",
+     "ZIP-8"
+    ],
+    "precision": 1.0,
+    "support": 24
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "ETS-7",
+     "TBX-11"
+    ],
+    "precision": 0.98,
+    "support": 48
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "F54F2.9",
+     "ZAG-1"
+    ],
+    "precision": 1.0,
+    "support": 22
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "NHR-85",
+     "TTX-1"
+    ],
+    "precision": 1.0,
+    "support": 19
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-14",
+     "CEH-6"
+    ],
+    "precision": 1.0,
+    "support": 18
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "HAM-2",
+     "TBX-8"
+    ],
+    "precision": 1.0,
+    "support": 17
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-39",
+     "HMBX-1"
+    ],
+    "precision": 1.0,
+    "support": 21
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "REF-2",
+     "SEM-2"
+    ],
+    "precision": 1.0,
+    "support": 17
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-14",
+     "CES-2"
+    ],
+    "precision": 1.0,
+    "support": 17
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-83",
+     "HMBX-1"
+    ],
+    "precision": 1.0,
+    "support": 16
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-22",
+     "TBX-36"
+    ],
+    "precision": 1.0,
+    "support": 14
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "LIN-39",
+     "REF-2"
+    ],
+    "precision": 1.0,
+    "support": 12
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-51",
+     "TBX-9"
+    ],
+    "precision": 1.0,
+    "support": 11
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "HBL-1",
+     "NGN-1"
+    ],
+    "precision": 1.0,
+    "support": 11
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-22",
+     "CND-1"
+    ],
+    "precision": 1.0,
+    "support": 10
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "EGRH-1",
+     "K09A11.1"
+    ],
+    "precision": 1.0,
+    "support": 10
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-9",
+     "ELT-4"
+    ],
+    "precision": 1.0,
+    "support": 13
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-39",
+     "TBX-9"
+    ],
+    "precision": 1.0,
+    "support": 12
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CND-1",
+     "ZIP-8"
+    ],
+    "precision": 0.935,
+    "support": 29
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-34",
+     "FKH-2"
+    ],
+    "precision": 1.0,
+    "support": 9
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "ELT-6",
+     "PHP-3"
+    ],
+    "precision": 1.0,
+    "support": 9
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-51",
+     "SEA-1"
+    ],
+    "precision": 0.927,
+    "support": 38
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "PAX-1"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-45",
+     "ZIP-8"
+    ],
+    "precision": 0.947,
+    "support": 18
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-45",
+     "NFYC-1"
+    ],
+    "precision": 1.0,
+    "support": 10
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-19",
+     "HBL-1"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "SEA-1",
+     "TBX-38"
+    ],
+    "precision": 0.902,
+    "support": 74
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CES-2",
+     "VAB-7"
+    ],
+    "precision": 1.0,
+    "support": 7
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "HLH-1",
+     "VAB-7"
+    ],
+    "precision": 1.0,
+    "support": 9
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "NHR-25",
+     "SOX-2"
+    ],
+    "precision": 1.0,
+    "support": 7
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "ETS-7",
+     "SEM-2"
+    ],
+    "precision": 1.0,
+    "support": 9
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "UNC-42",
+     "UNC-55"
+    ],
+    "precision": 1.0,
+    "support": 7
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "EGL-18",
+     "TBX-11"
+    ],
+    "precision": 0.913,
+    "support": 21
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "ALR-1",
+     "EGL-18"
+    ],
+    "precision": 1.0,
+    "support": 10
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-36",
+     "CEH-48"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-36",
+     "SEA-1"
+    ],
+    "precision": 0.921,
+    "support": 58
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "BCL-11",
+     "M03D4.4"
+    ],
+    "precision": 1.0,
+    "support": 8
+   }
+  ],
+  "integrated": [
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CES-2",
+     "UNC-120"
+    ],
+    "precision": 1.0,
+    "support": 62
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-45",
+     "TAG-68"
+    ],
+    "precision": 1.0,
+    "support": 39
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FAX-1",
+     "SOX-2"
+    ],
+    "precision": 1.0,
+    "support": 35
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "DAF-8",
+     "HMBX-1"
+    ],
+    "precision": 1.0,
+    "support": 31
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "HMBX-1",
+     "TBX-11"
+    ],
+    "precision": 1.0,
+    "support": 20
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FAX-1",
+     "SPTF-1"
+    ],
+    "precision": 1.0,
+    "support": 19
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-13",
+     "REF-2"
+    ],
+    "precision": 1.0,
+    "support": 15
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "AHA-1",
+     "CEH-6"
+    ],
+    "precision": 0.967,
+    "support": 29
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-36",
+     "HBL-1"
+    ],
+    "precision": 1.0,
+    "support": 18
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-48",
+     "CRH-2"
+    ],
+    "precision": 0.966,
+    "support": 28
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "NHR-25",
+     "VAB-3"
+    ],
+    "precision": 1.0,
+    "support": 13
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FOS-1",
+     "SYD-9"
+    ],
+    "precision": 1.0,
+    "support": 10
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "FKH-4",
+     "LSL-1"
+    ],
+    "precision": 1.0,
+    "support": 18
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "MML-1",
+     "ZAG-1"
+    ],
+    "precision": 1.0,
+    "support": 9
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "HLH-30",
+     "REF-2"
+    ],
+    "precision": 1.0,
+    "support": 13
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-34",
+     "ETS-5"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-48",
+     "REF-2"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FKH-2",
+     "NGN-1"
+    ],
+    "precision": 1.0,
+    "support": 8
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-19",
+     "PAL-1"
+    ],
+    "precision": 1.0,
+    "support": 7
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "PAL-1",
+     "SEA-1"
+    ],
+    "precision": 1.0,
+    "support": 17
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "HBL-1",
+     "TBX-2"
+    ],
+    "precision": 1.0,
+    "support": 7
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-16",
+     "NOB-1"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-43",
+     "LIN-22"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FKH-10",
+     "Y73E7A.1"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "PHA-4",
+     "SEM-2"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "AHA-1",
+     "CND-1"
+    ],
+    "precision": 0.885,
+    "support": 23
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "AHA-1",
+     "FKH-2"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CAMT-1",
+     "UNC-130"
+    ],
+    "precision": 1.0,
+    "support": 5
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "FOS-1",
+     "LIN-26"
+    ],
+    "precision": 0.917,
+    "support": 11
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "FOS-1",
+     "NHR-12"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "CEH-7",
+     "DMD-5"
+    ],
+    "precision": 1.0,
+    "support": 5
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-27",
+     "REF-2"
+    ],
+    "precision": 1.0,
+    "support": 6
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CND-1",
+     "TBX-37"
+    ],
+    "precision": 0.9,
+    "support": 9
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "PAG-3"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "AST-1",
+     "SOX-2"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-27",
+     "TLP-1"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "ETS-4",
+     "M03D4.4"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "CEH-12",
+     "HND-1"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Dividing",
+    "factors": [
+     "F23B12.7",
+     "MEC-3"
+    ],
+    "precision": 1.0,
+    "support": 4
+   },
+   {
+    "calls": "Terminal",
+    "factors": [
+     "M03D4.4",
+     "PHA-4"
+    ],
+    "precision": 1.0,
+    "support": 4
+   }
+  ]
+ },
+ "clauses": {
+  "a_factor_only": false,
+  "b_adds_to_depth": false,
+  "c_within_band": true
+ },
+ "clauses_corrected": {
+  "why": "the registered clause (c) pooling is inflated by the stratum prior; the macro average of the per-stratum figures has a floor of exactly 0.500",
+  "c_within_band_corrected_macro": true,
+  "best_factor_macro_within_band": 0.6964,
+  "best_factor_macro_within_band_and_founder": 0.6541
+ },
+ "best": {
+  "factor_only": {
+   "arm": "F integrated rules, held out",
+   "balanced": 0.8079,
+   "accuracy": 0.825,
+   "mcc": 0.6392,
+   "sensitivity": 0.7027,
+   "specificity": 0.9131,
+   "claimed": 787,
+   "called_terminal": 457,
+   "called_dividing": 869,
+   "n": 1326
+  },
+  "factors_plus_depth": {
+   "arm": "FD integrated rules + depth, held out",
+   "balanced": 0.8148,
+   "accuracy": 0.8348,
+   "mcc": 0.6628,
+   "sensitivity": 0.6919,
+   "specificity": 0.9377,
+   "claimed": 1164,
+   "called_terminal": 432,
+   "called_dividing": 894,
+   "n": 1326
+  },
+  "depth_only": {
+   "arm": "T4 depth per founder, in sample",
+   "balanced": 0.8998,
+   "accuracy": 0.8967,
+   "mcc": 0.7923,
+   "sensitivity": 0.9189,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 602,
+   "called_dividing": 724,
+   "n": 1326
+  },
+  "trivial_or_depth": {
+   "arm": "T4 depth per founder, in sample",
+   "balanced": 0.8998,
+   "accuracy": 0.8967,
+   "mcc": 0.7923,
+   "sensitivity": 0.9189,
+   "specificity": 0.8807,
+   "claimed": 1326,
+   "called_terminal": 602,
+   "called_dividing": 724,
+   "n": 1326
+  }
+ },
+ "verdict": "NEGATIVE: the measured factors do not say when a cell is done dividing well enough to build a rule on -- they lose to a per-founder depth threshold and add nothing to one -- though they do carry a real signal that is not depth, founder or coverage",
+ "model_requests": 0
+}

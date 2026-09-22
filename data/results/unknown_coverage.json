@@ -1,0 +1,196 @@
+{
+  "result": "unknown_coverage",
+  "date": "2026-09-17",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "assays": [
+    "lentimpra",
+    "vista",
+    "crispri"
+  ],
+  "by_label": {
+    "constrained_unknown_copy": {
+      "blocks": 216,
+      "blocks_measured": 6,
+      "blocks_untouched": 210,
+      "share_measured": 0.0278,
+      "bp": 1423312,
+      "measured_bp": 1243,
+      "untouched_mb": 1.38,
+      "by_assay_blocks": {
+        "lentimpra": 5,
+        "vista": 0,
+        "crispri": 1
+      },
+      "median_untouched_block_kb": 4.01
+    },
+    "fossil": {
+      "blocks": 7302,
+      "blocks_measured": 1541,
+      "blocks_untouched": 5761,
+      "share_measured": 0.211,
+      "bp": 328523829,
+      "measured_bp": 561190,
+      "untouched_mb": 187.34,
+      "by_assay_blocks": {
+        "lentimpra": 1455,
+        "vista": 71,
+        "crispri": 93
+      },
+      "median_untouched_block_kb": 14.12
+    },
+    "neutral": {
+      "blocks": 2632,
+      "blocks_measured": 332,
+      "blocks_untouched": 2300,
+      "share_measured": 0.1261,
+      "bp": 73328371,
+      "measured_bp": 121930,
+      "untouched_mb": 46.26,
+      "by_assay_blocks": {
+        "lentimpra": 314,
+        "vista": 17,
+        "crispri": 13
+      },
+      "median_untouched_block_kb": 6.66
+    },
+    "real_unknown_recent": {
+      "blocks": 29,
+      "blocks_measured": 3,
+      "blocks_untouched": 26,
+      "share_measured": 0.1034,
+      "bp": 243992,
+      "measured_bp": 800,
+      "untouched_mb": 0.15,
+      "by_assay_blocks": {
+        "lentimpra": 3,
+        "vista": 0,
+        "crispri": 0
+      },
+      "median_untouched_block_kb": 2.89
+    },
+    "real_unknown_relaxed": {
+      "blocks": 437,
+      "blocks_measured": 99,
+      "blocks_untouched": 338,
+      "share_measured": 0.2265,
+      "bp": 13438999,
+      "measured_bp": 104591,
+      "untouched_mb": 5.7,
+      "by_assay_blocks": {
+        "lentimpra": 75,
+        "vista": 38,
+        "crispri": 2
+      },
+      "median_untouched_block_kb": 6.32
+    },
+    "real_unknown_syntax": {
+      "blocks": 69,
+      "blocks_measured": 8,
+      "blocks_untouched": 61,
+      "share_measured": 0.1159,
+      "bp": 386621,
+      "measured_bp": 2071,
+      "untouched_mb": 0.22,
+      "by_assay_blocks": {
+        "lentimpra": 7,
+        "vista": 1,
+        "crispri": 0
+      },
+      "median_untouched_block_kb": 2.68
+    },
+    "real_unknown_tolerant": {
+      "blocks": 329,
+      "blocks_measured": 92,
+      "blocks_untouched": 237,
+      "share_measured": 0.2796,
+      "bp": 16427815,
+      "measured_bp": 52985,
+      "untouched_mb": 7.6,
+      "by_assay_blocks": {
+        "lentimpra": 82,
+        "vista": 16,
+        "crispri": 1
+      },
+      "median_untouched_block_kb": 16.1
+    },
+    "real_unknown_unmeasured": {
+      "blocks": 18,
+      "blocks_measured": 0,
+      "blocks_untouched": 18,
+      "share_measured": 0.0,
+      "bp": 104755,
+      "measured_bp": 0,
+      "untouched_mb": 0.1,
+      "by_assay_blocks": {
+        "lentimpra": 0,
+        "vista": 0,
+        "crispri": 0
+      },
+      "median_untouched_block_kb": 1.7
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "blocks_measured": 6422,
+      "blocks_untouched": 9114,
+      "share_measured": 0.4134,
+      "bp": 345170726,
+      "measured_bp": 3697822,
+      "untouched_mb": 139.12,
+      "by_assay_blocks": {
+        "lentimpra": 5857,
+        "vista": 343,
+        "crispri": 1241
+      },
+      "median_untouched_block_kb": 8.78
+    },
+    "structural": {
+      "blocks": 238,
+      "blocks_measured": 39,
+      "blocks_untouched": 199,
+      "share_measured": 0.1639,
+      "bp": 229707851,
+      "measured_bp": 11521,
+      "untouched_mb": 148.26,
+      "by_assay_blocks": {
+        "lentimpra": 39,
+        "vista": 0,
+        "crispri": 0
+      },
+      "median_untouched_block_kb": 62.2
+    }
+  },
+  "real_unknown": {
+    "blocks": 882,
+    "blocks_measured": 202,
+    "untouched_mb": 13.77,
+    "measured_bp": 160447,
+    "bp": 30602182
+  },
+  "reading": "a block is 'measured' if any of the three assays overlaps it by a single base, which is the most generous definition available and still leaves most of the space untouched. Coverage is not evidence of function; it is the precondition for asking about it",
+  "seconds": 36.7
+}

@@ -1,10 +1,23 @@
 name: ci
 
+# Cadence: at most one scheduled run a day, plus a run when a promotion PR is opened and whatever
+# anyone asks for by hand. It used to run on every push to dev AND again on the same commit through
+# the open dev -> main pull request, so one commit produced two runs and a red morning produced two
+# notifications an hour. The per-commit gate is the pre-push hook, which runs the same checks in a
+# clean worktree before anything reaches the remote; CI is the daily second opinion, not the gate.
 on:
-  push:
-    branches: [main, dev]
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC, once a day
   pull_request:
     branches: [main]
+    types: [opened, reopened, ready_for_review]
+  workflow_dispatch:
+
+# one run per branch at a time: a newer push cancels the run it supersedes
+# instead of letting it finish and fail on code that no longer exists
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -39,3 +52,31 @@ jobs:
           [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
       - name: Test
         run: uv run pytest -q -rs
+      - name: BioLang programs test themselves
+        run: uv run bio test data/demo genomeos/std data/organisms
+
+  # The readers that reach the outside world are gated behind env vars, so they run nowhere: three
+  # tests that read Zoonomia and gnomAD Gnocchi by HTTP range and UniProt/AlphaFold by API. Those are
+  # exactly the readers that rot silently when a URL or a file format changes, which has happened to
+  # this project twice (Ensembl's homology dump without mouse; ENCODE's per-strand labels). One daily
+  # advisory run is the cheapest way to hear about it from the project rather than from a wrong number.
+  #
+  # continue-on-error: an outage at UCSC is not a defect in this repository, and a scheduled job that
+  # goes red on someone else's downtime trains everyone to ignore it. It reports; it does not gate.
+  # The AlphaGenome live test stays out: it needs a paid key as a secret, which is Albert's decision.
+  live-readers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync
+      - name: Read the outside world
+        env:
+          GENOMEOS_LIVE: "1"
+          GENOMEOS_NET: "1"
+        run: uv run pytest -q -rs tests/test_attribution.py tests/test_variation.py tests/test_molecules.py

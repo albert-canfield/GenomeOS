@@ -1,0 +1,62 @@
+{
+  "result": "engine_package",
+  "date": "2026-09-15",
+  "name": "biolang",
+  "built": {
+    "files": 31,
+    "rewritten": 20,
+    "package": "/private/tmp/claude-502/-Users-AlbertCanfield-SITES-DEV-GenomeOS/ed15acca-e57b-4b40-b42c-0329b09a700b/scratchpad/biolang/biolang",
+    "dangling references": []
+  },
+  "checks": [
+    {
+      "check": "GenomeOS is not importable, and the engine imports only itself",
+      "ok": true,
+      "output": "VERSION 0.9.0 | LOADED biolang biolang.bio biolang.coords biolang.ir biolang.ir.model biolang.lang biolang.lang.located biolang.lang.parser biolang.lang.tools biolang.version",
+      "error": ""
+    },
+    {
+      "check": "bio check",
+      "ok": true,
+      "output": "    order                           0.00 |     protein    \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588   0.90 |     rule       \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    0.87",
+      "error": ""
+    },
+    {
+      "check": "bio compile",
+      "ok": true,
+      "output": "  \"organism\": null, |   \"regime\": null | }",
+      "error": ""
+    },
+    {
+      "check": "bio run",
+      "ok": true,
+      "output": "  cellular   UNKNOWN   (nothing simulated at this level) |   tissue     UNKNOWN   (nothing simulated at this level) |   organism   UNKNOWN   (nothing simulated at this level)",
+      "error": ""
+    },
+    {
+      "check": "every engine module imports",
+      "ok": true,
+      "output": "EXTRAS none | IMPORTED every module",
+      "error": ""
+    },
+    {
+      "check": "bio test (the program written here)",
+      "ok": true,
+      "output": "\u2713 smoke.bio: module smoke, 5 entities, 3 rules, 2/2 checks | 1 files, 2/2 checks passed",
+      "error": ""
+    },
+    {
+      "check": "bio test (an organism, so the Body runs too)",
+      "ok": true,
+      "output": "\u2713 organism.bio: module smoke.organism, 7 entities, 0 rules, 4/4 checks | 1 files, 4/4 checks passed",
+      "error": ""
+    },
+    {
+      "check": "bio test (the standard library testing itself)",
+      "ok": true,
+      "output": "\u2713 biolang/std/human_turnover.bio: module bio.std.human_turnover, 0 entities, 0 rules, 0/0 checks | \u2713 biolang/std/signalling.bio: module bio.std.signalling, 148 entities, 0 rules, 0/0 checks | 6 files, 6/6 checks passed",
+      "error": ""
+    }
+  ],
+  "passed": true
+}

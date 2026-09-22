@@ -1,0 +1,357 @@
+{
+  "result": "celegans_contacts",
+  "date": "2026-09-14",
+  "programs": {
+    "named_senders": "data/organisms/celegans/embryo_factors.bio",
+    "contacts": "data/organisms/celegans/embryo_contacts.bio",
+    "table": "data/organisms/celegans/contacts_embryo.tsv"
+  },
+  "founders": {
+    "with_contacts": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABpPrecursor",
+      "EMS": "EMSPolarised",
+      "P2": "Blastomere",
+      "MS": "MSPrecursor",
+      "E": "EPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "with_named_senders": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABpPrecursor",
+      "EMS": "EMSPrecursor",
+      "P2": "Blastomere",
+      "MS": "MSPrecursor",
+      "E": "EPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "expected": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABpPrecursor",
+      "EMS": "EMSPolarised",
+      "MS": "MSPrecursor",
+      "E": "EPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "correct": 8,
+    "of": 8
+  },
+  "rearranged": {
+    "what": "ABa put where ABp is and ABp where ABa is, in the contact table alone",
+    "founders": {
+      "ABa": "ABpPrecursor",
+      "ABp": "ABaPrecursor",
+      "EMS": "EMSPolarised",
+      "P2": "Blastomere",
+      "MS": "MSPrecursor",
+      "E": "EPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "fates_follow_position": true,
+    "published": "Priess & Thomson 1987, Cell 48:241; Hutter & Schnabel 1994, Development 120:2051"
+  },
+  "no_contact_table": {
+    "what": "the same program with no table, so nothing touches anything: a control on the table",
+    "founders": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABaPrecursor",
+      "EMS": "EMSPrecursor",
+      "P2": "Blastomere",
+      "MS": "MSPrecursor",
+      "E": "MSPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "nothing_induced": true
+  },
+  "knockouts": {
+    "APX-1": {
+      "expect": "ABp becomes ABa-like: no Delta reaches GLP-1",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABaPrecursor",
+        "EMS": "EMSPolarised",
+        "P2": "Blastomere",
+        "MS": "MSPrecursor",
+        "E": "EPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "GLP-1": {
+      "expect": "ABp becomes ABa-like: the receptor is gone",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABaPrecursor",
+        "EMS": "EMSPolarised",
+        "P2": "Blastomere",
+        "MS": "MSPrecursor",
+        "E": "EPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "MOM-2": {
+      "expect": "E takes the MS fate: no Wnt at the EMS/P2 contact",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPrecursor",
+        "P2": "Blastomere",
+        "MS": "MSPrecursor",
+        "E": "MSPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "MOM-5": {
+      "expect": "E takes the MS fate: the receptor is gone",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPrecursor",
+        "P2": "Blastomere",
+        "MS": "MSPrecursor",
+        "E": "MSPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "PIE-1": {
+      "expect": "P2 takes the EMS fate, and with the P2 identity lost ABp becomes ABa-like",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABaPrecursor",
+        "EMS": "EMSPrecursor",
+        "P2": "EMSPrecursor",
+        "MS": "MSPrecursor",
+        "E": "MSPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "EMSPrecursor"
+      },
+      "ok": true
+    },
+    "SKN-1": {
+      "expect": "EMS daughters take the C fate through PAL-1",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "Blastomere",
+        "P2": "Blastomere",
+        "MS": "CPrecursor",
+        "E": "CPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "POP-1": {
+      "expect": "MS takes the E fate",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPolarised",
+        "P2": "Blastomere",
+        "MS": "EPrecursor",
+        "E": "EPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "ok": true
+    },
+    "PAL-1": {
+      "expect": "C and D lose their fates",
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPolarised",
+        "P2": "Blastomere",
+        "MS": "MSPrecursor",
+        "E": "EPrecursor",
+        "C": "Blastomere",
+        "D": "Blastomere",
+        "P4": "GermCell"
+      },
+      "ok": true
+    }
+  },
+  "knockouts_reproduced": 8,
+  "against_sulston": {
+    "named_senders": {
+      "until_min": 800.0,
+      "reference_cells": 1439,
+      "matched": 1439,
+      "born_fraction": 1.0,
+      "missing": 0,
+      "missing_examples": [],
+      "extra": 0,
+      "extra_examples": [],
+      "parent_mismatch": 0,
+      "timing_median_min": 14.292007832764654,
+      "timing_p90_min": 41.97130230703772,
+      "fates_checked": 555,
+      "fates_correct": 501,
+      "fates_unknown": 0,
+      "fate_accuracy": 0.9027,
+      "fate_confusion": {
+        "Neuron->Hypodermis": 14,
+        "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
+        "GliaSocket->Neuron": 5,
+        "GliaSocket->Hypodermis": 4,
+        "Coelomocyte->Muscle": 4,
+        "GliaSheath->Neuron": 3,
+        "Valve->Neuron": 2,
+        "PharyngealMarginal->Neuron": 1,
+        "Excretory->Hypodermis": 1
+      },
+      "deaths_expected": 110,
+      "deaths_matched": 110,
+      "counts": [
+        {
+          "t": 0.5,
+          "body": 2.0,
+          "reference": 2
+        },
+        {
+          "t": 50,
+          "body": 4.0,
+          "reference": 4
+        },
+        {
+          "t": 100,
+          "body": 13.0,
+          "reference": 12
+        },
+        {
+          "t": 200,
+          "body": 48.0,
+          "reference": 52
+        },
+        {
+          "t": 350,
+          "body": 260.0,
+          "reference": 274
+        },
+        {
+          "t": 500,
+          "body": 601.0,
+          "reference": 622
+        },
+        {
+          "t": 800,
+          "body": 610.0,
+          "reference": 610
+        }
+      ]
+    },
+    "contacts": {
+      "until_min": 800.0,
+      "reference_cells": 1439,
+      "matched": 1439,
+      "born_fraction": 1.0,
+      "missing": 0,
+      "missing_examples": [],
+      "extra": 0,
+      "extra_examples": [],
+      "parent_mismatch": 0,
+      "timing_median_min": 14.292007832764654,
+      "timing_p90_min": 41.97130230703772,
+      "fates_checked": 555,
+      "fates_correct": 501,
+      "fates_unknown": 0,
+      "fate_accuracy": 0.9027,
+      "fate_confusion": {
+        "Neuron->Hypodermis": 14,
+        "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
+        "GliaSocket->Neuron": 5,
+        "GliaSocket->Hypodermis": 4,
+        "Coelomocyte->Muscle": 4,
+        "GliaSheath->Neuron": 3,
+        "Valve->Neuron": 2,
+        "PharyngealMarginal->Neuron": 1,
+        "Excretory->Hypodermis": 1
+      },
+      "deaths_expected": 110,
+      "deaths_matched": 110,
+      "counts": [
+        {
+          "t": 0.5,
+          "body": 2.0,
+          "reference": 2
+        },
+        {
+          "t": 50,
+          "body": 4.0,
+          "reference": 4
+        },
+        {
+          "t": 100,
+          "body": 13.0,
+          "reference": 12
+        },
+        {
+          "t": 200,
+          "body": 48.0,
+          "reference": 52
+        },
+        {
+          "t": 350,
+          "body": 260.0,
+          "reference": 274
+        },
+        {
+          "t": 500,
+          "body": 601.0,
+          "reference": 622
+        },
+        {
+          "t": 800,
+          "body": 610.0,
+          "reference": 610
+        }
+      ]
+    },
+    "cells_only_in_one": [],
+    "cells_that_differ": [
+      "EMS"
+    ],
+    "difference": {
+      "EMS": {
+        "named": [
+          "EMSPrecursor",
+          "",
+          42.292008
+        ],
+        "contacts": [
+          "EMSPolarised",
+          "",
+          42.292008
+        ]
+      }
+    }
+  },
+  "seconds": 1.0,
+  "pass": true
+}

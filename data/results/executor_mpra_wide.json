@@ -1,0 +1,524 @@
+{
+  "result": "executor_mpra_wide",
+  "date": "2026-09-16",
+  "database": {
+    "rows_on_the_main_assembly": 231336,
+    "distinct_variants": 129442,
+    "significant_rows_any_cell": 18038,
+    "rows_in_a_cell_the_model_has": 75996,
+    "significant_rows_in_those_cells": 7178,
+    "significant_variants_in_those_cells": 6196,
+    "cells": {
+      "GM12878": 3169,
+      "Jurkat": 386,
+      "HepG2": 2799,
+      "K562": 739,
+      "HeLa": 85
+    },
+    "studies": {
+      "Saturation mutagenesis of twenty disease-associated regulato": 3623,
+      "Multiple causal variants underlie genetic associations in hu": 2449,
+      "Direct Identification of Hundreds of Expression- Modulating ": 654,
+      "Prioritization of autoimmune disease-associated genetic vari": 276,
+      "Global discovery of lupus genetic risk variant allelic enhan": 175,
+      "Transcriptomic signatures across human tissues identify func": 1
+    },
+    "chromosomes": {
+      "chr1": 2951,
+      "chr19": 808,
+      "chrX": 344,
+      "chr6": 302,
+      "chr17": 280,
+      "chr11": 250,
+      "chr2": 205,
+      "chr16": 199,
+      "chr3": 197,
+      "chr9": 185,
+      "chr7": 182,
+      "chr5": 171,
+      "chr4": 156,
+      "chr12": 142,
+      "chr8": 128,
+      "chr22": 116,
+      "chr10": 108,
+      "chr14": 107,
+      "chr15": 106,
+      "chr20": 98,
+      "chr18": 79,
+      "chr21": 35,
+      "chr13": 29
+    }
+  },
+  "tests_built": 6196,
+  "pairs": {
+    "E1W_mpra_wide": 3260,
+    "E1S_mpra_saturation": 847
+  },
+  "unmatched": {
+    "E1W_mpra_wide:no_null": 134,
+    "E1S_mpra_saturation:no_null": 1955
+  },
+  "gene_source": {
+    "dapg": 2629,
+    "nearest_tss": 3567
+  },
+  "by_cell": {
+    "E1W_mpra_wide": {
+      "GM12878": 2890,
+      "Jurkat": 370
+    },
+    "E1S_mpra_saturation": {
+      "HepG2": 847
+    }
+  },
+  "by_chromosome": {
+    "E1W_mpra_wide": {
+      "chr1": 346,
+      "chr6": 277,
+      "chr17": 257,
+      "chr11": 228,
+      "chr3": 190,
+      "chr16": 185,
+      "chr2": 183,
+      "chr7": 169,
+      "chr5": 154,
+      "chr4": 147,
+      "chr12": 136,
+      "chr19": 134,
+      "chr8": 116,
+      "chr22": 109,
+      "chr14": 97,
+      "chr15": 94,
+      "chr10": 93,
+      "chr20": 90,
+      "chr9": 87,
+      "chr18": 71,
+      "chrX": 43,
+      "chr21": 30,
+      "chr13": 24
+    },
+    "E1S_mpra_saturation": {
+      "chr1": 333,
+      "chr19": 308,
+      "chrX": 206
+    }
+  },
+  "loci_20kb": {
+    "E1W_mpra_wide": 1515,
+    "E1S_mpra_saturation": 3
+  },
+  "control_distance_median_bp": {
+    "E1W_mpra_wide": 909.0,
+    "E1S_mpra_saturation": 201.0
+  },
+  "control_distance_bands": {
+    "E1W_mpra_wide": {
+      "5 to 50 kb": 362,
+      "under 5 kb": 2815,
+      "50 to 250 kb": 83
+    },
+    "E1S_mpra_saturation": {
+      "under 5 kb": 847
+    }
+  },
+  "measured_positive_share": {
+    "E1W_mpra_wide": 0.488,
+    "E1S_mpra_saturation": 0.36
+  },
+  "sign_convention": {
+    "tissue": "Cells_EBV-transformed_lymphocytes",
+    "variants": 1826,
+    "signs_agree": 946,
+    "share": 0.518,
+    "binomial_p_two_sided": 0.1224624,
+    "fine_mapped_only": {
+      "variants": 179,
+      "signs_agree": 120,
+      "share": 0.67,
+      "binomial_p_two_sided": 6e-06,
+      "note": "the variants DAP-G fine-maps at this very position: the population E2 tested, where linkage does not stand between the allele and the eQTL's direction"
+    },
+    "reading": "log2FC read as alternative over reference, as the endpoint assumes"
+  },
+  "pre_registration": {
+    "written": "2026-09-14, before any model request of the widened endpoint and before any pair was scored",
+    "why": "E1 was the endpoint that answers the standing objection to E2 and E3 \u2014 that the model's agreement with a GTEx eQTL is partly the model reading back training data of the same kind \u2014 and it had 12 pairs, because the shortlist was built from the human panel's storage units and the panel has run only on chr21 and chr22. The measurement is not so limited: MPRAVarDB is genome-wide. This endpoint drops the storage-unit framing and tests every significant allele pair the database holds, in the cell lines the model has RNA-seq tracks for",
+    "claim_tested": "swapping an allele that a reporter assay measured as changing activity moves the model's predicted read-out of the local gene in the measured direction more often than swapping an allele the same assay measured in the same cell and found not to change activity",
+    "population": "MPRAVarDB rows on the main assembly with an FDR at or below 0.05, or a nominal p at or below 0.01 where the study reports no FDR; 3'UTR stability libraries excluded; single-base ref and alt; the cell line one of GM12878, HepG2, K562, Jurkat or HeLa, the MPRA lines the model has RNA-seq tracks for. One test per variant: the significant row with the largest absolute log2FC",
+    "strata": "E1W_mpra_wide, the headline, is every such variant outside the saturation-mutagenesis study; E1S_mpra_saturation is that study alone, which mutates a handful of whole elements and so is a within-element test at five loci, reported apart and never the headline. Both are declared here, before either was assembled or scored",
+    "readout": "the model's RNA-seq gene tracks in the MPRA's own cell line, both alleles in one request over the 1 Mb window; the gene is chosen without the model: the gene DAP-G names at this very variant (highest PIP) if there is one, else the nearest protein-coding TSS in GENCODE. The control is read on the same gene in the same cell, so the no-call threshold cannot filter the two arms differently",
+    "readout_changed_from_e1": "the original E1 chose the read-out gene as the one with the largest absolute predicted effect in the cell when no eQTL named a gene, which is the model choosing its own read-out and favours the unit arm at the no-call threshold. The widened endpoint chooses the gene from DAP-G or the annotation alone, and refuses the pair rather than falling back on a model-chosen gene",
+    "measured_sign": "sign of MPRAVarDB log2FC, which UCSC's track description defines as log2(alt RNA/DNA) - log2(ref RNA/DNA): alternative over reference. The sign convention is checked once against GTEx lymphocyte eQTLs before the run and reported with the result",
+    "controls": "one per unit, never reused: a variant the same study measured in the same cell line and found not significant (FDR above 0.2, or nominal p above 0.2 where no FDR is given), with no significant row in any study or cell anywhere, single-base ref and alt, between 200 bp and 250 kb from the tested variant so that it is outside the tested variant's own 200-bp window and inside the prediction window; the nearest such variant is taken. It borrows the unit's gene, cell and measured sign. This is a measured null from the same library rather than the unmeasured storage unit E2 and E3 used, because off chr21 and chr22 there is no human panel to draw one from and because the same-library null is the stronger match: same assay, same cell, same neighbourhood",
+    "no_call": "a predicted |log2FC| below 0.001 is a no-call in either arm, with the 0, 0.001 and 0.01 grid",
+    "order": "strongest measured |log2FC| first, which is the subset where the measurement is most certain",
+    "budget": "1,000 pairs and at most 2,000 requests for E1W_mpra_wide; if the quota holder grants it, a further 300 pairs and 600 requests for E1S_mpra_saturation, reported apart",
+    "alpha_spending": {
+      "look_1_pairs": 150,
+      "alpha_1": 0.0005,
+      "look_2_pairs": 400,
+      "alpha_2": 0.002
+    },
+    "final_alpha": 0.01,
+    "stopping": "pairs in the pre-registered order; at 150 and 400 pairs an endpoint stops for success at its alpha or for futility if the upper 95% bound of the difference is below 0.05; otherwise the run ends at the budget and is read at alpha 0.01",
+    "success": "agreement in units minus agreement in matched nulls at or above 0.10, one-sided Fisher exact p at or below the alpha of the look, and the same direction of difference in GM12878 and in Jurkat separately (the two cells that carry the headline stratum)",
+    "confirms_e2_e3": "a success here is the external answer to the ENCODE objection: the model tracks a measured direction that is not one of its training tracks, and E2's +0.268 with E3's dilution then reads as a property of the sequence and not of the model's memory of GTEx",
+    "contradicts_e2_e3": "a difference at or below 0 with the budget spent, or a futility stop, says the model does not track an external measurement of direction at all, and E2 and E3 are then best explained by the model reproducing expression data of the kind it was trained on. The executor claim would be confined to eQTL-shaped read-outs and would not be a statement about sequence",
+    "fails_to_resolve": "a difference between 0 and 0.10, or p above 0.01 with the upper 95% bound above 0.05, decides nothing: the reporter measures an episomal fragment and the model predicts a chromosomal gene, so a small positive difference is what a weak but real correspondence would also look like",
+    "secondary_fine_mapped_split": "declared 2026-09-14 before any request, after the convention check and from it: among the tested GM12878 variants that also have a significant eQTL in EBV-transformed lymphocytes, the reporter's direction and the eQTL's direction agree 120 of 179 times (0.670) where DAP-G fine-maps the variant and 946 of 1,826 (0.518) over all of them. Two independent measurements therefore show the same split E2 and E3 found in the model. E1W is read again inside those strata: if the model is tracking the measurement rather than its own training data, its agreement should be higher on the fine-mapped variants than on the rest, by about the same margin. This is a prediction, not a criterion: the endpoint's success or failure is decided by the difference against the matched nulls as stated above",
+    "convention": "the control borrows the unit's measured sign, so mirroring the log2FC convention would flip both arms and change the sign of the difference: this endpoint stands or falls with the convention. It is therefore checked before any request, genome-wide, against GTEx slopes in EBV-transformed lymphocytes for the GM12878 variants (wide_sign_check), and the check is committed with the plan. A strongly negative difference at the end would be read first as evidence about the convention and only then as evidence about the claim",
+    "caveat": "an MPRA measures a short fragment on a plasmid, not the gene in its chromosome; the assay's own reproducibility across studies is modest; and the read-out gene is the nearest TSS for most variants, which is wrong for a third of distal elements by this project's own deletion work. All three blunt the endpoint rather than bias it towards success"
+  },
+  "budget": {
+    "requests_per_pair": 2,
+    "headline_pairs": 1000,
+    "headline_requests": 2000,
+    "saturation_pairs": 300,
+    "saturation_requests": 600,
+    "seconds_per_request_measured_elsewhere": 3.9
+  },
+  "first_pairs": [
+    {
+      "order": 1,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr17:5010733",
+      "test": {
+        "pos": 5010733,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs138386642",
+        "log2fc": -7.35204146379889,
+        "fdr": 5.54042150860492e-05,
+        "pvalue": 3.59414015694834e-07,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr17:5005426",
+        "pos": 5005426,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs55770506",
+        "log2fc": -0.170114505022426,
+        "fdr": 0.804201113852902,
+        "pvalue": 0.585638327453051,
+        "distance": -5307
+      },
+      "borrowed": {
+        "gene": "RP5-1050D4.2",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.012)"
+    },
+    {
+      "order": 2,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr19:2102825",
+      "test": {
+        "pos": 2102825,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs111246221",
+        "log2fc": -7.19523718815761,
+        "fdr": 4.24266485017175e-11,
+        "pvalue": 3.058077016702e-14,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr19:2102544",
+        "pos": 2102544,
+        "ref": "G",
+        "alt": "C",
+        "rsid": "rs141494805",
+        "log2fc": 0.333143730458549,
+        "fdr": 0.63483973704732,
+        "pvalue": 0.356861674865946,
+        "distance": -281
+      },
+      "borrowed": {
+        "gene": "IZUMO4",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.045)"
+    },
+    {
+      "order": 3,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr13:114310435",
+      "test": {
+        "pos": 114310435,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs9525204",
+        "log2fc": -6.92515118065451,
+        "fdr": 0.00416425113161078,
+        "pvalue": 0.000117346875420503,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr13:114309305",
+        "pos": 114309305,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs74116899",
+        "log2fc": 0.281307781918499,
+        "fdr": 0.622660462721932,
+        "pvalue": 0.3437464385317,
+        "distance": -1130
+      },
+      "borrowed": {
+        "gene": "UPF3A",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.034)"
+    },
+    {
+      "order": 4,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr17:46227820",
+      "test": {
+        "pos": 46227820,
+        "ref": "A",
+        "alt": "C",
+        "rsid": "rs380537",
+        "log2fc": -6.85891777444739,
+        "fdr": 1.48029719419085e-05,
+        "pvalue": 6.98390655800674e-08,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr17:46225386",
+        "pos": 46225386,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs2907488",
+        "log2fc": -0.480279940479283,
+        "fdr": 0.444371334969489,
+        "pvalue": 0.178031873905494,
+        "distance": -2434
+      },
+      "borrowed": {
+        "gene": "KANSL1",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "nearest protein-coding TSS (2431 bp)"
+    },
+    {
+      "order": 5,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr6:159682052",
+      "test": {
+        "pos": 159682052,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs5746136",
+        "log2fc": -6.77520203525025,
+        "fdr": 0.00501380176750033,
+        "pvalue": 0.000151126978117434,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr6:159681820",
+        "pos": 159681820,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs5746138",
+        "log2fc": -0.196142526215133,
+        "fdr": 0.90857847645862,
+        "pvalue": 0.776518359429519,
+        "distance": -232
+      },
+      "borrowed": {
+        "gene": "SOD2",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.097)"
+    },
+    {
+      "order": 6,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr19:9201580",
+      "test": {
+        "pos": 9201580,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs73498852",
+        "log2fc": 6.62987593584368,
+        "fdr": 0.000299668499194294,
+        "pvalue": 3.26943222042133e-06,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr19:9200671",
+        "pos": 9200671,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs57338458",
+        "log2fc": -0.332859245618167,
+        "fdr": 0.752842667617629,
+        "pvalue": 0.505120367924379,
+        "distance": -909
+      },
+      "borrowed": {
+        "gene": "ZNF317",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.058)"
+    },
+    {
+      "order": 7,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr6:89163336",
+      "test": {
+        "pos": 89163336,
+        "ref": "T",
+        "alt": "A",
+        "rsid": "rs6927416",
+        "log2fc": -6.41453598388304,
+        "fdr": 0.000144319723026219,
+        "pvalue": 1.22465134210703e-06,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr6:89162780",
+        "pos": 89162780,
+        "ref": "G",
+        "alt": "T",
+        "rsid": "rs9359842",
+        "log2fc": -0.769815432465602,
+        "fdr": 0.294165621924293,
+        "pvalue": 0.0842715840774845,
+        "distance": -556
+      },
+      "borrowed": {
+        "gene": "PM20D2",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "nearest protein-coding TSS (17337 bp)"
+    },
+    {
+      "order": 8,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr11:407708",
+      "test": {
+        "pos": 407708,
+        "ref": "A",
+        "alt": "C",
+        "rsid": "rs6421977",
+        "log2fc": -6.23695029624704,
+        "fdr": 0.000125932072157475,
+        "pvalue": 1.04135637143221e-06,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr11:408352",
+        "pos": 408352,
+        "ref": "C",
+        "alt": "A",
+        "rsid": "rs7396562",
+        "log2fc": 0.583037155260129,
+        "fdr": 0.368791688269826,
+        "pvalue": 0.125635273801277,
+        "distance": 644
+      },
+      "borrowed": {
+        "gene": "SIGIRR",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.197)"
+    },
+    {
+      "order": 9,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr11:71466161",
+      "test": {
+        "pos": 71466161,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs1790343",
+        "log2fc": 6.22626931170676,
+        "fdr": 0.00275925608370002,
+        "pvalue": 6.59464086953098e-05,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr11:71466366",
+        "pos": 71466366,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs1792227",
+        "log2fc": -0.878888123800463,
+        "fdr": 0.292689224625659,
+        "pvalue": 0.0836635056036598,
+        "distance": 205
+      },
+      "borrowed": {
+        "gene": "NADSYN1",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1,
+        "strict": true
+      },
+      "gene_how": "DAP-G at the variant (PIP 0.023)"
+    },
+    {
+      "order": 10,
+      "endpoint": "E1W_mpra_wide",
+      "unit": "chr4:151296074",
+      "test": {
+        "pos": 151296074,
+        "ref": "C",
+        "alt": "G",
+        "rsid": "rs72725927",
+        "log2fc": -6.21845817699676,
+        "fdr": 0.00122816663882422,
+        "pvalue": 2.16231908693549e-05,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr4:151296346",
+        "pos": 151296346,
+        "ref": "G",
+        "alt": "C",
+        "rsid": "rs3990708",
+        "log2fc": -0.015293376340473,
+        "fdr": 0.991652907108367,
+        "pvalue": 0.978364589206285,
+        "distance": 272
+      },
+      "borrowed": {
+        "gene": "PRSS48",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": -1,
+        "strict": true
+      },
+      "gene_how": "nearest protein-coding TSS (18913 bp)"
+    }
+  ],
+  "model_requests_spent": 0,
+  "seconds": 204.4
+}

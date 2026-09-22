@@ -1,0 +1,2682 @@
+{
+  "result": "lexicon_axes_chr21",
+  "date": "2026-09-14",
+  "chrom": "chr21",
+  "length": 46709983,
+  "axes": {
+    "mammals": "Zoonomia phyloP 241 mammals per base, constrained at >= 2.27 (byte track, bin edge at 2.27)",
+    "people": "HPRC 89-assembly panel per base (genomeos-h1's store): recurring substitution columns among informative bases, expected from trinucleotide x context x GC bin, and again with the phyloP bin",
+    "people_for_comparison": "gnomAD Gnocchi Z per kilobase, joined per base, not used as the axis",
+    "motifs": "JASPAR 2026 CORE vertebrates at 0.95 of the matrix range, whole chromosome, both strands; column-permuted decoys scanned the same way"
+  },
+  "phylop": {
+    "measured_fraction": 0.7999,
+    "constrained_fraction": 0.0237
+  },
+  "panel": {
+    "informative_bases": 33648994,
+    "variant_rate": 0.00569966519652861
+  },
+  "units": 4880,
+  "unit_rows": 21370,
+  "context_rows": 10831,
+  "real": {
+    "tests": {
+      "mammals": {
+        "tests": 9268,
+        "passing": 1152,
+        "bh_threshold": 0.006186121164921561
+      },
+      "people_depleted": {
+        "tests": 5445,
+        "passing": 343,
+        "bh_threshold": 0.003106184428368741
+      },
+      "people_given_phylop": {
+        "tests": 5445,
+        "passing": 421,
+        "bh_threshold": 0.0038542383488858875
+      },
+      "mammals_vs_flanks": {
+        "tests": 7490,
+        "passing": 649,
+        "bh_threshold": 0.004306255082500586
+      },
+      "people_depleted_vs_flanks": {
+        "tests": 5567,
+        "passing": 263,
+        "bh_threshold": 0.0023558068540012744
+      },
+      "people_two_sided_vs_flanks": {
+        "tests": 5567,
+        "passing": 265,
+        "bh_threshold": 0.0023729090904653118
+      }
+    },
+    "thresholds_applied": "own",
+    "counts": {
+      "rows": 10831,
+      "human_measured": 5445,
+      "held_mammals": 1152,
+      "held_people": 343,
+      "syntax": 167,
+      "people_tighter_than_mammals_predict": 266,
+      "value_slot": 7,
+      "held_mammals_vs_flanks": 649,
+      "held_people_vs_flanks": 263,
+      "syntax_vs_flanks": 60,
+      "value_slot_vs_flanks": 4
+    },
+    "two_by_two": {
+      "held_both": 167,
+      "mammals_only": 934,
+      "people_only": 176,
+      "neither": 4168,
+      "odds_ratio": 4.23
+    }
+  },
+  "shifted_calibration": {
+    "tests": {
+      "mammals": {
+        "tests": 14024,
+        "passing": 5,
+        "bh_threshold": 1.265938500504863e-05
+      },
+      "people_depleted": {
+        "tests": 6959,
+        "passing": 13,
+        "bh_threshold": 7.645231514230577e-05
+      },
+      "people_given_phylop": {
+        "tests": 6959,
+        "passing": 27,
+        "bh_threshold": 0.00018909393217724364
+      },
+      "mammals_vs_flanks": {
+        "tests": 13829,
+        "passing": 18,
+        "bh_threshold": 5.394833419834366e-05
+      },
+      "people_depleted_vs_flanks": {
+        "tests": 7088,
+        "passing": 0,
+        "bh_threshold": 0.0
+      },
+      "people_two_sided_vs_flanks": {
+        "tests": 7088,
+        "passing": 0,
+        "bh_threshold": 0.0
+      }
+    },
+    "thresholds_applied": "the real units'",
+    "counts": {
+      "rows": 15242,
+      "human_measured": 6959,
+      "held_mammals": 94,
+      "held_people": 52,
+      "syntax": 5,
+      "people_tighter_than_mammals_predict": 73,
+      "value_slot": 1,
+      "held_mammals_vs_flanks": 67,
+      "held_people_vs_flanks": 35,
+      "syntax_vs_flanks": 1,
+      "value_slot_vs_flanks": 0
+    },
+    "two_by_two": {
+      "held_both": 5,
+      "mammals_only": 76,
+      "people_only": 47,
+      "neither": 6831,
+      "odds_ratio": 10.34
+    }
+  },
+  "decoy_motifs": {
+    "tests": {
+      "mammals": {
+        "tests": 6251,
+        "passing": 494,
+        "bh_threshold": 0.003945969521250553
+      },
+      "people_depleted": {
+        "tests": 4045,
+        "passing": 162,
+        "bh_threshold": 0.0019783899767281676
+      },
+      "people_given_phylop": {
+        "tests": 4045,
+        "passing": 332,
+        "bh_threshold": 0.004024460619139895
+      },
+      "mammals_vs_flanks": {
+        "tests": 6187,
+        "passing": 214,
+        "bh_threshold": 0.0017105619178066802
+      },
+      "people_depleted_vs_flanks": {
+        "tests": 3948,
+        "passing": 97,
+        "bh_threshold": 0.0012249673647027892
+      },
+      "people_two_sided_vs_flanks": {
+        "tests": 3948,
+        "passing": 174,
+        "bh_threshold": 0.0021982803782469884
+      }
+    },
+    "thresholds_applied": "the real units'",
+    "counts": {
+      "rows": 6502,
+      "human_measured": 4045,
+      "held_mammals": 536,
+      "held_people": 192,
+      "syntax": 109,
+      "people_tighter_than_mammals_predict": 187,
+      "value_slot": 8,
+      "held_mammals_vs_flanks": 249,
+      "held_people_vs_flanks": 112,
+      "syntax_vs_flanks": 23,
+      "value_slot_vs_flanks": 7
+    },
+    "two_by_two": {
+      "held_both": 109,
+      "mammals_only": 405,
+      "people_only": 83,
+      "neither": 3448,
+      "odds_ratio": 11.15
+    }
+  },
+  "motif_against_decoy": {
+    "held_mammals": {
+      "motif_rows": 1140,
+      "motif_tested": 6541,
+      "decoy_rows": 536,
+      "decoy_tested": 6502
+    },
+    "held_people": {
+      "motif_rows": 233,
+      "motif_tested": 6541,
+      "decoy_rows": 192,
+      "decoy_tested": 6502
+    },
+    "syntax": {
+      "motif_rows": 159,
+      "motif_tested": 6541,
+      "decoy_rows": 109,
+      "decoy_tested": 6502
+    },
+    "people_tighter_than_mammals_predict": {
+      "motif_rows": 201,
+      "motif_tested": 6541,
+      "decoy_rows": 187,
+      "decoy_tested": 6502
+    },
+    "value_slot": {
+      "motif_rows": 7,
+      "motif_tested": 6541,
+      "decoy_rows": 8,
+      "decoy_tested": 6502
+    },
+    "held_mammals_vs_flanks": {
+      "motif_rows": 631,
+      "motif_tested": 6541,
+      "decoy_rows": 249,
+      "decoy_tested": 6502
+    },
+    "held_people_vs_flanks": {
+      "motif_rows": 137,
+      "motif_tested": 6541,
+      "decoy_rows": 112,
+      "decoy_tested": 6502
+    },
+    "syntax_vs_flanks": {
+      "motif_rows": 57,
+      "motif_tested": 6541,
+      "decoy_rows": 23,
+      "decoy_tested": 6502
+    },
+    "value_slot_vs_flanks": {
+      "motif_rows": 3,
+      "motif_tested": 6541,
+      "decoy_rows": 7,
+      "decoy_tested": 6502
+    }
+  },
+  "motif_against_own_decoy_paired": {
+    "*": {
+      "people_pairs": 577,
+      "people_motif_less_variable": 315,
+      "people_sign_p": 0.030315484970583118,
+      "people_median_difference": -0.018,
+      "mammal_pairs": 743,
+      "mammal_motif_more_constrained": 549,
+      "mammal_sign_p": 0.0,
+      "mammal_median_difference": 0.145
+    },
+    "intron": {
+      "people_pairs": 510,
+      "people_motif_less_variable": 262,
+      "people_sign_p": 0.5648946983454022,
+      "people_median_difference": -0.008,
+      "mammal_pairs": 704,
+      "mammal_motif_more_constrained": 476,
+      "mammal_sign_p": 0.0,
+      "mammal_median_difference": 0.145
+    },
+    "enhancer_like": {
+      "people_pairs": 244,
+      "people_motif_less_variable": 146,
+      "people_sign_p": 0.002550766704816798,
+      "people_median_difference": -0.041,
+      "mammal_pairs": 598,
+      "mammal_motif_more_constrained": 474,
+      "mammal_sign_p": 0.0,
+      "mammal_median_difference": 0.275
+    },
+    "promoter_like": {
+      "people_pairs": 4,
+      "people_motif_less_variable": 2,
+      "people_sign_p": 1.0,
+      "people_median_difference": -0.009,
+      "mammal_pairs": 246,
+      "mammal_motif_more_constrained": 173,
+      "mammal_sign_p": 1.5501089301039883e-10,
+      "mammal_median_difference": 0.17
+    },
+    "ctcf_only": {
+      "people_pairs": 1,
+      "people_motif_less_variable": 0,
+      "people_sign_p": 1.0,
+      "people_median_difference": 0.795,
+      "mammal_pairs": 194,
+      "mammal_motif_more_constrained": 129,
+      "mammal_sign_p": 5.0556227040310375e-06,
+      "mammal_median_difference": 0.173
+    },
+    "unknown_regulatory": {
+      "people_pairs": 270,
+      "people_motif_less_variable": 142,
+      "people_sign_p": 0.4289077147061604,
+      "people_median_difference": -0.013,
+      "mammal_pairs": 584,
+      "mammal_motif_more_constrained": 396,
+      "mammal_sign_p": 0.0,
+      "mammal_median_difference": 0.208
+    },
+    "unknown_fossil": {
+      "people_pairs": 272,
+      "people_motif_less_variable": 164,
+      "people_sign_p": 0.0008217570096467064,
+      "people_median_difference": -0.05,
+      "mammal_pairs": 571,
+      "mammal_motif_more_constrained": 367,
+      "mammal_sign_p": 8.772760295983062e-12,
+      "mammal_median_difference": 0.158
+    },
+    "unknown_neutral": {
+      "people_pairs": 233,
+      "people_motif_less_variable": 135,
+      "people_sign_p": 0.018161092075719143,
+      "people_median_difference": -0.035,
+      "mammal_pairs": 544,
+      "mammal_motif_more_constrained": 366,
+      "mammal_sign_p": 4.440892098500626e-16,
+      "mammal_median_difference": 0.235
+    }
+  },
+  "people_given_mammals_motif_and_decoy": {
+    "jaspar95": {
+      "held_mammals_vs_flanks": 631,
+      "also_people": 57,
+      "share": 0.0903
+    },
+    "decoy95": {
+      "held_mammals_vs_flanks": 249,
+      "also_people": 23,
+      "share": 0.0924
+    }
+  },
+  "motif_aliases": {
+    "ALX3": [
+      "DLX3",
+      "DLX4",
+      "DLX6",
+      "GBX2",
+      "HESX1",
+      "ISX",
+      "LBX2",
+      "MIXL1",
+      "MSX3",
+      "NOBOX",
+      "PRRX1",
+      "RAX2",
+      "SHOX",
+      "SHOX2",
+      "UNCX"
+    ],
+    "ARNT": [
+      "MAX",
+      "MLXIP",
+      "MNT"
+    ],
+    "BATF": [
+      "BATF3",
+      "BATF::JUN",
+      "BNC2",
+      "FOSB"
+    ],
+    "CRX": [
+      "PITX3"
+    ],
+    "EBF2": [
+      "EBF3"
+    ],
+    "EHF": [
+      "ELF3"
+    ],
+    "EMX1": [
+      "EMX2"
+    ],
+    "ESX1": [
+      "LHX5"
+    ],
+    "EVX1": [
+      "LHX4"
+    ],
+    "FOXA3": [
+      "FOXD1",
+      "FOXK1",
+      "FOXK2",
+      "FOXM1",
+      "FOXO1",
+      "FOXO3",
+      "FOXP1",
+      "FOXP4"
+    ],
+    "FOXI1": [
+      "FOXO4"
+    ],
+    "GATA3": [
+      "GATA4"
+    ],
+    "GSC": [
+      "GSC2"
+    ],
+    "HOXA2": [
+      "HOXB4",
+      "HOXD4",
+      "NKX6-2",
+      "PDX1"
+    ],
+    "MSX1": [
+      "MSX2"
+    ],
+    "MYC": [
+      "MYCN"
+    ],
+    "NR1H2": [
+      "NR1H4"
+    ],
+    "NR2F2": [
+      "PPARA"
+    ],
+    "SOX2": [
+      "SOX3"
+    ],
+    "VSX1": [
+      "VSX2"
+    ],
+    "ZIC1::ZIC2": [
+      "ZIC3"
+    ]
+  },
+  "measures_agreement": {
+    "rows": 5444,
+    "rank_correlation_gnocchi_vs_panel_depletion": -0.067,
+    "rank_correlation_phylop_vs_panel_depletion": 0.103,
+    "rank_correlation_phylop_vs_gnocchi": -0.128
+  },
+  "motif_sites_against_own_element": {
+    "factors_tested": 690,
+    "mammals": {
+      "tests": 690,
+      "passing": 334,
+      "bh_threshold": 0.02395585858482459
+    },
+    "people": {
+      "tests": 555,
+      "passing": 0,
+      "bh_threshold": 0.0
+    },
+    "passing_both": 0,
+    "pooled": {
+      "constrained_fraction": 0.0682,
+      "rest_of_element_fraction": 0.0573,
+      "human_observed_over_expected_from_rest": 0.986,
+      "note": "sites of different factors overlap, so pooled numbers count shared bases more than once"
+    },
+    "both_axes": [],
+    "top_mammals": [
+      {
+        "factor": "NFIX",
+        "sites_in_ccres": 11342,
+        "constrained_fraction": 0.0842,
+        "rest_of_element_fraction": 0.0589,
+        "z_mammals": 19.45,
+        "z_human": -0.266
+      },
+      {
+        "factor": "FIGLA",
+        "sites_in_ccres": 7486,
+        "constrained_fraction": 0.0784,
+        "rest_of_element_fraction": 0.0474,
+        "z_mammals": 16.563,
+        "z_human": -1.524
+      },
+      {
+        "factor": "ZEB2",
+        "sites_in_ccres": 5104,
+        "constrained_fraction": 0.0799,
+        "rest_of_element_fraction": 0.0462,
+        "z_mammals": 14.31,
+        "z_human": -0.272
+      },
+      {
+        "factor": "NEUROD2",
+        "sites_in_ccres": 3717,
+        "constrained_fraction": 0.0901,
+        "rest_of_element_fraction": 0.0521,
+        "z_mammals": 13.707,
+        "z_human": -0.983
+      },
+      {
+        "factor": "TCF12",
+        "sites_in_ccres": 4065,
+        "constrained_fraction": 0.0854,
+        "rest_of_element_fraction": 0.0511,
+        "z_mammals": 13.203,
+        "z_human": -0.594
+      },
+      {
+        "factor": "NFATC1",
+        "sites_in_ccres": 4061,
+        "constrained_fraction": 0.0916,
+        "rest_of_element_fraction": 0.0598,
+        "z_mammals": 12.746,
+        "z_human": -0.228
+      },
+      {
+        "factor": "NFIA",
+        "sites_in_ccres": 2531,
+        "constrained_fraction": 0.1047,
+        "rest_of_element_fraction": 0.0651,
+        "z_mammals": 12.525,
+        "z_human": -0.536
+      },
+      {
+        "factor": "FOS",
+        "sites_in_ccres": 2332,
+        "constrained_fraction": 0.0936,
+        "rest_of_element_fraction": 0.0522,
+        "z_mammals": 12.468,
+        "z_human": 0.048
+      },
+      {
+        "factor": "NFATC3",
+        "sites_in_ccres": 15547,
+        "constrained_fraction": 0.0697,
+        "rest_of_element_fraction": 0.0565,
+        "z_mammals": 12.129,
+        "z_human": -1.649
+      },
+      {
+        "factor": "ZEB1",
+        "sites_in_ccres": 3796,
+        "constrained_fraction": 0.0747,
+        "rest_of_element_fraction": 0.0426,
+        "z_mammals": 12.126,
+        "z_human": 0.444
+      },
+      {
+        "factor": "ATF3",
+        "sites_in_ccres": 1478,
+        "constrained_fraction": 0.1112,
+        "rest_of_element_fraction": 0.0495,
+        "z_mammals": 11.926,
+        "z_human": -0.064
+      },
+      {
+        "factor": "JUN",
+        "sites_in_ccres": 2149,
+        "constrained_fraction": 0.0908,
+        "rest_of_element_fraction": 0.0511,
+        "z_mammals": 11.789,
+        "z_human": -0.106
+      },
+      {
+        "factor": "NR1H2",
+        "sites_in_ccres": 2648,
+        "constrained_fraction": 0.0842,
+        "rest_of_element_fraction": 0.0493,
+        "z_mammals": 11.673,
+        "z_human": 0.142
+      },
+      {
+        "factor": "BATF",
+        "sites_in_ccres": 1370,
+        "constrained_fraction": 0.1132,
+        "rest_of_element_fraction": 0.0494,
+        "z_mammals": 11.608,
+        "z_human": -0.497
+      },
+      {
+        "factor": "TWIST2",
+        "sites_in_ccres": 2883,
+        "constrained_fraction": 0.0901,
+        "rest_of_element_fraction": 0.0543,
+        "z_mammals": 11.406,
+        "z_human": -1.095
+      }
+    ]
+  },
+  "decoy_sites_against_own_element": {
+    "factors_tested": 679,
+    "mammals": {
+      "tests": 679,
+      "passing": 37,
+      "bh_threshold": 0.0027091391540284143
+    },
+    "people": {
+      "tests": 539,
+      "passing": 5,
+      "bh_threshold": 0.0004015412095080828
+    },
+    "passing_both": 2,
+    "pooled": {
+      "constrained_fraction": 0.0544,
+      "rest_of_element_fraction": 0.0566,
+      "human_observed_over_expected_from_rest": 0.999,
+      "note": "sites of different factors overlap, so pooled numbers count shared bases more than once"
+    }
+  },
+  "fossil_tier": {
+    "subfamilies_paired": 67,
+    "people": {
+      "fossil_copies_less_variable": 13,
+      "sign_test_p": 4.4658346801823307e-07,
+      "median_difference_oe": 0.138
+    },
+    "mammals": {
+      "fossil_copies_less_constrained": 37,
+      "sign_test_p": 0.4638176178968696,
+      "note": "circular: the tier is defined by low block-level phyloP"
+    },
+    "tiers": [
+      {
+        "context": "unknown_fossil",
+        "bases": 3829654,
+        "constrained_fraction": 0.0097,
+        "phylop_mean": -0.054,
+        "human_oe_free": 1.145,
+        "human_informative_fraction": 0.882
+      },
+      {
+        "context": "unknown_neutral",
+        "bases": 2862783,
+        "constrained_fraction": 0.0128,
+        "phylop_mean": -0.087,
+        "human_oe_free": 1.029,
+        "human_informative_fraction": 0.838
+      },
+      {
+        "context": "unknown_regulatory",
+        "bases": 3385785,
+        "constrained_fraction": 0.0108,
+        "phylop_mean": -0.103,
+        "human_oe_free": 1.072,
+        "human_informative_fraction": 0.932
+      },
+      {
+        "context": "unknown_constrained",
+        "bases": 282115,
+        "constrained_fraction": 0.0596,
+        "phylop_mean": 0.197,
+        "human_oe_free": 0.945,
+        "human_informative_fraction": 0.577
+      },
+      {
+        "context": "intron",
+        "bases": 20698271,
+        "constrained_fraction": 0.0154,
+        "phylop_mean": -0.066,
+        "human_oe_free": 1.019,
+        "human_informative_fraction": 0.913
+      },
+      {
+        "context": "cds",
+        "bases": 375240,
+        "constrained_fraction": 0.4651,
+        "phylop_mean": 2.541,
+        "human_oe_free": 0.491,
+        "human_informative_fraction": 0.993
+      }
+    ],
+    "pairs": [
+      {
+        "subfamily": "Alu:AluY",
+        "fossil_occurrences": 157,
+        "intron_occurrences": 900,
+        "fossil_human_oe": 1.421,
+        "intron_human_oe": 1.263,
+        "fossil_constrained": 0.0,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.176,
+        "intron_phylop_mean": -0.149
+      },
+      {
+        "subfamily": "L2:L2a",
+        "fossil_occurrences": 143,
+        "intron_occurrences": 1002,
+        "fossil_human_oe": 0.901,
+        "intron_human_oe": 0.854,
+        "fossil_constrained": 0.0059,
+        "intron_constrained": 0.0083,
+        "fossil_phylop_mean": -0.16,
+        "intron_phylop_mean": -0.179
+      },
+      {
+        "subfamily": "MIR:MIR",
+        "fossil_occurrences": 113,
+        "intron_occurrences": 938,
+        "fossil_human_oe": 0.939,
+        "intron_human_oe": 0.798,
+        "fossil_constrained": 0.0071,
+        "intron_constrained": 0.0109,
+        "fossil_phylop_mean": -0.162,
+        "intron_phylop_mean": -0.172
+      },
+      {
+        "subfamily": "Alu:AluSx1",
+        "fossil_occurrences": 106,
+        "intron_occurrences": 891,
+        "fossil_human_oe": 1.127,
+        "intron_human_oe": 1.098,
+        "fossil_constrained": 0.0001,
+        "intron_constrained": 0.0002,
+        "fossil_phylop_mean": -0.118,
+        "intron_phylop_mean": -0.09
+      },
+      {
+        "subfamily": "Alu:AluJb",
+        "fossil_occurrences": 104,
+        "intron_occurrences": 868,
+        "fossil_human_oe": 0.905,
+        "intron_human_oe": 0.999,
+        "fossil_constrained": 0.0001,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.023,
+        "intron_phylop_mean": -0.016
+      },
+      {
+        "subfamily": "Alu:AluSx",
+        "fossil_occurrences": 98,
+        "intron_occurrences": 913,
+        "fossil_human_oe": 1.083,
+        "intron_human_oe": 0.999,
+        "fossil_constrained": 0.0,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.098,
+        "intron_phylop_mean": -0.091
+      },
+      {
+        "subfamily": "MIR:MIRb",
+        "fossil_occurrences": 97,
+        "intron_occurrences": 985,
+        "fossil_human_oe": 0.84,
+        "intron_human_oe": 0.82,
+        "fossil_constrained": 0.0129,
+        "intron_constrained": 0.0124,
+        "fossil_phylop_mean": -0.076,
+        "intron_phylop_mean": -0.152
+      },
+      {
+        "subfamily": "L1:L1M5",
+        "fossil_occurrences": 96,
+        "intron_occurrences": 507,
+        "fossil_human_oe": 1.101,
+        "intron_human_oe": 0.942,
+        "fossil_constrained": 0.005,
+        "intron_constrained": 0.0072,
+        "fossil_phylop_mean": -0.039,
+        "intron_phylop_mean": -0.042
+      },
+      {
+        "subfamily": "L2:L2",
+        "fossil_occurrences": 92,
+        "intron_occurrences": 358,
+        "fossil_human_oe": 0.946,
+        "intron_human_oe": 0.964,
+        "fossil_constrained": 0.0045,
+        "intron_constrained": 0.0083,
+        "fossil_phylop_mean": -0.113,
+        "intron_phylop_mean": -0.114
+      },
+      {
+        "subfamily": "ERVL-MaLR:MSTA",
+        "fossil_occurrences": 67,
+        "intron_occurrences": 247,
+        "fossil_human_oe": 1.493,
+        "intron_human_oe": 1.747,
+        "fossil_constrained": 0.0004,
+        "intron_constrained": 0.0003,
+        "fossil_phylop_mean": 0.013,
+        "intron_phylop_mean": 0.045
+      },
+      {
+        "subfamily": "ERVL-MaLR:THE1B",
+        "fossil_occurrences": 66,
+        "intron_occurrences": 263,
+        "fossil_human_oe": 1.303,
+        "intron_human_oe": 1.05,
+        "fossil_constrained": 0.0,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": 0.002,
+        "intron_phylop_mean": 0.025
+      },
+      {
+        "subfamily": "Alu:AluSz",
+        "fossil_occurrences": 64,
+        "intron_occurrences": 691,
+        "fossil_human_oe": 1.302,
+        "intron_human_oe": 0.975,
+        "fossil_constrained": 0.0,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.081,
+        "intron_phylop_mean": -0.062
+      },
+      {
+        "subfamily": "Alu:AluJr",
+        "fossil_occurrences": 62,
+        "intron_occurrences": 534,
+        "fossil_human_oe": 1.202,
+        "intron_human_oe": 0.98,
+        "fossil_constrained": 0.0003,
+        "intron_constrained": 0.0,
+        "fossil_phylop_mean": -0.041,
+        "intron_phylop_mean": 0.003
+      },
+      {
+        "subfamily": "L1:L1MC3",
+        "fossil_occurrences": 59,
+        "intron_occurrences": 93,
+        "fossil_human_oe": 0.978,
+        "intron_human_oe": 0.909,
+        "fossil_constrained": 0.0013,
+        "intron_constrained": 0.0026,
+        "fossil_phylop_mean": -0.013,
+        "intron_phylop_mean": -0.037
+      },
+      {
+        "subfamily": "Alu:AluSq2",
+        "fossil_occurrences": 56,
+        "intron_occurrences": 441,
+        "fossil_human_oe": 1.072,
+        "intron_human_oe": 0.952,
+        "fossil_constrained": 0.0001,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.107,
+        "intron_phylop_mean": -0.088
+      },
+      {
+        "subfamily": "L1:L1M4",
+        "fossil_occurrences": 54,
+        "intron_occurrences": 155,
+        "fossil_human_oe": 0.806,
+        "intron_human_oe": 0.958,
+        "fossil_constrained": 0.0033,
+        "intron_constrained": 0.0029,
+        "fossil_phylop_mean": -0.015,
+        "intron_phylop_mean": -0.019
+      },
+      {
+        "subfamily": "Alu:AluSc",
+        "fossil_occurrences": 54,
+        "intron_occurrences": 308,
+        "fossil_human_oe": 1.171,
+        "intron_human_oe": 1.037,
+        "fossil_constrained": 0.0001,
+        "intron_constrained": 0.0001,
+        "fossil_phylop_mean": -0.146,
+        "intron_phylop_mean": -0.12
+      },
+      {
+        "subfamily": "L2:L2c",
+        "fossil_occurrences": 53,
+        "intron_occurrences": 628,
+        "fossil_human_oe": 0.972,
+        "intron_human_oe": 0.816,
+        "fossil_constrained": 0.0134,
+        "intron_constrained": 0.0133,
+        "fossil_phylop_mean": -0.041,
+        "intron_phylop_mean": -0.09
+      },
+      {
+        "subfamily": "L1:HAL1",
+        "fossil_occurrences": 53,
+        "intron_occurrences": 147,
+        "fossil_human_oe": 0.954,
+        "intron_human_oe": 0.886,
+        "fossil_constrained": 0.0055,
+        "intron_constrained": 0.0081,
+        "fossil_phylop_mean": -0.132,
+        "intron_phylop_mean": -0.055
+      },
+      {
+        "subfamily": "L2:L2b",
+        "fossil_occurrences": 52,
+        "intron_occurrences": 381,
+        "fossil_human_oe": 0.802,
+        "intron_human_oe": 0.792,
+        "fossil_constrained": 0.0066,
+        "intron_constrained": 0.01,
+        "fossil_phylop_mean": -0.177,
+        "intron_phylop_mean": -0.166
+      }
+    ],
+    "matched_on_people": {
+      "replication_timing_matched": true,
+      "intron": {
+        "subfamilies": 62,
+        "fossil_copies_more_variable": 38,
+        "sign_test_p": 0.09795444051950741,
+        "pooled_ratio": 0.994,
+        "z": -0.22,
+        "largest": [
+          {
+            "subfamily": "Alu:AluY",
+            "fossil_copies": 139,
+            "observed": 493,
+            "expected": 459.7,
+            "ratio": 1.072
+          },
+          {
+            "subfamily": "ERVL-MaLR:THE1D-int",
+            "fossil_copies": 25,
+            "observed": 134,
+            "expected": 327.0,
+            "ratio": 0.41
+          },
+          {
+            "subfamily": "ERVL-MaLR:MSTA-int",
+            "fossil_copies": 20,
+            "observed": 118,
+            "expected": 323.4,
+            "ratio": 0.365
+          },
+          {
+            "subfamily": "ERVL-MaLR:MSTA",
+            "fossil_copies": 64,
+            "observed": 143,
+            "expected": 271.0,
+            "ratio": 0.528
+          },
+          {
+            "subfamily": "L1:L1PA4",
+            "fossil_copies": 22,
+            "observed": 288,
+            "expected": 221.5,
+            "ratio": 1.3
+          },
+          {
+            "subfamily": "L1:L1PA16",
+            "fossil_copies": 43,
+            "observed": 262,
+            "expected": 197.8,
+            "ratio": 1.325
+          },
+          {
+            "subfamily": "L1:L1MC3",
+            "fossil_copies": 58,
+            "observed": 187,
+            "expected": 189.4,
+            "ratio": 0.987
+          },
+          {
+            "subfamily": "Alu:AluSx1",
+            "fossil_copies": 88,
+            "observed": 179,
+            "expected": 189.1,
+            "ratio": 0.946
+          },
+          {
+            "subfamily": "L1:L1M1",
+            "fossil_copies": 37,
+            "observed": 186,
+            "expected": 179.5,
+            "ratio": 1.036
+          },
+          {
+            "subfamily": "L2:L2a",
+            "fossil_copies": 138,
+            "observed": 152,
+            "expected": 159.3,
+            "ratio": 0.954
+          }
+        ]
+      },
+      "other": {
+        "subfamilies": 0,
+        "fossil_copies_more_variable": 0,
+        "sign_test_p": null,
+        "pooled_ratio": null,
+        "z": null,
+        "largest": []
+      },
+      "unknown_neutral": {
+        "subfamilies": 38,
+        "fossil_copies_more_variable": 26,
+        "sign_test_p": 0.03355243967962451,
+        "pooled_ratio": 1.111,
+        "z": 3.98,
+        "largest": [
+          {
+            "subfamily": "Alu:AluY",
+            "fossil_copies": 139,
+            "observed": 493,
+            "expected": 410.1,
+            "ratio": 1.202
+          },
+          {
+            "subfamily": "Alu:AluSx1",
+            "fossil_copies": 88,
+            "observed": 179,
+            "expected": 171.6,
+            "ratio": 1.043
+          },
+          {
+            "subfamily": "Alu:AluSc",
+            "fossil_copies": 50,
+            "observed": 125,
+            "expected": 167.4,
+            "ratio": 0.747
+          },
+          {
+            "subfamily": "L2:L2a",
+            "fossil_copies": 138,
+            "observed": 152,
+            "expected": 166.8,
+            "ratio": 0.911
+          },
+          {
+            "subfamily": "ERVL-MaLR:THE1B",
+            "fossil_copies": 61,
+            "observed": 143,
+            "expected": 115.0,
+            "ratio": 1.243
+          },
+          {
+            "subfamily": "L1:L1MB8",
+            "fossil_copies": 29,
+            "observed": 79,
+            "expected": 103.9,
+            "ratio": 0.76
+          },
+          {
+            "subfamily": "Alu:AluSx",
+            "fossil_copies": 65,
+            "observed": 120,
+            "expected": 100.6,
+            "ratio": 1.193
+          },
+          {
+            "subfamily": "Alu:AluSz",
+            "fossil_copies": 57,
+            "observed": 127,
+            "expected": 97.6,
+            "ratio": 1.301
+          },
+          {
+            "subfamily": "ERVL-MaLR:MSTA",
+            "fossil_copies": 52,
+            "observed": 123,
+            "expected": 93.9,
+            "ratio": 1.309
+          },
+          {
+            "subfamily": "L2:L2",
+            "fossil_copies": 60,
+            "observed": 75,
+            "expected": 93.3,
+            "ratio": 0.804
+          }
+        ]
+      },
+      "unknown_regulatory": {
+        "subfamilies": 39,
+        "fossil_copies_more_variable": 17,
+        "sign_test_p": 0.5223973804968409,
+        "pooled_ratio": 0.946,
+        "z": -2.47,
+        "largest": [
+          {
+            "subfamily": "Alu:AluY",
+            "fossil_copies": 139,
+            "observed": 493,
+            "expected": 485.6,
+            "ratio": 1.015
+          },
+          {
+            "subfamily": "Alu:AluSx1",
+            "fossil_copies": 88,
+            "observed": 179,
+            "expected": 240.0,
+            "ratio": 0.746
+          },
+          {
+            "subfamily": "L1:L1M1",
+            "fossil_copies": 37,
+            "observed": 186,
+            "expected": 227.2,
+            "ratio": 0.819
+          },
+          {
+            "subfamily": "ERVL-MaLR:MSTA",
+            "fossil_copies": 64,
+            "observed": 143,
+            "expected": 192.7,
+            "ratio": 0.742
+          },
+          {
+            "subfamily": "L2:L2a",
+            "fossil_copies": 138,
+            "observed": 152,
+            "expected": 178.0,
+            "ratio": 0.854
+          },
+          {
+            "subfamily": "Alu:AluJb",
+            "fossil_copies": 89,
+            "observed": 108,
+            "expected": 175.5,
+            "ratio": 0.615
+          },
+          {
+            "subfamily": "ERVL-MaLR:THE1D",
+            "fossil_copies": 48,
+            "observed": 110,
+            "expected": 141.4,
+            "ratio": 0.778
+          },
+          {
+            "subfamily": "Alu:AluSz",
+            "fossil_copies": 57,
+            "observed": 127,
+            "expected": 130.0,
+            "ratio": 0.977
+          },
+          {
+            "subfamily": "Alu:AluSx",
+            "fossil_copies": 81,
+            "observed": 141,
+            "expected": 129.9,
+            "ratio": 1.086
+          },
+          {
+            "subfamily": "L1:L1M5",
+            "fossil_copies": 84,
+            "observed": 129,
+            "expected": 119.4,
+            "ratio": 1.081
+          }
+        ]
+      }
+    }
+  },
+  "syntax_candidates": [],
+  "syntax_rows": [
+    {
+      "unit": "jaspar95:ZNF536",
+      "context": "intron",
+      "occurrences": 118340,
+      "constrained_fraction": 0.0254,
+      "constrained_expected": 0.0163,
+      "z_mammals": 32.026,
+      "human_variants": 2076,
+      "human_expected_trinucleotide": 2296.63,
+      "human_oe": 0.904,
+      "human_oe_given_phylop": 0.912,
+      "z_human": -4.56,
+      "z_human_given_phylop": -4.161,
+      "gnocchi_mean": -0.211
+    },
+    {
+      "unit": "jaspar95:BARX1",
+      "context": "intron",
+      "occurrences": 100847,
+      "constrained_fraction": 0.0246,
+      "constrained_expected": 0.0162,
+      "z_mammals": 25.335,
+      "human_variants": 2185,
+      "human_expected_trinucleotide": 2614.37,
+      "human_oe": 0.836,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.397,
+      "z_human_given_phylop": -7.37,
+      "gnocchi_mean": -0.26
+    },
+    {
+      "unit": "jaspar95:DRGX",
+      "context": "intron",
+      "occurrences": 90745,
+      "constrained_fraction": 0.0248,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.968,
+      "human_variants": 1885,
+      "human_expected_trinucleotide": 2287.39,
+      "human_oe": 0.824,
+      "human_oe_given_phylop": 0.846,
+      "z_human": -8.414,
+      "z_human_given_phylop": -7.264,
+      "gnocchi_mean": -0.275
+    },
+    {
+      "unit": "jaspar95:BSX",
+      "context": "intron",
+      "occurrences": 110263,
+      "constrained_fraction": 0.0238,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.569,
+      "human_variants": 2408,
+      "human_expected_trinucleotide": 2875.48,
+      "human_oe": 0.837,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.718,
+      "z_human_given_phylop": -7.737,
+      "gnocchi_mean": -0.245
+    },
+    {
+      "unit": "jaspar95:HOXA7",
+      "context": "intron",
+      "occurrences": 88013,
+      "constrained_fraction": 0.0249,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.247,
+      "human_variants": 1862,
+      "human_expected_trinucleotide": 2197.25,
+      "human_oe": 0.847,
+      "human_oe_given_phylop": 0.866,
+      "z_human": -7.152,
+      "z_human_given_phylop": -6.193,
+      "gnocchi_mean": -0.268
+    },
+    {
+      "unit": "jaspar95:TLX2",
+      "context": "intron",
+      "occurrences": 77458,
+      "constrained_fraction": 0.0252,
+      "constrained_expected": 0.0163,
+      "z_mammals": 23.809,
+      "human_variants": 1557,
+      "human_expected_trinucleotide": 1864.81,
+      "human_oe": 0.835,
+      "human_oe_given_phylop": 0.858,
+      "z_human": -7.128,
+      "z_human_given_phylop": -6.033,
+      "gnocchi_mean": -0.287
+    },
+    {
+      "unit": "jaspar95:NFATC1",
+      "context": "intron",
+      "occurrences": 24326,
+      "constrained_fraction": 0.0319,
+      "constrained_expected": 0.0159,
+      "z_mammals": 23.283,
+      "human_variants": 471,
+      "human_expected_trinucleotide": 554.22,
+      "human_oe": 0.85,
+      "human_oe_given_phylop": 0.873,
+      "z_human": -3.535,
+      "z_human_given_phylop": -2.94,
+      "gnocchi_mean": -0.016
+    },
+    {
+      "unit": "jaspar95:ARID3A",
+      "context": "intron",
+      "occurrences": 61353,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0162,
+      "z_mammals": 23.15,
+      "human_variants": 1258,
+      "human_expected_trinucleotide": 1477.82,
+      "human_oe": 0.851,
+      "human_oe_given_phylop": 0.874,
+      "z_human": -5.718,
+      "z_human_given_phylop": -4.785,
+      "gnocchi_mean": -0.299
+    },
+    {
+      "unit": "jaspar95:RAX",
+      "context": "intron",
+      "occurrences": 63874,
+      "constrained_fraction": 0.0253,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.834,
+      "human_variants": 1316,
+      "human_expected_trinucleotide": 1520.12,
+      "human_oe": 0.866,
+      "human_oe_given_phylop": 0.89,
+      "z_human": -5.235,
+      "z_human_given_phylop": -4.247,
+      "gnocchi_mean": -0.304
+    },
+    {
+      "unit": "jaspar95:DLX1",
+      "context": "intron",
+      "occurrences": 102683,
+      "constrained_fraction": 0.0231,
+      "constrained_expected": 0.0161,
+      "z_mammals": 21.705,
+      "human_variants": 2444,
+      "human_expected_trinucleotide": 2736.82,
+      "human_oe": 0.893,
+      "human_oe_given_phylop": 0.898,
+      "z_human": -5.597,
+      "z_human_given_phylop": -5.327,
+      "gnocchi_mean": -0.253
+    },
+    {
+      "unit": "jaspar95:NFATC3",
+      "context": "intron",
+      "occurrences": 82818,
+      "constrained_fraction": 0.0223,
+      "constrained_expected": 0.0156,
+      "z_mammals": 21.633,
+      "human_variants": 2120,
+      "human_expected_trinucleotide": 2326.16,
+      "human_oe": 0.911,
+      "human_oe_given_phylop": 0.922,
+      "z_human": -4.275,
+      "z_human_given_phylop": -3.721,
+      "gnocchi_mean": 0.073
+    },
+    {
+      "unit": "jaspar95:HOXB3",
+      "context": "intron",
+      "occurrences": 102138,
+      "constrained_fraction": 0.0231,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.602,
+      "human_variants": 2271,
+      "human_expected_trinucleotide": 2642.95,
+      "human_oe": 0.859,
+      "human_oe_given_phylop": 0.875,
+      "z_human": -7.235,
+      "z_human_given_phylop": -6.342,
+      "gnocchi_mean": -0.269
+    },
+    {
+      "unit": "jaspar95:EVX1",
+      "context": "intron",
+      "occurrences": 51111,
+      "constrained_fraction": 0.0273,
+      "constrained_expected": 0.0164,
+      "z_mammals": 21.582,
+      "human_variants": 1041,
+      "human_expected_trinucleotide": 1306.61,
+      "human_oe": 0.797,
+      "human_oe_given_phylop": 0.813,
+      "z_human": -7.348,
+      "z_human_given_phylop": -6.678,
+      "gnocchi_mean": -0.276
+    },
+    {
+      "unit": "jaspar95:EVX2",
+      "context": "intron",
+      "occurrences": 60900,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0163,
+      "z_mammals": 21.46,
+      "human_variants": 1304,
+      "human_expected_trinucleotide": 1593.5,
+      "human_oe": 0.818,
+      "human_oe_given_phylop": 0.833,
+      "z_human": -7.252,
+      "z_human_given_phylop": -6.625,
+      "gnocchi_mean": -0.258
+    },
+    {
+      "unit": "jaspar95:MNX1",
+      "context": "intron",
+      "occurrences": 90706,
+      "constrained_fraction": 0.0229,
+      "constrained_expected": 0.016,
+      "z_mammals": 20.106,
+      "human_variants": 2208,
+      "human_expected_trinucleotide": 2557.88,
+      "human_oe": 0.863,
+      "human_oe_given_phylop": 0.873,
+      "z_human": -6.918,
+      "z_human_given_phylop": -6.36,
+      "gnocchi_mean": -0.192
+    },
+    {
+      "unit": "jaspar95:EMX1",
+      "context": "intron",
+      "occurrences": 38895,
+      "constrained_fraction": 0.0285,
+      "constrained_expected": 0.0164,
+      "z_mammals": 20.073,
+      "human_variants": 811,
+      "human_expected_trinucleotide": 992.16,
+      "human_oe": 0.817,
+      "human_oe_given_phylop": 0.834,
+      "z_human": -5.751,
+      "z_human_given_phylop": -5.17,
+      "gnocchi_mean": -0.29
+    },
+    {
+      "unit": "jaspar95:STAT3",
+      "context": "intron",
+      "occurrences": 20749,
+      "constrained_fraction": 0.0295,
+      "constrained_expected": 0.0163,
+      "z_mammals": 19.992,
+      "human_variants": 640,
+      "human_expected_trinucleotide": 762.39,
+      "human_oe": 0.839,
+      "human_oe_given_phylop": 0.862,
+      "z_human": -4.433,
+      "z_human_given_phylop": -3.747,
+      "gnocchi_mean": 0.017
+    },
+    {
+      "unit": "jaspar95:HOXA2",
+      "context": "intron",
+      "occurrences": 48744,
+      "constrained_fraction": 0.0267,
+      "constrained_expected": 0.0163,
+      "z_mammals": 19.929,
+      "human_variants": 1074,
+      "human_expected_trinucleotide": 1279.35,
+      "human_oe": 0.839,
+      "human_oe_given_phylop": 0.853,
+      "z_human": -5.741,
+      "z_human_given_phylop": -5.209,
+      "gnocchi_mean": -0.264
+    },
+    {
+      "unit": "jaspar95:HOXA1",
+      "context": "intron",
+      "occurrences": 93462,
+      "constrained_fraction": 0.0224,
+      "constrained_expected": 0.016,
+      "z_mammals": 19.39,
+      "human_variants": 2209,
+      "human_expected_trinucleotide": 2484.88,
+      "human_oe": 0.889,
+      "human_oe_given_phylop": 0.898,
+      "z_human": -5.534,
+      "z_human_given_phylop": -5.066,
+      "gnocchi_mean": -0.2
+    },
+    {
+      "unit": "jaspar95:LHX9",
+      "context": "intron",
+      "occurrences": 26078,
+      "constrained_fraction": 0.0304,
+      "constrained_expected": 0.0163,
+      "z_mammals": 18.913,
+      "human_variants": 732,
+      "human_expected_trinucleotide": 849.1,
+      "human_oe": 0.862,
+      "human_oe_given_phylop": 0.88,
+      "z_human": -4.018,
+      "z_human_given_phylop": -3.475,
+      "gnocchi_mean": -0.307
+    },
+    {
+      "unit": "jaspar95:NKX6-1",
+      "context": "intron",
+      "occurrences": 37341,
+      "constrained_fraction": 0.027,
+      "constrained_expected": 0.0164,
+      "z_mammals": 18.811,
+      "human_variants": 950,
+      "human_expected_trinucleotide": 1198.84,
+      "human_oe": 0.792,
+      "human_oe_given_phylop": 0.812,
+      "z_human": -7.187,
+      "z_human_given_phylop": -6.432,
+      "gnocchi_mean": -0.311
+    },
+    {
+      "unit": "jaspar95:HOXB5",
+      "context": "intron",
+      "occurrences": 46352,
+      "constrained_fraction": 0.026,
+      "constrained_expected": 0.0163,
+      "z_mammals": 18.638,
+      "human_variants": 1008,
+      "human_expected_trinucleotide": 1195.5,
+      "human_oe": 0.843,
+      "human_oe_given_phylop": 0.858,
+      "z_human": -5.423,
+      "z_human_given_phylop": -4.88,
+      "gnocchi_mean": -0.255
+    },
+    {
+      "unit": "jaspar95:GSX1",
+      "context": "intron",
+      "occurrences": 70231,
+      "constrained_fraction": 0.0237,
+      "constrained_expected": 0.0163,
+      "z_mammals": 18.572,
+      "human_variants": 1596,
+      "human_expected_trinucleotide": 1911.52,
+      "human_oe": 0.835,
+      "human_oe_given_phylop": 0.85,
+      "z_human": -7.217,
+      "z_human_given_phylop": -6.49,
+      "gnocchi_mean": -0.281
+    },
+    {
+      "unit": "jaspar95:HOXB8",
+      "context": "intron",
+      "occurrences": 58945,
+      "constrained_fraction": 0.0241,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.5,
+      "human_variants": 1706,
+      "human_expected_trinucleotide": 1959.66,
+      "human_oe": 0.871,
+      "human_oe_given_phylop": 0.881,
+      "z_human": -5.73,
+      "z_human_given_phylop": -5.254,
+      "gnocchi_mean": -0.224
+    },
+    {
+      "unit": "jaspar95:HOXD8",
+      "context": "intron",
+      "occurrences": 55954,
+      "constrained_fraction": 0.0244,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.449,
+      "human_variants": 1612,
+      "human_expected_trinucleotide": 1858.37,
+      "human_oe": 0.867,
+      "human_oe_given_phylop": 0.878,
+      "z_human": -5.715,
+      "z_human_given_phylop": -5.238,
+      "gnocchi_mean": -0.22
+    },
+    {
+      "unit": "jaspar95:HOXB1",
+      "context": "intron",
+      "occurrences": 41614,
+      "constrained_fraction": 0.0259,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.404,
+      "human_variants": 1225,
+      "human_expected_trinucleotide": 1398.04,
+      "human_oe": 0.876,
+      "human_oe_given_phylop": 0.887,
+      "z_human": -4.628,
+      "z_human_given_phylop": -4.186,
+      "gnocchi_mean": -0.208
+    },
+    {
+      "unit": "jaspar95:NOTO",
+      "context": "intron",
+      "occurrences": 56035,
+      "constrained_fraction": 0.0242,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.333,
+      "human_variants": 1464,
+      "human_expected_trinucleotide": 1685.35,
+      "human_oe": 0.869,
+      "human_oe_given_phylop": 0.889,
+      "z_human": -5.392,
+      "z_human_given_phylop": -4.502,
+      "gnocchi_mean": -0.262
+    },
+    {
+      "unit": "jaspar95:EN1",
+      "context": "intron",
+      "occurrences": 47229,
+      "constrained_fraction": 0.0254,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.2,
+      "human_variants": 1065,
+      "human_expected_trinucleotide": 1188.66,
+      "human_oe": 0.896,
+      "human_oe_given_phylop": 0.909,
+      "z_human": -3.587,
+      "z_human_given_phylop": -3.114,
+      "gnocchi_mean": -0.272
+    },
+    {
+      "unit": "jaspar95:MEOX1",
+      "context": "intron",
+      "occurrences": 19321,
+      "constrained_fraction": 0.0327,
+      "constrained_expected": 0.0163,
+      "z_mammals": 18.004,
+      "human_variants": 506,
+      "human_expected_trinucleotide": 613.57,
+      "human_oe": 0.825,
+      "human_oe_given_phylop": 0.841,
+      "z_human": -4.343,
+      "z_human_given_phylop": -3.901,
+      "gnocchi_mean": -0.198
+    },
+    {
+      "unit": "jaspar95:HOXB6",
+      "context": "intron",
+      "occurrences": 80625,
+      "constrained_fraction": 0.0223,
+      "constrained_expected": 0.0161,
+      "z_mammals": 17.624,
+      "human_variants": 2452,
+      "human_expected_trinucleotide": 2761.39,
+      "human_oe": 0.888,
+      "human_oe_given_phylop": 0.896,
+      "z_human": -5.888,
+      "z_human_given_phylop": -5.452,
+      "gnocchi_mean": -0.177
+    }
+  ],
+  "value_slot_rows": [
+    {
+      "unit": "jaspar95:TBP",
+      "context": "unknown_fossil",
+      "occurrences": 10114,
+      "constrained_fraction": 0.0122,
+      "constrained_expected": 0.0103,
+      "z_mammals": 2.914,
+      "human_variants": 495,
+      "human_expected_trinucleotide": 399.38,
+      "human_oe": 1.239,
+      "human_oe_given_phylop": 1.259,
+      "z_human": 3.082,
+      "z_human_given_phylop": 3.288,
+      "gnocchi_mean": -1.952
+    },
+    {
+      "unit": "jaspar95:VEZF1",
+      "context": "utr_or_exon",
+      "occurrences": 987,
+      "constrained_fraction": 0.0666,
+      "constrained_expected": 0.0486,
+      "z_mammals": 3.051,
+      "human_variants": 72,
+      "human_expected_trinucleotide": 37.13,
+      "human_oe": 1.939,
+      "human_oe_given_phylop": 1.787,
+      "z_human": 3.783,
+      "z_human_given_phylop": 3.451,
+      "gnocchi_mean": 2.015
+    },
+    {
+      "unit": "jaspar95:FOXN1",
+      "context": "unknown_regulatory",
+      "occurrences": 6695,
+      "constrained_fraction": 0.0145,
+      "constrained_expected": 0.0107,
+      "z_mammals": 4.59,
+      "human_variants": 302,
+      "human_expected_trinucleotide": 267.62,
+      "human_oe": 1.128,
+      "human_oe_given_phylop": 1.293,
+      "z_human": 1.839,
+      "z_human_given_phylop": 3.643,
+      "gnocchi_mean": 0.311
+    },
+    {
+      "unit": "jaspar95:SOX4",
+      "context": "intron",
+      "occurrences": 30286,
+      "constrained_fraction": 0.0164,
+      "constrained_expected": 0.0153,
+      "z_mammals": 2.616,
+      "human_variants": 1232,
+      "human_expected_trinucleotide": 1066.03,
+      "human_oe": 1.156,
+      "human_oe_given_phylop": 1.163,
+      "z_human": 4.059,
+      "z_human_given_phylop": 4.221,
+      "gnocchi_mean": -0.075
+    },
+    {
+      "unit": "jaspar95:IKZF2",
+      "context": "intron",
+      "occurrences": 20354,
+      "constrained_fraction": 0.0185,
+      "constrained_expected": 0.0155,
+      "z_mammals": 5.404,
+      "human_variants": 717,
+      "human_expected_trinucleotide": 512.79,
+      "human_oe": 1.398,
+      "human_oe_given_phylop": 1.393,
+      "z_human": 4.579,
+      "z_human_given_phylop": 4.543,
+      "gnocchi_mean": 0.25
+    },
+    {
+      "unit": "jaspar95:MEIS1",
+      "context": "unknown_regulatory",
+      "occurrences": 20479,
+      "constrained_fraction": 0.0133,
+      "constrained_expected": 0.0108,
+      "z_mammals": 4.66,
+      "human_variants": 749,
+      "human_expected_trinucleotide": 691.82,
+      "human_oe": 1.083,
+      "human_oe_given_phylop": 1.234,
+      "z_human": 2.014,
+      "z_human_given_phylop": 4.994,
+      "gnocchi_mean": 0.032
+    },
+    {
+      "unit": "jaspar95:PRDM1",
+      "context": "intron",
+      "occurrences": 6805,
+      "constrained_fraction": 0.0193,
+      "constrained_expected": 0.0158,
+      "z_mammals": 4.022,
+      "human_variants": 343,
+      "human_expected_trinucleotide": 188.91,
+      "human_oe": 1.816,
+      "human_oe_given_phylop": 1.777,
+      "z_human": 5.233,
+      "z_human_given_phylop": 5.098,
+      "gnocchi_mean": 0.09
+    }
+  ],
+  "people_tighter_rows": [
+    {
+      "unit": "jaspar95:ZNF536",
+      "context": "intron",
+      "occurrences": 118340,
+      "constrained_fraction": 0.0254,
+      "constrained_expected": 0.0163,
+      "z_mammals": 32.026,
+      "human_variants": 2076,
+      "human_expected_trinucleotide": 2296.63,
+      "human_oe": 0.904,
+      "human_oe_given_phylop": 0.912,
+      "z_human": -4.56,
+      "z_human_given_phylop": -4.161,
+      "gnocchi_mean": -0.211
+    },
+    {
+      "unit": "jaspar95:BARX1",
+      "context": "intron",
+      "occurrences": 100847,
+      "constrained_fraction": 0.0246,
+      "constrained_expected": 0.0162,
+      "z_mammals": 25.335,
+      "human_variants": 2185,
+      "human_expected_trinucleotide": 2614.37,
+      "human_oe": 0.836,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.397,
+      "z_human_given_phylop": -7.37,
+      "gnocchi_mean": -0.26
+    },
+    {
+      "unit": "jaspar95:DRGX",
+      "context": "intron",
+      "occurrences": 90745,
+      "constrained_fraction": 0.0248,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.968,
+      "human_variants": 1885,
+      "human_expected_trinucleotide": 2287.39,
+      "human_oe": 0.824,
+      "human_oe_given_phylop": 0.846,
+      "z_human": -8.414,
+      "z_human_given_phylop": -7.264,
+      "gnocchi_mean": -0.275
+    },
+    {
+      "unit": "jaspar95:BSX",
+      "context": "intron",
+      "occurrences": 110263,
+      "constrained_fraction": 0.0238,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.569,
+      "human_variants": 2408,
+      "human_expected_trinucleotide": 2875.48,
+      "human_oe": 0.837,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.718,
+      "z_human_given_phylop": -7.737,
+      "gnocchi_mean": -0.245
+    },
+    {
+      "unit": "jaspar95:HOXA7",
+      "context": "intron",
+      "occurrences": 88013,
+      "constrained_fraction": 0.0249,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.247,
+      "human_variants": 1862,
+      "human_expected_trinucleotide": 2197.25,
+      "human_oe": 0.847,
+      "human_oe_given_phylop": 0.866,
+      "z_human": -7.152,
+      "z_human_given_phylop": -6.193,
+      "gnocchi_mean": -0.268
+    },
+    {
+      "unit": "jaspar95:TLX2",
+      "context": "intron",
+      "occurrences": 77458,
+      "constrained_fraction": 0.0252,
+      "constrained_expected": 0.0163,
+      "z_mammals": 23.809,
+      "human_variants": 1557,
+      "human_expected_trinucleotide": 1864.81,
+      "human_oe": 0.835,
+      "human_oe_given_phylop": 0.858,
+      "z_human": -7.128,
+      "z_human_given_phylop": -6.033,
+      "gnocchi_mean": -0.287
+    },
+    {
+      "unit": "jaspar95:NFATC1",
+      "context": "intron",
+      "occurrences": 24326,
+      "constrained_fraction": 0.0319,
+      "constrained_expected": 0.0159,
+      "z_mammals": 23.283,
+      "human_variants": 471,
+      "human_expected_trinucleotide": 554.22,
+      "human_oe": 0.85,
+      "human_oe_given_phylop": 0.873,
+      "z_human": -3.535,
+      "z_human_given_phylop": -2.94,
+      "gnocchi_mean": -0.016
+    },
+    {
+      "unit": "jaspar95:ARID3A",
+      "context": "intron",
+      "occurrences": 61353,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0162,
+      "z_mammals": 23.15,
+      "human_variants": 1258,
+      "human_expected_trinucleotide": 1477.82,
+      "human_oe": 0.851,
+      "human_oe_given_phylop": 0.874,
+      "z_human": -5.718,
+      "z_human_given_phylop": -4.785,
+      "gnocchi_mean": -0.299
+    },
+    {
+      "unit": "jaspar95:RAX",
+      "context": "intron",
+      "occurrences": 63874,
+      "constrained_fraction": 0.0253,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.834,
+      "human_variants": 1316,
+      "human_expected_trinucleotide": 1520.12,
+      "human_oe": 0.866,
+      "human_oe_given_phylop": 0.89,
+      "z_human": -5.235,
+      "z_human_given_phylop": -4.247,
+      "gnocchi_mean": -0.304
+    },
+    {
+      "unit": "jaspar95:DLX1",
+      "context": "intron",
+      "occurrences": 102683,
+      "constrained_fraction": 0.0231,
+      "constrained_expected": 0.0161,
+      "z_mammals": 21.705,
+      "human_variants": 2444,
+      "human_expected_trinucleotide": 2736.82,
+      "human_oe": 0.893,
+      "human_oe_given_phylop": 0.898,
+      "z_human": -5.597,
+      "z_human_given_phylop": -5.327,
+      "gnocchi_mean": -0.253
+    },
+    {
+      "unit": "jaspar95:NFATC3",
+      "context": "intron",
+      "occurrences": 82818,
+      "constrained_fraction": 0.0223,
+      "constrained_expected": 0.0156,
+      "z_mammals": 21.633,
+      "human_variants": 2120,
+      "human_expected_trinucleotide": 2326.16,
+      "human_oe": 0.911,
+      "human_oe_given_phylop": 0.922,
+      "z_human": -4.275,
+      "z_human_given_phylop": -3.721,
+      "gnocchi_mean": 0.073
+    },
+    {
+      "unit": "jaspar95:HOXB3",
+      "context": "intron",
+      "occurrences": 102138,
+      "constrained_fraction": 0.0231,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.602,
+      "human_variants": 2271,
+      "human_expected_trinucleotide": 2642.95,
+      "human_oe": 0.859,
+      "human_oe_given_phylop": 0.875,
+      "z_human": -7.235,
+      "z_human_given_phylop": -6.342,
+      "gnocchi_mean": -0.269
+    },
+    {
+      "unit": "jaspar95:EVX1",
+      "context": "intron",
+      "occurrences": 51111,
+      "constrained_fraction": 0.0273,
+      "constrained_expected": 0.0164,
+      "z_mammals": 21.582,
+      "human_variants": 1041,
+      "human_expected_trinucleotide": 1306.61,
+      "human_oe": 0.797,
+      "human_oe_given_phylop": 0.813,
+      "z_human": -7.348,
+      "z_human_given_phylop": -6.678,
+      "gnocchi_mean": -0.276
+    },
+    {
+      "unit": "jaspar95:EVX2",
+      "context": "intron",
+      "occurrences": 60900,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0163,
+      "z_mammals": 21.46,
+      "human_variants": 1304,
+      "human_expected_trinucleotide": 1593.5,
+      "human_oe": 0.818,
+      "human_oe_given_phylop": 0.833,
+      "z_human": -7.252,
+      "z_human_given_phylop": -6.625,
+      "gnocchi_mean": -0.258
+    },
+    {
+      "unit": "jaspar95:MNX1",
+      "context": "intron",
+      "occurrences": 90706,
+      "constrained_fraction": 0.0229,
+      "constrained_expected": 0.016,
+      "z_mammals": 20.106,
+      "human_variants": 2208,
+      "human_expected_trinucleotide": 2557.88,
+      "human_oe": 0.863,
+      "human_oe_given_phylop": 0.873,
+      "z_human": -6.918,
+      "z_human_given_phylop": -6.36,
+      "gnocchi_mean": -0.192
+    },
+    {
+      "unit": "jaspar95:EMX1",
+      "context": "intron",
+      "occurrences": 38895,
+      "constrained_fraction": 0.0285,
+      "constrained_expected": 0.0164,
+      "z_mammals": 20.073,
+      "human_variants": 811,
+      "human_expected_trinucleotide": 992.16,
+      "human_oe": 0.817,
+      "human_oe_given_phylop": 0.834,
+      "z_human": -5.751,
+      "z_human_given_phylop": -5.17,
+      "gnocchi_mean": -0.29
+    },
+    {
+      "unit": "jaspar95:STAT3",
+      "context": "intron",
+      "occurrences": 20749,
+      "constrained_fraction": 0.0295,
+      "constrained_expected": 0.0163,
+      "z_mammals": 19.992,
+      "human_variants": 640,
+      "human_expected_trinucleotide": 762.39,
+      "human_oe": 0.839,
+      "human_oe_given_phylop": 0.862,
+      "z_human": -4.433,
+      "z_human_given_phylop": -3.747,
+      "gnocchi_mean": 0.017
+    },
+    {
+      "unit": "jaspar95:HOXA2",
+      "context": "intron",
+      "occurrences": 48744,
+      "constrained_fraction": 0.0267,
+      "constrained_expected": 0.0163,
+      "z_mammals": 19.929,
+      "human_variants": 1074,
+      "human_expected_trinucleotide": 1279.35,
+      "human_oe": 0.839,
+      "human_oe_given_phylop": 0.853,
+      "z_human": -5.741,
+      "z_human_given_phylop": -5.209,
+      "gnocchi_mean": -0.264
+    },
+    {
+      "unit": "jaspar95:HOXA1",
+      "context": "intron",
+      "occurrences": 93462,
+      "constrained_fraction": 0.0224,
+      "constrained_expected": 0.016,
+      "z_mammals": 19.39,
+      "human_variants": 2209,
+      "human_expected_trinucleotide": 2484.88,
+      "human_oe": 0.889,
+      "human_oe_given_phylop": 0.898,
+      "z_human": -5.534,
+      "z_human_given_phylop": -5.066,
+      "gnocchi_mean": -0.2
+    },
+    {
+      "unit": "jaspar95:LHX9",
+      "context": "intron",
+      "occurrences": 26078,
+      "constrained_fraction": 0.0304,
+      "constrained_expected": 0.0163,
+      "z_mammals": 18.913,
+      "human_variants": 732,
+      "human_expected_trinucleotide": 849.1,
+      "human_oe": 0.862,
+      "human_oe_given_phylop": 0.88,
+      "z_human": -4.018,
+      "z_human_given_phylop": -3.475,
+      "gnocchi_mean": -0.307
+    }
+  ],
+  "syntax_vs_flanks_rows": [
+    {
+      "unit": "gencode:exon",
+      "context": "cds",
+      "occurrences": 3710,
+      "constrained_fraction": 0.4236,
+      "constrained_expected": 0.3949,
+      "z_mammals": 5.807,
+      "human_variants": 2603,
+      "human_expected_trinucleotide": 3450.24,
+      "human_oe": 0.754,
+      "human_oe_given_phylop": 0.774,
+      "z_human": -9.941,
+      "z_human_given_phylop": -9.545,
+      "gnocchi_mean": 1.882,
+      "constrained_flank_fraction": 0.0598,
+      "z_mammals_flank": 32.897,
+      "human_oe_flank": 0.866,
+      "z_human_flank": -4.578
+    },
+    {
+      "unit": "jaspar95:NFATC1",
+      "context": "intron",
+      "occurrences": 24326,
+      "constrained_fraction": 0.0319,
+      "constrained_expected": 0.0159,
+      "z_mammals": 23.283,
+      "human_variants": 471,
+      "human_expected_trinucleotide": 554.22,
+      "human_oe": 0.85,
+      "human_oe_given_phylop": 0.873,
+      "z_human": -3.535,
+      "z_human_given_phylop": -2.94,
+      "gnocchi_mean": -0.016,
+      "constrained_flank_fraction": 0.0203,
+      "z_mammals_flank": 16.894,
+      "human_oe_flank": 0.971,
+      "z_human_flank": -2.884
+    },
+    {
+      "unit": "jaspar95:TLX2",
+      "context": "intron",
+      "occurrences": 77458,
+      "constrained_fraction": 0.0252,
+      "constrained_expected": 0.0163,
+      "z_mammals": 23.809,
+      "human_variants": 1557,
+      "human_expected_trinucleotide": 1864.81,
+      "human_oe": 0.835,
+      "human_oe_given_phylop": 0.858,
+      "z_human": -7.128,
+      "z_human_given_phylop": -6.033,
+      "gnocchi_mean": -0.287,
+      "constrained_flank_fraction": 0.0204,
+      "z_mammals_flank": 12.708,
+      "human_oe_flank": 0.937,
+      "z_human_flank": -4.538
+    },
+    {
+      "unit": "jaspar95:NFATC3",
+      "context": "intron",
+      "occurrences": 82818,
+      "constrained_fraction": 0.0223,
+      "constrained_expected": 0.0156,
+      "z_mammals": 21.633,
+      "human_variants": 2120,
+      "human_expected_trinucleotide": 2326.16,
+      "human_oe": 0.911,
+      "human_oe_given_phylop": 0.922,
+      "z_human": -4.275,
+      "z_human_given_phylop": -3.721,
+      "gnocchi_mean": 0.073,
+      "constrained_flank_fraction": 0.0184,
+      "z_mammals_flank": 12.494,
+      "human_oe_flank": 0.973,
+      "z_human_flank": -3.036
+    },
+    {
+      "unit": "jaspar95:DRGX",
+      "context": "intron",
+      "occurrences": 90745,
+      "constrained_fraction": 0.0248,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.968,
+      "human_variants": 1885,
+      "human_expected_trinucleotide": 2287.39,
+      "human_oe": 0.824,
+      "human_oe_given_phylop": 0.846,
+      "z_human": -8.414,
+      "z_human_given_phylop": -7.264,
+      "gnocchi_mean": -0.275,
+      "constrained_flank_fraction": 0.0206,
+      "z_mammals_flank": 12.252,
+      "human_oe_flank": 0.937,
+      "z_human_flank": -5.595
+    },
+    {
+      "unit": "jaspar95:RAX",
+      "context": "intron",
+      "occurrences": 63874,
+      "constrained_fraction": 0.0253,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.834,
+      "human_variants": 1316,
+      "human_expected_trinucleotide": 1520.12,
+      "human_oe": 0.866,
+      "human_oe_given_phylop": 0.89,
+      "z_human": -5.235,
+      "z_human_given_phylop": -4.247,
+      "gnocchi_mean": -0.304,
+      "constrained_flank_fraction": 0.0205,
+      "z_mammals_flank": 11.471,
+      "human_oe_flank": 0.941,
+      "z_human_flank": -3.01
+    },
+    {
+      "unit": "jaspar95:ARID3A",
+      "context": "intron",
+      "occurrences": 61353,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0162,
+      "z_mammals": 23.15,
+      "human_variants": 1258,
+      "human_expected_trinucleotide": 1477.82,
+      "human_oe": 0.851,
+      "human_oe_given_phylop": 0.874,
+      "z_human": -5.718,
+      "z_human_given_phylop": -4.785,
+      "gnocchi_mean": -0.299,
+      "constrained_flank_fraction": 0.0216,
+      "z_mammals_flank": 10.573,
+      "human_oe_flank": 0.974,
+      "z_human_flank": -4.782
+    },
+    {
+      "unit": "jaspar95:HOXA7",
+      "context": "intron",
+      "occurrences": 88013,
+      "constrained_fraction": 0.0249,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.247,
+      "human_variants": 1862,
+      "human_expected_trinucleotide": 2197.25,
+      "human_oe": 0.847,
+      "human_oe_given_phylop": 0.866,
+      "z_human": -7.152,
+      "z_human_given_phylop": -6.193,
+      "gnocchi_mean": -0.268,
+      "constrained_flank_fraction": 0.0211,
+      "z_mammals_flank": 10.502,
+      "human_oe_flank": 0.932,
+      "z_human_flank": -4.121
+    },
+    {
+      "unit": "jaspar95:BARX1",
+      "context": "intron",
+      "occurrences": 100847,
+      "constrained_fraction": 0.0246,
+      "constrained_expected": 0.0162,
+      "z_mammals": 25.335,
+      "human_variants": 2185,
+      "human_expected_trinucleotide": 2614.37,
+      "human_oe": 0.836,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.397,
+      "z_human_given_phylop": -7.37,
+      "gnocchi_mean": -0.26,
+      "constrained_flank_fraction": 0.0212,
+      "z_mammals_flank": 10.297,
+      "human_oe_flank": 0.934,
+      "z_human_flank": -5.191
+    },
+    {
+      "unit": "jaspar95:BARX1",
+      "context": "unknown_fossil",
+      "occurrences": 22212,
+      "constrained_fraction": 0.0192,
+      "constrained_expected": 0.0103,
+      "z_mammals": 13.934,
+      "human_variants": 518,
+      "human_expected_trinucleotide": 591.45,
+      "human_oe": 0.876,
+      "human_oe_given_phylop": 0.919,
+      "z_human": -3.02,
+      "z_human_given_phylop": -1.935,
+      "gnocchi_mean": -1.956,
+      "constrained_flank_fraction": 0.0132,
+      "z_mammals_flank": 9.36,
+      "human_oe_flank": 1.01,
+      "z_human_flank": -3.256
+    },
+    {
+      "unit": "jaspar95:DRGX",
+      "context": "unknown_fossil",
+      "occurrences": 20014,
+      "constrained_fraction": 0.0194,
+      "constrained_expected": 0.0103,
+      "z_mammals": 13.614,
+      "human_variants": 421,
+      "human_expected_trinucleotide": 514.55,
+      "human_oe": 0.818,
+      "human_oe_given_phylop": 0.859,
+      "z_human": -4.124,
+      "z_human_given_phylop": -3.13,
+      "gnocchi_mean": -1.97,
+      "constrained_flank_fraction": 0.0132,
+      "z_mammals_flank": 9.234,
+      "human_oe_flank": 1.033,
+      "z_human_flank": -4.787
+    },
+    {
+      "unit": "jaspar95:BSX",
+      "context": "unknown_fossil",
+      "occurrences": 23982,
+      "constrained_fraction": 0.0188,
+      "constrained_expected": 0.0103,
+      "z_mammals": 14.03,
+      "human_variants": 563,
+      "human_expected_trinucleotide": 645.97,
+      "human_oe": 0.872,
+      "human_oe_given_phylop": 0.915,
+      "z_human": -3.265,
+      "z_human_given_phylop": -2.106,
+      "gnocchi_mean": -1.95,
+      "constrained_flank_fraction": 0.0133,
+      "z_mammals_flank": 9.078,
+      "human_oe_flank": 1.007,
+      "z_human_flank": -3.432
+    },
+    {
+      "unit": "jaspar95:TLX2",
+      "context": "unknown_fossil",
+      "occurrences": 17169,
+      "constrained_fraction": 0.0197,
+      "constrained_expected": 0.0103,
+      "z_mammals": 13.05,
+      "human_variants": 360,
+      "human_expected_trinucleotide": 417.32,
+      "human_oe": 0.863,
+      "human_oe_given_phylop": 0.903,
+      "z_human": -2.806,
+      "z_human_given_phylop": -1.936,
+      "gnocchi_mean": -1.981,
+      "constrained_flank_fraction": 0.0133,
+      "z_mammals_flank": 8.894,
+      "human_oe_flank": 1.036,
+      "z_human_flank": -3.48
+    },
+    {
+      "unit": "jaspar95:BSX",
+      "context": "intron",
+      "occurrences": 110263,
+      "constrained_fraction": 0.0238,
+      "constrained_expected": 0.0162,
+      "z_mammals": 24.569,
+      "human_variants": 2408,
+      "human_expected_trinucleotide": 2875.48,
+      "human_oe": 0.837,
+      "human_oe_given_phylop": 0.854,
+      "z_human": -8.718,
+      "z_human_given_phylop": -7.737,
+      "gnocchi_mean": -0.245,
+      "constrained_flank_fraction": 0.0211,
+      "z_mammals_flank": 8.817,
+      "human_oe_flank": 0.929,
+      "z_human_flank": -5.086
+    },
+    {
+      "unit": "jaspar95:HMGA1",
+      "context": "intron",
+      "occurrences": 21346,
+      "constrained_fraction": 0.0202,
+      "constrained_expected": 0.0159,
+      "z_mammals": 8.02,
+      "human_variants": 549,
+      "human_expected_trinucleotide": 699.26,
+      "human_oe": 0.785,
+      "human_oe_given_phylop": 0.797,
+      "z_human": -5.682,
+      "z_human_given_phylop": -5.32,
+      "gnocchi_mean": -0.199,
+      "constrained_flank_fraction": 0.0157,
+      "z_mammals_flank": 8.397,
+      "human_oe_flank": 1.002,
+      "z_human_flank": -5.734
+    },
+    {
+      "unit": "jaspar95:ARID3A",
+      "context": "unknown_fossil",
+      "occurrences": 13993,
+      "constrained_fraction": 0.0188,
+      "constrained_expected": 0.0103,
+      "z_mammals": 11.177,
+      "human_variants": 286,
+      "human_expected_trinucleotide": 343.86,
+      "human_oe": 0.832,
+      "human_oe_given_phylop": 0.877,
+      "z_human": -3.12,
+      "z_human_given_phylop": -2.22,
+      "gnocchi_mean": -1.992,
+      "constrained_flank_fraction": 0.0124,
+      "z_mammals_flank": 8.38,
+      "human_oe_flank": 1.043,
+      "z_human_flank": -3.837
+    },
+    {
+      "unit": "jaspar95:NOTO",
+      "context": "intron",
+      "occurrences": 56035,
+      "constrained_fraction": 0.0242,
+      "constrained_expected": 0.0162,
+      "z_mammals": 18.333,
+      "human_variants": 1464,
+      "human_expected_trinucleotide": 1685.35,
+      "human_oe": 0.869,
+      "human_oe_given_phylop": 0.889,
+      "z_human": -5.392,
+      "z_human_given_phylop": -4.502,
+      "gnocchi_mean": -0.262,
+      "constrained_flank_fraction": 0.021,
+      "z_mammals_flank": 7.457,
+      "human_oe_flank": 0.952,
+      "z_human_flank": -3.49
+    },
+    {
+      "unit": "jaspar95:EVX1",
+      "context": "intron",
+      "occurrences": 51111,
+      "constrained_fraction": 0.0273,
+      "constrained_expected": 0.0164,
+      "z_mammals": 21.582,
+      "human_variants": 1041,
+      "human_expected_trinucleotide": 1306.61,
+      "human_oe": 0.797,
+      "human_oe_given_phylop": 0.813,
+      "z_human": -7.348,
+      "z_human_given_phylop": -6.678,
+      "gnocchi_mean": -0.276,
+      "constrained_flank_fraction": 0.0236,
+      "z_mammals_flank": 7.393,
+      "human_oe_flank": 0.922,
+      "z_human_flank": -4.702
+    },
+    {
+      "unit": "jaspar95:EMX1",
+      "context": "intron",
+      "occurrences": 38895,
+      "constrained_fraction": 0.0285,
+      "constrained_expected": 0.0164,
+      "z_mammals": 20.073,
+      "human_variants": 811,
+      "human_expected_trinucleotide": 992.16,
+      "human_oe": 0.817,
+      "human_oe_given_phylop": 0.834,
+      "z_human": -5.751,
+      "z_human_given_phylop": -5.17,
+      "gnocchi_mean": -0.29,
+      "constrained_flank_fraction": 0.0242,
+      "z_mammals_flank": 7.169,
+      "human_oe_flank": 0.919,
+      "z_human_flank": -3.346
+    },
+    {
+      "unit": "jaspar95:STAT5A::STAT5B",
+      "context": "enhancer_like",
+      "occurrences": 2759,
+      "constrained_fraction": 0.0703,
+      "constrained_expected": 0.0423,
+      "z_mammals": 8.605,
+      "human_variants": 63,
+      "human_expected_trinucleotide": 97.94,
+      "human_oe": 0.643,
+      "human_oe_given_phylop": 0.59,
+      "z_human": -3.531,
+      "z_human_given_phylop": -4.243,
+      "gnocchi_mean": 0.853,
+      "constrained_flank_fraction": 0.047,
+      "z_mammals_flank": 7.043,
+      "human_oe_flank": 1.042,
+      "z_human_flank": -3.864
+    },
+    {
+      "unit": "jaspar95:HOXB3",
+      "context": "intron",
+      "occurrences": 102138,
+      "constrained_fraction": 0.0231,
+      "constrained_expected": 0.0162,
+      "z_mammals": 21.602,
+      "human_variants": 2271,
+      "human_expected_trinucleotide": 2642.95,
+      "human_oe": 0.859,
+      "human_oe_given_phylop": 0.875,
+      "z_human": -7.235,
+      "z_human_given_phylop": -6.342,
+      "gnocchi_mean": -0.269,
+      "constrained_flank_fraction": 0.021,
+      "z_mammals_flank": 6.538,
+      "human_oe_flank": 0.929,
+      "z_human_flank": -3.739
+    },
+    {
+      "unit": "jaspar95:NOTO",
+      "context": "unknown_fossil",
+      "occurrences": 12145,
+      "constrained_fraction": 0.0193,
+      "constrained_expected": 0.0103,
+      "z_mammals": 10.35,
+      "human_variants": 318,
+      "human_expected_trinucleotide": 378.48,
+      "human_oe": 0.84,
+      "human_oe_given_phylop": 0.879,
+      "z_human": -3.109,
+      "z_human_given_phylop": -2.292,
+      "gnocchi_mean": -1.975,
+      "constrained_flank_fraction": 0.0136,
+      "z_mammals_flank": 6.489,
+      "human_oe_flank": 0.985,
+      "z_human_flank": -2.846
+    },
+    {
+      "unit": "jaspar95:NKX6-1",
+      "context": "intron",
+      "occurrences": 37341,
+      "constrained_fraction": 0.027,
+      "constrained_expected": 0.0164,
+      "z_mammals": 18.811,
+      "human_variants": 950,
+      "human_expected_trinucleotide": 1198.84,
+      "human_oe": 0.792,
+      "human_oe_given_phylop": 0.812,
+      "z_human": -7.187,
+      "z_human_given_phylop": -6.432,
+      "gnocchi_mean": -0.311,
+      "constrained_flank_fraction": 0.0234,
+      "z_mammals_flank": 6.449,
+      "human_oe_flank": 0.923,
+      "z_human_flank": -4.719
+    },
+    {
+      "unit": "jaspar95:EVX2",
+      "context": "intron",
+      "occurrences": 60900,
+      "constrained_fraction": 0.0261,
+      "constrained_expected": 0.0163,
+      "z_mammals": 21.46,
+      "human_variants": 1304,
+      "human_expected_trinucleotide": 1593.5,
+      "human_oe": 0.818,
+      "human_oe_given_phylop": 0.833,
+      "z_human": -7.252,
+      "z_human_given_phylop": -6.625,
+      "gnocchi_mean": -0.258,
+      "constrained_flank_fraction": 0.0232,
+      "z_mammals_flank": 6.409,
+      "human_oe_flank": 0.919,
+      "z_human_flank": -4.203
+    },
+    {
+      "unit": "jaspar95:HOXA2",
+      "context": "intron",
+      "occurrences": 48744,
+      "constrained_fraction": 0.0267,
+      "constrained_expected": 0.0163,
+      "z_mammals": 19.929,
+      "human_variants": 1074,
+      "human_expected_trinucleotide": 1279.35,
+      "human_oe": 0.839,
+      "human_oe_given_phylop": 0.853,
+      "z_human": -5.741,
+      "z_human_given_phylop": -5.209,
+      "gnocchi_mean": -0.264,
+      "constrained_flank_fraction": 0.0235,
+      "z_mammals_flank": 6.038,
+      "human_oe_flank": 0.917,
+      "z_human_flank": -2.903
+    },
+    {
+      "unit": "jaspar95:EVX1",
+      "context": "unknown_neutral",
+      "occurrences": 8732,
+      "constrained_fraction": 0.0259,
+      "constrained_expected": 0.0131,
+      "z_mammals": 10.732,
+      "human_variants": 150,
+      "human_expected_trinucleotide": 211.25,
+      "human_oe": 0.71,
+      "human_oe_given_phylop": 0.698,
+      "z_human": -4.214,
+      "z_human_given_phylop": -4.428,
+      "gnocchi_mean": -2.054,
+      "constrained_flank_fraction": 0.0188,
+      "z_mammals_flank": 6.021,
+      "human_oe_flank": 0.926,
+      "z_human_flank": -3.262
+    },
+    {
+      "unit": "jaspar95:POU6F1",
+      "context": "intron",
+      "occurrences": 20439,
+      "constrained_fraction": 0.0296,
+      "constrained_expected": 0.0164,
+      "z_mammals": 15.902,
+      "human_variants": 468,
+      "human_expected_trinucleotide": 601.39,
+      "human_oe": 0.778,
+      "human_oe_given_phylop": 0.8,
+      "z_human": -5.439,
+      "z_human_given_phylop": -4.827,
+      "gnocchi_mean": -0.279,
+      "constrained_flank_fraction": 0.0246,
+      "z_mammals_flank": 5.954,
+      "human_oe_flank": 0.961,
+      "z_human_flank": -4.565
+    },
+    {
+      "unit": "jaspar95:NKX6-1",
+      "context": "unknown_neutral",
+      "occurrences": 6521,
+      "constrained_fraction": 0.0247,
+      "constrained_expected": 0.0131,
+      "z_mammals": 9.112,
+      "human_variants": 141,
+      "human_expected_trinucleotide": 194.75,
+      "human_oe": 0.724,
+      "human_oe_given_phylop": 0.714,
+      "z_human": -3.852,
+      "z_human_given_phylop": -4.018,
+      "gnocchi_mean": -2.054,
+      "constrained_flank_fraction": 0.0175,
+      "z_mammals_flank": 5.738,
+      "human_oe_flank": 0.951,
+      "z_human_flank": -3.253
+    },
+    {
+      "unit": "jaspar95:NFATC1",
+      "context": "unknown_neutral",
+      "occurrences": 3574,
+      "constrained_fraction": 0.0243,
+      "constrained_expected": 0.0129,
+      "z_mammals": 7.572,
+      "human_variants": 48,
+      "human_expected_trinucleotide": 73.39,
+      "human_oe": 0.654,
+      "human_oe_given_phylop": 0.619,
+      "z_human": -2.964,
+      "z_human_given_phylop": -3.353,
+      "gnocchi_mean": -1.873,
+      "constrained_flank_fraction": 0.0157,
+      "z_mammals_flank": 5.688,
+      "human_oe_flank": 1.127,
+      "z_human_flank": -3.82
+    },
+    {
+      "unit": "jaspar95:MEF2C",
+      "context": "intron",
+      "occurrences": 9564,
+      "constrained_fraction": 0.0167,
+      "constrained_expected": 0.0151,
+      "z_mammals": 1.991,
+      "human_variants": 326,
+      "human_expected_trinucleotide": 449.61,
+      "human_oe": 0.725,
+      "human_oe_given_phylop": 0.753,
+      "z_human": -5.829,
+      "z_human_given_phylop": -5.131,
+      "gnocchi_mean": -0.02,
+      "constrained_flank_fraction": 0.0122,
+      "z_mammals_flank": 5.678,
+      "human_oe_flank": 1.048,
+      "z_human_flank": -6.686
+    }
+  ],
+  "value_slot_vs_flanks_rows": [
+    {
+      "unit": "ccre:dELS",
+      "context": "enhancer_like",
+      "occurrences": 8920,
+      "constrained_fraction": 0.0428,
+      "constrained_expected": 0.0437,
+      "z_mammals": -0.951,
+      "human_variants": 12644,
+      "human_expected_trinucleotide": 12536.13,
+      "human_oe": 1.009,
+      "human_oe_given_phylop": 0.897,
+      "z_human": 0.707,
+      "z_human_given_phylop": -9.51,
+      "gnocchi_mean": 0.852,
+      "constrained_flank_fraction": 0.0293,
+      "z_mammals_flank": 12.518,
+      "human_oe_flank": 0.927,
+      "z_human_flank": 6.709
+    },
+    {
+      "unit": "jaspar95:NFIA",
+      "context": "intron",
+      "occurrences": 10541,
+      "constrained_fraction": 0.0337,
+      "constrained_expected": 0.0159,
+      "z_mammals": 14.766,
+      "human_variants": 292,
+      "human_expected_trinucleotide": 266.23,
+      "human_oe": 1.097,
+      "human_oe_given_phylop": 1.106,
+      "z_human": 1.5,
+      "z_human_given_phylop": 1.631,
+      "gnocchi_mean": 0.063,
+      "constrained_flank_fraction": 0.0234,
+      "z_mammals_flank": 8.574,
+      "human_oe_flank": 0.826,
+      "z_human_flank": 4.193
+    },
+    {
+      "unit": "jaspar95:SRY",
+      "context": "intron",
+      "occurrences": 33075,
+      "constrained_fraction": 0.0193,
+      "constrained_expected": 0.0157,
+      "z_mammals": 8.175,
+      "human_variants": 1066,
+      "human_expected_trinucleotide": 1013.81,
+      "human_oe": 1.051,
+      "human_oe_given_phylop": 1.07,
+      "z_human": 1.4,
+      "z_human_given_phylop": 1.876,
+      "gnocchi_mean": -0.182,
+      "constrained_flank_fraction": 0.0181,
+      "z_mammals_flank": 2.76,
+      "human_oe_flank": 0.906,
+      "z_human_flank": 3.96
+    },
+    {
+      "unit": "jaspar95:MEIS1",
+      "context": "unknown_regulatory",
+      "occurrences": 20479,
+      "constrained_fraction": 0.0133,
+      "constrained_expected": 0.0108,
+      "z_mammals": 4.66,
+      "human_variants": 749,
+      "human_expected_trinucleotide": 691.82,
+      "human_oe": 1.083,
+      "human_oe_given_phylop": 1.234,
+      "z_human": 2.014,
+      "z_human_given_phylop": 4.994,
+      "gnocchi_mean": 0.032,
+      "constrained_flank_fraction": 0.0119,
+      "z_mammals_flank": 2.631,
+      "human_oe_flank": 0.948,
+      "z_human_flank": 3.268
+    }
+  ],
+  "syntax_vs_flanks_by_kind": {
+    "repeat_family": 1,
+    "gencode": 1,
+    "segmental_duplication": 1,
+    "jaspar95": 57
+  },
+  "syntax_vs_flanks_by_context": {
+    "intron": 25,
+    "cds": 1,
+    "unknown_neutral": 11,
+    "unknown_fossil": 12,
+    "unknown_regulatory": 9,
+    "enhancer_like": 2
+  },
+  "syntax_by_kind": {
+    "repeat_family": 1,
+    "ccre": 3,
+    "gencode": 3,
+    "segmental_duplication": 1,
+    "jaspar95": 159
+  },
+  "syntax_by_context": {
+    "intron": 85,
+    "exon_noncoding": 2,
+    "utr_or_exon": 2,
+    "promoter_like": 2,
+    "cds": 4,
+    "unknown_regulatory": 15,
+    "unknown_fossil": 12,
+    "enhancer_like": 8,
+    "unknown_neutral": 37
+  },
+  "value_slots_by_kind": {
+    "jaspar95": 7
+  },
+  "seconds": 209.8
+}

@@ -1,0 +1,29 @@
+{
+  "result": "variation_vista_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": 23,
+  "positive": {
+    "intervals": 1133,
+    "track_bases": 2788000,
+    "fraction_above": 0.2016,
+    "share_intervals_constrained": 0.329,
+    "share_intervals_strong": 0.064
+  },
+  "negative": {
+    "intervals": 1090,
+    "track_bases": 2456000,
+    "fraction_above": 0.1694,
+    "share_intervals_constrained": 0.269,
+    "share_intervals_strong": 0.054
+  },
+  "thresholds": {
+    "gnocchi": 2.18,
+    "gnocchi_strong": 4.0
+  },
+  "evidence": "curated: gnomAD Gnocchi, Z per kb from 76,156 genomes, constrained at >= 2.18 (top decile), strong at >= 4.0",
+  "cost": {
+    "requests": 190,
+    "mb_fetched": 15.34,
+    "seconds": 124.1
+  }
+}

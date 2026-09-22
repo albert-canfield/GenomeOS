@@ -1,0 +1,32 @@
+{
+  "result": "rmsk_chrM",
+  "date": "2026-09-11",
+  "chrom": "chrM",
+  "copies": 5,
+  "repeat_bp": 418,
+  "repeat_fraction": null,
+  "by_class": {
+    "tRNA": {
+      "copies": 3,
+      "bp": 217,
+      "mean_divergence": 0.117
+    },
+    "rRNA": {
+      "copies": 1,
+      "bp": 156,
+      "mean_divergence": 0.327
+    },
+    "Simple_repeat": {
+      "copies": 1,
+      "bp": 45,
+      "mean_divergence": 0.154
+    }
+  },
+  "top_families": {
+    "tRNA/tRNA": 217,
+    "rRNA/rRNA": 156,
+    "Simple_repeat/Simple_repeat": 45
+  },
+  "evidence": "RepeatMasker annotation of hg38 (UCSC rmsk track, Dfam/Repbase library)",
+  "confidence": 0.9
+}

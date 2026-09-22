@@ -1,0 +1,233 @@
+{
+ "task": "From the alterations of one tumour (no matched normal), name the likely driver events, the likely cancer type, the best cell-surface target for a designed binder, and neoantigen candidates, with evidence and confidence for each step.",
+ "sample": "data/demo/cancer_tumour.vcf",
+ "inputs": {
+  "variants_total": 5,
+  "likely_germline": 0,
+  "somatic_candidates": 5,
+  "coding_somatic": 2,
+  "mutation_burden": {
+   "coding_somatic_variants": 2,
+   "per_megabase": 0.06,
+   "assumption": "whole-exome input over 35 Mb; a panel or a single chromosome gives a different denominator",
+   "evidence": "inferred",
+   "note": "\u226510/Mb is the usual threshold for a high burden (immune-checkpoint response signal)"
+  },
+  "ranked": [
+   {
+    "chrom": "chr21",
+    "pos": 34792138,
+    "ref": "G",
+    "alt": "C",
+    "gene": "RUNX1",
+    "consequence": "stop_gained",
+    "hgvsp": "p.Tyr480Ter",
+    "hgvsc": "c.1440C>G",
+    "protein_change": "Y480*",
+    "sift": "",
+    "polyphen": "",
+    "cosmic": [],
+    "gnomad_af": null,
+    "likely_germline": false,
+    "driver_frequency": 0.0151,
+    "hotspot": false,
+    "score": 1.4,
+    "evidence": [
+     "RUNX1 mutated in 1.5% of 10945 tumours (cBioPortal msk_impact_2017)"
+    ]
+   },
+   {
+    "chrom": "chr21",
+    "pos": 25881673,
+    "ref": "G",
+    "alt": "C",
+    "gene": "APP",
+    "consequence": "missense_variant",
+    "hgvsp": "p.Asn770Lys",
+    "hgvsc": "c.2310C>G",
+    "protein_change": "N770K",
+    "sift": "deleterious_low_confidence",
+    "polyphen": "",
+    "cosmic": [],
+    "gnomad_af": null,
+    "likely_germline": false,
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.5,
+    "evidence": []
+   },
+   {
+    "chrom": "chr21",
+    "pos": 31659775,
+    "ref": "G",
+    "alt": "A",
+    "gene": "SOD1",
+    "consequence": "synonymous_variant",
+    "hgvsp": "p.Ala2=",
+    "hgvsc": "c.6G>A",
+    "protein_change": "A2=",
+    "sift": "",
+    "polyphen": "",
+    "cosmic": [],
+    "gnomad_af": null,
+    "likely_germline": false,
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.05,
+    "evidence": []
+   },
+   {
+    "chrom": "chr21",
+    "pos": 15000000,
+    "ref": "A",
+    "alt": "G",
+    "gene": "NRIP1",
+    "consequence": "intron_variant",
+    "hgvsp": "",
+    "hgvsc": "c.-335+14344T>C",
+    "protein_change": "",
+    "sift": "",
+    "polyphen": "",
+    "cosmic": [],
+    "gnomad_af": null,
+    "likely_germline": false,
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.02,
+    "evidence": []
+   },
+   {
+    "chrom": "chr21",
+    "pos": 30000000,
+    "ref": "C",
+    "alt": "T",
+    "gene": "",
+    "consequence": "intergenic_variant",
+    "hgvsp": "",
+    "hgvsc": "",
+    "protein_change": "",
+    "sift": "",
+    "polyphen": "",
+    "cosmic": [],
+    "gnomad_af": null,
+    "likely_germline": false,
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.02,
+    "evidence": []
+   }
+  ],
+  "germline_set_aside": [],
+  "mutant_peptides": [
+   {
+    "gene": "APP",
+    "change": "N770K",
+    "wild_type": "YKFFEQMQN",
+    "mutant": "YKFFEQMQK",
+    "window": [
+     762,
+     770
+    ],
+    "evidence": "derived: UniProt canonical sequence with the substitution applied",
+    "note": "9-mers containing the changed residue are the candidates; HLA binding is not predicted here"
+   }
+  ],
+  "pathway_effects": [
+   {
+    "gene": "RUNX1",
+    "change": "Y480*",
+    "treated_as": "absent (truncating)",
+    "pathways_checked": 10,
+    "reactions_lost": 64,
+    "most_affected": {
+     "pathway": "R-HSA-8939243",
+     "name": "RUNX1 interacts with co-factors whose precise effect on RUNX1 targets is not known",
+     "fraction_lost": 1.0
+    },
+    "evidence": "curated: Reactome; logic inferred (reachability)"
+   }
+  ],
+  "suggested_cancer_types": [
+   {
+    "cancer_type": "Salivary Gland Cancer",
+    "log_enrichment": 1.053,
+    "samples_in_study": 114,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Endometrial Cancer",
+    "log_enrichment": 1.016,
+    "samples_in_study": 218,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Bladder Cancer",
+    "log_enrichment": 0.862,
+    "samples_in_study": 423,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Adrenocortical Carcinoma",
+    "log_enrichment": 0.806,
+    "samples_in_study": 25,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Breast Cancer",
+    "log_enrichment": 0.673,
+    "samples_in_study": 1337,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   }
+  ],
+  "surface_targets": [
+   {
+    "gene": "APP",
+    "location": "plasma membrane / cell surface",
+    "evidence": "GO cellular component annotation (goa_human)",
+    "confidence": 0.7
+   }
+  ],
+  "evidence": {
+   "consequence": "curated: Ensembl VEP (canonical transcript, pick one)",
+   "germline_filter": "inferred: gnomAD frequency \u2265 0.01 means inherited; rare germline variants cannot be told apart without the normal sample",
+   "drivers": "curated: cBioPortal study frequencies and hotspots",
+   "damage": "predicted: SIFT / PolyPhen"
+  }
+ },
+ "constraints": [
+  "Use only the evidence in inputs; mark any external knowledge as 'assumption'.",
+  "Variants set aside as likely germline are not tumour-specific; do not build on them.",
+  "A predicted damage score is not a measurement; a pathway loss is a reachability inference.",
+  "Report confidence per claim on a 0-1 scale.",
+  "This is a research analysis, not clinical advice."
+ ],
+ "expected_output": {
+  "driver_events": [
+   {
+    "gene": "string",
+    "change": "string",
+    "why": "string",
+    "confidence": "0-1"
+   }
+  ],
+  "cancer_type": {
+   "name": "string",
+   "confidence": "0-1"
+  },
+  "target_gene": "string",
+  "target_why": "string",
+  "neoantigen_candidates": [
+   "string"
+  ],
+  "payload_options": [
+   "string"
+  ],
+  "risks": [
+   "string"
+  ],
+  "next_experiments": [
+   "string"
+  ]
+ },
+ "minimal_prompt": "You are given the annotated variants of one tumour without a matched normal: a ranked somatic candidate list, the variants set aside as likely germline, the mutation burden, mutant peptide windows, pathway reactions lost by truncated drivers, suggested cancer types and cell-surface products among the altered genes. Name the driver events and the likely cancer type, choose one surface target for a designed binder and its payload, list neoantigen candidates, risks and the next experiments. Answer in the expected_output JSON."
+}

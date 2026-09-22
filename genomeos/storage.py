@@ -232,7 +232,116 @@ def _distil_ccres_chr21() -> dict:
     return out
 
 
+def _distil_celegans_lineage() -> dict:
+    from genomeos.organism.reference import KNOWLEDGE, ReferenceLineage, distil, fetch_wormweb, parse_wormweb
+
+    data = distil(parse_wormweb(fetch_wormweb()))
+    KNOWLEDGE.parent.mkdir(parents=True, exist_ok=True)
+    KNOWLEDGE.write_text(json.dumps(data, separators=(",", ":")))
+    ref = ReferenceLineage.from_dict(data)
+    org = DATA / "organisms" / "celegans"
+    org.mkdir(parents=True, exist_ok=True)
+    (org / "timers.bio").write_text(ref.to_bio_timers())
+    (org / "lineage_embryo.bio").write_text(ref.to_bio_program(0.0, 800.0))
+    (org / "lineage_larva.bio").write_text(ref.to_bio_program(800.0))
+    return {
+        **{k: v for k, v in data.items() if k != "cells"},
+        **ref.summary(),
+        "knowledge_file": str(KNOWLEDGE),
+        "generated": [str(org / f) for f in ("timers.bio", "lineage_embryo.bio", "lineage_larva.bio")],
+        "cycle_timers": len(ref.cycle_stats()),
+    }
+
+
+def _distil_human_turnover() -> dict:
+    from genomeos.organism.human import distil, fetch_milo, read_xlsx, to_bio_tissues
+
+    table = distil(read_xlsx(fetch_milo()))
+    org = DATA / "organisms" / "human"
+    org.mkdir(parents=True, exist_ok=True)
+    from genomeos.organism.haematopoiesis import mutants_bio
+    from genomeos.organism.haematopoiesis import to_bio as haematopoiesis_bio
+
+    (org / "tissues.bio").write_text(to_bio_tissues(table))
+    (org / "haematopoiesis.bio").write_text(haematopoiesis_bio())
+    (org / "haematopoiesis_mutants.bio").write_text(mutants_bio())
+    table["generated"] = [
+        str(org / f) for f in ("tissues.bio", "haematopoiesis.bio", "haematopoiesis_mutants.bio")
+    ]
+    return table
+
+
+def _distil_celegans_tf_atlas() -> dict:
+    from genomeos.organism.reference import ReferenceLineage
+    from genomeos.organism.tf_atlas import distil, fetch, save_cells, summary, textbook_check, to_bio_reader
+
+    table = distil(fetch())
+    save_cells(table)
+    ref = ReferenceLineage.load()
+    checks = textbook_check(table, ref, load_result("celegans_packer2019"))
+    org = DATA / "organisms" / "celegans"
+    (org / "reader.bio").write_text(to_bio_reader(table))
+    out = summary(table, checks)
+    out["generated"] = [str(org / "reader.bio")]
+    return out
+
+
+def _distil_celegans_digital_development() -> dict:
+    from genomeos.organism.digital_development import distil
+
+    return distil()
+
+
+def _distil_celegans_time_axis() -> dict:
+    from genomeos.organism.time_axis import distil
+
+    return distil()
+
+
+def _distil_celegans_packer() -> dict:
+    from genomeos.organism.packer import distil, stream_annotation
+    from genomeos.organism.reference import ReferenceLineage
+
+    return distil(stream_annotation(), ReferenceLineage.load())
+
+
 DISTILLERS: list[Distiller] = [
+    Distiller(
+        "celegans_lineage",
+        [],
+        _distil_celegans_lineage,
+        "the complete timed C. elegans lineage (WormWeb, CC BY) as a 2,183-cell table plus generated BioLang",
+    ),
+    Distiller(
+        "human_cell_turnover",
+        [],
+        _distil_human_turnover,
+        "Sender & Milo 2021 cell counts, lifespans and turnover per cell type (Summary.xlsx streamed)",
+    ),
+    Distiller(
+        "celegans_tf_atlas",
+        [],
+        _distil_celegans_tf_atlas,
+        "Ma 2021 TF protein atlas (88 MB streamed): factor presence per cell, reader.bio, textbook check",
+    ),
+    Distiller(
+        "celegans_digital_development",
+        [],
+        _distil_celegans_digital_development,
+        "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts",
+    ),
+    Distiller(
+        "celegans_time_axis",
+        [],
+        _distil_celegans_time_axis,
+        "the reference lineage's minute against the Ma 2021 frames and the Packer 2019 embryo times",
+    ),
+    Distiller(
+        "celegans_packer2019",
+        [],
+        _distil_celegans_packer,
+        "Packer 2019 lineage -> cell type table (GEO GSE126954, 2.8 MB streamed) checked against the lineage",
+    ),
     Distiller(
         "encode_ccres_chr21",
         [],

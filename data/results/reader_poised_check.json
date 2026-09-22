@@ -1,0 +1,266 @@
+{
+  "result": "reader_poised_check",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX"
+  ],
+  "cell_types": {
+    "K562": {
+      "closed": {
+        "genes": 5122,
+        "expressed": 409,
+        "expressed_share": 0.0799
+      },
+      "poised": {
+        "genes": 2135,
+        "expressed": 138,
+        "expressed_share": 0.0646
+      },
+      "read_open": {
+        "genes": 12685,
+        "expressed": 8220,
+        "expressed_share": 0.648
+      },
+      "read": {
+        "genes": 12767,
+        "expressed": 8268,
+        "expressed_share": 0.6476
+      },
+      "read_by_marks": {
+        "genes": 82,
+        "expressed": 48,
+        "expressed_share": 0.5854
+      },
+      "read_by_openness_only": {
+        "genes": 14820,
+        "expressed": 8358,
+        "expressed_share": 0.564
+      }
+    },
+    "HepG2": {
+      "closed": {
+        "genes": 6847,
+        "expressed": 532,
+        "expressed_share": 0.0777
+      },
+      "poised": {
+        "genes": 1553,
+        "expressed": 122,
+        "expressed_share": 0.0786
+      },
+      "read_open": {
+        "genes": 11445,
+        "expressed": 7078,
+        "expressed_share": 0.6184
+      },
+      "read": {
+        "genes": 11624,
+        "expressed": 7180,
+        "expressed_share": 0.6177
+      },
+      "read_by_marks": {
+        "genes": 179,
+        "expressed": 102,
+        "expressed_share": 0.5698
+      },
+      "read_by_openness_only": {
+        "genes": 12998,
+        "expressed": 7200,
+        "expressed_share": 0.5539
+      }
+    },
+    "GM12878": {
+      "closed": {
+        "genes": 9133,
+        "expressed": 1776,
+        "expressed_share": 0.1945
+      },
+      "read_by_marks": {
+        "genes": 1095,
+        "expressed": 999,
+        "expressed_share": 0.9123
+      },
+      "read": {
+        "genes": 10691,
+        "expressed": 9389,
+        "expressed_share": 0.8782
+      },
+      "read_open": {
+        "genes": 9596,
+        "expressed": 8390,
+        "expressed_share": 0.8743
+      },
+      "poised": {
+        "genes": 200,
+        "expressed": 33,
+        "expressed_share": 0.165
+      },
+      "read_by_openness_only": {
+        "genes": 9796,
+        "expressed": 8423,
+        "expressed_share": 0.8598
+      }
+    },
+    "IMR-90": {
+      "closed": {
+        "genes": 5858,
+        "expressed": 440,
+        "expressed_share": 0.0751
+      },
+      "read_open": {
+        "genes": 12614,
+        "expressed": 6510,
+        "expressed_share": 0.5161
+      },
+      "read": {
+        "genes": 12730,
+        "expressed": 6557,
+        "expressed_share": 0.5151
+      },
+      "read_by_marks": {
+        "genes": 116,
+        "expressed": 47,
+        "expressed_share": 0.4052
+      },
+      "poised": {
+        "genes": 1436,
+        "expressed": 98,
+        "expressed_share": 0.0682
+      },
+      "read_by_openness_only": {
+        "genes": 14050,
+        "expressed": 6608,
+        "expressed_share": 0.4703
+      }
+    }
+  },
+  "orientation": {
+    "K562": {
+      "chr1": "as labelled",
+      "chr2": "as labelled",
+      "chr3": "as labelled",
+      "chr4": "as labelled",
+      "chr5": "as labelled",
+      "chr6": "as labelled",
+      "chr7": "as labelled",
+      "chr8": "as labelled",
+      "chr9": "as labelled",
+      "chr10": "as labelled",
+      "chr11": "as labelled",
+      "chr12": "as labelled",
+      "chr13": "as labelled",
+      "chr14": "as labelled",
+      "chr15": "as labelled",
+      "chr16": "as labelled",
+      "chr17": "as labelled",
+      "chr18": "as labelled",
+      "chr19": "as labelled",
+      "chr20": "as labelled",
+      "chr21": "as labelled",
+      "chr22": "as labelled",
+      "chrX": "as labelled"
+    },
+    "HepG2": {
+      "chr1": "as labelled",
+      "chr2": "as labelled",
+      "chr3": "as labelled",
+      "chr4": "as labelled",
+      "chr5": "as labelled",
+      "chr6": "as labelled",
+      "chr7": "as labelled",
+      "chr8": "as labelled",
+      "chr9": "as labelled",
+      "chr10": "as labelled",
+      "chr11": "as labelled",
+      "chr12": "as labelled",
+      "chr13": "as labelled",
+      "chr14": "as labelled",
+      "chr15": "as labelled",
+      "chr16": "as labelled",
+      "chr17": "as labelled",
+      "chr18": "as labelled",
+      "chr19": "as labelled",
+      "chr20": "as labelled",
+      "chr21": "as labelled",
+      "chr22": "as labelled",
+      "chrX": "as labelled"
+    },
+    "GM12878": {
+      "chr1": "as labelled",
+      "chr2": "as labelled",
+      "chr3": "as labelled",
+      "chr4": "as labelled",
+      "chr5": "as labelled",
+      "chr6": "as labelled",
+      "chr7": "as labelled",
+      "chr8": "as labelled",
+      "chr9": "as labelled",
+      "chr10": "as labelled",
+      "chr11": "as labelled",
+      "chr12": "as labelled",
+      "chr13": "as labelled",
+      "chr14": "as labelled",
+      "chr15": "as labelled",
+      "chr16": "as labelled",
+      "chr17": "as labelled",
+      "chr18": "as labelled",
+      "chr19": "as labelled",
+      "chr20": "as labelled",
+      "chr21": "as labelled",
+      "chr22": "as labelled",
+      "chrX": "as labelled"
+    },
+    "IMR-90": {
+      "chr1": "swapped",
+      "chr2": "swapped",
+      "chr3": "swapped",
+      "chr4": "swapped",
+      "chr5": "swapped",
+      "chr6": "swapped",
+      "chr7": "swapped",
+      "chr8": "swapped",
+      "chr9": "swapped",
+      "chr10": "swapped",
+      "chr11": "swapped",
+      "chr12": "swapped",
+      "chr13": "swapped",
+      "chr14": "swapped",
+      "chr15": "swapped",
+      "chr16": "swapped",
+      "chr17": "swapped",
+      "chr18": "swapped",
+      "chr19": "swapped",
+      "chr20": "swapped",
+      "chr21": "swapped",
+      "chr22": "swapped",
+      "chrX": "swapped"
+    }
+  },
+  "expressed": "mean covered fraction of the gene's exons at or above 0.3, ENCODE total RNA-seq on the gene's strand (signal 0.05)",
+  "evidence": {
+    "rna": "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)",
+    "calls": "reader_<cell>_<chrom> after the poised rule"
+  }
+}

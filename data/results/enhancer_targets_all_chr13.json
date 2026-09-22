@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr13",
+  "date": "2026-09-14",
+  "chrom": "chr13",
+  "elements_total": 25634,
+  "scored": 25634,
+  "requests_this_run": 25697,
+  "workers": 8,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 25634,
+    "with_predicted_target": 14885,
+    "fraction_with_target": 0.581,
+    "strong": 3457,
+    "weak": 11428,
+    "silencer_like": 5724,
+    "verdicts": {
+      "no predicted effect": 10749,
+      "another gene in the same domain": 6688,
+      "gene outside the domain": 4203,
+      "agrees with nearest TSS in domain": 3994
+    },
+    "verdicts_coding": {
+      "no predicted effect": 15923,
+      "agrees with nearest TSS in domain": 5433,
+      "gene outside the domain": 3070,
+      "another gene in the same domain": 1208
+    },
+    "coding_target_agrees_with_nearest": 0.559,
+    "fraction_agreeing_with_nearest": 0.268,
+    "fraction_inside_domain": 0.718,
+    "top_tissues": {
+      "K562": 776,
+      "placenta": 500,
+      "CD14-positive monocyte": 465,
+      "HepG2": 445,
+      "GM23338": 406,
+      "testis": 367,
+      "heart": 291,
+      "Karpas-422": 276,
+      "Whole_Blood": 273,
+      "common myeloid progenitor, CD34-positive": 258,
+      "kidney": 227,
+      "CD8-positive, alpha-beta T cell": 220
+    },
+    "median_distance_when_agreeing": 16523
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr13.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

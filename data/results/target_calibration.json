@@ -1,0 +1,5884 @@
+{
+  "result": "target_calibration",
+  "date": "2026-09-17",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), K562; predicted: AlphaGenome deletion per element; curated: ENCODE cCRE classes and GENCODE v50 gene starts; inferred: CTCF-only nodes",
+  "preregistered": "fitted on the K562 training pairs that lie on a deleted element, using only the features the genome-wide sweep also has (the predicted drop in K562, the top-target flag, the log distance to the gene's GENCODE TSS, whether the gene is the node's nearest TSS, and the registry class), the calibrated probability is reliable on the held-out K562 pairs and better calibrated than the model's own effect size read as a confidence: (a) in at least 7 of the 10 equal-count bins the bin's mean predicted probability lies inside the 95% Wilson interval of the bin's observed rate, and (b) both the expected calibration error and the Brier score are lower than those of min(1, |log2 fold change|) scored on the same pairs. The predicted-target calibration fitted on the top-target pairs alone is reported beside it and is not part of the claim: 40 held-out pairs cannot judge it",
+  "verdict": "failed",
+  "checks": {
+    "bins_consistent": 6,
+    "bins_required": 7,
+    "reliable": false,
+    "ece": [
+      0.0231,
+      0.0575
+    ],
+    "ece_better": true,
+    "brier": [
+      0.04184,
+      0.05522
+    ],
+    "brier_better": true
+  },
+  "criterion_note": "The Hosmer-Lemeshow statistic is reported for every reliability table but is deliberately not part of the pre-registered rule. It was read on the training pairs only, before any held-out pair was scored, and it rejects the fit's own in-sample curve at 8,796 pairs (chi2 22.5 on 8 df, p 0.004) while the leave-chromosome-out curve, which is the honest estimate, gives p 0.013 at an expected calibration error of 0.006. At this many pairs the statistic answers a question about counts of one and two positives per bin, not about whether a probability is usable, so it is a diagnostic here and the per-bin interval plus the two errors are the test",
+  "scope": "The calibration is measured on one cell line and one kind of element: K562 CRISPRi pairs whose element is an ENCODE cCRE inside a CTCF node and whose gene a screen chose to test, which means a gene expressed in K562 within about a megabase. The probability is conditional on that test happening: it says how often a K562 screen calls such a pair regulated, not how often an element regulates a gene. Applying it to another cell line, to elements outside the registry, to genes not expressed in the line, or to distances the screens do not reach is extrapolation, and for a sweep element whose strongest predicted tissue is not K562 the drop entering the calibration is the K562 drop, so the band is a statement about K562 and about nothing else. The objection that AlphaGenome was trained on ENCODE tracks of these same cell lines is narrowed and not closed: E1's 2,260 fresh pairs (commit 2a07c80) have units agreeing 637 of 1,096 (0.581) against matched nulls 490 of 968 (0.506), +0.075 with an upper 95% bound of 0.111 at one-sided p 0.00037 \u2014 the weak band, since the pre-registration asked for 0.10 in size, and a small p does not convert a weak effect into the declared one. One cell line carries it: GM12878 +0.089 on 1,895 pairs, Jurkat -0.001 on 365. So in lymphoblastoid cells the model weakly and detectably tracks a reporter assay's direction, and outside them that endpoint says nothing. The declared secondary did pass, and it is the first met prediction of that series: agreement is higher where DAP-G fine-maps the variant, +0.198 on 132 units against 90 controls (p 0.0018) against +0.057 for the rest, which is a reason to expect the transfer where the causal variant is known, not evidence that it happens. A calibration fitted on K562 CRISPRi is therefore a calibration against measurement in K562.",
+  "falsifies_the_transfer": "The transfer fails if, on a CRISPRi screen in another cell line with an AlphaGenome line in the deletion table (GM12878, HepG2 or IMR-90 at the same coverage), the bands do not hold: the observed rate per band outside the band's interval in most populated bands, or an expected calibration error above that of the effect size read as a confidence. It also fails if a screen that tests elements chosen without regard to K562 activity (an unbiased tiling rather than a candidate list) finds the top-band rate far below the band, which is what the selection on testability would look like from outside. A third way to fail is narrower and already measurable: E1's met secondary says agreement is higher where the causal variant is fine-mapped, so if the bands hold no better on the fine-mapped subset of a new screen than off it, the reason to expect any transfer at all is gone. The prevalence shift this result found is a fourth: a screen whose base rate differs from these screens' 5% will need its own intercept, and a band quoted without the population's rate beside it is not a measurement of anything",
+  "populations": {
+    "tested pair": {
+      "what": "a K562 pair a screen tested, on a cCRE inside a CTCF node, every feature present",
+      "training_pairs": 8796,
+      "training_regulated": 437,
+      "training_rate": 0.0497,
+      "heldout_pairs": 1715,
+      "heldout_regulated": 112,
+      "heldout_rate": 0.0653
+    },
+    "predicted target": {
+      "what": "the same, and the tested gene is the element's top predicted target",
+      "training_pairs": 245,
+      "training_regulated": 188,
+      "training_rate": 0.7673,
+      "heldout_pairs": 40,
+      "heldout_regulated": 36,
+      "heldout_rate": 0.9,
+      "covered_pairs_before_any_feature_is_required": [
+        246,
+        40
+      ]
+    }
+  },
+  "coverage": {
+    "training": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 451,
+          "with_every_feature": 437,
+          "fraction": 0.969
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 8786,
+          "with_every_feature": 8359,
+          "fraction": 0.9514
+        }
+      },
+      "missing_values": {
+        "scored_regulated": 437,
+        "pairs_regulated": 471,
+        "scored_not regulated": 8359,
+        "pairs_not regulated": 9885,
+        "no_deleted_element_not regulated": 1099,
+        "no_registry_class_not regulated": 1099,
+        "no_gencode_tss_not regulated": 477,
+        "no_gencode_tss_regulated": 14,
+        "no_deleted_element_regulated": 20,
+        "no_registry_class_regulated": 20
+      },
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.4413,
+            "auroc": 0.8963
+          },
+          "activity over distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.519,
+            "auroc": 0.925
+          }
+        },
+        "and with every feature": {
+          "distance": {
+            "pairs": 8796,
+            "positives": 437,
+            "baseline_precision": 0.0497,
+            "auprc": 0.4436,
+            "auroc": 0.8972
+          },
+          "activity over distance": {
+            "pairs": 8796,
+            "positives": 437,
+            "baseline_precision": 0.0497,
+            "auprc": 0.5265,
+            "auroc": 0.9272
+          }
+        }
+      },
+      "gencode_against_benchmark_distance": {
+        "pairs": 8796,
+        "median_bp": 148,
+        "p90_bp": 11102,
+        "within_1kb": 0.769,
+        "within_10kb": 0.8939
+      }
+    },
+    "heldout, every cell type": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 182,
+          "with_every_feature": 170,
+          "fraction": 0.9341
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 3667,
+          "with_every_feature": 3608,
+          "fraction": 0.9839
+        }
+      },
+      "missing_values": {
+        "scored_regulated": 170,
+        "pairs_regulated": 190,
+        "scored_not regulated": 3608,
+        "pairs_not regulated": 4188,
+        "no_deleted_element_not regulated": 521,
+        "no_registry_class_not regulated": 521,
+        "no_gencode_tss_not regulated": 76,
+        "no_gencode_tss_regulated": 12,
+        "no_deleted_element_regulated": 8,
+        "no_registry_class_regulated": 8
+      },
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.3195,
+            "auroc": 0.8198
+          },
+          "activity over distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.524,
+            "auroc": 0.9146
+          }
+        },
+        "and with every feature": {
+          "distance": {
+            "pairs": 3778,
+            "positives": 170,
+            "baseline_precision": 0.045,
+            "auprc": 0.3273,
+            "auroc": 0.8159
+          },
+          "activity over distance": {
+            "pairs": 3778,
+            "positives": 170,
+            "baseline_precision": 0.045,
+            "auprc": 0.5324,
+            "auroc": 0.9129
+          }
+        }
+      },
+      "gencode_against_benchmark_distance": {
+        "pairs": 3778,
+        "median_bp": 139,
+        "p90_bp": 2761,
+        "within_1kb": 0.8097,
+        "within_10kb": 0.9439
+      }
+    },
+    "heldout K562, the set the claim is judged on": {
+      "arms": {
+        "regulated": {
+          "pairs_on_a_deleted_element": 114,
+          "with_every_feature": 112,
+          "fraction": 0.9825
+        },
+        "not regulated": {
+          "pairs_on_a_deleted_element": 1630,
+          "with_every_feature": 1603,
+          "fraction": 0.9834
+        }
+      },
+      "missing_values": {},
+      "baselines": {
+        "on a deleted element": {
+          "distance": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.3753,
+            "auroc": 0.826
+          },
+          "activity over distance": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.5502,
+            "auroc": 0.8935
+          }
+        },
+        "and with every feature": {
+          "distance": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.3733,
+            "auroc": 0.8231
+          },
+          "activity over distance": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.554,
+            "auroc": 0.8929
+          }
+        }
+      },
+      "gencode_against_benchmark_distance": {
+        "pairs": 1715,
+        "median_bp": 95,
+        "p90_bp": 6201,
+        "within_1kb": 0.8251,
+        "within_10kb": 0.9195
+      }
+    }
+  },
+  "coverage_by_arm_of_the_deletion": {
+    "training": {
+      "arms": {
+        "regulated": {
+          "pairs": 471,
+          "covered": 451,
+          "fraction": 0.9575
+        },
+        "not regulated": {
+          "pairs": 9885,
+          "covered": 8786,
+          "fraction": 0.8888
+        }
+      },
+      "elements": 3941,
+      "elements_fully_covered": 3472,
+      "elements_partly_covered": 0,
+      "baselines": {
+        "all valid pairs": {
+          "distance": {
+            "pairs": 10356,
+            "positives": 471,
+            "baseline_precision": 0.0455,
+            "auprc": 0.4377,
+            "auroc": 0.8973
+          },
+          "activity over distance": {
+            "pairs": 10356,
+            "positives": 471,
+            "baseline_precision": 0.0455,
+            "auprc": 0.5173,
+            "auroc": 0.9257
+          }
+        },
+        "on a deleted element": {
+          "distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.4413,
+            "auroc": 0.8963
+          },
+          "activity over distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.519,
+            "auroc": 0.925
+          }
+        }
+      }
+    },
+    "heldout": {
+      "arms": {
+        "regulated": {
+          "pairs": 190,
+          "covered": 182,
+          "fraction": 0.9579
+        },
+        "not regulated": {
+          "pairs": 4188,
+          "covered": 3667,
+          "fraction": 0.8756
+        }
+      },
+      "elements": 1697,
+      "elements_fully_covered": 1489,
+      "elements_partly_covered": 0,
+      "baselines": {
+        "all valid pairs": {
+          "distance": {
+            "pairs": 4378,
+            "positives": 190,
+            "baseline_precision": 0.0434,
+            "auprc": 0.3204,
+            "auroc": 0.8257
+          },
+          "activity over distance": {
+            "pairs": 4378,
+            "positives": 190,
+            "baseline_precision": 0.0434,
+            "auprc": 0.5192,
+            "auroc": 0.9178
+          }
+        },
+        "on a deleted element": {
+          "distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.3195,
+            "auroc": 0.8198
+          },
+          "activity over distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.524,
+            "auroc": 0.9146
+          }
+        }
+      }
+    }
+  },
+  "training_leave_chromosome_out": {
+    "sweep": {
+      "pairs": 8796,
+      "positives": 437,
+      "baseline_precision": 0.0497,
+      "auprc": 0.6348,
+      "auroc": 0.9094,
+      "mean_predicted": 0.0505,
+      "brier": 0.02812,
+      "log_loss": 0.1104,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 9,
+        "ece": 0.0061,
+        "mce": 0.0189,
+        "hosmer_lemeshow": {
+          "chi2": 19.459,
+          "df": 8,
+          "p": 0.0126
+        },
+        "rows": [
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0013,
+              0.0053
+            ],
+            "mean_predicted": 0.0041,
+            "regulated": 7,
+            "observed": 0.008,
+            "ci95": [
+              0.0039,
+              0.0163
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0053,
+              0.0064
+            ],
+            "mean_predicted": 0.0058,
+            "regulated": 2,
+            "observed": 0.0023,
+            "ci95": [
+              0.0006,
+              0.0082
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0064,
+              0.0079
+            ],
+            "mean_predicted": 0.0071,
+            "regulated": 4,
+            "observed": 0.0046,
+            "ci95": [
+              0.0018,
+              0.0116
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0079,
+              0.0099
+            ],
+            "mean_predicted": 0.0089,
+            "regulated": 11,
+            "observed": 0.0125,
+            "ci95": [
+              0.007,
+              0.0222
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0099,
+              0.0124
+            ],
+            "mean_predicted": 0.011,
+            "regulated": 6,
+            "observed": 0.0068,
+            "ci95": [
+              0.0031,
+              0.0148
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0124,
+              0.0161
+            ],
+            "mean_predicted": 0.0141,
+            "regulated": 4,
+            "observed": 0.0046,
+            "ci95": [
+              0.0018,
+              0.0116
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0161,
+              0.0223
+            ],
+            "mean_predicted": 0.0189,
+            "regulated": 13,
+            "observed": 0.0148,
+            "ci95": [
+              0.0087,
+              0.0251
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0223,
+              0.0344
+            ],
+            "mean_predicted": 0.0275,
+            "regulated": 16,
+            "observed": 0.0182,
+            "ci95": [
+              0.0112,
+              0.0294
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 3,
+            "coverage_regulated": [
+              318,
+              332,
+              0.9578
+            ],
+            "coverage_not_regulated": [
+              8354,
+              8781,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0344,
+              0.0744
+            ],
+            "mean_predicted": 0.0491,
+            "regulated": 42,
+            "observed": 0.0477,
+            "ci95": [
+              0.0355,
+              0.0639
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 6,
+            "coverage_regulated": [
+              437,
+              451,
+              0.969
+            ],
+            "coverage_not_regulated": [
+              8359,
+              8786,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0744,
+              1.0
+            ],
+            "mean_predicted": 0.3583,
+            "regulated": 332,
+            "observed": 0.3773,
+            "ci95": [
+              0.3458,
+              0.4098
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    },
+    "activity": {
+      "pairs": 8796,
+      "positives": 437,
+      "baseline_precision": 0.0497,
+      "auprc": 0.6673,
+      "auroc": 0.9328,
+      "mean_predicted": 0.0502,
+      "brier": 0.02654,
+      "log_loss": 0.1017,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 9,
+        "ece": 0.0041,
+        "mce": 0.0153,
+        "hosmer_lemeshow": {
+          "chi2": 9.534,
+          "df": 8,
+          "p": 0.2993
+        },
+        "rows": [
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0004,
+              0.0019
+            ],
+            "mean_predicted": 0.0013,
+            "regulated": 0,
+            "observed": 0.0,
+            "ci95": [
+              0.0,
+              0.0044
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0019,
+              0.0031
+            ],
+            "mean_predicted": 0.0025,
+            "regulated": 2,
+            "observed": 0.0023,
+            "ci95": [
+              0.0006,
+              0.0082
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0031,
+              0.0045
+            ],
+            "mean_predicted": 0.0038,
+            "regulated": 5,
+            "observed": 0.0057,
+            "ci95": [
+              0.0024,
+              0.0132
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0045,
+              0.0064
+            ],
+            "mean_predicted": 0.0054,
+            "regulated": 5,
+            "observed": 0.0057,
+            "ci95": [
+              0.0024,
+              0.0132
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0064,
+              0.0092
+            ],
+            "mean_predicted": 0.0077,
+            "regulated": 6,
+            "observed": 0.0068,
+            "ci95": [
+              0.0031,
+              0.0148
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0092,
+              0.0134
+            ],
+            "mean_predicted": 0.0112,
+            "regulated": 7,
+            "observed": 0.008,
+            "ci95": [
+              0.0039,
+              0.0163
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0134,
+              0.0204
+            ],
+            "mean_predicted": 0.0165,
+            "regulated": 13,
+            "observed": 0.0148,
+            "ci95": [
+              0.0087,
+              0.0251
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 3,
+            "coverage_regulated": [
+              318,
+              332,
+              0.9578
+            ],
+            "coverage_not_regulated": [
+              8354,
+              8781,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0204,
+              0.0335
+            ],
+            "mean_predicted": 0.0261,
+            "regulated": 12,
+            "observed": 0.0137,
+            "ci95": [
+              0.0078,
+              0.0237
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 3,
+            "coverage_regulated": [
+              318,
+              332,
+              0.9578
+            ],
+            "coverage_not_regulated": [
+              8354,
+              8781,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0335,
+              0.0824
+            ],
+            "mean_predicted": 0.0511,
+            "regulated": 42,
+            "observed": 0.0477,
+            "ci95": [
+              0.0355,
+              0.0639
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 6,
+            "coverage_regulated": [
+              437,
+              451,
+              0.969
+            ],
+            "coverage_not_regulated": [
+              8359,
+              8786,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0826,
+              1.0
+            ],
+            "mean_predicted": 0.3767,
+            "regulated": 345,
+            "observed": 0.392,
+            "ci95": [
+              0.3603,
+              0.4247
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    }
+  },
+  "training_in_sample": {
+    "calibrated, sweep features": {
+      "pairs": 8796,
+      "positives": 437,
+      "baseline_precision": 0.0497,
+      "auprc": 0.6431,
+      "auroc": 0.9131,
+      "mean_predicted": 0.0497,
+      "brier": 0.02782,
+      "log_loss": 0.1086,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 6,
+        "ece": 0.0074,
+        "mce": 0.0318,
+        "hosmer_lemeshow": {
+          "chi2": 22.539,
+          "df": 8,
+          "p": 0.004
+        },
+        "rows": [
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0015,
+              0.0053
+            ],
+            "mean_predicted": 0.0041,
+            "regulated": 8,
+            "observed": 0.0091,
+            "ci95": [
+              0.0046,
+              0.0179
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0053,
+              0.0063
+            ],
+            "mean_predicted": 0.0058,
+            "regulated": 2,
+            "observed": 0.0023,
+            "ci95": [
+              0.0006,
+              0.0082
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0063,
+              0.0077
+            ],
+            "mean_predicted": 0.007,
+            "regulated": 4,
+            "observed": 0.0046,
+            "ci95": [
+              0.0018,
+              0.0116
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0078,
+              0.0096
+            ],
+            "mean_predicted": 0.0086,
+            "regulated": 8,
+            "observed": 0.0091,
+            "ci95": [
+              0.0046,
+              0.0178
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0096,
+              0.0119
+            ],
+            "mean_predicted": 0.0107,
+            "regulated": 7,
+            "observed": 0.008,
+            "ci95": [
+              0.0039,
+              0.0163
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0119,
+              0.0153
+            ],
+            "mean_predicted": 0.0135,
+            "regulated": 5,
+            "observed": 0.0057,
+            "ci95": [
+              0.0024,
+              0.0132
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0153,
+              0.0213
+            ],
+            "mean_predicted": 0.018,
+            "regulated": 12,
+            "observed": 0.0136,
+            "ci95": [
+              0.0078,
+              0.0237
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 1,
+            "coverage_regulated": [
+              249,
+              262,
+              0.9504
+            ],
+            "coverage_not_regulated": [
+              8302,
+              8729,
+              0.9511
+            ],
+            "predicted_range": [
+              0.0213,
+              0.033
+            ],
+            "mean_predicted": 0.0262,
+            "regulated": 13,
+            "observed": 0.0148,
+            "ci95": [
+              0.0087,
+              0.0251
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 3,
+            "coverage_regulated": [
+              318,
+              332,
+              0.9578
+            ],
+            "coverage_not_regulated": [
+              8354,
+              8781,
+              0.9514
+            ],
+            "predicted_range": [
+              0.033,
+              0.0723
+            ],
+            "mean_predicted": 0.0471,
+            "regulated": 37,
+            "observed": 0.042,
+            "ci95": [
+              0.0307,
+              0.0574
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 6,
+            "coverage_regulated": [
+              437,
+              451,
+              0.969
+            ],
+            "coverage_not_regulated": [
+              8359,
+              8786,
+              0.9514
+            ],
+            "predicted_range": [
+              0.0727,
+              1.0
+            ],
+            "mean_predicted": 0.3557,
+            "regulated": 341,
+            "observed": 0.3875,
+            "ci95": [
+              0.3559,
+              0.4201
+            ],
+            "consistent": false
+          }
+        ]
+      }
+    },
+    "drop alone, fitted": {
+      "pairs": 8796,
+      "positives": 437,
+      "baseline_precision": 0.0497,
+      "auprc": 0.4337,
+      "auroc": 0.6881,
+      "mean_predicted": 0.0497,
+      "brier": 0.03342,
+      "log_loss": 0.1489,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 8,
+        "ece": 0.0085,
+        "mce": 0.0191,
+        "hosmer_lemeshow": {
+          "chi2": 21.649,
+          "df": 8,
+          "p": 0.0056
+        },
+        "rows": [
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 27,
+            "observed": 0.0307,
+            "ci95": [
+              0.0212,
+              0.0443
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 35,
+            "observed": 0.0398,
+            "ci95": [
+              0.0287,
+              0.0548
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 31,
+            "observed": 0.0353,
+            "ci95": [
+              0.025,
+              0.0496
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 33,
+            "observed": 0.0375,
+            "ci95": [
+              0.0268,
+              0.0522
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 18,
+            "observed": 0.0205,
+            "ci95": [
+              0.013,
+              0.0321
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 13,
+            "observed": 0.0148,
+            "ci95": [
+              0.0087,
+              0.0251
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 24,
+            "observed": 0.0273,
+            "ci95": [
+              0.0184,
+              0.0403
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 36,
+            "observed": 0.041,
+            "ci95": [
+              0.0297,
+              0.0562
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 35,
+            "observed": 0.0398,
+            "ci95": [
+              0.0287,
+              0.0548
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 880,
+            "strata": 5,
+            "coverage_regulated": [
+              415,
+              428,
+              0.9696
+            ],
+            "coverage_not_regulated": [
+              8343,
+              8770,
+              0.9513
+            ],
+            "predicted_range": [
+              0.0339,
+              1.0
+            ],
+            "mean_predicted": 0.1917,
+            "regulated": 185,
+            "observed": 0.2102,
+            "ci95": [
+              0.1846,
+              0.2384
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    },
+    "effect size as a confidence": {
+      "pairs": 8796,
+      "positives": 437,
+      "baseline_precision": 0.0497,
+      "auprc": 0.4337,
+      "auroc": 0.6881,
+      "mean_predicted": 0.0068,
+      "brier": 0.04089,
+      "log_loss": 0.4579,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 0,
+        "ece": 0.0429,
+        "mce": 0.1426,
+        "hosmer_lemeshow": {
+          "chi2": 283.227,
+          "df": 8,
+          "p": 0.0
+        },
+        "rows": [
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 27,
+            "observed": 0.0307,
+            "ci95": [
+              0.0212,
+              0.0443
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 35,
+            "observed": 0.0398,
+            "ci95": [
+              0.0287,
+              0.0548
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 31,
+            "observed": 0.0353,
+            "ci95": [
+              0.025,
+              0.0496
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 33,
+            "observed": 0.0375,
+            "ci95": [
+              0.0268,
+              0.0522
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 18,
+            "observed": 0.0205,
+            "ci95": [
+              0.013,
+              0.0321
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 13,
+            "observed": 0.0148,
+            "ci95": [
+              0.0087,
+              0.0251
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 24,
+            "observed": 0.0273,
+            "ci95": [
+              0.0184,
+              0.0403
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 879,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 36,
+            "observed": 0.041,
+            "ci95": [
+              0.0297,
+              0.0562
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 2,
+            "coverage_regulated": [
+              271,
+              285,
+              0.9509
+            ],
+            "coverage_not_regulated": [
+              8318,
+              8745,
+              0.9512
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 35,
+            "observed": 0.0398,
+            "ci95": [
+              0.0287,
+              0.0548
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 880,
+            "strata": 5,
+            "coverage_regulated": [
+              415,
+              428,
+              0.9696
+            ],
+            "coverage_not_regulated": [
+              8343,
+              8770,
+              0.9513
+            ],
+            "predicted_range": [
+              0.0,
+              1.0
+            ],
+            "mean_predicted": 0.0677,
+            "regulated": 185,
+            "observed": 0.2102,
+            "ci95": [
+              0.1846,
+              0.2384
+            ],
+            "consistent": false
+          }
+        ]
+      }
+    }
+  },
+  "heldout_k562": {
+    "calibrated, sweep features": {
+      "pairs": 1715,
+      "positives": 112,
+      "baseline_precision": 0.0653,
+      "auprc": 0.5589,
+      "auroc": 0.8543,
+      "mean_predicted": 0.0441,
+      "brier": 0.04184,
+      "log_loss": 0.1667,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 6,
+        "ece": 0.0231,
+        "mce": 0.0843,
+        "hosmer_lemeshow": {
+          "chi2": 53.901,
+          "df": 8,
+          "p": 0.0
+        },
+        "rows": [
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0032,
+              0.0054
+            ],
+            "mean_predicted": 0.0046,
+            "regulated": 5,
+            "observed": 0.0292,
+            "ci95": [
+              0.0126,
+              0.0666
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0054,
+              0.0064
+            ],
+            "mean_predicted": 0.0059,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0322
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0064,
+              0.0076
+            ],
+            "mean_predicted": 0.007,
+            "regulated": 3,
+            "observed": 0.0175,
+            "ci95": [
+              0.006,
+              0.0503
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0076,
+              0.0092
+            ],
+            "mean_predicted": 0.0084,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0322
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0092,
+              0.0116
+            ],
+            "mean_predicted": 0.0103,
+            "regulated": 3,
+            "observed": 0.0175,
+            "ci95": [
+              0.006,
+              0.0503
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0116,
+              0.0143
+            ],
+            "mean_predicted": 0.0129,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0322
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0143,
+              0.02
+            ],
+            "mean_predicted": 0.0169,
+            "regulated": 4,
+            "observed": 0.0234,
+            "ci95": [
+              0.0091,
+              0.0586
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.02,
+              0.0314
+            ],
+            "mean_predicted": 0.0249,
+            "regulated": 11,
+            "observed": 0.064,
+            "ci95": [
+              0.0361,
+              0.1109
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0315,
+              0.0674
+            ],
+            "mean_predicted": 0.0443,
+            "regulated": 16,
+            "observed": 0.0936,
+            "ci95": [
+              0.0584,
+              0.1466
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 6,
+            "coverage_regulated": [
+              112,
+              114,
+              0.9825
+            ],
+            "coverage_not_regulated": [
+              1603,
+              1630,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0677,
+              1.0
+            ],
+            "mean_predicted": 0.3053,
+            "regulated": 67,
+            "observed": 0.3895,
+            "ci95": [
+              0.3198,
+              0.4641
+            ],
+            "consistent": false
+          }
+        ]
+      }
+    },
+    "drop alone, fitted": {
+      "pairs": 1715,
+      "positives": 112,
+      "baseline_precision": 0.0653,
+      "auprc": 0.4276,
+      "auroc": 0.6468,
+      "mean_predicted": 0.0505,
+      "brier": 0.04639,
+      "log_loss": 0.1962,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 7,
+        "ece": 0.0256,
+        "mce": 0.0649,
+        "hosmer_lemeshow": {
+          "chi2": 56.02,
+          "df": 8,
+          "p": 0.0
+        },
+        "rows": [
+          {
+            "pairs": 171,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 13,
+            "observed": 0.076,
+            "ci95": [
+              0.045,
+              0.1257
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 17,
+            "observed": 0.0988,
+            "ci95": [
+              0.0626,
+              0.1526
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 16,
+            "observed": 0.0936,
+            "ci95": [
+              0.0584,
+              0.1466
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 5,
+            "observed": 0.0291,
+            "ci95": [
+              0.0125,
+              0.0662
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 3,
+            "observed": 0.0175,
+            "ci95": [
+              0.006,
+              0.0503
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 4,
+            "observed": 0.0233,
+            "ci95": [
+              0.0091,
+              0.0583
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 2,
+            "observed": 0.0117,
+            "ci95": [
+              0.0032,
+              0.0416
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 8,
+            "observed": 0.0465,
+            "ci95": [
+              0.0238,
+              0.0891
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              0.0339
+            ],
+            "mean_predicted": 0.0339,
+            "regulated": 6,
+            "observed": 0.0351,
+            "ci95": [
+              0.0162,
+              0.0744
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "strata": 5,
+            "coverage_regulated": [
+              109,
+              111,
+              0.982
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0339,
+              1.0
+            ],
+            "mean_predicted": 0.1996,
+            "regulated": 38,
+            "observed": 0.2209,
+            "ci95": [
+              0.1654,
+              0.2887
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    },
+    "effect size as a confidence": {
+      "pairs": 1715,
+      "positives": 112,
+      "baseline_precision": 0.0653,
+      "auprc": 0.4276,
+      "auroc": 0.6468,
+      "mean_predicted": 0.0078,
+      "brier": 0.05522,
+      "log_loss": 0.6637,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 0,
+        "ece": 0.0575,
+        "mce": 0.1435,
+        "hosmer_lemeshow": {
+          "chi2": 49.62,
+          "df": 8,
+          "p": 0.0
+        },
+        "rows": [
+          {
+            "pairs": 171,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 13,
+            "observed": 0.076,
+            "ci95": [
+              0.045,
+              0.1257
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 17,
+            "observed": 0.0988,
+            "ci95": [
+              0.0626,
+              0.1526
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 16,
+            "observed": 0.0936,
+            "ci95": [
+              0.0584,
+              0.1466
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 5,
+            "observed": 0.0291,
+            "ci95": [
+              0.0125,
+              0.0662
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 3,
+            "observed": 0.0175,
+            "ci95": [
+              0.006,
+              0.0503
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 4,
+            "observed": 0.0233,
+            "ci95": [
+              0.0091,
+              0.0583
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 2,
+            "observed": 0.0117,
+            "ci95": [
+              0.0032,
+              0.0416
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 1,
+            "coverage_regulated": [
+              76,
+              78,
+              0.9744
+            ],
+            "coverage_not_regulated": [
+              1599,
+              1626,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 8,
+            "observed": 0.0465,
+            "ci95": [
+              0.0238,
+              0.0891
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "strata": 2,
+            "coverage_regulated": [
+              79,
+              81,
+              0.9753
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              0.0
+            ],
+            "mean_predicted": 0.0,
+            "regulated": 6,
+            "observed": 0.0351,
+            "ci95": [
+              0.0162,
+              0.0744
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "strata": 5,
+            "coverage_regulated": [
+              109,
+              111,
+              0.982
+            ],
+            "coverage_not_regulated": [
+              1601,
+              1628,
+              0.9834
+            ],
+            "predicted_range": [
+              0.0,
+              1.0
+            ],
+            "mean_predicted": 0.0774,
+            "regulated": 38,
+            "observed": 0.2209,
+            "ci95": [
+              0.1654,
+              0.2887
+            ],
+            "consistent": false
+          }
+        ]
+      }
+    }
+  },
+  "heldout_prevalence_shift": {
+    "calibrated, sweep features": {
+      "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+      "mean_predicted_before": 0.0441,
+      "observed_rate": 0.0653,
+      "log_odds_shift": 0.6793,
+      "bins_consistent": 9,
+      "bins": 10,
+      "ece": 0.01,
+      "brier": 0.04065,
+      "hosmer_lemeshow": {
+        "chi2": 14.08,
+        "df": 8,
+        "p": 0.0797
+      }
+    },
+    "drop alone, fitted": {
+      "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+      "mean_predicted_before": 0.0505,
+      "observed_rate": 0.0653,
+      "log_odds_shift": 0.3777,
+      "bins_consistent": 7,
+      "bins": 10,
+      "ece": 0.0258,
+      "brier": 0.04596,
+      "hosmer_lemeshow": {
+        "chi2": 32.735,
+        "df": 8,
+        "p": 0.0001
+      }
+    },
+    "effect size as a confidence": {
+      "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+      "mean_predicted_before": 0.0078,
+      "observed_rate": 0.0653,
+      "log_odds_shift": 10.7798,
+      "bins_consistent": 7,
+      "bins": 10,
+      "ece": 0.0263,
+      "brier": 0.04506,
+      "hosmer_lemeshow": {
+        "chi2": 35.14,
+        "df": 8,
+        "p": 0.0
+      }
+    }
+  },
+  "heldout_other_cells": {
+    "GM12878": {
+      "refused": "too few pairs to read a reliability table",
+      "pairs": 62,
+      "regulated": 14,
+      "calibrated": {
+        "pairs": 62,
+        "positives": 14,
+        "baseline_precision": 0.2258,
+        "auprc": 0.917,
+        "auroc": 0.9196,
+        "mean_predicted": 0.13,
+        "brier": 0.09271,
+        "log_loss": 0.3265,
+        "log_loss_clip": 1e-06,
+        "reliability": {
+          "bins": 3,
+          "bins_consistent": 2,
+          "ece": 0.1171,
+          "mce": 0.2803,
+          "hosmer_lemeshow": {
+            "chi2": 9.874,
+            "df": 1,
+            "p": 0.0017
+          },
+          "rows": [
+            {
+              "pairs": 20,
+              "predicted_range": [
+                0.0056,
+                0.0177
+              ],
+              "mean_predicted": 0.0142,
+              "regulated": 1,
+              "observed": 0.05,
+              "ci95": [
+                0.0089,
+                0.2361
+              ],
+              "consistent": true
+            },
+            {
+              "pairs": 21,
+              "predicted_range": [
+                0.0187,
+                0.0497
+              ],
+              "mean_predicted": 0.0314,
+              "regulated": 0,
+              "observed": 0.0,
+              "ci95": [
+                0.0,
+                0.1546
+              ],
+              "consistent": true
+            },
+            {
+              "pairs": 21,
+              "predicted_range": [
+                0.0555,
+                1.0
+              ],
+              "mean_predicted": 0.3388,
+              "regulated": 13,
+              "observed": 0.619,
+              "ci95": [
+                0.4088,
+                0.7925
+              ],
+              "consistent": false
+            }
+          ]
+        }
+      }
+    },
+    "HCT116": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    },
+    "Jurkat": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    },
+    "WTC11": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    }
+  },
+  "weights": {
+    "calibrated, sweep features": {
+      "intercept": 7.1611,
+      "deletion_drop": 20.7199,
+      "top_target": 1.2341,
+      "log_tss_distance": -0.9005,
+      "node_target": 0.2315,
+      "class_pELS": -0.4757,
+      "class_PLS": 0.0,
+      "class_CTCF-only": 0.0,
+      "class_DNase-H3K4me3": 0.0,
+      "class_unknown": 0.0
+    },
+    "drop alone, fitted": {
+      "intercept": -3.3502,
+      "deletion_drop": 51.4344
+    },
+    "with measured activity (not applied)": {
+      "intercept": 5.3049,
+      "deletion_drop": 17.4309,
+      "top_target": 1.2732,
+      "log_tss_distance": -0.9037,
+      "node_target": 0.257,
+      "class_pELS": -0.4619,
+      "class_PLS": 0.0,
+      "class_CTCF-only": 0.0,
+      "class_DNase-H3K4me3": 0.0,
+      "class_unknown": 0.0,
+      "log_activity": 1.0077
+    },
+    "predicted-target population": {
+      "intercept": 2.8132,
+      "deletion_drop": 15.0342,
+      "log_tss_distance": -0.2606,
+      "node_target": -0.506
+    }
+  },
+  "measured_by_drop_band": {
+    "population": "every covered K562 pair whose tested gene is the element's top predicted target (the sweep's own pair); no feature but the drop enters, so no pair is dropped for a missing value, and each band reports the coverage of both arms before its rate",
+    "K562 training": [
+      {
+        "drop": "= 0",
+        "pairs": 39,
+        "coverage_regulated": [
+          22,
+          23,
+          0.9565
+        ],
+        "coverage_not_regulated": [
+          16,
+          16,
+          1.0
+        ],
+        "regulated": 23,
+        "rate": 0.5897,
+        "ci95": [
+          0.4342,
+          0.7292
+        ],
+        "elements": 39
+      },
+      {
+        "drop": "0 < drop <= 0.1",
+        "pairs": 83,
+        "coverage_regulated": [
+          47,
+          47,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          36,
+          36,
+          1.0
+        ],
+        "regulated": 47,
+        "rate": 0.5663,
+        "ci95": [
+          0.4591,
+          0.6676
+        ],
+        "elements": 83
+      },
+      {
+        "drop": "0.1 < drop <= 0.2",
+        "pairs": 40,
+        "coverage_regulated": [
+          35,
+          35,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          5,
+          5,
+          1.0
+        ],
+        "regulated": 35,
+        "rate": 0.875,
+        "ci95": [
+          0.7389,
+          0.9454
+        ],
+        "elements": 40
+      },
+      {
+        "drop": "0.2 < drop <= 0.5",
+        "pairs": 35,
+        "coverage_regulated": [
+          35,
+          35,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 35,
+        "rate": 1.0,
+        "ci95": [
+          0.9011,
+          1.0
+        ],
+        "elements": 35
+      },
+      {
+        "drop": "0.5 < drop <= inf",
+        "pairs": 49,
+        "coverage_regulated": [
+          49,
+          49,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 49,
+        "rate": 1.0,
+        "ci95": [
+          0.9273,
+          1.0
+        ],
+        "elements": 49
+      }
+    ],
+    "K562 held out": [
+      {
+        "drop": "= 0",
+        "pairs": 5,
+        "coverage_regulated": [
+          3,
+          3,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          2,
+          2,
+          1.0
+        ],
+        "regulated": 3,
+        "rate": 0.6,
+        "ci95": [
+          0.2307,
+          0.8824
+        ],
+        "elements": 5
+      },
+      {
+        "drop": "0 < drop <= 0.1",
+        "pairs": 9,
+        "coverage_regulated": [
+          8,
+          8,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          1,
+          1,
+          1.0
+        ],
+        "regulated": 8,
+        "rate": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ],
+        "elements": 9
+      },
+      {
+        "drop": "0.1 < drop <= 0.2",
+        "pairs": 5,
+        "coverage_regulated": [
+          4,
+          4,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          1,
+          1,
+          1.0
+        ],
+        "regulated": 4,
+        "rate": 0.8,
+        "ci95": [
+          0.3755,
+          0.9638
+        ],
+        "elements": 5
+      },
+      {
+        "drop": "0.2 < drop <= 0.5",
+        "pairs": 11,
+        "coverage_regulated": [
+          11,
+          11,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 11,
+        "rate": 1.0,
+        "ci95": [
+          0.7412,
+          1.0
+        ],
+        "elements": 11
+      },
+      {
+        "drop": "0.5 < drop <= inf",
+        "pairs": 10,
+        "coverage_regulated": [
+          10,
+          10,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 10,
+        "rate": 1.0,
+        "ci95": [
+          0.7225,
+          1.0
+        ],
+        "elements": 10
+      }
+    ],
+    "K562 pooled (both, after the held-out test)": [
+      {
+        "drop": "= 0",
+        "pairs": 44,
+        "coverage_regulated": [
+          25,
+          26,
+          0.9615
+        ],
+        "coverage_not_regulated": [
+          18,
+          18,
+          1.0
+        ],
+        "regulated": 26,
+        "rate": 0.5909,
+        "ci95": [
+          0.4441,
+          0.7231
+        ],
+        "elements": 44
+      },
+      {
+        "drop": "0 < drop <= 0.1",
+        "pairs": 92,
+        "coverage_regulated": [
+          55,
+          55,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          37,
+          37,
+          1.0
+        ],
+        "regulated": 55,
+        "rate": 0.5978,
+        "ci95": [
+          0.4957,
+          0.6922
+        ],
+        "elements": 92
+      },
+      {
+        "drop": "0.1 < drop <= 0.2",
+        "pairs": 45,
+        "coverage_regulated": [
+          39,
+          39,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          6,
+          6,
+          1.0
+        ],
+        "regulated": 39,
+        "rate": 0.8667,
+        "ci95": [
+          0.7382,
+          0.9374
+        ],
+        "elements": 45
+      },
+      {
+        "drop": "0.2 < drop <= 0.5",
+        "pairs": 46,
+        "coverage_regulated": [
+          46,
+          46,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 46,
+        "rate": 1.0,
+        "ci95": [
+          0.9229,
+          1.0
+        ],
+        "elements": 46
+      },
+      {
+        "drop": "0.5 < drop <= inf",
+        "pairs": 59,
+        "coverage_regulated": [
+          59,
+          59,
+          1.0
+        ],
+        "coverage_not_regulated": [
+          0,
+          0,
+          null
+        ],
+        "regulated": 59,
+        "rate": 1.0,
+        "ci95": [
+          0.9389,
+          1.0
+        ],
+        "elements": 59
+      }
+    ]
+  },
+  "predicted_target_calibration": {
+    "note": "fitted on the training pairs of the sweep's own population; the held-out reliability rests on a few dozen pairs and is not part of the pre-registration",
+    "training_in_sample": {
+      "pairs": 245,
+      "positives": 188,
+      "baseline_precision": 0.7673,
+      "auprc": 0.9499,
+      "auroc": 0.8378,
+      "mean_predicted": 0.7673,
+      "brier": 0.13274,
+      "log_loss": 0.3928,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 3,
+        "bins_consistent": 3,
+        "ece": 0.0143,
+        "mce": 0.0213,
+        "hosmer_lemeshow": {
+          "chi2": 0.786,
+          "df": 1,
+          "p": 0.3752
+        },
+        "rows": [
+          {
+            "pairs": 81,
+            "strata": 2,
+            "coverage_regulated": [
+              69,
+              70,
+              0.9857
+            ],
+            "coverage_not_regulated": [
+              52,
+              52,
+              1.0
+            ],
+            "predicted_range": [
+              0.3416,
+              0.6286
+            ],
+            "mean_predicted": 0.5093,
+            "regulated": 40,
+            "observed": 0.4938,
+            "ci95": [
+              0.3877,
+              0.6005
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 82,
+            "strata": 4,
+            "coverage_regulated": [
+              139,
+              140,
+              0.9929
+            ],
+            "coverage_not_regulated": [
+              57,
+              57,
+              1.0
+            ],
+            "predicted_range": [
+              0.6298,
+              0.9513
+            ],
+            "mean_predicted": 0.7957,
+            "regulated": 67,
+            "observed": 0.8171,
+            "ci95": [
+              0.7199,
+              0.8859
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 82,
+            "strata": 3,
+            "coverage_regulated": [
+              119,
+              119,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              5,
+              5,
+              1.0
+            ],
+            "predicted_range": [
+              0.9517,
+              1.0
+            ],
+            "mean_predicted": 0.9938,
+            "regulated": 81,
+            "observed": 0.9878,
+            "ci95": [
+              0.9341,
+              0.9978
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    },
+    "heldout": {
+      "pairs": 40,
+      "positives": 36,
+      "baseline_precision": 0.9,
+      "auprc": 0.9847,
+      "auroc": 0.875,
+      "mean_predicted": 0.8355,
+      "brier": 0.08386,
+      "log_loss": 0.2624,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 3,
+        "bins_consistent": 3,
+        "ece": 0.0657,
+        "mce": 0.199,
+        "hosmer_lemeshow": {
+          "chi2": 2.118,
+          "df": 1,
+          "p": 0.1456
+        },
+        "rows": [
+          {
+            "pairs": 13,
+            "strata": 2,
+            "coverage_regulated": [
+              11,
+              11,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              3,
+              3,
+              1.0
+            ],
+            "predicted_range": [
+              0.3201,
+              0.7407
+            ],
+            "mean_predicted": 0.5703,
+            "regulated": 10,
+            "observed": 0.7692,
+            "ci95": [
+              0.4974,
+              0.9182
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 13,
+            "strata": 3,
+            "coverage_regulated": [
+              23,
+              23,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              2,
+              2,
+              1.0
+            ],
+            "predicted_range": [
+              0.7476,
+              0.9885
+            ],
+            "mean_predicted": 0.9249,
+            "regulated": 12,
+            "observed": 0.9231,
+            "ci95": [
+              0.6669,
+              0.9863
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 14,
+            "strata": 2,
+            "coverage_regulated": [
+              21,
+              21,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "predicted_range": [
+              0.9908,
+              1.0
+            ],
+            "mean_predicted": 0.9987,
+            "regulated": 14,
+            "observed": 1.0,
+            "ci95": [
+              0.7847,
+              1.0
+            ],
+            "consistent": true
+          }
+        ]
+      }
+    }
+  },
+  "what_measured_activity_would_add": {
+    "note": "DNase x H3K27ac measured in the screen's own cell is in the benchmark's columns but cached for one chromosome only, so a calibration using it cannot be applied to the sweep; this row says what leaving it out costs",
+    "leave_chromosome_out_ece": {
+      "sweep": 0.0061,
+      "activity": 0.0041
+    },
+    "heldout_k562": {
+      "pairs": 1715,
+      "positives": 112,
+      "baseline_precision": 0.0653,
+      "auprc": 0.64,
+      "auroc": 0.9057,
+      "mean_predicted": 0.0436,
+      "brier": 0.03772,
+      "log_loss": 0.147,
+      "log_loss_clip": 1e-06,
+      "reliability": {
+        "bins": 10,
+        "bins_consistent": 6,
+        "ece": 0.022,
+        "mce": 0.0982,
+        "hosmer_lemeshow": {
+          "chi2": 36.964,
+          "df": 8,
+          "p": 0.0
+        },
+        "rows": [
+          {
+            "pairs": 171,
+            "predicted_range": [
+              0.0007,
+              0.0017
+            ],
+            "mean_predicted": 0.0013,
+            "regulated": 0,
+            "observed": 0.0,
+            "ci95": [
+              0.0,
+              0.022
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "predicted_range": [
+              0.0017,
+              0.0024
+            ],
+            "mean_predicted": 0.0021,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0322
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "predicted_range": [
+              0.0024,
+              0.0035
+            ],
+            "mean_predicted": 0.0029,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0324
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "predicted_range": [
+              0.0035,
+              0.0047
+            ],
+            "mean_predicted": 0.004,
+            "regulated": 2,
+            "observed": 0.0116,
+            "ci95": [
+              0.0032,
+              0.0414
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "predicted_range": [
+              0.0047,
+              0.0067
+            ],
+            "mean_predicted": 0.0057,
+            "regulated": 1,
+            "observed": 0.0058,
+            "ci95": [
+              0.001,
+              0.0324
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 172,
+            "predicted_range": [
+              0.0067,
+              0.0096
+            ],
+            "mean_predicted": 0.008,
+            "regulated": 3,
+            "observed": 0.0174,
+            "ci95": [
+              0.0059,
+              0.05
+            ],
+            "consistent": true
+          },
+          {
+            "pairs": 171,
+            "predicted_range": [
+              0.0096,
+              0.0155
+            ],
+            "mean_predicted": 0.0122,
+            "regulated": 6,
+            "observed": 0.0351,
+            "ci95": [
+              0.0162,
+              0.0744
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "predicted_range": [
+              0.0156,
+              0.0305
+            ],
+            "mean_predicted": 0.0223,
+            "regulated": 10,
+            "observed": 0.0581,
+            "ci95": [
+              0.0319,
+              0.1037
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 171,
+            "predicted_range": [
+              0.0306,
+              0.0655
+            ],
+            "mean_predicted": 0.0445,
+            "regulated": 14,
+            "observed": 0.0819,
+            "ci95": [
+              0.0494,
+              0.1327
+            ],
+            "consistent": false
+          },
+          {
+            "pairs": 172,
+            "predicted_range": [
+              0.0659,
+              1.0
+            ],
+            "mean_predicted": 0.3321,
+            "regulated": 74,
+            "observed": 0.4302,
+            "ci95": [
+              0.3586,
+              0.505
+            ],
+            "consistent": false
+          }
+        ]
+      }
+    }
+  },
+  "genome_wide": {
+    "any gene": {
+      "targets": 593765,
+      "tested_pair_bands": {
+        "0-0.02": 7044,
+        "0.02-0.05": 13652,
+        "0.05-0.1": 36270,
+        "0.1-0.25": 108607,
+        "0.25-0.5": 134423,
+        "0.5-0.75": 110656,
+        "0.75-0.9": 100768,
+        "0.9-1": 82345
+      },
+      "predicted_target_bands": {
+        "0.05-0.1": 45,
+        "0.1-0.25": 3837,
+        "0.25-0.5": 178387,
+        "0.5-0.75": 293568,
+        "0.75-0.9": 61971,
+        "0.9-1": 55957
+      },
+      "drop_bands": {
+        "= 0": 275821,
+        "0 < drop <= 0.1": 239487,
+        "0.1 < drop <= 0.2": 44299,
+        "0.2 < drop <= 0.5": 24281,
+        "0.5 < drop <= inf": 9877
+      },
+      "by_registry_class": {
+        "dELS": {
+          "0.05-0.1": 34,
+          "0.1-0.25": 2591,
+          "0.25-0.5": 166181,
+          "0.5-0.75": 217661,
+          "0.75-0.9": 39538,
+          "0.9-1": 26869
+        },
+        "pELS": {
+          "0.05-0.1": 11,
+          "0.1-0.25": 1246,
+          "0.25-0.5": 12206,
+          "0.5-0.75": 75907,
+          "0.75-0.9": 22433,
+          "0.9-1": 29088
+        }
+      },
+      "missing": {
+        "no_gencode_tss_for_the_predicted_gene": 18558,
+        "no_predicted_target": 348904
+      }
+    },
+    "coding gene": {
+      "targets": 440377,
+      "tested_pair_bands": {
+        "0-0.02": 3286,
+        "0.02-0.05": 14987,
+        "0.05-0.1": 32972,
+        "0.1-0.25": 84694,
+        "0.25-0.5": 96505,
+        "0.5-0.75": 76467,
+        "0.75-0.9": 69238,
+        "0.9-1": 62228
+      },
+      "predicted_target_bands": {
+        "0.1-0.25": 1,
+        "0.25-0.5": 184256,
+        "0.5-0.75": 175655,
+        "0.75-0.9": 42552,
+        "0.9-1": 37913
+      },
+      "drop_bands": {
+        "= 0": 205541,
+        "0 < drop <= 0.1": 173234,
+        "0.1 < drop <= 0.2": 37488,
+        "0.2 < drop <= 0.5": 18338,
+        "0.5 < drop <= inf": 5776
+      },
+      "by_registry_class": {
+        "dELS": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 167143,
+          "0.5-0.75": 120677,
+          "0.75-0.9": 27961,
+          "0.9-1": 18918
+        },
+        "pELS": {
+          "0.25-0.5": 17113,
+          "0.5-0.75": 54978,
+          "0.75-0.9": 14591,
+          "0.9-1": 18995
+        }
+      },
+      "missing": {
+        "no_predicted_target": 520850
+      }
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "elements": 88109,
+      "any gene": {
+        "targets": 56803,
+        "mean_predicted_target_probability": 0.6171,
+        "tested_pair_bands": {
+          "0-0.02": 653,
+          "0.02-0.05": 896,
+          "0.05-0.1": 2730,
+          "0.1-0.25": 9027,
+          "0.25-0.5": 12953,
+          "0.5-0.75": 11359,
+          "0.75-0.9": 10479,
+          "0.9-1": 8706
+        },
+        "predicted_target_bands": {
+          "0.05-0.1": 36,
+          "0.1-0.25": 377,
+          "0.25-0.5": 15723,
+          "0.5-0.75": 28678,
+          "0.75-0.9": 6102,
+          "0.9-1": 5887
+        },
+        "drop_bands": {
+          "= 0": 26303,
+          "0 < drop <= 0.1": 22420,
+          "0.1 < drop <= 0.2": 4433,
+          "0.2 < drop <= 0.5": 2526,
+          "0.5 < drop <= inf": 1121
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.05-0.1": 28,
+            "0.1-0.25": 239,
+            "0.25-0.5": 14605,
+            "0.5-0.75": 21021,
+            "0.75-0.9": 3909,
+            "0.9-1": 2913
+          },
+          "pELS": {
+            "0.05-0.1": 8,
+            "0.1-0.25": 138,
+            "0.25-0.5": 1118,
+            "0.5-0.75": 7657,
+            "0.75-0.9": 2193,
+            "0.9-1": 2974
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1091,
+          "no_predicted_target": 30215
+        }
+      },
+      "coding gene": {
+        "targets": 43681,
+        "mean_predicted_target_probability": 0.589,
+        "tested_pair_bands": {
+          "0-0.02": 236,
+          "0.02-0.05": 989,
+          "0.05-0.1": 2702,
+          "0.1-0.25": 7443,
+          "0.25-0.5": 9728,
+          "0.5-0.75": 8141,
+          "0.75-0.9": 7576,
+          "0.9-1": 6866
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 16891,
+          "0.5-0.75": 18148,
+          "0.75-0.9": 4416,
+          "0.9-1": 4226
+        },
+        "drop_bands": {
+          "= 0": 20268,
+          "0 < drop <= 0.1": 16811,
+          "0.1 < drop <= 0.2": 3874,
+          "0.2 < drop <= 0.5": 2036,
+          "0.5 < drop <= inf": 692
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 15317,
+            "0.5-0.75": 12437,
+            "0.75-0.9": 2917,
+            "0.9-1": 2243
+          },
+          "pELS": {
+            "0.25-0.5": 1574,
+            "0.5-0.75": 5711,
+            "0.75-0.9": 1499,
+            "0.9-1": 1983
+          }
+        },
+        "missing": {
+          "no_predicted_target": 44428
+        }
+      }
+    },
+    "chr2": {
+      "elements": 79639,
+      "any gene": {
+        "targets": 46873,
+        "mean_predicted_target_probability": 0.5955,
+        "tested_pair_bands": {
+          "0-0.02": 498,
+          "0.02-0.05": 1111,
+          "0.05-0.1": 3185,
+          "0.1-0.25": 9717,
+          "0.25-0.5": 11319,
+          "0.5-0.75": 8373,
+          "0.75-0.9": 7144,
+          "0.9-1": 5526
+        },
+        "predicted_target_bands": {
+          "0.05-0.1": 9,
+          "0.1-0.25": 311,
+          "0.25-0.5": 15313,
+          "0.5-0.75": 22846,
+          "0.75-0.9": 4649,
+          "0.9-1": 3745
+        },
+        "drop_bands": {
+          "= 0": 22070,
+          "0 < drop <= 0.1": 19086,
+          "0.1 < drop <= 0.2": 3410,
+          "0.2 < drop <= 0.5": 1688,
+          "0.5 < drop <= inf": 619
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.05-0.1": 6,
+            "0.1-0.25": 217,
+            "0.25-0.5": 14388,
+            "0.5-0.75": 17554,
+            "0.75-0.9": 3128,
+            "0.9-1": 1938
+          },
+          "pELS": {
+            "0.05-0.1": 3,
+            "0.1-0.25": 94,
+            "0.25-0.5": 925,
+            "0.5-0.75": 5292,
+            "0.75-0.9": 1521,
+            "0.9-1": 1807
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1837,
+          "no_predicted_target": 30929
+        }
+      },
+      "coding gene": {
+        "targets": 32917,
+        "mean_predicted_target_probability": 0.5629,
+        "tested_pair_bands": {
+          "0-0.02": 179,
+          "0.02-0.05": 960,
+          "0.05-0.1": 2583,
+          "0.1-0.25": 7356,
+          "0.25-0.5": 7679,
+          "0.5-0.75": 5495,
+          "0.75-0.9": 4717,
+          "0.9-1": 3948
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 14950,
+          "0.5-0.75": 12536,
+          "0.75-0.9": 3046,
+          "0.9-1": 2385
+        },
+        "drop_bands": {
+          "= 0": 15669,
+          "0 < drop <= 0.1": 12883,
+          "0.1 < drop <= 0.2": 2791,
+          "0.2 < drop <= 0.5": 1250,
+          "0.5 < drop <= inf": 324
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 13704,
+            "0.5-0.75": 8877,
+            "0.75-0.9": 2131,
+            "0.9-1": 1260
+          },
+          "pELS": {
+            "0.25-0.5": 1246,
+            "0.5-0.75": 3659,
+            "0.75-0.9": 915,
+            "0.9-1": 1125
+          }
+        },
+        "missing": {
+          "no_predicted_target": 46722
+        }
+      }
+    },
+    "chr3": {
+      "elements": 62502,
+      "any gene": {
+        "targets": 37740,
+        "mean_predicted_target_probability": 0.5894,
+        "tested_pair_bands": {
+          "0-0.02": 810,
+          "0.02-0.05": 1526,
+          "0.05-0.1": 2944,
+          "0.1-0.25": 7594,
+          "0.25-0.5": 8571,
+          "0.5-0.75": 6288,
+          "0.75-0.9": 5506,
+          "0.9-1": 4501
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 315,
+          "0.25-0.5": 13134,
+          "0.5-0.75": 17497,
+          "0.75-0.9": 3649,
+          "0.9-1": 3145
+        },
+        "drop_bands": {
+          "= 0": 17935,
+          "0 < drop <= 0.1": 15188,
+          "0.1 < drop <= 0.2": 2704,
+          "0.2 < drop <= 0.5": 1417,
+          "0.5 < drop <= inf": 496
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 229,
+            "0.25-0.5": 12316,
+            "0.5-0.75": 13347,
+            "0.75-0.9": 2501,
+            "0.9-1": 1603
+          },
+          "pELS": {
+            "0.1-0.25": 86,
+            "0.25-0.5": 818,
+            "0.5-0.75": 4150,
+            "0.75-0.9": 1148,
+            "0.9-1": 1542
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 958,
+          "no_predicted_target": 23804
+        }
+      },
+      "coding gene": {
+        "targets": 27682,
+        "mean_predicted_target_probability": 0.5566,
+        "tested_pair_bands": {
+          "0-0.02": 521,
+          "0.02-0.05": 1754,
+          "0.05-0.1": 2627,
+          "0.1-0.25": 5673,
+          "0.25-0.5": 5920,
+          "0.5-0.75": 4181,
+          "0.75-0.9": 3681,
+          "0.9-1": 3325
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 1,
+          "0.25-0.5": 13109,
+          "0.5-0.75": 10074,
+          "0.75-0.9": 2447,
+          "0.9-1": 2051
+        },
+        "drop_bands": {
+          "= 0": 13076,
+          "0 < drop <= 0.1": 11051,
+          "0.1 < drop <= 0.2": 2252,
+          "0.2 < drop <= 0.5": 1037,
+          "0.5 < drop <= inf": 266
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 1,
+            "0.25-0.5": 12034,
+            "0.5-0.75": 7130,
+            "0.75-0.9": 1667,
+            "0.9-1": 1050
+          },
+          "pELS": {
+            "0.25-0.5": 1075,
+            "0.5-0.75": 2944,
+            "0.75-0.9": 780,
+            "0.9-1": 1001
+          }
+        },
+        "missing": {
+          "no_predicted_target": 34820
+        }
+      }
+    },
+    "chr4": {
+      "elements": 46124,
+      "any gene": {
+        "targets": 28054,
+        "mean_predicted_target_probability": 0.5887,
+        "tested_pair_bands": {
+          "0-0.02": 265,
+          "0.02-0.05": 895,
+          "0.05-0.1": 2364,
+          "0.1-0.25": 6016,
+          "0.25-0.5": 6495,
+          "0.5-0.75": 4725,
+          "0.75-0.9": 4018,
+          "0.9-1": 3276
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 199,
+          "0.25-0.5": 10068,
+          "0.5-0.75": 12763,
+          "0.75-0.9": 2773,
+          "0.9-1": 2251
+        },
+        "drop_bands": {
+          "= 0": 13370,
+          "0 < drop <= 0.1": 11161,
+          "0.1 < drop <= 0.2": 2145,
+          "0.2 < drop <= 0.5": 989,
+          "0.5 < drop <= inf": 389
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 145,
+            "0.25-0.5": 9428,
+            "0.5-0.75": 9914,
+            "0.75-0.9": 1928,
+            "0.9-1": 1223
+          },
+          "pELS": {
+            "0.1-0.25": 54,
+            "0.25-0.5": 640,
+            "0.5-0.75": 2849,
+            "0.75-0.9": 845,
+            "0.9-1": 1028
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 724,
+          "no_predicted_target": 17346
+        }
+      },
+      "coding gene": {
+        "targets": 20646,
+        "mean_predicted_target_probability": 0.5594,
+        "tested_pair_bands": {
+          "0-0.02": 73,
+          "0.02-0.05": 889,
+          "0.05-0.1": 2034,
+          "0.1-0.25": 4613,
+          "0.25-0.5": 4589,
+          "0.5-0.75": 3158,
+          "0.75-0.9": 2781,
+          "0.9-1": 2509
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 9836,
+          "0.5-0.75": 7358,
+          "0.75-0.9": 1927,
+          "0.9-1": 1525
+        },
+        "drop_bands": {
+          "= 0": 9990,
+          "0 < drop <= 0.1": 7892,
+          "0.1 < drop <= 0.2": 1806,
+          "0.2 < drop <= 0.5": 736,
+          "0.5 < drop <= inf": 222
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 9016,
+            "0.5-0.75": 5230,
+            "0.75-0.9": 1383,
+            "0.9-1": 847
+          },
+          "pELS": {
+            "0.25-0.5": 820,
+            "0.5-0.75": 2128,
+            "0.75-0.9": 544,
+            "0.9-1": 678
+          }
+        },
+        "missing": {
+          "no_predicted_target": 25478
+        }
+      }
+    },
+    "chr5": {
+      "elements": 53114,
+      "any gene": {
+        "targets": 31849,
+        "mean_predicted_target_probability": 0.5927,
+        "tested_pair_bands": {
+          "0-0.02": 404,
+          "0.02-0.05": 1014,
+          "0.05-0.1": 2772,
+          "0.1-0.25": 6656,
+          "0.25-0.5": 7061,
+          "0.5-0.75": 5371,
+          "0.75-0.9": 4637,
+          "0.9-1": 3934
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 224,
+          "0.25-0.5": 11165,
+          "0.5-0.75": 14549,
+          "0.75-0.9": 3202,
+          "0.9-1": 2709
+        },
+        "drop_bands": {
+          "= 0": 14942,
+          "0 < drop <= 0.1": 12887,
+          "0.1 < drop <= 0.2": 2343,
+          "0.2 < drop <= 0.5": 1258,
+          "0.5 < drop <= inf": 419
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 142,
+            "0.25-0.5": 10444,
+            "0.5-0.75": 11313,
+            "0.75-0.9": 2152,
+            "0.9-1": 1460
+          },
+          "pELS": {
+            "0.1-0.25": 82,
+            "0.25-0.5": 721,
+            "0.5-0.75": 3236,
+            "0.75-0.9": 1050,
+            "0.9-1": 1249
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1144,
+          "no_predicted_target": 20121
+        }
+      },
+      "coding gene": {
+        "targets": 22772,
+        "mean_predicted_target_probability": 0.5615,
+        "tested_pair_bands": {
+          "0-0.02": 210,
+          "0.02-0.05": 1095,
+          "0.05-0.1": 2332,
+          "0.1-0.25": 4743,
+          "0.25-0.5": 4756,
+          "0.5-0.75": 3517,
+          "0.75-0.9": 3157,
+          "0.9-1": 2962
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 10754,
+          "0.5-0.75": 8134,
+          "0.75-0.9": 2094,
+          "0.9-1": 1790
+        },
+        "drop_bands": {
+          "= 0": 10813,
+          "0 < drop <= 0.1": 8885,
+          "0.1 < drop <= 0.2": 1931,
+          "0.2 < drop <= 0.5": 908,
+          "0.5 < drop <= inf": 235
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 9892,
+            "0.5-0.75": 5812,
+            "0.75-0.9": 1447,
+            "0.9-1": 993
+          },
+          "pELS": {
+            "0.25-0.5": 862,
+            "0.5-0.75": 2322,
+            "0.75-0.9": 647,
+            "0.9-1": 797
+          }
+        },
+        "missing": {
+          "no_predicted_target": 30342
+        }
+      }
+    },
+    "chr6": {
+      "elements": 56945,
+      "any gene": {
+        "targets": 33908,
+        "mean_predicted_target_probability": 0.606,
+        "tested_pair_bands": {
+          "0-0.02": 331,
+          "0.02-0.05": 747,
+          "0.05-0.1": 2209,
+          "0.1-0.25": 6669,
+          "0.25-0.5": 7872,
+          "0.5-0.75": 6129,
+          "0.75-0.9": 5480,
+          "0.9-1": 4471
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 202,
+          "0.25-0.5": 10388,
+          "0.5-0.75": 16619,
+          "0.75-0.9": 3534,
+          "0.9-1": 3165
+        },
+        "drop_bands": {
+          "= 0": 16026,
+          "0 < drop <= 0.1": 13342,
+          "0.1 < drop <= 0.2": 2606,
+          "0.2 < drop <= 0.5": 1385,
+          "0.5 < drop <= inf": 549
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 124,
+            "0.25-0.5": 9716,
+            "0.5-0.75": 12643,
+            "0.75-0.9": 2370,
+            "0.9-1": 1581
+          },
+          "pELS": {
+            "0.1-0.25": 78,
+            "0.25-0.5": 672,
+            "0.5-0.75": 3976,
+            "0.75-0.9": 1164,
+            "0.9-1": 1584
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1252,
+          "no_predicted_target": 21785
+        }
+      },
+      "coding gene": {
+        "targets": 23769,
+        "mean_predicted_target_probability": 0.5727,
+        "tested_pair_bands": {
+          "0-0.02": 135,
+          "0.02-0.05": 748,
+          "0.05-0.1": 1889,
+          "0.1-0.25": 4951,
+          "0.25-0.5": 5276,
+          "0.5-0.75": 3940,
+          "0.75-0.9": 3603,
+          "0.9-1": 3227
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 10310,
+          "0.5-0.75": 9124,
+          "0.75-0.9": 2311,
+          "0.9-1": 2024
+        },
+        "drop_bands": {
+          "= 0": 11333,
+          "0 < drop <= 0.1": 9056,
+          "0.1 < drop <= 0.2": 2104,
+          "0.2 < drop <= 0.5": 974,
+          "0.5 < drop <= inf": 302
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 9401,
+            "0.5-0.75": 6355,
+            "0.75-0.9": 1541,
+            "0.9-1": 1013
+          },
+          "pELS": {
+            "0.25-0.5": 909,
+            "0.5-0.75": 2769,
+            "0.75-0.9": 770,
+            "0.9-1": 1011
+          }
+        },
+        "missing": {
+          "no_predicted_target": 33176
+        }
+      }
+    },
+    "chr7": {
+      "elements": 49296,
+      "any gene": {
+        "targets": 30213,
+        "mean_predicted_target_probability": 0.607,
+        "tested_pair_bands": {
+          "0-0.02": 439,
+          "0.02-0.05": 1042,
+          "0.05-0.1": 2305,
+          "0.1-0.25": 5549,
+          "0.25-0.5": 6385,
+          "0.5-0.75": 5232,
+          "0.75-0.9": 5076,
+          "0.9-1": 4185
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 161,
+          "0.25-0.5": 9550,
+          "0.5-0.75": 14299,
+          "0.75-0.9": 3292,
+          "0.9-1": 2911
+        },
+        "drop_bands": {
+          "= 0": 13904,
+          "0 < drop <= 0.1": 12092,
+          "0.1 < drop <= 0.2": 2427,
+          "0.2 < drop <= 0.5": 1276,
+          "0.5 < drop <= inf": 514
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 116,
+            "0.25-0.5": 9013,
+            "0.5-0.75": 10725,
+            "0.75-0.9": 2181,
+            "0.9-1": 1467
+          },
+          "pELS": {
+            "0.1-0.25": 45,
+            "0.25-0.5": 537,
+            "0.5-0.75": 3574,
+            "0.75-0.9": 1111,
+            "0.9-1": 1444
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 697,
+          "no_predicted_target": 18386
+        }
+      },
+      "coding gene": {
+        "targets": 22596,
+        "mean_predicted_target_probability": 0.5715,
+        "tested_pair_bands": {
+          "0-0.02": 279,
+          "0.02-0.05": 1143,
+          "0.05-0.1": 2127,
+          "0.1-0.25": 4593,
+          "0.25-0.5": 4545,
+          "0.5-0.75": 3579,
+          "0.75-0.9": 3371,
+          "0.9-1": 2959
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 9749,
+          "0.5-0.75": 8820,
+          "0.75-0.9": 2206,
+          "0.9-1": 1821
+        },
+        "drop_bands": {
+          "= 0": 10504,
+          "0 < drop <= 0.1": 8949,
+          "0.1 < drop <= 0.2": 1986,
+          "0.2 < drop <= 0.5": 882,
+          "0.5 < drop <= inf": 275
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 8960,
+            "0.5-0.75": 6269,
+            "0.75-0.9": 1518,
+            "0.9-1": 970
+          },
+          "pELS": {
+            "0.25-0.5": 789,
+            "0.5-0.75": 2551,
+            "0.75-0.9": 688,
+            "0.9-1": 851
+          }
+        },
+        "missing": {
+          "no_predicted_target": 26700
+        }
+      }
+    },
+    "chr8": {
+      "elements": 45332,
+      "any gene": {
+        "targets": 26342,
+        "mean_predicted_target_probability": 0.5987,
+        "tested_pair_bands": {
+          "0-0.02": 307,
+          "0.02-0.05": 628,
+          "0.05-0.1": 1824,
+          "0.1-0.25": 5589,
+          "0.25-0.5": 6091,
+          "0.5-0.75": 4583,
+          "0.75-0.9": 4158,
+          "0.9-1": 3162
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 151,
+          "0.25-0.5": 8617,
+          "0.5-0.75": 12665,
+          "0.75-0.9": 2715,
+          "0.9-1": 2194
+        },
+        "drop_bands": {
+          "= 0": 12338,
+          "0 < drop <= 0.1": 10716,
+          "0.1 < drop <= 0.2": 1991,
+          "0.2 < drop <= 0.5": 964,
+          "0.5 < drop <= inf": 333
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 118,
+            "0.25-0.5": 7985,
+            "0.5-0.75": 9657,
+            "0.75-0.9": 1780,
+            "0.9-1": 1156
+          },
+          "pELS": {
+            "0.1-0.25": 33,
+            "0.25-0.5": 632,
+            "0.5-0.75": 3008,
+            "0.75-0.9": 935,
+            "0.9-1": 1038
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1134,
+          "no_predicted_target": 17856
+        }
+      },
+      "coding gene": {
+        "targets": 18552,
+        "mean_predicted_target_probability": 0.5614,
+        "tested_pair_bands": {
+          "0-0.02": 202,
+          "0.02-0.05": 715,
+          "0.05-0.1": 1661,
+          "0.1-0.25": 4031,
+          "0.25-0.5": 4078,
+          "0.5-0.75": 2964,
+          "0.75-0.9": 2636,
+          "0.9-1": 2265
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 8638,
+          "0.5-0.75": 6826,
+          "0.75-0.9": 1713,
+          "0.9-1": 1375
+        },
+        "drop_bands": {
+          "= 0": 8750,
+          "0 < drop <= 0.1": 7331,
+          "0.1 < drop <= 0.2": 1602,
+          "0.2 < drop <= 0.5": 699,
+          "0.5 < drop <= inf": 170
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 7789,
+            "0.5-0.75": 4765,
+            "0.75-0.9": 1170,
+            "0.9-1": 754
+          },
+          "pELS": {
+            "0.25-0.5": 849,
+            "0.5-0.75": 2061,
+            "0.75-0.9": 543,
+            "0.9-1": 621
+          }
+        },
+        "missing": {
+          "no_predicted_target": 26780
+        }
+      }
+    },
+    "chr9": {
+      "elements": 41640,
+      "any gene": {
+        "targets": 25613,
+        "mean_predicted_target_probability": 0.598,
+        "tested_pair_bands": {
+          "0-0.02": 305,
+          "0.02-0.05": 471,
+          "0.05-0.1": 1608,
+          "0.1-0.25": 5178,
+          "0.25-0.5": 5854,
+          "0.5-0.75": 4674,
+          "0.75-0.9": 4191,
+          "0.9-1": 3332
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 126,
+          "0.25-0.5": 8315,
+          "0.5-0.75": 12431,
+          "0.75-0.9": 2587,
+          "0.9-1": 2154
+        },
+        "drop_bands": {
+          "= 0": 11995,
+          "0 < drop <= 0.1": 10465,
+          "0.1 < drop <= 0.2": 1842,
+          "0.2 < drop <= 0.5": 918,
+          "0.5 < drop <= inf": 393
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 81,
+            "0.25-0.5": 7793,
+            "0.5-0.75": 9356,
+            "0.75-0.9": 1711,
+            "0.9-1": 1066
+          },
+          "pELS": {
+            "0.1-0.25": 45,
+            "0.25-0.5": 522,
+            "0.5-0.75": 3075,
+            "0.75-0.9": 876,
+            "0.9-1": 1088
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 525,
+          "no_predicted_target": 15502
+        }
+      },
+      "coding gene": {
+        "targets": 19272,
+        "mean_predicted_target_probability": 0.5701,
+        "tested_pair_bands": {
+          "0-0.02": 202,
+          "0.02-0.05": 553,
+          "0.05-0.1": 1380,
+          "0.1-0.25": 4083,
+          "0.25-0.5": 4222,
+          "0.5-0.75": 3248,
+          "0.75-0.9": 3004,
+          "0.9-1": 2580
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 8306,
+          "0.5-0.75": 7607,
+          "0.75-0.9": 1872,
+          "0.9-1": 1487
+        },
+        "drop_bands": {
+          "= 0": 9063,
+          "0 < drop <= 0.1": 7691,
+          "0.1 < drop <= 0.2": 1564,
+          "0.2 < drop <= 0.5": 713,
+          "0.5 < drop <= inf": 241
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 7579,
+            "0.5-0.75": 5363,
+            "0.75-0.9": 1285,
+            "0.9-1": 773
+          },
+          "pELS": {
+            "0.25-0.5": 727,
+            "0.5-0.75": 2244,
+            "0.75-0.9": 587,
+            "0.9-1": 714
+          }
+        },
+        "missing": {
+          "no_predicted_target": 22368
+        }
+      }
+    },
+    "chr10": {
+      "elements": 47419,
+      "any gene": {
+        "targets": 28134,
+        "mean_predicted_target_probability": 0.5883,
+        "tested_pair_bands": {
+          "0-0.02": 432,
+          "0.02-0.05": 789,
+          "0.05-0.1": 1910,
+          "0.1-0.25": 5907,
+          "0.25-0.5": 6610,
+          "0.5-0.75": 4953,
+          "0.75-0.9": 4270,
+          "0.9-1": 3263
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 225,
+          "0.25-0.5": 9544,
+          "0.5-0.75": 13577,
+          "0.75-0.9": 2609,
+          "0.9-1": 2179
+        },
+        "drop_bands": {
+          "= 0": 13217,
+          "0 < drop <= 0.1": 11648,
+          "0.1 < drop <= 0.2": 1915,
+          "0.2 < drop <= 0.5": 994,
+          "0.5 < drop <= inf": 360
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 168,
+            "0.25-0.5": 9008,
+            "0.5-0.75": 10556,
+            "0.75-0.9": 1734,
+            "0.9-1": 1161
+          },
+          "pELS": {
+            "0.1-0.25": 57,
+            "0.25-0.5": 536,
+            "0.5-0.75": 3021,
+            "0.75-0.9": 875,
+            "0.9-1": 1018
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 731,
+          "no_predicted_target": 18554
+        }
+      },
+      "coding gene": {
+        "targets": 21023,
+        "mean_predicted_target_probability": 0.5555,
+        "tested_pair_bands": {
+          "0-0.02": 187,
+          "0.02-0.05": 946,
+          "0.05-0.1": 1831,
+          "0.1-0.25": 4517,
+          "0.25-0.5": 4725,
+          "0.5-0.75": 3370,
+          "0.75-0.9": 2949,
+          "0.9-1": 2498
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 9912,
+          "0.5-0.75": 7773,
+          "0.75-0.9": 1833,
+          "0.9-1": 1505
+        },
+        "drop_bands": {
+          "= 0": 9888,
+          "0 < drop <= 0.1": 8448,
+          "0.1 < drop <= 0.2": 1701,
+          "0.2 < drop <= 0.5": 782,
+          "0.5 < drop <= inf": 204
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 9203,
+            "0.5-0.75": 5625,
+            "0.75-0.9": 1284,
+            "0.9-1": 844
+          },
+          "pELS": {
+            "0.25-0.5": 709,
+            "0.5-0.75": 2148,
+            "0.75-0.9": 549,
+            "0.9-1": 661
+          }
+        },
+        "missing": {
+          "no_predicted_target": 26396
+        }
+      }
+    },
+    "chr11": {
+      "elements": 48380,
+      "any gene": {
+        "targets": 32644,
+        "mean_predicted_target_probability": 0.6074,
+        "tested_pair_bands": {
+          "0-0.02": 382,
+          "0.02-0.05": 868,
+          "0.05-0.1": 1775,
+          "0.1-0.25": 5560,
+          "0.25-0.5": 7409,
+          "0.5-0.75": 6267,
+          "0.75-0.9": 5726,
+          "0.9-1": 4657
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 150,
+          "0.25-0.5": 9761,
+          "0.5-0.75": 16355,
+          "0.75-0.9": 3293,
+          "0.9-1": 3085
+        },
+        "drop_bands": {
+          "= 0": 15053,
+          "0 < drop <= 0.1": 13364,
+          "0.1 < drop <= 0.2": 2330,
+          "0.2 < drop <= 0.5": 1342,
+          "0.5 < drop <= inf": 555
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 103,
+            "0.25-0.5": 9027,
+            "0.5-0.75": 11746,
+            "0.75-0.9": 2045,
+            "0.9-1": 1469
+          },
+          "pELS": {
+            "0.1-0.25": 47,
+            "0.25-0.5": 734,
+            "0.5-0.75": 4609,
+            "0.75-0.9": 1248,
+            "0.9-1": 1616
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 940,
+          "no_predicted_target": 14796
+        }
+      },
+      "coding gene": {
+        "targets": 25731,
+        "mean_predicted_target_probability": 0.5779,
+        "tested_pair_bands": {
+          "0-0.02": 280,
+          "0.02-0.05": 1088,
+          "0.05-0.1": 1664,
+          "0.1-0.25": 4409,
+          "0.25-0.5": 5638,
+          "0.5-0.75": 4662,
+          "0.75-0.9": 4240,
+          "0.9-1": 3750
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 10533,
+          "0.5-0.75": 10422,
+          "0.75-0.9": 2490,
+          "0.9-1": 2286
+        },
+        "drop_bands": {
+          "= 0": 11898,
+          "0 < drop <= 0.1": 10229,
+          "0.1 < drop <= 0.2": 2168,
+          "0.2 < drop <= 0.5": 1075,
+          "0.5 < drop <= inf": 361
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 9433,
+            "0.5-0.75": 6924,
+            "0.75-0.9": 1576,
+            "0.9-1": 1119
+          },
+          "pELS": {
+            "0.25-0.5": 1100,
+            "0.5-0.75": 3498,
+            "0.75-0.9": 914,
+            "0.9-1": 1167
+          }
+        },
+        "missing": {
+          "no_predicted_target": 22649
+        }
+      }
+    },
+    "chr12": {
+      "elements": 46582,
+      "any gene": {
+        "targets": 30232,
+        "mean_predicted_target_probability": 0.6135,
+        "tested_pair_bands": {
+          "0-0.02": 308,
+          "0.02-0.05": 509,
+          "0.05-0.1": 1948,
+          "0.1-0.25": 5484,
+          "0.25-0.5": 6800,
+          "0.5-0.75": 5754,
+          "0.75-0.9": 5118,
+          "0.9-1": 4311
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 218,
+          "0.25-0.5": 8599,
+          "0.5-0.75": 15199,
+          "0.75-0.9": 3259,
+          "0.9-1": 2957
+        },
+        "drop_bands": {
+          "= 0": 13868,
+          "0 < drop <= 0.1": 12293,
+          "0.1 < drop <= 0.2": 2309,
+          "0.2 < drop <= 0.5": 1269,
+          "0.5 < drop <= inf": 493
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 145,
+            "0.25-0.5": 7906,
+            "0.5-0.75": 11188,
+            "0.75-0.9": 2077,
+            "0.9-1": 1380
+          },
+          "pELS": {
+            "0.1-0.25": 73,
+            "0.25-0.5": 693,
+            "0.5-0.75": 4011,
+            "0.75-0.9": 1182,
+            "0.9-1": 1577
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 1394,
+          "no_predicted_target": 14956
+        }
+      },
+      "coding gene": {
+        "targets": 22814,
+        "mean_predicted_target_probability": 0.5793,
+        "tested_pair_bands": {
+          "0-0.02": 69,
+          "0.02-0.05": 611,
+          "0.05-0.1": 2004,
+          "0.1-0.25": 4404,
+          "0.25-0.5": 4982,
+          "0.5-0.75": 4010,
+          "0.75-0.9": 3523,
+          "0.9-1": 3211
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 9345,
+          "0.5-0.75": 9269,
+          "0.75-0.9": 2240,
+          "0.9-1": 1960
+        },
+        "drop_bands": {
+          "= 0": 10528,
+          "0 < drop <= 0.1": 9128,
+          "0.1 < drop <= 0.2": 1963,
+          "0.2 < drop <= 0.5": 931,
+          "0.5 < drop <= inf": 264
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 8354,
+            "0.5-0.75": 6279,
+            "0.75-0.9": 1450,
+            "0.9-1": 935
+          },
+          "pELS": {
+            "0.25-0.5": 991,
+            "0.5-0.75": 2990,
+            "0.75-0.9": 790,
+            "0.9-1": 1025
+          }
+        },
+        "missing": {
+          "no_predicted_target": 23768
+        }
+      }
+    },
+    "chr13": {
+      "elements": 25634,
+      "any gene": {
+        "targets": 14716,
+        "mean_predicted_target_probability": 0.5883,
+        "tested_pair_bands": {
+          "0-0.02": 52,
+          "0.02-0.05": 490,
+          "0.05-0.1": 1147,
+          "0.1-0.25": 3358,
+          "0.25-0.5": 3538,
+          "0.5-0.75": 2524,
+          "0.75-0.9": 2168,
+          "0.9-1": 1439
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 6,
+          "0.25-0.5": 5076,
+          "0.5-0.75": 7344,
+          "0.75-0.9": 1274,
+          "0.9-1": 1016
+        },
+        "drop_bands": {
+          "= 0": 6971,
+          "0 < drop <= 0.1": 6258,
+          "0.1 < drop <= 0.2": 892,
+          "0.2 < drop <= 0.5": 426,
+          "0.5 < drop <= inf": 169
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 6,
+            "0.25-0.5": 4830,
+            "0.5-0.75": 5752,
+            "0.75-0.9": 861,
+            "0.9-1": 506
+          },
+          "pELS": {
+            "0.25-0.5": 246,
+            "0.5-0.75": 1592,
+            "0.75-0.9": 413,
+            "0.9-1": 510
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 169,
+          "no_predicted_target": 10749
+        }
+      },
+      "coding gene": {
+        "targets": 9711,
+        "mean_predicted_target_probability": 0.5501,
+        "tested_pair_bands": {
+          "0-0.02": 43,
+          "0.02-0.05": 450,
+          "0.05-0.1": 996,
+          "0.1-0.25": 2312,
+          "0.25-0.5": 2143,
+          "0.5-0.75": 1467,
+          "0.75-0.9": 1327,
+          "0.9-1": 973
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 4705,
+          "0.5-0.75": 3641,
+          "0.75-0.9": 746,
+          "0.9-1": 619
+        },
+        "drop_bands": {
+          "= 0": 4687,
+          "0 < drop <= 0.1": 3932,
+          "0.1 < drop <= 0.2": 712,
+          "0.2 < drop <= 0.5": 297,
+          "0.5 < drop <= inf": 83
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 4386,
+            "0.5-0.75": 2662,
+            "0.75-0.9": 536,
+            "0.9-1": 318
+          },
+          "pELS": {
+            "0.25-0.5": 319,
+            "0.5-0.75": 979,
+            "0.75-0.9": 210,
+            "0.9-1": 301
+          }
+        },
+        "missing": {
+          "no_predicted_target": 15923
+        }
+      }
+    },
+    "chr14": {
+      "elements": 31794,
+      "any gene": {
+        "targets": 18985,
+        "mean_predicted_target_probability": 0.608,
+        "tested_pair_bands": {
+          "0-0.02": 292,
+          "0.02-0.05": 433,
+          "0.05-0.1": 993,
+          "0.1-0.25": 3460,
+          "0.25-0.5": 4280,
+          "0.5-0.75": 3572,
+          "0.75-0.9": 3487,
+          "0.9-1": 2468
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 162,
+          "0.25-0.5": 5463,
+          "0.5-0.75": 9791,
+          "0.75-0.9": 1978,
+          "0.9-1": 1591
+        },
+        "drop_bands": {
+          "= 0": 8829,
+          "0 < drop <= 0.1": 7984,
+          "0.1 < drop <= 0.2": 1249,
+          "0.2 < drop <= 0.5": 645,
+          "0.5 < drop <= inf": 278
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 108,
+            "0.25-0.5": 5071,
+            "0.5-0.75": 7006,
+            "0.75-0.9": 1109,
+            "0.9-1": 676
+          },
+          "pELS": {
+            "0.1-0.25": 54,
+            "0.25-0.5": 392,
+            "0.5-0.75": 2785,
+            "0.75-0.9": 869,
+            "0.9-1": 915
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 820,
+          "no_predicted_target": 11989
+        }
+      },
+      "coding gene": {
+        "targets": 13385,
+        "mean_predicted_target_probability": 0.5724,
+        "tested_pair_bands": {
+          "0-0.02": 106,
+          "0.02-0.05": 437,
+          "0.05-0.1": 877,
+          "0.1-0.25": 2638,
+          "0.25-0.5": 3069,
+          "0.5-0.75": 2375,
+          "0.75-0.9": 2111,
+          "0.9-1": 1772
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 5695,
+          "0.5-0.75": 5434,
+          "0.75-0.9": 1215,
+          "0.9-1": 1041
+        },
+        "drop_bands": {
+          "= 0": 6207,
+          "0 < drop <= 0.1": 5518,
+          "0.1 < drop <= 0.2": 1048,
+          "0.2 < drop <= 0.5": 468,
+          "0.5 < drop <= inf": 144
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 5132,
+            "0.5-0.75": 3662,
+            "0.75-0.9": 776,
+            "0.9-1": 468
+          },
+          "pELS": {
+            "0.25-0.5": 563,
+            "0.5-0.75": 1772,
+            "0.75-0.9": 439,
+            "0.9-1": 573
+          }
+        },
+        "missing": {
+          "no_predicted_target": 18409
+        }
+      }
+    },
+    "chr15": {
+      "elements": 31058,
+      "any gene": {
+        "targets": 20194,
+        "mean_predicted_target_probability": 0.6097,
+        "tested_pair_bands": {
+          "0-0.02": 249,
+          "0.02-0.05": 510,
+          "0.05-0.1": 1212,
+          "0.1-0.25": 3780,
+          "0.25-0.5": 4680,
+          "0.5-0.75": 3727,
+          "0.75-0.9": 3361,
+          "0.9-1": 2675
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 175,
+          "0.25-0.5": 5867,
+          "0.5-0.75": 10091,
+          "0.75-0.9": 2190,
+          "0.9-1": 1871
+        },
+        "drop_bands": {
+          "= 0": 9355,
+          "0 < drop <= 0.1": 8248,
+          "0.1 < drop <= 0.2": 1484,
+          "0.2 < drop <= 0.5": 813,
+          "0.5 < drop <= inf": 294
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 104,
+            "0.25-0.5": 5399,
+            "0.5-0.75": 7582,
+            "0.75-0.9": 1383,
+            "0.9-1": 911
+          },
+          "pELS": {
+            "0.1-0.25": 71,
+            "0.25-0.5": 468,
+            "0.5-0.75": 2509,
+            "0.75-0.9": 807,
+            "0.9-1": 960
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 637,
+          "no_predicted_target": 10227
+        }
+      },
+      "coding gene": {
+        "targets": 14474,
+        "mean_predicted_target_probability": 0.5739,
+        "tested_pair_bands": {
+          "0-0.02": 35,
+          "0.02-0.05": 531,
+          "0.05-0.1": 1107,
+          "0.1-0.25": 3084,
+          "0.25-0.5": 3225,
+          "0.5-0.75": 2479,
+          "0.75-0.9": 2156,
+          "0.9-1": 1857
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 6151,
+          "0.5-0.75": 5779,
+          "0.75-0.9": 1407,
+          "0.9-1": 1137
+        },
+        "drop_bands": {
+          "= 0": 6790,
+          "0 < drop <= 0.1": 5758,
+          "0.1 < drop <= 0.2": 1189,
+          "0.2 < drop <= 0.5": 573,
+          "0.5 < drop <= inf": 164
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 5527,
+            "0.5-0.75": 4017,
+            "0.75-0.9": 937,
+            "0.9-1": 597
+          },
+          "pELS": {
+            "0.25-0.5": 624,
+            "0.5-0.75": 1762,
+            "0.75-0.9": 470,
+            "0.9-1": 540
+          }
+        },
+        "missing": {
+          "no_predicted_target": 16584
+        }
+      }
+    },
+    "chr16": {
+      "elements": 32314,
+      "any gene": {
+        "targets": 19927,
+        "mean_predicted_target_probability": 0.6381,
+        "tested_pair_bands": {
+          "0-0.02": 236,
+          "0.02-0.05": 202,
+          "0.05-0.1": 716,
+          "0.1-0.25": 2914,
+          "0.25-0.5": 4363,
+          "0.5-0.75": 4155,
+          "0.75-0.9": 3919,
+          "0.9-1": 3422
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 119,
+          "0.25-0.5": 4390,
+          "0.5-0.75": 10769,
+          "0.75-0.9": 2343,
+          "0.9-1": 2306
+        },
+        "drop_bands": {
+          "= 0": 8903,
+          "0 < drop <= 0.1": 8115,
+          "0.1 < drop <= 0.2": 1578,
+          "0.2 < drop <= 0.5": 905,
+          "0.5 < drop <= inf": 426
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 66,
+            "0.25-0.5": 4060,
+            "0.5-0.75": 7600,
+            "0.75-0.9": 1326,
+            "0.9-1": 849
+          },
+          "pELS": {
+            "0.1-0.25": 53,
+            "0.25-0.5": 330,
+            "0.5-0.75": 3169,
+            "0.75-0.9": 1017,
+            "0.9-1": 1457
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 876,
+          "no_predicted_target": 11511
+        }
+      },
+      "coding gene": {
+        "targets": 14799,
+        "mean_predicted_target_probability": 0.6014,
+        "tested_pair_bands": {
+          "0-0.02": 184,
+          "0.02-0.05": 249,
+          "0.05-0.1": 684,
+          "0.1-0.25": 2353,
+          "0.25-0.5": 3168,
+          "0.5-0.75": 3031,
+          "0.75-0.9": 2600,
+          "0.9-1": 2530
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 5092,
+          "0.5-0.75": 6609,
+          "0.75-0.9": 1570,
+          "0.9-1": 1528
+        },
+        "drop_bands": {
+          "= 0": 6603,
+          "0 < drop <= 0.1": 5990,
+          "0.1 < drop <= 0.2": 1258,
+          "0.2 < drop <= 0.5": 685,
+          "0.5 < drop <= inf": 263
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 4507,
+            "0.5-0.75": 4287,
+            "0.75-0.9": 900,
+            "0.9-1": 577
+          },
+          "pELS": {
+            "0.25-0.5": 585,
+            "0.5-0.75": 2322,
+            "0.75-0.9": 670,
+            "0.9-1": 951
+          }
+        },
+        "missing": {
+          "no_predicted_target": 17515
+        }
+      }
+    },
+    "chr17": {
+      "elements": 41396,
+      "any gene": {
+        "targets": 27501,
+        "mean_predicted_target_probability": 0.6404,
+        "tested_pair_bands": {
+          "0-0.02": 222,
+          "0.02-0.05": 288,
+          "0.05-0.1": 832,
+          "0.1-0.25": 3348,
+          "0.25-0.5": 5993,
+          "0.5-0.75": 6116,
+          "0.75-0.9": 5793,
+          "0.9-1": 4909
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 160,
+          "0.25-0.5": 5791,
+          "0.5-0.75": 15155,
+          "0.75-0.9": 3119,
+          "0.9-1": 3276
+        },
+        "drop_bands": {
+          "= 0": 12407,
+          "0 < drop <= 0.1": 10986,
+          "0.1 < drop <= 0.2": 2151,
+          "0.2 < drop <= 0.5": 1365,
+          "0.5 < drop <= inf": 592
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 104,
+            "0.25-0.5": 5269,
+            "0.5-0.75": 10323,
+            "0.75-0.9": 1739,
+            "0.9-1": 1283
+          },
+          "pELS": {
+            "0.1-0.25": 56,
+            "0.25-0.5": 522,
+            "0.5-0.75": 4832,
+            "0.75-0.9": 1380,
+            "0.9-1": 1993
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 829,
+          "no_predicted_target": 13066
+        }
+      },
+      "coding gene": {
+        "targets": 21608,
+        "mean_predicted_target_probability": 0.6086,
+        "tested_pair_bands": {
+          "0-0.02": 41,
+          "0.02-0.05": 339,
+          "0.05-0.1": 828,
+          "0.1-0.25": 2946,
+          "0.25-0.5": 4845,
+          "0.5-0.75": 4617,
+          "0.75-0.9": 4174,
+          "0.9-1": 3818
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 6770,
+          "0.5-0.75": 10249,
+          "0.75-0.9": 2287,
+          "0.9-1": 2302
+        },
+        "drop_bands": {
+          "= 0": 9756,
+          "0 < drop <= 0.1": 8548,
+          "0.1 < drop <= 0.2": 1870,
+          "0.2 < drop <= 0.5": 1067,
+          "0.5 < drop <= inf": 367
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 5886,
+            "0.5-0.75": 6550,
+            "0.75-0.9": 1339,
+            "0.9-1": 985
+          },
+          "pELS": {
+            "0.25-0.5": 884,
+            "0.5-0.75": 3699,
+            "0.75-0.9": 948,
+            "0.9-1": 1317
+          }
+        },
+        "missing": {
+          "no_predicted_target": 19788
+        }
+      }
+    },
+    "chr18": {
+      "elements": 21973,
+      "any gene": {
+        "targets": 12910,
+        "mean_predicted_target_probability": 0.5791,
+        "tested_pair_bands": {
+          "0-0.02": 147,
+          "0.02-0.05": 355,
+          "0.05-0.1": 1201,
+          "0.1-0.25": 2945,
+          "0.25-0.5": 2958,
+          "0.5-0.75": 2173,
+          "0.75-0.9": 1925,
+          "0.9-1": 1206
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 100,
+          "0.25-0.5": 4613,
+          "0.5-0.75": 6260,
+          "0.75-0.9": 1090,
+          "0.9-1": 847
+        },
+        "drop_bands": {
+          "= 0": 6209,
+          "0 < drop <= 0.1": 5418,
+          "0.1 < drop <= 0.2": 803,
+          "0.2 < drop <= 0.5": 349,
+          "0.5 < drop <= inf": 131
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 73,
+            "0.25-0.5": 4289,
+            "0.5-0.75": 4801,
+            "0.75-0.9": 694,
+            "0.9-1": 429
+          },
+          "pELS": {
+            "0.1-0.25": 27,
+            "0.25-0.5": 324,
+            "0.5-0.75": 1459,
+            "0.75-0.9": 396,
+            "0.9-1": 418
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 740,
+          "no_predicted_target": 8323
+        }
+      },
+      "coding gene": {
+        "targets": 9250,
+        "mean_predicted_target_probability": 0.5312,
+        "tested_pair_bands": {
+          "0-0.02": 55,
+          "0.02-0.05": 473,
+          "0.05-0.1": 1159,
+          "0.1-0.25": 2299,
+          "0.25-0.5": 1933,
+          "0.5-0.75": 1293,
+          "0.75-0.9": 1216,
+          "0.9-1": 822
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 4898,
+          "0.5-0.75": 3141,
+          "0.75-0.9": 716,
+          "0.9-1": 495
+        },
+        "drop_bands": {
+          "= 0": 4557,
+          "0 < drop <= 0.1": 3676,
+          "0.1 < drop <= 0.2": 721,
+          "0.2 < drop <= 0.5": 237,
+          "0.5 < drop <= inf": 59
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 4381,
+            "0.5-0.75": 2240,
+            "0.75-0.9": 515,
+            "0.9-1": 284
+          },
+          "pELS": {
+            "0.25-0.5": 517,
+            "0.5-0.75": 901,
+            "0.75-0.9": 201,
+            "0.9-1": 211
+          }
+        },
+        "missing": {
+          "no_predicted_target": 12723
+        }
+      }
+    },
+    "chr19": {
+      "elements": 29374,
+      "any gene": {
+        "targets": 20149,
+        "mean_predicted_target_probability": 0.6812,
+        "tested_pair_bands": {
+          "0-0.02": 80,
+          "0.02-0.05": 36,
+          "0.05-0.1": 178,
+          "0.1-0.25": 1355,
+          "0.25-0.5": 3796,
+          "0.5-0.75": 4639,
+          "0.75-0.9": 5053,
+          "0.9-1": 5012
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 76,
+          "0.25-0.5": 2655,
+          "0.5-0.75": 11332,
+          "0.75-0.9": 2771,
+          "0.9-1": 3315
+        },
+        "drop_bands": {
+          "= 0": 8655,
+          "0 < drop <= 0.1": 7547,
+          "0.1 < drop <= 0.2": 1806,
+          "0.2 < drop <= 0.5": 1411,
+          "0.5 < drop <= inf": 730
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 44,
+            "0.25-0.5": 2365,
+            "0.5-0.75": 7092,
+            "0.75-0.9": 1454,
+            "0.9-1": 1220
+          },
+          "pELS": {
+            "0.1-0.25": 32,
+            "0.25-0.5": 290,
+            "0.5-0.75": 4240,
+            "0.75-0.9": 1317,
+            "0.9-1": 2095
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 651,
+          "no_predicted_target": 8574
+        }
+      },
+      "coding gene": {
+        "targets": 17265,
+        "mean_predicted_target_probability": 0.6581,
+        "tested_pair_bands": {
+          "0.02-0.05": 38,
+          "0.05-0.1": 203,
+          "0.1-0.25": 1325,
+          "0.25-0.5": 3448,
+          "0.5-0.75": 3867,
+          "0.75-0.9": 4000,
+          "0.9-1": 4384
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 3389,
+          "0.5-0.75": 8955,
+          "0.75-0.9": 2253,
+          "0.9-1": 2668
+        },
+        "drop_bands": {
+          "= 0": 7299,
+          "0 < drop <= 0.1": 6545,
+          "0.1 < drop <= 0.2": 1681,
+          "0.2 < drop <= 0.5": 1227,
+          "0.5 < drop <= inf": 513
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 2877,
+            "0.5-0.75": 5376,
+            "0.75-0.9": 1171,
+            "0.9-1": 1010
+          },
+          "pELS": {
+            "0.25-0.5": 512,
+            "0.5-0.75": 3579,
+            "0.75-0.9": 1082,
+            "0.9-1": 1658
+          }
+        },
+        "missing": {
+          "no_predicted_target": 12109
+        }
+      }
+    },
+    "chr20": {
+      "elements": 26954,
+      "any gene": {
+        "targets": 16444,
+        "mean_predicted_target_probability": 0.6087,
+        "tested_pair_bands": {
+          "0-0.02": 221,
+          "0.02-0.05": 249,
+          "0.05-0.1": 801,
+          "0.1-0.25": 2873,
+          "0.25-0.5": 3725,
+          "0.5-0.75": 3294,
+          "0.75-0.9": 2981,
+          "0.9-1": 2300
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 82,
+          "0.25-0.5": 4889,
+          "0.5-0.75": 8334,
+          "0.75-0.9": 1691,
+          "0.9-1": 1448
+        },
+        "drop_bands": {
+          "= 0": 7615,
+          "0 < drop <= 0.1": 6825,
+          "0.1 < drop <= 0.2": 1104,
+          "0.2 < drop <= 0.5": 640,
+          "0.5 < drop <= inf": 260
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 46,
+            "0.25-0.5": 4582,
+            "0.5-0.75": 6143,
+            "0.75-0.9": 1054,
+            "0.9-1": 689
+          },
+          "pELS": {
+            "0.1-0.25": 36,
+            "0.25-0.5": 307,
+            "0.5-0.75": 2191,
+            "0.75-0.9": 637,
+            "0.9-1": 759
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 546,
+          "no_predicted_target": 9964
+        }
+      },
+      "coding gene": {
+        "targets": 12702,
+        "mean_predicted_target_probability": 0.5793,
+        "tested_pair_bands": {
+          "0-0.02": 131,
+          "0.02-0.05": 253,
+          "0.05-0.1": 776,
+          "0.1-0.25": 2333,
+          "0.25-0.5": 2869,
+          "0.5-0.75": 2408,
+          "0.75-0.9": 2149,
+          "0.9-1": 1783
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 5155,
+          "0.5-0.75": 5324,
+          "0.75-0.9": 1192,
+          "0.9-1": 1031
+        },
+        "drop_bands": {
+          "= 0": 5880,
+          "0 < drop <= 0.1": 5192,
+          "0.1 < drop <= 0.2": 964,
+          "0.2 < drop <= 0.5": 498,
+          "0.5 < drop <= inf": 168
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 4715,
+            "0.5-0.75": 3737,
+            "0.75-0.9": 785,
+            "0.9-1": 545
+          },
+          "pELS": {
+            "0.25-0.5": 440,
+            "0.5-0.75": 1587,
+            "0.75-0.9": 407,
+            "0.9-1": 486
+          }
+        },
+        "missing": {
+          "no_predicted_target": 14252
+        }
+      }
+    },
+    "chr21": {
+      "elements": 12139,
+      "any gene": {
+        "targets": 7575,
+        "mean_predicted_target_probability": 0.6108,
+        "tested_pair_bands": {
+          "0-0.02": 34,
+          "0.02-0.05": 168,
+          "0.05-0.1": 435,
+          "0.1-0.25": 1408,
+          "0.25-0.5": 1851,
+          "0.5-0.75": 1376,
+          "0.75-0.9": 1280,
+          "0.9-1": 1023
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 16,
+          "0.25-0.5": 2238,
+          "0.5-0.75": 3797,
+          "0.75-0.9": 806,
+          "0.9-1": 718
+        },
+        "drop_bands": {
+          "= 0": 3603,
+          "0 < drop <= 0.1": 2992,
+          "0.1 < drop <= 0.2": 529,
+          "0.2 < drop <= 0.5": 324,
+          "0.5 < drop <= inf": 127
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 4,
+            "0.25-0.5": 2032,
+            "0.5-0.75": 2873,
+            "0.75-0.9": 519,
+            "0.9-1": 362
+          },
+          "pELS": {
+            "0.1-0.25": 12,
+            "0.25-0.5": 206,
+            "0.5-0.75": 924,
+            "0.75-0.9": 287,
+            "0.9-1": 356
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 271,
+          "no_predicted_target": 4293
+        }
+      },
+      "coding gene": {
+        "targets": 5174,
+        "mean_predicted_target_probability": 0.5578,
+        "tested_pair_bands": {
+          "0-0.02": 42,
+          "0.02-0.05": 246,
+          "0.05-0.1": 418,
+          "0.1-0.25": 1114,
+          "0.25-0.5": 1234,
+          "0.5-0.75": 739,
+          "0.75-0.9": 741,
+          "0.9-1": 640
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 2448,
+          "0.5-0.75": 1876,
+          "0.75-0.9": 466,
+          "0.9-1": 384
+        },
+        "drop_bands": {
+          "= 0": 2530,
+          "0 < drop <= 0.1": 1979,
+          "0.1 < drop <= 0.2": 418,
+          "0.2 < drop <= 0.5": 194,
+          "0.5 < drop <= inf": 53
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 2158,
+            "0.5-0.75": 1330,
+            "0.75-0.9": 299,
+            "0.9-1": 213
+          },
+          "pELS": {
+            "0.25-0.5": 290,
+            "0.5-0.75": 546,
+            "0.75-0.9": 167,
+            "0.9-1": 171
+          }
+        },
+        "missing": {
+          "no_predicted_target": 6965
+        }
+      }
+    },
+    "chr22": {
+      "elements": 19708,
+      "any gene": {
+        "targets": 12676,
+        "mean_predicted_target_probability": 0.6345,
+        "tested_pair_bands": {
+          "0-0.02": 158,
+          "0.02-0.05": 108,
+          "0.05-0.1": 313,
+          "0.1-0.25": 1665,
+          "0.25-0.5": 2835,
+          "0.5-0.75": 2901,
+          "0.75-0.9": 2612,
+          "0.9-1": 2084
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 137,
+          "0.25-0.5": 2768,
+          "0.5-0.75": 6925,
+          "0.75-0.9": 1454,
+          "0.9-1": 1392
+        },
+        "drop_bands": {
+          "= 0": 5820,
+          "0 < drop <= 0.1": 5063,
+          "0.1 < drop <= 0.2": 940,
+          "0.2 < drop <= 0.5": 598,
+          "0.5 < drop <= inf": 255
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 100,
+            "0.25-0.5": 2525,
+            "0.5-0.75": 4825,
+            "0.75-0.9": 829,
+            "0.9-1": 611
+          },
+          "pELS": {
+            "0.1-0.25": 37,
+            "0.25-0.5": 243,
+            "0.5-0.75": 2100,
+            "0.75-0.9": 625,
+            "0.9-1": 781
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 432,
+          "no_predicted_target": 6600
+        }
+      },
+      "coding gene": {
+        "targets": 9612,
+        "mean_predicted_target_probability": 0.6014,
+        "tested_pair_bands": {
+          "0-0.02": 3,
+          "0.02-0.05": 149,
+          "0.05-0.1": 337,
+          "0.1-0.25": 1461,
+          "0.25-0.5": 2243,
+          "0.5-0.75": 2124,
+          "0.75-0.9": 1728,
+          "0.9-1": 1567
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 3224,
+          "0.5-0.75": 4461,
+          "0.75-0.9": 951,
+          "0.9-1": 976
+        },
+        "drop_bands": {
+          "= 0": 4449,
+          "0 < drop <= 0.1": 3726,
+          "0.1 < drop <= 0.2": 828,
+          "0.2 < drop <= 0.5": 452,
+          "0.5 < drop <= inf": 157
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 2851,
+            "0.5-0.75": 2968,
+            "0.75-0.9": 586,
+            "0.9-1": 468
+          },
+          "pELS": {
+            "0.25-0.5": 373,
+            "0.5-0.75": 1493,
+            "0.75-0.9": 365,
+            "0.9-1": 508
+          }
+        },
+        "missing": {
+          "no_predicted_target": 10096
+        }
+      }
+    },
+    "chrX": {
+      "elements": 22894,
+      "any gene": {
+        "targets": 13744,
+        "mean_predicted_target_probability": 0.6139,
+        "tested_pair_bands": {
+          "0-0.02": 219,
+          "0.02-0.05": 306,
+          "0.05-0.1": 845,
+          "0.1-0.25": 2430,
+          "0.25-0.5": 2853,
+          "0.5-0.75": 2384,
+          "0.75-0.9": 2304,
+          "0.9-1": 2403
+        },
+        "predicted_target_bands": {
+          "0.1-0.25": 145,
+          "0.25-0.5": 4351,
+          "0.5-0.75": 5996,
+          "0.75-0.9": 1531,
+          "0.9-1": 1721
+        },
+        "drop_bands": {
+          "= 0": 6196,
+          "0 < drop <= 0.1": 5176,
+          "0.1 < drop <= 0.2": 1262,
+          "0.2 < drop <= 0.5": 756,
+          "0.5 < drop <= inf": 354
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.1-0.25": 109,
+            "0.25-0.5": 4033,
+            "0.5-0.75": 4396,
+            "0.75-0.9": 1008,
+            "0.9-1": 878
+          },
+          "pELS": {
+            "0.1-0.25": 36,
+            "0.25-0.5": 318,
+            "0.5-0.75": 1600,
+            "0.75-0.9": 523,
+            "0.9-1": 843
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 145,
+          "no_predicted_target": 9005
+        }
+      },
+      "coding gene": {
+        "targets": 10817,
+        "mean_predicted_target_probability": 0.5934,
+        "tested_pair_bands": {
+          "0-0.02": 73,
+          "0.02-0.05": 323,
+          "0.05-0.1": 734,
+          "0.1-0.25": 1987,
+          "0.25-0.5": 2173,
+          "0.5-0.75": 1789,
+          "0.75-0.9": 1782,
+          "0.9-1": 1956
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 4344,
+          "0.5-0.75": 4057,
+          "0.75-0.9": 1139,
+          "0.9-1": 1277
+        },
+        "drop_bands": {
+          "= 0": 4941,
+          "0 < drop <= 0.1": 3979,
+          "0.1 < drop <= 0.2": 1043,
+          "0.2 < drop <= 0.5": 611,
+          "0.5 < drop <= inf": 243
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 3993,
+            "0.5-0.75": 2761,
+            "0.75-0.9": 740,
+            "0.9-1": 646
+          },
+          "pELS": {
+            "0.25-0.5": 351,
+            "0.5-0.75": 1296,
+            "0.75-0.9": 399,
+            "0.9-1": 631
+          }
+        },
+        "missing": {
+          "no_predicted_target": 12077
+        }
+      }
+    },
+    "chrY": {
+      "elements": 907,
+      "any gene": {
+        "targets": 539,
+        "mean_predicted_target_probability": 0.647,
+        "tested_pair_bands": {
+          "0.02-0.05": 11,
+          "0.05-0.1": 23,
+          "0.1-0.25": 125,
+          "0.25-0.5": 131,
+          "0.5-0.75": 87,
+          "0.75-0.9": 82,
+          "0.9-1": 80
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 109,
+          "0.5-0.75": 296,
+          "0.75-0.9": 60,
+          "0.9-1": 74
+        },
+        "drop_bands": {
+          "= 0": 237,
+          "0 < drop <= 0.1": 213,
+          "0.1 < drop <= 0.2": 46,
+          "0.2 < drop <= 0.5": 23,
+          "0.5 < drop <= inf": 20
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 97,
+            "0.5-0.75": 248,
+            "0.75-0.9": 46,
+            "0.9-1": 38
+          },
+          "pELS": {
+            "0.25-0.5": 12,
+            "0.5-0.75": 48,
+            "0.75-0.9": 14,
+            "0.9-1": 36
+          }
+        },
+        "missing": {
+          "no_gencode_tss_for_the_predicted_gene": 15,
+          "no_predicted_target": 353
+        }
+      },
+      "coding gene": {
+        "targets": 125,
+        "mean_predicted_target_probability": 0.5993,
+        "tested_pair_bands": {
+          "0.02-0.05": 8,
+          "0.05-0.1": 19,
+          "0.1-0.25": 26,
+          "0.25-0.5": 17,
+          "0.5-0.75": 13,
+          "0.75-0.9": 16,
+          "0.9-1": 26
+        },
+        "predicted_target_bands": {
+          "0.25-0.5": 52,
+          "0.5-0.75": 38,
+          "0.75-0.9": 15,
+          "0.9-1": 20
+        },
+        "drop_bands": {
+          "= 0": 62,
+          "0 < drop <= 0.1": 37,
+          "0.1 < drop <= 0.2": 14,
+          "0.2 < drop <= 0.5": 6,
+          "0.5 < drop <= inf": 6
+        },
+        "by_registry_class": {
+          "dELS": {
+            "0.25-0.5": 48,
+            "0.5-0.75": 21,
+            "0.75-0.9": 8,
+            "0.9-1": 6
+          },
+          "pELS": {
+            "0.25-0.5": 4,
+            "0.5-0.75": 17,
+            "0.75-0.9": 7,
+            "0.9-1": 14
+          }
+        },
+        "missing": {
+          "no_predicted_target": 782
+        }
+      }
+    }
+  }
+}

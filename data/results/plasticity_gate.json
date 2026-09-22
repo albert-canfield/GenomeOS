@@ -1,0 +1,504 @@
+{
+  "result": "plasticity_gate",
+  "date": "2026-09-14",
+  "program": "data/organisms/celegans/plasticity.bio",
+  "series": "Fukushige & Krause 2005, Development 132:1795; Yuzyuk et al. 2009, Dev Cell 16:699",
+  "conditions": {
+    "as written": {
+      "hlh1_early": {
+        "types": {
+          "Muscle": 610.0
+        },
+        "muscle": 610.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 550",
+            "value": 610.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min = 0",
+            "value": 0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min = 0",
+            "value": 0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 1344,
+        "refused_committed": 1340,
+        "revised_fates": 0
+      },
+      "hlh1_late": {
+        "types": {
+          "Neuron": 233.0,
+          "Muscle": 117.0,
+          "Hypodermis": 103.0,
+          "ABpPrecursor": 35.0,
+          "Intestine": 34.0,
+          "Other": 14.0,
+          "ABaPrecursor": 13.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "MSPrecursor": 7.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Reproductive": 2.0,
+          "Mesoderm": 1.0,
+          "Rectal": 1.0
+        },
+        "muscle": 117.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 117.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 233.0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min >= 30",
+            "value": 34.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 1180,
+        "refused_committed": 2,
+        "revised_fates": 15
+      },
+      "hlh1_late_mes2": {
+        "types": {
+          "Muscle": 594.0,
+          "Hypodermis": 16.0
+        },
+        "muscle": 594.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 400",
+            "value": 594.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min <= 60",
+            "value": 0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 1280,
+        "revised_fates": 17
+      },
+      "hlh1_late_pha4": {
+        "types": {
+          "Neuron": 233.0,
+          "Muscle": 117.0,
+          "Hypodermis": 103.0,
+          "ABpPrecursor": 35.0,
+          "Intestine": 34.0,
+          "Other": 14.0,
+          "ABaPrecursor": 13.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "MSPrecursor": 7.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Reproductive": 2.0,
+          "Mesoderm": 1.0,
+          "Rectal": 1.0
+        },
+        "muscle": 117.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 117.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 233.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 1180,
+        "refused_committed": 2,
+        "revised_fates": 15
+      },
+      "hlh1_terminal_mes2": {
+        "types": {
+          "Neuron": 233.0,
+          "Muscle": 201.0,
+          "Hypodermis": 99.0,
+          "Intestine": 26.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Rectal": 1.0
+        },
+        "muscle": 201.0,
+        "asserts": [
+          {
+            "assert": "type Neuron at 800 min >= 233",
+            "value": 233.0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min >= 26",
+            "value": 26.0,
+            "ok": true
+          },
+          {
+            "assert": "type Hypodermis at 800 min >= 99",
+            "value": 99.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 482,
+        "revised_fates": 379
+      },
+      "program": "competence and commitment"
+    },
+    "competence removed": {
+      "hlh1_early": {
+        "types": {
+          "Muscle": 610.0
+        },
+        "muscle": 610.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 550",
+            "value": 610.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min = 0",
+            "value": 0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min = 0",
+            "value": 0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 1335,
+        "revised_fates": 0
+      },
+      "hlh1_late": {
+        "types": {
+          "Muscle": 594.0,
+          "Hypodermis": 16.0
+        },
+        "muscle": 594.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 594.0,
+            "ok": false
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 0,
+            "ok": false
+          },
+          {
+            "assert": "type Intestine at 800 min >= 30",
+            "value": 0,
+            "ok": false
+          }
+        ],
+        "passed": false,
+        "outside_competence": 0,
+        "refused_committed": 1280,
+        "revised_fates": 17
+      },
+      "hlh1_late_mes2": {
+        "types": {
+          "Muscle": 594.0,
+          "Hypodermis": 16.0
+        },
+        "muscle": 594.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 400",
+            "value": 594.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min <= 60",
+            "value": 0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 1280,
+        "revised_fates": 17
+      },
+      "hlh1_late_pha4": {
+        "types": {
+          "Muscle": 594.0,
+          "Hypodermis": 16.0
+        },
+        "muscle": 594.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 594.0,
+            "ok": false
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 0,
+            "ok": false
+          }
+        ],
+        "passed": false,
+        "outside_competence": 0,
+        "refused_committed": 1280,
+        "revised_fates": 17
+      },
+      "hlh1_terminal_mes2": {
+        "types": {
+          "Neuron": 233.0,
+          "Muscle": 201.0,
+          "Hypodermis": 99.0,
+          "Intestine": 26.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Rectal": 1.0
+        },
+        "muscle": 201.0,
+        "asserts": [
+          {
+            "assert": "type Neuron at 800 min >= 233",
+            "value": 233.0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min >= 26",
+            "value": 26.0,
+            "ok": true
+          },
+          {
+            "assert": "type Hypodermis at 800 min >= 99",
+            "value": 99.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 482,
+        "revised_fates": 379
+      },
+      "program": "commitment only"
+    },
+    "commitment removed": {
+      "hlh1_early": {
+        "types": {
+          "Neuron": 233.0,
+          "Muscle": 174.0,
+          "Hypodermis": 103.0,
+          "Intestine": 34.0,
+          "Other": 14.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Mesoderm": 1.0,
+          "Rectal": 1.0
+        },
+        "muscle": 174.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 550",
+            "value": 174.0,
+            "ok": false
+          },
+          {
+            "assert": "type Neuron at 800 min = 0",
+            "value": 233.0,
+            "ok": false
+          },
+          {
+            "assert": "type Intestine at 800 min = 0",
+            "value": 34.0,
+            "ok": false
+          }
+        ],
+        "passed": false,
+        "outside_competence": 1344,
+        "refused_committed": 0,
+        "revised_fates": 0
+      },
+      "hlh1_late": {
+        "types": {
+          "Neuron": 234.0,
+          "Muscle": 117.0,
+          "Hypodermis": 102.0,
+          "ABpPrecursor": 35.0,
+          "Intestine": 34.0,
+          "Other": 14.0,
+          "ABaPrecursor": 13.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "MSPrecursor": 7.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Reproductive": 2.0,
+          "Mesoderm": 1.0,
+          "Rectal": 1.0
+        },
+        "muscle": 117.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 117.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 234.0,
+            "ok": true
+          },
+          {
+            "assert": "type Intestine at 800 min >= 30",
+            "value": 34.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 1180,
+        "refused_committed": 0,
+        "revised_fates": 16
+      },
+      "hlh1_late_mes2": {
+        "types": {
+          "Muscle": 610.0
+        },
+        "muscle": 610.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min >= 400",
+            "value": 610.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min <= 60",
+            "value": 0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 0,
+        "refused_committed": 0,
+        "revised_fates": 18
+      },
+      "hlh1_late_pha4": {
+        "types": {
+          "Neuron": 234.0,
+          "Muscle": 117.0,
+          "Hypodermis": 102.0,
+          "ABpPrecursor": 35.0,
+          "Intestine": 34.0,
+          "Other": 14.0,
+          "ABaPrecursor": 13.0,
+          "Epithelium": 12.0,
+          "GliaSocket": 9.0,
+          "PharyngealMarginal": 8.0,
+          "MSPrecursor": 7.0,
+          "Valve": 6.0,
+          "GliaSheath": 6.0,
+          "Gland": 5.0,
+          "Excretory": 4.0,
+          "Reproductive": 2.0,
+          "Mesoderm": 1.0,
+          "Rectal": 1.0
+        },
+        "muscle": 117.0,
+        "asserts": [
+          {
+            "assert": "type Muscle at 800 min in 110..130",
+            "value": 117.0,
+            "ok": true
+          },
+          {
+            "assert": "type Neuron at 800 min >= 200",
+            "value": 234.0,
+            "ok": true
+          }
+        ],
+        "passed": true,
+        "outside_competence": 1180,
+        "refused_committed": 0,
+        "revised_fates": 16
+      },
+      "hlh1_terminal_mes2": {
+        "types": {
+          "Muscle": 610.0
+        },
+        "muscle": 610.0,
+        "asserts": [
+          {
+            "assert": "type Neuron at 800 min >= 233",
+            "value": 0,
+            "ok": false
+          },
+          {
+            "assert": "type Intestine at 800 min >= 26",
+            "value": 0,
+            "ok": false
+          },
+          {
+            "assert": "type Hypodermis at 800 min >= 99",
+            "value": 0,
+            "ok": false
+          }
+        ],
+        "passed": false,
+        "outside_competence": 0,
+        "refused_committed": 0,
+        "revised_fates": 543
+      },
+      "program": "competence only"
+    }
+  },
+  "verdict": {
+    "all arms pass as written": true,
+    "competence is load-bearing": true,
+    "commitment is load-bearing": true
+  }
+}

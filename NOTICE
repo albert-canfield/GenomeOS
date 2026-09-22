@@ -1,0 +1,24 @@
+GenomeOS
+Copyright (c) 2026 Albert Canfield
+
+This product includes two separately licensed parts:
+
+  * The BioLang engine — the language, the intermediate representation, the
+    virtual machine, the standard library and the `bio` toolchain
+    (genomeos/lang, genomeos/ir, genomeos/runtime, genomeos/std,
+    genomeos/coords.py, genomeos/version.py, genomeos/bio.py, and the BioLang
+    programs under data/demo and data/organisms) — is licensed under the
+    Apache License, Version 2.0. See LICENSE-APACHE.
+
+  * The GenomeOS application — everything else — is licensed under the GNU
+    Affero General Public License, version 3 or later. See LICENSE.
+
+The file-by-file map, the documentation licence and the terms of the external
+data sources are in LICENSING.md. Every library, model and database GenomeOS
+builds on is credited in ACKNOWLEDGEMENTS.md.
+
+Released under the MIT License on 2026-09-10 and relicensed as above on
+2026-09-11. Commits published before that change remain available under MIT.
+
+GenomeOS produces computational research hypotheses with their evidence and
+their gaps. It is not a medical device and gives no clinical advice.

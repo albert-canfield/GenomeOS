@@ -1,0 +1,58 @@
+# C. elegans from one cell, with the founder signals read from contacts instead of from names.
+#
+# The same program as embryo_factors.bio — the measured reader (Ma et al. 2021), the observed
+# lineage, the factor rules for terminal fates — with founders_contacts.bio in place of
+# founders.bio and a contact table on the organism block. Nothing else differs, so the difference
+# in the score against Sulston is the difference contacts make, and that is what this file is for.
+#
+# Run: genomeos grow data/organisms/celegans/embryo_contacts.bio --until 800 --compare
+# Measured: scripts/celegans_contacts.py, data/results/celegans_contacts.json.
+module organism.celegans.embryo_contacts
+# test: cells >= 2150
+# test: deaths == 131
+import cell_types.bio
+import timers.bio
+import founders_contacts.bio
+import reader.bio
+import lineage_embryo.bio
+import lineage_larva.bio
+import fates.bio
+
+regime worm { fates: first }
+
+organism Celegans {
+  species: Caenorhabditis elegans
+  genome: WBcel235
+  root: P0
+  cell_type: Zygote
+  seed: 0
+  factors: SKN-1, PIE-1, PAL-1, POP-1, PAR-3, PAR-2, GLP-1, MOM-5
+  environment: temperature = 20
+  contacts: contacts_embryo.tsv
+  observe: count, deaths, fates
+  assert: count at 0.5 min = 2
+  assert: count at 350 min in 240..310
+  assert: count at 500 min in 560..640
+  assert: deaths at 800 min in 100..115
+  reference: celegans
+  evidence: experimental "Sulston et al. 1983, Dev Biol 100:64; contacts curated from Priess & Thomson 1987, Cell 48:241 and Priess 2005, WormBook"; confidence: 0.85
+}
+
+stage Cleavage { from: 0 min; to: 100 min; evidence: experimental "Sulston et al. 1983"; confidence: 0.8 }
+stage Gastrulation { from: 100 min; to: 350 min; evidence: experimental "Sulston et al. 1983 (E2 ingression at ~100 min)"; confidence: 0.8 }
+stage Morphogenesis { from: 350 min; to: 800 min; evidence: experimental "Sulston et al. 1983 (proliferation ends, elongation)"; confidence: 0.7 }
+stage Larva { from: 800 min; to: 5700 min; evidence: experimental "Sulston & Horvitz 1977 (L1-L4)"; confidence: 0.7 }
+stage Adult { from: 5700 min; evidence: experimental "Sulston & Horvitz 1977"; confidence: 0.7 }
+
+decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "every descendant of the zygote is a blastomere until it differentiates"; confidence: 0.9 }
+
+# The same lock as embryo_factors.bio: a terminal fate read from a growing integral is only a fate if it
+# cannot be taken again at a later decision point. See the comment there for the measurement.
+commitment terminal_fate {
+  establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (the myogenic response is lost completely in terminally differentiated cells, and mes-2 does not restore it)"
+  confidence: 0.6
+}

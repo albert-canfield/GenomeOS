@@ -1,0 +1,4847 @@
+{
+  "result": "constrained_unknown_targets",
+  "date": "2026-09-16",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX",
+    "chrY",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22"
+  ],
+  "min_log2": 0.1,
+  "real_unknown": {
+    "blocks": 882,
+    "blocks_with_an_element": 531,
+    "elements": 3280,
+    "moving": 812,
+    "moves_per_element": 0.2476,
+    "blocks_with_a_moving_element": 331,
+    "share_of_blocks_with_an_element_that_move": 0.6234,
+    "median_length_kb": 11.7
+  },
+  "constrained_unknown_copies": {
+    "blocks": 216,
+    "blocks_with_an_element": 28,
+    "elements": 39,
+    "moving": 22,
+    "moves_per_element": 0.5641,
+    "blocks_with_a_moving_element": 20,
+    "share_of_blocks_with_an_element_that_move": 0.7143,
+    "median_length_kb": 4.0
+  },
+  "other_tiers": {
+    "neutral": {
+      "blocks": 2632,
+      "blocks_with_an_element": 1181,
+      "elements": 5706,
+      "moving": 1670,
+      "moves_per_element": 0.2927,
+      "blocks_with_a_moving_element": 768,
+      "share_of_blocks_with_an_element_that_move": 0.6503,
+      "median_length_kb": 7.9
+    },
+    "fossil": {
+      "blocks": 7302,
+      "blocks_with_an_element": 4155,
+      "elements": 23487,
+      "moving": 7122,
+      "moves_per_element": 0.3032,
+      "blocks_with_a_moving_element": 2911,
+      "share_of_blocks_with_an_element_that_move": 0.7006,
+      "median_length_kb": 18.6
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "blocks_with_an_element": 15330,
+      "elements": 145002,
+      "moving": 66915,
+      "moves_per_element": 0.4615,
+      "blocks_with_a_moving_element": 13655,
+      "share_of_blocks_with_an_element_that_move": 0.8907,
+      "median_length_kb": 12.8
+    }
+  },
+  "by_case": {
+    "recent": {
+      "blocks": 29,
+      "blocks_with_an_element": 15,
+      "elements": 22,
+      "moving": 14,
+      "moves_per_element": 0.6364,
+      "blocks_with_a_moving_element": 11,
+      "share_of_blocks_with_an_element_that_move": 0.7333,
+      "median_length_kb": 3.2
+    },
+    "relaxed": {
+      "blocks": 437,
+      "blocks_with_an_element": 267,
+      "elements": 1430,
+      "moving": 364,
+      "moves_per_element": 0.2545,
+      "blocks_with_a_moving_element": 167,
+      "share_of_blocks_with_an_element_that_move": 0.6255,
+      "median_length_kb": 11.0
+    },
+    "syntax": {
+      "blocks": 69,
+      "blocks_with_an_element": 27,
+      "elements": 40,
+      "moving": 23,
+      "moves_per_element": 0.575,
+      "blocks_with_a_moving_element": 19,
+      "share_of_blocks_with_an_element_that_move": 0.7037,
+      "median_length_kb": 2.7
+    },
+    "tolerant": {
+      "blocks": 329,
+      "blocks_with_an_element": 218,
+      "elements": 1784,
+      "moving": 408,
+      "moves_per_element": 0.2287,
+      "blocks_with_a_moving_element": 131,
+      "share_of_blocks_with_an_element_that_move": 0.6009,
+      "median_length_kb": 21.9
+    },
+    "unmeasured": {
+      "blocks": 18,
+      "blocks_with_an_element": 4,
+      "elements": 4,
+      "moving": 3,
+      "moves_per_element": 0.75,
+      "blocks_with_a_moving_element": 3,
+      "share_of_blocks_with_an_element_that_move": 0.75,
+      "median_length_kb": 1.7
+    }
+  },
+  "against_neutral_in_length_deciles": {
+    "per_decile": {
+      "0": {
+        "target_blocks": 79,
+        "control_blocks": 272,
+        "target": 0.1519,
+        "control": 0.1949,
+        "difference": -0.043
+      },
+      "1": {
+        "target_blocks": 90,
+        "control_blocks": 261,
+        "target": 0.2222,
+        "control": 0.1533,
+        "difference": 0.069
+      },
+      "2": {
+        "target_blocks": 96,
+        "control_blocks": 256,
+        "target": 0.2188,
+        "control": 0.1758,
+        "difference": 0.043
+      },
+      "3": {
+        "target_blocks": 66,
+        "control_blocks": 285,
+        "target": 0.2121,
+        "control": 0.1684,
+        "difference": 0.0437
+      },
+      "4": {
+        "target_blocks": 61,
+        "control_blocks": 291,
+        "target": 0.1475,
+        "control": 0.1546,
+        "difference": -0.0071
+      },
+      "5": {
+        "target_blocks": 60,
+        "control_blocks": 291,
+        "target": 0.3,
+        "control": 0.2027,
+        "difference": 0.0973
+      },
+      "6": {
+        "target_blocks": 101,
+        "control_blocks": 250,
+        "target": 0.4059,
+        "control": 0.324,
+        "difference": 0.0819
+      },
+      "7": {
+        "target_blocks": 106,
+        "control_blocks": 246,
+        "target": 0.5283,
+        "control": 0.439,
+        "difference": 0.0893
+      },
+      "8": {
+        "target_blocks": 122,
+        "control_blocks": 229,
+        "target": 0.582,
+        "control": 0.5502,
+        "difference": 0.0317
+      },
+      "9": {
+        "target_blocks": 101,
+        "control_blocks": 251,
+        "target": 0.6832,
+        "control": 0.6494,
+        "difference": 0.0338
+      }
+    },
+    "deciles_compared": 10,
+    "difference_weighted_by_target_blocks": 0.0456
+  },
+  "blocks_with_a_named_target": 331,
+  "named": [
+    {
+      "block": "chr1:153205120-153217583",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PRR9"
+      ],
+      "cells": [
+        "chorion"
+      ],
+      "strongest_abs_log2": 5.515
+    },
+    {
+      "block": "chr20:56623064-56625035",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000289199"
+      ],
+      "cells": [
+        "WTC11"
+      ],
+      "strongest_abs_log2": 3.239
+    },
+    {
+      "block": "chr1:98131726-98210434",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 7,
+      "targets": [
+        "LINC01776"
+      ],
+      "cells": [
+        "GM23248",
+        "LHCN-M2",
+        "endothelial cell of umbilical vein",
+        "epithelial cell of umbilical artery"
+      ],
+      "strongest_abs_log2": 2.237
+    },
+    {
+      "block": "chr1:107067636-107139968",
+      "case": "tolerant",
+      "elements": 12,
+      "moving": 10,
+      "targets": [
+        "ENSG00000289612"
+      ],
+      "cells": [
+        "HFFc6",
+        "Karpas-422",
+        "foreskin keratinocyte",
+        "hair follicular keratinocyte"
+      ],
+      "strongest_abs_log2": 2.027
+    },
+    {
+      "block": "chr4:149896233-149907559",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "IQCM"
+      ],
+      "cells": [
+        "left colon"
+      ],
+      "strongest_abs_log2": 1.989
+    },
+    {
+      "block": "chr11:77215241-77216554",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "GDPD4"
+      ],
+      "cells": [
+        "right renal cortex interstitium"
+      ],
+      "strongest_abs_log2": 1.789
+    },
+    {
+      "block": "chr6:91465939-91521659",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 8,
+      "targets": [
+        "MIR4643"
+      ],
+      "cells": [
+        "GM12878",
+        "K562",
+        "natural killer cell"
+      ],
+      "strongest_abs_log2": 1.786
+    },
+    {
+      "block": "chr18:32779286-32833416",
+      "case": "relaxed",
+      "elements": 9,
+      "moving": 8,
+      "targets": [
+        "ENSG00000228835",
+        "KLHL14",
+        "RPS27P28"
+      ],
+      "cells": [
+        "HepG2",
+        "IgD-negative memory B cell",
+        "Karpas-422",
+        "kidney"
+      ],
+      "strongest_abs_log2": 1.558
+    },
+    {
+      "block": "chrX:111270550-111293778",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "CAPN6"
+      ],
+      "cells": [
+        "HepG2",
+        "esophagus mucosa",
+        "myocyte"
+      ],
+      "strongest_abs_log2": 1.426
+    },
+    {
+      "block": "chr16:51095952-51107570",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000287718"
+      ],
+      "cells": [
+        "left lobe of liver"
+      ],
+      "strongest_abs_log2": 1.377
+    },
+    {
+      "block": "chr20:6820945-7069613",
+      "case": "relaxed",
+      "elements": 37,
+      "moving": 30,
+      "targets": [
+        "BMP2",
+        "ENSG00000232271"
+      ],
+      "cells": [
+        "B cell",
+        "CD14-positive monocyte",
+        "GM12878",
+        "Heart_Left_Ventricle"
+      ],
+      "strongest_abs_log2": 1.37
+    },
+    {
+      "block": "chr7:8752961-8938786",
+      "case": "tolerant",
+      "elements": 9,
+      "moving": 1,
+      "targets": [
+        "NXPH1"
+      ],
+      "cells": [
+        "K562"
+      ],
+      "strongest_abs_log2": 1.181
+    },
+    {
+      "block": "chr4:110648728-110783508",
+      "case": "tolerant",
+      "elements": 18,
+      "moving": 14,
+      "targets": [
+        "LINC01438",
+        "PANCR",
+        "PITX2"
+      ],
+      "cells": [
+        "Karpas-422",
+        "Kidney_Cortex",
+        "colonic mucosa",
+        "left ventricle myocardium inferior"
+      ],
+      "strongest_abs_log2": 1.161
+    },
+    {
+      "block": "chr10:73783652-73785548",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000280238"
+      ],
+      "cells": [
+        "Whole_Blood"
+      ],
+      "strongest_abs_log2": 1.034
+    },
+    {
+      "block": "chr17:70920726-71011282",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 2,
+      "targets": [
+        "ENSG00000271239"
+      ],
+      "cells": [
+        "right lobe of liver"
+      ],
+      "strongest_abs_log2": 1.006
+    },
+    {
+      "block": "chr4:82044244-82128534",
+      "case": "tolerant",
+      "elements": 15,
+      "moving": 6,
+      "targets": [
+        "RASGEF1B"
+      ],
+      "cells": [
+        "glutamatergic neuron",
+        "hair follicular keratinocyte",
+        "mesenchymal stem cell of adipose",
+        "mesenchymal stem cell of the bone marrow"
+      ],
+      "strongest_abs_log2": 0.996
+    },
+    {
+      "block": "chr14:97987918-98067464",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 5,
+      "targets": [
+        "LINC01550",
+        "LINC02295"
+      ],
+      "cells": [
+        "CD14-positive monocyte",
+        "CD8-positive, alpha-beta T cell",
+        "Jurkat, Clone E6-1",
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.982
+    },
+    {
+      "block": "chr6:93103384-93240009",
+      "case": "tolerant",
+      "elements": 23,
+      "moving": 4,
+      "targets": [
+        "EPHA7"
+      ],
+      "cells": [
+        "AG04450",
+        "OCI-LY7",
+        "left ventricle myocardium inferior"
+      ],
+      "strongest_abs_log2": 0.97
+    },
+    {
+      "block": "chr6:50181007-50411843",
+      "case": "tolerant",
+      "elements": 16,
+      "moving": 8,
+      "targets": [
+        "ENSG00000286405"
+      ],
+      "cells": [
+        "Brain_Hypothalamus",
+        "Liver",
+        "cerebellum"
+      ],
+      "strongest_abs_log2": 0.888
+    },
+    {
+      "block": "chr17:46886730-46909404",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "WNT9B"
+      ],
+      "cells": [
+        "dermis blood vessel endothelial cell",
+        "left colon",
+        "right renal cortex interstitium"
+      ],
+      "strongest_abs_log2": 0.884
+    },
+    {
+      "block": "chr8:64571332-64574305",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000253800"
+      ],
+      "cells": [
+        "cerebellum"
+      ],
+      "strongest_abs_log2": 0.74
+    },
+    {
+      "block": "chr3:165197109-165206439",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SLITRK3"
+      ],
+      "cells": [
+        "left lobe of liver"
+      ],
+      "strongest_abs_log2": 0.736
+    },
+    {
+      "block": "chr3:50189075-50191585",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "GNAT1"
+      ],
+      "cells": [
+        "Skin_Not_Sun_Exposed_Suprapubic"
+      ],
+      "strongest_abs_log2": 0.728
+    },
+    {
+      "block": "chrX:134166932-134168910",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "MIR19B2"
+      ],
+      "cells": [
+        "HeLa-S3"
+      ],
+      "strongest_abs_log2": 0.707
+    },
+    {
+      "block": "chr12:20328685-20361483",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 2,
+      "targets": [
+        "PDE3A",
+        "PDE3A-AS1"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1",
+        "mammary microvascular endothelial cell"
+      ],
+      "strongest_abs_log2": 0.701
+    },
+    {
+      "block": "chr2:119063989-119156242",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 8,
+      "targets": [
+        "C1QL2"
+      ],
+      "cells": [
+        "H1",
+        "H7",
+        "H9",
+        "pancreas"
+      ],
+      "strongest_abs_log2": 0.688
+    },
+    {
+      "block": "chr16:71724701-71726974",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000260612"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere"
+      ],
+      "strongest_abs_log2": 0.679
+    },
+    {
+      "block": "chr2:198772356-198882572",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 11,
+      "targets": [
+        "ENSG00000225421",
+        "ENSG00000231557",
+        "SATB2"
+      ],
+      "cells": [
+        "left colon",
+        "naive thymus-derived CD4-positive, alpha-beta T cell",
+        "transverse colon"
+      ],
+      "strongest_abs_log2": 0.65
+    },
+    {
+      "block": "chr4:129139740-129177385",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 4,
+      "targets": [
+        "ENSG00000251195"
+      ],
+      "cells": [
+        "K562",
+        "bladder microvascular endothelial cell"
+      ],
+      "strongest_abs_log2": 0.64
+    },
+    {
+      "block": "chr10:9065824-9149547",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 7,
+      "targets": [
+        "ENSG00000223808",
+        "RNA5SP299"
+      ],
+      "cells": [
+        "CD8-positive, alpha-beta T cell",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.638
+    },
+    {
+      "block": "chr1:213329327-213374554",
+      "case": "syntax",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "ENSG00000225233",
+        "ENSG00000228255"
+      ],
+      "cells": [
+        "HepG2",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.63
+    },
+    {
+      "block": "chr5:51167647-51219077",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 5,
+      "targets": [
+        "ENSG00000250360",
+        "ISL1-DT",
+        "LINC02106"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "glutamatergic neuron",
+        "progenitor cell of endocrine pancreas"
+      ],
+      "strongest_abs_log2": 0.629
+    },
+    {
+      "block": "chr7:113059893-113075123",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "GPR85"
+      ],
+      "cells": [
+        "CD14-positive monocyte"
+      ],
+      "strongest_abs_log2": 0.621
+    },
+    {
+      "block": "chr17:71743468-71829869",
+      "case": "tolerant",
+      "elements": 16,
+      "moving": 9,
+      "targets": [
+        "ENSG00000286387"
+      ],
+      "cells": [
+        "GM23338",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.617
+    },
+    {
+      "block": "chr8:77014028-77163448",
+      "case": "tolerant",
+      "elements": 17,
+      "moving": 3,
+      "targets": [
+        "ENSG00000254366",
+        "HIGD1AP18"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "Liver",
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.585
+    },
+    {
+      "block": "chr11:79968708-79987512",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000254471"
+      ],
+      "cells": [
+        "kidney"
+      ],
+      "strongest_abs_log2": 0.577
+    },
+    {
+      "block": "chr3:115565595-115623291",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 4,
+      "targets": [
+        "GAP43"
+      ],
+      "cells": [
+        "H9",
+        "aorta",
+        "subcutaneous adipose tissue"
+      ],
+      "strongest_abs_log2": 0.571
+    },
+    {
+      "block": "chr8:108132114-108162786",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "AURKBP1",
+        "RSPO2"
+      ],
+      "cells": [
+        "Artery_Coronary",
+        "IMR-90",
+        "Liver"
+      ],
+      "strongest_abs_log2": 0.564
+    },
+    {
+      "block": "chr2:18787752-18890093",
+      "case": "relaxed",
+      "elements": 17,
+      "moving": 6,
+      "targets": [
+        "ENSG00000224626",
+        "ENSG00000287284"
+      ],
+      "cells": [
+        "B cell",
+        "HepG2",
+        "Testis",
+        "progenitor cell of endocrine pancreas"
+      ],
+      "strongest_abs_log2": 0.555
+    },
+    {
+      "block": "chr10:59158058-59173364",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "TRAF6P1"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.55
+    },
+    {
+      "block": "chr9:125967379-126051029",
+      "case": "syntax",
+      "elements": 8,
+      "moving": 1,
+      "targets": [
+        "PBX3"
+      ],
+      "cells": [
+        "Purkinje cell"
+      ],
+      "strongest_abs_log2": 0.542
+    },
+    {
+      "block": "chr16:8180769-8252085",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 1,
+      "targets": [
+        "RBFOX1"
+      ],
+      "cells": [
+        "K562"
+      ],
+      "strongest_abs_log2": 0.531
+    },
+    {
+      "block": "chr17:20771427-20775355",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "HNRNPA1P19"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.5
+    },
+    {
+      "block": "chr15:36531920-36569387",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 2,
+      "targets": [
+        "ENSG00000259737"
+      ],
+      "cells": [
+        "H7",
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.488
+    },
+    {
+      "block": "chr13:94803430-94960040",
+      "case": "tolerant",
+      "elements": 17,
+      "moving": 5,
+      "targets": [
+        "ENSG00000287635",
+        "LINC00557",
+        "SOX21"
+      ],
+      "cells": [
+        "Brain_Caudate_basal_ganglia",
+        "hematopoietic multipotent progenitor cell",
+        "sciatic nerve",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.473
+    },
+    {
+      "block": "chr4:181306118-181390604",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 5,
+      "targets": [
+        "ENSG00000225356",
+        "ENSG00000286860",
+        "LINC02500"
+      ],
+      "cells": [
+        "Karpas-422",
+        "heart"
+      ],
+      "strongest_abs_log2": 0.466
+    },
+    {
+      "block": "chr6:50913256-51302209",
+      "case": "tolerant",
+      "elements": 71,
+      "moving": 23,
+      "targets": [
+        "TFAP2B"
+      ],
+      "cells": [
+        "BJ",
+        "Brain_Frontal_Cortex_BA9",
+        "HFFc6",
+        "K562"
+      ],
+      "strongest_abs_log2": 0.466
+    },
+    {
+      "block": "chr17:6323228-6342516",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "BTF3P14"
+      ],
+      "cells": [
+        "U-87 MG"
+      ],
+      "strongest_abs_log2": 0.462
+    },
+    {
+      "block": "chr2:221163053-221286242",
+      "case": "relaxed",
+      "elements": 20,
+      "moving": 5,
+      "targets": [
+        "ENSG00000290000",
+        "EPHA4"
+      ],
+      "cells": [
+        "Karpas-422"
+      ],
+      "strongest_abs_log2": 0.459
+    },
+    {
+      "block": "chr14:22503814-22505109",
+      "case": "unmeasured",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "TRAC"
+      ],
+      "cells": [
+        "left ventricle myocardium inferior"
+      ],
+      "strongest_abs_log2": 0.458
+    },
+    {
+      "block": "chr8:37069418-37073720",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000254038"
+      ],
+      "cells": [
+        "skeletal muscle myoblast"
+      ],
+      "strongest_abs_log2": 0.457
+    },
+    {
+      "block": "chr9:132098876-132125712",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 1,
+      "targets": [
+        "NTNG2"
+      ],
+      "cells": [
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.457
+    },
+    {
+      "block": "chr9:21059323-21077103",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "HACD4",
+        "IFNWP4"
+      ],
+      "cells": [
+        "natural killer cell",
+        "pulmonary artery endothelial cell"
+      ],
+      "strongest_abs_log2": 0.453
+    },
+    {
+      "block": "chr7:20590085-20615666",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "ABCB5",
+        "ENSG00000223866"
+      ],
+      "cells": [
+        "mesenchymal stem cell of the bone marrow",
+        "regular cardiac myocyte",
+        "right lobe of liver"
+      ],
+      "strongest_abs_log2": 0.448
+    },
+    {
+      "block": "chr2:219918898-219940679",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "ENSG00000288902"
+      ],
+      "cells": [
+        "GM12878",
+        "LHCN-M2",
+        "keratinocyte"
+      ],
+      "strongest_abs_log2": 0.447
+    },
+    {
+      "block": "chr2:153295527-153311631",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "LINC01850",
+        "RPRM"
+      ],
+      "cells": [
+        "myocyte",
+        "neural progenitor cell"
+      ],
+      "strongest_abs_log2": 0.446
+    },
+    {
+      "block": "chr15:34720865-34722043",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "GJD2"
+      ],
+      "cells": [
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.444
+    },
+    {
+      "block": "chr2:145338386-145569293",
+      "case": "relaxed",
+      "elements": 33,
+      "moving": 2,
+      "targets": [
+        "RPL6P5"
+      ],
+      "cells": [
+        "BLaER1",
+        "Karpas-422"
+      ],
+      "strongest_abs_log2": 0.442
+    },
+    {
+      "block": "chr11:28527041-28679182",
+      "case": "tolerant",
+      "elements": 26,
+      "moving": 14,
+      "targets": [
+        "ENSG00000254606",
+        "LINC02758"
+      ],
+      "cells": [
+        "CD8-positive, alpha-beta T cell",
+        "IMR-90",
+        "NCI-H460",
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.438
+    },
+    {
+      "block": "chr10:62282022-62289520",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC02621"
+      ],
+      "cells": [
+        "myocyte"
+      ],
+      "strongest_abs_log2": 0.437
+    },
+    {
+      "block": "chr14:26208424-26367316",
+      "case": "tolerant",
+      "elements": 25,
+      "moving": 5,
+      "targets": [
+        "CYB5AP5",
+        "LINC02306"
+      ],
+      "cells": [
+        "A375",
+        "GM23338",
+        "NCI-H460",
+        "U-87 MG"
+      ],
+      "strongest_abs_log2": 0.435
+    },
+    {
+      "block": "chr10:89139458-89152778",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "CH25H"
+      ],
+      "cells": [
+        "endothelial cell of umbilical vein",
+        "mammary epithelial cell"
+      ],
+      "strongest_abs_log2": 0.431
+    },
+    {
+      "block": "chr4:57353329-57424494",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 4,
+      "targets": [
+        "ENSG00000251459",
+        "RPS26P24"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.427
+    },
+    {
+      "block": "chr9:17824386-17894476",
+      "case": "tolerant",
+      "elements": 9,
+      "moving": 4,
+      "targets": [
+        "ADAMTSL1"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "cardiac muscle cell",
+        "heart left ventricle"
+      ],
+      "strongest_abs_log2": 0.423
+    },
+    {
+      "block": "chr8:77213127-77398974",
+      "case": "tolerant",
+      "elements": 19,
+      "moving": 8,
+      "targets": [
+        "ENSG00000254366"
+      ],
+      "cells": [
+        "Liver",
+        "hepatocyte",
+        "left lobe of liver",
+        "left renal pelvis"
+      ],
+      "strongest_abs_log2": 0.41
+    },
+    {
+      "block": "chr5:139493105-139494255",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000249689"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.402
+    },
+    {
+      "block": "chr17:56538963-56573039",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 2,
+      "targets": [
+        "NOG",
+        "RPL39P33"
+      ],
+      "cells": [
+        "left ventricle myocardium inferior",
+        "muscle of trunk"
+      ],
+      "strongest_abs_log2": 0.402
+    },
+    {
+      "block": "chr22:16956808-16961935",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "IGKV1OR22-1"
+      ],
+      "cells": [
+        "B cell"
+      ],
+      "strongest_abs_log2": 0.4
+    },
+    {
+      "block": "chr13:78667709-78713025",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "POU4F1"
+      ],
+      "cells": [
+        "cardiac muscle cell",
+        "neurosphere"
+      ],
+      "strongest_abs_log2": 0.396
+    },
+    {
+      "block": "chr6:84797631-84929514",
+      "case": "relaxed",
+      "elements": 21,
+      "moving": 4,
+      "targets": [
+        "ENSG00000287294",
+        "TBX18"
+      ],
+      "cells": [
+        "Adipose_Subcutaneous",
+        "MCF 10A",
+        "dermis blood vessel endothelial cell",
+        "keratinocyte"
+      ],
+      "strongest_abs_log2": 0.394
+    },
+    {
+      "block": "chr7:25257129-25260025",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "NPVF"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.393
+    },
+    {
+      "block": "chr13:51204115-51221943",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "C13orf42"
+      ],
+      "cells": [
+        "neurosphere"
+      ],
+      "strongest_abs_log2": 0.391
+    },
+    {
+      "block": "chr10:8724288-8726711",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000270234"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.39
+    },
+    {
+      "block": "chr7:96341246-96351519",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNU7-188P"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.389
+    },
+    {
+      "block": "chr18:39979343-40029241",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000279034"
+      ],
+      "cells": [
+        "Brain_Cortex",
+        "Brain_Hippocampus"
+      ],
+      "strongest_abs_log2": 0.378
+    },
+    {
+      "block": "chr2:149290196-149320592",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 5,
+      "targets": [
+        "LYPD6",
+        "RPL17P13"
+      ],
+      "cells": [
+        "GM12878",
+        "K562",
+        "placenta",
+        "small intestine"
+      ],
+      "strongest_abs_log2": 0.365
+    },
+    {
+      "block": "chr2:228841924-228850525",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC01807"
+      ],
+      "cells": [
+        "right lobe of liver"
+      ],
+      "strongest_abs_log2": 0.364
+    },
+    {
+      "block": "chr2:182794464-182828123",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 3,
+      "targets": [
+        "FRZB"
+      ],
+      "cells": [
+        "HFFc6",
+        "mesenteric fat pad",
+        "myocyte"
+      ],
+      "strongest_abs_log2": 0.363
+    },
+    {
+      "block": "chr12:68671901-68674367",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "NUP107-DT"
+      ],
+      "cells": [
+        "kidney"
+      ],
+      "strongest_abs_log2": 0.363
+    },
+    {
+      "block": "chr14:30297043-30327719",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000248975"
+      ],
+      "cells": [
+        "K562",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.361
+    },
+    {
+      "block": "chr15:34736327-34751031",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "GJD2"
+      ],
+      "cells": [
+        "Right ventricle myocardium superior"
+      ],
+      "strongest_abs_log2": 0.36
+    },
+    {
+      "block": "chr22:38571213-38574930",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RPS29P31"
+      ],
+      "cells": [
+        "left lung"
+      ],
+      "strongest_abs_log2": 0.352
+    },
+    {
+      "block": "chr16:59540266-59655601",
+      "case": "tolerant",
+      "elements": 22,
+      "moving": 16,
+      "targets": [
+        "APOOP5",
+        "DUXAP11",
+        "RNU4-58P"
+      ],
+      "cells": [
+        "Cells_Cultured_fibroblasts",
+        "GM23338",
+        "Purkinje cell",
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.348
+    },
+    {
+      "block": "chr6:133209583-133240513",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "EYA4"
+      ],
+      "cells": [
+        "IMR-90"
+      ],
+      "strongest_abs_log2": 0.345
+    },
+    {
+      "block": "chr7:126434158-126437158",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000287702"
+      ],
+      "cells": [
+        "heart"
+      ],
+      "strongest_abs_log2": 0.342
+    },
+    {
+      "block": "chr8:71795056-71815493",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "U8"
+      ],
+      "cells": [
+        "GM23338",
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.342
+    },
+    {
+      "block": "chr6:137498305-137543896",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 8,
+      "targets": [
+        "OLIG3"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "H7",
+        "neural cell",
+        "progenitor cell of endocrine pancreas"
+      ],
+      "strongest_abs_log2": 0.341
+    },
+    {
+      "block": "chr4:129975827-130026566",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "EEF1GP8"
+      ],
+      "cells": [
+        "HUES64"
+      ],
+      "strongest_abs_log2": 0.333
+    },
+    {
+      "block": "chr7:135651416-135656780",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RPL15P11"
+      ],
+      "cells": [
+        "SK-N-DZ"
+      ],
+      "strongest_abs_log2": 0.33
+    },
+    {
+      "block": "chr17:71015838-71081258",
+      "case": "tolerant",
+      "elements": 12,
+      "moving": 2,
+      "targets": [
+        "CASC17"
+      ],
+      "cells": [
+        "GM23338",
+        "NCI-H460"
+      ],
+      "strongest_abs_log2": 0.326
+    },
+    {
+      "block": "chr10:8669803-8724009",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 7,
+      "targets": [
+        "ENSG00000270234",
+        "RNA5SP299"
+      ],
+      "cells": [
+        "Skin_Not_Sun_Exposed_Suprapubic",
+        "lower leg skin",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.324
+    },
+    {
+      "block": "chr5:92719940-92823934",
+      "case": "relaxed",
+      "elements": 10,
+      "moving": 7,
+      "targets": [
+        "ENSG00000248588",
+        "ENSG00000249776",
+        "ENSG00000249984"
+      ],
+      "cells": [
+        "HeLa-S3",
+        "adrenal gland",
+        "cardiac muscle cell",
+        "left lung"
+      ],
+      "strongest_abs_log2": 0.321
+    },
+    {
+      "block": "chr8:74973071-74984332",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "CRISPLD1"
+      ],
+      "cells": [
+        "endocrine pancreas",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.319
+    },
+    {
+      "block": "chr15:96790183-96799385",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SPATA8-AS1"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.319
+    },
+    {
+      "block": "chr21:16815688-16862874",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 3,
+      "targets": [
+        "ENSG00000237735"
+      ],
+      "cells": [
+        "subcutaneous adipose tissue"
+      ],
+      "strongest_abs_log2": 0.318
+    },
+    {
+      "block": "chr4:62221384-62248293",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RPL21P47"
+      ],
+      "cells": [
+        "cardiac muscle cell"
+      ],
+      "strongest_abs_log2": 0.315
+    },
+    {
+      "block": "chr18:41789395-41819052",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "ENSG00000225253"
+      ],
+      "cells": [
+        "umbilical cord"
+      ],
+      "strongest_abs_log2": 0.312
+    },
+    {
+      "block": "chr9:1224258-1254802",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "DMRT2"
+      ],
+      "cells": [
+        "left lobe of liver",
+        "subcutaneous preadipocyte"
+      ],
+      "strongest_abs_log2": 0.311
+    },
+    {
+      "block": "chr1:69563715-69567490",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LRRC7"
+      ],
+      "cells": [
+        "BE2C"
+      ],
+      "strongest_abs_log2": 0.309
+    },
+    {
+      "block": "chr18:78643100-78645843",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "Y_RNA"
+      ],
+      "cells": [
+        "Whole_Blood"
+      ],
+      "strongest_abs_log2": 0.308
+    },
+    {
+      "block": "chr20:20854642-20970122",
+      "case": "relaxed",
+      "elements": 12,
+      "moving": 6,
+      "targets": [
+        "MRPS11P1"
+      ],
+      "cells": [
+        "Kidney_Cortex",
+        "renal cortex interstitium",
+        "renal pelvis",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.305
+    },
+    {
+      "block": "chr17:73836019-73865817",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "ENSG00000266765"
+      ],
+      "cells": [
+        "Colon_Transverse"
+      ],
+      "strongest_abs_log2": 0.304
+    },
+    {
+      "block": "chr6:42925845-42927685",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PTCRA"
+      ],
+      "cells": [
+        "IgD-negative memory B cell"
+      ],
+      "strongest_abs_log2": 0.303
+    },
+    {
+      "block": "chr9:71552648-71589600",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000289163",
+        "RPL35AP21"
+      ],
+      "cells": [
+        "spleen",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.303
+    },
+    {
+      "block": "chr13:58752233-59010331",
+      "case": "tolerant",
+      "elements": 25,
+      "moving": 10,
+      "targets": [
+        "HMGN2P39"
+      ],
+      "cells": [
+        "GM12878",
+        "Heart_Left_Ventricle",
+        "U-87 MG",
+        "left kidney"
+      ],
+      "strongest_abs_log2": 0.301
+    },
+    {
+      "block": "chr2:20679243-20683761",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000270100"
+      ],
+      "cells": [
+        "HepG2"
+      ],
+      "strongest_abs_log2": 0.294
+    },
+    {
+      "block": "chr2:26674464-26678218",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000225378"
+      ],
+      "cells": [
+        "Esophagus_Gastroesophageal_Junction"
+      ],
+      "strongest_abs_log2": 0.294
+    },
+    {
+      "block": "chr3:84947061-84958988",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "CADM2"
+      ],
+      "cells": [
+        "mammary epithelial cell"
+      ],
+      "strongest_abs_log2": 0.293
+    },
+    {
+      "block": "chr2:163318996-163445665",
+      "case": "relaxed",
+      "elements": 20,
+      "moving": 7,
+      "targets": [
+        "RNU6-627P"
+      ],
+      "cells": [
+        "Heart_Left_Ventricle",
+        "Kidney_Medulla",
+        "Purkinje cell"
+      ],
+      "strongest_abs_log2": 0.292
+    },
+    {
+      "block": "chr2:222076547-222199886",
+      "case": "relaxed",
+      "elements": 21,
+      "moving": 3,
+      "targets": [
+        "CCDC140",
+        "PAX3"
+      ],
+      "cells": [
+        "A673",
+        "Kidney_Medulla",
+        "psoas muscle"
+      ],
+      "strongest_abs_log2": 0.29
+    },
+    {
+      "block": "chr22:26619630-26621957",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "CRYBA4"
+      ],
+      "cells": [
+        "hindlimb muscle"
+      ],
+      "strongest_abs_log2": 0.29
+    },
+    {
+      "block": "chr18:37774706-37921417",
+      "case": "relaxed",
+      "elements": 10,
+      "moving": 5,
+      "targets": [
+        "ENSG00000286716"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.287
+    },
+    {
+      "block": "chr18:75110683-75112132",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000285915"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.287
+    },
+    {
+      "block": "chr2:84128638-84244427",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 1,
+      "targets": [
+        "ST6GALNAC2P1"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.283
+    },
+    {
+      "block": "chr4:79408228-79491801",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 5,
+      "targets": [
+        "ENSG00000251399",
+        "LINC00989",
+        "NAA11"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "K562",
+        "cerebellum",
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.273
+    },
+    {
+      "block": "chr9:79726882-79762824",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 1,
+      "targets": [
+        "NPAP1P6"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.271
+    },
+    {
+      "block": "chr2:157031030-157033829",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000286530"
+      ],
+      "cells": [
+        "A375"
+      ],
+      "strongest_abs_log2": 0.27
+    },
+    {
+      "block": "chr9:23438700-23500690",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "ENSG00000284418"
+      ],
+      "cells": [
+        "liver"
+      ],
+      "strongest_abs_log2": 0.268
+    },
+    {
+      "block": "chr4:181394576-181475344",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 2,
+      "targets": [
+        "ENSG00000286860"
+      ],
+      "cells": [
+        "heart"
+      ],
+      "strongest_abs_log2": 0.267
+    },
+    {
+      "block": "chr10:9019025-9038624",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "ENSG00000223808",
+        "RNA5SP299"
+      ],
+      "cells": [
+        "keratinocyte",
+        "lower leg skin",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.263
+    },
+    {
+      "block": "chrX:72726337-72727976",
+      "case": "unmeasured",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "CAPZA1P3"
+      ],
+      "cells": [
+        "Muscle_Skeletal"
+      ],
+      "strongest_abs_log2": 0.26
+    },
+    {
+      "block": "chr14:26397373-26443089",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 2,
+      "targets": [
+        "ENSG00000262119"
+      ],
+      "cells": [
+        "Artery_Tibial",
+        "mesenteric fat pad"
+      ],
+      "strongest_abs_log2": 0.257
+    },
+    {
+      "block": "chr8:108573174-108581061",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000253657"
+      ],
+      "cells": [
+        "CD14-positive monocyte"
+      ],
+      "strongest_abs_log2": 0.252
+    },
+    {
+      "block": "chr3:81769777-81809778",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "ENSG00000242190"
+      ],
+      "cells": [
+        "Muscle_Skeletal"
+      ],
+      "strongest_abs_log2": 0.251
+    },
+    {
+      "block": "chr8:72938349-72947149",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000260838"
+      ],
+      "cells": [
+        "common myeloid progenitor, CD34-positive"
+      ],
+      "strongest_abs_log2": 0.249
+    },
+    {
+      "block": "chr3:88811272-88940766",
+      "case": "tolerant",
+      "elements": 16,
+      "moving": 1,
+      "targets": [
+        "EPHA3"
+      ],
+      "cells": [
+        "H9"
+      ],
+      "strongest_abs_log2": 0.246
+    },
+    {
+      "block": "chr6:91739897-91815842",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 1,
+      "targets": [
+        "MTCO1P56"
+      ],
+      "cells": [
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.246
+    },
+    {
+      "block": "chr10:22254589-22257785",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000261671"
+      ],
+      "cells": [
+        "common myeloid progenitor, CD34-positive"
+      ],
+      "strongest_abs_log2": 0.246
+    },
+    {
+      "block": "chr2:66200373-66235376",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "ENSG00000227293"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.242
+    },
+    {
+      "block": "chr1:158164130-158175849",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "CD1D"
+      ],
+      "cells": [
+        "endothelial cell of umbilical vein"
+      ],
+      "strongest_abs_log2": 0.24
+    },
+    {
+      "block": "chr4:181159473-181237357",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 2,
+      "targets": [
+        "ENSG00000248770"
+      ],
+      "cells": [
+        "GM23338",
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.239
+    },
+    {
+      "block": "chr7:27462969-27472110",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PSMC1P2"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.239
+    },
+    {
+      "block": "chr7:96940364-96955140",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RN7SL252P"
+      ],
+      "cells": [
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.239
+    },
+    {
+      "block": "chr3:157677749-157814821",
+      "case": "relaxed",
+      "elements": 21,
+      "moving": 1,
+      "targets": [
+        "SHOX2"
+      ],
+      "cells": [
+        "GM23248"
+      ],
+      "strongest_abs_log2": 0.238
+    },
+    {
+      "block": "chr9:126053006-126057579",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000232413"
+      ],
+      "cells": [
+        "sigmoid colon"
+      ],
+      "strongest_abs_log2": 0.238
+    },
+    {
+      "block": "chr6:23631020-23649495",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "ENSG00000289368"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.237
+    },
+    {
+      "block": "chr4:84299240-84371392",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 5,
+      "targets": [
+        "LINC02994",
+        "NKX6-1"
+      ],
+      "cells": [
+        "cardiac muscle cell",
+        "glutamatergic neuron",
+        "myocyte",
+        "neurosphere"
+      ],
+      "strongest_abs_log2": 0.236
+    },
+    {
+      "block": "chr4:95841464-95868666",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNU6-1059P"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.235
+    },
+    {
+      "block": "chr9:79391759-79505800",
+      "case": "relaxed",
+      "elements": 12,
+      "moving": 4,
+      "targets": [
+        "CHCHD2P9",
+        "LNCARSR",
+        "TLE4"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1",
+        "HepG2",
+        "mesendoderm"
+      ],
+      "strongest_abs_log2": 0.235
+    },
+    {
+      "block": "chr3:70518064-70605413",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 4,
+      "targets": [
+        "ENSG00000287669"
+      ],
+      "cells": [
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.229
+    },
+    {
+      "block": "chr7:41355230-41419951",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 1,
+      "targets": [
+        "INHBA"
+      ],
+      "cells": [
+        "HepG2"
+      ],
+      "strongest_abs_log2": 0.229
+    },
+    {
+      "block": "chr11:30368646-30384492",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "RPL12P30"
+      ],
+      "cells": [
+        "HUES64",
+        "cardiac muscle cell",
+        "large intestine"
+      ],
+      "strongest_abs_log2": 0.229
+    },
+    {
+      "block": "chr5:31066132-31092321",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 4,
+      "targets": [
+        "CDH6",
+        "ENSG00000253940",
+        "ENSG00000287176"
+      ],
+      "cells": [
+        "K562",
+        "dorsolateral prefrontal cortex",
+        "left lobe of liver",
+        "vein endothelial cell"
+      ],
+      "strongest_abs_log2": 0.228
+    },
+    {
+      "block": "chr9:1164867-1183632",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "DMRT2"
+      ],
+      "cells": [
+        "left colon",
+        "myocyte"
+      ],
+      "strongest_abs_log2": 0.226
+    },
+    {
+      "block": "chr18:38807677-39016046",
+      "case": "tolerant",
+      "elements": 27,
+      "moving": 5,
+      "targets": [
+        "MIR924HG",
+        "RNU6-706P"
+      ],
+      "cells": [
+        "GM12878",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.225
+    },
+    {
+      "block": "chr1:34685732-34712736",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000287703"
+      ],
+      "cells": [
+        "muscle of arm",
+        "progenitor cell of endocrine pancreas"
+      ],
+      "strongest_abs_log2": 0.223
+    },
+    {
+      "block": "chr7:27458849-27461765",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PSMC1P2"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.223
+    },
+    {
+      "block": "chr10:100330264-100335559",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PKD2L1"
+      ],
+      "cells": [
+        "liver"
+      ],
+      "strongest_abs_log2": 0.223
+    },
+    {
+      "block": "chr5:123194266-123235902",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 2,
+      "targets": [
+        "PRDM6"
+      ],
+      "cells": [
+        "K562",
+        "subcutaneous preadipocyte"
+      ],
+      "strongest_abs_log2": 0.222
+    },
+    {
+      "block": "chr3:182078484-182121883",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "ENSG00000240478"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.22
+    },
+    {
+      "block": "chr22:27041494-27044000",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000279848"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.22
+    },
+    {
+      "block": "chr11:29989328-30008121",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC01616"
+      ],
+      "cells": [
+        "heart"
+      ],
+      "strongest_abs_log2": 0.219
+    },
+    {
+      "block": "chr10:62808479-62811995",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "EGR2"
+      ],
+      "cells": [
+        "GM12878"
+      ],
+      "strongest_abs_log2": 0.217
+    },
+    {
+      "block": "chr4:122085739-122087507",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "TRPC3"
+      ],
+      "cells": [
+        "subcutaneous adipose tissue"
+      ],
+      "strongest_abs_log2": 0.216
+    },
+    {
+      "block": "chr9:85233966-85283948",
+      "case": "tolerant",
+      "elements": 9,
+      "moving": 8,
+      "targets": [
+        "ENSG00000285556",
+        "ENSG00000287930"
+      ],
+      "cells": [
+        "common myeloid progenitor, CD34-positive",
+        "dorsolateral prefrontal cortex",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.215
+    },
+    {
+      "block": "chr15:94728380-94764533",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 3,
+      "targets": [
+        "ENSG00000286917"
+      ],
+      "cells": [
+        "endodermal cell",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.214
+    },
+    {
+      "block": "chr15:96591064-96688820",
+      "case": "relaxed",
+      "elements": 11,
+      "moving": 6,
+      "targets": [
+        "SPATA8"
+      ],
+      "cells": [
+        "SK-MEL-5",
+        "common myeloid progenitor, CD34-positive",
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.214
+    },
+    {
+      "block": "chr12:97598415-97644341",
+      "case": "relaxed",
+      "elements": 9,
+      "moving": 2,
+      "targets": [
+        "ENSG00000257157",
+        "ENSG00000276398"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1",
+        "Purkinje cell"
+      ],
+      "strongest_abs_log2": 0.213
+    },
+    {
+      "block": "chr2:55924271-55945832",
+      "case": "syntax",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "EFEMP1"
+      ],
+      "cells": [
+        "HT-29"
+      ],
+      "strongest_abs_log2": 0.211
+    },
+    {
+      "block": "chr3:134052184-134055247",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC02000"
+      ],
+      "cells": [
+        "Small_Intestine_Terminal_Ileum"
+      ],
+      "strongest_abs_log2": 0.211
+    },
+    {
+      "block": "chr8:63589768-63601391",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000287844"
+      ],
+      "cells": [
+        "Brain_Frontal_Cortex_BA9",
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.211
+    },
+    {
+      "block": "chr8:101169629-101171213",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ZNNT1"
+      ],
+      "cells": [
+        "IgD-negative memory B cell"
+      ],
+      "strongest_abs_log2": 0.21
+    },
+    {
+      "block": "chr8:38601200-38602392",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNF5P1"
+      ],
+      "cells": [
+        "SK-MEL-5"
+      ],
+      "strongest_abs_log2": 0.206
+    },
+    {
+      "block": "chr4:22819575-22896886",
+      "case": "relaxed",
+      "elements": 9,
+      "moving": 2,
+      "targets": [
+        "GBA3"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1",
+        "GM12892"
+      ],
+      "strongest_abs_log2": 0.204
+    },
+    {
+      "block": "chr14:98717761-98774460",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 2,
+      "targets": [
+        "LINC02914"
+      ],
+      "cells": [
+        "Muscle_Skeletal",
+        "heart right ventricle"
+      ],
+      "strongest_abs_log2": 0.204
+    },
+    {
+      "block": "chr3:70620325-70751122",
+      "case": "relaxed",
+      "elements": 14,
+      "moving": 5,
+      "targets": [
+        "COX6CP6",
+        "HMGB1P36"
+      ],
+      "cells": [
+        "Jurkat, Clone E6-1",
+        "Liver",
+        "U-87 MG",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.203
+    },
+    {
+      "block": "chr8:65378111-65526737",
+      "case": "relaxed",
+      "elements": 20,
+      "moving": 1,
+      "targets": [
+        "PPIAP86"
+      ],
+      "cells": [
+        "fibroblast of skin of back"
+      ],
+      "strongest_abs_log2": 0.202
+    },
+    {
+      "block": "chr4:23193740-23234624",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000249547"
+      ],
+      "cells": [
+        "SK-MEL-5",
+        "heart"
+      ],
+      "strongest_abs_log2": 0.201
+    },
+    {
+      "block": "chr6:50875604-50897614",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 4,
+      "targets": [
+        "TFAP2B"
+      ],
+      "cells": [
+        "K562",
+        "esophagus"
+      ],
+      "strongest_abs_log2": 0.201
+    },
+    {
+      "block": "chr7:14010763-14070534",
+      "case": "recent",
+      "elements": 6,
+      "moving": 4,
+      "targets": [
+        "EEF1A1P26",
+        "ETV1",
+        "Y_RNA"
+      ],
+      "cells": [
+        "K562",
+        "Testis",
+        "placenta",
+        "small intestine"
+      ],
+      "strongest_abs_log2": 0.201
+    },
+    {
+      "block": "chr8:10861885-10891180",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000280294"
+      ],
+      "cells": [
+        "B cell"
+      ],
+      "strongest_abs_log2": 0.201
+    },
+    {
+      "block": "chr2:174310974-174326026",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "LINC01305",
+        "SP9"
+      ],
+      "cells": [
+        "HFFc6",
+        "Skin_Sun_Exposed_Lower_leg"
+      ],
+      "strongest_abs_log2": 0.199
+    },
+    {
+      "block": "chr16:54954671-55007981",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 3,
+      "targets": [
+        "ENSG00000259711",
+        "IRX5"
+      ],
+      "cells": [
+        "Brain_Putamen_basal_ganglia",
+        "heart left ventricle"
+      ],
+      "strongest_abs_log2": 0.199
+    },
+    {
+      "block": "chr14:66174567-66177526",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000277651"
+      ],
+      "cells": [
+        "muscle of back"
+      ],
+      "strongest_abs_log2": 0.197
+    },
+    {
+      "block": "chr1:81099005-81157981",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "ENSG00000235089",
+        "RPL7P10"
+      ],
+      "cells": [
+        "CD14-positive monocyte",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.196
+    },
+    {
+      "block": "chr4:180675423-180731163",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 4,
+      "targets": [
+        "ENSG00000249883",
+        "LINC00290"
+      ],
+      "cells": [
+        "muscle of trunk"
+      ],
+      "strongest_abs_log2": 0.196
+    },
+    {
+      "block": "chr4:94671728-94675244",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000249951"
+      ],
+      "cells": [
+        "sigmoid colon"
+      ],
+      "strongest_abs_log2": 0.195
+    },
+    {
+      "block": "chr14:80153726-80197525",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 2,
+      "targets": [
+        "DIO2",
+        "DIO2-AS1"
+      ],
+      "cells": [
+        "GM23248"
+      ],
+      "strongest_abs_log2": 0.195
+    },
+    {
+      "block": "chr9:13045101-13100470",
+      "case": "tolerant",
+      "elements": 9,
+      "moving": 4,
+      "targets": [
+        "ENSG00000234586"
+      ],
+      "cells": [
+        "GM23338",
+        "Skin_Not_Sun_Exposed_Suprapubic",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.193
+    },
+    {
+      "block": "chr2:146478113-146587505",
+      "case": "relaxed",
+      "elements": 10,
+      "moving": 4,
+      "targets": [
+        "PABPC1P2"
+      ],
+      "cells": [
+        "Brain_Frontal_Cortex_BA9",
+        "HUES64",
+        "Skin_Not_Sun_Exposed_Suprapubic"
+      ],
+      "strongest_abs_log2": 0.192
+    },
+    {
+      "block": "chr3:147758876-147821523",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 1,
+      "targets": [
+        "ENSG00000289451"
+      ],
+      "cells": [
+        "muscle of trunk"
+      ],
+      "strongest_abs_log2": 0.192
+    },
+    {
+      "block": "chr10:98455061-98457076",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "HPSE2"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere"
+      ],
+      "strongest_abs_log2": 0.191
+    },
+    {
+      "block": "chr2:175905502-175923862",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "EVX2"
+      ],
+      "cells": [
+        "hindlimb muscle",
+        "skeletal muscle myoblast"
+      ],
+      "strongest_abs_log2": 0.19
+    },
+    {
+      "block": "chr5:165241756-165348895",
+      "case": "relaxed",
+      "elements": 13,
+      "moving": 4,
+      "targets": [
+        "ENSG00000253693",
+        "LINC01938",
+        "LINC03000"
+      ],
+      "cells": [
+        "Purkinje cell",
+        "mesenchymal stem cell of the bone marrow",
+        "sigmoid colon",
+        "thyroid gland"
+      ],
+      "strongest_abs_log2": 0.19
+    },
+    {
+      "block": "chr2:48776517-48780601",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ELOBP3"
+      ],
+      "cells": [
+        "Artery_Aorta"
+      ],
+      "strongest_abs_log2": 0.189
+    },
+    {
+      "block": "chr16:51647132-51671235",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "LINC01571",
+        "RN7SKP142"
+      ],
+      "cells": [
+        "GM23338",
+        "kidney",
+        "right lung"
+      ],
+      "strongest_abs_log2": 0.189
+    },
+    {
+      "block": "chr2:176201252-176242110",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "MIR7704"
+      ],
+      "cells": [
+        "LHCN-M2"
+      ],
+      "strongest_abs_log2": 0.188
+    },
+    {
+      "block": "chr18:61053587-61333424",
+      "case": "tolerant",
+      "elements": 29,
+      "moving": 3,
+      "targets": [
+        "CDH20",
+        "GAD3P"
+      ],
+      "cells": [
+        "BLaER1",
+        "IMR-90",
+        "pulmonary artery endothelial cell"
+      ],
+      "strongest_abs_log2": 0.187
+    },
+    {
+      "block": "chr6:50521153-50587606",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 1,
+      "targets": [
+        "TFAP2D"
+      ],
+      "cells": [
+        "BE2C"
+      ],
+      "strongest_abs_log2": 0.186
+    },
+    {
+      "block": "chr16:76147806-76228378",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 3,
+      "targets": [
+        "CNTNAP4",
+        "ENSG00000287694"
+      ],
+      "cells": [
+        "mesenchymal stem cell of adipose",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.186
+    },
+    {
+      "block": "chr21:15067837-15101542",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 1,
+      "targets": [
+        "LINC02920"
+      ],
+      "cells": [
+        "psoas muscle"
+      ],
+      "strongest_abs_log2": 0.186
+    },
+    {
+      "block": "chr7:83649188-83663418",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SEMA3E"
+      ],
+      "cells": [
+        "H9"
+      ],
+      "strongest_abs_log2": 0.184
+    },
+    {
+      "block": "chr7:115504081-115581314",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 2,
+      "targets": [
+        "POLR2DP2",
+        "TFEC"
+      ],
+      "cells": [
+        "Jurkat, Clone E6-1",
+        "K562"
+      ],
+      "strongest_abs_log2": 0.184
+    },
+    {
+      "block": "chr8:15325569-15341612",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "SGCZ"
+      ],
+      "cells": [
+        "IMR-90"
+      ],
+      "strongest_abs_log2": 0.184
+    },
+    {
+      "block": "chr1:203509238-203511881",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "OPTC"
+      ],
+      "cells": [
+        "Purkinje cell"
+      ],
+      "strongest_abs_log2": 0.183
+    },
+    {
+      "block": "chr2:175006654-175022213",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "CHN1"
+      ],
+      "cells": [
+        "heart left ventricle"
+      ],
+      "strongest_abs_log2": 0.183
+    },
+    {
+      "block": "chr15:37133532-37216616",
+      "case": "relaxed",
+      "elements": 9,
+      "moving": 1,
+      "targets": [
+        "Metazoa_SRP"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.182
+    },
+    {
+      "block": "chr17:41481151-41486135",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "KRT36"
+      ],
+      "cells": [
+        "esophagus"
+      ],
+      "strongest_abs_log2": 0.182
+    },
+    {
+      "block": "chr5:91919130-92082596",
+      "case": "tolerant",
+      "elements": 12,
+      "moving": 2,
+      "targets": [
+        "ENSG00000250049"
+      ],
+      "cells": [
+        "NCI-H460",
+        "PC-9"
+      ],
+      "strongest_abs_log2": 0.18
+    },
+    {
+      "block": "chr8:63606364-63609353",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000287844"
+      ],
+      "cells": [
+        "H7"
+      ],
+      "strongest_abs_log2": 0.18
+    },
+    {
+      "block": "chr11:15247208-15478846",
+      "case": "relaxed",
+      "elements": 24,
+      "moving": 3,
+      "targets": [
+        "ENSG00000254695",
+        "LINC02751"
+      ],
+      "cells": [
+        "Peyer's patch",
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.179
+    },
+    {
+      "block": "chr18:912172-926082",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ADCYAP1"
+      ],
+      "cells": [
+        "endothelial cell of umbilical vein"
+      ],
+      "strongest_abs_log2": 0.179
+    },
+    {
+      "block": "chr1:90607374-90657749",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "BARHL2",
+        "LINC02787"
+      ],
+      "cells": [
+        "H9",
+        "K562",
+        "SK-MEL-5"
+      ],
+      "strongest_abs_log2": 0.178
+    },
+    {
+      "block": "chr1:181092900-181094424",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "IER5"
+      ],
+      "cells": [
+        "HepG2"
+      ],
+      "strongest_abs_log2": 0.178
+    },
+    {
+      "block": "chr20:21393369-21395151",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "NKX2-4"
+      ],
+      "cells": [
+        "neurosphere"
+      ],
+      "strongest_abs_log2": 0.178
+    },
+    {
+      "block": "chr3:196589059-196590462",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000286661"
+      ],
+      "cells": [
+        "Brain_Cerebellum"
+      ],
+      "strongest_abs_log2": 0.177
+    },
+    {
+      "block": "chr10:112855364-112888726",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 2,
+      "targets": [
+        "LINC02935"
+      ],
+      "cells": [
+        "CD14-positive monocyte",
+        "CD4-positive, CD25-positive, alpha-beta regulatory T cell"
+      ],
+      "strongest_abs_log2": 0.177
+    },
+    {
+      "block": "chr2:155664668-155733107",
+      "case": "relaxed",
+      "elements": 12,
+      "moving": 2,
+      "targets": [
+        "ENSG00000286679"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1",
+        "muscle of back"
+      ],
+      "strongest_abs_log2": 0.176
+    },
+    {
+      "block": "chr17:9244897-9250148",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000273816"
+      ],
+      "cells": [
+        "Brain_Spinal_cord_cervical_c-1"
+      ],
+      "strongest_abs_log2": 0.175
+    },
+    {
+      "block": "chr16:73891871-73940638",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 3,
+      "targets": [
+        "RPSAP56",
+        "ZFHX3"
+      ],
+      "cells": [
+        "heart",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.174
+    },
+    {
+      "block": "chr9:25678444-25780031",
+      "case": "tolerant",
+      "elements": 13,
+      "moving": 2,
+      "targets": [
+        "TUSC1"
+      ],
+      "cells": [
+        "keratinocyte",
+        "skeletal muscle satellite cell"
+      ],
+      "strongest_abs_log2": 0.173
+    },
+    {
+      "block": "chr8:75566840-76132798",
+      "case": "tolerant",
+      "elements": 74,
+      "moving": 4,
+      "targets": [
+        "ENSG00000287352",
+        "HNF4G"
+      ],
+      "cells": [
+        "GM12892",
+        "HFFc6",
+        "HepG2",
+        "IMR-90"
+      ],
+      "strongest_abs_log2": 0.171
+    },
+    {
+      "block": "chr12:80029708-80031739",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "OTOGL"
+      ],
+      "cells": [
+        "thoracic aorta"
+      ],
+      "strongest_abs_log2": 0.17
+    },
+    {
+      "block": "chr1:112369851-112371003",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC02884"
+      ],
+      "cells": [
+        "adipose tissue"
+      ],
+      "strongest_abs_log2": 0.169
+    },
+    {
+      "block": "chr5:165848219-165905125",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 5,
+      "targets": [
+        "ENSG00000253693",
+        "RN7SKP60",
+        "RPL21P59"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex",
+        "heart",
+        "occipital lobe",
+        "thymus"
+      ],
+      "strongest_abs_log2": 0.169
+    },
+    {
+      "block": "chr6:91169104-91327928",
+      "case": "relaxed",
+      "elements": 16,
+      "moving": 8,
+      "targets": [
+        "ENSG00000224605",
+        "MIR4643"
+      ],
+      "cells": [
+        "GM23338",
+        "K562",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.168
+    },
+    {
+      "block": "chr21:25103670-25127468",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000237444"
+      ],
+      "cells": [
+        "Brain_Frontal_Cortex_BA9",
+        "GM12878"
+      ],
+      "strongest_abs_log2": 0.168
+    },
+    {
+      "block": "chr5:171752704-171773651",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000285914"
+      ],
+      "cells": [
+        "Adipose_Subcutaneous",
+        "skeletal muscle myoblast"
+      ],
+      "strongest_abs_log2": 0.167
+    },
+    {
+      "block": "chr14:81589073-81605337",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC01467"
+      ],
+      "cells": [
+        "SK-MEL-5"
+      ],
+      "strongest_abs_log2": 0.164
+    },
+    {
+      "block": "chr11:80957634-81015848",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 2,
+      "targets": [
+        "LINC02720"
+      ],
+      "cells": [
+        "breast epithelium",
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.163
+    },
+    {
+      "block": "chr16:64346589-64364717",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "ENSG00000259846"
+      ],
+      "cells": [
+        "Karpas-422",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.161
+    },
+    {
+      "block": "chr3:182142137-182149419",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000240478"
+      ],
+      "cells": [
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.16
+    },
+    {
+      "block": "chr4:181265148-181293722",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "ENSG00000286860",
+        "LINC02500"
+      ],
+      "cells": [
+        "heart",
+        "transverse colon"
+      ],
+      "strongest_abs_log2": 0.158
+    },
+    {
+      "block": "chr2:22749276-22800726",
+      "case": "relaxed",
+      "elements": 10,
+      "moving": 4,
+      "targets": [
+        "LINC01830"
+      ],
+      "cells": [
+        "GM23338",
+        "Karpas-422",
+        "glutamatergic neuron"
+      ],
+      "strongest_abs_log2": 0.157
+    },
+    {
+      "block": "chrX:21689940-21704787",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "KLHL34"
+      ],
+      "cells": [
+        "hindlimb muscle"
+      ],
+      "strongest_abs_log2": 0.156
+    },
+    {
+      "block": "chr20:59357774-59360926",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000230352"
+      ],
+      "cells": [
+        "large intestine"
+      ],
+      "strongest_abs_log2": 0.155
+    },
+    {
+      "block": "chr11:80747764-80751199",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ARL6IP1P3"
+      ],
+      "cells": [
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.153
+    },
+    {
+      "block": "chr10:8974570-8983288",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000223808"
+      ],
+      "cells": [
+        "Skin_Not_Sun_Exposed_Suprapubic"
+      ],
+      "strongest_abs_log2": 0.151
+    },
+    {
+      "block": "chr11:115951491-115958440",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RPL15P15"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.151
+    },
+    {
+      "block": "chr13:72453967-72460131",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000212377"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.151
+    },
+    {
+      "block": "chr18:57150410-57161362",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "BOD1L2"
+      ],
+      "cells": [
+        "Thyroid"
+      ],
+      "strongest_abs_log2": 0.151
+    },
+    {
+      "block": "chr2:156695659-156718792",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "LINC01958"
+      ],
+      "cells": [
+        "GM23338",
+        "K562",
+        "thymus"
+      ],
+      "strongest_abs_log2": 0.15
+    },
+    {
+      "block": "chr11:79989630-80031662",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 5,
+      "targets": [
+        "ENSG00000254434",
+        "ENSG00000254471",
+        "ENSG00000255209"
+      ],
+      "cells": [
+        "Brain_Cerebellum",
+        "heart",
+        "kidney",
+        "upper lobe of left lung"
+      ],
+      "strongest_abs_log2": 0.15
+    },
+    {
+      "block": "chr18:75639552-75641480",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000287993"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.15
+    },
+    {
+      "block": "chr14:49374383-49500451",
+      "case": "tolerant",
+      "elements": 14,
+      "moving": 7,
+      "targets": [
+        "ATP5MC2P2",
+        "ENSG00000258868"
+      ],
+      "cells": [
+        "Cells_EBV-transformed_lymphocytes",
+        "Jurkat, Clone E6-1",
+        "Kidney_Cortex",
+        "Liver"
+      ],
+      "strongest_abs_log2": 0.149
+    },
+    {
+      "block": "chr14:78060278-78170372",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "NRXN3"
+      ],
+      "cells": [
+        "mesangial cell",
+        "renal cortical epithelial cell"
+      ],
+      "strongest_abs_log2": 0.149
+    },
+    {
+      "block": "chr3:147591835-147688622",
+      "case": "relaxed",
+      "elements": 16,
+      "moving": 3,
+      "targets": [
+        "ENSG00000289451",
+        "NPM1P28"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "Cells_EBV-transformed_lymphocytes",
+        "K562"
+      ],
+      "strongest_abs_log2": 0.147
+    },
+    {
+      "block": "chr8:91398155-91464798",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 4,
+      "targets": [
+        "ENSG00000253901"
+      ],
+      "cells": [
+        "Kidney_Medulla",
+        "Prostate"
+      ],
+      "strongest_abs_log2": 0.147
+    },
+    {
+      "block": "chr20:6421101-6446722",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "CASC20"
+      ],
+      "cells": [
+        "K562"
+      ],
+      "strongest_abs_log2": 0.146
+    },
+    {
+      "block": "chr21:33159110-33164805",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC01548"
+      ],
+      "cells": [
+        "small intestine"
+      ],
+      "strongest_abs_log2": 0.146
+    },
+    {
+      "block": "chr8:77991987-78073931",
+      "case": "tolerant",
+      "elements": 10,
+      "moving": 2,
+      "targets": [
+        "ENSG00000254001"
+      ],
+      "cells": [
+        "GM23338",
+        "muscle of trunk"
+      ],
+      "strongest_abs_log2": 0.145
+    },
+    {
+      "block": "chr14:30381399-30412074",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 2,
+      "targets": [
+        "ENSG00000248975"
+      ],
+      "cells": [
+        "A375",
+        "K562"
+      ],
+      "strongest_abs_log2": 0.145
+    },
+    {
+      "block": "chr5:14874711-14877666",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "HNRNPKP5"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.144
+    },
+    {
+      "block": "chr10:75412413-75428875",
+      "case": "syntax",
+      "elements": 3,
+      "moving": 3,
+      "targets": [
+        "ENSG00000236842",
+        "ENSG00000270087",
+        "ZNF503"
+      ],
+      "cells": [
+        "CD14-positive monocyte",
+        "Kidney_Medulla",
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.144
+    },
+    {
+      "block": "chr10:104480274-104566930",
+      "case": "tolerant",
+      "elements": 8,
+      "moving": 2,
+      "targets": [
+        "ENSG00000237761",
+        "LINC02620"
+      ],
+      "cells": [
+        "Purkinje cell",
+        "SK-MEL-5"
+      ],
+      "strongest_abs_log2": 0.144
+    },
+    {
+      "block": "chr2:163476199-163593395",
+      "case": "relaxed",
+      "elements": 11,
+      "moving": 2,
+      "targets": [
+        "RNU6-627P"
+      ],
+      "cells": [
+        "Purkinje cell",
+        "cardiac muscle cell"
+      ],
+      "strongest_abs_log2": 0.143
+    },
+    {
+      "block": "chr5:141851257-141853089",
+      "case": "syntax",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "PCDH1"
+      ],
+      "cells": [
+        "OCI-LY7"
+      ],
+      "strongest_abs_log2": 0.143
+    },
+    {
+      "block": "chr14:25526451-25641481",
+      "case": "relaxed",
+      "elements": 6,
+      "moving": 1,
+      "targets": [
+        "ENSG00000279521"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.143
+    },
+    {
+      "block": "chr2:164450847-164491246",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "ENSG00000237844"
+      ],
+      "cells": [
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.142
+    },
+    {
+      "block": "chr16:61055964-61129107",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "ENSG00000286653"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.142
+    },
+    {
+      "block": "chr8:20511417-20551200",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 2,
+      "targets": [
+        "ENSG00000253178"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex",
+        "parietal lobe"
+      ],
+      "strongest_abs_log2": 0.141
+    },
+    {
+      "block": "chr9:80385699-80448042",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 3,
+      "targets": [
+        "MTCO1P51",
+        "MTND2P9"
+      ],
+      "cells": [
+        "CD4-positive, alpha-beta memory T cell",
+        "naive B cell"
+      ],
+      "strongest_abs_log2": 0.141
+    },
+    {
+      "block": "chr13:71914178-72453901",
+      "case": "relaxed",
+      "elements": 74,
+      "moving": 4,
+      "targets": [
+        "DACH1",
+        "RPS10P21"
+      ],
+      "cells": [
+        "cerebellum",
+        "fibroblast of skin of back",
+        "mammary microvascular endothelial cell",
+        "myocyte"
+      ],
+      "strongest_abs_log2": 0.141
+    },
+    {
+      "block": "chr13:78910542-79049076",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "CCT5P2",
+        "ENSG00000271776"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere",
+        "Cells_EBV-transformed_lymphocytes"
+      ],
+      "strongest_abs_log2": 0.141
+    },
+    {
+      "block": "chr1:96418933-96446929",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "EEF1A1P11"
+      ],
+      "cells": [
+        "uterus"
+      ],
+      "strongest_abs_log2": 0.14
+    },
+    {
+      "block": "chr1:95412307-95451340",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 2,
+      "targets": [
+        "LINC01761"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.139
+    },
+    {
+      "block": "chr4:41723512-41744081",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 2,
+      "targets": [
+        "PHOX2B"
+      ],
+      "cells": [
+        "Adrenal_Gland",
+        "colonic mucosa"
+      ],
+      "strongest_abs_log2": 0.139
+    },
+    {
+      "block": "chr16:67385221-67389026",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNU1-123P"
+      ],
+      "cells": [
+        "CD14-positive monocyte"
+      ],
+      "strongest_abs_log2": 0.139
+    },
+    {
+      "block": "chr5:91844529-91918069",
+      "case": "relaxed",
+      "elements": 10,
+      "moving": 1,
+      "targets": [
+        "PCBP2P3"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.138
+    },
+    {
+      "block": "chr6:71165770-71182611",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNU6-411P"
+      ],
+      "cells": [
+        "Thyroid"
+      ],
+      "strongest_abs_log2": 0.138
+    },
+    {
+      "block": "chr1:34366511-34468866",
+      "case": "tolerant",
+      "elements": 12,
+      "moving": 1,
+      "targets": [
+        "CSMD2"
+      ],
+      "cells": [
+        "K562"
+      ],
+      "strongest_abs_log2": 0.137
+    },
+    {
+      "block": "chrX:66056587-66074834",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ATXN7L3P1"
+      ],
+      "cells": [
+        "Spleen"
+      ],
+      "strongest_abs_log2": 0.137
+    },
+    {
+      "block": "chr17:52160028-52235864",
+      "case": "tolerant",
+      "elements": 10,
+      "moving": 3,
+      "targets": [
+        "CA10"
+      ],
+      "cells": [
+        "Brain_Cerebellum",
+        "GM23338",
+        "right cardiac atrium"
+      ],
+      "strongest_abs_log2": 0.137
+    },
+    {
+      "block": "chr2:19717576-19743479",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 2,
+      "targets": [
+        "ENSG00000234597"
+      ],
+      "cells": [
+        "heart",
+        "thoracic aorta"
+      ],
+      "strongest_abs_log2": 0.135
+    },
+    {
+      "block": "chr2:67069194-67086445",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "LINC01828",
+        "LINC01829"
+      ],
+      "cells": [
+        "left colon",
+        "transverse colon"
+      ],
+      "strongest_abs_log2": 0.135
+    },
+    {
+      "block": "chr3:78502315-78525100",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 1,
+      "targets": [
+        "ENSG00000240241"
+      ],
+      "cells": [
+        "HepG2"
+      ],
+      "strongest_abs_log2": 0.134
+    },
+    {
+      "block": "chr6:50637405-50713525",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "TFAP2D"
+      ],
+      "cells": [
+        "endothelial cell"
+      ],
+      "strongest_abs_log2": 0.134
+    },
+    {
+      "block": "chr16:51671563-51754627",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "LINC01571"
+      ],
+      "cells": [
+        "GM23338",
+        "kidney"
+      ],
+      "strongest_abs_log2": 0.134
+    },
+    {
+      "block": "chr7:8939369-9082556",
+      "case": "tolerant",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "ENSG00000271526"
+      ],
+      "cells": [
+        "cardiac muscle cell",
+        "right renal pelvis"
+      ],
+      "strongest_abs_log2": 0.133
+    },
+    {
+      "block": "chr11:113990313-113995960",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "HTR3A"
+      ],
+      "cells": [
+        "IgD-negative memory B cell"
+      ],
+      "strongest_abs_log2": 0.132
+    },
+    {
+      "block": "chr1:96391393-96418593",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 2,
+      "targets": [
+        "UBE2WP1"
+      ],
+      "cells": [
+        "Testis",
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.131
+    },
+    {
+      "block": "chr3:70754573-70808349",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "RNU6-281P"
+      ],
+      "cells": [
+        "Testis",
+        "testis"
+      ],
+      "strongest_abs_log2": 0.131
+    },
+    {
+      "block": "chr6:128521871-128565544",
+      "case": "tolerant",
+      "elements": 6,
+      "moving": 3,
+      "targets": [
+        "EEF1DP5",
+        "PTPRK"
+      ],
+      "cells": [
+        "Heart_Left_Ventricle",
+        "K562",
+        "naive B cell"
+      ],
+      "strongest_abs_log2": 0.13
+    },
+    {
+      "block": "chr13:103428298-103444619",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "ATP6V1G1P7"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.13
+    },
+    {
+      "block": "chr14:32029055-32073913",
+      "case": "relaxed",
+      "elements": 4,
+      "moving": 1,
+      "targets": [
+        "ARHGAP5-AS1"
+      ],
+      "cells": [
+        "K562"
+      ],
+      "strongest_abs_log2": 0.13
+    },
+    {
+      "block": "chr10:52389488-52391981",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "DKK1"
+      ],
+      "cells": [
+        "cardiac muscle cell"
+      ],
+      "strongest_abs_log2": 0.129
+    },
+    {
+      "block": "chr13:99590508-99594304",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "CFL1P8"
+      ],
+      "cells": [
+        "left lung"
+      ],
+      "strongest_abs_log2": 0.129
+    },
+    {
+      "block": "chr16:52677747-52934812",
+      "case": "relaxed",
+      "elements": 29,
+      "moving": 3,
+      "targets": [
+        "CASC16"
+      ],
+      "cells": [
+        "cerebellum",
+        "endocrine pancreas",
+        "left colon"
+      ],
+      "strongest_abs_log2": 0.129
+    },
+    {
+      "block": "chr5:166597734-166882249",
+      "case": "relaxed",
+      "elements": 34,
+      "moving": 1,
+      "targets": [
+        "TENM2"
+      ],
+      "cells": [
+        "NCI-H460"
+      ],
+      "strongest_abs_log2": 0.128
+    },
+    {
+      "block": "chr2:191741996-191792787",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 1,
+      "targets": [
+        "ENSG00000288582"
+      ],
+      "cells": [
+        "Cells_EBV-transformed_lymphocytes"
+      ],
+      "strongest_abs_log2": 0.126
+    },
+    {
+      "block": "chr3:16523005-16524770",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "LINC00690"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.125
+    },
+    {
+      "block": "chr6:50049936-50093388",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 2,
+      "targets": [
+        "ENSG00000226733"
+      ],
+      "cells": [
+        "left lobe of liver",
+        "muscle of trunk"
+      ],
+      "strongest_abs_log2": 0.125
+    },
+    {
+      "block": "chr2:138033429-138058117",
+      "case": "tolerant",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "HNMT"
+      ],
+      "cells": [
+        "placenta"
+      ],
+      "strongest_abs_log2": 0.124
+    },
+    {
+      "block": "chr7:41634244-41667167",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "INHBA"
+      ],
+      "cells": [
+        "left ventricle myocardium superior"
+      ],
+      "strongest_abs_log2": 0.124
+    },
+    {
+      "block": "chr3:89482437-89587885",
+      "case": "tolerant",
+      "elements": 19,
+      "moving": 1,
+      "targets": [
+        "EPHA3"
+      ],
+      "cells": [
+        "smooth muscle cell of trachea"
+      ],
+      "strongest_abs_log2": 0.123
+    },
+    {
+      "block": "chr6:92888581-93070386",
+      "case": "tolerant",
+      "elements": 24,
+      "moving": 1,
+      "targets": [
+        "ATF1P1"
+      ],
+      "cells": [
+        "metanephros"
+      ],
+      "strongest_abs_log2": 0.123
+    },
+    {
+      "block": "chr18:47630848-47668128",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "TPMTP1"
+      ],
+      "cells": [
+        "Muscle_Skeletal"
+      ],
+      "strongest_abs_log2": 0.122
+    },
+    {
+      "block": "chr1:9369532-9370607",
+      "case": "recent",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SPSB1"
+      ],
+      "cells": [
+        "OCI-LY7"
+      ],
+      "strongest_abs_log2": 0.121
+    },
+    {
+      "block": "chr1:58771295-58776844",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000283445"
+      ],
+      "cells": [
+        "endothelial cell of umbilical vein"
+      ],
+      "strongest_abs_log2": 0.121
+    },
+    {
+      "block": "chr15:48652016-48662530",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "FBN1-DT"
+      ],
+      "cells": [
+        "GM12892"
+      ],
+      "strongest_abs_log2": 0.121
+    },
+    {
+      "block": "chr18:40031691-40062902",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "ENSG00000279034"
+      ],
+      "cells": [
+        "Brain_Hippocampus"
+      ],
+      "strongest_abs_log2": 0.121
+    },
+    {
+      "block": "chr18:40940298-41341318",
+      "case": "tolerant",
+      "elements": 46,
+      "moving": 1,
+      "targets": [
+        "ENSG00000286328"
+      ],
+      "cells": [
+        "GM23338"
+      ],
+      "strongest_abs_log2": 0.121
+    },
+    {
+      "block": "chr2:31155202-31173055",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "GALNT14"
+      ],
+      "cells": [
+        "glutamatergic neuron"
+      ],
+      "strongest_abs_log2": 0.12
+    },
+    {
+      "block": "chr3:190699314-190714810",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "GMNC"
+      ],
+      "cells": [
+        "lower lobe of right lung"
+      ],
+      "strongest_abs_log2": 0.12
+    },
+    {
+      "block": "chr7:31284671-31330710",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "ENSG00000271027"
+      ],
+      "cells": [
+        "Liver"
+      ],
+      "strongest_abs_log2": 0.12
+    },
+    {
+      "block": "chr2:20918044-20971208",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 1,
+      "targets": [
+        "GDF7"
+      ],
+      "cells": [
+        "HFFc6"
+      ],
+      "strongest_abs_log2": 0.119
+    },
+    {
+      "block": "chr2:176878787-176892064",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000227098"
+      ],
+      "cells": [
+        "cerebellum"
+      ],
+      "strongest_abs_log2": 0.119
+    },
+    {
+      "block": "chr1:81993940-82212412",
+      "case": "relaxed",
+      "elements": 27,
+      "moving": 2,
+      "targets": [
+        "ADGRL2",
+        "ENSG00000233290"
+      ],
+      "cells": [
+        "GM23338",
+        "OCI-LY7"
+      ],
+      "strongest_abs_log2": 0.118
+    },
+    {
+      "block": "chr6:98948006-99082448",
+      "case": "relaxed",
+      "elements": 16,
+      "moving": 1,
+      "targets": [
+        "FBXL4"
+      ],
+      "cells": [
+        "Whole_Blood"
+      ],
+      "strongest_abs_log2": 0.118
+    },
+    {
+      "block": "chr6:104267339-104336454",
+      "case": "tolerant",
+      "elements": 10,
+      "moving": 5,
+      "targets": [
+        "NPM1P10",
+        "R3HDM2P2"
+      ],
+      "cells": [
+        "K562",
+        "cerebellum",
+        "subcutaneous adipose tissue",
+        "thyroid gland"
+      ],
+      "strongest_abs_log2": 0.118
+    },
+    {
+      "block": "chr1:47484162-47497893",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000271355"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.117
+    },
+    {
+      "block": "chr2:221372946-221418026",
+      "case": "relaxed",
+      "elements": 7,
+      "moving": 2,
+      "targets": [
+        "ENSG00000290000",
+        "EPHA4"
+      ],
+      "cells": [
+        "Karpas-422",
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.117
+    },
+    {
+      "block": "chr13:71168417-71296209",
+      "case": "tolerant",
+      "elements": 17,
+      "moving": 2,
+      "targets": [
+        "DACH1"
+      ],
+      "cells": [
+        "GM12878",
+        "subcutaneous preadipocyte"
+      ],
+      "strongest_abs_log2": 0.117
+    },
+    {
+      "block": "chr13:78840058-78841709",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "HSPD1P8"
+      ],
+      "cells": [
+        "endodermal cell"
+      ],
+      "strongest_abs_log2": 0.116
+    },
+    {
+      "block": "chr9:81885598-81888917",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SPATA31D5P"
+      ],
+      "cells": [
+        "Heart_Left_Ventricle"
+      ],
+      "strongest_abs_log2": 0.115
+    },
+    {
+      "block": "chr18:40144504-40245870",
+      "case": "tolerant",
+      "elements": 9,
+      "moving": 1,
+      "targets": [
+        "RPL17P45"
+      ],
+      "cells": [
+        "Purkinje cell"
+      ],
+      "strongest_abs_log2": 0.115
+    },
+    {
+      "block": "chr2:204280522-204306841",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "DSTNP5"
+      ],
+      "cells": [
+        "kidney"
+      ],
+      "strongest_abs_log2": 0.111
+    },
+    {
+      "block": "chr8:64554475-64570912",
+      "case": "relaxed",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "ENSG00000253800"
+      ],
+      "cells": [
+        "renal cortex interstitium"
+      ],
+      "strongest_abs_log2": 0.111
+    },
+    {
+      "block": "chr1:219330854-219409038",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 2,
+      "targets": [
+        "LYPLAL1-AS1"
+      ],
+      "cells": [
+        "CD4-positive, alpha-beta T cell",
+        "CD8-positive, alpha-beta T cell"
+      ],
+      "strongest_abs_log2": 0.11
+    },
+    {
+      "block": "chr11:18189621-18196656",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "MRGPRX13P"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.11
+    },
+    {
+      "block": "chr20:43231260-43304554",
+      "case": "relaxed",
+      "elements": 8,
+      "moving": 1,
+      "targets": [
+        "PPIAP21"
+      ],
+      "cells": [
+        "Cells_Cultured_fibroblasts"
+      ],
+      "strongest_abs_log2": 0.11
+    },
+    {
+      "block": "chr5:54957846-54977860",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ESM1"
+      ],
+      "cells": [
+        "LHCN-M2"
+      ],
+      "strongest_abs_log2": 0.109
+    },
+    {
+      "block": "chr11:13958759-13962371",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "SPON1"
+      ],
+      "cells": [
+        "dermis blood vessel endothelial cell"
+      ],
+      "strongest_abs_log2": 0.109
+    },
+    {
+      "block": "chr16:54657662-54844648",
+      "case": "relaxed",
+      "elements": 15,
+      "moving": 2,
+      "targets": [
+        "IRX5"
+      ],
+      "cells": [
+        "dermis blood vessel endothelial cell",
+        "pulmonary artery endothelial cell"
+      ],
+      "strongest_abs_log2": 0.109
+    },
+    {
+      "block": "chr1:30710205-30711276",
+      "case": "unmeasured",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "MATN1"
+      ],
+      "cells": [
+        "kidney"
+      ],
+      "strongest_abs_log2": 0.108
+    },
+    {
+      "block": "chr5:163887827-164119097",
+      "case": "tolerant",
+      "elements": 37,
+      "moving": 1,
+      "targets": [
+        "LINC03000"
+      ],
+      "cells": [
+        "OCI-LY7"
+      ],
+      "strongest_abs_log2": 0.108
+    },
+    {
+      "block": "chr20:39900882-39932921",
+      "case": "relaxed",
+      "elements": 3,
+      "moving": 1,
+      "targets": [
+        "HSPE1P1"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.108
+    },
+    {
+      "block": "chr4:27586144-27692365",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "IGBP1P5"
+      ],
+      "cells": [
+        "Brain_Cerebellar_Hemisphere"
+      ],
+      "strongest_abs_log2": 0.107
+    },
+    {
+      "block": "chr16:82435381-82491737",
+      "case": "relaxed",
+      "elements": 9,
+      "moving": 1,
+      "targets": [
+        "ENSG00000259873"
+      ],
+      "cells": [
+        "mesodermal cell"
+      ],
+      "strongest_abs_log2": 0.107
+    },
+    {
+      "block": "chr18:39016344-39034006",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "RNU6-706P"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.106
+    },
+    {
+      "block": "chr18:45181429-45212994",
+      "case": "tolerant",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "ENSG00000267101"
+      ],
+      "cells": [
+        "mononuclear cell"
+      ],
+      "strongest_abs_log2": 0.106
+    },
+    {
+      "block": "chr2:23332044-23347370",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000223530"
+      ],
+      "cells": [
+        "left lobe of liver"
+      ],
+      "strongest_abs_log2": 0.105
+    },
+    {
+      "block": "chr15:50418692-50423583",
+      "case": "relaxed",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "AHCYP7"
+      ],
+      "cells": [
+        "Testis"
+      ],
+      "strongest_abs_log2": 0.105
+    },
+    {
+      "block": "chr20:7633851-7668384",
+      "case": "tolerant",
+      "elements": 4,
+      "moving": 1,
+      "targets": [
+        "RN7SL547P"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.105
+    },
+    {
+      "block": "chr14:32882830-32932412",
+      "case": "relaxed",
+      "elements": 5,
+      "moving": 1,
+      "targets": [
+        "NPAS3"
+      ],
+      "cells": [
+        "subcutaneous adipose tissue"
+      ],
+      "strongest_abs_log2": 0.104
+    },
+    {
+      "block": "chr1:4981568-4992578",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000284739"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.102
+    },
+    {
+      "block": "chr1:61643793-61654193",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000223920"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.102
+    },
+    {
+      "block": "chr8:81924348-82033532",
+      "case": "tolerant",
+      "elements": 11,
+      "moving": 1,
+      "targets": [
+        "ENSG00000254394"
+      ],
+      "cells": [
+        "occipital lobe"
+      ],
+      "strongest_abs_log2": 0.102
+    },
+    {
+      "block": "chr2:18521684-18526876",
+      "case": "tolerant",
+      "elements": 1,
+      "moving": 1,
+      "targets": [
+        "ENSG00000260331"
+      ],
+      "cells": [
+        "left ventricle myocardium inferior"
+      ],
+      "strongest_abs_log2": 0.101
+    },
+    {
+      "block": "chr15:37545813-37671741",
+      "case": "relaxed",
+      "elements": 11,
+      "moving": 1,
+      "targets": [
+        "ENSG00000259434"
+      ],
+      "cells": [
+        "dorsolateral prefrontal cortex"
+      ],
+      "strongest_abs_log2": 0.101
+    },
+    {
+      "block": "chr6:85240643-85257327",
+      "case": "tolerant",
+      "elements": 2,
+      "moving": 1,
+      "targets": [
+        "RPL31P32"
+      ],
+      "cells": [
+        "testis"
+      ],
+      "strongest_abs_log2": 0.1
+    }
+  ],
+  "reading": "a named target here is a lead and not a finding: the same model names a target at 87% of matched random windows, which is why the rates are reported against the other tiers and inside length deciles rather than on their own",
+  "seconds": 240.3
+}

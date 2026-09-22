@@ -1,0 +1,690 @@
+{
+  "result": "epigenome_fossil_alu",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "elements": 125219,
+  "families": {
+    "Alu": {
+      "elements": 61068,
+      "median_gc": 0.516,
+      "median_cpg_per_100bp": 2.24,
+      "median_divergence": 0.112,
+      "median_wcgw_share": 0.125
+    },
+    "L1": {
+      "elements": 64151,
+      "median_gc": 0.351,
+      "median_cpg_per_100bp": 0.53,
+      "median_divergence": 0.179,
+      "median_wcgw_share": 0.429
+    }
+  },
+  "cell_types": {
+    "K562": {
+      "raw": {
+        "alu_minus_l1": 0.0836,
+        "alu": 45103,
+        "l1": 56280
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0711,
+        "alu": 41880,
+        "l1": 10148
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.0877,
+        "alu": 40152,
+        "l1": 4711
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0827,
+        "alu": 35458,
+        "l1": 3609
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0214,
+        "alu": 29908,
+        "l1": 36394
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": 0.0093,
+        "alu": 20,
+        "l1": 13
+      }
+    },
+    "HepG2": {
+      "raw": {
+        "alu_minus_l1": 0.1924,
+        "alu": 56716,
+        "l1": 61534
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0496,
+        "alu": 52266,
+        "l1": 20975
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.0662,
+        "alu": 49649,
+        "l1": 7128
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0673,
+        "alu": 43921,
+        "l1": 4080
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.1096,
+        "alu": 39728,
+        "l1": 46150
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": 0.0154,
+        "alu": 15,
+        "l1": 10
+      }
+    },
+    "GM12878": {
+      "raw": {
+        "alu_minus_l1": 0.1518,
+        "alu": 55521,
+        "l1": 60913
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0395,
+        "alu": 51501,
+        "l1": 20506
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.046,
+        "alu": 49250,
+        "l1": 7209
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0456,
+        "alu": 43782,
+        "l1": 3916
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0845,
+        "alu": 39184,
+        "l1": 46375
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": -0.0162,
+        "alu": 55,
+        "l1": 44
+      }
+    },
+    "H1": {
+      "raw": {
+        "alu_minus_l1": 0.0301,
+        "alu": 50836,
+        "l1": 60212
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0253,
+        "alu": 47194,
+        "l1": 19971
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.015,
+        "alu": 45230,
+        "l1": 7018
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0164,
+        "alu": 40128,
+        "l1": 3754
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0342,
+        "alu": 34734,
+        "l1": 40984
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": -0.013,
+        "alu": 32,
+        "l1": 21
+      }
+    },
+    "IMR-90": {
+      "raw": {
+        "alu_minus_l1": 0.1807,
+        "alu": 4159,
+        "l1": 3447
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0984,
+        "alu": 3610,
+        "l1": 1458
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.0803,
+        "alu": 1828,
+        "l1": 439
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0991,
+        "alu": 1300,
+        "l1": 276
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": null,
+        "alu": 0,
+        "l1": 0
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": null,
+        "alu": 0,
+        "l1": 0
+      }
+    },
+    "SK-N-SH": {
+      "raw": {
+        "alu_minus_l1": 0.1842,
+        "alu": 57178,
+        "l1": 61504
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.1078,
+        "alu": 52770,
+        "l1": 21033
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.1262,
+        "alu": 50176,
+        "l1": 7230
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.1272,
+        "alu": 44623,
+        "l1": 4179
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0941,
+        "alu": 40702,
+        "l1": 47460
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": -0.0033,
+        "alu": 44,
+        "l1": 34
+      }
+    },
+    "hepatocyte": {
+      "raw": {
+        "alu_minus_l1": 0.0749,
+        "alu": 58467,
+        "l1": 62099
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.056,
+        "alu": 54163,
+        "l1": 21244
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.0414,
+        "alu": 51712,
+        "l1": 7384
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.043,
+        "alu": 46070,
+        "l1": 4291
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0605,
+        "alu": 41918,
+        "l1": 48451
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": -0.0271,
+        "alu": 61,
+        "l1": 46
+      }
+    },
+    "CD14-positive monocyte": {
+      "raw": {
+        "alu_minus_l1": 0.0516,
+        "alu": 15677,
+        "l1": 10464
+      },
+      "gc_cpg": {
+        "alu_minus_l1": 0.0465,
+        "alu": 14023,
+        "l1": 4036
+      },
+      "gc_cpg_age": {
+        "alu_minus_l1": 0.0167,
+        "alu": 12664,
+        "l1": 1508
+      },
+      "gc_cpg_age_wcgw": {
+        "alu_minus_l1": 0.0179,
+        "alu": 9819,
+        "l1": 1185
+      },
+      "same_50kb_region": {
+        "alu_minus_l1": 0.0423,
+        "alu": 1164,
+        "l1": 1030
+      },
+      "same_1mb_gc_cpg_wcgw": {
+        "alu_minus_l1": null,
+        "alu": 0,
+        "l1": 0
+      }
+    }
+  },
+  "hypomethylated_lines": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "SK-N-SH"
+  ],
+  "wcgw_gradient": {
+    "K562": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 28628,
+          "mean": 0.1462
+        },
+        "wcgw_20_40pct": {
+          "n": 12278,
+          "mean": 0.1222
+        },
+        "wcgw_40_60pct": {
+          "n": 3419,
+          "mean": 0.1012
+        },
+        "wcgw_60_80pct": {
+          "n": 563,
+          "mean": 0.071
+        },
+        "wcgw_80_100pct": {
+          "n": 215,
+          "mean": 0.0507
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 9020,
+          "mean": 0.0615
+        },
+        "wcgw_20_40pct": {
+          "n": 15376,
+          "mean": 0.0538
+        },
+        "wcgw_40_60pct": {
+          "n": 19489,
+          "mean": 0.0494
+        },
+        "wcgw_60_80pct": {
+          "n": 6963,
+          "mean": 0.0455
+        },
+        "wcgw_80_100pct": {
+          "n": 5432,
+          "mean": 0.0409
+        }
+      }
+    },
+    "HepG2": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 36665,
+          "mean": 0.4033
+        },
+        "wcgw_20_40pct": {
+          "n": 15048,
+          "mean": 0.3147
+        },
+        "wcgw_40_60pct": {
+          "n": 4065,
+          "mean": 0.2242
+        },
+        "wcgw_60_80pct": {
+          "n": 666,
+          "mean": 0.1716
+        },
+        "wcgw_80_100pct": {
+          "n": 272,
+          "mean": 0.107
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 9828,
+          "mean": 0.2226
+        },
+        "wcgw_20_40pct": {
+          "n": 16903,
+          "mean": 0.1975
+        },
+        "wcgw_40_60pct": {
+          "n": 21334,
+          "mean": 0.1571
+        },
+        "wcgw_60_80pct": {
+          "n": 7539,
+          "mean": 0.1341
+        },
+        "wcgw_80_100pct": {
+          "n": 5930,
+          "mean": 0.1017
+        }
+      }
+    },
+    "GM12878": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 35499,
+          "mean": 0.4792
+        },
+        "wcgw_20_40pct": {
+          "n": 14873,
+          "mean": 0.3822
+        },
+        "wcgw_40_60pct": {
+          "n": 4178,
+          "mean": 0.2806
+        },
+        "wcgw_60_80pct": {
+          "n": 686,
+          "mean": 0.2218
+        },
+        "wcgw_80_100pct": {
+          "n": 285,
+          "mean": 0.1529
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 10081,
+          "mean": 0.3468
+        },
+        "wcgw_20_40pct": {
+          "n": 16450,
+          "mean": 0.3172
+        },
+        "wcgw_40_60pct": {
+          "n": 21074,
+          "mean": 0.2685
+        },
+        "wcgw_60_80pct": {
+          "n": 7389,
+          "mean": 0.2359
+        },
+        "wcgw_80_100pct": {
+          "n": 5919,
+          "mean": 0.175
+        }
+      }
+    },
+    "H1": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 32305,
+          "mean": 0.9033
+        },
+        "wcgw_20_40pct": {
+          "n": 13755,
+          "mean": 0.8957
+        },
+        "wcgw_40_60pct": {
+          "n": 3875,
+          "mean": 0.8768
+        },
+        "wcgw_60_80pct": {
+          "n": 636,
+          "mean": 0.8722
+        },
+        "wcgw_80_100pct": {
+          "n": 265,
+          "mean": 0.8635
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 9777,
+          "mean": 0.876
+        },
+        "wcgw_20_40pct": {
+          "n": 16404,
+          "mean": 0.8714
+        },
+        "wcgw_40_60pct": {
+          "n": 20855,
+          "mean": 0.8672
+        },
+        "wcgw_60_80pct": {
+          "n": 7351,
+          "mean": 0.8653
+        },
+        "wcgw_80_100pct": {
+          "n": 5825,
+          "mean": 0.8568
+        }
+      }
+    },
+    "IMR-90": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 2877,
+          "mean": 0.7971
+        },
+        "wcgw_20_40pct": {
+          "n": 1064,
+          "mean": 0.7361
+        },
+        "wcgw_40_60pct": {
+          "n": 194,
+          "mean": 0.6754
+        },
+        "wcgw_60_80pct": {
+          "n": 20,
+          "mean": 0.623
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 536,
+          "mean": 0.6197
+        },
+        "wcgw_20_40pct": {
+          "n": 1611,
+          "mean": 0.612
+        },
+        "wcgw_40_60pct": {
+          "n": 1030,
+          "mean": 0.561
+        },
+        "wcgw_60_80pct": {
+          "n": 200,
+          "mean": 0.5774
+        },
+        "wcgw_80_100pct": {
+          "n": 70,
+          "mean": 0.5229
+        }
+      }
+    },
+    "SK-N-SH": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 36891,
+          "mean": 0.4857
+        },
+        "wcgw_20_40pct": {
+          "n": 15202,
+          "mean": 0.4139
+        },
+        "wcgw_40_60pct": {
+          "n": 4122,
+          "mean": 0.3363
+        },
+        "wcgw_60_80pct": {
+          "n": 683,
+          "mean": 0.2711
+        },
+        "wcgw_80_100pct": {
+          "n": 280,
+          "mean": 0.2219
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 10045,
+          "mean": 0.3202
+        },
+        "wcgw_20_40pct": {
+          "n": 16774,
+          "mean": 0.2842
+        },
+        "wcgw_40_60pct": {
+          "n": 21253,
+          "mean": 0.2569
+        },
+        "wcgw_60_80pct": {
+          "n": 7468,
+          "mean": 0.2405
+        },
+        "wcgw_80_100pct": {
+          "n": 5964,
+          "mean": 0.2059
+        }
+      }
+    },
+    "hepatocyte": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 37474,
+          "mean": 0.8964
+        },
+        "wcgw_20_40pct": {
+          "n": 15538,
+          "mean": 0.8772
+        },
+        "wcgw_40_60pct": {
+          "n": 4432,
+          "mean": 0.8414
+        },
+        "wcgw_60_80pct": {
+          "n": 716,
+          "mean": 0.8224
+        },
+        "wcgw_80_100pct": {
+          "n": 307,
+          "mean": 0.8004
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 10326,
+          "mean": 0.8344
+        },
+        "wcgw_20_40pct": {
+          "n": 16798,
+          "mean": 0.8198
+        },
+        "wcgw_40_60pct": {
+          "n": 21464,
+          "mean": 0.8063
+        },
+        "wcgw_60_80pct": {
+          "n": 7481,
+          "mean": 0.7986
+        },
+        "wcgw_80_100pct": {
+          "n": 6030,
+          "mean": 0.777
+        }
+      }
+    },
+    "CD14-positive monocyte": {
+      "Alu": {
+        "wcgw_0_20pct": {
+          "n": 10429,
+          "mean": 0.9256
+        },
+        "wcgw_20_40pct": {
+          "n": 4256,
+          "mean": 0.9123
+        },
+        "wcgw_40_60pct": {
+          "n": 835,
+          "mean": 0.8935
+        },
+        "wcgw_60_80pct": {
+          "n": 120,
+          "mean": 0.8714
+        },
+        "wcgw_80_100pct": {
+          "n": 37,
+          "mean": 0.8474
+        }
+      },
+      "L1": {
+        "wcgw_0_20pct": {
+          "n": 1713,
+          "mean": 0.871
+        },
+        "wcgw_20_40pct": {
+          "n": 4322,
+          "mean": 0.8713
+        },
+        "wcgw_40_60pct": {
+          "n": 3392,
+          "mean": 0.8651
+        },
+        "wcgw_60_80pct": {
+          "n": 763,
+          "mean": 0.8646
+        },
+        "wcgw_80_100pct": {
+          "n": 274,
+          "mean": 0.8472
+        }
+      }
+    }
+  },
+  "designs": {
+    "raw": "Alu mean minus L1 mean",
+    "gc_cpg": "inside GC (0.05) x CpG per 100 bp strata",
+    "gc_cpg_age": "and RepeatMasker divergence in 0.05 bins",
+    "gc_cpg_age_wcgw": "and the share of solo-WCGW CpGs in 0.2 bins",
+    "same_50kb_region": "inside the same 50 kb window (regional domain held)",
+    "same_1mb_gc_cpg_wcgw": "inside the same 1 Mb window, GC x CpG stratum and solo-WCGW share"
+  },
+  "note": "RepeatMasker Alu (SINE/Alu) and L1 (LINE/L1) records of 200+ bp wholly inside fossil-tier blocks; methylation from 200 bp bins at least half inside the element with 2+ calls of 5+ reads, so a flank can dilute an element's value toward its neighbourhood; differences are weighted by Alu elements in strata with 3+ of each family",
+  "evidence": {
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl)",
+    "repeats": "curated: UCSC RepeatMasker (rmsk)"
+  }
+}

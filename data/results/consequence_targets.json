@@ -1,0 +1,1880 @@
+{
+  "result": "consequence_targets",
+  "date": "2026-09-12",
+  "gwas": {
+    "uniform": {
+      "elements": 4800,
+      "with_lead_variant": 1592,
+      "fraction_with_lead_variant": 0.332,
+      "shifted_control_fraction": 0.294,
+      "enrichment_over_shifted": 1.13,
+      "associations": 6771,
+      "by_partition": {
+        "named_target": {
+          "elements": 2994,
+          "with_lead_variant": 0.333
+        },
+        "no_target": {
+          "elements": 1806,
+          "with_lead_variant": 0.329
+        },
+        "strong_effect": {
+          "elements": 735,
+          "with_lead_variant": 0.35
+        },
+        "constrained": {
+          "elements": 0,
+          "with_lead_variant": null
+        },
+        "not_constrained": {
+          "elements": 0,
+          "with_lead_variant": null
+        }
+      },
+      "catalog_gene_is_the_predicted_target": 0.385,
+      "catalog_gene_is_the_inferred_target": 0.629,
+      "top_traits": {
+        "Height": 136,
+        "Height (baseline)": 50,
+        "Hematological traits (multi-trait analysis)": 40,
+        "Body mass index": 35,
+        "Total cholesterol levels": 29,
+        "Waist circumference adjusted for body mass index": 29,
+        "Type 2 diabetes": 29,
+        "Red blood cell count": 25,
+        "Diastolic blood pressure": 24,
+        "Physical function (baseline)": 23,
+        "Neutrophil-to-lymphocyte ratio": 23,
+        "Gamma glutamyl transferase levels": 22,
+        "Waist-to-hip ratio adjusted for BMI": 22,
+        "Systolic blood pressure": 21,
+        "Mean corpuscular volume": 21
+      },
+      "margin_bp": 1000,
+      "evidence": "curated: NHGRI-EBI GWAS Catalog lead variants (GRCh38 positions), all associations"
+    },
+    "constrained": {
+      "elements": 2305,
+      "with_lead_variant": 863,
+      "fraction_with_lead_variant": 0.374,
+      "shifted_control_fraction": 0.308,
+      "enrichment_over_shifted": 1.21,
+      "associations": 3607,
+      "by_partition": {
+        "named_target": {
+          "elements": 1744,
+          "with_lead_variant": 0.38
+        },
+        "no_target": {
+          "elements": 561,
+          "with_lead_variant": 0.358
+        },
+        "strong_effect": {
+          "elements": 556,
+          "with_lead_variant": 0.399
+        },
+        "constrained": {
+          "elements": 2305,
+          "with_lead_variant": 0.374
+        },
+        "not_constrained": {
+          "elements": 0,
+          "with_lead_variant": null
+        }
+      },
+      "catalog_gene_is_the_predicted_target": 0.495,
+      "catalog_gene_is_the_inferred_target": 0.613,
+      "top_traits": {
+        "Height": 92,
+        "Body mass index": 45,
+        "Height (baseline)": 26,
+        "Educational attainment": 25,
+        "Systolic blood pressure": 24,
+        "Insomnia": 23,
+        "Type 2 diabetes": 19,
+        "Heel bone mineral density": 18,
+        "Pulse pressure": 17,
+        "Smoking initiation": 16,
+        "Hemoglobin concentration": 16,
+        "Estimated glomerular filtration rate": 15,
+        "Unsupervised deep imaging phenotypes (UDIP-FA)": 15,
+        "Bone mineral density mean": 14,
+        "Monocyte count": 14
+      },
+      "margin_bp": 1000,
+      "evidence": "curated: NHGRI-EBI GWAS Catalog lead variants (GRCh38 positions), all associations"
+    },
+    "vista": {
+      "elements": 2223,
+      "with_lead_variant": 1056,
+      "fraction_with_lead_variant": 0.475,
+      "shifted_control_fraction": 0.429,
+      "enrichment_over_shifted": 1.11,
+      "associations": 9004,
+      "by_partition": {
+        "named_target": {
+          "elements": 1501,
+          "with_lead_variant": 0.506
+        },
+        "no_target": {
+          "elements": 722,
+          "with_lead_variant": 0.41
+        },
+        "strong_effect": {
+          "elements": 693,
+          "with_lead_variant": 0.558
+        },
+        "constrained": {
+          "elements": 1365,
+          "with_lead_variant": 0.424
+        },
+        "not_constrained": {
+          "elements": 856,
+          "with_lead_variant": 0.556
+        },
+        "vista_positive": {
+          "elements": 1133,
+          "with_lead_variant": 0.489
+        },
+        "vista_negative": {
+          "elements": 1090,
+          "with_lead_variant": 0.461
+        }
+      },
+      "catalog_gene_is_the_predicted_target": 0.347,
+      "catalog_gene_is_the_inferred_target": 0.347,
+      "top_traits": {
+        "Height": 110,
+        "Body mass index": 60,
+        "Height (baseline)": 35,
+        "Type 2 diabetes": 30,
+        "Systolic blood pressure": 28,
+        "Insomnia": 26,
+        "Educational attainment": 25,
+        "Heel bone mineral density": 21,
+        "Weight": 20,
+        "Estimated glomerular filtration rate (creatinine)": 19,
+        "Atrial fibrillation": 19,
+        "Waist-to-hip ratio adjusted for BMI": 19,
+        "Waist circumference adjusted for body mass index": 19,
+        "Hematological traits (multi-trait analysis)": 18,
+        "Pulse pressure": 17
+      },
+      "margin_bp": 1000,
+      "evidence": "curated: NHGRI-EBI GWAS Catalog lead variants (GRCh38 positions), all associations"
+    }
+  },
+  "clinvar": {
+    "uniform": {
+      "elements": 4800,
+      "with_pathogenic_noncoding_variant": 20,
+      "variants": 40,
+      "clinvar_gene_is_the_predicted_target": 11,
+      "clinvar_gene_is_the_inferred_target": 13,
+      "examples": [
+        {
+          "element": "EH38E1448566",
+          "key": "chr10:12084473-12084819",
+          "predicted": "DHTKD1",
+          "inferred": "DHTKD1",
+          "clinvar": [
+            {
+              "pos": 12084752,
+              "gene": "DHTKD1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2928857",
+          "key": "chr10:119672149-119672312",
+          "predicted": "BAG3",
+          "inferred": "BAG3",
+          "clinvar": [
+            {
+              "pos": 119672237,
+              "gene": "BAG3",
+              "significance": "Likely pathogenic",
+              "conditions": "Dilated cardiomyopathy 1HH; Myofibrillar myopathy 6",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 119672253,
+              "gene": "BAG3",
+              "significance": "Likely pathogenic",
+              "conditions": "Myofibrillar myopathy 6; Dilated cardiomyopathy 1HH",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 119672254,
+              "gene": "BAG3",
+              "significance": "Likely pathogenic",
+              "conditions": "Dilated cardiomyopathy 1HH; Myofibrillar myopathy 6",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3029418",
+          "key": "chr12:80211716-80212062",
+          "predicted": "OTOGL",
+          "inferred": "OTOGL",
+          "clinvar": [
+            {
+              "pos": 80211998,
+              "gene": "OTOGL",
+              "significance": "Likely pathogenic",
+              "conditions": "Autosomal recessive nonsyndromic hearing loss 84B",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1651082",
+          "key": "chr12:121807718-121807998",
+          "predicted": null,
+          "inferred": "SETD1B",
+          "clinvar": [
+            {
+              "pos": 121807836,
+              "gene": "SETD1B",
+              "significance": "Pathogenic",
+              "conditions": "Intellectual developmental disorder with seizures and language delay",
+              "consequence": "intron_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1736127",
+          "key": "chr14:91281372-91281692",
+          "predicted": null,
+          "inferred": "CCDC88C",
+          "clinvar": [
+            {
+              "pos": 91281526,
+              "gene": "CCDC88C",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3162752",
+          "key": "chr16:2056150-2056494",
+          "predicted": null,
+          "inferred": "NTHL1",
+          "clinvar": [
+            {
+              "pos": 2056193,
+              "gene": "TSC2",
+              "significance": "Pathogenic",
+              "conditions": "Tuberous sclerosis 2",
+              "consequence": "5_prime_UTR_variant,intron_variant",
+              "stars": 1
+            },
+            {
+              "pos": 2056194,
+              "gene": "TSC2",
+              "significance": "Likely pathogenic",
+              "conditions": "Hereditary cancer-predisposing syndrome; Tuberous sclerosis syndrome; Tuberous sclerosis 2",
+              "consequence": "5_prime_UTR_variant,splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 2056194,
+              "gene": "TSC2",
+              "significance": "Pathogenic",
+              "conditions": "Tuberous sclerosis 2",
+              "consequence": "5_prime_UTR_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3248675",
+          "key": "chr17:80111769-80111993",
+          "predicted": null,
+          "inferred": "GAA",
+          "clinvar": [
+            {
+              "pos": 80111980,
+              "gene": "GAA",
+              "significance": "Likely pathogenic",
+              "conditions": "Glycogen storage disease, type II",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 80111981,
+              "gene": "GAA",
+              "significance": "Pathogenic",
+              "conditions": "Glycogen storage disease, type II",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "EH38E3268250",
+          "key": "chr18:49097305-49097591",
+          "predicted": "ENSG00000265128",
+          "inferred": "SMAD7",
+          "clinvar": [
+            {
+              "pos": 49097401,
+              "gene": "DYM",
+              "significance": "Pathogenic",
+              "conditions": "Dyggve-Melchior-Clausen syndrome",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3280213",
+          "key": "chr19:1046215-1046532",
+          "predicted": "ABCA7",
+          "inferred": "ABCA7",
+          "clinvar": [
+            {
+              "pos": 1046404,
+              "gene": "ABCA7",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3316525",
+          "key": "chr19:54180434-54180774",
+          "predicted": "MBOAT7",
+          "inferred": "TMC4",
+          "clinvar": [
+            {
+              "pos": 54180772,
+              "gene": "MBOAT7",
+              "significance": "Pathogenic",
+              "conditions": "Intellectual disability, autosomal recessive 57",
+              "consequence": "splice_donor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "EH38E2051750",
+          "key": "chr2:172484712-172485042",
+          "predicted": "ITGA6",
+          "inferred": "PDK1",
+          "clinvar": [
+            {
+              "pos": 172484943,
+              "gene": "ITGA6",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3438217",
+          "key": "chr20:49510803-49511143",
+          "predicted": "PTGIS",
+          "inferred": "KCNB1",
+          "clinvar": [
+            {
+              "pos": 49511026,
+              "gene": "PTGIS",
+              "significance": "Pathogenic",
+              "conditions": "Essential hypertension",
+              "consequence": "splice_donor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "EH38E3457653",
+          "key": "chr21:36756551-36756900",
+          "predicted": "SIM2",
+          "inferred": "HLCS",
+          "clinvar": [
+            {
+              "pos": 36756736,
+              "gene": "HLCS",
+              "significance": "Likely pathogenic",
+              "conditions": "Holocarboxylase synthetase deficiency",
+              "consequence": "non-coding_transcript_variant,splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 36756756,
+              "gene": "HLCS",
+              "significance": "Likely pathogenic",
+              "conditions": "Holocarboxylase synthetase deficiency",
+              "consequence": "non-coding_transcript_variant,splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 36756757,
+              "gene": "HLCS",
+              "significance": "Likely pathogenic",
+              "conditions": "Holocarboxylase synthetase deficiency",
+              "consequence": "non-coding_transcript_variant,splice_acceptor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "EH38E3463999",
+          "key": "chr21:45497065-45497410",
+          "predicted": "COL18A1",
+          "inferred": "COL18A1",
+          "clinvar": [
+            {
+              "pos": 45497093,
+              "gene": "COL18A1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3469046",
+          "key": "chr22:20990207-20990443",
+          "predicted": "ENSG00000285314",
+          "inferred": "LZTR1",
+          "clinvar": [
+            {
+              "pos": 20990275,
+              "gene": "LZTR1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 20990384,
+              "gene": "LZTR1",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Cardiovascular phenotype; Hereditary cancer-predisposing syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 20990384,
+              "gene": "LZTR1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3494930",
+          "key": "chr3:10340127-10340448",
+          "predicted": "MIR378B",
+          "inferred": "SEC13",
+          "clinvar": [
+            {
+              "pos": 10340351,
+              "gene": "ATP2B2",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3534358",
+          "key": "chr3:121797073-121797307",
+          "predicted": null,
+          "inferred": "IQCB1",
+          "clinvar": [
+            {
+              "pos": 121797229,
+              "gene": "IQCB1",
+              "significance": "Likely pathogenic",
+              "conditions": "Senior-Loken syndrome 5",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3761208",
+          "key": "chr7:21704414-21704756",
+          "predicted": "DNAH11",
+          "inferred": "DNAH11",
+          "clinvar": [
+            {
+              "pos": 21704433,
+              "gene": "DNAH11",
+              "significance": "Likely pathogenic",
+              "conditions": "Primary ciliary dyskinesia",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 21704630,
+              "gene": "DNAH11",
+              "significance": "Likely pathogenic",
+              "conditions": "Primary ciliary dyskinesia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3808227",
+          "key": "chr7:150948292-150948550",
+          "predicted": "KCNH2",
+          "inferred": "KCNH2",
+          "clinvar": [
+            {
+              "pos": 150948439,
+              "gene": "KCNH2",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant",
+              "stars": 1
+            },
+            {
+              "pos": 150948439,
+              "gene": "KCNH2",
+              "significance": "Likely pathogenic",
+              "conditions": "Congenital long QT syndrome",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 150948442,
+              "gene": "KCNH2",
+              "significance": "Likely pathogenic",
+              "conditions": "Congenital long QT syndrome",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3831102",
+          "key": "chr8:42319051-42319390",
+          "predicted": "IKBKB",
+          "inferred": "POLB",
+          "clinvar": [
+            {
+              "pos": 42319268,
+              "gene": "IKBKB",
+              "significance": "Likely pathogenic",
+              "conditions": "Severe combined immunodeficiency due to IKK2 deficiency",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        }
+      ]
+    },
+    "constrained": {
+      "elements": 2305,
+      "with_pathogenic_noncoding_variant": 30,
+      "variants": 62,
+      "clinvar_gene_is_the_predicted_target": 20,
+      "clinvar_gene_is_the_inferred_target": 17,
+      "examples": [
+        {
+          "element": "EH38E1438725",
+          "key": "chr1:244854270-244854506",
+          "predicted": "HNRNPU",
+          "inferred": "HNRNPU",
+          "clinvar": [
+            {
+              "pos": 244854505,
+              "gene": "HNRNPU",
+              "significance": "Likely pathogenic",
+              "conditions": "Developmental and epileptic encephalopathy, 54",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 244854505,
+              "gene": "HNRNPU",
+              "significance": "Pathogenic",
+              "conditions": "Developmental and epileptic encephalopathy, 54",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 244854506,
+              "gene": "HNRNPU",
+              "significance": "Likely pathogenic",
+              "conditions": "Developmental and epileptic encephalopathy, 54",
+              "consequence": "intron_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2951376",
+          "key": "chr11:31801748-31802004",
+          "predicted": "PAX6",
+          "inferred": "ENSG00000285283",
+          "clinvar": [
+            {
+              "pos": 31801764,
+              "gene": "PAX6",
+              "significance": "Pathogenic",
+              "conditions": "Aniridia 1",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 31801777,
+              "gene": "PAX6",
+              "significance": "Pathogenic",
+              "conditions": "Aniridia 1",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 31801778,
+              "gene": "PAX6",
+              "significance": "Pathogenic",
+              "conditions": "Aniridia 1",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "EH38E2956539",
+          "key": "chr11:45971046-45971369",
+          "predicted": "PHF21A",
+          "inferred": "PEX16",
+          "clinvar": [
+            {
+              "pos": 45971115,
+              "gene": "PHF21A",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual developmental disorder with behavioral abnormalities and craniofacial dysmorphism with or without seizures",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 45971369,
+              "gene": "PHF21A",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2970838",
+          "key": "chr11:72239960-72240205",
+          "predicted": "PHOX2A",
+          "inferred": "PHOX2A",
+          "clinvar": [
+            {
+              "pos": 72240199,
+              "gene": "PHOX2A",
+              "significance": "Pathogenic",
+              "conditions": "Fibrosis of extraocular muscles, congenital, 2",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "EH38E1627883",
+          "key": "chr12:80649572-80649757",
+          "predicted": "PTPRQ",
+          "inferred": "MYF6",
+          "clinvar": [
+            {
+              "pos": 80649586,
+              "gene": "PTPRQ",
+              "significance": "Likely pathogenic",
+              "conditions": "Autosomal recessive nonsyndromic hearing loss 84A",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 80649671,
+              "gene": "PTPRQ",
+              "significance": "Pathogenic",
+              "conditions": "Autosomal recessive nonsyndromic hearing loss 84A; Hearing loss, autosomal dominant 73",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "EH38E1693240",
+          "key": "chr13:100235603-100235919",
+          "predicted": "PCCA",
+          "inferred": "PCCA",
+          "clinvar": [
+            {
+              "pos": 100235879,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 100235879,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 100235880,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1693186",
+          "key": "chr13:100154988-100155173",
+          "predicted": "RPL15P18",
+          "inferred": "PCCA",
+          "clinvar": [
+            {
+              "pos": 100155093,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 100155093,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 100155093,
+              "gene": "PCCA",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1693074",
+          "key": "chr13:99985217-99985467",
+          "predicted": "LINC00554",
+          "inferred": "ZIC2",
+          "clinvar": [
+            {
+              "pos": 99985321,
+              "gene": "ZIC2",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3181167",
+          "key": "chr16:53692168-53692441",
+          "predicted": "RPGRIP1L",
+          "inferred": "FTO",
+          "clinvar": [
+            {
+              "pos": 53692365,
+              "gene": "RPGRIP1L",
+              "significance": "Pathogenic",
+              "conditions": "Joubert syndrome; Meckel-Gruber syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 53692366,
+              "gene": "RPGRIP1L",
+              "significance": "Pathogenic",
+              "conditions": "Joubert syndrome; Meckel-Gruber syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1796701",
+          "key": "chr16:2498221-2498381",
+          "predicted": "TBC1D24",
+          "inferred": "ENSG00000260272",
+          "clinvar": [
+            {
+              "pos": 2498237,
+              "gene": "TBC1D24",
+              "significance": "Likely pathogenic",
+              "conditions": "TBC1D24-related disorder",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1816354",
+          "key": "chr16:53665009-53665348",
+          "predicted": "ENSG00000275191",
+          "inferred": "FTO",
+          "clinvar": [
+            {
+              "pos": 53665011,
+              "gene": "RPGRIP1L",
+              "significance": "Likely pathogenic",
+              "conditions": "Joubert syndrome; Meckel-Gruber syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1859730",
+          "key": "chr17:37710323-37710668",
+          "predicted": "HNF1B",
+          "inferred": "HNF1B",
+          "clinvar": [
+            {
+              "pos": 37710501,
+              "gene": "HNF1B",
+              "significance": "Pathogenic",
+              "conditions": "Renal cysts and diabetes syndrome",
+              "consequence": "splice_acceptor_variant,splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 37710501,
+              "gene": "HNF1B",
+              "significance": "Pathogenic",
+              "conditions": "Renal cysts and diabetes syndrome",
+              "consequence": "splice_acceptor_variant,splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 37710502,
+              "gene": "HNF1B",
+              "significance": "Pathogenic",
+              "conditions": "Renal cysts and diabetes syndrome",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E1913522",
+          "key": "chr18:45922401-45922604",
+          "predicted": null,
+          "inferred": "EPG5",
+          "clinvar": [
+            {
+              "pos": 45922601,
+              "gene": "EPG5",
+              "significance": "Likely pathogenic",
+              "conditions": "Vici syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2001440",
+          "key": "chr2:60545881-60546140",
+          "predicted": "BCL11A",
+          "inferred": "BCL11A",
+          "clinvar": [
+            {
+              "pos": 60545969,
+              "gene": "BCL11A",
+              "significance": "Pathogenic",
+              "conditions": "Dias-Logan syndrome; Inborn genetic diseases",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "EH38E3464772",
+          "key": "chr21:46131949-46132106",
+          "predicted": "COL6A2",
+          "inferred": "FTCD",
+          "clinvar": [
+            {
+              "pos": 46131953,
+              "gene": "COL6A2",
+              "significance": "Pathogenic",
+              "conditions": "Bethlem myopathy 1B",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3455816",
+          "key": "chr21:33546139-33546453",
+          "predicted": "MIR6501",
+          "inferred": "GART",
+          "clinvar": [
+            {
+              "pos": 33546212,
+              "gene": "SON",
+              "significance": "Pathogenic",
+              "conditions": "ZTTK syndrome",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3456477",
+          "key": "chr21:34799190-34799442",
+          "predicted": "RUNX1",
+          "inferred": "CLIC6",
+          "clinvar": [
+            {
+              "pos": 34799295,
+              "gene": "RUNX1",
+              "significance": "Pathogenic",
+              "conditions": "Inborn genetic diseases; Hereditary thrombocytopenia and hematological cancer predisposition syndrome associated with RUNX1",
+              "consequence": "splice_donor_variant",
+              "stars": 3
+            }
+          ]
+        },
+        {
+          "element": "EH38E3463940",
+          "key": "chr21:45468459-45468788",
+          "predicted": "COL18A1",
+          "inferred": "COL18A1",
+          "clinvar": [
+            {
+              "pos": 45468787,
+              "gene": "COL18A1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 45468787,
+              "gene": "COL18A1",
+              "significance": "Pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 45468788,
+              "gene": "COL18A1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2152923",
+          "key": "chr22:23791790-23792004",
+          "predicted": "SMARCB1",
+          "inferred": "SMARCB1",
+          "clinvar": [
+            {
+              "pos": 23791895,
+              "gene": "SMARCB1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3480293",
+          "key": "chr22:37740876-37741062",
+          "predicted": null,
+          "inferred": "H1-0",
+          "clinvar": [
+            {
+              "pos": 37740893,
+              "gene": "TRIOBP",
+              "significance": "Likely pathogenic",
+              "conditions": "TRIOBP-related disorder",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2265473",
+          "key": "chr3:185926551-185926739",
+          "predicted": "TRA2B",
+          "inferred": "TRA2B",
+          "clinvar": [
+            {
+              "pos": 185926599,
+              "gene": "TRA2B",
+              "significance": "Pathogenic",
+              "conditions": "Ramond-Elliott neurodevelopmental syndrome",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 185926600,
+              "gene": "TRA2B",
+              "significance": "Pathogenic",
+              "conditions": "TRA2B-associated epileptic encephalopathy; Ramond-Elliott neurodevelopmental syndrome",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2389363",
+          "key": "chr5:88729205-88729380",
+          "predicted": "MEF2C",
+          "inferred": "MEF2C",
+          "clinvar": [
+            {
+              "pos": 88729347,
+              "gene": "MEF2C",
+              "significance": "Pathogenic",
+              "conditions": "Neurodevelopmental disorder with hypotonia, stereotypic hand movements, and impaired language",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 88729349,
+              "gene": "MEF2C",
+              "significance": "Likely pathogenic",
+              "conditions": "Neurodevelopmental disorder with hypotonia, stereotypic hand movements, and impaired language",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2403747",
+          "key": "chr5:123364464-123364744",
+          "predicted": null,
+          "inferred": "PRDM6",
+          "clinvar": [
+            {
+              "pos": 123364494,
+              "gene": "CEP120",
+              "significance": "Likely pathogenic",
+              "conditions": "Short-rib thoracic dysplasia 13 with or without polydactyly",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2460685",
+          "key": "chr6:33440734-33441002",
+          "predicted": "SYNGAP1",
+          "inferred": "ZBTB9",
+          "clinvar": [
+            {
+              "pos": 33440964,
+              "gene": "SYNGAP1",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual disability, autosomal dominant 5",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 33440966,
+              "gene": "SYNGAP1",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual disability, autosomal dominant 5",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 33440966,
+              "gene": "SYNGAP1",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual disability, autosomal dominant 5",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E2759252",
+          "key": "chrX:77693628-77693971",
+          "predicted": null,
+          "inferred": "ATRX",
+          "clinvar": [
+            {
+              "pos": 77693939,
+              "gene": "ATRX",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3934810",
+          "key": "chrX:53235626-53235969",
+          "predicted": null,
+          "inferred": "KDM5C",
+          "clinvar": [
+            {
+              "pos": 53235782,
+              "gene": "IQSEC2",
+              "significance": "Pathogenic",
+              "conditions": "Intellectual disability, X-linked 1",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 53235833,
+              "gene": "IQSEC2",
+              "significance": "Pathogenic",
+              "conditions": "Intellectual disability, X-linked 1",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 53235834,
+              "gene": "IQSEC2",
+              "significance": "Pathogenic",
+              "conditions": "NEURODEVELOPMENTAL DISORDER, X-LINKED, WITH POOR OR ABSENT SPEECH AND BEHAVIORAL ABNORMALITIES",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3933903",
+          "key": "chrX:48905111-48905425",
+          "predicted": "SLC35A2",
+          "inferred": "SLC35A2",
+          "clinvar": [
+            {
+              "pos": 48905133,
+              "gene": "SLC35A2",
+              "significance": "Likely pathogenic",
+              "conditions": "Chromosome 1p36 deletion syndrome, proximal",
+              "consequence": "intron_variant",
+              "stars": 1
+            },
+            {
+              "pos": 48905133,
+              "gene": "SLC35A2",
+              "significance": "Pathogenic",
+              "conditions": "SLC35A2-congenital disorder of glycosylation",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3928847",
+          "key": "chrX:25004044-25004245",
+          "predicted": "ARX",
+          "inferred": "ARX",
+          "clinvar": [
+            {
+              "pos": 25004209,
+              "gene": "ARX",
+              "significance": "Pathogenic",
+              "conditions": "Developmental and epileptic encephalopathy, 1",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "EH38E3949507",
+          "key": "chrX:154364557-154364737",
+          "predicted": "FLNA",
+          "inferred": "FLNA",
+          "clinvar": [
+            {
+              "pos": 154364720,
+              "gene": "FLNA",
+              "significance": "Pathogenic",
+              "conditions": "Cardiac valvular dysplasia, X-linked",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 154364721,
+              "gene": "FLNA",
+              "significance": "Pathogenic",
+              "conditions": "Heterotopia, periventricular, X-linked dominant",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "EH38E3949483",
+          "key": "chrX:154350845-154351033",
+          "predicted": null,
+          "inferred": "FLNA",
+          "clinvar": [
+            {
+              "pos": 154350907,
+              "gene": "FLNA",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        }
+      ]
+    },
+    "vista": {
+      "elements": 2223,
+      "with_pathogenic_noncoding_variant": 24,
+      "variants": 107,
+      "clinvar_gene_is_the_predicted_target": 19,
+      "clinvar_gene_is_the_inferred_target": 12,
+      "examples": [
+        {
+          "element": "hs2272",
+          "key": "chr1:11787243-11792353",
+          "predicted": null,
+          "inferred": "CLCN6",
+          "clinvar": [
+            {
+              "pos": 11790916,
+              "gene": "MTHFR",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Homocystinuria due to methylene tetrahydrofolate reductase deficiency; Neural tube defects, folate-sensitive",
+              "consequence": "intron_variant",
+              "stars": 2
+            },
+            {
+              "pos": 11791199,
+              "gene": "MTHFR",
+              "significance": "Likely pathogenic",
+              "conditions": "Homocystinuria due to methylene tetrahydrofolate reductase deficiency",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 11791205,
+              "gene": "MTHFR",
+              "significance": "Likely pathogenic",
+              "conditions": "Neural tube defects, folate-sensitive",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2526",
+          "key": "chr1:94078508-94080860",
+          "predicted": "ABCA4",
+          "inferred": "ABCA4",
+          "clinvar": [
+            {
+              "pos": 94078589,
+              "gene": "ABCA4",
+              "significance": "Pathogenic",
+              "conditions": "Retinal dystrophy",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 94078705,
+              "gene": "ABCA4",
+              "significance": "Pathogenic",
+              "conditions": "Retinal dystrophy",
+              "consequence": "splice_acceptor_variant",
+              "stars": 0
+            },
+            {
+              "pos": 94078707,
+              "gene": "ABCA4",
+              "significance": "Pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs3031",
+          "key": "chr1:243415679-243417168",
+          "predicted": "SDCCAG8",
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 243415701,
+              "gene": "SDCCAG8",
+              "significance": "Likely pathogenic",
+              "conditions": "Bardet-Biedl syndrome 16; Senior-Loken syndrome 7",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 243415831,
+              "gene": "SDCCAG8",
+              "significance": "Likely pathogenic",
+              "conditions": "SDCCAG8-related disorder",
+              "consequence": "splice_donor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs229",
+          "key": "chr10:100786834-100788338",
+          "predicted": null,
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 100787013,
+              "gene": "PAX2",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Renal coloboma syndrome; Focal segmental glomerulosclerosis 7",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "hs1977",
+          "key": "chr11:17412969-17415128",
+          "predicted": "ABCC8",
+          "inferred": "KCNJ11",
+          "clinvar": [
+            {
+              "pos": 17413392,
+              "gene": "ABCC8",
+              "significance": "Likely pathogenic",
+              "conditions": "Hereditary hyperinsulinism",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 17413393,
+              "gene": "ABCC8",
+              "significance": "Likely pathogenic",
+              "conditions": "Hyperinsulinemic hypoglycemia, familial, 1",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 17413393,
+              "gene": "ABCC8",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "hs234",
+          "key": "chr11:31663808-31665336",
+          "predicted": null,
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 31664397,
+              "gene": "ELP4",
+              "significance": "Pathogenic",
+              "conditions": "Aniridia 1",
+              "consequence": "intron_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs2678",
+          "key": "chr11:72307321-72310280",
+          "predicted": "PHOX2A",
+          "inferred": "CLPB",
+          "clinvar": [
+            {
+              "pos": 72308526,
+              "gene": "CLPB",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Inborn genetic diseases; 3-methylglutaconic aciduria, type VIIB",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "hs3028",
+          "key": "chr12:123253934-123254417",
+          "predicted": "MTRFR",
+          "inferred": "MPHOSPH9",
+          "clinvar": [
+            {
+              "pos": 123253958,
+              "gene": "MTRFR",
+              "significance": "Pathogenic",
+              "conditions": "Hereditary spastic paraplegia 55",
+              "consequence": "splice_donor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs2154",
+          "key": "chr14:23397191-23399655",
+          "predicted": "MYH6",
+          "inferred": "MYH6",
+          "clinvar": [
+            {
+              "pos": 23397541,
+              "gene": "MYH6",
+              "significance": "Likely pathogenic",
+              "conditions": "Long QT syndrome",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2033",
+          "key": "chr17:47291161-47292144",
+          "predicted": "ITGB3",
+          "inferred": "EFCAB13",
+          "clinvar": [
+            {
+              "pos": 47292137,
+              "gene": "ITGB3",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2171",
+          "key": "chr2:71501788-71506744",
+          "predicted": "DYSF",
+          "inferred": "DYSF",
+          "clinvar": [
+            {
+              "pos": 71503054,
+              "gene": "DYSF",
+              "significance": "Pathogenic",
+              "conditions": "Autosomal recessive limb-girdle muscular dystrophy",
+              "consequence": "splice_acceptor_variant,splice_donor_variant",
+              "stars": 3
+            },
+            {
+              "pos": 71503211,
+              "gene": "DYSF",
+              "significance": "Likely pathogenic",
+              "conditions": "Autosomal recessive limb-girdle muscular dystrophy type 2B; Distal myopathy with anterior tibial onset; Miyoshi muscular dystrophy 1",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 71503212,
+              "gene": "DYSF",
+              "significance": "Likely pathogenic",
+              "conditions": "Neuromuscular disease caused by qualitative or quantitative defects of dysferlin",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2172",
+          "key": "chr2:71612535-71617389",
+          "predicted": "DYSF",
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 71612807,
+              "gene": "DYSF",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 71612808,
+              "gene": "DYSF",
+              "significance": "Likely pathogenic",
+              "conditions": "Autosomal recessive limb-girdle muscular dystrophy type 2B",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 71612808,
+              "gene": "DYSF",
+              "significance": "Likely pathogenic",
+              "conditions": "Distal myopathy with anterior tibial onset; Miyoshi muscular dystrophy 1; Autosomal recessive limb-girdle muscular dystrophy type 2B",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            }
+          ]
+        },
+        {
+          "element": "hs1479",
+          "key": "chr2:71670884-71673762",
+          "predicted": null,
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 71673373,
+              "gene": "DYSF",
+              "significance": "Pathogenic",
+              "conditions": "Miyoshi muscular dystrophy 1; Autosomal recessive limb-girdle muscular dystrophy type 2B; Autosomal recessive limb-girdle muscular dystrophy",
+              "consequence": "intron_variant",
+              "stars": 3
+            }
+          ]
+        },
+        {
+          "element": "hs2685",
+          "key": "chr2:98555326-98558653",
+          "predicted": "INPP4A",
+          "inferred": "INPP4A",
+          "clinvar": [
+            {
+              "pos": 98555470,
+              "gene": "INPP4A",
+              "significance": "Pathogenic",
+              "conditions": "Neurodevelopmental disorder with growth impairment, quadriparesis, and poor or absent speech",
+              "consequence": "splice_acceptor_variant,splice_donor_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs2302",
+          "key": "chr22:19722444-19723659",
+          "predicted": "GP1BB",
+          "inferred": "GP1BB",
+          "clinvar": [
+            {
+              "pos": 19723410,
+              "gene": "GP1BB",
+              "significance": "Pathogenic",
+              "conditions": "Bernard-Soulier syndrome, type B",
+              "consequence": "non-coding_transcript_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs2176",
+          "key": "chr3:38561143-38566061",
+          "predicted": "SCN5A",
+          "inferred": "EXOG",
+          "clinvar": [
+            {
+              "pos": 38562413,
+              "gene": "SCN5A",
+              "significance": "Likely pathogenic",
+              "conditions": "Cardiac arrhythmia; Brugada syndrome",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 38562413,
+              "gene": "SCN5A",
+              "significance": "Pathogenic",
+              "conditions": "Progressive familial heart block, type 1A",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 38562414,
+              "gene": "SCN5A",
+              "significance": "Pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2177",
+          "key": "chr3:38578361-38581496",
+          "predicted": "SCN5A",
+          "inferred": "EXOG",
+          "clinvar": [
+            {
+              "pos": 38579496,
+              "gene": "SCN5A",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 38580930,
+              "gene": "SCN5A",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 38580930,
+              "gene": "SCN5A",
+              "significance": "Likely pathogenic",
+              "conditions": "Cardiovascular phenotype",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs3110",
+          "key": "chr3:128482744-128483778",
+          "predicted": "GATA2",
+          "inferred": "GATA2",
+          "clinvar": [
+            {
+              "pos": 128483288,
+              "gene": "GATA2",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Inborn genetic diseases; Deafness-lymphedema-leukemia syndrome; Monocytopenia with susceptibility to infections",
+              "consequence": "intron_variant",
+              "stars": 2
+            },
+            {
+              "pos": 128483319,
+              "gene": "GATA2",
+              "significance": "Likely pathogenic",
+              "conditions": "Deafness-lymphedema-leukemia syndrome; GATA2 deficiency with susceptibility to MDS/AML; Monocytopenia with susceptibility to infections",
+              "consequence": "intron_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs3049",
+          "key": "chr3:136281652-136286126",
+          "predicted": "PCCB",
+          "inferred": "PCCB",
+          "clinvar": [
+            {
+              "pos": 136283835,
+              "gene": "PCCB",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 136283948,
+              "gene": "PCCB",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 136283949,
+              "gene": "PCCB",
+              "significance": "Likely pathogenic",
+              "conditions": "Propionic acidemia",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2715",
+          "key": "chr4:507208-511644",
+          "predicted": "PIGG",
+          "inferred": "PIGG",
+          "clinvar": [
+            {
+              "pos": 507403,
+              "gene": "PIGG",
+              "significance": "Pathogenic",
+              "conditions": "Intellectual disability, autosomal recessive 53",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 507595,
+              "gene": "PIGG",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual disability, autosomal recessive 53",
+              "consequence": "intron_variant,splice_donor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 508827,
+              "gene": "PIGG",
+              "significance": "Likely pathogenic",
+              "conditions": "Intellectual disability, autosomal recessive 53",
+              "consequence": "intron_variant,splice_acceptor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2651",
+          "key": "chr6:7558939-7563643",
+          "predicted": "DSP",
+          "inferred": "DSP",
+          "clinvar": [
+            {
+              "pos": 7559224,
+              "gene": "DSP",
+              "significance": "Likely pathogenic",
+              "conditions": "Arrhythmogenic right ventricular dysplasia 8; Arrhythmogenic cardiomyopathy with wooly hair and keratoderma",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 7559225,
+              "gene": "DSP",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Arrhythmogenic right ventricular dysplasia 8; Arrhythmogenic cardiomyopathy with wooly hair and keratoderma; Cardiovascular phenotype",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            },
+            {
+              "pos": 7559401,
+              "gene": "DSP",
+              "significance": "Likely pathogenic",
+              "conditions": "Arrhythmogenic right ventricular dysplasia 8; Arrhythmogenic cardiomyopathy with wooly hair and keratoderma",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2284",
+          "key": "chr7:35248509-35250509",
+          "predicted": "TBX20",
+          "inferred": "TBX20",
+          "clinvar": [
+            {
+              "pos": 35248842,
+              "gene": "TBX20",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 35249949,
+              "gene": "TBX20",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "splice_donor_variant",
+              "stars": 1
+            }
+          ]
+        },
+        {
+          "element": "hs2496",
+          "key": "chr7:156791086-156791875",
+          "predicted": "LMBR1",
+          "inferred": null,
+          "clinvar": [
+            {
+              "pos": 156791133,
+              "gene": "LMBR1",
+              "significance": "Likely pathogenic",
+              "conditions": "",
+              "consequence": "intron_variant",
+              "stars": 1
+            },
+            {
+              "pos": 156791137,
+              "gene": "LMBR1",
+              "significance": "Pathogenic",
+              "conditions": "Triphalangeal thumb; Polydactyly of a triphalangeal thumb",
+              "consequence": "intron_variant",
+              "stars": 1
+            },
+            {
+              "pos": 156791255,
+              "gene": "LMBR1",
+              "significance": "Pathogenic",
+              "conditions": "Triphalangeal thumb; Polydactyly of a triphalangeal thumb",
+              "consequence": "intron_variant",
+              "stars": 0
+            }
+          ]
+        },
+        {
+          "element": "hs2491",
+          "key": "chrX:154364847-154368210",
+          "predicted": "FLNA",
+          "inferred": "FLNA",
+          "clinvar": [
+            {
+              "pos": 154365466,
+              "gene": "FLNA",
+              "significance": "Likely pathogenic",
+              "conditions": "Melnick-Needles syndrome; Frontometaphyseal dysplasia; Heterotopia, periventricular, X-linked dominant",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 154365487,
+              "gene": "FLNA",
+              "significance": "Pathogenic",
+              "conditions": "Heterotopia, periventricular, X-linked dominant",
+              "consequence": "splice_acceptor_variant",
+              "stars": 1
+            },
+            {
+              "pos": 154366471,
+              "gene": "FLNA",
+              "significance": "Pathogenic/Likely pathogenic",
+              "conditions": "Heterotopia, periventricular, X-linked dominant; Melnick-Needles syndrome; Frontometaphyseal dysplasia",
+              "consequence": "splice_acceptor_variant",
+              "stars": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "evidence": {
+    "gwas": "curated: NHGRI-EBI GWAS Catalog lead variants (GRCh38 positions), all associations",
+    "clinvar": "curated: ClinVar (NCBI) pathogenic and likely pathogenic assertions, with their review status"
+  }
+}

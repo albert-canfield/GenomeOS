@@ -1,0 +1,587 @@
+{
+  "result": "executor_replication_e3r",
+  "date": "2026-09-15",
+  "pairs_done": 775,
+  "requests_spent": 1199,
+  "stopped": {},
+  "E2R_eqtl_replication": {
+    "pairs": 0,
+    "units_called": 0,
+    "units_agree": 0,
+    "controls_called": 0,
+    "controls_agree": 0,
+    "difference": null,
+    "p_one_sided": null,
+    "difference_upper_95": null,
+    "by_chromosome": {
+      "chr10": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr11": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr12": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr13": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr14": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr15": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr16": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr17": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr18": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr19": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr20": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr6": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr7": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr8": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr9": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chrX": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      }
+    },
+    "verdict": "negative"
+  },
+  "E3R_eqtl_linked_replication": {
+    "pairs": 775,
+    "units_called": 216,
+    "units_agree": 107,
+    "controls_called": 339,
+    "controls_agree": 178,
+    "difference": -0.03,
+    "p_one_sided": 0.77926637,
+    "difference_upper_95": 0.042,
+    "by_chromosome": {
+      "chr10": {
+        "pairs": 49,
+        "units_called": 16,
+        "units_agree": 6,
+        "controls_called": 21,
+        "controls_agree": 12,
+        "difference": -0.196,
+        "p_one_sided": 0.9358669,
+        "difference_upper_95": 0.07
+      },
+      "chr11": {
+        "pairs": 48,
+        "units_called": 8,
+        "units_agree": 5,
+        "controls_called": 12,
+        "controls_agree": 5,
+        "difference": 0.208,
+        "p_one_sided": 0.32495832,
+        "difference_upper_95": 0.575
+      },
+      "chr12": {
+        "pairs": 51,
+        "units_called": 14,
+        "units_agree": 6,
+        "controls_called": 27,
+        "controls_agree": 12,
+        "difference": -0.016,
+        "p_one_sided": 0.66418704,
+        "difference_upper_95": 0.253
+      },
+      "chr13": {
+        "pairs": 53,
+        "units_called": 16,
+        "units_agree": 7,
+        "controls_called": 26,
+        "controls_agree": 13,
+        "difference": -0.062,
+        "p_one_sided": 0.76118321,
+        "difference_upper_95": 0.198
+      },
+      "chr14": {
+        "pairs": 52,
+        "units_called": 20,
+        "units_agree": 7,
+        "controls_called": 37,
+        "controls_agree": 22,
+        "difference": -0.245,
+        "p_one_sided": 0.97991425,
+        "difference_upper_95": -0.025
+      },
+      "chr15": {
+        "pairs": 44,
+        "units_called": 10,
+        "units_agree": 4,
+        "controls_called": 8,
+        "controls_agree": 6,
+        "difference": -0.35,
+        "p_one_sided": 0.97703277,
+        "difference_upper_95": 0.008
+      },
+      "chr16": {
+        "pairs": 47,
+        "units_called": 12,
+        "units_agree": 6,
+        "controls_called": 11,
+        "controls_agree": 4,
+        "difference": 0.136,
+        "p_one_sided": 0.40671692,
+        "difference_upper_95": 0.473
+      },
+      "chr17": {
+        "pairs": 46,
+        "units_called": 10,
+        "units_agree": 4,
+        "controls_called": 18,
+        "controls_agree": 12,
+        "difference": -0.267,
+        "p_one_sided": 0.96140351,
+        "difference_upper_95": 0.047
+      },
+      "chr18": {
+        "pairs": 48,
+        "units_called": 13,
+        "units_agree": 7,
+        "controls_called": 27,
+        "controls_agree": 14,
+        "difference": 0.02,
+        "p_one_sided": 0.5873944,
+        "difference_upper_95": 0.297
+      },
+      "chr19": {
+        "pairs": 46,
+        "units_called": 16,
+        "units_agree": 10,
+        "controls_called": 28,
+        "controls_agree": 13,
+        "difference": 0.161,
+        "p_one_sided": 0.23851079,
+        "difference_upper_95": 0.413
+      },
+      "chr20": {
+        "pairs": 43,
+        "units_called": 18,
+        "units_agree": 8,
+        "controls_called": 25,
+        "controls_agree": 11,
+        "difference": 0.004,
+        "p_one_sided": 0.61014585,
+        "difference_upper_95": 0.257
+      },
+      "chr6": {
+        "pairs": 47,
+        "units_called": 16,
+        "units_agree": 11,
+        "controls_called": 23,
+        "controls_agree": 17,
+        "difference": -0.052,
+        "p_one_sided": 0.76335038,
+        "difference_upper_95": 0.191
+      },
+      "chr7": {
+        "pairs": 44,
+        "units_called": 13,
+        "units_agree": 6,
+        "controls_called": 22,
+        "controls_agree": 8,
+        "difference": 0.098,
+        "p_one_sided": 0.41313214,
+        "difference_upper_95": 0.381
+      },
+      "chr8": {
+        "pairs": 54,
+        "units_called": 5,
+        "units_agree": 3,
+        "controls_called": 18,
+        "controls_agree": 12,
+        "difference": -0.067,
+        "p_one_sided": 0.7923861,
+        "difference_upper_95": 0.337
+      },
+      "chr9": {
+        "pairs": 51,
+        "units_called": 15,
+        "units_agree": 8,
+        "controls_called": 22,
+        "controls_agree": 8,
+        "difference": 0.17,
+        "p_one_sided": 0.24657118,
+        "difference_upper_95": 0.441
+      },
+      "chrX": {
+        "pairs": 52,
+        "units_called": 14,
+        "units_agree": 9,
+        "controls_called": 14,
+        "controls_agree": 9,
+        "difference": 0.0,
+        "p_one_sided": 0.65270786,
+        "difference_upper_95": 0.298
+      }
+    },
+    "verdict": "futility"
+  },
+  "no_call_grid": {
+    "E3R_eqtl_linked_replication": [
+      {
+        "no_call": 0.0,
+        "pairs": 775,
+        "units_called": 421,
+        "units_agree": 218,
+        "controls_called": 770,
+        "controls_agree": 382,
+        "difference": 0.022,
+        "p_one_sided": 0.25600455,
+        "difference_upper_95": 0.072
+      },
+      {
+        "no_call": 0.001,
+        "pairs": 775,
+        "units_called": 216,
+        "units_agree": 107,
+        "controls_called": 339,
+        "controls_agree": 178,
+        "difference": -0.03,
+        "p_one_sided": 0.77926637,
+        "difference_upper_95": 0.042
+      },
+      {
+        "no_call": 0.01,
+        "pairs": 775,
+        "units_called": 10,
+        "units_agree": 6,
+        "controls_called": 3,
+        "controls_agree": 2,
+        "difference": -0.067,
+        "p_one_sided": 0.8041958,
+        "difference_upper_95": 0.448
+      }
+    ]
+  },
+  "leave_one_out": {
+    "E3R_eqtl_linked_replication": {
+      "by_chromosome_removed": {
+        "chr10": {
+          "pairs": 726,
+          "units_called": 200,
+          "units_agree": 101,
+          "controls_called": 318,
+          "controls_agree": 166,
+          "difference": -0.017,
+          "p_one_sided": 0.67995871,
+          "difference_upper_95": 0.057
+        },
+        "chr11": {
+          "pairs": 727,
+          "units_called": 208,
+          "units_agree": 102,
+          "controls_called": 327,
+          "controls_agree": 173,
+          "difference": -0.039,
+          "p_one_sided": 0.83173372,
+          "difference_upper_95": 0.034
+        },
+        "chr12": {
+          "pairs": 724,
+          "units_called": 202,
+          "units_agree": 101,
+          "controls_called": 312,
+          "controls_agree": 166,
+          "difference": -0.032,
+          "p_one_sided": 0.78836627,
+          "difference_upper_95": 0.042
+        },
+        "chr13": {
+          "pairs": 722,
+          "units_called": 200,
+          "units_agree": 100,
+          "controls_called": 313,
+          "controls_agree": 165,
+          "difference": -0.027,
+          "p_one_sided": 0.75519306,
+          "difference_upper_95": 0.047
+        },
+        "chr14": {
+          "pairs": 723,
+          "units_called": 196,
+          "units_agree": 100,
+          "controls_called": 302,
+          "controls_agree": 156,
+          "difference": -0.006,
+          "p_one_sided": 0.59112963,
+          "difference_upper_95": 0.069
+        },
+        "chr15": {
+          "pairs": 731,
+          "units_called": 206,
+          "units_agree": 103,
+          "controls_called": 331,
+          "controls_agree": 172,
+          "difference": -0.02,
+          "p_one_sided": 0.70246713,
+          "difference_upper_95": 0.053
+        },
+        "chr16": {
+          "pairs": 728,
+          "units_called": 204,
+          "units_agree": 101,
+          "controls_called": 328,
+          "controls_agree": 174,
+          "difference": -0.035,
+          "p_one_sided": 0.81150933,
+          "difference_upper_95": 0.038
+        },
+        "chr17": {
+          "pairs": 729,
+          "units_called": 206,
+          "units_agree": 103,
+          "controls_called": 321,
+          "controls_agree": 166,
+          "difference": -0.017,
+          "p_one_sided": 0.68198852,
+          "difference_upper_95": 0.056
+        },
+        "chr18": {
+          "pairs": 727,
+          "units_called": 203,
+          "units_agree": 100,
+          "controls_called": 312,
+          "controls_agree": 164,
+          "difference": -0.033,
+          "p_one_sided": 0.79475384,
+          "difference_upper_95": 0.041
+        },
+        "chr19": {
+          "pairs": 729,
+          "units_called": 200,
+          "units_agree": 97,
+          "controls_called": 311,
+          "controls_agree": 165,
+          "difference": -0.046,
+          "p_one_sided": 0.86346324,
+          "difference_upper_95": 0.029
+        },
+        "chr20": {
+          "pairs": 732,
+          "units_called": 198,
+          "units_agree": 99,
+          "controls_called": 314,
+          "controls_agree": 167,
+          "difference": -0.032,
+          "p_one_sided": 0.78619057,
+          "difference_upper_95": 0.043
+        },
+        "chr6": {
+          "pairs": 728,
+          "units_called": 200,
+          "units_agree": 96,
+          "controls_called": 316,
+          "controls_agree": 161,
+          "difference": -0.029,
+          "p_one_sided": 0.77129033,
+          "difference_upper_95": 0.045
+        },
+        "chr7": {
+          "pairs": 731,
+          "units_called": 203,
+          "units_agree": 101,
+          "controls_called": 317,
+          "controls_agree": 170,
+          "difference": -0.039,
+          "p_one_sided": 0.82962502,
+          "difference_upper_95": 0.035
+        },
+        "chr8": {
+          "pairs": 721,
+          "units_called": 211,
+          "units_agree": 104,
+          "controls_called": 321,
+          "controls_agree": 166,
+          "difference": -0.024,
+          "p_one_sided": 0.73753518,
+          "difference_upper_95": 0.049
+        },
+        "chr9": {
+          "pairs": 724,
+          "units_called": 201,
+          "units_agree": 99,
+          "controls_called": 317,
+          "controls_agree": 170,
+          "difference": -0.044,
+          "p_one_sided": 0.85569521,
+          "difference_upper_95": 0.03
+        },
+        "chrX": {
+          "pairs": 723,
+          "units_called": 202,
+          "units_agree": 98,
+          "controls_called": 325,
+          "controls_agree": 169,
+          "difference": -0.035,
+          "p_one_sided": 0.80719944,
+          "difference_upper_95": 0.039
+        }
+      },
+      "lowest": {
+        "chromosome_removed": "chr19",
+        "difference": -0.046
+      },
+      "holds_above_0.05": false
+    }
+  },
+  "against_the_discovery_run": {
+    "E2_eqtl": "units 38 of 56, controls 30 of 73, +0.268 at p 0.0021 on chr21 and chr22",
+    "E3_eqtl_linked": "units 239 of 450, controls 351 of 749, +0.062 at p 0.021 on chr21 and chr22"
+  },
+  "pre_registration": {
+    "written": "2026-09-15, before any model request of the replication and before a pair of it was scored; the human panel had just reached 19 chromosomes and the shortlist 123,667 units with a measured value",
+    "why": "E2 is the strongest result this lane has (+0.268, units 38 of 56 against controls 30 of 73, p 0.0021) and E3 showed its agreement follows causality rather than the neighbourhood. Both rest on 161 pairs from chr21 and chr22, the two chromosomes that happened to be scored first, and chr22 carried the difference while chr21 did not reach significance alone. A claim that holds on those two and nowhere else has caught this project four times already, so the question is asked again where the answer can be different",
+    "population": "storage units on the catalogued chromosomes other than chr21 and chr22, which are the discovery set and are excluded from the replication claim entirely. E2R_eqtl_replication: the unit's recurring value is a variant DAP-G fine-maps (PIP at or above 0.5) for a gene with GTEx p at or below 1e-5 and one sign across tissues. E3R_eqtl_linked_replication: the other significant eQTL values, which are usually linked to a cause rather than causal",
+    "unchanged": "everything the first run fixed stays fixed: the read-out (the gene GTEx names, the track matching the most significant tissue else the mean over the gene's tracks), the measured sign (GTEx slope for the alternative allele), the no-call at 0.001 with the 0, 0.001 and 0.01 grid, two matched controls per unit from the same chromosome within 250 kb with the same GC stratum and, where the neighbourhood allows, the same timing tertile and value count, panel r-squared under 0.2, no measured value of their own, borrowing the unit's gene, tissue and measured sign, each unit counted once and each control once",
+    "order": "round robin over chromosomes, strongest evidence first inside each: the first requests answer whether the effect appears on chromosomes the original never saw, not which chromosome has the most units. A unit's two pairs stay together, so a stop leaves no half-answered unit. E2R is spent before E3R",
+    "alpha_spending": {
+      "look_1_pairs": 150,
+      "alpha_1": 0.0005,
+      "look_2_pairs": 400,
+      "alpha_2": 0.002
+    },
+    "final_alpha": 0.01,
+    "stopping": "unchanged: at 150 and 400 pairs an endpoint stops for success at its alpha or for futility if the upper 95% bound of the difference is below 0.05; otherwise the run ends at the budget and is read at 0.01. E3R never stops the run and is read against E2R by the hold-out's own rule (compare_endpoints)",
+    "replicates": "the pooled difference on the replication chromosomes is at or above 0.10 with one-sided Fisher p at or below the alpha of the look, AND no single chromosome's removal takes the pooled difference below 0.05 (leave_one_out). The second half is the point: it is what would have caught a claim carried by one chromosome, and E2 itself would have passed it only because chr21 and chr22 both leaned the same way",
+    "fails_to_replicate": "the pooled difference is at or below 0 with the budget spent, or the run stops for futility. Then E2's +0.268 belongs to chr21 and chr22 or to 161 pairs, the executor claim loses the result it rested on, and E3's dilution becomes a statement about two chromosomes",
+    "resolves_nothing": "a pooled difference between 0 and 0.10, or p above the alpha with the upper 95% bound above 0.05, or a pooled difference that only clears 0.10 while one chromosome carries it (leave-one-out below 0.05). The last case is reported as 'not replicated as a genome-wide claim', never as a success",
+    "dilution_again": "E3R is the hold-out asked at power: if a unit executes its value, E3R's difference should again be clearly smaller than E2R's, with the gap's one-sided 95% lower bound above zero. If the two match this time, the reading is the neighbourhood and not causality, whatever the first run found",
+    "what_a_success_would_still_not_mean": "this endpoint is one model agreeing with fine-mapping. The widened E1, the endpoint whose outcome is an external measurement, came back at +0.014 with an upper bound of 0.073 and resolved nothing, and the benchmark lane has since shown that a model producing a direction is evidence of having been scored rather than of an element doing anything. The only part of this work that does not depend on AlphaGenome is the measured-against-measured reading: MPRA direction against GTEx slope, 0.670 where DAP-G fine-maps the variant and 0.518 over all of them, with no model in between. A replication here strengthens the pattern; it does not move the evidence outside the model",
+    "caveat": "the same ENCODE caveat as E2: the model learned from RNA-seq tracks and GTEx expression is the same kind of measurement. Five chromosomes (chr1 to chr5) have no panel yet, so 'genome-wide' means 17 replication chromosomes, and chrY contributes almost nothing"
+  },
+  "seconds": 1096.7
+}

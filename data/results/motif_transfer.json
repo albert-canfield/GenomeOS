@@ -1,0 +1,1568 @@
+{
+  "result": "motif_transfer",
+  "date": "2026-09-17",
+  "preregistered": {
+    "vista": "Strict family-collapsed JASPAR site counts per kb, the feature set \u00a717 found predictive on lentiMPRA, are tested on VISTA's in-vivo transgenic assay. Decided on the held-out chromosomes (VISTA_HELD_OUT), by AUROC with 95% bootstrap intervals over elements: (1) AUROC(counts) above 0.5 with its interval above 0.5; (2) AUROC(counts) - AUROC(composition) above 0 with its interval above 0; (3) AUROC(conservation + counts) - AUROC(conservation) above 0 with its interval above 0 -- this is the transfer claim, that counts add over conservation on an in-vivo assay, and it is the central one because VISTA elements were chosen for conservation; (4) the null: AUROC(counts) - AUROC(shuffled counts) above 0 with its interval above 0, without which any count signal is composition under another name. The claim holds only if (1), (3) and (4) all hold. VISTA negatives are not matched to the positives on length, GC or constraint, so (1) is not an effect size and the covariates of both classes are reported beside it. Tissue group, reported separately and not part of the claim: among held-out positives a one-vs-rest count model ranks the elements of at least one tissue group above the other positives, interval above 0.5, against a label-permutation null.",
+    "real_unknown": "Reading 2 is decided on MEASURED activity, not on the deletion sweep's own call, because that call is an AlphaGenome output and scoring a motif model against it would be two readings of one model. Coverage is reported first and nothing is invented for the blocks that have none: of the 882 real-unknown blocks, how many hold at least one ENCODE4 lentiMPRA element, and how many elements. (1) PRIMARY, measured level: lentiMPRA log2(RNA/DNA) of the elements inside real-unknown blocks against the elements inside neutral-tier blocks, per cell line, as an AUROC with a rank-sum z. The deletion sweep puts the real unknown BELOW the neutral tier per element (0.248 against 0.293, z -5.7); if the measured reporter puts it above, the two readings contradict each other and the contradiction is the finding, not split and not tuned away. (2) PRIMARY, measured transfer: Spearman of \u00a717's (b) count model with measured activity on those same in-block elements against the (a) composition model, with every element inside a real-unknown or neutral-tier block held out of the fit BY LOCATION. The claim is that rho(b) - rho(a) is above 0 by its 95% bootstrap interval inside the real unknown, as it is +0.234 over the whole library. (3) SECONDARY, predicted level: the same count model's mean prediction over every 200 bp window of all 882 blocks against 882 length-matched neutral-tier blocks, each beside a dinucleotide-shuffled null of its own windows. This is a prediction and is reported as one. (4) SECONDARY and NOT VALIDATION: the AUROC of that predicted score against whether the sweep's AlphaGenome deletion moved a gene in the block. Both sides are model outputs, so agreement here is agreement between two model readings and is never read as either confirming the other."
+  },
+  "site_threshold": 0.95,
+  "evidence": {
+    "vista": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates",
+    "conservation": "experimental: Zoonomia phyloP over 241 placental mammals, per element mean and fraction of bases at or above 2.27",
+    "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+    "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+    "sweep_lead": "predicted: an AlphaGenome deletion moved a gene by at least 0.1 log2; the same model names a target at 87% of matched random windows, so a lead is a lead and not a measurement",
+    "comparison": "inferred: ridge fitted on training chromosomes or on locations held out, AUROC and Spearman on the held-out ones, bootstrap over elements or blocks"
+  },
+  "vista": {
+    "preregistered": "Strict family-collapsed JASPAR site counts per kb, the feature set \u00a717 found predictive on lentiMPRA, are tested on VISTA's in-vivo transgenic assay. Decided on the held-out chromosomes (VISTA_HELD_OUT), by AUROC with 95% bootstrap intervals over elements: (1) AUROC(counts) above 0.5 with its interval above 0.5; (2) AUROC(counts) - AUROC(composition) above 0 with its interval above 0; (3) AUROC(conservation + counts) - AUROC(conservation) above 0 with its interval above 0 -- this is the transfer claim, that counts add over conservation on an in-vivo assay, and it is the central one because VISTA elements were chosen for conservation; (4) the null: AUROC(counts) - AUROC(shuffled counts) above 0 with its interval above 0, without which any count signal is composition under another name. The claim holds only if (1), (3) and (4) all hold. VISTA negatives are not matched to the positives on length, GC or constraint, so (1) is not an effect size and the covariates of both classes are reported beside it. Tissue group, reported separately and not part of the claim: among held-out positives a one-vs-rest count model ranks the elements of at least one tissue group above the other positives, interval above 0.5, against a label-permutation null.",
+    "site_threshold": 0.95,
+    "family_units": [
+      "RXR-related receptors (NR2)",
+      "Paired-related HD factors",
+      "NK",
+      "TALE-type homeo domain factors",
+      "HOX",
+      "FOX",
+      "HIC2",
+      "ZNF70",
+      "NFAT-related factors",
+      "Tal-related",
+      "TALE-type HD",
+      "SOX-related factors",
+      "C4-GATA-related",
+      "Nuclear factor 1",
+      "Thyroid hormone receptor-related factors (NR1)",
+      "NACC2",
+      "DMRT factors",
+      "HD-LIM",
+      "ZNF536",
+      "KLF5",
+      "SP5",
+      "PAS domain factors",
+      "ZNF354C",
+      "STAT factors",
+      "ZBTB48",
+      "IKZF2",
+      "HD-ZF",
+      "MYT",
+      "ZNF827",
+      "bHLH-ZIP",
+      "E2A",
+      "VEZF1",
+      "POU domain factors",
+      "ARID-related",
+      "TEF-1-related factors",
+      "ZNF66",
+      "HD-ZF factors",
+      "ZNF800",
+      "CSL-related factors",
+      "Fos-related"
+    ],
+    "counts_per_kb": true,
+    "training_chromosomes": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr6",
+      "chr7",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr19",
+      "chr20"
+    ],
+    "held_out_chromosomes": [
+      "chr4",
+      "chr5",
+      "chr8",
+      "chr9",
+      "chr13",
+      "chr18",
+      "chr21",
+      "chr22",
+      "chrX"
+    ],
+    "training_elements": 1580,
+    "held_out_elements": 643,
+    "coverage": {
+      "chromosomes_with_a_vista_table": 23,
+      "chromosomes_scanned": 23,
+      "elements_in_table": 2223,
+      "without_sequence_or_sites": 0,
+      "without_conservation": 2,
+      "status_not_positive_or_negative": 0,
+      "used": 2223
+    },
+    "conservation_fallback": {
+      "phylop_mean": 1.9563,
+      "constrained_fraction": 0.3445
+    },
+    "models": {
+      "length": [
+        "intercept",
+        "length"
+      ],
+      "composition": [
+        "intercept",
+        "length",
+        "composition"
+      ],
+      "conservation": [
+        "intercept",
+        "length",
+        "conservation"
+      ],
+      "counts": [
+        "intercept",
+        "length",
+        "composition",
+        "counts"
+      ],
+      "both": [
+        "intercept",
+        "length",
+        "conservation",
+        "composition",
+        "counts"
+      ],
+      "counts_shuffled": [
+        "intercept",
+        "length",
+        "composition",
+        "counts_shuffled"
+      ]
+    },
+    "columns": {
+      "length": 2,
+      "composition": 5,
+      "conservation": 4,
+      "counts": 47,
+      "both": 49,
+      "counts_shuffled": 47
+    },
+    "positives": {
+      "train": 782,
+      "held_out": 351
+    },
+    "covariates_all": {
+      "positive": {
+        "elements": 1133,
+        "median_length": 1705.0,
+        "median_gc": 0.4167,
+        "median_cpg_oe": 0.2381,
+        "median_phylop_mean": 1.815,
+        "median_constrained_fraction": 0.335,
+        "median_sites_per_kb": 182.202
+      },
+      "negative": {
+        "elements": 1090,
+        "median_length": 1440.0,
+        "median_gc": 0.4029,
+        "median_cpg_oe": 0.2292,
+        "median_phylop_mean": 1.707,
+        "median_constrained_fraction": 0.318,
+        "median_sites_per_kb": 181.738
+      },
+      "positives_above_negatives_auroc": {
+        "length": 0.5815,
+        "gc": 0.5475,
+        "cpg_oe": 0.5321,
+        "sites_per_kb": 0.5174
+      },
+      "reading": "VISTA negatives are sequences that failed to drive expression in the assay, not a background matched to the positives on any of these, so a separation between the classes is not an effect size; the column that matters is whether counts add over conservation"
+    },
+    "covariates_held_out": {
+      "positive": {
+        "elements": 351,
+        "median_length": 1688.0,
+        "median_gc": 0.3989,
+        "median_cpg_oe": 0.2267,
+        "median_phylop_mean": 2.075,
+        "median_constrained_fraction": 0.382,
+        "median_sites_per_kb": 182.673
+      },
+      "negative": {
+        "elements": 292,
+        "median_length": 1473.0,
+        "median_gc": 0.3878,
+        "median_cpg_oe": 0.2295,
+        "median_phylop_mean": 1.625,
+        "median_constrained_fraction": 0.301,
+        "median_sites_per_kb": 182.724
+      },
+      "positives_above_negatives_auroc": {
+        "length": 0.5657,
+        "gc": 0.5555,
+        "cpg_oe": 0.5087,
+        "phylop_mean": 0.5498,
+        "constrained_fraction": 0.5532,
+        "sites_per_kb": 0.5173
+      },
+      "reading": "VISTA negatives are sequences that failed to drive expression in the assay, not a background matched to the positives on any of these, so a separation between the classes is not an effect size; the column that matters is whether counts add over conservation"
+    },
+    "evidence": {
+      "vista": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates",
+      "conservation": "experimental: Zoonomia phyloP over 241 placental mammals, per element mean and fraction of bases at or above 2.27",
+      "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+      "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+      "sweep_lead": "predicted: an AlphaGenome deletion moved a gene by at least 0.1 log2; the same model names a target at 87% of matched random windows, so a lead is a lead and not a measurement",
+      "comparison": "inferred: ridge fitted on training chromosomes or on locations held out, AUROC and Spearman on the held-out ones, bootstrap over elements or blocks"
+    },
+    "inner_cross_validation": {
+      "length": {
+        "lambda": 1.0,
+        "inner_auroc": 0.5888,
+        "by_lambda": {
+          "1.0": 0.5888,
+          "10.0": 0.5888,
+          "100.0": 0.5888,
+          "1000.0": 0.5888,
+          "10000.0": 0.5888
+        }
+      },
+      "composition": {
+        "lambda": 10.0,
+        "inner_auroc": 0.6016,
+        "by_lambda": {
+          "1.0": 0.5995,
+          "10.0": 0.6016,
+          "100.0": 0.6013,
+          "1000.0": 0.5966,
+          "10000.0": 0.5881
+        }
+      },
+      "conservation": {
+        "lambda": 100.0,
+        "inner_auroc": 0.6205,
+        "by_lambda": {
+          "1.0": 0.6171,
+          "10.0": 0.6194,
+          "100.0": 0.6205,
+          "1000.0": 0.6202,
+          "10000.0": 0.6191
+        }
+      },
+      "counts": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.6149,
+        "by_lambda": {
+          "1.0": 0.6077,
+          "10.0": 0.6066,
+          "100.0": 0.6091,
+          "1000.0": 0.6149,
+          "10000.0": 0.5978
+        }
+      },
+      "both": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.6262,
+        "by_lambda": {
+          "1.0": 0.6221,
+          "10.0": 0.6206,
+          "100.0": 0.6228,
+          "1000.0": 0.6262,
+          "10000.0": 0.6088
+        }
+      },
+      "counts_shuffled": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.576,
+        "by_lambda": {
+          "1.0": 0.5732,
+          "10.0": 0.5698,
+          "100.0": 0.57,
+          "1000.0": 0.576,
+          "10000.0": 0.5715
+        }
+      }
+    },
+    "held_out": {
+      "length": {
+        "auroc": 0.5657,
+        "ci95": [
+          0.5215,
+          0.6076
+        ],
+        "above_chance": 0.996,
+        "auprc": 0.5699,
+        "auprc_ci95": [
+          0.5173,
+          0.629
+        ]
+      },
+      "composition": {
+        "auroc": 0.561,
+        "ci95": [
+          0.5163,
+          0.6061
+        ],
+        "above_chance": 0.994,
+        "auprc": 0.589,
+        "auprc_ci95": [
+          0.5376,
+          0.6518
+        ]
+      },
+      "conservation": {
+        "auroc": 0.5955,
+        "ci95": [
+          0.5538,
+          0.638
+        ],
+        "above_chance": 1.0,
+        "auprc": 0.6264,
+        "auprc_ci95": [
+          0.5722,
+          0.6829
+        ]
+      },
+      "counts": {
+        "auroc": 0.6296,
+        "ci95": [
+          0.5843,
+          0.6711
+        ],
+        "above_chance": 1.0,
+        "auprc": 0.6618,
+        "auprc_ci95": [
+          0.6096,
+          0.7168
+        ]
+      },
+      "both": {
+        "auroc": 0.6554,
+        "ci95": [
+          0.6119,
+          0.6986
+        ],
+        "above_chance": 1.0,
+        "auprc": 0.6886,
+        "auprc_ci95": [
+          0.637,
+          0.7428
+        ]
+      },
+      "counts_shuffled": {
+        "auroc": 0.5623,
+        "ci95": [
+          0.5156,
+          0.6055
+        ],
+        "above_chance": 0.995,
+        "auprc": 0.5897,
+        "auprc_ci95": [
+          0.5333,
+          0.6507
+        ]
+      },
+      "composition - length": {
+        "auroc": -0.0047,
+        "ci95": [
+          -0.032,
+          0.025
+        ],
+        "above_chance": 0.393
+      },
+      "conservation - length": {
+        "auroc": 0.0299,
+        "ci95": [
+          -0.0041,
+          0.066
+        ],
+        "above_chance": 0.954
+      },
+      "counts - composition": {
+        "auroc": 0.0687,
+        "ci95": [
+          0.0334,
+          0.1036
+        ],
+        "above_chance": 1.0
+      },
+      "counts - counts_shuffled": {
+        "auroc": 0.0673,
+        "ci95": [
+          0.0293,
+          0.1111
+        ],
+        "above_chance": 1.0
+      },
+      "both - conservation": {
+        "auroc": 0.0598,
+        "ci95": [
+          0.0216,
+          0.0994
+        ],
+        "above_chance": 0.999
+      },
+      "both - counts": {
+        "auroc": 0.0257,
+        "ci95": [
+          0.0079,
+          0.0443
+        ],
+        "above_chance": 0.999
+      }
+    },
+    "permutation_null": {
+      "counts": {
+        "draws": 1000,
+        "mean": 0.4985,
+        "ci95": [
+          0.4542,
+          0.5454
+        ],
+        "share_at_or_above_observed": 0.0
+      },
+      "both": {
+        "draws": 1000,
+        "mean": 0.4984,
+        "ci95": [
+          0.4521,
+          0.544
+        ],
+        "share_at_or_above_observed": 0.0
+      }
+    },
+    "tissue": {
+      "feature_sets": {
+        "length": [
+          "intercept",
+          "length"
+        ],
+        "composition": [
+          "intercept",
+          "length",
+          "composition"
+        ],
+        "counts": [
+          "intercept",
+          "length",
+          "composition",
+          "counts"
+        ],
+        "both": [
+          "intercept",
+          "length",
+          "conservation",
+          "composition",
+          "counts"
+        ]
+      },
+      "positives_train": 782,
+      "positives_held_out": 351,
+      "positives_without_a_mapped_group": 60,
+      "minimum_positives": {
+        "train": 20,
+        "held_out": 8
+      },
+      "by_group": {
+        "neural": {
+          "positives_train": 512,
+          "positives_held_out": 258,
+          "lambda_length": 1.0,
+          "inner_auroc_length": 0.6297,
+          "lambda_composition": 10.0,
+          "inner_auroc_composition": 0.6683,
+          "lambda_counts": 1000.0,
+          "inner_auroc_counts": 0.6856,
+          "lambda_both": 1000.0,
+          "inner_auroc_both": 0.7011,
+          "by_feature_set": {
+            "length": {
+              "auroc": 0.6193,
+              "ci95": [
+                0.5465,
+                0.6872
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.7852,
+              "auprc_ci95": [
+                0.7314,
+                0.8489
+              ]
+            },
+            "composition": {
+              "auroc": 0.7442,
+              "ci95": [
+                0.6843,
+                0.7964
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.8854,
+              "auprc_ci95": [
+                0.8445,
+                0.9201
+              ]
+            },
+            "counts": {
+              "auroc": 0.7634,
+              "ci95": [
+                0.7015,
+                0.8147
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.8863,
+              "auprc_ci95": [
+                0.8399,
+                0.9245
+              ]
+            },
+            "both": {
+              "auroc": 0.7659,
+              "ci95": [
+                0.7066,
+                0.8205
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.885,
+              "auprc_ci95": [
+                0.8378,
+                0.9254
+              ]
+            },
+            "counts - composition": {
+              "auroc": 0.0192,
+              "ci95": [
+                -0.0169,
+                0.0561
+              ],
+              "above_chance": 0.841
+            }
+          },
+          "auroc": 0.7634,
+          "ci95": [
+            0.7015,
+            0.8147
+          ],
+          "above_chance": 1.0,
+          "auprc": 0.8863,
+          "auprc_ci95": [
+            0.8399,
+            0.9245
+          ],
+          "permutation_null": {
+            "draws": 1000,
+            "mean": 0.4984,
+            "ci95": [
+              0.4228,
+              0.569
+            ],
+            "share_at_or_above_observed": 0.0
+          }
+        },
+        "heart": {
+          "positives_train": 131,
+          "positives_held_out": 43,
+          "lambda_length": 1.0,
+          "inner_auroc_length": 0.7114,
+          "lambda_composition": 1000.0,
+          "inner_auroc_composition": 0.7708,
+          "lambda_counts": 100.0,
+          "inner_auroc_counts": 0.7925,
+          "lambda_both": 1000.0,
+          "inner_auroc_both": 0.7984,
+          "by_feature_set": {
+            "length": {
+              "auroc": 0.7164,
+              "ci95": [
+                0.616,
+                0.8143
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.3386,
+              "auprc_ci95": [
+                0.2299,
+                0.4912
+              ]
+            },
+            "composition": {
+              "auroc": 0.8394,
+              "ci95": [
+                0.7767,
+                0.8972
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.4584,
+              "auprc_ci95": [
+                0.3258,
+                0.6038
+              ]
+            },
+            "counts": {
+              "auroc": 0.8457,
+              "ci95": [
+                0.7846,
+                0.8926
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.4532,
+              "auprc_ci95": [
+                0.3131,
+                0.603
+              ]
+            },
+            "both": {
+              "auroc": 0.851,
+              "ci95": [
+                0.7886,
+                0.9017
+              ],
+              "above_chance": 1.0,
+              "auprc": 0.4753,
+              "auprc_ci95": [
+                0.3385,
+                0.6348
+              ]
+            },
+            "counts - composition": {
+              "auroc": 0.0063,
+              "ci95": [
+                -0.0324,
+                0.0456
+              ],
+              "above_chance": 0.626
+            }
+          },
+          "auroc": 0.8457,
+          "ci95": [
+            0.7846,
+            0.8926
+          ],
+          "above_chance": 1.0,
+          "auprc": 0.4532,
+          "auprc_ci95": [
+            0.3131,
+            0.603
+          ],
+          "permutation_null": {
+            "draws": 1000,
+            "mean": 0.4983,
+            "ci95": [
+              0.4054,
+              0.5909
+            ],
+            "share_at_or_above_observed": 0.0
+          }
+        },
+        "limb and mesenchyme": {
+          "positives_train": 220,
+          "positives_held_out": 98,
+          "lambda_length": 1.0,
+          "inner_auroc_length": 0.5483,
+          "lambda_composition": 10000.0,
+          "inner_auroc_composition": 0.5596,
+          "lambda_counts": 10000.0,
+          "inner_auroc_counts": 0.5715,
+          "lambda_both": 10000.0,
+          "inner_auroc_both": 0.584,
+          "by_feature_set": {
+            "length": {
+              "auroc": 0.5749,
+              "ci95": [
+                0.511,
+                0.6406
+              ],
+              "above_chance": 0.988,
+              "auprc": 0.3401,
+              "auprc_ci95": [
+                0.277,
+                0.4427
+              ]
+            },
+            "composition": {
+              "auroc": 0.5445,
+              "ci95": [
+                0.4754,
+                0.6121
+              ],
+              "above_chance": 0.906,
+              "auprc": 0.3441,
+              "auprc_ci95": [
+                0.2729,
+                0.442
+              ]
+            },
+            "counts": {
+              "auroc": 0.5836,
+              "ci95": [
+                0.5096,
+                0.6524
+              ],
+              "above_chance": 0.988,
+              "auprc": 0.3863,
+              "auprc_ci95": [
+                0.3054,
+                0.4971
+              ]
+            },
+            "both": {
+              "auroc": 0.5876,
+              "ci95": [
+                0.514,
+                0.6564
+              ],
+              "above_chance": 0.991,
+              "auprc": 0.3882,
+              "auprc_ci95": [
+                0.3046,
+                0.5023
+              ]
+            },
+            "counts - composition": {
+              "auroc": 0.0391,
+              "ci95": [
+                -0.01,
+                0.0892
+              ],
+              "above_chance": 0.94
+            }
+          },
+          "auroc": 0.5836,
+          "ci95": [
+            0.5096,
+            0.6524
+          ],
+          "above_chance": 0.988,
+          "auprc": 0.3863,
+          "auprc_ci95": [
+            0.3054,
+            0.4971
+          ],
+          "permutation_null": {
+            "draws": 1000,
+            "mean": 0.4992,
+            "ci95": [
+              0.4381,
+              0.5681
+            ],
+            "share_at_or_above_observed": 0.008
+          }
+        },
+        "liver": {
+          "positives_train": 5,
+          "positives_held_out": 1,
+          "skipped": "too few positives of this group"
+        },
+        "pancreas": {
+          "positives_train": 7,
+          "positives_held_out": 5,
+          "skipped": "too few positives of this group"
+        }
+      }
+    },
+    "verdict": {
+      "counts_separate_positives_from_negatives": true,
+      "counts_add_over_composition": true,
+      "counts_add_over_conservation": true,
+      "counts_beat_their_shuffled_control": true,
+      "preregistered_claim_holds": true,
+      "a_tissue_group_is_predicted": true,
+      "counts_add_over_composition_for_the_tissue_group": false,
+      "tissue_statement": "the tissue group is predictable from sequence, but length and composition alone get there: motif counts add nothing detectable to which tissue a positive drives",
+      "statement": "strict family-collapsed motif counts separate VISTA positives from negatives in vivo and add over conservation: \u00a717's positive transfers to a different assay"
+    }
+  },
+  "mpra_model": {
+    "family_units": [
+      "RXR-related receptors (NR2)",
+      "Paired-related HD factors",
+      "NK",
+      "TALE-type homeo domain factors",
+      "HOX",
+      "FOX",
+      "HIC2",
+      "ZNF70",
+      "NFAT-related factors",
+      "Tal-related",
+      "TALE-type HD",
+      "SOX-related factors",
+      "C4-GATA-related",
+      "Nuclear factor 1",
+      "Thyroid hormone receptor-related factors (NR1)",
+      "NACC2",
+      "DMRT factors",
+      "HD-LIM",
+      "ZNF536",
+      "KLF5",
+      "SP5",
+      "PAS domain factors",
+      "ZNF354C",
+      "STAT factors",
+      "ZBTB48",
+      "IKZF2",
+      "HD-ZF",
+      "MYT",
+      "ZNF827",
+      "bHLH-ZIP",
+      "E2A",
+      "VEZF1",
+      "POU domain factors",
+      "ARID-related",
+      "TEF-1-related factors",
+      "ZNF66",
+      "HD-ZF factors",
+      "ZNF800",
+      "CSL-related factors",
+      "Fos-related"
+    ],
+    "columns": {
+      "a": 4,
+      "b": 46
+    },
+    "elements_available": 51374,
+    "elements_excluded_by_location": 614,
+    "training_elements": 50760,
+    "training_chromosomes": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX",
+      "chrY",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr20",
+      "chr21",
+      "chr22"
+    ],
+    "inner_cross_validation": {
+      "a": {
+        "K562": {
+          "lambda": 1.0,
+          "inner_spearman": 0.2064,
+          "by_lambda": {
+            "1.0": 0.2064,
+            "10.0": 0.206,
+            "100.0": 0.2017,
+            "1000.0": 0.1924,
+            "10000.0": 0.189
+          }
+        },
+        "HepG2": {
+          "lambda": 1.0,
+          "inner_spearman": 0.1836,
+          "by_lambda": {
+            "1.0": 0.1836,
+            "10.0": 0.1832,
+            "100.0": 0.18,
+            "1000.0": 0.1786,
+            "10000.0": 0.179
+          }
+        },
+        "WTC11": {
+          "lambda": 10000.0,
+          "inner_spearman": 0.3714,
+          "by_lambda": {
+            "1.0": 0.3714,
+            "10.0": 0.3714,
+            "100.0": 0.3713,
+            "1000.0": 0.3712,
+            "10000.0": 0.3714
+          }
+        }
+      },
+      "b": {
+        "K562": {
+          "lambda": 1.0,
+          "inner_spearman": 0.4226,
+          "by_lambda": {
+            "1.0": 0.4226,
+            "10.0": 0.4223,
+            "100.0": 0.4182,
+            "1000.0": 0.4064,
+            "10000.0": 0.4003
+          }
+        },
+        "HepG2": {
+          "lambda": 1.0,
+          "inner_spearman": 0.4071,
+          "by_lambda": {
+            "1.0": 0.4071,
+            "10.0": 0.4069,
+            "100.0": 0.404,
+            "1000.0": 0.3945,
+            "10000.0": 0.3917
+          }
+        },
+        "WTC11": {
+          "lambda": 1.0,
+          "inner_spearman": 0.4243,
+          "by_lambda": {
+            "1.0": 0.4243,
+            "10.0": 0.4239,
+            "100.0": 0.4209,
+            "1000.0": 0.4147,
+            "10000.0": 0.415
+          }
+        }
+      }
+    }
+  },
+  "real_unknown": {
+    "preregistered": "Reading 2 is decided on MEASURED activity, not on the deletion sweep's own call, because that call is an AlphaGenome output and scoring a motif model against it would be two readings of one model. Coverage is reported first and nothing is invented for the blocks that have none: of the 882 real-unknown blocks, how many hold at least one ENCODE4 lentiMPRA element, and how many elements. (1) PRIMARY, measured level: lentiMPRA log2(RNA/DNA) of the elements inside real-unknown blocks against the elements inside neutral-tier blocks, per cell line, as an AUROC with a rank-sum z. The deletion sweep puts the real unknown BELOW the neutral tier per element (0.248 against 0.293, z -5.7); if the measured reporter puts it above, the two readings contradict each other and the contradiction is the finding, not split and not tuned away. (2) PRIMARY, measured transfer: Spearman of \u00a717's (b) count model with measured activity on those same in-block elements against the (a) composition model, with every element inside a real-unknown or neutral-tier block held out of the fit BY LOCATION. The claim is that rho(b) - rho(a) is above 0 by its 95% bootstrap interval inside the real unknown, as it is +0.234 over the whole library. (3) SECONDARY, predicted level: the same count model's mean prediction over every 200 bp window of all 882 blocks against 882 length-matched neutral-tier blocks, each beside a dinucleotide-shuffled null of its own windows. This is a prediction and is reported as one. (4) SECONDARY and NOT VALIDATION: the AUROC of that predicted score against whether the sweep's AlphaGenome deletion moved a gene in the block. Both sides are model outputs, so agreement here is agreement between two model readings and is never read as either confirming the other.",
+    "min_log2": 0.1,
+    "window": 200,
+    "shuffle_windows": 20,
+    "blocks": {
+      "real_unknown": 882,
+      "matched_neutral": 882
+    },
+    "windows": {
+      "real_unknown": 152556,
+      "matched_neutral": 151810,
+      "dropped_for_n_bases": 68,
+      "blocks_without_a_window": 0
+    },
+    "by_case": {
+      "recent": {
+        "blocks": 29,
+        "with_a_measured_element": 3,
+        "with_a_tested_element": 15,
+        "with_a_sweep_lead": 11,
+        "predicted_mean_K562": -0.4241
+      },
+      "relaxed": {
+        "blocks": 437,
+        "with_a_measured_element": 73,
+        "with_a_tested_element": 267,
+        "with_a_sweep_lead": 167,
+        "predicted_mean_K562": -0.551
+      },
+      "syntax": {
+        "blocks": 69,
+        "with_a_measured_element": 5,
+        "with_a_tested_element": 27,
+        "with_a_sweep_lead": 19,
+        "predicted_mean_K562": -0.4224
+      },
+      "tolerant": {
+        "blocks": 329,
+        "with_a_measured_element": 80,
+        "with_a_tested_element": 218,
+        "with_a_sweep_lead": 131,
+        "predicted_mean_K562": -0.5978
+      },
+      "unmeasured": {
+        "blocks": 18,
+        "with_a_measured_element": 0,
+        "with_a_tested_element": 4,
+        "with_a_sweep_lead": 3,
+        "predicted_mean_K562": -0.5277
+      }
+    },
+    "measured": {
+      "coverage": {
+        "real_unknown": {
+          "blocks": 882,
+          "blocks_with_a_measured_element": 161,
+          "blocks_without_any_measured_element": 721,
+          "measured_elements": 227,
+          "blocks_with_an_element_the_sweep_tested": 531,
+          "blocks_with_a_sweep_lead": 331,
+          "median_length_kb": 11.7
+        },
+        "neutral": {
+          "blocks": 2632,
+          "blocks_with_a_measured_element": 298,
+          "blocks_without_any_measured_element": 2334,
+          "measured_elements": 387,
+          "blocks_with_an_element_the_sweep_tested": 1181,
+          "blocks_with_a_sweep_lead": 768,
+          "median_length_kb": 7.9
+        }
+      },
+      "measured_elements_with_activity_in_all_three_lines": {
+        "real_unknown": 227,
+        "neutral": 387
+      },
+      "elements_excluded_by_location": 614,
+      "training_elements": 50760,
+      "gc_of_measured_elements": {
+        "real_unknown": 0.49,
+        "neutral": 0.5
+      },
+      "sites_of_measured_elements": {
+        "real_unknown": 34.0,
+        "neutral": 34.0
+      },
+      "level": {
+        "K562": {
+          "auroc": 0.4617,
+          "z": -1.59,
+          "n": [
+            227,
+            387
+          ],
+          "median": [
+            -0.504,
+            -0.421
+          ],
+          "mean": [
+            -0.3551,
+            -0.2708
+          ]
+        },
+        "HepG2": {
+          "auroc": 0.4891,
+          "z": -0.45,
+          "n": [
+            227,
+            387
+          ],
+          "median": [
+            -0.424,
+            -0.411
+          ],
+          "mean": [
+            -0.3124,
+            -0.2743
+          ]
+        },
+        "WTC11": {
+          "auroc": 0.4715,
+          "z": -1.18,
+          "n": [
+            227,
+            387
+          ],
+          "median": [
+            -0.857,
+            -0.758
+          ],
+          "mean": [
+            -0.6095,
+            -0.5241
+          ]
+        }
+      },
+      "transfer": {
+        "K562": {
+          "a": {
+            "point": 0.1311,
+            "ci95": [
+              -0.0043,
+              0.2575
+            ],
+            "above_zero": 0.97
+          },
+          "b": {
+            "point": 0.3689,
+            "ci95": [
+              0.2501,
+              0.4897
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.2377,
+            "ci95": [
+              0.0974,
+              0.3777
+            ],
+            "above_zero": 1.0
+          },
+          "elements": 227
+        },
+        "HepG2": {
+          "a": {
+            "point": 0.0213,
+            "ci95": [
+              -0.1104,
+              0.1656
+            ],
+            "above_zero": 0.622
+          },
+          "b": {
+            "point": 0.4103,
+            "ci95": [
+              0.2974,
+              0.5081
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.389,
+            "ci95": [
+              0.2339,
+              0.5282
+            ],
+            "above_zero": 1.0
+          },
+          "elements": 227
+        },
+        "WTC11": {
+          "a": {
+            "point": 0.29,
+            "ci95": [
+              0.1688,
+              0.4094
+            ],
+            "above_zero": 1.0
+          },
+          "b": {
+            "point": 0.3359,
+            "ci95": [
+              0.2141,
+              0.4468
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.0459,
+            "ci95": [
+              -0.0561,
+              0.142
+            ],
+            "above_zero": 0.819
+          },
+          "elements": 227
+        }
+      },
+      "transfer_neutral_tier": {
+        "K562": {
+          "a": {
+            "point": 0.2579,
+            "ci95": [
+              0.1659,
+              0.3483
+            ],
+            "above_zero": 1.0
+          },
+          "b": {
+            "point": 0.3389,
+            "ci95": [
+              0.2415,
+              0.4239
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.081,
+            "ci95": [
+              -0.0136,
+              0.1654
+            ],
+            "above_zero": 0.961
+          },
+          "elements": 387
+        },
+        "HepG2": {
+          "a": {
+            "point": 0.3444,
+            "ci95": [
+              0.2524,
+              0.4323
+            ],
+            "above_zero": 1.0
+          },
+          "b": {
+            "point": 0.3593,
+            "ci95": [
+              0.2695,
+              0.4461
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.0149,
+            "ci95": [
+              -0.0822,
+              0.118
+            ],
+            "above_zero": 0.617
+          },
+          "elements": 387
+        },
+        "WTC11": {
+          "a": {
+            "point": 0.2814,
+            "ci95": [
+              0.1842,
+              0.3685
+            ],
+            "above_zero": 1.0
+          },
+          "b": {
+            "point": 0.3144,
+            "ci95": [
+              0.2148,
+              0.4031
+            ],
+            "above_zero": 1.0
+          },
+          "b-a": {
+            "point": 0.033,
+            "ci95": [
+              -0.0308,
+              0.1022
+            ],
+            "above_zero": 0.833
+          },
+          "elements": 387
+        }
+      }
+    },
+    "predicted_level": {
+      "median_length_kb": {
+        "real_unknown": 11.7,
+        "matched_neutral": 11.7
+      },
+      "reading": "a prediction of the count model, not a measurement of activity",
+      "K562": {
+        "real_unknown_vs_matched_neutral": {
+          "auroc": 0.4965,
+          "z": -0.25,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.5774,
+            -0.5686
+          ],
+          "mean": [
+            -0.5538,
+            -0.541
+          ]
+        },
+        "real_unknown_vs_its_shuffle": {
+          "auroc": 0.5142,
+          "z": 1.03,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.5774,
+            -0.578
+          ],
+          "mean": [
+            -0.5538,
+            -0.5617
+          ]
+        },
+        "matched_neutral_vs_its_shuffle": {
+          "auroc": 0.5064,
+          "z": 0.46,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.5686,
+            -0.5674
+          ],
+          "mean": [
+            -0.541,
+            -0.5497
+          ]
+        }
+      },
+      "HepG2": {
+        "real_unknown_vs_matched_neutral": {
+          "auroc": 0.4987,
+          "z": -0.1,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.594,
+            -0.5917
+          ],
+          "mean": [
+            -0.5663,
+            -0.5543
+          ]
+        },
+        "real_unknown_vs_its_shuffle": {
+          "auroc": 0.4912,
+          "z": -0.64,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.594,
+            -0.5805
+          ],
+          "mean": [
+            -0.5663,
+            -0.5667
+          ]
+        },
+        "matched_neutral_vs_its_shuffle": {
+          "auroc": 0.4862,
+          "z": -1.0,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -0.5917,
+            -0.5716
+          ],
+          "mean": [
+            -0.5543,
+            -0.5522
+          ]
+        }
+      },
+      "WTC11": {
+        "real_unknown_vs_matched_neutral": {
+          "auroc": 0.4984,
+          "z": -0.12,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -1.14,
+            -1.1255
+          ],
+          "mean": [
+            -1.0885,
+            -1.0606
+          ]
+        },
+        "real_unknown_vs_its_shuffle": {
+          "auroc": 0.5186,
+          "z": 1.35,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -1.14,
+            -1.1512
+          ],
+          "mean": [
+            -1.0885,
+            -1.1054
+          ]
+        },
+        "matched_neutral_vs_its_shuffle": {
+          "auroc": 0.5128,
+          "z": 0.93,
+          "n": [
+            882,
+            882
+          ],
+          "median": [
+            -1.1255,
+            -1.1394
+          ],
+          "mean": [
+            -1.0606,
+            -1.0771
+          ]
+        }
+      }
+    },
+    "agreement_with_the_sweep": {
+      "cell_line": "K562",
+      "reading": "both sides are model outputs -- a JASPAR count model and an AlphaGenome deletion -- so this is agreement between two model readings, never one validating the other",
+      "coverage": {
+        "blocks": 882,
+        "without_a_scorable_window": 0,
+        "with_a_tested_element": 531,
+        "without_a_tested_element": 351,
+        "with_a_lead": 331
+      },
+      "tested_blocks_only": {
+        "count_model_mean": {
+          "auroc": 0.5422,
+          "ci95": [
+            0.4937,
+            0.5934
+          ],
+          "above_chance": 0.956,
+          "auprc": 0.6611,
+          "auprc_ci95": [
+            0.6095,
+            0.7229
+          ]
+        },
+        "count_model_max": {
+          "auroc": 0.5197,
+          "ci95": [
+            0.4673,
+            0.5677
+          ],
+          "above_chance": 0.778,
+          "auprc": 0.6481,
+          "auprc_ci95": [
+            0.5969,
+            0.7054
+          ]
+        },
+        "block_length": {
+          "auroc": 0.4944,
+          "ci95": [
+            0.4445,
+            0.5417
+          ],
+          "above_chance": 0.365,
+          "auprc": 0.6449,
+          "auprc_ci95": [
+            0.5877,
+            0.7008
+          ]
+        },
+        "tested_elements": {
+          "auroc": 0.5514,
+          "ci95": [
+            0.498,
+            0.5962
+          ],
+          "above_chance": 0.97,
+          "auprc": 0.6704,
+          "auprc_ci95": [
+            0.6168,
+            0.7243
+          ]
+        },
+        "count_model_mean - block_length": {
+          "auroc": 0.0478,
+          "ci95": [
+            -0.0298,
+            0.1322
+          ],
+          "above_chance": 0.894
+        },
+        "blocks": 531,
+        "with_a_lead": 331,
+        "permutation_null": {
+          "draws": 1000,
+          "mean": 0.4997,
+          "ci95": [
+            0.4492,
+            0.5511
+          ],
+          "share_at_or_above_observed": 0.055
+        }
+      },
+      "all_blocks": {
+        "count_model_mean": {
+          "auroc": 0.4837,
+          "ci95": [
+            0.4467,
+            0.5197
+          ],
+          "above_chance": 0.191,
+          "auprc": 0.3489,
+          "auprc_ci95": [
+            0.3123,
+            0.3929
+          ]
+        },
+        "count_model_max": {
+          "auroc": 0.6786,
+          "ci95": [
+            0.6439,
+            0.7152
+          ],
+          "above_chance": 1.0,
+          "auprc": 0.5322,
+          "auprc_ci95": [
+            0.4842,
+            0.5916
+          ]
+        },
+        "block_length": {
+          "auroc": 0.7175,
+          "ci95": [
+            0.6831,
+            0.7521
+          ],
+          "above_chance": 1.0,
+          "auprc": 0.5928,
+          "auprc_ci95": [
+            0.5388,
+            0.6516
+          ]
+        },
+        "tested_elements": {
+          "auroc": 0.8372,
+          "ci95": [
+            0.8117,
+            0.8627
+          ],
+          "above_chance": 1.0,
+          "auprc": 0.6704,
+          "auprc_ci95": [
+            0.6181,
+            0.7252
+          ]
+        },
+        "count_model_mean - block_length": {
+          "auroc": -0.2338,
+          "ci95": [
+            -0.2922,
+            -0.1791
+          ],
+          "above_chance": 0.0
+        },
+        "blocks": 882,
+        "with_a_lead": 331,
+        "permutation_null": {
+          "draws": 1000,
+          "mean": 0.5008,
+          "ci95": [
+            0.4614,
+            0.5395
+          ],
+          "share_at_or_above_observed": 0.81
+        }
+      }
+    },
+    "verdict": {
+      "cell_line": "K562",
+      "measured_elements": 227,
+      "measured_level_auroc": 0.4617,
+      "measured_level_z": -1.59,
+      "measured_transfer_b_minus_a": 0.2377,
+      "measured_transfer_ci95": [
+        0.0974,
+        0.3777
+      ],
+      "count_model_transfers_inside_the_real_unknown": true,
+      "predicted_level_auroc": 0.4965,
+      "predicted_level_z": -0.25,
+      "sweep_agreement_auroc": 0.5422,
+      "sweep_agreement_ci95": [
+        0.4937,
+        0.5934
+      ],
+      "measured_statement": "the measured reporter reads the real unknown and the neutral tier at the same level: it neither confirms nor contradicts the deletion sweep's per-element reading",
+      "transfer_statement": "inside the real unknown, strict motif counts still predict measured activity over composition alone: \u00a717's positive holds on this sequence"
+    },
+    "evidence": {
+      "vista": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates",
+      "conservation": "experimental: Zoonomia phyloP over 241 placental mammals, per element mean and fraction of bases at or above 2.27",
+      "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+      "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+      "sweep_lead": "predicted: an AlphaGenome deletion moved a gene by at least 0.1 log2; the same model names a target at 87% of matched random windows, so a lead is a lead and not a measurement",
+      "comparison": "inferred: ridge fitted on training chromosomes or on locations held out, AUROC and Spearman on the held-out ones, bootstrap over elements or blocks"
+    }
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "result": "therapeutic_benchmark",
+  "date": "2026-09-21",
+  "cases": 9,
+  "targets_recovered": 9,
+  "verdicts_correct": 9,
+  "top_mechanism_defensible": 9,
+  "cases_by_driver_call": {
+    "point mutation": 6,
+    "copy number": 1,
+    "structural variant": 1,
+    "expression": 1
+  },
+  "surface_cases": 4,
+  "surface_cases_recovered": 4,
+  "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
+  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target, and all four routes into the candidate list are now scored: six point mutations, one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case so that the route is the only thing that differs), one structural variant (EML4-ALK) and one expression call (CD19, which carries no alteration of any kind). The ALK case is the one where the curated databases and the patient disagree: ALK is a single-pass surface receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the approved drugs are small molecules. It passes by refusing a surface route rather than by leaving the question open. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target that carry no alteration in this tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, sits behind three of them. The pipeline recovers it and does not prefer it, and the three scored questions cannot tell those apart, so the count is reported beside them rather than folded into a verdict.",
+  "rows": [
+    {
+      "case": "EGFR L858R, lung adenocarcinoma",
+      "gene": "EGFR",
+      "driver_call": "point mutation",
+      "approved": "osimertinib (small molecule); cetuximab and panitumumab are approved antibodies against EGFR in colorectal carcinoma",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "a single-pass receptor with a large extracellular domain and an approved antibody, so a surface route must be found",
+      "candidates": [
+        "EGFR"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "seconds": 1.1,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.606,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "ERBB2-amplified breast carcinoma",
+      "gene": "ERBB2",
+      "driver_call": "point mutation",
+      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the canonical surface target in oncology; if any case must work, it is this one",
+      "candidates": [
+        "ERBB2"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "seconds": 1.0,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "BRAF V600E, melanoma",
+      "gene": "BRAF",
+      "driver_call": "point mutation",
+      "approved": "vemurafenib, dabrafenib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "a cytoplasmic kinase; the approved drug is a small molecule, a class GenomeOS does not model",
+      "candidates": [
+        "BRAF",
+        "HSP90AA1",
+        "HSP90AB1"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.427,
+      "surface_accessibility": 0.36,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "blocking_antibody",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "KRAS G12C, lung adenocarcinoma",
+      "gene": "KRAS",
+      "driver_call": "point mutation",
+      "approved": "sotorasib, adagrasib (covalent small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "membrane-anchored on the inner leaflet, so no outward-facing epitope; the mutant peptide route is the one GenomeOS can reason about",
+      "candidates": [
+        "KIT",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "KRAS"
+      ],
+      "recovered": true,
+      "rank": 5,
+      "outranked_by_hypotheses": [
+        "KIT",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2"
+      ],
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.369,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "PIK3CA H1047R, breast carcinoma",
+      "gene": "PIK3CA",
+      "driver_call": "point mutation",
+      "approved": "alpelisib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "intracellular lipid kinase",
+      "candidates": [
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "ERBB3",
+        "PIK3CA"
+      ],
+      "recovered": true,
+      "rank": 5,
+      "outranked_by_hypotheses": [
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "ERBB3"
+      ],
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.438,
+      "surface_accessibility": 0.36,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "adcp",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "IDH1 R132H, glioma and AML",
+      "gene": "IDH1",
+      "driver_call": "point mutation",
+      "approved": "ivosidenib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "cytosolic enzyme; a neomorphic mutation whose product is a metabolite, which GenomeOS does not model at all",
+      "candidates": [
+        "EGFR",
+        "IDH1"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "outranked_by_hypotheses": [
+        "EGFR"
+      ],
+      "seconds": 1.1,
+      "target_class": "neoantigen_hla",
+      "score": 0.345,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call",
+      "gene": "ERBB2",
+      "driver_call": "copy number",
+      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the amplification is the approved therapy's companion diagnostic, so a pipeline that needs a coding change to see ERBB2 would miss every patient trastuzumab is actually given to",
+      "candidates": [
+        "KDR",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "ERBB3",
+        "PIK3CA"
+      ],
+      "recovered": true,
+      "rank": 4,
+      "outranked_by_hypotheses": [
+        "KDR",
+        "EGFR",
+        "PDGFRB"
+      ],
+      "seconds": 1.0,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic",
+      "gene": "ALK",
+      "driver_call": "structural variant",
+      "approved": "crizotinib, alectinib, brigatinib, lorlatinib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "every curated compartment calls ALK a single-pass surface receptor, so the trap is to offer an antibody against it; as the 3' partner of the fusion it keeps none of its outward-facing part, and the drugs that work are small molecules acting inside the cell",
+      "candidates": [
+        "ACVR2A",
+        "ALK",
+        "PIK3CA",
+        "TGFB1",
+        "TGFBR2",
+        "PTN"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "outranked_by_hypotheses": [
+        "ACVR2A"
+      ],
+      "seconds": 1.9,
+      "target_class": "intracellular_only",
+      "score": 0.559,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA",
+      "gene": "CD19",
+      "driver_call": "expression",
+      "approved": "tafasitamab (Fc-engineered antibody); blinatumomab (CD19xCD3 engager); tisagenlecleucel and axicabtagene ciloleucel (CAR-T); loncastuximab tesirine (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the tumour's only DNA driver is TP53; CD19 carries no alteration at all, so a pipeline that starts from alterations cannot propose the target of the two best-known cell therapies. Every approved CD19 drug is antibody-like, which is the one modality class GenomeOS models, so this case tests the route and not only the recovery",
+      "candidates": [
+        "FCRL5",
+        "CD19",
+        "HSP90AA1",
+        "HMGB1",
+        "TP53"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "outranked_by_hypotheses": [
+        "FCRL5"
+      ],
+      "seconds": 3.1,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "adcc",
+      "best_compatibility": 0.655,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    }
+  ]
+}

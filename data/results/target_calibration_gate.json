@@ -1,0 +1,3119 @@
+{
+  "result": "target_calibration_gate",
+  "date": "2026-09-22",
+  "preregistered": "Registered 2026-09-22, before the calibration was re-fitted through the sweep's own per-element response cache and before any re-fitted held-out pair was scored.\n\nWHAT IS GATED. `top_target` is the flag that the pair's measured gene is the single gene the compact all_elements table kept for that element. It gates this module in three places. (1) The magnitude: `deletion_drop` is read from the compact table, so it is a structural zero for every pair whose gene is not that one gene, and the zero is a property of the projection, not of what the sweep predicted. On the fitted population it is zero for 8,589 of 8,796 K562 training pairs (97.6%) and 1,680 of 1,715 held-out K562 pairs (97.9%). (2) The element: `matched_element` picks the overlapping element whose top predicted target is the pair's gene, and otherwise the element with the largest predicted magnitude for whatever other gene the table named, which is the element the class and distance features are then taken from. (3) The population: the predicted-target calibration is fitted on the 245 training pairs the gate admits (188 regulated, 76.7%) and read on 40 held-out pairs (36 regulated, 90.0%), and it is that fit whose weights band all 612,323 sweep targets.\n\nWHAT THE GATE EXCLUDES. 8,551 of the 8,796 fitted training pairs (249 regulated, 2.91%) and 1,675 of the 1,715 held-out K562 pairs (76 regulated, 4.54%). Asked through `targets.ElementResponses`, which carries every gene in the scorer's 1 Mb window with a signed change on the cell's own track, 5,571 of the excluded training pairs (65.1%) and 1,112 of the excluded held-out pairs (66.4%) carry a number the sweep did predict; the remaining 2,980 and 563 are the named silence `the gene is not in the scorer's window at this element` and stay unanswerable. No excluded pair is a `not on this cell's own track` or a `not cached` silence. So the gate is two thirds a censoring and one third a real limit, and the calibration can be fitted with a magnitude that means something on 5,816 training pairs instead of 245.\n\nWHAT IS RE-FITTED AND WHAT IS NOT. The published 2026-09-17 curve is annotated, never rewritten: `score()` keeps its default of no cache and reproduces the published numbers exactly, and the re-fit is a second arm that passes the cache. `SWEEP_FEATURES` and `TARGET_FEATURES` do not change, because a feature the sweep does not have cannot be fitted; only what `deletion_drop` means changes, from `the compact table's entry for the one gene it kept` to `what the sweep predicted for this pair's own gene at this element`.\n\nTHE DIRECTION EXPECTED, AND WHY. Reliability is expected NOT to improve. The 2026-09-17 claim failed on the population and not on the curve: 6 of 10 bins inside their intervals, all four failures in the same direction, mean predicted 0.0441 against an observed 0.0653, and a single log-odds shift of +0.679 restoring 9 of 10. An uncensored magnitude is a better feature; it is not an intercept, and it cannot move a prevalence that is a property of how a screen chose its pairs. The registered expectation is therefore 6 of 10 bins give or take one, with the prevalence ratio still near 1.31, and a rise in AUPRC as the only movement a better feature buys.\n\nWHAT A CONFIDENCE MEANS FOR A PAIR THE GATE WOULD HAVE EXCLUDED. This is the clause that decides whether the re-fit is worth anything. The predicted-target curve is fitted on 245 pairs whose base rate is 76.7% -- the model's most confident calls, the one gene per element it was surest of -- and the sweep quotes it for 612,323 targets. A user who now asks about any other gene in the window, which the reader makes askable and which is about fifty genes per element rather than one, would be quoted a curve fitted on a population whose base rate is twenty-six times theirs. That is the classic form of a calibration that looks reliable and is not. The measurement registered here is direct: score the shipped 245-pair curve on the held-out pairs the gate excluded but the sweep did answer, and report its mean predicted probability against their observed rate. WHAT WOULD SHOW THE FAILURE IS HAPPENING: the shipped curve's mean predicted probability on those pairs sits far above their observed rate -- a gap of the order of the 0.767 against 0.029 base-rate gap rather than of the 1.31 prevalence ratio already found -- and its bins fall outside their intervals in one direction. WHAT WOULD SHOW IT IS NOT: the shipped curve lands near their observed rate, which would mean the three features carry the population difference and the gate was only selecting on them. Either way the number is reported, and a confidence for an off-gate pair is quoted from a curve fitted on off-gate pairs or it is not quoted at all.\n\nIF RELIABILITY IMPROVES. An improvement is the outcome that would tempt a lane to stop checking, so the checks are fixed in advance and run whether it improves or not. A curve that predicts the base rate everywhere is trivially inside every equal-count bin, so a rise in bins_consistent is reported only beside (a) the width of the predicted range across the ten bins, which must not shrink, (b) AUPRC on the same held-out pairs, which must not fall, and (c) the prevalence ratio and the log-odds shift, which must have moved towards 1 and 0 for the improvement to be a calibration rather than a flattening. If bins_consistent reaches 7 or more while the predicted range narrows or AUPRC falls, the improvement is recorded as a flattening and the 2026-09-17 verdict of failed is not upgraded. The verdict is only upgraded if the prevalence gap itself closes, and nothing in this change acts on the intercept, so that is not expected.",
+  "what": "the pairs the top-target gate admits and excludes, before anything is re-fitted, with the sweep's own per-element cache asked about every excluded pair's own gene",
+  "training, every feature present": {
+    "all": {
+      "pairs": 8796,
+      "regulated": 437,
+      "rate": 0.0497
+    },
+    "admitted, the gene is the top target": {
+      "pairs": 245,
+      "regulated": 188,
+      "rate": 0.7673
+    },
+    "excluded by the gate": {
+      "pairs": 8551,
+      "regulated": 249,
+      "rate": 0.0291
+    },
+    "deletion_drop is zero": 8589,
+    "the sweep answered this gene": 245
+  },
+  "held-out K562, every feature present": {
+    "all": {
+      "pairs": 1715,
+      "regulated": 112,
+      "rate": 0.0653
+    },
+    "admitted, the gene is the top target": {
+      "pairs": 40,
+      "regulated": 36,
+      "rate": 0.9
+    },
+    "excluded by the gate": {
+      "pairs": 1675,
+      "regulated": 76,
+      "rate": 0.0454
+    },
+    "deletion_drop is zero": 1680,
+    "the sweep answered this gene": 40
+  },
+  "training, on a deleted element": {
+    "all": {
+      "pairs": 9237,
+      "regulated": 451,
+      "rate": 0.0488
+    },
+    "admitted, the gene is the top target": {
+      "pairs": 246,
+      "regulated": 189,
+      "rate": 0.7683
+    },
+    "excluded by the gate": {
+      "pairs": 8991,
+      "regulated": 262,
+      "rate": 0.0291
+    },
+    "deletion_drop is zero": 9030,
+    "the sweep answered this gene": 246
+  },
+  "held-out K562, on a deleted element": {
+    "all": {
+      "pairs": 1744,
+      "regulated": 114,
+      "rate": 0.0654
+    },
+    "admitted, the gene is the top target": {
+      "pairs": 40,
+      "regulated": 36,
+      "rate": 0.9
+    },
+    "excluded by the gate": {
+      "pairs": 1704,
+      "regulated": 78,
+      "rate": 0.0458
+    },
+    "deletion_drop is zero": 1709,
+    "the sweep answered this gene": 40
+  },
+  "what the window reader says, training": {
+    "by_side": {
+      "admitted": {
+        "scored": 245
+      },
+      "excluded": {
+        "scored": 5571,
+        "the gene is not in the scorer's window at this element": 2980
+      }
+    },
+    "measured_gene_rank_in_the_window": {
+      "pairs": 5814,
+      "median_rank": 24,
+      "rank_1": 128,
+      "top_3": 359,
+      "top_5": 566,
+      "median_genes_in_the_window": 50
+    }
+  },
+  "what the window reader says, held-out K562": {
+    "by_side": {
+      "admitted": {
+        "scored": 40
+      },
+      "excluded": {
+        "scored": 1112,
+        "the gene is not in the scorer's window at this element": 563
+      }
+    },
+    "measured_gene_rank_in_the_window": {
+      "pairs": 1152,
+      "median_rank": 24,
+      "rank_1": 19,
+      "top_3": 50,
+      "top_5": 97,
+      "median_genes_in_the_window": 53
+    }
+  },
+  "comparison": {
+    "preregistered": "Registered 2026-09-22, before the calibration was re-fitted through the sweep's own per-element response cache and before any re-fitted held-out pair was scored.\n\nWHAT IS GATED. `top_target` is the flag that the pair's measured gene is the single gene the compact all_elements table kept for that element. It gates this module in three places. (1) The magnitude: `deletion_drop` is read from the compact table, so it is a structural zero for every pair whose gene is not that one gene, and the zero is a property of the projection, not of what the sweep predicted. On the fitted population it is zero for 8,589 of 8,796 K562 training pairs (97.6%) and 1,680 of 1,715 held-out K562 pairs (97.9%). (2) The element: `matched_element` picks the overlapping element whose top predicted target is the pair's gene, and otherwise the element with the largest predicted magnitude for whatever other gene the table named, which is the element the class and distance features are then taken from. (3) The population: the predicted-target calibration is fitted on the 245 training pairs the gate admits (188 regulated, 76.7%) and read on 40 held-out pairs (36 regulated, 90.0%), and it is that fit whose weights band all 612,323 sweep targets.\n\nWHAT THE GATE EXCLUDES. 8,551 of the 8,796 fitted training pairs (249 regulated, 2.91%) and 1,675 of the 1,715 held-out K562 pairs (76 regulated, 4.54%). Asked through `targets.ElementResponses`, which carries every gene in the scorer's 1 Mb window with a signed change on the cell's own track, 5,571 of the excluded training pairs (65.1%) and 1,112 of the excluded held-out pairs (66.4%) carry a number the sweep did predict; the remaining 2,980 and 563 are the named silence `the gene is not in the scorer's window at this element` and stay unanswerable. No excluded pair is a `not on this cell's own track` or a `not cached` silence. So the gate is two thirds a censoring and one third a real limit, and the calibration can be fitted with a magnitude that means something on 5,816 training pairs instead of 245.\n\nWHAT IS RE-FITTED AND WHAT IS NOT. The published 2026-09-17 curve is annotated, never rewritten: `score()` keeps its default of no cache and reproduces the published numbers exactly, and the re-fit is a second arm that passes the cache. `SWEEP_FEATURES` and `TARGET_FEATURES` do not change, because a feature the sweep does not have cannot be fitted; only what `deletion_drop` means changes, from `the compact table's entry for the one gene it kept` to `what the sweep predicted for this pair's own gene at this element`.\n\nTHE DIRECTION EXPECTED, AND WHY. Reliability is expected NOT to improve. The 2026-09-17 claim failed on the population and not on the curve: 6 of 10 bins inside their intervals, all four failures in the same direction, mean predicted 0.0441 against an observed 0.0653, and a single log-odds shift of +0.679 restoring 9 of 10. An uncensored magnitude is a better feature; it is not an intercept, and it cannot move a prevalence that is a property of how a screen chose its pairs. The registered expectation is therefore 6 of 10 bins give or take one, with the prevalence ratio still near 1.31, and a rise in AUPRC as the only movement a better feature buys.\n\nWHAT A CONFIDENCE MEANS FOR A PAIR THE GATE WOULD HAVE EXCLUDED. This is the clause that decides whether the re-fit is worth anything. The predicted-target curve is fitted on 245 pairs whose base rate is 76.7% -- the model's most confident calls, the one gene per element it was surest of -- and the sweep quotes it for 612,323 targets. A user who now asks about any other gene in the window, which the reader makes askable and which is about fifty genes per element rather than one, would be quoted a curve fitted on a population whose base rate is twenty-six times theirs. That is the classic form of a calibration that looks reliable and is not. The measurement registered here is direct: score the shipped 245-pair curve on the held-out pairs the gate excluded but the sweep did answer, and report its mean predicted probability against their observed rate. WHAT WOULD SHOW THE FAILURE IS HAPPENING: the shipped curve's mean predicted probability on those pairs sits far above their observed rate -- a gap of the order of the 0.767 against 0.029 base-rate gap rather than of the 1.31 prevalence ratio already found -- and its bins fall outside their intervals in one direction. WHAT WOULD SHOW IT IS NOT: the shipped curve lands near their observed rate, which would mean the three features carry the population difference and the gate was only selecting on them. Either way the number is reported, and a confidence for an off-gate pair is quoted from a curve fitted on off-gate pairs or it is not quoted at all.\n\nIF RELIABILITY IMPROVES. An improvement is the outcome that would tempt a lane to stop checking, so the checks are fixed in advance and run whether it improves or not. A curve that predicts the base rate everywhere is trivially inside every equal-count bin, so a rise in bins_consistent is reported only beside (a) the width of the predicted range across the ten bins, which must not shrink, (b) AUPRC on the same held-out pairs, which must not fall, and (c) the prevalence ratio and the log-odds shift, which must have moved towards 1 and 0 for the improvement to be a calibration rather than a flattening. If bins_consistent reaches 7 or more while the predicted range narrows or AUPRC falls, the improvement is recorded as a flattening and the 2026-09-17 verdict of failed is not upgraded. The verdict is only upgraded if the prevalence gap itself closes, and nothing in this change acts on the intercept, so that is not expected.",
+    "arms": {
+      "shipped, the compact table": {
+        "populations": {
+          "training, every feature present": {
+            "all": {
+              "pairs": 8796,
+              "regulated": 437,
+              "rate": 0.0497
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 245,
+              "regulated": 188,
+              "rate": 0.7673
+            },
+            "excluded by the gate": {
+              "pairs": 8551,
+              "regulated": 249,
+              "rate": 0.0291
+            },
+            "deletion_drop is zero": 8589,
+            "the sweep answered this gene": 245
+          },
+          "held-out K562, every feature present": {
+            "all": {
+              "pairs": 1715,
+              "regulated": 112,
+              "rate": 0.0653
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 40,
+              "regulated": 36,
+              "rate": 0.9
+            },
+            "excluded by the gate": {
+              "pairs": 1675,
+              "regulated": 76,
+              "rate": 0.0454
+            },
+            "deletion_drop is zero": 1680,
+            "the sweep answered this gene": 40
+          },
+          "training, the sweep answered this gene": {
+            "all": {
+              "pairs": 245,
+              "regulated": 188,
+              "rate": 0.7673
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 245,
+              "regulated": 188,
+              "rate": 0.7673
+            },
+            "excluded by the gate": {
+              "pairs": 0,
+              "regulated": 0,
+              "rate": null
+            },
+            "deletion_drop is zero": 38,
+            "the sweep answered this gene": 245
+          },
+          "held-out K562, the sweep answered this gene": {
+            "all": {
+              "pairs": 40,
+              "regulated": 36,
+              "rate": 0.9
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 40,
+              "regulated": 36,
+              "rate": 0.9
+            },
+            "excluded by the gate": {
+              "pairs": 0,
+              "regulated": 0,
+              "rate": null
+            },
+            "deletion_drop is zero": 5,
+            "the sweep answered this gene": 40
+          }
+        },
+        "heldout_k562": {
+          "calibrated, sweep features": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.5589,
+            "auroc": 0.8543,
+            "mean_predicted": 0.0441,
+            "brier": 0.04184,
+            "log_loss": 0.1667,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 6,
+              "ece": 0.0231,
+              "mce": 0.0843,
+              "hosmer_lemeshow": {
+                "chi2": 53.901,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0032,
+                    0.0054
+                  ],
+                  "mean_predicted": 0.0046,
+                  "regulated": 5,
+                  "observed": 0.0292,
+                  "ci95": [
+                    0.0126,
+                    0.0666
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0054,
+                    0.0064
+                  ],
+                  "mean_predicted": 0.0059,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0064,
+                    0.0076
+                  ],
+                  "mean_predicted": 0.007,
+                  "regulated": 3,
+                  "observed": 0.0175,
+                  "ci95": [
+                    0.006,
+                    0.0503
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0076,
+                    0.0092
+                  ],
+                  "mean_predicted": 0.0084,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0092,
+                    0.0116
+                  ],
+                  "mean_predicted": 0.0103,
+                  "regulated": 3,
+                  "observed": 0.0175,
+                  "ci95": [
+                    0.006,
+                    0.0503
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0116,
+                    0.0143
+                  ],
+                  "mean_predicted": 0.0129,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0143,
+                    0.02
+                  ],
+                  "mean_predicted": 0.0169,
+                  "regulated": 4,
+                  "observed": 0.0234,
+                  "ci95": [
+                    0.0091,
+                    0.0586
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.02,
+                    0.0314
+                  ],
+                  "mean_predicted": 0.0249,
+                  "regulated": 11,
+                  "observed": 0.064,
+                  "ci95": [
+                    0.0361,
+                    0.1109
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0315,
+                    0.0674
+                  ],
+                  "mean_predicted": 0.0443,
+                  "regulated": 16,
+                  "observed": 0.0936,
+                  "ci95": [
+                    0.0584,
+                    0.1466
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 6,
+                  "coverage_regulated": [
+                    112,
+                    114,
+                    0.9825
+                  ],
+                  "coverage_not_regulated": [
+                    1603,
+                    1630,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0677,
+                    1.0
+                  ],
+                  "mean_predicted": 0.3053,
+                  "regulated": 67,
+                  "observed": 0.3895,
+                  "ci95": [
+                    0.3198,
+                    0.4641
+                  ],
+                  "consistent": false
+                }
+              ]
+            }
+          },
+          "drop alone, fitted": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.4276,
+            "auroc": 0.6468,
+            "mean_predicted": 0.0505,
+            "brier": 0.04639,
+            "log_loss": 0.1962,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 7,
+              "ece": 0.0256,
+              "mce": 0.0649,
+              "hosmer_lemeshow": {
+                "chi2": 56.02,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 13,
+                  "observed": 0.076,
+                  "ci95": [
+                    0.045,
+                    0.1257
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 17,
+                  "observed": 0.0988,
+                  "ci95": [
+                    0.0626,
+                    0.1526
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 16,
+                  "observed": 0.0936,
+                  "ci95": [
+                    0.0584,
+                    0.1466
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 5,
+                  "observed": 0.0291,
+                  "ci95": [
+                    0.0125,
+                    0.0662
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 3,
+                  "observed": 0.0175,
+                  "ci95": [
+                    0.006,
+                    0.0503
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 4,
+                  "observed": 0.0233,
+                  "ci95": [
+                    0.0091,
+                    0.0583
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 8,
+                  "observed": 0.0465,
+                  "ci95": [
+                    0.0238,
+                    0.0891
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    0.0339
+                  ],
+                  "mean_predicted": 0.0339,
+                  "regulated": 6,
+                  "observed": 0.0351,
+                  "ci95": [
+                    0.0162,
+                    0.0744
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 5,
+                  "coverage_regulated": [
+                    109,
+                    111,
+                    0.982
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0339,
+                    1.0
+                  ],
+                  "mean_predicted": 0.1996,
+                  "regulated": 38,
+                  "observed": 0.2209,
+                  "ci95": [
+                    0.1654,
+                    0.2887
+                  ],
+                  "consistent": true
+                }
+              ]
+            }
+          },
+          "effect size as a confidence": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.4276,
+            "auroc": 0.6468,
+            "mean_predicted": 0.0078,
+            "brier": 0.05522,
+            "log_loss": 0.6637,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 0,
+              "ece": 0.0575,
+              "mce": 0.1435,
+              "hosmer_lemeshow": {
+                "chi2": 49.62,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 13,
+                  "observed": 0.076,
+                  "ci95": [
+                    0.045,
+                    0.1257
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 17,
+                  "observed": 0.0988,
+                  "ci95": [
+                    0.0626,
+                    0.1526
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 16,
+                  "observed": 0.0936,
+                  "ci95": [
+                    0.0584,
+                    0.1466
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 5,
+                  "observed": 0.0291,
+                  "ci95": [
+                    0.0125,
+                    0.0662
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 3,
+                  "observed": 0.0175,
+                  "ci95": [
+                    0.006,
+                    0.0503
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 4,
+                  "observed": 0.0233,
+                  "ci95": [
+                    0.0091,
+                    0.0583
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    76,
+                    78,
+                    0.9744
+                  ],
+                  "coverage_not_regulated": [
+                    1599,
+                    1626,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 8,
+                  "observed": 0.0465,
+                  "ci95": [
+                    0.0238,
+                    0.0891
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    79,
+                    81,
+                    0.9753
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 6,
+                  "observed": 0.0351,
+                  "ci95": [
+                    0.0162,
+                    0.0744
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 5,
+                  "coverage_regulated": [
+                    109,
+                    111,
+                    0.982
+                  ],
+                  "coverage_not_regulated": [
+                    1601,
+                    1628,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    1.0
+                  ],
+                  "mean_predicted": 0.0774,
+                  "regulated": 38,
+                  "observed": 0.2209,
+                  "ci95": [
+                    0.1654,
+                    0.2887
+                  ],
+                  "consistent": false
+                }
+              ]
+            }
+          }
+        },
+        "verdict": "failed",
+        "checks": {
+          "bins_consistent": 6,
+          "bins_required": 7,
+          "reliable": false,
+          "ece": [
+            0.0231,
+            0.0575
+          ],
+          "ece_better": true,
+          "brier": [
+            0.04184,
+            0.05522
+          ],
+          "brier_better": true
+        },
+        "prevalence_shift": {
+          "calibrated, sweep features": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.0441,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 0.6793,
+            "bins_consistent": 9,
+            "bins": 10,
+            "ece": 0.01,
+            "brier": 0.04065,
+            "hosmer_lemeshow": {
+              "chi2": 14.08,
+              "df": 8,
+              "p": 0.0797
+            }
+          },
+          "drop alone, fitted": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.0505,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 0.3777,
+            "bins_consistent": 7,
+            "bins": 10,
+            "ece": 0.0258,
+            "brier": 0.04596,
+            "hosmer_lemeshow": {
+              "chi2": 32.735,
+              "df": 8,
+              "p": 0.0001
+            }
+          },
+          "effect size as a confidence": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.0078,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 10.7798,
+            "bins_consistent": 7,
+            "bins": 10,
+            "ece": 0.0263,
+            "brier": 0.04506,
+            "hosmer_lemeshow": {
+              "chi2": 35.14,
+              "df": 8,
+              "p": 0.0
+            }
+          }
+        },
+        "weights": {
+          "intercept": 7.1611,
+          "deletion_drop": 20.7199,
+          "top_target": 1.2341,
+          "log_tss_distance": -0.9005,
+          "node_target": 0.2315,
+          "class_pELS": -0.4757,
+          "class_PLS": 0.0,
+          "class_CTCF-only": 0.0,
+          "class_DNase-H3K4me3": 0.0,
+          "class_unknown": 0.0
+        },
+        "predicted_target_weights": {
+          "intercept": 2.8132,
+          "deletion_drop": 15.0342,
+          "log_tss_distance": -0.2606,
+          "node_target": -0.506
+        },
+        "measured_by_drop_band, the answered held-out pairs": [
+          {
+            "drop": "= 0",
+            "pairs": 5,
+            "coverage_regulated": [
+              3,
+              3,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              2,
+              2,
+              1.0
+            ],
+            "regulated": 3,
+            "rate": 0.6,
+            "ci95": [
+              0.2307,
+              0.8824
+            ],
+            "elements": 5
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 9,
+            "coverage_regulated": [
+              8,
+              8,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1,
+              1,
+              1.0
+            ],
+            "regulated": 8,
+            "rate": 0.8889,
+            "ci95": [
+              0.565,
+              0.9801
+            ],
+            "elements": 9
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 5,
+            "coverage_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1,
+              1,
+              1.0
+            ],
+            "regulated": 4,
+            "rate": 0.8,
+            "ci95": [
+              0.3755,
+              0.9638
+            ],
+            "elements": 5
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 11,
+            "coverage_regulated": [
+              11,
+              11,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 11,
+            "rate": 1.0,
+            "ci95": [
+              0.7412,
+              1.0
+            ],
+            "elements": 11
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 10,
+            "coverage_regulated": [
+              10,
+              10,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 10,
+            "rate": 1.0,
+            "ci95": [
+              0.7225,
+              1.0
+            ],
+            "elements": 10
+          }
+        ],
+        "measured_by_drop_band, the answered pairs the gate excludes": [
+          {
+            "drop": "= 0",
+            "pairs": 1112,
+            "coverage_regulated": [
+              67,
+              67,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1045,
+              1045,
+              1.0
+            ],
+            "regulated": 67,
+            "rate": 0.0603,
+            "ci95": [
+              0.0477,
+              0.0758
+            ],
+            "elements": 486
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          }
+        ],
+        "measured_by_drop_band, the answered training pairs the gate excludes": [
+          {
+            "drop": "= 0",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          }
+        ],
+        "measured_by_drop_band, both, after the held-out test": [
+          {
+            "drop": "= 0",
+            "pairs": 1112,
+            "coverage_regulated": [
+              67,
+              67,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1045,
+              1045,
+              1.0
+            ],
+            "regulated": 67,
+            "rate": 0.0603,
+            "ci95": [
+              0.0477,
+              0.0758
+            ],
+            "elements": 486
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 0,
+            "coverage_regulated": [
+              0,
+              0,
+              null
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 0,
+            "rate": null,
+            "ci95": null,
+            "elements": 0
+          }
+        ],
+        "what_a_confidence_means_off_the_gate": {
+          "the predicted-target curve, on the pairs the gate excludes": {
+            "what": "fitted on the top-target pairs alone; the curve the sweep's bands come from",
+            "pairs": 1112,
+            "regulated": 67,
+            "observed_rate": 0.0603,
+            "observed_ci95": [
+              0.0477,
+              0.0758
+            ],
+            "mean_predicted": 0.4126,
+            "quoted_over_observed": 6.85,
+            "log_odds_gap": 2.3939,
+            "inside_the_observed_interval": false
+          },
+          "the predicted-target curve, on the pairs it admits": {
+            "what": "its own population, for comparison",
+            "pairs": 40,
+            "regulated": 36,
+            "observed_rate": 0.9,
+            "observed_ci95": [
+              0.7695,
+              0.9604
+            ],
+            "mean_predicted": 0.8355,
+            "quoted_over_observed": 0.93,
+            "log_odds_gap": -0.5722,
+            "inside_the_observed_interval": true
+          },
+          "the tested-pair curve, on the pairs the gate excludes": {
+            "what": "fitted on every scored training pair",
+            "pairs": 1112,
+            "regulated": 67,
+            "observed_rate": 0.0603,
+            "observed_ci95": [
+              0.0477,
+              0.0758
+            ],
+            "mean_predicted": 0.0359,
+            "quoted_over_observed": 0.6,
+            "log_odds_gap": -0.5446,
+            "inside_the_observed_interval": false
+          }
+        }
+      },
+      "re-fitted, the window": {
+        "populations": {
+          "training, every feature present": {
+            "all": {
+              "pairs": 8796,
+              "regulated": 437,
+              "rate": 0.0497
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 245,
+              "regulated": 188,
+              "rate": 0.7673
+            },
+            "excluded by the gate": {
+              "pairs": 8551,
+              "regulated": 249,
+              "rate": 0.0291
+            },
+            "deletion_drop is zero": 4737,
+            "the sweep answered this gene": 5816
+          },
+          "held-out K562, every feature present": {
+            "all": {
+              "pairs": 1715,
+              "regulated": 112,
+              "rate": 0.0653
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 40,
+              "regulated": 36,
+              "rate": 0.9
+            },
+            "excluded by the gate": {
+              "pairs": 1675,
+              "regulated": 76,
+              "rate": 0.0454
+            },
+            "deletion_drop is zero": 907,
+            "the sweep answered this gene": 1152
+          },
+          "training, the sweep answered this gene": {
+            "all": {
+              "pairs": 5816,
+              "regulated": 421,
+              "rate": 0.0724
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 245,
+              "regulated": 188,
+              "rate": 0.7673
+            },
+            "excluded by the gate": {
+              "pairs": 5571,
+              "regulated": 233,
+              "rate": 0.0418
+            },
+            "deletion_drop is zero": 1757,
+            "the sweep answered this gene": 5816
+          },
+          "held-out K562, the sweep answered this gene": {
+            "all": {
+              "pairs": 1152,
+              "regulated": 103,
+              "rate": 0.0894
+            },
+            "admitted, the gene is the top target": {
+              "pairs": 40,
+              "regulated": 36,
+              "rate": 0.9
+            },
+            "excluded by the gate": {
+              "pairs": 1112,
+              "regulated": 67,
+              "rate": 0.0603
+            },
+            "deletion_drop is zero": 344,
+            "the sweep answered this gene": 1152
+          }
+        },
+        "heldout_k562": {
+          "calibrated, sweep features": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.6774,
+            "auroc": 0.8744,
+            "mean_predicted": 0.0469,
+            "brier": 0.03453,
+            "log_loss": 0.144,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 7,
+              "ece": 0.0214,
+              "mce": 0.1023,
+              "hosmer_lemeshow": {
+                "chi2": 43.376,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.004,
+                    0.0054
+                  ],
+                  "mean_predicted": 0.0049,
+                  "regulated": 5,
+                  "observed": 0.0292,
+                  "ci95": [
+                    0.0126,
+                    0.0666
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0054,
+                    0.0061
+                  ],
+                  "mean_predicted": 0.0057,
+                  "regulated": 2,
+                  "observed": 0.0116,
+                  "ci95": [
+                    0.0032,
+                    0.0414
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0061,
+                    0.0071
+                  ],
+                  "mean_predicted": 0.0066,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0071,
+                    0.0086
+                  ],
+                  "mean_predicted": 0.0078,
+                  "regulated": 0,
+                  "observed": 0.0,
+                  "ci95": [
+                    0.0,
+                    0.0218
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0086,
+                    0.01
+                  ],
+                  "mean_predicted": 0.0093,
+                  "regulated": 4,
+                  "observed": 0.0234,
+                  "ci95": [
+                    0.0091,
+                    0.0586
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0101,
+                    0.012
+                  ],
+                  "mean_predicted": 0.011,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0121,
+                    0.0158
+                  ],
+                  "mean_predicted": 0.0137,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0159,
+                    0.0241
+                  ],
+                  "mean_predicted": 0.0196,
+                  "regulated": 7,
+                  "observed": 0.0407,
+                  "ci95": [
+                    0.0199,
+                    0.0816
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0241,
+                    0.0478
+                  ],
+                  "mean_predicted": 0.0329,
+                  "regulated": 10,
+                  "observed": 0.0585,
+                  "ci95": [
+                    0.0321,
+                    0.1043
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 10,
+                  "coverage_regulated": [
+                    112,
+                    114,
+                    0.9825
+                  ],
+                  "coverage_not_regulated": [
+                    1603,
+                    1630,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0479,
+                    1.0
+                  ],
+                  "mean_predicted": 0.357,
+                  "regulated": 79,
+                  "observed": 0.4593,
+                  "ci95": [
+                    0.3865,
+                    0.5339
+                  ],
+                  "consistent": false
+                }
+              ]
+            }
+          },
+          "drop alone, fitted": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.7215,
+            "auroc": 0.8786,
+            "mean_predicted": 0.0516,
+            "brier": 0.03501,
+            "log_loss": 0.1493,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 8,
+              "ece": 0.0283,
+              "mce": 0.1713,
+              "hosmer_lemeshow": {
+                "chi2": 37.495,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0205
+                  ],
+                  "mean_predicted": 0.0205,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0205
+                  ],
+                  "mean_predicted": 0.0205,
+                  "regulated": 8,
+                  "observed": 0.0465,
+                  "ci95": [
+                    0.0238,
+                    0.0891
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0205
+                  ],
+                  "mean_predicted": 0.0205,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0324
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0205
+                  ],
+                  "mean_predicted": 0.0205,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    892,
+                    919,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0205
+                  ],
+                  "mean_predicted": 0.0205,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0205,
+                    0.0211
+                  ],
+                  "mean_predicted": 0.0207,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    47,
+                    47,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    707,
+                    707,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0211,
+                    0.0221
+                  ],
+                  "mean_predicted": 0.0216,
+                  "regulated": 4,
+                  "observed": 0.0234,
+                  "ci95": [
+                    0.0091,
+                    0.0586
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    57,
+                    57,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    709,
+                    709,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0221,
+                    0.0234
+                  ],
+                  "mean_predicted": 0.0227,
+                  "regulated": 2,
+                  "observed": 0.0116,
+                  "ci95": [
+                    0.0032,
+                    0.0414
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    57,
+                    57,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    709,
+                    709,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0234,
+                    0.0268
+                  ],
+                  "mean_predicted": 0.0247,
+                  "regulated": 6,
+                  "observed": 0.0351,
+                  "ci95": [
+                    0.0162,
+                    0.0744
+                  ],
+                  "consistent": true
+                },
+                {
+                  "pairs": 172,
+                  "strata": 8,
+                  "coverage_regulated": [
+                    97,
+                    97,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    711,
+                    711,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0269,
+                    1.0
+                  ],
+                  "mean_predicted": 0.3229,
+                  "regulated": 85,
+                  "observed": 0.4942,
+                  "ci95": [
+                    0.4204,
+                    0.5682
+                  ],
+                  "consistent": false
+                }
+              ]
+            }
+          },
+          "effect size as a confidence": {
+            "pairs": 1715,
+            "positives": 112,
+            "baseline_precision": 0.0653,
+            "auprc": 0.7215,
+            "auroc": 0.8786,
+            "mean_predicted": 0.012,
+            "brier": 0.05056,
+            "log_loss": 0.2899,
+            "log_loss_clip": 1e-06,
+            "reliability": {
+              "bins": 10,
+              "bins_consistent": 0,
+              "ece": 0.0533,
+              "mce": 0.3802,
+              "hosmer_lemeshow": {
+                "chi2": 433.211,
+                "df": 8,
+                "p": 0.0
+              },
+              "rows": [
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 8,
+                  "observed": 0.0465,
+                  "ci95": [
+                    0.0238,
+                    0.0891
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0324
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    891,
+                    918,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    15,
+                    17,
+                    0.8824
+                  ],
+                  "coverage_not_regulated": [
+                    892,
+                    919,
+                    0.9706
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0
+                  ],
+                  "mean_predicted": 0.0,
+                  "regulated": 2,
+                  "observed": 0.0117,
+                  "ci95": [
+                    0.0032,
+                    0.0416
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    62,
+                    64,
+                    0.9688
+                  ],
+                  "coverage_not_regulated": [
+                    1598,
+                    1625,
+                    0.9834
+                  ],
+                  "predicted_range": [
+                    0.0,
+                    0.0005
+                  ],
+                  "mean_predicted": 0.0002,
+                  "regulated": 1,
+                  "observed": 0.0058,
+                  "ci95": [
+                    0.001,
+                    0.0322
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 1,
+                  "coverage_regulated": [
+                    47,
+                    47,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    707,
+                    707,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0005,
+                    0.0013
+                  ],
+                  "mean_predicted": 0.0009,
+                  "regulated": 4,
+                  "observed": 0.0234,
+                  "ci95": [
+                    0.0091,
+                    0.0586
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    57,
+                    57,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    709,
+                    709,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0013,
+                    0.0023
+                  ],
+                  "mean_predicted": 0.0018,
+                  "regulated": 2,
+                  "observed": 0.0116,
+                  "ci95": [
+                    0.0032,
+                    0.0414
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 171,
+                  "strata": 2,
+                  "coverage_regulated": [
+                    57,
+                    57,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    709,
+                    709,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0023,
+                    0.0046
+                  ],
+                  "mean_predicted": 0.0032,
+                  "regulated": 6,
+                  "observed": 0.0351,
+                  "ci95": [
+                    0.0162,
+                    0.0744
+                  ],
+                  "consistent": false
+                },
+                {
+                  "pairs": 172,
+                  "strata": 8,
+                  "coverage_regulated": [
+                    97,
+                    97,
+                    1.0
+                  ],
+                  "coverage_not_regulated": [
+                    711,
+                    711,
+                    1.0
+                  ],
+                  "predicted_range": [
+                    0.0047,
+                    1.0
+                  ],
+                  "mean_predicted": 0.114,
+                  "regulated": 85,
+                  "observed": 0.4942,
+                  "ci95": [
+                    0.4204,
+                    0.5682
+                  ],
+                  "consistent": false
+                }
+              ]
+            }
+          }
+        },
+        "verdict": "passed",
+        "checks": {
+          "bins_consistent": 7,
+          "bins_required": 7,
+          "reliable": true,
+          "ece": [
+            0.0214,
+            0.0533
+          ],
+          "ece_better": true,
+          "brier": [
+            0.03453,
+            0.05056
+          ],
+          "brier_better": true
+        },
+        "prevalence_shift": {
+          "calibrated, sweep features": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.0469,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 0.7025,
+            "bins_consistent": 9,
+            "bins": 10,
+            "ece": 0.0109,
+            "brier": 0.03268,
+            "hosmer_lemeshow": {
+              "chi2": 13.822,
+              "df": 8,
+              "p": 0.0865
+            }
+          },
+          "drop alone, fitted": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.0516,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 0.4614,
+            "bins_consistent": 8,
+            "bins": 10,
+            "ece": 0.0316,
+            "brier": 0.03355,
+            "hosmer_lemeshow": {
+              "chi2": 36.185,
+              "df": 8,
+              "p": 0.0
+            }
+          },
+          "effect size as a confidence": {
+            "note": "fitted on the held-out labels' own prevalence: a description of the failure, not a test, and not the calibration that is shipped",
+            "mean_predicted_before": 0.012,
+            "observed_rate": 0.0653,
+            "log_odds_shift": 3.4658,
+            "bins_consistent": 3,
+            "bins": 10,
+            "ece": 0.0212,
+            "brier": 0.02995,
+            "hosmer_lemeshow": {
+              "chi2": 13.464,
+              "df": 8,
+              "p": 0.0969
+            }
+          }
+        },
+        "weights": {
+          "intercept": 4.7904,
+          "deletion_drop": 31.5696,
+          "top_target": 1.3547,
+          "log_tss_distance": -0.7319,
+          "node_target": 0.1754,
+          "class_pELS": -0.1992,
+          "class_PLS": 0.0,
+          "class_CTCF-only": 0.0,
+          "class_DNase-H3K4me3": 0.0,
+          "class_unknown": 0.0
+        },
+        "predicted_target_weights": {
+          "intercept": 2.5942,
+          "deletion_drop": 17.1562,
+          "log_tss_distance": -0.2583,
+          "node_target": -0.5011
+        },
+        "measured_by_drop_band, the answered held-out pairs": [
+          {
+            "drop": "= 0",
+            "pairs": 344,
+            "coverage_regulated": [
+              6,
+              6,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              338,
+              338,
+              1.0
+            ],
+            "regulated": 6,
+            "rate": 0.0174,
+            "ci95": [
+              0.008,
+              0.0375
+            ],
+            "elements": 212
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 766,
+            "coverage_regulated": [
+              57,
+              57,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              709,
+              709,
+              1.0
+            ],
+            "regulated": 57,
+            "rate": 0.0744,
+            "ci95": [
+              0.0579,
+              0.0952
+            ],
+            "elements": 404
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 14,
+            "coverage_regulated": [
+              13,
+              13,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1,
+              1,
+              1.0
+            ],
+            "regulated": 13,
+            "rate": 0.9286,
+            "ci95": [
+              0.6853,
+              0.9873
+            ],
+            "elements": 14
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 16,
+            "coverage_regulated": [
+              15,
+              15,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1,
+              1,
+              1.0
+            ],
+            "regulated": 15,
+            "rate": 0.9375,
+            "ci95": [
+              0.7167,
+              0.9889
+            ],
+            "elements": 13
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 12,
+            "coverage_regulated": [
+              12,
+              12,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 12,
+            "rate": 1.0,
+            "ci95": [
+              0.7575,
+              1.0
+            ],
+            "elements": 12
+          }
+        ],
+        "measured_by_drop_band, the answered pairs the gate excludes": [
+          {
+            "drop": "= 0",
+            "pairs": 343,
+            "coverage_regulated": [
+              6,
+              6,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              337,
+              337,
+              1.0
+            ],
+            "regulated": 6,
+            "rate": 0.0175,
+            "ci95": [
+              0.008,
+              0.0376
+            ],
+            "elements": 211
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 754,
+            "coverage_regulated": [
+              47,
+              47,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              707,
+              707,
+              1.0
+            ],
+            "regulated": 47,
+            "rate": 0.0623,
+            "ci95": [
+              0.0472,
+              0.0819
+            ],
+            "elements": 398
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 8,
+            "coverage_regulated": [
+              8,
+              8,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 8,
+            "rate": 1.0,
+            "ci95": [
+              0.6756,
+              1.0
+            ],
+            "elements": 8
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 5,
+            "coverage_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1,
+              1,
+              1.0
+            ],
+            "regulated": 4,
+            "rate": 0.8,
+            "ci95": [
+              0.3755,
+              0.9638
+            ],
+            "elements": 3
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 2,
+            "coverage_regulated": [
+              2,
+              2,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 2,
+            "rate": 1.0,
+            "ci95": [
+              0.3424,
+              1.0
+            ],
+            "elements": 2
+          }
+        ],
+        "measured_by_drop_band, the answered training pairs the gate excludes": [
+          {
+            "drop": "= 0",
+            "pairs": 1736,
+            "coverage_regulated": [
+              27,
+              27,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              1709,
+              1709,
+              1.0
+            ],
+            "regulated": 27,
+            "rate": 0.0156,
+            "ci95": [
+              0.0107,
+              0.0225
+            ],
+            "elements": 1075
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 3783,
+            "coverage_regulated": [
+              162,
+              162,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              3621,
+              3621,
+              1.0
+            ],
+            "regulated": 162,
+            "rate": 0.0428,
+            "ci95": [
+              0.0368,
+              0.0498
+            ],
+            "elements": 1965
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 26,
+            "coverage_regulated": [
+              22,
+              22,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "regulated": 22,
+            "rate": 0.8462,
+            "ci95": [
+              0.6647,
+              0.9385
+            ],
+            "elements": 25
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 24,
+            "coverage_regulated": [
+              20,
+              20,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "regulated": 20,
+            "rate": 0.8333,
+            "ci95": [
+              0.6415,
+              0.9332
+            ],
+            "elements": 23
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 2,
+            "coverage_regulated": [
+              2,
+              2,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 2,
+            "rate": 1.0,
+            "ci95": [
+              0.3424,
+              1.0
+            ],
+            "elements": 1
+          }
+        ],
+        "measured_by_drop_band, both, after the held-out test": [
+          {
+            "drop": "= 0",
+            "pairs": 2079,
+            "coverage_regulated": [
+              33,
+              33,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              2046,
+              2046,
+              1.0
+            ],
+            "regulated": 33,
+            "rate": 0.0159,
+            "ci95": [
+              0.0113,
+              0.0222
+            ],
+            "elements": 1286
+          },
+          {
+            "drop": "0 < drop <= 0.1",
+            "pairs": 4537,
+            "coverage_regulated": [
+              209,
+              209,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              4328,
+              4328,
+              1.0
+            ],
+            "regulated": 209,
+            "rate": 0.0461,
+            "ci95": [
+              0.0403,
+              0.0526
+            ],
+            "elements": 2363
+          },
+          {
+            "drop": "0.1 < drop <= 0.2",
+            "pairs": 34,
+            "coverage_regulated": [
+              30,
+              30,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "regulated": 30,
+            "rate": 0.8824,
+            "ci95": [
+              0.7338,
+              0.9533
+            ],
+            "elements": 33
+          },
+          {
+            "drop": "0.2 < drop <= 0.5",
+            "pairs": 29,
+            "coverage_regulated": [
+              24,
+              24,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              5,
+              5,
+              1.0
+            ],
+            "regulated": 24,
+            "rate": 0.8276,
+            "ci95": [
+              0.6545,
+              0.924
+            ],
+            "elements": 26
+          },
+          {
+            "drop": "0.5 < drop <= inf",
+            "pairs": 4,
+            "coverage_regulated": [
+              4,
+              4,
+              1.0
+            ],
+            "coverage_not_regulated": [
+              0,
+              0,
+              null
+            ],
+            "regulated": 4,
+            "rate": 1.0,
+            "ci95": [
+              0.5101,
+              1.0
+            ],
+            "elements": 3
+          }
+        ],
+        "what_a_confidence_means_off_the_gate": {
+          "the predicted-target curve, on the pairs the gate excludes": {
+            "what": "fitted on the top-target pairs alone; the curve the sweep's bands come from",
+            "pairs": 1112,
+            "regulated": 67,
+            "observed_rate": 0.0603,
+            "observed_ci95": [
+              0.0477,
+              0.0758
+            ],
+            "mean_predicted": 0.3855,
+            "quoted_over_observed": 6.4,
+            "log_odds_gap": 2.2809,
+            "inside_the_observed_interval": false
+          },
+          "the predicted-target curve, on the pairs it admits": {
+            "what": "its own population, for comparison",
+            "pairs": 40,
+            "regulated": 36,
+            "observed_rate": 0.9,
+            "observed_ci95": [
+              0.7695,
+              0.9604
+            ],
+            "mean_predicted": 0.8457,
+            "quoted_over_observed": 0.94,
+            "log_odds_gap": -0.4961,
+            "inside_the_observed_interval": true
+          },
+          "the tested-pair curve, on the pairs the gate excludes": {
+            "what": "fitted on every scored training pair",
+            "pairs": 1112,
+            "regulated": 67,
+            "observed_rate": 0.0603,
+            "observed_ci95": [
+              0.0477,
+              0.0758
+            ],
+            "mean_predicted": 0.0394,
+            "quoted_over_observed": 0.65,
+            "log_odds_gap": -0.4476,
+            "inside_the_observed_interval": false
+          }
+        }
+      }
+    },
+    "off_gate_note": "the registered clause: what a confidence means when it is quoted for a pair the gate would have excluded. Each arm reports it with its own features, so the shipped arm says what a user is quoted today and the re-fitted arm says what the same curve says once the sweep's own answer for that gene reaches it",
+    "the_same_heldout_population": {
+      "pairs": 1715,
+      "regulated": 112,
+      "identical_in_both_arms": true,
+      "pairs_the_gate_excludes_and_the_sweep_answers": 1112,
+      "pairs_the_gate_admits": 40
+    },
+    "flattening_check": {
+      "bins_consistent": [
+        6,
+        7
+      ],
+      "predicted_range_across_the_bins": [
+        0.3007,
+        0.3521
+      ],
+      "auprc": [
+        0.5589,
+        0.6774
+      ],
+      "reliability_improved": true,
+      "range_narrowed": false,
+      "auprc_fell": false,
+      "flattened": false
+    },
+    "coverage": {
+      "note": "what fraction of the pairs a user would ask about can be answered at all: on the benchmark, the pairs whose own gene the sweep predicted a change for; on the sweep, the (element, gene) questions the window makes askable against the one gene the compact table kept. The sweep figure is measured on two chromosomes, not genome-wide",
+      "benchmark, training K562 on a deleted element": {
+        "pairs": 9237,
+        "answerable_before": 246,
+        "answerable_now": 5827
+      },
+      "benchmark, held-out K562 on a deleted element": {
+        "pairs": 1744,
+        "answerable_before": 40,
+        "answerable_now": 1152
+      },
+      "sweep": {
+        "chr21": {
+          "elements": 12139,
+          "elements_the_compact_table_names_a_gene_for": 7846,
+          "elements_in_the_response_cache": 12139,
+          "askable_pairs_before": 7846,
+          "askable_pairs_now": 347591,
+          "genes_per_window_median": 28,
+          "factor": 44.3
+        },
+        "chr22": {
+          "elements": 19708,
+          "elements_the_compact_table_names_a_gene_for": 13108,
+          "elements_in_the_response_cache": 19708,
+          "askable_pairs_before": 13108,
+          "askable_pairs_now": 873596,
+          "genes_per_window_median": 41,
+          "factor": 66.6
+        }
+      }
+    }
+  }
+}

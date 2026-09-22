@@ -1,0 +1,519 @@
+{
+  "result": "motif_grammar",
+  "date": "2026-09-16",
+  "preregistered": "(c) beats (b) in Spearman with measured activity on held-out chromosomes in each cell line: the 95% bootstrap interval of rho(c) - rho(b) over held-out elements lies above 0 in K562, HepG2 and WTC11. The arrangement reading additionally requires rho(c) - rho(c shuffled) above 0 by the same interval; if only (c) - (b) holds, the gain is pair counts, not arrangement.",
+  "site_threshold": 0.95,
+  "training_chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chrX",
+    "chrY"
+  ],
+  "held_out_chromosomes": [
+    "chr8",
+    "chr9",
+    "chr21",
+    "chr22"
+  ],
+  "training_elements": 45228,
+  "columns": {
+    "a": 4,
+    "b": 46,
+    "c": 376
+  },
+  "family_units": [
+    "RXR-related receptors (NR2)",
+    "Paired-related HD factors",
+    "NK",
+    "TALE-type homeo domain factors",
+    "HOX",
+    "FOX",
+    "HIC2",
+    "ZNF70",
+    "NFAT-related factors",
+    "Tal-related",
+    "TALE-type HD",
+    "SOX-related factors",
+    "C4-GATA-related",
+    "Nuclear factor 1",
+    "Thyroid hormone receptor-related factors (NR1)",
+    "NACC2",
+    "DMRT factors",
+    "HD-LIM",
+    "ZNF536",
+    "KLF5",
+    "SP5",
+    "PAS domain factors",
+    "ZNF354C",
+    "STAT factors",
+    "ZBTB48",
+    "IKZF2",
+    "HD-ZF",
+    "MYT",
+    "ZNF827",
+    "bHLH-ZIP",
+    "E2A",
+    "VEZF1",
+    "POU domain factors",
+    "ARID-related",
+    "TEF-1-related factors",
+    "ZNF66",
+    "HD-ZF factors",
+    "ZNF800",
+    "CSL-related factors",
+    "Fos-related"
+  ],
+  "pair_units": [
+    "RXR-related receptors (NR2)",
+    "Paired-related HD factors",
+    "NK",
+    "TALE-type homeo domain factors",
+    "HOX",
+    "FOX",
+    "HIC2",
+    "ZNF70",
+    "NFAT-related factors",
+    "Tal-related"
+  ],
+  "pair_features_per_pair": 6,
+  "gap_bins": [
+    [
+      0,
+      10
+    ],
+    [
+      10,
+      20
+    ],
+    [
+      20,
+      50
+    ],
+    [
+      50,
+      null
+    ]
+  ],
+  "sites_per_element_median": 34,
+  "inner_cross_validation": {
+    "a": {
+      "K562": {
+        "lambda": 1.0,
+        "inner_spearman": 0.2065,
+        "by_lambda": {
+          "1.0": 0.2065,
+          "10.0": 0.2061,
+          "100.0": 0.2017,
+          "1000.0": 0.1935,
+          "10000.0": 0.1905
+        }
+      },
+      "HepG2": {
+        "lambda": 1.0,
+        "inner_spearman": 0.1848,
+        "by_lambda": {
+          "1.0": 0.1848,
+          "10.0": 0.1845,
+          "100.0": 0.1827,
+          "1000.0": 0.1814,
+          "10000.0": 0.1817
+        }
+      },
+      "WTC11": {
+        "lambda": 10000.0,
+        "inner_spearman": 0.3737,
+        "by_lambda": {
+          "1.0": 0.3737,
+          "10.0": 0.3736,
+          "100.0": 0.3736,
+          "1000.0": 0.3736,
+          "10000.0": 0.3737
+        }
+      }
+    },
+    "b": {
+      "K562": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4203,
+        "by_lambda": {
+          "1.0": 0.4203,
+          "10.0": 0.4199,
+          "100.0": 0.4154,
+          "1000.0": 0.4037,
+          "10000.0": 0.3973
+        }
+      },
+      "HepG2": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4079,
+        "by_lambda": {
+          "1.0": 0.4079,
+          "10.0": 0.4077,
+          "100.0": 0.4043,
+          "1000.0": 0.3948,
+          "10000.0": 0.3918
+        }
+      },
+      "WTC11": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4244,
+        "by_lambda": {
+          "1.0": 0.4244,
+          "10.0": 0.424,
+          "100.0": 0.4209,
+          "1000.0": 0.4149,
+          "10000.0": 0.4153
+        }
+      }
+    },
+    "c": {
+      "K562": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4208,
+        "by_lambda": {
+          "1.0": 0.4208,
+          "10.0": 0.4204,
+          "100.0": 0.4166,
+          "1000.0": 0.4092,
+          "10000.0": 0.406
+        }
+      },
+      "HepG2": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4076,
+        "by_lambda": {
+          "1.0": 0.4076,
+          "10.0": 0.4073,
+          "100.0": 0.404,
+          "1000.0": 0.3968,
+          "10000.0": 0.3957
+        }
+      },
+      "WTC11": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4247,
+        "by_lambda": {
+          "1.0": 0.4247,
+          "10.0": 0.4243,
+          "100.0": 0.4212,
+          "1000.0": 0.4173,
+          "10000.0": 0.4197
+        }
+      }
+    },
+    "shuffled": {
+      "K562": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4171,
+        "by_lambda": {
+          "1.0": 0.4171,
+          "10.0": 0.4168,
+          "100.0": 0.413,
+          "1000.0": 0.4054,
+          "10000.0": 0.4022
+        }
+      },
+      "HepG2": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4032,
+        "by_lambda": {
+          "1.0": 0.4032,
+          "10.0": 0.4029,
+          "100.0": 0.3997,
+          "1000.0": 0.3926,
+          "10000.0": 0.3922
+        }
+      },
+      "WTC11": {
+        "lambda": 1.0,
+        "inner_spearman": 0.4197,
+        "by_lambda": {
+          "1.0": 0.4197,
+          "10.0": 0.4193,
+          "100.0": 0.4162,
+          "1000.0": 0.4122,
+          "10000.0": 0.4154
+        }
+      }
+    }
+  },
+  "folds": {
+    "chr1": 0,
+    "chr2": 1,
+    "chr6": 2,
+    "chr3": 3,
+    "chr7": 3,
+    "chr5": 2,
+    "chr10": 1,
+    "chr11": 0,
+    "chr4": 3,
+    "chr12": 2,
+    "chr17": 1,
+    "chr16": 0,
+    "chr19": 2,
+    "chr15": 3,
+    "chr20": 1,
+    "chr14": 0,
+    "chrX": 2,
+    "chr13": 3,
+    "chr18": 1,
+    "chrY": 0
+  },
+  "evidence": {
+    "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+    "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+    "comparison": "inferred: ridge on the training chromosomes, Spearman on the held-out ones, bootstrap by element"
+  },
+  "held_out": {
+    "K562": {
+      "held_out_elements": 6146,
+      "lambda": {
+        "a": 1.0,
+        "b": 1.0,
+        "c": 1.0,
+        "shuffled": 1.0
+      },
+      "a": {
+        "point": 0.1998,
+        "ci95": [
+          0.176,
+          0.2229
+        ],
+        "above_zero": 1.0
+      },
+      "b": {
+        "point": 0.434,
+        "ci95": [
+          0.4132,
+          0.4563
+        ],
+        "above_zero": 1.0
+      },
+      "c": {
+        "point": 0.4361,
+        "ci95": [
+          0.4152,
+          0.4584
+        ],
+        "above_zero": 1.0
+      },
+      "shuffled": {
+        "point": 0.4374,
+        "ci95": [
+          0.4166,
+          0.4601
+        ],
+        "above_zero": 1.0
+      },
+      "b-a": {
+        "point": 0.2342,
+        "ci95": [
+          0.2082,
+          0.2618
+        ],
+        "above_zero": 1.0
+      },
+      "c-b": {
+        "point": 0.0021,
+        "ci95": [
+          -0.0049,
+          0.0085
+        ],
+        "above_zero": 0.715
+      },
+      "c-shuffled": {
+        "point": -0.0013,
+        "ci95": [
+          -0.0081,
+          0.0051
+        ],
+        "above_zero": 0.342
+      },
+      "shuffled-b": {
+        "point": 0.0034,
+        "ci95": [
+          -0.003,
+          0.0092
+        ],
+        "above_zero": 0.853
+      }
+    },
+    "HepG2": {
+      "held_out_elements": 6146,
+      "lambda": {
+        "a": 1.0,
+        "b": 1.0,
+        "c": 1.0,
+        "shuffled": 1.0
+      },
+      "a": {
+        "point": 0.1672,
+        "ci95": [
+          0.1408,
+          0.1916
+        ],
+        "above_zero": 1.0
+      },
+      "b": {
+        "point": 0.4021,
+        "ci95": [
+          0.3814,
+          0.4234
+        ],
+        "above_zero": 1.0
+      },
+      "c": {
+        "point": 0.3966,
+        "ci95": [
+          0.3745,
+          0.4197
+        ],
+        "above_zero": 1.0
+      },
+      "shuffled": {
+        "point": 0.4001,
+        "ci95": [
+          0.3793,
+          0.4217
+        ],
+        "above_zero": 1.0
+      },
+      "b-a": {
+        "point": 0.235,
+        "ci95": [
+          0.2047,
+          0.2628
+        ],
+        "above_zero": 1.0
+      },
+      "c-b": {
+        "point": -0.0056,
+        "ci95": [
+          -0.012,
+          0.0014
+        ],
+        "above_zero": 0.059
+      },
+      "c-shuffled": {
+        "point": -0.0036,
+        "ci95": [
+          -0.0106,
+          0.0038
+        ],
+        "above_zero": 0.178
+      },
+      "shuffled-b": {
+        "point": -0.002,
+        "ci95": [
+          -0.0078,
+          0.0042
+        ],
+        "above_zero": 0.256
+      }
+    },
+    "WTC11": {
+      "held_out_elements": 6146,
+      "lambda": {
+        "a": 10000.0,
+        "b": 1.0,
+        "c": 1.0,
+        "shuffled": 1.0
+      },
+      "a": {
+        "point": 0.3479,
+        "ci95": [
+          0.3249,
+          0.3695
+        ],
+        "above_zero": 1.0
+      },
+      "b": {
+        "point": 0.4244,
+        "ci95": [
+          0.4029,
+          0.4449
+        ],
+        "above_zero": 1.0
+      },
+      "c": {
+        "point": 0.4265,
+        "ci95": [
+          0.4042,
+          0.4467
+        ],
+        "above_zero": 1.0
+      },
+      "shuffled": {
+        "point": 0.4219,
+        "ci95": [
+          0.4003,
+          0.442
+        ],
+        "above_zero": 1.0
+      },
+      "b-a": {
+        "point": 0.0765,
+        "ci95": [
+          0.0596,
+          0.0939
+        ],
+        "above_zero": 1.0
+      },
+      "c-b": {
+        "point": 0.0022,
+        "ci95": [
+          -0.005,
+          0.0097
+        ],
+        "above_zero": 0.738
+      },
+      "c-shuffled": {
+        "point": 0.0047,
+        "ci95": [
+          -0.0023,
+          0.0124
+        ],
+        "above_zero": 0.901
+      },
+      "shuffled-b": {
+        "point": -0.0025,
+        "ci95": [
+          -0.0082,
+          0.0029
+        ],
+        "above_zero": 0.181
+      }
+    }
+  },
+  "verdict": {
+    "grammar_beats_counts": {
+      "K562": false,
+      "HepG2": false,
+      "WTC11": false
+    },
+    "grammar_beats_shuffled_grammar": {
+      "K562": false,
+      "HepG2": false,
+      "WTC11": false
+    },
+    "preregistered_claim_holds": false,
+    "arrangement_reading_holds": false,
+    "statement": "grammar features add nothing detectable over strict motif counts"
+  }
+}

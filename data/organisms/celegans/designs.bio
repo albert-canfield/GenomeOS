@@ -1,0 +1,24 @@
+# Design questions put to BioForge over the C. elegans founder rules: which single maternal factor or
+# signal, removed, gives the stated founder outcome. Answers are predictions from the cited rules.
+# Run: genomeos grow data/organisms/celegans/designs.bio --design
+module organism.celegans.designs
+import embryo.bio
+
+design two_intestinal_founders {
+  knockout_any_of: POP-1, SKN-1, PIE-1, PAL-1, APX-1, GLP-1
+  at_most: 1
+  until: 200 min
+  target: type EPrecursor at 100 min = 2
+  keep: type ABpPrecursor at 50 min = 1
+  keep: type CPrecursor at 100 min = 1
+  evidence: curated "Lin et al. 1995: without POP-1, MS takes the E fate"; confidence: 0.6
+}
+
+design two_ems_founders_no_germline {
+  knockout_any_of: POP-1, SKN-1, PIE-1, PAL-1, APX-1
+  at_most: 1
+  until: 200 min
+  target: type EMSPrecursor at 60 min = 2
+  target: type GermCell at 150 min = 0
+  evidence: curated "Mello et al. 1992: without PIE-1, P2 takes the EMS fate"; confidence: 0.6
+}
