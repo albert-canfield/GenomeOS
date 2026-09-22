@@ -2563,9 +2563,69 @@ in order. "Owner" is the session that holds the files today (see §7).
   out**; on chr21 the answerable (element, gene) questions go from 7,846 to
   347,591. The published `score()` keeps its no-cache default as the control and
   was not re-run.
+- **The genome re-banded, and 94.2% of its bands lose their number (2026-09-22,
+  lane-band, `9a44b65` registration, `d519bdb` result, 0 requests). Two things
+  this session wrote above are corrected here by the lane sent to act on them,
+  and both stay visible.** First, **593,765** targets are banded, not 612,323:
+  that larger figure is what the sweep NAMES, and 18,558 of them carry no band
+  because their gene has no GENCODE v50 TSS. Second, **no swept target is off
+  the gate** — `sweep_chromosome` bands the `predicted` and `predicted_coding`
+  keys and `crispri.deletion_values` sets `top_target` on a match to either — so
+  the ×6.85 is not an error in the shipped table but what that curve quotes for
+  a population that became askable only when `ElementResponses` existed. The
+  coordinator's guessed split was argued rather than assumed, and it does not
+  exist in the sweep. **The real mismatch is inside the gate**: 31.8% of the
+  fitted 245 pairs are K562-named against 5.3% of the sweep, and 34.3% carry a
+  drop above 0.2 against 5.8%.
+  **Re-banded on the registered axis, 559,607 of 593,765 targets (94.2%) lose
+  their band** — 34,158 keep 0.9–1, 62 move up and **none moves down** — and all
+  four registered predictions were exact, to the count. **Of the 55,957 targets
+  published at 0.9–1, 21,861 (39.1%) are not calibrated at all.** A stratum
+  keeps a number only with at least 30 pooled pairs and a Wilson interval inside
+  one published band; otherwise it reads **"not calibrated here"** with its count
+  and its interval, which was written into the registration before anyone knew
+  how many strata would need it.
+  **The registration's own falsifier fired, and it is recorded as written: the
+  axis was wrong.** The track axis bands both its strata where the drop axis
+  bands 5.8% of the genome — and on it **44,372 of the 55,957 published 0.9–1
+  targets (79.3%) fall two bands**. Either way the conclusion is the same and it
+  is the point of the lane: **the claim that 55,957 pairs are at least 90%
+  likely does not survive**, a third of that band being uncalibrated or four
+  fifths of it two bands lower.
+  **On the gate every published band is honest** — 0.25–0.5 measures 0.3514,
+  0.5–0.75 measures 0.6629, 0.9–1 measures 0.9754 — and after re-banding the top
+  band means **105 of 105**. The off-gate population gets its own table for the
+  first time: at drop 0, 4,716 pairs measure **0.0091**; at 0 < drop ≤ 0.1,
+  3,783 pairs measure **0.0428** — against the 0.4126 the shipped curve would
+  have quoted them. **No web UI hunk is needed**: nothing in `server.py`,
+  `index.html` or `cli.py` reads this result or any band label, which was
+  verified directly rather than assumed.
+  **One thing was measured and deliberately not adopted**, and the reason is the
+  lane's own discipline: the two axes are near-disjoint (Jaccard 14.5%) and
+  their union bands **128 of 128** pairs at 1.0000. Adopting it now would be
+  exactly the post-hoc choice this lane exists to correct, so it goes to the
+  next registration instead.
 - **Next, open, and the first is now the area's highest-value item: re-band the
   genome from an off-gate curve.** An off-gate confidence is quoted from an
   off-gate curve or it is not quoted. Then the model's **second** targets as a
+  shortlist, held against an independent perturbation, since the 86.6% against
+  1.6% separation is something no compact one-gene table could ever offer. Then
+  the prevalence term, unchanged since 2026-09-17 and now confirmed on 23.7× the
+  pairs (×1.23 to ×1.44 on every slicing): re-fit the intercept per screen with
+  that screen's own base rate as an offset before any band is quoted.
+  *(Written before the lane ran, and its first clause is answered and corrected
+  above: the re-banding is done, and there was no off-gate population in the
+  sweep to re-band. The list below supersedes this one.)*
+- **Next, open.** 1. **The union axis, registered properly**: K562 track and
+  predicted drop are near-disjoint, either alone gives 100% regulated, and their
+  union would band the genome from two single-band populations rather than from
+  a drop axis that bands 5.8% or a track axis that aggregates sub-populations
+  reading 0.58, 0.60 and 0.87. 2. **The 52 off-gate pairs above a drop of 0.1**,
+  carrying 84.6% and 83.3% and refused a band because 26 and 24 pairs cannot
+  hold one — the model's second and third targets, and the cheapest way to widen
+  that shortlist is more off-gate pairs rather than more features. 3. **No test
+  guards the genome-wide totals**, which is how "612,323" travelled into four
+  documents. Then the model's **second** targets as a
   shortlist, held against an independent perturbation, since the 86.6% against
   1.6% separation is something no compact one-gene table could ever offer. Then
   the prevalence term, unchanged since 2026-09-17 and now confirmed on 23.7× the

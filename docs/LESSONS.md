@@ -644,3 +644,16 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   measured there.** Any confidence, band or calibrated probability in this project should carry the
   population it was fitted on beside it, and a consumer applying it off that population is quoting a
   number the curve was never asked about.
+
+  **Two corrections to this entry as it was first written, both found by the lane sent to act on
+  it, and both left visible because the entry is about not trusting a number past its population.**
+  The figure **612,323** is the count of targets the sweep NAMES; **593,765** are banded, and the
+  other 18,558 carry no band because their gene has no GENCODE v50 TSS. And the ×6.85 was not an
+  error in the shipped table: `sweep_chromosome` bands the `predicted` and `predicted_coding` keys,
+  and `crispri.deletion_values` sets `top_target` on a match to either, so **no swept target is off
+  the gate**. The ×6.85 is what that curve quotes for a population that could not be asked about
+  until `ElementResponses` existed. The lesson stands and is sharper stated correctly: **the curve
+  was honest on every population it could reach, and the exposure appeared the moment a new
+  population became reachable.** The mismatch that is real sits INSIDE the gate — 31.8% of the
+  fitted 245 pairs are K562-named against 5.3% of the sweep, and 34.3% carry a drop above 0.2
+  against 5.8%.
