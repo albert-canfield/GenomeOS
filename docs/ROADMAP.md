@@ -718,6 +718,56 @@ in order. "Owner" is the session that holds the files today (see §7).
   2026-09-22 as the next spend, because it is the arm that could falsify a
   passing result. NODES-READER-WRITER.md, "Measured perturbations, and the
   direction question"; `data/results/crispri_direction.json`.
+- **The upward arm, and the direction pass does not survive it (2026-09-22,
+  lane-updir).** `c2a16d8` the registration, `d492834` the result, **0 requests
+  of the 35 authorised** — because the 30/35 costing was reproduced exactly and
+  then turned out to buy something already on disk. **"The sweep stores one
+  target per element" is true of a derived table, not of the measurement**: the
+  compact `all_elements/<chrom>.json` keeps one gene, while the per-element
+  response cache written by the same run at `threshold=0.0` carries **every gene
+  in the scorer's 1 Mb window with a signed per-cell log2fc, uncensored**. The
+  answerable set goes from **44 one-signed pairs to 152 two-signed** ones, 116
+  down and 36 up.
+  **With both signs present the primary had to change, and the registration said
+  so before scoring**: the set is not balanced, so a constant-down caller scores
+  0.763 on raw agreement and quoting that against 0.5 would have manufactured a
+  success one step further along. The registered primary is therefore **balanced
+  accuracy**, where chance is 0.5 for any class mix and a constant-sign caller
+  scores exactly 0.5 by construction.
+  **THE UPWARD ARM FAILS: 15 of 36, 0.4167 [0.2714, 0.5780]** — not clearing
+  chance, and below the model's own unconditional up-rate of 0.4643, so on pairs
+  where an increase was measured the layer does no better than its own habit.
+  Downward 96/116. **Combined balanced accuracy 0.6221 [0.5354, 0.7088]:
+  undecidable, as the registration predicted to within a decimal.**
+  **The sharpest number is raw agreement 0.7303 against a majority-class rate of
+  0.7632 — the layer is worse at calling direction than a caller that says "down"
+  every time and never looks at the element.** Its marginals are almost exactly
+  right (predicted 117 down / 35 up against measured 116 / 36) and its pairings
+  are wrong. **This is precisely what the first half could not have found**: on an
+  all-down set a caller worse than constant-down still scores 0.93.
+  **So the 41/44 pass of `5c842ca` is correct for what it measured and is now a
+  statement about downward effects only**, annotated in place rather than
+  rewritten, and no subset was searched for where the upward arm holds. All three
+  registered falsifiers fired, including top-target selection: 42/44 on pairs the
+  compact table could see against **69/108, balanced 0.5833**, on pairs only the
+  cache can answer. **"All errors below ‖0.055‖" is falsified** by a 0.3172 miss
+  on HBG1 in K562 against a measured -0.7356; what survives and sharpens is that
+  in the weak band the sensitivities are 0.7069 down and 0.3939 up — **balanced
+  accuracy 0.5504, chance** — so all of the layer's direction signal lives in
+  large-magnitude downward calls. The registered magnitude-matched sub-test has
+  only 2 upward pairs above 0.1 and is reported as **unable to settle** whether
+  the upward failure is about sign or magnitude, rather than leaned on.
+  **One registered check did not pass and was traced rather than waived**: one of
+  the 44 changes sign, and it is a candidate-set difference rather than a reader
+  disagreement — three scored elements overlap that perturbation and the wider
+  set resolves the largest-magnitude rule elsewhere. It is recorded as a flaw in
+  the lane's own registration, and reported because it moves the other way: it
+  would turn one of the first half's three errors into a hit. **The general form
+  is carried forward: "largest absolute change among overlapping matches" is not
+  well defined unless the candidate set is pinned too.**
+  **The `represses` half of `action` is now measured and unsupported, which is a
+  better place to stand than measured nowhere.** NODES-READER-WRITER.md;
+  `data/results/crispri_direction_both.json`.
 - **Next (epigenome and nodes).** 1. Done as an alternative; the next test is a
   stricter site call (best-hit strand, stronger motifs) judged on all four
   measurements at once, and whether Hi-C questions and enhancer-to-gene

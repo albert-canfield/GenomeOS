@@ -619,3 +619,14 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the code for the field, before the note hardens into a reason.** The lesson is not about fusions
   and not about cBioPortal: a `SUMMARY` projection, a default column set and a summary endpoint
   all drop fields silently, and none of them report what they withheld.
+
+  **A second instance the next day, from a different direction, which is why this is a rule and
+  not an anecdote (2026-09-22).** The direction question could only be asked of 44 element-gene
+  pairs because "the sweep stores one target per element", and closing the other arm was costed at
+  30 requests and authorised. It cost none. That sentence was true of the compact
+  `all_elements/<chrom>.json` — a **derived table** — and false of the measurement: the same run
+  wrote a per-element response cache at `threshold=0.0` holding every gene in the scorer's window
+  with a signed per-cell value. The answerable set went from 44 pairs to 152, and the extra 108 are
+  where the claim fell over. **A limit inherited from a summary of the data is not a limit of the
+  data**, and the cheapest thing to do with any sentence of the form "we only have one X per Y" is
+  to look for what the run wrote before it was summarised.
