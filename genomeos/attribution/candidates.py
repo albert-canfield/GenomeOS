@@ -15,7 +15,9 @@ holds locally, and adds nothing from a model:
   the repeats they sit in (a base in a primate-specific repeat cannot be held across mammals, a
   base in a structured-RNA copy is held because its paralogues are);
 - the registry (ENCODE cCREs) and the reader (ENCODE DNase in eleven cell types) on the element
-  itself, next to the node's openness in the same cells;
+  itself, next to where the element's CTCF node ranks against that same cell's other nodes (a rank
+  within one cell, not an absolute call: half of any cell's nodes are on the open side, so it can
+  say one cell ranks the node higher than another does, never that the node is shut);
 - coding: each conserved segment scored for a stop-free frame with codon usage, held against the
   chromosome's own canonical coding exons, and the segment parser run over the block;
 - measured ground truth already local: VISTA, lentiMPRA, ClinVar pathogenic, GWAS lead variants
@@ -39,6 +41,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from genomeos.genome.reader import NODE_OPEN_BASIS, node_open_threshold
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 CHROMS = tuple([f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"])
@@ -76,7 +79,12 @@ EVIDENCE = {
     "context": "curated: GENCODE v50 genes (every type); inferred: CTCF-only nodes, nearest coding TSS",
     "node_targets": "predicted: AlphaGenome deletion runs already scored (no new calls)",
     "registry": "curated: ENCODE SCREEN cCREs v3",
-    "reader": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types; control windows alongside",
+    "reader": (
+        "experimental: ENCODE DNase-seq narrowPeak, eleven cell types; control windows alongside. "
+        "open_on_element and open_on_conserved are absolute (a peak overlaps or it does not) and are "
+        "the only reader fields any score reads; node_open is a per-cell rank against that "
+        "biosample's own median node density and supports no absolute claim (node_open_basis)"
+    ),
     "constraint": "experimental-derived: UCSC phastConsElements100way (local cache)",
     "repeats": "curated: UCSC RepeatMasker",
     "coding": (
@@ -399,9 +407,10 @@ class Chromosome:
         for c in self.cells:
             r = load_result(f"reader_{c}_{chrom}", results_dir) or {}
             table = r.get("node_table") or []
-            dens = sorted(n["peaks_per_100kb"] for n in table)
-            median = dens[len(dens) // 2] if dens else 0.0
-            self.node_open[c] = {n["id"]: n["peaks_per_100kb"] >= max(1.0, median) for n in table}
+            # one definition of the open-node call, in genome/reader.py, so this copy of it cannot
+            # drift from the reader's; NODE_OPEN_BASIS says what the call supports (a per-cell rank)
+            open_density = node_open_threshold(n["peaks_per_100kb"] for n in table)
+            self.node_open[c] = {n["id"]: n["peaks_per_100kb"] >= open_density for n in table}
         self.deleted = deletion_elements(chrom, results_dir)
         self._codon_lo: dict[str, float] | None = None
         self._exon_scores: list[float] | None = None
@@ -599,8 +608,12 @@ def reader(
         "cells": len(ch.cells),
         "open_on_element": open_element,
         "open_on_conserved": open_conserved,
+        # open_on_element and open_on_conserved are absolute: a DNase peak is there or it is not.
+        # node_open is not, and the two must not be read as the same kind of call, so the basis
+        # travels with the record rather than living only in the doc.
         "node_open": open_node,
         "node_open_element_closed": sorted(set(open_node) - set(open_element)),
+        "node_open_basis": NODE_OPEN_BASIS,
     }
 
 

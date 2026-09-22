@@ -2362,3 +2362,59 @@ being tidied away.
    is checked over all 312 files on disk, not asserted.
 
 No data is fetched for any of this and no model request is made.
+
+### Scored against that registration (seconds, 0 model requests, nothing fetched)
+
+Run after the registration above was committed as 1e57e3e and before the code
+was touched, then again after.
+
+**Falsifier 1, the one that would have made this a defect: not fired.** The
+shared `node_open_threshold` was checked against the literal expression it
+replaces over every node on disk — 260,026 node calls across 312
+`reader_*_chr*.json` files, thirteen biosamples on twenty-four chromosomes —
+and the two agree on **0 disagreements**. Re-deriving both emitted fields for
+the 69 published candidates under the shared function, on the eleven biosamples
+that run had, reproduces the file exactly: **69 of 69 identical** on `node_open`
+and 69 of 69 on `node_open_element_closed`, against the registered bar of 69 of
+69. Nothing in `syntax_candidates_genome_wide.json` moves, which is what a
+change with no consumer should do.
+
+**Falsifier 2, a consumer that compares biosamples on the count rather than the
+membership: not found.** There is no consumer at all, so there is nothing to
+compare. Had one existed it would have carried the reader's defect and the
+field would have had to be withdrawn rather than relabelled.
+
+**Falsifier 3, the floor binding where a candidate lives: not fired.** Over the
+same 312 files the floor binds in 9, all chrY, and on none of the nineteen
+chromosomes the 69 blocks sit on, for none of the thirteen biosamples. One
+label for the field is therefore enough, and the chrY case is kept as a named
+case in the test rather than tidied out of the code.
+
+So the verdict registered in advance stands, and it is a negative one in the
+useful sense: **this duplication was a maintenance hazard and not a defect.**
+Every consumer of the per-cell call is a within-biosample rank, no published
+number rests on a between-biosample reading of it, and nothing changed when the
+copy was removed. That is worth saying as plainly as the reversal in the
+section above: the same construction that made `nodes_open` unusable as a count
+is, as a membership, depth-invariant and legitimate, and the difference is what
+the consumer asks of it.
+
+### What changed in the code
+
+- `genomeos/genome/reader.py`: `NODE_OPEN_MIN_DENSITY`, `NODE_OPEN_BASIS` and
+  `node_open_threshold()` are the single definition of the open-node call;
+  `read_chromosome` calls it instead of inlining the median and the floor.
+- `genomeos/attribution/candidates.py:398-404` calls the same function, so the
+  two copies cannot drift. `reader()` emits `node_open_basis` beside
+  `node_open`, so a consumer opening a `syntax_candidates_*.json` learns from
+  the file that the call is a per-cell rank; the existing file gains it at the
+  next run. The module docstring no longer calls it "the node's openness in the
+  same cells", and `EVIDENCE["reader"]` now says which reader fields are
+  absolute, which is a rank, and which of them any score actually reads.
+- `tests/test_node_open_threshold.py` pins seven properties: the shared
+  function reproduces the replaced expression on seven density cases including
+  the empty one; neither module carries the literal `max(1.0, median` back;
+  membership survives scaling by 0.1, 2.0 and the observed depth span 6.81;
+  the split is still half the nodes at any scale, so the closed side carries no
+  information; below the floor the call stops being a rank and depth alone
+  moves the count; and the basis string travels with the record.

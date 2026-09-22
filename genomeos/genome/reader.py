@@ -37,6 +37,7 @@ import json
 import re
 import urllib.parse
 import urllib.request
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -149,6 +150,30 @@ def _mark_index(cell_type: str, mark: str, chrom: str) -> PeakIndex | None:
     return PeakIndex(pk) if pk is not None else None
 
 
+# The open-node call, defined once. genomeos/attribution/candidates.py re-derived this expression
+# line for line until 2026-09-22; it now calls these, so the two cannot drift apart.
+NODE_OPEN_MIN_DENSITY = 1.0  # peaks per 100 kb: the floor below which a median split is meaningless
+
+NODE_OPEN_BASIS = (
+    "a node is open where its DNase peak density is at or above the median over that biosample's "
+    f"own nodes on this chromosome, floored at {NODE_OPEN_MIN_DENSITY} peaks per 100 kb. That is a "
+    "rank within one cell, not an absolute call: half of every cell's nodes are open by "
+    "construction, so a difference between two cells says one ranks the node above its own median "
+    "and the other does not, never that the node is shut in either. Below the floor the call stops "
+    "being a rank and becomes an absolute threshold on a density, which is assay depth; over the "
+    "biosamples on disk that happens only on chrY. See docs/NODES-READER-WRITER.md, 'The second "
+    "copy of that threshold, in the attribution candidates'."
+)
+
+
+def node_open_threshold(densities: Iterable[float]) -> float:
+    """The peaks-per-100 kb at or above which a node counts as open for one biosample on one
+    chromosome: the median over that biosample's own nodes, floored. See NODE_OPEN_BASIS for what
+    the call does and does not support."""
+    d = sorted(densities)
+    return max(NODE_OPEN_MIN_DENSITY, d[len(d) // 2]) if d else NODE_OPEN_MIN_DENSITY
+
+
 def read_chromosome(
     cell_type: str, chrom: str, annotation, domains: list, ccres: list, marks: bool = True
 ) -> dict[str, Any]:
@@ -194,8 +219,8 @@ def read_chromosome(
         )
     enh = [c for c in ccres if c.cls in ("pELS", "dELS")]
     active = sum(1 for c in enh if idx.overlapping(c.start, c.end))
-    median_density = sorted(n["peaks_per_100kb"] for n in nodes)[len(nodes) // 2] if nodes else 0
-    open_nodes = [n for n in nodes if n["peaks_per_100kb"] >= max(1.0, median_density)]
+    open_density = node_open_threshold(n["peaks_per_100kb"] for n in nodes)
+    open_nodes = [n for n in nodes if n["peaks_per_100kb"] >= open_density]
     silent_nodes = [n for n in nodes if n["peaks"] == 0]
     read_open = len(read)
     read.extend(by_marks)
