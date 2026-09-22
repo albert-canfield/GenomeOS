@@ -631,6 +631,26 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   data**, and the cheapest thing to do with any sentence of the form "we only have one X per Y" is
   to look for what the run wrote before it was summarised.
 
+- **A reading that a new sample cannot surprise is a reading of the instrument (2026-09-22).** The
+  epigenome layer reports `enhancers_active` per biosample, and across eleven biosamples it spans
+  4.1× while `genes_read` spans 1.3×. The wide one correlates with DNase peak count at rho 0.8818,
+  which on its own says only that they move together. The test that settles it costs one fetch:
+  fit the reading on the biosamples you have, then bring in a lineage and a material the layer has
+  never held — here testis and ovary, the first bulk tissues in a set of eleven cultured
+  populations — and see whether the fit predicts them. **Testis landed at z = −0.11 and ovary at
+  −1.29.** A number that a genuinely new sample cannot move away from its assay-depth prediction is
+  measuring the assay. `genes_read` is the control that makes the point rather than a caveat
+  against it: testis leaves the eleven's entire range at 15,078 of 20,094, on mid-range depth, in
+  the direction its biology predicts. **Before a per-sample reading is used as evidence, fit it
+  against the cheapest measure of how hard the sample was sequenced and report both.**
+
+- **A range built from two non-overlapping populations cannot be failed (2026-09-22).** The same
+  lane registered that germline methylation would fall outside the somatic range, and it did not.
+  The more useful finding is that it could not have: the "somatic range" is transformed lines at
+  0.074–0.604 and non-transformed at 0.805–0.852 with **nothing in between**, so the interval it
+  spans contains no value any sample could take. A test against an aggregate range is only a test
+  if the aggregate is one population, and the check is to plot the members before quoting the span.
+
 - **A curve is honest on the population it was fitted on and nowhere else, and the gate that chose
   that population is usually invisible (2026-09-22).** The confidence attached to every predicted
   enhancer target was fitted on the **245** training pairs where the measured gene happened to be

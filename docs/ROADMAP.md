@@ -680,6 +680,52 @@ in order. "Owner" is the session that holds the files today (see §7).
   default's excess survives the 3.9× growth (+2.6 → +2.9).
   NODES-READER-WRITER.md, "A stricter site call, judged on all four measurements
   at once".
+- **A twelfth and thirteenth biosample, and the reading they were fetched to
+  test turns out to be assay depth (2026-09-22, lane-biosample, `ca8aa0f`
+  inventory and registration, `1680ebc` result).** The inventory came first and
+  had never been written down, and two of its facts decided the choice: **not
+  one of the eleven biosamples was a tissue** — six immortalised or cancer
+  lines, two directed-differentiation products of a stem line, three cultured
+  primaries — and **neural was already occupied twice**, by SK-N-SH and
+  astrocyte. So the committed rule (unoccupied lineage first, then whether the
+  direction predicts a reading outside the eleven's range for a stated
+  mechanism, availability only as a tiebreak) chose **gonadal**: testis, with
+  ovary as the control that separates "germline" from "bulk tissue", since
+  testis moves both at once.
+  **The result that matters is a negative about a reading this project already
+  ships. `enhancers_active` is predicted out of sample by DNase peak count
+  alone**: fitted on the eleven, `enhancers = 57,968 + 0.3910 × peaks`, testis
+  lands at **z = −0.11** and ovary at −1.29. A lineage and a material the layer
+  had never seen have their enhancer count predicted by assay depth. **So
+  `enhancers_active` must stop being read as a count of enhancers.** The one
+  reading that escapes it is `genes_read`, where testis reads **15,078 of
+  20,094, above the eleven's entire range**, on mid-range depth — the expected
+  direction, since testis has the broadest transcriptome of any human tissue.
+  **The germline methylation prediction was refuted and the test it was scored
+  against shown non-discriminating**, which is the more useful half: the somatic
+  range is a union of two non-overlapping populations, transformed lines at
+  0.074–0.604 and non-transformed at 0.805–0.852 with **nothing between**, so no
+  value could have failed it. The methylation layer separates transformed from
+  non-transformed by a margin larger than any lineage effect in it.
+  **And a prediction made from portal byte sizes before downloading anything was
+  confirmed exactly**: testis yields **321 H3K9me3 peaks genome-wide and 1,902
+  H3K27me3** against floors of 1,770 and 8,540, so those two marks are
+  **under-called and not measured absence** — its 0.0209 silent-promoter share
+  is a peak-call artefact. Ovary's H3K27ac sits 4% under the floor, unregistered
+  and reported as such.
+  All **264 of 264** existing (chromosome, biosample) blocks reproduced
+  byte-identically. 1.91 GB over the wire, 113 MB on disk, 0 model requests.
+  Signal profiles for the two were deliberately not fetched, so the direction,
+  fossil and transfer analyses still exclude them.
+  **What area B's Missing should now say**: the set is thirteen and holds its
+  first bulk tissue and first gonadal lineage, and it remains **without a
+  germline-resolved sample** — bulk testis dilutes spermatogenic cells with
+  Sertoli, Leydig, peritubular and blood cells, so that question needs a sorted
+  or single-cell source rather than another bulk tissue. "No second mammal for
+  node comparison" stands unchanged.
+  **Operational, and it is Albert's**: disk is at **95%, 21 GiB free**, worse
+  than the 92% recorded on 2026-09-17. This lane's 113 MB is negligible and the
+  trend is not.
 - **Direction, held against measured perturbations, and it passes (2026-09-22,
   lane-crispri).** Every enhancer-gene call this project makes carries an
   `action`, `activates` or `represses`, and that word is only the sign of a
