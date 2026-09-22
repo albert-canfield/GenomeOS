@@ -2752,6 +2752,31 @@ in order. "Owner" is the session that holds the files today (see §7).
   distinguish "these sub-populations differ" from "too small to say", and here
   it is mostly the second — reported as a defect rather than claimed as a
   heterogeneity finding.
+- **The second copy of the median node-open threshold, and why it was not a
+  defect (2026-09-22, lane-nodes, `1e57e3e` registration, `c6fc229` result).**
+  `candidates.py:398` re-derived, line for line and floor for floor, the split
+  that retired `nodes_open` the same day — but **both fields it feeds are
+  write-only**: `node_open_element_closed` appears exactly once in the whole
+  repository, on the line that writes it, and every score reads the absolute
+  `open_on_element` instead. **So no published number rests on a
+  between-biosample reading of it**, and the 69 candidates' classes,
+  confidences and controls are computed without it.
+  **The judgement was registered in advance and it is the useful part**: the
+  *count* of a median split is half the nodes whatever the depth, but the
+  *membership* is depth-invariant — scale every density in a cell and its median
+  scales with it — so comparing memberships across cells is rank-normalised and
+  legitimate. It simply can never say a node is shut, and the module's docstring
+  had been calling it "openness" beside `open_on_element`, which is absolute.
+  That juxtaposition was the whole of the problem.
+  **All three registered falsifiers fired negative: 0 disagreements over 260,026
+  node calls, 69 of 69 published blocks identical on both fields, and the
+  `max(1.0, median)` floor — the one part of the rule that is an absolute
+  threshold on a density rather than a rank — binds in 9 of 312 files, all
+  chrY, and on none of the 19 chromosomes the blocks sit on.** Reported as the
+  negative it is: **a maintenance hazard, not a defect.** The rule now has one
+  definition, `node_open_threshold` in `genome/reader.py`, called from both
+  sites; the basis string travels with the record; and a test pins that neither
+  module can grow the literal back.
 - **The prevalence term, registered then fitted — it does not transport, and
   the genome-wide band table is withdrawn as a quotable confidence
   (2026-09-22, lane-prevalence, `1a1a852` registration, `e4914ef` fit, 0
