@@ -2616,6 +2616,62 @@ in order. "Owner" is the session that holds the files today (see §7).
   *(Written before the lane ran, and its first clause is answered and corrected
   above: the re-banding is done, and there was no off-gate population in the
   sweep to re-band. The list below supersedes this one.)*
+- **The union axis, registered and then fitted (2026-09-22, lane-union,
+  `ccb06e3`, 0 requests) — the separation confirms, the LEVEL does not, and the
+  coordinator's decision below keeps it beside the drop axis rather than in
+  front of it.** The registration did the work the situation demanded, because
+  the axis had been chosen after seeing one result: it split the 128-of-128 into
+  three questions and registered **the level as a description rather than a
+  test**, since a hypothesis and its confirmation cannot be the same 128 pairs.
+  **The separation is confirmable and was confirmed on populations that took no
+  part in the choice**: off the gate, on 1,419 pairs, track-only reads **0.0719
+  [0.0596, 0.0865]** against neither at **0.0222 [0.0193, 0.0255]**, ×3.2 with
+  the intervals clearing wide; and on GTEx cis-eQTLs, an independent assay,
+  0.5939 against 0.5062, ×1.17 and marginal. **The lane's own registered
+  prediction there was a null, and it is recorded as wrong.** The search that
+  found the axis was priced by permutation at p = 0.0001, which bounds the
+  search without choosing the axis.
+  **The same test kills the level: the union stratum reads 1.0000 on the gate
+  and 0.0895 off it, ×11.** So 0.9–1 is a property of *union ∧ on-gate ∧ K562 ∧
+  screen-tested*, not of the axis — the third time on a third axis, after ×6.85
+  and ×7. Nothing on this disk can confirm the level, and the one independent
+  population readable on the same axis says it is not there.
+  **The sharpest objection is the lane's own**: the `track only` cell rests on
+  **23 pairs**, and 23 pairs buy no band under the project's own thin-stratum
+  rule — the union clears that rule only by pooling them with the 105 the drop
+  axis had already banded, so **the 23,468 targets the union adds rest on
+  evidence the rule refuses when read alone.**
+  Banded: **57,626 of 593,765 (9.70%) at 0.9–1, 536,139 (90.30%) "not calibrated
+  here"**, 20,293 up and none down; of the 55,957 published at 0.9–1, 37,333
+  keep it and **18,624 (33.3%) are declared uncalibrated**. Coverage sits in the
+  drop axis's refusal mode rather than the track axis's aggregation mode, which
+  is the right failure to have and a small return for an axis that looked like
+  it would band everything.
+  **Decision, 2026-09-22: the banding stands as the registered rule computed it,
+  and the union does NOT become the shipped default.** Overturning a rule after
+  seeing its output is the move every lane today has been asked not to make, so
+  the number stands; but two things bar promotion, and both are measured rather
+  than felt. The level does not travel (×11), and the genome-wide targets it
+  would be quoted for are on-gate yet mostly **neither K562 nor screen-tested** —
+  the same inside-the-gate mismatch counted earlier at 31.8% against 5.3%. And
+  the increment is unpriced. **So the union is reported beside the drop axis,
+  every band carries the population it was fitted on, and promotion waits on
+  pricing the 23-pair cell on pairs that can carry it.**
+  **Two corrections to the re-banding of a few hours earlier, reported rather
+  than quietly fixed**: its windowed off-gate table was training-only, because
+  the driver called `add_features` on one arm, so off-gate is 10,226 here
+  against 8,549 there; and its track axis returned `another track` for every
+  off-gate pair, collapsing to a constant exactly where it needed reading.
+  **And a defect the lane names in its own adoption rule**: clause (c) cannot
+  distinguish "these sub-populations differ" from "too small to say", and here
+  it is mostly the second — reported as a defect rather than claimed as a
+  heterogeneity finding.
+- **The next item, ahead of the list below, which item 1 of that list is now
+  answered by the bullet above: price the increment on the pairs that justify
+  it.** The union's whole gain over the drop axis is the 23,468-target
+  `track only` cell, resting on 23 pairs. Until that is priced the union stays
+  beside the drop axis. Then a homogeneity clause that can separate difference
+  from under-power, which the one used here cannot and says so.
 - **Next, open.** 1. **The union axis, registered properly**: K562 track and
   predicted drop are near-disjoint, either alone gives 100% regulated, and their
   union would band the genome from two single-band populations rather than from
