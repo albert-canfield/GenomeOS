@@ -975,6 +975,16 @@ class Api:
             t["cell_type"] = cell
             t["read_fraction"] = round((t.get("genes_read") or 0) / genes, 4) if genes else None
             t["open_fraction"] = round((t.get("genes_read_open") or 0) / genes, 4) if genes else None
+            # The raw active-enhancer count is assay depth (rho 0.83 against peak count, and it
+            # predicts a biosample the layer had never held to z = -0.11), so the view carries the
+            # rate beside it. The sum is a fallback so this works before the roll-up is re-run.
+            pk = t.get("peaks") or sum(
+                v[cell].get("peaks", 0) for v in per_chrom.values() if isinstance(v, dict) and cell in v
+            )
+            t["peaks"] = pk
+            t["enhancers_active_per_100k_peaks"] = (
+                round((t.get("enhancers_active") or 0) / pk * 100_000, 1) if pk else None
+            )
             t["chromosomes"] = {
                 chrom: v[cell] for chrom, v in per_chrom.items() if isinstance(v, dict) and cell in v
             }

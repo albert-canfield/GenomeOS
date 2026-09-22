@@ -2924,8 +2924,12 @@ def cmd_reader(args: argparse.Namespace) -> int:
         save_result(f"reader_{slug(cell)}_{args.chrom}", {k: v for k, v in r.items() if k != "_read_all"})
         genes = f"{r['genes_read']}/{r['coding_genes']} coding genes read ({r['read_fraction']:.0%})"
         frac = f"{r['enhancers_active_fraction']:.0%}"
-        enh = f"enhancers active {r['enhancers_active']}/{r['enhancers']} ({frac})"
-        nodes = f"nodes open {r['nodes_open']}/{r['nodes']}, silent {r['nodes_silent']}"
+        rate = f"{r['enhancers_active_per_100k_peaks']:,.0f} per 100k peaks"
+        enh = f"enhancers active {r['enhancers_active']}/{r['enhancers']} ({frac}; {rate})"
+        # `nodes_open` is a median split of this biosample against itself, so it returns about half
+        # the nodes for every one of them (9,988 to 10,016 of 20,002 across thirteen, a span of 1.00
+        # against a depth span of 6.81). It is not printed here as though it were a comparison.
+        nodes = f"nodes silent {r['nodes_silent']}/{r['nodes']}"
         print(f"{cell} on {args.chrom}: {r['peaks']:,} peaks; {genes}; {enh}; {nodes}")
         print(
             "  strongest promoters: "

@@ -644,6 +644,14 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the direction its biology predicts. **Before a per-sample reading is used as evidence, fit it
   against the cheapest measure of how hard the sample was sequenced and report both.**
 
+  *Two corrections from the lane sent to act on this entry. `enhancers_active` is produced by the
+  **DNase reader**, `genomeos/genome/reader.py`, not by the epigenome layer as written above. And
+  the family check it prompted found something worse than a confound in the same file:
+  **`nodes_open` is a median split of each biosample against itself**, so it returns about half the
+  nodes for every one of them — 9,988 to 10,016 of 20,002 across thirteen, a span of 1.00 where
+  depth spans 6.81. A reading that cannot distinguish two samples even in principle is a stronger
+  version of the same lesson, and it had been printed in the CLI and in two views as a comparison.*
+
 - **A range built from two non-overlapping populations cannot be failed (2026-09-22).** The same
   lane registered that germline methylation would fall outside the somatic range, and it did not.
   The more useful finding is that it could not have: the "somatic range" is transformed lines at

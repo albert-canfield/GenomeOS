@@ -726,6 +726,46 @@ in order. "Owner" is the session that holds the files today (see §7).
   **Operational, and it is Albert's**: disk is at **95%, 21 GiB free**, worse
   than the 92% recorded on 2026-09-17. This lane's 113 MB is negligible and the
   trend is not.
+- **The whole per-biosample family banded against depth, and two more defects
+  under it (2026-09-22, lane-depth, `41bc7d6` registration, `86d668f` result).**
+  *(Correction to the bullet above and to LESSONS.md: `enhancers_active` is the
+  **DNase reader**, `genomeos/genome/reader.py:203`, not the epigenome layer.)*
+  The confound is a property of the pipeline, so all nine readings that can
+  carry a claim were checked against the covariate that actually drives each.
+  **`nodes_open` turns out never to have measured anything**: `reader.py:197`
+  takes the median peak density over that biosample's own nodes and calls a node
+  open at or above it, so a median split returns half the nodes by construction
+  — **9,988 to 10,016 of 20,002 for all thirteen biosamples, a span of 1.00
+  against a depth span of 6.81.** Withdrawn as a between-biosample reading. And
+  **DNase depth was the wrong covariate for the mark-derived readings**:
+  `genes_poised` reads 0.38 against DNase and looks clean, 0.49 against
+  H3K27me3, the mark that actually calls it — so a biosample with an
+  under-called broad mark reads as un-poised, which is exactly what testis does.
+  **The repair was registered with three ways to be wrong before it was built,
+  and all three passed.** The depth residual replicates across disjoint halves
+  of the genome at **rho 0.9835** (p 0.0001 over 10,000 shuffles), is not peak
+  width (−0.033) and is not curvature (a log fit raises replication to 0.9945
+  and drops the residual's own correlation with depth to 0.1374). The rate reads
+  −0.522 against peak count, which clears the failure bar and **misses its own
+  target band**, reported as the partial result it is.
+  **The registered bar was "must move a published conclusion or it is
+  decoration", and it was cleared by a reversal**: K562 reads 193,255 active
+  enhancers against HepG2's 124,478, and **per 100k peaks K562 reads 37,272
+  against HepG2's 70,472** — the published comparison points the other way.
+  `enhancers_active_per_100k_peaks` now ships beside the count, and the CLI, the
+  Cells view and the Progress tables carry the rate instead of the count.
+  **Four published conclusions softened in the open**, including one from a
+  commit six hours old: testis's 284 poised genes had been offered as evidence
+  for the tissue-mixture argument two paragraphs after the same section recorded
+  testis's H3K27me3 as under-called — reading one artefact twice — so testis is
+  withdrawn from that claim and ovary carries it alone.
+  **The limit is stated rather than glossed**: replicating across the genome and
+  surviving peak count, width and curvature makes the residual a stable property
+  of the biosample, and does not make it biology. FRiP, fragment length,
+  crosslinking and library complexity are all biosample-stable assay properties
+  and none is on disk. **Still open**: `attribution/candidates.py:401` re-derives
+  the same median-density threshold and carries the same tautology into the
+  candidate scoring.
 - **Direction, held against measured perturbations, and it passes (2026-09-22,
   lane-crispri).** Every enhancer-gene call this project makes carries an
   `action`, `activates` or `represses`, and that word is only the sign of a

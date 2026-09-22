@@ -869,7 +869,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-twin" class="scroll"></div>
     </div>
     <div class="card">
-      <h2><i class="ic">📖</i>Reader, every chromosome<span class="help" data-tip="Reader v1 over every chromosome for the cell types run so far: coding genes with an open promoter (read), active enhancers and silent nodes per cell type, from ENCODE DNase peaks.">?</span></h2>
+      <h2><i class="ic">📖</i>Reader, every chromosome<span class="help" data-tip="Reader v1 over every chromosome for the cell types run so far: coding genes with an open promoter (read), active enhancers per 100k DNase peaks and silent nodes per cell type, from ENCODE DNase peaks. The raw active-enhancer count is assay depth — rho 0.83 against peak count, and a fit on eleven biosamples predicted two from a lineage the layer had never held to z = -0.11 — so the rate is shown instead.">?</span></h2>
       <div id="j-reader" class="scroll"></div>
     </div>
     <div class="card">
@@ -1609,8 +1609,8 @@ async function loadIndividualWide() {
     if (rd && rd.chromosomes) {
       const cells = rd.cell_types || []; const t = rd.totals || {};
       $('#j-reader').innerHTML = `<div class="kpi">${cells.map(c => `<div><b>${fmt((t[c] || {}).genes_read || 0)}</b><span>${c} reads of ${fmt((t[c] || {}).coding_genes || 0)} genes</span></div>`).join('')}</div>
-        <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enhancers</th>`).join('')}<th class="num">both</th></tr>` +
-        Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(r[k].enhancers_active) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
+        <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enh/100k pk</th>`).join('')}<th class="num">both</th></tr>` +
+        Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(Math.round(r[k].enhancers_active_per_100k_peaks ?? r[k].enhancers_active / Math.max(1, r[k].peaks) * 1e5)) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
     } else $('#j-reader').innerHTML = '<span class="muted">not run yet (scripts/reader_genome_wide.py)</span>';
     const mm = d.mouse || {};
     const mchroms = Object.keys(mm);
@@ -1851,12 +1851,12 @@ async function loadCells() {
       <div><b>${(bottom.read_fraction * 100).toFixed(1)}%</b><span>least read (${escH(bottom.cell_type)})</span></div>
       <div><b>${fmt(r.chromosomes.length)}</b><span>chromosomes</span></div>`;
     $('#cl-evidence').textContent = r.evidence || '';
-    $('#cl-table').innerHTML = `<table><tr><th>cell type</th><th class="num">read</th><th class="num">read %</th><th class="num">promoter open</th><th class="num">poised</th><th class="num">by marks</th><th class="num">enhancers active</th><th class="num">nodes silent</th></tr>` +
+    $('#cl-table').innerHTML = `<table><tr><th>cell type</th><th class="num">read</th><th class="num">read %</th><th class="num">promoter open</th><th class="num">poised</th><th class="num">by marks</th><th class="num">enh / 100k peaks</th><th class="num">nodes silent</th></tr>` +
       r.cells.map(c => `<tr class="ev-file${c.cell_type === clCell ? ' on' : ''}" data-cell="${escH(c.cell_type)}">
         <td>${escH(c.cell_type)}</td><td class="num">${fmt(c.genes_read || 0)}</td>
         <td class="num"><b>${(c.read_fraction * 100).toFixed(1)}%</b></td>
         <td class="num">${fmt(c.genes_read_open || 0)}</td><td class="num">${fmt(c.genes_poised || 0)}</td>
-        <td class="num">${fmt(c.genes_read_by_marks || 0)}</td><td class="num">${fmt(c.enhancers_active || 0)}</td>
+        <td class="num">${fmt(c.genes_read_by_marks || 0)}</td><td class="num">${fmt(Math.round(c.enhancers_active_per_100k_peaks || 0))}</td>
         <td class="num">${fmt(c.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
     $('#cl-table').querySelectorAll('tr[data-cell]').forEach(tr => tr.onclick = () => { clCell = tr.dataset.cell; renderCellChroms(); });
     if (!clCell) clCell = top.cell_type;
@@ -1870,11 +1870,11 @@ function renderCellChroms() {
   if (!cell) return;
   $('#cl-pick').textContent = `— ${clCell}, click another row to change`;
   const rows = clData.chromosomes.map(ch => [ch, cell.chromosomes[ch]]).filter(([, v]) => v);
-  $('#cl-chroms').innerHTML = `<table><tr><th>chromosome</th><th class="num">coding genes</th><th class="num">read</th><th class="num">read %</th><th class="num">poised</th><th class="num">enhancers active</th><th class="num">nodes open</th><th class="num">nodes silent</th></tr>` +
+  $('#cl-chroms').innerHTML = `<table><tr><th>chromosome</th><th class="num">coding genes</th><th class="num">read</th><th class="num">read %</th><th class="num">poised</th><th class="num">enh / 100k peaks</th><th class="num">nodes silent</th></tr>` +
     rows.map(([ch, v]) => `<tr><td class="mono">${escH(ch)}</td><td class="num">${fmt(v.coding_genes || 0)}</td><td class="num">${fmt(v.genes_read || 0)}</td>
       <td class="num">${v.read_fraction != null ? (v.read_fraction * 100).toFixed(1) + '%' : ''}</td>
-      <td class="num">${fmt(v.genes_poised || 0)}</td><td class="num">${fmt(v.enhancers_active || 0)}</td>
-      <td class="num">${fmt(v.nodes_open || 0)}</td><td class="num">${fmt(v.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
+      <td class="num">${fmt(v.genes_poised || 0)}</td><td class="num">${fmt(Math.round(v.enhancers_active_per_100k_peaks ?? v.enhancers_active / Math.max(1, v.peaks) * 1e5))}</td>
+      <td class="num">${fmt(v.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
 }
 
 // ---- Cell view: one cell type inside one program — the rules it runs, the graph, the trajectory
