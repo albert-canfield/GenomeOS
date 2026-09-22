@@ -3725,6 +3725,34 @@ entire sweep. What is next, in order of what it decides:
    it does not exist.** An entry whose session is gone is retired rather than left to read as
    work in flight, and the Progress tab separates what is running from what was run.
 
+   **The lane table above is the state at the row's first hour and is left as written. This is
+   where it stood at the end of 2026-09-22**, thirteen lanes later, every one of them registered
+   before it measured and every one reporting its own negatives:
+   - **Closed with a result**: area F's two mechanism defects and the CNA/SV/expression cases
+     (milestone 1.2 at **9/9**); stage 2 of the economy with gate (b) a **derived** negative; the
+     fourth locus frame at n=50, its reader defect, the non-coding pair, and the re-read of all
+     five frames; area B's stricter site call, its twelfth and thirteenth biosamples, and the
+     depth banding of the whole reader family; the calibration's `top_target` gate, the genome
+     re-banding, the union axis and the prevalence term.
+   - **Running**: `lane-solver` (the shared logistic fit is undamped and every caller inherits
+     it), `lane-worm2` (area E's exposure read against a lineage mean, and the 332-to-414 move).
+   - **Decisions taken here rather than deferred**: §22 stays interpretable on a restated control;
+     no overlap-tolerant rate, because the tolerance lifts the baseline equally; the union axis
+     banded as registered but **not** promoted; and the **593,765-target band table retired**
+     rather than corrected.
+   - **Still Albert's, and none of it blocks a lane**: mappability, whether the oligo library is
+     ordered and at what size, whether a surface score should read the alteration, a permission
+     rule for `scripts/commit_own.sh` so a registration can be committed on its own, and disk at
+     **95%**.
+   **What the day actually established, across four areas and one shared theme:** a number is
+   trusted for the population it was measured on and no further. It showed up as a curve quoted
+   ×6.85 off its own gate, a band table that is one screen's to within 0.37%, a reading predicted
+   by assay depth to z = −0.11, a field that returns half the nodes by construction, and a
+   direction that passes at 41 of 44 on downward effects and fails at chance upward. **Three
+   guards were added so the recurrences are caught by a machine rather than by a reader**:
+   `genomeos work retire` for lanes nobody is behind, a message check in `commit_own.sh` for the
+   shared scratchpad, and `tests/test_band_totals.py` for the genome-wide totals.
+
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 
 The ordered list across areas, each with the milestone it serves and the
