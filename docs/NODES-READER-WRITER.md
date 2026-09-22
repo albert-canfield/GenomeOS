@@ -854,6 +854,109 @@ a real positive above a magnitude-matched baseline. What it does not give is an
 upward arm, and until 30 more requests are spent the `represses` half of every
 `action` GenomeOS writes rests on 3 calls that were all wrong.
 
+### The upward arm: the registration, written and committed before any upward sign was compared
+
+The subsection above ends by costing the upward arm at 30 requests for K562 and 35
+with GM12878, and leaving it unspent. **That costing is right and the spend is
+unnecessary**, and the reason matters more than the saving.
+
+**The costing, reproduced first.** Of the 53 signed upward held-out K562 pairs, 33
+are within the scorer's 524 kb reach, and they sit on **30 distinct elements**;
+GM12878 adds 5 pairs on 5 more, giving **38 pairs on 35 elements**. One deletion
+request per element is exactly the 30 and 35 the first half named. The number is
+recomputed from the benchmark tables here rather than quoted, and it agrees.
+
+**Why none of it is bought.** The sentence "the sweep stores one target per
+element" is true of a *derived table*, not of the measurement. The run that built
+`data/knowledge/alphagenome/all_elements/<chrom>.json` wrote a second output at
+the same time: the per-element response cache
+`data/knowledge/alphagenome/elements/<chrom>.json.gz` (775 MB), and
+`scripts/enhancer_targets_all.py` scored it with `threshold=0.0`
+(`worker_scorer`), so that cache keeps **every gene in the scorer's 1 Mb window
+with its signed log2 fold change on each of K562, HepG2, GM12878 and IMR-90's own
+track**, uncensored. The quantity 30 requests would have purchased — the predicted
+change for a *named* gene on deleting a *named* element in a *named* cell line —
+is already on disk for every element the sweep ever touched. **Requests spent: 0.**
+
+**What that opens.** Reading the cache instead of the compact table, the held-out
+answerable set goes from 44 one-signed pairs to **152 two-signed ones**: 116
+downward (103 K562, 13 GM12878) and **36 upward** (31 K562, 5 GM12878). Three
+pairs stay unanswerable because the measured gene carries no track in the scored
+window at all, and they are reported as their own stratum rather than scored as
+zero.
+
+**The trap that replaces the old one.** With one measured sign, agreement was the
+model's own rate of emitting that sign, so the first half registered the sweep's
+marginal down-rate as the baseline instead of 0.5. Both signs being present
+removes that trap and immediately supplies another: the two-signed set is **not
+balanced**, 116 down against 36 up, so a caller that says "down" and nothing else
+scores **0.763**. Quoting raw agreement against 0.5 would manufacture a success
+one step further along than the first half nearly did.
+
+So the registered primary statistic for the combined set is **balanced accuracy**,
+the unweighted mean of the two per-sign sensitivities. Its chance level is 0.5 for
+any class mix, and a constant-sign caller of *either* sign scores exactly 0.5 on
+it by construction. That is the honest form of "with both signs present, 0.5 is
+available at last". Raw agreement is reported too, and never without the
+majority-class rate printed beside it.
+
+**The four registered tests**, fixed here before any upward sign was compared:
+
+1. **The upward arm alone**, measured increases only. `sensitivity_up` must clear
+   0.5 by 0.15 **and** clear the model's **marginal up-rate** over the whole sweep
+   (one minus the 0.5361 down-rate, so about 0.464) by 0.10 with the Wilson lower
+   bound above it. The same two margins the first half used, pointed the other way.
+   A constant-down caller scores **0.000** here.
+2. **The combined two-signed set**, on balanced accuracy. **PASS** at ≥ 0.65 with
+   the stratified bootstrap (2,000 draws, seed 20260922, resampled within each sign
+   arm) 95% lower bound above 0.5. **FAIL** at a lower bound at or below 0.5.
+   **UNDECIDABLE** in between.
+3. **The magnitude-matched sub-test**: both arms restricted to ‖predicted log2fc‖
+   > 0.1, the band in which the first half was 28 of 28. The upward pairs are *not*
+   selected for being the element's top target, so their predicted magnitudes run
+   smaller than the 44's, and small magnitudes are a real candidate explanation for
+   a weak upward arm. This removes the excuse in advance: **if the upward arm fails
+   even above 0.1, where the downward arm did not miss, the failure is about sign
+   and not about magnitude.**
+4. **The re-derivation check**: the 44 pairs of `5c842ca` must reappear in the new
+   downward set with identical signs, or the run is refused — the two readers read
+   the same numbers by different paths and a mismatch means one of them is wrong.
+   And the downward arm is re-read over all **116** answerable downward pairs,
+   which removes the top-target selection the 41/44 was drawn under.
+
+**What agreement on the combined set would mean, fixed at four levels** so that the
+number cannot pick its own reading afterwards:
+
+| balanced accuracy | what it means |
+|---|---|
+| ≤ 0.55 | the layer does not read direction at all. The 0.9318 was the measured side's constancy plus the magnitude selection the top-target rule imposed, and `5c842ca` becomes a statement about downward effects only |
+| 0.55 – 0.65 | direction is faintly readable and not usable. UNDECIDABLE: the `represses` half of `action` stays unsupported, and every action word GenomeOS writes on a predicted rise is unbacked |
+| 0.65 – 0.80 | the layer reads direction on both signs, with the upward half materially weaker. `5c842ca` survives as a two-signed claim, but its headline must be quoted as the balanced accuracy and never again as 0.9318 |
+| > 0.80 | the layer reads direction on both signs. `5c842ca` survives in full and the one-sidedness caveat on measurement 2 is discharged rather than narrowed |
+
+**The expected direction, stated plainly.** **The upward arm is expected to come
+back at or below chance**, `sensitivity_up` somewhere between 0.2 and 0.45. The
+model is not shy of saying "up" — its marginal up-rate over the whole sweep is
+about 0.46, so it says it on nearly half of all elements — it says it in the wrong
+places, and the only three up-calls it made on the one-signed set were all wrong,
+0 of 3. Balanced accuracy is therefore expected between 0.60 and 0.70: above 0.5,
+but carried by the downward half. That lands the combined result in the
+**UNDECIDABLE** band and makes the honest headline a downward-only one.
+
+**What falsifies the pass of `5c842ca`, and what happens then.** Restated over both
+signs, the pass does **not** survive if either the combined set's bootstrap lower
+bound falls at or below 0.5, **or** the upward arm comes in at or below chance —
+*including when balanced accuracy is high*, because a high balanced accuracy
+carried entirely by the downward half means the layer reads "down", not direction.
+A third route to losing it: the downward arm collapsing on the 116 unselected
+pairs, which would show that the 41/44 was the top-target selection rather than the
+layer. **If any of those fires, the 0.9318 headline is restated as a statement
+about downward effects only, in this same section, with the same prominence as the
+pass it qualifies; the first subsection's numbers are left standing and annotated
+rather than edited; and no subset is searched for in which the upward arm holds.**
+A claim that has only been tested where it succeeds is not yet a claim, and this
+registration is what makes the difference decidable.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
