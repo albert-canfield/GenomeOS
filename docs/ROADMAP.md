@@ -3046,6 +3046,42 @@ entire sweep. What is next, in order of what it decides:
    another name**, and which of the two it is has never been measured. Also left undone, and named:
    `read_gene_input` still reads `predicted_coding` alone, deliberately excluded so two movements
    would not sit behind one number.
+   **That question is now measured, classes and thresholds committed before a single miss was
+   looked at** (`bf33233` the registration, `d8777fe` the measurement and §25, 0 requests). Of
+   **98 strict misses** across the six frames scored through the repaired reader, **15 overlap the
+   published target's body, 11 more are within 10 kb and 50 within 100 kb**, leaving 22 further
+   away. **So the benchmark's "miss" is overwhelmingly a NEIGHBOUR rather than an alias** — which
+   is neither of the two things the question posed. Controls passed before any number was read:
+   42 of 42 strict hits classify as exact symbol matches, and the strict rate recomputed here
+   reproduces all six published figures.
+   **The decisive number was the baseline under the same tolerance.** An overlap-tolerant rate,
+   reported beside the strict one as a description, reads 15/50 and 16/58 where the strict reads
+   9/50 and 10/58 — and the nearest-coding-TSS rule under the same tolerance rises 3/50 → 7/50 and
+   10/58 → **15/58**. **The gap between the model and the rule it is measured against does not
+   move.** That column was added after the distribution was seen and is disclosed as late,
+   admissible only because it can only make the tolerant reading look worse. §22's proximity
+   finding survives and not narrowly: the deletion layer reads 4/50 and 4/58 tolerant against about
+   twenty loci where it names the nearer gene.
+   **The coordinator's decision, 2026-09-22: the registered case was met and a second rate is NOT
+   adopted.** The thresholds cleared — overlap share 0.153 against 0.15, gap 0.120 against 0.05 —
+   and the lane recorded that as computed rather than adjusting it, which is the only reason this
+   decision can be trusted. Three measured facts decide it against adoption. **It cleared by
+   0.003**, and the pool is not six independent frames: the two fourth-frame entries are two
+   readings of one draw, and dropping either reads 0.143 or 0.163, so the threshold flips on which
+   reading of one frame is counted. **The tolerance buys the model nothing against its baseline.**
+   And **only 3 of the 8 distinct overlapping loci are the case the question was about** — a
+   non-coding gene lying inside the target (IGF2-AS in IGF2, a pseudogene in SLC2A3, the control's
+   lncRNA in HMGA1) — while three are tail overlaps between distinct protein-coding genes, LRRC23
+   over ENO2 by 499 bp, which are not aliases in any sense. The class was **not** re-cut after the
+   wider test cleared, because narrowing a class once it has passed is the move the registration
+   exists to prevent; the composition is reported beside the count and the count stands.
+   **Declining a threshold that was met is the mirror of adopting one that was not, so this
+   decision is pinned to something checkable rather than to taste: the benchmark reports a
+   comparison, and a tolerance that lifts both arms equally changes no comparison.** What would
+   reverse it is registered here in advance — **a frame drawn FOR this question**, rather than
+   overlaps found in frames drawn for something else, in which overlap tolerance moves the model's
+   margin over the nearest-gene rule by at least 0.05. That frame is the next step of this item.
+   LOCI-BENCHMARK.md §25.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). **No decision blocks code any
    more, and this row said otherwise until 2026-09-21.** Decision 2, amounts or concentrations, was
    the one holding stage 2: it was **priced 2026-09-17** (the registered test could not be run,
