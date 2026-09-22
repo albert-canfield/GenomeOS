@@ -680,6 +680,44 @@ in order. "Owner" is the session that holds the files today (see §7).
   default's excess survives the 3.9× growth (+2.6 → +2.9).
   NODES-READER-WRITER.md, "A stricter site call, judged on all four measurements
   at once".
+- **Direction, held against measured perturbations, and it passes (2026-09-22,
+  lane-crispri).** Every enhancer-gene call this project makes carries an
+  `action`, `activates` or `represses`, and that word is only the sign of a
+  predicted log2 fold change. It had never been measured — §21 of the locus
+  benchmark registered it **undecidable at n = 2**. The measurement was already
+  on disk and unused: the ENCODE CRISPRi benchmark carries a **signed**
+  `EffectSize`, and `attribution/crispri.py` reads `Regulated`, which is defined
+  as `Significant AND EffectSize < 0`, so **the entire upward half of the
+  measured signal was discarded before that module saw it.** Read two-sided
+  against the finished genome-wide sweep for **0 requests** (`c115bbf` the
+  registration, `5c842ca` the result): on the held-out arm the sign agrees
+  **41 of 44 times, 0.9318, 95% [0.8177, 0.9765]** — K562 33/36, GM12878 8/8.
+  **The registration expected this to be vacuous and said so in advance**, which
+  is what makes the pass worth anything: every answerable pair carries a measured
+  decrease, so a model that always says "down" would score 1.000, and the
+  registered baseline was therefore not 0.5 but the sweep's own marginal
+  down-rate, uncomputed at the time. It is **0.5361** — 325,989 of 610,034 K562
+  elements — so the sweep is not a constant-down caller and both pre-registered
+  margins are met. **A positive was then given a negative's scrutiny**: the 44
+  are selected for being the top predicted target, which selects large effects,
+  and the sweep's down-rate climbs 0.51 to 0.91 with magnitude, so the flat
+  baseline was too easy; re-weighted to the scored pairs' own magnitudes it is
+  **0.6537**, still cleared by 0.278 with the lower bound above it. Labelled
+  post-hoc and reported beside the registered verdict, never in place of it.
+  **All three errors sit below ‖log2fc‖ 0.055, and above 0.1 the model is 28 of
+  28** — so the direction is worth reading in proportion to the magnitude it is
+  read from, which is a sharper claim than the rate.
+  **Two limits carry as much as the result.** Zero upward measured pairs are
+  answerable, so **the `represses` half is untested**, and the only three up-calls
+  the model made were all wrong. And the answerable set is the close half: the 111
+  covered pairs that could not be asked about have a median element-to-TSS
+  distance of **102,522 bp against 22,553**, and 37 of them are the upward pairs.
+  **Closing that arm costs 30 requests, 35 with GM12878** — costed in advance,
+  and a partial draw was refused on the ground that an arm sampled for its sign
+  and scored in part is not the registered set. Authorised by the coordinator on
+  2026-09-22 as the next spend, because it is the arm that could falsify a
+  passing result. NODES-READER-WRITER.md, "Measured perturbations, and the
+  direction question"; `data/results/crispri_direction.json`.
 - **Next (epigenome and nodes).** 1. Done as an alternative; the next test is a
   stricter site call (best-hit strand, stronger motifs) judged on all four
   measurements at once, and whether Hi-C questions and enhancer-to-gene
