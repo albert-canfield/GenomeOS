@@ -428,10 +428,52 @@ def logistic_fit(x: list[list[float]], y: list[bool], lam: float = 1e-3, rounds:
                 hess[i][i] += lam
                 grad[i] -= lam * w[i]
         step = solve(hess, grad)
+        step = damped_step(rows, y, w, step, lam)  # an undamped step leaves for 1e12 on a near-separable fit
         w = [a + b for a, b in zip(w, step, strict=True)]
         if max(abs(s) for s in step) < 1e-6:
             break
     return w
+
+
+def penalised_objective(rows: list[list[float]], y: list[bool], w: list[float], lam: float) -> float:
+    """The log-likelihood the fit maximises, with the same ridge the Hessian carries; the intercept is spared.
+
+    `rows` already carry the leading 1.0, so `w[0]` is the intercept and is not penalised. The linear
+    predictor is clamped the way the sigmoid in `logistic_fit` clamps it, so the two agree on a
+    saturated row instead of disagreeing about a point neither can represent.
+    """
+    total = 0.0
+    for r, yi in zip(rows, y, strict=True):
+        z = max(-30.0, min(30.0, sum(a * b for a, b in zip(w, r, strict=True))))
+        total += (z if yi else 0.0) - math.log1p(math.exp(z))
+    return total - 0.5 * lam * sum(v * v for v in w[1:])
+
+
+def damped_step(
+    rows: list[list[float]], y: list[bool], w: list[float], step: list[float], lam: float
+) -> list[float]:
+    """The Newton step halved until it stops lowering the objective, or zeroed if it never does.
+
+    Newton's method is not globally convergent for logistic regression. Where the classes nearly
+    separate, the full step can saturate every linear predictor; a saturated row whose label is on
+    the wrong side then offers a curvature of about 9.4e-14 against a gradient of order one, and the
+    next solve divides one by the other and sends the weights to 1e12. The iterate does not return,
+    the step never falls under the convergence threshold, and the fit ends at a point whose
+    predictions are all 0 while still ordering the rows correctly, which is why nothing downstream
+    that reads a ranking could ever see it.
+
+    The full step is accepted whenever it does not lower the objective, which is every iteration of a
+    run that converges, so this reproduces the undamped fit exactly where the undamped fit was right
+    rather than merely closely. A zero step ends the iteration through the caller's own check.
+    """
+    base = penalised_objective(rows, y, w, lam)
+    scale = 1.0
+    for _ in range(20):
+        trial = [a + scale * b for a, b in zip(w, step, strict=True)]
+        if penalised_objective(rows, y, trial, lam) >= base:
+            return [scale * s for s in step]
+        scale /= 2
+    return [0.0] * len(step)
 
 
 def logistic_score(w: list[float], x: list[list[float]]) -> list[float]:

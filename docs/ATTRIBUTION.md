@@ -6076,6 +6076,55 @@ figure in the seven files above differs from its committed value by more than th
 itself applies, this section's title becomes that finding, the affected claim is marked withdrawn
 where it was made, and the re-derived value is published with the date of the repair beside it.
 
+### The outcome: nothing moved, and the reason is that the real fits were never near the edge
+
+Written after the repair, against the registration above.
+
+**No published number moved.** All seven files were re-derived on the repaired solver and compared
+against the copy committed in this repository:
+
+| File | After the repair |
+|---|---|
+| `crispri_benchmark.json` | byte-identical (verdict `passed`, held-out K562 AUPRC 0.6909 against 0.5501, deletion gain 0.1407 [0.082, 0.2313]) |
+| `crispri_contact.json` | every number identical; the `date` stamp alone changed, and `reads: {}` — no matrix was opened, nothing was fetched |
+| `target_calibration.json` | every number identical; the `date` stamp alone changed. The top band reads 55,957 of 593,765 as before |
+| `target_calibration_gate.json` | byte-identical |
+| `target_rebanding.json` | 550 insertions, **0 deletions**: the `by_stratum` counts that `target_calibration.py:1648` began emitting earlier today, on a file last saved before that. No existing value altered |
+| `union_axis.json` | byte-identical (44,775 coding targets on the union, 395,602 losing their band) |
+| `target_prevalence.json` | byte-identical (3 of 6 screens improving, weighted ECE 0.01724 to 0.01383, median residual 0.3235, verdict `failed`; the band table 27,514 to 198,475) |
+
+**Why, measured rather than assumed.** Before the repair, every one of the 72 fits inside
+`crispri.score` — the three `FEATURES` models on the full training set and on each of 23
+leave-one-chromosome-out folds — was computed twice, once undamped and once with the line search.
+The largest disagreement in any weight over all 72 was **3.4e-7**, and the largest weight reached
+was 27.5. The real designs are not near the edge: 9,237 pairs with 451 positives, no separating
+feature, and a Hessian that stays well conditioned. The defect was live and inherited by seven call
+sites; it had simply never fired on the data this project has.
+
+**How near the edge is near enough.** On a random family of ill-conditioned designs (8 to 80 rows,
+1 to 5 columns, column scales drawn over five orders of magnitude, labels separable, near-separable
+or random), the undamped solver returns a point **worse than the all-zero start it began from** in
+**64 of 3,738 fits, 1.7%**, the worst of them at |w| = 5.0e12. The repaired solver loses on none.
+So the exposure was real and roughly one fit in sixty of that family — it is the conditioning of
+this project's particular feature matrices, not the solver, that kept the published numbers safe.
+
+**What the repair leaves.** `crispri.logistic_fit` now damps, so all seven call sites inherit the
+line search. `target_calibration.damped` and `penalised_log_likelihood` are still a second copy of
+the same rule, kept because `check_staged.py` refuses to delete lines committed the same day, and
+pinned by `test_the_two_copies_of_the_line_search_are_one_rule`, which asserts they return the same
+step and the same objective on the same input. Merging them is a roadmap row for tomorrow, when the
+window has passed; the pinning test is then the regression test for that merge.
+
+**The lesson, which is about the test and not the solver.** `test_logistic_fit_orders_a_separable_feature`
+had guarded this function since it was written, and it asserts the ordering of the scores and the
+sign of one weight. Those are exactly the two properties a diverged fit keeps. On the design now
+pinned beside it, the old solver returns weights of 2.25e12, gives seven of eight rows a predicted
+probability of exactly 0 including three of the four positives, and scores **AUROC 1.0** — the same
+AUROC the correct fit gives. A test that reads a model the way its headline figure reads it cannot
+see a failure that the headline figure is blind to; the two tests added here assert instead that
+the weights stay finite, that the probabilities separate, and that the solver never returns a point
+whose penalised objective is below the start's, which is the invariant divergence actually breaks.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

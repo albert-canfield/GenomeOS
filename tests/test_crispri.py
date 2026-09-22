@@ -346,3 +346,63 @@ def test_a_pair_without_a_contact_is_counted_with_its_reason(tmp_path):
     assert counts["without_contact_no_matrix_for_this_cell_line"] == 2
     assert counts["without_contact_no_balanced_bin_in_the_matrix"] >= 1
     assert counts["pairs_without_contact"] == 4 + counts["without_contact_no_balanced_bin_in_the_matrix"]
+
+
+# A separable design on three scales that an undamped Newton step cannot survive. The columns run
+# over 1e4, 1e3 and 1e1, so the Hessian is badly conditioned from the first iteration; the labels
+# separate on the first column alone. Before the line search the fit returned weights of 2.25e12 and
+# a predicted probability of exactly 0 for seven of these eight rows, three of them positives, while
+# still ranking them perfectly - so AUROC and AUPRC, which is all the CRISPRi benchmark reads off
+# this function, were 1.0 either way. The two tests below fail on that fit and pass on this one.
+NEAR_SEPARABLE = (
+    ((31_000.0, 1_500.0, 28.0), True),
+    ((24_000.0, -1_200.0, -1.0), True),
+    ((-22_000.0, -1_300.0, -32.0), False),
+    ((24_000.0, -150.0, 4.0), True),
+    ((21_500.0, 3_500.0, 13.0), False),
+    ((-33_000.0, 2_200.0, 39.0), False),
+    ((-38_000.0, -670.0, -25.0), False),
+    ((23_800.0, -4_300.0, 21.0), True),
+)
+
+
+def near_separable():
+    return [list(r) for r, _ in NEAR_SEPARABLE], [lab for _, lab in NEAR_SEPARABLE]
+
+
+def test_the_fit_does_not_diverge_on_a_separable_problem():
+    """The weights stay finite and the probabilities still separate; an undamped step gave 2.25e12."""
+    x, y = near_separable()
+    w = crispri.logistic_fit(x, y)
+    assert all(abs(v) < 1e4 for v in w), w
+    p = [1 / (1 + math.exp(-max(-30.0, min(30.0, s)))) for s in crispri.logistic_score(w, x)]
+    pos = [v for v, lab in zip(p, y, strict=True) if lab]
+    neg = [v for v, lab in zip(p, y, strict=True) if not lab]
+    assert min(pos) > 0.5, p  # the diverged fit gave three of these four a probability of 0
+    assert max(neg) < 0.5, p
+
+
+def test_the_fit_never_returns_a_point_worse_than_the_start_it_was_given():
+    """The invariant divergence breaks, and the one an ordering test cannot see it break."""
+    x, y = near_separable()
+    rows = [[1.0, *r] for r in x]
+    start = crispri.penalised_objective(rows, y, [0.0] * len(rows[0]), 1e-3)
+    w = crispri.logistic_fit(x, y)
+    assert crispri.penalised_objective(rows, y, w, 1e-3) >= start  # undamped: -4.4e12 against -5.55
+    assert crispri.auroc(crispri.logistic_score(w, x), y) == 1.0  # the property divergence preserved
+
+
+def test_the_two_copies_of_the_line_search_are_one_rule():
+    """target_calibration keeps its own offset-aware copy; pinned here so the two cannot drift."""
+    from genomeos.attribution import target_calibration as tc
+
+    x, y = near_separable()
+    rows = [[1.0, *r] for r in x]
+    w = [0.1, 1e-4, -1e-4, 0.01]
+    step = [3.0, 2e-3, -5e-3, 0.4]
+    here = crispri.damped_step(rows, y, w, step, 1e-3)
+    there = tc.damped(rows, y, [0.0] * len(rows), w, step, 1e-3)
+    assert all(abs(a - b) < 1e-12 for a, b in zip(here, there, strict=True)), (here, there)
+    assert crispri.penalised_objective(rows, y, w, 1e-3) == tc.penalised_log_likelihood(
+        rows, y, [0.0] * len(rows), w, 1e-3
+    )
