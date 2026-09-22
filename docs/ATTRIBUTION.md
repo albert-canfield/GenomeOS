@@ -5994,6 +5994,88 @@ factor of 7.2 is if anything an understatement of the spread. Six screens is a s
    precision on a screen that took no part in the fit) and stop registering level claims until a
    screen exists on both sides of the split.
 
+## Pre-registration: the shared logistic fit is undamped, and every caller inherits it (2026-09-22, seventh)
+
+Written before the repair is made and before any result is re-derived.
+
+**The defect.** `genomeos/attribution/crispri.py:407`, `logistic_fit`, takes an undamped Newton
+step: it forms the gradient and the ridge-penalised Hessian, calls `solve`, and adds the whole step
+to the weights, twenty-five times or until the step is small. Newton's method for logistic
+regression is not globally convergent, and on a design where the classes nearly separate the step
+can carry the iterate so far that every linear predictor saturates. The sigmoid clamps its argument
+to [-30, 30], so a saturated row contributes a curvature of about 9.4e-14 and, if its label is on
+the wrong side, a gradient of order one: the next solve divides a gradient of order one by a
+curvature of order 1e-13 and the weights leave for 1e12. The iterate never comes back, the step
+never falls under 1e-6, and the function returns the twenty-fifth divergent point without a word.
+
+**Why it is dangerous rather than merely wrong.** A diverged fit still *orders* the rows. On the
+eight-row design in `tests/test_crispri.py` added with this repair the diverged weights reach
+2.25e12 and give seven of eight rows a predicted probability of exactly 0 — including three of the
+four positives — and its AUROC is still 1.0, identical to the converged fit's. Every downstream
+figure in this project that is read off `logistic_fit` as a *ranking* (AUPRC, AUROC, a gain
+interval, a top-k precision) is therefore blind to the failure, and every figure read off it as a
+*level* (a reliability bin, a calibration curve, a confidence band) would be silently ruined. The
+existing test, `test_logistic_fit_orders_a_separable_feature`, asserts the ordering and the sign of
+one weight, which are exactly the two properties divergence preserves; it passes on a diverged fit.
+
+**The inventory of callers**, each with what it fits and what a divergence there would look like:
+
+| Caller | What it fits | Exposure |
+|---|---|---|
+| `crispri.py:611` | leave-one-chromosome-out folds of `FEATURES` on the K562 training pairs, 23 folds x 3 models | read as AUPRC/AUROC only: a divergence would be **invisible**, the ranking survives |
+| `crispri.py:617` | the three `FEATURES` models on all 9,237 covered training pairs, applied to the held-out pairs | read as AUPRC/AUROC and a bootstrap gain interval: **invisible** |
+| `crispri.py:843` | leave-one-chromosome-out folds of `CONTACT_FEATURES` (seven models incl. measured Hi-C contact) | read as AUPRC/AUROC: **invisible** |
+| `crispri.py:849` | the seven `CONTACT_FEATURES` models on the training pairs with a measured contact | read as AUPRC/AUROC: **invisible** |
+| `target_calibration.py:658` (`fit`) | every calibration weight vector in the project: `sweep`, `drop`, `activity`, `target`, and through `scripts/target_calibration.py`, `scripts/target_calibration_gate.py`, `scripts/target_rebanding.py`, `scripts/union_axis.py` | read as a **probability**: a divergence gives predicted 0 or 1 and a reliability table of empty bins, which would look like a legitimate "the model is confident and wrong" result |
+| `target_calibration.py:1028` | leave-one-chromosome-out folds of `sweep` and `activity` inside `calibration_result` | read as a probability through `predict`: **plausible-looking**, as above |
+| `tests/test_crispri.py:75` | a one-feature separable toy | asserts only the ordering, so it **cannot see** the failure |
+
+`target_calibration.logistic_fit_offset:2089` is the same solver with a per-row offset and already
+carries the backtracking line search; it is not exposed. `motif_grammar.fit` and `motif_transfer.fit`
+are a different, linear, ridge solve and are not callers.
+
+**The repair, registered.** Move the line search into the shared function: `crispri.logistic_fit`
+gains `damped_step`, which halves the Newton step until it stops lowering the penalised
+log-likelihood and returns a zero step if twenty halvings do not, which ends the iteration through
+the caller's own convergence check. The edit is purely additive — the existing lines of
+`logistic_fit` keep their text and one line is inserted between the solve and the update — because
+`scripts/check_staged.py` refuses a commit that deletes lines a commit of the last two days added,
+and `target_calibration.py`'s copy of the same rule was added today by e4914ef. That copy is
+therefore **left in place, knowingly**, and pinned instead: a test asserts that
+`crispri.damped_step` and `target_calibration.damped` return the same step on the same input, so
+the duplication cannot drift into two rules. Removing it is a roadmap row, not this change.
+
+**What must hold.** The damped fit must reproduce the undamped fit wherever the undamped fit
+converges, to **1e-6 in every weight**, which is the tolerance the offset solver was already held
+to. The reason it holds is that the line search accepts the full step whenever the full step does
+not lower the penalised log-likelihood, which is every iteration of a converging run, so the
+iterates are identical and not merely close.
+
+**The results that are re-derived, and that must not move.** Each is compared against the **file
+committed in this repository today**, not against a figure quoted in this document, because several
+of these numbers moved this morning for unrelated reasons:
+
+1. `data/results/crispri_benchmark.json` — the pre-registered CRISPRi verdict, the held-out AUPRC
+   per cell type and the deletion gain intervals (`scripts/crispri_score.py`).
+2. `data/results/crispri_contact.json` — the measured-contact comparison (`scripts/crispri_contact.py`,
+   offline: every contact is already in `data/knowledge/hic_contact`).
+3. `data/results/target_calibration.json` — the reliability table, the band assignment and the
+   sweep summary (`scripts/target_calibration.py`).
+4. `data/results/target_calibration_gate.json` — the gate arm.
+5. `data/results/target_rebanding.json` — the re-banded curve and its strata.
+6. `data/results/union_axis.json` — the union axis's 9.70%.
+7. `data/results/target_prevalence.json` — the leave-one-screen-out arm, whose comparator is
+   `fit` and whose offset arm is already damped.
+
+**What happens if one of them moves.** It is reported first, as the finding, before anything else
+in this section, and the old value is **withdrawn**, not reconciled. A number that changes when the
+solver stops diverging was computed at a diverged point and was wrong when it was published; the
+size of the change is not an argument about whether it mattered, because a diverged fit has no
+error bar to be inside. The falsifier is stated here so it cannot be softened afterwards: if any
+figure in the seven files above differs from its committed value by more than the rounding the file
+itself applies, this section's title becomes that finding, the affected claim is marked withdrawn
+where it was made, and the re-derived value is published with the date of the repair beside it.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
