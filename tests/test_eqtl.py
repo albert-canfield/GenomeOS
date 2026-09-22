@@ -123,3 +123,76 @@ def test_score_and_summarise():
         "inferred_right": 0,
     }
     assert s["predicted_tissue_is_an_eqtl_tissue"] == 1.0 and s["tissue_judged"] == 1
+
+
+def _responses(tmp_path):
+    """A two-element cache: one with the measured eGene in the window, one without."""
+    import json
+
+    from genomeos.attribution.targets import ElementResponses
+
+    def gene(name, drop, rise=0.0):
+        return {"gene": name, "max_drop_log2fc": drop, "max_rise_log2fc": rise, "by_cell": {}}
+
+    archive = {
+        "E1": {"genes": [gene("A", -0.40), gene("B", -0.20), gene("X", -0.05)]},
+        "E2": {"genes": [gene("Q", -0.30), gene("R", -0.02)]},
+        "E3": {"genes": [gene("B", -0.04), gene("A", -0.01)]},  # nothing clears MIN_EFFECT
+    }
+    with gzip.open(tmp_path / "chr1.json.gz", "wt") as fh:
+        json.dump(archive, fh)
+    return ElementResponses(tmp_path)
+
+
+def test_the_window_says_which_misses_were_unanswerable(tmp_path):
+    symbols = {"ENSG00000001": "A", "ENSG00000002": "B"}
+    hits = [{"tissue": "Liver", "gene_id": "ENSG00000001"}, {"tissue": "Liver", "gene_id": "ENSG00000002"}]
+    r = _responses(tmp_path)
+    e1 = eqtl.score_element(
+        {"id": "E1", "predicted": {"gene": "A"}, "inferred": {"gene": "B"}},
+        hits,
+        symbols,
+        responses=r,
+        chrom="chr1",
+    )
+    assert e1["cached"] and e1["window_genes"] == 3 and e1["egenes_in_window"] == 2
+    assert e1["cache_target"] == "A" and e1["cache_target_in_egenes"] is True
+    assert e1["cache_target_named_by_the_table"] and e1["best_egene_rank"] == 1
+
+    # E2: both measured eGenes are outside the scorer's window, so the model could not have named
+    # one. Today that reads as a miss; it is no answer, and it says so.
+    e2 = eqtl.score_element(
+        {"id": "E2", "predicted": {"gene": "Q"}, "inferred": {"gene": "Q"}},
+        hits,
+        symbols,
+        responses=r,
+        chrom="chr1",
+    )
+    assert e2["predicted_in_egenes"] is False  # the old field is unchanged
+    assert e2["egenes_in_window"] == 0 and e2["cache_target_in_egenes"] is None
+    assert e2["cache_silence"] == "no eGene of this element is in the scorer's window"
+    assert e2["egenes_out_of_window"] == 2
+
+    # E3: no gene clears MIN_EFFECT, so the compact table names none and the element is dropped
+    # from the published rate. The sweep still has a best gene, and it is right here.
+    e3 = eqtl.score_element({"id": "E3", "predicted": None}, hits, symbols, responses=r, chrom="chr1")
+    assert e3["predicted_in_egenes"] is None and e3["cache_target"] == "B"
+    assert e3["cache_target_in_egenes"] is True and e3["cache_target_named_by_the_table"] is False
+
+    missing = eqtl.score_element({"id": "E404", "predicted": None}, hits, symbols, responses=r, chrom="chr1")
+    assert missing["cached"] is False and missing["cache_silence"]
+
+    s = eqtl.summarise([e1, e2, e3, missing])["from_the_whole_window"]
+    assert s["judged"] == 2 and s["cache_target_is_an_egene"] == 1.0
+    assert s["where_the_table_named_a_gene"] == {"elements": 1, "rate": 1.0}
+    assert s["where_the_table_named_none"] == {"elements": 1, "rate": 1.0}
+    assert s["no_egene_in_the_window"] == 1 and s["not_cached"] == 1
+    assert s["egene_mentions_out_of_window"] == 2 and s["best_egene_rank_median"] == 1
+
+
+def test_without_a_reader_every_number_is_the_old_one():
+    symbols = {"ENSG00000001": "A"}
+    hits = [{"tissue": "Liver", "gene_id": "ENSG00000001"}]
+    r = eqtl.score_element({"id": "E1", "predicted": {"gene": "A"}, "inferred": {"gene": "B"}}, hits, symbols)
+    assert "cached" not in r and "cache_target" not in r
+    assert eqtl.summarise([r])["from_the_whole_window"] == {}

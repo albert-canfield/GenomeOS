@@ -5136,6 +5136,59 @@ threshold and it is to be reported as one.
 **Reported first if it falls.** A fall is the expected outcome and goes at the top of the result
 section, in the same table as anything that rises.
 
+### The result: the headline did not move, and that is the finding
+
+`scripts/eqtl_targets.py` re-run over the same elements and the same distilled hits (125 s, **0
+AlphaGenome requests**, nothing fetched). The registration expected the headline to fall. **On the
+uniform set it moved by 0.001**, from 0.529 to 0.528, while the denominator grew by half, from
+2,372 elements to 3,613. On VISTA it rose, 0.412 → 0.423. So the registered direction is wrong, and
+the falsifier written beside it is the one that fired: **the elements the compact table refused to
+name a gene for are answered about as well as the elements it named one for.**
+
+| set | published, gated | asked of every answerable element | where the table named a gene | where it named none | chance in the same window |
+|---|---|---|---|---|---|
+| uniform | 0.529 (2,372) | **0.528 (3,613)** | 0.546 (2,297) | **0.496 (1,316)** | 0.127 |
+| constrained | 0.448 (1,054) | **0.449 (1,329)** | 0.467 (1,010) | **0.392 (319)** | 0.116 |
+| VISTA | 0.412 (1,119) | **0.423 (1,353)** | 0.441 (1,046) | **0.362 (307)** | 0.146 |
+
+The movement decomposes into two corrections that nearly cancel, and both are real. Uniform:
+0.529 over 2,372 → **0.546 over 2,297** when the 75 elements whose every eGene lies outside the
+scorer's window are dropped, because the model could not have named one and they were being counted
+as misses (+0.017) → **0.528 over 3,613** when the 1,316 elements the table left unnamed are added
+at 0.496 (−0.018). Net −0.001. Quoting the old 0.529 as the model's accuracy was wrong twice over,
+and the two errors happened to be the same size.
+
+**What `MIN_EFFECT` = 0.1 is worth, now that it can be priced.** The gate excludes a third of the
+elements that carry an eQTL. On the elements it keeps, the sweep's best gene is an eGene 54.6% of
+the time; on the elements it throws away, 49.6% — five points, against a chance floor of 12.7% in
+the same windows. So the threshold is a weak confidence signal, not the difference between an
+answer and a non-answer, and a table built on it is discarding 1,316 usable answers to raise a rate
+by five points. On the constrained and VISTA sets the same gap is 7.5 and 7.9 points.
+
+**What the compact table could not express at all.** The measured eGene's rank in the sweep's own
+ordering of the window, not merely whether it is the head of it: median rank **1** of 34.1 genes on
+uniform, with the eGene in the model's top 3 for **77.6%** of elements and the top 5 for **85.1%**
+(constrained 0.673 / 0.737 of 33.1 genes, VISTA 0.694 / 0.793 of 24.9). That is a much stronger
+statement about what the sweep knows than the 0.528 top-1 rate, and it is not a comparison with the
+nearest-coding-TSS rule, which gets one guess and takes 0.662; it is a statement that when the model
+is wrong about which gene, it is usually wrong by one or two places.
+
+**The negatives that were never answers.** 2,542 of the 17,834 uniform eGene mentions (14.3%) are
+of genes outside the scorer's 1 Mb window, and on 112 elements *every* eGene is outside it. Those
+elements now carry `cache_silence`, "no eGene of this element is in the scorer's window", instead of
+a `False`. On VISTA 39 elements are not in the cache at all and say so rather than being scored.
+
+**The control held exactly.** Every pre-existing field reproduces to the digit: uniform 0.529 on
+2,372, coding 0.717 on 1,851, nearest TSS 0.662 on 3,725, and the disagreement table 516 / 842 of
+1,379. The only reason any number in the result file differs from the September run is the block of
+new fields beside it (3.9 MB → 6.2 MB).
+
+**A correction to the record.** The commit that carries the reader and the registration above,
+45e4f92, was committed with the wrong message text: it repeats the message of df6c5f4, from the
+CRISPRi lane earlier the same day, because a stale message file of that name was picked up. Its
+contents are `attribution/targets.py`, `tests/test_element_responses.py` and the registration
+section here, and the history was left unrewritten rather than rewritten under a shared branch.
+
 **What is not touched.** Every field the current result carries keeps its name and its meaning, so
 the figures above stay comparable and the web view keeps working; the new fields are added beside
 them. `predicted_target_is_an_egene` still means "of the elements where the compact table named a

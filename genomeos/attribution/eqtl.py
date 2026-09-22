@@ -26,6 +26,9 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from genomeos.attribution.targets import NOT_CACHED, ElementResponses
+from genomeos.predict.enhancer_target import MIN_EFFECT
+
 GTEX_EQTL_TAR = (
     "https://storage.googleapis.com/adult-gtex/bulk-qtl/v8/single-tissue-cis-qtl/GTEx_Analysis_v8_eQTL.tar"
 )
@@ -235,9 +238,21 @@ def tissue_matches(predicted: str | None, gtex: str) -> bool | None:
 
 
 def score_element(
-    element: dict[str, Any], hits: list[dict[str, Any]], symbol_of: dict[str, str]
+    element: dict[str, Any],
+    hits: list[dict[str, Any]],
+    symbol_of: dict[str, str],
+    responses: ElementResponses | None = None,
+    chrom: str = "",
+    cache_id: str = "",
 ) -> dict[str, Any]:
-    """One element: the eGenes GTEx ties to it against the predicted and the inferred target."""
+    """One element: the eGenes GTEx ties to it against the predicted and the inferred target.
+
+    With a `responses` reader the same element is also scored against every gene the sweep kept in
+    its window, not only the one the compact table named. That answers two questions the compact
+    fields cannot: whether an eGene was in the window at all (a miss on a gene that was never
+    scorable is not a wrong answer, it is no answer), and where the measured eGene sits in the
+    model's own ordering rather than only whether it is the head of it.
+    """
     genes: dict[str, set[str]] = {}
     for h in hits:
         sym = symbol_of.get(h["gene_id"], h["gene_id"])
@@ -262,7 +277,52 @@ def score_element(
         "inferred": inf,
         "inferred_in_egenes": (inf in genes) if inf else None,
         "predicted_tissue_is_an_eqtl_tissue": tissue_agree,
+        **_window(genes, responses, chrom, cache_id or element["id"]),
     }
+
+
+def _window(
+    genes: dict[str, set[str]],
+    responses: ElementResponses | None,
+    chrom: str,
+    element_id: str,
+) -> dict[str, Any]:
+    """The same element read from the sweep's per-element cache: every gene, in the sweep's order.
+
+    Absent a reader this is empty and nothing else in the row changes. With one, `cache_silence`
+    names why a question has no answer instead of letting a False stand for it: the element is not
+    in the cache, or none of the element's eGenes is in the scorer's window, in which case the
+    model could not have named one and the element is not a miss.
+    """
+    if responses is None:
+        return {}
+    window = responses.genes(chrom, element_id)
+    if window is None:
+        return {"cached": False, "cache_silence": NOT_CACHED}
+    order = responses.ranked(chrom, element_id, by="effect")
+    inside = sorted(set(genes) & set(window))
+    ranks = [i + 1 for i, (g, _) in enumerate(order) if g in genes]
+    head, head_effect = order[0] if order else (None, None)
+    out: dict[str, Any] = {
+        "cached": True,
+        "window_genes": len(window),
+        "egenes_in_window": len(inside),
+        "egenes_out_of_window": len(genes) - len(inside),
+        "cache_target": head,
+        "cache_target_effect": head_effect,
+        # whether that gene clears the threshold the compact table records a target at
+        "cache_target_named_by_the_table": bool(head_effect is not None and abs(head_effect) >= MIN_EFFECT),
+        "cache_target_in_egenes": None,
+        # where the measured eGene sits in the sweep's own ordering; rank 1 is the compact target
+        "best_egene_rank": ranks[0] if ranks else None,
+    }
+    if not genes:
+        out["cache_silence"] = "no eQTL for this element"
+    elif not inside:
+        out["cache_silence"] = "no eGene of this element is in the scorer's window"
+    else:
+        out["cache_target_in_egenes"] = head in genes
+    return out
 
 
 def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -320,7 +380,59 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
         },
         "predicted_tissue_is_an_eqtl_tissue": t,
         "tissue_judged": nt,
+        "from_the_whole_window": _window_summary(with_e),
         "evidence": EVIDENCE,
+    }
+
+
+def _window_summary(with_e: list[dict[str, Any]]) -> dict[str, Any]:
+    """The same test asked of every element the sweep scored, not only of those it named a gene for.
+
+    `predicted_target_is_an_egene` above is a rate over the elements whose best gene cleared
+    `MIN_EFFECT`; a third of the elements that carry an eQTL never enter it. Here the sweep's best
+    gene is taken whatever its size, so the denominator is every element with an eQTL and an eGene
+    the model could have named, and the two halves of that denominator are reported apart: the
+    elements the compact table named a gene for, and the elements it left out.
+    """
+    cached = [r for r in with_e if r.get("cached")]
+    if not cached:
+        return {}
+    judged = [r for r in cached if r.get("cache_target_in_egenes") is not None]
+    named = [r for r in judged if r["cache_target_named_by_the_table"]]
+    unnamed = [r for r in judged if not r["cache_target_named_by_the_table"]]
+    ranked = [r for r in judged if r.get("best_egene_rank")]
+
+    def rate(rows: list[dict[str, Any]], key: str = "cache_target_in_egenes") -> float | None:
+        return round(sum(bool(r[key]) for r in rows) / len(rows), 3) if rows else None
+
+    ranks = sorted(r["best_egene_rank"] for r in ranked)
+    return {
+        "elements_with_an_eqtl": len(with_e),
+        "cached": len(cached),
+        "not_cached": len(with_e) - len(cached),
+        "no_egene_in_the_window": sum(
+            1 for r in cached if r.get("cache_target_in_egenes") is None and r.get("egenes_in_window") == 0
+        ),
+        "egene_mentions_in_window": sum(r.get("egenes_in_window") or 0 for r in cached),
+        "egene_mentions_out_of_window": sum(r.get("egenes_out_of_window") or 0 for r in cached),
+        "window_genes_mean": round(sum(r.get("window_genes") or 0 for r in cached) / len(cached), 1),
+        "judged": len(judged),
+        "cache_target_is_an_egene": rate(judged),
+        # the floor: one gene drawn at random from the same window, averaged over the same elements
+        "chance_if_the_gene_were_drawn_at_random": round(
+            sum(r["egenes_in_window"] / r["window_genes"] for r in judged if r.get("window_genes"))
+            / len(judged),
+            3,
+        )
+        if judged
+        else None,
+        "where_the_table_named_a_gene": {"elements": len(named), "rate": rate(named)},
+        "where_the_table_named_none": {"elements": len(unnamed), "rate": rate(unnamed)},
+        "rankable": len(ranked),
+        "best_egene_rank_median": ranks[len(ranks) // 2] if ranks else None,
+        "egene_is_the_top_gene": rate(ranked, "cache_target_in_egenes"),
+        "egene_in_top_3": round(sum(r <= 3 for r in ranks) / len(ranks), 3) if ranks else None,
+        "egene_in_top_5": round(sum(r <= 5 for r in ranks) / len(ranks), 3) if ranks else None,
     }
 
 

@@ -19,6 +19,7 @@ import json
 import sys
 
 from genomeos.attribution import eqtl
+from genomeos.attribution.targets import ElementResponses
 from genomeos.jobs import heartbeat
 from genomeos.results import save_result
 
@@ -62,6 +63,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--distil", action="store_true", help="stream the GTEx archive and keep the hits")
     ap.add_argument("--tissues", default="", help="comma list of GTEx tissues (default: all 49)")
+    ap.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="score from the compact tables alone, the way this ran before 2026-09-22",
+    )
     args = ap.parse_args()
     sets = elements()
     if args.distil or not any(eqtl.KNOWLEDGE.glob("hits_*.tsv")):
@@ -93,15 +99,37 @@ def main() -> int:
     chroms = {e["chrom"] for rows in sets.values() for e in rows}
     symbols = symbol_map(chroms)
     hits = eqtl.load_hits()
-    out: dict = {"sets": {}, "margin_bp": MARGIN, "evidence": eqtl.EVIDENCE}
+    responses = None if args.no_cache else ElementResponses()
+    out: dict = {
+        "sets": {},
+        "margin_bp": MARGIN,
+        "evidence": eqtl.EVIDENCE,
+        "window_source": "the compact tables alone"
+        if args.no_cache
+        else "the sweep's per-element response cache, every gene in the scorer's window",
+    }
+    # chromosome-major, because the response cache holds one chromosome's archive at a time
+    by_chrom: dict[str, list[tuple[str, dict]]] = {}
     for name, rows in sets.items():
-        scored = []
         for e in rows:
+            by_chrom.setdefault(e["chrom"], []).append((name, e))
+    scored_by_set: dict[str, list[dict]] = {name: [] for name in sets}
+    for chrom in sorted(by_chrom):
+        for name, e in by_chrom[chrom]:
             key = f"{e['chrom']}:{e['start']}-{e['end']}"
-            r = eqtl.score_element({**e, "id": key}, hits.get(key, []), symbols)
+            r = eqtl.score_element(
+                {**e, "id": key},
+                hits.get(key, []),
+                symbols,
+                responses=responses,
+                chrom=e["chrom"],
+                cache_id=e["id"],
+            )
             r["element"] = e["id"]
             r["chrom"] = e["chrom"]
-            scored.append(r)
+            scored_by_set[name].append(r)
+    for name in sets:
+        scored = scored_by_set[name]
         out["sets"][name] = {
             "summary": eqtl.summarise(scored),
             "elements_with_eqtl": [r for r in scored if r["n_egenes"]],
@@ -114,6 +142,20 @@ def main() -> int:
             f"{s['inferred_target_is_an_egene']} (n={s['inferred_judged']}); when they disagree "
             f"{s['when_they_disagree']}"
         )
+        w = s.get("from_the_whole_window") or {}
+        if w:
+            print(
+                f"{name}: asked of every element the sweep scored, "
+                f"{w['cache_target_is_an_egene']} (n={w['judged']}) against "
+                f"{s['predicted_target_is_an_egene']} (n={s['predicted_judged']}); "
+                f"where the table named a gene {w['where_the_table_named_a_gene']}, "
+                f"where it named none {w['where_the_table_named_none']}; "
+                f"chance {w['chance_if_the_gene_were_drawn_at_random']}; "
+                f"best eGene rank median {w['best_egene_rank_median']} of {w['window_genes_mean']} genes, "
+                f"top-3 {w['egene_in_top_3']}, top-5 {w['egene_in_top_5']}; "
+                f"{w['egene_mentions_out_of_window']} eGene mentions were outside the window and "
+                f"{w['no_egene_in_the_window']} elements had none inside it"
+            )
     save_result("eqtl_targets", out)
     return 0
 
