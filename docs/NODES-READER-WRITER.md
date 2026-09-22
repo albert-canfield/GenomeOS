@@ -1728,3 +1728,120 @@ divisions. A clock reads a state; this says how the state changes when a cell
 divides. Connecting them (a predicted drift at the clock's own CpGs, in their own
 sequence context, against a twin's measured betas) is a real next step and is not
 claimed here: none of the numbers above involve a clock.
+
+## A twelfth and thirteenth biosample: gonadal tissue, chosen on a committed rule (2026-09-22)
+
+### The inventory, established before anything was chosen
+
+The layer holds eleven biosamples. Every one of them carries DNase peaks and all
+five marks genome-wide (24 chromosomes); eight of the eleven also carry WGBS.
+The three without methylation are astrocyte, cardiac muscle cell and
+keratinocyte.
+
+| biosample | lineage | material | WGBS | DNase peaks | cache |
+|---|---|---|---|---|---|
+| K562 | mesoderm, blood | cancer line | yes | 518,503 | 255 MB |
+| HepG2 | endoderm, liver | cancer line | yes | 176,634 | 270 MB |
+| GM12878 | mesoderm, blood | EBV-transformed line | yes | 76,119 | 261 MB |
+| H1 | pluripotent | ES line | yes | 232,709 | 268 MB |
+| IMR-90 | mesoderm, fetal lung | fibroblast line | yes | 312,250 | 184 MB |
+| SK-N-SH | ectoderm, neural | cancer line | yes | 232,038 | 296 MB |
+| cardiac muscle cell | mesoderm | differentiated from RUES2 | no | 332,799 | 253 MB |
+| keratinocyte | ectoderm, surface | primary, cultured | no | 83,639 | 185 MB |
+| hepatocyte | endoderm | differentiated from H9 | yes | 267,741 | 303 MB |
+| astrocyte | ectoderm, neural | primary, cultured | no | 294,713 | 217 MB |
+| CD14-positive monocyte | mesoderm, blood | primary, cultured | yes | 202,328 | 233 MB |
+
+Cost per biosample, measured on what is already on disk: 185 to 303 MB, mean
+247 MB, of which roughly 200 MB is the five fold-change signal profiles, 24 to
+50 MB is WGBS and only about 3 MB is the peak calls. The signal bigWigs are 0.4
+to 2.3 GB each on the portal and are never downloaded whole: they are read by
+range into 200 bp bin means, which is why a biosample costs megabytes and not
+tens of gigabytes. The reader's DNase rows are a separate 0.7 to 4.4 MB per
+biosample under `data/results/dnase_*`. The pipeline is per-chromosome for
+signal and methylation and genome-wide for peaks, which are streamed once per
+(biosample, mark) and split as they go.
+
+Two facts in that table were not on record before and decide what follows.
+**First, not one of the eleven is tissue.** Six are immortalised or cancer
+lines, two are directed-differentiation products of a stem line (cardiac muscle
+cell from RUES2, hepatocyte from H9), and three are cultured primary cells.
+Every reading the layer has ever produced comes from a cultured population.
+**Second, the neural direction is already occupied twice**, by SK-N-SH and by
+astrocyte.
+
+### The rule, fixed before any portal query
+
+Rank the three directions the roadmap names by what the existing eleven cannot
+answer:
+
+1. Is the lineage unoccupied? A direction whose lineage already has a member
+   adds a second member to an answered question.
+2. Does the direction make a prediction the present set cannot make — a reading
+   expected to fall *outside* the range the eleven span, for a stated
+   mechanistic reason, rather than somewhere inside it?
+3. Only as a tiebreak among directions passing 1 and 2: does a biosample exist
+   at the layer's standing bar — released, GRCh38, untreated, DNase plus all
+   five marks, WGBS if it can be had?
+
+Neural fails 1: the lineage is occupied by a neural line and a primary neural
+cell, so a third is a replicate of an answered question. Embryonic fails 1 in
+substance: H1 holds the pluripotent state and IMR-90 is fetal, so the direction
+is occupied at both ends. Gonadal passes 1 — all eleven are somatic — and
+passes 2 for a stated reason: the germline is the one lineage that erases and
+re-lays methylation, so its methylation should sit off the somatic range rather
+than inside it.
+
+**The rule chooses gonadal.** At bar 3 the portal offers `testis` (male adult,
+37 years) and `ovary` (female adult, 30 years), both with DNase, all five marks
+and WGBS; `NT2/D1` fails the bar with no H3K27ac, and `gonad`, `sperm` and
+`testicular germ cell` are not ENCODE biosample terms at all.
+
+Both are ingested, and the second is not padding. Testis carries the germline
+claim — adult testis is dominated by spermatogenic cells — but it moves two
+variables at once, because it is also the layer's first bulk tissue. Ovary is
+the control that separates them: it is gonadal and it is tissue, but its germ
+cells are a negligible fraction of the bulk, so anything germline should appear
+in testis alone while anything merely tissue-shaped should appear in both.
+
+### What is registered, before the fetch
+
+The reading under test is the layer's founding assumption, that which nodes are
+open is a property of the cell type. Computed on the eleven before choosing
+anything, `enhancers_active` spans 57,321 to 233,853 — a factor of 4.1 — while
+`genes_read` spans 10,698 to 14,135, a factor of 1.3. The wide one tracks the
+assay: over the eleven, Spearman rho between a biosample's DNase peak count and
+its `enhancers_active` is **0.8818**, against 0.7182 for `genes_read`, 0.6818
+for `genes_read_open` and −0.5727 for `nodes_silent`.
+
+**P1, the confound.** Testis and ovary are out-of-sample points for that fit.
+Confirmed if both land inside the prediction the eleven's peak-count fit makes
+from their DNase peak count alone; refuted if either has an enhancer count its
+openness depth does not explain. *Changing nothing* is the outcome where rho
+over thirteen is within 0.05 of rho over eleven and both new points fall inside
+the eleven's range on every reader total — that is a row added and no reading
+moved, and it will be reported as that.
+
+**P2, germline methylation.** Testis's methylation-by-tier readings should fall
+outside the range the eight WGBS biosamples span, in at least one tier. Ovary
+should fall inside. Refuted if testis is inside on every tier, or if ovary is
+outside on the same tiers as testis — which would mean the effect is tissue,
+not germline.
+
+**P3, tissue against culture.** Bulk tissue mixes cell types, so a promoter is
+open if it is open in any constituent. Both new samples should therefore show a
+higher read share and a lower `nodes_silent` than the cultured median, and in
+the same direction. If only testis moves it is germline, not mixture.
+
+**P4, the two under-called marks.** Registered in advance as an assay defect,
+not biology: testis's H3K27me3 peak file is 35,646 bytes and its H3K9me3 file
+6,919 bytes, against a floor of 193 KB (hepatocyte) and 35 KB (cardiac muscle
+cell) across the eleven. Those two marks are expected to yield near-empty peak
+sets, and any testis state distribution resting on their absence is an artefact.
+Falsified if their peak counts land inside the eleven's range after all.
+
+A fifth thing is recorded because it is a standing difference rather than a
+prediction: every one of the eleven uses ENCODE **replicated** peaks, and every
+tissue experiment on offer for testis and ovary has only **pseudoreplicated**
+peaks. Tissue is a single-replicate donor in this portal, and the manifest rule
+prefers replicated calls that tissue cannot supply.
