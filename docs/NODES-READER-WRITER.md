@@ -759,6 +759,19 @@ What it named instead is reported with them.
 
 ### The direction, scored (`scripts/crispri_direction.py`, 12 s, 0 requests)
 
+> **Re-read 2026-09-22, and every number below is left exactly as it was.** The
+> upward arm was scored afterwards (two subsections down) and **the pass restated
+> over both measured signs does not survive**: the upward arm came in at 15/36 =
+> 0.4167, below chance and below the model's own up-rate, and the combined
+> two-signed set is UNDECIDABLE at a balanced accuracy of 0.6221. The 0.9318 here
+> is correct for what it measured and is **a statement about downward effects
+> only**. Two specific claims in this subsection are superseded rather than
+> restated: the 44's headline was drawn under a top-target selection which, once
+> removed, gives 96/116 = 0.8276 on the same kind of pairs; and "all three
+> disagreements sit at the bottom of the magnitude ladder" does not hold on the
+> wider set, which contains errors at 0.3172 and 0.2645. Nothing below is edited,
+> because the first half's arithmetic is not what was wrong with it.
+
 **The registered rule passes, and it passes against a harder baseline than the
 one registered.** The headline, on the 44 held-out pairs fixed above:
 
@@ -956,6 +969,133 @@ pass it qualifies; the first subsection's numbers are left standing and annotate
 rather than edited; and no subset is searched for in which the upward arm holds.**
 A claim that has only been tested where it succeeds is not yet a claim, and this
 registration is what makes the difference decidable.
+
+### The upward arm, scored (`scripts/crispri_direction_both.py`, 125 s, 0 requests)
+
+**The upward arm fails, and the pass of `5c842ca` does not survive being restated
+over both signs.** The registration's stated expectation — written down before
+anything was compared, and quoted here because it was a prediction that could have
+been wrong — was that the upward arm would come back at or below chance with a
+sensitivity between 0.2 and 0.45, and that balanced accuracy would land between
+0.60 and 0.70 in the UNDECIDABLE band. That is what happened, to within a decimal.
+
+| | k/n | rate | 95% |
+|---|---|---|---|
+| **upward arm (measured increases)** | **15/36** | **0.4167** | **[0.2714, 0.5780]** Wilson |
+| downward arm (measured decreases) | 96/116 | 0.8276 | [0.7486, 0.8855] Wilson |
+| **combined, balanced accuracy** | — | **0.6221** | **[0.5354, 0.7088]** bootstrap |
+| combined, raw agreement | 111/152 | 0.7303 | [0.6547, 0.7945] Wilson |
+
+**The upward arm is FAILED by the registered rule** — it does not clear 0.5 at
+all, let alone by 0.15. It is also below the model's own **marginal up-rate of
+0.4643**, the share of the whole sweep it calls upward anyway, so on the pairs
+where an increase was actually measured the layer does no better than its
+unconditional habit. Every pair is a real test: a constant-down caller scores
+**0.000** on this arm, so unlike the first half there is nothing vacuous about it.
+
+**The combined set is UNDECIDABLE**, in the registered 0.55–0.65 band, whose
+meaning was fixed in advance: *direction is faintly readable and not usable; the
+`represses` half of `action` stays unsupported, and every action word GenomeOS
+writes on a predicted rise is unbacked.*
+
+**The single number that says it most plainly.** Raw agreement on the combined set
+is **0.7303, and the majority-class rate is 0.7632.** The layer is *worse at
+calling direction than a caller that says "down" every time and never looks at the
+element.* This is exactly why balanced accuracy and not raw agreement was
+registered as the primary, and it is why the first half's 0.9318 could not have
+revealed the problem: on a set where everything is measured-down, a caller that
+does worse than constant-down still looks excellent.
+
+**The model's marginals are right; its pairings are not.** Against a measured 116
+down and 36 up, the model predicted **117 down and 35 up**. It emits almost exactly
+the right number of increases. It emits them on the wrong elements. No pair was
+dropped for a predicted value of exactly zero.
+
+**The downward arm, re-read without the selection the 41/44 was drawn under.**
+Restricted to the 44 pairs whose gene is the element's top target the new route
+gives 42/44 = 0.9545; over the 108 pairs that only the cache can answer it gives
+69/108 = 0.6389, balanced accuracy 0.5833 [0.4931, 0.6736]. So **the top-target
+selection was doing a large part of the work**: the 0.9318 was measured on the
+easiest tenth of the covered pairs, and on the rest the layer is near chance. That
+is the third registered falsifier and it fired too.
+
+**The magnitude ladder, re-read over the new pairs — and it does not survive
+intact.** The first half's sharpest claim was that every error sat below ‖log2fc‖
+0.055 and the model was 28 of 28 above 0.1. Over 152 pairs:
+
+| ‖predicted log2fc‖ | downward arm | upward arm |
+|---|---|---|
+| 0 – 0.01 | 14/25 | 11/28 |
+| 0.01 – 0.025 | 8/9 | 2/4 |
+| 0.025 – 0.05 | 19/24 | 0/1 |
+| 0.05 – 0.1 | 12/14 | 1/1 |
+| 0.1 – 0.25 | 19/19 | 1/1 |
+| 0.25 – 0.5 | 11/12 | 0/1 |
+| 0.5 – 1.0 | 7/7 | — |
+| ≥ 1.0 | 6/6 | — |
+| **≤ 0.05** | **41/58 = 0.7069** | **13/33 = 0.3939** |
+| **> 0.1** | **43/44 = 0.9773** | **1/2** |
+
+The shape holds and the absolute claim does not. Above 0.1 the downward arm is
+43 of 44, not 28 of 28 — there is now a large miss, **HBG1 in K562, measured
+−0.7356, predicted +0.3172** — and the upward arm has a miss at 0.2645 (ERAL1).
+**"All errors below 0.055" is falsified.** "Read the direction in proportion to the
+magnitude it is read from" survives, and is if anything sharpened: in the weak band
+the two sensitivities are 0.7069 and 0.3939, a **balanced accuracy of 0.5504**,
+which is chance. All of the layer's direction signal lives in the large-magnitude
+downward calls.
+
+**The registered magnitude-matched sub-test is underpowered, and that is reported
+rather than glossed.** It was registered to stop a failing upward arm being excused
+as small magnitudes. Above 0.1 the downward arm is 43/44 = 0.9773 and the upward
+arm is **1/2** — only two upward pairs reach that band at all, because the upward
+pairs sit far lower on the ladder (median ‖predicted‖ **0.0028** against **0.0504**
+for the downward ones). So the sub-test **cannot settle** whether the upward
+failure is about sign or about magnitude, and it is not claimed to. What can be
+said without it: at matched *weak* magnitudes, where both arms have real numbers,
+the downward arm is 0.7069 and the upward arm 0.3939, and those sum to 1.10 — which
+is what a caller reading nothing but its own base rate would give.
+
+**Per cell.** K562 is where the weight is: up 11/31, down 85/103, balanced accuracy
+0.5900 [0.5013, 0.6835] — its lower bound barely clears chance. GM12878 is up 4/5,
+down 11/13, balanced 0.8231 [0.6000, 1.0], on 18 pairs; it looks much better and is
+far too small to carry anything. The training arm, fitted on and not a test, is up
+24/45, down 358/421, balanced 0.6918.
+
+**Requests: 0, and the costing that was authorised is returned unspent.** The buy
+was authorised at up to 35. The reproduced costing is 30 requests for K562 and 35
+with GM12878, agreeing exactly with the first half. None was spent, because the
+per-element response cache already holds the answer they would have bought. **The
+whole of this result — the falsification of a passing headline — cost nothing.**
+
+**The one registered check that did not pass, and what it was.** The re-derivation
+required the 44 pairs of `5c842ca` to reappear with identical signs. One did not:
+**SH3BGRL3 on chr1 at 26,284,661–26,285,505 in K562, +0.0111 then, −0.1073 now.**
+The cause was traced before anything else was written, and it is a candidate-set
+difference and not a reader disagreement — the diagnostic that separates the two
+(`readers_agree_on_the_same_candidate_set`) is **true**, with an empty
+disagreement list. Three scored elements overlap that perturbation. SH3BGRL3 is
+the top target of only one of them, `EH38E2796839` at +0.0111, which is the single
+value the compact table could offer; the cache also sees `EH38E2796838` at −0.1073
+and `EH38E1330371` at −0.0124, where SH3BGRL3 is present but is not the top gene.
+The registered largest-magnitude rule, given the wider candidate set, resolves to
+−0.1073. **Both readers read the identical number for the identical element**; the
+rule was under-specified across two different candidate sets, which is a flaw in
+the registration and is recorded as one. It is reported rather than waived because
+it moves the *other* way — it turns one of the first half's three errors into a
+hit, raising the old subset from 41/44 to 42/44 — so relaxing it quietly would have
+flattered the result this section is trying to knock down.
+
+**What this closes.** The `represses` half of `action` is now **measured and
+unsupported**, which is a strictly better position than measured nowhere. Every
+enhancer-gene call GenomeOS writes with `action: "represses"` — the sign of a
+predicted rise on deletion — rests on a layer that gets increases right 15 times in
+36, below its own base rate. The honest one-line statement of the direction result
+is now: *on held-out CRISPRi pairs the deletion layer calls the direction of a
+measured **decrease** correctly 96 times in 116, and calls the direction of a
+measured **increase** correctly 15 times in 36, which is chance; its usable signal
+is confined to large-magnitude downward calls.* No subset was searched for in
+which the upward arm holds, as registered.
 
 ## Reader v1 (built 2026-09-11)
 

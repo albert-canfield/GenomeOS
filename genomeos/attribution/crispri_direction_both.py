@@ -185,7 +185,12 @@ def cached_genes(chrom: str, element_id: str, archive: dict[str, Any]) -> list[d
 
 
 def value_for_gene(
-    els: list[dict[str, Any]], chrom: str, gene: str, cell: str, archive: dict[str, Any]
+    els: list[dict[str, Any]],
+    chrom: str,
+    gene: str,
+    cell: str,
+    archive: dict[str, Any],
+    only_top: bool = False,
 ) -> dict[str, Any] | None:
     """The sweep's signed predicted change for THIS gene in THIS cell, whether or not it is the top target.
 
@@ -193,7 +198,13 @@ def value_for_gene(
     among every overlapping scored element that carries a value for the gene on the cell's own track,
     take the largest absolute change, ties broken by element id. Every match is kept so that pairs
     whose overlapping elements disagree in sign are counted rather than hidden by the choice.
+
+    `only_top` narrows the candidate elements to those where the gene IS the element's top target,
+    which is the set the compact table could see. It exists so that the two readers can be compared
+    on identical inputs; it is a diagnostic, never the headline.
     """
+    if only_top:
+        els = [e for e in els if top_target_of([e], gene, cell)]
     matches = []
     for e in els:
         for g in cached_genes(chrom, e["id"], archive):
@@ -274,6 +285,7 @@ def collect(table: list[dict[str, str]], cells: tuple[str, ...] = CELLS) -> dict
                 continue
             strata[f"answerable::{cell}::{sign}"] += 1
             strata[f"newly_answerable::{cell}::{sign}"] += not row["was_top_target"]
+            top = value_for_gene(ov, chrom, gene, cell, archive, only_top=True)
             answered.append(
                 {
                     **row,
@@ -281,6 +293,9 @@ def collect(table: list[dict[str, str]], cells: tuple[str, ...] = CELLS) -> dict
                     "predicted_sign": "down" if m["value"] < 0 else ("up" if m["value"] > 0 else "zero"),
                     "matches": m["matches"],
                     "matches_disagree": m["matches_disagree"],
+                    # the same rule over only the elements the compact table could see, for the
+                    # reader-against-reader check; None when the compact table could not answer at all
+                    "predicted_top_target_only": None if top is None else round(top["value"], 4),
                 }
             )
         del els_all, starts, archive
@@ -521,14 +536,31 @@ def rederivation_check(answered: list[dict[str, Any]], prior_path: Path) -> dict
         return {"checked": False, "why": "the first half's result file is not on disk"}
     prior = json.loads(prior_path.read_text())["answered"]
     here = {(r["chrom"], tuple(r["element"]), r["gene"], r["cell"]): r for r in answered}
-    missing, changed = [], []
+    missing, changed, reader_disagrees = [], [], []
     for p in prior:
         key = (p["chrom"], tuple(p["element"]), p["gene"], p["cell"])
         q = here.get(key)
         if q is None:
             missing.append(key)
-        elif q["predicted_sign"] != p["predicted_sign"]:
-            changed.append({"pair": key, "then": p["predicted"], "now": q["predicted"]})
+            continue
+        if q["predicted_sign"] != p["predicted_sign"]:
+            changed.append(
+                {
+                    "pair": key,
+                    "then": p["predicted"],
+                    "now": q["predicted"],
+                    "same_candidate_set": q["predicted_top_target_only"],
+                }
+            )
+        # the reader-against-reader comparison: the same rule over the same candidate elements
+        if q["predicted_top_target_only"] != p["predicted"]:
+            reader_disagrees.append(
+                {
+                    "pair": key,
+                    "compact_table": p["predicted"],
+                    "cache_same_set": q["predicted_top_target_only"],
+                }
+            )
     return {
         "checked": True,
         "prior_pairs": len(prior),
@@ -537,6 +569,16 @@ def rederivation_check(answered: list[dict[str, Any]], prior_path: Path) -> dict
         "sign_changed": len(changed),
         "changed": changed[:10],
         "passes": not missing and not changed,
+        "readers_agree_on_the_same_candidate_set": not reader_disagrees,
+        "reader_disagreements": reader_disagrees[:10],
+        "note": (
+            "two different things can make this check fail, and they must not be confused. A READER "
+            "disagreement -- the two paths reading different numbers for the same element -- would "
+            "mean one of them is wrong and would refuse the run. A CANDIDATE-SET difference means "
+            "both readers read the same number for the same element, but the cache route can see "
+            "overlapping elements the compact table hid, so the registered largest-magnitude rule "
+            "resolves to a different element. readers_agree_on_the_same_candidate_set separates them"
+        ),
     }
 
 

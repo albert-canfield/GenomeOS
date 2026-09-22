@@ -19,6 +19,7 @@ def _pair(measured_sign, predicted, cell="K562", gene="G", top=True):
         "was_top_target": top,
         "matches": 1,
         "matches_disagree": False,
+        "predicted_top_target_only": predicted,
     }
 
 
@@ -171,25 +172,49 @@ def test_the_costing_is_recomputed_from_the_tables_not_quoted_from_the_prior_lan
     assert cb.PRIOR == {"k": 41, "n": 44, "rate": 0.9318}
 
 
-def test_a_rederivation_mismatch_is_visible():
+def _check(here, prior_predicted=-0.5):
+    import json
+    import tempfile
+    from pathlib import Path
+
     prior = [
         {
             "chrom": "chr1",
             "element": [1000, 1500],
             "gene": "G",
             "cell": "K562",
-            "predicted": -0.5,
-            "predicted_sign": "down",
+            "predicted": prior_predicted,
+            "predicted_sign": "down" if prior_predicted < 0 else "up",
         }
     ]
-    here = [{**_pair("down", 0.3, gene="G")}]
-    import json
-    import tempfile
-    from pathlib import Path
-
     with tempfile.TemporaryDirectory() as d:
         p = Path(d) / "prior.json"
         p.write_text(json.dumps({"answered": prior}))
-        out = cb.rederivation_check(here, p)
+        return cb.rederivation_check(here, p)
+
+
+def test_a_rederivation_mismatch_is_visible():
+    out = _check([{**_pair("down", 0.3, gene="G"), "predicted_top_target_only": -0.5}])
     assert out["checked"] and out["sign_changed"] == 1 and out["passes"] is False
     assert out["prior_headline"] == {"k": 41, "n": 44, "rate": 0.9318}
+
+
+def test_a_wider_candidate_set_is_not_a_reader_disagreement():
+    """The two failures the check can suffer are different things and must not be confused.
+
+    Here the two readers read the identical number for the identical element (-0.5), and the sign
+    only moves because the cache route can see an overlapping element the compact table hid.
+    """
+    out = _check([{**_pair("down", 0.3, gene="G"), "predicted_top_target_only": -0.5}])
+    assert out["sign_changed"] == 1
+    assert out["readers_agree_on_the_same_candidate_set"] is True
+    assert out["changed"][0]["same_candidate_set"] == -0.5
+
+
+def test_a_reader_disagreement_is_reported_separately():
+    """The same rule over the same candidate elements reading a different number: that is a bug."""
+    out = _check([{**_pair("down", -0.5, gene="G"), "predicted_top_target_only": -0.9}])
+    assert out["sign_changed"] == 0 and out["passes"] is True
+    assert out["readers_agree_on_the_same_candidate_set"] is False
+    assert out["reader_disagreements"][0]["compact_table"] == -0.5
+    assert out["reader_disagreements"][0]["cache_same_set"] == -0.9
