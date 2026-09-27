@@ -15,16 +15,51 @@ from __future__ import annotations
 
 import time
 
+from genomeos import manifest as mf
 from genomeos.attribution import crispri, crispri_direction
 from genomeos.results import save_result
+
+CELLS = ("K562", "GM12878")
+
+
+def manifest() -> dict:
+    """The provenance contract (review item R9): the representative result a second environment
+    rebuilds. The CRISPRi tables are fetched from a branch, not a tag, so the sha256 is the pin."""
+    return {
+        "sources": [
+            {
+                "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data (Gschwind et al. 2025)",
+                "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+                "url": crispri.BASE_URL,
+            },
+            {
+                "accession": "ENCODE SCREEN cCRE registry (EH38 identifiers) scored by AlphaGenome deletion",
+                "version": "cCRE V4; AlphaGenome as served during the 2026-09 all-element sweep (unpinned)",
+                "path": str(crispri_direction.ELEMENTS),
+            },
+        ],
+        "inputs": [
+            mf.input_entry(crispri.KNOWLEDGE / crispri.TRAINING, partition="training (K562, fitted on)"),
+            mf.input_entry(crispri.KNOWLEDGE / crispri.HELDOUT, partition="heldout (5 cell types)"),
+            mf.input_entry(crispri_direction.ELEMENTS, partition=None),
+        ],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {"cells": list(CELLS), "reach_bp": crispri.REACH},
+        "exclusions": ["pairs whose predicted log2 fold change is exactly zero (counted in the headline)"],
+        "partitions": {
+            "heldout": "the test: EPCrisprBenchmark heldout_5_cell_types, K562 and GM12878 rows",
+            "training": "reported as fitted on, not a test",
+        },
+    }
 
 
 def main() -> int:
     t0 = time.time()
     for name in (crispri.TRAINING, crispri.HELDOUT):
         crispri.fetch(name)
-    result = crispri_direction.direction()
-    path = save_result("crispri_direction", result)
+    result = crispri_direction.direction(CELLS)
+    path = save_result("crispri_direction", result, manifest=manifest())
 
     head = result["headline"]
     print(
