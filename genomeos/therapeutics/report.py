@@ -573,6 +573,11 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
                 "protein": c.protein,
                 "uniprot": c.uniprot,
                 "target_class": c.target_class,
+                # The criterion the ranking sorted on, published beside the
+                # score, because the list is tier-major and the score alone
+                # therefore does not imply the order.
+                "evidence_tier": c.evidence_tier,
+                "evidence_tier_reason": c.evidence_tier_reason,
                 "why": c.why_interesting,
                 "origin_variants": [o.to_dict() for o in c.origins],
                 "scores": {
@@ -582,6 +587,7 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
                         for k, v in c.scores.components.items()
                         if k
                         in (
+                            "alteration_evidence",
                             "tumour_selectivity",
                             "surface_accessibility",
                             "normal_tissue_safety",

@@ -57,6 +57,8 @@ from .providers import Providers
 from .scan import limitations as scan_limitations
 from .scan import scan as expression_scan
 from .scoring import (
+    UNMEASURED_TIER,
+    alteration_evidence,
     assemble,
     clinical_precedent,
     clonality,
@@ -607,6 +609,12 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
 
 def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) -> Any:
     """Every dimension, each with the sentence that explains it."""
+    # What is known about this gene in this patient. Curated localisation
+    # describes the gene whether or not the tumour touched it, so before this
+    # dimension existed twelve copies of ERBB2 and a STRING neighbour of a
+    # mutated gene were scored from the same annotation and came out equal.
+    tier, tier_value, tier_basis = alteration_evidence(c.origins, c.tumour)
+    c.evidence_tier, c.evidence_tier_reason = tier, tier_basis
     sa, sa_basis = surface_accessibility(c.localization, ectodomain_lost=mech.ectodomain_lost(c))
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)
@@ -620,6 +628,7 @@ def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) ->
     prec, prec_basis = clinical_precedent(c.precedent, precedent_available)
     shed, shed_basis = shedding_score(c.trafficking)
     components: list[ScoreComponent] = [
+        component("alteration_evidence", tier_value, f"{tier}: {tier_basis}"),
         component("surface_accessibility", sa, sa_basis),
         component("tumour_selectivity", sel, sel_basis, sel_ev),
         component("tumour_expression", exp, exp_basis),
@@ -1006,7 +1015,16 @@ def analyse(
         c.therapeutic_mechanisms = select_mechanisms(c)
 
     combos = combination_logic.pairs(candidates)
-    candidates.sort(key=lambda c: (-(c.scores.overall or 0.0), c.gene))
+    # Tier-major, over a coarser partition than the tier itself: a candidate
+    # measured in this patient — by an alteration or by the patient's own RNA —
+    # before one measured nowhere, and only then by score. The cut is coarse on
+    # purpose. Alteration versus patient RNA is a difference of degree and is
+    # traded against safety and selectivity inside the score, which is why CD19,
+    # reached from the patient's RNA, is not pushed below the tumour's drivers.
+    # A measurement of this gene versus none is a difference in kind: no
+    # quantity of curated annotation about an unmeasured gene should outrank a
+    # gene this tumour actually altered.
+    candidates.sort(key=lambda c: (c.evidence_tier == UNMEASURED_TIER, -(c.scores.overall or 0.0), c.gene))
     return {
         # the live provider bundle, so the dataset stage can still ask questions;
         # it is never serialised (machine_report and dataset take what they need)

@@ -813,6 +813,13 @@ class TherapeuticTargetCandidate:
     target_class: TargetClass = "unknown"
     class_reason: str = ""
     origins: list[VariantOrigin] = field(default_factory=list)
+    #: Which tier of evidence about this gene in this patient reached it here:
+    #: an observed alteration, this patient's own measurement of the gene, or a
+    #: database association with a gene that was altered. Set when the candidate
+    #: is scored, and read by the ranking, which puts the third tier last before
+    #: it looks at any score.
+    evidence_tier: str = ""
+    evidence_tier_reason: str = ""
     localization: Localisation = field(default_factory=Localisation)
     tumour: TumourState = field(default_factory=TumourState)
     normal_tissue: NormalTissueProfile = field(default_factory=NormalTissueProfile)

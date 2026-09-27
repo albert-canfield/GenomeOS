@@ -620,6 +620,73 @@ the protein.
 * `data/results/therapeutic_benchmark.json` is regenerated whole, and every
   row's rank and score is reported before and after.
 
+### The falsifier fired on the first day, and on the clause it was written for
+
+The tier as pre-registered above — a dimension in `WEIGHTS` at 1.1, plus the
+coarse tier-major sort — was implemented and measured before anything was
+written into this section. It closed what it was aimed at: all twelve
+hypothesis-above-target rows went, and CD19 held at rank 2. It also made a
+pinned case **worse**, which is falsifier 1.
+
+`tests/test_cancer_alterations.py::test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own`
+asserts that in a tumour with twelve copies of ERBB2 and no ERBB2 mutation,
+ERBB2 ranks first. It did, at 0.494 against a mutated PIK3CA at 0.444. With the
+tier averaged into the mean it stopped: PIK3CA reached 0.528 and ERBB2 stopped
+at 0.500. The same inversion put the benchmark's copy-number case at rank 2
+rather than the pre-registered rank 1.
+
+**Two arithmetic causes, neither of them about evidence.**
+
+1. *The mean is over the dimensions that were available.* PIK3CA is scored on 7
+   dimensions, ERBB2 on 10. One new dimension worth 1.0 therefore lifts the
+   sparser candidate further — PIK3CA by 0.084, ERBB2 by 0.061 — so a dimension
+   meant to prefer the observed alteration preferred whichever candidate had
+   less known about it.
+2. *The poor-safety cap clips at a constant other candidates can walk past.*
+   ERBB2's normal-tissue safety is 0.06 — this is the real cardiotoxicity of
+   HER2 therapy, and the cap is right — so its raw 0.555 is clipped to 0.500.
+   PIK3CA's safety is 0.449, mediocre but above the 0.35 threshold, so nothing
+   clips its 0.528. A capped candidate can be overtaken by adding any dimension
+   at all, whatever the dimension says.
+
+Both are properties of `assemble()` that the new dimension exposed rather than
+introduced, and neither is a statement about evidence. Tuning the weight would
+not fix either: for any positive weight the sparser candidate gains more, and
+the cap binds regardless.
+
+### The amendment: a precondition is gated, not averaged
+
+`alteration_evidence` is scored and published per candidate, with its tier and
+its sentence, and is **kept out of the overall mean** — through
+`DIAGNOSTIC`, the mechanism this file already has for a dimension that
+describes the candidate's inputs rather than the target's priority. The ranking
+is where the tier acts: the coarse tier-major sort, unchanged from the
+pre-registration.
+
+The reason is not the regression; the regression is what made it visible. The
+mean answers one question — how good a target is this protein, on the
+dimensions we could measure — and the tier answers a different one: is there
+evidence that this tumour involves this gene at all. That is a precondition,
+and averaging a precondition into a mean lets a strong precondition compensate
+for weak biology, exactly as it lets weak biology compensate for a missing one.
+This file already treats one fact that way: safety can only ever cap a score,
+never raise it. Evidence of involvement now sits in the same family — it orders
+and it is published, and it does not pay into the average.
+
+**What this costs, stated rather than hidden.** A hypothesis can still carry a
+higher published number than the target above it: KDR at 0.575 is ranked below
+ERBB2 at 0.494. The list is tier-major and every row carries its tier, and the
+result note says so, but the number alone no longer implies the order. The
+alternative — averaging the tier in, so that the number matches the order — was
+implemented, measured and rejected, because it inverted a case that was
+previously right. A number that agrees with a wrong order is worth less than an
+order that is right and says what it sorted on.
+
+Every published score is therefore unchanged by this change, and no existing
+threshold, cap or fixture needed re-baselining. What changed is the order, which
+is what the defect was about, and the per-candidate record, which now names the
+tier.
+
 ### The falsifier
 
 The tier is wrong if any of these is observed:
@@ -639,6 +706,57 @@ The tier is wrong if any of these is observed:
    rises for a candidate whose evidence did not change — a gene promoted
    because of how it was proposed rather than what was measured about it — the
    dimension has become a label for the route and is measuring nothing.
+
+### The result, 2026-09-27
+
+`data/results/therapeutic_benchmark.json` regenerated, network on, nine cases.
+**Every published score is identical to the run before this change**, because
+the tier is published and ordered on rather than averaged in. Everything that
+moved is a place:
+
+| case | route | rank | score | tier |
+| --- | --- | --- | --- | --- |
+| EGFR L858R | point mutation | 1 → 1 | 0.500 | observed alteration |
+| ERBB2 mutated | point mutation | 1 → 1 | 0.494 | observed alteration |
+| BRAF V600E | point mutation | 1 → 1 | 0.427 | observed alteration |
+| KRAS G12C | point mutation | **5 → 1** | 0.369 | observed alteration |
+| PIK3CA H1047R | point mutation | **5 → 1** | 0.438 | observed alteration |
+| IDH1 R132H | point mutation | **2 → 1** | 0.345 | observed alteration |
+| ERBB2 amplified, 12 copies | copy number | **4 → 1** | 0.494 | observed alteration |
+| EML4-ALK | structural variant | **2 → 1** | 0.559 | observed alteration |
+| CD19 | expression | 2 → 2 | 0.500 | patient measurement |
+
+All nine targets recovered, nine of nine verdicts correct, nine of nine top
+mechanisms defensible — and every target class, mechanism, compatibility,
+accessibility and peptide-route field in the result is byte-identical to the
+previous run, which is the check that this changed the order and nothing else.
+
+`outranked_by_hypotheses` reads **empty for all nine cases**, from twelve rows
+across four cases before (KRAS 4, PIK3CA 4, the ERBB2 copy-number case 3, IDH1
+1). `BURIED_SURFACE_TARGETS` goes from 2 to **0**, lowered to what was achieved
+and not to what was wanted.
+
+**CD19 did not move, which was the hard half.** It is reached from the
+patient's RNA and has no DNA origin, so the obvious rule — demote a candidate
+with no alteration — would have buried the target of four approved therapies
+while claiming to fix burial. The metric had that error inside it too: it was
+defined as "candidates with no `origins` record", under which the one candidate
+above CD19, FCRL5, counted as a hypothesis although this patient's RNA measures
+it exactly as it measures CD19. Both now read the tier, and FCRL5 sits in the
+same tier as CD19: above it on score, which is a ranking between two measured
+genes and a different question from this one.
+
+**What is left, named rather than closed.** The published number of a
+hypothesis can exceed that of the target ranked above it — KDR at 0.575 under
+ERBB2 at 0.494 — and the amplified and the mutated ERBB2 still produce the same
+0.494, so the amplification buys the place and not the number. Inside the top
+tier, nothing yet distinguishes twelve copies from a single missense, and
+nothing asks whether a candidate has any mechanism at all: in the
+ERBB2-amplified tumour the candidate that came second is PIK3CA, whose best
+mechanism is not merely weak but absent, its nearest being `adcp` with
+`surface_accessible` unanswered. A ranking that puts a gene no modelled
+modality can reach above one with an approved antibody is the next question,
+and it is not this one.
 
 ## The Therapeutic Design Dataset
 

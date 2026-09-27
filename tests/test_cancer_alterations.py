@@ -194,6 +194,11 @@ def test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own():
     assert [o.alteration_kind for o in erbb2.origins] == ["amplification"]
     assert erbb2.origins[0].copy_number == 12.0
     assert erbb2.origins[0].driver_frequency, "the cohort frequency of the amplification is attached"
+    # And since 2026-09-27 the score says so too, rather than describing the gene
+    # as the databases would describe it in a tumour that never touched it.
+    assert erbb2.evidence_tier == "observed_alteration"
+    assert erbb2.scores.value("alteration_evidence") == 1.0
+    assert "12 copies" in erbb2.evidence_tier_reason or "amplification" in erbb2.evidence_tier_reason
 
 
 @needs_caches
@@ -210,6 +215,12 @@ def test_a_gene_reached_by_its_own_alteration_is_not_proposed_again_as_a_hypothe
     amplification bought nothing, which is why the duplicate was invisible in
     the ranking and visible only as a repeated name.
 
+    That tie is history. Since the evidence tier of 2026-09-27 the two entries
+    could not have scored the same: an observed alteration scores 1.0 on
+    `alteration_evidence` and an association with an altered gene scores 0.2, so
+    a duplicate would now show as a gap and not only as a repeated name. The
+    assertion below says so against the hypotheses that remain in this run.
+
     The weaker entry is the one that has to go. A gene reached by its own
     alteration is not a guess about a neighbour.
     """
@@ -223,6 +234,17 @@ def test_a_gene_reached_by_its_own_alteration_is_not_proposed_again_as_a_hypothe
     erbb2 = next(c for c in a["candidates"] if c.gene == "ERBB2")
     assert erbb2.target_class == "direct_surface", "the surviving entry is the one with the evidence"
     assert [o.alteration_kind for o in erbb2.origins] == ["amplification"]
+    hypotheses = [c for c in a["candidates"] if c.target_class == "pathway_induced_surface"]
+    assert hypotheses, "the pathway route is on, which is what made the duplicate reachable"
+    assert erbb2.scores.value("alteration_evidence") == 1.0
+    assert all(c.scores.value("alteration_evidence") == 0.2 for c in hypotheses), (
+        "a gene nothing was measured about in this patient cannot be scored as the amplified one is"
+    )
+    assert all(c.evidence_tier == "association_hypothesis" for c in hypotheses)
+    # The ranking puts the unmeasured tier last before it looks at a score, so no
+    # hypothesis stands above a gene this tumour altered.
+    ranked_tiers = [c.evidence_tier == "association_hypothesis" for c in a["candidates"]]
+    assert ranked_tiers == sorted(ranked_tiers), f"a hypothesis outranks an alteration: {ranked}"
 
 
 @needs_caches

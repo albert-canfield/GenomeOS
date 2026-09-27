@@ -57,6 +57,7 @@ from pathlib import Path
 
 from genomeos.results import save_result
 from genomeos.therapeutics import analyse_vcf
+from genomeos.therapeutics.scoring import UNMEASURED_TIER
 
 DEMO = Path("data/demo")
 BENCH = DEMO / "benchmark"
@@ -249,14 +250,20 @@ def run_case(case: dict, net: bool, log) -> dict:
     ranked = [c.gene for c in a["candidates"]]
     hit = next((c for c in a["candidates"] if c.gene == gene), None)
     # A fourth question, and the copy-number case is what made it askable: how
-    # many candidates outrank the target while carrying no alteration in this
-    # tumour at all? A pathway-induced hypothesis has no origin — it is named
-    # for being a neighbour of something that is altered. Recovering the target
-    # and burying it under hypotheses are not the same result, and the first
-    # three questions cannot tell them apart, so the count is recorded rather
-    # than scored: it is a measurement of the ranking, not a verdict on it.
+    # many candidates outrank the target while nothing about them was measured
+    # in this patient at all? Recovering the target and burying it under
+    # hypotheses are not the same result, and the first three questions cannot
+    # tell them apart.
+    #
+    # It was first written as "candidates with no origins record", and that
+    # proxy was wrong in the direction that mattered: CD19 has no origins
+    # either, because it is reached from the patient's RNA rather than from a
+    # DNA event, so the proxy counted the one case that proves the expression
+    # route works as a case of burial. The count now reads the evidence tier,
+    # which is the thing the proxy stood for: a candidate is a hypothesis when
+    # nothing about that gene was measured in this patient.
     above = a["candidates"][: ranked.index(gene)] if hit is not None else []
-    hypotheses_above = [c.gene for c in above if not c.origins]
+    hypotheses_above = [c.gene for c in above if c.evidence_tier == UNMEASURED_TIER]
     out = {
         "case": case["case"],
         "gene": gene,
@@ -282,6 +289,8 @@ def run_case(case: dict, net: bool, log) -> dict:
             {
                 "target_class": hit.target_class,
                 "score": None if hit.scores.overall is None else round(hit.scores.overall, 3),
+                "evidence_tier": hit.evidence_tier,
+                "alteration_evidence": hit.scores.value("alteration_evidence"),
                 "surface_accessibility": hit.scores.value("surface_accessibility"),
                 "best_mechanism": best.mechanism if best else None,
                 "best_compatibility": round(best.compatibility, 3) if best else None,
@@ -376,11 +385,23 @@ def main() -> int:
             "approved drugs are small molecules. It passes by refusing a surface route rather than "
             "by leaving the question open. "
             "outranked_by_hypotheses is recorded per row and is the question the copy-number case "
-            "made askable: candidates ranked above the target that carry no alteration in this "
-            "tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion "
-            "diagnostic, sits behind three of them. The pipeline recovers it and does not "
-            "prefer it, and the three scored questions cannot tell those apart, so the count is "
-            "reported beside them rather than folded into a verdict."
+            "made askable: candidates ranked above the target with nothing measured about them in "
+            "this patient. Until 2026-09-27 the pipeline could recover a target without preferring "
+            "it, and the three scored questions could not tell those apart: ERBB2 at twelve copies, "
+            "whose amplification is trastuzumab's companion diagnostic, scored 0.494 and ranked "
+            "fourth behind KDR, EGFR and PDGFRB, none of them altered in that tumour, because "
+            "surface_accessibility reads curated localisation and no dimension read the alteration. "
+            "A dimension now does: alteration_evidence, on three tiers - an alteration observed in "
+            "this tumour (1.0), this patient's own measurement of the gene (0.6), a database "
+            "association with a gene that was altered (0.2) - and the ranking puts the third tier "
+            "below the other two before it looks at a score. evidence_tier and alteration_evidence "
+            "are reported per row. The tier is read from the evidence about the gene and never from "
+            "the route that proposed it, which is what keeps CD19, reached from the patient's RNA "
+            "with no alteration of any kind, from being demoted by a rule aimed at hypotheses; for "
+            "the same reason the count above no longer means 'candidates with no origins record', a "
+            "proxy under which CD19's own route read as burial. Scores before and after this change "
+            "are not comparable, because every candidate gained a dimension; the ordering is what "
+            "the change was about."
         ),
         "rows": rows,
     }

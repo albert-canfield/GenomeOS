@@ -166,20 +166,45 @@ def test_the_copy_number_route_is_scored_and_not_merely_unit_tested():
     assert amp["recovered"] and amp["pass"]
     assert amp["target_class"] == "direct_surface", "reached as itself, not as a pathway hypothesis"
     assert amp["best_mechanism_established"], "an approved antibody must not be provisional here"
+    assert amp["evidence_tier"] == "observed_alteration"
+    assert amp["alteration_evidence"] == 1.0, "twelve copies are an observed alteration"
     mutated = next(r for r in rows() if r["gene"] == "ERBB2" and r["driver_call"] == "point mutation")
-    assert mutated["rank"] == 1 and amp["rank"] > mutated["rank"], (
-        "the finding this case exists to record: the same target, reached by the measurement the "
-        "approved therapy is actually prescribed on, ranks below where a coding change puts it"
+    assert mutated["rank"] == 1
+    assert not amp["outranked_by_hypotheses"], (
+        "the finding this case existed to record, now closed: nothing with no measurement in this "
+        "tumour outranks the target the approved therapy is prescribed on"
     )
+    assert amp["rank"] <= AMPLIFIED_TARGET_RANK, (
+        f"the amplified target fell below the pinned rank {AMPLIFIED_TARGET_RANK}"
+    )
+    # Recorded, not repaired: both routes to the same gene still produce the same
+    # number, because the tier orders the candidates and is published per
+    # candidate rather than averaged into the mean. What the amplification buys
+    # is the place, which is what the clinic reads. The assertion allows the
+    # number to rise and not to fall.
+    assert amp["score"] >= mutated["score"]
 
 
-#: Targets outranked by candidates carrying no alteration in the tumour, counted
-#: today. It may fall, never rise. ERBB2 reached by its amplification sits behind
-#: three such hypotheses and CD19 behind one; the four intracellular cases are not
-#: expected to head their lists at all. The cause is one thing: for a surface
-#: target the score reads the gene's curated annotation and not the alteration, so
-#: the amplified gene and the same gene as a guess scored identically at 0.494.
-BURIED_SURFACE_TARGETS = 2
+#: Where the amplified ERBB2 case ranks: the case the evidence tier was built
+#: for. It may not rise. It was 4, behind KDR, EGFR and PDGFRB, none of them
+#: altered in that tumour and all three named only for neighbouring the mutated
+#: PIK3CA. It is 1 since the evidence tier of 2026-09-27, with every score in the
+#: benchmark unchanged: the tier orders the candidates and is published per
+#: candidate, and it is deliberately kept out of the weighted mean. Averaging it
+#: in was implemented first and measured: it put PIK3CA above ERBB2 in this very
+#: tumour, because the mean is taken over the dimensions that were available and
+#: so lifts the candidate with fewer of them further, and because ERBB2's raw
+#: score is clipped by the poor-normal-tissue-safety cap that PIK3CA's mediocre
+#: safety walks past.
+AMPLIFIED_TARGET_RANK = 1  # was 4
+
+#: Targets outranked by candidates with nothing measured about them in this
+#: patient, counted today. It may fall, never rise. It read 2 while the score had
+#: no dimension for the alteration — the amplified gene and the same gene as a
+#: guess scored identically at 0.494 — and it reads 0 since the evidence tier,
+#: with the metric also corrected: it counted "candidates with no origins
+#: record", under which CD19's own route read as burial.
+BURIED_SURFACE_TARGETS = 0  # was 2; the evidence tier, 2026-09-27
 
 
 def test_a_recovered_target_is_not_quietly_buried_under_hypotheses():
@@ -205,6 +230,44 @@ def test_a_recovered_target_is_not_quietly_buried_under_hypotheses():
             f"{r['gene']} outranks itself: the same gene reached twice, once by its alteration and "
             "once as a hypothesis about a neighbour"
         )
+
+
+def test_a_target_is_preferred_for_its_alteration_and_not_only_recovered():
+    """The question the nine cases could not ask, and the trap inside asking it.
+
+    Recovering a target and preferring it are different results. Until
+    2026-09-27 nothing in the score read the alteration: `surface_accessibility`
+    reads curated localisation, which describes the gene whether or not the
+    tumour touched it, so twelve copies of ERBB2 and a STRING neighbour of a
+    mutated gene were worth the same and three unaltered genes outranked the
+    target trastuzumab is prescribed on.
+
+    The trap is that the obvious rule — penalise a candidate with no DNA origin
+    — demotes CD19, which has no origin either and is the target of four
+    approved therapies. So the tier is read from the evidence about the gene in
+    this patient, and CD19 sits in its middle tier rather than its bottom one.
+    This test asserts both halves: no target is under an unmeasured candidate,
+    and the case that carries no alteration of any kind did not pay for it.
+    """
+    for r in rows():
+        if not r["recovered"]:
+            continue
+        assert r["evidence_tier"] in ("observed_alteration", "patient_measurement"), (
+            f"{r['gene']}: an approved target is not a hypothesis about a neighbour"
+        )
+        assert not r["outranked_by_hypotheses"], (
+            f"{r['gene']} is outranked by candidates measured nowhere in this tumour: "
+            f"{r['outranked_by_hypotheses']}"
+        )
+        if r["driver_call"] != "expression":
+            assert r["alteration_evidence"] == 1.0
+    cd19 = next(r for r in rows() if r["gene"] == "CD19")
+    assert cd19["evidence_tier"] == "patient_measurement", (
+        "CD19 carries no alteration; it is reached from this patient's own RNA, which is a "
+        "measurement of this gene and not an association with another one"
+    )
+    assert cd19["alteration_evidence"] == 0.6
+    assert cd19["rank"] <= 2, "the rule aimed at hypotheses must not demote the expression route"
 
 
 def test_every_route_into_the_candidate_list_is_scored():

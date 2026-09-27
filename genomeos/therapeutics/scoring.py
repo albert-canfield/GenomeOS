@@ -39,9 +39,25 @@ WEIGHTS: dict[str, float] = {
     "clinical_precedent": 0.7,
 }
 
-#: Dimensions that describe the mechanism's inputs rather than the target's
+#: Dimensions that describe the candidate's inputs rather than the target's
 #: priority; scored and published, but kept out of the overall mean.
-DIAGNOSTIC = ("shedding",)
+#:
+#: `alteration_evidence` is here for a reason worth writing down, because it was
+#: first written as a weighted dimension and measured before it was believed. The
+#: mean answers how good a target this protein is on the dimensions that could be
+#: measured; the tier answers whether there is evidence that this tumour involves
+#: the gene at all, which is a precondition and not a dimension of goodness.
+#: Averaged in, a precondition compensates for weak biology and weak biology
+#: compensates for a missing precondition — and it did worse than that in
+#: practice: because the mean is taken over the dimensions that were available, a
+#: new dimension lifts a candidate with fewer of them further, and because the
+#: poor-safety cap clips at a constant, a capped candidate can be overtaken by
+#: adding any dimension at all. Both inverted a tumour with twelve copies of
+#: ERBB2, putting a mutated PIK3CA first. So the tier gates instead: it orders
+#: the candidates in `pipeline.analyse` and it is published per candidate with
+#: the sentence behind it, in the same family as safety, which can only ever cap
+#: a score and never raise one.
+DIAGNOSTIC = ("shedding", "alteration_evidence")
 
 #: Copy number bounds what a cell could display; it is not a measurement of
 #: what it does, so it cannot reach the score a measurement can.
@@ -52,6 +68,10 @@ COPY_NUMBER_CAP = 0.5
 #: amplification is at least 4 copies, which the formula above would put at
 #: 0.25; a gain is at least 3, which it would put at 0.125.
 DISCRETE_COPY_NUMBER: dict[str, float] = {"amplification": 0.2, "gain": 0.1}
+
+#: The count at which a copy number is an alteration rather than a measurement
+#: that the gene is normal; the same 4 copies the note above reasons from.
+RAISED_COPIES = 4.0
 
 SAFETY_UNKNOWN_CAP = 0.6
 SAFETY_POOR_CAP = 0.5
@@ -72,6 +92,103 @@ def component(
         weight=WEIGHTS.get(key, 0.0),
         unknown_reason=unknown_reason or (basis if value is None else ""),
         evidence=evidence or [],
+    )
+
+
+#: What is known about *this gene in this patient*, which is not the same
+#: question as what is known about the protein. Curated localisation describes
+#: the gene whether or not the tumour touched it, so without this dimension a
+#: gene carried at twelve copies and a gene named only for neighbouring a
+#: mutated one are scored from the same annotation and come out equal.
+#:
+#: The order is argued rather than assumed. The top two tiers are both
+#: measurements of this gene in this patient and differ in degree: a somatic
+#: alteration is attributable to the tumour and is what approved indications are
+#: written on, while the expression route establishes a ratio against a queried
+#: healthy-tissue panel rather than this patient's own normal tissue, and raised
+#: transcript is not protein on the surface. The bottom tier differs in kind: it
+#: is not a weak measurement of this gene but a measurement of a different gene
+#: plus a database association. It is 0.2 and not 0.0 because an association
+#: with a disrupted driver is evidence of something and the pipeline is entitled
+#: to propose it; it is not entitled to prefer it.
+EVIDENCE_TIERS: dict[str, float] = {
+    "observed_alteration": 1.0,
+    "patient_measurement": 0.6,
+    "association_hypothesis": 0.2,
+}
+
+#: The tier that is not preferred over the target: no measurement of this gene
+#: in this patient at all. `pipeline.analyse` orders this tier below the other
+#: two before it looks at the score.
+UNMEASURED_TIER = "association_hypothesis"
+
+
+def alteration_evidence(origins: Any, tumour: TumourState) -> tuple[str, float, str]:
+    """Which tier of evidence about this gene in this patient reached it here.
+
+    Read from the evidence and never from the name of the route that proposed
+    the candidate. That is deliberate: CD19 is reached from the patient's RNA
+    and carries no alteration of any kind, so "has a DNA origin" would demote
+    the target of four approved therapies. And a gene first proposed as a
+    neighbour rises on its own the moment the patient's RNA is supplied, without
+    the tier being edited.
+    """
+    alterations = [o for o in (origins or [])]
+    if alterations:
+        labels = [
+            o.alteration_label or f"{o.variant_type} {o.protein_change or ''}".strip() or "alteration"
+            for o in alterations
+        ]
+        return (
+            "observed_alteration",
+            EVIDENCE_TIERS["observed_alteration"],
+            (
+                "this tumour's own DNA carries "
+                + ", ".join(dict.fromkeys(labels))
+                + "; the alteration is observed in this patient and not inferred"
+            ),
+        )
+    measured = []
+    if tumour.expression.value is not None and tumour.expression.patient_specific:
+        measured.append(
+            f"tumour RNA at {tumour.expression.value:g} {tumour.expression.unit} ({tumour.expression.source})"
+        )
+    if tumour.protein_abundance.known and tumour.protein_abundance.patient_specific:
+        measured.append(f"tumour proteomics ({tumour.protein_abundance.source})")
+    if tumour.surface_abundance.known and tumour.surface_abundance.patient_specific:
+        measured.append(f"tumour surface proteomics ({tumour.surface_abundance.source})")
+    cn = tumour.copy_number
+    if cn.patient_specific and (
+        (cn.value is not None and cn.value >= RAISED_COPIES) or cn.qualitative in DISCRETE_COPY_NUMBER
+    ):
+        # A raised count in the patient's copy-number table is an observed
+        # alteration whether or not a caller also emitted an event record for
+        # it, because the tier reads the evidence and not the record-keeping.
+        basis = (
+            f"this patient's copy-number table places this gene at {cn.value:g} copies against the diploid 2"
+            if cn.value is not None
+            else f"this patient's copy-number call for this gene is '{cn.qualitative}' ({cn.source})"
+        )
+        return "observed_alteration", EVIDENCE_TIERS["observed_alteration"], basis
+    if measured:
+        return (
+            "patient_measurement",
+            EVIDENCE_TIERS["patient_measurement"],
+            (
+                "not altered in this tumour's DNA, and measured in this patient: "
+                + "; ".join(measured)
+                + ". A measurement of this gene in this patient, scored below an observed alteration "
+                "because the comparator is a healthy-tissue panel rather than this patient's own normal "
+                "tissue and because raised transcript is not protein on the surface"
+            ),
+        )
+    return (
+        "association_hypothesis",
+        EVIDENCE_TIERS["association_hypothesis"],
+        (
+            "nothing about this gene was measured in this patient: it is on the list because a database "
+            "associates it with a gene that was altered, which is evidence about the other gene"
+        ),
     )
 
 
