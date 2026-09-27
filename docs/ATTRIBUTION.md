@@ -477,6 +477,15 @@ all-elements chain holds the request quota.
 
 ## What the whole-chromosome scoring bought the 98%, decided on chr21 (2026-09-13)
 
+> **Annotated 2026-09-27**, figures unchanged. Every number in this section is read from the compact
+> one-gene-per-element table. Two of them were computed over structural zeros and one set of six was
+> conditioned on the sweep's `MIN_EFFECT` gate without saying so; the section below,
+> "the unknown scoring off the one-gene table", says which and reports the corrected figures beside
+> them. The naming rates here are not among them: the compact table's coding target was already
+> chosen from the whole window, and the re-run reproduces 5,174 of 12,139 exactly. What this section
+> lacked, and could not have had, is a matched-random control on its own instrument: the unknown
+> blocks name a coding target at 49.1% against 65.3% at length-matched random windows on chr21.
+
 Albert's question before more quota goes to the sweep: chromosome 21's 12,139 elements
 have all been deleted in AlphaGenome with the effect per gene and per cell line (5,409
 requests), so what did that buy the UNKNOWN space, does it sharpen the syntax reading,
@@ -6124,6 +6133,146 @@ AUROC the correct fit gives. A test that reads a model the way its headline figu
 see a failure that the headline figure is blind to; the two tests added here assert instead that
 the weights stay finite, that the probabilities separate, and that the solver never returns a point
 whose penalised objective is below the start's, which is the invariant divergence actually breaks.
+
+## Pre-registration: the unknown scoring off the one-gene table, and what a named target means against matched random windows (2026-09-27)
+
+`attribution/unknown_scoring.py` is the module behind milestone 1.3's clause "the
+constrained-unknown blocks attributed to a gene and a tissue". It reads the compact
+one-gene-per-element table at three sites, and the two lanes of 2026-09-22 that moved
+`crispri.py` and `eqtl.py` onto the sweep's own per-element response cache left it on the table.
+This registers what the three sites do, what the cache can and cannot add, and the one comparison
+that decides whether reading the whole window is an improvement at all. **0 AlphaGenome requests:
+every number below and every number in the result section is on disk.**
+
+### The three sites, and whether a silence is read as "no effect"
+
+| site | what it reads | what a silence there becomes | is it a zero? |
+|---|---|---|---|
+| `unknown_scoring.py:65` (`scored_elements`, consumed by `annotate:111`) | `run_elements("enhancer_targets_all", chrom)` | `predicted` null → `abs_log2`, `silencer`, `cells_acting`, `target_tss_distance` all `None`; `moves_gene` and `names_coding` `False` | **no, a `None` that `stratified:242` then drops** — so the four magnitude metrics are silently *conditioned on the gate* |
+| `unknown_scoring.py:497` (`candidates_on_scored_chromosomes`) | the same table, per candidate block | no element clears the gate → `gain: "nothing"`, `target: null`, `log2: null` | **no, but it reads as one**: "nothing" also means "no registry element lies here", and the two are not the same silence |
+| `unknown_scoring.py:681` (`coverage`) | the same table plus the two samples' tables for `before_ids` | a gated element cannot make a block "named"; `cells_acting` `None` is falsy | no |
+| `unknown_scoring.py:657` (`against_vista`, reached from site 1's rows) | `max((r["abs_log2"] or 0.0 for r in over), default=None)` | a VISTA element covered only by gated elements gets **`max_abs_log2` = 0.0** and is averaged into `mean_max_abs_log2_positive` / `_negative` | **yes. This is the zero.** |
+| `unknown_scoring.py:588` (`against_mpra`) | `"abs_log2": r["abs_log2"] or 0.0` | the same zero is written into each pair | yes, but the field is never consumed: the correlation reads `predicted_by_cell`, which is `None` for a gated element, so those elements are dropped instead |
+
+So the answer to the question that decides everything is: **one zero, at `unknown_scoring.py:657`,
+in the module's only enhancer-level measured validation**; one written-and-unused zero at
+`unknown_scoring.py:588`; and everywhere else a `None` that is dropped rather than zeroed — which
+is not the CRISPRi defect but is the eQTL defect, a comparison conditioned on the gate and
+published as a comparison.
+
+### How much of the window the module reads, counted first
+
+Over chr21's 12,139 scored elements (the one chromosome this result is computed on), against
+`data/knowledge/alphagenome/elements/chr21.json.gz` read through `ElementResponses`
+(0.7 s, one chromosome held at a time, 0 requests):
+
+| | count | share |
+|---|---|---|
+| cached element-gene rows available | 347,614 (28.6 genes per window, median 28) | |
+| gene readings the module takes (`predicted` and `predicted_coding`) | 13,020 | **3.75%** |
+| per-cell readings available (4 lines × every gene) | 1,389,752 | |
+| per-cell readings the module takes (4 lines × the top gene of a mover) | 31,384 | **2.26%** |
+| elements the cache answers a magnitude for | 12,139 | **100%** |
+| elements whose `abs_log2` is `None` today, dropped from every magnitude comparison | 4,293 | **35.4%** |
+| of those, the cache answers | 4,293 | **100%** |
+| elements not in the cache | 0 | |
+
+The gate's rate is not the same on the two arms of the module's own comparison: **49.5% of the
+2,334 elements over an unknown block clear it against 68.2% of the other 9,805**, an 18.5-point
+difference. That is what makes the four gated metrics a conditioned comparison rather than a
+comparison: the arms are selected differently by the very quantity the table gates on.
+
+### What the cache cannot add, which is the more important half
+
+**The compact table is not censoring the target.** `predict.enhancer_target.score_element`
+computes `predicted_coding` by running `predict_target` over *every coding gene in the window* and
+keeps its head, so the table's one coding gene was already chosen from the whole window. Counted:
+**5,174 of 12,139 elements name a coding gene from the compact table, and 5,174 of 12,139 name one
+from the cache gated at the same `MIN_EFFECT` = 0.1 — the same number, and the same elements.**
+Reading the window cannot name one additional target at the threshold. Ungated it would name
+11,372 (93.7%), which is not a gain but the removal of the only thing keeping the rate from being
+"almost every element names something".
+
+So this is registered as a check rather than a prediction: **any change at all in `names_coding`,
+`moves_gene`, or the block counts in `coverage` would mean the compact table was censoring after
+all**, and the re-run must reproduce them to the element.
+
+What the cache can add is three things, each of which is either a de-conditioning or a silence
+given its name: the head magnitude for all 12,139 elements rather than the 7,846 that clear the
+gate; the per-cell question asked of every gene in the window rather than of the top gene only;
+and the 4,293 gated elements' measured heads in place of the zeros at `against_vista`.
+
+### The clause that decides it: what a named target means at matched random windows
+
+`constrained_unknown_targets.json` carries the sentence that sets 1.3's standing — "a named target
+here is a lead and not a finding: the same model names a target at 87% of matched random windows".
+That 87% is borrowed from the locus benchmark (303d0b0, ef80075: some derived layer names a target
+at 52 of 60 matched random windows), which is a different instrument — it pools every layer over a
+whole window, this is one element's own deletion — and this module has never had a matched-random
+control of its own. One is added here, on this instrument, with 0 requests: for each of chr21's 446
+UNKNOWN blocks, `RANDOM_DRAWS` = 50 windows of the same length placed uniformly at random inside
+the span of the chromosome's scored elements and rejected if they overlap any UNKNOWN block, with
+the same block-level question asked of each. 444 of the 446 blocks admit such a window; the two
+that do not are 5.01 Mb and 2.35 Mb long.
+
+Measured during this census, on the compact table, so reported here as a census figure and not as a
+prediction test:
+
+| block-level question, of blocks or windows carrying at least one scored element | UNKNOWN blocks (285 of 446) | matched random windows (16,706 of 22,200) |
+|---|---|---|
+| carries an element naming a coding gene | 140, **49.1%** | 10,908, **65.3%** |
+| carries an element naming a coding gene with a cell line at the bar | 89, **31.2%** | 8,005, **47.9%** |
+
+**The unknown blocks name a target less often than length-matched random windows on the same
+chromosome, by 16.2 points.** That is the honest reading of 1.3's clause on this instrument, and it
+is worse than the borrowed 87% suggested, not better: it is not "naming is easy everywhere", it is
+"naming is harder here than at random".
+
+**This is why the direction of the change is registered as it is.** Because the target set is
+identical before and after, no reading of the window can move the 49.1% or the 65.3%. The one
+block-level figure the window can move is the cell line, and if it moves the matched-random rate by
+as much or more than it moves the blocks, then reading the window has inflated a count without
+improving what can be said — and that is to be reported as an inflation, in those words, not as a
+gain.
+
+### The directions registered, before the module is changed
+
+Nothing below has been computed.
+
+1. **`head_abs_log2` over all 12,139 elements** (new, beside the untouched `abs_log2`): the
+   unknown-minus-rest difference is expected to be **larger in magnitude** than the gated
+   −0.0294 (p 0.048), because the gate removes the sub-0.1 tail from 31.8% of the rest arm and
+   50.5% of the unknown arm, so ungating pulls the unknown arm down further. Falsifier: a
+   difference that narrows or flips sign, which would mean the gated magnitude gap was itself an
+   artefact of the gate in the opposite direction.
+2. **`cells_acting_window`** (any gene in the window at the bar on a cell's own track, against the
+   top gene only): the raw share of elements acting in at least one line goes 3,260 of 7,846
+   movers to 3,693 of all 12,139, and per element 15.8% → 17.9% over unknown blocks against
+   29.5% → 33.4% elsewhere. The matched difference and its permutation p are not computed and are
+   registered as unknown. The relative change is **larger on the rest arm than on the unknown
+   arm**, which already says the window's extra cells are not a property of unknown sequence.
+3. **VISTA**: `mean_max_abs_log2_positive` 0.4259 and `_negative` 0.0953 are computed over
+   structural zeros — 4 of the 6 negatives and 3 of the 13 positives are covered only by gated
+   elements. Replacing those zeros with the measured heads (median 0.064 on gated elements) must
+   raise the negative arm more than the positive arm, so **the contrast is expected to shrink**.
+   Falsifier: a contrast that widens.
+4. **lentiMPRA**: the correlation is computed on the 329 elements whose top gene cleared the gate;
+   the window's strongest per-cell effect exists for every covered element. The ungated rho is
+   expected to **fall in magnitude or hold**, because the added elements are all small-effect.
+   Falsifier: a rise, which would say the gate was discarding elements whose sub-threshold effects
+   still track measured activity — the same finding the eQTL lane reached about `MIN_EFFECT` on
+   2026-09-22, and it would be worth more than the fix.
+5. **The 69 syntax candidates**: 35 have no scored element inside them at all, 9 have elements of
+   which none clears the gate, and 25 have a mover. The current stored table reports only 2 rows
+   because it was computed on 2026-09-13 when two chromosomes were complete; 19 are complete now
+   and all 69 candidates lie on them. The re-run therefore changes that table for a reason that
+   has nothing to do with the cache, so **both re-runs are reported**: the compact table over 69
+   candidates, which is the control, and the cache over the same 69.
+6. **Everything already published is annotated, never rewritten.** `abs_log2`, `silencer`,
+   `cells_acting`, `target_tss_distance`, `moves_gene`, `names_coding` and every field of
+   `coverage`, `ablation`, `mpra` and `vista` keep their names and their meanings, and the re-run
+   must reproduce them to the digit; the new fields are added beside them. The 2026-09-13 section
+   above is annotated in place.
 
 ## What comes next, in order
 
