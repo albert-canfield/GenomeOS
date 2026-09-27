@@ -282,8 +282,12 @@ block text: the engine defines the hook (`genomeos.lang.parser.IMPORT_RESOLVERS`
 and imports nothing; GenomeOS registers the packaged human proteome
 (`genomeos.lib.biolang.register()`, done by the CLI and the web server), so a
 program pulls a cited `protein` block with accession, domains, pathways and
-interactions in one line. `bio` programs without the application see no
-resolvers and say so.
+interactions in one line. GenomeOS also declares the resolver as the
+`protein` entry point of the `biolang_import_resolvers` group, which the engine
+reads when a scheme has no registered resolver, so `bio` finds the proteome
+wherever GenomeOS is installed. A packaged engine with no application beside it
+ships no proteome: `import protein:X` stops with an error naming the missing
+resolver, never an empty module and never a network fetch.
 
 ## Standard prelude
 

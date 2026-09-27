@@ -468,7 +468,11 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("repl", help="interactive BioLang")
     p.set_defaults(fn=cmd_repl)
     args = ap.parse_args(argv)
-    return args.fn(args)
+    try:
+        return args.fn(args)
+    except BioLangError as e:  # a program that does not compile is the user's error, not a crash
+        print(f"bio: {e}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

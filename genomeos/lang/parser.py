@@ -1045,6 +1045,35 @@ def _check_references(module: Module) -> None:
 # the application registers sources (the packaged proteome as `protein:TP53`). The engine imports nothing.
 IMPORT_RESOLVERS: dict[str, Callable[[str], str]] = {}
 
+# An installed application can also offer a resolver without being imported by name: an entry point in
+# this group, named for its scheme, pointing at a `str -> str` function. GenomeOS declares `protein`
+# here, so `bio` finds the proteome wherever GenomeOS is installed and nowhere else. The engine ships no
+# resolver of its own: with none installed, `import protein:X` stops with the error below rather than
+# returning an empty module or reaching for the network.
+RESOLVER_GROUP = "biolang_import_resolvers"
+
+# schemes the engine knows by name, so their error says what is missing rather than only that it is
+KNOWN_SCHEMES = {
+    "protein": "`import protein:SYMBOL` reads a protein block from a proteome, and the engine ships none;"
+    " an application has to supply one (GenomeOS does, from its packaged human proteome)",
+}
+
+
+def import_resolver(scheme: str) -> Callable[[str], str] | None:
+    """The resolver for `scheme`: one registered in IMPORT_RESOLVERS, else one an installed package
+    declares under RESOLVER_GROUP (loaded once and then registered), else None."""
+    if scheme in IMPORT_RESOLVERS:
+        return IMPORT_RESOLVERS[scheme]
+    try:
+        from importlib.metadata import entry_points
+
+        found = [e for e in entry_points(group=RESOLVER_GROUP) if e.name == scheme]
+    except Exception:  # noqa: BLE001  (no metadata to read is the same as no resolver declared)
+        found = []
+    if not found:
+        return None
+    return IMPORT_RESOLVERS.setdefault(scheme, found[0].load())
+
 
 def resolve_import(name: str, base_dir: Path | None) -> Path:
     """`bio.std.ageing` -> genomeos/std/ageing.bio; `a.b` -> <base>/a/b.bio; or a literal path."""
@@ -1075,20 +1104,19 @@ def parse(
     done = set() if _done is None else _done  # files already merged into this program (diamond imports)
     for imp in imports:
         scheme, _, rest = imp.partition(":")
-        if rest and scheme in IMPORT_RESOLVERS:
+        resolver = import_resolver(scheme) if rest else None
+        if resolver is not None:
             key = imp
             if key in done:
                 continue
             done.add(key)
-            module.merge(
-                parse(
-                    IMPORT_RESOLVERS[scheme](rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done
-                )
-            )
+            module.merge(parse(resolver(rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done))
             continue
         if rest and scheme.isalpha() and scheme.islower() and "/" not in scheme and not imp.endswith(".bio"):
+            why = f": {KNOWN_SCHEMES[scheme]}" if scheme in KNOWN_SCHEMES else ""
             raise BioLangError(
-                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)})"
+                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)}){why};"
+                f" register one in IMPORT_RESOLVERS or declare it as a {RESOLVER_GROUP!r} entry point"
             )
         path = resolve_import(imp, base_dir)
         key = str(path.resolve())

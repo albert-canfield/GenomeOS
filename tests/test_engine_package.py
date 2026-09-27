@@ -114,3 +114,41 @@ def test_the_engine_has_a_version_of_its_own(built):
     assert f'version = "{info["version"]}"' in (out / "pyproject.toml").read_text()
     assert f'__version__ = "{info["version"]}"' in (out / "biolang" / "version.py").read_text()
     assert info["version"] in (out / "README.md").read_text()
+
+
+@pytest.fixture(scope="module")
+def described(built) -> list[dict]:
+    out, _, _ = built
+    return package_engine.describe(out, "biolang")
+
+
+def test_the_package_describes_its_own_language(built, described):
+    """The grammar and every specification travel inside the package, so the wheel carries them; the
+    grammar is re-rendered by the packaged parser in isolation and must match what was copied."""
+    out, info, _ = built
+    checks = described
+    assert len(checks) == 3
+    docs = out / "biolang" / "docs"
+    assert set(info["docs"]) == {p.name for p in (ROOT / "docs").glob("BIOLANG-*.md")}
+    assert {"BIOLANG-GRAMMAR.md", "BIOLANG-v0.1.md", "BIOLANG-v0.3.md", "BIOLANG-v0.4-ECONOMY.md"} <= set(
+        info["docs"]
+    )
+    assert all((docs / d).is_file() for d in info["docs"])
+    assert "genomeos" not in (docs / "BIOLANG-GRAMMAR.md").read_text()
+    assert "Creative Commons Attribution 4.0" in (docs / "README.md").read_text()
+    assert 'packages = ["biolang"]' in (out / "pyproject.toml").read_text()  # docs/ is inside it
+    c = next(c for c in checks if c["check"].startswith("the grammar and the specs"))
+    assert c["ok"], c["error"] or c["output"]
+
+
+def test_bio_repl_runs_in_isolation(described):
+    c = next(c for c in described if c["check"].startswith("bio repl"))
+    assert c["ok"], c["error"] or c["output"]
+
+
+def test_import_protein_without_genomeos_is_a_named_error(described):
+    """The engine ships no proteome: the import must stop, exit 2, name the missing resolver and how to
+    supply one, with no traceback; not an empty module, not a network fetch."""
+    c = next(c for c in described if c["check"].startswith("import protein:"))
+    assert c["ok"], c["error"] or c["output"]
+    assert "the engine ships none" in c["error"]
