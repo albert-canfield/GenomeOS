@@ -6846,6 +6846,48 @@ chosen mark is carried by the structured fields a feature would read, not only b
 A test is to assert that no held-out-only gene reaches `targets:` and that every held-out-only rule
 carries the mark.
 
+That test now exists: `tests/test_crispri_split.py`.
+
+**The fix, as built.** In the committed chr21 program, `targets: ICOSLG` left the held-out element
+and its rule gained the mark. The rule count stayed 2. Genome-wide, 1 of the 169 training-supported
+rules had taken its strength from a stronger held-out pair; it now takes it from the training pair.
+No reported figure moves. The `rules`, `entities` and `unknowns` counts each program tests itself
+on do not move either, because every measured link is still stated. Only the chr21 lines that the
+fix touches were rewritten in the committed copy. A full recompile would also have pulled in
+unrelated drift in the reader comments since 2026-09-17. The git-ignored programs under
+`data/knowledge/compiled/` pick up the mark on the next
+`scripts/measured_layer.py --write-programs`.
+
+**Evaluation independence (review item R5).**
+- *Provenance.* Every `CrispriPair` now carries its partition (`split`), its `source_file`, its
+  `assay` and its `study` (the benchmark's `Dataset` column). All four are frozen at parse time.
+- *Guard.* `measured.development_only` raises on a held-out pair rather than filtering it out
+  silently.
+- *Overlap check.* `measured.split_overlap` compares the two partitions by interval as well as by
+  identical pair, and a test recomputes it from the files against
+  `data/results/crispri_split_audit.json`.
+
+It finds **no identical pairs, but 249 of the 4,378 held-out pairs share at least one base with a
+training interval**:
+
+- 36 are on the same gene: 4 near-identical (reciprocal overlap ≥ 0.9) and 32 overlapping. By
+  cell, 23 are in HCT116 and 13 in WTC11.
+- 213 are on another gene. 66 of those sit on a near-identical element, and 164 of the 213 are in
+  K562.
+
+No held-out K562 pair repeats a training gene at an overlapping interval. `crispri.score` already
+reports an arm restricted to held-out elements absent from training; every other held-out figure
+includes the related pairs. The related-variant half of the check has nothing to compare here,
+because the benchmark tests intervals, not alleles.
+
+**Reused benchmark.** At least ten scored results have read the held-out file: crispri_benchmark,
+crispri_contact, crispri_published, crispri_direction, crispri_direction_both, target_calibration,
+target_calibration_gate, target_prevalence, target_rebanding and union_axis. loci_fourth and
+loci_noncoding read its held-out arm too. Each registration froze its model before its own read.
+The choices between registrations, however, were made by people who had seen the earlier reads. In
+the audit JSON, every row on this file is therefore flagged `reused_benchmark`, and its figures are
+to be quoted as a reused benchmark, not as a first touch of a test set.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

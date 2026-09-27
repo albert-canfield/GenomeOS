@@ -159,7 +159,10 @@ def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> li
     props = [f"class: {row.get('class') or 'enhancer'}", f"locus: {chrom}:{row['start']}-{row['end']}"]
     if row.get("domain") in domains:
         props.append(f"domain: {ident(row['domain'])}")
-    regulated = row["measured"].get("crispri", {}).get("genes_regulated", [])
+    c = row["measured"].get("crispri", {})
+    # a held-out-only link never reaches `targets:`, the field a feature reads; it stays as a marked
+    # rule below (the split audit of 2026-09-28 in docs/ATTRIBUTION.md)
+    regulated = c.get("genes_regulated_training", c.get("genes_regulated", []))
     if regulated:
         props.append("targets: " + ", ".join(ident_of[g] for g in regulated))
     props += [
@@ -170,10 +173,11 @@ def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> li
     lines = [f"element {row['id']}_measured {{}}".replace("{}", "{")]
     lines += [f"  {p}" for p in props]
     lines.append("}")
-    for gene, action, strength, cell in ms.rule_lines(row):
+    for gene, action, strength, cell, split in ms.rule_links(row):
+        mark = f", {ms.HELDOUT_MARK}" if split == ms.HELDOUT else ""
         lines.append(
             f"rule {row['id']}_measured {action} {ident_of[gene]} {{ strength: {strength}; "
-            f'evidence: experimental "{_text(ms.SOURCES["crispri"])}, silenced in {_text(cell)}"; '
+            f'evidence: experimental "{_text(ms.SOURCES["crispri"])}, silenced in {_text(cell)}{mark}"; '
             f"confidence: {row['confidence']:.2f} }}"
         )
     return lines

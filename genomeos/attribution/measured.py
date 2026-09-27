@@ -90,6 +90,24 @@ CRISPRI_FILES = (
     "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
     "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
 )
+#: the benchmark's own split, one per file. A pair's split is the file it came from and nothing else.
+TRAINING, HELDOUT, ALL = "training", "heldout", "all"
+CRISPRI_SPLIT_OF = dict(zip(CRISPRI_FILES, (TRAINING, HELDOUT), strict=True))
+SPLITS = (TRAINING, HELDOUT, ALL)
+#: the power columns exactly as both headers name them (read 2026-09-28): the probability that the
+#: screen would have called an effect of 10, 15, 20, 25 or 50% on this pair. A negative with power
+#: near 1 is evidence of no effect; one with power near 0 is a screen that could not have seen one.
+POWER_COLUMNS = (
+    "PowerAtEffectSize10",
+    "PowerAtEffectSize15",
+    "PowerAtEffectSize20",
+    "PowerAtEffectSize25",
+    "PowerAtEffectSize50",
+)
+#: written into the evidence source of every compiled link found only in held-out pairs. The link is
+#: a real measurement and stays in the program, but no feature, fit or label may read it: the
+#: held-out file is the benchmark's test set (docs/ATTRIBUTION.md, the split audit of 2026-09-28).
+HELDOUT_MARK = "held-out split, evaluation only, never a feature"
 MPRA_ACTIVE = mpra.ACTIVE  # log2(RNA/DNA) at or above which a reporter element counts as active
 REACH = 200_000  # the longest measured interval any assay holds, for the bounded overlap scan
 
@@ -162,9 +180,128 @@ class CrispriPair:
     significant: bool
     effect_size: float
     p_adjusted: float
+    split: str = TRAINING  # the evaluation partition, from the file: "training" or "heldout"
+    source_file: str = ""  # the benchmark file the row was read from, by name
+    assay: str = "CRISPRi"  # the assay, named on the record so a pooled list stays traceable
+    # the five power columns, None where a table lacks the column or leaves it empty
+    power_at_effect_size_10: float | None = None
+    power_at_effect_size_15: float | None = None
+    power_at_effect_size_20: float | None = None
+    power_at_effect_size_25: float | None = None
+    power_at_effect_size_50: float | None = None
+
+    @property
+    def study(self) -> str:
+        """The benchmark's own study identifier (its `Dataset` column)."""
+        return self.dataset
+
+    @property
+    def partition(self) -> str:
+        """The evaluation partition: "training" is development, "heldout" is evaluation only."""
+        return self.split
 
 
-def parse_crispri(lines: Any, chrom: str | None = None) -> tuple[list[CrispriPair], int]:
+def development_only(pairs: list[CrispriPair]) -> list[CrispriPair]:
+    """The pairs a feature, a fit, a candidate selection, a starting label or a search objective may
+    read. Raises if a held-out pair is among them, rather than filtering it silently: a caller that
+    passed one has a leak to fix, not a list to clean."""
+    held = [p for p in pairs if p.split != TRAINING]
+    if held:
+        raise ValueError(
+            f"{len(held)} held-out pairs passed to a development reader "
+            f"(first: {held[0].chrom}:{held[0].start}-{held[0].end} {held[0].gene} in {held[0].cell})"
+        )
+    return pairs
+
+
+#: the overlap check's thresholds, fixed before it was run: an interval pair at or above
+#: NEAR_IDENTICAL reciprocal overlap is the same element tested twice; any shared base is related
+NEAR_IDENTICAL = 0.9
+
+
+def split_overlap(pairs: list[CrispriPair]) -> dict[str, Any]:
+    """Where the evaluation partition touches the development one, beyond identical pairs.
+
+    Counted per held-out pair, each in the first category it meets, strictest first:
+
+    - `identical_pair`: the same interval and the same gene appears in training;
+    - `near_identical_same_gene`: a training interval at reciprocal overlap >= NEAR_IDENTICAL, same gene;
+    - `overlapping_same_gene`: a training interval sharing at least one base, same gene;
+    - `near_identical_other_gene`: the same element (>= NEAR_IDENTICAL) tested in training on another gene;
+    - `overlapping_other_gene`: a training interval sharing at least one base, another gene;
+    - `independent`: no training interval shares a base with it.
+
+    Each category is also split by the held-out pair's cell, because a K562 held-out pair on a
+    training element is a much closer relative than a WTC11 one.
+    """
+    train = sorted((p for p in pairs if p.split == TRAINING), key=lambda p: (p.chrom, p.start))
+    by_chrom: dict[str, list[CrispriPair]] = defaultdict(list)
+    for p in train:
+        by_chrom[p.chrom].append(p)
+    starts = {c: [p.start for p in v] for c, v in by_chrom.items()}
+    reach = max((p.end - p.start for p in train), default=0)
+    order = (
+        "identical_pair",
+        "near_identical_same_gene",
+        "overlapping_same_gene",
+        "near_identical_other_gene",
+        "overlapping_other_gene",
+        "independent",
+    )
+    counts = dict.fromkeys(order, 0)
+    by_cell: dict[str, dict[str, int]] = {}
+    held = [p for p in pairs if p.split == HELDOUT]
+    for h in held:
+        cand = by_chrom.get(h.chrom, [])
+        lo = bisect.bisect_left(starts.get(h.chrom, []), h.start - reach)
+        hi = bisect.bisect_right(starts.get(h.chrom, []), h.end)
+        near = [t for t in cand[lo:hi] if t.end > h.start and t.start < h.end]
+        same = [t for t in near if t.gene == h.gene]
+        other = [t for t in near if t.gene != h.gene]
+        if any(t.start == h.start and t.end == h.end for t in same):
+            kind = order[0]
+        elif any(reciprocal_overlap(h.start, h.end, t.start, t.end) >= NEAR_IDENTICAL for t in same):
+            kind = order[1]
+        elif same:
+            kind = order[2]
+        elif any(reciprocal_overlap(h.start, h.end, t.start, t.end) >= NEAR_IDENTICAL for t in other):
+            kind = order[3]
+        elif other:
+            kind = order[4]
+        else:
+            kind = order[5]
+        counts[kind] += 1
+        cell = by_cell.setdefault(h.cell, dict.fromkeys(order, 0))
+        cell[kind] += 1
+    return {
+        "heldout_pairs": len(held),
+        "training_pairs": len(train),
+        "near_identical_at": NEAR_IDENTICAL,
+        "counts": counts,
+        "by_heldout_cell": dict(sorted(by_cell.items())),
+        "heldout_related_to_training": len(held) - counts["independent"],
+    }
+
+
+def _power(value: str | None) -> float | None:
+    """A power column's value; None for an absent, empty or NA cell, never a made-up zero."""
+    if value in (None, "", "NA"):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
+def is_heldout(source: str) -> bool:
+    """Whether a compiled evidence source names a held-out link. Any reader that turns compiled
+    `_measured` rules into features or labels must drop these."""
+    return HELDOUT_MARK in source
+
+
+def parse_crispri(
+    lines: Any, chrom: str | None = None, split: str = TRAINING, source_file: str = ""
+) -> tuple[list[CrispriPair], int]:
     """Valid pairs and the count the benchmark itself marks invalid (promoter or exon overlaps).
 
     The invalid ones are returned as a number rather than silently skipped: they are not measured
@@ -191,23 +328,39 @@ def parse_crispri(lines: Any, chrom: str | None = None) -> tuple[list[CrispriPai
                 significant=r.get("Significant") == "TRUE",
                 effect_size=float(r["EffectSize"] or 0.0),
                 p_adjusted=float(r["pValueAdjusted"] or 1.0),
+                split=split,
+                source_file=source_file,
+                power_at_effect_size_10=_power(r.get("PowerAtEffectSize10")),
+                power_at_effect_size_15=_power(r.get("PowerAtEffectSize15")),
+                power_at_effect_size_20=_power(r.get("PowerAtEffectSize20")),
+                power_at_effect_size_25=_power(r.get("PowerAtEffectSize25")),
+                power_at_effect_size_50=_power(r.get("PowerAtEffectSize50")),
             )
         )
     return out, invalid
 
 
 def load_crispri(
-    chrom: str | None = None, knowledge: Path = CRISPRI_KNOWLEDGE
+    chrom: str | None = None, knowledge: Path = CRISPRI_KNOWLEDGE, split: str = ALL
 ) -> tuple[list[CrispriPair], int]:
-    """Both benchmark tables from the local cache. Nothing is fetched; a missing table is no pairs."""
+    """The benchmark tables from the local cache. Nothing is fetched; a missing table is no pairs.
+
+    `split` picks "training", "heldout" or "all". The default stays "all" because the split audit of
+    2026-09-28 found no caller that fits or builds a feature on these pairs; each pair carries its
+    `split`, so a caller that does must pass "training" or filter on it.
+    """
+    if split not in SPLITS:
+        raise ValueError(f"split must be one of {SPLITS}, not {split!r}")
     pairs: list[CrispriPair] = []
     invalid = 0
     for name in CRISPRI_FILES:
+        if split != ALL and CRISPRI_SPLIT_OF[name] != split:
+            continue
         p = knowledge / name
         if not p.exists():
             continue
         with gzip.open(p, "rt") as fh:
-            got, bad = parse_crispri(fh, chrom)
+            got, bad = parse_crispri(fh, chrom, CRISPRI_SPLIT_OF[name], name)
         pairs.extend(got)
         invalid += bad
     pairs.sort(key=lambda p: (p.start, p.end, p.gene, p.cell))
@@ -364,6 +517,10 @@ class Layer:
             out["crispri"] = {
                 "genes_tested": tested,
                 "genes_regulated": regulated,
+                # the genes a training pair calls regulated: the only ones a compiled `targets:` names
+                "genes_regulated_training": sorted(
+                    {p.gene for p, _ in pairs if p.regulated and p.split == TRAINING}
+                ),
                 "genes_not_regulated": [g for g in tested if g not in set(regulated)],
                 "cells": sorted({p.cell for p, _ in pairs}),
                 "overlap": round(max(f for _, f in pairs), 3),
@@ -376,6 +533,8 @@ class Layer:
                         "effect_size": round(p.effect_size, 4),
                         "p_adjusted": p.p_adjusted,
                         "overlap": round(f, 3),
+                        "split": p.split,
+                        "source_file": p.source_file,
                     }
                     for p, f in sorted(pairs, key=lambda x: (x[0].gene, x[0].cell))
                 ],
@@ -909,6 +1068,12 @@ def basis_text(row: dict[str, Any]) -> str:
             bits.append("regulated " + ", ".join(c["genes_regulated"]))
         if c["genes_not_regulated"]:
             bits.append("measured no effect on " + ", ".join(c["genes_not_regulated"]))
+        held = [p for p in c["pairs"] if p.get("split", TRAINING) == HELDOUT]
+        if held:
+            bits.append(
+                f"{len(held)} of the {len(c['pairs'])} pairs are the benchmark's held-out split "
+                f"({', '.join(sorted({p['cell'] for p in held}))}), evaluation only"
+            )
         parts.append(", ".join(bits))
     m = row["measured"].get("lentimpra")
     if m:
@@ -963,14 +1128,28 @@ def rule_lines(row: dict[str, Any]) -> list[tuple[str, str, float, str]]:
     activity, not a gene's, so it names no relation at all. Its experiments carry gene names given by
     their authors (SORT1, IRF4), which is curation and not a measured target.
     """
+    return [link[:4] for link in rule_links(row)]
+
+
+def rule_links(row: dict[str, Any]) -> list[tuple[str, str, float, str, str]]:
+    """`rule_lines` with the split of the pairs each link rests on: (gene, action, strength, cell, split).
+
+    A link with any regulated training pair takes its action and strength from the training pairs
+    only, so a held-out measurement never sets a compiled number. A link found only in held-out pairs
+    keeps split "heldout", and the compiler marks it with `HELDOUT_MARK`.
+    """
     c = row["measured"].get("crispri")
     if not c:
         return []
     out = []
     for gene in c["genes_regulated"]:
         hit = [p for p in c["pairs"] if p["gene"] == gene and p["regulated"]]
-        strongest = max(hit, key=lambda p: abs(p["effect_size"]))
+        train = [p for p in hit if p.get("split", TRAINING) == TRAINING]
+        split = TRAINING if train else HELDOUT
+        strongest = max(train or hit, key=lambda p: abs(p["effect_size"]))
         # the screen silences the element: a gene that falls was being activated by it
         action = "activates" if strongest["effect_size"] < 0 else "inhibits"
-        out.append((gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"]))
+        out.append(
+            (gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"], split)
+        )
     return out

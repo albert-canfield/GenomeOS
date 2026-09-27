@@ -56232,12 +56232,11 @@ element EH38E3462385_measured {
   class: enhancer
   locus: chr21:44196243-44196591
   domain: chr21_D211
-  targets: ICOSLG
-  basis: CRISPRi in GM12878 tested 1 genes, regulated ICOSLG, against the predicted target ICOSLG, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in GM12878 tested 1 genes, regulated ICOSLG, 1 of the 1 pairs are the benchmark's held-out split (GM12878), evaluation only, against the predicted target ICOSLG, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
-rule EH38E3462385_measured activates ICOSLG { strength: 0.205; evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in GM12878"; confidence: 0.90 }
+rule EH38E3462385_measured activates ICOSLG { strength: 0.205; evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in GM12878, held-out split, evaluation only, never a feature"; confidence: 0.90 }
 element EH38E3462556_measured {
   class: enhancer
   locus: chr21:44364235-44364401
@@ -56258,7 +56257,7 @@ element EH38E3462688_measured {
   class: enhancer
   locus: chr21:44482705-44483053
   domain: chr21_D214
-  basis: CRISPRi in K562 tested 2 genes, measured no effect on CSTB, SUMO3, against the predicted target TSPEAR, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 2 genes, measured no effect on CSTB, SUMO3, 2 of the 2 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target TSPEAR, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56306,7 +56305,7 @@ element EH38E3463038_measured {
   class: enhancer
   locus: chr21:44854835-44855184
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, lentiMPRA log2(RNA/DNA) HepG2 -0.85, K562 +0.58, WTC11 -1.37, active in 0 of 3 cells at 1.0, against the predicted target PTTG1IP, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, 2 of the 2 pairs are the benchmark's held-out split (K562), evaluation only, lentiMPRA log2(RNA/DNA) HepG2 -0.85, K562 +0.58, WTC11 -1.37, active in 0 of 3 cells at 1.0, against the predicted target PTTG1IP, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.90
 }
@@ -56314,7 +56313,7 @@ element EH38E3463056_measured {
   class: enhancer
   locus: chr21:44869867-44870200
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, against the predicted target PTTG1IP, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, 2 of the 2 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target PTTG1IP, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56346,7 +56345,7 @@ element EH38E3463114_measured {
   class: enhancer
   locus: chr21:44897645-44897988
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, lentiMPRA log2(RNA/DNA) HepG2 +0.94, K562 +1.46, WTC11 +1.41, active in 2 of 3 cells at 1.0, against the predicted target ITGB2, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, 3 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, lentiMPRA log2(RNA/DNA) HepG2 +0.94, K562 +1.46, WTC11 +1.41, active in 2 of 3 cells at 1.0, against the predicted target ITGB2, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.90
 }
@@ -56354,7 +56353,7 @@ element EH38E3463174_measured {
   class: enhancer
   locus: chr21:44927530-44927879
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, against the predicted target ITGB2, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, 3 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target ITGB2, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56370,7 +56369,7 @@ element EH38E3463485_measured {
   class: enhancer
   locus: chr21:45138614-45138952
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 1 genes, measured no effect on SUMO3, lentiMPRA log2(RNA/DNA) HepG2 +0.38, K562 +0.81, WTC11 -0.25, active in 0 of 3 cells at 1.0, against the predicted target ADARB1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 1 genes, measured no effect on SUMO3, 1 of the 1 pairs are the benchmark's held-out split (K562), evaluation only, lentiMPRA log2(RNA/DNA) HepG2 +0.38, K562 +0.81, WTC11 -0.25, active in 0 of 3 cells at 1.0, against the predicted target ADARB1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.90
 }
@@ -56378,7 +56377,7 @@ element EH38E3463502_measured {
   class: enhancer
   locus: chr21:45150971-45151255
   domain: chr21_D217
-  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, against the predicted target ADARB1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 2 genes, measured no effect on SUMO3, UBE2G2, 2 of the 2 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target ADARB1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56403,7 +56402,7 @@ element EH38E3463738_measured {
   locus: chr21:45360242-45360590
   domain: chr21_D219
   targets: COL18A1
-  basis: CRISPRi in K562 tested 3 genes, regulated COL18A1, measured no effect on PTTG1IP, SUMO3, against the predicted target COL18A1, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 3 genes, regulated COL18A1, measured no effect on PTTG1IP, SUMO3, 1 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target COL18A1, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56428,7 +56427,7 @@ element EH38E3463817_measured {
   class: enhancer
   locus: chr21:45406883-45407231
   domain: chr21_D220
-  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, against the predicted target COL18A1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, 3 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target COL18A1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
@@ -56452,7 +56451,7 @@ element EH38E3464091_measured {
   class: enhancer
   locus: chr21:45541286-45541543
   domain: chr21_D221
-  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, against the predicted target SLC19A1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 3 genes, measured no effect on PTTG1IP, SUMO3, UBE2G2, 3 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target SLC19A1, 0 assays agrees and 0 disagrees (predicted_gene_not_tested), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
   confidence: 0.90
 }
