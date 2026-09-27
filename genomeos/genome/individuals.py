@@ -1376,3 +1376,194 @@ def reference_alleles_carried(name: str, root: Path | None = None, annotation_fo
         "GIAB trio's do); no variant at all means the person carries hg38's allele there, a truncation the "
         "reference hides",
     }
+
+
+def read_assembly_calls(path: Path | str, chroms: set[str], base_at_for=None) -> dict[str, dict]:
+    """A phased diploid-assembly VCF (dipcall's: one sample, `a|b` with haplotype 1 first) read into
+    {chrom: {"alleles": {(pos, ref, alt): (on_hap1, on_hap2, passed)}, "positions": sorted starts}}.
+    Alleles are normalised like the trio's (`normalise_variant`) so the two sources compare; `.` in a
+    haplotype means that haplotype is uncalled there. `base_at_for(chrom)` gives a chromosome's
+    reference reader, or None to trim without left-aligning."""
+    out: dict[str, dict] = {}
+    readers: dict[str, Any] = {}
+    with open_variants(path) as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t", 10)
+            chrom = f[0]
+            if chrom not in chroms:
+                continue
+            if chrom not in readers:
+                readers[chrom] = base_at_for(chrom) if base_at_for else None
+            base_at = readers[chrom]
+            gt = f[9].split(":")[0] if len(f) > 9 else ""
+            haps = gt.split("|") if "|" in gt else [gt, gt]
+            if len(haps) != 2:
+                continue
+            passed = f[6] in ("PASS", ".")
+            d = out.setdefault(chrom, {"alleles": {}, "positions": []})
+            d["positions"].append(int(f[1]))
+            for i, alt in enumerate(f[4].split(","), 1):
+                key = (int(f[1]), f[3].upper(), alt.upper())
+                if base_at is not None and (len(f[3]) > 1 or len(alt) > 1):
+                    key = normalise_variant(*key, base_at=base_at)
+                h1, h2 = haps[0] == str(i), haps[1] == str(i)
+                if h1 or h2:
+                    o1, o2, op = d["alleles"].get(key, (False, False, True))
+                    d["alleles"][key] = (o1 or h1, o2 or h2, op and passed)
+    for d in out.values():
+        d["positions"].sort()
+    return out
+
+
+def assembly_class(key: tuple[int, str, str], calls: dict | None, window: int = 10) -> str:
+    """Where a phased assembly puts one normalised child allele: 'hap1' or 'hap2' (on one haplotype
+    only), 'both', 'filtered' (the allele is there but the assembly's own filter failed), 'nearby' (no
+    such allele, but the assembly has a variant within `window` bases: a representation disagreement)
+    or 'absent' (the assembly reads the reference there). The caller decides beforehand whether the
+    site lies inside the assembly's diploid regions."""
+    import bisect
+
+    if calls:
+        hit = calls["alleles"].get(key)
+        if hit is not None:
+            h1, h2, passed = hit
+            if not passed:
+                return "filtered"
+            return "both" if h1 and h2 else ("hap1" if h1 else "hap2")
+        pos = calls["positions"]
+        i = bisect.bisect_left(pos, key[0] - window)
+        if i < len(pos) and pos[i] <= key[0] + window:
+            return "nearby"
+    return "absent"
+
+
+def phase_trio_by_assembly(
+    child: str,
+    father: str,
+    mother: str,
+    assembly_vcf: Path | str,
+    assembly_bed: Path | str,
+    benchmark_bed: Path | str | None = None,
+    hap1_parent: str = "father",
+    other_beds: dict[str, Path | str] | None = None,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    reference: Path = Path("data/reference"),
+    window: int = 10,
+) -> dict[str, Any]:
+    """The trio's de novo candidates (child calls absent from both parents inside all trusted regions,
+    exactly as `trio` defines them) placed on a phased, parent-labelled assembly of the child, next to
+    a control: child heterozygous calls that exactly one parent carries, whose parent of origin is
+    therefore known from the trio alone. The control measures how often the assembly carries an
+    ordinary inherited allele and how often it puts it on the right parent's haplotype; the candidates
+    are read against that. Counts only: no position, allele or genotype leaves this function."""
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    for n in (child, father, mother):
+        if n not in people:
+            raise FileNotFoundError(f"{n} is not a local individual")
+    chroms = chroms or [c for c in people[child]["chromosomes"] if c not in ("chrX", "chrY", "chrM")]
+    hap_to_parent = {"hap1": hap1_parent, "hap2": "mother" if hap1_parent == "father" else "father"}
+
+    def bed(path) -> dict[str, tuple[list[tuple[int, int]], list[int]]]:
+        iv: dict[str, list[tuple[int, int]]] = {}
+        if path is None:
+            return {}
+        with open_variants(path) as fh:
+            for line in fh:
+                f = line.split("\t")
+                if len(f) >= 3 and not line.startswith(("#", "track")):
+                    iv.setdefault(f[0], []).append((int(f[1]), int(f[2])))
+        return {c: (sorted(v), [a for a, _ in sorted(v)]) for c, v in iv.items()}
+
+    dip, bench = bed(assembly_bed), bed(benchmark_bed)
+    others = {name: bed(p) for name, p in (other_beds or {}).items()}
+    cand_in_other: dict[str, dict[str, int]] = {name: {} for name in others}
+
+    def base_at_for(chrom):
+        return _reference_base_reader(chrom, reference)[0]
+
+    calls = read_assembly_calls(assembly_vcf, set(chroms), base_at_for)
+    cand = {"total": 0, "outside_assembly": 0}
+    cand_by_type: dict[str, dict[str, int]] = {"snv": {}, "indel": {}}
+    cand_in_bench: dict[str, int] = {}
+    cand_child_hom: dict[str, int] = {}
+    ctrl = {"total": 0, "outside_assembly": 0, "right_parent": 0, "wrong_parent": 0}
+    ctrl_class: dict[str, int] = {}
+    done = []
+    for chrom in chroms:
+        pc, pf, pm = (vcf_path(n, chrom, root) for n in (child, father, mother))
+        if not (pc and pf and pm):
+            continue
+        base_at, genome = _reference_base_reader(chrom, reference)
+        try:
+            gc, gf, gm = _genotypes(pc, base_at), _genotypes(pf, base_at), _genotypes(pm, base_at)
+        finally:
+            if genome is not None:
+                genome.close()
+        rf, rm, rc = (load_regions(n, chrom, root) for n in (father, mother, child))
+        sf, sm, sc = [x for x, _ in rf], [x for x, _ in rm], [x for x, _ in rc]
+        have_regions = bool(rf and rm)
+        di, ds = dip.get(chrom, ([], []))
+        bi, bs = bench.get(chrom, ([], []))
+        cc = calls.get(chrom)
+        for key, zyg in gc.items():
+            pos0 = key[0] - 1
+            trusted = (not have_regions) or (
+                _inside(rf, sf, pos0) and _inside(rm, sm, pos0) and (not rc or _inside(rc, sc, pos0))
+            )
+            if not trusted:
+                continue
+            f_has, m_has = key in gf, key in gm
+            if not f_has and not m_has:
+                cand["total"] += 1
+                if not _inside(di, ds, pos0):
+                    cand["outside_assembly"] += 1
+                    continue
+                k = assembly_class(key, cc, window)
+                k = hap_to_parent.get(k, k)
+                cand[k] = cand.get(k, 0) + 1
+                t = "snv" if len(key[1]) == 1 and len(key[2]) == 1 else "indel"
+                cand_by_type[t][k] = cand_by_type[t].get(k, 0) + 1
+                if bench and _inside(bi, bs, pos0):
+                    cand_in_bench[k] = cand_in_bench.get(k, 0) + 1
+                for name, ob in others.items():
+                    oi, os_ = ob.get(chrom, ([], []))
+                    if _inside(oi, os_, pos0):
+                        cand_in_other[name][k] = cand_in_other[name].get(k, 0) + 1
+                if zyg == "hom":
+                    cand_child_hom[k] = cand_child_hom.get(k, 0) + 1
+            elif f_has != m_has and zyg == "het":
+                ctrl["total"] += 1
+                if not _inside(di, ds, pos0):
+                    ctrl["outside_assembly"] += 1
+                    continue
+                k = assembly_class(key, cc, window)
+                ctrl_class[k] = ctrl_class.get(k, 0) + 1
+                if k in hap_to_parent:
+                    expected = "father" if f_has else "mother"
+                    ctrl["right_parent" if hap_to_parent[k] == expected else "wrong_parent"] += 1
+        done.append(chrom)
+    placed = ctrl["right_parent"] + ctrl["wrong_parent"]
+    inside = ctrl["total"] - ctrl["outside_assembly"]
+    one_parent = cand.get("father", 0) + cand.get("mother", 0)
+    return {
+        "child": child,
+        "father": father,
+        "mother": mother,
+        "chromosomes": done,
+        "window": window,
+        "candidates": cand,
+        "candidates_by_type": cand_by_type,
+        "candidates_in_benchmark_regions": cand_in_bench if bench else None,
+        "candidates_homozygous_in_child": cand_child_hom,
+        "candidates_in_other_regions": cand_in_other,
+        "control": ctrl,
+        "control_classes": ctrl_class,
+        "control_found_on_one_haplotype": round(placed / inside, 5) if inside else None,
+        "control_parent_agreement": round(ctrl["right_parent"] / placed, 5) if placed else None,
+        "candidates_paternal_share": round(cand.get("father", 0) / one_parent, 4) if one_parent else None,
+        "date": time.strftime("%Y-%m-%d"),
+    }

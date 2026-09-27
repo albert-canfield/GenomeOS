@@ -290,6 +290,126 @@ variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as
 expected for a highly polymorphic family.
 
+## Phasing the trio candidates on the Q100 assembly (2026-09-27)
+
+The trio above left 1,430 de novo candidates and the note that phasing them
+by parent "waits for a phased import". The phased resource already exists.
+It is the one the resolution below uses.
+
+**The resource, from primary sources (read 2026-09-27).** NIST/GIAB's v5.0q
+release,
+<https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/AshkenazimTrio/HG002_NA24385_son/v5.0q/>,
+is an assembly-based benchmark built on v1.1 of the T2T HG002 Q100 diploid
+assembly (<https://github.com/marbl/hg002>,
+<https://doi.org/10.1101/2025.09.21.677443>). Its `dipcall_output/` directory
+holds the assembly's own variant calls against GRCh38,
+`GRCh38_HG2-T2TQ100-V1.1_dipcall-z2k.dip.vcf.gz` (40 MB, index 1.5 MB), and
+the regions both haplotypes cover, `...dip.bed` (9.5 KB, 2.84 Gb). Beside
+them is the curated benchmark: `HG002_GRCh38_v5.0q_smvar.vcf.gz` (40 MB) and
+its `.benchmark.bed` (2.74 Gb).
+
+- **Phased and labelled by parent.** Every genotype is written `a|b`. The
+  release's own configuration (`defrabb_files/resources.yml`) names the two
+  inputs `hg002v1.1.mat.fasta.gz` and `hg002v1.1.pat.fasta.gz`. The pipeline's
+  dipcall rule (usnistgov/defrabb, `rules/asm-varcall.smk`) passes
+  `paternal.fa` first and `maternal.fa` second, and dipcall's README says
+  that for a male sample parent 1 is taken as the father. So haplotype 1 is
+  paternal and haplotype 2 is maternal. I checked this on the file itself:
+  every PASS call in the chrX non-PAR is `.|1` (136,036 calls), and every
+  chrY call is `1|.` (31,822 calls). A son's X comes from his mother and
+  his Y from his father.
+- **Licence.** The README's NIST Data Use Policy says the data were created by
+  NIST employees and are not subject to copyright in the US (17 USC 105).
+  They are provided "AS IS". Outside the US, NIST grants a royalty-free right
+  to copy, modify, prepare derivative works and distribute them. The one
+  condition is acknowledgement of NIST as the source, with a note of any
+  change. The files may be downloaded and distilled here. They are stored
+  under the git-ignored `data/cache/q100/` and md5-checked against the
+  release's `checksum.md5`. Only counts are committed.
+- **Sizes.** 42.4 MB for the four files used, far under the 5 GB limit. The
+  per-haplotype BAMs (1.0 GB each) are not needed.
+- **What the parent label can and cannot do.** Trio binning assigns each of
+  the child's haplotypes to the parent it came from. An allele on the
+  paternal haplotype sat on the chromosome the father transmitted. That is
+  true whether the father carries the allele or it arose in his germline. So
+  the assembly says *which parent's chromosome*, not *inherited or de novo*.
+  For one candidate, that distinction still rests on the parents' calls,
+  which lack the allele by definition. For the set, the distinction shows in
+  the paternal share. Germline de novos are about 75 to 80% paternal (Kong et
+  al. 2012; Jónsson et al. 2017). Inherited alleles that a parent's call
+  missed would split about evenly.
+
+**Pre-registration, written and committed before the phasing ran.** The
+code is `phase_trio_by_assembly` in `genomeos/genome/individuals.py`, run by
+`scripts/trio_q100_phase.py`. It rebuilds the candidates exactly as `trio`
+defines them, and the run is refused unless the count is 1,430. Then it
+reads each candidate against the assembly, with alleles normalised the same
+way. It also counts overlap with the v5.0q benchmark regions and with NIST's
+HG002 de novo and mosaic exclusion regions. That BED is named in the same
+`resources.yml` (1,913 intervals, 7.2 Mb including the repeats it was
+widened over).
+
+Each candidate falls into one class:
+
+| Class | The assembly | Read as |
+|---|---|---|
+| outside | the site is outside the diploid regions | not assessable |
+| father / mother | the same allele, on one haplotype only | the child's allele is confirmed and sits on that parent's chromosome: a de novo from that parent's germline, or an inherited allele the parent's call missed |
+| both | the same allele, on both haplotypes | not a de novo: two independent events at one base are not credible, so at least one parent's call missed it (or both sources share an error) |
+| filtered | the same allele, but dipcall's own filter failed | the assembly is uncertain there |
+| nearby | no such allele, but a variant within 10 bases | a representation disagreement the normalisation did not reconcile |
+| absent | reference within 10 bases | the assembly does not support the child's call: a representation artefact or a false positive in the v4.2.1 child call, or an assembly error |
+
+The control uses the same trio, the same regions and the same code. It takes
+the child's heterozygous calls that exactly one parent carries, so the parent
+of origin is known from the trio alone.
+
+- **C1.** At least 97% of the control calls inside the diploid regions are
+  found as the same allele on exactly one haplotype.
+- **C2.** At least 99% of those are on the haplotype of the parent who
+  carries the allele.
+
+**Predictions.** The hypothesis is the one the trio note stated: most of the
+1,430 are representation artefacts, and the true de novos are the 60 to 100
+per genome the literature gives.
+
+- **P1.** father + mother is between 40 and 150. The range is wider than 60
+  to 100 because the three trusted-region sets cover part of the genome and
+  a v4.2.1 child call can miss a de novo.
+- **P2.** Among those, the paternal share is between 0.70 and 0.90.
+- **P3.** nearby + absent is at least half of the assessable candidates.
+- **P4.** both is under 5%.
+- **P5.** Of the father + mother candidates, at least 30% fall in NIST's
+  de novo and mosaic exclusion regions, if they are true de novos. This
+  would be an independent confirmation.
+
+**The rival reading.** If father + mother is well above 150 and the paternal
+share is near 0.5, the excess is inherited variation that the parents' v4.2.1
+calls missed, not artefacts on the child's side. P1 to P3 would then fail,
+and the note above would be wrong about where the excess comes from.
+
+**What would show the method wrong.** Any of these voids the reading of the
+candidates, and it is recorded as void rather than reinterpreted:
+
+- the candidate total is not 1,430;
+- C2 is below 95%, which means the haplotype labels are misread;
+- C1 is below 90%, which means absence from the assembly does not
+  discriminate at this normalisation.
+
+**The assembly is a benchmark too.** The v5.0q README says excluded regions
+remain for assembly errors, mosaic variants and places where the assembly
+could be aligned another way. A candidate that v4.2.1 calls and the assembly
+does not is a disagreement between two measurements. It is not proof that
+the child call is wrong. Counts are also reported for the subset inside the
+v5.0q benchmark regions, where NIST vouches for the assembly's calls. One
+effect is expected there. If the father + mother candidates are true de
+novos, they fall outside the benchmark regions more often than the control
+does, because NIST excluded known de novo and mosaic sites from them.
+
+**Result.** Filled in below after the run. It goes to
+`data/results/trio_q100_phase.json`, which holds counts per class and never
+a position, an allele or a genotype.
+
 ## Telomere from a BAM read by ranges (2026-09-12)
 
 GIAB's 300x Illumina BAM of HG002 on GRCh38 (601 GB, NCBI FTP over HTTPS,
