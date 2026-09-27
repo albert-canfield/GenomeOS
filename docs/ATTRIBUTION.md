@@ -6952,6 +6952,53 @@ the same night, and the checkout's removal guard refuses that without `--force`,
 does not use. The programs in `data/knowledge/compiled/` already carry both changes. The next
 recompile of the committed copy will pick them up.
 
+## Pre-registration: context in executable rules, one rule per element, gene and cell (R1, 2026-09-28)
+
+The external review of 2026-09-28 (ROADMAP section 5 item 11, R1) found two things. The compiler
+wrote the cell a CRISPRi screen silenced an element in only into evidence text ("silenced in
+K562"), so a rule measured in K562 ran in every simulated cell. And `measured.rule_links` kept one
+rule per element and gene, the strongest result across every cell that measured it, so two cells
+that disagreed became one number.
+
+**Route.** BioLang already has the condition form: a rule's `when: k = v` clause, which the
+network runtime honours through `Module.active_rules` (a rule whose `when` does not match the
+context is not integrated). Nothing new is added to the grammar's keys. The compiler writes
+`when: cell_type = <cell>`, the context key `measured.CONTEXT_KEY`. One addition is needed in
+the runtime: `cell_type = unknown` (`measured.CONTEXT_UNKNOWN`) must match no cell. Today a
+`when` value is compared by plain equality, so `unknown` would match a context that happened to
+be called "unknown"; the addition makes it match nothing, and the grammar's text says so.
+
+**Fixed before the build.**
+
+1. The review's acceptance tests, as it words them (`measured.R1_ACCEPTANCE`): a K562-specific
+   rule is inactive in HepG2; conflicting results from two cell types survive compilation and
+   round-trip serialisation (compiled text, parse, `Module.to_dict`, JSON, `from_dict`).
+2. A rule with no recorded context is written `when: cell_type = unknown`, never without a
+   `when`. That holds for measured rules (a pair with an empty cell) and for the predicted
+   AlphaGenome rules, which name the track's biosample in their evidence ("AlphaGenome deletion,
+   K562") and are gated on it the same way. A predicted rule whose track was not recorded
+   ("strongest track") gets `unknown`.
+3. The unit of a compiled experimental rule is one (element, gene, cell) observation
+   (`measured.RULE_UNIT`). Within one cell, the split rule of the audit above is kept: a link
+   with training support in that cell takes its action and strength from the training pairs
+   only, and a link held out in that cell is marked `HELDOUT_MARK`. An element-gene link
+   regulated in K562 (training) and in WTC11 (held-out) was one training rule and becomes two
+   rules, the WTC11 one marked.
+4. What still makes no rule: a measured null and a significant increase (the benchmark's
+   `Regulated` label excludes positive effects, and the audit above pinned that an increase
+   raises no rule). Where one cell's null or increase sits beside another cell's regulated link
+   for the same gene, the measured element's basis text names it cell by cell, because
+   `for_element` today keeps only the strongest outcome per gene and drops the other cell's.
+
+**Expected counts, with the direction.** Predicted rules: unchanged in number (one per element),
+all gated. Experimental rules: the same or more per program, never fewer, because one rule per
+(element, gene) becomes one per (element, gene, cell). Every program's `# test: rules ==` line
+moves by the same amount. A simulation run with no `cell_type` in its context now activates no
+compiled rule; before, every one ran. Old and new counts are reported with the result.
+
+**Falsifiers.** Any compiled rule without a `when`; an experimental rule count below the old one;
+a training rule whose strength changes; a HepG2 run that integrates a K562 rule.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

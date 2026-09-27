@@ -129,6 +129,22 @@ WELL_POWERED = 0.8
 #: a real measurement and stays in the program, but no feature, fit or label may read it: the
 #: held-out file is the benchmark's test set (docs/ATTRIBUTION.md, the split audit of 2026-09-28).
 HELDOUT_MARK = "held-out split, evaluation only, never a feature"
+
+# --- R1, context in executable rules (external review of 2026-09-28), fixed before the build ---------
+#: the runtime context key a compiled rule's `when` names: the identity of the simulated cell. The
+#: network runtime gates every rule by `when` against the context it is run in (`Module.active_rules`)
+CONTEXT_KEY = "cell_type"
+#: the `when` value of a rule whose measurement or prediction recorded no cell. The runtime matches it
+#: to no cell at all, so a missing context stays explicit and never becomes a universal rule
+CONTEXT_UNKNOWN = "unknown"
+#: what one compiled experimental rule stands for: one (element, gene, cell) observation, never the
+#: strongest result across cells. Within one cell the training pairs still set the number, as before
+RULE_UNIT = ("element", "gene", "cell")
+#: the review's acceptance tests, as it words them, pinned in tests/test_rule_context.py
+R1_ACCEPTANCE = (
+    "a K562-specific rule is inactive in HepG2",
+    "conflicting results from two cell types survive compilation and round-trip serialisation",
+)
 MPRA_ACTIVE = mpra.ACTIVE  # log2(RNA/DNA) at or above which a reporter element counts as active
 REACH = 200_000  # the longest measured interval any assay holds, for the bounded overlap scan
 
