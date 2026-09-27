@@ -1,0 +1,3795 @@
+{
+  "result": "node_containment_audit",
+  "date": "2026-09-27",
+  "denominator_census": {
+    "archive_rows": 961227,
+    "has_predicted": 612323,
+    "has_predicted_coding": 440377,
+    "predicted_coding_gene_in_annotation": 440377,
+    "predicted_coding_gene_protein_coding": 440377,
+    "has_confidence": 612323,
+    "predicted_coding_has_confidence": 440377,
+    "coding_named": 440377,
+    "any_named": 593765
+  },
+  "per_chromosome": [
+    {
+      "chrom": "chr1",
+      "length": 248956422,
+      "nodes": 1639,
+      "edges": 1638,
+      "median_node_length": 105227,
+      "min_node_length": 50012,
+      "census": {
+        "archive_rows": 88109,
+        "has_predicted": 57894,
+        "has_predicted_coding": 43681,
+        "predicted_coding_gene_in_annotation": 43681,
+        "predicted_coding_gene_protein_coding": 43681,
+        "has_confidence": 57894,
+        "predicted_coding_has_confidence": 43681
+      },
+      "coding_named": 43681,
+      "coding_inside": 34337,
+      "any_named": 56803,
+      "any_inside": 45931,
+      "controls": {
+        "uniform": {
+          "draws": [
+            34079,
+            33127,
+            33538,
+            33226,
+            33178,
+            33098,
+            33306,
+            34022,
+            33649,
+            34148,
+            33398,
+            33078,
+            32542,
+            33026,
+            33828,
+            33551,
+            33131,
+            33009,
+            33834,
+            33368
+          ],
+          "mean_inside": 33406.8,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 105196.65
+        },
+        "uniform_merged": {
+          "draws": [
+            34089,
+            34424,
+            33842,
+            34734,
+            34227,
+            34251,
+            34018,
+            33932,
+            34045,
+            34043,
+            33768,
+            33504,
+            33911,
+            34531,
+            33418,
+            33962,
+            34140,
+            33435,
+            34139,
+            33556
+          ],
+          "mean_inside": 33998.45,
+          "mean_nodes": 1237.6,
+          "mean_median_node_length": 154368.3
+        },
+        "circular": {
+          "draws": [
+            32226,
+            32483,
+            32913,
+            31989,
+            33068,
+            32332,
+            32424,
+            32453,
+            32035,
+            32758,
+            32762,
+            32384,
+            32575,
+            32964,
+            32494,
+            33001,
+            31600,
+            31372,
+            31864,
+            32285
+          ],
+          "mean_inside": 32399.1,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 105472.35
+        },
+        "count_matched": {
+          "draws": [
+            32133,
+            31543,
+            32053,
+            32396,
+            31678,
+            32176,
+            31269,
+            31851,
+            32221,
+            31944,
+            31412,
+            31916,
+            32572,
+            31795,
+            31374,
+            31544,
+            32850,
+            31984,
+            31712,
+            31436
+          ],
+          "mean_inside": 31892.95,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 118843.5
+        }
+      }
+    },
+    {
+      "chrom": "chr2",
+      "length": 242193529,
+      "nodes": 1654,
+      "edges": 1653,
+      "median_node_length": 109825,
+      "min_node_length": 50061,
+      "census": {
+        "archive_rows": 79639,
+        "has_predicted": 48710,
+        "has_predicted_coding": 32917,
+        "predicted_coding_gene_in_annotation": 32917,
+        "predicted_coding_gene_protein_coding": 32917,
+        "has_confidence": 48710,
+        "predicted_coding_has_confidence": 32917
+      },
+      "coding_named": 32917,
+      "coding_inside": 24406,
+      "any_named": 46873,
+      "any_inside": 35116,
+      "controls": {
+        "uniform": {
+          "draws": [
+            23402,
+            22855,
+            23049,
+            22721,
+            23034,
+            23386,
+            23298,
+            23520,
+            23112,
+            22778,
+            22822,
+            23591,
+            23436,
+            23686,
+            23233,
+            23692,
+            23160,
+            22646,
+            23502,
+            23073
+          ],
+          "mean_inside": 23199.8,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 101447.1
+        },
+        "uniform_merged": {
+          "draws": [
+            23594,
+            23319,
+            24232,
+            23388,
+            23716,
+            24272,
+            23547,
+            24217,
+            23980,
+            24175,
+            24173,
+            23850,
+            23489,
+            23741,
+            23752,
+            24510,
+            24488,
+            23321,
+            23756,
+            23360
+          ],
+          "mean_inside": 23844.0,
+          "mean_nodes": 1234.95,
+          "mean_median_node_length": 151324.65
+        },
+        "circular": {
+          "draws": [
+            22295,
+            21533,
+            22293,
+            21754,
+            22109,
+            21794,
+            22111,
+            21532,
+            21607,
+            21662,
+            22271,
+            21814,
+            21943,
+            21851,
+            22304,
+            21300,
+            21790,
+            22070,
+            21787,
+            21589
+          ],
+          "mean_inside": 21870.45,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 109809.75
+        },
+        "count_matched": {
+          "draws": [
+            21761,
+            21497,
+            21354,
+            22335,
+            21354,
+            21658,
+            22106,
+            21586,
+            21166,
+            21235,
+            21977,
+            21474,
+            21883,
+            21615,
+            21304,
+            20883,
+            21765,
+            21540,
+            21402,
+            21588
+          ],
+          "mean_inside": 21574.15,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 115892.7
+        }
+      }
+    },
+    {
+      "chrom": "chr3",
+      "length": 198295559,
+      "nodes": 1441,
+      "edges": 1440,
+      "median_node_length": 102642,
+      "min_node_length": 27518,
+      "census": {
+        "archive_rows": 62502,
+        "has_predicted": 38698,
+        "has_predicted_coding": 27682,
+        "predicted_coding_gene_in_annotation": 27682,
+        "predicted_coding_gene_protein_coding": 27682,
+        "has_confidence": 38698,
+        "predicted_coding_has_confidence": 27682
+      },
+      "coding_named": 27682,
+      "coding_inside": 19120,
+      "any_named": 37740,
+      "any_inside": 27188,
+      "controls": {
+        "uniform": {
+          "draws": [
+            17719,
+            17446,
+            18205,
+            17582,
+            17697,
+            17722,
+            17778,
+            18229,
+            17581,
+            18140,
+            17857,
+            17368,
+            17587,
+            17898,
+            17702,
+            18048,
+            17365,
+            17316,
+            18327,
+            18076
+          ],
+          "mean_inside": 17782.15,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 95363.4
+        },
+        "uniform_merged": {
+          "draws": [
+            18515,
+            18441,
+            18458,
+            18270,
+            18251,
+            17935,
+            18583,
+            18889,
+            17973,
+            18448,
+            18444,
+            18584,
+            18134,
+            18244,
+            18341,
+            17580,
+            18693,
+            18727,
+            18387,
+            17844
+          ],
+          "mean_inside": 18337.05,
+          "mean_nodes": 1060.6,
+          "mean_median_node_length": 145353.05
+        },
+        "circular": {
+          "draws": [
+            16952,
+            16582,
+            16515,
+            16726,
+            16663,
+            17046,
+            16573,
+            16921,
+            17019,
+            16592,
+            17071,
+            16584,
+            16617,
+            16858,
+            17206,
+            16343,
+            16265,
+            16246,
+            16814,
+            16892
+          ],
+          "mean_inside": 16724.25,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 102654.65
+        },
+        "count_matched": {
+          "draws": [
+            16806,
+            16962,
+            16485,
+            16721,
+            16653,
+            16206,
+            16501,
+            16342,
+            16842,
+            16623,
+            16783,
+            16691,
+            16422,
+            16313,
+            16811,
+            16637,
+            17026,
+            16540,
+            16630,
+            16664
+          ],
+          "mean_inside": 16632.9,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 109680.4
+        }
+      }
+    },
+    {
+      "chrom": "chr4",
+      "length": 190214555,
+      "nodes": 1322,
+      "edges": 1321,
+      "median_node_length": 111151,
+      "min_node_length": 50023,
+      "census": {
+        "archive_rows": 46124,
+        "has_predicted": 28778,
+        "has_predicted_coding": 20646,
+        "predicted_coding_gene_in_annotation": 20646,
+        "predicted_coding_gene_protein_coding": 20646,
+        "has_confidence": 28778,
+        "predicted_coding_has_confidence": 20646
+      },
+      "coding_named": 20646,
+      "coding_inside": 14461,
+      "any_named": 28054,
+      "any_inside": 20062,
+      "controls": {
+        "uniform": {
+          "draws": [
+            13530,
+            13911,
+            13860,
+            13510,
+            14275,
+            14051,
+            13488,
+            13986,
+            13923,
+            13199,
+            13752,
+            14258,
+            13761,
+            13842,
+            13417,
+            13496,
+            14289,
+            14014,
+            13752,
+            13879
+          ],
+          "mean_inside": 13809.65,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 98956.1
+        },
+        "uniform_merged": {
+          "draws": [
+            14205,
+            14242,
+            14086,
+            14024,
+            14506,
+            14458,
+            14068,
+            13880,
+            14286,
+            14074,
+            13990,
+            14150,
+            14223,
+            13479,
+            13757,
+            13888,
+            13738,
+            14270,
+            13909,
+            14465
+          ],
+          "mean_inside": 14084.9,
+          "mean_nodes": 983.8,
+          "mean_median_node_length": 149615.9
+        },
+        "circular": {
+          "draws": [
+            12872,
+            12729,
+            12617,
+            13423,
+            12898,
+            12997,
+            12954,
+            12638,
+            13048,
+            13322,
+            12903,
+            12860,
+            13110,
+            12358,
+            13013,
+            12675,
+            12414,
+            12332,
+            13073,
+            12645
+          ],
+          "mean_inside": 12844.05,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 111036.25
+        },
+        "count_matched": {
+          "draws": [
+            12530,
+            12834,
+            12912,
+            12896,
+            12826,
+            12505,
+            12930,
+            12542,
+            12788,
+            12742,
+            12515,
+            13103,
+            12678,
+            12656,
+            13109,
+            12991,
+            12570,
+            12891,
+            12448,
+            12847
+          ],
+          "mean_inside": 12765.65,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 113772.2
+        }
+      }
+    },
+    {
+      "chrom": "chr5",
+      "length": 181538259,
+      "nodes": 1245,
+      "edges": 1244,
+      "median_node_length": 106668,
+      "min_node_length": 41275,
+      "census": {
+        "archive_rows": 53114,
+        "has_predicted": 32993,
+        "has_predicted_coding": 22772,
+        "predicted_coding_gene_in_annotation": 22772,
+        "predicted_coding_gene_protein_coding": 22772,
+        "has_confidence": 32993,
+        "predicted_coding_has_confidence": 22772
+      },
+      "coding_named": 22772,
+      "coding_inside": 15907,
+      "any_named": 31849,
+      "any_inside": 23070,
+      "controls": {
+        "uniform": {
+          "draws": [
+            15322,
+            15002,
+            15312,
+            15146,
+            15476,
+            14862,
+            15307,
+            14975,
+            15222,
+            15046,
+            15403,
+            15383,
+            14811,
+            14454,
+            15243,
+            15672,
+            15487,
+            15455,
+            15468,
+            14435
+          ],
+          "mean_inside": 15174.05,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 101240.1
+        },
+        "uniform_merged": {
+          "draws": [
+            15669,
+            16029,
+            15649,
+            15608,
+            16429,
+            16140,
+            15913,
+            15955,
+            16051,
+            15571,
+            15071,
+            16136,
+            15936,
+            16113,
+            16088,
+            15630,
+            16157,
+            16088,
+            15670,
+            15765
+          ],
+          "mean_inside": 15883.4,
+          "mean_nodes": 933.9,
+          "mean_median_node_length": 150806.8
+        },
+        "circular": {
+          "draws": [
+            14606,
+            14158,
+            14240,
+            14104,
+            15080,
+            14381,
+            14201,
+            14881,
+            14251,
+            14823,
+            14707,
+            14876,
+            14417,
+            13747,
+            14174,
+            14749,
+            14714,
+            14658,
+            14940,
+            14192
+          ],
+          "mean_inside": 14494.95,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 106602.9
+        },
+        "count_matched": {
+          "draws": [
+            14887,
+            14256,
+            14406,
+            14275,
+            14029,
+            14214,
+            13846,
+            13980,
+            14216,
+            14343,
+            14930,
+            13786,
+            14833,
+            14702,
+            14403,
+            14581,
+            14472,
+            13881,
+            14989,
+            13889
+          ],
+          "mean_inside": 14345.9,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 115122.95
+        }
+      }
+    },
+    {
+      "chrom": "chr6",
+      "length": 170805979,
+      "nodes": 1180,
+      "edges": 1179,
+      "median_node_length": 112246,
+      "min_node_length": 50022,
+      "census": {
+        "archive_rows": 56945,
+        "has_predicted": 35160,
+        "has_predicted_coding": 23769,
+        "predicted_coding_gene_in_annotation": 23769,
+        "predicted_coding_gene_protein_coding": 23769,
+        "has_confidence": 35160,
+        "predicted_coding_has_confidence": 23769
+      },
+      "coding_named": 23769,
+      "coding_inside": 17452,
+      "any_named": 33908,
+      "any_inside": 25898,
+      "controls": {
+        "uniform": {
+          "draws": [
+            16351,
+            16713,
+            16828,
+            17030,
+            16919,
+            16675,
+            16335,
+            16530,
+            16563,
+            16233,
+            16963,
+            17139,
+            16837,
+            16470,
+            17260,
+            17095,
+            16089,
+            16548,
+            16324,
+            17062
+          ],
+          "mean_inside": 16698.2,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 100026.95
+        },
+        "uniform_merged": {
+          "draws": [
+            17000,
+            17192,
+            16901,
+            17046,
+            16961,
+            16697,
+            16969,
+            17150,
+            17055,
+            17030,
+            17010,
+            17299,
+            16405,
+            16773,
+            17247,
+            17002,
+            17255,
+            17912,
+            16712,
+            17297
+          ],
+          "mean_inside": 17045.65,
+          "mean_nodes": 881.0,
+          "mean_median_node_length": 150306.35
+        },
+        "circular": {
+          "draws": [
+            15653,
+            15456,
+            15507,
+            15598,
+            15706,
+            15593,
+            15505,
+            15724,
+            15872,
+            15755,
+            15870,
+            16145,
+            15993,
+            16129,
+            16223,
+            15950,
+            15311,
+            15840,
+            15858,
+            15791
+          ],
+          "mean_inside": 15773.95,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 111945.35
+        },
+        "count_matched": {
+          "draws": [
+            15532,
+            15735,
+            15835,
+            15947,
+            15806,
+            15785,
+            15372,
+            16281,
+            15538,
+            15605,
+            15696,
+            15626,
+            15284,
+            15403,
+            15815,
+            16241,
+            15961,
+            15511,
+            16123,
+            16157
+          ],
+          "mean_inside": 15762.65,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 114237.45
+        }
+      }
+    },
+    {
+      "chrom": "chr7",
+      "length": 159345973,
+      "nodes": 1133,
+      "edges": 1132,
+      "median_node_length": 105445,
+      "min_node_length": 45697,
+      "census": {
+        "archive_rows": 49296,
+        "has_predicted": 30910,
+        "has_predicted_coding": 22596,
+        "predicted_coding_gene_in_annotation": 22596,
+        "predicted_coding_gene_protein_coding": 22596,
+        "has_confidence": 30910,
+        "predicted_coding_has_confidence": 22596
+      },
+      "coding_named": 22596,
+      "coding_inside": 15390,
+      "any_named": 30213,
+      "any_inside": 21873,
+      "controls": {
+        "uniform": {
+          "draws": [
+            15395,
+            14531,
+            15106,
+            14886,
+            15742,
+            15528,
+            15535,
+            14937,
+            15149,
+            15324,
+            14875,
+            15396,
+            15450,
+            15095,
+            15312,
+            14919,
+            15223,
+            15150,
+            14528,
+            15144
+          ],
+          "mean_inside": 15161.25,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 97123.35
+        },
+        "uniform_merged": {
+          "draws": [
+            15530,
+            15369,
+            15199,
+            15558,
+            15283,
+            15645,
+            15117,
+            15386,
+            15549,
+            14666,
+            15470,
+            15112,
+            15799,
+            15179,
+            15297,
+            15377,
+            15330,
+            15793,
+            15980,
+            14934
+          ],
+          "mean_inside": 15378.65,
+          "mean_nodes": 837.75,
+          "mean_median_node_length": 146948.2
+        },
+        "circular": {
+          "draws": [
+            14011,
+            14091,
+            14157,
+            13916,
+            14037,
+            14147,
+            14296,
+            13752,
+            13666,
+            14190,
+            14344,
+            14111,
+            14433,
+            14075,
+            14483,
+            14492,
+            14488,
+            13987,
+            13610,
+            14306
+          ],
+          "mean_inside": 14129.6,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 105573.5
+        },
+        "count_matched": {
+          "draws": [
+            14242,
+            14440,
+            14208,
+            14053,
+            14137,
+            14298,
+            14099,
+            13783,
+            13719,
+            13993,
+            14344,
+            13906,
+            13785,
+            14210,
+            13904,
+            14051,
+            14033,
+            14124,
+            14029,
+            14016
+          ],
+          "mean_inside": 14068.7,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 111668.05
+        }
+      }
+    },
+    {
+      "chrom": "chr8",
+      "length": 145138636,
+      "nodes": 1112,
+      "edges": 1111,
+      "median_node_length": 96380,
+      "min_node_length": 50027,
+      "census": {
+        "archive_rows": 45332,
+        "has_predicted": 27476,
+        "has_predicted_coding": 18552,
+        "predicted_coding_gene_in_annotation": 18552,
+        "predicted_coding_gene_protein_coding": 18552,
+        "has_confidence": 27476,
+        "predicted_coding_has_confidence": 18552
+      },
+      "coding_named": 18552,
+      "coding_inside": 13129,
+      "any_named": 26342,
+      "any_inside": 19354,
+      "controls": {
+        "uniform": {
+          "draws": [
+            12096,
+            12807,
+            12276,
+            11562,
+            12355,
+            12781,
+            12177,
+            12304,
+            12454,
+            12743,
+            12426,
+            12360,
+            12301,
+            12491,
+            12744,
+            11943,
+            12629,
+            12459,
+            12426,
+            12518
+          ],
+          "mean_inside": 12392.6,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 91167.75
+        },
+        "uniform_merged": {
+          "draws": [
+            12333,
+            12724,
+            12448,
+            12622,
+            12498,
+            12343,
+            12750,
+            11690,
+            12584,
+            12589,
+            12642,
+            12897,
+            12561,
+            12633,
+            12575,
+            12882,
+            12817,
+            12249,
+            12539,
+            12690
+          ],
+          "mean_inside": 12553.3,
+          "mean_nodes": 806.2,
+          "mean_median_node_length": 140163.05
+        },
+        "circular": {
+          "draws": [
+            11017,
+            11949,
+            11466,
+            11423,
+            11370,
+            11165,
+            11341,
+            11793,
+            10697,
+            11937,
+            11145,
+            11710,
+            11395,
+            11365,
+            11182,
+            11253,
+            11386,
+            11549,
+            11457,
+            11339
+          ],
+          "mean_inside": 11396.95,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 96565.9
+        },
+        "count_matched": {
+          "draws": [
+            11340,
+            11468,
+            11154,
+            10922,
+            11377,
+            11409,
+            11553,
+            11258,
+            11337,
+            11408,
+            11244,
+            11584,
+            11370,
+            11538,
+            10810,
+            10900,
+            11756,
+            11164,
+            11740,
+            11341
+          ],
+          "mean_inside": 11333.65,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 104704.65
+        }
+      }
+    },
+    {
+      "chrom": "chr9",
+      "length": 138394717,
+      "nodes": 814,
+      "edges": 813,
+      "median_node_length": 105075,
+      "min_node_length": 50001,
+      "census": {
+        "archive_rows": 41640,
+        "has_predicted": 26138,
+        "has_predicted_coding": 19272,
+        "predicted_coding_gene_in_annotation": 19272,
+        "predicted_coding_gene_protein_coding": 19272,
+        "has_confidence": 26138,
+        "predicted_coding_has_confidence": 19272
+      },
+      "coding_named": 19272,
+      "coding_inside": 14448,
+      "any_named": 25613,
+      "any_inside": 19763,
+      "controls": {
+        "uniform": {
+          "draws": [
+            13899,
+            14529,
+            14338,
+            13941,
+            14369,
+            14468,
+            14537,
+            14575,
+            14073,
+            14397,
+            14070,
+            14410,
+            14348,
+            13882,
+            14214,
+            13815,
+            14065,
+            14065,
+            14549,
+            14201
+          ],
+          "mean_inside": 14237.25,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 118158.4
+        },
+        "uniform_merged": {
+          "draws": [
+            14850,
+            14528,
+            13696,
+            14248,
+            14746,
+            14442,
+            14598,
+            14418,
+            14467,
+            15058,
+            14403,
+            14092,
+            14872,
+            14145,
+            14728,
+            14308,
+            14158,
+            14637,
+            14254,
+            14442
+          ],
+          "mean_inside": 14454.5,
+          "mean_nodes": 630.95,
+          "mean_median_node_length": 168311.85
+        },
+        "circular": {
+          "draws": [
+            13824,
+            14112,
+            14535,
+            14192,
+            14075,
+            12903,
+            14362,
+            13903,
+            14013,
+            14860,
+            13866,
+            14770,
+            13243,
+            14150,
+            14197,
+            14557,
+            14247,
+            13997,
+            13620,
+            12647
+          ],
+          "mean_inside": 14003.65,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 104680.4
+        },
+        "count_matched": {
+          "draws": [
+            13679,
+            13507,
+            12856,
+            13730,
+            13639,
+            13543,
+            14088,
+            13612,
+            14256,
+            13686,
+            13608,
+            13557,
+            14013,
+            13771,
+            13112,
+            13465,
+            13379,
+            13143,
+            13845,
+            13506
+          ],
+          "mean_inside": 13599.75,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 132924.4
+        }
+      }
+    },
+    {
+      "chrom": "chr10",
+      "length": 133797422,
+      "nodes": 922,
+      "edges": 921,
+      "median_node_length": 104282,
+      "min_node_length": 50030,
+      "census": {
+        "archive_rows": 47419,
+        "has_predicted": 28865,
+        "has_predicted_coding": 21023,
+        "predicted_coding_gene_in_annotation": 21023,
+        "predicted_coding_gene_protein_coding": 21023,
+        "has_confidence": 28865,
+        "predicted_coding_has_confidence": 21023
+      },
+      "coding_named": 21023,
+      "coding_inside": 15644,
+      "any_named": 28134,
+      "any_inside": 21626,
+      "controls": {
+        "uniform": {
+          "draws": [
+            13583,
+            13741,
+            14041,
+            13461,
+            14060,
+            14834,
+            14188,
+            13424,
+            13713,
+            13884,
+            14053,
+            14670,
+            14642,
+            13978,
+            13386,
+            14652,
+            14406,
+            13879,
+            13817,
+            14508
+          ],
+          "mean_inside": 14046.0,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 100813.7
+        },
+        "uniform_merged": {
+          "draws": [
+            14588,
+            14730,
+            14835,
+            15039,
+            14342,
+            14314,
+            14408,
+            15136,
+            14563,
+            14464,
+            14592,
+            14347,
+            14382,
+            14569,
+            14454,
+            14839,
+            14682,
+            14278,
+            14517,
+            14732
+          ],
+          "mean_inside": 14590.55,
+          "mean_nodes": 689.0,
+          "mean_median_node_length": 150754.15
+        },
+        "circular": {
+          "draws": [
+            13652,
+            13016,
+            13058,
+            13424,
+            13863,
+            13444,
+            13426,
+            13380,
+            13257,
+            13201,
+            13108,
+            13374,
+            13380,
+            13484,
+            13443,
+            13517,
+            13492,
+            13494,
+            13513,
+            13421
+          ],
+          "mean_inside": 13397.35,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 104343.5
+        },
+        "count_matched": {
+          "draws": [
+            13092,
+            13079,
+            13814,
+            13462,
+            13564,
+            13429,
+            13647,
+            13310,
+            13494,
+            13438,
+            13493,
+            12989,
+            13179,
+            12536,
+            13378,
+            12882,
+            12701,
+            12953,
+            13059,
+            13013
+          ],
+          "mean_inside": 13225.6,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 114636.45
+        }
+      }
+    },
+    {
+      "chrom": "chr11",
+      "length": 135086622,
+      "nodes": 947,
+      "edges": 946,
+      "median_node_length": 102462,
+      "min_node_length": 50036,
+      "census": {
+        "archive_rows": 48380,
+        "has_predicted": 33584,
+        "has_predicted_coding": 25731,
+        "predicted_coding_gene_in_annotation": 25731,
+        "predicted_coding_gene_protein_coding": 25731,
+        "has_confidence": 33584,
+        "predicted_coding_has_confidence": 25731
+      },
+      "coding_named": 25731,
+      "coding_inside": 20276,
+      "any_named": 32644,
+      "any_inside": 26172,
+      "controls": {
+        "uniform": {
+          "draws": [
+            18687,
+            18581,
+            18506,
+            18131,
+            18340,
+            19106,
+            18556,
+            18819,
+            19203,
+            18903,
+            18991,
+            18651,
+            19040,
+            19227,
+            18442,
+            18976,
+            18529,
+            18871,
+            18168,
+            18186
+          ],
+          "mean_inside": 18695.65,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 98400.2
+        },
+        "uniform_merged": {
+          "draws": [
+            19141,
+            18984,
+            18711,
+            19230,
+            18947,
+            19296,
+            19899,
+            18957,
+            19057,
+            19117,
+            19717,
+            19196,
+            18803,
+            19193,
+            18664,
+            19063,
+            19321,
+            19042,
+            19170,
+            19367
+          ],
+          "mean_inside": 19143.75,
+          "mean_nodes": 703.8,
+          "mean_median_node_length": 148598.15
+        },
+        "circular": {
+          "draws": [
+            17900,
+            18469,
+            18612,
+            17762,
+            18150,
+            18448,
+            17464,
+            17981,
+            18012,
+            17820,
+            18075,
+            18058,
+            18121,
+            17943,
+            18114,
+            18348,
+            18342,
+            18216,
+            18074,
+            18545
+          ],
+          "mean_inside": 18122.7,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 102420.45
+        },
+        "count_matched": {
+          "draws": [
+            17627,
+            17523,
+            18391,
+            17255,
+            17590,
+            17774,
+            17687,
+            18071,
+            17591,
+            18403,
+            17722,
+            17674,
+            17228,
+            17388,
+            17586,
+            17611,
+            17651,
+            17804,
+            17498,
+            18084
+          ],
+          "mean_inside": 17707.9,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 111637.4
+        }
+      }
+    },
+    {
+      "chrom": "chr12",
+      "length": 133275309,
+      "nodes": 922,
+      "edges": 921,
+      "median_node_length": 102441,
+      "min_node_length": 47883,
+      "census": {
+        "archive_rows": 46582,
+        "has_predicted": 31626,
+        "has_predicted_coding": 22814,
+        "predicted_coding_gene_in_annotation": 22814,
+        "predicted_coding_gene_protein_coding": 22814,
+        "has_confidence": 31626,
+        "predicted_coding_has_confidence": 22814
+      },
+      "coding_named": 22814,
+      "coding_inside": 17241,
+      "any_named": 30232,
+      "any_inside": 23499,
+      "controls": {
+        "uniform": {
+          "draws": [
+            16643,
+            16584,
+            16506,
+            16322,
+            16041,
+            16012,
+            16710,
+            15801,
+            16557,
+            16260,
+            16297,
+            16202,
+            16426,
+            16612,
+            16281,
+            16753,
+            16656,
+            16420,
+            16045,
+            16913
+          ],
+          "mean_inside": 16402.05,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 99998.8
+        },
+        "uniform_merged": {
+          "draws": [
+            16969,
+            17222,
+            16251,
+            16801,
+            17063,
+            16759,
+            16892,
+            17128,
+            16776,
+            16525,
+            16390,
+            16874,
+            17304,
+            16736,
+            17001,
+            16892,
+            16816,
+            16264,
+            16668,
+            17225
+          ],
+          "mean_inside": 16827.8,
+          "mean_nodes": 689.65,
+          "mean_median_node_length": 150272.5
+        },
+        "circular": {
+          "draws": [
+            15020,
+            15948,
+            15460,
+            16208,
+            15406,
+            15714,
+            15214,
+            15658,
+            15665,
+            15742,
+            15831,
+            15775,
+            15290,
+            15394,
+            15534,
+            15466,
+            15301,
+            15880,
+            15882,
+            15419
+          ],
+          "mean_inside": 15590.35,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 102448.45
+        },
+        "count_matched": {
+          "draws": [
+            15627,
+            15486,
+            15776,
+            15589,
+            15174,
+            14800,
+            15327,
+            15450,
+            15244,
+            15332,
+            15530,
+            15561,
+            15964,
+            15396,
+            15581,
+            15092,
+            15519,
+            15337,
+            16008,
+            15465
+          ],
+          "mean_inside": 15462.9,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 114113.15
+        }
+      }
+    },
+    {
+      "chrom": "chr13",
+      "length": 114364328,
+      "nodes": 662,
+      "edges": 661,
+      "median_node_length": 112335,
+      "min_node_length": 50033,
+      "census": {
+        "archive_rows": 25634,
+        "has_predicted": 14885,
+        "has_predicted_coding": 9711,
+        "predicted_coding_gene_in_annotation": 9711,
+        "predicted_coding_gene_protein_coding": 9711,
+        "has_confidence": 14885,
+        "predicted_coding_has_confidence": 9711
+      },
+      "coding_named": 9711,
+      "coding_inside": 6641,
+      "any_named": 14716,
+      "any_inside": 10670,
+      "controls": {
+        "uniform": {
+          "draws": [
+            6672,
+            6650,
+            6797,
+            6910,
+            6858,
+            6859,
+            6736,
+            6537,
+            6821,
+            6803,
+            6646,
+            6564,
+            7035,
+            6997,
+            6782,
+            6857,
+            6777,
+            6648,
+            6553,
+            6767
+          ],
+          "mean_inside": 6763.45,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 119722.55
+        },
+        "uniform_merged": {
+          "draws": [
+            6955,
+            6817,
+            6871,
+            7076,
+            7051,
+            6841,
+            6884,
+            7049,
+            6824,
+            6693,
+            6897,
+            6699,
+            6872,
+            6859,
+            7111,
+            6981,
+            7017,
+            6954,
+            7147,
+            6941
+          ],
+          "mean_inside": 6926.95,
+          "mean_nodes": 514.8,
+          "mean_median_node_length": 169062.45
+        },
+        "circular": {
+          "draws": [
+            6234,
+            7010,
+            6977,
+            6022,
+            7393,
+            6404,
+            6469,
+            6936,
+            6388,
+            6699,
+            6239,
+            6339,
+            6023,
+            6660,
+            6391,
+            6526,
+            5923,
+            6467,
+            6738,
+            6455
+          ],
+          "mean_inside": 6514.65,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 111147.45
+        },
+        "count_matched": {
+          "draws": [
+            6430,
+            6449,
+            6392,
+            6523,
+            6457,
+            6447,
+            6586,
+            6494,
+            6553,
+            6075,
+            6507,
+            6528,
+            6262,
+            6291,
+            6231,
+            6536,
+            6541,
+            6392,
+            6494,
+            6467
+          ],
+          "mean_inside": 6432.75,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 134324.45
+        }
+      }
+    },
+    {
+      "chrom": "chr14",
+      "length": 107043718,
+      "nodes": 634,
+      "edges": 633,
+      "median_node_length": 105143,
+      "min_node_length": 50052,
+      "census": {
+        "archive_rows": 31794,
+        "has_predicted": 19805,
+        "has_predicted_coding": 13385,
+        "predicted_coding_gene_in_annotation": 13385,
+        "predicted_coding_gene_protein_coding": 13385,
+        "has_confidence": 19805,
+        "predicted_coding_has_confidence": 13385
+      },
+      "coding_named": 13385,
+      "coding_inside": 10334,
+      "any_named": 18985,
+      "any_inside": 14943,
+      "controls": {
+        "uniform": {
+          "draws": [
+            10345,
+            9921,
+            10406,
+            10000,
+            10139,
+            9971,
+            10284,
+            9819,
+            9866,
+            9923,
+            10124,
+            10110,
+            10230,
+            10115,
+            10194,
+            10317,
+            10716,
+            10151,
+            10222,
+            10367
+          ],
+          "mean_inside": 10161.0,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 116234.95
+        },
+        "uniform_merged": {
+          "draws": [
+            10482,
+            10221,
+            10571,
+            10535,
+            10375,
+            10025,
+            10353,
+            10482,
+            10246,
+            10246,
+            10254,
+            10082,
+            10342,
+            10584,
+            10396,
+            10371,
+            10231,
+            10235,
+            10322,
+            10647
+          ],
+          "mean_inside": 10350.0,
+          "mean_nodes": 492.7,
+          "mean_median_node_length": 166827.25
+        },
+        "circular": {
+          "draws": [
+            9606,
+            10116,
+            9348,
+            9597,
+            9379,
+            10227,
+            9584,
+            10285,
+            10120,
+            8931,
+            9837,
+            10007,
+            10450,
+            9689,
+            9798,
+            10068,
+            9425,
+            10369,
+            10166,
+            10304
+          ],
+          "mean_inside": 9865.3,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 105021.8
+        },
+        "count_matched": {
+          "draws": [
+            9452,
+            9794,
+            9375,
+            9925,
+            9950,
+            9708,
+            9776,
+            9603,
+            9576,
+            9486,
+            9683,
+            9818,
+            9962,
+            9574,
+            9593,
+            9709,
+            9905,
+            9688,
+            9932,
+            9820
+          ],
+          "mean_inside": 9716.45,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 132350.75
+        }
+      }
+    },
+    {
+      "chrom": "chr15",
+      "length": 101991189,
+      "nodes": 543,
+      "edges": 542,
+      "median_node_length": 111551,
+      "min_node_length": 50298,
+      "census": {
+        "archive_rows": 31058,
+        "has_predicted": 20831,
+        "has_predicted_coding": 14474,
+        "predicted_coding_gene_in_annotation": 14474,
+        "predicted_coding_gene_protein_coding": 14474,
+        "has_confidence": 20831,
+        "predicted_coding_has_confidence": 14474
+      },
+      "coding_named": 14474,
+      "coding_inside": 10667,
+      "any_named": 20194,
+      "any_inside": 15504,
+      "controls": {
+        "uniform": {
+          "draws": [
+            11093,
+            10674,
+            10819,
+            10655,
+            10943,
+            10751,
+            11080,
+            11182,
+            10809,
+            10383,
+            10956,
+            10714,
+            10778,
+            10583,
+            10940,
+            10597,
+            10654,
+            10641,
+            11413,
+            10369
+          ],
+          "mean_inside": 10801.7,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 129931.6
+        },
+        "uniform_merged": {
+          "draws": [
+            11030,
+            10829,
+            10737,
+            10814,
+            10917,
+            11085,
+            11221,
+            10694,
+            11200,
+            10726,
+            10879,
+            10997,
+            11058,
+            10789,
+            11397,
+            11081,
+            11029,
+            11256,
+            11142,
+            10818
+          ],
+          "mean_inside": 10984.95,
+          "mean_nodes": 429.15,
+          "mean_median_node_length": 180699.15
+        },
+        "circular": {
+          "draws": [
+            11166,
+            10734,
+            11032,
+            10950,
+            10989,
+            10481,
+            11187,
+            10588,
+            11551,
+            10863,
+            9798,
+            10849,
+            11240,
+            10670,
+            10855,
+            9733,
+            10820,
+            10923,
+            10882,
+            10510
+          ],
+          "mean_inside": 10791.05,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 111643.65
+        },
+        "count_matched": {
+          "draws": [
+            10110,
+            10679,
+            10352,
+            10332,
+            10233,
+            10333,
+            10420,
+            10420,
+            10865,
+            10621,
+            10198,
+            10043,
+            10753,
+            10188,
+            10824,
+            10419,
+            10687,
+            10328,
+            10288,
+            10526
+          ],
+          "mean_inside": 10430.95,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 145133.95
+        }
+      }
+    },
+    {
+      "chrom": "chr16",
+      "length": 90338345,
+      "nodes": 563,
+      "edges": 562,
+      "median_node_length": 107995,
+      "min_node_length": 50078,
+      "census": {
+        "archive_rows": 32314,
+        "has_predicted": 20803,
+        "has_predicted_coding": 14799,
+        "predicted_coding_gene_in_annotation": 14799,
+        "predicted_coding_gene_protein_coding": 14799,
+        "has_confidence": 20803,
+        "predicted_coding_has_confidence": 14799
+      },
+      "coding_named": 14799,
+      "coding_inside": 12090,
+      "any_named": 19927,
+      "any_inside": 16554,
+      "controls": {
+        "uniform": {
+          "draws": [
+            11747,
+            12090,
+            11496,
+            11787,
+            12274,
+            11605,
+            12370,
+            12102,
+            11582,
+            11611,
+            11976,
+            11635,
+            11657,
+            11684,
+            11819,
+            11685,
+            12007,
+            11744,
+            11744,
+            11871
+          ],
+          "mean_inside": 11824.3,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 112111.9
+        },
+        "uniform_merged": {
+          "draws": [
+            11833,
+            12322,
+            12257,
+            12362,
+            11998,
+            11874,
+            11717,
+            12367,
+            12025,
+            11667,
+            12006,
+            12162,
+            11673,
+            11942,
+            11752,
+            11875,
+            12343,
+            11773,
+            12248,
+            11918
+          ],
+          "mean_inside": 12005.7,
+          "mean_nodes": 430.35,
+          "mean_median_node_length": 161865.05
+        },
+        "circular": {
+          "draws": [
+            11456,
+            11720,
+            11777,
+            11513,
+            12031,
+            11735,
+            11690,
+            11211,
+            11657,
+            12377,
+            11972,
+            11890,
+            10706,
+            11858,
+            11850,
+            12010,
+            12019,
+            11736,
+            11867,
+            11603
+          ],
+          "mean_inside": 11733.9,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 107448.15
+        },
+        "count_matched": {
+          "draws": [
+            11472,
+            11553,
+            11857,
+            11217,
+            11617,
+            11160,
+            11545,
+            11717,
+            11570,
+            11540,
+            11427,
+            11337,
+            11125,
+            11273,
+            11448,
+            11281,
+            11272,
+            11439,
+            11499,
+            11220
+          ],
+          "mean_inside": 11428.45,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 125777.65
+        }
+      }
+    },
+    {
+      "chrom": "chr17",
+      "length": 83257441,
+      "nodes": 546,
+      "edges": 545,
+      "median_node_length": 111803,
+      "min_node_length": 50043,
+      "census": {
+        "archive_rows": 41396,
+        "has_predicted": 28330,
+        "has_predicted_coding": 21608,
+        "predicted_coding_gene_in_annotation": 21608,
+        "predicted_coding_gene_protein_coding": 21608,
+        "has_confidence": 28330,
+        "predicted_coding_has_confidence": 21608
+      },
+      "coding_named": 21608,
+      "coding_inside": 18573,
+      "any_named": 27501,
+      "any_inside": 23797,
+      "controls": {
+        "uniform": {
+          "draws": [
+            17495,
+            17564,
+            17443,
+            17329,
+            17348,
+            17701,
+            17143,
+            18097,
+            17161,
+            17732,
+            17630,
+            18000,
+            17690,
+            17680,
+            18012,
+            17887,
+            17350,
+            17621,
+            17012,
+            17554
+          ],
+          "mean_inside": 17572.45,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 106429.9
+        },
+        "uniform_merged": {
+          "draws": [
+            17504,
+            18218,
+            17271,
+            17621,
+            18252,
+            18523,
+            18234,
+            17801,
+            18149,
+            17744,
+            17935,
+            18289,
+            17756,
+            18116,
+            17782,
+            18255,
+            17751,
+            17712,
+            18057,
+            17924
+          ],
+          "mean_inside": 17944.7,
+          "mean_nodes": 412.95,
+          "mean_median_node_length": 155696.15
+        },
+        "circular": {
+          "draws": [
+            16718,
+            16900,
+            17189,
+            17787,
+            17024,
+            16906,
+            17283,
+            17769,
+            16973,
+            17285,
+            17094,
+            17028,
+            17337,
+            17282,
+            17000,
+            17584,
+            16706,
+            16889,
+            17208,
+            17343
+          ],
+          "mean_inside": 17165.25,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 111797.5
+        },
+        "count_matched": {
+          "draws": [
+            17417,
+            16898,
+            17134,
+            17353,
+            17275,
+            17174,
+            17343,
+            17153,
+            17530,
+            17141,
+            16966,
+            17587,
+            17184,
+            17123,
+            17413,
+            17290,
+            17224,
+            17474,
+            17269,
+            16944
+          ],
+          "mean_inside": 17244.6,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 119193.95
+        }
+      }
+    },
+    {
+      "chrom": "chr18",
+      "length": 80373285,
+      "nodes": 560,
+      "edges": 559,
+      "median_node_length": 100834,
+      "min_node_length": 12120,
+      "census": {
+        "archive_rows": 21973,
+        "has_predicted": 13650,
+        "has_predicted_coding": 9250,
+        "predicted_coding_gene_in_annotation": 9250,
+        "predicted_coding_gene_protein_coding": 9250,
+        "has_confidence": 13650,
+        "predicted_coding_has_confidence": 9250
+      },
+      "coding_named": 9250,
+      "coding_inside": 6393,
+      "any_named": 12910,
+      "any_inside": 9439,
+      "controls": {
+        "uniform": {
+          "draws": [
+            5961,
+            5598,
+            5795,
+            6243,
+            5841,
+            5839,
+            5583,
+            5576,
+            5574,
+            5751,
+            5560,
+            5319,
+            5753,
+            5654,
+            5488,
+            5673,
+            6008,
+            5638,
+            5504,
+            5565
+          ],
+          "mean_inside": 5696.15,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 99277.1
+        },
+        "uniform_merged": {
+          "draws": [
+            6015,
+            6067,
+            6249,
+            6291,
+            6353,
+            5861,
+            5942,
+            5449,
+            5905,
+            5849,
+            5872,
+            6222,
+            5678,
+            5955,
+            6214,
+            6180,
+            5616,
+            5715,
+            6029,
+            6157
+          ],
+          "mean_inside": 5980.95,
+          "mean_nodes": 420.1,
+          "mean_median_node_length": 150216.35
+        },
+        "circular": {
+          "draws": [
+            5557,
+            5705,
+            5578,
+            5417,
+            5186,
+            5271,
+            4970,
+            5092,
+            5932,
+            5650,
+            5439,
+            5362,
+            4809,
+            5641,
+            5644,
+            5088,
+            5475,
+            5737,
+            5212,
+            5546
+          ],
+          "mean_inside": 5415.55,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 100836.2
+        },
+        "count_matched": {
+          "draws": [
+            5303,
+            5431,
+            5230,
+            5358,
+            5106,
+            5343,
+            5153,
+            5156,
+            5283,
+            5228,
+            5205,
+            5528,
+            5269,
+            5010,
+            5459,
+            5520,
+            5236,
+            5205,
+            5332,
+            5365
+          ],
+          "mean_inside": 5286.0,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 113649.0
+        }
+      }
+    },
+    {
+      "chrom": "chr19",
+      "length": 58617616,
+      "nodes": 339,
+      "edges": 338,
+      "median_node_length": 106598,
+      "min_node_length": 50040,
+      "census": {
+        "archive_rows": 29374,
+        "has_predicted": 20800,
+        "has_predicted_coding": 17265,
+        "predicted_coding_gene_in_annotation": 17265,
+        "predicted_coding_gene_protein_coding": 17265,
+        "has_confidence": 20800,
+        "predicted_coding_has_confidence": 17265
+      },
+      "coding_named": 17265,
+      "coding_inside": 15749,
+      "any_named": 20149,
+      "any_inside": 18447,
+      "controls": {
+        "uniform": {
+          "draws": [
+            15623,
+            15534,
+            15594,
+            15646,
+            15684,
+            15718,
+            15603,
+            15434,
+            15546,
+            15467,
+            15646,
+            15680,
+            15645,
+            15589,
+            15780,
+            15617,
+            15715,
+            15466,
+            15869,
+            15621
+          ],
+          "mean_inside": 15623.85,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 121115.25
+        },
+        "uniform_merged": {
+          "draws": [
+            15910,
+            15874,
+            15654,
+            15818,
+            15753,
+            16090,
+            15495,
+            15917,
+            15835,
+            15802,
+            15629,
+            15754,
+            16024,
+            15869,
+            15992,
+            15756,
+            15933,
+            15824,
+            15824,
+            15772
+          ],
+          "mean_inside": 15826.25,
+          "mean_nodes": 262.4,
+          "mean_median_node_length": 170415.25
+        },
+        "circular": {
+          "draws": [
+            15698,
+            15791,
+            15780,
+            15334,
+            15749,
+            15132,
+            15437,
+            15588,
+            15479,
+            15118,
+            15731,
+            15550,
+            15443,
+            15458,
+            15359,
+            15388,
+            15556,
+            15657,
+            15426,
+            15589
+          ],
+          "mean_inside": 15513.15,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 106207.5
+        },
+        "count_matched": {
+          "draws": [
+            15771,
+            15444,
+            15450,
+            15493,
+            15220,
+            15481,
+            15563,
+            15308,
+            15476,
+            15540,
+            15316,
+            15527,
+            15345,
+            15510,
+            15263,
+            15231,
+            15492,
+            15534,
+            15491,
+            15530
+          ],
+          "mean_inside": 15449.25,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 133972.45
+        }
+      }
+    },
+    {
+      "chrom": "chr20",
+      "length": 64444167,
+      "nodes": 478,
+      "edges": 477,
+      "median_node_length": 97103,
+      "min_node_length": 50027,
+      "census": {
+        "archive_rows": 26954,
+        "has_predicted": 16990,
+        "has_predicted_coding": 12702,
+        "predicted_coding_gene_in_annotation": 12702,
+        "predicted_coding_gene_protein_coding": 12702,
+        "has_confidence": 16990,
+        "predicted_coding_has_confidence": 12702
+      },
+      "coding_named": 12702,
+      "coding_inside": 9556,
+      "any_named": 16444,
+      "any_inside": 12727,
+      "controls": {
+        "uniform": {
+          "draws": [
+            9152,
+            9608,
+            9145,
+            9602,
+            9214,
+            9682,
+            9455,
+            9490,
+            9592,
+            9490,
+            9395,
+            9356,
+            9483,
+            9504,
+            9189,
+            9532,
+            9061,
+            9506,
+            9709,
+            9265
+          ],
+          "mean_inside": 9421.5,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 93275.3
+        },
+        "uniform_merged": {
+          "draws": [
+            9956,
+            9782,
+            9647,
+            10126,
+            9690,
+            9821,
+            9765,
+            9808,
+            9870,
+            10074,
+            9808,
+            9526,
+            9522,
+            9609,
+            9615,
+            9533,
+            9661,
+            9816,
+            9530,
+            9849
+          ],
+          "mean_inside": 9750.4,
+          "mean_nodes": 346.15,
+          "mean_median_node_length": 145392.1
+        },
+        "circular": {
+          "draws": [
+            9094,
+            8891,
+            8911,
+            8516,
+            9067,
+            9014,
+            8873,
+            8819,
+            9352,
+            8953,
+            8941,
+            9330,
+            9194,
+            9357,
+            9357,
+            9159,
+            9108,
+            9353,
+            8775,
+            9174
+          ],
+          "mean_inside": 9061.9,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 96941.05
+        },
+        "count_matched": {
+          "draws": [
+            9034,
+            9132,
+            8719,
+            8882,
+            9167,
+            8892,
+            9117,
+            8817,
+            8625,
+            9027,
+            8878,
+            8809,
+            9091,
+            8543,
+            9159,
+            9048,
+            8836,
+            8866,
+            8953,
+            9052
+          ],
+          "mean_inside": 8932.35,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 108265.65
+        }
+      }
+    },
+    {
+      "chrom": "chr21",
+      "length": 46709983,
+      "nodes": 228,
+      "edges": 227,
+      "median_node_length": 115786,
+      "min_node_length": 50296,
+      "census": {
+        "archive_rows": 12139,
+        "has_predicted": 7846,
+        "has_predicted_coding": 5174,
+        "predicted_coding_gene_in_annotation": 5174,
+        "predicted_coding_gene_protein_coding": 5174,
+        "has_confidence": 7846,
+        "predicted_coding_has_confidence": 5174
+      },
+      "coding_named": 5174,
+      "coding_inside": 3757,
+      "any_named": 7575,
+      "any_inside": 5986,
+      "controls": {
+        "uniform": {
+          "draws": [
+            3882,
+            3905,
+            3918,
+            3899,
+            4053,
+            4096,
+            3912,
+            3803,
+            3927,
+            3681,
+            3959,
+            3818,
+            3853,
+            3917,
+            3688,
+            3920,
+            3643,
+            3509,
+            3951,
+            3958
+          ],
+          "mean_inside": 3864.6,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 144966.45
+        },
+        "uniform_merged": {
+          "draws": [
+            4366,
+            3614,
+            3736,
+            3881,
+            3883,
+            4014,
+            3929,
+            3922,
+            3985,
+            3558,
+            4026,
+            4047,
+            3921,
+            4074,
+            3789,
+            3909,
+            3941,
+            3969,
+            3739,
+            3932
+          ],
+          "mean_inside": 3911.75,
+          "mean_nodes": 183.65,
+          "mean_median_node_length": 192189.95
+        },
+        "circular": {
+          "draws": [
+            3407,
+            3461,
+            3459,
+            4294,
+            3617,
+            4248,
+            4100,
+            3594,
+            4362,
+            4399,
+            4378,
+            3500,
+            4106,
+            3505,
+            3527,
+            3353,
+            3515,
+            3856,
+            3621,
+            3828
+          ],
+          "mean_inside": 3806.5,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 116057.15
+        },
+        "count_matched": {
+          "draws": [
+            3564,
+            3791,
+            3578,
+            3527,
+            3802,
+            3545,
+            3670,
+            3660,
+            3814,
+            3888,
+            3584,
+            3892,
+            3751,
+            3842,
+            3744,
+            3875,
+            3777,
+            3716,
+            3631,
+            3855
+          ],
+          "mean_inside": 3725.3,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 159597.85
+        }
+      }
+    },
+    {
+      "chrom": "chr22",
+      "length": 50818468,
+      "nodes": 247,
+      "edges": 246,
+      "median_node_length": 114345,
+      "min_node_length": 50920,
+      "census": {
+        "archive_rows": 19708,
+        "has_predicted": 13108,
+        "has_predicted_coding": 9612,
+        "predicted_coding_gene_in_annotation": 9612,
+        "predicted_coding_gene_protein_coding": 9612,
+        "has_confidence": 13108,
+        "predicted_coding_has_confidence": 9612
+      },
+      "coding_named": 9612,
+      "coding_inside": 8082,
+      "any_named": 12676,
+      "any_inside": 10823,
+      "controls": {
+        "uniform": {
+          "draws": [
+            8339,
+            8180,
+            8115,
+            7984,
+            8283,
+            8123,
+            7921,
+            7782,
+            8279,
+            7807,
+            8239,
+            8442,
+            8006,
+            8008,
+            8261,
+            8098,
+            8390,
+            8171,
+            8243,
+            8080
+          ],
+          "mean_inside": 8137.55,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 143794.35
+        },
+        "uniform_merged": {
+          "draws": [
+            8280,
+            8303,
+            8189,
+            8305,
+            8395,
+            8448,
+            8348,
+            8203,
+            8566,
+            8493,
+            8162,
+            8301,
+            8568,
+            8598,
+            8100,
+            8295,
+            8251,
+            8474,
+            7971,
+            8493
+          ],
+          "mean_inside": 8337.15,
+          "mean_nodes": 198.15,
+          "mean_median_node_length": 195636.95
+        },
+        "circular": {
+          "draws": [
+            7791,
+            8581,
+            8298,
+            7244,
+            7589,
+            8511,
+            7496,
+            7584,
+            8436,
+            8494,
+            7914,
+            7787,
+            8490,
+            8671,
+            7651,
+            8489,
+            8888,
+            8570,
+            8378,
+            7806
+          ],
+          "mean_inside": 8133.4,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 114517.2
+        },
+        "count_matched": {
+          "draws": [
+            7977,
+            7683,
+            7777,
+            8019,
+            7902,
+            7870,
+            7929,
+            8025,
+            8018,
+            8065,
+            8048,
+            7898,
+            7710,
+            7996,
+            8217,
+            8234,
+            7953,
+            7905,
+            8209,
+            8069
+          ],
+          "mean_inside": 7975.2,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 156111.0
+        }
+      }
+    },
+    {
+      "chrom": "chrX",
+      "length": 156040895,
+      "nodes": 822,
+      "edges": 821,
+      "median_node_length": 138506,
+      "min_node_length": 50466,
+      "census": {
+        "archive_rows": 22894,
+        "has_predicted": 13889,
+        "has_predicted_coding": 10817,
+        "predicted_coding_gene_in_annotation": 10817,
+        "predicted_coding_gene_protein_coding": 10817,
+        "has_confidence": 13889,
+        "predicted_coding_has_confidence": 10817
+      },
+      "coding_named": 10817,
+      "coding_inside": 8379,
+      "any_named": 13744,
+      "any_inside": 10805,
+      "controls": {
+        "uniform": {
+          "draws": [
+            8107,
+            8444,
+            8315,
+            8242,
+            8401,
+            8442,
+            8259,
+            8134,
+            8273,
+            8438,
+            8544,
+            8345,
+            8582,
+            8514,
+            8502,
+            8318,
+            8439,
+            8497,
+            8337,
+            8298
+          ],
+          "mean_inside": 8371.55,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 130759.2
+        },
+        "uniform_merged": {
+          "draws": [
+            8583,
+            8405,
+            8559,
+            8426,
+            8335,
+            8551,
+            8488,
+            8313,
+            8524,
+            8606,
+            8754,
+            8619,
+            8401,
+            8734,
+            8546,
+            8498,
+            8528,
+            8500,
+            8464,
+            8276
+          ],
+          "mean_inside": 8505.5,
+          "mean_nodes": 651.0,
+          "mean_median_node_length": 182125.8
+        },
+        "circular": {
+          "draws": [
+            7916,
+            8100,
+            8026,
+            7907,
+            8437,
+            8197,
+            8227,
+            8105,
+            8084,
+            8103,
+            8168,
+            7978,
+            8133,
+            7825,
+            7807,
+            8127,
+            8110,
+            8228,
+            8091,
+            8138
+          ],
+          "mean_inside": 8085.35,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 138433.85
+        },
+        "count_matched": {
+          "draws": [
+            7952,
+            7718,
+            8071,
+            8009,
+            8171,
+            7811,
+            7733,
+            8218,
+            8118,
+            8318,
+            8058,
+            8176,
+            8382,
+            8014,
+            8050,
+            8024,
+            8099,
+            8144,
+            8001,
+            8132
+          ],
+          "mean_inside": 8059.95,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 146939.15
+        }
+      }
+    },
+    {
+      "chrom": "chrY",
+      "length": 57227415,
+      "nodes": 49,
+      "edges": 48,
+      "median_node_length": 260423,
+      "min_node_length": 53774,
+      "census": {
+        "archive_rows": 907,
+        "has_predicted": 554,
+        "has_predicted_coding": 125,
+        "predicted_coding_gene_in_annotation": 125,
+        "predicted_coding_gene_protein_coding": 125,
+        "has_confidence": 554,
+        "predicted_coding_has_confidence": 125
+      },
+      "coding_named": 125,
+      "coding_inside": 89,
+      "any_named": 539,
+      "any_inside": 472,
+      "controls": {
+        "uniform": {
+          "draws": [
+            122,
+            93,
+            123,
+            107,
+            105,
+            125,
+            118,
+            124,
+            125,
+            124,
+            112,
+            118,
+            125,
+            112,
+            105,
+            122,
+            118,
+            121,
+            106,
+            123
+          ],
+          "mean_inside": 116.4,
+          "mean_nodes": 49.0,
+          "mean_median_node_length": 795142.7
+        },
+        "uniform_merged": {
+          "draws": [
+            110,
+            114,
+            115,
+            125,
+            125,
+            114,
+            114,
+            125,
+            119,
+            106,
+            104,
+            116,
+            121,
+            106,
+            125,
+            124,
+            123,
+            118,
+            120,
+            119
+          ],
+          "mean_inside": 117.15,
+          "mean_nodes": 47.25,
+          "mean_median_node_length": 877949.5
+        },
+        "circular": {
+          "draws": [
+            104,
+            125,
+            125,
+            110,
+            125,
+            123,
+            118,
+            111,
+            116,
+            125,
+            124,
+            123,
+            115,
+            125,
+            98,
+            125,
+            114,
+            125,
+            120,
+            111
+          ],
+          "mean_inside": 118.1,
+          "mean_nodes": 49.0,
+          "mean_median_node_length": 256278.3
+        },
+        "count_matched": {
+          "draws": [
+            117,
+            123,
+            108,
+            123,
+            123,
+            117,
+            113,
+            112,
+            116,
+            106,
+            121,
+            121,
+            110,
+            107,
+            115,
+            106,
+            114,
+            115,
+            124,
+            96
+          ],
+          "mean_inside": 114.35,
+          "mean_nodes": 49.0,
+          "mean_median_node_length": 799112.85
+        }
+      }
+    }
+  ],
+  "modelled": {
+    "label": "modelled: the deletion's most-moved coding gene",
+    "pairs": 440377,
+    "controls": {
+      "uniform": {
+        "control_share": 0.7252,
+        "excess_points": 2.898,
+        "mean_median_control_node_length": 138360,
+        "mean_control_nodes": 20002,
+        "bootstrap_chromosomes": {
+          "point": 2.898,
+          "ci95": [
+            2.034,
+            3.809
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 2.898,
+          "ci95": [
+            2.039,
+            3.689
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 19,
+          "of": 24,
+          "p_one_sided": 0.0033,
+          "p_two_sided": 0.0066,
+          "per_chromosome": [
+            {
+              "chrom": "chrY",
+              "excess_points": -21.92,
+              "pairs": 125
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": -2.08,
+              "pairs": 5174
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": -1.26,
+              "pairs": 9711
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": -0.93,
+              "pairs": 14474
+            },
+            {
+              "chrom": "chr22",
+              "excess_points": -0.58,
+              "pairs": 9612
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 0.07,
+              "pairs": 10817
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 0.72,
+              "pairs": 17265
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 1.01,
+              "pairs": 22596
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": 1.06,
+              "pairs": 12702
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 1.09,
+              "pairs": 19272
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 1.29,
+              "pairs": 13385
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 1.8,
+              "pairs": 14799
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 2.13,
+              "pairs": 43681
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 3.15,
+              "pairs": 20646
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 3.17,
+              "pairs": 23769
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 3.22,
+              "pairs": 22772
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 3.66,
+              "pairs": 32917
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 3.68,
+              "pairs": 22814
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 3.97,
+              "pairs": 18552
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 4.63,
+              "pairs": 21608
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": 4.83,
+              "pairs": 27682
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 6.14,
+              "pairs": 25731
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 7.53,
+              "pairs": 9250
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 7.6,
+              "pairs": 21023
+            }
+          ]
+        }
+      },
+      "uniform_merged": {
+        "control_share": 0.7421,
+        "excess_points": 1.212,
+        "mean_median_control_node_length": 189787,
+        "mean_control_nodes": 15077,
+        "bootstrap_chromosomes": {
+          "point": 1.212,
+          "ci95": [
+            0.397,
+            1.968
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 1.212,
+          "ci95": [
+            0.393,
+            2.053
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 14,
+          "of": 24,
+          "p_one_sided": 0.2706,
+          "p_two_sided": 0.5413,
+          "per_chromosome": [
+            {
+              "chrom": "chrY",
+              "excess_points": -22.52,
+              "pairs": 125
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": -2.99,
+              "pairs": 5174
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": -2.94,
+              "pairs": 9711
+            },
+            {
+              "chrom": "chr22",
+              "excess_points": -2.65,
+              "pairs": 9612
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": -2.2,
+              "pairs": 14474
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": -1.53,
+              "pairs": 12702
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": -1.17,
+              "pairs": 10817
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": -0.45,
+              "pairs": 17265
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": -0.12,
+              "pairs": 13385
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": -0.03,
+              "pairs": 19272
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 0.05,
+              "pairs": 22596
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 0.1,
+              "pairs": 22772
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 0.57,
+              "pairs": 14799
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 0.78,
+              "pairs": 43681
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 1.71,
+              "pairs": 32917
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 1.71,
+              "pairs": 23769
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 1.81,
+              "pairs": 22814
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 1.82,
+              "pairs": 20646
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": 2.83,
+              "pairs": 27682
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 2.91,
+              "pairs": 21608
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 3.1,
+              "pairs": 18552
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 4.4,
+              "pairs": 25731
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 4.45,
+              "pairs": 9250
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 5.01,
+              "pairs": 21023
+            }
+          ]
+        }
+      },
+      "circular": {
+        "control_share": 0.697,
+        "excess_points": 5.715,
+        "mean_median_control_node_length": 114161,
+        "mean_control_nodes": 20002,
+        "bootstrap_chromosomes": {
+          "point": 5.715,
+          "ci95": [
+            4.512,
+            6.918
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 5.715,
+          "ci95": [
+            4.862,
+            6.545
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 20,
+          "of": 24,
+          "p_one_sided": 0.0008,
+          "p_two_sided": 0.0015,
+          "per_chromosome": [
+            {
+              "chrom": "chrY",
+              "excess_points": -23.28,
+              "pairs": 125
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": -0.96,
+              "pairs": 5174
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": -0.86,
+              "pairs": 14474
+            },
+            {
+              "chrom": "chr22",
+              "excess_points": -0.53,
+              "pairs": 9612
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 1.3,
+              "pairs": 9711
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 1.37,
+              "pairs": 17265
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 2.31,
+              "pairs": 19272
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 2.41,
+              "pairs": 14799
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 2.71,
+              "pairs": 10817
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 3.5,
+              "pairs": 13385
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": 3.89,
+              "pairs": 12702
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 4.44,
+              "pairs": 43681
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 5.58,
+              "pairs": 22596
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 6.2,
+              "pairs": 22772
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 6.51,
+              "pairs": 21608
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 7.06,
+              "pairs": 23769
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 7.24,
+              "pairs": 22814
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 7.7,
+              "pairs": 32917
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 7.83,
+              "pairs": 20646
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 8.37,
+              "pairs": 25731
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": 8.65,
+              "pairs": 27682
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 9.34,
+              "pairs": 18552
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 10.57,
+              "pairs": 9250
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 10.69,
+              "pairs": 21023
+            }
+          ]
+        }
+      },
+      "count_matched": {
+        "control_share": 0.6884,
+        "excess_points": 6.575,
+        "mean_median_control_node_length": 152152,
+        "mean_control_nodes": 20002,
+        "bootstrap_chromosomes": {
+          "point": 6.575,
+          "ci95": [
+            5.431,
+            7.669
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 6.575,
+          "ci95": [
+            5.713,
+            7.402
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 23,
+          "of": 24,
+          "p_one_sided": 0.0,
+          "p_two_sided": 0.0,
+          "per_chromosome": [
+            {
+              "chrom": "chrY",
+              "excess_points": -20.28,
+              "pairs": 125
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": 0.61,
+              "pairs": 5174
+            },
+            {
+              "chrom": "chr22",
+              "excess_points": 1.11,
+              "pairs": 9612
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": 1.63,
+              "pairs": 14474
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 1.74,
+              "pairs": 17265
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 2.14,
+              "pairs": 9711
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 2.95,
+              "pairs": 10817
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 4.4,
+              "pairs": 19272
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 4.47,
+              "pairs": 14799
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 4.61,
+              "pairs": 13385
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": 4.91,
+              "pairs": 12702
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 5.6,
+              "pairs": 43681
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 5.85,
+              "pairs": 22596
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 6.15,
+              "pairs": 21608
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 6.86,
+              "pairs": 22772
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 7.11,
+              "pairs": 23769
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 7.79,
+              "pairs": 22814
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 8.21,
+              "pairs": 20646
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 8.6,
+              "pairs": 32917
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": 8.98,
+              "pairs": 27682
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 9.68,
+              "pairs": 18552
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 9.98,
+              "pairs": 25731
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 11.5,
+              "pairs": 21023
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 11.97,
+              "pairs": 9250
+            }
+          ]
+        }
+      }
+    },
+    "measured_share": 0.7542
+  },
+  "baseline_definitions": {
+    "uniform": "the published control: as many uniform positions as the caller has edges, no 50 kb minimum-size merge, 20 draws, seed 7 per chromosome (scripts/oriented_domains.py human_chrom)",
+    "uniform_merged": "the same positions through the same 50 kb merge as every real node, so the node length floor is matched and only placement differs",
+    "circular": "the real boundary set rotated by a uniform offset modulo the chromosome: node count and node length distribution matched (the one gap containing position 0 is split by the wrap), only the relation between a boundary and the genes near it destroyed",
+    "count_matched": "uniform positions drawn until the post-merge edge count reaches the real one"
+  },
+  "evidence": {
+    "nodes": "inferred: CTCF-only ENCODE elements as boundary proxies, no Hi-C",
+    "modelled": "predicted: AlphaGenome deletion archive, most-moved coding gene",
+    "measured": "experimental: ENCODE CRISPRi enhancer-gene benchmark, Regulated=TRUE"
+  }
+}

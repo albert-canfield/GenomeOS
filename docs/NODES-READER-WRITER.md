@@ -2418,3 +2418,333 @@ the consumer asks of it.
   the split is still half the nodes at any scale, so the closed side carries no
   information; below the floor the call stops being a rank and depth alone
   moves the count; and the basis string travels with the record.
+
+## The +2.88-point containment claim, audited (2026-09-27)
+
+Measurement 2 above — the share of scored elements whose most-moved coding gene
+sits inside the element's own node — is quoted outside this document as settled
+shorthand: **"the node beats random boundaries by +2.88 points over 440,377
+coding-target elements, ahead on 18 of 24 chromosomes"**, in docs/ROADMAP.md
+(lines 22, 678, 2599, 3265), docs/LESSONS.md and docs/ATTRIBUTION.md (lines
+1781, 2598, 3912). Seven citations, seven point estimates, no interval, and the
+baseline the point estimate is measured against is not defined in any document
+this repository holds. This section defines it, prices the choice, and gives the
+number an interval. `scripts/node_containment_audit.py`, 24 chromosomes,
+`data/results/node_containment_audit.json`, 0 model requests, nothing fetched.
+
+**The result goes first: the sign survives and the magnitude does not.** The
+excess is positive under every baseline that can be defended, but its size runs
+from **+1.2 to +6.6 points** depending on a matching choice nobody ever wrote
+down, and the published +2.88 is one arbitrary point in that range rather than a
+measurement of anything. The claim as quoted should be quoted as a direction,
+not as a number.
+
+### 1. The baseline, written down for the first time
+
+`scripts/oriented_domains.py`, in `human_chrom`, builds the control in one line:
+
+```python
+st = [0, *sorted(rng.randint(1, length - 1) for _ in edges)]
+null.append(_inside_share(st, pairs_coding)[0])
+```
+
+Twenty draws, `random.Random(7)` per chromosome, and **only the mean of the
+twenty inside-counts is kept** (`round(..., 1)`), so the control's own spread is
+discarded before the result file is written. What the draw is matched on, and
+what it is not:
+
+| matched | not matched |
+|---|---|
+| the number of boundaries, per chromosome (`len(edges)`, the count after the merge) | the node length distribution: real nodes pass the 50 kb `MIN_DOMAIN` merge in `genome/domains.py _domains_from` and the random set does not |
+| the chromosome, and therefore its length | cCRE density, gene density, TSS density |
+| | assembly gaps, centromeres, mappability: positions are uniform on `[1, length-1]` |
+| | the element-to-target distance distribution |
+
+**The minimum-size merge is the load-bearing omission, and it is worth 1.7 of
+the 2.9 points.** Every real node has passed a merge that deletes any boundary
+within 50 kb of the previous kept one; the control's boundaries have not, so the
+control's node set contains short nodes that the real node set cannot contain,
+and a short node separates an element from its target. Apply the same merge to
+the same uniform positions and the excess falls from **+2.90 to +1.21 points**,
+and the per-chromosome tally falls from 19 of 24 to **14 of 24** — a coin.
+
+### 2. Four baselines, all defensible, on the same 440,377 pairs
+
+The measured share is 0.7542 in all four rows; only the control moves.
+
+| control | what it matches | control nodes | median control node | control share | **excess** | 95% CI (chromosome bootstrap) | ahead on |
+|---|---|---|---|---|---|---|---|
+| `uniform` — the published one | boundary count only, no 50 kb merge | 20,002 | 138,360 | 0.7252 | **+2.90** | +2.03 to +3.81 | 19 of 24, p=0.007 |
+| `uniform_merged` | count **and** the 50 kb node-length floor | 15,077 | 189,787 | 0.7421 | **+1.21** | +0.40 to +1.97 | 14 of 24, p=0.54 |
+| `circular` | the real gap distribution, rotated: node count and node lengths matched | 20,002 | 114,161 | 0.6970 | **+5.72** | +4.51 to +6.92 | 20 of 24, p=0.002 |
+| `count_matched` | the post-merge node count exactly, merge applied | 20,002 | 152,152 | 0.6884 | **+6.58** | +5.43 to +7.67 | 23 of 24, p<0.001 |
+
+Real nodes, for comparison: 20,002 nodes, median 106,668 bp. `circular` is the
+closest match on geometry — it rotates the real boundary set by a uniform offset
+modulo the chromosome, so the node count is exact and the node length multiset is
+exact but for the one gap the wrap splits — and it destroys only the relation
+between a boundary and the genes near it, which is the thing the claim is about.
+It gives **+5.72**, twice the published figure. `uniform_merged` matches the
+length floor but overshoots on length (median 190 kb against the real 107 kb) and
+undershoots on count, and a longer node contains more by construction, so it is
+the conservative end. The honest statement is the range: **the excess is between
+about +1 and about +7 points, and which end you get is decided by whether you
+match the control on node length, on node count, or on neither.**
+
+That spread is not a reason to drop the claim — no baseline puts the excess at or
+below zero, and three of the four have a lower bound above +2 — but it is a
+reason to stop quoting `+2.88` as if it were the answer. It is `uniform`'s
+answer, and `uniform` is the least matched of the four.
+
+### 3. The interval, and why it is a bootstrap over chromosomes
+
+The 440,377 pairs are not 440,377 independent observations. Every element inside
+one node has its containment decided by the same two boundary positions, and
+there are 20,002 nodes, so the pairs arrive in about 22-element clusters whose
+outcomes are strongly correlated; many also share a target gene. An element-level
+interval would therefore be far too narrow. Two resamplings are reported, 2,000
+draws each:
+
+- **over chromosomes** (the one to quote): the 24 chromosomes are resampled with
+  replacement and the pooled share is recomputed inside each resample. The
+  chromosome is the largest unit over which boundary placement is plausibly
+  independent, and it is also the unit the claim's own dispersion figure already
+  uses. Its weakness is that there are only 24 units and that chrY carries 125 of
+  the 440,377 pairs while chr1 carries 40,000, so a resample that draws chrY
+  three times is barely perturbed and one that drops chr1 is perturbed a lot.
+- **over node clusters**: elements resampled in node-sized blocks until the
+  element count is reached, which keeps n and respects the dependence. For
+  `uniform` it gives +2.04 to +3.69 against the chromosome bootstrap's +2.03 to
+  +3.81 — the two agree to a tenth of a point, which says the chromosome
+  bootstrap is not merely a conservative stand-in.
+
+**`+2.88 points` therefore becomes `+2.90 points, 95% CI +2.03 to +3.81`** on the
+published baseline, and the same arithmetic on the length-matched baseline is
+`+1.21, 95% CI +0.40 to +1.97`.
+
+### 4. Both quoted digits traced: "+2.88" is a rounding artifact and "18 of 24" is a count against a threshold that appears nowhere
+
+Neither figure is in any result file. Both entered on 2026-09-16 in b6333ee, and
+both are cross-file arithmetic done by hand in the roadmap row. Reconstructed:
+
+**+2.88** is `0.754 − 0.7252`. The 0.754 is
+`data/results/enhancer_targets_all_genome_wide.json`'s
+`genome.coding_target_inside_domain`, stored to three decimals; the 0.7252 is
+`data/results/domains_oriented_comparison.json`'s `coding_inside_random_share`,
+stored to four. Subtracting a 3-dp number from a 4-dp one gives 2.88; both at
+four decimals give **2.90**, which is also the value the second file already
+stores as `coding_excess_over_random` (0.029). So the figure quoted seven times
+is two hundredths of a point away from the value in the file it is drawn from,
+for no reason but mixed precision. That is small, and it is the smallest of the
+three problems in this section — but a number that cannot be reproduced from its
+own sources is a number nobody has checked.
+
+Worth saying while those two files are side by side: the sweep's own file carries
+a **different** registered control for the same statistic, `controls
+.coding_target_inside_domain` = 0.791 against a measured 0.817, from the
+113,399-element archive of 2026-09-14. It was never updated when the archive grew
+to 440,377, so inside one file the measured share reads 0.754 and the control
+beside it reads 0.791, and the statistic looks 3.7 points *worse* than random. The
++2.88 exists because the reader silently took the control from the other file
+instead. Both files are right about their own run; the row that joined them is not
+a reading either file supports.
+
+**18 of 24** is the count of chromosomes in
+`enhancer_targets_all_genome_wide.json`'s
+`spread.coding_target_inside_domain.per_chromosome` whose share is **strictly
+above 0.700** — a threshold that is in no file, no script and no document.
+Against the 0.725 the claim itself names in the same sentence, the same 24 shares
+give **16 of 24**. Against each chromosome's own random control, which is the
+only comparison the statistic actually licenses, this audit gives **19 of 24**.
+The published 18 is therefore not a tally against the claim's own baseline; it is
+a tally against a round number, and it happens to sit between the two defensible
+answers.
+
+(This audit's per-chromosome measured shares match the sweep file's all 24 out of
+24 to three decimals, so the disagreement is entirely in what they are being
+compared with, not in the shares.)
+
+Behind the tally, the per-chromosome excesses under `uniform` run from **−21.9
+points (chrY, 125 pairs)** to **+7.6 (chr10, 21,023 pairs)**, with chr21 (−2.1),
+chr13 (−1.3) and chr15 (−0.9) also behind. 19 of 24 is p = 0.007 two-sided
+against a coin, so the tally does carry information — but on the length-matched
+baseline it is 14 of 24 at p = 0.54, and on that baseline the assessment's
+suspicion that "18/24 is not far from a coin" is exactly right.
+
+### 5. The denominator: 440,377 is one set, counted field by field
+
+The three published numbers are three stages of one filter, and the audit counts
+each stage directly out of `data/knowledge/alphagenome/all_elements`:
+
+| stage | count | share of the archive |
+|---|---|---|
+| archive rows (every ENCODE enhancer element scored by deletion) | **961,227** | 100% |
+| `predicted.gene` is set — and every one of them also states a confidence | **612,323** | **63.70%** |
+| that named gene is in the element's own chromosome's GENCODE annotation (`any_named`) | 593,765 | 61.77% |
+| `predicted_coding.gene` is set, is in the annotation, and is protein-coding | **440,377** | 45.81% |
+| of those, how many state a confidence | **440,377** | 45.81% |
+
+So the assessment's third doubt is settled: **"440,377 coding-target elements"
+and ATTRIBUTION.md's "440,377 compiled elements that state a confidence" are the
+same set.** `predicted_coding_has_confidence` equals `has_predicted_coding`
+equals 440,377 on the nose, and every one of the 440,377 is both present in the
+annotation and protein-coding, so no two of the filters are doing different work.
+The 961,227 is the archive before any filter and the 593,765 is the same filter
+run on the any-gene target instead of the coding one. Three numbers, one set of
+elements, and the containment claim is scored on the last row.
+
+### 6. The 63.7% and the 87%: they are not the same measurement
+
+The pair that "points the other way" — the model names a gene at 63.7% of real
+elements and at 87% of matched random windows — reconciles, but not into a
+−23-point deficit, because the two rates were never measured on the same thing:
+
+- **63.7%** is 612,323 of 961,227 ENCODE cCREs whose AlphaGenome deletion names
+  any gene. It is exact and it is this archive (row 2 of the table above).
+- **87%** is **52 of 60**. It is the share of *matched random windows in the
+  twelve-locus panel benchmark* at which a **different layer** — the summed
+  window-input reading of `docs/LOCI-BENCHMARK.md`, section 7, against 11 of 12
+  published loci — names some target. Its source is
+  `scripts/enhancer_targets_all_genome_wide.py:48` and
+  `docs/LOCI-BENCHMARK.md:333`.
+
+n = 961,227 against n = 60. The Wilson 95% interval on 52 of 60 is **75.8% to
+93.1%**, so the 87% is itself ±9 points, the windows are matched to twelve
+published loci rather than to cCREs, and the layer that scores them is not the
+deletion sweep. The two numbers cannot contradict each other and, more to the
+point, the 87% is not a control for the 63.7% and should stop being printed in
+the column headed "the control it has to be read against".
+
+What survives of the objection is worse than a contradiction, and it is the
+reason this audit does not end here. The 440,377 elements that enter the
+containment test are **selected by the naming step**, and that step's
+false-positive rate against matched controls has never been measured on cCREs —
+the only number standing in for it comes from 60 windows in another assay. The
+containment excess is therefore conditioned on a selection of unknown
+specificity, and the gene whose TSS the test uses is the model's own answer. That
+is the standing caveat measurement 2 has carried since 2026-09-21, and it is why
+the next section holds the same statistic against a measured element-gene set.
+
+### What this section changes about the claim
+
+- The baseline is now defined, in this document, with what it matches and what
+  it does not.
+- `+2.88 points` should be quoted as **+2.90, 95% CI +2.03 to +3.81, on a
+  control matched on boundary count alone**, and beside it the range **+1.2 to
+  +6.6** across four baselines, because the point estimate is a choice.
+- `ahead on 18 of 24 chromosomes` should read **19 of 24 (p = 0.007), and 14 of
+  24 (p = 0.54) once the control's nodes are given the same 50 kb floor as the
+  real ones.** The 18 was a count against 0.700, which is nothing.
+- `data/results/enhancer_targets_all_genome_wide.json` still carries a stale
+  control for this statistic (0.791 against 0.817, on the 113,399-element archive
+  of 2026-09-14) beside a measured 0.754 from the 440,377-element one, so the file
+  reads as though the node lost by 3.7 points. That control belongs to a
+  superseded denominator and should be replaced by a pointer to this section
+  rather than left to be subtracted. It is not this lane's file to edit.
+- `440,377` needs no qualification: it is one set, and it is the same set
+  ATTRIBUTION.md counts.
+- The `87%` should be dropped as a control for the `63.7%`, and named as 52 of
+  60 windows from the locus benchmark wherever it is kept.
+
+## Held against 661 measured pairs: the registration (2026-09-27, before the run)
+
+Section 1 to 6 above audits a statistic computed on the model's own answers. The
+caveat measurement 2 has carried since 2026-09-21 is that the "target gene" is
+whichever gene the deletion moves most, so the containment share partly measures
+where the model looks. A measured set is on disk and costs nothing:
+`data/knowledge/crispri/EPCrisprBenchmark_combined_data.{training_K562,heldout_5_cell_types}.GRCh38.tsv.gz`,
+parsed by `genomeos/attribution/crispri.py`. Filtering on `Regulated=TRUE` gives
+the arm below. **This registration is committed before the swap is run.**
+
+### The swap
+
+`_inside_share(starts, elements)` takes `(element midpoint, TSS)` pairs. The
+modelled arm feeds it the TSS of the gene the deletion moves most; the measured
+arm feeds it `(Pair.midpoint, Pair.tss)` from `crispri.load` filtered on
+`regulated`. Everything downstream — `infer_domains`, the four controls of
+section 2, both bootstraps, the sign test — is the same code, unchanged.
+
+### The arm's inventory, counted before anything was scored
+
+| | |
+|---|---|
+| `Regulated=TRUE` pairs, both tables, `ValidConnection=TRUE` | **661** |
+| all 661 carry a `startTSS` | 661 |
+| distinct (element, cell) | **594** |
+| cells | K562 **589**, HCT116 34, GM12878 16, WTC11 15, Jurkat 7 |
+| median element-to-TSS distance | **32,075 bp** |
+| pairs beyond 10 kb | **498** |
+| chromosomes represented | 23 |
+| screens | Gasperini2019 360, Nasser2021 111, Xie 42, Morris 35, HCT116 34, Schraivogel2020 23, Klann 21, WTC11_DC_TAP 15, K562_DC_TAP 12, Reilly 8 |
+
+**This arm is effectively single-cell-type.** 589 of 661 pairs, 89.1%, are K562.
+Nothing this arm returns is a statement about cell types in general, and the node
+caller itself is cell-type-blind (CTCF-only cCREs pooled across ENCODE), so a
+K562-dominated measured set cannot test whether nodes are cell-type-specific
+either. It tests one thing: whether a *measured* element-gene link is contained
+by a node more often than the same link would be under randomly placed
+boundaries.
+
+### The power arithmetic, which decides how the result may be read
+
+At a containment share near the control's 0.725 and n = 594 independent pairs,
+the standard error of a share is `sqrt(0.725 x 0.275 / 594)` = **1.83 points**.
+Therefore:
+
+| | |
+|---|---|
+| the modelled excess, +2.90 points, expressed in this arm's standard errors | **1.58 sigma** |
+| its one-sided p, if the measured arm reproduced it exactly | **0.057** |
+| the smallest excess this arm detects at 80% power, one-sided a = 0.05 | **4.56 points** |
+| the same on the 498 distal pairs (SE 2.00) | **4.98 points**, and +2.90 becomes 1.45 sigma |
+| the same on all 661 pairs, ignoring the element-sharing (SE 1.74) | 4.32 points, +2.90 at 1.67 sigma |
+
+And the pairs are not fully independent: 661 pairs sit on 594 distinct
+(element, cell) pairs, and every pair inside one node shares its boundaries, so
+the effective n is below 594 and every figure above is optimistic. **The arm is
+underpowered to confirm an excess of the modelled size.** This is registered
+because it is the difference between a result and a non-result, and it is
+registered before the number exists.
+
+### The three outcomes, and what each means for the claim
+
+1. **Undecidable — the most likely outcome, and registered as such.** The
+   measured excess lands somewhere near the modelled +2.9 with an interval that
+   crosses zero. This neither supports nor withdraws the containment claim; it
+   establishes that 661 measured pairs cannot test it, which is itself the
+   finding, because the claim has been quoted seven times as though a measured
+   test existed. The claim would then stand as what it is: a statement about
+   where a model looks, with a defined baseline and an interval, and no measured
+   confirmation. The right consequence is the wording change in "What this
+   section changes about the claim" above, plus a named power requirement — about
+   **1,500 measured pairs** would be needed for 80% power at +2.9 points — so the
+   next CRISPRi release can be checked against a number rather than hoped at.
+2. **Clearly larger — plausible, and registered as plausible rather than as a
+   surprise.** A measured excess materially above the modelled one, with a lower
+   bound above zero, is expected under one specific mechanism: the modelled arm's
+   target gene is the model's own most-moved gene, and where the model is wrong
+   about the target it supplies a TSS drawn from roughly the right neighbourhood
+   but the wrong gene, which dilutes a real containment signal toward the
+   background. Since only 62% of coding targets are even the nearest TSS, the
+   dilution is not small. A larger measured excess would therefore *strengthen*
+   the node as a unit while *withdrawing* the number: +2.9 would be revealed as
+   an attenuated reading of the model's own noise, not an estimate of node
+   containment, and the quotable figure would become the measured one with its
+   interval.
+3. **Clearly absent — real elements contained no more often than random
+   boundaries would contain them, upper bound below about +1 point.** This
+   withdraws the claim outright, on 589 K562 pairs, and it says the +2.9 is a
+   property of the deletion archive's target-calling rather than of the genome's
+   folding. It would not withdraw the node caller, which is also supported by the
+   Hi-C enrichment of section 1 above and by the mouse synteny, but it would end
+   measurement 2 as evidence for it, and the seven citations would have to be
+   cut rather than re-worded.
+
+Between (1) and (3) the dividing line is registered now: the verdict is
+**"clearly absent" only if the 95% interval's upper bound is below +1.0 point**,
+and **"clearly larger" only if the lower bound is above +2.9**, the modelled
+value. Anything else is outcome (1), undecidable. Four controls are scored in
+both arms and the verdict is read off `uniform`, the published baseline, so that
+the measured and modelled numbers are comparable; the other three are reported
+beside it and the range across them is reported as the range, exactly as in
+section 2.
