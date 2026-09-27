@@ -555,6 +555,20 @@ the time of writing, origin and paralogues as the only residue. The view is
 the product form of area J: what the project knows about a locus, layer by
 layer, with the gap stated.
 
+**"Eleven ENCODE cell types" above was true on 2026-09-12 and is thirteen
+since 2026-09-14 (added 2026-09-27).** Testis and ovary joined the eleven
+`reader_genome_wide.json` then held (K562, HepG2, GM12878, H1, IMR-90,
+SK-N-SH, cardiac muscle cell, keratinocyte, hepatocyte, astrocyte,
+CD14-positive monocyte). The figure is left as written and corrected here
+rather than edited, because the view never held a list: `_reader` in
+`decompile.py` globs `reader_*_{chrom}.json` and prints whatever readers are on
+disk, so the number in the paragraph above was a reading of the results
+directory on one day and not a setting. Checked while counting: the glob
+matches fourteen files for chr21, the fourteenth being
+`reader_K562_vs_HepG2_chr21.json`, a two-cell comparison rather than a cell
+type — and the function already drops it, on `"_vs_" in stem` and on the
+absence of `silent_genes`, so the view prints thirteen.
+
 ## 10. Step 2 built: origin per gene, age per library, paralogues (2026-09-12)
 
 `genomeos origin [--gene G | --library L]` (`knowledge/homology.py`,
