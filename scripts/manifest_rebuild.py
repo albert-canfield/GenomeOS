@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -117,16 +118,27 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
                 )
                 return {**report, "rebuilt": False}
         env["PYTHONPATH"] = str(wt)
+        # The committed uv.lock is used as it is. Without UV_FROZEN `uv run` re-locks (the lock at
+        # fe0880a still names genomeos 0.9.0 against pyproject's 1.0.0) and the rewritten lock makes
+        # the second checkout dirty, which the rebuilt manifest then records as a one-byte difference.
+        env.update(UV_FROZEN="1", UV_OFFLINE="1")
         run = subprocess.run(["uv", "run", "python", *argv], cwd=wt, env=env, capture_output=True, text=True)
         report["exit"] = run.returncode
         report["stdout_tail"] = run.stdout[-1500:]
         if run.returncode:
             report["unavailable"].append(f"the command failed: {run.stderr[-800:]}")
             return {**report, "rebuilt": False}
+        name = original.get("result") or result.stem
+        written = wt / "data" / "results" / f"{name}.json"
+        if written.name != result.name:  # the manifest was read from a copy under another name
+            shutil.copyfile(written, wt / "data" / "results" / result.name)
         rebuilt = json.loads((wt / "data" / "results" / result.name).read_text())
+        report["rebuilt_sha256"] = mf.sha256_of(written)[0]
         report["differences"] = diff(comparable(original), comparable(rebuilt))
         report["fields_compared"] = len(comparable(original))
+        # despite its name this key compares fields (date and the code block ignored); the next is bytes
         report["identical_bytes_except_date_and_run"] = not report["differences"]
+        report["identical_bytes"] = written.read_bytes() == result.read_bytes()
         return {**report, "rebuilt": True}
     finally:
         if not keep:
