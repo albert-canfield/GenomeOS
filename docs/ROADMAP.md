@@ -3058,6 +3058,30 @@ useless as a *count* is depth-invariant as a *membership*.
   Evidence view now carries both eGene columns. What remains is
   `target_calibration.py`, `motif_transfer.py` and `syntax_tiling.py`, each
   needing its own registration.)*
+- **The unknown scoring read off the sweep's whole window, and the naming rate turns out to sit
+  below its own chance level (2026-09-27, lane-scoring, `77de3bb` registration, `7f7c8c1` result, 0
+  requests).** Three sites in `attribution/unknown_scoring.py` moved onto `ElementResponses`, with every
+  pre-existing chr21 figure reproduced to the digit as the control. **The compact table was not
+  censoring this module's target**: 5,174 of 12,139 elements name a coding gene from the table and the
+  same 5,174 from the window, 0 disagreements, so reading the window cannot name one extra target —
+  checked before the run rather than discovered after it.
+  **The decisive number is a control this module never had.** On 22,200 length-matched random windows
+  inside the same scored span, **unknown blocks name a coding gene at 49.1% against 65.3% at random —
+  16.2 points below chance.** The one count the window did raise, blocks carrying a target and a cell
+  line (90 → 99), rose *faster* at the control (−16.69 → −16.99 points), and is reported as an inflation
+  in those words. Of chr21's 20 constrained-unknown blocks, 1 carries a named target and 0 a cell line.
+  **What the lane bought instead.** A magnitude comparison no longer conditioned on the `MIN_EFFECT`
+  gate, which fires at 49.5% of unknown-block elements against 68.2% of the rest: −0.0294 at p 0.048
+  becomes **−0.0625 at p 0.0005**. A VISTA contrast with **no invented zeros** — `against_vista` had
+  been scoring an element covered only by gated elements as exactly 0.0 and averaging it in; removing
+  them moves the contrast 0.3306 → 0.3126. And "nothing" on the 69 syntax candidates split into its two
+  meanings: 35 blocks hold no registry element at all, 9 were asked and answered below the bar.
+  **The registered falsifier fired, and it is worth more than the fix.** Over all 445 covered
+  lentiMPRA elements rather than the gated 329, unsigned rho *rose* on HepG2, **0.1699 → 0.2081** (p
+  0.002 → 0.0005): the gate discards elements whose sub-threshold effects still track measured
+  activity. That is the eQTL lane's `MIN_EFFECT` finding of 2026-09-22 shown against a measurement
+  rather than a database. **Next here**: lift `matched_random_windows` into
+  `scripts/constrained_unknown_targets.py`, which still carries the borrowed 87% sentence.
 - **Owner.** genomeos-i1 since 2026-09-13 (this lane's files; earlier genomeos-f7 and genomeos-c6); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.
@@ -4153,6 +4177,16 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.2 therapeutics benchmark** ◑ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. **2026-09-21 (`e21d34a`): 7/7 recovered, 7/7 routes, 7/7 defensible, the pinned mechanism-defect count down from 2 to 0, and the seventh case reached by an expression call rather than a DNA event.** The `cancer.*` libraries landed 2026-09-14 (`9c0e6ce`). Outstanding: **no scored case is driven by a copy number or a structural variant** — both routes have unit controls only — and the fusion candidate keeps a surface class its product may not have, blocked on a junction or orientation measurement this project does not hold and pinned as a failing-when-fixed test |
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (**284,001 oligos** over 878 blocks, 41,037 of the test arm from blocks no assay has touched; this said 312,129 until 2026-09-27, the first build's count before the orderability filter dropped 4,264 untouched windows, and 45,301 − 4,264 = 41,037 exactly) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
+
+**1.3's second clause, measured 2026-09-27 (area I, the unknown scoring row).** "The
+constrained-unknown blocks attributed to a gene and a tissue" is not merely undefended for want of
+measurement: **the unknown blocks name a coding gene at 49.1% against 65.3% at length-matched random
+windows — 16.2 points below the instrument's own chance level** — and reading the sweep's whole window
+cannot change it, because the table's target already is the window's head. Section 5 item 10 split this
+clause into "attributed where measurement exists, a labelled lead elsewhere"; this measurement says a
+lead from this instrument, on these blocks, is weaker than one drawn at random, so the clause is held as
+**not met** and what would move it is a control it can pass — a measured arm per block, or blocks chosen
+so they are not gene-poor against their control — rather than more model output.
 
 **1.3's row above cites "node +2.88 points over random boundaries" as evidence that a clause was met.**
 Re-audited 2026-09-27 (area B's node containment row): **+2.90, 95% CI +2.03 to +3.81** on a control

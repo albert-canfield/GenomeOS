@@ -55,6 +55,9 @@ CONTROLS = {
         "control": 0.791,
         "measured": 0.817,
         "excess": 0.026,
+        "superseded_by": "data/results/node_containment_audit.json and docs/NODES-READER-WRITER.md "
+        "(2026-09-27): this control is from the 113,399-element archive and must not be read against "
+        "the 440,377-element measurement beside it; the audit gives four baselines and a measured arm",
         "what": "over the whole deletion archive of 113,399 elements the same caller keeps a coding "
         "target inside the element's own CTCF node for 81.7% of elements, against 79.1% for the same "
         "number of boundaries placed at random: 2.6 points, not nine times out of ten",

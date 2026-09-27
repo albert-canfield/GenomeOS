@@ -1787,7 +1787,7 @@ the same twenty seconds. A default nobody waits for is not a default.
 
 **What it does not say.** Nothing here is a claim that the attributions are wrong. `predicted` is an
 honest label on a model's output and the project has spent two days measuring how far those outputs
-carry — the node's +2.88 points, the calibration's failure on prevalence, E1's +0.075. It says that
+carry — the node's +2.88 points *(Re-audited 2026-09-27, NODES-READER-WRITER.md: +2.90, 95% CI +2.03 to +3.81, on a control matched on boundary count only; +1.2 to +6.6 across four defensible baselines; and **+5.89, CI +3.18 to +8.46, on 661 measured CRISPRi pairs** — the direction stands on measurement, the size quoted here was never identified.)*, the calibration's failure on prevalence, E1's +0.075. It says that
 the compiled genome is a hypothesis in the shape of a program, and that it says so itself, fact by
 fact, which is what the evidence field was built for.
 
@@ -2604,7 +2604,7 @@ the one category where the sweep changed a block's reading rather than confirmin
 
 **What this does not say.** A named target is a prediction from one model, and the same model names a
 target at 87% of matched random windows; the number that matters is not 25 of 69 but whether these
-differ from matched controls, which the sweep's own fold answers for elements at large (+2.88 points)
+differ from matched controls, which the sweep's own fold answers for elements at large (+2.88 points) *(Re-audited 2026-09-27, NODES-READER-WRITER.md: +2.90, 95% CI +2.03 to +3.81, on a control matched on boundary count only; +1.2 to +6.6 across four defensible baselines; and **+5.89, CI +3.18 to +8.46, on 661 measured CRISPRi pairs** — the direction stands on measurement, the size quoted here was never identified.)*
 and which nobody has answered for these 69. The two-thirds that gain nothing are the honest headline:
 **scoring every element of the genome leaves 44 of 69 candidate blocks exactly where they were.**
 
@@ -3920,7 +3920,7 @@ chr22, chrX and chrY), 605,137 elements, 425,526 requests.
 |---|---|---|---|
 | names a gene at all | 64.1% | 58.1% (chr13) to 70.8% (chr19), median 62.8% | 87% of matched random windows in the locus benchmark |
 | the named coding gene is the nearest TSS | 62.0% | 48.8% (chrY) to 65.3% (chr22), median 61.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements |
+| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements. *(2026-09-27: that random set is matched on boundary count only, not on the 50 kb floor every real node passes, so it is biased low; across four baselines the excess runs +1.2 to +6.6, and on 661 measured CRISPRi pairs it is +5.89. NODES-READER-WRITER.md, the random-boundary audit.)* |
 
 **The node control, re-measured where the claim is now being made.** dbad593 qualified the old
 "90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
