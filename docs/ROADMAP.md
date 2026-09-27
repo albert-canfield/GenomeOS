@@ -250,7 +250,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   sequence along time reported against a run with its inversions. It drives
   nothing, which is what keeps it from being a second `stage`. And the engine now
   **builds and runs as a package of its own** (`scripts/package_engine.py`,
-  `docs/ARCHITECTURE.md` §10.1, milestone 2.0): 31 files, Apache-2.0, no
+  `docs/ARCHITECTURE.md` §10.1, milestone 2.0): **36 files on 2026-09-27, 22 with imports rewritten, 8 of 8 checks** (31 files and 20 rewritten when first built on 2026-09-15, which this row quoted until today), Apache-2.0, no
   dependencies, run in a Python with no site-packages where `import genomeos`
   fails outright — all four verbs, every module, the standard library and an
   organism, with the application absent.
@@ -763,9 +763,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   surviving peak count, width and curvature makes the residual a stable property
   of the biosample, and does not make it biology. FRiP, fragment length,
   crosslinking and library complexity are all biosample-stable assay properties
-  and none is on disk. **Still open**: `attribution/candidates.py:401` re-derives
-  the same median-density threshold and carries the same tautology into the
-  candidate scoring.
+  and none is on disk. **Closed on 2026-09-22** (`1e57e3e` registration, `c6fc229` merge, `f21365f` the field and its
+views); this row said "Still open" until 2026-09-27. There is now one definition,
+`node_open_threshold()` in `genome/reader.py`, called from both sites. Against its registration:
+**0 disagreements over 260,026 node calls** in 312 files, and **69 of 69** published candidates
+identical on both fields. The verdict is the negative one: **a maintenance hazard and not a defect**,
+because both fields it feeds are write-only, and because the construction that makes `nodes_open`
+useless as a *count* is depth-invariant as a *membership*.
 - **Direction, held against measured perturbations, and it passes (2026-09-22,
   lane-crispri).** Every enhancer-gene call this project makes carries an
   `action`, `activates` or `represses`, and that word is only the sign of a
@@ -884,10 +888,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   `graph.py`, `reactome.py`, `uniprot.py`, `alphafold.py`, `ptm.py`;
   `flow/trace.py`.
 - **Design.** PROTEIN.md, FLOW.md.
-- **Data.** `proteome_chr*` (4 of 25: chrM, 21, 22, Y),
-  `translation_vs_uniprot_chr*` (3), `graph_chr21`, `graph_genome`,
-  `ptm_genome_wide`, compiled definitions in
-  `data/knowledge/proteins` (18 MB).
+- **Data.** Counted on disk 2026-09-27. This row read "`proteome_chr*` (4 of 25: chrM, 21, 22, Y),
+  `translation_vs_uniprot_chr*` (3) … `data/knowledge/proteins` (18 MB)" and understated every
+  figure in it for sixteen days. `proteome_chr*` **25 of 25** plus `proteome_genome_wide`;
+  `translation_vs_uniprot_chr*` **25 of 25**, with no genome-wide file of its own; `graph_chr21`,
+  `graph_genome`, `ptm_genome_wide`; compiled definitions in `data/knowledge/proteins`, **19,453
+  files and 291 MB**. A row that understates its own area is read as a to-do list by the next lane,
+  which is how the same work gets scheduled twice.
 - **Requirements.** UniProt accession is the id; Gene → Transcript →
   Protein isoform, never Gene → Protein; predicted never equals
   experimental; STRING association is not interaction; never call an API
@@ -1766,19 +1773,18 @@ in order. "Owner" is the session that holds the files today (see §7).
   programs, mean confidence 0.57, 48% experimental, 46% predicted, 4%
   curated, 2% inferred and 2 facts with no evidence at all; 9,974 facts sit
   at or below 0.5, and 9,782 of those are the compiled chr21 non-coding
-  program, whose mean confidence is 0.27. Measured and predicted are almost
+  program, whose mean confidence is 0.27. **Re-run 2026-09-27: 26,845 facts over 41 programs, mean confidence 0.617, 10,075 at or below 0.5 — experimental 14,655 (54.6%), predicted 10,352 (38.6%), curated 1,343 (5.0%), inferred 492 (1.8%), none 3.** The first reading above is kept beside it; mean confidence rose because what arrived is mostly measured, and the weak half did not shrink (10,075 against 9,974). Measured and predicted are almost
   equal in number, which is what a project that compiles public data and then
   predicts on it should look like; the weak half is concentrated in exactly
   one place, area I's attributions, rather than spread through the
   hand-written biology.
-- **Missing.** One view promised in the UI track is still unbuilt:
-  **Cell** (a cell type's active rule set and graph, run and watch). No git tag and no PyPI package; no nightly
-  real-data CI; no "known phenotypes it must reproduce" list per library from
-  a biologist. Done 2026-09-11: version 0.9.0 in `pyproject.toml` and the
-  README rewritten around what the release measures. Done 2026-09-11: the jobs
-  registry de-duplicates by pid liveness, so server restarts no longer spawn
-  copies of a job. Done 2026-09-11: `data/jobs` metadata and logs are
-  git-ignored, the registry kept in code.
+- **Missing.** Every view promised in the UI track is now built. The last, **Cell**, shipped on
+  2026-09-21 as `7abb450` with `/api/cell`, `/api/cell/programs`, `/api/cell/run` and
+  `tests/test_cell_view.py`; this line said it was unbuilt until 2026-09-27. Its "no nightly
+  real-data CI" clause was stale too — Next item 4 records it done on 2026-09-17. **What is genuinely
+  outstanding: no git tag and no PyPI package** (the version reads 1.0.0 since 2026-09-27), and no
+  "known phenotypes it must reproduce" list per library from a biologist, which is a person this
+  project does not have rather than a task.
 - **Next.** 1. Done 2026-09-13: the Evidence explorer over every program,
   with the CSV review list; next, the same reading over the compiled
   chromosome programs of area I, which is where the weak half sits.
@@ -1795,7 +1801,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   `continue-on-error`: an outage at UCSC is not a defect here, and a scheduled job that
   reddens on someone else's downtime trains everyone to ignore it. The AlphaGenome live
   test stays out because it needs a paid key as a repository secret, which is Albert's
-  decision. Still one scheduled run a day. 5. Cell view: **done 2026-09-17**. The reader has run on eleven cell types over
+  decision. Still one scheduled run a day. 5. Cell view: **done 2026-09-17**. The reader has run on **thirteen** cell types over (this said "eleven" until 2026-09-27; `reader_genome_wide.json` has named thirteen since 2026-09-14, the last two being testis and ovary)
   all 24 chromosomes since 2026-09-14 and its numbers lived pooled inside the Progress
   tab's genome-wide card, where cells could not be compared. `/api/cells` and the Cells
   view read `reader_genome_wide` per cell: genes read, promoter open, poised, read by
@@ -3195,9 +3201,45 @@ in order. "Owner" is the session that holds the files today (see §7).
   family survives correction, and the ZRS has 6 strongly functional bases of
   485, so §12's reading is unsupported by measurement. Uses no AlphaGenome
   quota, so it runs beside the deletion chain. GRAMMAR-BY-COMPARISON.md §16.
-- **Missing.** The motif scan and
-  operator patterns; phylogenetic profiling between libraries; the
-  decompiled locus view; one developmental locus run end to end.
+- **Grammar as a test that could fail, and it failed (2026-09-16).** `attribution/motif_grammar.py`,
+  results `motif_grammar` and `motif_grammar_preregistration`, **pre-registered in code and committed
+  before the held-out chromosomes were read**. On 51,376 ENCODE4 lentiMPRA elements, three nested
+  ridge feature sets — composition; plus strict family-collapsed JASPAR counts at 0.95; plus 330
+  arrangement columns (gap bins, strand, helical phase) — with chr8, 9, 21 and 22 held out (6,146
+  elements) and a shuffled-grammar falsifier. **The registered claim fails in all three cell lines**:
+  arrangement adds +0.0021 [−0.0049, +0.0085] in K562, −0.0056 [−0.0120, +0.0014] in HepG2, +0.0022
+  [−0.0050, +0.0097] in WTC11, and the shuffle does as well or better in two of three. **What worked
+  is the counts**: +0.234 Spearman in K562 and +0.235 in HepG2 over composition. Four limits recorded
+  rather than tuned away, the largest being that an episomal reporter has no nucleosome, which is the
+  mechanism that would make helical phase matter. GRAMMAR-BY-COMPARISON.md §17.
+- **The count positive tested for transfer, and it survives — the one surviving sequence-to-function
+  claim in area J (2026-09-17).** `attribution/motif_transfer.py`, pre-registration committed first.
+  On 2,223 VISTA transgenic-mouse verdicts with nine chromosomes held out (643 elements, 351 positive),
+  **conservation + counts 0.655 against conservation alone 0.596, +0.060 [+0.022, +0.099]**, on
+  elements chosen for conservation; counts beat a dinucleotide shuffle by +0.067; 0 of 1,000 label
+  permutations reached the observed value. The control that fails is kept: which *tissue* a positive
+  drives is predicted by length and composition alone, and counts add nothing. On the 227 lentiMPRA
+  elements inside the constrained-unknown blocks counts add +0.238 in K562 — but swept blind over
+  152,556 windows of those blocks the same model **cannot tell real sequence from its own shuffle**,
+  because a lentiMPRA element is a selected cCRE and a uniform tiling is not. GRAMMAR-BY-COMPARISON.md §18.
+- **Missing.** *(Corrected 2026-09-27 by lane-records: the line that stood here was stale in all
+  four of its clauses, and is kept below rather than overwritten.)* It read: "The motif scan and operator
+  patterns; phylogenetic profiling between libraries; the decompiled locus view; one developmental
+  locus run end to end." All four were built on 2026-09-12 by steps recorded in this area, and three
+  then produced negatives: **the motif scan** (`genome/motifs.py`, 1,019 JASPAR CORE profiles over
+  all 20,067 canonical promoters, §8); **operator patterns** — searched, and there are none: no
+  TFClass family pair recurs beyond its GC-decile × repeat-share expectation in any of the 42
+  libraries, the last survivor sitting on Alu at 19.4% of bases against 1.1% (§13), and arrangement
+  adds +0.0021, −0.0056, +0.0022 Spearman on 51,376 measured elements, every interval containing zero
+  (§17); **phylogenetic profiling** (§11), since tested twice, with 14 of 42 libraries at or below a
+  prevalence-matched real-gene null and the fourteen being the ancient core (§19); **the decompiled
+  locus view** (`genomeos decompile`, the Blocks-tab card, `/api/decompile`, §9); and **one
+  developmental locus end to end**, the ZRS across five species (§12), its site call corrected (§13)
+  and carried into a 148-element VISTA panel where held-site density does not separate (§15).
+  **What is actually missing**: enhancer pair logic read outside promoters (GATA plus T-box in heart
+  has never been read in enhancers); a species-tree null, the only thing that would let a pair be
+  called a dependency; and a model that reads the sequence itself, scored on §17's own held-out
+  elements — the one readout §17 names as able to overturn its negative.
 - **Next.** 1. Done: the human axis over the genome and the case in the
   compiled `region` note, and **the Blocks-tab lane is done 2026-09-17**: every UNKNOWN block
   carries its case, both axes and the confidence, and the lane draws a bar beneath it — amber
@@ -4066,7 +4108,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** ✅ | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | **Reached, and the row said "planned" until 2026-09-22 while every clause was already met.** `bio test` runs 41 programs at 220/220 checks in CI, including ten worm mutants and nine blood mutants as `experiment` programs; the `design` block takes experiments as input; the Evidence explorer shipped 2026-09-13. **One caveat the version does not carry: BioForge's own emitted confidence is a hand-set `0.3` and is `UNCHECKABLE_BY_CONSTRUCTION` (docs/BIOFORGE-CONFIDENCE.md), so "takes experiments as input" is true and "prices its answer" is not.** |
 | **1.1 human mechanism** ◑ | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | **Both clauses are built and the row said "planned" until 2026-09-22.** Haematopoiesis landed 2026-09-11 as the first human mechanism module, with its mutants in CI; reader v1 runs on **thirteen biosamples** across every chromosome. **Not marked done, for a measured reason rather than an unfinished one:** of reader v1's per-biosample readings, `enhancers_active` is assay depth (rho 0.83 against peak count), `nodes_open` is a median split that returns half the nodes for every biosample, and `genes_poised` tracks its own mark's peak call — so "open nodes per cell type" is a number the layer cannot yet defend between cell types. `genes_read` survives the depth check and testis leaves the range it was fitted on. The milestone needs the reader's readings to mean what their names say, not more biosamples |
 | **1.2 therapeutics benchmark** ◑ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. **2026-09-21 (`e21d34a`): 7/7 recovered, 7/7 routes, 7/7 defensible, the pinned mechanism-defect count down from 2 to 0, and the seventh case reached by an expression call rather than a DNA event.** The `cancer.*` libraries landed 2026-09-14 (`9c0e6ce`). Outstanding: **no scored case is driven by a copy number or a structural variant** — both routes have unit controls only — and the fusion candidate keeps a surface class its product may not have, blocked on a junction or orientation measurement this project does not hold and pinned as a failing-when-fixed test |
-| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (312,129 oligos) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
+| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (**284,001 oligos** over 878 blocks, 41,037 of the test arm from blocks no assay has touched; this said 312,129 until 2026-09-27, the first build's count before the orderability filter dropped 4,264 untouched windows, and 45,301 − 4,264 = 41,037 exactly) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 **Version and README, corrected 2026-09-27.** The 0.9 row above says "Version is 0.9.0 and the
