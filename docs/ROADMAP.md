@@ -1737,6 +1737,18 @@ useless as a *count* is depth-invariant as a *membership*.
   ERBB2-amp 4 → 1, KRAS 5 → 1, PIK3CA 5 → 1, IDH1 and ALK 2 → 1, CD19 held at 2; the twelve rows where
   a guess outranked the target are zero. Left open by it: no rule asks whether a candidate has any
   mechanism at all, and inside the top tier twelve copies and one missense read the same.
+- **Mechanism gate and magnitude tiebreak, done (2026-09-28, lane-mech, `028085c` registered,
+  `2805552` built).** The two items the evidence tier left open are closed on the order, not in the
+  mean. `mechanism_reach` partitions candidates by whether any modelled modality reaches them with
+  its hard requirements answered — read after the tier, never before it, provisional-only in the
+  same class as nothing — and `alteration_magnitude` publishes what the patient's data measure
+  (copy count against the diploid 2, allele fraction, hotspot status), stating absences and breaking
+  ties only between candidates equal on tier, gate and score. No falsifier fired: all nine rows are
+  identical field by field; new pin `outranked_by_unreachable` 0 for all nine. **Five of the nine
+  targets are `no_established_mechanism`** — the small-molecule cases — which the ranking now says
+  rather than ordering them as though a modality existed. **Negative: the gate closed no case**, so
+  its value is untested against a tumour where an unreachable candidate outranks a target, and the
+  tiebreak has never fired end to end because the demo VCFs carry no allele fraction.
 - **Missing.** The demo runs at data level 1 only; what a deep deletion is
   actually worth (the dependency it creates) is not modelled; the scan's
   healthy reference is 20 tissues of population consensus, not a matched
@@ -4210,6 +4222,7 @@ entire sweep. What is next, in order of what it decides:
    | R7 | A compositional ontology (P2) | `compile.py:283` | origin, role, activity, target and evidence status separated; a repeat-derived regulatory element keeps both; a predicted increase does not force a silencer label; alternatives survive serialisation; constraint read as selection, not mechanism | after R3 |
    | R8 | The joint inference engine, bounded (P2) | `attribution/closure.py`; genomeos-8a's brief | pretest first (coupling against independent scoring on validation folds; a negative closes it); then fixed-boundary search solving a synthetic two-change case, and gains on independent evidence over unchanged annotation and independent-block baselines; convergence never reported as validation | after R1–R5 |
    | R9 | Result manifests and public claims (P2) | `genomeos/results.py:23`, README | every result carries source accessions and versions, checksums, assembly, coordinate convention, code revision, parameters, exclusions and partitions; a second environment rebuilds one representative result or names what is missing; public summaries separate sequence, annotation and assay coverage, software correctness and independent prediction | now; README corrected 2026-09-28 by the coordinator |
+   | ↳ R9 | **manifests done 2026-09-28 (lane-manifest, `fe0880a`, `4b8e8b9`; evidence fix `c22c8c6`)** | `genomeos/manifest.py`, under `result_manifest` | Census before: **0 of 955 results carried a manifest**, 718 said nothing on any field, none recorded a code revision or coordinate convention. The writer stamps git sha, dirty flag and argv; a new result name must be complete (written, then `ManifestError`); rewriting a historical result warns; nothing historical rewritten. `crispri_direction` rebuilt **byte-identical** from its manifest in a second clean worktree with a fresh offline venv, all 3 input sha256 matching. On another machine the missing dependency is the unpublished AlphaGenome all-element sweep (model version unpinned); the CRISPRi tables are pinned only by sha256 (upstream `main`). `genomeos evidence` now fails loudly when a program does not parse. Side finding fixed: uv.lock named genomeos 0.9.0 against 1.0.0 | open: the other writers still need manifests | done, one writer |
 
    **What the project already agreed with.** R5's merge defect and R2's missing power column were
    reported independently the same night by genomeos-8a and confirmed by the coordinator; lane-split
