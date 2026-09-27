@@ -57,6 +57,7 @@ from pathlib import Path
 
 from genomeos.results import save_result
 from genomeos.therapeutics import analyse_vcf
+from genomeos.therapeutics import scoring as ranking_rules
 from genomeos.therapeutics.scoring import UNMEASURED_TIER
 
 DEMO = Path("data/demo")
@@ -264,6 +265,11 @@ def run_case(case: dict, net: bool, log) -> dict:
     # nothing about that gene was measured in this patient.
     above = a["candidates"][: ranked.index(gene)] if hit is not None else []
     hypotheses_above = [c.gene for c in above if c.evidence_tier == UNMEASURED_TIER]
+    # A fifth question, from the mechanism gate registered 2026-09-27: how many
+    # candidates rank above the target while no modelled modality reaches them with
+    # its hard requirements answered? A gene nothing can be aimed at, ranked above a
+    # gene with an approved antibody, is a ranking that cannot be acted on.
+    unreachable_above = [c.gene for c in above if c.mechanism_reach == ranking_rules.REACH_NONE]
     out = {
         "case": case["case"],
         "gene": gene,
@@ -276,6 +282,7 @@ def run_case(case: dict, net: bool, log) -> dict:
         "recovered": hit is not None,
         "rank": (ranked.index(gene) + 1) if hit is not None else None,
         "outranked_by_hypotheses": hypotheses_above,
+        "outranked_by_unreachable": unreachable_above,
         "seconds": round(time.time() - t0, 1),
     }
     if hit is not None:
@@ -290,6 +297,10 @@ def run_case(case: dict, net: bool, log) -> dict:
                 "target_class": hit.target_class,
                 "score": None if hit.scores.overall is None else round(hit.scores.overall, 3),
                 "evidence_tier": hit.evidence_tier,
+                "mechanism_reach": hit.mechanism_reach,
+                "mechanism_reach_reason": hit.mechanism_reach_reason,
+                "alteration_magnitude": hit.alteration_magnitude,
+                "alteration_magnitude_reason": hit.alteration_magnitude_reason,
                 "alteration_evidence": hit.scores.value("alteration_evidence"),
                 "surface_accessibility": hit.scores.value("surface_accessibility"),
                 "best_mechanism": best.mechanism if best else None,
@@ -402,6 +413,21 @@ def main() -> int:
             "proxy under which CD19's own route read as burial. Scores before and after this change "
             "are not comparable, because every candidate gained a dimension; the ordering is what "
             "the change was about."
+        ),
+        # The two rules of 2026-09-27 are documented in their own key rather than inside
+        # the note above, which belongs to the run that measured the evidence tier.
+        "ordering_rules": (
+            "Two rules on the order, registered before the code on 2026-09-27 and neither a term in "
+            "the weighted mean. mechanism_reach partitions candidates by whether any modelled "
+            "modality reaches them with its hard requirements answered; it is read after the "
+            "evidence tier and never before it, and provisional-only sits with nothing-at-all "
+            "because a mechanism whose requirement is unanswered has not been shown to apply. "
+            "outranked_by_unreachable counts candidates ranked above the target that no modality "
+            "reaches. alteration_magnitude publishes how much this patient's own data say the gene "
+            "was altered - copy count against the diploid 2, variant allele fraction, hotspot "
+            "status - with an absent quantity stated as absent and never imputed, and it breaks "
+            "ties only between candidates already equal on tier, gate and published score, "
+            "comparing like with like because a count and an annotation share no unit."
         ),
         "rows": rows,
     }

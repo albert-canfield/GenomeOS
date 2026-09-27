@@ -15,6 +15,8 @@
   "surface_cases_recovered": 4,
   "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
   "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target, and all four routes into the candidate list are now scored: six point mutations, one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case so that the route is the only thing that differs), one structural variant (EML4-ALK) and one expression call (CD19, which carries no alteration of any kind). The ALK case is the one where the curated databases and the patient disagree: ALK is a single-pass surface receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the approved drugs are small molecules. It passes by refusing a surface route rather than by leaving the question open. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target with nothing measured about them in this patient. Until 2026-09-27 the pipeline could recover a target without preferring it, and the three scored questions could not tell those apart: ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, scored 0.494 and ranked fourth behind KDR, EGFR and PDGFRB, none of them altered in that tumour, because surface_accessibility reads curated localisation and no dimension read the alteration. A dimension now does: alteration_evidence, on three tiers - an alteration observed in this tumour (1.0), this patient's own measurement of the gene (0.6), a database association with a gene that was altered (0.2) - and the ranking puts the third tier below the other two before it looks at a score. evidence_tier and alteration_evidence are reported per row. The tier is read from the evidence about the gene and never from the route that proposed it, which is what keeps CD19, reached from the patient's RNA with no alteration of any kind, from being demoted by a rule aimed at hypotheses; for the same reason the count above no longer means 'candidates with no origins record', a proxy under which CD19's own route read as burial. Scores before and after this change are not comparable, because every candidate gained a dimension; the ordering is what the change was about.",
+  "ordering_rules": "Two rules on the order, registered before the code on 2026-09-27 and neither a term in the weighted mean. mechanism_reach partitions candidates by whether any modelled modality reaches them with its hard requirements answered; it is read after the evidence tier and never before it, and provisional-only sits with nothing-at-all because a mechanism whose requirement is unanswered has not been shown to apply. outranked_by_unreachable counts candidates ranked above the target that no modality reaches. alteration_magnitude publishes how much this patient's own data say the gene was altered - copy count against the diploid 2, variant allele fraction, hotspot status - with an absent quantity stated as absent and never imputed, and it breaks ties only between candidates already equal on tier, gate and published score, comparing like with like because a count and an annotation share no unit.",
+  "ordering_rules_measured": "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a re-run on 2026-09-28, hours after the rules were registered. Every other field of every row came out identical to the 2026-09-27 run recorded here - rank, score, target class, evidence tier, mechanism, compatibility, accessibility, peptide route, verdict - which is the check that the two rules changed an order and nothing else. That run's date and per-case wall-clock timings are left as they are rather than overwritten, so that adding these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds per case.",
   "rows": [
     {
       "case": "EGFR L858R, lung adenocarcinoma",
@@ -30,10 +32,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "direct_surface",
       "score": 0.5,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.61",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 1.0,
       "best_mechanism": "blocking_antibody",
@@ -63,10 +78,24 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "direct_surface",
       "score": 0.494,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+      "alteration_magnitude": {
+        "copies": 12.0,
+        "copies_above_diploid": 10.0,
+        "vaf": null,
+        "hotspot": false,
+        "quantities": [
+          "copies",
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 1.0,
       "best_mechanism": "blocking_antibody",
@@ -98,10 +127,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "neoantigen_hla",
       "score": 0.427,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is blocking_antibody at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 0.36,
       "best_mechanism": null,
@@ -135,10 +177,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "neoantigen_hla",
       "score": 0.369,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 0.0,
       "best_mechanism": null,
@@ -170,10 +225,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "neoantigen_hla",
       "score": 0.438,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is adcp at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 0.36,
       "best_mechanism": null,
@@ -204,10 +272,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "neoantigen_hla",
       "score": 0.345,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 0.0,
       "best_mechanism": null,
@@ -240,10 +321,23 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "direct_surface",
       "score": 0.494,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+      "alteration_magnitude": {
+        "copies": 12.0,
+        "copies_above_diploid": 10.0,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": [
+          "copies"
+        ]
+      },
+      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 1.0,
       "best_mechanism": "blocking_antibody",
@@ -278,10 +372,21 @@
       "recovered": true,
       "rank": 1,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.4,
       "target_class": "intracellular_only",
       "score": 0.559,
       "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, mutation_rationale not established: no protein-altering alteration in this gene, so there is no mutation-specific rationale)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": []
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
       "alteration_evidence": 1.0,
       "surface_accessibility": 0.0,
       "best_mechanism": null,
@@ -313,10 +418,21 @@
       "recovered": true,
       "rank": 2,
       "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
       "seconds": 1.5,
       "target_class": "direct_surface",
       "score": 0.5,
       "evidence_tier": "patient_measurement",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "adcc reaches this target with every hard requirement answered, at compatibility 0.66",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": []
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
       "alteration_evidence": 0.6,
       "surface_accessibility": 1.0,
       "best_mechanism": "adcc",

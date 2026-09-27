@@ -295,3 +295,96 @@ def test_the_benchmark_states_what_it_does_not_cover():
     out = [r for r in rows() if r["expected"] == "out_of_scope_expected"]
     assert len(out) >= 5, "the small-molecule cases are the ones that state the boundary"
     assert all(r["approved_modality"] == "small_molecule" for r in out)
+
+
+#: Targets ranked below a candidate that no modelled modality reaches with its
+#: hard requirements answered, counted today. It may fall, never rise. It reads 0
+#: from the mechanism gate registered 2026-09-27, and the pin is what keeps the
+#: question countable: the gate closed nothing in these nine cases, because the
+#: candidates that could have outranked a target were already below it on the
+#: evidence tier. It exists so that a future case cannot reintroduce the defect
+#: quietly.
+UNREACHABLE_ABOVE_TARGET = 0
+
+#: The ranks the two rules of 2026-09-27 registered as unmovable: every target
+#: first, CD19 second behind FCRL5, which this patient's RNA measures exactly as
+#: it measures CD19. A rank may improve and may not get worse.
+REGISTERED_RANKS = {"CD19": 2}
+
+
+def test_the_registered_ranks_did_not_move():
+    """The must-not-move condition of the mechanism gate and the magnitude tiebreak.
+
+    Both act on the order, so the order is where they have to be checked as a
+    whole and not only at the case each was written for. Every target is first
+    except CD19, which sits behind one gene measured in the same patient by the
+    same route.
+    """
+    for r in rows():
+        assert r["recovered"], r["gene"]
+        assert r["rank"] <= REGISTERED_RANKS.get(r["gene"], 1), (
+            f"{r['gene']} ({r['driver_call']}) fell to rank {r['rank']}: {r['candidates']}"
+        )
+
+
+def test_no_target_is_ranked_below_a_candidate_nothing_can_be_aimed_at():
+    """The gate's own metric, which the three original questions could not ask.
+
+    A gene no modelled modality reaches, ranked above a gene with an approved
+    antibody, is a list nobody can act on — and until 2026-09-27 nothing in the
+    ranking asked the question. The count is pinned rather than asserted to zero,
+    because lowering it is an ordering change that has to be made deliberately.
+    """
+    above = [(r["gene"], r["outranked_by_unreachable"]) for r in rows() if r["outranked_by_unreachable"]]
+    assert len(above) <= UNREACHABLE_ABOVE_TARGET, (
+        f"more targets rank below candidates no modality reaches than the pinned "
+        f"{UNREACHABLE_ABOVE_TARGET}: {above}"
+    )
+    for r in rows():
+        assert "outranked_by_unreachable" in r, "the benchmark stopped asking the gate's question"
+
+
+def test_the_gate_class_agrees_with_the_preferred_mechanism():
+    """A falsifier of the gate, checked directly rather than trusted.
+
+    The gate is defined as `best_mechanism` and nothing else: a mechanism whose
+    hard requirement is unanswered leaves the candidate in the gated class. If the
+    two ever disagree, the gate is reading something other than what was
+    registered.
+    """
+    for r in rows():
+        assert r["mechanism_reach"] in ("established_mechanism", "no_established_mechanism")
+        assert r["mechanism_reach_reason"], f"{r['gene']}: a gate class with no sentence behind it"
+        if r["best_mechanism"]:
+            assert r["mechanism_reach"] == "established_mechanism"
+            assert r["best_mechanism"] in r["mechanism_reach_reason"]
+        else:
+            assert r["mechanism_reach"] == "no_established_mechanism", (
+                f"{r['gene']} has no preferred mechanism and is not gated"
+            )
+
+
+def test_the_magnitude_is_measured_and_its_absences_are_stated():
+    """Twelve copies and one missense stop reading the same, without a guess.
+
+    The amplified case publishes the count and its distance from the diploid 2.
+    The fusion case publishes three absences: no copy count, no allele fraction,
+    and no observed position to look a hotspot up at. An absence stated is the
+    point of the rule — a default here would read like a measurement.
+    """
+    amp = next(r for r in rows() if r["driver_call"] == "copy number")
+    assert amp["alteration_magnitude"]["copies"] == 12.0
+    assert amp["alteration_magnitude"]["copies_above_diploid"] == 10.0
+    assert "12 copies against the diploid 2" in amp["alteration_magnitude_reason"]
+
+    alk = next(r for r in rows() if r["driver_call"] == "structural variant")
+    mag = alk["alteration_magnitude"]
+    assert mag["copies"] is None and mag["vaf"] is None and mag["hotspot"] is None
+    assert mag["quantities"] == [], "a fusion record carries no measured amount"
+    assert "not imputed" in alk["alteration_magnitude_reason"]
+
+    for r in rows():
+        assert "alteration_magnitude" in r and r["alteration_magnitude_reason"]
+        mag = r["alteration_magnitude"]
+        assert set(mag) == {"copies", "copies_above_diploid", "vaf", "hotspot", "quantities"}
+        assert mag["vaf"] is None or 0.0 <= mag["vaf"] <= 1.0

@@ -24,6 +24,8 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass, field
+from functools import cmp_to_key
+from itertools import groupby
 from pathlib import Path
 from typing import Any
 
@@ -57,12 +59,16 @@ from .providers import Providers
 from .scan import limitations as scan_limitations
 from .scan import scan as expression_scan
 from .scoring import (
+    MECHANISM_GATE_ORDER,
     UNMEASURED_TIER,
     alteration_evidence,
+    alteration_magnitude,
     assemble,
     clinical_precedent,
     clonality,
     component,
+    magnitude_prefers,
+    mechanism_reach,
     shedding_score,
     summary_evidence,
     surface_accessibility,
@@ -525,6 +531,10 @@ def build_candidate(
 
     # --- stage 10: mechanisms
     c.therapeutic_mechanisms = select_mechanisms(c)
+    # The two ordering rules of 2026-09-27, carried by the candidate itself so that a
+    # candidate built outside `analyse` still states what a ranking would sort it on.
+    c.mechanism_reach, c.mechanism_reach_reason = mechanism_reach(c)
+    c.alteration_magnitude, c.alteration_magnitude_reason = alteration_magnitude(c.origins, c.tumour)
     c.target_logic = combination_logic.single(c)
     c.limitations = limitations_for(c)
     c.why_interesting = why_interesting(c)
@@ -840,6 +850,43 @@ def input_hash(path: str) -> str | None:
     return f"sha256:{h.hexdigest()[:32]}"
 
 
+def _rank_key(c: TherapeuticTargetCandidate) -> tuple[Any, ...]:
+    """Tier, then the mechanism gate, then the published score, then the gene."""
+    return (
+        c.evidence_tier == UNMEASURED_TIER,
+        MECHANISM_GATE_ORDER.index(c.mechanism_reach)
+        if c.mechanism_reach in MECHANISM_GATE_ORDER
+        else len(MECHANISM_GATE_ORDER),
+        -(c.scores.overall or 0.0),
+        c.gene,
+    )
+
+
+def _break_ties_on_magnitude(
+    candidates: list[TherapeuticTargetCandidate],
+) -> list[TherapeuticTargetCandidate]:
+    """Reorder only candidates equal on tier, gate and published score.
+
+    Restricting it to an exact tie in the published score is what makes it a
+    tiebreak rather than a weight: it can reorder candidates the score could not
+    separate and it cannot move a candidate past one the score already ranked.
+    """
+    out: list[TherapeuticTargetCandidate] = []
+    for _, group in groupby(candidates, key=lambda c: _rank_key(c)[:3]):
+        block = list(group)
+        if len(block) > 1:
+            block.sort(
+                key=cmp_to_key(
+                    lambda a, b: (
+                        magnitude_prefers(a.alteration_magnitude, b.alteration_magnitude)
+                        or ((a.gene > b.gene) - (a.gene < b.gene))
+                    )
+                )
+            )
+        out.extend(block)
+    return out
+
+
 def missing_data_report(candidates: list[TherapeuticTargetCandidate], profile: PatientProfile) -> list[dict]:
     """What would most improve confidence, in the order it would help."""
     wanted = [
@@ -1013,6 +1060,13 @@ def analyse(
     for c in candidates:
         c.scores = score_candidate(c, c.precedent is not None)
         c.therapeutic_mechanisms = select_mechanisms(c)
+        # The two rules registered 2026-09-27, both read by the ranking below and
+        # neither entering the weighted mean: whether any modelled modality reaches
+        # this candidate with its hard requirements answered, and how much this
+        # patient's own data say the tumour altered the gene. Both are computed once
+        # the mechanisms exist, because the gate is a statement about them.
+        c.mechanism_reach, c.mechanism_reach_reason = mechanism_reach(c)
+        c.alteration_magnitude, c.alteration_magnitude_reason = alteration_magnitude(c.origins, c.tumour)
 
     combos = combination_logic.pairs(candidates)
     # Tier-major, over a coarser partition than the tier itself: a candidate
@@ -1024,7 +1078,24 @@ def analyse(
     # A measurement of this gene versus none is a difference in kind: no
     # quantity of curated annotation about an unmeasured gene should outrank a
     # gene this tumour actually altered.
+    # Then the mechanism gate, registered 2026-09-27: a candidate some modelled
+    # modality reaches with its hard requirements answered before one nothing
+    # reaches. It is read after the tier and never before it, so a candidate
+    # measured nowhere in this patient cannot rise by having a reachable surface.
+    # Provisional-only and nothing-at-all are one class on purpose: a mechanism
+    # whose requirement is unanswered has not been shown to apply, and putting it
+    # above a gene the tumour altered would be the same defect in the other
+    # direction.
     candidates.sort(key=lambda c: (c.evidence_tier == UNMEASURED_TIER, -(c.scores.overall or 0.0), c.gene))
+    # The gate is applied as a second, stable sort rather than as a wider key, so the
+    # tier's own line above stays exactly as it was written: Python's sort is stable, so
+    # re-sorting on (tier, gate) keeps the score order inside each class and the result is
+    # the four-part key tier > gate > score > gene.
+    candidates.sort(key=lambda c: _rank_key(c)[:2])
+    # Last, the magnitude tiebreak, and only where the three keys above are equal:
+    # what the tumour data measure about how much — copies, allele fraction,
+    # hotspot status — compared like with like and never imputed.
+    candidates[:] = _break_ties_on_magnitude(candidates)
     return {
         # the live provider bundle, so the dataset stage can still ask questions;
         # it is never serialised (machine_report and dataset take what they need)

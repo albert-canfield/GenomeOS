@@ -857,6 +857,42 @@ different kinds being compared.
 Either falsifier firing is reported with the failure kept in the record and the
 rule amended, as the tier's first shape was on the day it was registered.
 
+### What the run measured
+
+Built the same evening and measured by a re-run in the small hours of
+2026-09-28. Neither falsifier fired. Every one of the nine rows is identical to
+the run before, field by field — rank, score, target class,
+evidence tier, mechanism, compatibility, accessibility, peptide route, verdict —
+which is the check that these two rules changed an order and nothing else, and
+in these nine cases they did not need to change one.
+
+The committed artifact is the previous run's file with the three new fields added
+to it, rather than the re-run's file wholesale, and it says so in
+`ordering_rules_measured`: rewriting it would have removed the run date and the
+nine per-case timings that the tier's own commit recorded, and every other field
+was identical anyway. The re-run took 1.0 to 1.1 seconds a case.
+
+The gate reads `established_mechanism` for EGFR, both ERBB2 cases and CD19, and
+`no_established_mechanism` for BRAF, KRAS, PIK3CA, IDH1 and ALK, which is the
+honest reading: the five small-molecule cases are the ones GenomeOS models no
+modality for, and saying so is the point of those cases. For all nine,
+`outranked_by_unreachable` is empty for all nine and is pinned at 0, because the candidates
+that could have outranked a target were already below it on the evidence tier.
+The gate closed no case here; it is a rule that now exists, with a countable
+metric, rather than a rule that fixed something.
+
+The magnitudes are as measured: twelve copies against the diploid 2 for both
+ERBB2 cases, a recorded hotspot for EGFR L858R, BRAF V600E, KRAS G12C, PIK3CA
+H1047R and IDH1 R132H, and three stated absences for EML4-ALK, whose fusion
+record carries no count, no allele fraction and no position to look a hotspot up
+at. No allele fraction appears anywhere, because these demo VCFs report none —
+which is the rule working: an absent quantity stays absent. The tiebreak
+therefore never fired in the nine cases, exactly as registered, and the unit
+tests carry its behaviour instead: twelve copies over four, a clonal fraction
+over a subclonal one, a hotspot over a position that is not one, and twelve
+copies against a hotspot missense left deliberately unordered, because a count
+and an annotation share no unit.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be

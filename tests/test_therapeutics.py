@@ -1299,3 +1299,139 @@ def test_supplied_hla_alleles_are_recorded_even_when_the_variant_makes_no_peptid
     c = build_candidate("TOY", [tx_variant("stop_gained", "c.15T>A", "Y5*", 5)], profile, toy_providers(), {})
     assert c.neoantigen.peptides == []
     assert c.neoantigen.hla_alleles == ["HLA-A*02:01"]  # supplied, just not useful here
+
+
+# --- the mechanism gate and the magnitude tiebreak, registered 2026-09-27 --------------
+
+
+def test_a_candidate_no_modality_reaches_is_gated_and_says_which_question_is_open():
+    """The gate's two classes, and why they are two and not three.
+
+    A nuclear protein has no established mechanism: every surface route is
+    refused and the peptide route needs an HLA type nobody supplied. A candidate
+    carrying only a mechanism whose hard requirement is unanswered is in the same
+    class as one carrying none, because not refused is not established — the rule
+    this file already applies to which mechanism may head a list.
+    """
+    from genomeos.therapeutics.scoring import REACH_ESTABLISHED, REACH_NONE
+
+    nuclear = candidate("RUNX1", [variant("RUNX1", "missense_variant", "Y201K", 201)])
+    assert nuclear.best_mechanism is None
+    assert nuclear.mechanism_reach == REACH_NONE
+    assert nuclear.mechanism_reach_reason, "a gated candidate has to say why"
+    if nuclear.best_provisional_mechanism is not None:
+        assert "unanswered" in nuclear.mechanism_reach_reason
+    surface = candidate("ERBB2", [variant("ERBB2", "missense_variant", "S310F", 310)])
+    if surface.best_mechanism is not None:
+        assert surface.mechanism_reach == REACH_ESTABLISHED
+        assert surface.best_mechanism.mechanism in surface.mechanism_reach_reason
+
+
+def test_the_gate_is_read_after_the_evidence_tier_and_never_before_it():
+    """The defect the gate must not introduce while closing the one it closes.
+
+    A candidate measured nowhere in this patient must not rise by having a
+    reachable surface. The ranking key puts the unmeasured tier first, so an
+    established mechanism in the bottom tier still sorts below a gated candidate
+    the tumour altered.
+    """
+    from genomeos.therapeutics.pipeline import _rank_key
+    from genomeos.therapeutics.scoring import REACH_ESTABLISHED, REACH_NONE, UNMEASURED_TIER
+
+    class Stub:
+        def __init__(self, gene, tier, reach, score):
+            self.gene = gene
+            self.evidence_tier = tier
+            self.mechanism_reach = reach
+            self.scores = type("S", (), {"overall": score})()
+
+    altered_but_gated = Stub("KRAS", "observed_alteration", REACH_NONE, 0.30)
+    hypothesis_with_a_route = Stub("KDR", UNMEASURED_TIER, REACH_ESTABLISHED, 0.90)
+    assert _rank_key(altered_but_gated) < _rank_key(hypothesis_with_a_route)
+
+
+def test_a_magnitude_is_measured_or_stated_absent_and_never_imputed():
+    """What the tumour data measure, and nothing filled in for what they do not.
+
+    A discrete `amplification` call carries a direction and no amount, so it
+    yields no copy count; a VCF with no allele fraction yields no fraction; a
+    candidate with no observed position has no hotspot status to report. Each
+    absence is named in the sentence, which is the assertion that matters: the
+    failure mode of a magnitude rule is a default that reads like a measurement.
+    """
+    from genomeos.therapeutics.model import Measure, TumourState, VariantOrigin
+    from genomeos.therapeutics.scoring import alteration_magnitude
+
+    counted, said = alteration_magnitude(
+        [VariantOrigin(gene="ERBB2", alteration_kind="amplification", copy_number=12.0)], TumourState()
+    )
+    assert counted["copies"] == 12.0 and counted["copies_above_diploid"] == 10.0
+    assert counted["vaf"] is None and counted["hotspot"] is None
+    assert "12 copies against the diploid 2" in said
+    assert "no variant allele fraction was reported" in said
+    assert "not imputed" in said
+
+    called, said = alteration_magnitude(
+        [VariantOrigin(gene="ERBB2", alteration_kind="amplification")],
+        TumourState(copy_number=Measure(qualitative="amplification", patient_specific=True)),
+    )
+    assert called["copies"] is None, "a discrete call gives a direction and no amount"
+    assert "no copy count is present" in said
+
+    cohort_only = TumourState(copy_number=Measure(value=9.0, patient_specific=False))
+    borrowed, _ = alteration_magnitude([VariantOrigin(gene="X", alteration_kind="gain")], cohort_only)
+    assert borrowed["copies"] is None, "a figure that is not this patient's own is not a magnitude"
+
+    hotspot, said = alteration_magnitude(
+        [VariantOrigin(gene="KRAS", position=25245350, protein_change="G12C", hotspot=True, vaf=0.42)],
+        TumourState(),
+    )
+    assert hotspot["hotspot"] is True and hotspot["vaf"] == 0.42
+    assert "recorded hotspot" in said
+
+
+def test_the_tiebreak_compares_like_with_like_and_otherwise_leaves_the_tie():
+    """Copies, a fraction and a yes/no share no unit, so a pair can be unbroken.
+
+    Ordering twelve copies against a hotspot missense would need an exchange rate
+    between a count and an annotation, and inventing one is exactly the guess the
+    rule refuses. The pair is left to the gene-name fallback instead.
+    """
+    from genomeos.therapeutics.scoring import magnitude_prefers
+
+    twelve = {"copies": 12.0, "vaf": None, "hotspot": None}
+    four = {"copies": 4.0, "vaf": None, "hotspot": None}
+    assert magnitude_prefers(twelve, four) == -1 and magnitude_prefers(four, twelve) == 1
+
+    clonal = {"copies": None, "vaf": 0.48, "hotspot": False}
+    subclonal = {"copies": None, "vaf": 0.09, "hotspot": False}
+    assert magnitude_prefers(clonal, subclonal) == -1
+
+    known = {"copies": None, "vaf": 0.2, "hotspot": True}
+    unknown_position = {"copies": None, "vaf": 0.2, "hotspot": False}
+    assert magnitude_prefers(known, unknown_position) == -1
+
+    missense = {"copies": None, "vaf": 0.4, "hotspot": True}
+    assert magnitude_prefers(twelve, missense) == 0, "no quantity in common leaves the tie unbroken"
+    assert magnitude_prefers(twelve, twelve) == 0
+
+
+def test_the_tiebreak_only_reaches_candidates_the_score_could_not_separate():
+    """A tiebreak and not a weight: it cannot move a candidate past one the score ranked."""
+    from genomeos.therapeutics.pipeline import _break_ties_on_magnitude
+    from genomeos.therapeutics.scoring import REACH_ESTABLISHED
+
+    class Stub:
+        def __init__(self, gene, score, magnitude):
+            self.gene = gene
+            self.evidence_tier = "observed_alteration"
+            self.mechanism_reach = REACH_ESTABLISHED
+            self.scores = type("S", (), {"overall": score})()
+            self.alteration_magnitude = magnitude
+
+    small = {"copies": 3.0, "vaf": None, "hotspot": None}
+    large = {"copies": 12.0, "vaf": None, "hotspot": None}
+    tied = [Stub("AAA", 0.5, small), Stub("BBB", 0.5, large)]
+    assert [c.gene for c in _break_ties_on_magnitude(tied)] == ["BBB", "AAA"]
+    ordered = [Stub("AAA", 0.6, small), Stub("BBB", 0.5, large)]
+    assert [c.gene for c in _break_ties_on_magnitude(ordered)] == ["AAA", "BBB"]

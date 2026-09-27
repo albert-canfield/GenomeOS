@@ -245,6 +245,112 @@ def alteration_evidence(origins: Any, tumour: TumourState) -> tuple[str, float, 
     )
 
 
+def mechanism_reach(candidate: Any) -> tuple[str, str]:
+    """Does any modelled modality reach this candidate, requirements answered?
+
+    Registered 2026-09-27 as a gate on the order and not a dimension of the mean.
+    `best_mechanism` is the question: a mechanism whose hard requirement is merely
+    unanswered has not been shown to apply, so a candidate carrying only such a
+    mechanism is in the same class as one carrying none. Ranking an unanswered
+    question above a gene the tumour altered is the defect this rule must not
+    introduce while closing the one it was written for.
+    """
+    best = candidate.best_mechanism
+    if best is not None:
+        return REACH_ESTABLISHED, (
+            f"{best.mechanism} reaches this target with every hard requirement answered, at "
+            f"compatibility {best.compatibility:.2f}"
+        )
+    nearest = candidate.best_provisional_mechanism
+    if nearest is not None:
+        open_ = ", ".join(nearest.provisional_requirements) or "an unnamed requirement"
+        return REACH_NONE, (
+            f"no modelled modality is established against this target; the nearest is "
+            f"{nearest.mechanism} at compatibility {nearest.compatibility:.2f} with {open_} "
+            "unanswered, which is a question and not an option"
+        )
+    refused = sorted({g for m in candidate.therapeutic_mechanisms for g in m.gates_failed})
+    if candidate.therapeutic_mechanisms:
+        return REACH_NONE, (
+            "every modelled modality was refused against this target"
+            + (f" ({', '.join(refused[:4])})" if refused else "")
+        )
+    return REACH_NONE, "no modelled modality applies to this target at all"
+
+
+def alteration_magnitude(origins: Any, tumour: TumourState) -> tuple[dict[str, Any], str]:
+    """How much this tumour altered the gene, from measurements only.
+
+    Registered 2026-09-27. The evidence tier says an alteration was observed; it
+    carries no amount, so twelve copies and a single missense read the same inside
+    the top tier. The quantities here are the ones this patient's own data state,
+    and an absent quantity is reported as absent: no default allele fraction, no
+    count inferred from a discrete `amplification` call, no hotspot inferred from a
+    gene's driver frequency. `magnitude_prefers` compares them like with like, and
+    only between candidates a score could not separate.
+    """
+    rows = list(origins or [])
+    counts = [o.copy_number for o in rows if o.copy_number is not None]
+    cn = tumour.copy_number
+    if not counts and cn.patient_specific and cn.value is not None:
+        counts = [cn.value]
+    fractions = [o.vaf for o in rows if o.vaf is not None]
+    if not fractions and tumour.vaf is not None:
+        fractions = [tumour.vaf]
+    positioned = [o for o in rows if o.position is not None or o.protein_change]
+    copies = max(counts) if counts else None
+    vaf = max(fractions) if fractions else None
+    hotspot = any(o.hotspot for o in positioned) if positioned else None
+    magnitude: dict[str, Any] = {
+        "copies": copies,
+        "copies_above_diploid": None if copies is None else round(copies - DIPLOID_COPIES, 3),
+        "vaf": vaf,
+        "hotspot": hotspot,
+        "quantities": [
+            q for q in MAGNITUDE_QUANTITIES if magnitude_value(q, copies, vaf, hotspot) is not None
+        ],
+    }
+    said = []
+    if copies is not None:
+        said.append(f"{copies:g} copies against the diploid {DIPLOID_COPIES:g} in this patient's table")
+    else:
+        said.append("no copy count is present in this patient's data")
+    if vaf is not None:
+        said.append(f"variant allele fraction {vaf:.2f} at the observed variant")
+    else:
+        said.append("no variant allele fraction was reported")
+    if hotspot is None:
+        said.append("no observed position to look up, so hotspot status does not apply")
+    else:
+        said.append(
+            "the observed position is a recorded hotspot"
+            if hotspot
+            else "the observed position is not a recorded hotspot"
+        )
+    return magnitude, "; ".join(said) + ". Absent quantities are absent and are not imputed"
+
+
+def magnitude_value(quantity: str, copies: float | None, vaf: float | None, hotspot: bool | None) -> Any:
+    return {"copies": copies, "vaf": vaf, "hotspot": hotspot}[quantity]
+
+
+def magnitude_prefers(a: dict[str, Any], b: dict[str, Any]) -> int:
+    """-1 if `a` carries the larger measured magnitude, 1 if `b`, 0 if neither.
+
+    Like with like, in the registered order, and never across kinds: copies, a
+    fraction and a yes/no share no unit, so a pair with no quantity in common
+    leaves the tie unbroken rather than being ordered by an invented exchange rate.
+    """
+    for quantity in MAGNITUDE_QUANTITIES:
+        av, bv = (a or {}).get(quantity), (b or {}).get(quantity)
+        if av is None or bv is None or av == bv:
+            continue
+        if quantity == "hotspot":
+            return -1 if av else 1
+        return -1 if av > bv else 1
+    return 0
+
+
 def surface_accessibility(localisation: Any, ectodomain_lost: bool = False) -> tuple[float | None, str]:
     """How reachable the protein is from outside, from curated localisation.
 
