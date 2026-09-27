@@ -169,3 +169,23 @@ rate, a protein's `produces` rules) instead of clamping it, which holds it at
 exactly zero at every stage. Existing callers that clamp an external signal to
 a non-zero level carry the smaller version of the same error; nothing in area H
 depends on it, and it is not fixed here.
+
+**Who reads `clamp=`, before it is fixed (census, 2026-09-28).** Two callers
+pass it, and `data/results/grn_clamp_census.json` (written by
+`scripts/grn_clamp_census.py before`) lists them with what depends on each.
+`run_gastrulation` holds the NODAL signal at a non-zero level per cell; it
+feeds `genomeos develop gastrulation`, the web develop view and the pin in
+`tests/test_gastrulation.py` (layer order, and each proportion within 0.25 of
+the module's stated expectation: mesoderm reads 0.100 against 0.35, inside the
+bar by rounding). `Api.cell_run(silence=True)` holds silenced genes' mRNA at
+zero, but the runtime already silences those genes and their derivative at
+zero is zero, so its stages never left zero and its pin in
+`tests/test_cell_view.py` cannot move. `Body._network_step` has its own
+single-stage loop that skips clamped species and is not a caller;
+`forge/network_experiment.py` avoids `clamp=` on purpose; no BioLang
+`experiment` block and no script reaches it. Measured inside the stages of a
+5 h run: a clamped-at-zero `a.mRNA` reaches 3.92, a protein clamped at 3
+reaches 7.62, a signal clamped at 2 falls to 1.81. `tests/test_grn_clamp.py`
+states the fix as strict expected failures: every stage and every recorded
+point equals the clamp, and a protein whose mRNA is clamped at zero follows its
+own decay and nothing else.
