@@ -2807,6 +2807,20 @@ useless as a *count* is depth-invariant as a *membership*.
   pass rule, not run. Prior art: the AlphaGenome preprint already added an input-gradient score to
   ENCODE-rE2G on this dataset; new here is the deletion form and the frozen held-out test.
   Outside-reader summary: docs/CRISPRI-RESULT.md.
+- **The last one-target consumers moved, and the unknown's control (2026-09-27, lane-onetarget,
+  `b7352be` registered, `d717b28` result, 0 requests).** motif_transfer, syntax_tiling, candidates and
+  loci `read_gene_input` read `ElementResponses` beside the compact head; 0 disagreements between the
+  cache head and the table over 849,469 elements. **Negative first: the loci window rule is
+  falsified** — crediting every coding gene at the bar drops strict hits 10 → 9 of 17 (HOXD lost to
+  EVX2, a narrow table win before), so `gene_input` keeps the one-target sum and carries
+  `window_reading` beside it. motif_transfer reproduced to the digit (AUROC 0.5422 stands);
+  candidates held its falsifier (top node gene changed at 3 of 58). `constrained_unknown_targets`
+  now carries its own length-matched random-window control: **real unknown 62.3% of 531 blocks name a
+  target against 86.0% of 44,100 random windows, −23.7 points, below chance**; naming a coding gene
+  29.8% against 67.0%. The neutral tier reads −19.3, so most of the gap is organiser blocks sitting in
+  gene-poorer sequence than their control, not something peculiar to the unknown; inside length
+  deciles the unknown is +4.6 points above neutral. The borrowed "87% of random windows" is withdrawn.
+  This confirms, on a second script, the reading that holds milestone 1.3's second clause as not met.
 - **The reader under the one-gene tables, and the second consumer moved
   (2026-09-22, lane-reader2, `45e4f92` and `350c4c3`, 0 requests).**
   `attribution/targets.py` gained `ElementResponses`, the general form of
