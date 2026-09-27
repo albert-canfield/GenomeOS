@@ -410,6 +410,103 @@ does, because NIST excluded known de novo and mosaic sites from them.
 `data/results/trio_q100_phase.json`, which holds counts per class and never
 a position, an allele or a genotype.
 
+**Result, run 2026-09-27 after the registration was committed (457702c).**
+`scripts/trio_q100_phase.py` took 28 s. It reproduced 1,430 candidates, so
+the run stands.
+
+- **Control.** 1,484,060 one-parent heterozygous calls; 1,313 fall outside
+  the diploid regions.
+  - C1 passes: 1,481,231 of the remaining 1,482,747 (0.99898) are found on
+    exactly one haplotype.
+  - C2 passes: 1,481,214 of those are on the carrying parent's haplotype,
+    with 17 on the other (0.99999).
+  - Of the rest, 1,187 are nearby, 287 absent and 42 on both haplotypes.
+
+  The labels are read correctly, and the assembly carries ordinary inherited
+  alleles almost without exception.
+- **Candidates.** 19 of the 1,430 fall outside the diploid regions. Of the
+  1,411 assessable, the classes are:
+
+  | Class | Count |
+  |---|---|
+  | father | 703 |
+  | mother | 679 |
+  | absent | 20 |
+  | nearby | 9 |
+  | both | 0 |
+  | filtered | 0 |
+
+  Of the 1,155 assessable SNVs, 584 are father, 564 mother, 6 absent and 1
+  nearby. Of the 256 assessable indels, 119 are father, 115 mother, 14 absent
+  and 8 nearby. Every candidate is heterozygous in the child.
+- **Verdicts.**
+  - P1 fails: 1,382 are supported on one haplotype, against 40 to 150.
+  - P2 fails: the paternal share is 0.509 (703 / 1,382; 95% interval about
+    0.48 to 0.54), against 0.70 to 0.90.
+  - P3 fails: nearby + absent is 29 of 1,411 (2.1%), against at least half.
+  - P4 holds: both is 0.
+  - P5 holds as a number: 953 of the 1,382 (69.0%) lie in NIST's de novo and
+    mosaic exclusion regions, which cover about 0.25% of the genome. It is
+    not the independent confirmation the registration hoped for, because how
+    NIST built that list is not documented in the release.
+  - The registered rival reading's signature appeared: many more than 150,
+    at a share near 0.5.
+- **Benchmark regions.** 420 of the 1,411 (29.8%) lie inside the v5.0q
+  benchmark regions: 194 father, 210 mother, 9 nearby, 7 absent. The
+  benchmark regions cover 96.4% of the diploid regions' length. The
+  candidates avoid them, as expected if NIST excluded these sites as de
+  novo or mosaic. The control was not counted against this BED, so this
+  comparison is by length, not against the control.
+
+**Exploratory, not registered: the population check.** The rival reading
+named a cause, inherited variation that the parents' calls missed.
+`scripts/trio_q100_population.py` tests that cause. It asks how often an
+allele is carried by any of the 88 HPRC year-1 haplotypes in the local human
+panel (UCSC `hprc/cactus90way`). None of those assemblies is HG002: its HPRC
+accessions are absent from the panel's list.
+
+| Group | Seen in the panel |
+|---|---|
+| control (every 100th one-parent inherited SNV) | 11,950 / 12,871 (92.8%) |
+| supported candidate SNVs, all | 35 / 1,148 (3.0%) |
+| inside NIST's de novo and mosaic regions | 11 / 900 (1.2%) |
+| outside those regions | 24 / 248 (9.7%) |
+
+A missed inherited polymorphism would be seen about as often as the control.
+The candidates are new alleles. So the rival's cause is contradicted, even
+though its signature appeared.
+
+**Reading.** The 1,430 are neither mostly representation artefacts nor mostly
+parent-side misses. The assembly independently carries 1,382 of them, and
+the child's two measurements agree:
+
+- 97.9% sit on exactly one parental chromosome;
+- they split evenly between the father's and the mother's chromosomes;
+- they are absent from the population;
+- 69% sit where NIST itself set sites aside as de novo or mosaic.
+
+A germline de novo set would be about 80% paternal. An even split is what a
+mutation arising after fertilisation gives: in the embryo, or in the
+lymphoblastoid cell line from which GIAB's HG002 DNA comes, the assembly's
+DNA included. Both measurements would then carry it. This is the
+interpretation that fits all four observations, not a measurement of it.
+Separating early-embryonic variants from culture-acquired ones needs read
+allele fractions or DNA that was never in culture.
+
+The share cannot count the germline de novos mixed in. A 0.80-paternal
+component of X in a 0.50 background gives X ≈ (703 − 691) / 0.3 ≈ 40, with
+a standard error near 60. That is consistent with anything from none to the
+literature's 60 to 100. The trio note above, "a larger count is
+representation differences", was wrong for the count after normalisation:
+the normalisation had already removed nearly all of those.
+
+**Status.** Area D's phasing item is not blocked: the phased, parent-labelled
+resource exists and is used here. Each candidate now has a parental
+chromosome, and the set has a reading. What remains open is a germline versus
+post-zygotic call for each candidate, which needs reads. Result files hold
+counts only: `data/results/trio_q100_phase.json` and
+`data/results/trio_q100_population.json`.
+
 ## Telomere from a BAM read by ranges (2026-09-12)
 
 GIAB's 300x Illumina BAM of HG002 on GRCh38 (601 GB, NCBI FTP over HTTPS,
