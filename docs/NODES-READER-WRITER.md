@@ -2748,3 +2748,92 @@ both arms and the verdict is read off `uniform`, the published baseline, so that
 the measured and modelled numbers are comparable; the other three are reported
 beside it and the range across them is reported as the range, exactly as in
 section 2.
+
+### Scored against that registration (2026-09-27, seconds, 0 model requests, nothing fetched)
+
+`scripts/node_containment_audit.py --stage 2`,
+`data/results/node_containment_measured.json`. The inventory came out exactly as
+registered: 661 `Regulated=TRUE` pairs, all with a `startTSS`, 594 distinct
+(element, cell), 589 K562, median 32,075 bp to the TSS, 498 beyond 10 kb, 23
+chromosomes.
+
+**Outcome 2. The measured excess is about twice the modelled one, and it is
+larger under all four baselines.**
+
+| baseline | modelled excess, 440,377 pairs | **measured excess, 661 pairs** | measured 95% CI, chromosomes | measured 95% CI, node clusters | ahead on |
+|---|---|---|---|---|---|
+| `uniform` (the published one) | +2.90 | **+5.89** | +3.18 to +8.46 | +0.90 to +10.49 | 17 of 23, p=0.035 |
+| `uniform_merged` | +1.21 | **+4.52** | +2.05 to +7.27 | −0.43 to +9.36 | 14 of 23, p=0.40 |
+| `circular` | +5.72 | **+8.77** | +6.20 to +11.61 | +3.41 to +13.61 | 20 of 23, p<0.001 |
+| `count_matched` | +6.58 | **+10.15** | +6.71 to +13.32 | +5.01 to +15.14 | 19 of 23, p=0.003 |
+
+**The verdict against the registered dividing lines.** The registration fixed
+them as: "clearly larger" only if the lower bound exceeds the modelled +2.9,
+"clearly absent" only if the upper bound is below +1.0, read off `uniform`. The
+headline interval — the paired bootstrap over chromosomes, which section 3
+registered as the one to quote — has a lower bound of **+3.18**, above +2.90, so
+the registered verdict is **outcome 2, clearly larger**. It is not a clean
+outcome 2 and this says so: the node-cluster resample, which holds the control
+share fixed rather than resampling it with its chromosome, gives +0.90 to +10.49,
+which clears zero but not +2.9, and on that resampling the result is outcome 1.
+The chromosome bootstrap is narrower here because it carries each chromosome's
+measured count and its control count together, which pairs the difference; that
+is the right resampling for a difference and it is why it was registered as the
+headline. The honest summary is **outcome 2 on the registered reading, outcome 1
+on the unpaired one, and outcome 3 excluded by both.**
+
+**The registration's most likely outcome was wrong, in the direction the
+registration named as plausible.** "Undecidable" was registered as most likely
+because the arm's minimum detectable excess at 80% power is 4.56 points and the
+modelled effect is 2.90. The effect that exists is 5.89, above the arm's own
+detection floor, so the arm had the power for the effect that is there and not
+for the effect that was expected. Registering the power arithmetic is what makes
+that statement available; without it, +5.89 on 661 pairs would read as a lucky
+number.
+
+**Where the increase comes from, stated because it is not where one would guess.**
+The measured containment share, 0.7579 (501 of 661), is within four tenths of a
+point of the modelled 0.7542. The whole of the difference between the two arms'
+excesses is in the **control**: 0.699 for the measured pairs against 0.7252 for
+the archive's, on the same baseline and the same node sets. The reason is
+distance. The CRISPRi pairs are long-range — median 32,075 bp, 498 of 661 beyond
+10 kb — and a randomly placed boundary cuts a long-range link far more often than
+a short one, while the real nodes do not. So the finding is not "measured links
+are contained more often"; it is **"measured links span distances at which
+randomly placed boundaries would separate them, and the nodes hold them
+together anyway."** That is a stronger statement than the one the claim has been
+making, and it is the one the data supports.
+
+**What this does to the claim as quoted seven times.** The direction is now
+confirmed on measured perturbations rather than on the model's own answers, which
+is what measurement 2 has needed since 2026-09-21. The number is withdrawn:
+`+2.88 points` is not an estimate of node containment. It is an attenuated
+reading of the deletion archive's own target calls — the mechanism registered
+under outcome 2 above, where a wrong target supplies a TSS from roughly the right
+neighbourhood and dilutes the signal toward the background — and the measured
+value on the same baseline is roughly twice it, while the baseline choice moves
+it by a factor of five. The seven citations should carry a direction, the measured
+figure and its interval, and the baseline they are measured against.
+
+### What this arm cannot say
+
+- **It is one cell type.** 589 of 661 pairs, 89.1%, are K562. Nothing here is a
+  statement about cell types in general, and since the node caller pools CTCF-only
+  cCREs across ENCODE it is cell-type-blind, so this arm cannot test
+  cell-type-specific folding in either direction.
+- **661 pairs, and the screens chose them.** CRISPRi `Regulated=TRUE` pairs are
+  elements strong enough and close enough to give a significant drop in a screen,
+  which is the same selection ATTRIBUTION.md names for the measured slice of the
+  compiled genome. The 0.7579 is conditional on that selection.
+- **The two arms share the node set**, so the comparison of the two excesses is
+  not a comparison of independent measurements; only the element-gene pairing
+  differs. That is the point of the swap, but it means the +5.89 and the +2.90 are
+  correlated and their difference has no interval here.
+- **Per chromosome the arm is thin**: the extremes are chr14 at +21.8 on 11 pairs
+  and chr22 at −12.9 on 7. The chromosome bootstrap's interval is doing real work
+  and the per-chromosome tally, 17 of 23, should not be read as 23 independent
+  tests.
+- **A power requirement, so the next release can be checked against a number
+  rather than hoped at**: about **1,500 measured pairs** would give 80% power at
+  +2.9 points, and about 600 suffice at +4.5. The present 661 are adequate for the
+  effect found and not for the effect modelled.

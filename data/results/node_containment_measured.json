@@ -1,0 +1,3326 @@
+{
+  "result": "node_containment_measured",
+  "date": "2026-09-27",
+  "crispri_inventory": {
+    "regulated_pairs": 661,
+    "distinct_element_cell": 594,
+    "cells": {
+      "K562": 589,
+      "GM12878": 16,
+      "HCT116": 34,
+      "Jurkat": 7,
+      "WTC11": 15
+    },
+    "median_distance_to_tss": 32075,
+    "beyond_10kb": 498,
+    "chromosomes": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX"
+    ]
+  },
+  "measured": {
+    "label": "measured: CRISPRi Regulated=TRUE element-gene pairs",
+    "pairs": 661,
+    "controls": {
+      "uniform": {
+        "control_share": 0.699,
+        "excess_points": 5.893,
+        "mean_median_control_node_length": 109804,
+        "mean_control_nodes": 19953,
+        "bootstrap_chromosomes": {
+          "point": 5.893,
+          "ci95": [
+            3.183,
+            8.458
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 5.893,
+          "ci95": [
+            0.9,
+            10.488
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 17,
+          "of": 23,
+          "p_one_sided": 0.0173,
+          "p_two_sided": 0.0347,
+          "per_chromosome": [
+            {
+              "chrom": "chr22",
+              "excess_points": -12.86,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": -6.67,
+              "pairs": 24
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": -5.0,
+              "pairs": 10
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": -1.0,
+              "pairs": 15
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": -0.45,
+              "pairs": 33
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 0.0,
+              "pairs": 2
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 0.45,
+              "pairs": 67
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 1.81,
+              "pairs": 36
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": 2.14,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 2.44,
+              "pairs": 41
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 3.08,
+              "pairs": 52
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 3.18,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 3.91,
+              "pairs": 23
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 4.08,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 8.91,
+              "pairs": 87
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 10.26,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 11.57,
+              "pairs": 35
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 13.52,
+              "pairs": 27
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 14.07,
+              "pairs": 43
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 15.56,
+              "pairs": 9
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 17.27,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": 20.0,
+              "pairs": 12
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 21.82,
+              "pairs": 11
+            }
+          ]
+        }
+      },
+      "uniform_merged": {
+        "control_share": 0.7128,
+        "excess_points": 4.516,
+        "mean_median_control_node_length": 159867,
+        "mean_control_nodes": 15030,
+        "bootstrap_chromosomes": {
+          "point": 4.516,
+          "ci95": [
+            2.046,
+            7.267
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 4.516,
+          "ci95": [
+            -0.432,
+            9.357
+          ],
+          "crosses_zero": true,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 14,
+          "of": 23,
+          "p_one_sided": 0.2024,
+          "p_two_sided": 0.4049,
+          "per_chromosome": [
+            {
+              "chrom": "chr22",
+              "excess_points": -17.86,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": -7.08,
+              "pairs": 24
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": -5.0,
+              "pairs": 10
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": -2.27,
+              "pairs": 33
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": -1.59,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": -0.98,
+              "pairs": 41
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": -0.37,
+              "pairs": 67
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 0.0,
+              "pairs": 15
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 0.0,
+              "pairs": 2
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 1.09,
+              "pairs": 23
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 3.37,
+              "pairs": 52
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": 4.29,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 4.48,
+              "pairs": 87
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 5.97,
+              "pairs": 36
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 6.51,
+              "pairs": 43
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 7.22,
+              "pairs": 9
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 8.29,
+              "pairs": 38
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 8.29,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": 14.58,
+              "pairs": 12
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 15.23,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 15.57,
+              "pairs": 35
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 15.93,
+              "pairs": 27
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 19.09,
+              "pairs": 11
+            }
+          ]
+        }
+      },
+      "circular": {
+        "control_share": 0.6703,
+        "excess_points": 8.767,
+        "mean_median_control_node_length": 107982,
+        "mean_control_nodes": 19953,
+        "bootstrap_chromosomes": {
+          "point": 8.767,
+          "ci95": [
+            6.2,
+            11.609
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 8.767,
+          "ci95": [
+            3.41,
+            13.608
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 20,
+          "of": 23,
+          "p_one_sided": 0.0002,
+          "p_two_sided": 0.0005,
+          "per_chromosome": [
+            {
+              "chrom": "chr22",
+              "excess_points": -17.86,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": -3.5,
+              "pairs": 10
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 0.0,
+              "pairs": 2
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 0.67,
+              "pairs": 15
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": 0.71,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 2.21,
+              "pairs": 52
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 3.64,
+              "pairs": 33
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 3.91,
+              "pairs": 23
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 4.03,
+              "pairs": 67
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 4.77,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": 4.79,
+              "pairs": 24
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 6.83,
+              "pairs": 41
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 6.94,
+              "pairs": 36
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 8.16,
+              "pairs": 87
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 10.26,
+              "pairs": 38
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 13.16,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 15.0,
+              "pairs": 9
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 16.51,
+              "pairs": 43
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 18.89,
+              "pairs": 27
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 19.14,
+              "pairs": 35
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": 19.58,
+              "pairs": 12
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 21.82,
+              "pairs": 11
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 22.5,
+              "pairs": 22
+            }
+          ]
+        }
+      },
+      "count_matched": {
+        "control_share": 0.6564,
+        "excess_points": 10.151,
+        "mean_median_control_node_length": 124023,
+        "mean_control_nodes": 19953,
+        "bootstrap_chromosomes": {
+          "point": 10.151,
+          "ci95": [
+            6.71,
+            13.321
+          ],
+          "crosses_zero": false,
+          "resamples": 2000,
+          "unit": "chromosome"
+        },
+        "bootstrap_nodes": {
+          "point": 10.151,
+          "ci95": [
+            5.008,
+            15.144
+          ],
+          "crosses_zero": false,
+          "note": "the control share is held fixed; only the measured share is resampled",
+          "unit": "node cluster"
+        },
+        "sign_test": {
+          "ahead": 19,
+          "of": 23,
+          "p_one_sided": 0.0013,
+          "p_two_sided": 0.0026,
+          "per_chromosome": [
+            {
+              "chrom": "chr22",
+              "excess_points": -18.57,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr20",
+              "excess_points": -3.5,
+              "pairs": 10
+            },
+            {
+              "chrom": "chr3",
+              "excess_points": -2.08,
+              "pairs": 24
+            },
+            {
+              "chrom": "chr21",
+              "excess_points": 0.0,
+              "pairs": 7
+            },
+            {
+              "chrom": "chr1",
+              "excess_points": 2.99,
+              "pairs": 67
+            },
+            {
+              "chrom": "chr16",
+              "excess_points": 3.18,
+              "pairs": 22
+            },
+            {
+              "chrom": "chr9",
+              "excess_points": 4.33,
+              "pairs": 15
+            },
+            {
+              "chrom": "chr5",
+              "excess_points": 4.78,
+              "pairs": 23
+            },
+            {
+              "chrom": "chr13",
+              "excess_points": 5.0,
+              "pairs": 2
+            },
+            {
+              "chrom": "chr12",
+              "excess_points": 5.91,
+              "pairs": 33
+            },
+            {
+              "chrom": "chr8",
+              "excess_points": 5.98,
+              "pairs": 41
+            },
+            {
+              "chrom": "chr19",
+              "excess_points": 7.02,
+              "pairs": 52
+            },
+            {
+              "chrom": "chr7",
+              "excess_points": 7.63,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr17",
+              "excess_points": 8.19,
+              "pairs": 36
+            },
+            {
+              "chrom": "chrX",
+              "excess_points": 13.29,
+              "pairs": 38
+            },
+            {
+              "chrom": "chr10",
+              "excess_points": 16.11,
+              "pairs": 27
+            },
+            {
+              "chrom": "chr11",
+              "excess_points": 16.55,
+              "pairs": 87
+            },
+            {
+              "chrom": "chr2",
+              "excess_points": 17.79,
+              "pairs": 43
+            },
+            {
+              "chrom": "chr6",
+              "excess_points": 18.43,
+              "pairs": 35
+            },
+            {
+              "chrom": "chr15",
+              "excess_points": 18.75,
+              "pairs": 12
+            },
+            {
+              "chrom": "chr14",
+              "excess_points": 20.45,
+              "pairs": 11
+            },
+            {
+              "chrom": "chr18",
+              "excess_points": 24.44,
+              "pairs": 9
+            },
+            {
+              "chrom": "chr4",
+              "excess_points": 28.18,
+              "pairs": 22
+            }
+          ]
+        }
+      }
+    },
+    "measured_share": 0.7579
+  },
+  "per_chromosome": [
+    {
+      "chrom": "chr1",
+      "length": 248956422,
+      "coding_named": 67,
+      "coding_inside": 52,
+      "controls": {
+        "uniform": {
+          "draws": [
+            56,
+            52,
+            55,
+            50,
+            47,
+            57,
+            48,
+            46,
+            49,
+            54,
+            49,
+            55,
+            49,
+            53,
+            53,
+            52,
+            56,
+            48,
+            56,
+            49
+          ],
+          "mean_inside": 51.7,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 105196.65
+        },
+        "uniform_merged": {
+          "draws": [
+            52,
+            58,
+            53,
+            51,
+            58,
+            54,
+            53,
+            52,
+            49,
+            54,
+            52,
+            48,
+            50,
+            49,
+            48,
+            52,
+            55,
+            54,
+            56,
+            47
+          ],
+          "mean_inside": 52.25,
+          "mean_nodes": 1237.6,
+          "mean_median_node_length": 154368.3
+        },
+        "circular": {
+          "draws": [
+            47,
+            47,
+            54,
+            48,
+            49,
+            55,
+            48,
+            50,
+            48,
+            46,
+            51,
+            43,
+            48,
+            53,
+            50,
+            58,
+            55,
+            44,
+            45,
+            47
+          ],
+          "mean_inside": 49.3,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 105472.35
+        },
+        "count_matched": {
+          "draws": [
+            54,
+            50,
+            48,
+            52,
+            50,
+            50,
+            49,
+            54,
+            47,
+            51,
+            53,
+            46,
+            52,
+            49,
+            42,
+            54,
+            49,
+            50,
+            51,
+            49
+          ],
+          "mean_inside": 50.0,
+          "mean_nodes": 1639.0,
+          "mean_median_node_length": 118843.5
+        }
+      }
+    },
+    {
+      "chrom": "chr2",
+      "length": 242193529,
+      "coding_named": 43,
+      "coding_inside": 33,
+      "controls": {
+        "uniform": {
+          "draws": [
+            35,
+            28,
+            18,
+            35,
+            17,
+            19,
+            27,
+            25,
+            24,
+            30,
+            22,
+            31,
+            31,
+            30,
+            30,
+            28,
+            29,
+            28,
+            25,
+            27
+          ],
+          "mean_inside": 26.95,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 101447.1
+        },
+        "uniform_merged": {
+          "draws": [
+            38,
+            31,
+            27,
+            32,
+            35,
+            31,
+            24,
+            34,
+            23,
+            39,
+            30,
+            20,
+            30,
+            29,
+            28,
+            22,
+            32,
+            28,
+            36,
+            35
+          ],
+          "mean_inside": 30.2,
+          "mean_nodes": 1234.95,
+          "mean_median_node_length": 151324.65
+        },
+        "circular": {
+          "draws": [
+            36,
+            28,
+            34,
+            33,
+            28,
+            24,
+            24,
+            21,
+            34,
+            25,
+            32,
+            24,
+            19,
+            19,
+            27,
+            20,
+            30,
+            26,
+            17,
+            17
+          ],
+          "mean_inside": 25.9,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 109809.75
+        },
+        "count_matched": {
+          "draws": [
+            32,
+            25,
+            27,
+            33,
+            24,
+            22,
+            24,
+            32,
+            28,
+            28,
+            21,
+            26,
+            22,
+            21,
+            21,
+            28,
+            19,
+            23,
+            24,
+            27
+          ],
+          "mean_inside": 25.35,
+          "mean_nodes": 1654.0,
+          "mean_median_node_length": 115892.7
+        }
+      }
+    },
+    {
+      "chrom": "chr3",
+      "length": 198295559,
+      "coding_named": 24,
+      "coding_inside": 14,
+      "controls": {
+        "uniform": {
+          "draws": [
+            15,
+            16,
+            14,
+            14,
+            18,
+            20,
+            14,
+            15,
+            13,
+            16,
+            11,
+            19,
+            13,
+            14,
+            17,
+            19,
+            18,
+            15,
+            16,
+            15
+          ],
+          "mean_inside": 15.6,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 95363.4
+        },
+        "uniform_merged": {
+          "draws": [
+            13,
+            14,
+            14,
+            22,
+            15,
+            17,
+            17,
+            16,
+            14,
+            14,
+            15,
+            10,
+            16,
+            14,
+            17,
+            16,
+            18,
+            20,
+            16,
+            16
+          ],
+          "mean_inside": 15.7,
+          "mean_nodes": 1060.6,
+          "mean_median_node_length": 145353.05
+        },
+        "circular": {
+          "draws": [
+            13,
+            14,
+            12,
+            14,
+            13,
+            16,
+            10,
+            11,
+            11,
+            14,
+            13,
+            11,
+            12,
+            12,
+            11,
+            8,
+            13,
+            18,
+            15,
+            16
+          ],
+          "mean_inside": 12.85,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 102654.65
+        },
+        "count_matched": {
+          "draws": [
+            19,
+            15,
+            16,
+            13,
+            15,
+            14,
+            18,
+            10,
+            20,
+            16,
+            11,
+            16,
+            17,
+            14,
+            16,
+            11,
+            12,
+            7,
+            18,
+            12
+          ],
+          "mean_inside": 14.5,
+          "mean_nodes": 1441.0,
+          "mean_median_node_length": 109680.4
+        }
+      }
+    },
+    {
+      "chrom": "chr4",
+      "length": 190214555,
+      "coding_named": 22,
+      "coding_inside": 18,
+      "controls": {
+        "uniform": {
+          "draws": [
+            12,
+            14,
+            19,
+            13,
+            9,
+            13,
+            13,
+            16,
+            17,
+            15,
+            16,
+            13,
+            16,
+            11,
+            12,
+            18,
+            12,
+            16,
+            16,
+            13
+          ],
+          "mean_inside": 14.2,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 98956.1
+        },
+        "uniform_merged": {
+          "draws": [
+            11,
+            17,
+            16,
+            15,
+            17,
+            13,
+            13,
+            21,
+            13,
+            17,
+            15,
+            13,
+            13,
+            14,
+            16,
+            17,
+            15,
+            10,
+            14,
+            13
+          ],
+          "mean_inside": 14.65,
+          "mean_nodes": 983.8,
+          "mean_median_node_length": 149615.9
+        },
+        "circular": {
+          "draws": [
+            12,
+            12,
+            13,
+            12,
+            12,
+            18,
+            14,
+            12,
+            14,
+            13,
+            10,
+            15,
+            16,
+            13,
+            14,
+            12,
+            15,
+            14,
+            13,
+            7
+          ],
+          "mean_inside": 13.05,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 111036.25
+        },
+        "count_matched": {
+          "draws": [
+            9,
+            15,
+            11,
+            9,
+            16,
+            13,
+            14,
+            12,
+            10,
+            12,
+            12,
+            12,
+            9,
+            11,
+            11,
+            14,
+            16,
+            11,
+            7,
+            12
+          ],
+          "mean_inside": 11.8,
+          "mean_nodes": 1322.0,
+          "mean_median_node_length": 113772.2
+        }
+      }
+    },
+    {
+      "chrom": "chr5",
+      "length": 181538259,
+      "coding_named": 23,
+      "coding_inside": 18,
+      "controls": {
+        "uniform": {
+          "draws": [
+            17,
+            20,
+            18,
+            18,
+            16,
+            18,
+            14,
+            16,
+            17,
+            18,
+            21,
+            20,
+            17,
+            16,
+            14,
+            19,
+            18,
+            15,
+            15,
+            15
+          ],
+          "mean_inside": 17.1,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 101240.1
+        },
+        "uniform_merged": {
+          "draws": [
+            17,
+            18,
+            19,
+            18,
+            19,
+            19,
+            17,
+            17,
+            18,
+            18,
+            18,
+            18,
+            21,
+            17,
+            19,
+            16,
+            17,
+            16,
+            15,
+            18
+          ],
+          "mean_inside": 17.75,
+          "mean_nodes": 933.9,
+          "mean_median_node_length": 150806.8
+        },
+        "circular": {
+          "draws": [
+            17,
+            19,
+            18,
+            17,
+            17,
+            14,
+            17,
+            19,
+            19,
+            18,
+            16,
+            16,
+            21,
+            15,
+            17,
+            19,
+            15,
+            16,
+            16,
+            16
+          ],
+          "mean_inside": 17.1,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 106602.9
+        },
+        "count_matched": {
+          "draws": [
+            17,
+            19,
+            19,
+            16,
+            16,
+            16,
+            16,
+            16,
+            19,
+            19,
+            15,
+            18,
+            16,
+            16,
+            18,
+            18,
+            15,
+            14,
+            17,
+            18
+          ],
+          "mean_inside": 16.9,
+          "mean_nodes": 1245.0,
+          "mean_median_node_length": 115122.95
+        }
+      }
+    },
+    {
+      "chrom": "chr6",
+      "length": 170805979,
+      "coding_named": 35,
+      "coding_inside": 27,
+      "controls": {
+        "uniform": {
+          "draws": [
+            27,
+            20,
+            19,
+            24,
+            19,
+            23,
+            20,
+            26,
+            22,
+            26,
+            23,
+            20,
+            23,
+            20,
+            27,
+            21,
+            25,
+            26,
+            23,
+            25
+          ],
+          "mean_inside": 22.95,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 100026.95
+        },
+        "uniform_merged": {
+          "draws": [
+            21,
+            20,
+            18,
+            19,
+            19,
+            23,
+            22,
+            21,
+            20,
+            23,
+            23,
+            22,
+            22,
+            19,
+            23,
+            24,
+            24,
+            22,
+            23,
+            23
+          ],
+          "mean_inside": 21.55,
+          "mean_nodes": 881.0,
+          "mean_median_node_length": 150306.35
+        },
+        "circular": {
+          "draws": [
+            22,
+            24,
+            21,
+            19,
+            17,
+            24,
+            27,
+            22,
+            22,
+            18,
+            24,
+            19,
+            18,
+            19,
+            20,
+            16,
+            16,
+            20,
+            18,
+            20
+          ],
+          "mean_inside": 20.3,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 111945.35
+        },
+        "count_matched": {
+          "draws": [
+            17,
+            16,
+            25,
+            21,
+            20,
+            17,
+            20,
+            24,
+            24,
+            17,
+            23,
+            21,
+            20,
+            24,
+            18,
+            27,
+            16,
+            22,
+            19,
+            20
+          ],
+          "mean_inside": 20.55,
+          "mean_nodes": 1180.0,
+          "mean_median_node_length": 114237.45
+        }
+      }
+    },
+    {
+      "chrom": "chr7",
+      "length": 159345973,
+      "coding_named": 38,
+      "coding_inside": 29,
+      "controls": {
+        "uniform": {
+          "draws": [
+            27,
+            27,
+            23,
+            33,
+            27,
+            27,
+            26,
+            33,
+            32,
+            23,
+            30,
+            26,
+            29,
+            33,
+            30,
+            20,
+            31,
+            19,
+            26,
+            27
+          ],
+          "mean_inside": 27.45,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 97123.35
+        },
+        "uniform_merged": {
+          "draws": [
+            28,
+            20,
+            22,
+            27,
+            29,
+            28,
+            23,
+            23,
+            24,
+            26,
+            23,
+            32,
+            20,
+            23,
+            25,
+            32,
+            25,
+            27,
+            29,
+            31
+          ],
+          "mean_inside": 25.85,
+          "mean_nodes": 837.75,
+          "mean_median_node_length": 146948.2
+        },
+        "circular": {
+          "draws": [
+            30,
+            24,
+            22,
+            23,
+            28,
+            28,
+            27,
+            29,
+            27,
+            21,
+            24,
+            22,
+            31,
+            21,
+            25,
+            24,
+            24,
+            23,
+            23,
+            26
+          ],
+          "mean_inside": 25.1,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 105573.5
+        },
+        "count_matched": {
+          "draws": [
+            24,
+            27,
+            24,
+            30,
+            28,
+            27,
+            26,
+            25,
+            32,
+            29,
+            26,
+            25,
+            27,
+            23,
+            25,
+            24,
+            20,
+            24,
+            31,
+            25
+          ],
+          "mean_inside": 26.1,
+          "mean_nodes": 1133.0,
+          "mean_median_node_length": 111668.05
+        }
+      }
+    },
+    {
+      "chrom": "chr8",
+      "length": 145138636,
+      "coding_named": 41,
+      "coding_inside": 20,
+      "controls": {
+        "uniform": {
+          "draws": [
+            22,
+            18,
+            19,
+            15,
+            18,
+            18,
+            22,
+            20,
+            17,
+            20,
+            17,
+            16,
+            23,
+            15,
+            24,
+            14,
+            28,
+            18,
+            20,
+            16
+          ],
+          "mean_inside": 19.0,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 91167.75
+        },
+        "uniform_merged": {
+          "draws": [
+            19,
+            20,
+            18,
+            19,
+            22,
+            20,
+            20,
+            25,
+            20,
+            21,
+            24,
+            19,
+            26,
+            21,
+            18,
+            15,
+            19,
+            17,
+            26,
+            19
+          ],
+          "mean_inside": 20.4,
+          "mean_nodes": 806.2,
+          "mean_median_node_length": 140163.05
+        },
+        "circular": {
+          "draws": [
+            15,
+            14,
+            18,
+            20,
+            18,
+            16,
+            17,
+            17,
+            21,
+            18,
+            18,
+            15,
+            19,
+            14,
+            15,
+            17,
+            16,
+            19,
+            19,
+            18
+          ],
+          "mean_inside": 17.2,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 96565.9
+        },
+        "count_matched": {
+          "draws": [
+            19,
+            17,
+            18,
+            18,
+            20,
+            23,
+            13,
+            17,
+            16,
+            18,
+            18,
+            16,
+            16,
+            19,
+            20,
+            18,
+            17,
+            17,
+            15,
+            16
+          ],
+          "mean_inside": 17.55,
+          "mean_nodes": 1112.0,
+          "mean_median_node_length": 104704.65
+        }
+      }
+    },
+    {
+      "chrom": "chr9",
+      "length": 138394717,
+      "coding_named": 15,
+      "coding_inside": 12,
+      "controls": {
+        "uniform": {
+          "draws": [
+            12,
+            12,
+            13,
+            14,
+            12,
+            12,
+            13,
+            14,
+            11,
+            12,
+            10,
+            13,
+            14,
+            13,
+            10,
+            12,
+            11,
+            11,
+            12,
+            12
+          ],
+          "mean_inside": 12.15,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 118158.4
+        },
+        "uniform_merged": {
+          "draws": [
+            12,
+            12,
+            12,
+            14,
+            13,
+            12,
+            14,
+            12,
+            10,
+            11,
+            10,
+            12,
+            12,
+            13,
+            12,
+            13,
+            9,
+            12,
+            13,
+            12
+          ],
+          "mean_inside": 12.0,
+          "mean_nodes": 630.95,
+          "mean_median_node_length": 168311.85
+        },
+        "circular": {
+          "draws": [
+            11,
+            10,
+            11,
+            13,
+            12,
+            14,
+            13,
+            7,
+            13,
+            12,
+            11,
+            11,
+            14,
+            10,
+            14,
+            13,
+            11,
+            12,
+            12,
+            14
+          ],
+          "mean_inside": 11.9,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 104680.4
+        },
+        "count_matched": {
+          "draws": [
+            13,
+            14,
+            14,
+            11,
+            10,
+            10,
+            11,
+            11,
+            13,
+            11,
+            12,
+            13,
+            10,
+            12,
+            9,
+            11,
+            10,
+            9,
+            13,
+            10
+          ],
+          "mean_inside": 11.35,
+          "mean_nodes": 814.0,
+          "mean_median_node_length": 132924.4
+        }
+      }
+    },
+    {
+      "chrom": "chr10",
+      "length": 133797422,
+      "coding_named": 27,
+      "coding_inside": 23,
+      "controls": {
+        "uniform": {
+          "draws": [
+            20,
+            20,
+            19,
+            20,
+            18,
+            16,
+            17,
+            21,
+            12,
+            21,
+            24,
+            22,
+            20,
+            14,
+            19,
+            24,
+            22,
+            21,
+            16,
+            21
+          ],
+          "mean_inside": 19.35,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 100813.7
+        },
+        "uniform_merged": {
+          "draws": [
+            22,
+            18,
+            19,
+            20,
+            21,
+            16,
+            21,
+            13,
+            19,
+            16,
+            21,
+            19,
+            20,
+            25,
+            20,
+            17,
+            17,
+            21,
+            14,
+            15
+          ],
+          "mean_inside": 18.7,
+          "mean_nodes": 689.0,
+          "mean_median_node_length": 150754.15
+        },
+        "circular": {
+          "draws": [
+            22,
+            18,
+            18,
+            16,
+            17,
+            22,
+            21,
+            18,
+            22,
+            21,
+            13,
+            20,
+            20,
+            12,
+            13,
+            9,
+            20,
+            19,
+            18,
+            19
+          ],
+          "mean_inside": 17.9,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 104343.5
+        },
+        "count_matched": {
+          "draws": [
+            22,
+            20,
+            21,
+            19,
+            13,
+            17,
+            22,
+            17,
+            22,
+            12,
+            17,
+            21,
+            17,
+            20,
+            19,
+            20,
+            22,
+            20,
+            9,
+            23
+          ],
+          "mean_inside": 18.65,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 114636.45
+        }
+      }
+    },
+    {
+      "chrom": "chr11",
+      "length": 135086622,
+      "coding_named": 87,
+      "coding_inside": 63,
+      "controls": {
+        "uniform": {
+          "draws": [
+            54,
+            38,
+            56,
+            47,
+            75,
+            53,
+            56,
+            38,
+            56,
+            57,
+            59,
+            74,
+            69,
+            42,
+            55,
+            60,
+            63,
+            51,
+            50,
+            52
+          ],
+          "mean_inside": 55.25,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 98400.2
+        },
+        "uniform_merged": {
+          "draws": [
+            72,
+            58,
+            59,
+            64,
+            67,
+            69,
+            73,
+            39,
+            54,
+            52,
+            42,
+            64,
+            58,
+            66,
+            39,
+            69,
+            59,
+            54,
+            65,
+            59
+          ],
+          "mean_inside": 59.1,
+          "mean_nodes": 703.8,
+          "mean_median_node_length": 148598.15
+        },
+        "circular": {
+          "draws": [
+            61,
+            47,
+            58,
+            46,
+            56,
+            74,
+            44,
+            67,
+            41,
+            51,
+            47,
+            62,
+            46,
+            60,
+            65,
+            69,
+            58,
+            47,
+            59,
+            60
+          ],
+          "mean_inside": 55.9,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 102420.45
+        },
+        "count_matched": {
+          "draws": [
+            40,
+            38,
+            51,
+            55,
+            51,
+            44,
+            56,
+            53,
+            45,
+            39,
+            42,
+            55,
+            54,
+            54,
+            52,
+            44,
+            50,
+            59,
+            36,
+            54
+          ],
+          "mean_inside": 48.6,
+          "mean_nodes": 947.0,
+          "mean_median_node_length": 111637.4
+        }
+      }
+    },
+    {
+      "chrom": "chr12",
+      "length": 133275309,
+      "coding_named": 33,
+      "coding_inside": 21,
+      "controls": {
+        "uniform": {
+          "draws": [
+            21,
+            20,
+            18,
+            25,
+            27,
+            20,
+            21,
+            24,
+            21,
+            22,
+            20,
+            18,
+            19,
+            21,
+            22,
+            22,
+            19,
+            19,
+            21,
+            23
+          ],
+          "mean_inside": 21.15,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 99998.8
+        },
+        "uniform_merged": {
+          "draws": [
+            26,
+            21,
+            17,
+            21,
+            18,
+            25,
+            26,
+            20,
+            21,
+            20,
+            28,
+            21,
+            19,
+            22,
+            22,
+            21,
+            23,
+            21,
+            22,
+            21
+          ],
+          "mean_inside": 21.75,
+          "mean_nodes": 689.65,
+          "mean_median_node_length": 150272.5
+        },
+        "circular": {
+          "draws": [
+            19,
+            23,
+            21,
+            22,
+            17,
+            21,
+            21,
+            17,
+            21,
+            23,
+            18,
+            14,
+            23,
+            18,
+            22,
+            19,
+            18,
+            18,
+            21,
+            20
+          ],
+          "mean_inside": 19.8,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 102448.45
+        },
+        "count_matched": {
+          "draws": [
+            17,
+            13,
+            21,
+            20,
+            22,
+            17,
+            20,
+            19,
+            20,
+            22,
+            19,
+            17,
+            19,
+            17,
+            21,
+            19,
+            21,
+            14,
+            23,
+            20
+          ],
+          "mean_inside": 19.05,
+          "mean_nodes": 922.0,
+          "mean_median_node_length": 114113.15
+        }
+      }
+    },
+    {
+      "chrom": "chr13",
+      "length": 114364328,
+      "coding_named": 2,
+      "coding_inside": 2,
+      "controls": {
+        "uniform": {
+          "draws": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "mean_inside": 2.0,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 119722.55
+        },
+        "uniform_merged": {
+          "draws": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "mean_inside": 2.0,
+          "mean_nodes": 514.8,
+          "mean_median_node_length": 169062.45
+        },
+        "circular": {
+          "draws": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "mean_inside": 2.0,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 111147.45
+        },
+        "count_matched": {
+          "draws": [
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "mean_inside": 1.9,
+          "mean_nodes": 662.0,
+          "mean_median_node_length": 134324.45
+        }
+      }
+    },
+    {
+      "chrom": "chr14",
+      "length": 107043718,
+      "coding_named": 11,
+      "coding_inside": 11,
+      "controls": {
+        "uniform": {
+          "draws": [
+            9,
+            9,
+            10,
+            8,
+            8,
+            7,
+            10,
+            10,
+            8,
+            8,
+            9,
+            7,
+            9,
+            8,
+            9,
+            10,
+            8,
+            8,
+            8,
+            9
+          ],
+          "mean_inside": 8.6,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 116234.95
+        },
+        "uniform_merged": {
+          "draws": [
+            8,
+            8,
+            9,
+            10,
+            8,
+            10,
+            8,
+            9,
+            8,
+            10,
+            9,
+            9,
+            9,
+            10,
+            9,
+            9,
+            9,
+            9,
+            10,
+            7
+          ],
+          "mean_inside": 8.9,
+          "mean_nodes": 492.7,
+          "mean_median_node_length": 166827.25
+        },
+        "circular": {
+          "draws": [
+            8,
+            8,
+            8,
+            10,
+            8,
+            8,
+            10,
+            8,
+            9,
+            6,
+            8,
+            9,
+            8,
+            8,
+            8,
+            10,
+            9,
+            11,
+            9,
+            9
+          ],
+          "mean_inside": 8.6,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 105021.8
+        },
+        "count_matched": {
+          "draws": [
+            8,
+            9,
+            10,
+            9,
+            8,
+            9,
+            8,
+            8,
+            7,
+            10,
+            8,
+            9,
+            10,
+            9,
+            10,
+            8,
+            8,
+            9,
+            8,
+            10
+          ],
+          "mean_inside": 8.75,
+          "mean_nodes": 634.0,
+          "mean_median_node_length": 132350.75
+        }
+      }
+    },
+    {
+      "chrom": "chr15",
+      "length": 101991189,
+      "coding_named": 12,
+      "coding_inside": 12,
+      "controls": {
+        "uniform": {
+          "draws": [
+            6,
+            12,
+            10,
+            11,
+            11,
+            11,
+            11,
+            9,
+            9,
+            7,
+            11,
+            9,
+            9,
+            9,
+            6,
+            9,
+            10,
+            11,
+            11,
+            10
+          ],
+          "mean_inside": 9.6,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 129931.6
+        },
+        "uniform_merged": {
+          "draws": [
+            9,
+            12,
+            10,
+            12,
+            10,
+            11,
+            12,
+            11,
+            11,
+            9,
+            8,
+            11,
+            11,
+            9,
+            11,
+            7,
+            11,
+            11,
+            9,
+            10
+          ],
+          "mean_inside": 10.25,
+          "mean_nodes": 429.15,
+          "mean_median_node_length": 180699.15
+        },
+        "circular": {
+          "draws": [
+            10,
+            10,
+            9,
+            9,
+            10,
+            11,
+            10,
+            9,
+            12,
+            9,
+            6,
+            11,
+            11,
+            9,
+            8,
+            9,
+            10,
+            10,
+            11,
+            9
+          ],
+          "mean_inside": 9.65,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 111643.65
+        },
+        "count_matched": {
+          "draws": [
+            7,
+            10,
+            8,
+            10,
+            10,
+            11,
+            8,
+            11,
+            10,
+            11,
+            11,
+            9,
+            10,
+            10,
+            12,
+            10,
+            9,
+            10,
+            9,
+            9
+          ],
+          "mean_inside": 9.75,
+          "mean_nodes": 543.0,
+          "mean_median_node_length": 145133.95
+        }
+      }
+    },
+    {
+      "chrom": "chr16",
+      "length": 90338345,
+      "coding_named": 22,
+      "coding_inside": 18,
+      "controls": {
+        "uniform": {
+          "draws": [
+            14,
+            16,
+            20,
+            17,
+            16,
+            21,
+            15,
+            17,
+            19,
+            14,
+            16,
+            18,
+            18,
+            19,
+            18,
+            19,
+            17,
+            18,
+            16,
+            18
+          ],
+          "mean_inside": 17.3,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 112111.9
+        },
+        "uniform_merged": {
+          "draws": [
+            20,
+            19,
+            18,
+            17,
+            20,
+            20,
+            20,
+            15,
+            20,
+            17,
+            17,
+            19,
+            17,
+            14,
+            19,
+            20,
+            19,
+            19,
+            19,
+            18
+          ],
+          "mean_inside": 18.35,
+          "mean_nodes": 430.35,
+          "mean_median_node_length": 161865.05
+        },
+        "circular": {
+          "draws": [
+            14,
+            20,
+            17,
+            14,
+            16,
+            20,
+            17,
+            17,
+            19,
+            14,
+            19,
+            14,
+            11,
+            20,
+            18,
+            18,
+            14,
+            21,
+            18,
+            18
+          ],
+          "mean_inside": 16.95,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 107448.15
+        },
+        "count_matched": {
+          "draws": [
+            17,
+            19,
+            20,
+            12,
+            18,
+            19,
+            15,
+            19,
+            19,
+            18,
+            16,
+            17,
+            18,
+            13,
+            16,
+            20,
+            18,
+            19,
+            17,
+            16
+          ],
+          "mean_inside": 17.3,
+          "mean_nodes": 563.0,
+          "mean_median_node_length": 125777.65
+        }
+      }
+    },
+    {
+      "chrom": "chr17",
+      "length": 83257441,
+      "coding_named": 36,
+      "coding_inside": 29,
+      "controls": {
+        "uniform": {
+          "draws": [
+            27,
+            30,
+            30,
+            26,
+            29,
+            32,
+            24,
+            25,
+            31,
+            23,
+            26,
+            28,
+            28,
+            30,
+            24,
+            31,
+            34,
+            32,
+            33,
+            24
+          ],
+          "mean_inside": 28.35,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 106429.9
+        },
+        "uniform_merged": {
+          "draws": [
+            30,
+            24,
+            29,
+            28,
+            20,
+            28,
+            25,
+            28,
+            24,
+            28,
+            26,
+            27,
+            23,
+            28,
+            25,
+            28,
+            29,
+            32,
+            28,
+            27
+          ],
+          "mean_inside": 26.85,
+          "mean_nodes": 412.95,
+          "mean_median_node_length": 155696.15
+        },
+        "circular": {
+          "draws": [
+            29,
+            21,
+            32,
+            22,
+            28,
+            29,
+            26,
+            22,
+            31,
+            30,
+            27,
+            27,
+            26,
+            30,
+            23,
+            25,
+            30,
+            25,
+            23,
+            24
+          ],
+          "mean_inside": 26.5,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 111797.5
+        },
+        "count_matched": {
+          "draws": [
+            27,
+            22,
+            26,
+            27,
+            25,
+            28,
+            25,
+            30,
+            28,
+            27,
+            27,
+            25,
+            25,
+            26,
+            22,
+            24,
+            28,
+            25,
+            26,
+            28
+          ],
+          "mean_inside": 26.05,
+          "mean_nodes": 546.0,
+          "mean_median_node_length": 119193.95
+        }
+      }
+    },
+    {
+      "chrom": "chr18",
+      "length": 80373285,
+      "coding_named": 9,
+      "coding_inside": 8,
+      "controls": {
+        "uniform": {
+          "draws": [
+            7,
+            6,
+            8,
+            9,
+            9,
+            3,
+            6,
+            5,
+            6,
+            5,
+            7,
+            9,
+            7,
+            6,
+            7,
+            7,
+            5,
+            6,
+            8,
+            6
+          ],
+          "mean_inside": 6.6,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 99277.1
+        },
+        "uniform_merged": {
+          "draws": [
+            7,
+            9,
+            7,
+            9,
+            7,
+            8,
+            7,
+            8,
+            7,
+            5,
+            7,
+            8,
+            8,
+            9,
+            8,
+            7,
+            7,
+            5,
+            7,
+            7
+          ],
+          "mean_inside": 7.35,
+          "mean_nodes": 420.1,
+          "mean_median_node_length": 150216.35
+        },
+        "circular": {
+          "draws": [
+            7,
+            7,
+            5,
+            2,
+            5,
+            7,
+            7,
+            8,
+            9,
+            9,
+            5,
+            9,
+            5,
+            7,
+            9,
+            5,
+            7,
+            9,
+            4,
+            7
+          ],
+          "mean_inside": 6.65,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 100836.2
+        },
+        "count_matched": {
+          "draws": [
+            6,
+            7,
+            7,
+            7,
+            4,
+            7,
+            4,
+            8,
+            5,
+            4,
+            4,
+            9,
+            5,
+            6,
+            5,
+            6,
+            5,
+            6,
+            4,
+            7
+          ],
+          "mean_inside": 5.8,
+          "mean_nodes": 560.0,
+          "mean_median_node_length": 113649.0
+        }
+      }
+    },
+    {
+      "chrom": "chr19",
+      "length": 58617616,
+      "coding_named": 52,
+      "coding_inside": 41,
+      "controls": {
+        "uniform": {
+          "draws": [
+            36,
+            40,
+            41,
+            34,
+            41,
+            40,
+            39,
+            40,
+            39,
+            40,
+            43,
+            39,
+            40,
+            40,
+            40,
+            39,
+            37,
+            43,
+            41,
+            36
+          ],
+          "mean_inside": 39.4,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 121115.25
+        },
+        "uniform_merged": {
+          "draws": [
+            38,
+            38,
+            37,
+            40,
+            37,
+            37,
+            43,
+            42,
+            42,
+            41,
+            41,
+            38,
+            34,
+            38,
+            39,
+            40,
+            42,
+            42,
+            37,
+            39
+          ],
+          "mean_inside": 39.25,
+          "mean_nodes": 262.4,
+          "mean_median_node_length": 170415.25
+        },
+        "circular": {
+          "draws": [
+            43,
+            39,
+            39,
+            42,
+            37,
+            42,
+            40,
+            39,
+            42,
+            41,
+            31,
+            38,
+            42,
+            40,
+            43,
+            42,
+            42,
+            37,
+            41,
+            37
+          ],
+          "mean_inside": 39.85,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 106207.5
+        },
+        "count_matched": {
+          "draws": [
+            39,
+            38,
+            38,
+            38,
+            41,
+            37,
+            39,
+            40,
+            36,
+            36,
+            37,
+            41,
+            29,
+            37,
+            40,
+            36,
+            39,
+            38,
+            39,
+            29
+          ],
+          "mean_inside": 37.35,
+          "mean_nodes": 339.0,
+          "mean_median_node_length": 133972.45
+        }
+      }
+    },
+    {
+      "chrom": "chr20",
+      "length": 64444167,
+      "coding_named": 10,
+      "coding_inside": 7,
+      "controls": {
+        "uniform": {
+          "draws": [
+            8,
+            8,
+            7,
+            9,
+            8,
+            8,
+            7,
+            8,
+            7,
+            7,
+            7,
+            8,
+            7,
+            8,
+            8,
+            7,
+            6,
+            6,
+            8,
+            8
+          ],
+          "mean_inside": 7.5,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 93275.3
+        },
+        "uniform_merged": {
+          "draws": [
+            7,
+            8,
+            7,
+            9,
+            7,
+            8,
+            7,
+            6,
+            5,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            7,
+            8,
+            8,
+            7,
+            8
+          ],
+          "mean_inside": 7.5,
+          "mean_nodes": 346.15,
+          "mean_median_node_length": 145392.1
+        },
+        "circular": {
+          "draws": [
+            8,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            9,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            9,
+            5,
+            7,
+            7,
+            6,
+            6
+          ],
+          "mean_inside": 7.35,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 96941.05
+        },
+        "count_matched": {
+          "draws": [
+            8,
+            8,
+            7,
+            7,
+            7,
+            6,
+            7,
+            8,
+            7,
+            8,
+            8,
+            8,
+            7,
+            7,
+            7,
+            8,
+            8,
+            6,
+            8,
+            7
+          ],
+          "mean_inside": 7.35,
+          "mean_nodes": 478.0,
+          "mean_median_node_length": 108265.65
+        }
+      }
+    },
+    {
+      "chrom": "chr21",
+      "length": 46709983,
+      "coding_named": 7,
+      "coding_inside": 5,
+      "controls": {
+        "uniform": {
+          "draws": [
+            6,
+            6,
+            5,
+            5,
+            6,
+            6,
+            3,
+            5,
+            6,
+            2,
+            6,
+            7,
+            5,
+            6,
+            2,
+            4,
+            5,
+            2,
+            6,
+            4
+          ],
+          "mean_inside": 4.85,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 144966.45
+        },
+        "uniform_merged": {
+          "draws": [
+            3,
+            4,
+            5,
+            6,
+            5,
+            5,
+            4,
+            3,
+            3,
+            6,
+            5,
+            4,
+            5,
+            4,
+            5,
+            6,
+            5,
+            4,
+            6,
+            6
+          ],
+          "mean_inside": 4.7,
+          "mean_nodes": 183.65,
+          "mean_median_node_length": 192189.95
+        },
+        "circular": {
+          "draws": [
+            6,
+            5,
+            6,
+            6,
+            6,
+            5,
+            6,
+            6,
+            6,
+            6,
+            7,
+            2,
+            6,
+            5,
+            3,
+            3,
+            2,
+            5,
+            5,
+            3
+          ],
+          "mean_inside": 4.95,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 116057.15
+        },
+        "count_matched": {
+          "draws": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            4,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            2,
+            6,
+            4,
+            6,
+            4,
+            5,
+            5
+          ],
+          "mean_inside": 5.0,
+          "mean_nodes": 228.0,
+          "mean_median_node_length": 159597.85
+        }
+      }
+    },
+    {
+      "chrom": "chr22",
+      "length": 50818468,
+      "coding_named": 7,
+      "coding_inside": 4,
+      "controls": {
+        "uniform": {
+          "draws": [
+            5,
+            5,
+            5,
+            6,
+            3,
+            4,
+            6,
+            6,
+            5,
+            4,
+            5,
+            6,
+            4,
+            4,
+            5,
+            4,
+            4,
+            6,
+            5,
+            6
+          ],
+          "mean_inside": 4.9,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 143794.35
+        },
+        "uniform_merged": {
+          "draws": [
+            5,
+            5,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            4,
+            6,
+            5,
+            4,
+            6,
+            5,
+            5,
+            5,
+            5,
+            5,
+            6,
+            6
+          ],
+          "mean_inside": 5.25,
+          "mean_nodes": 198.15,
+          "mean_median_node_length": 195636.95
+        },
+        "circular": {
+          "draws": [
+            4,
+            4,
+            5,
+            5,
+            5,
+            6,
+            4,
+            5,
+            5,
+            6,
+            5,
+            6,
+            5,
+            7,
+            5,
+            6,
+            7,
+            5,
+            5,
+            5
+          ],
+          "mean_inside": 5.25,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 114517.2
+        },
+        "count_matched": {
+          "draws": [
+            5,
+            6,
+            5,
+            6,
+            4,
+            5,
+            6,
+            5,
+            5,
+            4,
+            6,
+            6,
+            6,
+            4,
+            5,
+            6,
+            6,
+            6,
+            5,
+            5
+          ],
+          "mean_inside": 5.3,
+          "mean_nodes": 247.0,
+          "mean_median_node_length": 156111.0
+        }
+      }
+    },
+    {
+      "chrom": "chrX",
+      "length": 156040895,
+      "coding_named": 38,
+      "coding_inside": 34,
+      "controls": {
+        "uniform": {
+          "draws": [
+            23,
+            27,
+            31,
+            27,
+            24,
+            27,
+            31,
+            31,
+            32,
+            31,
+            34,
+            32,
+            32,
+            29,
+            31,
+            33,
+            30,
+            34,
+            31,
+            32
+          ],
+          "mean_inside": 30.1,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 130759.2
+        },
+        "uniform_merged": {
+          "draws": [
+            31,
+            32,
+            34,
+            28,
+            31,
+            32,
+            30,
+            32,
+            26,
+            33,
+            33,
+            32,
+            31,
+            30,
+            32,
+            28,
+            35,
+            30,
+            28,
+            29
+          ],
+          "mean_inside": 30.85,
+          "mean_nodes": 651.0,
+          "mean_median_node_length": 182125.8
+        },
+        "circular": {
+          "draws": [
+            26,
+            33,
+            30,
+            26,
+            30,
+            28,
+            29,
+            27,
+            27,
+            24,
+            29,
+            32,
+            24,
+            32,
+            32,
+            33,
+            31,
+            31,
+            27,
+            29
+          ],
+          "mean_inside": 29.0,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 138433.85
+        },
+        "count_matched": {
+          "draws": [
+            27,
+            27,
+            32,
+            34,
+            31,
+            24,
+            29,
+            28,
+            27,
+            31,
+            28,
+            29,
+            32,
+            30,
+            25,
+            28,
+            30,
+            29,
+            27,
+            31
+          ],
+          "mean_inside": 28.95,
+          "mean_nodes": 822.0,
+          "mean_median_node_length": 146939.15
+        }
+      }
+    }
+  ],
+  "baseline_definitions": {
+    "uniform": "the published control: as many uniform positions as the caller has edges, no 50 kb minimum-size merge, 20 draws, seed 7 per chromosome (scripts/oriented_domains.py human_chrom)",
+    "uniform_merged": "the same positions through the same 50 kb merge as every real node, so the node length floor is matched and only placement differs",
+    "circular": "the real boundary set rotated by a uniform offset modulo the chromosome: node count and node length distribution matched (the one gap containing position 0 is split by the wrap), only the relation between a boundary and the genes near it destroyed",
+    "count_matched": "uniform positions drawn until the post-merge edge count reaches the real one"
+  },
+  "evidence": {
+    "nodes": "inferred: CTCF-only ENCODE elements as boundary proxies, no Hi-C",
+    "modelled": "predicted: AlphaGenome deletion archive, most-moved coding gene",
+    "measured": "experimental: ENCODE CRISPRi enhancer-gene benchmark, Regulated=TRUE"
+  }
+}
