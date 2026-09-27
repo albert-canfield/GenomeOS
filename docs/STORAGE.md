@@ -363,6 +363,8 @@ re-admitted by an explicit `!` negation** — the chr21 `dnase_*` and `reader_*`
 `superdups_chr21`, `gencode_v50_chr21_chrM`, `clinvar_chr21_coding.vcf.gz`. Nothing is tracked by
 accident.
 
+*Correction, same day: `data/individuals` is **329 MiB**, not 321 MiB as written above — `du -sk` reports 336,864 KiB. No other figure depended on it.*
+
 **The one change with the best size-to-effort ratio is `git gc --prune=now`, run when the other lanes
 are idle.** It is one command, it is not needed for any GitHub limit, and it takes `.git` from 147 MiB
 to about 70 MiB — but the reason to run it is the 8,029 loose objects with no pack, which every

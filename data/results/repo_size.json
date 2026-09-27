@@ -506,6 +506,7 @@
       "recommendation_only": true
     },
     "gitignore_doing_its_job": true,
+    "gitignore_evidence_correction": "data/individuals is 329 MiB (du -sk: 336,864 KiB), not 321 MiB as gitignore_evidence states; no other figure depended on it",
     "gitignore_evidence": "97.1 pct of data/ is ignored, 8.28 GiB of it; the five largest ignored paths are data/knowledge 6.31 GiB, data/reference 1.41 GiB, .venv 1.15 GiB, data/individuals 321 MiB and data/twins/HG002_chr22.fa 98.5 MiB, and each is covered by a commented rule stating why; all 30 tracked files that an ignore pattern would otherwise exclude are re-admitted by an explicit negation, so nothing is tracked by accident"
   }
 }
