@@ -55,6 +55,7 @@ import sys
 import time
 from pathlib import Path
 
+from genomeos import manifest as mf
 from genomeos.results import save_result
 from genomeos.therapeutics import analyse_vcf
 from genomeos.therapeutics import scoring as ranking_rules
@@ -353,6 +354,64 @@ def run_case(case: dict, net: bool, log) -> dict:
     return out
 
 
+KNOWLEDGE_READ = (
+    Path("data/knowledge/therapeutics"),
+    Path("data/knowledge/proteins"),
+    Path("data/knowledge/expression"),
+    Path("data/knowledge/pathways"),
+    Path("data/knowledge/go-basic.obo"),
+    Path("data/knowledge/goa_human.gaf.gz"),
+    Path("data/knowledge/Ensembl2Reactome.txt"),
+    Path("data/cache/gencode_genes.tsv"),
+)
+
+
+def manifest(net: bool) -> dict:
+    """The provenance contract (review item R9) for the 9/9 benchmark. The providers answer from the
+    local knowledge stores first and, with the network on, fetch what a store lacks from live
+    services that publish no version a request can pin; the stores' sha256 after the run is the pin."""
+    inputs = []
+    for case in CASES:
+        folder = DEMO / case.get("dir", "benchmark")
+        for key in ("vcf", "cnv", "sv", "rna"):
+            if case.get(key):
+                inputs.append(mf.input_entry(folder / case[key], partition=None, case=case["case"]))
+    for name in ("cancer_msk_impact_2017", "cancer_alterations_msk_impact_2017"):
+        p = Path("data/results") / f"{name}.json"
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    inputs += [mf.input_entry(p, partition=None) for p in KNOWLEDGE_READ if p.exists()]
+    return {
+        "sources": [
+            {
+                "accession": "cBioPortal msk_impact_2017 (Zehir et al. 2017)",
+                "version": "public REST API as read 2026-09-10; pinned by the result files' sha256",
+            },
+            {
+                "accession": "GenomeOS federated protein compiler: UniProt, Ensembl, InterPro, PDB, "
+                "AlphaFold, Reactome, STRING, HPA",
+                "version": "live services, unversioned per request; the local store's sha256 is the pin",
+            },
+            {"accession": "Human Protein Atlas normal expression", "version": "live service, CC BY-SA 4.0"},
+            {"accession": "Open Targets Platform", "version": "live GraphQL service, CC0 1.0"},
+            {"accession": "Ensembl REST (paralogues, transcript sequence)", "version": "live service"},
+            {
+                "accession": "the nine benchmark tumours (data/demo): hand-written VCF, CNV, SV and "
+                "RNA files",
+                "version": "this repository at the recorded commit",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 1, "interval": "closed"},
+        "parameters": {"network": net, "top_genes": 8, "indirect": True, "cases": len(CASES)},
+        "exclusions": [
+            "small-molecule routes are not modelled: those cases pass by not claiming a surface route",
+        ],
+        "partitions": "n/a: a retrospective benchmark of nine known targets; nothing is fitted to them",
+    }
+
+
 def main() -> int:
     net = "--offline" not in sys.argv
     log = sys.stdout
@@ -431,7 +490,7 @@ def main() -> int:
         ),
         "rows": rows,
     }
-    save_result("therapeutic_benchmark", result)
+    save_result("therapeutic_benchmark", result, manifest=manifest(net))
     print(
         f"\n{recovered}/{len(rows)} targets recovered; {passed}/{len(rows)} verdicts correct; "
         f"{result['surface_cases_recovered']}/{len(surface_cases)} approved antibody targets "

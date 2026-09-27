@@ -31,7 +31,9 @@ from collections import defaultdict
 from statistics import median
 from typing import Any
 
+from genomeos import manifest as mf
 from genomeos.attribution import crispri, mpra, organise, vista
+from genomeos.attribution.measured import CRISPRI_SPLIT_OF
 from genomeos.results import save_result
 
 CRISPRI_FILES = (
@@ -139,6 +141,60 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return out
 
 
+def manifest(chroms: list[str]) -> dict[str, Any]:
+    """The provenance contract (review item R9) for the assay-coverage headline."""
+    inputs = [mf.input_entry(p, partition=None) for c in chroms for p in organise.inputs(c)]
+    inputs += [
+        mf.input_entry(mpra.KNOWLEDGE / f"{acc}.bed.gz", partition=None) for acc in mpra.FILES.values()
+    ]
+    inputs.append(mf.input_entry(vista.locus_path(vista.KNOWLEDGE), partition=None))
+    inputs += [
+        mf.input_entry(crispri.KNOWLEDGE / n, partition=CRISPRI_SPLIT_OF.get(n))
+        for n in CRISPRI_FILES
+        if (crispri.KNOWLEDGE / n).exists()
+    ]
+    return {
+        "sources": [
+            {
+                "accession": f"ENCODE4 lentiMPRA joint library {mpra.LIBRARY}",
+                "version": ", ".join(f"{cell} {acc}" for cell, acc in mpra.FILES.items()),
+            },
+            {
+                "accession": "VISTA Enhancer Browser loci (gitlab egsb-mfgl/vista-data locus.tsv.gz)",
+                "version": "main branch, unpinned upstream; pinned here by sha256",
+                "url": vista.VISTA_LOCUS_URL,
+            },
+            {
+                "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data (Gschwind et al. 2025)",
+                "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+                "url": crispri.BASE_URL,
+            },
+            {
+                "accession": "the block organiser's inputs: Zoonomia cactus241way phyloP, gnomAD Gnocchi, "
+                "UCSC genomicSuperDups, and the AlphaGenome attribution runs",
+                "version": "as the per-chromosome result files listed in inputs, pinned by sha256",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "measured_means": "any overlap of a single base by any of the three assays",
+            "lentimpra": "elements with an activity value in any of the three cells",
+            "vista": "every tested locus, positive and negative",
+            "crispri": "every perturbed element of both benchmark files",
+        },
+        "exclusions": [
+            "a measured layer that cannot be read on a chromosome counts as absent there, not fatal",
+        ],
+        "partitions": {
+            "training": "CRISPRi training_K562 elements, pooled as measurements",
+            "heldout": "CRISPRi heldout_5_cell_types elements, pooled as measurements",
+            "pooled": "a coverage count fits nothing, so neither partition is a test here",
+        },
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="")
@@ -179,7 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.no_save:
         print("not saved (--no-save)")
     else:
-        print(f"saved {save_result(out['result'], out)}")
+        print(f"saved {save_result(out['result'], out, manifest=manifest(chroms))}")
     print(f"\n{'label':26} {'blocks':>7} {'measured':>9} {'share':>7} {'untouched Mb':>13}")
     for label, v in per_label.items():
         print(

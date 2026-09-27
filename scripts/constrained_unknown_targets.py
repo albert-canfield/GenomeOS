@@ -28,12 +28,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import time
 from collections import defaultdict
 from pathlib import Path
 from statistics import median
 from typing import Any
 
+from genomeos import manifest as mf
 from genomeos.attribution import organise
 from genomeos.results import load_result, save_result
 
@@ -43,6 +45,10 @@ DECILES = 10
 RANDOM_DRAWS = 50  # windows per block, as `unknown_scoring.matched_random_windows`
 SEED = 20260913  # the same seed, so the lift can be checked against chr21 to the digit
 CHANCE_BAND = 5.0  # points either side of the random-window rate that read as "at chance"
+# The 2026-09-16 run the registered reproduction is checked against, read from history by commit so
+# that the check does not change with whatever result is on disk when it runs (review item R9).
+FIRST_RUN = "1d0a137"
+FIRST_RUN_PATH = "data/results/constrained_unknown_targets.json"
 
 # Registered 2026-09-27, before the control below was run on any chromosome but chr21 (where the
 # unknown-scoring lane measured it). The 87% this script used to quote was the locus benchmark's,
@@ -523,6 +529,80 @@ def reading(per_chrom: dict[str, dict[str, dict[str, Any]]], questions: list[str
     )
 
 
+def first_run() -> dict[str, Any] | None:
+    """The 2026-09-16 result as that commit wrote it, or None where the history is not available."""
+    try:
+        blob = subprocess.run(
+            ["git", "show", f"{FIRST_RUN}:{FIRST_RUN_PATH}"], capture_output=True, check=True, timeout=60
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return json.loads(blob)
+
+
+def manifest(chroms: list[str], control: bool, window: bool) -> dict[str, Any]:
+    """The provenance contract (review item R9) for the real-unknown headline."""
+    from genomeos.attribution.targets import ELEMENT_CACHE
+
+    inputs = []
+    for c in chroms:
+        inputs += [mf.input_entry(p, partition=None) for p in organise.inputs(c)]
+        if not any(i["path"] == str(ELEMENTS / f"{c}.json") for i in inputs):
+            inputs.append(mf.input_entry(ELEMENTS / f"{c}.json", partition=None))
+        if window and (ELEMENT_CACHE / f"{c}.json.gz").exists():
+            inputs.append(mf.input_entry(ELEMENT_CACHE / f"{c}.json.gz", partition=None))
+    if control:
+        inputs.append(mf.input_entry(Path("data/results/unknown_scoring_chr21.json"), partition=None))
+    return {
+        "sources": [
+            {
+                "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element archive and "
+                "its per-element response cache)",
+                "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); "
+                "pinned here by sha256",
+                "path": str(ELEMENTS),
+            },
+            {
+                "accession": "Zoonomia cactus241way phyloP and UCSC phastConsElements100way "
+                "(the budget tiers)",
+                "version": "UCSC hg38 goldenPath cactus241way, as fetched 2026-09-11; "
+                "pinned by the budget files",
+            },
+            {
+                "accession": "gnomAD Gnocchi mutConstraint (the human axis)",
+                "version": "UCSC hg38 gbdb gnomAD/mutConstraint/mutConstraint.bw, as fetched 2026-09-17",
+            },
+            {"accession": "UCSC hg38 genomicSuperDups (the copy flag)", "version": "as fetched 2026-09-12"},
+            {
+                "accession": f"this repository, {FIRST_RUN_PATH} at commit {FIRST_RUN}",
+                "version": f"git {FIRST_RUN}, the 2026-09-16 run the reproduction field is checked against",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "min_log2": MIN_LOG2,
+            "length_deciles": DECILES,
+            "random_draws_per_block": RANDOM_DRAWS,
+            "seed_per_chromosome": SEED,
+            "chance_band_points": CHANCE_BAND,
+            "copy_min_duplicated_fraction": organise.COPY_MIN,
+            "control": control,
+            "window": window,
+        },
+        "exclusions": [
+            "constrained_unknown blocks half or more covered by a curated segmental duplication (copies) "
+            "are out of the real unknown and reported apart",
+            "an element belongs to the block holding its midpoint; "
+            "blocks with no scored element carry no rate",
+            "random windows overlapping any organiser block are rejected; blocks with no drawable window are "
+            "counted as undrawable",
+        ],
+        "partitions": "n/a: arithmetic over model answers already on disk; nothing fitted, nothing held out",
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="", help="comma-separated; default every chromosome with a table")
@@ -541,6 +621,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     out = collect(chroms, control=not args.no_control, window=not args.no_window)
     before = load_result(out["result"]) or {}
+    # the registered check is against the 2026-09-16 run, read by commit; the file on disk is only the
+    # fallback where history is absent, since after one rewrite it no longer is that run (review R9)
+    before = first_run() or before
     if before and not args.chroms:
         # the registered reproduction: every field the 2026-09-16 run wrote, bar its reading and timing
         same = {k: before[k] == out.get(k) for k in before if k not in ("reading", "seconds", "date")}
@@ -549,7 +632,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.no_save:
         print("\nnot saved (--no-save)")
     else:
-        print(f"\nsaved {save_result(out['result'], out)}")
+        m = manifest(chroms, control=not args.no_control, window=not args.no_window)
+        print(f"\nsaved {save_result(out['result'], out, manifest=m)}")
     ru, ne = out["real_unknown"], out["other_tiers"]["neutral"]
     print(f"real unknown: {ru['blocks']} blocks, {ru['elements']} elements, moves {ru['moves_per_element']}")
     print(f"neutral tier: {ne['blocks']} blocks, {ne['elements']} elements, moves {ne['moves_per_element']}")
