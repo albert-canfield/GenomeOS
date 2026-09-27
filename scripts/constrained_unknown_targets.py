@@ -37,6 +37,54 @@ from genomeos.results import save_result
 ELEMENTS = Path("data/knowledge/alphagenome/all_elements")
 MIN_LOG2 = 0.1  # the sweep's own threshold for "this deletion moved a gene"
 DECILES = 10
+RANDOM_DRAWS = 50  # windows per block, as `unknown_scoring.matched_random_windows`
+SEED = 20260913  # the same seed, so the lift can be checked against chr21 to the digit
+CHANCE_BAND = 5.0  # points either side of the random-window rate that read as "at chance"
+
+# Registered 2026-09-27, before the control below was run on any chromosome but chr21 (where the
+# unknown-scoring lane measured it). The 87% this script used to quote was the locus benchmark's,
+# a different instrument; this is the script's own.
+CONTROL_REGISTRATION = {
+    "registered": "2026-09-27",
+    "lift_check": (
+        "the lifted function, handed chr21's 446 UNKNOWN blocks and unknown_scoring's predicate (names a "
+        "coding gene), must reproduce 7f7c8c1 to the digit: 22,200 windows drawn, 2 undrawable, 16,706 "
+        "carrying an element, 10,908 naming; 285 blocks carrying an element, 140 naming. Any difference "
+        "means the lift is wrong and no genome-wide figure is reported"
+    ),
+    "reproduce_exactly": (
+        "every field this script already wrote on 2026-09-16 (real_unknown 331 of 531 blocks with an "
+        "element move, 0.6234; moves per element 0.2476; the other tiers; by case; the length deciles; "
+        "331 named blocks with their targets): the tables are unchanged and the window reading cannot "
+        "change a yes or no (see scripts/onetarget_consumers.py)"
+    ),
+    "primary": (
+        "real unknown (882 blocks, copies out), the script's own question: does a block carrying a "
+        "scored element carry one that moves a gene. Against 50 windows per block of the block's length, "
+        "drawn inside the chromosome's scored-element span and rejected on overlap with any organiser "
+        "block, pooled over the 24 chromosomes"
+    ),
+    "readings": {
+        "below_chance": (
+            f"block rate more than {CHANCE_BAND} points below the random rate: a lead at a real-unknown "
+            "block is rarer than at random sequence of the same length outside unknown space. Registered as "
+            "a live possibility and as the expected one (chr21, coding targets: 49.1% against 65.3%), not "
+            "as a failure: it says what the 331 leads are worth"
+        ),
+        "at_chance": f"within {CHANCE_BAND} points: a lead carries no block-level information",
+        "above_chance": f"more than {CHANCE_BAND} points above: the first above-chance reading of the leads",
+    },
+    "secondary": [
+        "the same control with 'names a coding gene' as the question, the chr21 instrument's",
+        "the neutral tier as a second target set, since it is the script's own comparison",
+        "the window reading's genes at the bar per block, beside the head gene per element",
+    ],
+    "caveat": (
+        "the random windows avoid all UNKNOWN space, so 'chance' is sequence outside it of the same "
+        "length, which is gene-richer than the unknown; the tier comparison inside length deciles stays "
+        "the within-unknown control"
+    ),
+}
 
 
 def elements_of(chrom: str) -> list[dict[str, Any]]:

@@ -6673,6 +6673,63 @@ holds when the arms are matched (arm 2) and when uncovered pairs are counted (ar
 
 The outside-reader summary is `docs/CRISPRI-RESULT.md`.
 
+## Pre-registration: the last one-target consumers under one registration, and the constrained-unknown headline against its own matched random windows (2026-09-27, third)
+
+Four modules still read one target gene per element from the compact
+`all_elements` tables: `motif_transfer.tier_blocks` (the sweep lead per block),
+`syntax_tiling.moved`, `candidates.node_context` and the locus benchmark's
+`read_gene_input`. They are moved onto `attribution.targets.ElementResponses`
+together, under this one registration, whose code form is
+`PRE_REGISTRATION` in `scripts/onetarget_consumers.py`. The old reading is
+kept beside the new one in every case, so each run carries its own control.
+0 AlphaGenome requests; one chromosome's cache archive held at a time.
+
+**The shared premise, registered as expected false.** The roadmap line said an
+element that moves a non-top gene reads as "did not move". The compact head is
+the maximum over the window by `predict_target`'s own rule, so "some gene is at
+the bar" and "the head is at the bar" are one statement. The survey measured it
+on chr21 before this registration: 7,846 elements yes/yes, 4,293 no/no, 0
+disagreements. What a one-target reader loses is how many other genes move and
+which, never the yes or no. Shared control: the window's head at the bar names
+the table's `predicted` gene and its coding head names `predicted_coding`, with 0
+disagreements required; an uncached element keeps its compact reading and is
+counted by name.
+
+| Consumer | Must reproduce to the digit | May change, and which way | Falsifier |
+| --- | --- | --- | --- |
+| motif_transfer | real unknown 531 tested / 331 with a lead; neutral 1,181 / 768; leads by case 11, 167, 19, 131, 3; hence the agreement AUROC 0.5422 by construction (count model not re-run) | a new per-block count of genes at the bar, expected at or above the distinct head genes, about 2.3 per moving element | any block's lead or tested count differs |
+| syntax_tiling | nothing: the registered run was cancelled unrun | its rows gain the genes at the bar from the cache when it runs; `moved` unchanged | a cached element where `moved` and "some gene at the bar" disagree (unit test) |
+| candidates | the chr22 candidate's node fields (the only candidate chromosome complete on 2026-09-13) | the other 68 differ from the stored file by input, counted and attributed to it; per gene, window count >= table count, strictly; the top node gene two-sided, counted | any gene whose window count is below its table count |
+| loci gene_input | all 17 loci's stored gene_input fields; strict hits 10 of 17, among 15 of 17 | strict hits hold or rise; the misses' median rank holds or improves (MYC_8q24 and PMP22_CMT1A, rank 2, likeliest to flip) | strict hits below 10, or any of SHH_ZRS, HERC2_OCA2, FTO_IRX3, SOX9_PierreRobin (where gene_input alone carries the headline) losing its hit |
+
+The benchmark's `target_derived` 15/17 is not recomputed in place: swapping a
+layer of the shared benchmark is its owner's call, so the counterfactual rate
+with the window layer is reported beside it. The candidates' labels and set
+tests stand as stored.
+
+**The constrained-unknown headline gets its own control**
+(`CONTROL_REGISTRATION` in `scripts/constrained_unknown_targets.py`).
+`matched_random_windows` is lifted into the script and first checked against
+chr21: handed the same 446 blocks and the same predicate it must reproduce
+7f7c8c1 to the digit (22,200 drawn, 2 undrawable, 16,706 carrying an element,
+10,908 naming; 140 of 285 blocks). Any difference and no genome-wide figure is
+reported. Then every field the script wrote on 2026-09-16 must reproduce (331 of
+531 blocks with an element carry a mover, 0.6234; 0.2476 per element; tiers,
+cases, deciles, the 331 named blocks), and the primary is new: the real
+unknown's 0.6234 against 50 windows per block of its length, drawn in the
+chromosome's scored span and rejected on overlap with any organiser block,
+pooled over 24 chromosomes. Readings, with a band of 5 points: **below chance**
+is a live possibility and the expected one (chr21, coding targets: 49.1% against
+65.3%) and would say a lead at a real-unknown block is rarer than at random
+sequence outside unknown space, which is what the 331 leads are worth, not a
+failure; **at chance** says a lead carries no block-level information; **above
+chance** would be the first above-chance reading of the leads. Secondary: the
+same control on "names a coding gene", the neutral tier as a second target set,
+and genes at the bar per block. Caveat registered now: the random windows avoid
+all unknown space and so sample gene-richer sequence; the tier comparison in
+length deciles remains the within-unknown control. The borrowed 87% sentence is
+replaced by whatever this measures.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
