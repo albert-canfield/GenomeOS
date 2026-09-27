@@ -2837,3 +2837,32 @@ figure and its interval, and the baseline they are measured against.
   rather than hoped at**: about **1,500 measured pairs** would give 80% power at
   +2.9 points, and about 600 suffice at +4.5. The present 661 are adequate for the
   effect found and not for the effect modelled.
+
+### One more digit, traced after both sections were committed (2026-09-27)
+
+docs/ROADMAP.md:2600 quotes the claim with a significance test attached: "ahead on
+18 of 24 chromosomes (**sign test one-sided p 0.011**)". Section 4 above showed
+that the 18 is a count of per-chromosome shares strictly above 0.700, a threshold
+in no file. The p follows it: the exact one-sided binomial at 18 of 24 is 0.0113,
+so the published p is that tally's p and nothing else. The three tallies and their
+exact one-sided p values, on the same 24 shares:
+
+| compared with | ahead | one-sided p |
+|---|---|---|
+| 0.700, the threshold the published figure used | 18 of 24 | 0.011 |
+| **0.7252, the baseline the same sentence names** | **16 of 24** | **0.076** |
+| each chromosome's own random control (this audit) | 19 of 24 | 0.003 |
+
+So the one figure in the claim that carries a p-value carries it from a threshold
+that is not the claim's own baseline, and against the baseline the claim does name
+in the same sentence the sign test **does not reach 0.05**. The audit's own
+per-chromosome comparison recovers significance at p = 0.003, and the length-matched
+baseline of section 2 loses it again at 14 of 24. All three readings are in the
+table of section 2 and none of them is 0.011.
+
+This is the fourth arithmetic in this claim that cannot be reproduced from the
+files it cites, after the mixed-precision +2.88, the stale 0.791 control sitting in
+`enhancer_targets_all_genome_wide.json` beside a measured 0.754, and the 18. None
+of the four changes the direction, which the measured arm above confirms
+independently. All four are reasons the claim should never have been quoted as a
+number.
