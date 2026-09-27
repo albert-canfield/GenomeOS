@@ -2866,3 +2866,29 @@ files it cites, after the mixed-precision +2.88, the stale 0.791 control sitting
 of the four changes the direction, which the measured arm above confirms
 independently. All four are reasons the claim should never have been quoted as a
 number.
+
+### The seven citations, listed exactly (2026-09-27)
+
+The count of seven is right and two of the line references given at the head of
+this audit were not, so here is the inventory by `grep -rn "2\.88"`, taken after
+both arms were committed. Line numbers in docs/ATTRIBUTION.md and docs/ROADMAP.md
+move under concurrent editing; the surrounding phrase is the durable address.
+
+| file | line at the time of writing | the phrase to change |
+|---|---|---|
+| docs/ROADMAP.md | 22 | "the node beats random boundaries by +2.88 points" |
+| docs/ROADMAP.md | 2599 | "0.725, +2.88 points over 440,377 coding-target elements, ahead on 18 of 24 chromosomes (sign test one-sided p 0.011)" |
+| docs/ROADMAP.md | 3265 | the all-elements sweep row: "+2.88 points over 440,377 coding-target elements, ahead on 18 of 24 chromosomes" and "63.7% name a gene (matched random windows 87%)" |
+| docs/ROADMAP.md | 4069 | milestone 1.3: "every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries)" |
+| docs/LESSONS.md | 232 | "+2.88 points genome-wide, small but measured against random boundaries" |
+| docs/ATTRIBUTION.md | 1790 | "the node's +2.88 points" |
+| docs/ATTRIBUTION.md | 2607 | "which the sweep's own fold answers for elements at large (+2.88 points)" |
+
+Two references given earlier in this audit do not carry the figure and are struck
+here rather than above, so that this section takes nothing out of what was already
+committed: **docs/ROADMAP.md:678** quotes "+2.6 → +2.9", which is the one
+arithmetic in the family that reproduces, and **docs/ATTRIBUTION.md:3912** quotes
+the node control as 77.2% against 74.3% on eighteen chromosomes, which is a
+different reading of the same statistic on a different chromosome set and needs
+its own correction rather than this one. In their place the seventh and fourth
+citations are **docs/ROADMAP.md:4069**, milestone 1.3, and **docs/ATTRIBUTION.md:2607**.
