@@ -227,3 +227,67 @@ def test_the_committed_overlap_counts_are_what_the_benchmark_files_give():
     assert audit, Path("data/results/crispri_split_audit.json")
     pairs, _ = measured.load_crispri()
     assert measured.split_overlap(pairs) == audit["overlap_between_partitions"]
+
+
+# --- R2: a CRISPRi outcome is one of five things, and only one of them rejects -----------------------
+def q_(gene, significant, effect, power=0.95):
+    return measured.CrispriPair(
+        chrom="chrT",
+        start=1000,
+        end=1300,
+        gene=gene,
+        cell="K562",
+        dataset="s",
+        reference="r",
+        regulated=significant and effect < 0,
+        significant=significant,
+        effect_size=effect,
+        p_adjusted=0.01 if significant else 0.5,
+        power_at_effect_size_20=power,
+    )
+
+
+def test_each_pair_is_one_of_five_outcomes():
+    assert q_("A", True, -0.3).outcome == measured.DECREASE
+    assert q_("A", True, 0.3).outcome == measured.INCREASE
+    assert q_("A", False, 0.01, power=0.95).outcome == measured.NULL_INFORMATIVE
+    assert q_("A", False, 0.01, power=0.2).outcome == measured.NULL_INCONCLUSIVE
+    assert q_("A", False, 0.01, power=None).outcome == measured.NULL_INCONCLUSIVE
+    assert q_("A", False, float("nan")).outcome == measured.MISSING
+    got, _ = measured.parse_crispri(table([row(1, 2, "Z", False, "NA", "K562")]))
+    assert got[0].outcome == measured.MISSING  # an empty effect is not read as zero
+
+
+def element(*pairs, predicted):
+    m = measured.Layer(chrom="chrT", crispri=list(pairs)).for_element(1000, 1300)
+    return {"measured": m, "agreement": measured.agreement(predicted, m), "predicted_gene": predicted}
+
+
+def test_a_significant_increase_never_becomes_no_effect_and_raises_no_rule():
+    r = element(q_("UP", True, 0.4), q_("NUL", False, 0.0), predicted="UP")
+    c = r["measured"]["crispri"]
+    assert c["genes_increased"] == ["UP"]
+    assert "UP" not in c["genes_not_regulated"] and c["genes_not_regulated"] == ["NUL"]
+    assert r["agreement"]["crispri"] == measured.INCREASED
+    assert r["agreement"]["assays_disagreeing"] == 0 and r["agreement"]["assays_agreeing"] == 0
+    assert measured.rule_links(r) == []  # an increase is not a silencer, and nothing says it is
+    assert "measured no effect on NUL" in measured.basis_text(r)
+    assert "no effect on UP" not in measured.basis_text(r)
+
+
+def test_only_a_well_powered_null_rejects_the_compiled_claim():
+    strong = element(q_("G", False, 0.0, power=0.9), predicted="G")
+    weak = element(q_("G", False, 0.0, power=0.3), predicted="G")
+    assert strong["agreement"]["crispri"] == measured.DISAGREES
+    assert weak["agreement"]["crispri"] == measured.UNDERPOWERED
+    assert weak["agreement"]["assays_disagreeing"] == 0
+    assert weak["measured"]["crispri"]["genes_no_effect_underpowered"] == ["G"]
+    assert "underpowered, on G" in measured.basis_text(weak)
+
+
+def test_a_gene_takes_its_strongest_outcome_across_pairs():
+    r = element(q_("G", False, 0.0, power=0.9), q_("G", True, 0.2), predicted="G")
+    assert r["measured"]["crispri"]["genes_increased"] == ["G"]
+    assert r["measured"]["crispri"]["genes_no_effect_well_powered"] == []
+    r = element(q_("G", True, 0.2), q_("G", True, -0.2), predicted="G")
+    assert r["agreement"]["crispri"] == measured.AGREES

@@ -104,6 +104,27 @@ POWER_COLUMNS = (
     "PowerAtEffectSize25",
     "PowerAtEffectSize50",
 )
+#: what `EffectSize` is, so a reader never has to guess the unit: the fractional change in the measured
+#: gene's expression when the element is silenced, so -0.2 is a 20% decrease and +0.1 a 10% increase
+EFFECT_UNIT = "fractional change in the measured gene's expression on silencing (EffectSize)"
+#: A pair's outcome, kept apart before anything is pooled (review item R2). The benchmark's `Regulated`
+#: means a significant DECREASE only, so a significant increase also carries Regulated FALSE; before
+#: 2026-09-28 such a gene was listed as "measured no effect". It is not a null and it is not a silencer.
+DECREASE = "significant_decrease"
+INCREASE = "significant_increase"
+NULL_INFORMATIVE = "not_significant_well_powered"
+NULL_INCONCLUSIVE = "not_significant_underpowered"
+MISSING = "missing"
+OUTCOMES = (DECREASE, INCREASE, NULL_INFORMATIVE, NULL_INCONCLUSIVE, MISSING)
+#: a non-significant pair is an informative negative when the screen had at least WELL_POWERED power
+#: to see a 20% effect. Fixed before any verdict was recomputed on it: PowerAtEffectSize25 cannot
+#: separate (every non-significant pair in both files is >= 0.8 there, which is the benchmark's own
+#: filter), and at 20% the training file holds 6,169 of 9,810 non-significant pairs above the bar,
+#: the figure genomeos-8a's brief quotes. The comparison is invalid only when the benchmark says so
+#: (ValidConnection), and those rows are counted, never read as outcomes.
+POWER_FOR_NEGATIVES = "PowerAtEffectSize20"
+WELL_POWERED = 0.8
+
 #: written into the evidence source of every compiled link found only in held-out pairs. The link is
 #: a real measurement and stays in the program, but no feature, fit or label may read it: the
 #: held-out file is the benchmark's test set (docs/ATTRIBUTION.md, the split audit of 2026-09-28).
@@ -189,6 +210,19 @@ class CrispriPair:
     power_at_effect_size_20: float | None = None
     power_at_effect_size_25: float | None = None
     power_at_effect_size_50: float | None = None
+
+    @property
+    def outcome(self) -> str:
+        """One of OUTCOMES. A significant pair is a decrease or an increase by the sign of its effect;
+        a non-significant one is informative only if the screen could have seen a 20% effect."""
+        if self.effect_size != self.effect_size:  # NaN: the table gave no effect size
+            return MISSING
+        if self.significant:
+            return DECREASE if self.effect_size < 0 else INCREASE
+        power = self.power_at_effect_size_20
+        if power is None:
+            return NULL_INCONCLUSIVE  # a null whose power is unknown cannot reject anything
+        return NULL_INFORMATIVE if power >= WELL_POWERED else NULL_INCONCLUSIVE
 
     @property
     def study(self) -> str:
@@ -283,6 +317,16 @@ def split_overlap(pairs: list[CrispriPair]) -> dict[str, Any]:
     }
 
 
+def _effect(value: str | None) -> float:
+    """EffectSize, or NaN where the table leaves it empty: a missing effect is not a zero effect."""
+    if value in (None, "", "NA"):
+        return float("nan")
+    try:
+        return float(value)
+    except ValueError:
+        return float("nan")
+
+
 def _power(value: str | None) -> float | None:
     """A power column's value; None for an absent, empty or NA cell, never a made-up zero."""
     if value in (None, "", "NA"):
@@ -326,7 +370,7 @@ def parse_crispri(
                 reference=r.get("Reference", ""),
                 regulated=r.get("Regulated") == "TRUE",
                 significant=r.get("Significant") == "TRUE",
-                effect_size=float(r["EffectSize"] or 0.0),
+                effect_size=_effect(r.get("EffectSize")),
                 p_adjusted=float(r["pValueAdjusted"] or 1.0),
                 split=split,
                 source_file=source_file,
@@ -514,14 +558,30 @@ class Layer:
         if pairs:
             regulated = sorted({p.gene for p, _ in pairs if p.regulated})
             tested = sorted({p.gene for p, _ in pairs})
+            outcomes: dict[str, set[str]] = defaultdict(set)
+            for p, _ in pairs:
+                outcomes[p.outcome].add(p.gene)
+            # a gene takes the strongest outcome any of its pairs has: a decrease anywhere, else an
+            # increase anywhere, else an informative null, else an inconclusive one. A significant
+            # effect of either sign is therefore never listed as "no effect"
+            increased = sorted(outcomes[INCREASE] - set(regulated))
+            moved = set(regulated) | set(increased)
+            informative = sorted(outcomes[NULL_INFORMATIVE] - moved)
+            inconclusive = sorted(outcomes[NULL_INCONCLUSIVE] - moved - set(informative))
+            missing = sorted(set(tested) - moved - set(informative) - set(inconclusive))
             out["crispri"] = {
                 "genes_tested": tested,
                 "genes_regulated": regulated,
+                "genes_increased": increased,
+                "genes_no_effect_well_powered": informative,
+                "genes_no_effect_underpowered": inconclusive,
+                "genes_effect_missing": missing,
                 # the genes a training pair calls regulated: the only ones a compiled `targets:` names
                 "genes_regulated_training": sorted(
                     {p.gene for p, _ in pairs if p.regulated and p.split == TRAINING}
                 ),
-                "genes_not_regulated": [g for g in tested if g not in set(regulated)],
+                # a measured null, well powered or not: never a significant increase (R2)
+                "genes_not_regulated": sorted(set(informative) | set(inconclusive)),
                 "cells": sorted({p.cell for p, _ in pairs}),
                 "overlap": round(max(f for _, f in pairs), 3),
                 "pairs": [
@@ -531,6 +591,8 @@ class Layer:
                         "dataset": p.dataset,
                         "regulated": p.regulated,
                         "effect_size": round(p.effect_size, 4),
+                        "outcome": p.outcome,
+                        "power_at_effect_size_20": p.power_at_effect_size_20,
                         "p_adjusted": p.p_adjusted,
                         "overlap": round(f, 3),
                         "split": p.split,
@@ -616,6 +678,10 @@ class Layer:
 
 # --- prediction against measurement ---------------------------------------------------------------
 AGREES, DISAGREES, NOT_TESTED = "agrees", "disagrees", "predicted_gene_not_tested"
+# two CRISPRi answers that are neither agreement nor disagreement (R2): the predicted gene rose
+# significantly, which is an effect but not the decrease `regulated` names and not evidence of a
+# silencer; or it showed no significant effect in a screen too weak to have seen one
+INCREASED, UNDERPOWERED = "predicted_gene_increased", "predicted_gene_null_underpowered"
 # the two outcomes a base-level assay has that an element-level one does not, neither of them a verdict
 # on the element: the first is measured-and-inert, the second is never-looked
 BASES_INERT = "bases_measured_none_functional"
@@ -641,8 +707,14 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
     if c:
         if predicted_gene in c["genes_regulated"]:
             out["crispri"] = AGREES
-        elif predicted_gene in c["genes_not_regulated"]:
-            out["crispri"] = DISAGREES
+        elif predicted_gene in c.get("genes_increased", ()):
+            out["crispri"] = INCREASED
+        elif "genes_no_effect_well_powered" not in c and predicted_gene in c["genes_not_regulated"]:
+            out["crispri"] = DISAGREES  # a row written before R2: every null counted as informative
+        elif predicted_gene in c.get("genes_no_effect_well_powered", ()):
+            out["crispri"] = DISAGREES  # only a well-powered null may reject the compiled claim
+        elif predicted_gene in c.get("genes_no_effect_underpowered", ()):
+            out["crispri"] = UNDERPOWERED
         else:
             out["crispri"] = NOT_TESTED
         out["crispri_detail"] = (
@@ -792,6 +864,12 @@ def census(
     agree = {a: sum(1 for r in measured_rows if r["agreement"].get(a) == AGREES) for a in ASSAYS}
     disagree = {a: sum(1 for r in measured_rows if r["agreement"].get(a) == DISAGREES) for a in ASSAYS}
     not_tested = sum(1 for r in measured_rows if r["agreement"].get("crispri") == NOT_TESTED)
+    increased = sum(1 for r in measured_rows if r["agreement"].get("crispri") == INCREASED)
+    underpowered = sum(1 for r in measured_rows if r["agreement"].get("crispri") == UNDERPOWERED)
+    by_outcome = dict.fromkeys(OUTCOMES, 0)
+    for r in measured_rows:
+        for p in r["measured"].get("crispri", {}).get("pairs", []):
+            by_outcome[p.get("outcome", MISSING)] += 1
     regulated_pairs = sum(
         1 for r in measured_rows for p in r["measured"].get("crispri", {}).get("pairs", []) if p["regulated"]
     )
@@ -799,7 +877,7 @@ def census(
         1
         for r in measured_rows
         for p in r["measured"].get("crispri", {}).get("pairs", [])
-        if not p["regulated"]
+        if p.get("outcome") in (NULL_INFORMATIVE, NULL_INCONCLUSIVE)
     )
     measured_genes = {
         g for r in measured_rows for g in r["measured"].get("crispri", {}).get("genes_regulated", [])
@@ -830,6 +908,9 @@ def census(
         "agrees": agree,
         "disagrees": disagree,
         "crispri_predicted_gene_not_tested": not_tested,
+        "crispri_predicted_gene_increased": increased,
+        "crispri_predicted_gene_null_underpowered": underpowered,
+        "crispri_pairs_by_outcome": by_outcome,
         "agreement_rate_over_all_matched_elements": (
             round(agree["crispri"] / crispri_matched, 4) if crispri_matched else None
         ),
@@ -959,6 +1040,8 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "experimental_element_blocks",
         "experimental_rule_blocks",
         "crispri_predicted_gene_not_tested",
+        "crispri_predicted_gene_increased",
+        "crispri_predicted_gene_null_underpowered",
         "crispri_pairs_regulated",
         "crispri_pairs_measured_as_not_regulated",
         "crispri_pairs_the_benchmark_calls_invalid",
@@ -975,9 +1058,12 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
     )
     satmut: dict[str, Any] = dict.fromkeys(satmut_keys, 0)
     experiments: set[str] = set()
+    by_outcome = dict.fromkeys(OUTCOMES, 0)
     for c in censuses:
         for k in keys:
             sums[k] += c.get(k) or 0
+        for k, v in (c.get("crispri_pairs_by_outcome") or {}).items():
+            by_outcome[k] = by_outcome.get(k, 0) + v
         s = c.get("satmut") or {}
         for k in satmut_keys:
             satmut[k] += s.get(k) or 0
@@ -1016,6 +1102,7 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
             round(agree["crispri"] / tested, 4) if tested else None
         ),
         "agreement_denominator_predicted_gene_tested": tested,
+        "crispri_pairs_by_outcome": by_outcome,
         "satmut": {
             **satmut,
             "experiments_matched": sorted(experiments),
@@ -1066,7 +1153,18 @@ def basis_text(row: dict[str, Any]) -> str:
         bits = [f"CRISPRi in {', '.join(c['cells'])} tested {len(c['genes_tested'])} genes"]
         if c["genes_regulated"]:
             bits.append("regulated " + ", ".join(c["genes_regulated"]))
-        if c["genes_not_regulated"]:
+        if c.get("genes_increased"):
+            bits.append(
+                "significantly increased " + ", ".join(c["genes_increased"]) + " (an effect, not a null)"
+            )
+        if "genes_no_effect_well_powered" in c:
+            if c["genes_no_effect_well_powered"]:
+                bits.append("measured no effect on " + ", ".join(c["genes_no_effect_well_powered"]))
+            if c["genes_no_effect_underpowered"]:
+                bits.append(
+                    "no significant effect, underpowered, on " + ", ".join(c["genes_no_effect_underpowered"])
+                )
+        elif c["genes_not_regulated"]:
             bits.append("measured no effect on " + ", ".join(c["genes_not_regulated"]))
         held = [p for p in c["pairs"] if p.get("split", TRAINING) == HELDOUT]
         if held:

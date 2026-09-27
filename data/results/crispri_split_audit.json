@@ -209,5 +209,168 @@
     "reported_figures": "none",
     "compiled_programs": "held-out-only links (43 genome-wide, 1 in the committed chr21 copy) keep their rule but leave `targets:` and carry measured.HELDOUT_MARK; 1 training-supported rule genome-wide took its strength from a held-out pair and now takes it from the training pair; rule, entity and unknown counts unchanged"
   },
+  "r2_outcomes": {
+    "rule": "a pair is significant_decrease, significant_increase, not_significant_well_powered (PowerAtEffectSize20 >= 0.8), not_significant_underpowered, or missing; ValidConnection FALSE rows are counted as invalid and never read. Only a well-powered null may disagree; an increase is its own verdict and raises no rule",
+    "files": {
+      "training": {
+        "significant_decrease": 471,
+        "significant_increase": 75,
+        "not_significant": 9810,
+        "not_significant_well_powered_at_20pct": 6169,
+        "missing": 0,
+        "invalid": 0
+      },
+      "heldout": {
+        "significant_decrease": 190,
+        "significant_increase": 84,
+        "not_significant": 4104,
+        "not_significant_well_powered_at_20pct": 3632,
+        "missing": 0,
+        "invalid": 0
+      }
+    },
+    "why_20pct": "PowerAtEffectSize25 is >= 0.8 on every non-significant pair in both files (the benchmark's own filter), so it cannot separate; 20% is the column genomeos-8a's brief counted (6,169 of 9,810)",
+    "figures_changed": [
+      {
+        "figure": "measured_layer_genome pooled.disagrees.crispri",
+        "old": 31,
+        "new": 23
+      },
+      {
+        "figure": "measured_layer_genome agreement_denominator_predicted_gene_tested",
+        "old": 128,
+        "new": 120
+      },
+      {
+        "figure": "measured_layer_genome agreement_rate_where_the_predicted_gene_was_tested",
+        "old": 0.7578,
+        "new": 0.8083
+      },
+      {
+        "figure": "measured_layer_genome crispri_pairs_measured_as_not_regulated",
+        "old": 4613,
+        "new": 4565
+      },
+      {
+        "figure": "measured_layer_genome crispri_predicted_gene_increased (new)",
+        "old": null,
+        "new": 1
+      },
+      {
+        "figure": "measured_layer_genome crispri_predicted_gene_null_underpowered (new)",
+        "old": null,
+        "new": 7
+      },
+      {
+        "figure": "measured_layer_genome crispri_pairs_by_outcome (new)",
+        "old": null,
+        "new": {
+          "significant_decrease": 212,
+          "significant_increase": 48,
+          "not_significant_well_powered": 3130,
+          "not_significant_underpowered": 1435,
+          "missing": 0
+        }
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: elements",
+        "old": 128,
+        "new": 120
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: observed",
+        "old": 0.7578,
+        "new": 0.8083
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: mean stated",
+        "old": 0.347,
+        "new": 0.3576
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: expected calibration error",
+        "old": 0.4108,
+        "new": 0.4507
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: median gap over populated bands",
+        "old": 0.4724,
+        "new": 0.5432
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: standardised difference (matched)",
+        "old": 0.1374,
+        "new": 0.0898,
+        "p_old": 0.06975,
+        "p_new": 0.155971
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: raw difference",
+        "old": 0.1886,
+        "new": 0.1208,
+        "p_old": 0.003525,
+        "p_new": 0.039538
+      },
+      {
+        "figure": "committed noncoding_chr21.bio experimental-layer header: pairs measured as not regulated",
+        "old": 32,
+        "new": 31
+      }
+    ],
+    "unchanged": "the band headline (stated level outside its interval in 10 of 12 bands), every pattern verdict, the all-matched agreement rate 0.0645 over 1,505, coverage 19,070 of 440,377, and every program's rules/entities/unknowns counts"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data",
+        "version": "EPCrisprBenchmark_combined_data GRCh38, cached 2026-09-16",
+        "citation": "Gschwind et al. 2026, doi:10.1038/s41586-026-10781-4"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "near_identical_at": 0.9,
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8
+    },
+    "exclusions": [
+      "rows with ValidConnection FALSE (0 in either file)"
+    ],
+    "partitions": {
+      "training": "EPCrisprBenchmark training_K562 file, development",
+      "heldout": "EPCrisprBenchmark heldout_5_cell_types file, evaluation only"
+    },
+    "code": {
+      "git_sha": "eb65f5dc1d79fe5bbd4d3f7cee97a1bb7bc369f9",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/measured.py",
+        "genomeos/organism/forge.py"
+      ],
+      "argv": [
+        "-"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
   "not_covered": "crispri.Pair (the scorer's own dataclass) also drops the power columns; that is outside this defect and is left to the lane that weights negatives"
 }

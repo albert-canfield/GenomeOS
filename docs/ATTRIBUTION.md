@@ -6888,6 +6888,70 @@ The choices between registrations, however, were made by people who had seen the
 the audit JSON, every row on this file is therefore flagged `reused_benchmark`, and its figures are
 to be quoted as a reused benchmark, not as a first touch of a test set.
 
+**Correction to the count above.** The brief's "6,169 of 9,810" is exact, not an approximation.
+9,810 is the number of *non-significant* training pairs, and 6,169 of them have
+`PowerAtEffectSize20` ≥ 0.8. The 9,885 quoted above also counted the 75 significant increases,
+which the benchmark marks `Regulated` FALSE.
+
+**CRISPRi negatives read as outcomes (review item R2).** In the benchmark file, `Regulated` means a
+significant *decrease*. A significant increase is therefore marked FALSE as well, and until today
+`for_element` listed such a gene as "measured no effect". Each pair now has one of five outcomes,
+kept apart before anything is pooled. The rule was fixed before any verdict was recomputed:
+
+- `significant_decrease`;
+- `significant_increase`;
+- `not_significant_well_powered`, meaning at least 0.8 power at a 20% effect;
+- `not_significant_underpowered`;
+- `missing`.
+
+Invalid comparisons (`ValidConnection` FALSE) are still counted and never read as outcomes. Both
+files hold 0 missing and 0 invalid rows. The training file has 471 decreases, 75 increases and
+9,810 non-significant pairs, 6,169 of them well powered. The held-out file has 190, 84 and 4,104,
+with 3,632 well powered. The 25% column cannot separate the nulls: every non-significant pair in
+both files is at least 0.8 there, which is the benchmark's own filter.
+
+The agreement rules change as follows:
+
+- A gene takes the strongest outcome among its pairs.
+- Only a well-powered null disagrees with the compiled claim.
+- An underpowered null is `predicted_gene_null_underpowered`.
+- An increase is `predicted_gene_increased`. Neither of these two counts as agreement or as
+  disagreement.
+- An increase raises no rule and no silencer label.
+
+The figures that move are these, old → new:
+
+| figure | old | new |
+|---|---|---|
+| CRISPRi disagreements (`measured_layer_genome`) | 31 | 23 |
+| elements where the predicted gene was tested | 128 | 120 |
+| agreement rate over them | 0.7578 | 0.8083 |
+| pairs measured as not regulated | 4,613 | 4,565 |
+| predicted gene significantly increased (new) | — | 1 |
+| predicted gene null but underpowered (new) | — | 7 |
+| pairs by outcome (new) | — | decrease 212, increase 48, well-powered null 3,130, underpowered null 1,435 |
+| confidence calibration, CRISPRi where tested: observed / mean stated | 0.7578 / 0.347 | 0.8083 / 0.3576 |
+| expected calibration error | 0.4108 | 0.4507 |
+| median gap over populated bands | +0.4724 | +0.5432 |
+| does the stated confidence carry information? matched difference (p) | 0.1374 (0.070) | 0.0898 (0.156) |
+| the same, raw (p) | 0.1886 (0.0035) | 0.1208 (0.040) |
+| committed chr21 program, pairs "measured as not regulated" in its header | 32 | 31 |
+
+Some figures do not move: the band headline (the stated level lies outside its own interval in 10
+of 12 bands), every pattern verdict, the all-matched rate of 0.0645 over 1,505, the coverage of
+19,070 of 440,377, and the `rules`, `entities` and `unknowns` counts in every program. The
+figures of 2026-09-17 in the sections above (128, 0.7578, 4,613 and the calibration table) are
+superseded by this table and are left as they were written. The 24 git-ignored programs were
+recompiled (`scripts/measured_layer.py --write-programs`), so the held-out mark and the five
+outcomes are now on disk. In the committed chr21 copy, only the header line and the one basis line
+that changed were rewritten.
+
+**Not yet in the committed chr21 copy.** Two lines are held back from this commit: the header
+count (32 → 31) and the SUMO3 basis line. The basis line replaces one this lane wrote in `36fa298`
+the same night, and the checkout's removal guard refuses that without `--force`, which this lane
+does not use. The programs in `data/knowledge/compiled/` already carry both changes. The next
+recompile of the committed copy will pick them up.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
