@@ -2754,6 +2754,23 @@ useless as a *count* is depth-invariant as a *membership*.
   section of ATTRIBUTION.md is annotated rather than rewritten, including its
   "Limits" sentence, which said a full per-gene table "would cost the sweep
   again" — it would not have, and it was already on disk.
+- **The CRISPRi result made showable, one cell type (2026-09-27, lane-publish, `fe61c36` registered,
+  `42d7b1b` scored, 0 requests).** Held against Gschwind et al. 2026 (Nature, doi:10.1038/s41586-026-10781-4)
+  Supplementary Table 3 on the same pairs with the benchmark's own estimator, which reproduces the
+  published distance figures exactly (0.4359, 0.3631) before any model was scored. **Negative first: the
+  held-out comparison flatters this project** — every one of the 190 held-out positives sits in an
+  H3K27ac element, 1,438 of the 4,188 negatives do not, and the activity term here reads H3K27ac while
+  the published held-out model reads DNase only; the registered "above ENCODE-rE2G" band is withdrawn.
+  Training, leave-one-chromosome-out: baseline **0.507** (below ABC, 0.565) → frozen model with the
+  deletion **0.724** (ENCODE-rE2G 0.662, Extended 0.737). Held-out, pooled and weighted as registered:
+  0.567 → 0.677, gain +0.110 (+0.061 to +0.174). Post hoc, DNase only: 0.476 → 0.639 against
+  ENCODE-rE2G 0.556 (0.468–0.631), **"in the range of ENCODE-rE2G"**, unpaired. The gain is invariant
+  to coverage: all three registered arms pass (coverage-matched median +0.145, 1,000 of 1,000 draws
+  above zero; a covered-or-not flag alone +0.001). Second cell type: only HCT116 has the n (34
+  regulated, AlphaGenome carries its own tracks), costed at **705 requests** and registered with its
+  pass rule, not run. Prior art: the AlphaGenome preprint already added an input-gradient score to
+  ENCODE-rE2G on this dataset; new here is the deletion form and the frozen held-out test.
+  Outside-reader summary: docs/CRISPRI-RESULT.md.
 - **The reader under the one-gene tables, and the second consumer moved
   (2026-09-22, lane-reader2, `45e4f92` and `350c4c3`, 0 requests).**
   `attribution/targets.py` gained `ElementResponses`, the general form of
@@ -4050,6 +4067,9 @@ entire sweep. What is next, in order of what it decides:
    unusual asset is the discipline, not the biology: registration that binds a single author by
    commit order. Roughly two of sixteen documented withdrawals bound someone else's claim; the rest
    bound this project's own. Moving that ratio is the strategic goal of the next stretch.
+   *(2026-09-27, later: the CRISPRi result now stands beside the published figures on the same
+   pairs — held-out 0.691 after the cache repair, "in the range of ENCODE-rE2G" on a DNase-only
+   refit, still one cell type; HCT116 is the second, at 705 requests. Area I has the detail.)*
 
    **Two decisions were taken on 2026-09-27 rather than deferred.** *The oligo library is not
    ordered*: permanent non-goal D8 forbids wet-lab synthesis, and 1.3's own exit criterion asks for "a
