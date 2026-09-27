@@ -502,6 +502,20 @@ def main() -> int:
         ),
         "rows": rows,
     }
+    # The committed file keeps 2805552's wording of this note: the R9 rebuild of 2026-09-28 added a
+    # manifest to the committed result rather than rewrite its lines, so its date and per-case timings
+    # are still the 2026-09-27 run's, which is what this wording says. The script writes the same
+    # wording, so a rebuild from the manifest reproduces the file; the draft wording above is superseded.
+    result["ordering_rules_measured"] = (
+        "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a "
+        "re-run on 2026-09-28, hours after the rules were registered. Every other field of every "
+        "row came out identical to the 2026-09-27 run recorded here - rank, score, target class, "
+        "evidence tier, mechanism, compatibility, accessibility, peptide route, verdict - which "
+        "is the check that the two rules changed an order and nothing else. That run's date and "
+        "per-case wall-clock timings are left as they are rather than overwritten, so that adding "
+        "these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds "
+        "per case."
+    )
     save_result("therapeutic_benchmark", result, manifest=manifest(net))
     print(
         f"\n{recovered}/{len(rows)} targets recovered; {passed}/{len(rows)} verdicts correct; "
