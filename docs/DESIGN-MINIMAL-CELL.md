@@ -189,3 +189,19 @@ reaches 7.62, a signal clamped at 2 falls to 1.81. `tests/test_grn_clamp.py`
 states the fix as strict expected failures: every stage and every recorded
 point equals the clamp, and a protein whose mRNA is clamped at zero follows its
 own decay and nothing else.
+
+**The clamp now holds inside every stage (2026-09-28).** `NetworkRuntime.run`
+masks a clamped species' derivative to zero and writes the clamp value into
+every stage state, so it equals its clamp at every stage and every recorded
+point; the public signature is unchanged and an unclamped run is bit-identical
+(values in `data/results/grn_clamp_census_after.json`).
+With `a.mRNA` clamped at zero, protein A on the ring now reads 1.1e-66 (its own
+decay from 10) instead of 1.87. Among the census callers only gastrulation
+moves, because NODAL no longer decays inside the stages it is read in: at the
+test's 60 cells, 30 h, ectoderm 0.483 to 0.467 and endoderm 0.417 to 0.433,
+mesoderm unchanged at 0.100, boundaries one cell further out; at the
+command-line and web default of 120 cells, 40 h, mesoderm 0.108 to 0.100,
+endoderm 0.417 to 0.425. Both move away from the module's stated expectation
+(mesoderm 0.35, endoderm 0.20), and the test's mesoderm stays within the 0.25
+bar only by floating-point rounding (0.35 - 0.1 = 0.24999999999999997). The
+layer order is unchanged; the cell view does not move.

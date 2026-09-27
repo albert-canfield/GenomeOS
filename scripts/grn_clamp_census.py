@@ -34,6 +34,10 @@ from genomeos.runtime.grn import NetworkRuntime  # noqa: E402
 from genomeos.web.server import Api  # noqa: E402
 
 NAME = "grn_clamp_census"
+# one file per label after the first: the before record stays byte for byte as committed, and
+# `after` writes data/results/grn_clamp_census_after.json beside it
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] != "before":
+    NAME = f"{NAME}_{sys.argv[1]}"
 ROOT = Path(__file__).resolve().parents[1]
 
 CALLERS: list[dict[str, Any]] = [

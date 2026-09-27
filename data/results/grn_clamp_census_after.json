@@ -1,0 +1,184 @@
+{
+  "result": "grn_clamp_census_after",
+  "date": "2026-09-28",
+  "question": "which callers of NetworkRuntime.run(clamp=...) and which recorded figures or pinned tests depend on it, and what each reads on the runtime before and after the clamp is held inside every Runge-Kutta stage",
+  "callers": [
+    {
+      "caller": "genomeos/runtime/gastrulation.py run_gastrulation",
+      "clamp": "{'Nodal': nodal_max * exp(-x / decay_length)}, one value per cell, non-zero",
+      "kind": "external signal held at a non-zero level; Nodal is a declared protein (gene NODAL max 0)",
+      "reached_from": [
+        "genomeos develop gastrulation (cli)",
+        "web /api/develop model=gastrulation"
+      ],
+      "dependents": [
+        "tests/test_gastrulation.py::test_three_layers_in_order_and_plausible_proportions (cells=60, hours=30, dt=0.05): order endoderm/mesoderm/ectoderm, every proportion > 0.05, |proportion - expected| < 0.25",
+        "docs/PROGRESS.md row 4.3 and docs/LESSONS.md line 58: qualitative (order, within expectation)"
+      ]
+    },
+    {
+      "caller": "genomeos/web/server.py Api._integrate <- Api.cell_run(silence=True)",
+      "clamp": "{'<gene>.mRNA': 0.0} for every gene the cell type silences",
+      "kind": "mRNA knockout at zero, but only of genes the runtime already silences (derivative -delta_m * x, which is 0 at 0), so the stages never left zero",
+      "reached_from": [
+        "web Cell tab 'Run and watch', the 'hold at zero' toggle (/api/cell/run silence=1)"
+      ],
+      "dependents": [
+        "tests/test_cell_view.py::test_a_gene_the_cell_does_not_express_stays_at_zero_without_being_held_down (data/demo/cell_context.bio, Neuron2, 20 h): silence is a no-op on the levels"
+      ]
+    }
+  ],
+  "not_callers": [
+    {
+      "where": "genomeos/runtime/body.py Body._network_step",
+      "why": "its own Euler loop over vm._derivatives that skips clamped species (`if s in clamp: continue`); Euler has one stage, so the signal is held exactly; unaffected by the defect or the fix"
+    },
+    {
+      "where": "genomeos/forge/network_experiment.py",
+      "why": "deliberately avoids clamp=: a node knockout zeroes basal, max and produces instead (8e705f7)"
+    },
+    {
+      "where": "BioLang experiment blocks (genomeos/bio.py, LocatedRuntime)",
+      "why": "knockouts go to LocatedRuntime(knockouts=...) or the network experiment; the v0.3 `clamps` clause named in docs/ARCHITECTURE.md is not parsed anywhere, so no program reaches clamp="
+    },
+    {
+      "where": "scripts/",
+      "why": "no script passes clamp="
+    },
+    {
+      "where": "genomeos/web/static/index.html",
+      "why": "reaches clamp only through /api/cell/run silence"
+    }
+  ],
+  "grep_clamp_equals": [
+    "genomeos/runtime/gastrulation.py:49:        traj = vm.run(hours=hours, dt=dt, initial={\"Sox2\": 1.0}, record_every=10**9, clamp={\"Nodal\": nodal})",
+    "genomeos/web/server.py:218:            clamp=clamp,",
+    "genomeos/web/server.py:1294:            clamp={f\"{g}.mRNA\": 0.0 for g in held} or None,"
+  ],
+  "measured": {
+    "after": {
+      "ring_A_second_half_mean_unperturbed": 19.213568140152386,
+      "ring_A_second_half_mean_a_mRNA_clamped_0": 1.1231923909039374e-66,
+      "stage_max_deviation": {
+        "ring a.mRNA clamped 0": 0.0,
+        "ring B clamped 3": 0.0,
+        "signal S clamped 2": 0.0
+      },
+      "gastrulation test (cells 60, 30 h, dt 0.05)": {
+        "proportions": {
+          "ectoderm": 0.4666666666666667,
+          "mesoderm": 0.1,
+          "endoderm": 0.43333333333333335
+        },
+        "boundaries": [
+          26,
+          32
+        ],
+        "order": [
+          "endoderm",
+          "mesoderm",
+          "ectoderm"
+        ]
+      },
+      "gastrulation default = cli and web (cells 120, 40 h, dt 0.05)": {
+        "proportions": {
+          "ectoderm": 0.475,
+          "mesoderm": 0.1,
+          "endoderm": 0.425
+        },
+        "boundaries": [
+          51,
+          63
+        ],
+        "order": [
+          "endoderm",
+          "mesoderm",
+          "ectoderm"
+        ]
+      },
+      "cell_run Neuron2 20 h silence=False final": {
+        "NKX2-5.mRNA": 0.0,
+        "MYH6.mRNA": 0.0,
+        "SYN1.mRNA": 80.0499998350047,
+        "Nkx2-5": 0.0,
+        "Myh6": 0.0,
+        "Syn1": 80.04999979375587
+      },
+      "cell_run Neuron2 20 h silence=True final": {
+        "NKX2-5.mRNA": 0.0,
+        "MYH6.mRNA": 0.0,
+        "SYN1.mRNA": 80.0499998350047,
+        "Nkx2-5": 0.0,
+        "Myh6": 0.0,
+        "Syn1": 80.04999979375587
+      }
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/demo/gastrulation.bio",
+        "version": "in-repo demo module"
+      },
+      {
+        "accession": "data/demo/cell_context.bio",
+        "version": "in-repo demo module"
+      },
+      {
+        "accession": "tests/test_grn_clamp.py RING and SIGNAL",
+        "version": "in-repo fixtures"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "6d3b1268b13ae0dcfbcd16c5c89ff3674eee5f55a4d673f7e177a80689a66a4c",
+        "bytes": 2613,
+        "partition": null
+      },
+      {
+        "path": "data/demo/cell_context.bio",
+        "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+        "bytes": 1659,
+        "partition": null
+      },
+      {
+        "path": "genomeos/runtime/grn.py",
+        "sha256": "65525a8f3c323e68475e847472c07ec35e2672e62c1d309fe3cdd991bd3bf632",
+        "bytes": 9464,
+        "partition": null
+      },
+      {
+        "path": "tests/test_grn_clamp.py",
+        "sha256": "5a19eb8976f0f2a05187c3e57144a301792821593ded26242282807a3098d7b3",
+        "bytes": 5461,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: simulated networks, no genome coordinates",
+    "coordinates": "n/a: no genomic intervals",
+    "parameters": {
+      "label": "after",
+      "ring": "60 h, dt 0.02, A0 10",
+      "stage_runs": "5 h, dt 0.02"
+    },
+    "exclusions": [],
+    "partitions": "n/a: no evaluation split",
+    "code": {
+      "git_sha": "1cff24ae6c943e667cac8708d688e9e0ed715467",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/network_experiment.py",
+        "genomeos/organism/forge.py",
+        "genomeos/runtime/grn.py",
+        "scripts/grn_clamp_census.py"
+      ],
+      "argv": [
+        "scripts/grn_clamp_census.py",
+        "after"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

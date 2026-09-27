@@ -110,3 +110,13 @@ def test_an_unclamped_run_is_unchanged_by_the_clamp_machinery() -> None:
     xs = traj.levels["A"][len(traj.levels["A"]) // 2 :]
     assert sum(xs) / len(xs) == pytest.approx(19.2136, abs=1e-3)
     assert traj.peaks("A") >= 3
+
+
+# The fix landed (2026-09-28, the commit after the census): the two strict expected-failure markers above
+# are kept as the record of what was stated before the runtime changed, and lifted here so both tests
+# now have to pass. A strict marker left in place would fail them as an unexpected pass.
+for _test in (
+    test_a_clamped_species_equals_its_clamp_at_every_stage_and_every_recorded_point,
+    test_a_protein_whose_mrna_is_clamped_at_zero_only_decays,
+):
+    _test.pytestmark = [m for m in _test.pytestmark if m.name != "xfail"]  # type: ignore[attr-defined]

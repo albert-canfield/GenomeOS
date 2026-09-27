@@ -173,6 +173,8 @@ class _ContinuousEngine:
         # takes its basal rate inside the Runge-Kutta stages and its protein reads that. Measured on the
         # three-gene ring: the protein of a clamped gene settled at 1.87, a tenth of its 19.2, not zero.
         # Zeroing what makes the species instead holds it at exactly zero at every stage.
+        # (The runtime's clamp holds every stage since 2026-09-28, grn_clamp_census.json; zeroing stays,
+        # because it also cuts the protein's `produces` rules, which a clamp on the mRNA alone would not.)
         off = set(nodes_off)
         for name in nodes_off:
             if name in genes:

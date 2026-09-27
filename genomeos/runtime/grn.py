@@ -149,7 +149,26 @@ class NetworkRuntime:
         clamp: dict[str, float] | None = None,
     ) -> Trajectory:
         """Integrate for `hours`. `clamp` holds species at fixed levels (external
-        signals such as a morphogen the module does not itself produce)."""
+        signals such as a morphogen the module does not itself produce, or an mRNA
+        knocked out at zero).
+
+        A clamped species is held inside every Runge-Kutta stage, not only between
+        steps: its derivative is zero and every stage state carries the clamp value.
+        Until 2026-09-28 the clamp was re-applied only after a whole step, so a
+        clamped mRNA was transcribed inside the stages and its protein translated off
+        them (the three-gene ring's protein A read 1.87 with its mRNA clamped at zero,
+        a tenth of the unperturbed 19.2), and a clamped signal decayed inside them.
+        Census and values: data/results/grn_clamp_census.json (before), _after.json."""
+        held = dict(clamp or {})
+
+        def derivatives(st: dict[str, float]) -> dict[str, float]:
+            st.update(held)  # every stage reads the clamp, including a signal outside `species`
+            d = self._derivatives(st)
+            for s in held:
+                if s in d:
+                    d[s] = 0.0
+            return d
+
         state = dict.fromkeys(self.species, 0.0)
         if initial:
             state.update(initial)
@@ -167,22 +186,22 @@ class NetworkRuntime:
         record(0.0)
         for step in range(1, steps + 1):
             if noise > 0:
-                d = self._derivatives(state)
-                for s in self.species:
-                    state[s] = max(
+                d = derivatives(state)
+                for s in self.species:  # a clamped species draws its noise too, then is restored below,
+                    state[s] = max(  # so the random stream is the one a seed gave before 2026-09-28
                         0.0,
                         state[s]
                         + d[s] * dt
                         + noise * math.sqrt(dt) * self.rng.gauss(0, 1) * math.sqrt(max(state[s], 1e-9)),
                     )
             else:
-                k1 = self._derivatives(state)
+                k1 = derivatives(state)
                 s2 = {s: state[s] + 0.5 * dt * k1[s] for s in self.species}
-                k2 = self._derivatives(s2)
+                k2 = derivatives(s2)
                 s3 = {s: state[s] + 0.5 * dt * k2[s] for s in self.species}
-                k3 = self._derivatives(s3)
+                k3 = derivatives(s3)
                 s4 = {s: state[s] + dt * k3[s] for s in self.species}
-                k4 = self._derivatives(s4)
+                k4 = derivatives(s4)
                 for s in self.species:
                     state[s] = max(0.0, state[s] + dt / 6 * (k1[s] + 2 * k2[s] + 2 * k3[s] + k4[s]))
             if clamp:
