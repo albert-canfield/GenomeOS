@@ -1,0 +1,834 @@
+{
+ "result": "reader_normalised",
+ "registration": "docs/NODES-READER-WRITER.md, 'The reader family normalised, to close milestone 1.1: the registration', committed 63929e1 before this ran",
+ "biosamples": [
+  "K562",
+  "HepG2",
+  "GM12878",
+  "H1",
+  "IMR-90",
+  "SK-N-SH",
+  "cardiac muscle cell",
+  "keratinocyte",
+  "hepatocyte",
+  "astrocyte",
+  "CD14-positive monocyte",
+  "testis",
+  "ovary"
+ ],
+ "k562_vs_hepg2_first": {
+  "genes_read_open_depth_residual": {
+   "raw": [
+    14828.0,
+    13015.0
+   ],
+   "z": [
+    -1.6671,
+    0.1101
+   ],
+   "z_odd": [
+    -1.7048,
+    0.1337
+   ],
+   "z_even": [
+    -1.6927,
+    0.1543
+   ],
+   "verdict": "reverses"
+  },
+  "genes_read_depth_residual": {
+   "raw": [
+    12775.0,
+    11641.0
+   ],
+   "z": [
+    -1.0256,
+    -0.6245
+   ],
+   "z_odd": [
+    -1.0374,
+    -0.6363
+   ],
+   "z_even": [
+    -1.0243,
+    -0.6355
+   ],
+   "verdict": "reverses"
+  }
+ },
+ "p3_tissues_above_cultured": {
+  "genes_read_depth_residual": {
+   "cultured_median_z": -0.3894,
+   "testis": 2.1506,
+   "ovary": 1.0563,
+   "holds": true
+  },
+  "genes_read_open_depth_residual": {
+   "cultured_median_z": 0.0982,
+   "testis": 1.3053,
+   "ovary": 0.0708,
+   "holds": false
+  }
+ },
+ "readings": {
+  "nodes_open_depth_residual": {
+   "raw": {
+    "K562": 10414.0,
+    "HepG2": 9268.0,
+    "GM12878": 3263.0,
+    "H1": 8919.0,
+    "IMR-90": 13114.0,
+    "SK-N-SH": 11302.0,
+    "cardiac muscle cell": 14593.0,
+    "keratinocyte": 3992.0,
+    "hepatocyte": 14117.0,
+    "astrocyte": 14447.0,
+    "CD14-positive monocyte": 8323.0,
+    "testis": 10756.0,
+    "ovary": 7553.0
+   },
+   "covariate": {
+    "K562": 518503.0,
+    "HepG2": 176634.0,
+    "GM12878": 76119.0,
+    "H1": 232709.0,
+    "IMR-90": 312250.0,
+    "SK-N-SH": 232038.0,
+    "cardiac muscle cell": 332799.0,
+    "keratinocyte": 83639.0,
+    "hepatocyte": 267741.0,
+    "astrocyte": 294713.0,
+    "CD14-positive monocyte": 202328.0,
+    "testis": 225744.0,
+    "ovary": 248611.0
+   },
+   "raw_rho_vs_covariate": 0.7198,
+   "z": {
+    "K562": -1.898,
+    "HepG2": 0.2207,
+    "GM12878": -0.3373,
+    "H1": -0.6002,
+    "IMR-90": 0.5037,
+    "SK-N-SH": 0.4395,
+    "cardiac muscle cell": 0.9899,
+    "keratinocyte": -0.2502,
+    "hepatocyte": 1.3119,
+    "astrocyte": 1.2218,
+    "CD14-positive monocyte": -0.5187,
+    "testis": 0.2697,
+    "ovary": -1.3527
+   },
+   "z_loo": {
+    "K562": -3.5352,
+    "HepG2": 0.2323,
+    "GM12878": -0.5604,
+    "H1": -0.6318,
+    "IMR-90": 0.549,
+    "SK-N-SH": 0.4588,
+    "cardiac muscle cell": 1.1427,
+    "keratinocyte": -0.376,
+    "hepatocyte": 1.5074,
+    "astrocyte": 1.4087,
+    "CD14-positive monocyte": -0.5444,
+    "testis": 0.2796,
+    "ovary": -1.5513
+   },
+   "z_odd": {
+    "K562": -1.9135,
+    "HepG2": 0.2127,
+    "GM12878": -0.4282,
+    "H1": -0.5873,
+    "IMR-90": 0.5433,
+    "SK-N-SH": 0.4779,
+    "cardiac muscle cell": 1.0069,
+    "keratinocyte": -0.3118,
+    "hepatocyte": 1.279,
+    "astrocyte": 1.2494,
+    "CD14-positive monocyte": -0.4963,
+    "testis": 0.2439,
+    "ovary": -1.2758
+   },
+   "z_even": {
+    "K562": -1.8767,
+    "HepG2": 0.2273,
+    "GM12878": -0.2676,
+    "H1": -0.6045,
+    "IMR-90": 0.4574,
+    "SK-N-SH": 0.4283,
+    "cardiac muscle cell": 0.9465,
+    "keratinocyte": -0.1794,
+    "hepatocyte": 1.3567,
+    "astrocyte": 1.1934,
+    "CD14-positive monocyte": -0.5485,
+    "testis": 0.2882,
+    "ovary": -1.4213
+   },
+   "bar1_split_half": {
+    "rho": 1.0,
+    "p": 0.0001,
+    "passes": true
+   },
+   "bar2_depth_removed": {
+    "rho_in_sample": 0.2198,
+    "rho_leave_one_out": 0.2363,
+    "passes": true
+   },
+   "bar3_second_assay": {
+    "covariate": "mean DNase peak width",
+    "rho": 0.0549,
+    "fires": false
+   },
+   "kept": true,
+   "order_raw": [
+    "cardiac muscle cell",
+    "astrocyte",
+    "hepatocyte",
+    "IMR-90",
+    "SK-N-SH",
+    "testis",
+    "K562",
+    "HepG2",
+    "H1",
+    "CD14-positive monocyte",
+    "ovary",
+    "keratinocyte",
+    "GM12878"
+   ],
+   "order_normalised": [
+    "hepatocyte",
+    "astrocyte",
+    "cardiac muscle cell",
+    "IMR-90",
+    "SK-N-SH",
+    "testis",
+    "HepG2",
+    "keratinocyte",
+    "GM12878",
+    "CD14-positive monocyte",
+    "H1",
+    "ovary",
+    "K562"
+   ],
+   "fraction_at_reference": {
+    "K562": 0.5206,
+    "HepG2": 0.4634,
+    "GM12878": 0.1631,
+    "H1": 0.4459,
+    "IMR-90": 0.6556,
+    "SK-N-SH": 0.565,
+    "cardiac muscle cell": 0.7296,
+    "keratinocyte": 0.1996,
+    "hepatocyte": 0.7058,
+    "astrocyte": 0.7223,
+    "CD14-positive monocyte": 0.4161,
+    "testis": 0.5377,
+    "ovary": 0.3776
+   },
+   "floored_or_saturated": [],
+   "median_split_raw": {
+    "K562": 10002,
+    "HepG2": 10011,
+    "GM12878": 9995,
+    "H1": 10014,
+    "IMR-90": 9990,
+    "SK-N-SH": 9989,
+    "cardiac muscle cell": 10010,
+    "keratinocyte": 9990,
+    "hepatocyte": 9994,
+    "astrocyte": 9988,
+    "CD14-positive monocyte": 10016,
+    "testis": 10012,
+    "ovary": 10003
+   }
+  },
+  "genes_poised_mark_residual": {
+   "raw": {
+    "K562": 2135.0,
+    "HepG2": 1553.0,
+    "GM12878": 200.0,
+    "H1": 3151.0,
+    "IMR-90": 1436.0,
+    "SK-N-SH": 1467.0,
+    "cardiac muscle cell": 2422.0,
+    "keratinocyte": 304.0,
+    "hepatocyte": 1414.0,
+    "astrocyte": 1348.0,
+    "CD14-positive monocyte": 2434.0,
+    "testis": 284.0,
+    "ovary": 398.0
+   },
+   "covariate": {
+    "K562": 133535.0,
+    "HepG2": 115860.0,
+    "GM12878": 25814.0,
+    "H1": 38481.0,
+    "IMR-90": 117190.0,
+    "SK-N-SH": 36028.0,
+    "cardiac muscle cell": 38270.0,
+    "keratinocyte": 46799.0,
+    "hepatocyte": 8540.0,
+    "astrocyte": 41943.0,
+    "CD14-positive monocyte": 56083.0,
+    "testis": 1902.0,
+    "ovary": 12359.0
+   },
+   "raw_rho_vs_covariate": 0.4945,
+   "z": {
+    "K562": 0.208,
+    "HepG2": -0.4019,
+    "GM12878": -1.3087,
+    "H1": 1.9232,
+    "IMR-90": -0.5419,
+    "SK-N-SH": 0.0082,
+    "cardiac muscle cell": 1.0842,
+    "keratinocyte": -1.4481,
+    "hepatocyte": 0.5748,
+    "astrocyte": -0.1954,
+    "CD14-positive monocyte": 0.9314,
+    "testis": -0.0746,
+    "ovary": -0.7591
+   },
+   "z_loo": {
+    "K562": 0.2467,
+    "HepG2": -0.4667,
+    "GM12878": -1.4891,
+    "H1": 2.4963,
+    "IMR-90": -0.6354,
+    "SK-N-SH": 0.0085,
+    "cardiac muscle cell": 1.1927,
+    "keratinocyte": -1.6945,
+    "hepatocyte": 0.6866,
+    "astrocyte": -0.203,
+    "CD14-positive monocyte": 1.0256,
+    "testis": -0.1639,
+    "ovary": -0.8631
+   },
+   "z_odd": {
+    "K562": 0.3058,
+    "HepG2": -0.409,
+    "GM12878": -1.3182,
+    "H1": 1.8735,
+    "IMR-90": -0.532,
+    "SK-N-SH": -0.0546,
+    "cardiac muscle cell": 1.0069,
+    "keratinocyte": -1.4757,
+    "hepatocyte": 0.5785,
+    "astrocyte": -0.2088,
+    "CD14-positive monocyte": 1.0369,
+    "testis": -0.0567,
+    "ovary": -0.7466
+   },
+   "z_even": {
+    "K562": 0.06,
+    "HepG2": -0.3421,
+    "GM12878": -1.3171,
+    "H1": 1.9721,
+    "IMR-90": -0.5276,
+    "SK-N-SH": 0.001,
+    "cardiac muscle cell": 1.1778,
+    "keratinocyte": -1.4218,
+    "hepatocyte": 0.5894,
+    "astrocyte": -0.1526,
+    "CD14-positive monocyte": 0.8146,
+    "testis": -0.1357,
+    "ovary": -0.718
+   },
+   "bar1_split_half": {
+    "rho": 0.9945,
+    "p": 0.0001,
+    "passes": true
+   },
+   "bar2_depth_removed": {
+    "rho_in_sample": -0.0165,
+    "rho_leave_one_out": -0.0165,
+    "passes": true
+   },
+   "bar3_second_assay": {
+    "covariate": "DNase peaks",
+    "rho": 0.4341,
+    "fires": false
+   },
+   "kept": true,
+   "order_raw": [
+    "H1",
+    "CD14-positive monocyte",
+    "cardiac muscle cell",
+    "K562",
+    "HepG2",
+    "SK-N-SH",
+    "IMR-90",
+    "hepatocyte",
+    "astrocyte",
+    "ovary",
+    "keratinocyte",
+    "testis",
+    "GM12878"
+   ],
+   "order_normalised": [
+    "H1",
+    "cardiac muscle cell",
+    "CD14-positive monocyte",
+    "hepatocyte",
+    "K562",
+    "SK-N-SH",
+    "testis",
+    "astrocyte",
+    "HepG2",
+    "IMR-90",
+    "ovary",
+    "GM12878",
+    "keratinocyte"
+   ],
+   "without_testis": {
+    "bar1_split_half": {
+     "rho": 0.993,
+     "p": 0.0001,
+     "passes": true
+    },
+    "bar2_depth_removed": {
+     "rho_in_sample": -0.007,
+     "rho_leave_one_out": -0.007,
+     "passes": true
+    },
+    "bar3_second_assay": {
+     "covariate": "DNase peaks",
+     "rho": 0.4406,
+     "fires": false
+    },
+    "kept": true,
+    "z": {
+     "K562": 0.2251,
+     "HepG2": -0.3607,
+     "GM12878": -1.2681,
+     "H1": 1.8264,
+     "IMR-90": -0.494,
+     "SK-N-SH": -0.0023,
+     "cardiac muscle cell": 1.0259,
+     "keratinocyte": -1.3843,
+     "hepatocyte": 0.4978,
+     "astrocyte": -0.1923,
+     "CD14-positive monocyte": 0.8908,
+     "ovary": -0.7643
+    }
+   },
+   "testis_dependent": false
+  },
+  "genes_read_depth_residual": {
+   "raw": {
+    "K562": 12775.0,
+    "HepG2": 11641.0,
+    "GM12878": 10698.0,
+    "H1": 12042.0,
+    "IMR-90": 12737.0,
+    "SK-N-SH": 13556.0,
+    "cardiac muscle cell": 12951.0,
+    "keratinocyte": 10964.0,
+    "hepatocyte": 14135.0,
+    "astrocyte": 12639.0,
+    "CD14-positive monocyte": 11351.0,
+    "testis": 15078.0,
+    "ovary": 14006.0
+   },
+   "covariate": {
+    "K562": 518503.0,
+    "HepG2": 176634.0,
+    "GM12878": 76119.0,
+    "H1": 232709.0,
+    "IMR-90": 312250.0,
+    "SK-N-SH": 232038.0,
+    "cardiac muscle cell": 332799.0,
+    "keratinocyte": 83639.0,
+    "hepatocyte": 267741.0,
+    "astrocyte": 294713.0,
+    "CD14-positive monocyte": 202328.0,
+    "testis": 225744.0,
+    "ovary": 248611.0
+   },
+   "raw_rho_vs_covariate": 0.533,
+   "z": {
+    "K562": -1.0256,
+    "HepG2": -0.6245,
+    "GM12878": -0.362,
+    "H1": -0.6274,
+    "IMR-90": -0.3894,
+    "SK-N-SH": 0.7417,
+    "cardiac muscle cell": -0.2807,
+    "keratinocyte": -0.2467,
+    "hepatocyte": 1.0746,
+    "astrocyte": -0.4013,
+    "CD14-positive monocyte": -1.0656,
+    "testis": 2.1506,
+    "ovary": 1.0563
+   },
+   "z_loo": {
+    "K562": -1.5006,
+    "HepG2": -0.6689,
+    "GM12878": -0.6023,
+    "H1": -0.6616,
+    "IMR-90": -0.4221,
+    "SK-N-SH": 0.7884,
+    "cardiac muscle cell": -0.3082,
+    "keratinocyte": -0.3707,
+    "hepatocyte": 1.1948,
+    "astrocyte": -0.4298,
+    "CD14-positive monocyte": -1.171,
+    "testis": 3.0111,
+    "ovary": 1.1623
+   },
+   "z_odd": {
+    "K562": -1.0374,
+    "HepG2": -0.6363,
+    "GM12878": -0.3368,
+    "H1": -0.6242,
+    "IMR-90": -0.3727,
+    "SK-N-SH": 0.7729,
+    "cardiac muscle cell": -0.2231,
+    "keratinocyte": -0.3003,
+    "hepatocyte": 1.0949,
+    "astrocyte": -0.4772,
+    "CD14-positive monocyte": -1.041,
+    "testis": 2.1243,
+    "ovary": 1.0568
+   },
+   "z_even": {
+    "K562": -1.0243,
+    "HepG2": -0.6355,
+    "GM12878": -0.4031,
+    "H1": -0.7214,
+    "IMR-90": -0.3334,
+    "SK-N-SH": 0.7708,
+    "cardiac muscle cell": -0.3466,
+    "keratinocyte": -0.1616,
+    "hepatocyte": 1.0636,
+    "astrocyte": -0.3101,
+    "CD14-positive monocyte": -1.0821,
+    "testis": 2.1143,
+    "ovary": 1.0695
+   },
+   "bar1_split_half": {
+    "rho": 0.9231,
+    "p": 0.0002,
+    "passes": true
+   },
+   "bar2_depth_removed": {
+    "rho_in_sample": -0.0879,
+    "rho_leave_one_out": 0.044,
+    "passes": true
+   },
+   "bar3_second_assay": {
+    "covariate": "mean DNase peak width",
+    "rho": 0.1154,
+    "fires": false
+   },
+   "kept": true,
+   "order_raw": [
+    "testis",
+    "hepatocyte",
+    "ovary",
+    "SK-N-SH",
+    "cardiac muscle cell",
+    "K562",
+    "IMR-90",
+    "astrocyte",
+    "H1",
+    "HepG2",
+    "CD14-positive monocyte",
+    "keratinocyte",
+    "GM12878"
+   ],
+   "order_normalised": [
+    "testis",
+    "hepatocyte",
+    "ovary",
+    "SK-N-SH",
+    "keratinocyte",
+    "cardiac muscle cell",
+    "GM12878",
+    "IMR-90",
+    "astrocyte",
+    "HepG2",
+    "H1",
+    "K562",
+    "CD14-positive monocyte"
+   ]
+  },
+  "genes_read_open_depth_residual": {
+   "raw": {
+    "K562": 14828.0,
+    "HepG2": 13015.0,
+    "GM12878": 9802.0,
+    "H1": 15129.0,
+    "IMR-90": 14057.0,
+    "SK-N-SH": 14883.0,
+    "cardiac muscle cell": 15268.0,
+    "keratinocyte": 8432.0,
+    "hepatocyte": 15489.0,
+    "astrocyte": 13885.0,
+    "CD14-positive monocyte": 13647.0,
+    "testis": 15265.0,
+    "ovary": 14193.0
+   },
+   "covariate": {
+    "K562": 518503.0,
+    "HepG2": 176634.0,
+    "GM12878": 76119.0,
+    "H1": 232709.0,
+    "IMR-90": 312250.0,
+    "SK-N-SH": 232038.0,
+    "cardiac muscle cell": 332799.0,
+    "keratinocyte": 83639.0,
+    "hepatocyte": 267741.0,
+    "astrocyte": 294713.0,
+    "CD14-positive monocyte": 202328.0,
+    "testis": 225744.0,
+    "ovary": 248611.0
+   },
+   "raw_rho_vs_covariate": 0.5934,
+   "z": {
+    "K562": -1.6671,
+    "HepG2": 0.1101,
+    "GM12878": -0.0649,
+    "H1": 1.0921,
+    "IMR-90": -0.758,
+    "SK-N-SH": 0.8869,
+    "cardiac muscle cell": 0.0982,
+    "keratinocyte": -1.5518,
+    "hepatocyte": 0.9686,
+    "astrocyte": -0.7276,
+    "CD14-positive monocyte": 0.2373,
+    "testis": 1.3053,
+    "ovary": 0.0708
+   },
+   "z_loo": {
+    "K562": -2.8341,
+    "HepG2": 0.1157,
+    "GM12878": -0.1069,
+    "H1": 1.202,
+    "IMR-90": -0.8405,
+    "SK-N-SH": 0.9546,
+    "cardiac muscle cell": 0.1075,
+    "keratinocyte": -2.8655,
+    "hepatocyte": 1.064,
+    "astrocyte": -0.7945,
+    "CD14-positive monocyte": 0.2464,
+    "testis": 1.4783,
+    "ovary": 0.0735
+   },
+   "z_odd": {
+    "K562": -1.7048,
+    "HepG2": 0.1337,
+    "GM12878": -0.0647,
+    "H1": 1.0662,
+    "IMR-90": -0.6835,
+    "SK-N-SH": 0.7675,
+    "cardiac muscle cell": 0.1503,
+    "keratinocyte": -1.6082,
+    "hepatocyte": 1.0059,
+    "astrocyte": -0.7097,
+    "CD14-positive monocyte": 0.3261,
+    "testis": 1.2831,
+    "ovary": 0.038
+   },
+   "z_even": {
+    "K562": -1.6927,
+    "HepG2": 0.1543,
+    "GM12878": -0.0574,
+    "H1": 1.1157,
+    "IMR-90": -0.7813,
+    "SK-N-SH": 0.97,
+    "cardiac muscle cell": 0.1039,
+    "keratinocyte": -1.5374,
+    "hepatocyte": 0.9678,
+    "astrocyte": -0.6915,
+    "CD14-positive monocyte": 0.1674,
+    "testis": 1.221,
+    "ovary": 0.0601
+   },
+   "bar1_split_half": {
+    "rho": 0.9835,
+    "p": 0.0001,
+    "passes": true
+   },
+   "bar2_depth_removed": {
+    "rho_in_sample": -0.2308,
+    "rho_leave_one_out": -0.1703,
+    "passes": true
+   },
+   "bar3_second_assay": {
+    "covariate": "mean DNase peak width",
+    "rho": 0.4615,
+    "fires": false
+   },
+   "kept": true,
+   "order_raw": [
+    "hepatocyte",
+    "cardiac muscle cell",
+    "testis",
+    "H1",
+    "SK-N-SH",
+    "K562",
+    "ovary",
+    "IMR-90",
+    "astrocyte",
+    "CD14-positive monocyte",
+    "HepG2",
+    "GM12878",
+    "keratinocyte"
+   ],
+   "order_normalised": [
+    "testis",
+    "H1",
+    "hepatocyte",
+    "SK-N-SH",
+    "CD14-positive monocyte",
+    "HepG2",
+    "cardiac muscle cell",
+    "ovary",
+    "GM12878",
+    "astrocyte",
+    "IMR-90",
+    "keratinocyte",
+    "K562"
+   ]
+  }
+ },
+ "per_biosample": {
+  "K562": {
+   "nodes_open_depth_residual": -1.898,
+   "nodes_open_depth_residual_at_edge": true,
+   "genes_poised_mark_residual": 0.208,
+   "genes_poised_mark_residual_at_edge": true,
+   "genes_read_depth_residual": -1.0256,
+   "genes_read_depth_residual_at_edge": true,
+   "genes_read_open_depth_residual": -1.6671,
+   "genes_read_open_depth_residual_at_edge": true
+  },
+  "HepG2": {
+   "nodes_open_depth_residual": 0.2207,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -0.4019,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.6245,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.1101,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "GM12878": {
+   "nodes_open_depth_residual": -0.3373,
+   "nodes_open_depth_residual_at_edge": true,
+   "genes_poised_mark_residual": -1.3087,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.362,
+   "genes_read_depth_residual_at_edge": true,
+   "genes_read_open_depth_residual": -0.0649,
+   "genes_read_open_depth_residual_at_edge": true
+  },
+  "H1": {
+   "nodes_open_depth_residual": -0.6002,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": 1.9232,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.6274,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 1.0921,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "IMR-90": {
+   "nodes_open_depth_residual": 0.5037,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -0.5419,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.3894,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": -0.758,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "SK-N-SH": {
+   "nodes_open_depth_residual": 0.4395,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": 0.0082,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": 0.7417,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.8869,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "cardiac muscle cell": {
+   "nodes_open_depth_residual": 0.9899,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": 1.0842,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.2807,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.0982,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "keratinocyte": {
+   "nodes_open_depth_residual": -0.2502,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -1.4481,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.2467,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": -1.5518,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "hepatocyte": {
+   "nodes_open_depth_residual": 1.3119,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": 0.5748,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": 1.0746,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.9686,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "astrocyte": {
+   "nodes_open_depth_residual": 1.2218,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -0.1954,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -0.4013,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": -0.7276,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "CD14-positive monocyte": {
+   "nodes_open_depth_residual": -0.5187,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": 0.9314,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": -1.0656,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.2373,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "testis": {
+   "nodes_open_depth_residual": 0.2697,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -0.0746,
+   "genes_poised_mark_residual_at_edge": true,
+   "genes_read_depth_residual": 2.1506,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 1.3053,
+   "genes_read_open_depth_residual_at_edge": false
+  },
+  "ovary": {
+   "nodes_open_depth_residual": -1.3527,
+   "nodes_open_depth_residual_at_edge": false,
+   "genes_poised_mark_residual": -0.7591,
+   "genes_poised_mark_residual_at_edge": false,
+   "genes_read_depth_residual": 1.0563,
+   "genes_read_depth_residual_at_edge": false,
+   "genes_read_open_depth_residual": 0.0708,
+   "genes_read_open_depth_residual_at_edge": false
+  }
+ },
+ "kept": {
+  "nodes_open_depth_residual": true,
+  "genes_poised_mark_residual": true,
+  "genes_read_depth_residual": true,
+  "genes_read_open_depth_residual": true
+ },
+ "evidence": "derived: ENCODE DNase-seq and Histone ChIP-seq peak counts already on disk; no request made"
+}

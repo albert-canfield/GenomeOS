@@ -1,0 +1,368 @@
+{
+ "result": "reader_rarefied",
+ "registered": false,
+ "runs": {
+  "76119": {
+   "result": "reader_rarefied",
+   "registered": false,
+   "why": "Not registered in advance: added after the registered residual reversed the K562-against-\nHepG2 read share with K562 alone at the top of the depth axis. Every biosample is cut to the\nsame number of peaks (the shallowest's, GM12878's) by keeping its strongest, and the reader is\nre-run on the cached files, so depth is matched by construction rather than modelled. The node\ntables are the ones on disk; no domain is re-inferred.",
+   "peaks_per_biosample": 76119,
+   "biosamples": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "H1",
+    "IMR-90",
+    "SK-N-SH",
+    "cardiac muscle cell",
+    "keratinocyte",
+    "hepatocyte",
+    "astrocyte",
+    "CD14-positive monocyte",
+    "testis",
+    "ovary"
+   ],
+   "full_depth": {
+    "K562": 518503,
+    "HepG2": 176634,
+    "GM12878": 76119,
+    "H1": 232709,
+    "IMR-90": 312250,
+    "SK-N-SH": 232038,
+    "cardiac muscle cell": 332799,
+    "keratinocyte": 83639,
+    "hepatocyte": 267741,
+    "astrocyte": 294713,
+    "CD14-positive monocyte": 202328,
+    "testis": 225744,
+    "ovary": 248611
+   },
+   "rarefied": {
+    "K562": {
+     "peaks": 76119,
+     "genes_read": 11183,
+     "genes_read_open": 12030,
+     "nodes_open_at_reference": 3508
+    },
+    "HepG2": {
+     "peaks": 76119,
+     "genes_read": 10802,
+     "genes_read_open": 10842,
+     "nodes_open_at_reference": 3607
+    },
+    "GM12878": {
+     "peaks": 76119,
+     "genes_read": 10698,
+     "genes_read_open": 9802,
+     "nodes_open_at_reference": 3263
+    },
+    "H1": {
+     "peaks": 76119,
+     "genes_read": 11213,
+     "genes_read_open": 14103,
+     "nodes_open_at_reference": 3359
+    },
+    "IMR-90": {
+     "peaks": 76119,
+     "genes_read": 11085,
+     "genes_read_open": 9813,
+     "nodes_open_at_reference": 3684
+    },
+    "SK-N-SH": {
+     "peaks": 76119,
+     "genes_read": 12472,
+     "genes_read_open": 13293,
+     "nodes_open_at_reference": 3475
+    },
+    "cardiac muscle cell": {
+     "peaks": 76119,
+     "genes_read": 11174,
+     "genes_read_open": 11308,
+     "nodes_open_at_reference": 3548
+    },
+    "keratinocyte": {
+     "peaks": 76119,
+     "genes_read": 10889,
+     "genes_read_open": 8223,
+     "nodes_open_at_reference": 3591
+    },
+    "hepatocyte": {
+     "peaks": 76119,
+     "genes_read": 12688,
+     "genes_read_open": 13242,
+     "nodes_open_at_reference": 3274
+    },
+    "astrocyte": {
+     "peaks": 76119,
+     "genes_read": 10381,
+     "genes_read_open": 8840,
+     "nodes_open_at_reference": 3394
+    },
+    "CD14-positive monocyte": {
+     "peaks": 76119,
+     "genes_read": 10781,
+     "genes_read_open": 11086,
+     "nodes_open_at_reference": 3367
+    },
+    "testis": {
+     "peaks": 76119,
+     "genes_read": 13292,
+     "genes_read_open": 12977,
+     "nodes_open_at_reference": 3301
+    },
+    "ovary": {
+     "peaks": 76119,
+     "genes_read": 13155,
+     "genes_read_open": 13128,
+     "nodes_open_at_reference": 3349
+    }
+   },
+   "agreement": {
+    "genes_read": {
+     "rho_rarefied_vs_residual": 0.6264,
+     "rho_rarefied_vs_raw": 0.8407,
+     "k562": 11183,
+     "hepg2": 10802,
+     "k562_vs_hepg2": "K562 > HepG2",
+     "min": 10381,
+     "max": 13292,
+     "order_rarefied": [
+      "testis",
+      "ovary",
+      "hepatocyte",
+      "SK-N-SH",
+      "H1",
+      "K562",
+      "cardiac muscle cell",
+      "IMR-90",
+      "keratinocyte",
+      "HepG2",
+      "CD14-positive monocyte",
+      "GM12878",
+      "astrocyte"
+     ]
+    },
+    "genes_read_open": {
+     "rho_rarefied_vs_residual": 0.6868,
+     "rho_rarefied_vs_raw": 0.7747,
+     "k562": 12030,
+     "hepg2": 10842,
+     "k562_vs_hepg2": "K562 > HepG2",
+     "min": 8223,
+     "max": 14103,
+     "order_rarefied": [
+      "H1",
+      "SK-N-SH",
+      "hepatocyte",
+      "ovary",
+      "testis",
+      "K562",
+      "cardiac muscle cell",
+      "CD14-positive monocyte",
+      "HepG2",
+      "IMR-90",
+      "GM12878",
+      "astrocyte",
+      "keratinocyte"
+     ]
+    },
+    "nodes_open_at_reference": {
+     "rho_rarefied_vs_residual": 0.1099,
+     "rho_rarefied_vs_raw": 0.2418,
+     "k562": 3508,
+     "hepg2": 3607,
+     "k562_vs_hepg2": "HepG2 >= K562",
+     "min": 3263,
+     "max": 3684,
+     "order_rarefied": [
+      "IMR-90",
+      "HepG2",
+      "keratinocyte",
+      "cardiac muscle cell",
+      "K562",
+      "SK-N-SH",
+      "astrocyte",
+      "CD14-positive monocyte",
+      "H1",
+      "ovary",
+      "testis",
+      "hepatocyte",
+      "GM12878"
+     ]
+    }
+   },
+   "evidence": "derived: ENCODE DNase-seq peaks already on disk, strongest n kept; no request made"
+  },
+  "176634": {
+   "result": "reader_rarefied",
+   "registered": false,
+   "why": "Not registered in advance: added after the registered residual reversed the K562-against-\nHepG2 read share with K562 alone at the top of the depth axis. Every biosample is cut to the\nsame number of peaks (the shallowest's, GM12878's) by keeping its strongest, and the reader is\nre-run on the cached files, so depth is matched by construction rather than modelled. The node\ntables are the ones on disk; no domain is re-inferred.",
+   "peaks_per_biosample": 176634,
+   "biosamples": [
+    "K562",
+    "HepG2",
+    "H1",
+    "IMR-90",
+    "SK-N-SH",
+    "cardiac muscle cell",
+    "hepatocyte",
+    "astrocyte",
+    "CD14-positive monocyte",
+    "testis",
+    "ovary"
+   ],
+   "full_depth": {
+    "K562": 518503,
+    "HepG2": 176634,
+    "GM12878": 76119,
+    "H1": 232709,
+    "IMR-90": 312250,
+    "SK-N-SH": 232038,
+    "cardiac muscle cell": 332799,
+    "keratinocyte": 83639,
+    "hepatocyte": 267741,
+    "astrocyte": 294713,
+    "CD14-positive monocyte": 202328,
+    "testis": 225744,
+    "ovary": 248611
+   },
+   "rarefied": {
+    "K562": {
+     "peaks": 176634,
+     "genes_read": 11898,
+     "genes_read_open": 13557,
+     "nodes_open_at_reference": 6792
+    },
+    "HepG2": {
+     "peaks": 176634,
+     "genes_read": 11641,
+     "genes_read_open": 13015,
+     "nodes_open_at_reference": 9268
+    },
+    "H1": {
+     "peaks": 176634,
+     "genes_read": 11978,
+     "genes_read_open": 15064,
+     "nodes_open_at_reference": 8360
+    },
+    "IMR-90": {
+     "peaks": 176634,
+     "genes_read": 11957,
+     "genes_read_open": 12328,
+     "nodes_open_at_reference": 8952
+    },
+    "SK-N-SH": {
+     "peaks": 176634,
+     "genes_read": 13310,
+     "genes_read_open": 14565,
+     "nodes_open_at_reference": 8111
+    },
+    "cardiac muscle cell": {
+     "peaks": 176634,
+     "genes_read": 12116,
+     "genes_read_open": 13542,
+     "nodes_open_at_reference": 9105
+    },
+    "hepatocyte": {
+     "peaks": 176634,
+     "genes_read": 13640,
+     "genes_read_open": 14911,
+     "nodes_open_at_reference": 8821
+    },
+    "astrocyte": {
+     "peaks": 176634,
+     "genes_read": 11781,
+     "genes_read_open": 12228,
+     "nodes_open_at_reference": 9291
+    },
+    "CD14-positive monocyte": {
+     "peaks": 176634,
+     "genes_read": 11244,
+     "genes_read_open": 13365,
+     "nodes_open_at_reference": 7433
+    },
+    "testis": {
+     "peaks": 176634,
+     "genes_read": 14853,
+     "genes_read_open": 15023,
+     "nodes_open_at_reference": 8870
+    },
+    "ovary": {
+     "peaks": 176634,
+     "genes_read": 13905,
+     "genes_read_open": 14089,
+     "nodes_open_at_reference": 6643
+    }
+   },
+   "agreement": {
+    "genes_read": {
+     "rho_rarefied_vs_residual": 0.8909,
+     "rho_rarefied_vs_raw": 0.9273,
+     "k562": 11898,
+     "hepg2": 11641,
+     "k562_vs_hepg2": "K562 > HepG2",
+     "min": 11244,
+     "max": 14853,
+     "order_rarefied": [
+      "testis",
+      "ovary",
+      "hepatocyte",
+      "SK-N-SH",
+      "cardiac muscle cell",
+      "H1",
+      "IMR-90",
+      "K562",
+      "astrocyte",
+      "HepG2",
+      "CD14-positive monocyte"
+     ]
+    },
+    "genes_read_open": {
+     "rho_rarefied_vs_residual": 0.7364,
+     "rho_rarefied_vs_raw": 0.7273,
+     "k562": 13557,
+     "hepg2": 13015,
+     "k562_vs_hepg2": "K562 > HepG2",
+     "min": 12228,
+     "max": 15064,
+     "order_rarefied": [
+      "H1",
+      "testis",
+      "hepatocyte",
+      "SK-N-SH",
+      "ovary",
+      "K562",
+      "cardiac muscle cell",
+      "CD14-positive monocyte",
+      "HepG2",
+      "IMR-90",
+      "astrocyte"
+     ]
+    },
+    "nodes_open_at_reference": {
+     "rho_rarefied_vs_residual": 0.6909,
+     "rho_rarefied_vs_raw": 0.6636,
+     "k562": 6792,
+     "hepg2": 9268,
+     "k562_vs_hepg2": "HepG2 >= K562",
+     "min": 6643,
+     "max": 9291,
+     "order_rarefied": [
+      "astrocyte",
+      "HepG2",
+      "cardiac muscle cell",
+      "IMR-90",
+      "testis",
+      "hepatocyte",
+      "H1",
+      "SK-N-SH",
+      "CD14-positive monocyte",
+      "K562",
+      "ovary"
+     ]
+    }
+   },
+   "evidence": "derived: ENCODE DNase-seq peaks already on disk, strongest n kept; no request made"
+  }
+ }
+}

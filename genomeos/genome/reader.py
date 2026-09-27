@@ -34,6 +34,7 @@ import bisect
 import gzip
 import io
 import json
+import math
 import re
 import urllib.parse
 import urllib.request
@@ -174,6 +175,85 @@ def node_open_threshold(densities: Iterable[float]) -> float:
     return max(NODE_OPEN_MIN_DENSITY, d[len(d) // 2]) if d else NODE_OPEN_MIN_DENSITY
 
 
+# The between-biosample open-node reading, registered 2026-09-27 before it was computed
+# (docs/NODES-READER-WRITER.md, "The reader family normalised, to close milestone 1.1").
+# One absolute density for every biosample: the pooled median of peaks per 100 kb over all
+# 260,026 (node, biosample) calls on disk that day, frozen here so adding a biosample does not
+# redefine it. The count at this density is depth; its log-depth residual is the reading.
+NODE_OPEN_REFERENCE_DENSITY = 4.79
+
+# normalised reading -> (raw reading it normalises, covariate it is normalised against). Each is
+# the standardised residual of raw ~ a + b * ln(covariate) over a panel of biosamples, so it
+# exists only for a panel, never for one row: see normalise_family.
+NORMALISED_READINGS = {
+    "nodes_open_depth_residual": ("nodes_open_at_reference", "peaks"),
+    "genes_poised_mark_residual": ("genes_poised", "h3k27me3_peaks"),
+    "genes_read_depth_residual": ("genes_read", "peaks"),
+    "genes_read_open_depth_residual": ("genes_read_open", "peaks"),
+}
+
+
+def log_fit(xs: list[float], ys: list[float]) -> tuple[float, float, float]:
+    """Least squares y = a + b * ln(x); returns (a, b, s) with s = sqrt(SSR / (n - 2))."""
+    lx = [math.log(x) for x in xs]
+    n = len(lx)
+    mx, my = sum(lx) / n, sum(ys) / n
+    sxx = sum((v - mx) ** 2 for v in lx)
+    b = sum((u - mx) * (v - my) for u, v in zip(lx, ys, strict=True)) / sxx if sxx else 0.0
+    a = my - b * mx
+    ssr = sum((v - (a + b * u)) ** 2 for u, v in zip(lx, ys, strict=True))
+    s = math.sqrt(ssr / (n - 2)) if n > 2 else 0.0
+    # an exact fit leaves rounding error, not a residual: call it zero rather than divide by it
+    return a, b, 0.0 if s <= 1e-9 * (1.0 + max(abs(v) for v in ys)) else s
+
+
+def depth_residuals(xs: list[float], ys: list[float]) -> list[float]:
+    """Standardised residuals of y ~ a + b * ln(x) over the panel: how many standard errors each
+    biosample sits above (+) or below (-) what its covariate predicts."""
+    a, b, s = log_fit(xs, ys)
+    return [(y - (a + b * math.log(x))) / s if s else 0.0 for x, y in zip(xs, ys, strict=True)]
+
+
+def loo_residuals(xs: list[float], ys: list[float]) -> list[float]:
+    """Each biosample's standardised residual from a fit on the others. Unlike the in-sample
+    residual it is not uncorrelated with ln(x) by construction, so it is the honest test of
+    whether depth was removed."""
+    out = []
+    for i, (x, y) in enumerate(zip(xs, ys, strict=True)):
+        a, b, s = log_fit(xs[:i] + xs[i + 1 :], ys[:i] + ys[i + 1 :])
+        out.append((y - (a + b * math.log(x))) / s if s else 0.0)
+    return out
+
+
+def normalise_family(totals: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """The normalised readings for a panel of biosamples, from their genome-wide totals (each must
+    carry the raw reading and its covariate, as NORMALISED_READINGS names them). A reading whose
+    raw value or covariate is missing for any biosample is None for all of them: a residual is a
+    property of the panel, and a panel with a hole is a different panel.
+
+    Beside each reading, `<name>_at_edge` is True for the biosamples at the panel's highest and
+    lowest covariate. Their residual is an extrapolation that rests on the fit's form: on
+    2026-09-27 the log fit put K562, alone at the top of DNase depth, below HepG2 on read share,
+    and cutting every biosample to the same number of peaks put it above. Compare an edge
+    biosample on a depth-matched count (scripts/reader_depth_family.py --rarefied), not on this."""
+    cells = list(totals)
+    out: dict[str, dict[str, Any]] = {c: {} for c in cells}
+    for name, (raw, cov) in NORMALISED_READINGS.items():
+        ys = [totals[c].get(raw) for c in cells]
+        xs = [totals[c].get(cov) for c in cells]
+        ok = len(cells) > 2 and all(v is not None for v in ys) and all(v for v in xs)
+        z = depth_residuals([float(v) for v in xs], [float(v) for v in ys]) if ok else [None] * len(cells)
+        edge = (
+            {max(cells, key=lambda c: totals[c][cov]), min(cells, key=lambda c: totals[c][cov])}
+            if ok
+            else set()
+        )
+        for c, v in zip(cells, z, strict=True):
+            out[c][name] = round(v, 4) if v is not None else None
+            out[c][name + "_at_edge"] = c in edge
+    return out
+
+
 def read_chromosome(
     cell_type: str, chrom: str, annotation, domains: list, ccres: list, marks: bool = True
 ) -> dict[str, Any]:
@@ -221,6 +301,7 @@ def read_chromosome(
     active = sum(1 for c in enh if idx.overlapping(c.start, c.end))
     open_density = node_open_threshold(n["peaks_per_100kb"] for n in nodes)
     open_nodes = [n for n in nodes if n["peaks_per_100kb"] >= open_density]
+    open_at_reference = sum(1 for n in nodes if n["peaks_per_100kb"] >= NODE_OPEN_REFERENCE_DENSITY)
     silent_nodes = [n for n in nodes if n["peaks"] == 0]
     read_open = len(read)
     read.extend(by_marks)
@@ -245,6 +326,8 @@ def read_chromosome(
         "poised_genes": sorted(p["gene"] for p in poised),
         "read_by_marks": sorted(r["gene"] for r in by_marks),
         "marks_used": use_marks,
+        # the covariate genes_poised is normalised against (the mark that calls it), carried per row
+        "h3k27me3_peaks": len(k27me3.peaks) if use_marks else None,
         "enhancers": len(enh),
         "enhancers_active": active,
         "enhancers_active_fraction": round(active / max(1, len(enh)), 4),
@@ -255,6 +338,9 @@ def read_chromosome(
         "enhancers_active_per_100k_peaks": round(active / max(1, len(idx.peaks)) * 100_000, 1),
         "nodes": len(nodes),
         "nodes_open": len(open_nodes),
+        # the between-biosample counterpart: one absolute density for every biosample. The count is
+        # depth; normalise_family turns it into nodes_open_depth_residual over a panel
+        "nodes_open_at_reference": open_at_reference,
         "nodes_silent": len(silent_nodes),
         "silent_node_ids": [n["id"] for n in silent_nodes][:100],
         "node_table": nodes,
@@ -283,7 +369,21 @@ def read_chromosome(
                 "thirteen); it distinguishes nothing and is withdrawn as a between-biosample "
                 "reading. genes_poised tracks the H3K27me3 peak call at 0.49, so a biosample with "
                 "an under-called broad mark reads as un-poised. genes_read, genes_read_open and "
-                "nodes_silent are banded as partly independent of depth (|rho| 0.53 to 0.59)."
+                "nodes_silent are banded as partly independent of depth (|rho| 0.53 to 0.59). "
+                # normalised 2026-09-27 against a registration committed before the run
+                # (data/results/reader_normalised.json, reader_rarefied.json)
+                "Between biosamples, read the normalised counterparts, which exist for a panel "
+                "and not for one row (genomeos.genome.reader.normalise_family): "
+                "nodes_open_depth_residual is the log-DNase-depth residual of "
+                "nodes_open_at_reference, the nodes at or above one fixed 4.79 peaks per 100 kb; "
+                "genes_poised_mark_residual is genes_poised against the H3K27me3 peak count "
+                "(h3k27me3_peaks) that calls it; genes_read_depth_residual and "
+                "genes_read_open_depth_residual are the read counts against DNase depth. All four "
+                "replicate across odd and even autosomes (Spearman 0.92 to 1.00) and sit inside "
+                "|rho| < 0.4 of their covariate when each biosample is left out of its own fit. "
+                "The biosamples at the top and bottom of the covariate are extrapolations "
+                "(<name>_at_edge): compare those on a depth-matched count instead. nodes_open "
+                "itself stays the within-biosample rank node_open_threshold defines."
             ),
         },
     }

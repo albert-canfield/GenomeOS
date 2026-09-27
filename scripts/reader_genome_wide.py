@@ -11,7 +11,7 @@ from pathlib import Path
 
 from genomeos.genome import Annotation, IndexedGenome, default_gencode
 from genomeos.genome.domains import infer_domains
-from genomeos.genome.reader import compare, fetch_peaks, load_peaks, read_chromosome, slug
+from genomeos.genome.reader import compare, fetch_peaks, load_peaks, normalise_family, read_chromosome, slug
 from genomeos.genome.regulatory import load_ccres
 from genomeos.jobs import heartbeat
 from genomeos.results import load_result, save_result
@@ -33,6 +33,11 @@ DEFAULT_CELLS = [
 ]
 RERUN = "--rerun" in sys.argv  # start the summary afresh (after a change to what "read" means)
 CELLS = [a for a in sys.argv[1:] if a != "--rerun"] or DEFAULT_CELLS
+
+
+def _sum_or_none(ch: dict, cell: str, field: str) -> int | None:
+    vals = [r[cell].get(field) for r in ch.values()]
+    return None if any(v is None for v in vals) else sum(vals)
 
 
 def main() -> None:
@@ -76,6 +81,8 @@ def main() -> None:
                     "enhancers_active_per_100k_peaks",
                     "nodes",
                     "nodes_open",
+                    "nodes_open_at_reference",
+                    "h3k27me3_peaks",
                     "nodes_silent",
                 )
             }
@@ -118,9 +125,15 @@ def main() -> None:
                 1,
             ),
             "nodes_silent": sum(r[cell]["nodes_silent"] for r in ch.values()),
+            # the raw counts and covariates the normalised readings are fitted on (2026-09-27);
+            # None where a row predates them, and normalise_family then leaves that reading None
+            "nodes_open_at_reference": _sum_or_none(ch, cell, "nodes_open_at_reference"),
+            "h3k27me3_peaks": _sum_or_none(ch, cell, "h3k27me3_peaks"),
         }
         for cell in cells
     }
+    # beside the raw totals, never instead of them: a residual belongs to this panel of biosamples
+    out["normalised"] = normalise_family(out["totals"])
     out["totals"]["seconds"] = round(time.time() - t0)
     out["evidence"] = (
         "experimental: ENCODE DNase-seq peaks and Histone ChIP-seq peaks; inferred: read = promoter open "
