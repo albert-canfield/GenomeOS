@@ -6791,6 +6791,61 @@ to SP7 and HOXC6 to HOXC11 on chr12). syntax_tiling: not re-run, as registered;
 its rows now carry `genes_at_bar` from the cache the scorer writes, and the unit
 test that `moved` equals "some gene at the bar" passes on 2,000 random records.
 
+## The CRISPRi split audited: no held-out figure read the held-out pairs through the merged loader or the compiled program, and 43 held-out links sat in the compiled programs unmarked (2026-09-28)
+
+Two defects were reported in `attribution/measured.py`. First, `CrispriPair` dropped the
+benchmark's power columns, so a well-powered negative and a blind one counted the same. Second,
+`load_crispri` merged the training file with the held-out file, and `compile.py _measured_blocks`
+wrote the regulated links from both into the compiled BioLang programs as experimental facts. The
+audit came first and was committed before any code changed. It traced every consumer of
+`load_crispri`, of the measured layer's CRISPRi data and of the `<id>_measured` blocks through
+`genomeos/` and `scripts/`. It then checked every other CRISPRi reader behind a held-out claim, to
+confirm that none of them reaches the two paths indirectly. The table is in
+`data/results/crispri_split_audit.json`.
+
+**Exposed: none.** No scorer, fit or feature behind a held-out or validation figure read held-out
+pairs through either path. Every held-out claim comes from a module that reads the two files
+separately with `crispri.load` and fits on training rows only. The defect is latent, not realised:
+the compiled programs carried **43 held-out-only links out of 212 measured rules** across the 24
+chromosomes. The committed `data/organisms/human/noncoding_chr21.bio` carried 1 of its 2 (ICOSLG,
+GM12878). The first feature to read a compiled program would have seen the test set.
+
+| consumer | path | figures | status |
+|---|---|---|---|
+| `crispri.score` (`scripts/crispri_score.py`) | `crispri.load` per file | held-out K562 AUPRC 0.550 → 0.691, +0.141 [+0.082, +0.231] (`crispri_benchmark.json`, CRISPRI-RESULT.md) | CLEAN: fit on training, held-out scored frozen |
+| `crispri.score_published` (`scripts/crispri_published.py`, 42d7b1b) | `crispri.load` per file | training LOCO 0.507 / 0.724; held-out pooled 0.567 / 0.677 registered, 0.476 / 0.639 DNase-only; coverage arms +0.136 | CLEAN; the post hoc DNase choice is already disclosed and is not a leak |
+| `crispri.score_contact` | `crispri.load` per file | `crispri_contact.json` held-out arm | CLEAN |
+| `target_calibration` and its gate and prevalence scripts | `crispri.load` per file | `heldout_k562`, `heldout_other_cells`, `held_out_before_and_after` | CLEAN: every `fit` and `fit_with_offset` runs on training |
+| `target_rebanding`, `union_axis` band levels | `crispri.load` per file | band rates | CLEAN for these paths; the rates pool training and held-out K562 by registration, so no later held-out K562 figure may be read against the re-banded table as out of sample |
+| `crispri_direction`, `crispri_direction_both` | `crispri.load` per file | per-cell sign agreement | EVALUATION-ONLY: nothing fitted |
+| `loci_fourth`, `loci_noncoding` | `crispri.load(HELDOUT)` only | locus rates | EVALUATION-ONLY: registered 2026-09-21 before the file was read |
+| `node_containment_audit.py` stage 2 | `crispri.load` of both files | 661 regulated pairs, measured share 0.758 | EVALUATION-ONLY: the pairs are ground truth for a caller built from CTCF cCREs, nothing is fitted, and the figure is not quoted as held-out |
+| `measured.rows`/`census` (`scripts/measured_layer.py`) | `load_crispri`, merged | 19,070 of 440,377 elements measured; agreement over 1,505 and over 128 | EVALUATION-ONLY: fixed rules, pooled by design, not a held-out claim |
+| `confidence_calibration` | `load_crispri`, merged | 128 elements, observed 0.758 against stated 0.347; 10 of 12 bands outside | EVALUATION-ONLY: bands imported unchanged, nothing fitted |
+| `compile._measured_blocks` → `noncoding_chr*.bio` | the compiled program | 43 of 212 rules held-out-only | REPORT-ONLY today: its readers are the evidence census, the CLI, the explorer index, `bio test` and three syntax censuses |
+| `measurability.py`, `unknown_coverage.py` | own file lists, intervals only | coverage footprints | REPORT-ONLY: no label read |
+
+**What the fix is therefore allowed to change: no figure.** `load_crispri` keeps its default of
+both files, because no exposed caller exists to move. The fix, committed after this audit, gives it a `split` argument
+(`"training"`, `"heldout"`, `"all"`). Each `CrispriPair` gains its `split`, taken from the
+file it came from, and the five power columns exactly as the headers name them:
+`PowerAtEffectSize10`, `15`, `20`, `25` and `50`. In both files every valid row has a value. The
+training file holds 9,885 negatives, 6,193 of them with power at least 0.8 at a 20% effect (the
+brief's "6,169 of 9,810" was an approximation of this). The held-out file holds 4,188 negatives,
+3,675 of them well powered.
+
+The compiled program **keeps the held-out links, marked**, and this is the least invasive choice. Removing them would change the rule
+counts every program tests itself on, and it would make the program omit a real measurement. The
+chosen mark is carried by the structured fields a feature would read, not only by a comment:
+
+- the `targets:` of a `_measured` element lists only genes regulated in a training pair;
+- a link found only in held-out pairs is written with `measured.HELDOUT_MARK` in its evidence
+  source, and `measured.is_heldout(source)` is the test any future reader must apply;
+- a link found in both splits takes its action and strength from the training pairs.
+
+A test is to assert that no held-out-only gene reaches `targets:` and that every held-out-only rule
+carries the mark.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
