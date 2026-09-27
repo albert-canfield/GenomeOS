@@ -1,0 +1,511 @@
+{
+  "result": "repo_size",
+  "date": "2026-09-27",
+  "question": "how close is the GenomeOS repository to any GitHub limit, and how fast is it growing",
+  "measured_on": "2026-09-27",
+  "measured_at_tip": {
+    "dev": "a1f8418",
+    "main": "36f36d6",
+    "commits_reachable": 728
+  },
+  "method": "du -sk, git ls-files + stat, git ls-tree -r -l, git cat-file --batch-check, git pack-objects --stdout piped to wc -c, git rev-list -1 --before per day",
+  "working_tree": {
+    "total_bytes": 10578845696,
+    "total_gib": 9.85,
+    "note": "includes .git and the git-ignored .venv",
+    "by_directory_on_disk_bytes": {
+      "data": 9155821568,
+      ".venv": 1237942272,
+      ".git": 154537984,
+      "genomeos": 15192064,
+      "tests": 8478720,
+      "scripts": 2318336,
+      "docs": 2068480
+    },
+    "data_subdirectories_on_disk_bytes": {
+      "knowledge": 6773243904,
+      "reference": 1512390656,
+      "results": 406847488,
+      "individuals": 344948736,
+      "twins": 103809024,
+      "cache": 6791168,
+      "organisms": 4194304
+    }
+  },
+  "tracked_vs_ignored": {
+    "tracked_files": 1365,
+    "tracked_bytes": 281431807,
+    "tracked_mib": 268.4,
+    "data_total_bytes": 9155821568,
+    "data_tracked_bytes": 268908870,
+    "data_tracked_files": 761,
+    "data_tracked_share_pct": 2.9,
+    "data_ignored_bytes": 8886912698,
+    "data_ignored_gib": 8.28,
+    "data_ignored_share_pct": 97.1,
+    "tracked_bytes_by_directory": {
+      "data": 268908870,
+      "genomeos": 7517930,
+      "docs": 2002381,
+      "tests": 1227048,
+      "scripts": 1158775
+    },
+    "biggest_ignored_paths_bytes": {
+      "data/knowledge": 6773243904,
+      "data/reference": 1512390656,
+      ".venv": 1237942272,
+      "data/individuals": 344948736,
+      "data/twins/HG002_chr22.fa": 103333888
+    },
+    "force_added_files": 30,
+    "force_added_all_covered_by_explicit_negation": true
+  },
+  "git_history": {
+    "dot_git_bytes": 154537984,
+    "loose_objects": 8029,
+    "loose_size_bytes": 152924323,
+    "packs": 0,
+    "size_pack_bytes": 0,
+    "reachable_objects": 7767,
+    "blobs_ever_committed": 3600,
+    "blob_bytes_ever_committed_uncompressed": 516348866,
+    "blob_bytes_ever_committed_uncompressed_mib": 492.4,
+    "blob_bytes_ever_committed_zlib_mib": 113.9,
+    "tree_bytes_uncompressed_mib": 11.3,
+    "commit_bytes_uncompressed_mib": 1.0,
+    "full_pack_bytes": 72564509,
+    "full_pack_mib": 69.2,
+    "full_pack_is_the_clone_transfer_size": true,
+    "unreachable_or_garbage_estimate_mib": 24.3,
+    "gc_run": false,
+    "gc_not_run_because": "three other lanes hold the same checkout and commit to dev while this ran; the dev tip moved from 36f36d6 to a1f8418 during the measurement"
+  },
+  "largest_tracked_at_head": [
+    {
+      "mib": 6.1,
+      "bytes": 6398244,
+      "path": "data/results/origin_genome_wide.json"
+    },
+    {
+      "mib": 5.87,
+      "path": "data/results/eqtl_targets.json"
+    },
+    {
+      "mib": 5.53,
+      "path": "data/results/human_panel_chr1.json"
+    },
+    {
+      "mib": 4.38,
+      "path": "data/results/human_panel_chr2.json"
+    },
+    {
+      "mib": 3.38,
+      "path": "data/results/human_panel_chr11.json"
+    },
+    {
+      "mib": 3.16,
+      "path": "data/results/human_panel_chr6.json"
+    },
+    {
+      "mib": 3.14,
+      "path": "data/results/human_panel_chr7.json"
+    },
+    {
+      "mib": 3.05,
+      "path": "data/results/human_panel_chr5.json"
+    },
+    {
+      "mib": 3.04,
+      "path": "data/results/human_panel_chr3.json"
+    },
+    {
+      "mib": 3.04,
+      "path": "data/results/human_panel_chr4.json"
+    },
+    {
+      "mib": 3.01,
+      "path": "data/results/motifs_chr1.json"
+    },
+    {
+      "mib": 3.0,
+      "path": "data/results/human_panel_chrX.json"
+    },
+    {
+      "mib": 2.86,
+      "path": "data/results/human_panel_chr19.json"
+    },
+    {
+      "mib": 2.78,
+      "path": "data/results/human_panel_chr12.json"
+    },
+    {
+      "mib": 2.67,
+      "path": "data/organisms/human/noncoding_chr21.bio"
+    },
+    {
+      "mib": 2.66,
+      "path": "data/results/human_panel_chr8.json"
+    },
+    {
+      "mib": 2.65,
+      "path": "data/results/human_panel_chr10.json"
+    },
+    {
+      "mib": 2.63,
+      "path": "data/results/human_panel_chr17.json"
+    },
+    {
+      "mib": 2.52,
+      "path": "data/results/human_panel_chr9.json"
+    },
+    {
+      "mib": 2.49,
+      "path": "data/results/panel_union_five_arms.json"
+    }
+  ],
+  "largest_blobs_in_history": [
+    {
+      "mib": 6.12,
+      "bytes": 6418316,
+      "path": "data/results/origin_genome_wide.json",
+      "note": "earlier version, still in history"
+    },
+    {
+      "mib": 6.1,
+      "path": "data/results/origin_genome_wide.json"
+    },
+    {
+      "mib": 5.87,
+      "path": "data/results/eqtl_targets.json"
+    },
+    {
+      "mib": 5.53,
+      "path": "data/results/human_panel_chr1.json"
+    },
+    {
+      "mib": 4.38,
+      "path": "data/results/human_panel_chr2.json"
+    },
+    {
+      "mib": 3.75,
+      "path": "data/results/eqtl_targets.json",
+      "note": "superseded version"
+    },
+    {
+      "mib": 3.38,
+      "path": "data/results/human_panel_chr11.json"
+    },
+    {
+      "mib": 3.16,
+      "path": "data/results/human_panel_chr6.json"
+    },
+    {
+      "mib": 3.14,
+      "path": "data/results/human_panel_chr7.json"
+    },
+    {
+      "mib": 3.08,
+      "path": "data/results/eqtl_targets.json",
+      "note": "superseded version"
+    },
+    {
+      "mib": 3.05,
+      "path": "data/results/human_panel_chr5.json"
+    },
+    {
+      "mib": 3.04,
+      "path": "data/results/human_panel_chr3.json"
+    },
+    {
+      "mib": 3.04,
+      "path": "data/results/human_panel_chr4.json"
+    },
+    {
+      "mib": 3.01,
+      "path": "data/results/motifs_chr1.json"
+    },
+    {
+      "mib": 3.0,
+      "path": "data/results/human_panel_chrX.json"
+    },
+    {
+      "mib": 2.86,
+      "path": "data/results/human_panel_chr19.json"
+    },
+    {
+      "mib": 2.78,
+      "path": "data/results/human_panel_chr12.json"
+    },
+    {
+      "mib": 2.67,
+      "path": "data/organisms/human/noncoding_chr21.bio"
+    },
+    {
+      "mib": 2.67,
+      "path": "data/organisms/human/noncoding_chr21.bio",
+      "note": "superseded version"
+    },
+    {
+      "mib": 2.66,
+      "path": "data/results/mpra_chr1.json"
+    }
+  ],
+  "compression": {
+    "tracked_head_zlib_by_extension_mib": {
+      "json": 29.8,
+      "gz": 18.49,
+      "py": 2.32,
+      "md": 0.87,
+      "bio": 0.47,
+      "vcf": 0.37
+    },
+    "tracked_head_raw_by_extension_mib": {
+      "json": 234.37,
+      "gz": 18.61,
+      "py": 6.34,
+      "bio": 4.03,
+      "vcf": 1.98,
+      "md": 1.96
+    },
+    "json_compresses_to_pct": 12.7,
+    "already_gzipped_files_are_pct_of_bytes": 6.9,
+    "already_gzipped_files_are_pct_of_clone_weight": 35.4,
+    "pretty_vs_compact_test": {
+      "file": "data/results/origin_genome_wide.json",
+      "pretty_mib": 6.1,
+      "pretty_gzip_mib": 0.37,
+      "compact_mib": 3.57,
+      "compact_gzip_mib": 0.32,
+      "lesson": "compacting the JSON would cut the working tree 41 pct but the repository only 14 pct"
+    }
+  },
+  "growth": {
+    "tracked_snapshot_mib_by_day": {
+      "2026-09-12": 162.0,
+      "2026-09-13": 167.3,
+      "2026-09-14": 214.6,
+      "2026-09-15": 236.4,
+      "2026-09-16": 247.1,
+      "2026-09-17": 257.4,
+      "2026-09-18": 257.4,
+      "2026-09-19": 257.4,
+      "2026-09-20": 257.4,
+      "2026-09-21": 262.6,
+      "2026-09-22": 268.4,
+      "2026-09-23": 268.4,
+      "2026-09-24": 268.4,
+      "2026-09-25": 268.4,
+      "2026-09-26": 268.4,
+      "2026-09-27": 268.4
+    },
+    "tracked_file_count_by_day": {
+      "2026-09-12": 882,
+      "2026-09-14": 1080,
+      "2026-09-17": 1271,
+      "2026-09-22": 1365,
+      "2026-09-27": 1365
+    },
+    "history_blob_zlib_mib_by_day": {
+      "2026-09-11": 42.0,
+      "2026-09-13": 70.0,
+      "2026-09-15": 88.7,
+      "2026-09-17": 102.5,
+      "2026-09-19": 102.9,
+      "2026-09-22": 113.9
+    },
+    "pack_bytes_by_day": {
+      "2026-09-13": 47456373,
+      "2026-09-17": 66351822,
+      "2026-09-27": 72564509
+    },
+    "pack_growth_bytes_per_day_14d": 1793438,
+    "pack_growth_mib_per_day_14d": 1.71,
+    "pack_growth_mib_per_day_peak_4d": 4.51,
+    "commits_per_active_day_range": [
+      5,
+      104
+    ],
+    "active_days_in_window": 11,
+    "idle_since": "2026-09-22",
+    "largest_single_day_push_mib": 12.01,
+    "largest_single_day_push_day": "2026-09-17",
+    "largest_single_commit_files_changed": 106,
+    "dev_ahead_of_main_commits": 4,
+    "cost_of_todays_dev_to_main_merge_mib": 0.55,
+    "projection_days_to": {
+      "1_gib_at_14d_rate": 558,
+      "1_gib_at_peak_rate": 212,
+      "5_gib_at_14d_rate": 2953,
+      "5_gib_at_peak_rate": 1121,
+      "10_gib_at_14d_rate": 5947,
+      "10_gib_at_peak_rate": 2258
+    },
+    "projection_date_to": {
+      "1_gib_at_14d_rate": "2028-04-07",
+      "1_gib_at_peak_rate": "2027-04-26",
+      "5_gib_at_14d_rate": "2034-10-28",
+      "5_gib_at_peak_rate": "2029-10-22",
+      "10_gib_at_14d_rate": "2043-01-07",
+      "10_gib_at_peak_rate": "2032-12-01"
+    }
+  },
+  "directory_shape": {
+    "widest_tracked_directories": {
+      "data/results": 691,
+      "tests": 199,
+      "scripts": 123,
+      "genomeos/attribution": 38,
+      "genomeos/genome": 35,
+      "docs": 35
+    },
+    "max_tracked_depth": 3,
+    "data_results_width_by_day": {
+      "2026-09-11": 262,
+      "2026-09-13": 495,
+      "2026-09-15": 621,
+      "2026-09-17": 666,
+      "2026-09-19": 666,
+      "2026-09-22": 691
+    },
+    "data_results_width_growth_per_day_14d": 14,
+    "data_results_width_growth_per_day_active": 39,
+    "days_to_3000_entry_recommendation_14d_rate": 165,
+    "days_to_3000_entry_recommendation_active_rate": 59,
+    "data_results_untracked_entries_on_disk": 1337
+  },
+  "github_limits": {
+    "source": "docs.github.com, fetched 2026-09-27",
+    "verified": true,
+    "per_file_block": {
+      "limit_bytes": 104857600,
+      "limit": "100 MiB",
+      "wording": "GitHub blocks files larger than 100 MiB",
+      "current": "6.12 MiB (largest blob ever)",
+      "headroom": "93.9 MiB, 16.3x",
+      "url": "https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github"
+    },
+    "per_file_warning": {
+      "limit_bytes": 52428800,
+      "limit": "50 MiB",
+      "wording": "If you attempt to add or update a file that is larger than 50 MiB, you will receive a warning from Git",
+      "current": "6.12 MiB",
+      "headroom": "43.9 MiB, 8.2x"
+    },
+    "browser_upload": {
+      "limit": "25 MiB",
+      "relevance": "not used; every commit is from the CLI"
+    },
+    "repository_recommended": {
+      "limit": "ideally less than 1 GB",
+      "wording": "We recommend repositories remain small, ideally less than 1 GB, and less than 5 GB is strongly recommended",
+      "current": "69.2 MiB packed",
+      "headroom": "954.8 MiB, 14.8x",
+      "days": 558
+    },
+    "repository_strongly_recommended": {
+      "limit": "less than 5 GB",
+      "current": "69.2 MiB packed",
+      "headroom": "5.0 GiB, 74x",
+      "days": 2953
+    },
+    "repository_on_disk_recommendation": {
+      "limit": "10 GB",
+      "kind": "recommendation, not enforced",
+      "current": "69.2 MiB packed",
+      "headroom": "148x",
+      "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits"
+    },
+    "enforcement_when_exceeded": "no automatic block; 'If your repository excessively impacts our infrastructure, you might receive an email from GitHub Support asking you to take corrective action'",
+    "per_push": {
+      "limit_bytes": 2147483648,
+      "limit": "2 GiB",
+      "kind": "enforced",
+      "error": "remote: fatal: pack exceeds maximum allowed size (2.00 GiB)",
+      "current": "12.01 MiB, the busiest day measured (95 commits)",
+      "headroom": "170x",
+      "url": "https://docs.github.com/en/get-started/using-git/troubleshooting-the-2-gb-push-limit"
+    },
+    "push_rate": {
+      "limit": "6 pushes per minute",
+      "current": "one push per commit cycle"
+    },
+    "git_read_operations": {
+      "limit": "15 per second per repository"
+    },
+    "directory_width": {
+      "limit": 3000,
+      "kind": "recommendation",
+      "wording": "Directory width (number of entries in a single directory): 3,000",
+      "current": "691 in data/results",
+      "headroom": "2,309 entries, 165 days at the trailing rate"
+    },
+    "directory_depth": {
+      "limit": 50,
+      "kind": "recommendation",
+      "current": 3
+    },
+    "branches": {
+      "limit": 5000,
+      "current": 2
+    },
+    "files_per_repository": {
+      "limit": "none stated",
+      "note": "GitHub's repository-limits page states no maximum number of files in a repository or in a single commit"
+    },
+    "files_per_commit": {
+      "limit": "none stated",
+      "note": "only diff rendering is capped"
+    },
+    "diff_rendering": {
+      "files_per_diff": 300,
+      "renderable_files_per_diff": 25,
+      "total_diff": "20,000 lines or 1 MB",
+      "single_file_diff": "20,000 lines or 500 KB",
+      "current": "largest single commit already 106 files; a day of work is 45 to 104 commits",
+      "consequence": "a daily dev-to-main pull request will refuse to render its diff; the merge itself still works"
+    },
+    "commits_listed": {
+      "compare_or_pr": 250,
+      "commits_tab": 10000,
+      "rebase_and_merge": 100
+    }
+  },
+  "git_lfs": {
+    "free_quota_storage": "10 GiB (GitHub Free, Pro, Free for organizations); 250 GiB (Team, Enterprise Cloud)",
+    "free_quota_bandwidth": "10 GiB (Free, Pro, Free for orgs); 250 GiB (Team, Enterprise Cloud)",
+    "bandwidth_metering": "billed for each GiB downloaded; every clone and every CI checkout counts against the repository owner's allowance",
+    "per_file_limit": "2 GB (Free, Pro), 4 GB (Team), 5 GB (Enterprise Cloud)",
+    "source": "https://docs.github.com/en/billing/concepts/product-billing/git-lfs and https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage",
+    "verified": true,
+    "needed": false,
+    "would_it_help": false,
+    "why_not": [
+      "nothing is near the 100 MiB block: the largest blob ever is 6.12 MiB, 16x below it",
+      "LFS stores objects as uploaded, without zlib or delta compression; these files are text JSON that compresses to 12.7 pct, so 492 MiB of history that git holds in a 69.2 MiB pack would become roughly 492 MiB of LFS storage",
+      "LFS bandwidth is metered: a full checkout would pull about 268 MiB of LFS objects instead of git's 69.2 MiB pack, so about 38 clones or CI runs would exhaust the 10 GiB free monthly bandwidth, where plain git transfer is unmetered",
+      "delta compression across versions of the same result file is exactly what this project benefits from and exactly what LFS gives up"
+    ]
+  },
+  "verdict": {
+    "safe_to_keep_committing": true,
+    "safe_for": "years at the measured rate; the nearest stated GitHub limit is 165 days away and it is a performance recommendation, not a block",
+    "first_thing_that_breaks": "the daily dev-to-main pull request diff, at 300 files and 20,000 lines, which is already exceeded by a single day of work; then the 3,000-entry directory-width recommendation on data/results in about 165 days; the 1 GB repository recommendation is 558 days away and no size limit is enforced before then",
+    "clone_comfortable_today": true,
+    "clone_transfer_mib": 69.2,
+    "clone_time_at_20_mbit": "about 29 seconds",
+    "clone_checkout_mib": 268.4,
+    "best_size_to_effort_change": "git gc --prune=now, once the other lanes are idle: the repository has never been packed (8,029 loose objects, 0 packs), so .git is 147 MiB where a pack of the same history is 69.2 MiB, and every git status in the shared checkout stats 8,029 loose files",
+    "gc_saving_mib": 77,
+    "tracked_but_arguably_should_not_be": {
+      "paths": "data/results/ccres_chr*.bed.gz, the 25 files other than ccres_chr21.bed.gz",
+      "bytes": 12014557,
+      "mib": 11.46,
+      "share_of_clone_pct": 16.6,
+      "argument": "they are streamed ENCODE SCREEN track rows, re-fetchable in minutes, and the project's own rule keeps the analogous rmsk, superdups and dnase tracks to chr21 only; being already gzipped they cost their full size in the pack",
+      "caveat": "the all-enhancer scoring chain reads them chromosome by chromosome, so untracking them is a plan with an owner, not a deletion; tests write their own fixtures and do not depend on the committed copies",
+      "recommendation_only": true
+    },
+    "gitignore_doing_its_job": true,
+    "gitignore_evidence": "97.1 pct of data/ is ignored, 8.28 GiB of it; the five largest ignored paths are data/knowledge 6.31 GiB, data/reference 1.41 GiB, .venv 1.15 GiB, data/individuals 321 MiB and data/twins/HG002_chr22.fa 98.5 MiB, and each is covered by a commented rule stating why; all 30 tracked files that an ignore pattern would otherwise exclude are re-admitted by an explicit negation, so nothing is tracked by accident"
+  }
+}
