@@ -92,6 +92,8 @@ module's rules from the same papers they are scored against. Verdict
 `UNCHECKABLE_BY_CONSTRUCTION`, with the registration, the census, the interval
 that was computed and withheld, and the five things that would change it, in
 docs/BIOFORGE-CONFIDENCE.md.
+*(2026-09-28: `16a0434` retired the literal. A design answer now carries a certainty record whose
+probability is unavailable with its reason; see BIOFORGE-CONFIDENCE.md.)*
 
 ## Budgets in `design`, knockouts in network experiments (registered 2026-09-27)
 
