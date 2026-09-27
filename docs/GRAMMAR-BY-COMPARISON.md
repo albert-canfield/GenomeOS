@@ -62,6 +62,28 @@ ones share a shape: they are all **comparisons GenomeOS has not yet made**,
 across people (variation per base), across the tree (clade of origin,
 covariance), and within the genome (duplication). That is the enrichment.
 
+**The table above is the state on 2026-09-12 and is kept at that date; five of
+its six missing rows were built in the sections below (noted 2026-09-27).** The
+counts in the paragraph above — fifteen built, five partial, six missing — are
+the reading of that morning and are not restated here, because the value of the
+table is that it was written before the work. What became of each missing row:
+
+| row in the table above | where it was built | what it found |
+|---|---|---|
+| Cases A to D | §6, genome-wide | the four cases (syntax, relaxed, recent, tolerant) on every UNKNOWN block and scored element of 24 chromosomes; elements constrained on both axes name a gene 73.9% of the time against 45.3% for tolerant |
+| the promoter as the dependency list (`requires:`), listed "designed, not built" | §8 | built over 20,067 promoters; eight factors per promoter at enrichment ≥ 1.5 |
+| regulatory operators from motifs, listed "planned … and not built" | §8, then §13 and §17 | the scan was built and the operator reading failed twice: no family pair beyond a GC-and-repeat-matched expectation in any of 42 libraries, and no arrangement effect over counts in three lentiMPRA cell lines |
+| gene duplication and paralogues | §7, §10 | 64,216 curated segmental-duplication pairs over 5.4% of the genome; 64,050 `paralogue_of` edges |
+| covariance across species (coevolution), listed "nothing" | §11, §14, §19 | built at library level and tested twice; against a prevalence-matched real-gene null 14 of 42 libraries fail, and **no pair is called a dependency** |
+| a first developmental locus end to end | §12, §13, §15 | the ZRS carried across five species with both axes and its held sites, then into the 72-enhancer panel against 76 matched negatives |
+
+Two rows of the table are still missing and are not claimed anywhere below:
+**mining packages from the graph** (community detection — nothing in the tree
+names a community algorithm, checked 2026-09-27) and the **aligner layer of our
+own** in the compiler pipeline row. The `orthologue_of` half of the graph row was
+closed on 2026-09-17 as species counts per clade (`orthologues_by_clade` in
+`molecules/graph.py`); non-coding elements are still absent from the graph.
+
 ## 2. What the conversation adds that GenomeOS should adopt
 
 1. **The second axis of constraint.** GenomeOS reads constraint across 241
@@ -245,12 +267,17 @@ in a table, and evidence in BioIR. Owner: area J in ROADMAP.md.
 | Zoonomia 241 mammals | phyloP per base, the alignment as bigMaf | `goldenPath/hg38/cactus241way/` | in use (D42) |
 | Ensembl Compara REST | orthologues and paralogues per gene, `target_taxon` filter, gene trees | `rest.ensembl.org/homology/symbol/human/OCA2?type=orthologues;target_taxon=40674` | one call, 92 mammal orthologues |
 | JASPAR 2026 | 1,019 CORE vertebrate profiles as PFM | `jaspar.elixir.no/api/v1/matrix/?collection=CORE&tax_group=vertebrates` | one call per matrix or one bulk download |
-| UCSC `genomicSuperDups` | segmental duplications > 1 kb | track API, as RepeatMasker is read | not yet read |
+| UCSC `genomicSuperDups` | segmental duplications > 1 kb | track API, as RepeatMasker is read | "not yet read" as written on 2026-09-12; **read the same day** — `genome/duplications.py`, `duplication_chr*` for 24 chromosomes, 64,216 pairs, §7 |
 | HPRC 90-way and v2.1 SVs | 90 human assemblies aligned (hg38, CHM13, 88 haplotypes of 44 people); arrangements against hg38; SVs from 233 assemblies | UCSC `hprc90way` MAF at `gbdb/hg38/hprc/cactus90way/<chrom>.maf` by the block offsets the REST API returns; `hprcArrV1` and `hprc2v21Sv` as bigBed ranges (`attribution/human_panel.py`) | read 2026-09-14 on chr21: 3.28 GB in 236 s, 1.05 M variable columns per assembly; per-base presence, alleles and inserted lengths give block classes against GC- and timing-matched windows, fixed/storage/cannot-place catalogues with value domains, and a kilobase comparison with Gnocchi (weak agreement, Spearman -0.08); genome 266.6 GB (`human_panel_chr21`, ATTRIBUTION.md "Many human genomes") |
 | OrthoDB v12 | hierarchical orthologous groups per clade | REST and SPARQL | alternative to Ensembl for step 5 |
 
 Not found: a phyloP bigWig for the 447-way (primate-expanded) alignment
 under UCSC's `cactus447way/`, which holds only the alignment and the trees.
+
+Checked again 2026-09-27: of the two rows that read "not yet read" above, only
+the 470-mammal phyloP still does — no module in the tree names `phyloP470way`
+or `phastCons470way`. The `genomicSuperDups` row was overtaken within hours and
+is annotated in place.
 
 ## 6. Step 1 built: the human axis beside the mammalian one (2026-09-12)
 
@@ -477,6 +504,37 @@ then enhancers, not promoters, for the developmental combinations. That is
 the next step of step 4, and the table stands as `inferred` at low
 confidence until it is done.
 
+**Both conditions were met, and the answer is a negative (added 2026-09-27).**
+The paragraph above stays as written because it named a condition, and the
+condition did not stay open: §13 satisfied both halves of it the same day, and
+§17 failed the same claim again four days later on a measured readout. So the
+operator table is not `inferred` and waiting — there is no operator table.
+
+- **Families and a matched expectation, §13.** The 158 matrices of the promoter
+  lists become 110 curated TFClass family units (C2H2 zinc fingers kept
+  individual), and every expectation is taken inside GC-decile by repeat-share
+  strata of all 20,067 promoters. Result: **no factor-family pair recurs beyond
+  its matched expectation in any of the 42 libraries.** The 84 pairs that passed
+  the naive test are explained by GC or by interspersed repeats, and the last
+  survivor was ZNF135 with ZNF460 sitting on Alu — 19.4% of those promoters'
+  bases against 1.1% where neither site is present. What survives the correction
+  is the single-family enrichment, REST in `systems.nervous` at **5.7 times** its
+  matched expectation over 28 members, and the THAP and ZNF143 promoter families
+  in the translation and replication cores.
+- **Enhancers rather than promoters, §17.** The sentence above asked for
+  enhancers next, and they were read: ENCODE4's joint lentiMPRA library, 51,376
+  elements of 200 bp with measured activity in three cell lines. Pairwise
+  spacing, relative strand and helical phase over the 55 family pairs add
+  **+0.0021, −0.0056 and +0.0022** Spearman over strict family counts in K562,
+  HepG2 and WTC11, every 95% interval containing zero, with the label-shuffled
+  control scoring as well or better in two lines of three.
+
+So the correct reading of step 4 is: the `requires:` list per promoter and the
+single-family enrichments per library stand; the pair level is a measured
+absence in promoters (§13) and the arrangement level a measured absence in
+enhancers (§17). The one thing JASPAR sites do predict at scale is activity from
+**counts**, +0.234 and +0.235 Spearman (§17), and whether that transfers is §18.
+
 ## 9. Step 6 built: the decompiled locus (2026-09-12)
 
 `genomeos decompile GENE --chrom C` (`genomeos/decompile.py`) is the view
@@ -622,6 +680,23 @@ correlation is `inferred` evidence. The step the conversation called
 covariance is built; making it a dependency claim needs a gene-level
 profile and a null over shuffled libraries, which is recorded as its next
 step.
+
+**That next step was run on 2026-09-17 (§19), and the null decided against a
+third of the libraries (added 2026-09-27).** The condition above stays written
+as it was, and this is what satisfying it produced. Over 19,391 genes and the
+computed membership of all 42 libraries: against a prevalence-preserving
+shuffle every library looks coherent, median excess **+0.3067** mean pair
+Jaccard with not one of 42 drawing above its observed value — which is the
+reading the correlations in this section would have supported. Against a null
+built from **real genes matched on prevalence**, 21 libraries are clear, 7
+marginal and **14 sit at or below it**, and the fourteen are the ancient core
+(translation, energy, transcription, splicing, DNA repair, chromatin and the
+rest), whose genes are in nearly every species and therefore co-occur with any
+other such gene. The `inferred` label above turns out to be right for a
+different reason than the one given: the weakness that matters is not shared
+members or the bacterial share of the 355 species but that the null did not
+hold the tree. **Nothing in §19 calls a pair a dependency either**, and a
+species-tree null is what would; this project holds no tree.
 
 
 ## 12. Step 7 built: one locus across species (2026-09-12)

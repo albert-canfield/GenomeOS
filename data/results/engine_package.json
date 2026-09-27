@@ -1,11 +1,11 @@
 {
   "result": "engine_package",
-  "date": "2026-09-15",
+  "date": "2026-09-27",
   "name": "biolang",
   "built": {
-    "files": 31,
-    "rewritten": 20,
-    "package": "/private/tmp/claude-502/-Users-AlbertCanfield-SITES-DEV-GenomeOS/ed15acca-e57b-4b40-b42c-0329b09a700b/scratchpad/biolang/biolang",
+    "files": 36,
+    "rewritten": 22,
+    "package": "/Users/AlbertCanfield/SITES DEV/GenomeOS/build/biolang/biolang",
     "dangling references": []
   },
   "checks": [
@@ -54,7 +54,7 @@
     {
       "check": "bio test (the standard library testing itself)",
       "ok": true,
-      "output": "\u2713 biolang/std/human_turnover.bio: module bio.std.human_turnover, 0 entities, 0 rules, 0/0 checks | \u2713 biolang/std/signalling.bio: module bio.std.signalling, 148 entities, 0 rules, 0/0 checks | 6 files, 6/6 checks passed",
+      "output": "\u2713 biolang/std/methylation.bio: module bio.std.methylation, 0 entities, 0 rules, 2/2 checks | \u2713 biolang/std/signalling.bio: module bio.std.signalling, 148 entities, 0 rules, 0/0 checks | 7 files, 8/8 checks passed",
       "error": ""
     }
   ],
