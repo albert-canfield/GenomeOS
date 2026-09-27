@@ -37,7 +37,14 @@ def run_gastrulation(
     decay_length: float = 0.35,
 ) -> GastrulationResult:
     """Cells are spread along a normalised axis x in [0, 1]; NODAL falls off
-    exponentially from the x = 0 pole (the node / primitive streak)."""
+    exponentially from the x = 0 pole (the node / primitive streak).
+
+    The module's expected_* proportions are unsourced guesses, and the defaults
+    here miss the mesoderm one: 0.10 against 0.35 (endoderm 0.43 against 0.20).
+    Each fate holds a fixed band of NODAL level, so decay_length and nodal_max
+    (neither sourced, both in model units) only move the band edges along the
+    axis, and two free numbers can fit any three proportions. Meeting the
+    expectation by setting them would therefore show nothing."""
     module = parse_file(module_path)
     fates: list[str] = []
     positions: list[float] = []

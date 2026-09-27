@@ -26,6 +26,11 @@ rule Tbxt inhibits SOX17  { strength: 0.6; threshold: 4.0; hill: 3; evidence: in
 
 param translation_rate = 2 { evidence: inferred "dimensionless"; confidence: 0.3 }
 param mrna_half_life = 0.5 h { evidence: inferred "dimensionless"; confidence: 0.3 }
+# UNSOURCED: the three expected_* proportions below cite no measurement or paper;
+# they were written as an order-of-magnitude guess and are not a bar the model is
+# known to have to meet. Measured 2026-09-28 (60 cells, 30 h): ectoderm 0.467,
+# mesoderm 0.10, endoderm 0.433. The rule citations above support the interactions,
+# not their threshold values. tests/test_gastrulation.py marks mesoderm xfail.
 param expected_ectoderm = 0.45 { evidence: inferred "order of magnitude; germ-layer proportions vary by stage"; confidence: 0.3 }
 param expected_mesoderm = 0.35 { evidence: inferred "order of magnitude"; confidence: 0.3 }
 param expected_endoderm = 0.20 { evidence: inferred "order of magnitude"; confidence: 0.3 }

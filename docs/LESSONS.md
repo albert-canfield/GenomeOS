@@ -56,6 +56,7 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 | The Fauré cell cycle has a G1-arrest fixed point without CycD and a 7-state cycle with it | Boolean engine | `data/models/mammalian_cell_cycle.bnet` |
 | Segment count = frozen cells / (wavefront speed × period); cells freeze ~18 cells behind the FGF front | segmentation runtime | `SegmentationResult.expected` |
 | A tristable switch read against a clamped morphogen gives endoderm → mesoderm → ectoderm; half its rules are inferred and the report says "low" | gastrulation runtime | `clamp` argument on the network runtime; uncertainty report |
+| Re-measured 2026-09-28: the order is right, the proportions are not. Mesoderm 0.10 against a stated 0.35, endoderm 0.433 against 0.20; the old test passed mesoderm only because 0.35 - 0.10 = 0.24999999999999997 < 0.25. A tolerance check must resolve float ties against the model, and an expectation with no source is not a bar | gastrulation runtime, `run_gastrulation(cells=60, hours=30)` | `tests/test_gastrulation.py` `_within`; mesoderm `xfail(strict=True)` |
 | Sulston's early lineage follows from per-founder cycle times: 4 cells at 22 min, ~24 at 100 min, E slowest | lineage engine | `data/demo/celegans_lineage.bio` |
 
 ## The UNKNOWN space, genome-wide
