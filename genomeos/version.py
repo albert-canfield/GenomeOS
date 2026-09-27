@@ -8,6 +8,10 @@ toolchain a work based on the application (LICENSING.md: the application may
 import the engine, never the reverse). One line of engine-side code avoids
 that, and it is also one less thing to untangle when BioLang is packaged on
 its own, since the package root does not travel with it.
+
+This string is the GenomeOS application's version. The packaged engine carries
+its own (scripts/package_engine.py, ENGINE_VERSION), because the two are
+released on different cadences.
 """
 
 __version__ = "1.0.0"

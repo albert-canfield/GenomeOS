@@ -6,13 +6,64 @@
     "files": 36,
     "rewritten": 22,
     "package": "/Users/AlbertCanfield/SITES DEV/GenomeOS/build/biolang/biolang",
-    "dangling references": []
+    "dangling references": [],
+    "version": "0.1.0",
+    "test files": [
+      "test_bio.py",
+      "test_body_contacts.py",
+      "test_boolean.py",
+      "test_compose.py",
+      "test_concentration.py",
+      "test_debugger.py",
+      "test_economy.py",
+      "test_gastrulation.py",
+      "test_grammar.py",
+      "test_human_body.py",
+      "test_lang.py",
+      "test_lang_v02.py",
+      "test_lang_v03.py",
+      "test_lang_v04.py",
+      "test_order.py",
+      "test_plasticity.py",
+      "test_pools.py",
+      "test_recheck.py",
+      "test_runtime.py",
+      "test_sbml.py",
+      "test_segmentation.py",
+      "test_share.py",
+      "test_spatial.py",
+      "test_uncertainty.py"
+    ],
+    "test functions": 146,
+    "fixtures": [
+      "data/demo/cell_context.bio",
+      "data/demo/gastrulation.bio",
+      "data/demo/hoxd_order.bio",
+      "data/demo/lateral_inhibition.bio",
+      "data/demo/repressilator.bio",
+      "data/demo/segmentation_clock.bio",
+      "data/models/BIOMD0000000012.xml",
+      "data/models/mammalian_cell_cycle.bnet",
+      "data/organisms/celegans/cell_types.bio",
+      "data/organisms/celegans/embryo.bio",
+      "data/organisms/celegans/embryo_factors.bio",
+      "data/organisms/celegans/fates.bio",
+      "data/organisms/celegans/founders.bio",
+      "data/organisms/celegans/lineage_embryo.bio",
+      "data/organisms/celegans/lineage_larva.bio",
+      "data/organisms/celegans/plasticity.bio",
+      "data/organisms/celegans/reader.bio",
+      "data/organisms/celegans/timers.bio",
+      "data/organisms/human/body.bio",
+      "data/organisms/human/tissues.bio",
+      "docs/BIOLANG-GRAMMAR.md"
+    ]
   },
   "checks": [
     {
-      "check": "GenomeOS is not importable, and the engine imports only itself",
+      "check": "GenomeOS is not importable, the engine imports only itself, and bio --version is its own",
       "ok": true,
-      "output": "VERSION 0.9.0 | LOADED biolang biolang.bio biolang.coords biolang.ir biolang.ir.model biolang.lang biolang.lang.located biolang.lang.parser biolang.lang.tools biolang.version",
+      "output": "VERSION 0.1.0 | bio 0.1.0 | LOADED biolang biolang.bio biolang.coords biolang.ir biolang.ir.model biolang.lang biolang.lang.located biolang.lang.parser biolang.lang.tools biolang.version",
       "error": ""
     },
     {
@@ -56,6 +107,20 @@
       "ok": true,
       "output": "\u2713 biolang/std/methylation.bio: module bio.std.methylation, 0 entities, 0 rules, 2/2 checks | \u2713 biolang/std/signalling.bio: module bio.std.signalling, 148 entities, 0 rules, 0/0 checks | 7 files, 8/8 checks passed",
       "error": ""
+    },
+    {
+      "check": "the engine's own pytest suite",
+      "ok": true,
+      "output": "154 passed, 3 skipped in 47.85s",
+      "error": "",
+      "passed": 154,
+      "failed": 0,
+      "skipped": 3,
+      "skip reasons": [
+        "SKIPPED [1] tests/test_compose.py:10: process-bigraph not installed (uv sync --extra compose)",
+        "SKIPPED [1] tests/test_compose.py:21: process-bigraph not installed (uv sync --extra compose)",
+        "SKIPPED [1] tests/test_compose.py:33: process-bigraph not installed (uv sync --extra compose)"
+      ]
     }
   ],
   "passed": true

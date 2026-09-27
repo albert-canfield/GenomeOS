@@ -71,3 +71,46 @@ def test_the_package_declares_apache_and_no_dependencies(built):
     assert 'license = "Apache-2.0"' in pyproject
     assert "dependencies = []" in pyproject  # the engine core takes nothing; the heavy engines are extras
     assert "Apache License" in (out / "LICENSE").read_text()
+
+
+def test_the_engine_carries_its_own_pytest_suite_and_it_passes_in_isolation(built):
+    """Milestone 2.0 asks for two test suites. The engine's is the GenomeOS tests that touch nothing
+    but the engine, rewritten to `biolang`, run as the ninth check in the interpreter where GenomeOS
+    cannot be imported. Nothing may fail, and a skip counts only for an optional extra that is not
+    installed, never for a missing fixture."""
+    out, info, checks = built
+    suite = next(c for c in checks if c["check"] == "the engine's own pytest suite")
+    assert suite["ok"], suite["error"] or suite["output"]
+    assert suite["failed"] == 0 and suite["passed"] >= 140, suite["output"]
+    assert all("not installed" in r for r in suite["skip reasons"]), suite["skip reasons"]
+    assert len(info["test files"]) >= 24 and "test_lang_v04.py" in info["test files"]
+    assert len(checks) == 9
+    assert "genomeos" not in (out / "tests" / "test_lang.py").read_text()
+    assert 'dev = ["pytest>=8"]' in (out / "pyproject.toml").read_text()
+
+
+def test_every_fixture_the_suite_reads_travels_with_it(built):
+    """The fixtures are found from the tests and followed through `import X.bio`, and the conftest
+    that ships with them stops the run if one is missing."""
+    out, info, _ = built
+    for rel in (
+        "data/demo/repressilator.bio",
+        "data/organisms/celegans/embryo.bio",
+        "data/organisms/human/body.bio",
+    ):
+        assert rel in info["fixtures"]
+    assert "data/organisms/celegans/lineage_larva.bio" in info["fixtures"]  # reached only by import
+    assert all((out / f).is_file() for f in info["fixtures"])
+    assert "pytest.exit" in (out / "tests" / "conftest.py").read_text()
+
+
+def test_the_engine_has_a_version_of_its_own(built):
+    """Two packages on two cadences cannot share one string: `bio --version` in the package prints
+    the engine's version, and genomeos/version.py stays the application's."""
+    out, info, _ = built
+    from genomeos.version import __version__ as application
+
+    assert info["version"] == package_engine.ENGINE_VERSION != application
+    assert f'version = "{info["version"]}"' in (out / "pyproject.toml").read_text()
+    assert f'__version__ = "{info["version"]}"' in (out / "biolang" / "version.py").read_text()
+    assert info["version"] in (out / "README.md").read_text()
