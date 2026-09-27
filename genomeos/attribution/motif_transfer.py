@@ -1051,12 +1051,19 @@ def tier_blocks(
     results_dir: Path = RESULTS_DIR,
     tables: Path = ELEMENT_TABLES,
     positions: dict[str, list[tuple[int, str]]] | None = None,
+    responses: Any = None,
 ) -> dict[str, list[dict[str, Any]]]:
     """The real-unknown blocks and the neutral tier, with the sweep's call and lentiMPRA coverage attached.
 
     The real unknown is the organiser's constrained-unknown tier with the copies taken out -- the same
     882 blocks the peer measured. The neutral tier is left as the peer left it, copies included, because
     it is their control that this reading is held against.
+
+    `responses`, an `attribution.targets.ElementResponses`, adds what the compact table cannot hold:
+    every gene at the bar over the block's elements, not only each element's head. It cannot change
+    `moving_elements` -- an element has a gene at the bar exactly when its head is at the bar -- and
+    `moving_elements_window` is kept beside it so that claim is checked on every block, not assumed.
+    Chromosome-major, so the cache is decompressed once per chromosome.
     """
     from genomeos.attribution import organise
 
@@ -1080,19 +1087,30 @@ def tier_blocks(
             inside = [e for e in els if b["start"] <= (e["start"] + e["end"]) // 2 < b["end"]]
             i = bisect.bisect_left(mids, b["start"])
             j = bisect.bisect_left(mids, b["end"])
-            out[key].append(
-                {
-                    "chrom": chrom,
-                    "block": f"{chrom}:{b['start']}-{b['end']}",
-                    "start": b["start"],
-                    "end": b["end"],
-                    "length": b["length"],
-                    "case": b.get("case"),
-                    "tested_elements": len(inside),
-                    "moving_elements": sum(1 for e in inside if moves(e)),
-                    "mpra_keys": [k for _, k in mpra[i:j]],
-                }
-            )
+            row = {
+                "chrom": chrom,
+                "block": f"{chrom}:{b['start']}-{b['end']}",
+                "start": b["start"],
+                "end": b["end"],
+                "length": b["length"],
+                "case": b.get("case"),
+                "tested_elements": len(inside),
+                "moving_elements": sum(1 for e in inside if moves(e)),
+                "mpra_keys": [k for _, k in mpra[i:j]],
+            }
+            if responses is not None:
+                window = [responses.at_bar(chrom, e["id"], MIN_LOG2) for e in inside]
+                row["elements_not_cached"] = sum(1 for w in window if w is None)
+                row["moving_elements_window"] = sum(
+                    1 if w else int(moves(e)) if w is None else 0 for w, e in zip(window, inside, strict=True)
+                )
+                row["head_genes"] = sorted(
+                    {(e.get("predicted") or {}).get("gene") for e in inside if moves(e)} - {None}
+                )
+                row["genes_at_bar_window"] = sorted(
+                    {g for w in window if w for g, _ in w} | set(row["head_genes"])
+                )
+            out[key].append(row)
     return out
 
 

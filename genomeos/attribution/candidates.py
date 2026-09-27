@@ -737,7 +737,17 @@ def load_truth(chrom: str) -> dict[str, Any]:
     return {"vista": vrows, "mpra": mpra.load_rows(chrom), "clinvar": clin, "gwas": g_rows, "eqtl": e_rows}
 
 
-def node_context(ch: Chromosome, start: int, end: int) -> dict[str, Any]:
+def node_context(
+    ch: Chromosome, start: int, end: int, responses: Any = None, coding: set[str] | None = None
+) -> dict[str, Any]:
+    """The candidate's node and what the deletions inside it named.
+
+    `node_targets_named` counts each element once, for its compact coding head. With `responses` (an
+    `attribution.targets.ElementResponses`) and the chromosome's `coding` symbols, the window reading
+    is added beside it: an element counts for every coding gene at the bar in its window, so a gene's
+    window count can only equal or exceed its table count. An element the cache does not hold keeps
+    its compact vote and is counted under `elements_not_cached`.
+    """
     mid = (start + end) // 2
     node = ch.node_at(mid)
     if node is None:
@@ -755,7 +765,7 @@ def node_context(ch: Chromosome, start: int, end: int) -> dict[str, Any]:
         for e in inside
         if e["start"] < end and e["end"] > start
     ]
-    return {
+    out = {
         "node": node["id"],
         "node_start": node["start"],
         "node_end": node["end"],
@@ -765,6 +775,33 @@ def node_context(ch: Chromosome, start: int, end: int) -> dict[str, Any]:
         "node_targets_named": [{"gene": g, "elements": n} for g, n in named.most_common(3)],
         "deleted_elements_on_block": on_block,
     }
+    if responses is None or coding is None:
+        return out
+    from genomeos.predict.enhancer_target import MIN_EFFECT
+
+    window_named: Counter = Counter()
+    not_cached = 0
+    by_id: dict[str, list[str]] = {}
+    for e in inside:
+        got = responses.at_bar(ch.chrom, e["id"], MIN_EFFECT, coding)
+        if got is None:
+            not_cached += 1
+            head = (e.get("predicted_coding") or {}).get("gene")
+            genes = [head] if head else []
+        else:
+            genes = [g for g, _ in got]
+        by_id[e["id"]] = genes
+        window_named.update(genes)
+    out["node_targets_named_window"] = [{"gene": g, "elements": n} for g, n in window_named.most_common(3)]
+    out["node_genes_at_bar_window"] = len(window_named)
+    out["node_genes_named_table"] = len(named)
+    # the reader's own check, per gene: a window count below the table count would mean the two readers
+    # disagree about an element's head, which the registration says cannot happen
+    out["genes_below_table_count"] = sorted(g for g, n in named.items() if window_named[g] < n)
+    out["elements_not_cached"] = not_cached
+    for row in on_block:
+        row["targets_window"] = by_id.get(row["id"], [])
+    return out
 
 
 def human_axis_footing(ch: Chromosome, start: int, end: int) -> dict[str, Any]:

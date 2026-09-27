@@ -6730,6 +6730,67 @@ all unknown space and so sample gene-richer sequence; the tier comparison in
 length deciles remains the within-unknown control. The borrowed 87% sentence is
 replaced by whatever this measures.
 
+## The result: the last one-target readers moved onto the cache, the locus layer lost HOXD, and the real unknown names a target 24 points below chance (2026-09-27, fourth)
+
+The run of the registration above. `data/results/onetarget_consumers.json` and
+`data/results/constrained_unknown_targets.json`; 0 AlphaGenome requests; one
+chromosome's cache archive held at a time. Negatives first.
+
+**The locus benchmark's window rule is falsified.** Crediting every coding gene
+at the bar, not only each element's coding head, takes the gene-input layer's
+strict hits from 10 of 17 to 9: HOXD is lost, gained by none. HOXD was a narrow
+table win (HOXD1 13.859 against EVX2 13.199, summed |log2|), and the window
+reading hands EVX2 the lead as rank 2. No sole-carrier locus lost its hit
+(SHH_ZRS, HERC2_OCA2, FTO_IRX3 and SOX9_PierreRobin all hold), and the misses'
+median rank of the first published target improved from 6 to 5, but the
+registered falsifier is "strict hits below 10", and it fired. The one-target sum
+stays the better reader of this layer; `read_gene_input` keeps it and carries
+the window reading beside it as `window_reading`, never in place of it. The
+counterfactual `target_derived` rate with the window layer is 15 of 17, the same
+as stored, because HOXD is also hit by another derived layer.
+
+**The constrained-unknown headline reads below chance, as registered.** The
+lifted `matched_random_windows` reproduced 7f7c8c1 on chr21 to the digit
+(22,200 drawn, 2 undrawable, 16,706 carrying an element, 10,908 naming; 285 and
+140 blocks), so the genome-wide figure is reported. Of the 531 real-unknown
+blocks carrying a scored element, 331 carry one that moves a gene, 62.3%,
+against 86.0% of 44,100 length-matched random windows outside the organiser's
+blocks (27,254 of 31,676 carrying an element): -23.7 points, **below chance**.
+On "names a coding gene" the gap is -37.2 points (29.8% against 67.0%). The
+neutral tier reads the same way, -19.3 and -36.0 points (65.0% against 84.3%;
+28.8% against 64.8%), so the gap is the organiser's blocks against gene-richer
+sequence outside them, the caveat registered, rather than something special to
+the real unknown; inside length deciles the real unknown stays 4.6 points above
+neutral, the within-unknown control, unchanged. A lead at a real-unknown block is rarer than at random sequence, and
+the borrowed 87% sentence is replaced in the result by this measurement.
+
+**What reproduced to the digit.** Every field `constrained_unknown_targets`
+wrote on 2026-09-16 (331 of 531, 0.6234; 0.2476 per element; tiers, cases,
+deciles, the 331 named blocks). motif_transfer: real unknown 531 tested / 331
+with a lead, neutral 1,181 / 768, leads by case 11, 167, 19, 131, 3, so the
+agreement AUROC 0.5422 stands by construction. candidates: the chr22
+candidate's node fields reproduced; the other 68 differ from the stored file by
+input (93 elements in their nodes then, 7,285 now), as registered. loci: all 17
+stored `gene_input` fields reproduced on the input the stored benchmark had;
+on today's input MYC_8q24 differs because stated intervals were added after
+7a1c751.
+
+**The shared premise was false, as registered.** Over every element read from
+both sources (849,469 for the candidates' chromosomes, 4,794 in the locus
+windows) the window's head at the bar names the table's `predicted` gene, and
+its coding head names `predicted_coding`, with 0 disagreements; no element in a
+motif-transfer block was uncached, and no block's mover count moved. What the
+table lost is the other genes: over the 331 led real-unknown blocks, 849 genes
+at the bar against 416 head genes (179 blocks name more); neutral 2,139 against
+932. The registered "about 2.3 per moving element" was the survey's per-element
+figure; counted distinct per block it is 849 over 812 moving elements, 1.05,
+because neighbouring elements share genes. candidates: no gene's window count
+fell below its table count (the falsifier), node genes 223 to 267, and the top
+node gene changed at 3 of 58 candidates with one (SYP to FOXP3 on chrX, MAP3K12
+to SP7 and HOXC6 to HOXC11 on chr12). syntax_tiling: not re-run, as registered;
+its rows now carry `genes_at_bar` from the cache the scorer writes, and the unit
+test that `moved` equals "some gene at the bar" passes on 2,000 random records.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

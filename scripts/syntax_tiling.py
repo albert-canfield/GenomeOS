@@ -25,7 +25,7 @@ from pathlib import Path
 from genomeos import jobs
 from genomeos.attribution import syntax_tiling as st
 from genomeos.predict import AlphaGenomeAdapter
-from genomeos.predict.enhancer_target import Context, score_element
+from genomeos.predict.enhancer_target import CACHE, Context, load_cached, score_element
 from genomeos.results import save_result
 
 HOLDER = "genomeos-9c"
@@ -152,7 +152,11 @@ def run(args) -> dict:
                 row["end"],
                 coding=ctx.coding,
             )
-            done.append({**row, "predicted": hit.get("predicted"), "id": wid})
+            # the head alone is what `st.moved` reads, and it is the right yes or no; the other genes the
+            # deletion moved are kept too, from the cache the scorer just wrote, so the result is not
+            # one-target (docs/ATTRIBUTION.md, 2026-09-27, third)
+            window = st.genes_at_bar_of(load_cached(chrom, wid, CACHE))
+            done.append({**row, "predicted": hit.get("predicted"), "id": wid, "genes_at_bar": window})
             if len(done) % 25 == 0:
                 say(f"{len(done)}/{budget} windows scored")
             if len(done) == look_at:

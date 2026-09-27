@@ -250,7 +250,21 @@ def match_windows(rows: list[dict]) -> list[dict]:
 
 
 def moved(row: dict) -> bool:
-    """Did this window's deletion move a gene, by the registered threshold?"""
+    """Did this window's deletion move a gene, by the registered threshold?
+
+    It reads the compact head only, and that is the right yes or no: the head is the maximum over the
+    scorer's window, so some gene is at the bar exactly when the head is. What the head alone loses is
+    which other genes moved, and `genes_at_bar_of` keeps those beside it (2026-09-27).
+    """
     pred = row.get("predicted") or {}
     log2 = pred.get("log2_fold_change")
     return bool(pred.get("gene")) and log2 is not None and abs(log2) >= MIN_EFFECT
+
+
+def genes_at_bar_of(record: dict | None) -> list[list] | None:
+    """Every gene the cached deletion moved to the bar, strongest first, as [gene, signed log2];
+    None when the window was not cached (a named silence, not an empty answer)."""
+    from genomeos.attribution.targets import genes_at_bar
+
+    got = genes_at_bar(record, MIN_EFFECT)
+    return None if got is None else [[g, v] for g, v in got]

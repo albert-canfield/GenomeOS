@@ -1,6 +1,6 @@
 {
   "result": "constrained_unknown_targets",
-  "date": "2026-09-16",
+  "date": "2026-09-27",
   "chromosomes": [
     "chr1",
     "chr2",
@@ -4842,6 +4842,458 @@
       "strongest_abs_log2": 0.1
     }
   ],
-  "reading": "a named target here is a lead and not a finding: the same model names a target at 87% of matched random windows, which is why the rates are reported against the other tiers and inside length deciles rather than on their own",
-  "seconds": 240.3
+  "matched_random_control": {
+    "registration": {
+      "registered": "2026-09-27",
+      "lift_check": "the lifted function, handed chr21's 446 UNKNOWN blocks and unknown_scoring's predicate (names a coding gene), must reproduce 7f7c8c1 to the digit: 22,200 windows drawn, 2 undrawable, 16,706 carrying an element, 10,908 naming; 285 blocks carrying an element, 140 naming. Any difference means the lift is wrong and no genome-wide figure is reported",
+      "reproduce_exactly": "every field this script already wrote on 2026-09-16 (real_unknown 331 of 531 blocks with an element move, 0.6234; moves per element 0.2476; the other tiers; by case; the length deciles; 331 named blocks with their targets): the tables are unchanged and the window reading cannot change a yes or no (see scripts/onetarget_consumers.py)",
+      "primary": "real unknown (882 blocks, copies out), the script's own question: does a block carrying a scored element carry one that moves a gene. Against 50 windows per block of the block's length, drawn inside the chromosome's scored-element span and rejected on overlap with any organiser block, pooled over the 24 chromosomes",
+      "readings": {
+        "below_chance": "block rate more than 5.0 points below the random rate: a lead at a real-unknown block is rarer than at random sequence of the same length outside unknown space. Registered as a live possibility and as the expected one (chr21, coding targets: 49.1% against 65.3%), not as a failure: it says what the 331 leads are worth",
+        "at_chance": "within 5.0 points: a lead carries no block-level information",
+        "above_chance": "more than 5.0 points above: the first above-chance reading of the leads"
+      },
+      "secondary": [
+        "the same control with 'names a coding gene' as the question, the chr21 instrument's",
+        "the neutral tier as a second target set, since it is the script's own comparison",
+        "the window reading's genes at the bar per block, beside the head gene per element"
+      ],
+      "caveat": "the random windows avoid all UNKNOWN space, so 'chance' is sequence outside it of the same length, which is gene-richer than the unknown; the tier comparison inside length deciles stays the within-unknown control"
+    },
+    "lift_check": {
+      "against": "unknown_scoring_chr21.matched_random_windows (7f7c8c1)",
+      "fields": {
+        "blocks": {
+          "lifted": 446,
+          "stored": 446
+        },
+        "windows_drawn": {
+          "lifted": 22200,
+          "stored": 22200
+        },
+        "undrawable_blocks": {
+          "lifted": 2,
+          "stored": 2
+        },
+        "undrawable_lengths": {
+          "lifted": [
+            5011798,
+            2349840
+          ],
+          "stored": [
+            5011798,
+            2349840
+          ]
+        },
+        "span_bp": {
+          "lifted": 41623045,
+          "stored": 41623045
+        },
+        "windows_carrying_an_element": {
+          "lifted": 16706,
+          "stored": 16706
+        },
+        "blocks_carrying_an_element": {
+          "lifted": 285,
+          "stored": 285
+        },
+        "blocks_naming": {
+          "lifted": 140,
+          "stored": 140
+        },
+        "windows_naming": {
+          "lifted": 10908,
+          "stored": 10908
+        }
+      },
+      "passed": true
+    },
+    "draws_per_block": 50,
+    "seed_per_chromosome": 20260913,
+    "real_unknown": {
+      "blocks": 882,
+      "windows_drawn": 44100,
+      "undrawable_blocks": 0,
+      "windows_carrying_an_element": 31676,
+      "blocks_carrying_an_element": 531,
+      "moves_a_gene": {
+        "blocks_yes": 331,
+        "block_rate": 0.6234,
+        "windows_yes": 27254,
+        "random_window_rate": 0.8604,
+        "difference_in_points": -23.7,
+        "reading": "below_chance"
+      },
+      "names_a_coding_gene": {
+        "blocks_yes": 158,
+        "block_rate": 0.2976,
+        "windows_yes": 21217,
+        "random_window_rate": 0.6698,
+        "difference_in_points": -37.23,
+        "reading": "below_chance"
+      }
+    },
+    "neutral": {
+      "blocks": 2632,
+      "windows_drawn": 131600,
+      "undrawable_blocks": 0,
+      "windows_carrying_an_element": 88317,
+      "blocks_carrying_an_element": 1181,
+      "moves_a_gene": {
+        "blocks_yes": 768,
+        "block_rate": 0.6503,
+        "windows_yes": 74466,
+        "random_window_rate": 0.8432,
+        "difference_in_points": -19.29,
+        "reading": "below_chance"
+      },
+      "names_a_coding_gene": {
+        "blocks_yes": 340,
+        "block_rate": 0.2879,
+        "windows_yes": 57212,
+        "random_window_rate": 0.6478,
+        "difference_in_points": -35.99,
+        "reading": "below_chance"
+      }
+    },
+    "per_chromosome_real_unknown": {
+      "chr1": {
+        "blocks_carrying_an_element": 44,
+        "windows_carrying_an_element": 2553,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 24,
+          "windows": 2167
+        },
+        "names_a_coding_gene": {
+          "blocks": 12,
+          "windows": 1730
+        }
+      },
+      "chr2": {
+        "blocks_carrying_an_element": 61,
+        "windows_carrying_an_element": 3601,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 40,
+          "windows": 3079
+        },
+        "names_a_coding_gene": {
+          "blocks": 20,
+          "windows": 2303
+        }
+      },
+      "chr3": {
+        "blocks_carrying_an_element": 30,
+        "windows_carrying_an_element": 1797,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 20,
+          "windows": 1556
+        },
+        "names_a_coding_gene": {
+          "blocks": 13,
+          "windows": 1242
+        }
+      },
+      "chr4": {
+        "blocks_carrying_an_element": 30,
+        "windows_carrying_an_element": 1804,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 21,
+          "windows": 1542
+        },
+        "names_a_coding_gene": {
+          "blocks": 9,
+          "windows": 1166
+        }
+      },
+      "chr5": {
+        "blocks_carrying_an_element": 32,
+        "windows_carrying_an_element": 1764,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 15,
+          "windows": 1558
+        },
+        "names_a_coding_gene": {
+          "blocks": 6,
+          "windows": 1158
+        }
+      },
+      "chr6": {
+        "blocks_carrying_an_element": 31,
+        "windows_carrying_an_element": 2185,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 21,
+          "windows": 1921
+        },
+        "names_a_coding_gene": {
+          "blocks": 11,
+          "windows": 1471
+        }
+      },
+      "chr7": {
+        "blocks_carrying_an_element": 24,
+        "windows_carrying_an_element": 1398,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 17,
+          "windows": 1166
+        },
+        "names_a_coding_gene": {
+          "blocks": 11,
+          "windows": 958
+        }
+      },
+      "chr8": {
+        "blocks_carrying_an_element": 34,
+        "windows_carrying_an_element": 1725,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 22,
+          "windows": 1439
+        },
+        "names_a_coding_gene": {
+          "blocks": 8,
+          "windows": 1070
+        }
+      },
+      "chr9": {
+        "blocks_carrying_an_element": 23,
+        "windows_carrying_an_element": 1417,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 16,
+          "windows": 1194
+        },
+        "names_a_coding_gene": {
+          "blocks": 8,
+          "windows": 946
+        }
+      },
+      "chrX": {
+        "blocks_carrying_an_element": 10,
+        "windows_carrying_an_element": 457,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 5,
+          "windows": 362
+        },
+        "names_a_coding_gene": {
+          "blocks": 3,
+          "windows": 273
+        }
+      },
+      "chrY": {
+        "blocks_carrying_an_element": 1,
+        "windows_carrying_an_element": 66,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 0,
+          "windows": 55
+        },
+        "names_a_coding_gene": {
+          "blocks": 0,
+          "windows": 29
+        }
+      },
+      "chr10": {
+        "blocks_carrying_an_element": 24,
+        "windows_carrying_an_element": 1284,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 17,
+          "windows": 1069
+        },
+        "names_a_coding_gene": {
+          "blocks": 9,
+          "windows": 849
+        }
+      },
+      "chr11": {
+        "blocks_carrying_an_element": 18,
+        "windows_carrying_an_element": 1263,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 13,
+          "windows": 1067
+        },
+        "names_a_coding_gene": {
+          "blocks": 5,
+          "windows": 859
+        }
+      },
+      "chr12": {
+        "blocks_carrying_an_element": 10,
+        "windows_carrying_an_element": 900,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 4,
+          "windows": 750
+        },
+        "names_a_coding_gene": {
+          "blocks": 2,
+          "windows": 592
+        }
+      },
+      "chr13": {
+        "blocks_carrying_an_element": 25,
+        "windows_carrying_an_element": 1506,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 11,
+          "windows": 1273
+        },
+        "names_a_coding_gene": {
+          "blocks": 6,
+          "windows": 964
+        }
+      },
+      "chr14": {
+        "blocks_carrying_an_element": 24,
+        "windows_carrying_an_element": 1352,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 15,
+          "windows": 1173
+        },
+        "names_a_coding_gene": {
+          "blocks": 6,
+          "windows": 917
+        }
+      },
+      "chr15": {
+        "blocks_carrying_an_element": 17,
+        "windows_carrying_an_element": 849,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 10,
+          "windows": 759
+        },
+        "names_a_coding_gene": {
+          "blocks": 3,
+          "windows": 589
+        }
+      },
+      "chr16": {
+        "blocks_carrying_an_element": 24,
+        "windows_carrying_an_element": 1535,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 15,
+          "windows": 1395
+        },
+        "names_a_coding_gene": {
+          "blocks": 8,
+          "windows": 1068
+        }
+      },
+      "chr17": {
+        "blocks_carrying_an_element": 13,
+        "windows_carrying_an_element": 951,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 11,
+          "windows": 854
+        },
+        "names_a_coding_gene": {
+          "blocks": 6,
+          "windows": 705
+        }
+      },
+      "chr18": {
+        "blocks_carrying_an_element": 28,
+        "windows_carrying_an_element": 1504,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 17,
+          "windows": 1342
+        },
+        "names_a_coding_gene": {
+          "blocks": 4,
+          "windows": 1028
+        }
+      },
+      "chr19": {
+        "blocks_carrying_an_element": 6,
+        "windows_carrying_an_element": 445,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 0,
+          "windows": 392
+        },
+        "names_a_coding_gene": {
+          "blocks": 0,
+          "windows": 363
+        }
+      },
+      "chr20": {
+        "blocks_carrying_an_element": 13,
+        "windows_carrying_an_element": 834,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 9,
+          "windows": 738
+        },
+        "names_a_coding_gene": {
+          "blocks": 4,
+          "windows": 616
+        }
+      },
+      "chr21": {
+        "blocks_carrying_an_element": 4,
+        "windows_carrying_an_element": 182,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 4,
+          "windows": 165
+        },
+        "names_a_coding_gene": {
+          "blocks": 1,
+          "windows": 132
+        }
+      },
+      "chr22": {
+        "blocks_carrying_an_element": 5,
+        "windows_carrying_an_element": 304,
+        "undrawable_blocks": 0,
+        "moves_a_gene": {
+          "blocks": 4,
+          "windows": 238
+        },
+        "names_a_coding_gene": {
+          "blocks": 3,
+          "windows": 189
+        }
+      }
+    }
+  },
+  "genes_at_bar_real_unknown": {
+    "blocks": 331,
+    "moving_elements": 812,
+    "head_genes": 416,
+    "genes_at_bar": 849,
+    "not_cached": 0,
+    "yes_no_disagree": 0
+  },
+  "reading": "331 real-unknown blocks carrying a scored element carry one that moves a gene (62.3%), against 86.0% of length-matched random windows outside the organiser's blocks (-23.70 points), which reads below chance: a lead at a real-unknown block is rarer than at random sequence of the same length outside unknown space. A named target here is a lead, not a finding; the random windows sample gene-richer sequence than the unknown, so the tier comparison inside length deciles stays the within-unknown control",
+  "seconds": 236.7,
+  "reproduced_from_2026_09_16": {
+    "fields": {
+      "result": true,
+      "chromosomes": true,
+      "min_log2": true,
+      "real_unknown": true,
+      "constrained_unknown_copies": true,
+      "other_tiers": true,
+      "by_case": true,
+      "against_neutral_in_length_deciles": true,
+      "blocks_with_a_named_target": true,
+      "named": true
+    },
+    "all": true
+  }
 }
