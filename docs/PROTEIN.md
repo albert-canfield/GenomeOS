@@ -303,6 +303,39 @@ it is the one built; route 2 is recorded as reachable and usable, not built.
   disulfide cysteine must not appear); residue disagreements must stay under
   2% of accession-position matches, or the numbering is off.
 
+**Result, against the registration.** `scripts/phosphosite_observation.py`
+(run with `uv run --with rdata`, the R data read in a temporary directory and
+deleted) writes `data/results/phosphosite_observation.json` (0.55 MB, the
+joined sites only); `ptm.observed_in(accession, position, observation)`
+returns one site's record with the meaning attached.
+
+| | |
+|---|---|
+| curated phospho sites | 41,661 of 96,362 |
+| accession and position found in the reference | 29,299 |
+| residue disagrees with the current sequence, dropped | 20 (0.07%) |
+| joined: `observed_in_cell_types_or_tissues` set | 29,279 on 6,222 proteins |
+| share of curated phospho sites | 70.3% (registered 45% to 70%) |
+| share of all curated sites | 30.4% (registered 19% to 30%) |
+| cell types or tissues per joined site | median 12; 2,238 in one; 16,699 in ten or more; max 83 |
+| reference sites not joined to a curated site | 86,979 |
+
+The coverage lands 0.3 points above the registered range, on the high side:
+the expectation was too low and is reported as missed, not moved. All three
+checks pass: NPM1 S125 is observed, TP53 M1 is not, no joined site sits on a
+residue other than S, T or Y, and residue disagreements are 0.07% against a
+2% bound. Curated sites of other classes that fall on a reference position
+(acetyl 212, glyco 81, ADP-ribosyl 41, nitro 9, sulfo 3, other 2, methyl 1)
+are counted and not joined: the same serine or threonine can carry either
+chemistry, and the reference says only that it was seen phosphorylated.
+
+Read with its limits. The reference and UniProt's curation are not
+independent: many UniProt phosphosites were annotated from the same
+large-scale studies Ochoa et al. reanalysed, so the 70% is partly
+agreement with itself, not an external confirmation rate. The 86,979
+reference sites without a curated counterpart are observations the curated
+layer lacks; they are not added as sites here. Occupancy stays blocked.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had

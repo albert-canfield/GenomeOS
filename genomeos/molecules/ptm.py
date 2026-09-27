@@ -182,3 +182,106 @@ def summary(index: dict[str, Any], top: int = 20) -> dict[str, Any]:
         ],
         "evidence": index["evidence"],
     }
+
+
+# Observation, not occupancy -----------------------------------------------------------------------
+#
+# Ochoa et al. 2020 (Nat. Biotechnol. 38:365) reanalysed 6,801 public phosphoproteomics raw files from
+# 104 cell types or tissues; the authors' funscoR package (LGPL) ships, per site, the number of distinct
+# cell lines or tissues in which it was identified at 1% site-level FDR and its spectral count. Joined to
+# the curated sites above, that turns "can be modified" into "identified phosphorylated in N cell types or
+# tissues". It is not occupancy (the fraction of the protein modified), not a per-cell state, and a curated
+# site missing from the reference is not evidence that it is never phosphorylated.
+
+OBSERVATION = Path("data/results/phosphosite_observation.json")
+OBSERVATION_MEANING = (
+    "observed_in_cell_types_or_tissues: distinct cell lines or tissues whose public mass-spectrometry data "
+    "identified this phosphosite (Ochoa et al. 2020, 1% site-level FDR); not occupancy, "
+    "not a per-cell state, and absence is not evidence of no phosphorylation"
+)
+PHOSPHO_ACCEPTORS = frozenset("STY")
+
+
+def accession_of(defn: dict[str, Any]) -> str | None:
+    ident = ((defn.get("sections") or {}).get("identity") or {}).get("items") or {}
+    acc = ident.get("accession")
+    if acc:
+        return acc
+    pid = defn.get("id") or ""
+    return pid.split(":", 1)[1] if pid.startswith("UniProt:") else None
+
+
+def sequence_of(defn: dict[str, Any]) -> str:
+    ident = ((defn.get("sections") or {}).get("identity") or {}).get("items") or {}
+    return ident.get("sequence") or ""
+
+
+def join_observations(
+    reference: dict[tuple[str, int], tuple[str, int, int]],
+    definitions: Any,
+) -> dict[str, Any]:
+    """Join curated phospho sites to a reference keyed by (accession, position).
+
+    ``reference`` maps (accession, position) to (residue, cell types or tissues, spectral count).
+    ``definitions`` yields compiled protein definitions. Only curated sites of class ``phospho`` are
+    joined; a match counts only when the reference residue equals the residue at that position in the
+    current UniProt sequence, and disagreements are counted, not joined.
+    """
+    curated = phospho = matched_position = disagree = 0
+    other_class_on_reference = Counter()
+    off_acceptor: list[str] = []
+    joined: dict[str, list[list[Any]]] = {}
+    for d in definitions:
+        acc = accession_of(d)
+        seq = sequence_of(d)
+        for s in sites(d):
+            curated += 1
+            pos = s.get("start")
+            if acc is None or not isinstance(pos, int):
+                continue
+            ref = reference.get((acc, pos))
+            if s["class"] != "phospho":
+                if ref is not None:
+                    other_class_on_reference[s["class"]] += 1
+                continue
+            phospho += 1
+            if ref is None:
+                continue
+            matched_position += 1
+            here = seq[pos - 1] if 0 < pos <= len(seq) else ""
+            if here != ref[0]:
+                disagree += 1
+                continue
+            if here not in PHOSPHO_ACCEPTORS:
+                off_acceptor.append(f"{acc}:{here}{pos}")
+            joined.setdefault(acc, []).append([pos, here, ref[1], ref[2]])
+    n_joined = sum(len(v) for v in joined.values())
+    return {
+        "curated_sites": curated,
+        "curated_phospho_sites": phospho,
+        "accession_position_matches": matched_position,
+        "residue_disagreements": disagree,
+        "joined": n_joined,
+        "off_acceptor": off_acceptor,
+        "other_class_on_reference_position": dict(other_class_on_reference.most_common()),
+        "sites": {a: sorted(v) for a, v in sorted(joined.items())},
+    }
+
+
+def load_observation(path: Path = OBSERVATION) -> dict[str, Any] | None:
+    return load_index(path)
+
+
+def observed_in(accession: str, position: int, observation: dict[str, Any] | None) -> dict[str, Any] | None:
+    """The observation record of one curated phosphosite, or None when the reference lacks it."""
+    if not observation:
+        return None
+    for pos, residue, n, psm in observation.get("sites", {}).get(accession, []):
+        if pos == position:
+            return {
+                "residue": residue,
+                "observed_in_cell_types_or_tissues": n,
+                "spectral_count": psm,
+                "meaning": OBSERVATION_MEANING,
+            }
+    return None
