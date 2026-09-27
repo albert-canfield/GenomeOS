@@ -215,6 +215,94 @@ and land in the graph as nodes of their own. Ubiquitin cross-links are not
 in the compiled `modifications` section yet, which is why no ubiquitin class
 appears.
 
+## Phosphosite observation (2026-09-27)
+
+**What the field means:** `observed_in_cell_types_or_tissues` counts the
+distinct cell lines or tissues in whose public mass-spectrometry data a
+phosphosite was identified (Ochoa et al. 2020 reanalysis, 1% site-level FDR);
+it does **not** say what fraction of the protein is phosphorylated there
+(occupancy), whether the site is phosphorylated in a given cell, or that the
+phosphorylation does anything. A curated site with no entry is absent from
+that reference, which is not evidence that it is never phosphorylated.
+
+Area C recorded measured modification state as blocked: the layer above says
+only that a site *can* be modified. No open per-site, per-tissue occupancy
+table exists, and none is built here. Two partial routes were probed.
+
+**Route 1: the Ochoa et al. 2020 reference phosphoproteome.** Ochoa, Jarnuczak
+et al., "The functional landscape of the human phosphoproteome", Nat.
+Biotechnol. 38, 365-373 (2020), doi:10.1038/s41587-019-0344-3; author
+manuscript PMC7100915. 112 PRIDE datasets from 104 cell types or tissues,
+6,801 raw files reanalysed jointly with MaxQuant (PRIDE PXD012174); 119,809
+sites pass 1% site-level FDR, 116,258 of them on reviewed UniProt proteins.
+
+- Where. The article's Supplementary Tables 2 and 3 (Springer Nature
+  `41587_2019_344_MOESM4_ESM.xlsx`, 54,465,047 bytes, and `MOESM5`,
+  3,556,910 bytes; Content-Length checked 2026-09-27) and the authors' R
+  package funscoR, https://github.com/evocellnet/funscoR, whose `data/`
+  holds the same reference as R data files: `phosphoproteome.rda` (197,440
+  bytes), `feature_spectral_counts.rda` (367,201), `feature_ms_pride.rda`
+  (1,427,549).
+- Terms. The article is under exclusive licence to Springer Nature; the
+  PMC manuscript permits viewing and text and data mining for academic
+  research under Nature's conditions, and the supplementary spreadsheets
+  carry no licence of their own. The funscoR package declares
+  `License: LGPL` in its DESCRIPTION (no version, no LICENSE file), which
+  permits copying and redistribution of the package, data included. This
+  project takes the funscoR files, not the spreadsheets, and keeps only
+  per-site counts joined to its own curated sites, with the citation.
+  funscoR's `psp.rda` is parsed from PhosphoSitePlus and is **not** used:
+  PhosphoSitePlus terms are non-commercial.
+- One row. `feature_spectral_counts`: `acc` (UniProt accession), `residue`,
+  `position`, `Biological_samples`, `Spectral_Counts`; 116,258 rows,
+  `Biological_samples` 1 to 83 (median 3), `Spectral_Counts` median 87.
+  The paper's text names this feature "the number of different cell lines
+  or tissues in which the site had been identified", which is what the
+  field here is called. It is **not** a count of the 6,801 experiments: no
+  per-site experiment count is published, so "observed in N experiments"
+  cannot be delivered from this source.
+- Size. 2.0 MB for the three files; well under the 2 GB stop.
+
+**Route 2: CPTAC phosphoproteomics through cBioPortal.** The public API
+(https://www.cbioportal.org/api, the client in `genomeos/cancer/cbioportal.py`)
+lists 12 phosphoprotein profiles as `GENERIC_ASSAY` / `LIMIT-VALUE`
+(profile ids `brca_cptac_2020_phosphoproteome`,
+`luad_cptac_2020_phosphoproteome`, `lusc_cptac_2021_phosphoproteome`,
+`ucec_cptac_2020_phosphoproteome`, `gbm_cptac_2021_phosphoproteome`,
+`paad_cptac_2021_phosphoproteome`, `brain_cptac_2020_phosphoprotein`,
+`coad_cptac_2019_phosphoprotein_quantification`, and the CPTAC
+quantifications in `brca_tcga`, `ov_tcga` and their PanCan Atlas studies). Entities per profile, from `/api/generic-assay-meta`:
+38,751 (breast 2020), 41,188 (lung adenocarcinoma), 18,806 (breast, TCGA
+PanCan). Values are log2 abundance ratios to a pooled reference across
+tumours, so the only honest name is `relative_abundance_in_tumours`.
+Terms: the cBioPortal FAQ says data are under the ODC Open Database
+License unless a study says otherwise (attribution, share-alike on a
+derived database). The join is the obstacle: sites are named by gene symbol
+and a RefSeq protein position (`NP_000010.1_1_1_69_69`, `A2M_S710s`,
+`AAAS_pS462`), not by UniProt accession and residue, so each needs a RefSeq
+to UniProt residue mapping first. Route 1 is smaller and joins directly, so
+it is the one built; route 2 is recorded as reachable and usable, not built.
+
+**Registration (written before the join).**
+
+- Field: `observed_in_cell_types_or_tissues` (integer, 1 to 104) and
+  `spectral_count` (peptide-spectrum matches), per curated site; source
+  `Ochoa et al. 2020 / funscoR`. Never `occupancy`, `modified` or `active`.
+- Join: UniProt accession of the compiled definition and the site's
+  `start`, curated sites of class `phospho` only (the reference holds only
+  phosphosites), and the reference residue must equal the residue at that
+  position in the current UniProt sequence. A pair whose residue disagrees
+  (sequence changed since the 2017 proteome) is counted and dropped, not
+  joined.
+- Expectation: 45% to 70% of the 41,661 curated phospho sites gain an
+  observation, which is 19% to 30% of all 96,362 curated sites; the other
+  classes gain none by construction.
+- Checks that would show the join wrong: NPM1 S125 (P06748, the
+  constitutive CK2 site) must be observed; no joined site may sit on a
+  residue other than S, T or Y in the current sequence (TP53 M1 and every
+  disulfide cysteine must not appear); residue disagreements must stay under
+  2% of accession-position matches, or the numbering is off.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had
