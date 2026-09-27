@@ -187,6 +187,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   `scripts/burden_gate.py` and `scripts/abundance_gate.py`. **Missing after
   this:** a per-demander saturable policy, the only change that could make gate
   (b) answerable, and stage 3.
+- **2.0 part two, done (2026-09-27, lane-engine2, `14f9ada`).** The `biolang` package describes its own
+  language: the grammar (regenerated from the packaged parser and re-rendered in isolation to match)
+  and the v0.1–v0.4 specs ship in `biolang/docs/` inside the wheel, under CC BY 4.0. `bio repl` is
+  driven through stdin in the isolated check. `import protein:` has an honest default: the engine
+  ships no proteome and stops with an error naming the missing resolver (never an empty module, never
+  the network); GenomeOS supplies it as the `protein` entry point of `biolang_import_resolvers`.
+  12 of 12 isolated checks; engine suite 154 passed, 3 skipped. **Negatives first in the lane's
+  report:** the 2.0 `bio run` smoke check had passed on an all-zero run (`basal_rate:` is accepted and
+  ignored by the parser; now `basal:` with a level-above-zero test), and `bio check` crashed on
+  `import protein:` even with GenomeOS installed. **Missing after this:** the parser rejecting unknown
+  block keys; the engine package ships copies of `tests/*.py` that LICENSING.md lists as AGPL.
 - **Missing.** A `biolang` package with its own tests; imports from a
   remote registry (the resolver hook exists: `import protein:TP53` reads the
   packaged proteome through `IMPORT_RESOLVERS`). Done 2026-09-11: the grammar
@@ -985,6 +996,17 @@ useless as a *count* is depth-invariant as a *membership*.
   which is the textbook. The layer says which protein a tissue makes, which
   is what `ProteinState.isoform` was for. The Molecules protein card shows
   the modification classes and the writers UniProt names.
+- **Modification observation, partly unblocked (2026-09-27, lane-phospho, `58f84fb` registered, `869158d` result).** Occupancy stays
+  blocked, but observation now exists: **29,279 of the 41,661 curated phosphosites (70.3%**, registered
+  45–70%, a miss high by 0.3 points, range not moved; 30.4% of all 96,362 curated sites) carry
+  `observed_in_cell_types_or_tissues` (1–83, median 12) from Ochoa et al. 2020's reanalysis of 6,801
+  PRIDE runs at 1% site FDR, via the authors' funscoR data (LGPL; its PhosphoSitePlus-derived table
+  excluded). No per-site experiment count is published, so the field is not "observed in N
+  experiments". Checks pass (NPM1 S125 present, TP53 M1 absent, nothing off S/T/Y, 0.07% residue
+  disagreement); curation and reference share source studies, so the 70% partly agrees with itself.
+  CPTAC through cBioPortal is reachable (12 phosphoprotein profiles, ODbL, log2 ratios to a pooled
+  reference) and usable only as `relative_abundance_in_tumours`, not built: it is keyed by RefSeq
+  position and needs a RefSeq-to-UniProt residue mapping first. docs/PROTEIN.md has the detail.
 - **Missing, and blocked on data (checked 2026-09-12).** Modification state
   is possibility, not occupancy: measured phosphoproteomics has no open
   per-site, per-tissue table the project could stream and distil as it does
@@ -1251,6 +1273,20 @@ useless as a *count* is depth-invariant as a *membership*.
 - **Next.** 1. Phasing by parent on the 1,430 candidates, which waits for a
   phased import (the GIAB files carry unphased genotypes); until then the
   1,430 stand as the trio's disagreement set.
+  **Done 2026-09-27 (lane-q100, `457702c` registered, `4d63910` result), and not by the route
+  expected.** GIAB v5.0q ships the Q100 v1.1 assembly's own GRCh38 dipcall VCF (40 MB, NIST public
+  domain, acknowledgement only), labelled paternal|maternal and checked on the file: every chrX non-PAR
+  call `.|1`, every chrY call `1|.`. Controls pass (99.9% found, 99.999% on the right parent). Of 1,411
+  assessable candidates **1,382 sit on one parental chromosome, 703 paternal to 679 maternal (share
+  0.509)**; 29 disagree with the assembly. **P1–P3 failed as registered** (they expected 40–150 germline
+  de novos at a ~0.8 paternal share); P4 holds. The rival reading (missed parent calls) is contradicted
+  too, unregistered: 3.0% of the candidate SNVs are seen in 88 HPRC haplotypes against 92.8% of
+  inherited calls, and 69% lie in NIST's de novo and mosaic regions. So the candidates are real and
+  new, most likely post-zygotic or cell-line mutations — an interpretation, not a measurement. A parent
+  label says which chromosome carries an allele, not whether it was inherited. Result files hold counts
+  only. 2. Germline versus post-zygotic per candidate, which needs read allele fractions. 3. The note in
+  `trio()` still calls an excess "representation differences"; docs/DATA.md records that this is wrong
+  after normalisation.
 - **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### E. From one cell to an organism
