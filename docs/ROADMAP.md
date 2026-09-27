@@ -3911,6 +3911,92 @@ entire sweep. What is next, in order of what it decides:
    `genomeos work retire` for lanes nobody is behind, a message check in `commit_own.sh` for the
    shared scratchpad, and `tests/test_band_totals.py` for the genome-wide totals.
 
+10. **The execution plan of 2026-09-27: one picture, waves ordered so nothing is built twice, and a
+   capacity model measured rather than assumed.** Written after five independent assessors read every
+   area against its own tests and result files. This item is the plan the lanes execute; the rows
+   above it are the record.
+
+   **Where the project stands, on two denominators that must be read together.** Against the plan as
+   written it is **about 70% built** — 99 of 129 area items (77%), 20 of 24 data jobs (83%), milestones
+   at 64% counting a partial as half. Against the goal it exists for it is **0.52% measured**: 160,447
+   of the real unknown's 30,602,182 bases have ever been read by any assay this project holds. Per area,
+   each on its own stated denominator: A 88% of requirements, B 78%, C 63% of goal clauses, D 78%,
+   E 64% of its agenda with **0 fates decided independently of the lineage**, F 9/9 routes, G 100% of
+   requirements with **release readiness 0 of 3**, H 50% of its goal, I 89–93% of its ledger, J **100%
+   built and 17% surviving** (one of six falsifiable claims).
+
+   **There is no breakthrough, and the assessment says so.** There is one result worth showing an
+   outside reader — the AlphaGenome deletion feature lifting held-out CRISPRi AUPRC 0.550 → 0.633
+   (+0.083, 95% +0.031 to +0.166) on 1,744 K562 pairs, frozen before the held-out pairs were scored —
+   and it needs a second cell type with real n and one published baseline figure beside it. The
+   unusual asset is the discipline, not the biology: registration that binds a single author by
+   commit order. Roughly two of sixteen documented withdrawals bound someone else's claim; the rest
+   bound this project's own. Moving that ratio is the strategic goal of the next stretch.
+
+   **Two decisions were taken on 2026-09-27 rather than deferred.** *The oligo library is not
+   ordered*: permanent non-goal D8 forbids wet-lab synthesis, and 1.3's own exit criterion asks for "a
+   designed experiment for the rest, which is built" — it is built, so that clause is met, and the
+   plan loses its only months-long dependency. What blocks 1.3 is clause 2, which was never split the
+   way clause 3 was on 2026-09-17; it is split here the same way — attributed where measurement
+   exists, a labelled *lead* elsewhere. *BioLang stays a generated package*: the export already runs
+   36 files at 8/8 checks with the application unimportable, nothing outside this repository consumes
+   it yet, and 2.0's clause "GenomeOS depends on it" is a means rather than an end; it is restated as
+   "the engine is separately installable and independently tested", and a real split waits for a
+   real consumer.
+
+   **Capacity, measured on 2026-09-27.** Apple M3 Pro, 11 cores (5 performance), 18 GiB RAM with about
+   6.5 GiB reclaimable under load, data volume at 95% with 22 GiB free. Twenty-one lanes ran on
+   2026-09-22 at a mean of about **35 minutes each** and **2–3 concurrent** without a file collision.
+   The binding limits are, in order: RAM (the per-element cache reader peaks near 2.9 GB on chr1),
+   the shared checkout's index and shared documents, the single AlphaGenome quota, disk for anything
+   that fetches, and the coordinator's review of each report against its result file. So:
+   **at most four lanes at once, of which at most two read the per-element cache, at most one spends
+   AlphaGenome quota, and at most one fetches more than 1 GB.** Only the coordinator runs the full
+   `scripts/check.sh` (six minutes, CPU-bound); lanes run their own targeted tests. **The machine must
+   be on mains power** for any run longer than an hour: it sleeps on battery or with the lid closed.
+
+   **The waves, ordered so each one's result is an input and never a re-do.**
+
+   | wave | lane | why here | lane-sessions |
+   |---|---|---|---|
+   | 0 *(running)* | the node-containment claim: audit its baseline and interval, then hold it against 661 measured CRISPRi pairs | quoted seven times with no interval and an undefined baseline; everything node-based waits on it | 2 |
+   | 0 *(running)* | `unknown_scoring` off the one-gene table | it is behind 1.3's clause 2 and was on no list | 2 |
+   | 0 *(running)* | records truth pass | stops lanes reading rows that are wrong | 1 |
+   | 0 *(running)* | repository size against GitHub limits | the daily merge to `main` needs the headroom known | 0.5 |
+   | 1 | make the deletion result publishable: a second held-out cell type, and the published ENCODE-rE2G / ABC figure on the same pair set | the one external contribution in reach, no wet lab | 3 |
+   | 1 | the reader family in **one** lane: `nodes_open` given a between-biosample definition, `genes_poised` against H3K27me3, `genes_read` normalised | one recomputation of 264 cached blocks instead of three; closes 1.1 | 2.5 |
+   | 1 | the therapeutic evidence tier (observed alteration > this patient's RNA > a STRING neighbour) | `BURIED_SURFACE_TARGETS` 2 → 0; must be a tier, because CD19 has no origin record and a no-origin penalty would demote the expression route | 2 |
+   | 1 | 2.0 part one: the 27 engine-only test files (162 tests) travelling with `biolang`, and a version string of its own | the only missing clause of 2.0's proof | 2.5 |
+   | 2 | 2.0 part two: grammar docs copied in, `bio repl` in the isolated check, a default for `import protein:` | release mechanics after the tests exist | 2.5 |
+   | 2 | the remaining one-target consumers under **one** registration with a falsifier per module | five modules, one shared reader; one registration instead of five | 3 |
+   | 2 | D: verify NIST/GIAB Q100 T2T-HG002 (trio-binned, so its haplotype is the parent), then phase the 1,430 candidates | a phased resource this project had never named; probe before spending | 0.5 + 2 |
+   | 2 | C: reachability of the Ochoa 2020 phosphosite table and CPTAC through the cBioPortal client already shipped | turns "can be modified" into "observed modified in N experiments", never "occupancy" | 0.5 + 2 |
+   | 3 | E2/E3 widened past chr21 and chr22 — 184,604 fine-mapped units on disk, 161 read | the largest unread population in area I; spends quota, so it runs alone on the key | 3 |
+   | 3 | A: the three facts with evidence kind `none`; v0.4 stage 4, partitioning division | small correctness, then the next stage | 0.5 + 2 |
+   | 3 | H: budget constraints in `design`; network knockouts in `experiment` | the two concrete items left in the weakest area | 2 |
+
+   **The stop list, which is as much the plan as the waves.** Nothing more is built on the node model
+   until wave 0's measured test lands. No more biosamples: 1.1 needs its readings to mean what their
+   names say. Nothing is built in area J: all seven steps exist, and only bookkeeping remains. No
+   AlphaGenome requests on the 882 blocks: that returns predictions, and the matched table already
+   showed this instrument cannot order the tiers. Area E's fate ceiling is not chased: 0 fates decided
+   independently of the lineage, generation 7 at chance, and no public dataset resolves terminal
+   division; measured contact atlases would strengthen the founder claims and not this one. BioForge's
+   confidence is not calibrated: it is uncheckable by construction.
+
+   **The rules every lane follows**, collected in one place: claim the board with `--who` before the
+   first edit; write the commit message to a lane-unique file; register before producing any number,
+   with its falsifier; commit with `scripts/commit_own.sh`, own files only; send roadmap rows to the
+   coordinator as finished text; report a negative first. A lane whose files overlap a running lane
+   waits rather than negotiates. The coordinator verifies every report against its result file before
+   placing its row, runs the full check before the daily merge, and merges `dev` into `main` at the
+   end of each working day and never more than two days apart.
+
+   **Estimate.** About 36 lane-sessions across waves 0–3; at four concurrent lanes, bounded by review
+   rather than by the machine, about **1.5 working days**, and the whole unblocked backlog about
+   **3 days**. After that the project's limits are measurement it does not hold, not work it has not
+   done.
+
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 
 The ordered list across areas, each with the milestone it serves and the
