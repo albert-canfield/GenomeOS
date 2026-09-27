@@ -1,5 +1,645 @@
 {
   "result": "node_containment_audit",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "UCSC hg38 chromosome FASTA (lengths from its faidx)",
+        "version": "GRCh38, as served at hgdownload goldenPath/hg38/chromosomes; pinned here by sha256"
+      },
+      {
+        "accession": "GENCODE human gene annotation",
+        "version": "release 50 (GRCh38.p14)"
+      },
+      {
+        "accession": "ENCODE SCREEN registry of cCREs (CTCF-only elements as node boundaries)",
+        "version": "V3, downloads.wenglab.org/V3/GRCh38-cCREs.bed"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element archive)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256",
+        "path": "data/knowledge/alphagenome/all_elements"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/reference/chr1.fa.gz.fai",
+        "sha256": "b93f31e77bada79b6e93a4156a3d5555f2ff01ec9beece1041bd4316636d7f9b",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr2.fa.fai",
+        "sha256": "70bdaeaa6711c723c4c5b2cfb1617aea9d718d9b8624890fb1da1d976f3117fd",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr3.fa.gz.fai",
+        "sha256": "1e4e1e6e4758587c54fc3cabc88df61042f6bb150d5e223778fbbbb56b45b164",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr4.fa.gz.fai",
+        "sha256": "15712947b3e44eb2c61c6e26eb56e3522d2f9371a35debfd3a58fd09570a6804",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr5.fa.gz.fai",
+        "sha256": "3ac07246eadc7cad05eb8860600a22e5d83fa5d88fb1adf566b1a8c6696f1ca4",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr6.fa.gz.fai",
+        "sha256": "e83e5ac789db3ca9060bf73e6a1c68699784afb24deb70d474ec6e6ad09f7f20",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr7.fa.gz.fai",
+        "sha256": "eda5a503df39a2dfdb80f2069118f6b55382ef564f265bbe17111e3b338613d4",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr8.fa.gz.fai",
+        "sha256": "7e4ca3a11738da78832043845b1db5f8b1e5e890f3c017e15d8721102a050817",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr9.fa.gz.fai",
+        "sha256": "355c6eacc7b33dae746cc6dc848b397f3ba33a3e4ce2fd4e727bf901be4c3f89",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr10.fa.gz.fai",
+        "sha256": "a5bd8d51f36163ec2d12322f4c9ebb27554a44b37d3fd657f4bda082a086e652",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr11.fa.gz.fai",
+        "sha256": "a239664652b93914be554809c58427e79208917583e1f915013e7f09ff14f6e0",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr12.fa.gz.fai",
+        "sha256": "1c01ea1c034dde781510aa13ff42e85d89f7348b0dd3bafcf043d24e07803d1e",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr13.fa.gz.fai",
+        "sha256": "ea29ed6eb9751cd6d5b82ff9809047ca6c7ca01799828137f8ede9b45d60467d",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr14.fa.gz.fai",
+        "sha256": "0df468f00233874383381914eb654f91d3003720e7a241c183f70c8974030a3b",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr15.fa.gz.fai",
+        "sha256": "82d22292e9cada50cce925c088d0ba8d173117222b3fcda15b43bd554b38e040",
+        "bytes": 24,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr16.fa.gz.fai",
+        "sha256": "4962857863c84e6d5b72321e8b173cb47a1576bb90bd7378c521b79b36edf566",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr17.fa.gz.fai",
+        "sha256": "9597aca42ec115a11a5212f8098780c759627cceb30ca8e03cf2243df2c90a3d",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr18.fa.gz.fai",
+        "sha256": "2cb3e60b228e33ba7dbb547089d01ea6f022a93b4e939372a982bded3b6d1e94",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr19.fa.gz.fai",
+        "sha256": "753857e3850afd6bfdd138e9341d4bfc9acb4997b4931c2722469aa64894115b",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr20.fa.gz.fai",
+        "sha256": "081e289f1f48b9c9548bb74a9f43b0596c47c6bf59ec986d988839264baf0570",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr21.fa.gz.fai",
+        "sha256": "c98f0f7e9a3e8c2ad7a89aac749d4dbe8dc156690b5f492296e6e8bf50a53fdb",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+        "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+        "bytes": 1862225,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chr22.fa.gz.fai",
+        "sha256": "26356feb528bad613ba1637331b248f7fb5b09cd3e94a9f85f5166d268817fda",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chrX.fa.gz.fai",
+        "sha256": "fc4c5d65a359e2de3acd6c5b357b35a6b5db9c9c2f90fdbdd882e772310eee36",
+        "bytes": 23,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/reference/chrY.fa.gz.fai",
+        "sha256": "8e25a7a1bc4157a2f72e4b8db43f4de2c5ad5ae6411d33070921f67980d3d623",
+        "bytes": 22,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "stage": 1,
+      "node_caller": "genome.domains.infer_domains, the default ctcf_only caller",
+      "min_node_bp": 50000,
+      "shuffles": 20,
+      "seed_per_chromosome": 7,
+      "bootstraps": 2000,
+      "bootstrap_seed": 11,
+      "controls": [
+        "uniform",
+        "uniform_merged",
+        "circular",
+        "count_matched"
+      ],
+      "workers_do_not_change_numbers": true
+    },
+    "exclusions": [
+      {
+        "chromosomes_skipped": [],
+        "why": "no length, GENCODE or cCREs"
+      },
+      "archive elements with no predicted coding gene, or whose gene is not protein_coding in GENCODE 50, are not pairs (each step counted in denominator_census)"
+    ],
+    "partitions": "n/a: model answers over the whole genome, nothing fitted and nothing held out",
+    "code": {
+      "git_sha": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "argv": [
+        "scripts/node_containment_audit.py",
+        "--workers",
+        "2"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
   "date": "2026-09-27",
   "denominator_census": {
     "archive_rows": 961227,

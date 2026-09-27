@@ -1,5 +1,209 @@
 {
   "result": "therapeutic_benchmark",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "cBioPortal msk_impact_2017 (Zehir et al. 2017)",
+        "version": "public REST API as read 2026-09-10; pinned by the result files' sha256"
+      },
+      {
+        "accession": "GenomeOS federated protein compiler: UniProt, Ensembl, InterPro, PDB, AlphaFold, Reactome, STRING, HPA",
+        "version": "live services, unversioned per request; the local store's sha256 is the pin"
+      },
+      {
+        "accession": "Human Protein Atlas normal expression",
+        "version": "live service, CC BY-SA 4.0"
+      },
+      {
+        "accession": "Open Targets Platform",
+        "version": "live GraphQL service, CC0 1.0"
+      },
+      {
+        "accession": "Ensembl REST (paralogues, transcript sequence)",
+        "version": "live service"
+      },
+      {
+        "accession": "the nine benchmark tumours (data/demo): hand-written VCF, CNV, SV and RNA files",
+        "version": "this repository at the recorded commit"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/benchmark/egfr_l858r_lung.vcf",
+        "sha256": "36326a43fd7bc29c85669df45510db8c3ca47629e9f0d8ef3da223612ccb037c",
+        "bytes": 258,
+        "partition": null,
+        "case": "EGFR L858R, lung adenocarcinoma"
+      },
+      {
+        "path": "data/demo/benchmark/erbb2_amplified_breast.vcf",
+        "sha256": "1b667cb2570de46de3ba4a25392d8ba349362f0e0eb897b8d4ee7f92ab9f9cc4",
+        "bytes": 287,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma"
+      },
+      {
+        "path": "data/demo/benchmark/erbb2_amplified_breast.cnv",
+        "sha256": "4b9a8ebb55883791de3c7b6aefeacf8fe4b7f8e3bc7773df016d96f8b708e216",
+        "bytes": 9,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma"
+      },
+      {
+        "path": "data/demo/benchmark/braf_v600e_melanoma.vcf",
+        "sha256": "92e2f6b7c3117e57be7914d310549f8b287ac7ea7a5ebc9ef58acabda7f35362",
+        "bytes": 237,
+        "partition": null,
+        "case": "BRAF V600E, melanoma"
+      },
+      {
+        "path": "data/demo/benchmark/kras_g12c_lung.vcf",
+        "sha256": "df77820276e46102047a57985b06c593deeb03bd6a67601dce64cba95164c60f",
+        "bytes": 230,
+        "partition": null,
+        "case": "KRAS G12C, lung adenocarcinoma"
+      },
+      {
+        "path": "data/demo/benchmark/pik3ca_h1047r_breast.vcf",
+        "sha256": "797b4bfab766487caef1882849fc61c2a76dfb8ee8e91b1e10d6f31c4aff556f",
+        "bytes": 233,
+        "partition": null,
+        "case": "PIK3CA H1047R, breast carcinoma"
+      },
+      {
+        "path": "data/demo/benchmark/idh1_r132h_glioma.vcf",
+        "sha256": "54712481b46734f8b7efea21fc4d35a5556ac510b85d6d5325f8b7cd34641163",
+        "bytes": 229,
+        "partition": null,
+        "case": "IDH1 R132H, glioma and AML"
+      },
+      {
+        "path": "data/demo/alterations/erbb2_amplification_only.vcf",
+        "sha256": "eafd4aba8ccc40d757ac88b7a0d68c2b8de31cb463ad9df00a9d9a0de52f2563",
+        "bytes": 226,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call"
+      },
+      {
+        "path": "data/demo/alterations/erbb2_amplification_only.cnv",
+        "sha256": "392e0a48c1f1c6aa545afa3844aa58c6727b0d6d19f131801a4a9662ec82d6df",
+        "bytes": 28,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call"
+      },
+      {
+        "path": "data/demo/alterations/alk_eml4_fusion.vcf",
+        "sha256": "2690d5a51b289adacb6b3a0b8f9285b83ba07d71c2d8c62aeb9cfdcaf9c42841",
+        "bytes": 215,
+        "partition": null,
+        "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic"
+      },
+      {
+        "path": "data/demo/alterations/alk_eml4_fusion.sv",
+        "sha256": "97bb964f90bf04383bdb313134bcdf3adf7985fd62adbeae27974ad86022aaf7",
+        "bytes": 44,
+        "partition": null,
+        "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic"
+      },
+      {
+        "path": "data/demo/expression/bcell_lymphoma.vcf",
+        "sha256": "0745d43baa5d424073f2b1044e54bea12a03db595c8aef44250eddbaf8e6916b",
+        "bytes": 229,
+        "partition": null,
+        "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA"
+      },
+      {
+        "path": "data/demo/expression/bcell_lymphoma_rna.tsv",
+        "sha256": "de0ebefe0c5712d36f963eb008a3a798b89889f46cc748ed31c4a86db8f171f4",
+        "bytes": 284,
+        "partition": null,
+        "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA"
+      },
+      {
+        "path": "data/results/cancer_msk_impact_2017.json",
+        "sha256": "1609f9235141e06094939edf6640ce5d246d79c30f67f24e26f47b2fa228874e",
+        "bytes": 165474,
+        "partition": null
+      },
+      {
+        "path": "data/results/cancer_alterations_msk_impact_2017.json",
+        "sha256": "1bba8559e1dd462b0f13ae1fb9514f77789cd3a232f8d5679b4e3762803ca643",
+        "bytes": 138848,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/therapeutics",
+        "sha256": "12bf0ffff5350034e27206d0e970274fb82e40d2bfbc31c74778ab7b38c0cc2c",
+        "bytes": 48840306,
+        "partition": null,
+        "files": 977
+      },
+      {
+        "path": "data/knowledge/proteins",
+        "sha256": "bc95154a13209afca6f3925daf85d8fab239ff3ceb532c648b1bb9e239caa657",
+        "bytes": 264811558,
+        "partition": null,
+        "files": 19453
+      },
+      {
+        "path": "data/knowledge/expression",
+        "sha256": "61691b70d6cd60093d15696073514559a0244dfcd207b6bb8062a0666fba552e",
+        "bytes": 1134119,
+        "partition": null,
+        "files": 102
+      },
+      {
+        "path": "data/knowledge/pathways",
+        "sha256": "8240272050d2de9aba10292d8a1fda78d34ccc70c42d92095a56e79a4d8b81d5",
+        "bytes": 13435655,
+        "partition": null,
+        "files": 56
+      },
+      {
+        "path": "data/knowledge/go-basic.obo",
+        "sha256": "b08d45b268b8c24ccb2513dbbbc7d4df9f6521c099b413f79eb31e06e0fa3bcc",
+        "bytes": 32227785,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/goa_human.gaf.gz",
+        "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+        "bytes": 15041996,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed"
+    },
+    "parameters": {
+      "network": true,
+      "top_genes": 8,
+      "indirect": true,
+      "cases": 9
+    },
+    "exclusions": [
+      "small-molecule routes are not modelled: those cases pass by not claiming a surface route"
+    ],
+    "partitions": "n/a: a retrospective benchmark of nine known targets; nothing is fitted to them",
+    "code": {
+      "git_sha": "65d2d23fd303b9e342c96f6029b04b6253d75023",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "argv": [
+        "scripts/therapeutic_benchmark.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
   "date": "2026-09-27",
   "cases": 9,
   "targets_recovered": 9,
