@@ -6,13 +6,13 @@ which presumes the number beside the answer is a probability. This module establ
 number is, counts what could be checked against it, registers the comparison before running it,
 and records the verdict. The verdict is a refusal, and the refusal is the result.
 
-**What the number is.** `organism/forge.py:143` writes `confidence=0.3` as a literal onto the
+**What the number is.** `organism/forge.py:170` writes `confidence=0.3` as a literal onto the
 `Experiment` a design emits. It is not derived from `loss`, `feasible`, `evaluations`, the number
 of tied feasible candidates or the margin to the runner-up, all of which the search computes and
 then discards. Six further sites cap an existing confidence at the same constant
-(`organism/forge.py:66,70`, `forge/design.py:59,63,66`, and `attribution/budget.py:60` for an
+(`organism/forge.py:93,97`, `forge/design.py:59,63,66`, and `attribution/budget.py:60` for an
 unrelated quantity). A cap can only lower a number and is defensible as a ceiling; the literal at
-line 143 is different in kind, because it creates a number out of nothing and attaches it to a
+line 170 is different in kind, because it creates a number out of nothing and attaches it to a
 freshly predicted entity, where a reader is most likely to read it as a posterior. The design
 block's own stated confidence (0.5 and 0.6 in the shipped programs) is parsed, stored on the
 `Design`, and then ignored by `to_experiment()`.
@@ -54,10 +54,10 @@ from typing import Any
 # The constant, and every site that writes it. Read off the source on 2026-09-22.
 THE_CONSTANT = 0.3
 CONFIDENCE_SITES: dict[str, str] = {
-    "genomeos/organism/forge.py:143": "confidence=0.3 - CREATES the number on the emitted Experiment;"
+    "genomeos/organism/forge.py:170": "confidence=0.3 - CREATES the number on the emitted Experiment;"
     " the only one a user of `genomeos grow --design` reads",
-    "genomeos/organism/forge.py:66": "min(timer.confidence, 0.3) - ceiling on a knob the search moved",
-    "genomeos/organism/forge.py:70": "min(decision.confidence, 0.3) - ceiling",
+    "genomeos/organism/forge.py:93": "min(timer.confidence, 0.3) - ceiling on a knob the search moved",
+    "genomeos/organism/forge.py:97": "min(decision.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:59": "min(gene.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:63": "min(rule.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:66": "min(parameter.confidence, 0.3) - ceiling",
@@ -108,7 +108,7 @@ PREREGISTRATION: dict[str, Any] = {
         " look like to be publishable"
     ),
     "the_quantity_under_test": (
-        "the confidence `organism/forge.py:143` attaches to the predicted Experiment a design emits,"
+        "the confidence `organism/forge.py:170` attaches to the predicted Experiment a design emits,"
         " as read by a user of `genomeos grow --design`"
     ),
     "what_is_compared": (

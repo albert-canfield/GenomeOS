@@ -12,7 +12,7 @@ off the data, which makes it the rare small-n result that does not depend on n.
 
 ## 1. What the confidence is
 
-`genomeos/organism/forge.py:143` writes
+`genomeos/organism/forge.py:170` writes
 
 ```python
 # fmt: off
@@ -20,14 +20,14 @@ confidence=0.3,
 ```
 
 as a literal onto the `Experiment` that a `design` block emits. Six further sites cap an existing
-confidence at the same value — `organism/forge.py:66,70`, `forge/design.py:59,63,66`, and
+confidence at the same value — `organism/forge.py:93,97`, `forge/design.py:59,63,66`, and
 `attribution/budget.py:60` for an entirely unrelated quantity in another area. That last one is
 the tell: a number that means the same thing for a design search over a worm embryo and for a
 phyloP budget over chromosome 21 is not a probability about either. It is a provenance marker
 reading *predicted, not validated*.
 
 The caps are defensible. `min(x, 0.3)` can only lower a number, so it cannot inflate a claim. The
-literal at line 143 is different in kind, because it creates a number from nothing and attaches it
+literal at line 170 is different in kind, because it creates a number from nothing and attaches it
 to a freshly predicted entity, which is where a reader is most likely to take it for a posterior.
 
 **The search computes better quantities and discards all of them.** `run_design` knows each
@@ -100,7 +100,7 @@ rate was compared with 0.3 or any interval computed. Full text in
 ## 4. The result: uncheckable by construction, on four counts before n
 
 **(a) The predictor is degenerate.** One distinct value over every design, and by inspection of
-line 143 over every design that could ever be written. A reliability diagram needs two populated
+line 170 over every design that could ever be written. A reliability diagram needs two populated
 bins. This is fatal at every sample size and is the whole answer to the item as posed.
 
 **(b) The outcome is degenerate too.** All four designs solve, at loss exactly 0.0. The label

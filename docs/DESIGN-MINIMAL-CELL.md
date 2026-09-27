@@ -81,7 +81,7 @@ cost in bases, before anyone tries.
 
 Area H's third open item asked how often a design's answer matches the
 published outcome, which presumes the number beside the answer is a
-probability. It is not: `organism/forge.py:143` writes the literal `0.3` onto
+probability. It is not: `organism/forge.py:170` writes the literal `0.3` onto
 every feasible answer, ignoring the loss, the feasibility, the evaluations and
 the design's own stated confidence, and the same constant marks an unrelated
 quantity in area I. A single-valued predictor has one reliability bin at every
