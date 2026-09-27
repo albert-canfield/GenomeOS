@@ -6449,6 +6449,121 @@ gate silenced. `annotate` reads the cache only when it is handed a reader, so
 pay nothing and see `NOT_READ` in the window fields — a fourth named silence beside the reader's
 three, because "this caller did not look" is not "the sweep did not answer".
 
+## Pre-registration: the CRISPRi result against the published baseline on the same pairs, a second cell type costed, and the gain held against coverage (2026-09-27)
+
+The one result in this project an outside reader could be shown is the CRISPRi one: adding the
+AlphaGenome predicted-deletion feature to an activity-over-distance baseline raises held-out K562
+AUPRC from 0.550 to 0.691 (gain +0.141, 95% +0.082 to +0.231, 1,744 pairs, 114 regulated). A
+sceptical reading of 2026-09-27 named what it lacks: a second cell type with real n, a published
+baseline on the same pairs, a coverage-matched arm for the *gain*, and the feature-selection
+caveat. This section registers all four before anything new is scored. The registration is also in
+code, `crispri.PREREGISTERED_PUBLISHED` and `crispri.PUBLISHED`, committed before the scoring code.
+**AlphaGenome requests: 0 prediction requests; one metadata call (`output_metadata`) to read the
+model's track list.**
+
+### A second cell type: the model has the tracks, the cache does not, and it costs 705 requests
+
+The held-out refusal said "no AlphaGenome line for this cell type". That is not true of the model.
+Its own track list, read on 2026-09-27, carries RNA-seq tracks for **HCT116 (EFO:0002824, 3
+tracks), Jurkat (CLO:0007045, 1) and WTC11 (EFO:0009747, 3)**, and DNase for all three. No proxy
+is needed and none is proposed. The refusal is a fact about the sweep's per-element cache, which
+kept per-gene values for four cell lines only (`enhancer_target.CELLS`).
+
+Whether a cell type could carry a result is settled by its regulated pairs, not by the model:
+
+| held-out cell | pairs | regulated | on a deleted element | regulated there | registry elements to score |
+|---|---|---|---|---|---|
+| K562 | 1,918 | 118 | 1,744 | 114 | (cached) |
+| HCT116 | 396 | 34 | 363 | 34 | **705** |
+| WTC11 | 1,921 | 15 | 1,616 | 14 | 614 |
+| GM12878 | 68 | 16 | 62 | 14 | (cached) |
+| Jurkat | 75 | 7 | 64 | 6 | 111 |
+
+Only HCT116 has enough positives to say anything. The frozen feature is the largest predicted drop
+over every registry element overlapping the pair, so scoring HCT116 costs one deletion request per
+overlapping registry element: **705**. Deleting the 363 CRISPR elements themselves would cost 363
+but changes the feature, so it is not the frozen model. The lane's budget is 20. **HCT116 is
+registered here and not run**; the number goes to the coordinator. When it is bought: same code
+path with HCT116 added to the cells kept per gene, weights unchanged; it passes if the gain on the
+363 covered pairs is above zero, and counts as a replication only if the chromosome-bootstrap
+interval excludes zero. A gain at or below zero makes this a K562 result, to be described as one.
+
+### The published baseline: same pairs, same split, figures from the primary source
+
+Gschwind et al., *An encyclopedia of human enhancer–gene regulatory interactions*, Nature 2026
+(doi:10.1038/s41586-026-10781-4, PMC13471189), Supplementary Table 3, benchmarks on **the same two
+files this module reads**. The training set is 10,356 K562 pairs with 471 positives, scored by
+hold-one-chromosome-out for supervised models and unweighted AUPRC. The held-out set is 4,378 pairs
+with 190 positives over five cell types, pooled, with AUPRC weighted by each pair's
+`direct_vs_indirect_negative` (the 190 positives sum to 157.39, the paper's "157.39 weighted").
+
+| set | predictor | AUPRC [95%] |
+|---|---|---|
+| training, unweighted | ENCODE-rE2G Extended | 0.737 [0.693, 0.775] |
+| | ENCODE-rE2G | 0.662 [0.616, 0.706] |
+| | ABC (DNase × H3K27ac, ENCODE Hi-C) | 0.613 [0.558, 0.657] |
+| | ABC (DNase, average Hi-C) | 0.565 [0.511, 0.610] |
+| | DHS & DNase RPM × distance (norm.) | 0.527 [0.479, 0.575] |
+| | distance to TSS | 0.436 [0.387, 0.482] |
+| held-out, weighted | ENCODE-rE2G | 0.556 [0.468, 0.631] |
+| | ABC (DNase, average Hi-C) | 0.465 [0.378, 0.541] |
+| | distance to TSS | 0.363 [0.281, 0.438] |
+
+**The comparison this module has published so far is not comparable to any of these.** It scores
+only the pairs on a deleted element (9,237 training, 1,744 held-out K562), unweighted, with
+average precision rather than the benchmark's trapezoid, and held-out K562 alone rather than the
+pooled five. So the numbers are re-scored on the published pair sets with the published estimator.
+The estimator was checked on the one predictor that needs no model, before this registration: raw
+distance to TSS gives **0.4359** unweighted on training (published 0.4359) and **0.3631** weighted
+on held-out (published 0.3631).
+
+Registered comparisons:
+
+1. **Training, published split.** Hold-one-chromosome-out on all 10,356 pairs, fitted on the
+   covered pairs of the other chromosomes (the frozen recipe); an uncovered pair carries deletion
+   features of zero, the benchmark's own minimum-score rule. Unweighted, beside the training rows
+   above. The pairs and the split are comparable. One thing is not: this module's deletion features
+   were chosen after reading the single predictors on these same pairs. ENCODE-rE2G's features were
+   also chosen by sequential selection on this set (its Fig. 4c), so both numbers carry a selection
+   on the data, and that is stated with them.
+2. **Held-out, published pairs and weighting.** The frozen weights applied to all 4,378 pairs,
+   pooled, weighted. The handicap is stated before the number: 2,392 of the 4,378 pairs (HCT116,
+   Jurkat, WTC11; 56 regulated) carry no deletion value. Bands against ENCODE-rE2G's interval
+   [0.468, 0.631]: above it, "higher than the published ENCODE-rE2G figure on the same pairs";
+   inside it, "in the range of ENCODE-rE2G"; below it, "below ENCODE-rE2G: the gain is over a
+   baseline weaker than the published state of the art". `activity + distance` is placed against
+   ABC's [0.378, 0.541] by the same bands, which says whether this project's own baseline is weak.
+   The K562-only weighted figure is reported as this module's alone, because the source gives no
+   per-cell-type held-out figure.
+
+### The coverage-matched arm, for the gain
+
+Held-out K562; the covered rate is 96.6% for regulated pairs against 90.6% for the rest.
+
+- **Arm 1:** all 1,918 pairs, uncovered ones with deletion features of zero. The gain, with its
+  chromosome-bootstrap interval.
+- **Arm 2:** the covered pairs, with the regulated arm thinned at random to the non-regulated
+  arm's coverage rate, over 1,000 draws. The median gain and the share of draws above zero.
+- **Arm 3, the control:** `activity + distance` plus a covered-or-not indicator in place of the
+  deletion features, fitted on all training pairs and scored on all 1,918. If coverage alone buys
+  the gain, this arm shows it.
+
+The gain is **invariant to coverage** only if arm 1's interval excludes zero, arm 2's share is at
+least 0.95, and arm 3's gain is below arm 1's. Otherwise the headline must say "on the pairs the
+sweep covered".
+
+### What each outcome allows the result to be called
+
+- Held-out pooled above ENCODE-rE2G's interval: "matches or exceeds the published model on its own
+  benchmark". This would be a surprise, since 55% of the pairs carry no deletion.
+- Inside the interval: "a sequence-model feature brings a simple baseline into the published
+  model's range".
+- Below the interval: "improves this project's own baseline; not competitive with the published
+  state of the art".
+- The coverage bar failing: the claim is restricted to covered pairs whatever the band.
+- HCT116 unrun: the result is **one cell type** and is described as such. GM12878 (14 regulated) is
+  reported but carries no weight.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

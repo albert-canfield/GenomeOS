@@ -121,6 +121,93 @@ PREREGISTERED_CONTACT = (
     "'activity + distance' (the same activity over 1/distance) on the held-out K562 pairs"
 )
 
+# --- the published baseline on the same pairs, and the coverage-matched arm (registered 2026-09-27) --
+#: Figures copied from the primary source, never from memory: Gschwind et al., "An encyclopedia of
+#: human enhancer-gene regulatory interactions", Nature 2026, doi:10.1038/s41586-026-10781-4
+#: (PMC13471189), Supplementary Table 3, sheets "Combined K562 data (training)" and "Held-out
+#: benchmarks". The training pair set is this module's TRAINING file (10,356 pairs, 471 positives,
+#: unweighted AUPRC, hold-one-chromosome-out for supervised models, a pair with no prediction given
+#: the minimum score). The held-out pair set is this module's HELDOUT file (4,378 pairs, 190
+#: positives, five cell types pooled), and its AUPRC is weighted: every pair by its column
+#: `direct_vs_indirect_negative` (the 190 positives sum to 157.39, the paper's "157.39 weighted").
+#: The AUPRC is the benchmark's own estimator (yardstick pr_curve, first and last points dropped,
+#: trapezoid; EngreitzLab/CRISPR_comparison workflow/scripts/crisprComparisonBootstrapFunctions.R).
+PUBLISHED_SOURCE = (
+    "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Table 3 "
+    "(https://pmc.ncbi.nlm.nih.gov/articles/PMC13471189/)"
+)
+PUBLISHED = {
+    "training": {  # AUPRC [95% bootstrap interval], unweighted, 10,356 pairs / 471 positives
+        "ENCODE-rE2G_Extended": (0.7373, 0.6931, 0.7750),
+        "ENCODE-rE2G": (0.6622, 0.6156, 0.7059),
+        "ABC_A=DNase x H3K27ac, C=ENCODE Hi-C": (0.6128, 0.5580, 0.6570),
+        "ABC_A=DNase, C=Average ENCODE Hi-C": (0.5649, 0.5109, 0.6103),
+        "In element (DHS) & DNase RPM x distance (norm.)": (0.5272, 0.4786, 0.5745),
+        "Distance to TSS": (0.4359, 0.3873, 0.4824),
+    },
+    "heldout": {  # weighted AUPRC [95% bootstrap interval], 4,378 pairs / 190 positives, pooled
+        "ENCODE-rE2G": (0.5562, 0.4679, 0.6312),
+        "ABC_A=DNase, C=Average ENCODE Hi-C": (0.4654, 0.3782, 0.5414),
+        "EPIraction": (0.3827, 0.3025, 0.4558),
+        "Distance to TSS": (0.3631, 0.2812, 0.4379),
+    },
+}
+#: The estimator was checked against the source BEFORE this registration, on the one predictor that
+#: needs no model: raw distance to TSS gives 0.4359 unweighted on TRAINING (published 0.4359) and
+#: 0.3631 weighted on HELDOUT (published 0.3631). No model of this module had been scored with it.
+PREREGISTERED_PUBLISHED: dict[str, str] = {
+    "written": (
+        "2026-09-27, before any model of this module was scored on the full pair sets, weighted, or "
+        "on the coverage arms below. The model set is FEATURES, frozen; its weights are the ones "
+        "score() fits on the covered K562 training pairs; nothing is refitted"
+    ),
+    "second_cell_type": (
+        "AlphaGenome carries its own RNA-seq tracks for HCT116 (EFO:0002824, 3 tracks), Jurkat "
+        "(CLO:0007045, 1) and WTC11 (EFO:0009747, 3), read from the model's output_metadata on "
+        "2026-09-27; no proxy is needed. The refusal is a fact about the sweep's cache, which kept "
+        "four cell lines' values per gene. Only HCT116 can carry a result: 396 held-out pairs, 34 "
+        "regulated, 363 on a deleted element (Jurkat 6 regulated covered, WTC11 14, GM12878 14). "
+        "Scoring it with the frozen feature needs one deletion request per registry element "
+        "overlapping a covered HCT116 pair: 705 (363 if the CRISPR element itself were deleted, "
+        "which changes the feature and is not the frozen model). The lane's budget is 20, so HCT116 "
+        "is registered here and NOT run. When bought: the same code path with HCT116 added to the "
+        "cells kept per gene, weights unchanged; passes if the gain on the 363 covered HCT116 pairs "
+        "is above zero; stated as replicated only if its chromosome-bootstrap interval excludes zero. "
+        "A gain at or below zero means the result is a K562 result and must be described as one"
+    ),
+    "published_training": (
+        "hold-one-chromosome-out on all 10,356 TRAINING pairs (fitted on the covered pairs of the "
+        "other chromosomes, the frozen recipe; an uncovered pair carries deletion features of zero, "
+        "the benchmark's minimum-score rule), unweighted AUPRC by the benchmark's estimator, set "
+        "beside PUBLISHED['training']. Comparable pair set and split; NOT comparable in one respect "
+        "that is stated with the number: this module's deletion features were chosen after reading "
+        "the single predictors on these same pairs (ENCODE-rE2G's features were also chosen by "
+        "sequential selection on this set, its Fig. 4c, so both carry a selection on the data)"
+    ),
+    "published_heldout": (
+        "the frozen weights applied to all 4,378 HELDOUT pairs, pooled, weighted AUPRC by the "
+        "benchmark's estimator, set beside PUBLISHED['heldout']. Expected handicap stated before "
+        "the number: 2,392 of the 4,378 pairs (HCT116, Jurkat, WTC11) carry no deletion value, so "
+        "the deletion can only act on the K562 and GM12878 pairs. Bands against ENCODE-rE2G's "
+        "published interval [0.468, 0.631]: above 0.631 'higher than the published ENCODE-rE2G "
+        "figure on the same pairs'; inside it 'in the range of ENCODE-rE2G'; below 0.468 'below "
+        "ENCODE-rE2G: the gain is over a baseline weaker than the published state of the art'. "
+        "'activity + distance' is placed against ABC's [0.378, 0.541] by the same bands, which says "
+        "whether the project's own baseline is weak. The K562-only weighted figure is reported as "
+        "this module's alone: the source gives no per-cell-type held-out figure"
+    ),
+    "coverage_matched": (
+        "held-out K562. Arm 1, all 1,918 pairs, uncovered ones with deletion features of zero: the "
+        "gain with its chromosome-bootstrap interval. Arm 2, the covered pairs with the regulated "
+        "arm thinned at random to the non-regulated arm's coverage rate, 1,000 draws: the median "
+        "gain and the share of draws above zero. Arm 3, the control: 'activity + distance' plus a "
+        "covered-or-not indicator in place of the deletion features, fitted on all training pairs "
+        "and scored on all 1,918. The gain is 'invariant to coverage' only if arm 1's interval "
+        "excludes zero, arm 2's share is at least 0.95, and arm 3's gain is below arm 1's; otherwise "
+        "the headline must say 'on the pairs the sweep covered'"
+    ),
+}
+
 
 @dataclass
 class Pair:
