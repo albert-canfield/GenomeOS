@@ -123,6 +123,59 @@ EVIDENCE_TIERS: dict[str, float] = {
 UNMEASURED_TIER = "association_hypothesis"
 
 
+# --- two rules on the order, registered 2026-09-27 ------------------------------------
+#
+# The evidence tier asks whether this tumour involves the gene at all. Two questions it
+# does not ask were named when it landed. First, nothing asks whether any modelled
+# modality reaches the candidate: in the ERBB2-amplified tumour the second place goes to
+# a gene whose best mechanism is absent rather than weak. Second, inside the top tier
+# twelve copies of a gene and one missense read the same, because the tier is a label and
+# carries no amount.
+#
+# Both are answered on the ORDER and neither enters WEIGHTS, for the reason the tier's
+# own first shape established by being measured: the mean is taken over the dimensions
+# that were available, so any new dimension lifts the candidate with fewer of them
+# further, and the poor-safety cap clips at a constant that an uncapped candidate walks
+# past. A precondition averaged against biology also lets each compensate for the other.
+# So one is a gate and one is a tiebreak, in the same family as safety, which can only
+# ever cap a score and never raise one.
+
+#: The mechanism gate. Whether some modelled modality reaches this candidate with its
+#: hard requirements *answered* — `TherapeuticTargetCandidate.best_mechanism` — or not.
+#:
+#: Two classes and not three, which is the argued part. A mechanism with an unanswered
+#: requirement has not been shown to apply; it has only failed to be ruled out, and that
+#: is this file's existing rule for which mechanism may head a list. So "provisional
+#: only" cannot be preferred over "nothing at all": in the EML4-ALK tumour that would put
+#: a mutated PIK3CA, whose nearest mechanism is adcp at 0.25 with `surface_accessible`
+#: unanswered, above the fusion the tumour actually carries.
+REACH_ESTABLISHED = "established_mechanism"
+REACH_NONE = "no_established_mechanism"
+
+#: The gate is read after the evidence tier and before the score, never before the tier:
+#: a candidate measured nowhere in this patient does not rise by having a reachable
+#: surface, which is the defect the tier exists to prevent.
+MECHANISM_GATE_ORDER = (REACH_ESTABLISHED, REACH_NONE)
+
+#: The magnitude tiebreak. The quantities that say *how much*, each read from this
+#: patient's own tumour data and never imputed: the copy count in the patient's
+#: copy-number table, the variant allele fraction of the observed variant, and whether
+#: the observed position is a recorded hotspot. A quantity that is absent is reported as
+#: absent; no default fraction, no count inferred from a discrete call, no hotspot
+#: inferred from a gene's driver frequency.
+#:
+#: They are compared like with like and in this order — both candidates carry a count, so
+#: the larger count; else both carry a fraction, so the larger; else exactly one is a
+#: hotspot. Copies, fractions and a yes/no share no unit, and inventing an exchange rate
+#: between them would be the guess this rule exists to refuse, so a pair that has no
+#: quantity in common leaves the tie unbroken and the gene-name fallback stands.
+MAGNITUDE_QUANTITIES = ("copies", "vaf", "hotspot")
+
+#: What a copy count is read against, so that a magnitude is a distance from normal
+#: rather than a raw number.
+DIPLOID_COPIES = 2.0
+
+
 def alteration_evidence(origins: Any, tumour: TumourState) -> tuple[str, float, str]:
     """Which tier of evidence about this gene in this patient reached it here.
 

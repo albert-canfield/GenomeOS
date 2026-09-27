@@ -758,6 +758,105 @@ mechanism is not merely weak but absent, its nearest being `adcp` with
 modality can reach above one with an approved antibody is the next question,
 and it is not this one.
 
+## The mechanism gate and the magnitude tiebreak, pre-registered 2026-09-27
+
+Written before the code and before any number was regenerated, so that what
+follows is a prediction the run can contradict. It closes the two items the
+evidence tier left open above: nothing asked whether a candidate has any
+mechanism at all, and inside the top tier twelve copies of a gene and one
+missense read the same.
+
+**Neither is a weight, and that is settled rather than chosen.** `WEIGHTS` is
+unchanged and no dimension is added to the overall mean. The tier's own first
+shape was registered as a weighted dimension, implemented, measured, and it
+inverted the tumour it was built for: because the mean is taken over the
+dimensions that were available, a new dimension lifts the candidate with fewer
+of them further, and because the poor-safety cap clips at a constant, a capped
+candidate is overtaken by a candidate that gains anything at all. No positive
+weight escapes either. Both rules therefore act on the order — one a gate, one a
+tiebreak — in the same family as safety, which can only ever cap a score and
+never raise one.
+
+### Rule 1: the mechanism gate
+
+After the evidence tier and before the score, candidates are partitioned by
+whether any modelled modality reaches this candidate *with its hard
+requirements answered* — `best_mechanism`, not merely a mechanism that was not
+refused. Two classes: `established_mechanism` and `no_established_mechanism`.
+Inside a class nothing changes.
+
+Two classes and not three is the argued part. A mechanism whose requirement is
+unanswered has not been shown to apply; it has only failed to be ruled out,
+which is already this file's rule for which mechanism may head a list. So
+"provisional only" is not preferred over "nothing at all". The concrete reason
+is the EML4-ALK tumour: ALK offers no mechanism of any kind, while the mutated
+PIK3CA in the same sample carries `adcp` at 0.25 with `surface_accessible`
+unanswered. A three-level gate would rank an unanswered question above the
+fusion the tumour carries, which is the same defect in the other direction.
+
+The gate is subordinate to the tier by construction, never read before it. A
+candidate measured nowhere in this patient does not rise by having a reachable
+surface; that is exactly what the tier exists to prevent.
+
+`mechanism_reach` and its sentence are published per candidate, in the report,
+the dataset and the benchmark rows, so the list says what it sorted on.
+
+### Rule 2: the magnitude tiebreak
+
+Magnitude comes only from what this patient's tumour data measure, and an
+absent quantity is stated as absent rather than imputed. Three quantities:
+the copy count in the patient's copy-number table, read against the diploid 2;
+the variant allele fraction of the observed variant; and whether the observed
+position is a recorded hotspot. No default fraction, no count inferred from a
+discrete `amplification` call, and no hotspot inferred from a gene's driver
+frequency — each of those would be the guess this rule refuses.
+
+It orders only between candidates already equal on the tier, on the gate and on
+the published score, and it compares like with like in this order: both carry a
+count, so the larger count; else both carry a fraction, so the larger; else
+exactly one is a hotspot, so that one. Copies, fractions and a yes/no share no
+unit, and an exchange rate between them would be invented, so a pair with no
+quantity in common leaves the tie unbroken and the existing gene-name fallback
+stands. `alteration_magnitude` and its sentence are published per candidate
+whether or not the tiebreak ever fires.
+
+This is deliberately the weaker of the two rules. It gives the amplification a
+published amount — twelve copies against the diploid 2 — and an order among
+candidates the score cannot separate, and it does not attempt to say how many
+copies are worth one hotspot.
+
+### What must not move
+
+All nine benchmark cases keep their rank: every target at 1, CD19 at 2. All
+nine scores are unchanged to the published three decimals, and no case's
+`target_class`, mechanism, compatibility, accessibility, evidence tier or
+peptide route changes; neither rule touches scoring arithmetic. For all nine,
+`outranked_by_hypotheses` stays empty, `BURIED_SURFACE_TARGETS` stays 0,
+`AMPLIFIED_TARGET_RANK` stays 1 and `KNOWN_MECHANISM_DEFECTS` stays 0. No pin
+is raised.
+
+Predicted effects inside the nine cases: the gate makes ERBB2's first place in
+the amplified tumour follow from the rule rather than only from its score,
+since PIK3CA is `no_established_mechanism` there; ALK keeps first place in the
+fusion tumour because it and PIK3CA are in the same gate class and ALK scores
+higher; and CD19 may rise from 2 to 1 if FCRL5 turns out to have no established
+mechanism, which is an improvement the pin allows and does not require.
+
+### What would falsify it
+
+The gate is falsified by any of the nine ranks getting worse; by any published
+score changing; by the gate class disagreeing with `best_mechanism` for any
+candidate; or by the gate lifting a candidate of the unmeasured tier above a
+measured one, which would mean it was read before the tier.
+
+The tiebreak is falsified by any rank in the nine cases changing at all, since
+it fires only on an exact tie in the published score; by any magnitude quantity
+appearing that the patient's data do not contain; or by two quantities of
+different kinds being compared.
+
+Either falsifier firing is reported with the failure kept in the record and the
+rule amended, as the tier's first shape was on the day it was registered.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
