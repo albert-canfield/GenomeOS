@@ -92,3 +92,42 @@ module's rules from the same papers they are scored against. Verdict
 `UNCHECKABLE_BY_CONSTRUCTION`, with the registration, the census, the interval
 that was computed and withheld, and the five things that would change it, in
 docs/BIOFORGE-CONFIDENCE.md.
+
+## Budgets in `design`, knockouts in network experiments (registered 2026-09-27)
+
+Area H's two remaining concrete items, written down before the code. The
+constants live in `genomeos/organism/forge.py` (`BUDGET_*`) and
+`genomeos/forge/network_experiment.py` (`NETWORK_KNOCKOUT_*`).
+
+**Budget in `design`.** The unit is the perturbation: a knockout, an addition
+or a continuous knob moved off the program's own value each cost 1, unless the
+caller prices a name (bases, edits, money). `at_most` already caps how many
+factors are combined, but it never counted knob moves, so a design that varies
+timers could move every knob at once. A budget is a hard limit on the answer,
+not a loss term: the answer never spends more than it. Candidates over the
+limit are still run once at the program's own knob values, so the result can
+say what the spend bought and what the limit excluded, including whether an
+excluded candidate reached the target more closely than the answer did.
+*Falsifier:* on any shipped design and any limit from 0 to 3, an answer over
+the limit, an excluded candidate missing from the list, or a cheaper-loss
+excluded candidate not flagged. *Known case:* `two_intestinal_founders` in
+`data/organisms/celegans/designs.bio` (Lin et al. 1995, pinned to POP-1 by
+`tests/test_design.py`): at limit 1 the answer is -POP-1, solved; at limit 0
+it is the wild type, unsolved, with -POP-1 listed as excluded at loss 0.
+
+**Network knockouts in `experiment`.** An experiment on a network names nodes
+held at zero for the whole run and edges `A>B` (B reads A as zero; every other
+reader sees A as it is). The perturbed run is compared with the unperturbed
+run from the same start: per node, the change in the fraction of the attractor
+spent on (Boolean) or in the late mean level (continuous, as a log2 ratio), and
+whether the dynamics changed kind (fixed point against cycle, oscillating
+against not). The consequence is the mean change over nodes knocked out in
+neither run, and it is ranked against knockouts of the same size, nodes and
+edges matched separately, drawn from what was not chosen: 200 draws, or every
+matched set when there are fewer; p = (1 + as-large-or-larger) / (1 + draws).
+*Falsifier:* a knockout of a node no rule reads must score 0 with p = 1.0, and
+no draw may contain a chosen node. *Known case:* the Fauré et al. 2006
+mammalian cell cycle (`data/models/mammalian_cell_cycle.bnet`, pinned by
+`tests/test_boolean.py`): from CycD on, the unperturbed network cycles, and
+CycD held at zero rests in a fixed point with Rb, p27 and Cdh1 on and CycA,
+CycB off.

@@ -28,6 +28,33 @@ _ASSERT = re.compile(
 )
 MAX_COMBINATIONS = 300
 
+# Budget constraints (area H, registered 2026-09-27 before the code that honours them was written).
+# The unit is the perturbation: each knockout, each addition and each continuous knob moved off its
+# value in the program costs 1 unless the caller prices it (`Budget.costs`, e.g. bases or edits). The
+# budget is a hard limit on the answer, not a loss term: the answer never spends more than the limit,
+# and the result states what the spend bought and which evaluated candidates the limit excluded.
+BUDGET_UNIT = "perturbations"  # knockouts + additions + knobs moved; per-name costs override 1 each
+BUDGET_SPEC = (
+    "A design run with a budget returns an answer whose spend is <= the limit, for every design and "
+    "every limit; candidates over the limit are still run once at the program's own knob values so the "
+    "result can name what the limit excluded and whether an excluded candidate had a lower loss than "
+    "the answer. No budget keeps the previous behaviour byte for byte."
+)
+BUDGET_FALSIFIER = (
+    "Any shipped design, any limit in 0..3: the reported answer spends more than the limit, or a "
+    "candidate the limit excluded is missing from the excluded list, or an excluded candidate with "
+    "a lower loss than the answer is not flagged."
+)
+# the known case, from an existing fixture: data/organisms/celegans/designs.bio, design
+# two_intestinal_founders, cites Lin et al. 1995 ("without POP-1, MS takes the E fate"), and
+# tests/test_design.py pins POP-1 as its unbudgeted answer at loss 0.
+BUDGET_KNOWN_CASE = {
+    "design": "data/organisms/celegans/designs.bio two_intestinal_founders",
+    "source": "Lin et al. 1995, cited in the design block; answer pinned by tests/test_design.py",
+    "limit 1": "answer -POP-1, solved, spend 1",
+    "limit 0": "answer wild type, not solved, spend 0; -POP-1 listed as excluded with loss 0 < the answer's",
+}
+
 
 @dataclass(slots=True)
 class Knob:
