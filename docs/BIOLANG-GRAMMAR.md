@@ -34,6 +34,7 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 | `basal` | `number` | basal transcription rate |
 | `produces` | `Id, Id` | proteins this gene produces (one `produces` rule each) |
 | `location` | `Id` | v0.4: the compartment where it is read |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
 
 May contain `transcript` blocks.
 
@@ -54,6 +55,7 @@ May contain `transcript` blocks.
 | `pathways` | `Id, Id` | Reactome pathway ids |
 | `interactions` | `Id, Id` | interaction partners |
 | `structures` | `Id, Id` | PDB ids or AF- AlphaFold ids |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
 
 ### `region`
 
@@ -112,6 +114,7 @@ May contain `transcript` blocks.
 | `rate` | `number /unit` | rate with unit |
 | `when` | `k = v, ...` | guards |
 | `effect` | `var op number [unit]` | repeatable; op in += -= *= = |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
 
 ### `transcript`
 
@@ -277,6 +280,9 @@ May contain `transcript` blocks.
 | `locks` | `cell_type` | what can no longer change |
 | `inherit` | `daughters | no` | the lock passes to the daughters |
 | `release` | `never` | only never is implemented |
+| `maintain` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
+| `excludes` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
+| `hysteresis` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
 
 ### `order`
 
@@ -353,6 +359,7 @@ May contain `transcript` blocks.
 | `fates` | `first | last` | Body: one fate per decision point by precedence (default), or the last match (legacy) |
 | `allocation` | `competitive | proportional | priority | optimise` | shared capacities |
 | `seed` | `integer` |  |
+| `recheck` | `crossings | none` | a cell decides again when a read it names crosses a threshold |
 
 ## BioIR types
 

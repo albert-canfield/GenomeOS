@@ -28,6 +28,7 @@ BLOCKS: dict[str, dict] = {
             "basal": ("number", "basal transcription rate"),
             "produces": ("Id, Id", "proteins this gene produces (one `produces` rule each)"),
             "location": ("Id", "v0.4: the compartment where it is read"),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
         },
         "nested": "transcript",
     },
@@ -49,6 +50,7 @@ BLOCKS: dict[str, dict] = {
             "pathways": ("Id, Id", "Reactome pathway ids"),
             "interactions": ("Id, Id", "interaction partners"),
             "structures": ("Id, Id", "PDB ids or AF- AlphaFold ids"),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
         },
     },
     "region": {
@@ -103,6 +105,7 @@ BLOCKS: dict[str, dict] = {
             "rate": ("number /unit", "rate with unit"),
             "when": ("k = v, ...", "guards"),
             "effect": ("var op number [unit]", "repeatable; op in += -= *= ="),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
         },
     },
     "organism": {
@@ -235,6 +238,9 @@ BLOCKS: dict[str, dict] = {
             "locks": ("cell_type", "what can no longer change"),
             "inherit": ("daughters | no", "the lock passes to the daughters"),
             "release": ("never", "only never is implemented"),
+            "maintain": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
+            "excludes": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
+            "hysteresis": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
         },
     },
     "design": {
@@ -313,6 +319,7 @@ BLOCKS: dict[str, dict] = {
             ),
             "allocation": ("competitive | proportional | priority | optimise", "shared capacities"),
             "seed": ("integer", ""),
+            "recheck": ("crossings | none", "a cell decides again when a read it names crosses a threshold"),
         },
     },
 }
