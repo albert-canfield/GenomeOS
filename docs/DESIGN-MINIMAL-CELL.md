@@ -131,3 +131,41 @@ mammalian cell cycle (`data/models/mammalian_cell_cycle.bnet`, pinned by
 `tests/test_boolean.py`): from CycD on, the unperturbed network cycles, and
 CycD held at zero rests in a fixed point with Rb, p27 and Cdh1 on and CycA,
 CycB off.
+
+## What the two items do now, and what they cannot tell you (2026-09-28)
+
+Both items above are built and tested against the registration:
+`tests/test_design_budget.py` (11 tests) and `tests/test_network_knockout.py`
+(9 tests). Both known cases hold as registered — `two_intestinal_founders`
+answers -POP-1 at limit 1 and the wild type at limit 0 with -POP-1 named as
+excluded at loss 0, and CycD held at zero turns the Fauré cycle into the G1
+fixed point with Rb, p27 and Cdh1 on, CycA, CycE and CycB off. The negatives
+are the part worth reading.
+
+**A hard limit hides the fix rather than pricing it.** At limit 0 the answer to
+`two_intestinal_founders` is the wild type at loss 0.5, and the only trace of
+the perturbation that would have solved it is the excluded list
+(`limit_cost_the_target`). That is what "a limit, not a loss term" means, and a
+caller who sets a limit below the cheapest fix gets an answer that looks like a
+failed search unless they read the budget report.
+
+**The chance rank is coarse, and on a small network it is nearly uninformative.**
+With one node knocked out in a 10-node model there are nine matched knockouts,
+so every p-value is a multiple of 0.1 and the strongest possible single-node
+knockout still reads p = 0.1: the floor, not a small number. Cutting one edge
+of the three-gene ring destroys the oscillation and still reads p = 1.0,
+because every other edge of a ring does the same. The control answers "is this
+change unusual among knockouts of this size", and on a small network the honest
+answer is usually no.
+
+**A clamp in the GRN runtime does not hold a species at zero.**
+`NetworkRuntime.run(clamp=...)` re-applies the clamped value only between whole
+steps, so inside the Runge-Kutta stages a clamped mRNA still takes its basal and
+regulated rate and its protein is translated from those stages. Measured on the
+three-gene ring: clamping `a.mRNA` to 0 left protein A at 1.87 instead of 0,
+about a tenth of its unperturbed 19.2 — a knockdown, not a knockout. A network
+node knockout therefore zeroes what makes the species (a gene's basal and max
+rate, a protein's `produces` rules) instead of clamping it, which holds it at
+exactly zero at every stage. Existing callers that clamp an external signal to
+a non-zero level carry the smaller version of the same error; nothing in area H
+depends on it, and it is not fixed here.
