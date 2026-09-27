@@ -225,6 +225,8 @@ class Pair:
     features: dict[str, float] = field(default_factory=dict)
     covered: bool = False
     contact: dict[str, Any] | None = None
+    weight: float = 1.0  # the benchmark's probability that the pair's effect is direct
+    category: str = ""  # the benchmark's elementChromatinCategory of the tested element
 
     @property
     def element(self) -> tuple[str, str, int, int]:
@@ -243,6 +245,14 @@ def fetch(name: str, knowledge: Path = KNOWLEDGE) -> Path:
         with urllib.request.urlopen(BASE_URL + name, timeout=120) as r:
             p.write_bytes(r.read())
     return p
+
+
+def _weight(value: str | None) -> float:
+    """The benchmark's direct-effect weight of a pair; 1 where the column is absent or empty."""
+    try:
+        return float(value) if value not in (None, "", "NA") else 1.0
+    except ValueError:
+        return 1.0
 
 
 def parse(lines: Any) -> list[Pair]:
@@ -264,6 +274,8 @@ def parse(lines: Any) -> list[Pair]:
                 h3k27ac=float(r["H3K27ac.RPM"] or 0),
                 regulated=r["Regulated"] == "TRUE",
                 tss=int(r["startTSS"]) if r.get("startTSS") else None,
+                weight=_weight(r.get("direct_vs_indirect_negative")),
+                category=r.get("elementChromatinCategory") or "",
             )
         )
     return out
@@ -1059,5 +1071,382 @@ def score_contact(
                 "an element and its TSS inside one 5 kb bin share the diagonal cell of the matrix, which "
                 "is the measured self-contact of that bin, not a contact between two places"
             ),
+        },
+    }
+
+
+# --- the published baseline on the same pairs, and the coverage-matched arm (PREREGISTERED_PUBLISHED) --
+SECOND_CELL_COST = {
+    "HCT116": {"tracks": "RNA-seq x3, EFO:0002824", "pairs": 396, "regulated": 34, "covered": 363},
+    "WTC11": {"tracks": "RNA-seq x3, EFO:0009747", "pairs": 1921, "regulated": 15, "covered": 1616},
+    "Jurkat": {"tracks": "RNA-seq x1, CLO:0007045", "pairs": 75, "regulated": 7, "covered": 64},
+}
+REQUEST_BUDGET = 20
+MATCH_DRAWS = 1_000
+
+
+def benchmark_auprc(
+    scores: list[float], labels: list[bool], weights: list[float] | None = None
+) -> float | None:
+    """AUPRC by the ENCODE benchmark's own estimator, optionally with case weights.
+
+    yardstick's pr_curve, one point per distinct score from the highest down, with the first row
+    (recall 0) dropped as the pipeline does, then the last point dropped (the pipeline's recall-100%
+    endpoint), then the trapezoid over recall. Checked against the published figure for distance to
+    TSS on both files before any model was scored with it (see PUBLISHED).
+    """
+    w = weights or [1.0] * len(labels)
+    total = sum(x for x, y in zip(w, labels, strict=True) if y)
+    if not total or all(labels):
+        return None
+    order = sorted(range(len(scores)), key=lambda i: -scores[i])
+    tp = fp = 0.0
+    points: list[tuple[float, float]] = []
+    i = 0
+    while i < len(order):
+        s = scores[order[i]]
+        while i < len(order) and scores[order[i]] == s:
+            j = order[i]
+            if labels[j]:
+                tp += w[j]
+            else:
+                fp += w[j]
+            i += 1
+        points.append((tp / total, tp / (tp + fp) if tp + fp else 1.0))
+    points = points[:-1]
+    return sum((b[0] - a[0]) * (a[1] + b[1]) / 2 for a, b in zip(points, points[1:], strict=False))
+
+
+def weighted_gain(
+    a: list[float], b: list[float], pairs: list[Pair], weighted: bool, seed: int = 0, n: int = BOOTSTRAPS
+) -> dict[str, Any]:
+    """Benchmark-estimator AUPRC of `a` minus `b`, 95% interval from resampling whole chromosomes."""
+    by_chrom: dict[str, list[int]] = defaultdict(list)
+    for i, p in enumerate(pairs):
+        by_chrom[p.chrom].append(i)
+    chroms = sorted(by_chrom)
+    labels = [p.regulated for p in pairs]
+    w = [p.weight if weighted else 1.0 for p in pairs]
+
+    def diff(idx: list[int]) -> float:
+        lab, ww = [labels[i] for i in idx], [w[i] for i in idx]
+        return (benchmark_auprc([a[i] for i in idx], lab, ww) or 0) - (
+            benchmark_auprc([b[i] for i in idx], lab, ww) or 0
+        )
+
+    point = diff(list(range(len(pairs))))
+    rng = random.Random(seed)
+    diffs = []
+    for _ in range(n):
+        idx = [i for c in (rng.choice(chroms) for _ in chroms) for i in by_chrom[c]]
+        if any(labels[i] for i in idx) and not all(labels[i] for i in idx):
+            diffs.append(diff(idx))
+    diffs.sort()
+    ci = [
+        round(diffs[int(0.025 * len(diffs))], 4),
+        round(diffs[min(len(diffs) - 1, int(0.975 * len(diffs)))], 4),
+    ]
+    return {"gain": round(point, 4), "ci95": ci if diffs else None, "resamples": len(diffs)}
+
+
+def band(value: float, published: tuple[float, float, float]) -> str:
+    """Where a figure sits against a published figure's 95% interval."""
+    _, lo, hi = published
+    return (
+        "above the published interval"
+        if value > hi
+        else ("below the published interval" if value < lo else "inside the published interval")
+    )
+
+
+def bench_metrics(scores: list[float], pairs: list[Pair], weighted: bool) -> dict[str, Any]:
+    labels = [p.regulated for p in pairs]
+    w = [p.weight for p in pairs] if weighted else None
+    v = benchmark_auprc(scores, labels, w)
+    return {
+        "pairs": len(pairs),
+        "positives": sum(labels),
+        "weighted_positives": round(sum(p.weight for p in pairs if p.regulated), 2) if weighted else None,
+        "auprc": None if v is None else round(v, 4),
+    }
+
+
+def coverage_arms(
+    heldout_k562: list[Pair], training: list[Pair], weights: dict[str, list[float]], seed: int = 0
+) -> dict[str, Any]:
+    """The three registered arms for the held-out K562 gain; the headline's estimator (average precision)."""
+    with_d, without = FEATURES["activity + distance + deletion"], FEATURES["activity + distance"]
+
+    def gain_on(rows: list[Pair]) -> float:
+        lab = [p.regulated for p in rows]
+        a = logistic_score(weights["activity + distance + deletion"], matrix(rows, with_d))
+        b = logistic_score(weights["activity + distance"], matrix(rows, without))
+        return (average_precision(a, lab) or 0) - (average_precision(b, lab) or 0)
+
+    rows = heldout_k562
+    s_with = logistic_score(weights["activity + distance + deletion"], matrix(rows, with_d))
+    s_without = logistic_score(weights["activity + distance"], matrix(rows, without))
+    arm1 = {
+        "pairs": len(rows),
+        "positives": sum(p.regulated for p in rows),
+        "uncovered_pairs": sum(not p.covered for p in rows),
+        **gain_interval(s_with, s_without, rows),
+    }
+
+    covered = [p for p in rows if p.covered]
+    reg_all = [p for p in rows if p.regulated]
+    neg_all = [p for p in rows if not p.regulated]
+    neg_rate = sum(p.covered for p in neg_all) / len(neg_all)
+    reg_cov = [p for p in covered if p.regulated]
+    neg_cov = [p for p in covered if not p.regulated]
+    keep = round(neg_rate * len(reg_all))
+    rng = random.Random(seed)
+    gains = sorted(gain_on(neg_cov + rng.sample(reg_cov, keep)) for _ in range(MATCH_DRAWS))
+    arm2 = {
+        "regulated_coverage_before": round(len(reg_cov) / len(reg_all), 4),
+        "non_regulated_coverage": round(neg_rate, 4),
+        "regulated_kept": keep,
+        "regulated_covered": len(reg_cov),
+        "draws": MATCH_DRAWS,
+        "median_gain": round(gains[len(gains) // 2], 4),
+        "range": [round(gains[0], 4), round(gains[-1], 4)],
+        "share_above_zero": round(sum(g > 0 for g in gains) / len(gains), 4),
+    }
+
+    control_cols = ("log_distance", "log_activity", "activity_over_distance", "covered")
+    w_ctrl = logistic_fit(matrix(training, control_cols), [p.regulated for p in training])
+    w_base = logistic_fit(matrix(training, without), [p.regulated for p in training])
+    s_ctrl = logistic_score(w_ctrl, matrix(rows, control_cols))
+    s_base = logistic_score(w_base, matrix(rows, without))
+    arm3 = {
+        "model": "activity + distance + covered (fitted on all training pairs)",
+        "against": "activity + distance (fitted on all training pairs)",
+        **gain_interval(s_ctrl, s_base, rows),
+    }
+    ci = arm1["ci95"]
+    invariant = bool(ci and ci[0] > 0) and arm2["share_above_zero"] >= 0.95 and arm3["gain"] < arm1["gain"]
+    return {
+        "arm1_all_pairs": arm1,
+        "arm2_coverage_matched": arm2,
+        "arm3_coverage_indicator_control": arm3,
+        "invariant_to_coverage": invariant,
+    }
+
+
+def score_published(
+    training: list[Pair],
+    heldout: list[Pair],
+    table: DeletionTable,
+    cache: ElementCache | None = None,
+) -> dict[str, Any]:
+    """PREREGISTERED_PUBLISHED: the frozen model on the published pair sets, and the coverage arms."""
+    annotate(training + heldout, table, cache)
+    for p in training + heldout:
+        p.features["covered"] = float(p.covered)
+    train = [p for p in training if p.covered]
+    weights = {
+        name: logistic_fit(matrix(train, cols), [p.regulated for p in train])
+        for name, cols in FEATURES.items()
+    }
+
+    raw_distance = {
+        "training_unweighted": round(
+            benchmark_auprc([-abs(p.distance) for p in training], [p.regulated for p in training]) or 0, 4
+        ),
+        "heldout_weighted": round(
+            benchmark_auprc(
+                [-abs(p.distance) for p in heldout],
+                [p.regulated for p in heldout],
+                [p.weight for p in heldout],
+            )
+            or 0,
+            4,
+        ),
+        "published": {
+            "training": PUBLISHED["training"]["Distance to TSS"][0],
+            "heldout": PUBLISHED["heldout"]["Distance to TSS"][0],
+        },
+    }
+
+    # 1. training, hold-one-chromosome-out over all 10,356 pairs, fitted on the covered pairs elsewhere
+    loco: dict[str, list[float]] = {name: [0.0] * len(training) for name in FEATURES}
+    for c in sorted({p.chrom for p in training}):
+        fit_rows = [p for p in train if p.chrom != c]
+        idx = [i for i, p in enumerate(training) if p.chrom == c]
+        for name, cols in FEATURES.items():
+            w = logistic_fit(matrix(fit_rows, cols), [p.regulated for p in fit_rows])
+            for i, v in zip(idx, logistic_score(w, matrix([training[i] for i in idx], cols)), strict=True):
+                loco[name][i] = v
+    train_models = {name: bench_metrics(s, training, weighted=False) for name, s in loco.items()}
+    ours_train = train_models["activity + distance + deletion"]["auprc"] or 0.0
+    training_block = {
+        "models": train_models,
+        "deletion_gain": weighted_gain(
+            loco["activity + distance + deletion"], loco["activity + distance"], training, weighted=False
+        ),
+        "published": PUBLISHED["training"],
+        "against_encode_re2g": band(ours_train, PUBLISHED["training"]["ENCODE-rE2G"]),
+        "against_encode_re2g_extended": band(ours_train, PUBLISHED["training"]["ENCODE-rE2G_Extended"]),
+        "baseline_against_abc": band(
+            train_models["activity + distance"]["auprc"] or 0.0,
+            PUBLISHED["training"]["ABC_A=DNase, C=Average ENCODE Hi-C"],
+        ),
+    }
+
+    # 2. held-out, all 4,378 pairs pooled, weighted, frozen weights
+    s = {name: logistic_score(weights[name], matrix(heldout, cols)) for name, cols in FEATURES.items()}
+    pooled = {name: bench_metrics(v, heldout, weighted=True) for name, v in s.items()}
+    ours_held = pooled["activity + distance + deletion"]["auprc"] or 0.0
+    per_cell = {}
+    for cell in sorted({p.cell for p in heldout}):
+        idx = [i for i, p in enumerate(heldout) if p.cell == cell]
+        rows = [heldout[i] for i in idx]
+        if not any(p.regulated for p in rows):
+            continue
+        per_cell[cell] = {
+            "models": {
+                name: bench_metrics([v[i] for i in idx], rows, weighted=True) for name, v in s.items()
+            },
+            "deletion_gain": weighted_gain(
+                [s["activity + distance + deletion"][i] for i in idx],
+                [s["activity + distance"][i] for i in idx],
+                rows,
+                weighted=True,
+            ),
+            "deletion_available": cell in MODEL_CELLS,
+        }
+    heldout_block = {
+        "models": pooled,
+        "deletion_gain": weighted_gain(
+            s["activity + distance + deletion"], s["activity + distance"], heldout, weighted=True
+        ),
+        "pairs_without_a_deletion_value": sum(p.cell not in MODEL_CELLS for p in heldout),
+        "published": PUBLISHED["heldout"],
+        "against_encode_re2g": band(ours_held, PUBLISHED["heldout"]["ENCODE-rE2G"]),
+        "baseline_against_abc": band(
+            pooled["activity + distance"]["auprc"] or 0.0,
+            PUBLISHED["heldout"]["ABC_A=DNase, C=Average ENCODE Hi-C"],
+        ),
+        "per_cell_type_weighted": per_cell,
+    }
+
+    # 3. the coverage arms on held-out K562
+    arms = coverage_arms([p for p in heldout if p.cell == "K562"], training, weights)
+
+    # 5, NOT registered: found after the registered numbers were read (see POSITIVE_FILTER)
+    diagnostic = dnase_only_diagnostic(training, heldout)
+
+    # 4. the second cell type, costed from the join itself, not bought
+    cost: dict[str, Any] = {}
+    for cell in SECOND_CELL_COST:
+        ids = {e["id"] for p in heldout if p.cell == cell for e in table.overlapping(p.chrom, p.start, p.end)}
+        cost[cell] = {**SECOND_CELL_COST[cell], "requests_frozen_feature": len(ids)}
+    return {
+        "evidence": EVIDENCE,
+        "preregistered": PREREGISTERED_PUBLISHED,
+        "published_source": PUBLISHED_SOURCE,
+        "estimator_check_raw_distance": raw_distance,
+        "training_published_split": training_block,
+        "heldout_published_pairs": heldout_block,
+        "coverage_arms_k562_heldout": arms,
+        "second_cell_type": {
+            "cost": cost,
+            "budget": REQUEST_BUDGET,
+            "run": False,
+            "why": (
+                "HCT116 needs more deletion requests than the lane's budget; costed and handed to "
+                "the coordinator"
+            ),
+        },
+        "post_hoc_positive_filter": {
+            "registered": False,
+            "finding": POSITIVE_FILTER,
+            "chromatin_category_by_label": chromatin_by_label(heldout),
+            "dnase_only_diagnostic": diagnostic,
+        },
+        "alphagenome_requests": 0,
+    }
+
+
+#: Found on 2026-09-27 AFTER the registered held-out numbers were read, and therefore not part of the
+#: registration: the held-out file's positives were filtered on chromatin at the tested element
+#: (Gschwind et al. 2026, Methods: "filters based on effect size and chromatin state"), so every one
+#: of its 190 positives lies in an H3K27ac element while 1,438 of its 4,188 negatives do not. This
+#: module's activity term is sqrt(DNase x H3K27ac) read from the same file, so on the held-out set
+#: it is partly reading the rule that made a pair positive. ENCODE-rE2G's held-out figure is its
+#: DNase-only model, which does not read H3K27ac. The registered held-out band is therefore not a
+#: fair comparison in this module's favour, and the diagnostic below re-fits both models with DNase
+#: alone, as the published model has it. It is labelled post hoc everywhere it is quoted.
+POSITIVE_FILTER = (
+    "held-out positives were selected on H3K27ac at the element; this module's activity reads H3K27ac; "
+    "ENCODE-rE2G's held-out model reads DNase only, so the registered held-out band flatters this module"
+)
+DNASE_FEATURES = {
+    "dnase + distance": ("log_distance", "log_dnase", "dnase_over_distance"),
+    "dnase + distance + deletion": (
+        "log_distance",
+        "log_dnase",
+        "dnase_over_distance",
+        "top_target",
+        "deletion_drop",
+    ),
+}
+
+
+def chromatin_by_label(pairs: list[Pair]) -> dict[str, Any]:
+    """The benchmark's chromatin category of the tested element, counted per label."""
+    out: dict[str, Any] = {}
+    for label, flag in (("regulated", True), ("not regulated", False)):
+        counts: dict[str, int] = defaultdict(int)
+        for p in pairs:
+            if p.regulated is flag:
+                counts[p.category or "unknown"] += 1
+        out[label] = dict(sorted(counts.items()))
+    return out
+
+
+def dnase_only_diagnostic(training: list[Pair], heldout: list[Pair]) -> dict[str, Any]:
+    """Post hoc: the same two models with DNase in place of sqrt(DNase x H3K27ac). Pairs already annotated."""
+    for p in training + heldout:
+        d = max(MIN_DISTANCE, p.distance)
+        p.features["log_dnase"] = math.log1p(max(p.dhs, 0.0))
+        p.features["dnase_over_distance"] = p.features["log_dnase"] - math.log(d)
+    train = [p for p in training if p.covered]
+    lab = [p.regulated for p in train]
+    weights = {n: logistic_fit(matrix(train, c), lab) for n, c in DNASE_FEATURES.items()}
+    loco: dict[str, list[float]] = {n: [0.0] * len(training) for n in DNASE_FEATURES}
+    for c in sorted({p.chrom for p in training}):
+        fit_rows = [p for p in train if p.chrom != c]
+        idx = [i for i, p in enumerate(training) if p.chrom == c]
+        for n, cols in DNASE_FEATURES.items():
+            w = logistic_fit(matrix(fit_rows, cols), [p.regulated for p in fit_rows])
+            for i, v in zip(idx, logistic_score(w, matrix([training[i] for i in idx], cols)), strict=True):
+                loco[n][i] = v
+    s = {n: logistic_score(weights[n], matrix(heldout, c)) for n, c in DNASE_FEATURES.items()}
+    k562 = [p for p in heldout if p.cell == "K562" and p.covered]
+    sk = {n: logistic_score(weights[n], matrix(k562, c)) for n, c in DNASE_FEATURES.items()}
+    with_d, without = "dnase + distance + deletion", "dnase + distance"
+    return {
+        "training_published_split": {
+            "models": {n: bench_metrics(v, training, weighted=False) for n, v in loco.items()},
+            "deletion_gain": weighted_gain(loco[with_d], loco[without], training, weighted=False),
+        },
+        "heldout_pooled_weighted": {
+            "models": {n: bench_metrics(v, heldout, weighted=True) for n, v in s.items()},
+            "deletion_gain": weighted_gain(s[with_d], s[without], heldout, weighted=True),
+            "against_encode_re2g": band(
+                benchmark_auprc(s[with_d], [p.regulated for p in heldout], [p.weight for p in heldout])
+                or 0.0,
+                PUBLISHED["heldout"]["ENCODE-rE2G"],
+            ),
+            "baseline_against_abc": band(
+                benchmark_auprc(s[without], [p.regulated for p in heldout], [p.weight for p in heldout])
+                or 0.0,
+                PUBLISHED["heldout"]["ABC_A=DNase, C=Average ENCODE Hi-C"],
+            ),
+        },
+        "heldout_k562_covered_headline_estimator": {
+            "models": {n: metrics(v, [p.regulated for p in k562]) for n, v in sk.items()},
+            "deletion_gain": gain_interval(sk[with_d], sk[without], k562),
         },
     }

@@ -406,3 +406,62 @@ def test_the_two_copies_of_the_line_search_are_one_rule():
     assert crispri.penalised_objective(rows, y, w, 1e-3) == tc.penalised_log_likelihood(
         rows, y, [0.0] * len(rows), w, 1e-3
     )
+
+
+# --- the published baseline on the same pairs (PREREGISTERED_PUBLISHED) --------------------------
+
+
+def test_benchmark_auprc_is_the_trapezoid_the_pipeline_draws():
+    # a perfect ranking: the curve holds precision 1 until the last positive, the endpoint dropped
+    assert crispri.benchmark_auprc([4, 3, 2, 1], [True, True, False, False]) == pytest.approx(0.5)
+    # a negative first: points (0,0), (0.5,0.5), (1,2/3), (1,0.5); the last is dropped, so the
+    # area is 0.5 x (0 + 0.5) / 2 + 0.5 x (0.5 + 2/3) / 2
+    v = crispri.benchmark_auprc([4, 3, 2, 1], [False, True, True, False])
+    assert v == pytest.approx(0.125 + 0.5 * (0.5 + 2 / 3) / 2)
+    # unit weights change nothing; a lighter leading negative raises the curve
+    labels = [False, True, True, False]
+    assert crispri.benchmark_auprc([4, 3, 2, 1], labels, [1.0] * 4) == pytest.approx(v)
+    assert crispri.benchmark_auprc([4, 3, 2, 1], labels, [0.5, 1.0, 1.0, 1.0]) > v
+    assert crispri.benchmark_auprc([1, 2], [False, False]) is None
+
+
+def test_the_weight_and_chromatin_columns_are_read_and_default_to_neutral():
+    header = HEADER.replace("\n", "\tdirect_vs_indirect_negative\telementChromatinCategory\n")
+    text = header + row("chr1", 100, 600, "A", True, 5000).replace("\n", "\t0.25\tHigh H3K27ac\n")
+    (p,) = crispri.parse(io.StringIO(text))
+    assert (p.weight, p.category) == (0.25, "High H3K27ac")
+    (q,) = crispri.parse(io.StringIO(HEADER + row("chr1", 100, 600, "A", True, 5000)))
+    assert (q.weight, q.category) == (1.0, "")
+
+
+def test_band_places_a_figure_against_a_published_interval():
+    pub = (0.556, 0.468, 0.631)
+    assert crispri.band(0.70, pub) == "above the published interval"
+    assert crispri.band(0.50, pub) == "inside the published interval"
+    assert crispri.band(0.40, pub) == "below the published interval"
+
+
+def test_the_registration_names_the_published_figures_and_the_second_cell_cost():
+    reg = crispri.PREREGISTERED_PUBLISHED
+    assert {"second_cell_type", "published_training", "published_heldout", "coverage_matched"} <= set(reg)
+    assert "705" in reg["second_cell_type"] and "not the frozen model" in reg["second_cell_type"]
+    assert crispri.PUBLISHED["heldout"]["ENCODE-rE2G"] == (0.5562, 0.4679, 0.6312)
+    assert crispri.PUBLISHED["training"]["Distance to TSS"][0] == 0.4359
+
+
+def test_score_published_runs_every_registered_arm(tmp_path):
+    training = pairs_for_score(tmp_path)
+    heldout = pairs_for_score(tmp_path)
+    for p in heldout[:4]:
+        p.cell = "HCT116"
+    result = crispri.score_published(training, heldout, crispri.DeletionTable(tmp_path))
+    assert result["alphagenome_requests"] == 0
+    assert result["training_published_split"]["models"]["distance"]["pairs"] == len(training)
+    held = result["heldout_published_pairs"]
+    assert held["pairs_without_a_deletion_value"] == 4
+    assert held["models"]["activity + distance + deletion"]["auprc"] is not None
+    arms = result["coverage_arms_k562_heldout"]
+    assert arms["arm2_coverage_matched"]["draws"] == crispri.MATCH_DRAWS
+    assert set(arms) >= {"arm1_all_pairs", "arm3_coverage_indicator_control", "invariant_to_coverage"}
+    assert result["second_cell_type"]["run"] is False
+    assert result["post_hoc_positive_filter"]["registered"] is False

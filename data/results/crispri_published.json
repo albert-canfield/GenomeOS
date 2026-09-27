@@ -1,0 +1,459 @@
+{
+  "result": "crispri_published",
+  "date": "2026-09-27",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: AlphaGenome deletion per element",
+  "preregistered": {
+    "written": "2026-09-27, before any model of this module was scored on the full pair sets, weighted, or on the coverage arms below. The model set is FEATURES, frozen; its weights are the ones score() fits on the covered K562 training pairs; nothing is refitted",
+    "second_cell_type": "AlphaGenome carries its own RNA-seq tracks for HCT116 (EFO:0002824, 3 tracks), Jurkat (CLO:0007045, 1) and WTC11 (EFO:0009747, 3), read from the model's output_metadata on 2026-09-27; no proxy is needed. The refusal is a fact about the sweep's cache, which kept four cell lines' values per gene. Only HCT116 can carry a result: 396 held-out pairs, 34 regulated, 363 on a deleted element (Jurkat 6 regulated covered, WTC11 14, GM12878 14). Scoring it with the frozen feature needs one deletion request per registry element overlapping a covered HCT116 pair: 705 (363 if the CRISPR element itself were deleted, which changes the feature and is not the frozen model). The lane's budget is 20, so HCT116 is registered here and NOT run. When bought: the same code path with HCT116 added to the cells kept per gene, weights unchanged; passes if the gain on the 363 covered HCT116 pairs is above zero; stated as replicated only if its chromosome-bootstrap interval excludes zero. A gain at or below zero means the result is a K562 result and must be described as one",
+    "published_training": "hold-one-chromosome-out on all 10,356 TRAINING pairs (fitted on the covered pairs of the other chromosomes, the frozen recipe; an uncovered pair carries deletion features of zero, the benchmark's minimum-score rule), unweighted AUPRC by the benchmark's estimator, set beside PUBLISHED['training']. Comparable pair set and split; NOT comparable in one respect that is stated with the number: this module's deletion features were chosen after reading the single predictors on these same pairs (ENCODE-rE2G's features were also chosen by sequential selection on this set, its Fig. 4c, so both carry a selection on the data)",
+    "published_heldout": "the frozen weights applied to all 4,378 HELDOUT pairs, pooled, weighted AUPRC by the benchmark's estimator, set beside PUBLISHED['heldout']. Expected handicap stated before the number: 2,392 of the 4,378 pairs (HCT116, Jurkat, WTC11) carry no deletion value, so the deletion can only act on the K562 and GM12878 pairs. Bands against ENCODE-rE2G's published interval [0.468, 0.631]: above 0.631 'higher than the published ENCODE-rE2G figure on the same pairs'; inside it 'in the range of ENCODE-rE2G'; below 0.468 'below ENCODE-rE2G: the gain is over a baseline weaker than the published state of the art'. 'activity + distance' is placed against ABC's [0.378, 0.541] by the same bands, which says whether the project's own baseline is weak. The K562-only weighted figure is reported as this module's alone: the source gives no per-cell-type held-out figure",
+    "coverage_matched": "held-out K562. Arm 1, all 1,918 pairs, uncovered ones with deletion features of zero: the gain with its chromosome-bootstrap interval. Arm 2, the covered pairs with the regulated arm thinned at random to the non-regulated arm's coverage rate, 1,000 draws: the median gain and the share of draws above zero. Arm 3, the control: 'activity + distance' plus a covered-or-not indicator in place of the deletion features, fitted on all training pairs and scored on all 1,918. The gain is 'invariant to coverage' only if arm 1's interval excludes zero, arm 2's share is at least 0.95, and arm 3's gain is below arm 1's; otherwise the headline must say 'on the pairs the sweep covered'"
+  },
+  "published_source": "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Table 3 (https://pmc.ncbi.nlm.nih.gov/articles/PMC13471189/)",
+  "estimator_check_raw_distance": {
+    "training_unweighted": 0.4359,
+    "heldout_weighted": 0.3631,
+    "published": {
+      "training": 0.4359,
+      "heldout": 0.3631
+    }
+  },
+  "training_published_split": {
+    "models": {
+      "distance": {
+        "pairs": 10356,
+        "positives": 471,
+        "weighted_positives": null,
+        "auprc": 0.4234
+      },
+      "activity + distance": {
+        "pairs": 10356,
+        "positives": 471,
+        "weighted_positives": null,
+        "auprc": 0.5068
+      },
+      "activity + distance + deletion": {
+        "pairs": 10356,
+        "positives": 471,
+        "weighted_positives": null,
+        "auprc": 0.7241
+      }
+    },
+    "deletion_gain": {
+      "gain": 0.2173,
+      "ci95": [
+        0.1768,
+        0.2606
+      ],
+      "resamples": 200
+    },
+    "published": {
+      "ENCODE-rE2G_Extended": [
+        0.7373,
+        0.6931,
+        0.775
+      ],
+      "ENCODE-rE2G": [
+        0.6622,
+        0.6156,
+        0.7059
+      ],
+      "ABC_A=DNase x H3K27ac, C=ENCODE Hi-C": [
+        0.6128,
+        0.558,
+        0.657
+      ],
+      "ABC_A=DNase, C=Average ENCODE Hi-C": [
+        0.5649,
+        0.5109,
+        0.6103
+      ],
+      "In element (DHS) & DNase RPM x distance (norm.)": [
+        0.5272,
+        0.4786,
+        0.5745
+      ],
+      "Distance to TSS": [
+        0.4359,
+        0.3873,
+        0.4824
+      ]
+    },
+    "against_encode_re2g": "above the published interval",
+    "against_encode_re2g_extended": "inside the published interval",
+    "baseline_against_abc": "below the published interval"
+  },
+  "heldout_published_pairs": {
+    "models": {
+      "distance": {
+        "pairs": 4378,
+        "positives": 190,
+        "weighted_positives": 157.39,
+        "auprc": 0.3631
+      },
+      "activity + distance": {
+        "pairs": 4378,
+        "positives": 190,
+        "weighted_positives": 157.39,
+        "auprc": 0.5674
+      },
+      "activity + distance + deletion": {
+        "pairs": 4378,
+        "positives": 190,
+        "weighted_positives": 157.39,
+        "auprc": 0.677
+      }
+    },
+    "deletion_gain": {
+      "gain": 0.1095,
+      "ci95": [
+        0.0607,
+        0.1741
+      ],
+      "resamples": 200
+    },
+    "pairs_without_a_deletion_value": 2392,
+    "published": {
+      "ENCODE-rE2G": [
+        0.5562,
+        0.4679,
+        0.6312
+      ],
+      "ABC_A=DNase, C=Average ENCODE Hi-C": [
+        0.4654,
+        0.3782,
+        0.5414
+      ],
+      "EPIraction": [
+        0.3827,
+        0.3025,
+        0.4558
+      ],
+      "Distance to TSS": [
+        0.3631,
+        0.2812,
+        0.4379
+      ]
+    },
+    "against_encode_re2g": "above the published interval",
+    "baseline_against_abc": "above the published interval",
+    "per_cell_type_weighted": {
+      "GM12878": {
+        "models": {
+          "distance": {
+            "pairs": 68,
+            "positives": 16,
+            "weighted_positives": 14.3,
+            "auprc": 0.8203
+          },
+          "activity + distance": {
+            "pairs": 68,
+            "positives": 16,
+            "weighted_positives": 14.3,
+            "auprc": 0.7848
+          },
+          "activity + distance + deletion": {
+            "pairs": 68,
+            "positives": 16,
+            "weighted_positives": 14.3,
+            "auprc": 0.7994
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.0146,
+          "ci95": [
+            -0.0941,
+            0.2052
+          ],
+          "resamples": 200
+        },
+        "deletion_available": true
+      },
+      "HCT116": {
+        "models": {
+          "distance": {
+            "pairs": 396,
+            "positives": 34,
+            "weighted_positives": 22.63,
+            "auprc": 0.3167
+          },
+          "activity + distance": {
+            "pairs": 396,
+            "positives": 34,
+            "weighted_positives": 22.63,
+            "auprc": 0.4946
+          },
+          "activity + distance + deletion": {
+            "pairs": 396,
+            "positives": 34,
+            "weighted_positives": 22.63,
+            "auprc": 0.495
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.0004,
+          "ci95": [
+            -0.0002,
+            0.004
+          ],
+          "resamples": 200
+        },
+        "deletion_available": false
+      },
+      "Jurkat": {
+        "models": {
+          "distance": {
+            "pairs": 75,
+            "positives": 7,
+            "weighted_positives": 6.29,
+            "auprc": 0.4465
+          },
+          "activity + distance": {
+            "pairs": 75,
+            "positives": 7,
+            "weighted_positives": 6.29,
+            "auprc": 0.5748
+          },
+          "activity + distance + deletion": {
+            "pairs": 75,
+            "positives": 7,
+            "weighted_positives": 6.29,
+            "auprc": 0.5786
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.0038,
+          "ci95": [
+            0.0,
+            0.0059
+          ],
+          "resamples": 200
+        },
+        "deletion_available": false
+      },
+      "K562": {
+        "models": {
+          "distance": {
+            "pairs": 1918,
+            "positives": 118,
+            "weighted_positives": 100.79,
+            "auprc": 0.4083
+          },
+          "activity + distance": {
+            "pairs": 1918,
+            "positives": 118,
+            "weighted_positives": 100.79,
+            "auprc": 0.5911
+          },
+          "activity + distance + deletion": {
+            "pairs": 1918,
+            "positives": 118,
+            "weighted_positives": 100.79,
+            "auprc": 0.7272
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.1361,
+          "ci95": [
+            0.0768,
+            0.2277
+          ],
+          "resamples": 200
+        },
+        "deletion_available": true
+      },
+      "WTC11": {
+        "models": {
+          "distance": {
+            "pairs": 1921,
+            "positives": 15,
+            "weighted_positives": 13.37,
+            "auprc": 0.4188
+          },
+          "activity + distance": {
+            "pairs": 1921,
+            "positives": 15,
+            "weighted_positives": 13.37,
+            "auprc": 0.5197
+          },
+          "activity + distance + deletion": {
+            "pairs": 1921,
+            "positives": 15,
+            "weighted_positives": 13.37,
+            "auprc": 0.5148
+          }
+        },
+        "deletion_gain": {
+          "gain": -0.0049,
+          "ci95": [
+            -0.0174,
+            0.0
+          ],
+          "resamples": 200
+        },
+        "deletion_available": false
+      }
+    }
+  },
+  "coverage_arms_k562_heldout": {
+    "arm1_all_pairs": {
+      "pairs": 1918,
+      "positives": 118,
+      "uncovered_pairs": 174,
+      "gain": 0.1361,
+      "ci95": [
+        0.081,
+        0.2248
+      ],
+      "resamples": 200
+    },
+    "arm2_coverage_matched": {
+      "regulated_coverage_before": 0.9661,
+      "non_regulated_coverage": 0.9056,
+      "regulated_kept": 107,
+      "regulated_covered": 114,
+      "draws": 1000,
+      "median_gain": 0.1449,
+      "range": [
+        0.124,
+        0.1601
+      ],
+      "share_above_zero": 1.0
+    },
+    "arm3_coverage_indicator_control": {
+      "model": "activity + distance + covered (fitted on all training pairs)",
+      "against": "activity + distance (fitted on all training pairs)",
+      "gain": 0.0008,
+      "ci95": [
+        -0.0009,
+        0.0031
+      ],
+      "resamples": 200
+    },
+    "invariant_to_coverage": true
+  },
+  "second_cell_type": {
+    "cost": {
+      "HCT116": {
+        "tracks": "RNA-seq x3, EFO:0002824",
+        "pairs": 396,
+        "regulated": 34,
+        "covered": 363,
+        "requests_frozen_feature": 705
+      },
+      "WTC11": {
+        "tracks": "RNA-seq x3, EFO:0009747",
+        "pairs": 1921,
+        "regulated": 15,
+        "covered": 1616,
+        "requests_frozen_feature": 614
+      },
+      "Jurkat": {
+        "tracks": "RNA-seq x1, CLO:0007045",
+        "pairs": 75,
+        "regulated": 7,
+        "covered": 64,
+        "requests_frozen_feature": 111
+      }
+    },
+    "budget": 20,
+    "run": false,
+    "why": "HCT116 needs more deletion requests than the lane's budget; costed and handed to the coordinator"
+  },
+  "post_hoc_positive_filter": {
+    "registered": false,
+    "finding": "held-out positives were selected on H3K27ac at the element; this module's activity reads H3K27ac; ENCODE-rE2G's held-out model reads DNase only, so the registered held-out band flatters this module",
+    "chromatin_category_by_label": {
+      "regulated": {
+        "H3K27ac": 52,
+        "High H3K27ac": 138
+      },
+      "not regulated": {
+        "CTCF element": 552,
+        "H3K27ac": 1750,
+        "H3K27me3 element": 297,
+        "High H3K27ac": 1000,
+        "No H3K27ac": 589
+      }
+    },
+    "dnase_only_diagnostic": {
+      "training_published_split": {
+        "models": {
+          "dnase + distance": {
+            "pairs": 10356,
+            "positives": 471,
+            "weighted_positives": null,
+            "auprc": 0.4958
+          },
+          "dnase + distance + deletion": {
+            "pairs": 10356,
+            "positives": 471,
+            "weighted_positives": null,
+            "auprc": 0.7201
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.2244,
+          "ci95": [
+            0.1819,
+            0.2676
+          ],
+          "resamples": 200
+        }
+      },
+      "heldout_pooled_weighted": {
+        "models": {
+          "dnase + distance": {
+            "pairs": 4378,
+            "positives": 190,
+            "weighted_positives": 157.39,
+            "auprc": 0.4757
+          },
+          "dnase + distance + deletion": {
+            "pairs": 4378,
+            "positives": 190,
+            "weighted_positives": 157.39,
+            "auprc": 0.6393
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.1636,
+          "ci95": [
+            0.1015,
+            0.2368
+          ],
+          "resamples": 200
+        },
+        "against_encode_re2g": "above the published interval",
+        "baseline_against_abc": "inside the published interval"
+      },
+      "heldout_k562_covered_headline_estimator": {
+        "models": {
+          "dnase + distance": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.5021,
+            "auroc": 0.8813
+          },
+          "dnase + distance + deletion": {
+            "pairs": 1744,
+            "positives": 114,
+            "baseline_precision": 0.0654,
+            "auprc": 0.6813,
+            "auroc": 0.9018
+          }
+        },
+        "deletion_gain": {
+          "gain": 0.1792,
+          "ci95": [
+            0.1023,
+            0.2867
+          ],
+          "resamples": 200
+        }
+      }
+    }
+  },
+  "alphagenome_requests": 0
+}

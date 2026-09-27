@@ -6564,6 +6564,115 @@ sweep covered".
 - HCT116 unrun: the result is **one cell type** and is described as such. GM12878 (14 regulated) is
   reported but carries no weight.
 
+## The result: the CRISPRi gain survives coverage and the published pair sets, the held-out comparison is flattered by a filter, and the result is still one cell type (2026-09-27, later)
+
+The registration above was committed first (fe61c36). The code is `crispri.score_published`, the
+script `scripts/crispri_published.py` (90 s), and the result `data/results/crispri_published.json`.
+**AlphaGenome requests: 0.** The deletion values are the sweep's own cache.
+
+### What goes first: three limits the numbers do not remove
+
+1. **The held-out comparison with ENCODE-rE2G flatters this module, for a reason the registration
+   did not foresee.** The held-out file's positives were selected on chromatin at the tested
+   element (Gschwind et al. 2026, Methods: "filters based on effect size and chromatin state").
+   All 190 positives sit in an `H3K27ac` or `High H3K27ac` element. Of the 4,188 negatives, 1,438
+   do not (552 CTCF, 297 H3K27me3, 589 no H3K27ac). This module's activity term is
+   sqrt(DNase × H3K27ac), read from the same file, so on the held-out set it partly reads the rule
+   that made a pair positive. The published held-out figure is ENCODE-rE2G's DNase-only model, which
+   does not read H3K27ac. The registered band (below) came out "above the published interval", and
+   **that wording may not be used.** A post hoc diagnostic, not registered and labelled so, refits
+   both models with DNase alone.
+2. **It is one cell type.** HCT116 is the only other held-out cell type with enough positives, and
+   AlphaGenome has its own HCT116 tracks, but the frozen feature costs 705 deletion requests against
+   a budget of 20. It was not run. GM12878's 14 regulated covered pairs give a weighted gain of
+   +0.015 (95% −0.094 to +0.205), which says nothing either way.
+3. **The idea is not new.** The AlphaGenome preprint (Avsec et al. 2025, bioRxiv
+   10.1101/2025.06.25.661532, Fig. 4j) already added an AlphaGenome input-gradient score to
+   ENCODE-rE2G-extended on this CRISPRi dataset. What is this project's own is the deletion form of
+   the feature and a held-out test frozen before scoring. No figure from that preprint is quoted here,
+   because none was read from the source.
+
+### 1. Training, the published pair set and split (the cleanest comparison)
+
+All 10,356 pairs, hold-one-chromosome-out, unweighted, scored by the benchmark's estimator:
+
+| model | AUPRC | published, same pairs |
+|---|---|---|
+| distance (this module) | 0.423 | distance to TSS 0.436 [0.387, 0.482] |
+| activity + distance | **0.507** | ABC (DNase, avg Hi-C) 0.565 [0.511, 0.610] → **below** |
+| activity + distance + deletion | **0.724** | ENCODE-rE2G 0.662 [0.616, 0.706] → above; ENCODE-rE2G Extended 0.737 [0.693, 0.775] → **inside** |
+
+Deletion gain +0.217 (95% +0.177 to +0.261). **This project's own baseline is weaker than
+published ABC.** It sits just under ABC's interval, level with the paper's simple DHS-and-DNase
+baselines (0.506 to 0.527). With the deletion, the frozen model reaches the range of the paper's
+best model. The caveat stays attached: the deletion features were chosen after reading the single
+predictors on these same pairs. ENCODE-rE2G's features were also selected on this set (its
+Fig. 4c), so neither figure is free of selection.
+
+### 2. Held-out, the published pairs and weighting
+
+All 4,378 pairs, five cell types pooled, weighted by direct-effect probability, frozen weights:
+
+| model | weighted AUPRC | registered band |
+|---|---|---|
+| distance | 0.363 (published 0.363) | — |
+| activity + distance | 0.567 | above ABC's [0.378, 0.541] |
+| activity + distance + deletion | 0.677 | above ENCODE-rE2G's [0.468, 0.631] |
+
+Deletion gain +0.110 (95% +0.061 to +0.174). This is lower than on K562 alone, as registered,
+because 2,392 pairs carry no deletion value. Per cell type (weighted; the deletion exists only for
+K562 and GM12878):
+
+| cell | pairs | positives (weighted) | activity + distance | + deletion | gain [95%] |
+|---|---|---|---|---|---|
+| K562 | 1,918 | 118 (100.8) | 0.591 | 0.727 | +0.136 [+0.077, +0.228] |
+| GM12878 | 68 | 16 (14.3) | 0.785 | 0.799 | +0.015 [−0.094, +0.205] |
+| HCT116 | 396 | 34 (22.6) | 0.495 | 0.495 | no deletion value |
+| WTC11 | 1,921 | 15 (13.4) | 0.520 | 0.515 | no deletion value |
+| Jurkat | 75 | 7 (6.3) | 0.575 | 0.579 | no deletion value |
+
+The baseline landing *above* ABC here but *below* it on training is the filter at work.
+
+**Post hoc, DNase in place of sqrt(DNase × H3K27ac)** (not registered; found after the numbers
+above were read):
+
+| | DNase + distance | + deletion | gain [95%] |
+|---|---|---|---|
+| training, all pairs, LOCO | 0.496 | 0.720 | +0.224 [+0.182, +0.268] |
+| held-out pooled, weighted | 0.476 (ABC 0.465: inside) | 0.639 (ENCODE-rE2G upper bound 0.631) | +0.164 [+0.102, +0.237] |
+| held-out K562 covered, headline estimator | 0.502 | 0.681 | +0.179 [+0.102, +0.287] |
+
+With H3K27ac taken out, the baseline falls onto ABC, the deletion's gain gets *larger*, not
+smaller, and the combined model lands just above ENCODE-rE2G's published interval. That is an
+unpaired comparison against a published interval, not a test, so the defensible phrase is **"in
+the range of the published ENCODE-rE2G model on the same pairs"**. It is not "exceeds".
+
+### 3. The coverage-matched arms, held-out K562
+
+| arm | result | bar | met |
+|---|---|---|---|
+| 1. all 1,918 pairs, 174 uncovered at zero | gain +0.136 [+0.081, +0.225] | interval above zero | yes |
+| 2. regulated arm thinned from 96.6% to 90.6% covered (107 of 114 kept), 1,000 draws | median +0.145, range +0.124 to +0.160, 100% above zero | ≥ 95% above zero | yes |
+| 3. control: a covered-or-not indicator in place of the deletion | gain +0.001 [−0.001, +0.003] | below arm 1 | yes |
+
+**The gain is invariant to coverage.** Being on a deleted element buys nothing (arm 3). The gain
+holds when the arms are matched (arm 2) and when uncovered pairs are counted (arm 1).
+
+### What the result may now be called
+
+- Allowed: "On the ENCODE CRISPRi benchmark, adding an AlphaGenome predicted-deletion feature to an
+  activity-and-distance model, frozen before the held-out pairs were scored, raises held-out K562
+  AUPRC from 0.55 to 0.69 (+0.14, 95% +0.08 to +0.23; 1,744 pairs, 114 regulated). The gain does
+  not depend on which pairs the sweep covered, and the combined model sits in the range of the
+  published ENCODE-rE2G model on the same pairs. Tested in one cell type."
+- Not allowed: "exceeds ENCODE-rE2G" (held-out band flattered by the H3K27ac filter; unpaired);
+  "generalises across cell types" (HCT116 unrun, GM12878 uninformative); "a strong baseline" (this
+  project's own activity baseline is below published ABC on training).
+- Open, and handed to the coordinator: HCT116 at 705 requests, the only purchase that could make it
+  two cell types.
+
+The outside-reader summary is `docs/CRISPRI-RESULT.md`.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
