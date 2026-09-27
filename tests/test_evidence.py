@@ -181,3 +181,30 @@ def test_a_single_kind_still_reports_its_own_mean() -> None:
 
     assert out["mean_confidence_by_evidence"] == {"curated": {"facts": 1, "mean": 0.9}}
     assert out["mean_confidence"] == 0.9
+
+
+def test_a_program_that_fails_to_parse_is_counted_and_the_command_fails(programs, monkeypatch, capsys):
+    """2026-09-27: a demo program with a syntax error took 21 facts out of `genomeos evidence`
+    (26,845 to 26,824) and the command said nothing. A failure is now named, counted and an error."""
+    from genomeos.cli import main
+
+    (programs / "data" / "demo" / "broken.bio").write_text("module broken\n\ngene {\n")
+    evidence._cached.cache_clear()
+    out = evidence.collect(programs)
+    assert [f["path"] for f in out["failed"]] == ["data/demo/broken.bio"]
+    assert out["failed"][0]["error"]
+    monkeypatch.chdir(programs)
+    assert main(["evidence"]) == 1
+    cap = capsys.readouterr()
+    assert "broken.bio did not parse" in cap.err and "1 program(s) failed to parse" in cap.err
+    assert "5 facts in 2 programs, 1 FAILED TO PARSE" in cap.out
+
+
+def test_a_clean_run_reports_no_failures_and_succeeds(programs, monkeypatch, capsys):
+    from genomeos.cli import main
+
+    assert evidence.collect(programs)["failed"] == []
+    monkeypatch.chdir(programs)
+    assert main(["evidence"]) == 0
+    cap = capsys.readouterr()
+    assert "FAILED" not in cap.out and "ERROR" not in cap.err

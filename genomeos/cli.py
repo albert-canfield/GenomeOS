@@ -4549,13 +4549,25 @@ def cmd_evidence(args: argparse.Namespace) -> int:
         compiled=getattr(args, "compiled", False),
     )
     rows, whole = out["rows"], out["whole"]
+    failed = out.get("failed", [])
+    # A program that fails to parse is an error, not a quiet shortfall: its facts (and those of every
+    # program importing it) are missing from every count below, so say how many and exit non-zero.
+    for f in failed:
+        print(f"genomeos evidence: ERROR {f['path']} did not parse: {f['error']}", file=sys.stderr)
+    if failed:
+        print(
+            f"genomeos evidence: ERROR {len(failed)} program(s) failed to parse; "
+            "their facts are missing from the totals",
+            file=sys.stderr,
+        )
     if args.csv:
         Path(args.csv).write_text(evidence.to_csv(rows))
         print(f"{len(rows):,} facts written to {args.csv}, weakest first")
-        return 0
+        return 1 if failed else 0
     s = out["summary"]
+    unparsed = f", {len(failed)} FAILED TO PARSE (facts missing)" if failed else ""
     print(
-        f"{whole['facts']:,} facts in {len(out['files'])} programs, "
+        f"{whole['facts']:,} facts in {len(out['files']) - len(failed)} programs{unparsed}, "
         f"mean confidence {whole['mean_confidence']}, {whole['weak']:,} at or below {out['weak_line']}"
     )
     print("evidence: " + ", ".join(f"{k} {v:,}" for k, v in whole["by_evidence"].items()))
@@ -4569,7 +4581,7 @@ def cmd_evidence(args: argparse.Namespace) -> int:
                 print(
                     f"  {f['mean_confidence']:.2f}  {f['facts']:>6,} facts  {f['weak']:>6,} weak  {f['path']}"
                 )
-        return 0
+        return 1 if failed else 0
     for r in rows[: args.top]:
         src = f"  [{r['source']}]" if r["source"] else ""
         print(
@@ -4577,7 +4589,7 @@ def cmd_evidence(args: argparse.Namespace) -> int:
         )
     if len(rows) > args.top:
         print(f"  … {len(rows) - args.top:,} more (--top N, or --csv FILE for all)")
-    return 0
+    return 1 if failed else 0
 
 
 def cmd_work(args: argparse.Namespace) -> int:

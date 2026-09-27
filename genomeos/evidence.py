@@ -305,9 +305,14 @@ def collect(
             or q in str(r["detail"]).lower()
         ]
     rows.sort(key=lambda r: (r["confidence"], r["path"], r["block"], r["label"]))
+    # A program that fails to parse states no facts, and neither does any program importing it. On
+    # 2026-09-27 one demo program with a syntax error took 21 facts out of the total (26,845 to
+    # 26,824) and nothing said so. The failures travel beside the rows so every caller can count them.
+    failed = [{"path": f["path"], "error": f["error"]} for f in files if f.get("error")]
     return {
         "rows": rows,
         "files": list(files),
+        "failed": failed,
         "summary": summarise(rows),
         "whole": summarise(list(all_rows)),
         "weak_line": WEAK,
