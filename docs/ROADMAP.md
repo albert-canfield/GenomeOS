@@ -19,7 +19,8 @@ Both genome-wide sweeps are finished: **961,227 enhancer elements deleted** in
 AlphaGenome across 24 chromosomes, and the **HPRC panel of 90 human genomes read on
 all 24** (1,925,587 storage units, 187,966 executor-ready). What those two sweeps
 established is smaller than what they were expected to: the node beats random
-boundaries by +2.88 points, no unknown tier can be ordered against another once the
+boundaries — by +2.9 points against a count-matched control and **+5.9 on 661 measured CRISPRi
+pairs**, the size depending on how the control is matched (+1.2 to +6.6; re-audited 2026-09-27) — no unknown tier can be ordered against another once the
 comparison is standardised, and **0.45% of the unknown space has ever been measured
 by any assay this project holds**. The experiment that would change that is designed
 and unrun: 284,001 oligos, controls matched in advance (§5 item 3b).
@@ -770,6 +771,42 @@ views); this row said "Still open" until 2026-09-27. There is now one definition
 identical on both fields. The verdict is the negative one: **a maintenance hazard and not a defect**,
 because both fields it feeds are write-only, and because the construction that makes `nodes_open`
 useless as a *count* is depth-invariant as a *membership*.
+- **The node containment claim, audited and then held against a measurement it had never met
+  (2026-09-27, lane-node, `05b71ae` audit and registration, `2b77663` measured arm, `f853fc6`,
+  `698d10d`, 0 requests).** The "+2.88 points over random boundaries" was quoted seven times across
+  three documents as settled shorthand, with no interval and **a baseline defined in no document**. It
+  is as many uniform positions as the caller has post-merge edges, matched on boundary count per
+  chromosome and on nothing else — **not on the 50 kb floor every real node passes**, so the control
+  contains short nodes the real set cannot, and is biased low by its own geometry. On the same 440,377
+  pairs, four defensible baselines give **+1.21, +2.90, +5.72 and +6.58**: a five-fold range, the
+  published figure the least matched, the sign positive under all four. The interval, by a paired
+  bootstrap over the 24 chromosomes because 440,377 pairs sit on about 20,000 nodes and are not
+  440,377 observations: **+2.90, 95% CI +2.03 to +3.81**, confirmed to a tenth of a point by a
+  node-cluster resample.
+  **Four of the claim's digits could not be reproduced from the files it cites.** +2.88 is a 3-dp
+  figure from one file minus a 4-dp figure from another; one of those files still carries a superseded
+  control (0.791, from the 113,399-element archive), against which the node *loses* by 3.7 points.
+  "18 of 24" counts chromosomes above **0.700, a threshold in no file, script or document**, and "sign
+  test one-sided p 0.011" is exactly that count's binomial; against the 0.725 the same sentence names,
+  it is **16 of 24, p 0.076 — not significant**. And the "87% of matched random windows" quoted beside
+  the 63.7% is 52 of 60 windows in the twelve-locus panel, scored by a different layer, and was never a
+  control for that rate. The denominators, by contrast, reconcile exactly: 961,227 rows → 612,323 name
+  a gene (the 63.7%) → 593,765 in the annotation → 440,377 protein-coding, the same set as
+  ATTRIBUTION.md's "compiled elements that state a confidence".
+  **Then held against the 661 CRISPRi-measured regulated pairs already on disk, pre-registered with its
+  power arithmetic**: at n = 594 the modelled +2.90 is 1.58 sigma, the minimum detectable excess 4.56
+  points, and "undecidable" was registered as the most likely verdict. **Measured excess: +5.89, 95% CI
+  +3.18 to +8.46**, larger than modelled under all four baselines. The registration's likeliest outcome
+  was wrong, in the direction it had registered as plausible. Not clean, and recorded as such: 89.1% of
+  the pairs are K562, and an unpaired node-cluster resample (+0.90 to +10.49) clears zero but not +2.9.
+  **Where the increase comes from is the finding.** The measured share (0.7579) sits within 0.4 points
+  of the modelled one; the whole difference is in the *control* (0.699 against 0.7252), because
+  CRISPRi pairs are long-range and a random boundary cuts a long link far more often than a short one.
+  So the claim the data supports is stronger than the one that was quoted, and differently worded:
+  **nodes hold together enhancer-gene links at distances where randomly placed boundaries would
+  separate them.** About 1,500 measured pairs would give 80% power at +2.9 points. NODES-READER-WRITER.md,
+  the random-boundary audit (2026-09-27), which is the first time that document mentions the reading
+  at all.
 - **Direction, held against measured perturbations, and it passes (2026-09-22,
   lane-crispri).** Every enhancer-gene call this project makes carries an
   `action`, `activates` or `represses`, and that word is only the sign of a
@@ -2603,7 +2640,13 @@ useless as a *count* is depth-invariant as a *membership*.
   their node in AlphaGenome, 778,780 requests, one scorer at a time behind the key
   lock. Genome-wide the node beats as many randomly placed boundaries: **0.754 against
   0.725, +2.88 points over 440,377 coding-target elements, ahead on 18 of 24
-  chromosomes (sign test one-sided p 0.011)**. Real and small; the headline 90.2% of
+  chromosomes (sign test one-sided p 0.011)**. *(Re-audited 2026-09-27, NODES-READER-WRITER.md: the
+  figure is **+2.90, 95% CI +2.03 to +3.81**, on a control matched on boundary count alone; across
+  four defensible baselines it runs **+1.2 to +6.6**, the published one the least matched. "18 of 24"
+  counts chromosomes above 0.700, a threshold in no file; against the 0.725 this sentence names it is
+  **16 of 24, p 0.076**, and 19 of 24 against each chromosome's own control. Held against 661
+  measured CRISPRi pairs the excess is **+5.89, CI +3.18 to +8.46** — the sign stands on measured data;
+  the magnitude above was never identified.)* Real and small; the headline 90.2% of
   the 4,800-element sample was mostly what random boundaries give too. The large
   chromosomes pulled every rate down (inside the domain 0.772 at 18 chromosomes to
   0.754; agreement with nearest TSS 0.620 to 0.611).
@@ -3304,7 +3347,7 @@ or the CLI; results land in `data/results` and are committed.
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 330,018 edges after the 2,985 `modifies` edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
 | Modifiable sites (post-translational state) | genome-wide (2026-09-11) | done | 96,362 sites on 13,083 proteins, 352 named writers; `ptm_genome_wide` |
 | Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; 90.2% of those sit inside the element's CTCF node, against 79.1% for random boundaries on the full archive (qualified 2026-09-14) (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
-| All-elements deletion scoring (every ENCODE enhancer inside a node, AlphaGenome) | 24 of 24 (2026-09-16) | done, `scripts/enhancer_targets_all_chain.py` | 961,227 elements, 778,780 requests; 63.7% name a gene (matched random windows 87%); the node beats as many random boundaries by +2.88 points over 440,377 coding-target elements, ahead on 18 of 24 chromosomes. Summaries committed, element tables local and packed. See area I |
+| All-elements deletion scoring (every ENCODE enhancer inside a node, AlphaGenome) | 24 of 24 (2026-09-16) | done, `scripts/enhancer_targets_all_chain.py` | 961,227 elements, 778,780 requests; 63.7% name a gene (the "87%" once quoted beside it is 52 of 60 random windows in the twelve-locus panel, scored by a different layer, Wilson 75.8–93.1%, and is not a control for this rate); the node beats as many random boundaries by +2.9 points (95% CI +2.03 to +3.81) over 440,377 coding-target elements against a count-matched control, +1.2 to +6.6 across four baselines, and +5.89 on 661 measured CRISPRi pairs (re-audited 2026-09-27). Summaries committed, element tables local and packed. See area I |
 | Human panel (HPRC release 1, 90 assemblies, storage units and executor-ready values) | 23 of 24 (2026-09-16); chr2 unread | `scripts/human_panel.py`, one chromosome at a time | 1,786,068 storage units, 174,210 executor-ready (GTEx fine-mapped or MPRA allele pair); seven chromosomes fail a control, six of them on the neutral tier. chr2 (22.6 GB of alignment) needs about 20 GB free to start. See area I |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
@@ -4110,6 +4153,12 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.2 therapeutics benchmark** ◑ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. **2026-09-21 (`e21d34a`): 7/7 recovered, 7/7 routes, 7/7 defensible, the pinned mechanism-defect count down from 2 to 0, and the seventh case reached by an expression call rather than a DNA event.** The `cancer.*` libraries landed 2026-09-14 (`9c0e6ce`). Outstanding: **no scored case is driven by a copy number or a structural variant** — both routes have unit controls only — and the fusion candidate keeps a surface class its product may not have, blocked on a junction or orientation measurement this project does not hold and pinned as a failing-when-fixed test |
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (**284,001 oligos** over 878 blocks, 41,037 of the test arm from blocks no assay has touched; this said 312,129 until 2026-09-27, the first build's count before the orderability filter dropped 4,264 untouched windows, and 45,301 − 4,264 = 41,037 exactly) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
+
+**1.3's row above cites "node +2.88 points over random boundaries" as evidence that a clause was met.**
+Re-audited 2026-09-27 (area B's node containment row): **+2.90, 95% CI +2.03 to +3.81** on a control
+matched on boundary count only, +1.2 to +6.6 across four baselines, and **+5.89, CI +3.18 to +8.46, on
+661 measured CRISPRi pairs** — so the direction the clause relies on now stands on measurement, and the
+size quoted in the row does not. The row is left as written and read with this beside it.
 
 **Version and README, corrected 2026-09-27.** The 0.9 row above says "Version is 0.9.0 and the
 README states what that means", and both had been overtaken: `pyproject.toml` and

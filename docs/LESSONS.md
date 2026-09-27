@@ -229,7 +229,7 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
      alone) and observed-over-expected alone collapses to 0.083.
   What does add signal at the same task is the **perturbation**: the AlphaGenome deletion lifts
   held-out K562 AUPRC 0.550 to 0.633 over activity-over-distance, and the node's containment excess is
-  +2.88 points genome-wide, small but measured against random boundaries. The reading is not that
+  +2.88 points genome-wide, small but measured against random boundaries *(re-audited 2026-09-27: +2.90, CI +2.03 to +3.81, on a control matched on boundary count only; +1.2 to +6.6 across four baselines; and **+5.89, CI +3.18 to +8.46, on 661 measured CRISPRi pairs** — the direction survives measurement, the size was never identified)*. The reading is not that
   structure does not exist — it is measured, and it is real where it was measured — but that **at these
   distances structure is not the discriminating variable and perturbation is**. A fourth structural
   reading needs a reason why it would differ from these three, stated before it is run.
