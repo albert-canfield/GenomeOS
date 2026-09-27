@@ -6274,6 +6274,181 @@ Nothing below has been computed.
    must reproduce them to the digit; the new fields are added beside them. The 2026-09-13 section
    above is annotated in place.
 
+## The result: the window named no target the table had not, and the one count it raised it raised faster at random (2026-09-27, later)
+
+`unknown_scoring.run("chr21")` re-run with the response cache handed in (133.1 s against 32.7 s, the
+extra time being 17 chromosome archives decompressed for the syntax candidates, **0 AlphaGenome
+requests, nothing fetched**). Every pre-existing field computed from chr21's own tables reproduces
+**to the digit** — the ablation, all six stratified metrics, `mpra`, `vista`, every count in
+`coverage` — which is the control. Thirteen figures differ and all thirteen are in the two blocks
+that read *other* chromosomes' results: `syntax_candidates` (2 complete chromosomes on 2026-09-13,
+19 now) and `cost` (chr1 and chr20 finished in between). That confound was registered, and both
+readings of the candidates are computed in the same run so the cache's effect can be told from it.
+
+### The registered check: the compact table was not censoring, confirmed
+
+| | compact table | the window, same threshold | disagreements |
+|---|---|---|---|
+| elements naming a coding gene, chr21 | **5,174** of 12,139 | **5,174** of 12,139 | **0** |
+
+The same elements, not merely the same count. Ungated the window names one at 11,372 (93.7%), which
+is the threshold doing the work and not the table. **So reading the whole window cannot name a
+single target this module was not already naming**, and the naming rates of the 2026-09-13 section
+stand exactly as published.
+
+### The decider: what a named target means against matched random windows
+
+New, and on this instrument rather than borrowed from the locus benchmark: 22,200 windows, 50 per
+UNKNOWN block, of that block's length, placed uniformly at random inside the 41.6 Mb span of chr21's
+scored elements and rejected if they overlap any UNKNOWN block; 444 of 446 blocks drawable, the two
+that are not being 5.01 Mb and 2.35 Mb long; an element belongs to the window its midpoint falls in.
+Rates over the 285 blocks and 16,706 windows that carry at least one scored element.
+
+| block-level question | UNKNOWN blocks | matched random windows | difference |
+|---|---|---|---|
+| names a coding gene — **before and after, unchanged** | 140, **49.12%** | 10,908, **65.29%** | **−16.17 points** |
+| a coding gene and a cell line, from the named gene (before) | 89, 31.23% | 8,005, 47.92% | −16.69 points |
+| a coding gene and a cell line, from the whole window (after) | 97, **34.04%** | 8,524, **51.02%** | **−16.99 points** |
+
+Two things follow and they are the answer to the task.
+
+**The 1.3 clause is weaker than the borrowed 87% made it sound, not stronger.** On this instrument
+the unknown blocks name a coding target at 49.1% where length-matched random windows on the same
+chromosome name one at 65.3%. A named target at an unknown block is not merely unremarkable against
+chance, it is **16.2 points rarer than at random sequence of the same size** — because the unknown
+space is gene-poor by construction, which is the same confound the element-level strata correct for
+and which the block-level claim never had a control for at all.
+
+**The one count the window raised, it raised faster at random.** The cell line is the only
+block-level figure the window can move, and it moves it: 89 → 97 blocks with a target and a cell by
+the midpoint rule, 90 → 99 by `coverage`'s largest-overlap rule (regulatory 81 → 89, neutral 6 → 7,
+fossil 3 → 3, constrained_unknown 0 → 0, structural 0 → 0). At the matched random windows the same
+change is 8,005 → 8,524, and the gap against the control **widens** from −16.69 to −16.99 points.
+That is an inflation and it is named as one: the extra cell lines are a property of reading a 1 Mb
+window's worth of genes, not a property of unknown sequence, and any block count quoted off them
+must be quoted against the control beside it. The registration said this outcome was to be reported
+in those words, and it is.
+
+### What the change did buy: three comparisons that were conditioned on the gate
+
+**The gate selects the two arms unequally**, which is why this matters: 1,155 of the 2,334 elements
+over an unknown block clear `MIN_EFFECT` (49.5%) against 6,691 of the other 9,805 (68.2%). Every
+metric computed only on the movers was therefore conditioned on a variable that differs between the
+arms by 18.5 points.
+
+| per element, matched inside 443 shared strata | conditioned on the gate | over every element | |
+|---|---|---|---|
+| magnitude, unknown | 0.3091 (n 1,155) | **0.1815** (n 2,334) | |
+| magnitude, rest | 0.3384 (n 6,691) | **0.2440** (n 9,805) | |
+| difference | **−0.0294**, p 0.048 | **−0.0625**, p 0.0005 | registered to grow: **it did, 2.1×** |
+| cell lines of four, unknown | 0.4523 (movers) | 0.2677 (all) | |
+| cell lines of four, rest | 0.7962 (movers) | 0.6072 (all) | |
+| difference | −0.3439, p 0.0005 | −0.3395, p 0.0005 | barely moves |
+
+The magnitude result is the one that changes standing. Published, the unknown elements' effects were
+0.309 against 0.338 matched, a 0.029 gap at p 0.048 — a difference at the edge of its null, quoted
+over the 62% of elements the gate had kept. Over every element the sweep answered for, the gap is
+0.0625 at p 0.0005. The direction was always right and the size was **less than half of what it
+is**, because the gate was removing the sub-0.1 tail from half the unknown arm and a third of the
+rest. Raw, the share of elements acting in at least one cell line goes 3,260 of 7,846 movers to
+3,693 of all 12,139, and per element 15.8% → 17.9% over unknown blocks against 29.5% → 33.4%
+elsewhere — larger on the rest arm, which is the same inflation the control catches at block level.
+
+### The zero, and the measurement it was in
+
+`against_vista` took `max((r["abs_log2"] or 0.0 ...))`, so a VISTA element covered only by elements
+the gate had silenced was scored as a predicted change of **exactly zero** — a statement the sweep
+never made — and averaged into the module's only enhancer-level measured contrast.
+
+| VISTA on chr21 | published | over what the sweep predicted |
+|---|---|---|
+| mean max effect, 13 positives | 0.4259 | **0.4393** |
+| mean max effect, 6 negatives | 0.0953 | **0.1267** |
+| the contrast | 0.3306 | **0.3126** |
+| rows that had to be given a zero | 3 positives, 2 negatives | none |
+
+Registered to shrink, and it shrank, by 0.018. **One correction to the registration**: it said four
+of the six negatives were covered only by silenced elements. Two were; the other two have no scored
+element covering them at all, so `max_abs_log2` was `None` and `_mean` dropped them rather than
+zeroing them. The new `positives_scored_as_a_structural_zero` and
+`negatives_scored_as_a_structural_zero` fields are what told the two silences apart, which is the
+distinction that was missing in the first place. With 19 elements the note above it still holds:
+reported, not read.
+
+### The falsifier fired on lentiMPRA, and it is worth more than the fix
+
+The correlation against measured activity was computed on the 329 elements whose named gene cleared
+the gate. The window's strongest per-cell effect exists for every covered element, so the same
+correlation can be taken over all 445.
+
+| lentiMPRA, chr21 | n | signed effect vs activity | unsigned magnitude vs activity |
+|---|---|---|---|
+| K562, gated | 329 | 0.2208 (p 0.0005) | 0.1043 (p 0.057) |
+| K562, every covered element | **445** | **0.1885** (p 0.0005) | **0.0893** (p 0.060) |
+| HepG2, gated | 329 | 0.2391 (p 0.0005) | 0.1699 (p 0.002) |
+| HepG2, every covered element | **445** | **0.2095** (p 0.0005) | **0.2081** (p 0.0005) |
+
+Registered: fall in magnitude or hold, with a rise named in advance as the outcome worth more than
+the fix. The signed correlation fell on both lines as registered, 0.221 → 0.189 and 0.239 → 0.210,
+which is what adding 116 small-effect elements to a signed measure does. **The unsigned magnitude
+rose on HepG2, 0.1699 → 0.2081, and its permutation p went 0.002 → 0.0005** while falling slightly
+on K562. So on one line of two the 116 elements the gate was discarding carry *more* information
+about measured activity per element than the ones it kept. That is the same finding the eQTL lane
+reached about `MIN_EFFECT` on 2026-09-22 from a completely different direction — the threshold is a
+weak confidence signal and not the line between an answer and a non-answer — and it is the first
+time it has been shown against a measurement rather than against a database.
+
+### "Nothing" was two silences, and the syntax candidates say which
+
+All 69 genome-wide syntax candidates now lie on completely scored chromosomes (19 of them; 17 caches
+decompressed, chr12's and chr14's candidates needing none). Both readings, in the same run:
+
+| the 69 candidates | compact table | the whole window |
+|---|---|---|
+| **"nothing"** | **44** | — |
+| no registry element lies inside the block: never asked | — | **35** |
+| asked, and answered below the bar | — | **9** |
+| target and magnitude, no cell line at the bar | 17 | 15 |
+| target, cell and magnitude | 8 | **10** |
+
+The 44 "nothing" rows were two different statements. Thirty-five of those blocks hold no ENCODE
+registry element at all, so the sweep was never asked about them and no amount of quota would have
+changed the answer — a fact about the element registry's coverage of the unknown space, not about
+the model. Nine were asked and answered, and the answer is a number: the strongest gene in the
+window moves by 0.0204 to 0.0947 (chr1:29,326,813 LINC01756 0.0558; chr1:156,070,514 MEX3A 0.0759;
+chr10:128,696,482 ENSG00000289400 0.0204; chr15:96,415,047 ENSG00000242295 0.0789; chr16:46,575,094
+ENSG00000260251 0.0551; chr19:53,943,950 CACNG7 0.0628; chr3:171,938,715 TMEM212-AS1 0.0573;
+chr6:108,188,805 NR2E1 0.0947; chrX:41,077,750 USP9X 0.0368). Two candidates move from "no cell line
+at the bar" to a cell line, both through a gene that is not their element's top target:
+chr17:40,365,372 (GJD3, −1.3884) and chrX:134,166,932 (CCDC160, −0.1194), each reaching the bar on
+all four lines.
+
+### The standing of milestone 1.3's second clause, stated plainly
+
+Before this the clause's result said "a named target here is a lead and not a finding" and priced
+that against 87% of matched random windows from another instrument. It can now be priced on its own:
+**140 of the 285 unknown blocks carrying a scored element name a coding gene, 49.1%, against 65.3%
+at length-matched random windows on the same chromosome.** Reading the sweep's whole window does not
+move either number and cannot, and the one count it does move it moves faster at the control. So the
+clause is not 0% defensible for want of a wider reading; it is 0% defensible because the quantity it
+reports is below its own chance level, and what would change that is a control the attribution can
+pass, not more of the model's output. The three things this lane did deliver are the control itself,
+a magnitude comparison no longer conditioned on the gate (−0.0294 at p 0.048 → −0.0625 at p 0.0005),
+and a measured contrast with no invented zeros in it.
+
+**What still reads the compact one-gene table**, unchanged and listed rather than silently left:
+`candidates.py:734`, `closure.py:69`, `compile.py:112`, `organise.py:91`,
+`confidence_calibration.py:244`, `vista.py:278`, `decompile.py:113`, `motif_transfer.py:1025`,
+`syntax_tiling.py:252`, `benchmark/loci.py:1137`, `cli.py:3832`, `target_calibration.py:173`,
+`crispri_direction.py:118`, and `scripts/constrained_unknown_targets.py:42`, which is the script that
+carries this milestone's own result and whose 87% sentence this section prices. On the evidence here,
+moving any of them will not change a naming rate: the table's target is the window's head. What it
+will change is any figure they compute over movers only, and any zero they write for an element the
+gate silenced. `annotate` reads the cache only when it is handed a reader, so
+`scripts/confidence_calibration.py` and `scripts/measured_layer.py`, which call it for covariates,
+pay nothing and see `NOT_READ` in the window fields — a fourth named silence beside the reader's
+three, because "this caller did not look" is not "the sweep did not answer".
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

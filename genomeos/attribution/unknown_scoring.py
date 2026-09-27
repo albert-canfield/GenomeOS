@@ -23,6 +23,18 @@ already on disk and with no model call:
 
 Every comparison states its control and its null. A difference that does not survive its strata
 is reported as not surviving.
+
+Since 2026-09-27 every element also carries what the sweep's own per-element response cache says
+about **every** gene in the scorer's window (`attribution.targets.ElementResponses`), beside what
+the compact one-gene-per-element table said. The compact table was not censoring the target --
+`predict.enhancer_target.score_element` already chose `predicted_coding` over the whole window, and
+the two agree on 5,174 of chr21's 12,139 elements exactly -- so the window adds no named target. It
+adds three things the table could not express: a head magnitude for the 35.4% of elements the
+`MIN_EFFECT` gate silenced, which were being dropped from every magnitude comparison whose arms the
+gate selects unequally; the per-cell question asked of every gene rather than of the top gene only;
+and a measured number where `against_vista` was averaging structural zeros. The cache is read one
+chromosome at a time and a caller walks chromosome-major, because hopping costs a full
+decompression each time.
 """
 
 from __future__ import annotations
@@ -108,11 +120,86 @@ def gc_fraction(seq: str) -> float | None:
     return round((seq.count("G") + seq.count("C")) / acgt, 4) if acgt else None
 
 
+CELL_LINES = ("K562", "HepG2", "GM12878", "IMR-90")
+# a fourth named silence beside the reader's three: this caller did not open the cache at all, which
+# is not the same as an element the sweep never cached. `annotate` only reads it when it is handed a
+# reader, so the callers outside this module keep exactly the cost and the fields they had.
+NOT_READ = "this caller did not read the response cache"
+
+
+def window_reading(responses: Any, chrom: str, element_id: str, coding: set[str]) -> dict[str, Any]:
+    """What the sweep predicted for every gene in this element's window, not for the one the table kept.
+
+    The compact table keeps the head of this ranking (and the head of its coding part) and drops the
+    rest, and it keeps neither head at all when it falls below `MIN_EFFECT`. Every field here is
+    therefore either a number the table could not hold or a named silence -- never a zero standing in
+    for a question the sweep was not asked. `head_abs_log2` exists for every cached element, gate or
+    no gate, which is what lets a magnitude be compared without conditioning on the gate.
+    """
+    from genomeos.attribution.targets import NOT_CACHED
+
+    genes = responses.genes(chrom, element_id) if responses is not None else None
+    if genes is None:
+        return {
+            "cache_silence": NOT_CACHED if responses is not None else NOT_READ,
+            "window_genes": None,
+            "head_gene": None,
+            "head_abs_log2": None,
+            "head_signed_log2": None,
+            "head_coding_gene": None,
+            "head_coding_abs_log2": None,
+            "window_by_cell": None,
+            "cells_acting_window": None,
+        }
+    best: tuple[float, str, float] | None = None
+    best_coding: tuple[float, str] | None = None
+    by_cell: dict[str, float | None] = {}
+    for name, g in genes.items():
+        drop, rise = g.get("max_drop_log2fc"), g.get("max_rise_log2fc")
+        size = max(abs(drop or 0.0), abs(rise or 0.0))
+        signed = drop if abs(drop or 0.0) >= abs(rise or 0.0) else rise
+        if best is None or size > best[0]:
+            best = (size, name, float(signed or 0.0))
+        if name in coding and (best_coding is None or size > best_coding[0]):
+            best_coding = (size, name)
+        for cell, v in (g.get("by_cell") or {}).items():
+            if v is None:
+                continue
+            cur = by_cell.get(cell)
+            if cur is None or abs(float(v)) > abs(cur):
+                by_cell[cell] = float(v)
+    return {
+        "cache_silence": None,
+        "window_genes": len(genes),
+        "head_gene": best[1] if best else None,
+        "head_abs_log2": round(best[0], 4) if best else None,
+        "head_signed_log2": round(best[2], 4) if best else None,
+        "head_coding_gene": best_coding[1] if best_coding else None,
+        "head_coding_abs_log2": round(best_coding[0], 4) if best_coding else None,
+        "window_by_cell": {c: by_cell.get(c) for c in CELL_LINES},
+        # in how many of the four lines ANY gene in the window reaches the bar on that line's own
+        # track; `cells_acting` asks it of the top gene only, and a gene that is not the head can
+        # act in a line the head does not reach
+        "cells_acting_window": sum(
+            1 for c in CELL_LINES if by_cell.get(c) is not None and abs(by_cell[c]) >= MIN_EFFECT
+        ),
+    }
+
+
 def annotate(
-    chrom: str, elements: list[dict[str, Any]], results_dir: Path = RESULTS_DIR
+    chrom: str,
+    elements: list[dict[str, Any]],
+    results_dir: Path = RESULTS_DIR,
+    responses: Any = None,
 ) -> list[dict[str, Any]]:
     """Per element: the UNKNOWN block it overlaps (edges count), length, GC, distance to the nearest
-    coding TSS and to its predicted target, and what the deletion said."""
+    coding TSS and to its predicted target, what the deletion said, and -- since 2026-09-27 -- what
+    the response cache says about every other gene in the same window.
+
+    `responses` is an `ElementResponses` this caller opened; with None the cache is not read at all and
+    the window fields carry `NOT_READ`, a named silence rather than a zero. It is never opened here,
+    so a caller that wants only the covariates pays nothing for a 775 MB tree it will not use.
+    """
     from genomeos.coords import Locus
     from genomeos.genome import Annotation
     from genomeos.genome.annotation import default_gencode
@@ -121,6 +208,7 @@ def annotate(
     blocks = unknown_blocks(chrom, results_dir)
     starts = [b["start"] for b in blocks]
     ann = Annotation.from_gff3(default_gencode({chrom}), {chrom})
+    coding_symbols = {g.symbol for g in ann.protein_coding() if g.locus.chrom == chrom}
     tss_of = {
         g.symbol: (g.locus.end - 1 if g.locus.strand.value == "-" else g.locus.start)
         for g in ann.genes.values()
@@ -194,6 +282,7 @@ def annotate(
                 ),
                 "target": pc.get("gene"),
                 "target_tss_distance": (abs(tss_of[pc["gene"]] - mid) if pc.get("gene") in tss_of else None),
+                **window_reading(responses, chrom, e["id"], coding_symbols),
             }
         )
     genome.close()
@@ -285,10 +374,54 @@ def stratified(
 
 
 METRICS = ("moves_gene", "names_coding", "abs_log2", "silencer", "cells_acting", "target_tss_distance")
+# the same comparison without the gate: `head_abs_log2` exists for every cached element, and
+# `cells_acting_window` asks the per-cell question of the window instead of the top gene. The old
+# six keep their names and their meanings; these are reported beside them, never instead of them.
+WINDOW_METRICS = ("head_abs_log2", "cells_acting_window")
+
+
+def the_table_was_not_censoring(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """The control the 2026-09-27 registration turns on: the compact table's coding target was
+    already chosen over the whole window, so the cache must name a coding gene at exactly the same
+    elements once the same threshold is applied. Any disagreement means it was censoring after all."""
+    have = [r for r in rows if r.get("cache_silence") is None]
+    gated = [r for r in have if (r.get("head_coding_abs_log2") or 0.0) >= MIN_EFFECT]
+    disagree = [
+        r["id"]
+        for r in have
+        if bool(r["names_coding"]) != ((r.get("head_coding_abs_log2") or 0.0) >= MIN_EFFECT)
+    ]
+    return {
+        "elements": len(rows),
+        "elements_in_the_cache": len(have),
+        "names_a_coding_gene_compact_table": sum(1 for r in rows if r["names_coding"]),
+        "names_a_coding_gene_window_at_the_same_threshold": len(gated),
+        "disagreements": len(disagree),
+        "first_disagreements": disagree[:10],
+        "names_a_coding_gene_window_ungated": sum(1 for r in have if r.get("head_coding_gene")),
+        "reading": (
+            "the compact table keeps the head of the window's coding ranking, so reading the window "
+            "names no target the table did not; ungated it names one almost everywhere, which is the "
+            "threshold doing the work and not the table"
+        ),
+    }
 
 
 def comparison(rows: list[dict[str, Any]]) -> dict[str, Any]:
     out = {m: stratified(rows, m) for m in METRICS}
+    out["from_the_window"] = {m: stratified(rows, m) for m in WINDOW_METRICS}
+    out["gate_selects_the_arms_unequally"] = {
+        side: {
+            "elements": len(sel),
+            "clear_the_gate": sum(1 for r in sel if r["abs_log2"] is not None),
+            "share": round(sum(1 for r in sel if r["abs_log2"] is not None) / len(sel), 4) if sel else None,
+        }
+        for side, sel in (
+            ("unknown", [r for r in rows if r["in_unknown"]]),
+            ("rest", [r for r in rows if not r["in_unknown"]]),
+        )
+    }
+    out["censoring_check"] = the_table_was_not_censoring(rows)
     out["balance_inside_strata"] = {
         c: {k: v[k] for k in ("unknown_matched", "rest_matched")}
         for c, v in ((c, stratified(rows, c)) for c in ("length", "gc", "nearest_coding_tss"))
@@ -438,13 +571,23 @@ def by_case(rows: list[dict[str, Any]]) -> dict[str, Any]:
             if any(r["abs_log2"] for r in v)
             else None,
             "cells_acting": round(_mean([r["cells_acting"] for r in v]), 3),
+            # the same two without the gate: over every element, not only the movers
+            "head_abs_log2_all_elements": round(_mean([r.get("head_abs_log2") for r in v]), 4)
+            if any(r.get("head_abs_log2") is not None for r in v)
+            else None,
+            "cells_acting_window_all_elements": round(_mean([r.get("cells_acting_window") for r in v]), 3)
+            if any(r.get("cells_acting_window") is not None for r in v)
+            else None,
         }
         for k, v in sorted(groups.items())
     }
     # the mammalian axis as a two-group test inside strata: blocks at or above the budget's 5% bar
     for r in sel:
         r["_mammal"] = bool((r["block_mammal_fraction"] or 0) >= 0.05)
-    mammal = {m: stratified(sel, m, flag="_mammal") for m in ("moves_gene", "abs_log2", "cells_acting")}
+    mammal = {
+        m: stratified(sel, m, flag="_mammal")
+        for m in ("moves_gene", "abs_log2", "cells_acting", "head_abs_log2", "cells_acting_window")
+    }
     # elements inside one block share its label, so the element-level p is optimistic: the same test with
     # blocks as the unit, block means compared and the label permuted over blocks
     groups_by_block: dict[tuple, list[dict]] = {}
@@ -493,8 +636,15 @@ def block_level(blocks: dict[tuple, list[dict]], metric: str, seed: int = SEED) 
 
 def candidates_on_scored_chromosomes(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     """What the whole-chromosome scoring now says about each syntax candidate that lies on a chromosome
-    whose run is complete: a target, a cell and a magnitude, or still nothing."""
-    from genomeos.attribution.targets import run_elements
+    whose run is complete: a target, a cell and a magnitude, or still nothing.
+
+    "Nothing" was two different silences and is now told apart. A candidate with no registry element
+    inside it was never asked; a candidate whose elements were all below `MIN_EFFECT` was asked and
+    the sweep's answer was a number under the bar, which the response cache can state. The walk is
+    chromosome-major and a chromosome's cache is decompressed only when some candidate on it needs
+    it, because hopping costs a full decompression each time.
+    """
+    from genomeos.attribution.targets import ELEMENT_CACHE, ElementResponses, run_elements
 
     cand = (load_result("syntax_candidates_genome_wide", results_dir) or {}).get("candidates", [])
     complete = {
@@ -502,9 +652,11 @@ def candidates_on_scored_chromosomes(results_dir: Path = RESULTS_DIR) -> dict[st
         for c in {x["chrom"] for x in cand}
         if (load_result(f"enhancer_targets_all_{c}", results_dir) or {}).get("complete")
     }
+    responses = ElementResponses()
     rows = []
     for chrom in sorted(complete):
         elements = run_elements("enhancer_targets_all", chrom, results_dir)
+        have_cache = (ELEMENT_CACHE / f"{chrom}.json.gz").exists()
         for c in (x for x in cand if x["chrom"] == chrom):
             inside = [e for e in elements if e["start"] < c["end"] and e["end"] > c["start"]]
             movers = [e for e in inside if e.get("predicted")]
@@ -514,6 +666,21 @@ def candidates_on_scored_chromosomes(results_dir: Path = RESULTS_DIR) -> dict[st
             )
             cells = sorted(k for k, v in by_cell.items() if v is not None and abs(v) >= MIN_EFFECT)
             pc = (best or {}).get("predicted_coding") or {}
+            window = [
+                window_reading(responses if have_cache else None, chrom, e["id"], set()) for e in inside
+            ]
+            heads = [w["head_abs_log2"] for w in window if w["head_abs_log2"] is not None]
+            window_cells = sorted(
+                {
+                    cell
+                    for w in window
+                    for cell, v in (w["window_by_cell"] or {}).items()
+                    if v is not None and abs(v) >= MIN_EFFECT
+                }
+            )
+            strongest = (
+                max(window, key=lambda w: w["head_abs_log2"] or -1.0, default=None) if window else None
+            )
             rows.append(
                 {
                     "block": f"{chrom}:{c['start']}-{c['end']}",
@@ -530,13 +697,47 @@ def candidates_on_scored_chromosomes(results_dir: Path = RESULTS_DIR) -> dict[st
                         if best and cells
                         else ("target and magnitude, no cell line at the bar" if best else "nothing")
                     ),
+                    # the window's reading of the same elements, beside the table's
+                    "head_gene": (strongest or {}).get("head_gene"),
+                    "head_abs_log2": max(heads) if heads else None,
+                    "cells_at_bar_window": window_cells,
+                    "elements_in_the_cache": sum(1 for w in window if w["cache_silence"] is None),
+                    "gain_window": (
+                        "no registry element lies inside this block: the sweep was never asked"
+                        if not inside
+                        else (
+                            "target, cell and magnitude"
+                            if best and (cells or window_cells)
+                            else (
+                                "target and magnitude, no cell line at the bar"
+                                if best
+                                else (
+                                    f"asked and answered below the bar: the strongest gene in the window "
+                                    f"moves by {max(heads):.4f}"
+                                    if heads
+                                    else "not in the response cache"
+                                )
+                            )
+                        )
+                    ),
                 }
             )
+    from collections import Counter as _Counter
+
     return {
         "candidates": len(cand),
         "on_completely_scored_chromosomes": len(rows),
         "chromosomes": sorted(complete),
         "rows": rows,
+        # what "nothing" was hiding: a candidate with no element inside it was never asked, and a
+        # candidate whose elements all fell under the bar was asked and answered
+        "gain_window_counts": dict(_Counter(r["gain_window"].split(":")[0] for r in rows)),
+        "candidates_with_no_scored_element": sum(1 for r in rows if not r["elements_scored"]),
+        "candidates_with_elements_all_below_the_bar": sum(
+            1 for r in rows if r["elements_scored"] and not r["elements_moving_a_gene"]
+        ),
+        "candidates_with_a_mover": sum(1 for r in rows if r["elements_moving_a_gene"]),
+        "chromosome_caches_decompressed": list(responses._loaded),
     }
 
 
@@ -587,7 +788,12 @@ def against_mpra(chrom: str, rows: list[dict[str, Any]], elements: list[dict[str
                     "in_unknown": flag[r["id"]]["in_unknown"],
                     "activity": m["activity"],
                     "predicted": {c: by_cell.get(c) for c in ("K562", "HepG2")},
+                    # a gated element has no per-cell value in the compact table, so the correlation
+                    # below drops it; the window's strongest per-cell effect exists for every cached
+                    # element and is carried here so the same correlation can be taken ungated
+                    "window": {c: (r.get("window_by_cell") or {}).get(c) for c in ("K562", "HepG2")},
                     "abs_log2": r["abs_log2"] or 0.0,
+                    "head_abs_log2": r.get("head_abs_log2"),
                 }
             )
     out: dict[str, Any] = {"elements_covered_by_both": len(pairs)}
@@ -636,6 +842,29 @@ def against_mpra(chrom: str, rows: list[dict[str, Any]], elements: list[dict[str
                 ),
             },
         }
+        # the same correlation over every covered element, the gate removed: the window's strongest
+        # per-cell effect in place of the named gene's, which exists whether or not the gate fired
+        wide = [p for p in pairs if p["window"].get(cell) is not None and p["activity"].get(cell) is not None]
+        out[cell]["from_the_window"] = {
+            "n": len(wide),
+            "n_added_by_removing_the_gate": len(wide) - len(have),
+            "rho_abs_effect_vs_activity": (
+                spearman([abs(p["window"][cell]) for p in wide], [p["activity"][cell] for p in wide])
+                if len(wide) >= 3
+                else None
+            ),
+            "rho_signed_effect_vs_activity": (
+                spearman([-p["window"][cell] for p in wide], [p["activity"][cell] for p in wide])
+                if len(wide) >= 3
+                else None
+            ),
+            "p_signed_permuted": rho_p(
+                [-p["window"][cell] for p in wide], [p["activity"][cell] for p in wide]
+            ),
+            "p_abs_permuted": rho_p(
+                [abs(p["window"][cell]) for p in wide], [p["activity"][cell] for p in wide]
+            ),
+        }
     return out
 
 
@@ -653,9 +882,19 @@ def against_vista(chrom: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
                     "id": v["id"],
                     "elements": len(over),
                     "moving": sum(1 for r in over if r["moves_gene"]),
+                    # `abs_log2 or 0.0` turns a gated element into a predicted change of zero, which
+                    # is a statement the sweep never made. The field is kept unchanged so the
+                    # published figures stay comparable; `max_head_abs_log2` is the same maximum
+                    # taken over what the sweep actually predicted for the whole window, and
+                    # `structural_zero` marks the rows the old one had to invent.
                     "max_abs_log2": max((r["abs_log2"] or 0.0 for r in over), default=None),
+                    "max_head_abs_log2": max(
+                        (r["head_abs_log2"] for r in over if r.get("head_abs_log2") is not None), default=None
+                    ),
+                    "structural_zero": bool(over) and not any(r["abs_log2"] is not None for r in over),
                 }
             )
+    zeros = {k: sum(1 for x in v if x["structural_zero"]) for k, v in out.items()}
     return {
         "elements": len(vista),
         "positives": len(out["positive"]),
@@ -666,6 +905,14 @@ def against_vista(chrom: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
         if out["positive"]
         else None,
         "mean_max_abs_log2_negative": round(_mean([x["max_abs_log2"] for x in out["negative"]]), 4)
+        if out["negative"]
+        else None,
+        "positives_scored_as_a_structural_zero": zeros.get("positive", 0),
+        "negatives_scored_as_a_structural_zero": zeros.get("negative", 0),
+        "mean_max_head_abs_log2_positive": round(_mean([x["max_head_abs_log2"] for x in out["positive"]]), 4)
+        if out["positive"]
+        else None,
+        "mean_max_head_abs_log2_negative": round(_mean([x["max_head_abs_log2"] for x in out["negative"]]), 4)
         if out["negative"]
         else None,
         "note": "too few VISTA elements here to conclude from; reported, not read",
@@ -711,6 +958,17 @@ def coverage(chrom: str, rows: list[dict[str, Any]], results_dir: Path = RESULTS
             for b in sel
             if any(r["names_coding"] and r["cells_acting"] for r in by_block.get((b["start"], b["end"]), []))
         ]
+        # the same question with the per-cell answer taken from the whole window rather than from the
+        # named gene alone: the only block-level figure reading the window can move, since the named
+        # target is the same either way
+        with_cell_window = [
+            b
+            for b in sel
+            if any(
+                r["names_coding"] and r.get("cells_acting_window")
+                for r in by_block.get((b["start"], b["end"]), [])
+            )
+        ]
         per_tier[tier] = {
             "blocks": len(sel),
             "bp": sum(b["length"] for b in sel),
@@ -718,6 +976,7 @@ def coverage(chrom: str, rows: list[dict[str, Any]], results_dir: Path = RESULTS
             "blocks_with_a_named_target_before": len(named_before),
             "blocks_with_a_named_target_after": len(named_after),
             "blocks_with_a_target_and_a_cell": len(with_cell),
+            "blocks_with_a_target_and_a_cell_from_the_window": len(with_cell_window),
             "bp_with_a_named_target_after": sum(b["length"] for b in named_after),
         }
     out["by_tier"] = per_tier
@@ -730,6 +989,9 @@ def coverage(chrom: str, rows: list[dict[str, Any]], results_dir: Path = RESULTS
     out["blocks_with_a_target_and_a_cell"] = sum(
         v["blocks_with_a_target_and_a_cell"] for v in per_tier.values()
     )
+    out["blocks_with_a_target_and_a_cell_from_the_window"] = sum(
+        v["blocks_with_a_target_and_a_cell_from_the_window"] for v in per_tier.values()
+    )
     out["bp_with_a_named_target_after"] = sum(v["bp_with_a_named_target_after"] for v in per_tier.values())
     named = [r for r in rows if r["in_unknown"] and r["names_coding"]]
     out["element_bp_with_a_named_target_inside_unknown"] = sum(r["unknown_bp"] for r in named)
@@ -739,6 +1001,123 @@ def coverage(chrom: str, rows: list[dict[str, Any]], results_dir: Path = RESULTS
     out["elements_over_unknown_blocks"] = sum(1 for r in rows if r["in_unknown"])
     out["elements_over_unknown_naming_a_gene"] = sum(1 for r in rows if r["in_unknown"] and r["names_coding"])
     out["elements_over_unknown_moving_any_gene"] = sum(1 for r in rows if r["in_unknown"] and r["moves_gene"])
+    return out
+
+
+def matched_random_windows(
+    chrom: str, rows: list[dict[str, Any]], results_dir: Path = RESULTS_DIR, seed: int = SEED
+) -> dict[str, Any]:
+    """What a named target means: the same block-level question asked of random windows of the same length.
+
+    `constrained_unknown_targets.json` quotes "the same model names a target at 87% of matched random
+    windows" from the locus benchmark, which is a different instrument -- it pools every derived layer
+    over a whole window, this is one element's own deletion -- and this module has never had a control
+    of its own. Here it does: for every UNKNOWN block, `RANDOM_DRAWS` windows of that block's length
+    placed uniformly at random inside the span of the chromosome's scored elements and rejected if
+    they overlap any UNKNOWN block, with the same question asked of each. A block longer than the
+    drawable span admits no such window and is counted as undrawable rather than skipped silently.
+
+    An element belongs to the window its midpoint falls in, so no element is split between two.
+    Rates are quoted over blocks and windows that carry at least one scored element, because a window
+    with none was never asked and is a different silence. Both the compact-table reading and the
+    window reading are reported, since the whole point of the control is to tell a gain from an
+    inflation: if reading the window raises the random rate by as much as it raises the blocks, the
+    change named more without saying more.
+    """
+    import bisect
+
+    blocks = unknown_blocks(chrom, results_dir)
+    if not blocks or not rows:
+        return {"blocks": len(blocks), "windows_drawn": 0}
+    mids = sorted(((r["start"] + r["end"]) // 2, r) for r in rows)
+    keys = [m for m, _ in mids]
+    lo, hi = keys[0], keys[-1]
+    unknown = sorted((b["start"], b["end"]) for b in blocks)
+    u_starts = [s for s, _ in unknown]
+
+    def overlaps_unknown(s: int, t: int) -> bool:
+        i = max(0, bisect.bisect_right(u_starts, s) - 1)
+        while i < len(unknown) and unknown[i][0] < t:
+            if unknown[i][1] > s:
+                return True
+            i += 1
+        return False
+
+    def inside_window(s: int, t: int) -> list[dict[str, Any]]:
+        return [r for _, r in mids[bisect.bisect_left(keys, s) : bisect.bisect_left(keys, t)]]
+
+    def asked(sel: list[dict[str, Any]], cell_field: str) -> tuple[bool, bool]:
+        return (
+            any(r["names_coding"] for r in sel),
+            any(r["names_coding"] and r.get(cell_field) for r in sel),
+        )
+
+    out: dict[str, Any] = {
+        "blocks": len(blocks),
+        "draws_per_block": RANDOM_DRAWS,
+        "span_bp": hi - lo,
+        "element_assignment": "an element belongs to the window its midpoint falls in",
+    }
+    rng = random.Random(seed)
+    drawn = carry = 0
+    undrawable: list[int] = []
+    tally = {"from_the_named_gene": [0, 0], "from_the_window": [0, 0]}
+    for b in blocks:
+        length, got, tries = b["length"], 0, 0
+        while got < RANDOM_DRAWS and tries < 4000:
+            tries += 1
+            top = hi - length
+            if top <= lo:
+                break
+            s = rng.randrange(lo, top)
+            if overlaps_unknown(s, s + length):
+                continue
+            got += 1
+            drawn += 1
+            sel = inside_window(s, s + length)
+            if not sel:
+                continue
+            carry += 1
+            for key, field in (
+                ("from_the_named_gene", "cells_acting"),
+                ("from_the_window", "cells_acting_window"),
+            ):
+                gene, gene_and_cell = asked(sel, field)
+                tally[key][0] += gene
+                tally[key][1] += gene_and_cell
+        if not got:
+            undrawable.append(length)
+    target = [inside_window(b["start"], b["end"]) for b in blocks]
+    with_element = [sel for sel in target if sel]
+    out["undrawable_blocks"] = len(undrawable)
+    out["undrawable_lengths"] = sorted(undrawable, reverse=True)[:5]
+    out["windows_drawn"] = drawn
+    out["windows_carrying_an_element"] = carry
+    out["unknown_blocks_carrying_an_element"] = len(with_element)
+    for key, field in (("from_the_named_gene", "cells_acting"), ("from_the_window", "cells_acting_window")):
+        t_gene = sum(1 for sel in with_element if asked(sel, field)[0])
+        t_both = sum(1 for sel in with_element if asked(sel, field)[1])
+        r_gene, r_both = tally[key]
+        out[key] = {
+            "unknown_blocks_naming_a_coding_gene": t_gene,
+            "unknown_block_rate": round(t_gene / len(with_element), 4) if with_element else None,
+            "random_windows_naming_a_coding_gene": r_gene,
+            "random_window_rate": round(r_gene / carry, 4) if carry else None,
+            "difference_in_points": (
+                round(100 * (t_gene / len(with_element) - r_gene / carry), 2)
+                if with_element and carry
+                else None
+            ),
+            "unknown_blocks_with_a_gene_and_a_cell": t_both,
+            "unknown_block_rate_with_a_cell": round(t_both / len(with_element), 4) if with_element else None,
+            "random_windows_with_a_gene_and_a_cell": r_both,
+            "random_window_rate_with_a_cell": round(r_both / carry, 4) if carry else None,
+            "difference_in_points_with_a_cell": (
+                round(100 * (t_both / len(with_element) - r_both / carry), 2)
+                if with_element and carry
+                else None
+            ),
+        }
     return out
 
 
@@ -789,9 +1168,14 @@ def run(chrom: str = "chr21", results_dir: Path = RESULTS_DIR, progress=None) ->
         if progress:
             progress(m)
 
+    from genomeos.attribution.targets import ELEMENT_CACHE, ElementResponses
+
     elements = scored_elements(chrom, results_dir)
     say(f"{len(elements)} scored elements")
-    rows = add_strata(annotate(chrom, elements, results_dir))
+    # one reader for this chromosome, handed in rather than built inside `annotate`, so the callers
+    # outside this module pay nothing for the cache they do not use
+    responses = ElementResponses() if (ELEMENT_CACHE / f"{chrom}.json.gz").exists() else None
+    rows = add_strata(annotate(chrom, elements, results_dir, responses))
     say(f"{sum(1 for r in rows if r['in_unknown'])} overlap an UNKNOWN block")
     abl = ablation(chrom, results_dir, rows)
     say("ablation done")
@@ -802,6 +1186,9 @@ def run(chrom: str = "chr21", results_dir: Path = RESULTS_DIR, progress=None) ->
     mpra_out = against_mpra(chrom, rows, elements)
     vista_out = against_vista(chrom, rows)
     cov = coverage(chrom, rows, results_dir)
+    say("coverage done")
+    control = matched_random_windows(chrom, rows, results_dir)
+    say("matched random windows done")
     return {
         "chrom": chrom,
         "elements_scored": len(elements),
@@ -818,6 +1205,7 @@ def run(chrom: str = "chr21", results_dir: Path = RESULTS_DIR, progress=None) ->
         "mpra": mpra_out,
         "vista": vista_out,
         "coverage": cov,
+        "matched_random_windows": control,
         "cost": cost(chrom, results_dir),
         "thresholds": {
             "min_effect_log2": MIN_EFFECT,
