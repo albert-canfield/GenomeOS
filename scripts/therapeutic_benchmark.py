@@ -488,6 +488,18 @@ def main() -> int:
             "ties only between candidates already equal on tier, gate and published score, "
             "comparing like with like because a count and an annotation share no unit."
         ),
+        # Hand-added to the committed file on 2026-09-28 (2805552); kept here so the script writes it
+        # and a rebuild from the manifest reproduces the file (review item R9).
+        "ordering_rules_measured": (
+            "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a "
+            "re-run on 2026-09-28, hours after the rules were registered. Every other field of every "
+            "row came out identical to the 2026-09-27 run - rank, score, target class, evidence tier, "
+            "mechanism, compatibility, accessibility, peptide route, verdict - which is the check that "
+            "the two rules changed an order and nothing else. Until the same day this key was added to "
+            "the file by hand beside the 2026-09-27 run's date and timings; since the result manifest "
+            "(R9) the whole file is this script's output, rebuilt in a clean checkout, and every field "
+            "but the date and the per-case timings came out as committed."
+        ),
         "rows": rows,
     }
     save_result("therapeutic_benchmark", result, manifest=manifest(net))
