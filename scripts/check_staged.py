@@ -54,6 +54,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 
@@ -189,6 +190,41 @@ def check(index: str | None, since: str) -> list[str]:
     return problems
 
 
+# `from genomeos.a.b import c` and `import genomeos.a.b`: the dotted module a staged file needs.
+_IMPORT = re.compile(r"^\s*(?:from\s+(genomeos(?:\.\w+)*)\s+import\b|import\s+(genomeos(?:\.\w+)*))", re.M)
+
+
+def missing_imports(index: str | None) -> list[str]:
+    """Staged Python that imports a genomeos module the committed tree will not contain.
+
+    38087a1 on 2026-09-28 committed a test importing `genomeos.certainty` while the module was still
+    untracked. In the shared tree everything passed, because the file was there; in the clean worktree
+    the pre-push hook builds, ruff sorted the unknown module as third-party (I001) and the test could
+    not import, and every lane's push stopped behind it. The committed tree is the index, so the
+    question is whether the index holds the module.
+    """
+    env = dict(os.environ)
+    if index:
+        env["GIT_INDEX_FILE"] = index
+    listed = subprocess.run(["git", "ls-files", "--cached"], capture_output=True, text=True, env=env)
+    tracked = set(listed.stdout.splitlines())
+    problems = []
+    for status, path in staged_paths(index):
+        if status == "D" or not path.endswith(".py"):
+            continue
+        shown = subprocess.run(["git", "show", f":{path}"], capture_output=True, text=True, env=env)
+        for match in _IMPORT.finditer(shown.stdout):
+            module = match.group(1) or match.group(2)
+            base = module.replace(".", "/")
+            if f"{base}.py" in tracked or f"{base}/__init__.py" in tracked:
+                continue
+            problems.append(
+                f"{path}: imports {module}, but neither {base}.py nor {base}/__init__.py is in the "
+                "commit. Stage the module with it: a clean checkout cannot import it."
+            )
+    return problems
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--index", default=os.environ.get("GIT_INDEX_FILE"), help="the index to check")
@@ -197,6 +233,14 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     problems = check(args.index, args.since)
+    unimportable = missing_imports(args.index)
+    if unimportable:
+        # not a revert, so not the message below; and not something --force should wave through,
+        # because the fix is always to stage the module
+        print("REFUSED: this commit imports a module it does not contain\n")
+        for problem in unimportable:
+            print(f"    {problem}\n")
+        return 2
     if not problems:
         print("staged tree takes nothing back out")
         return 0
