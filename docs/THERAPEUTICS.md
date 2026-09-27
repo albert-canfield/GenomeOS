@@ -476,6 +476,170 @@ is recorded per row and pinned at two buried surface targets
 (`BURIED_SURFACE_TARGETS`), because teaching the score to read the alteration is
 a change to every case's numbers and is made deliberately or not at all.
 
+## The evidence tier, pre-registered 2026-09-27
+
+Recovering a target and preferring it are different results, and the benchmark
+measured only the first. What follows was written before the code and before
+any number was regenerated, so the movement below is a prediction that the
+regenerated result can contradict.
+
+**The defect in one sentence.** `surface_accessibility` reads curated
+localisation, so a gene this tumour carries at twelve copies and a gene named
+only for neighbouring a mutated one are scored from the same annotation and are
+worth the same — which is why ERBB2 reached by its amplification scores 0.494
+and ranks fourth behind KDR at 0.575, EGFR and PDGFRB, none of which is altered
+in that tumour. Across the nine cases there are twelve
+hypothesis-above-target rows: KRAS 4, PIK3CA 4, the ERBB2 copy-number case 3,
+IDH1 1. `assemble()` has no dimension for how the candidate was reached, and
+`classify()` already knows the difference it does not use.
+
+### The tier
+
+A new scored dimension, `alteration_evidence`, over three levels. The tier is
+read from the evidence about **this gene in this patient**, never from the name
+of the route that proposed it:
+
+| tier | value | what has to be true |
+| --- | --- | --- |
+| `observed_alteration` | 1.0 | this tumour's own DNA carries an alteration of this gene: a coding variant, a copy-number event or a rearrangement — the candidate has origins |
+| `patient_measurement` | 0.6 | no DNA event, but this patient's own tumour measures this gene: RNA-seq, proteomics or surface abundance |
+| `association_hypothesis` | 0.2 | nothing about this gene was measured in this patient; it is on the list because a database associates it with a gene that was |
+
+**Why that order, and not another.** The top and the middle are both
+measurements of this gene in this patient and differ in degree. DNA is above
+patient RNA because a somatic alteration is attributable to the tumour and is
+the thing approved indications are actually written on — ERBB2 amplification is
+trastuzumab's companion diagnostic — whereas the expression route establishes a
+ratio against a queried healthy-tissue panel, which is weaker in two named
+ways: the comparator is a panel and not this patient's own normal tissue, and
+raised transcript is not protein on the surface, a lack the pipeline already
+records for every gene it reaches this way. The bottom tier is different in
+kind: it is not a weak measurement of this gene but a measurement of a
+different gene, plus an association. 0.2 rather than 0.0 because an association
+with a disrupted driver is evidence of something, and the pipeline is entitled
+to propose it; it is not entitled to prefer it.
+
+**The trap this avoids.** `outranked_by_hypotheses` is currently implemented as
+"candidates with no `origins` record", and CD19 has no origins: it is reached
+from the patient's RNA, not from a DNA event. Penalising the absence of an
+origin would demote the one case that proves the expression route works. So the
+proxy is replaced by the thing it was a proxy for: the metric will count
+candidates above the target whose tier is `association_hypothesis`. In the CD19
+case that reclassifies FCRL5, the candidate above CD19, which the patient's own
+RNA measures exactly as it measures CD19 and which is therefore not a
+hypothesis at all.
+
+### How the tier enters the ranking
+
+Both a dimension and a sort key, with different jobs, because each alone is
+wrong in a way the other is not.
+
+*A dimension alone is not enough.* It is averaged with eleven others, so to
+close the 0.081 between ERBB2 and KDR reliably in every case it would need a
+weight large enough to make the other dimensions decorative for any
+hypothesis — a lexicographic preference smuggled in as a weight.
+
+*A sort key alone is not enough either.* The published score would read 0.494
+for the candidate shown first and 0.575 for the one shown fourth, and the
+number GenomeOS quotes would contradict the order it presents. The score has to
+change, because "twelve copies and a guess are worth the same" is a statement
+about the number.
+
+So: `alteration_evidence` enters `WEIGHTS` at **1.1** — not less than
+`surface_accessibility` at 1.0, because whether this tumour has the alteration
+is not a smaller question than whether the protein is reachable; below
+`tumour_selectivity` at 1.3 and `normal_tissue_safety` at 1.5, because those can
+rule a target out and this one only orders. And the final sort becomes
+tier-major over a **coarser** partition than the tier itself: measured in this
+patient (either of the top two tiers) before measured nowhere
+(`association_hypothesis`), then by score, then by gene. The coarse cut is the
+argued part. The difference between DNA and patient RNA is a difference of
+degree and belongs inside the score, where it can be traded against safety and
+selectivity. The difference between a measurement of this gene and no
+measurement of this gene is a difference in kind, and no quantity of curated
+annotation about an unmeasured gene should outrank a gene the tumour actually
+altered. That cut is also exactly why **CD19 must not fall**: CD19 is measured
+in this patient.
+
+### Expected movement, per case
+
+| case | route | rank before | rank after | score before |
+| --- | --- | --- | --- | --- |
+| EGFR L858R | point mutation | 1 | 1 | 0.500 |
+| ERBB2 mutated | point mutation | 1 | 1 | 0.494 |
+| BRAF V600E | point mutation | 1 | 1 | 0.427 |
+| KRAS G12C | point mutation | 5 | 1 | 0.369 |
+| PIK3CA H1047R | point mutation | 5 | 1 | 0.438 |
+| IDH1 R132H | point mutation | 2 | 1 | 0.345 |
+| ERBB2 amplified, 12 copies | copy number | 4 | **1** | 0.494 |
+| EML4-ALK | structural variant | 2 | 1 | 0.559 |
+| CD19 | expression | 2 | **2, and no lower** | 0.500 |
+
+Every score rises, because every candidate gains a dimension it did not have
+and no candidate's tier value is 0. The scores are not comparable across the
+two regimes and the after-numbers are reported in full rather than compared
+with the before-numbers as if they measured the same thing. What is comparable
+is the ordering, which is what the defect was about.
+
+`BURIED_SURFACE_TARGETS` is expected to go from **2 to 0**: the ERBB2
+copy-number case by rising to rank 1, and CD19 because the candidate above it
+is measured in this patient and was never a hypothesis. The constant will be
+lowered to whatever is actually achieved and never raised, and no test will be
+loosened to reach it. Nine of nine recovered, nine of nine verdicts and nine of
+nine defensible top mechanisms must all hold; ALK must stay
+`intracellular_only` at accessibility 0.0 with no preferred mechanism, because
+the tier says how a candidate was reached and not whether a binder can reach
+the protein.
+
+### The pinned fixtures, each re-baselined deliberately
+
+* `tests/test_therapeutic_benchmark.py::test_the_copy_number_route_is_scored_and_not_merely_unit_tested`
+  asserts `amp["rank"] > mutated["rank"]` — it pins today's wrong answer, and
+  it is the assertion this change exists to invert. It becomes: both ERBB2
+  cases rank 1, and the amplified case is preferred rather than merely
+  recovered.
+* `tests/test_cancer_alterations.py::test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own`
+  runs with `indirect=False`, so ERBB2 is rank 1 there before and after; the
+  fixture stands and gains an assertion on the tier.
+* `tests/test_cancer_alterations.py::test_a_gene_reached_by_its_own_alteration_is_not_proposed_again_as_a_hypothesis`
+  states in its docstring that both entries scored 0.494. That number is
+  history now: the prose says so, and the test gains the assertion that the two
+  entries would no longer tie.
+* `tests/test_therapeutics.py` pins overall scores only as inequalities and
+  caps (`<= 0.6` under the unknown-safety cap, `risky < safe`). Adding a
+  dimension every candidate scores at the same tier value cannot flip an
+  inequality between two candidates of the same tier, and the safety caps are
+  above the mean. Re-checked rather than assumed.
+* `genomeos/therapeutics/report.py` publishes a five-dimension excerpt of the
+  score in the machine report. `alteration_evidence` joins it, because a
+  dimension that decides the order cannot be the one the report omits.
+* The Therapeutic Design Dataset reads named components — selectivity, surface,
+  structure — and never the overall priority score, so `design_readiness` is
+  arithmetically unaffected; what can change is the order of
+  `target_specifications`, which follows the ranked candidate list.
+* `data/results/therapeutic_benchmark.json` is regenerated whole, and every
+  row's rank and score is reported before and after.
+
+### The falsifier
+
+The tier is wrong if any of these is observed:
+
+1. **A case gets worse.** Any target's rank rises in number, or any of the
+   three scored questions falls below nine of nine. CD19 falling from rank 2 is
+   the specific version of this that the coarse sort cut exists to prevent, and
+   if it falls anyway the cut is mis-specified.
+2. **A target that is only ever a hypothesis.** A case whose approved target
+   carries no alteration and no patient measurement — reachable only as an
+   association with an altered driver — would be buried by a lexicographic
+   preference that can never be outvoted. That case would show the order must
+   be a weighting and not a tier, and it is the reason the tier is read from
+   evidence about the gene rather than from the route's name: supply that
+   patient's RNA and the same gene rises without the tier being edited.
+3. **The tier standing in for a measurement.** If `alteration_evidence` ever
+   rises for a candidate whose evidence did not change — a gene promoted
+   because of how it was proposed rather than what was measured about it — the
+   dimension has become a label for the route and is measuring nothing.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
