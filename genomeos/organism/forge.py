@@ -19,6 +19,7 @@ import random
 import re
 from dataclasses import dataclass, field
 
+from genomeos.certainty import Certainty
 from genomeos.ir import Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
 from genomeos.runtime.body import Body, evaluate_assert
 
@@ -55,6 +56,41 @@ BUDGET_KNOWN_CASE = {
     "limit 0": "answer wild type, not solved, spend 0; -POP-1 listed as excluded with loss 0 < the answer's",
 }
 
+# Review item R4 (2026-09-28): the emitted experiment used to carry a fixed confidence of 0.3, a constant
+# a reader takes for a probability of being right. No calibration record exists for any outcome of a
+# design answer (docs/BIOFORGE-CONFIDENCE.md), so the answer now carries a `Certainty` whose probability
+# is None with the reason, and the experiment's numeric confidence is left unstated: 0.0 is what the
+# BioLang parser gives an `experiment` block with no `confidence:` key, so the emitted text and the
+# returned Experiment agree. It is the absence of a stated value, not a probability of zero.
+UNSTATED_CONFIDENCE = 0.0
+EFFECT_UNIT = "normalised target distance removed (wild-type loss minus answer loss; 0 = no change)"
+MODEL_SCORE_NAME = "loss: normalised distance from every target holding; 0 = all hold; lower ranks first"
+UNCERTAINTY_NOTE = (
+    "not measured: one simulation per candidate at a fixed seed; the search's spread is not a measurement"
+)
+PROBABILITY_UNAVAILABLE = (
+    "no calibration record: no population of design answers with a published outcome and a negative case"
+    " exists, and the 2-4 designs with a published answer were authored from that answer"
+    " (docs/BIOFORGE-CONFIDENCE.md)"
+)
+
+
+def design_certainty(answer_loss: float, baseline_loss: float | None) -> Certainty:
+    """The certainty record of a design answer. The effect is how much target distance the perturbation
+    removed; nothing here turns it, or the loss, into a probability, so a larger effect cannot raise it."""
+    effect = None if baseline_loss is None else baseline_loss - answer_loss
+    return Certainty(
+        evidence_category=FORGE_EVIDENCE.kind.value,
+        effect_estimate=effect,
+        effect_unit=EFFECT_UNIT,
+        measurement_uncertainty=None,
+        uncertainty_note=UNCERTAINTY_NOTE,
+        model_score=answer_loss,
+        model_score_name=MODEL_SCORE_NAME,
+        probability=None,
+        probability_unavailable=PROBABILITY_UNAVAILABLE,
+    )
+
 
 @dataclass(slots=True)
 class Knob:
@@ -87,6 +123,8 @@ class Knob:
 
     def set(self, m: Module, value: float) -> None:
         value = min(self.hi, max(self.lo, value))
+        # the two min(x, 0.3) below cap the IR's evidence-quality score of a value the search set: they
+        # only lower it and never read `value`, so no knob position raises it. Not a probability (R4).
         if self.kind == "timer":
             t = m.timer(self.name)
             t.duration = value
@@ -145,6 +183,7 @@ class DesignResult:
     until: float
     candidates: list[Candidate] = field(default_factory=list)
     evaluations: int = 0
+    baseline_loss: float | None = None  # loss of the unperturbed program at its own knob values
 
     @property
     def best(self) -> Candidate | None:
@@ -167,8 +206,15 @@ class DesignResult:
             asserts=list(self.design.targets) + list(self.design.keeps),
             expect=f"BioForge: {b.label()} reaches {'; '.join(self.design.targets)}",
             evidence=FORGE_EVIDENCE,
-            confidence=0.3,
+            confidence=UNSTATED_CONFIDENCE,  # was a fixed 0.3 until review item R4; see design_certainty
         )
+
+    def certainty(self) -> Certainty | None:
+        """Evidence, effect, uncertainty, score and probability of the answer, kept apart (review R4)."""
+        b = self.best
+        if b is None or not b.feasible:
+            return None
+        return design_certainty(b.loss, self.baseline_loss)
 
     def to_bio(self) -> str:
         ex = self.to_experiment()
@@ -184,7 +230,10 @@ class DesignResult:
         parts.append(f"  until: {self.until:g} min")
         parts.append(f'  expect: "{ex.expect}"')
         parts += [f"  assert: {a}" for a in ex.asserts]
-        parts.append(f'  evidence: predicted "{ex.evidence.source}"; confidence: {ex.confidence}')
+        parts.append(f'  evidence: predicted "{ex.evidence.source}"')
+        cert = self.certainty()
+        if cert is not None:
+            parts += ["  " + line for line in cert.comment_lines()]
         parts.append("}")
         return "\n".join(parts) + "\n"
 
@@ -208,6 +257,7 @@ class DesignResult:
                 for c in self.candidates
             ],
             "experiment": self.to_bio(),
+            "certainty": None if (c := self.certainty()) is None else c.to_dict(),
         }
 
     def format(self, top: int = 6) -> str:
@@ -240,6 +290,8 @@ class DesignResult:
 
 # The budget lives below DesignResult on purpose: tests/test_forge_calibration.py pins lines 93, 97
 # and 170 of this file by number, so the budgeted types extend the classes above instead of editing them.
+# (Those pins were retired on 2026-09-28 with the literal on line 170, review item R4; the property that
+# replaces them is in tests/test_forge_certainty.py.)
 @dataclass(slots=True)
 class Budget:
     """A hard limit on what a design may spend, in `unit`; each perturbation costs 1 unless priced.
@@ -417,6 +469,8 @@ def run_design(
             break
     for knockouts, adds in combos:
         best = evaluate(knockouts, adds, original)
+        if not knockouts and not adds and res.baseline_loss is None:
+            res.baseline_loss = best.loss  # the unperturbed program: the reference the effect is read against
         if budget is not None and not best.within_budget:
             res.candidates.append(best)  # over the limit before any knob moves: run once, report as excluded
             continue

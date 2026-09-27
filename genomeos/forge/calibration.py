@@ -65,6 +65,25 @@ CONFIDENCE_SITES: dict[str, str] = {
     " quantity in another area, which is what a provenance marker looks like and what a probability"
     " does not",
 }
+# 2026-09-28, review item R4: the site that CREATED the number is gone. forge.py:170 no longer writes
+# 0.3; the emitted experiment carries a genomeos.certainty.Certainty with probability None and the
+# reason, and its numeric confidence is left unstated (0.0, what the parser gives a block with no
+# `confidence:` key). CONFIDENCE_SITES above is kept as the 2026-09-22 reading. The ceilings remain,
+# read now as caps on the IR's evidence-quality score that never read the value set, and are pinned by
+# pattern rather than by line number, because line pins only preserved the old constant.
+RETIRED_SITES: dict[str, str] = {
+    "genomeos/organism/forge.py:170": "confidence=0.3 on the emitted Experiment; replaced 2026-09-28 by"
+    " organism.forge.design_certainty (probability None, reason stated) and UNSTATED_CONFIDENCE",
+}
+CEILING_SITES: dict[str, int] = {  # file -> number of min(<x>.confidence, 0.3) ceilings it holds
+    "genomeos/organism/forge.py": 2,
+    "genomeos/forge/design.py": 3,
+}
+LEFT_FOR_R4B: dict[str, str] = {
+    "genomeos/attribution/budget.py:60": "round(min(confidence, 0.3), 2) - area I, a stored result's field",
+    "genomeos/attribution/human_panel.py:1321": "0.3 + min(0.3, gap * 3) - confidence rising with an"
+    " effect's size, the pattern review R4 names",
+}
 WHAT_IT_IS = (
     "a provenance marker, not a probability: one hand-set constant meaning 'this came from a search,"
     " not from a bench', used at the same value by an unrelated area for an unrelated quantity"
