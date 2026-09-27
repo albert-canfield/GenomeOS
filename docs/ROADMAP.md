@@ -4161,6 +4161,7 @@ entire sweep. What is next, in order of what it decides:
    | 2 | C: reachability of the Ochoa 2020 phosphosite table and CPTAC through the cBioPortal client already shipped | turns "can be modified" into "observed modified in N experiments", never "occupancy" | 0.5 + 2 |
    | 3 | E2/E3 widened past chr21 and chr22 — 184,604 fine-mapped units on disk, 161 read | the largest unread population in area I; spends quota, so it runs alone on the key | 3 |
    | 3 | A: the three facts with evidence kind `none`; v0.4 stage 4, partitioning division | small correctness, then the next stage | 0.5 + 2 |
+   | 3 | ↳ **A done 2026-09-27 (lane-parser, `61c5838` census, `b41ddd6` parser).** A key a block does not read is now an error naming the key, the block, the closest match and the accepted keys; the census before it found 4 hits in 428 program texts, all `rate:` on rules in the engine's own smoke and REPL programs, so the inhibition there was never applied. Two bugs behind it: a nested transcript never inherited its gene's evidence, and NKX2-5-201's loci matched no GENCODE record (now GENCODE v50 ENST00000329198.5, curated). `none` facts 3 → 2, each remaining one with its reason stated. Open: `genomeos evidence` drops facts silently when a program fails to parse (26,845 → 26,824, no error); `engine_package.json` regenerated 12/12 but uncommitted, its removal check needs Albert. v0.4 stage 4 waits behind item 11 R1–R5 | done | — |
    | 3 | H: budget constraints in `design`; network knockouts in `experiment` | the two concrete items left in the weakest area | 2 |
 
    *(Correction to the wave-1 row above, from the lane that built it: the engine-only tests are **24 files and 157 tests, not 27 and 162** — two files import only the engine but load gate scripts from `scripts/`, so they stay with the application.)*
@@ -4186,6 +4187,33 @@ entire sweep. What is next, in order of what it decides:
    rather than by the machine, about **1.5 working days**, and the whole unblocked backlog about
    **3 days**. After that the project's limits are measurement it does not hold, not work it has not
    done.
+
+11. **The external review of 2026-09-28, adopted as the next order of work.** A read-only review of the
+   code, documents and stored results (tests not run) found the project's strongest asset is traceable
+   evidence and its main gap predictive reliability, and set a priority: **context preservation,
+   uncertainty reporting and one independent biological benchmark before any expansion of simulation
+   scope.** Its nine items, each confirmed by it against a line of code, are adopted with its acceptance
+   tests as written; its delivery order is binding: **R1–R5 before any increase in model complexity**,
+   then R6–R7, then the joint engine R8, with R9 alongside. Consequences for the rest of this section:
+   v0.4 stage 4 (partitioning division) and the E2/E3 widening wait behind R1–R5; lane-joint's pretest
+   becomes the first step of R8, not a wave-3 lane of its own.
+
+   | # | Item (review's priority) | Code it names | Acceptance (the review's) | Lane, order |
+   | --- | --- | --- | --- | --- |
+   | R1 | Context in executable rules (P1) | `attribution/compile.py:173`, `measured.py:970` | a K562-specific rule is inactive in HepG2; conflicting results from two cell types survive compilation and round-trip serialisation | after lane-split (same files) |
+   | R2 | CRISPRi negatives read as outcomes (P1) | `measured.py:362` | significant decrease, significant increase, non-significant, missing and invalid kept apart with units, power, study and context; a significant increase never becomes "no effect"; a low-powered null cannot strongly reject; an increase does not establish a silencer | taken into lane-split (it holds `measured.py` and already carries power) |
+   | R3 | A validated bridge from annotation to dynamics (P1) | `compile.py:295`, `runtime/grn.py:109` | an end-to-end fixture shows a supported expression response; missing regulator state gives an explicit unresolved-model diagnostic; another citation for the same mechanism does not change its simulated strength; predicted and measured forms of one relation are not counted twice | after R1 |
+   | R4 | Confidence, effect size and evidence quality separated (P1) | `compile.py:271`, `organism/forge.py:170`, BIOFORGE-CONFIDENCE.md | effect magnitude alone never raises certainty; every probability names its outcome, calibration population and method, and an unavailable probability stays unavailable; the calibration text corrected (a constant can be calibrated to a base rate and still not discriminate); tests that only preserve the old constant updated | after lane-h releases `forge.py`; compiler half after R1 |
+   | R5 | Evaluation independence through provenance (P1) | `measured.py:199` | immutable study, assay, source-file and partition identifiers on every record; validation outcomes kept out of features, candidate selection, starting labels and search objectives; automated overlap checks including related intervals and variants; reused benchmarks reported as reused | lane-split, running (its audit is the first half) |
+   | R6 | Assay observations kept before aggregation (P2) | `measured.py:390` | one strong reporter tile cannot set a region's label; maxima only as labelled descriptive statistics; conflicting observations inspectable; lentiMPRA described as integrated, not episomal | after R2 |
+   | R7 | A compositional ontology (P2) | `compile.py:283` | origin, role, activity, target and evidence status separated; a repeat-derived regulatory element keeps both; a predicted increase does not force a silencer label; alternatives survive serialisation; constraint read as selection, not mechanism | after R3 |
+   | R8 | The joint inference engine, bounded (P2) | `attribution/closure.py`; genomeos-8a's brief | pretest first (coupling against independent scoring on validation folds; a negative closes it); then fixed-boundary search solving a synthetic two-change case, and gains on independent evidence over unchanged annotation and independent-block baselines; convergence never reported as validation | after R1–R5 |
+   | R9 | Result manifests and public claims (P2) | `genomeos/results.py:23`, README | every result carries source accessions and versions, checksums, assembly, coordinate convention, code revision, parameters, exclusions and partitions; a second environment rebuilds one representative result or names what is missing; public summaries separate sequence, annotation and assay coverage, software correctness and independent prediction | now; README corrected 2026-09-28 by the coordinator |
+
+   **What the project already agreed with.** R5's merge defect and R2's missing power column were
+   reported independently the same night by genomeos-8a and confirmed by the coordinator; lane-split
+   was running on them when the review arrived. BIOFORGE-CONFIDENCE.md already said the fixed 0.3 is
+   not a probability; the review corrects its reason.
 
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 
