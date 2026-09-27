@@ -32,6 +32,8 @@ Common keys on any block: evidence, confidence.
 
 from __future__ import annotations
 
+import difflib
+import functools
 import math
 import re
 from collections.abc import Callable
@@ -337,6 +339,35 @@ def _arrows(value: str, line_no: int) -> dict[str, str]:
     return out
 
 
+@functools.cache
+def _accepted(kind: str) -> tuple[str, ...]:
+    """The keys a block of this kind reads: the grammar table's properties plus the common keys.
+
+    The table in `genomeos.lang.grammar` is the one docs/BIOLANG-GRAMMAR.md is generated from, so a
+    key is accepted exactly when the written grammar names it. Imported here, not at the top,
+    because the grammar module imports this one.
+    """
+    from genomeos.lang import grammar
+
+    return tuple(grammar.BLOCKS[kind].get("props", {})) + tuple(grammar.COMMON)
+
+
+def _check_keys(b: Block) -> None:
+    """Refuse a key the block does not read. Until 2026-09-27 such a key was stored and ignored, so
+    `basal_rate: 1.0` compiled to a gene with no basal rate and the engine's smoke run passed on an
+    all-zero line (data/results/biolang_key_census.json has what the check found when it arrived)."""
+    allowed = _accepted(b.kind)
+    for key in b.props:
+        if key in allowed:
+            continue
+        close = difflib.get_close_matches(key, allowed, n=1)
+        hint = f" (did you mean {close[0]!r}?)" if close else ""
+        raise BioLangError(
+            f"line {b.line}: {b.kind} {b.header!r} has no key {key!r}{hint}. "
+            f"A {b.kind} accepts: {', '.join(allowed)}"
+        )
+
+
 def _common(b: Block) -> tuple[Evidence, float]:
     ev = _parse_evidence(b.props["evidence"]) if "evidence" in b.props else Evidence()
     conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else 0.0
@@ -349,6 +380,7 @@ def _common(b: Block) -> tuple[Evidence, float]:
 
 
 def _compile_block(b: Block, module: Module) -> None:
+    _check_keys(b)
     ev, conf = _common(b)
     p = b.props
     if b.kind == "gene":
@@ -378,9 +410,16 @@ def _compile_block(b: Block, module: Module) -> None:
         for child in b.children:
             if child.kind != "transcript":
                 raise BioLangError(f"line {child.line}: only transcript blocks may nest inside a gene")
+            _check_keys(child)
             cev, cconf = _common(child)
+            # a transcript without its own evidence line carries its gene's; `cev or ev` never did,
+            # because an Evidence is always truthy, so such a transcript counted as evidence `none`
             tx = Transcript(
-                id=child.header, kind="transcript", gene_id=g.id, evidence=cev or ev, confidence=cconf or conf
+                id=child.header,
+                kind="transcript",
+                gene_id=g.id,
+                evidence=cev if "evidence" in child.props else ev,
+                confidence=cconf or conf,
             )
             if "exons" in child.props:
                 tx.exons = [Locus.parse(x) for x in _list(child.props["exons"])]

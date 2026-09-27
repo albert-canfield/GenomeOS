@@ -214,6 +214,9 @@ to move for a runtime fix that changes no syntax.
 # a program that exercises the language without any of the application's data. The key is `basal`:
 # until 2026-09-27 it said `basal_rate`, which the parser accepts and ignores, so every species ran at
 # zero and `bio run` passed on a flat line; the run checks below now ask for a level above zero.
+# Its rules said `rate:`, which a rule does not read either (a rule's weight is `strength`), so
+# the inhibition's 0.5 was never applied. Since the same day the parser refuses a key its block
+# does not read (data/results/biolang_key_census.json).
 SMOKE = """module smoke
 # test: rules >= 2
 # test: unknowns == 0
@@ -221,16 +224,19 @@ gene A { locus: chr1:100-400(+); basal: 1.0; evidence: curated "smoke"; confiden
 gene B { locus: chr1:900-1200(+); basal: 0.2; evidence: curated "smoke"; confidence: 0.9 }
 protein Ap { evidence: curated "smoke"; confidence: 0.9 }
 protein Bp { evidence: curated "smoke"; confidence: 0.9 }
-rule A produces Ap { rate: 1.0; evidence: curated "smoke"; confidence: 0.9 }
-rule B produces Bp { rate: 1.0; evidence: curated "smoke"; confidence: 0.9 }
-rule Ap inhibits Bp { rate: 0.5; evidence: curated "smoke"; confidence: 0.8 }
+rule A produces Ap { strength: 1.0; evidence: curated "smoke"; confidence: 0.9 }
+rule B produces Bp { strength: 1.0; evidence: curated "smoke"; confidence: 0.9 }
+rule Ap inhibits Bp { strength: 0.5; evidence: curated "smoke"; confidence: 0.8 }
 order along { members: A, B; axis: position; direction: increasing }
 """
 
 # the interactive entry, driven through stdin: blocks, a forward reference that waits for its
 # declaration, a rejected line, :check and :run
+# The `rate:` rule is the form the smoke programs used until 2026-09-27; the REPL now rejects it by
+# name, and the `strength:` line after it is the rule.
 REPL_INPUT = """gene A { locus: chr1:100-400(+); basal: 1.0; evidence: curated "repl"; confidence: 0.9 }
 rule A produces Ap { rate: 1.0; evidence: curated "repl"; confidence: 0.9 }
+rule A produces Ap { strength: 1.0; evidence: curated "repl"; confidence: 0.9 }
 protein Ap { evidence: curated "repl"; confidence: 0.9 }
 gene { this does not parse
 :check

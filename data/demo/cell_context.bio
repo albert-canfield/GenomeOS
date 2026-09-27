@@ -7,7 +7,14 @@ gene NKX2-5 {
   symbol: NKX2-5
   max: 50; basal: 0.1
   produces: Nkx2-5
-  transcript NKX2-5-201 { exons: chr5:173232109-173233366, chr5:173234555-173235310; cds: chr5:173232700-173233366, chr5:173234555-173235000 }
+  # NKX2-5-201 as GENCODE v50 records it (ENST00000329198.5, data/reference/gencode_v50_chr5.gff3.gz),
+  # converted to 0-based half-open; until 2026-09-27 these loci matched no GENCODE record and the
+  # transcript carried evidence `none`, because a nested block did not inherit its gene's evidence
+  transcript NKX2-5-201 {
+    exons: chr5:173232108-173233209(-), chr5:173234749-173235206(-)
+    cds: chr5:173232568-173233209(-), chr5:173234749-173235083(-)
+    evidence: curated "GENCODE v50 ENST00000329198.5"; confidence: 0.9
+  }
   evidence: curated "GENCODE 50"; confidence: 0.9
 }
 gene MYH6 { max: 80; basal: 0.05; produces: Myh6; evidence: curated "GENCODE 50"; confidence: 0.9 }

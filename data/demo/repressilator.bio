@@ -78,9 +78,10 @@ param translation_rate = 5 {
   confidence: 0.5
 }
 
-# An honest placeholder: a region we know exists but whose function we do not.
+# An honest placeholder: the demo's example of a region whose role is unknown. No source locates it on
+# the Elowitz & Leibler plasmids; its evidence stays `none` and says why.
 region upstream_element {
   locus: plasmid:0-120
   role: unknown
-  evidence: none
+  evidence: none placeholder, no source locates or describes this region
 }
