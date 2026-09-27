@@ -57,6 +57,7 @@ from typing import Any
 
 from genomeos.attribution.bigwig import BigWig, Header, _Source, coalesce
 from genomeos.attribution.constraint import _api
+from genomeos.certainty import Certainty
 
 # -- sources -------------------------------------------------------------------------------------
 MAF_TRACK = "hprc90way"
@@ -1295,8 +1296,41 @@ def build_background(
     return bg
 
 
+PANEL_EVIDENCE = (
+    "inferred: the HPRC assembly panel's presence and recurring events read against an expected count"
+    " (flanks or a matched background, by caller); a class from fixed bars, never a verdict"
+)
+PANEL_NO_PROBABILITY = (
+    "no calibration record: no set of blocks with a known core, variable, polymorphic or"
+    " lineage-restricted outcome has been scored, so no probability of the class is quoted"
+)
+
+
+def _panel_certainty(
+    category: str = PANEL_EVIDENCE,
+    effect: float | None = None,
+    unit: str = "",
+    spread: float | None = None,
+    note: str = "",
+) -> dict[str, Any]:
+    return Certainty(
+        evidence_category=category,
+        effect_estimate=effect,
+        effect_unit=unit if effect is not None else "",
+        measurement_uncertainty=spread,
+        uncertainty_note=note,
+        probability_unavailable=PANEL_NO_PROBABILITY,
+    ).to_dict()
+
+
 def block_class(m: dict[str, Any], observed: int, expected: float) -> dict[str, Any]:
-    """Core, variable, polymorphic, lineage-restricted or unplaced, with the evidence and a confidence."""
+    """Core, variable, polymorphic, lineage-restricted or unplaced, with the evidence and its certainty.
+
+    Review R4b (2026-09-28): the class used to carry a `confidence` that rose with how far presence or
+    the observed/expected ratio lay past its bar (polymorphic was 0.3 + min(0.3, gap * 3)). The size
+    of an effect is not a probability of the class being right, so the record now carries the effect
+    itself, in its unit, with the Poisson spread where there is a count, and no probability.
+    """
     ratio = observed / expected if expected else None
     below, above = poisson_tails(observed, expected)
     ev = {
@@ -1312,20 +1346,44 @@ def block_class(m: dict[str, Any], observed: int, expected: float) -> dict[str, 
         or (m.get("missing_share") or 0) > MISSING_MAX
         or presence is None
     ):
-        return {"class": "unplaced", "reason": "not aligned", "confidence": 0.0, **ev}
+        cert = _panel_certainty("none: the panel aligns too little of the block to read it")
+        return {"class": "unplaced", "reason": "not aligned", "certainty": cert, **ev}
     if presence < LINEAGE_MAX:
-        conf = 0.3 + 0.3 * min(1.0, (LINEAGE_MAX - presence) / LINEAGE_MAX)
-        return {"class": "lineage_restricted", "confidence": round(conf, 2), **ev}
-    if presence < PRESENT_MIN or (m.get("touched_recurring_share") or 0) >= STRUCTURAL_MAX:
-        gap = max(PRESENT_MIN - presence, (m.get("touched_recurring_share") or 0) - STRUCTURAL_MAX)
-        return {"class": "polymorphic", "confidence": round(0.3 + min(0.3, gap * 3), 2), **ev}
+        cert = _panel_certainty(
+            effect=round(presence, 4),
+            unit="panel presence: share of informative assembly-bases carrying the block",
+            note="a share over the panel; no spread computed",
+        )
+        return {"class": "lineage_restricted", "certainty": cert, **ev}
+    touched = m.get("touched_recurring_share") or 0
+    if presence < PRESENT_MIN or touched >= STRUCTURAL_MAX:
+        gap = max(PRESENT_MIN - presence, touched - STRUCTURAL_MAX)
+        cert = _panel_certainty(
+            effect=round(gap, 4),
+            unit=(
+                f"share of assembly-bases past the polymorphic bar (presence below {PRESENT_MIN} or"
+                f" recurring-touched share above {STRUCTURAL_MAX}, whichever is further)"
+            ),
+            note="a share over the panel; no spread computed",
+        )
+        return {"class": "polymorphic", "certainty": cert, **ev}
     if expected < MIN_EXPECTED:
-        return {"class": "unplaced", "reason": "too short to call", "confidence": 0.0, **ev}
+        cert = _panel_certainty(
+            f"none: fewer than {MIN_EXPECTED:g} recurring events expected, too short to call"
+        )
+        return {"class": "unplaced", "reason": "too short to call", "certainty": cert, **ev}
+    counted = {
+        "effect": round(ratio, 4) if ratio is not None else None,
+        "unit": "observed / expected recurring events",
+        "spread": round(math.sqrt(observed) / expected, 4) if expected else None,
+        "note": (
+            "Poisson SD of the observed count over the expectation; the expectation's own error is not"
+            " included"
+        ),
+    }
     if ratio is not None and ratio <= CORE_MAX_RATIO and below <= CORE_MAX_P:
-        conf = 0.3 + 0.3 * min(1.0, (CORE_MAX_RATIO - ratio) / CORE_MAX_RATIO + (1 if below < 1e-4 else 0))
-        return {"class": "core", "confidence": round(min(conf, 0.6), 2), **ev}
-    conf = 0.3 + 0.3 * min(1.0, abs((ratio or 0) - CORE_MAX_RATIO) / CORE_MAX_RATIO)
-    return {"class": "variable", "confidence": round(min(conf, 0.6), 2), **ev}
+        return {"class": "core", "certainty": _panel_certainty(**counted), **ev}
+    return {"class": "variable", "certainty": _panel_certainty(**counted), **ev}
 
 
 # ================================================================================================
@@ -3030,7 +3088,7 @@ def compact_block(r: dict[str, Any], units: Counter | None = None) -> dict[str, 
         **{k: r[k] for k in ("start", "end", "length", "tier", "sequence_class") if k in r},
         **({"gene": r["gene"], "cds_bases": r["cds_bases"]} if "gene" in r else {}),
         "class": c["class"],
-        "confidence": c["confidence"],
+        "certainty": c.get("certainty"),
         "reason": c.get("reason"),
         "recurring_events": c["recurring_events"],
         "expected": c["expected"],

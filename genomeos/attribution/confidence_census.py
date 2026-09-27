@@ -14,6 +14,13 @@ an effect, and every consumer found by search (stored results, compiled BioLang,
 - `no_call`: a constant 0.0 standing for "nothing was called".
 
 Census taken 2026-09-28 at 19423bd. None of these numbers was ever calibrated against an outcome.
+
+Replaced 2026-09-28: human_panel.block_class and variation.case_of return a `certainty` record
+(genomeos.certainty.Certainty: effect in its unit, Poisson spread where there is a count, probability
+None with its reason) and no `confidence`. budget.guess keeps `confidence` because compile.py emits it,
+now documented as an evidence-quality score and repeated as the record's named model score beside the
+constrained fraction as effect. candidates.reading is unchanged: no effect size enters it. Stored
+results are not rewritten; the change reaches them on their next run.
 """
 
 from __future__ import annotations

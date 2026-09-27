@@ -10,6 +10,9 @@ probability. The effect itself may, and should, move in `certainty.effect_estima
 
 A probability, where one appears, names its outcome, calibration population and method; where none
 exists it is None with its reason.
+
+Committed first as strict xfails against the old code (ef31028). The build makes every one of them
+pass; the markers stay as that record and are lifted at the end of this file.
 """
 
 from __future__ import annotations
@@ -142,3 +145,26 @@ def test_budget_guess_carries_the_constrained_fraction_as_its_effect_and_no_prob
     assert_certainty_record(unmeasured)
     assert unmeasured["certainty"]["effect_estimate"] is None
     assert unmeasured["confidence"] <= 0.3
+
+
+# The build after ef31028 makes each strict xfail above pass, so the tests run as plain tests now. The
+# markers are kept as the record of the census commit and lifted here rather than deleted.
+for _test in (
+    test_lineage_restricted_certainty_does_not_rise_as_presence_falls,
+    test_polymorphic_certainty_does_not_rise_with_the_gap,
+    test_core_certainty_does_not_rise_with_the_depletion,
+    test_variable_certainty_does_not_rise_with_the_distance_from_the_bar,
+    test_every_panel_class_carries_a_certainty_record_with_its_effect,
+    test_variation_case_certainty_does_not_rise_with_the_distance_from_the_bars,
+    test_budget_guess_carries_the_constrained_fraction_as_its_effect_and_no_probability,
+):
+    _test.pytestmark = [m for m in getattr(_test, "pytestmark", []) if m.name != "xfail"]
+
+
+def test_no_xfail_is_left_on_the_certainty_properties() -> None:
+    marked = [
+        n
+        for n, f in globals().items()
+        if n.startswith("test_") and any(m.name == "xfail" for m in getattr(f, "pytestmark", []))
+    ]
+    assert marked == []

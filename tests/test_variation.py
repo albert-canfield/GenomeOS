@@ -66,11 +66,14 @@ def test_stats_dict_and_cases():
     assert case_of(0.10, 0.00)["case"] == "relaxed"
     # an element uses its own mammalian bar
     assert case_of(0.10, 0.60, ELEMENT_MAMMAL_MIN)["case"] == "recent"
-    # unmeasured on either axis gives no case; confidence is a reading, capped at 0.6
+    # unmeasured on either axis gives no case; a case states its evidence and no probability, and a
+    # block far past both bars reads with the same certainty as one at them (review R4b: the pinned
+    # 0.6 and 0.3 here were a confidence rising with the distance from the bars)
     assert case_of(None, 0.5) is None and case_of(0.1, None) is None
     c = case_of(1.0, 1.0)
-    assert c["confidence"] == 0.6 and c["mammals"] == "constrained" and c["humans"] == "constrained"
-    assert case_of(0.05, HUMAN_MIN_FRACTION)["confidence"] == 0.3
+    assert c["mammals"] == "constrained" and c["humans"] == "constrained" and "confidence" not in c
+    assert c["certainty"]["probability"] is None and c["certainty"]["probability_unavailable"]
+    assert case_of(0.05, HUMAN_MIN_FRACTION)["certainty"] == c["certainty"]
 
 
 def test_classify_and_tally_blocks():

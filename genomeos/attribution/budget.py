@@ -14,7 +14,8 @@ that is far better than "no clue":
     constrained_unknown  under selection, not coding, not regulatory by the registry: the real unknown
     neutral              unique sequence with no constraint and no element: best guess, nothing
 
-Every guess carries a confidence and the numbers it rests on. The tiers are a
+Every guess carries an evidence-quality score (`confidence`, hand-set per rule, not a
+probability) and a certainty record with the numbers it rests on. The tiers are a
 vocabulary for the next steps (attribution of a target gene and a tissue), not a
 verdict; `constrained_unknown` is where the work is.
 """
@@ -32,6 +33,7 @@ from genomeos.attribution.constraint import (
     fetch_elements,
     phylop_over_blocks,
 )
+from genomeos.certainty import Certainty
 from genomeos.results import load_result, save_result
 
 TIERS = ("structural", "fossil", "regulatory", "constrained_unknown", "neutral")
@@ -41,8 +43,43 @@ STRUCTURAL = {"centromere", "satellite_array", "tandem_repeat"}
 REGULATORY = {"regulatory", "promoter_like"}
 
 
+SCORE_NAME = (
+    "evidence-quality score: the hand-set constant of the budget rule that fired, capped at 0.3 when"
+    " constraint is unmeasured; within one label it does not move with the constrained fraction; not"
+    " a probability"
+)
+NO_PROBABILITY = (
+    "no calibration record: no set of blocks with a known function outcome has been scored against"
+    " these tiers, so no probability of the tier is quoted"
+)
+CONSTRAINT_UNIT = "fraction of measured bases at Zoonomia phyloP >= 2.27 (241 mammals)"
+
+
 def guess(cls: str, confidence: float, phylop: dict | None, elements: dict | None) -> dict:
-    """Class plus constraint to a tier, a label and a confidence."""
+    """Class plus constraint to a tier, a label, an evidence-quality score and a certainty record.
+
+    Review R4b (2026-09-28): `confidence` stays because compile.py emits it as the `confidence:` of
+    each region block, but it is a hand-set evidence-quality score per rule (census:
+    genomeos/attribution/confidence_census.py), never a probability. The record beside it states the
+    constrained fraction as the effect, in its unit, and that no probability exists.
+    """
+    g = _rule(cls, confidence, phylop, elements)
+    fa = phylop.get("fraction_above") if phylop else None
+    source = "curated: assembly gap" if cls == "gap" else f"inferred: sequence class {cls} plus constraint"
+    g["certainty"] = Certainty(
+        evidence_category=source if fa is not None or cls == "gap" else f"{source} not measured",
+        effect_estimate=fa,
+        effect_unit=CONSTRAINT_UNIT if fa is not None else "",
+        uncertainty_note="a block summary; no spread computed" if fa is not None else "constraint not read",
+        model_score=g["confidence"],
+        model_score_name=SCORE_NAME,
+        probability_unavailable=NO_PROBABILITY,
+    ).to_dict()
+    return g
+
+
+def _rule(cls: str, confidence: float, phylop: dict | None, elements: dict | None) -> dict:
+    """Class plus constraint to a tier, a label and the rule's evidence-quality score."""
     fa = phylop.get("fraction_above") if phylop else None
     n_el = elements.get("n", 0) if elements else 0
     if cls == "gap":

@@ -20,7 +20,7 @@ and never stored; a chromosome's blocks cost a few hundred kilobytes because Gno
 one value per kilobase. Nothing here reads a case as a verdict: within-human constraint
 at one kilobase says little about one base, and a "tolerant" block may hold a value slot
 (eye colour's rs12913832 sits in a kilobase Gnocchi does not score at all). The cases are
-evidence with a confidence, reported next to the tier, and the controls (coding exons
+evidence with a certainty record (no probability), reported next to the tier, and the controls (coding exons
 must read as constrained, VISTA positives more than negatives) say how far to trust the
 axis on each chromosome. Design and numbers: docs/GRAMMAR-BY-COMPARISON.md.
 """
@@ -35,6 +35,7 @@ from typing import Any
 from genomeos.attribution.bigwig import BigWig, IntervalStats
 from genomeos.attribution.budget import CONSTRAINED_MIN
 from genomeos.attribution.constraint import PHYLOP_241_URL, PHYLOP_THRESHOLD, phylop_over_blocks
+from genomeos.certainty import Certainty
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 GNOCCHI_URL = "https://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw"
@@ -69,7 +70,7 @@ EVIDENCE = {
         f"curated: gnomAD Gnocchi, Z per kb from 76,156 genomes, constrained at >= {GNOCCHI_THRESHOLD}"
         f" (top decile), strong at >= {GNOCCHI_STRONG}"
     ),
-    "case": "inferred: the two axes read together; a best guess with a confidence, never a verdict",
+    "case": "inferred: the two axes read together; a best guess with its certainty record, never a verdict",
 }
 
 
@@ -99,28 +100,45 @@ def stats_dict(s: IntervalStats | None) -> dict | None:
     }
 
 
+CASE_EVIDENCE = (
+    "inferred: two block summaries read together, the Zoonomia mammalian and the gnomAD Gnocchi human"
+    " constrained fractions, each against a fixed bar; a best guess, never a verdict"
+)
+CASE_NO_PROBABILITY = (
+    "no calibration record: no set of blocks with a known syntax, tolerant, recent or relaxed outcome has"
+    " been scored, so no probability of the case is quoted"
+)
+
+
 def case_of(
     mammal_fraction: float | None,
     human_fraction: float | None,
     mammal_min: float = CONSTRAINED_MIN,
     human_min: float = HUMAN_MIN_FRACTION,
 ) -> dict | None:
-    """One of four cases from the two constrained fractions, with a confidence.
+    """One of four cases from the two constrained fractions, with its certainty record.
 
-    Confidence rises with the distance of each fraction from its bar and is capped at 0.6:
-    two summary statistics over a block are a reading, not a measurement of any base.
+    Review R4b (2026-09-28): the case used to carry a confidence of 0.3 + 0.3 * min(dm, dh), rising
+    with the distance of each fraction from its bar. How far a fraction lies past a bar is an effect,
+    not a probability of the case being right; the fractions travel beside the case, and the record
+    states the evidence category and that no probability exists.
     """
     if mammal_fraction is None or human_fraction is None:
         return None
     m = mammal_fraction >= mammal_min
     h = human_fraction >= human_min
-    dm = min(1.0, abs(mammal_fraction - mammal_min) / mammal_min)
-    dh = min(1.0, abs(human_fraction - human_min) / human_min)
     return {
         "case": CASES[(m, h)],
         "mammals": "constrained" if m else "free",
         "humans": "constrained" if h else "free",
-        "confidence": round(0.3 + 0.3 * min(dm, dh), 2),
+        "certainty": Certainty(
+            evidence_category=CASE_EVIDENCE,
+            uncertainty_note=(
+                "two effects, not one: the mammalian and human constrained fractions are carried beside"
+                " the case (mammal_fraction, human_fraction / gnocchi); no spread computed"
+            ),
+            probability_unavailable=CASE_NO_PROBABILITY,
+        ).to_dict(),
     }
 
 

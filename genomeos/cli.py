@@ -2056,11 +2056,10 @@ def cmd_variation(args: argparse.Namespace) -> int:
                         "people": _pct(b["gnocchi"]["fraction_above"]),
                         "max Z": b["gnocchi"]["maximum"],
                         "case": b["case"]["case"],
-                        "conf": b["case"]["confidence"],
                     }
                     for b in top
                 ],
-                ["locus", "kb", "tier", "mammals", "people", "max Z", "case", "conf"],
+                ["locus", "kb", "tier", "mammals", "people", "max Z", "case"],
             )
         )
     print(f"  [{r['evidence']['case']}; {r['cost']['seconds']} s]")
