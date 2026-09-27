@@ -222,6 +222,20 @@ VERDICT_TEXT = (
     " reading 'predicted, not validated', and it should be read and documented as one"
 )
 
+# Correction, 2026-09-28 (external review, R4). VERDICT and VERDICT_TEXT above are kept as written; their
+# reasoning is wrong. A constant predictor is calibrated on a population when the event frequency there
+# equals the constant: one reliability bin suffices (calibration-in-the-large), and the census above
+# performed exactly that check. What a constant lacks is discrimination (zero resolution, AUC 0.5).
+CORRECTED_VERDICT = "UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION"
+CORRECTION_TEXT = (
+    "A constant predictor can be calibrated to a population's event frequency while having no"
+    " discrimination; its constancy does not make calibration impossible. The problems are that 0.3"
+    " was never supported by any measurement, and that no evaluation population independent of the"
+    " answers exists for the population it is quoted for: the 2-4 designs with a published outcome were"
+    " authored from it and hold no negative case. Since 2026-09-28 the number is not emitted; a design"
+    " answer carries genomeos.certainty.Certainty with probability None and the reason."
+)
+
 WHAT_WOULD_CHANGE_IT: tuple[str, ...] = (
     "1. A NEGATIVE CASE. Every design in the repository is solved and every answer is right, so the"
     " outcome column is constant and no rate can be estimated from it. At least one design whose"

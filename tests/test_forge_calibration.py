@@ -16,6 +16,8 @@ from pathlib import Path
 from genomeos.forge.calibration import (
     CEILING_SITES,
     CENSUS,
+    CORRECTED_VERDICT,
+    CORRECTION_TEXT,
     PREREGISTRATION,
     RETIRED_SITES,
     THE_CONSTANT,
@@ -94,3 +96,18 @@ def test_the_registration_and_the_verdict_are_present_and_agree() -> None:
         assert PREREGISTRATION[key]
     assert PREREGISTRATION["the_population_clause"]["quoted_for"]
     assert CENSUS["fixtures_pairing_a_design_with_a_published_outcome"] == 0
+
+
+def test_a_constant_can_be_calibrated_and_still_not_discriminate() -> None:
+    """The review's correction, checked on numbers: a constant equal to the base rate has zero
+    calibration error and no discrimination, so constancy alone never made calibration impossible."""
+    outcomes = [1] * 3 + [0] * 7  # base rate 0.3
+    constant = [0.3] * len(outcomes)
+    calibration_error = abs(sum(constant) / len(constant) - sum(outcomes) / len(outcomes))
+    assert calibration_error < 1e-12
+    pos = [p for p, y in zip(constant, outcomes, strict=True) if y]
+    neg = [p for p, y in zip(constant, outcomes, strict=True) if not y]
+    auc = sum((a > b) + 0.5 * (a == b) for a in pos for b in neg) / (len(pos) * len(neg))
+    assert auc == 0.5
+    assert CORRECTED_VERDICT == "UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION"
+    assert "no discrimination" in CORRECTION_TEXT and "never supported" in CORRECTION_TEXT
