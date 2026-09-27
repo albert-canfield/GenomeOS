@@ -50,21 +50,21 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
 
 ## Project family
 
-| Component | Role | Status (2026-09-11) |
+| Component | Role | Status (2026-09-27) |
 |---|---|---|
 | **BioLang** | biological programming language / DSL | v0.3: 18 block kinds from `gene` to `organism` and `experiment`; evidence on every block; programs test themselves |
 | **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.3: 20 types with JSON round-trip, `UNKNOWN` as a value |
 | **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | eleven engines (central dogma, network, Boolean, SBML, ageing, spatial, segmentation, gastrulation, Body, debugger, uncertainty); process-bigraph composition |
 | **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl` |
 | **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | 45 libraries with data-computed membership from GO and Reactome |
-| **BioTwin** | a specific genome + specific biological state | HG002 with measured state; fork, run, diff; genome-wide build in progress |
-| **BioForge** | in-silico design and experiment system | design search under constraints; experiments as input next |
+| **BioTwin** | a specific genome + specific biological state | HG002 with measured state; fork, run, diff; genome-wide, 4,048,342 PASS variants on 22 autosomes with 0 reference mismatches |
+| **BioForge** | in-silico design and experiment system | design search under constraints; experiments are input, 19 published mutants run in CI; the emitted confidence is a hand-set constant and is documented as uncalibratable |
 
 Where each stands in detail, what is missing and what comes next:
 [docs/ROADMAP.md](docs/ROADMAP.md) §2.1; the document index is
 [docs/README.md](docs/README.md).
 
-## What runs today (v0.1)
+## What runs today
 
 - **Genome engine.** Stream any FASTA (plain or gzip), including full human
   chromosomes, into typed `Chromosome` / `Sequence` / `Locus` objects.
@@ -93,13 +93,32 @@ Validated on real human DNA: the mitochondrial genome translates to the known
 proteins (MT-CO1 513 aa, MT-CO2 227 aa, MT-ATP6 226 aa) and chromosome 21
 loads in half a second.
 
-## Status (0.9, 2026-09-11)
+## Status (1.0, 2026-09-27)
 
 The whole genome is decoded end to end. Every human chromosome has been
 fetched and analysed, the proteome compiled and verified against the curators,
 and the structural model tested at genome scale. [docs/ROADMAP.md](docs/ROADMAP.md)
 holds the plan and the gaps; [docs/PROGRESS.md](docs/PROGRESS.md) records the
-evidence per task. What 0.9 means, measured:
+evidence per task.
+
+**Milestone 1.0 was reached on 2026-09-22**: the `experiment` block, published
+perturbations as tests, BioForge taking experiments as input, and the Evidence
+explorer. `bio test` runs 41 programs at 220/220 checks in CI, including ten
+worm mutants and nine blood mutants. 1.1 (human mechanism), 1.2 (therapeutics
+benchmark, now 9/9 targets recovered by all four routes) and 1.3 (the 98%) are
+each partly met and the roadmap says for each exactly which clause is not.
+
+**The number that frames everything else.** The non-coding space this project
+exists to explain is 30,602,182 bases, and **160,447 of them — 0.52% — have
+ever been measured by any assay held here.** Every model built over that space
+is extrapolating from half a percent of it, which is why the record carries
+withdrawals as prominently as results: the genome-wide confidence band table
+was retired rather than corrected, and a locus benchmark headline of 0.88 reads
+0.172 on a frame drawn by a rule that excludes the cases where naming the
+nearest gene is simply correct. [docs/LESSONS.md](docs/LESSONS.md) keeps the
+transferable half of each one.
+
+What 0.9 means, measured:
 
 - **every chromosome**: 25 fetched and analysed, UNKNOWN space classified at 98.5% with curated repeats, CTCF nodes on 24, open chromatin read for eleven cell types
 - **the whole proteome**: 19,478 coding genes compiled from seven public databases, translation verified against UniProt on 19,249 of them (90.9% identical to the canonical entry, 97.8% exact for some isoform), and packaged as a 2.3 MB library that answers offline

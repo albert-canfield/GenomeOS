@@ -3983,6 +3983,16 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (312,129 oligos) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
+**Version and README, corrected 2026-09-27.** The 0.9 row above says "Version is 0.9.0 and the
+README states what that means", and both had been overtaken: `pyproject.toml` and
+`genomeos/version.py` still read **0.9.0** five days after 1.0 was reached, and README.md carried a
+section headed "What runs today (**v0.1**)" plus a status section dated 2026-09-11 that described 0.9
+only. The version is now **1.0.0**, the v0.1 heading is gone, the component table is re-dated with
+BioTwin's genome-wide build and BioForge's experiment input marked done rather than pending, and the
+status section states what 1.0 means, which of 1.1/1.2/1.3 are partial, and the number that frames the
+project on its own front page: **160,447 of 30,602,182 bases of the real unknown have ever been
+measured, 0.52%.** No git tag exists yet at 731 commits; the tag remains the owner's to cut.
+
 **1.2 moved twice on 2026-09-21 and its row above is left as it was written each time.** By `e21d34a`
 the benchmark read 7/7 on all three questions with the pinned mechanism-defect count down from 2 to
 0, and by `3aee02f` it reads **8/8**, the eighth case driven by a **copy number** — ERBB2 amplified
