@@ -8954,6 +8954,213 @@ share the latent spread and differ only in the mean.
 **Words.** Every size is a probability-of-detection statement under the calibrated assumptions, never a
 guarantee that an experiment decides clause 2.
 
+## Item 13 C4 registered: hide evidence and predict it, with the AlphaGenome ablation run first (2026-09-28, lane-c4)
+
+This section registers the measuring stick for the coherence programme (ROADMAP section 5, item 13):
+the leave-one-source-out harness that C1, C2 and C3 will all be scored by, and the diagnostic that
+runs before it, **the AlphaGenome ablation**. Both are fixed here before either is run. The constants
+are in `genomeos/attribution/ablation.py` and `genomeos/attribution/holdout.py`; the runners are
+`scripts/c4_ablation.py` and `scripts/c4_holdout_run.py`. Nothing calls the model (0 requests). The
+per-element response cache is never opened: the model's labels are read from the compiled programs,
+which are what the project states.
+
+**What was read before this registration, so the reader can judge it.** While designing the census the
+lane read the published values of the six headline results in `manifest_headlines.json`, including the
+measured arm of the node-containment result (+5.893 points, chromosome interval [3.183, 8.458]) and the
+`cannot_decide` reading of clause 2's measured arm. It also counted the units each source holds per
+endpoint (below), which decides which endpoints clear the floors, and it parsed the compiled programs
+once to confirm that they hold 440,377 predicted links, the published count. No metric of any labelling
+on any source had been computed when this section was written.
+
+**What both may and may not be called.** The harness is an **internal development benchmark only**.
+Every source in it has been read by this project before, several of them repeatedly. The ENCODE CRISPRi
+held-out file alone is read by at least ten scored results (lane-split), so it is a reused benchmark
+and cannot become fresh validation. The ablation reads the same files. A score may be called: "on
+evidence this project has already read, labelling L predicts held-out source S's own endpoint with
+metric M [95% locus-bootstrap interval] at coverage C, beside distance to TSS and the unchanged labels."
+It may not be called any of the following:
+
+- an external, independent or fresh validation;
+- evidence of biological accuracy beyond the sources held here;
+- a test of regulation, when the endpoint is reporter activity, in-vivo activity, base sensitivity or
+  association (activity is not regulation, and association is not perturbation);
+- a comparison between sources or endpoints;
+- out of sample for anything tuned on the CRISPRi benchmark;
+- a verdict on what the evidence can predict when `rest` scores low. `rest` is an unfitted rule, so a low
+  score says only that this rule transfers poorly.
+
+### Part 1, run first: the AlphaGenome ablation
+
+**Removed.** The all-element deletion sweep (`enhancer_targets_all_<chrom>`) and its per-element response
+cache; the sample target runs of the same model (`constrained_targets_*`, `enhancer_targets_*`); the
+compiled predicted layer (every `element` block without `_measured`, every `rule` with `evidence:
+predicted`); and any value computed from these. An input path containing `alphagenome`,
+`enhancer_targets`, `constrained_targets` or `knowledge/compiled/` counts as model output.
+
+**Censused.** There are three families.
+
+1. The six headline results rebuilt in `manifest_headlines.json`.
+2. Every element block of the 24 compiled programs, predicted and measured, axis value by axis value
+   (`class`, `targets`, `origin`, `molecular_role`, `activity`, `target_relation`, `evidence_status`),
+   with the region blocks counted.
+3. Every compiled rule, split by evidence kind after R1.
+
+**The classification rule.** Each conclusion is put in exactly one of three classes.
+
+- **Was never model-dependent.** No ablated input enters the stated value or selects the units it is
+  computed on. A model file read only for a quantity the conclusion does not state does not count, and it
+  is named. Examples are chromosome names and lengths, or a column that the stated figure does not use.
+  For a per-element label, the label's *value* is classified. The fact that an element carries a block at
+  all, because the model named a target, is counted separately as placement.
+- **Survives.** An ablated input enters the conclusion, and with every ablated input removed the same
+  statement is still established on experimental evidence alone.
+  - A predicted link (element, gene, direction) survives when a CRISPRi pair on the same element meets
+    `measured.RECIPROCAL_OVERLAP` (0.5), names the same gene, and is significant in the stated
+    direction: activates means `significant_decrease`, inhibits means `significant_increase`. Any cell
+    and either benchmark file counts.
+  - A compiled rule survives on the same test, measured in the rule's own `when` cell (R1).
+  - A result survives when the record holds an experimental arm of the same statistic, computed without
+    ablated input, with the model figure's sign and a 95% interval that excludes zero. The interval is
+    the result's own headline interval. The surviving figure is the arm's, never the model's.
+- **Does not survive.** Everything else, with one reason:
+  - `about_the_model`: the statement's subject is a model output (its value, its gain or its agreement);
+  - `contradicted`: the same endpoint measured the same element and gene, and found either a
+    well-powered null or a significant change in the opposite direction;
+  - `inconclusive`: the same endpoint measured it without deciding. This covers an underpowered null, a
+    missing effect, and an experimental arm that is below its floor or has an interval across zero;
+  - `never_measured`: nothing of the same endpoint was measured. The element and gene were never
+    perturbed together (for a rule: not in its cell), or the result has no experimental arm.
+
+Reporter activity, VISTA, saturation mutagenesis and GTEx association are other endpoints. They never
+make a link survive (review S4). Where they touch a link that does not survive, they are counted beside
+it.
+
+On a predicted block, the axis values that carry the link take the link's class. These are `targets`,
+`activates_target` or `represses_target`, `predicted_deletion_target`, `nearest_tss_in_domain`, and the
+repression-alternatives role group. `predicted_model` (on predicted blocks) and `conflicting` (on
+measured twins) are `about_the_model`. Every other value is sequence, registry or assay content and was
+never model-dependent. The same holds for a measured twin's activity and relation. Placement is counted
+from the measured side: of the CRISPRi significant decreases (element, gene, cell), how many have a
+model-compiled element that meets the overlap rule, and, for the rest, how many have an ENCODE cCRE that
+would carry them with no model involved.
+
+**The registered reading of each headline result.** Each reading comes from its writer, read before the
+run, and is checked at run time against the result's manifest inputs.
+
+| result | model input | reading |
+| --- | --- | --- |
+| node_containment_audit (+2.90) | value: the archive's most-moved coding gene | experimental arm `node_containment_measured`, uniform control, chromosome interval |
+| node_containment_measured (+5.89) | bookkeeping only: stage 1's rows supply chromosome name and length | never model-dependent |
+| constrained_unknown_targets (62.3% vs 86.0%) | value: the model's mover | experimental arm `clause2_measured_arm`, its registered `primary_reading` |
+| therapeutic_benchmark (9/9) | none (checked against the manifest) | never model-dependent, unless the manifest names a model input |
+| unknown_coverage (0.52%) | a column the figure does not state (organise's `attributed_elements`) | never model-dependent |
+| crispri_published (deletion feature over ENCODE-rE2G) | value: the deletion feature | `about_the_model` |
+
+### Part 2: the leave-one-source-out harness
+
+**Sources and endpoints.** Each assay is a separately holdable unit, and each endpoint is modelled apart.
+
+| source | unit | endpoint(s) | primary metric |
+| --- | --- | --- | --- |
+| `crispri:<study>` (the benchmark's `Dataset`, R5; 11 studies) | element-gene-cell pair | `decrease`: significant decrease (1) against well-powered null (0); `increase`: significant increase (1) against well-powered null (0). Underpowered nulls and missing effects are counted, never scored (R2) | average precision |
+| `lentimpra:<cell>` (K562, HepG2, WTC11) | one tile in one cell (R6, never aggregated) | `activity`: log2(RNA/DNA); `active`: at or above 1.0 | Spearman; average precision |
+| `vista` | element | positive in any tissue (1) or negative (0) | average precision |
+| `satmut` | measured base of each locus's primary experiment | functional (1) or inert (0) | average precision |
+| `gtex` | element x protein-coding gene with a TSS within 1 Mb, at the elements GTEx ties to a gene | associated in any of 49 tissues (1) or not (0; untested and null are not told apart) | average precision |
+
+AUROC is the secondary metric everywhere (for `activity`, the AUROC of `active`). The prevalence is
+reported beside average precision. The GTEx elements are the ones the eQTL distillation indexed, which
+are elements that an earlier target run predicted for, so that unit set was chosen by those runs.
+
+**Unit counts, read before this registration.**
+
+- **CRISPRi decrease, positives/negatives:**
+  - Gasperini2019: 360/4,893
+  - Schraivogel2020: 23/1,276
+  - Xie: 42/393
+  - Morris: 35/132
+  - K562_DC_TAP: 12/1,221
+  - WTC11_DC_TAP: 15/1,886
+  - HCT116: 34/0
+  - Nasser2021: 111/0
+  - Klann: 21/0
+  - Reilly: 8/0
+- **CRISPRi increase:**
+  - Gasperini2019: 42/4,893
+  - WTC11_DC_TAP: 20/1,886
+  - every other study is under 20 positives or has no informative negatives
+- **lentiMPRA:** about 54,000 tiles per cell, and 2,864 loci
+- **VISTA:** 1,267/1,175, and 948 loci
+- **saturation mutagenesis:** 2,694/7,140 bases, and 19 loci
+- **GTEx:** 21,166/124,183, and 421 loci. Of 30,210 element-gene associations, 8,333 are with a gene that
+  is not protein-coding and 711 with a gene absent from GENCODE v50. Both groups are counted and never
+  scored.
+
+**The split.** The split is by study and by locus. Holding out S does three things.
+
+1. It removes S and every provenance sibling of S. CRISPRi studies that share a value of the
+   benchmark's `Reference` column are siblings, which makes K562_DC_TAP and WTC11_DC_TAP siblings
+   (Ray et al. 2025). The three lentiMPRA cells are one library.
+2. It masks every record of S's endpoint family whose interval shares a base with an S unit. These are
+   the related intervals of lane-split's `split_overlap`, so an element measured by two studies cannot
+   leak across the split. The relation counts per source reuse `measured.split_overlap` itself.
+3. It never admits a pair from the CRISPRi benchmark's held-out file as evidence (R5), whatever is held
+   out.
+
+Records of another family are evidence in full: a reporter predicting a screen is the question, and a
+second screen of the same pair is a replicate. A labelling that declares it read S, a sibling, the
+held-out file, or a same-family source outside `evidence(without=S)` is refused (`LeakError`).
+
+**Metric and interval.**
+
+- **Interval.** A 95% percentile bootstrap over loci, never over pairs. The run uses 1,000 resamples,
+  seed 20260928, and the same resamples for every labelling of a source.
+- **Loci.** A locus is a connected component of a source's units, joined by a shared 1 Mb bin of the
+  midpoint or, for pair endpoints, a shared gene. Each resample draws as many loci as the source has.
+- **Ranks under resampling.** Spearman under resampling keeps the full-sample ranks, weighted.
+- **Abstention.** An abstention ranks below every stated score, and coverage is reported beside every
+  value.
+- **Floors.** An endpoint is described and not scored below 20 positives or 20 negatives
+  (`MIN_FOR_A_COMPARISON`), below 20 units for `activity`, or below 10 loci. By the counts above, 15
+  endpoints are scored and 16 CRISPRi endpoints are described:
+  - HCT116, Nasser2021, Klann and Reilly have no well-powered null at all;
+  - K562_DC_TAP is under 20 positives on both endpoints;
+  - WTC11_DC_TAP is under 20 positives on `decrease`;
+  - Morris, Schraivogel2020 and Xie are under 20 positives on `increase`.
+
+**The labellings of the first run.** Three labellings are scored for every source.
+
+- `distance`: minus the distance from the unit's midpoint to its gene's TSS. CRISPRi uses the
+  benchmark's own TSS columns, and GTEx uses GENCODE v50. For element and base units it is the nearest
+  GENCODE v50 protein-coding TSS.
+- `unchanged`: the compiled predicted layer as it stands, matched by one shared base. For pair endpoints
+  it is the largest strength among matched links that name the unit's gene in the endpoint's direction:
+  activates for `decrease`, inhibits for `increase`, and either for `associated`. It is 0 when the
+  matched links name another gene or direction. For element and base endpoints it is the largest strength
+  of any matched link. It abstains where no predicted element shares a base, and it never reads the
+  measured twins.
+- `rest`: the prediction from the remaining sources, an unfitted rule. The score is 10 x G + E +
+  closeness.
+  - G counts the view's sources that support this gene at this interval: a CRISPRi training pair on the
+    same gene, significant in the endpoint's direction, or a GTEx association with the same gene.
+  - E counts the sources that say the interval does something: lentiMPRA active by R6's rule in some cell,
+    a VISTA positive, or a functional saturation-mutagenesis base. For non-regulation endpoints it also
+    counts a significant CRISPRi training pair and a GTEx association on any gene.
+  - Closeness is 1 / (1 + distance / 100 kb).
+
+The three paired differences are also scored on the same resamples: rest minus distance, rest minus
+unchanged, and unchanged minus distance.
+
+**The call the pilot makes.** It is `holdout.score(labels, held_out_source)`, and `compare(a, b,
+source)` gives the paired difference. It is deterministic, with a fixed seed and resample count. It is
+cached in memory and under `data/cache/holdout`, keyed by the predictions themselves. It runs on
+ordinary CPUs, uses numpy over at most about 145,000 units, and makes no request.
+
+**Expectation, written before the run.** Distance should be the strongest simple predictor of CRISPRi
+decreases, as the benchmark literature finds. `rest` should add little there, because after the locus
+mask no screen of the same pair remains. The unchanged labels should have low coverage of the screens'
+pairs. None of this changes a rule above.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
