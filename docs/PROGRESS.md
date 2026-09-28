@@ -1122,3 +1122,40 @@ of 986,941 facts state no confidence at all. The results that rest on the AlphaG
 that its model version was never requested; new requests name it. Moving the budget's readers to the
 new labels changed 0 of about 14 million numbers compared. The three decisions at the top of this
 entry are unchanged.
+
+## 2026-09-28 — clause 2 of milestone 1.3, tested to the end of what can be tested without new measurement
+
+The project's central question — whether the attribution layer says anything true about the
+non-coding 98% — was pushed as far as the evidence allows. Six registered runs in two days, each
+committed before its numbers existed, 0 AlphaGenome requests.
+
+**The finding, in one line.** Elements inside constrained-unknown blocks name a coding gene **9.18%**
+of the time against **44.04%** for elements outside them: about a fifth as often, not more often.
+
+**Every innocent explanation was tested and rejected, in order.**
+- *The control was unfair on length* → matched on length: −37.23 points.
+- *The blocks sit in gene-poor places* → matched on local gene density: −27.25; density closes about
+  11 of the 38.6 points.
+- *The comparison windows get more chances* → matched on the number of scored elements: −23.99, and
+  −18.57 when the counts are made exactly equal. The per-element estimator, which needs no matching
+  at all, gives −28.77.
+- *The model cannot see a gene from there* → measured, for the first time, where the model actually
+  reads: reach **is** far lower (2.23 coding starts against 7.22; 28% of block elements have none at
+  all). But standardising on it keeps seven tenths of the gap, and **the gap is present inside every
+  reach stratum and both element classes**. The failure is about the sequence, not the window.
+- *The tier labels mean something* → the neutral tier behaves identically to the real unknown
+  (−0.10, interval covering zero). The label does not predict whether a gene is named.
+
+**What measurement says: nothing yet, and that is now a number.** 823 of 882 blocks hold no measured
+element at all; three hold one CRISPRi ever tested against a coding gene; none moved a gene, which
+three nulls cannot establish. The registered arm returned *cannot decide*. **19 more comparable blocks
+would decide it** — about twenty times today's experimental reach into this sequence. And the assays
+are aimed away from it: these blocks carry a measured element 11% of the time against 26% for their
+matched windows.
+
+**So clause 2 stays not met, and the reason is no longer a mystery.** Either these blocks hold
+regulating elements the model failed to name, or they hold none while their windows do. Nothing the
+project holds can separate those, and the experiment that would is now specified rather than wished
+for.
+
+docs/ROADMAP.md milestone 1.3 notes; docs/ATTRIBUTION.md; `data/results/clause2_*.json`.

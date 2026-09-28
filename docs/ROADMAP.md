@@ -4471,6 +4471,21 @@ the failure is the model's; if it finds they hold none while their windows do, t
 what is wrong. The descriptive route is finished; **clause 2 now waits on an experiment whose size is
 known**.)*
 
+*(2026-09-28, lane-tssreach, `f6b86bb` registered, `e8aa571` result, 0 requests: **the two descriptive
+controls are closed, and the last cheap route with them.** Element class and reach — the coding starts
+inside the model's own 1,048,576 bp input window centred on each element, the window read from the
+scorer rather than assumed — were registered with their strata, thresholds and every reading in advance,
+then run once; the gate reproduced `d717b28` and `faeb0da` to the digit. **Reach really is far lower
+inside the blocks**: 2.229 coding starts against 7.219, −4.39 per block, and **28.08% of block elements
+have no coding start in the window at all against 6.20%**. So the instrument was partly asked about
+elements from which it can see a third as many genes. **But that is not the explanation**: standardising
+on reach leaves −24.46 points (−26.36 to −22.47), closing 29.8% of the gap against a registered
+threshold of half; standardising on class leaves −33.57, closing 3.7%; jointly −24.00. The gap is
+present **inside every reach stratum** (−14.48 to −34.62) and inside both scored classes, and on the
+density-matched windows, where element-level reach balances (−0.14, interval covering zero), it is still
+−23.89. **Clause 2's failure is about the sequence, not the window.** The reach imbalance is real and
+belongs beside the −28.77 wherever it is quoted. What remains is measurement, and its size is known.)*
+
 **1.3's row above cites "node +2.88 points over random boundaries" as evidence that a clause was met.**
 Re-audited 2026-09-27 (area B's node containment row): **+2.90, 95% CI +2.03 to +3.81** on a control
 matched on boundary count only, +1.2 to +6.6 across four baselines, and **+5.89, CI +3.18 to +8.46, on
