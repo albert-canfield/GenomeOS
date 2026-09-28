@@ -501,3 +501,70 @@ activators):
   **Negative for the sign lane's reading:** the mesoderm band is absent under
   every rule, so the mean is not what removed it; it only sets how much
   endoderm the second activator costs (0.367 against 0.42–0.45).
+
+**What evidence exists, and what it can discriminate.** Read before this
+registration was written, so the outcome of the published cases below was
+known to the lane when it wrote the pass rule:
+
+1. *Published reporter pairs* (Bothma JP, Garcia HG, Ng S, Perry MW, Gregor T,
+   Levine M 2015, eLife 4:e07956, PMC4532966): one transgene with the primary
+   enhancer, the shadow enhancer, or both, live-imaged. With the construct's
+   enhancers as the gene's whole activator set, each rule predicts the pair P
+   from the singles S1, S2 without any number: mean P = (S1 + S2)/2, max
+   P = max, sum_capped and or max ≤ P ≤ S1 + S2. The paper's own words:
+   *knirps* "early ... super-additively" (P > S1 + S2) and later "a simple
+   additive manner"; *hunchback* "sub-additively in anterior regions",
+   "additively" in central ones ("the wild-type transgene produces
+   significantly higher levels of expression than either of the transgenes
+   driven by a single enhancer"); *snail* "the wild-type transgene displays
+   significantly lower levels of expression than the mutant transgene
+   containing only the shadow enhancer". **Can discriminate:** additive pairs
+   contradict mean and max; the *snail* pair below its stronger single
+   contradicts every monotone rule (sum_capped, max, or) and is the one
+   behaviour only the mean produces; super-additivity contradicts all four.
+2. *Published CRISPRi doubles* (Zhou J, Guruvayurappan K, Toneyan S et al.,
+   bioRxiv 2023.04.26.538501, Cell Genomics 2024; Gasperini 2019 K562
+   single-cell data): in 264 high-confidence enhancer pairs "the
+   multiplicative model provided a better fit" than the additive one, and no
+   interaction term was significant. **Cannot discriminate** these four: it
+   compares two GLM links, and each rule's double-removal prediction depends
+   on the gene's other activators and on saturation.
+3. *The project's CRISPRi* (EPCrisprBenchmark training split, K562,
+   `measured.load_crispri(split="training")` through `development_only`):
+   single removals only, no doubles. **Can discriminate max only:** a
+   gene-cell with two significant decreases is impossible under max
+   (removing an activator below the maximum changes nothing). Under the mean
+   the single-removal changes of a gene's activators sum to exactly zero
+   (ΔA_i = (A − t_i)/(n − 1)), so decreases need balancing increases, but
+   untested or undetected activators can carry them; the ratio is reported,
+   not judged. Sum_capped and or allow any pattern of decreases.
+4. *Textbook fixtures in tests*: the census above shows no C. elegans,
+   haematopoiesis or cell-cycle program has a gene with two activators in
+   this runtime (the Faure cell cycle runs in `runtime/boolean.py`, whose
+   logic is written per gene), so **none can discriminate**. The one case,
+   gastrulation, rests on unsourced strengths and thresholds: whether Tbxt
+   removal lowers SOX17 (Lolas 2014 Fig. 3A) depends on them under the mean.
+
+**The test** (`grn.COMBINATION_TEST`, run once by
+`scripts/activator_combination.py choose`): a rule is contradicted by a
+case only when no choice of its numbers can produce the observation. Cases:
+the five Bothma behaviours above and the CRISPRi two-decrease count (max is
+contradicted if at least 10 training gene-cells have two or more significant
+decreases). A case that contradicts all four rules (knirps early) is
+reported as outside the family and discriminates nothing. **Pass rule:**
+switch from the mean to R only if the mean is contradicted by at least one
+judged case and R by none; if no alternative survives, or several do, the
+mean is retained and the choice recorded as undetermined. **No strength,
+threshold, Hill coefficient or rate is re-tuned for any rule,** and the
+census comparison is reported per rule but is not a criterion: picking the
+rule that fits the census best would be a tuning with one discrete knob.
+
+**Expected, stated before the run:** from the published cases alone the mean
+is contradicted twice (knirps late, hunchback central) and every
+alternative at least once (*snail*), so the registered outcome is "mean
+retained, undetermined"; the CRISPRi count can only add a contradiction of
+max, so it cannot change that. The run is therefore mainly the CRISPRi count
+and its record; the lane says so rather than presenting a foregone verdict
+as a discovery. The CRISPRi outcomes had not been counted when this was
+written (only the table's schema was read); `tests/test_activator_combination.py`
+pins the constants and the identities each rule's prediction rests on.

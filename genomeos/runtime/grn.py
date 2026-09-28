@@ -22,6 +22,7 @@ The combination rules are model assumptions, named in `ACTIVATOR_COMBINATION` an
 another is high lowers that gene's drive there (lane-sign, 2026-09-28).
 `combine_activators` computes the mean and the three alternatives the census in
 docs/DESIGN-MINIMAL-CELL.md compares; the runtime uses the one `ACTIVATOR_COMBINATION` names.
+The registered choice between them is `COMBINATION_TEST` (2026-09-28).
 
 Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
 for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
@@ -57,6 +58,48 @@ INHIBITOR_COMBINATION = "product"  # R = product of (1 - s_j * H(x_j))
 #: the activator rules the combination registration (lane-combine, 2026-09-28) compares; each is
 #: over the terms t_i = s_i * H(x_i) in [0, 1], and all four agree when a gene has one activator
 ACTIVATOR_RULES = ("mean", "sum_capped", "max", "or")
+#: The choice test between the rules, registered 2026-09-28 before its one run (lane-combine;
+#: docs/DESIGN-MINIMAL-CELL.md, "The activator combination rule: a choice test"). Each case is a
+#: published or project measurement whose outcome a rule either can or cannot produce whatever its
+#: numbers are; a rule is contradicted by a case only in that parameter-free sense. No strength,
+#: threshold, Hill coefficient or basal rate is re-tuned for any rule, and the gastrulation census is
+#: reported under each rule but is not a criterion (choosing a rule by that fit is a tuning).
+COMBINATION_TEST = {
+    "cases": {
+        # Bothma et al. 2015 eLife 4:e07956 (PMC4532966): one reporter, primary / shadow / both
+        # enhancers, the pair P against the singles S1, S2 above basal. Predictions: mean P = (S1+S2)/2;
+        # max P = max(S1, S2); sum_capped max <= P <= S1+S2; or max <= P <= S1+S2.
+        "bothma2015_kni_early": {"observed": "super-additive, P > S1 + S2", "contradicts": ACTIVATOR_RULES},
+        "bothma2015_kni_late": {"observed": "additive, P = S1 + S2", "contradicts": ("mean", "max")},
+        "bothma2015_hb_anterior": {
+            "observed": "sub-additive; removing the shadow enhancer has no effect",
+            "contradicts": (),
+        },
+        "bothma2015_hb_central": {"observed": "additive, P = S1 + S2", "contradicts": ("mean", "max")},
+        "bothma2015_sna": {
+            "observed": "P below the shadow enhancer alone, P < max(S1, S2)",
+            "contradicts": ("sum_capped", "max", "or"),
+        },
+        # the project's CRISPRi training split: single removals only; a gene-cell with two significant
+        # decreases is impossible under max (removing a non-maximal activator changes nothing)
+        "crispri_training_two_decreases": {"observed": "computed at the run", "contradicts": "max if >= 10"},
+    },
+    "not_judged": {
+        "zhou2024_gasperini_doubles": "compares additive and multiplicative GLM links for enhancer pairs; "
+        "each rule's double-removal prediction depends on the gene's other activators and saturation",
+        "crispri_training_mean": "under the mean the single-removal changes of a gene's activators sum to "
+        "zero, but untested or undetected activators can carry the balancing increases",
+        "gastrulation_tbxt_knockdown": "Lolas 2014 Fig. 3A (Brachyury depletion lowers Sox17): whether "
+        "the model reproduces it depends on the module's unsourced strengths and thresholds",
+        "gastrulation_census": "a fit criterion, not a mechanism test",
+    },
+    # a case that contradicts all four rules says the family is inadequate and discriminates nothing
+    "exclude_cases_contradicting_every_rule": True,
+    # switch from the mean to R only if the mean is contradicted by >= 1 judged case and R by none; if
+    # no R or several survive, the mean is retained and the choice is recorded as undetermined
+    "pass_rule": "switch to the single surviving rule, else mean retained, undetermined",
+    "crispri_min_gene_cells_for_max": 10,
+}
 #: a rule source ending in this reads zero by the caller's declaration, never by omission
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
