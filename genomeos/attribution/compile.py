@@ -14,10 +14,14 @@ chromosome and writes it as blocks the engine parses and checks:
 - the CTCF domains those elements sit in, each with a comment saying in which cell
   types the reader finds the node open.
 
-Everything is labelled with the evidence kind it has (curated, inferred, predicted)
-and a confidence; predicted evidence is capped at 0.7 as everywhere in GenomeOS. The
-program carries `# test:` lines so `bio test` checks that what was compiled is what
-was meant. Generated files say so in their header and are not edited by hand.
+Everything is labelled with the evidence kind it has (curated, inferred, predicted).
+Since review R4 (2026-09-28) a predicted element or rule states no `confidence:` (the parser
+reads that as 0.0, unstated): it carries its effect in its unit and says its probability is
+unavailable, and the full `genomeos.certainty.Certainty` record is written once in the
+header. A region keeps the budget's hand-set evidence-quality score, labelled as such in its
+evidence note; gene stubs and domains state no constant. The program carries `# test:`
+lines so `bio test` checks that what was compiled is what was meant. Generated files say so
+in their header and are not edited by hand.
 
 Since 2026-09-17 the program also carries an **experimental layer**
 (`attribution/measured.py`): where a CRISPRi screen, a lentiMPRA library, a VISTA
@@ -38,9 +42,26 @@ import time
 from pathlib import Path
 from typing import Any
 
+from genomeos.certainty import Certainty
 from genomeos.results import RESULTS_DIR, load_result
 
+#: retired as a compiled number by review R4 (2026-09-28); kept because
+#: attribution/confidence_calibration.py recomputes the historical formula to read old programs
 PREDICTED_CAP = 0.7
+EFFECT_UNIT = (
+    "log2 fold change of the target gene's predicted RNA-seq expression on deleting the element"
+    " (AlphaGenome gene scorer, one track)"
+)
+MODEL_SCORE_NAME = (
+    "the target run's `confidence` field, equal to |log2 fold change|: the magnitude the run ranked"
+    " by, not a probability"
+)
+NO_PROBABILITY = (
+    "no calibration record: no compiled prediction has been scored against a measured outcome"
+    " population by a stated method, so no probability that deleting this element moves this gene is"
+    " quoted"
+)
+REGION_SCORE_NOTE = "confidence is the budget's hand-set evidence-quality score per rule, not a probability"
 EVIDENCE_BY_TIER = {
     "structural": ("curated", "RepeatMasker and the assembly, classified by genomeos unknown"),
     "fossil": ("curated", "RepeatMasker family, Zoonomia phyloP over 241 mammals"),
@@ -81,6 +102,28 @@ def _copies(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
     return {blk["start"]: blk for blk in r.get("blocks", []) if blk.get("duplicated_fraction") is not None}
 
 
+def element_certainty(pc: dict[str, Any]) -> Certainty:
+    """What a predicted element-to-gene link rests on, R4 (2026-09-28): effect in its unit, the run's
+    ranking score named, no probability. Nothing here converts the effect into a certainty."""
+    score = pc.get("confidence")
+    return Certainty(
+        evidence_category="predicted: AlphaGenome deletion, one model run",
+        effect_estimate=float(pc["log2_fold_change"]),
+        effect_unit=EFFECT_UNIT,
+        uncertainty_note="one deterministic model run; no spread computed",
+        model_score=None if score is None else float(score),
+        model_score_name=MODEL_SCORE_NAME,
+        probability_unavailable=NO_PROBABILITY,
+    )
+
+
+def _effect_note(pc: dict[str, Any]) -> str:
+    """The per-block form of the record: the effect with its unit's short name, no probability."""
+    return (
+        f"effect {float(pc['log2_fold_change']):+.3g} log2 fold change on deletion, probability unavailable"
+    )
+
+
 def _region(
     chrom: str, b: dict, human: dict[int, dict] | None = None, copies: dict[int, dict] | None = None
 ) -> list[str]:
@@ -111,7 +154,7 @@ def _region(
         f"region U_{chrom}_{b['start']} {{",
         f"  locus: {chrom}:{b['start']}-{b['end']}",
         f"  role: {role}",
-        f'  evidence: {kind} "{_text(source)}" {_text(", ".join(facts))}',
+        f'  evidence: {kind} "{_text(source)}" {_text(", ".join([*facts, REGION_SCORE_NOTE]))}',
         f"  confidence: {min(b['guess']['confidence'], 1.0):.2f}",
         "}",
     ]
@@ -237,6 +280,24 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         "# Every rule is gated on the cell it was measured or predicted in (`when: cell_type = K562`), one",
         "# rule per element, gene and cell, so a run in HepG2 integrates none of K562's. A rule whose",
         "# cell was not recorded says `cell_type = unknown`, which matches no cell: it is never universal.",
+        "#",
+        "# Certainty (review R4, 2026-09-28). A predicted element or rule states no `confidence:`: the",
+        "# size of a predicted effect is not how sure anyone is. Each carries its effect in its unit and",
+        "# says its probability is unavailable; the record behind that note, for every predicted link:",
+        *(
+            "# " + ln[2:]
+            for ln in Certainty(
+                evidence_category="predicted: AlphaGenome deletion, one model run",
+                effect_unit=EFFECT_UNIT,
+                uncertainty_note="one deterministic model run; no spread computed",
+                model_score_name=MODEL_SCORE_NAME,
+                probability_unavailable=NO_PROBABILITY,
+            ).comment_lines()
+        ),
+        "# with the effect and the score per element. A region's `confidence:` is the budget's hand-set",
+        "# evidence-quality score for the rule that fired, not a probability; a `_measured` block's is the",
+        "# hand-set rank of its strongest assay kind (perturbation above reporter), not a probability.",
+        "# Gene stubs and domains state no confidence.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")
@@ -270,8 +331,8 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
                 lines.append(f"# {did}: {note}")
             lines.append(
                 f"domain {ident(did)} {{ locus: {chrom}:{d['start']}-{d['end']}; "
-                f'evidence: inferred "CTCF-only ENCODE elements as boundary proxies, no Hi-C"; '
-                f"confidence: {d.get('confidence', 0.4):.2f} }}"
+                'evidence: inferred "CTCF-only ENCODE elements as boundary proxies, no Hi-C" '
+                "no confidence stated, the domain call has no measured outcome }"
             )
     if genes:
         lines += [
@@ -280,15 +341,12 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         ]
         for g in genes:
             lines.append(
-                f'gene {ident(g)} {{ symbol: {g}; evidence: curated "GENCODE v50"; confidence: 0.9 }}'
+                f'gene {ident(g)} {{ symbol: {g}; evidence: curated "GENCODE v50" symbol only, a stub }}'
             )
     if elements:
         lines += ["", f"# ---- attributed elements ({len(elements)}): deletion in AlphaGenome names the gene"]
         for e in elements:
             pc = e["predicted_coding"]
-            conf = round(
-                min(PREDICTED_CAP, max(0.05, float(pc.get("confidence") or abs(pc["log2_fold_change"])))), 2
-            )
             action = "activates" if pc.get("action") == "activates" else "inhibits"
             basis = (
                 f"predicted, deleting the element moves {pc['gene']} by {pc['log2_fold_change']:+.2f} log2 "
@@ -304,8 +362,8 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             props += [
                 f"targets: {ident(pc['gene'])}",
                 f"basis: {_text(basis)}",
-                'evidence: predicted "AlphaGenome RNA-seq gene scorer, expression change on deletion"',
-                f"confidence: {conf:.2f}",
+                'evidence: predicted "AlphaGenome RNA-seq gene scorer, expression change on deletion" '
+                + _text(_effect_note(pc)),
             ]
             lines.append(f"element {e['id']} {{")
             lines += [f"  {p}" for p in props]
@@ -314,9 +372,8 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             lines.append(
                 f"rule {e['id']} {action} {ident(pc['gene'])} {{ strength: {strength}; "
                 f"when: cell_type = {context(pc.get('tissue'))}; "
-                f'evidence: predicted "AlphaGenome deletion, {_text(pc.get("tissue") or "strongest track")}";'
-                " "
-                f"confidence: {conf:.2f} }}"
+                f'evidence: predicted "AlphaGenome deletion, {_text(pc.get("tissue") or "strongest track")}" '
+                f"{_text(_effect_note(pc))} }}"
             )
     from genomeos.attribution.measured import AGREES, DISAGREES, RECIPROCAL_OVERLAP, eligibility
 

@@ -323,7 +323,9 @@ def test_compile_chromosome_to_biolang(tmp_path):
     assert len(m.unknowns()) == 1 and len(m.rules) == 2
     assert {e.kind for e in m.entities.values()} == {"region", "regulatory_element", "gene", "domain"}
     e1 = m.entities["EH38E0000001"]
-    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1" and e1.confidence == 0.7  # capped
+    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1"
+    # R4 (2026-09-28): no confidence from the effect's size; tests/test_compile_certainty.py has the property
+    assert e1.confidence == 0.0 and "+0.9 log2 fold change" in e1.evidence.note
     out = write_program("chrT", tmp_path / "prog" / "noncoding_chrT.bio", tmp_path)
     assert out.exists() and out.read_text() == text
 
