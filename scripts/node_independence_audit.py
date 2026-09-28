@@ -149,7 +149,8 @@ def constant_history() -> dict:
         ("boundary_merge_bp", "MERGE_BOUNDARIES_WITHIN = 5_000", "genomeos/genome/domains.py"),
         ("boundary_class", 'c.cls == "CTCF-only"', "genomeos/genome/domains.py"),
         ("node_confidence", "confidence: float = 0.4", "genomeos/genome/domains.py"),
-        ("control_seed", "SEED = 7", "scripts/node_containment_audit.py"),
+        ("control_seed_inherited", "random.Random(7)", "scripts/oriented_domains.py"),
+        ("control_seed_in_the_audit", "SEED = 7", "scripts/node_containment_audit.py"),
         ("control_draws", "SHUFFLES = 20", "scripts/oriented_domains.py"),
     ):
         log = [
@@ -176,21 +177,20 @@ def constant_history() -> dict:
 
 def _crispri_pairs_by_chrom() -> tuple[dict[str, list[tuple[int, int]]], dict]:
     """The 661 regulated pairs as (element midpoint, measured TSS), and their split decomposition."""
-    pairs = []
+    pairs: list[tuple[str, object]] = []
     per_file: dict[str, int] = {}
     for t in nca.CRISPRI_TABLES:
         if (crispri.KNOWLEDGE / t).exists():
             got = crispri.load(t)
-            per_file[CRISPRI_SPLIT_OF.get(t, t)] = sum(1 for p in got if p.regulated and p.tss is not None)
-            pairs += got
-    reg = [p for p in pairs if p.regulated and p.tss is not None]
+            split = CRISPRI_SPLIT_OF.get(t, t)
+            per_file[split] = sum(1 for p in got if p.regulated and p.tss is not None)
+            pairs += [(split, p) for p in got]
+    reg = [(s, p) for s, p in pairs if p.regulated and p.tss is not None]
     by_chrom: dict[str, list[tuple[int, int]]] = {}
-    for p in reg:
-        by_chrom.setdefault(p.chrom, []).append((p.midpoint, p.tss))
     cells_by_split: dict[str, dict[str, int]] = {}
-    for p in reg:
-        cells_by_split.setdefault(CRISPRI_SPLIT_OF.get(p.source_file, p.source_file), {})
-        d = cells_by_split[CRISPRI_SPLIT_OF.get(p.source_file, p.source_file)]
+    for split, p in reg:
+        by_chrom.setdefault(p.chrom, []).append((p.midpoint, p.tss))
+        d = cells_by_split.setdefault(split, {})
         d[p.cell] = d.get(p.cell, 0) + 1
     return by_chrom, {"pairs_per_file": per_file, "cells_per_file": cells_by_split, "total": len(reg)}
 
