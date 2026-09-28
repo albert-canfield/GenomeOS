@@ -86,6 +86,171 @@ MAPPING = {
     "inhibits": "s = (b + V) * (1 - 1/RHO) / (V * h)",
 }
 
+# ---- measured rates: what a published number becomes (lane-rates, registered 2026-09-28) ----------
+#: `basal_rate` and `max_rate` above are a.u./h that nobody has measured, so every compiled mechanism
+#: that passes the other checks fails on `gene_parameter_missing`: 161,144 of them in
+#: data/results/bridge_audit.json, beside 76,469 gene-cell pairs already unidentifiable. This block
+#: says which published quantity becomes which model parameter, in which unit, for which species and
+#: cell, and -- the part that matters -- what each one does NOT license. It was written and committed
+#: before the rate table was built and before any count was read.
+MEASURED_RATE_SOURCES = {
+    "schwanhausser2011": (
+        "Schwanhausser et al. 2011, Nature 473:337-342, doi 10.1038/nature10098, Supplementary Table 3"
+        " (the file replaced 2013-02-13 for the corrigendum, Nature 495:126-127, doi 10.1038/nature11848),"
+        " sha256 5343f73b4014a21c2b03630a579e95dabbf8b3c44f5ff0515db0df292abc12cd, 3,394,048 bytes."
+        " MOUSE NIH 3T3 fibroblasts, one unperturbed steady state. 5,028 rows; 4,338 transcription"
+        " rates, 4,658 mRNA half-lives, 5,028 protein half-lives, 4,309 mRNA copy numbers. Springer"
+        " Nature supplementary information, no open licence stated: cached in the git-ignored"
+        " data/cache/rates/, read here, never redistributed by this repository"
+    ),
+    "schofield2018": (
+        "Schofield et al. 2018, Nature Methods 15:221-225, doi 10.1038/nmeth.4582, Supplementary Table 2,"
+        " sha256 d5c010c1c2b1b22319310644e3194674ac58af059542862639cd43e720e60f19, 726,994 bytes."
+        " TimeLapse-seq transcript half-lives in HUMAN K562 (5,419 transcripts, 4 h s4U) and MOUSE"
+        " embryonic fibroblasts (2,992, 1 h s4U) by one method in one paper: the only matched"
+        " cross-species pair here, and therefore the species falsifier below. Same licence position"
+    ),
+    "mgi_homology": (
+        "Mouse Genome Informatics, HOM_MouseHumanSequence.rpt, retrieved 2026-09-28, 46,522 rows,"
+        " sha256 b8220b7689f11066c3d82e0f24c23ba3c7a30ad26a0f24ab639357aebc09582d, 15,112,222 bytes."
+        " Free for research use with attribution (MGI conditions of use). Used ONLY to carry a mouse"
+        " symbol to a human symbol, and only within a homology class holding exactly one of each"
+    ),
+    "sender_milo_2021": (
+        "already in the repository as bio.std.human_turnover (Sender & Milo 2021, Nat Med 27:45): HUMAN"
+        " cell-type lifespans in DAYS. A cell's replacement clock. It is NOT an mRNA or protein"
+        " half-life and never becomes delta_m or delta_p; it is listed here so that it is not reached for"
+    ),
+}
+#: each measured quantity: the unit it arrives in, the parameter it becomes, and what it does not license
+MEASURED_RATE_UNITS = {
+    "transcription rate (vsr) [molecules/(cell*h)]": (
+        "becomes T, the gene's TOTAL transcription in the unperturbed cell: T = basal_rate +"
+        " max_rate * A * R at the observed state. It does NOT become max_rate. max_rate is the"
+        " ceiling of the regulated term, reached only when every activator saturates, and no"
+        " measurement in this source observes that state"
+    ),
+    "mRNA half-life [h]": (
+        "becomes the degradation constant delta_m = ln2 / t_half [1/h] (runtime/grn.py's"
+        " mrna_half_life). It is NOT a transcription rate and NOT a max_rate: it says only how fast"
+        " mRNA disappears, and on its own it sets no level"
+    ),
+    "protein half-life [h]": (
+        "becomes delta_p = ln2 / t_half [1/h] (Protein.half_life_h). It is NOT a translation rate"
+    ),
+    "translation rate constant (ksp) [molecules/(mRNA*h)]": (
+        "becomes k_tl (runtime/grn.py's translation_rate). It is NOT a transcription rate"
+    ),
+    "mRNA copy number [molecules/cell]": (
+        "becomes nothing. It is held as the steady state a run should land on, for the acceptance"
+        " check only, and is never supplied as a parameter"
+    ),
+    "cell lifespan [d] (Sender & Milo)": "becomes nothing here; see MEASURED_RATE_SOURCES",
+}
+#: THE SPLIT. One measured T and one removal fold RHO determine the basal rate and the element's own
+#: contribution exactly, with no invented fraction. For the only case that matters (a gene carrying
+#: ONE mechanism in this cell -- a gene with more is already `not_identifiable`), at the intact state
+#: h = H_INTACT:
+#:   activates: intact = b + V*s*h = T and removed = b, and RHO = removed/intact
+#:              =>  b = RHO * T           and  V*s*h = (1 - RHO) * T
+#:   inhibits:  intact = b + V*(1 - s*h) = T and removed = b + V = RHO * T
+#:              =>  V*s*h = (RHO - 1) * T  and  b = RHO * T - V
+#: What is IDENTIFIED is C = |1 - RHO| * T, the element's own contribution to transcription in
+#: molecules/(cell*h). V and s are NOT separately identified: only their product is. DECLARED_STRENGTH
+#: fixes the split by convention and by nothing else.
+DECLARED_STRENGTH = 1.0
+#: what DECLARED_STRENGTH does NOT license: it is not a measurement that the element saturates its
+#: gene. Every s in (0, 1] with V = C / (s * h) reproduces this observation identically; the
+#: simulation's answer to any OTHER perturbation (a dose, a second regulator, a saturating input)
+#: depends on V and s separately and is therefore not determined by any measurement used here.
+DECLARED_STRENGTH_LICENSES = (
+    "the absolute scale of one gene's transcription and its basal fraction, in molecules/(cell*h);"
+    " not the ceiling, not the strength, and not the response to any perturbation but this removal"
+)
+#: a fold is dimensionless and the split is linear in T, so the FITTED STRENGTH does not depend on T at
+#: all. A measured rate buys absolute units and the basal fraction; it buys nothing about the
+#: regulation. This is why a borrowed rate is a separate, lower tier below and never a headline count.
+RATE_TIERS = {
+    "measured": "the gene's own measured T, carried to its human symbol through a 1:1 homology class",
+    "borrowed_median": (
+        "the genome median of the measured T, for a gene with no measurement. It fixes no absolute"
+        " number: such a pair is simulable in RELATIVE units only, is counted separately and is never"
+        " added to the measured count"
+    ),
+    "unmeasured": "no rate and no borrowing: `gene_rate_unmeasured`, an explicit marker, never a number",
+}
+#: EVERY rate here is mouse. A human gene simulated with them is borrowing a mouse fibroblast constant;
+#: the result records `species: mouse` on every parameterised gene and the audit repeats it.
+RATE_SPECIES = "Mus musculus, NIH 3T3 fibroblasts; every human simulation using them borrows a mouse constant"
+#: ALREADY COMPUTED while surveying the source, so disclosed and not presented as a passed test:
+#: Schwanhausser's vsr is not the identity N * ln2 / t_half over its own columns -- median relative
+#: difference 0.236 across the 4,309 genes carrying all three, because vsr comes from their ODE fit to
+#: time courses, not from the ratio. The acceptance check below therefore tests the runtime against
+#: T / delta_m, which the model does determine, and reports the distance to the measured copy number
+#: as an observation about the source.
+#: the declared split puts the refitted strength exactly at DECLARED_STRENGTH, so `fit` returns 1 plus
+#: a rounding error and the acceptance window (0, 1] needs a numerical tolerance at its upper end. It
+#: is a floating-point allowance and nothing else: a strength above it is still `response_out_of_range`.
+STRENGTH_TOLERANCE = 1e-9
+RATE_SOURCE_INTERNAL_CONSISTENCY = (
+    "median |vsr - N*ln2/t_half| / vsr = 0.236 over 4,309 genes (disclosed, not a test)"
+)
+
+
+def split_measured_rate(rho: float, total_rate: float, strength: float = DECLARED_STRENGTH) -> tuple:
+    """(basal_rate, max_rate) in molecules/(cell*h) from one measured T and one removal fold RHO.
+
+    The algebra above. A negative basal rate is a real outcome, not an error: an inhibitory
+    mechanism whose removal raises the gene by more than 1 / (1 - strength * H_INTACT) leaves no
+    room for a positive basal rate under the declared Hill assumptions, and the caller reports it as
+    `rate_split_infeasible` rather than clipping it.
+    """
+    contribution = abs(1.0 - rho) * total_rate
+    vmax = contribution / (strength * H_INTACT)
+    basal = rho * total_rate if rho < 1.0 else rho * total_rate - vmax
+    return basal, vmax
+
+
+#: the acceptance test, fixed before the build, as lane-bridge's fixture was
+RATE_ACCEPTANCE = (
+    "end to end: a one-gene program whose gene carries a measured T and a measured mRNA half-life and"
+    " whose one measured regulator is observed at RHO, parameterised through `parameterize(rates=...)`"
+    " and integrated to steady state with the element clamped at 1 and at 0, reproduces RHO within 1%",
+    "units: the same run's intact steady-state mRNA equals T / delta_m = T * t_half / ln2 within 1%,"
+    " so the level the simulation reports is in molecules per cell and not in a.u.",
+    "markers: a gene absent from the rate table is reported `gene_rate_unmeasured` and no number is"
+    " put in its place; a gene whose split leaves basal <= 0 is reported `rate_split_infeasible`",
+)
+#: the falsifiers, none of them computed when this was committed
+RATE_FALSIFIER = {
+    "species_transfer": (
+        "Schofield 2018 measured half-lives in mouse fibroblasts and human K562 by one method. Over MGI"
+        " 1:1 homology classes the Spearman correlation of the two will be computed ONCE. If rho < 0.5"
+        " the mouse constants are declared non-transferable: the rate table stays, every count keeps its"
+        " `species: mouse` flag, and the registration states that the absolute human numbers are not"
+        " supported by anything measured in a human cell"
+    ),
+    "inhibitor_bound": (
+        "under the declared split an inhibitory mechanism needs RHO < 1 / (1 - DECLARED_STRENGTH *"
+        " H_INTACT) = 2 to leave a positive basal rate. If more than half of the inhibitory mechanisms"
+        " that reach the split fail it, the binding limit is the declared Hill assumption (K = 1,"
+        " n = 2, so H = 0.5 at an intact element) and not the data, and that is the finding reported"
+    ),
+    "invariant": (
+        "supplying rates must not change `not_identifiable` (76,469) or any other reason but"
+        " `gene_parameter_missing`: rates are not an observation. A change there is a defect"
+    ),
+}
+#: the expected count, with a direction, before the run
+RATE_EXPECTED = (
+    "of the 161,144 mechanisms now `gene_parameter_missing`, the number that becomes simulable on"
+    " MEASURED rates will be strictly greater than 0 and strictly less than 161,144, and is predicted"
+    " to fall between 15,000 and 60,000: the source carries 4,338 measured transcription rates against"
+    " roughly 20,000 protein-coding genes, and its genes are the abundant ones, which may be over- or"
+    " under-represented among the targets of compiled non-coding elements. Gene-cell pairs simulable"
+    " rise from 0 by the same order. If the count lands outside 15,000-60,000 the miss is reported"
+)
+
 # ---- one mechanism, one parameter -----------------------------------------------------------------
 #: a mechanism is (element, target gene, cell context); `<id>` and `<id>_measured` are one element
 MECHANISM_KEY = ("element id without the _measured suffix", "target gene", "when clauses")
@@ -100,6 +265,9 @@ CITATION_TOLERANCE = 1e-6  # |RHO_a - RHO_b| within this is the same observation
 UNRESOLVED = {
     "regulator_state_missing": "the source is not a species, not clamped and not a declared zero",
     "gene_parameter_missing": "the target declares no max_rate or no basal_rate > 0",
+    "gene_rate_unmeasured": "no measured transcription rate for the target in the rate table supplied",
+    "rate_split_infeasible": "the measured rate cannot carry this response and a positive basal rate",
+    "observation_null_effect": "the observed removal fold is exactly 1: the mechanism moves nothing",
     "observation_missing": "no effect with a unit could be read from the rule",
     "observation_censored": "the only number is a strength clipped at 1",
     "observation_summarised": "an experimental strength is the maximum of several pairs, not one reading",
@@ -155,6 +323,8 @@ class Bridged:
     strengths: dict[tuple, float] = field(default_factory=dict)  # mechanism -> fitted s
     observations: dict[tuple, Observation] = field(default_factory=dict)
     required_state: dict[str, float] = field(default_factory=dict)  # clamp these, intact = 1
+    rates_used: dict[str, tuple] = field(default_factory=dict)  # gene -> (T, basal, max_rate), tier
+    tier: dict[str, str] = field(default_factory=dict)  # gene -> RATE_TIERS key
     superseded: list[Rule] = field(default_factory=list)  # lower-precedence citations, never added
     unresolved: list[Unresolved] = field(default_factory=list)
 
@@ -210,10 +380,17 @@ def parameterize(
     context: dict[str, str],
     genes: dict[str, dict[str, float]] | None = None,
     build: bool = True,
+    rates: dict[str, float] | None = None,
+    borrowed_rate: float | None = None,
 ) -> Bridged:
     """One fitted rule per resolved mechanism active in `context`; every other one reported by name.
 
     `build=False` classifies without copying the module or writing any rule (the audit's mode).
+    `rates` maps a gene symbol to its MEASURED total transcription rate T in molecules/(cell*h);
+    `split_measured_rate` turns T and the observed fold into basal_rate and max_rate. `borrowed_rate`
+    is the single number a gene with no measurement of its own is given instead, which fixes no
+    absolute scale (RATE_TIERS): passing it puts that gene in the `borrowed_median` tier, and leaving
+    it None reports the gene as `gene_rate_unmeasured`. An explicit `genes` entry still wins over both.
     """
     genes = genes or {}
     out = copy.deepcopy(module) if build else module
@@ -262,8 +439,39 @@ def parameterize(
             )
             continue
         g = out.entities.get(gene)
+        rho = obs[0].rho if isinstance(obs[0], Observation) else 1.0
         basal = genes.get(gene, {}).get("basal_rate", getattr(g, "basal_rate", 0.0))
         vmax = genes.get(gene, {}).get("max_rate", (g.attrs.get("max_rate") if g is not None else None))
+        tier = None
+        if g is not None and not (basal and basal > 0 and vmax and vmax > 0) and rates is not None:
+            total = rates.get(gene)
+            tier = "measured" if total is not None else ("borrowed_median" if borrowed_rate else None)
+            if tier is None:
+                b.unresolved.append(
+                    Unresolved(
+                        "gene_rate_unmeasured", gene, f"no measured transcription rate ({RATE_SPECIES})"
+                    )
+                )
+                continue
+            total = float(total if total is not None else borrowed_rate)
+            if rho == 1.0:
+                b.unresolved.append(
+                    Unresolved("observation_null_effect", key[0], f"{gene}: RHO is exactly 1")
+                )
+                continue
+            basal, vmax = split_measured_rate(rho, total)
+            if basal <= 0 or vmax <= 0:
+                b.unresolved.append(
+                    Unresolved(
+                        "rate_split_infeasible",
+                        key[0],
+                        f"{gene}: RHO {rho:.4g} on T = {total:.4g} molecules/(cell*h) leaves"
+                        f" basal {basal:.4g} at strength {DECLARED_STRENGTH}",
+                    )
+                )
+                continue
+            b.rates_used[gene] = (total, basal, vmax)
+            b.tier[gene] = tier
         if g is None or not basal or basal <= 0 or not vmax or vmax <= 0:
             b.unresolved.append(
                 Unresolved("gene_parameter_missing", gene, "needs basal_rate > 0 and max_rate > 0 (a.u./h)")
@@ -272,6 +480,8 @@ def parameterize(
         ob = obs[0]
         assert isinstance(ob, Observation)
         s = fit(ob.rho, basal, vmax) if ob.rho != 1.0 else 0.0
+        if 1.0 < s <= 1.0 + STRENGTH_TOLERANCE:
+            s = 1.0
         if not 0.0 < s <= 1.0:
             b.unresolved.append(
                 Unresolved("response_out_of_range", key[0], f"{gene}: RHO {ob.rho:.4g} needs s = {s:.4g}")

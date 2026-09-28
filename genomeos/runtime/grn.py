@@ -32,6 +32,18 @@ on the trajectory's `unresolved` list and as an `UnresolvedModelWarning`, or as 
 `EXPLICIT_ZERO_SUFFIX` is a zero the caller declared (network_experiment's edge
 knockout) and is not unresolved. A state is given by `clamp`; `initial` does not
 hold a species the runtime does not integrate.
+
+Units (review R3, lane-rates, 2026-09-28). `DEFAULTS` below are arbitrary units per hour and are
+not measurements of anything. A module whose parameters carry measured values puts the whole run
+into real units: `mrna_half_life` and a protein's `half_life_h` in HOURS give delta_m and delta_p
+in 1/h, `translation_rate` in molecules per mRNA per hour, and a gene's `basal_rate` and `max_rate`
+in molecules per cell per hour, so that an mRNA level reads as molecules per cell. A measured
+half-life is a degradation constant and never a transcription rate; a measured transcription rate is
+the gene's TOTAL rate at the state it was measured in and never `max_rate`, which is a ceiling no
+steady-state measurement observes. `attribution/bridge.py` holds the full mapping, the sources and
+what each of them does not license (`MEASURED_RATE_UNITS`, `split_measured_rate`). Mixing a measured
+parameter with a defaulted one mixes units: the defaults are left in place only so that a module
+that declares nothing still runs, and such a run is in a.u.
 """
 
 from __future__ import annotations

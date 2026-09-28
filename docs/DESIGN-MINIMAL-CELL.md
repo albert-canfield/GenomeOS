@@ -608,3 +608,123 @@ would need numbers the project does not have. Nothing moved: no rule
 changed, no pin changed, the census verdict is the `5cbce26` one
 (falsified). The per-rule gastrulation table above is the answer to "does
 the rule explain the missing mesoderm": it does not.
+
+## Declared rates for the compiled programs (registered 2026-09-28)
+
+The R3 audit's starkest line is that **0 of 440,589 compiled rules can be
+simulated as compiled**. 76,469 of 237,613 gene-cell pairs carry more than
+one mechanism and are not identifiable from single removals under the mean
+rule; that is settled and this section does not touch it. The other
+**161,144 lack only declared rates**: a basal rate and a maximum
+transcription rate per gene, which `runtime/grn.py` defaulted to zero and now
+diagnoses. This section is the registration for supplying them. It was
+written and committed before the rate table was built and before any count
+was read.
+
+**The sources.** `attribution/bridge.py`'s `MEASURED_RATE_SOURCES` holds them
+with sizes and digests. In short: Schwanhausser et al. 2011 (Nature 473:337,
+Supplementary Table 3, the file replaced in 2013 for the corrigendum, Nature
+495:126) gives 4,338 transcription rates in molecules per cell per hour,
+4,658 mRNA half-lives and 5,028 protein half-lives in hours, and 4,309 mRNA
+copy numbers, all in **mouse NIH 3T3 fibroblasts**. Schofield et al. 2018
+(Nat Methods 15:221, Supplementary Table 2) gives transcript half-lives in
+**human K562** and **mouse embryonic fibroblasts** by one method, which is
+the only matched cross-species pair here and so carries the species
+falsifier. MGI's mouse-human homology report carries a mouse symbol to a
+human one. Both supplementary files are Springer Nature material with no open
+licence stated: they are cached in the git-ignored `data/cache/rates/`, read,
+and never redistributed from this repository. The project's existing
+`bio.std.human_turnover` (Sender & Milo 2021) is human cell **lifespans in
+days** and is listed only so that nobody reaches for it: a cell's replacement
+clock is not a molecular half-life and never becomes a decay constant.
+
+**The unit mapping.** A measured half-life is a degradation constant, not a
+maximum transcription rate: mRNA half-life becomes `delta_m = ln2 / t_half`
+in 1/h and protein half-life becomes `delta_p`, and neither sets any level on
+its own. A measured translation rate constant becomes `k_tl` and is not a
+transcription rate. A measured mRNA copy number becomes **nothing**: it is
+held for the acceptance check and never supplied as a parameter. And the
+measured transcription rate becomes `T`, the gene's **total** transcription
+in the one unperturbed cell it was measured in, `T = basal + max_rate * A *
+R`. It does **not** become `max_rate`. `max_rate` is the ceiling of the
+regulated term, reached only when every activator saturates, and no
+steady-state measurement in any of these sources observes that state.
+
+**The split, with no invented fraction.** For the case that matters, a gene
+carrying one mechanism in this cell (a gene with more is already
+`not_identifiable`), the measured `T` and the observed removal fold `RHO`
+determine the basal rate exactly. Activator: intact is `b + V*s*h = T`,
+removed is `b`, so `b = RHO * T` and `V*s*h = (1 - RHO) * T`. Inhibitor:
+removed is `b + V = RHO * T`, so `V*s*h = (RHO - 1) * T` and `b = RHO*T - V`.
+What is **identified** is `C = |1 - RHO| * T`, the element's own contribution
+to transcription in molecules per cell per hour. `V` and `s` are **not**
+separately identified; only their product is. `DECLARED_STRENGTH = 1` fixes
+the split by convention and by nothing else, and it does not license the
+claim that the element saturates its gene: every `s` in (0, 1] with
+`V = C / (s*h)` reproduces this observation identically, and the simulation's
+answer to any other perturbation depends on `V` and `s` separately.
+
+**What a measured rate does and does not buy.** A fold is dimensionless and
+the split is linear in `T`, so the fitted strength does not depend on `T` at
+all. The measurement buys the absolute scale and the basal fraction, in
+molecules per cell per hour; it buys nothing about the regulation. That is
+why a gene with no measurement of its own is either an explicit
+`gene_rate_unmeasured` marker with no number in its place, or, in a
+separately counted lower tier, given the genome median as an openly borrowed
+constant, which fixes no absolute number and makes the pair simulable in
+relative units only. The borrowed tier is never added to the measured count.
+
+**The species limit, stated not hidden.** Every transcription rate here is
+mouse. A human gene simulated with one is borrowing a mouse fibroblast
+constant, the parameterised genes carry `species: mouse`, and the audit
+repeats it.
+
+**Disclosed before the fact.** While surveying the source it was already
+computed that Schwanhausser's `vsr` is not the identity `N * ln2 / t_half`
+over its own columns: the median relative difference is 0.236 across the
+4,309 genes carrying all three, because `vsr` comes from their ODE fit to
+time courses and not from that ratio. That is a property of the source,
+disclosed here, and is not presented as a passed test. The acceptance check
+below therefore tests the runtime against `T / delta_m`, which the model does
+determine.
+
+**Acceptance** (`RATE_ACCEPTANCE`, fixed before the build, as lane-bridge's
+fixture was). A one-gene program whose gene carries a measured `T` and a
+measured mRNA half-life, and whose one measured regulator is observed at
+`RHO`, parameterised through the bridge and integrated to steady state with
+the element clamped at 1 and at 0, reproduces `RHO` within 1%; the same run's
+intact steady-state mRNA equals `T / delta_m` within 1%, so the level reads
+in molecules per cell and not in a.u.; a gene absent from the table is
+reported `gene_rate_unmeasured` with no number put in its place, and a split
+that leaves a non-positive basal rate is reported `rate_split_infeasible`.
+
+One consequence to state plainly: because the declared split puts the
+refitted strength exactly at 1, the bridge's acceptance window (0, 1] gains a
+`STRENGTH_TOLERANCE` of 1e-9 at its upper end. That is a floating-point
+allowance and nothing else; a strength above it is still
+`response_out_of_range`.
+
+**Falsifiers** (`RATE_FALSIFIER`, none of them computed when this was
+written). *Species transfer*: over MGI one-to-one homology classes the
+Spearman correlation between Schofield's mouse fibroblast and human K562
+half-lives is computed once; if it is below 0.5 the mouse constants are
+declared non-transferable and the registration states that the absolute human
+numbers are supported by nothing measured in a human cell. *Inhibitor bound*:
+under the declared split an inhibitory mechanism needs `RHO < 2` to leave a
+positive basal rate; if more than half of the inhibitory mechanisms that
+reach the split fail it, the binding limit is the declared Hill assumption
+(`K = 1`, `n = 2`, so `H = 0.5` at an intact element) and not the data, and
+that is the finding. *Invariant*: supplying rates must not move
+`not_identifiable` (76,469) or any reason other than
+`gene_parameter_missing`, because a rate is not an observation; a change
+there is a defect.
+
+**Expected count, with a direction** (`RATE_EXPECTED`). Of the 161,144
+mechanisms now `gene_parameter_missing`, the number that becomes simulable on
+measured rates will be strictly greater than 0 and strictly less than
+161,144, and is predicted to fall between **15,000 and 60,000**: the source
+carries 4,338 measured rates against roughly 20,000 protein-coding genes, and
+those genes are the abundant ones, which may be over- or under-represented
+among the targets of compiled non-coding elements. Simulable gene-cell pairs
+rise from 0 by the same order. A count outside 15,000-60,000 is reported as a
+miss.
