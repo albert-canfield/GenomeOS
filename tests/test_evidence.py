@@ -102,7 +102,7 @@ def test_the_real_programs_are_read():
     assert out["whole"]["facts"] > 5000 and len(out["files"]) >= 20
     assert not [f for f in out["files"] if f.get("error")]
     assert set(out["whole"]["by_evidence"]) <= set(evidence.KINDS)
-    order = lambda r: (r["confidence"], r["path"], r["block"], r["label"])  # noqa: E731
+    order = lambda r: (not r["stated"], r["confidence"], r["path"], r["block"], r["label"])  # noqa: E731
     assert out["rows"] == sorted(out["rows"], key=order)
 
 
@@ -166,8 +166,8 @@ def test_the_pooled_mean_confidence_is_reported_as_the_mixture_it_is() -> None:
 
     assert out["mean_confidence"] == round((0.2 + 0.3 + 0.9) / 3, 3)
     by = out["mean_confidence_by_evidence"]
-    assert by["predicted"] == {"facts": 2, "mean": 0.25}
-    assert by["curated"] == {"facts": 1, "mean": 0.9}
+    assert by["predicted"] == {"facts": 2, "stated": 2, "unstated": 0, "mean": 0.25}
+    assert by["curated"] == {"facts": 1, "stated": 1, "unstated": 0, "mean": 0.9}
     # the pooled figure lies between the two and equals neither: that is the whole point
     assert by["predicted"]["mean"] < out["mean_confidence"] < by["curated"]["mean"]
     assert "not on one scale" in out["mean_confidence_is_a_mixture"]
@@ -179,7 +179,9 @@ def test_a_single_kind_still_reports_its_own_mean() -> None:
 
     out = evidence.summarise(rows)
 
-    assert out["mean_confidence_by_evidence"] == {"curated": {"facts": 1, "mean": 0.9}}
+    assert out["mean_confidence_by_evidence"] == {
+        "curated": {"facts": 1, "stated": 1, "unstated": 0, "mean": 0.9}
+    }
     assert out["mean_confidence"] == 0.9
 
 
@@ -208,3 +210,111 @@ def test_a_clean_run_reports_no_failures_and_succeeds(programs, monkeypatch, cap
     assert main(["evidence"]) == 0
     cap = capsys.readouterr()
     assert "FAILED" not in cap.out and "ERROR" not in cap.err
+
+
+UNSTATED_PROGRAM = """module test.unstated
+
+param judged_zero = 0.1 {
+  evidence: inferred "a guess somebody judged worthless"
+  confidence: 0.0
+}
+
+param judged_weak = 0.2 { evidence: inferred "order of magnitude"; confidence: 0.4 }
+
+param judged_strong = 0.3 { evidence: curated "BioModels"; confidence: 0.9 }
+
+gene NANOG { symbol: NANOG; evidence: curated "GENCODE v50" }
+
+rule NANOG activates NANOG {
+  strength: 0.2
+  evidence: predicted "AlphaGenome deletion" effect -0.2 log2 fold change, probability unavailable
+}
+"""
+
+
+@pytest.fixture
+def unstated_program(tmp_path, monkeypatch):
+    d = tmp_path / "data" / "demo"
+    d.mkdir(parents=True)
+    (d / "u.bio").write_text(UNSTATED_PROGRAM)
+    monkeypatch.setattr(evidence, "PROGRAM_DIRS", (Path("data/demo"),))
+    evidence._cached.cache_clear()
+    return tmp_path
+
+
+def test_an_unstated_confidence_is_not_counted_as_a_weak_one(unstated_program):
+    """Review R4 (2026-09-28) took `confidence:` off every predicted compiled fact and the parser read
+    the gap as 0.0, so the explorer's weak count rose 812,921 -> 928,094 overnight on facts nobody had
+    judged. A stated 0.0 is a judgement and stays weak; a missing one is counted apart."""
+    out = evidence.collect(unstated_program)
+    w = out["whole"]
+    assert w["facts"] == 5
+    assert (w["weak"], w["strong"], w["unstated"]) == (2, 1, 2)
+    assert w["weak"] + w["strong"] + w["unstated"] == w["facts"]
+    by = {r["label"].split(" =")[0]: r for r in out["rows"]}
+    assert by["judged_zero"]["stated"] is True and by["judged_zero"]["confidence"] == 0.0
+    assert by["NANOG"]["stated"] is False and by["NANOG activates NANOG"]["stated"] is False
+    # the mean is over the three stated values, not dragged down by the two absences
+    assert w["mean_confidence"] == round((0.0 + 0.4 + 0.9) / 3, 3)
+    assert w["bands"]["unstated"] == 2
+    assert w["mean_confidence_by_evidence"]["predicted"] == {
+        "facts": 1,
+        "stated": 0,
+        "unstated": 1,
+        "mean": None,
+    }
+    assert out["files"][0]["unstated"] == 2 and out["files"][0]["weak"] == 2
+
+
+def test_the_weak_filter_and_the_review_list_keep_unstated_apart(unstated_program):
+    weak = evidence.collect(unstated_program, max_confidence=0.5)["rows"]
+    assert [r["label"].split(" =")[0] for r in weak] == ["judged_zero", "judged_weak"]
+    rows = evidence.collect(unstated_program)["rows"]
+    assert [r["stated"] for r in rows] == [True, True, True, False, False]  # judged first
+    lines = evidence.to_csv(rows).strip().splitlines()
+    assert lines[1].startswith("0.0,inferred,parameter,judged_zero")
+    assert sum(1 for x in lines[1:] if x.startswith("unstated,")) == 2
+
+
+def test_the_cli_headline_splits_weak_strong_and_unstated(unstated_program, monkeypatch, capsys):
+    from genomeos.cli import main
+
+    monkeypatch.chdir(unstated_program)
+    assert main(["evidence", "--by-program"]) == 0
+    out = capsys.readouterr().out
+    assert "confidence stated on 3: 2 at or below 0.5, 1 above" in out and "2 state none" in out
+    assert "unstated" in out.splitlines()[2]
+
+
+def test_the_parser_marks_a_missing_confidence_and_keeps_its_value_zero():
+    from genomeos.ir import UNSTATED, confidence_stated
+    from genomeos.lang import parse
+
+    m = parse(UNSTATED_PROGRAM)
+    assert not confidence_stated(m.entities["NANOG"].confidence)
+    assert m.entities["NANOG"].confidence == 0.0 and f"{m.rules[0].confidence:.2f}" == "0.00"
+    assert confidence_stated(m.parameters["judged_zero"].confidence)
+    assert m.parameters["judged_zero"].confidence == 0.0
+    assert not confidence_stated(UNSTATED) and confidence_stated(0.0)
+
+
+def test_the_distinction_lives_in_the_parsed_ir_and_not_in_bioir_json():
+    """A stated 0.0 stays stated and an absent confidence is UNSTATED through parse and to_dict; the
+    BioIR JSON writes both as 0.0, so after json and from_dict every confidence reads as stated. The
+    distinction is a property of a parsed program, not of stored BioIR."""
+    import json
+
+    from genomeos.ir import Module, confidence_stated
+    from genomeos.lang import parse
+
+    m = parse(UNSTATED_PROGRAM)
+    d = m.to_dict()
+    by_id = {e["id"]: e for e in d["entities"]}
+    assert not confidence_stated(by_id["NANOG"]["confidence"])  # in memory, to_dict keeps the object
+    text = json.dumps(d)
+    back = Module.from_dict(json.loads(text))
+    assert confidence_stated(back.parameters["judged_zero"].confidence)
+    assert back.parameters["judged_zero"].confidence == 0.0
+    assert back.entities["NANOG"].confidence == 0.0
+    assert confidence_stated(back.entities["NANOG"].confidence)  # lost in JSON: read as a stated 0.0
+    assert json.loads(text)["rules"][0]["confidence"] == 0.0

@@ -4565,26 +4565,42 @@ def cmd_evidence(args: argparse.Namespace) -> int:
         return 1 if failed else 0
     s = out["summary"]
     unparsed = f", {len(failed)} FAILED TO PARSE (facts missing)" if failed else ""
+    # stated-weak, stated-strong and unstated are three counts, never one: a confidence the program
+    # left out (every predicted compiled fact since review R4) is not a low one
+    mean = whole["mean_confidence"]
     print(
         f"{whole['facts']:,} facts in {len(out['files']) - len(failed)} programs{unparsed}, "
-        f"mean confidence {whole['mean_confidence']}, {whole['weak']:,} at or below {out['weak_line']}"
+        f"confidence stated on {whole['stated']:,}: {whole['weak']:,} at or below {out['weak_line']}, "
+        f"{whole['strong']:,} above (mean {'-' if mean is None else mean}); "
+        f"{whole['unstated']:,} state none"
     )
     print("evidence: " + ", ".join(f"{k} {v:,}" for k, v in whole["by_evidence"].items()))
     if kinds or args.max_confidence is not None or args.query or args.module:
-        print(f"selected: {s['facts']:,} facts, mean confidence {s['mean_confidence']}")
+        print(
+            f"selected: {s['facts']:,} facts: {s['weak']:,} stated weak, {s['strong']:,} stated strong, "
+            f"{s['unstated']:,} unstated, mean of stated "
+            f"{'-' if s['mean_confidence'] is None else s['mean_confidence']}"
+        )
     if args.by_program:
-        for f in sorted(out["files"], key=lambda f: f.get("mean_confidence", 0)):
+        print("  mean   facts    weak  strong  unstated  program (mean of stated confidences, - if none)")
+        for f in sorted(
+            out["files"], key=lambda f: (f.get("mean_confidence") is None, f.get("mean_confidence") or 0)
+        ):
             if f.get("error"):
                 print(f"  {f['path']}: {f['error']}")
             else:
+                m = f["mean_confidence"]
                 print(
-                    f"  {f['mean_confidence']:.2f}  {f['facts']:>6,} facts  {f['weak']:>6,} weak  {f['path']}"
+                    f"  {'   -' if m is None else f'{m:.2f}'}  {f['facts']:>6,}  {f['weak']:>6,}"
+                    f"  {f['strong']:>6,}  {f['unstated']:>8,}  {f['path']}"
                 )
         return 1 if failed else 0
     for r in rows[: args.top]:
         src = f"  [{r['source']}]" if r["source"] else ""
+        conf = f"{r['confidence']:.2f}" if r.get("stated", True) else "   -"
         print(
-            f"  {r['confidence']:.2f} {r['evidence']:<12} {r['block']:<18} {r['label']}{src}  ({r['path']})"
+            f"  {conf} {r['evidence']:<12} {r['block']:<18} {r['label']}{src}  ({r['path']})"
+            + ("" if r.get("stated", True) else "  [no confidence stated]")
         )
     if len(rows) > args.top:
         print(f"  … {len(rows) - args.top:,} more (--top N, or --csv FILE for all)")
@@ -5508,7 +5524,11 @@ def build_parser() -> argparse.ArgumentParser:
         choices=["experimental", "curated", "predicted", "inferred", "none"],
         help="keep these",
     )
-    p.add_argument("--max-confidence", type=float, help="keep facts at or below this confidence (0.5 = weak)")
+    p.add_argument(
+        "--max-confidence",
+        type=float,
+        help="keep facts that STATE a confidence at or below this (0.5 = weak); unstated facts drop out",
+    )
     p.add_argument("--query", help="text in the fact, its source or its note")
     p.add_argument("--module", help="one program, by module name or path")
     p.add_argument("--top", type=int, default=30, help="rows to print, weakest first")

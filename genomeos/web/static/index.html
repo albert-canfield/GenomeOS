@@ -2035,8 +2035,10 @@ async function loadEvidence() {
     const r = await api('/api/evidence?' + evQuery({limit: 300}));
     const w = r.whole, s = r.summary;
     $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
-      <div><b>${w.mean_confidence.toFixed(2)}</b><span>mean confidence</span></div>
-      <div><b>${fmt(w.weak)}</b><span>weak (≤ ${r.weak_line})</span></div>
+      <div><b>${w.mean_confidence == null ? '–' : w.mean_confidence.toFixed(2)}</b><span>mean of stated confidences</span></div>
+      <div><b>${fmt(w.weak)}</b><span>stated weak (≤ ${r.weak_line})</span></div>
+      <div><b>${fmt(w.strong)}</b><span>stated strong</span></div>
+      <div><b>${fmt(w.unstated)}</b><span>no confidence stated</span></div>
       <div><b>${fmt(r.files.length)}</b><span>programs</span></div>
       <div><b>${fmt(w.by_evidence.experimental || 0)}</b><span>measured</span></div>
       <div><b>${fmt((w.by_evidence.inferred || 0) + (w.by_evidence.none || 0))}</b><span>inferred or unstated</span></div>`;
@@ -2047,15 +2049,15 @@ async function loadEvidence() {
       $('#ev-module').innerHTML += r.files.map(f => `<option value="${escH(f.path)}">${escH(f.path.replace(/^data\/|^genomeos\//, ''))}</option>`).join('');
     }
     const sel = evPicked.size || parseFloat($('#ev-max').value) < 1 || $('#ev-q').value.trim() || evFile;
-    $('#ev-sel').textContent = sel ? `${s.facts.toLocaleString()} facts selected, mean confidence ${s.mean_confidence.toFixed(2)}; ${s.weak.toLocaleString()} of them weak` : 'no filter: every fact in every program';
-    $('#ev-files').innerHTML = '<table><tr><th>program</th><th class="num">facts</th><th class="num">weak</th><th class="num">conf</th></tr>' +
-      r.files.slice().sort((a, b) => (a.mean_confidence || 0) - (b.mean_confidence || 0)).map(f => `<tr class="ev-file ${f.path === evFile ? 'on' : ''}" data-path="${escH(f.path)}">
+    $('#ev-sel').textContent = sel ? `${s.facts.toLocaleString()} facts selected: ${s.weak.toLocaleString()} stated weak, ${s.strong.toLocaleString()} stated strong, ${s.unstated.toLocaleString()} unstated; mean of stated ${s.mean_confidence == null ? '–' : s.mean_confidence.toFixed(2)}` : 'no filter: every fact in every program';
+    $('#ev-files').innerHTML = '<table><tr><th>program</th><th class="num">facts</th><th class="num">weak</th><th class="num">unstated</th><th class="num">conf</th></tr>' +
+      r.files.slice().sort((a, b) => (a.mean_confidence ?? 2) - (b.mean_confidence ?? 2)).map(f => `<tr class="ev-file ${f.path === evFile ? 'on' : ''}" data-path="${escH(f.path)}">
         <td>${escH(f.path.replace(/^data\/|^genomeos\//, ''))}${f.error ? ` <span class="pill none">unparsed</span>` : ''}</td>
-        <td class="num">${fmt(f.facts || 0)}</td><td class="num">${fmt(f.weak || 0)}</td>
-        <td class="num ev-conf ${evConfClass(f.mean_confidence || 0)}">${(f.mean_confidence || 0).toFixed(2)}</td></tr>`).join('') + '</table>';
+        <td class="num">${fmt(f.facts || 0)}</td><td class="num">${fmt(f.weak || 0)}</td><td class="num">${fmt(f.unstated || 0)}</td>
+        <td class="num ev-conf ${f.mean_confidence == null ? '' : evConfClass(f.mean_confidence)}">${f.mean_confidence == null ? '–' : f.mean_confidence.toFixed(2)}</td></tr>`).join('') + '</table>';
     $('#ev-files').querySelectorAll('tr.ev-file').forEach(tr => tr.onclick = () => { evFile = evFile === tr.dataset.path ? '' : tr.dataset.path; $('#ev-module').value = evFile; loadEvidence(); });
     $('#ev-rows').innerHTML = (r.rows.length ? '<table><tr><th class="num">conf</th><th>evidence</th><th>fact</th></tr>' + r.rows.map(x => `<tr>
-        <td class="num ev-conf ${evConfClass(x.confidence)}">${x.confidence.toFixed(2)}</td>
+        <td class="num ev-conf ${x.stated === false ? '' : evConfClass(x.confidence)}">${x.stated === false ? '<span class="muted" title="no confidence stated">–</span>' : x.confidence.toFixed(2)}</td>
         <td><span class="pill" style="color:${evVar(x.evidence)};border-color:${evVar(x.evidence)}">${x.evidence}</span><div class="muted" style="font-size:11px">${escH(x.block)}</div></td>
         <td><b>${escH(x.label)}</b>${x.source ? `<div class="muted" style="font-size:11.5px">${escH(x.source)}</div>` : ''}${x.note ? `<div class="muted" style="font-size:11.5px">${escH(x.note)}</div>` : ''}
           <div class="mono muted" style="font-size:10.5px">${escH(x.path)}${Object.keys(x.detail || {}).length ? ' · ' + escH(Object.entries(x.detail).slice(0, 4).map(([k, v]) => `${k}=${v}`).join(' ')) : ''}</div></td></tr>`).join('') + '</table>' : '<div class="muted">no fact matches</div>')

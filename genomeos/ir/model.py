@@ -39,6 +39,29 @@ class Evidence:
 Confidence = float  # 0.0 (pure guess) .. 1.0 (settled fact)
 
 
+class UnstatedConfidence(float):
+    """A confidence the program did not state: equal to 0.0 in every calculation, but not a 0.0.
+
+    The parser reads a missing `confidence:` as 0.0, and since review R4 (2026-09-28) the compiler
+    leaves it out on purpose for every predicted element and rule, because the size of a predicted
+    effect is not how sure anyone is. A stated `confidence: 0.0` exists too (bio.std methylation), so
+    the number alone cannot tell "stated as low" from "not stated". This subclass can: arithmetic,
+    formatting and JSON see the float 0.0, so nothing that reads a confidence moves, and a reader that
+    needs the difference asks `confidence_stated(x)`. The distinction lives in a parsed program only:
+    BioIR JSON (`to_dict` through json, then `from_dict`) writes it as 0.0 and reads it back as stated.
+    """
+
+    __slots__ = ()
+
+
+UNSTATED = UnstatedConfidence(0.0)
+
+
+def confidence_stated(value: object) -> bool:
+    """False only for a confidence the program left out (the parser's UNSTATED)."""
+    return not isinstance(value, UnstatedConfidence)
+
+
 class _Unknown:
     """Singleton marking a role, function or value we do not know."""
 
@@ -1054,6 +1077,9 @@ __all__ = [
     "REGIME_TREATMENTS",
     "REGIME_UPDATES",
     "UNKNOWN",
+    "UNSTATED",
+    "UnstatedConfidence",
+    "confidence_stated",
     "VOLUME_UNITS",
     "Action",
     "CellType",

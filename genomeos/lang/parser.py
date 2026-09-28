@@ -51,6 +51,7 @@ from genomeos.ir import (
     REGIME_TREATMENTS,
     REGIME_UPDATES,
     UNKNOWN,
+    UNSTATED,
     VOLUME_UNITS,
     Action,
     Allocation,
@@ -379,7 +380,8 @@ def _check_keys(b: Block) -> None:
 
 def _common(b: Block) -> tuple[Evidence, float]:
     ev = _parse_evidence(b.props["evidence"]) if "evidence" in b.props else Evidence()
-    conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else 0.0
+    # a missing confidence is UNSTATED: 0.0 to every calculation, but distinguishable from a stated 0.0
+    conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else UNSTATED
     if not 0.0 <= conf <= 1.0:
         raise BioLangError(f"line {b.line}: confidence must be within 0..1")
     return ev, conf
