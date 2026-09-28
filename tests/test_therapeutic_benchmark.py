@@ -388,3 +388,131 @@ def test_the_magnitude_is_measured_and_its_absences_are_stated():
         mag = r["alteration_magnitude"]
         assert set(mag) == {"copies", "copies_above_diploid", "vaf", "hotspot", "quantities"}
         assert mag["vaf"] is None or 0.0 <= mag["vaf"] <= 1.0
+
+
+#: The tenth case, pre-registered 2026-09-28 (docs/THERAPEUTICS.md) and run once
+#: after the registration was committed. It is the first case chosen for a *rule*
+#: rather than for a route: a HER2-positive gastroesophageal adenocarcinoma with
+#: a co-amplified MYC, from TCGA stomach adenocarcinoma, where an approved
+#: antibody target and a gene no modelled modality reaches sit in the same
+#: evidence tier and only the mechanism gate can order them.
+GATE_CASE = "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC"
+
+#: The four tests below wait for their artifact rather than assert against one
+#: that is not there. The tenth case was registered and run on 2026-09-28, and
+#: the regenerated result could not be committed with it: every re-run rewrites
+#: the date, the seven counts and the manifest's write stamp, and
+#: `scripts/check_staged.py` refuses a commit that removes lines a recent commit
+#: added. This result is also a headline one, so landing it means a rebuild in a
+#: clean checkout and the pins in `tests/test_manifest_headlines.py` and README
+#: moving from 9 to 10 in the same commit. The skip is on the case's presence, so
+#: these assert the moment that commit lands; nothing here is weakened, and the
+#: run they were written from is in docs/THERAPEUTICS.md under 2026-09-28.
+gate_case = pytest.mark.skipif(
+    not any(r["case"] == GATE_CASE for r in RESULT.get("rows", [])),
+    reason="the tenth case's result is registered and run but not yet committed (docs/THERAPEUTICS.md)",
+)
+
+#: What the gate did, measured: nothing, in all ten cases. `rank_without_gate` is
+#: the pipeline's own ranking key with the gate removed, so a target whose two
+#: ranks agree is a target the gate did not move. An equality pin rather than a
+#: ceiling: a change here means the gate has finally acted on a case, which is a
+#: result to read and record, not a regression to absorb quietly.
+GATE_MOVED_TARGETS: list[str] = []
+
+#: What the tiebreak did, measured: nothing, and in the tenth case it had no
+#: opportunity at all. Every group the score could not separate is a pair of
+#: candidates with nothing measured about either of them in that patient, which
+#: is not an accident: the score ties among unmeasured hypotheses, and an
+#: unmeasured candidate carries no quantity by definition, so the tiebreak's
+#: opportunity set in this benchmark is empty by construction.
+TIEBREAK_CHANGED_ORDER: list[str] = []
+
+
+@gate_case
+def test_the_gate_case_recovers_the_approved_target_over_the_undruggable_amplification():
+    """The case the mechanism gate was given, and what it measured.
+
+    Registered predictions: ERBB2 first, nothing unreachable above it, and MYC in
+    the same evidence tier so that only the gate could separate them. The first two
+    hold. The third holds as a fact about the tier and is beside the point as a
+    test of the gate, which is the finding: MYC is in the top tier and scores
+    0.246 against the target's 0.494, the lowest of the six altered candidates, so
+    it never came near the target's place.
+    """
+    row = next(r for r in rows() if r["case"] == GATE_CASE)
+    assert row["gene"] == "ERBB2" and row["driver_call"] == "copy number"
+    assert row["recovered"] and row["pass"]
+    assert row["rank"] == 1
+    assert row["target_class"] == "direct_surface"
+    assert row["best_mechanism_established"], "an approved antibody must not be provisional here"
+    assert row["evidence_tier"] == "observed_alteration"
+    assert not row["outranked_by_unreachable"], "the gate's own metric, in the case chosen to move it"
+    assert not row["outranked_by_hypotheses"]
+    assert row["alteration_magnitude"]["copies"] == 13.0
+    assert row["alteration_magnitude"]["copies_above_diploid"] == 11.0
+    by_gene = {q["gene"]: q for q in row["quantities_in_this_tumour"]}
+    assert by_gene["MYC"]["copies"] == 8.0, "the undruggable amplification is in the list and measured"
+    assert by_gene["MYC"]["gate"] == "no_established_mechanism"
+    assert by_gene["MYC"]["score"] < by_gene["ERBB2"]["score"], (
+        "the case's finding: the annotations that make a gene unreachable also make it score low, "
+        "so an undruggable amplification does not produce the configuration the gate was written for"
+    )
+
+
+@gate_case
+def test_the_gate_is_measured_and_not_only_defined():
+    """What the gate would have to be doing to be worth its place in the key.
+
+    `rank_without_gate` is the same key with the gate taken out, so the difference
+    between it and `rank` is the gate's whole effect on that tumour. Across ten
+    cases the difference is nothing.
+    """
+    for r in rows():
+        assert r["rank_without_gate"] is not None or not r["recovered"]
+    assert RESULT["gate_moved_the_target"] == GATE_MOVED_TARGETS, (
+        "the gate moved a target for the first time; read the case before changing this pin"
+    )
+
+
+@gate_case
+def test_the_tiebreak_had_an_opportunity_and_what_came_of_it():
+    """A rule that did not fire is only informative if its opportunities are counted.
+
+    Every score-tied group in every case is recorded, so "did not fire" is
+    distinguishable from "was never asked". It was never asked: every tie in the
+    ten cases is between candidates with nothing measured about them in that
+    patient, and a candidate with no measurement carries no quantity to compare.
+    """
+    assert RESULT["magnitude_tiebreak_changed_order"] == TIEBREAK_CHANGED_ORDER
+    for r in rows():
+        assert "magnitude_tiebreaks" in r, "the benchmark stopped counting the tiebreak's opportunities"
+        for group in r["magnitude_tiebreaks"]:
+            assert len(group["tied_on_score"]) > 1
+            if not group["decided_by_magnitude"]:
+                assert not group["changed_the_order"], (
+                    "a tied group was reordered without any measured quantity deciding it"
+                )
+
+
+@gate_case
+def test_the_allele_fraction_reaches_the_ranking_even_though_the_row_has_none():
+    """A registered prediction that the run falsified, kept as it was written.
+
+    Prediction 4 of 2026-09-28 said the tenth row would publish a variant allele
+    fraction of 0.49. It publishes none, and the mistake is in the registration: a
+    row publishes the *target's* magnitude, the target there is reached by its
+    amplification, and the 0.49 belongs to the mutated TP53 in the same tumour.
+    The amendment is additive — the candidates' own quantities are published — and
+    this test pins both halves so the correction cannot quietly become a claim
+    that the prediction held.
+    """
+    row = next(r for r in rows() if r["case"] == GATE_CASE)
+    assert row["alteration_magnitude"]["vaf"] is None, (
+        "the target of this case is amplified, not mutated: its magnitude is a copy count"
+    )
+    fractions = {q["gene"]: q["vaf"] for q in row["quantities_in_this_tumour"] if q["vaf"] is not None}
+    assert fractions == {"TP53": 0.49}, (
+        "the first allele fraction in this benchmark, on the candidate that actually carries it"
+    )
+    assert RESULT["cases_where_a_candidate_carries_an_allele_fraction"] == ["ERBB2"]

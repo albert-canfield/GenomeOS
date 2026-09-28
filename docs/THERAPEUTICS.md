@@ -1049,6 +1049,17 @@ tenth row and the new fields merged into it additively, the nine rows' own
 timings kept, so the artifact is one `--force` away from landing and the
 numbers above are the run's.
 
+That is not the whole of it, as looking at what else holds the file showed.
+`therapeutic_benchmark` is one of the *headline* results:
+`tests/test_manifest_headlines.py` pins the commit it was last rebuilt at,
+requires its manifest to record a clean checkout, and pins
+`(targets_recovered, verdicts_correct, top_mechanism_defensible)` at `(9, 9, 9)`,
+and README quotes 9/9 in the same words. The tenth case therefore lands as one
+commit that rebuilds the result in a clean checkout and moves those pins and that
+sentence from nine to ten together — both files belonging to other lanes. The four
+tests written for the case are committed ahead of it and skip on the case's
+absence, so they assert the moment that commit lands; none of them is weakened.
+
 What passed. ERBB2 is recovered as a surface target at rank 1 with an
 established blocking antibody at compatibility 0.52 and accessibility 1.0;
 `outranked_by_unreachable` is empty and the pin of 0 holds across ten cases;
