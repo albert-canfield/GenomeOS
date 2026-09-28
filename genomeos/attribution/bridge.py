@@ -39,8 +39,17 @@ OBSERVATION_UNITS = {
     "experimental": (
         "fractional change in expression on CRISPRi silencing (ENCODE benchmark EffectSize), carried as"
         " the rule strength |f| with the sign from the action (activates: f < 0); RHO = 1 + f"
+        ", used only when the link rests on one regulated pair (EXPERIMENTAL_SUMMARY)"
     ),
 }
+#: amendment of 2026-09-28, before the build (lane-assay's census A8 of measured.rule_links): a compiled
+#: experimental rule's strength is the LARGEST |EffectSize| among the regulated pairs of one (element,
+#: gene, cell) in the partition used, a maximum and not an observation whenever there is more than one
+#: pair. The compiler writes each link's pair count on the measured element's evidence note
+#: ("<gene> in <cell> from <n> pairs"); the bridge maps a link that rests on one pair and reports one
+#: that rests on several as `observation_summarised`, never fitting to the maximum. No summary rule
+#: (median, mean, meta-analysis) is chosen here; choosing one is its own registration.
+EXPERIMENTAL_SUMMARY = "one pair maps; several pairs are unresolved (the compiled strength is their maximum)"
 
 # ---- the model it maps into ----------------------------------------------------------------------
 #: the element is a regulator whose state is its presence: dimensionless, 1 intact, 0 removed
@@ -86,6 +95,7 @@ UNRESOLVED = {
     "gene_parameter_missing": "the target declares no max_rate or no basal_rate > 0",
     "observation_missing": "no effect with a unit could be read from the rule",
     "observation_censored": "the only number is a strength clipped at 1",
+    "observation_summarised": "an experimental strength is the maximum of several pairs, not one reading",
     "not_identifiable": "more than one mechanism regulates the gene in this context",
     "conflicting_observations": "two citations of one mechanism report different responses",
     "response_out_of_range": "the fitted strength falls outside (0, 1] for the declared parameters",

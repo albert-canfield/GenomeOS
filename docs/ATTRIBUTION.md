@@ -7378,6 +7378,15 @@ mode and records it otherwise; an `@zero` source raises nothing. (3) A second ci
 mechanism, a duplicate rule citing another source or a predicted rule beside a measured one,
 leaves the simulated strength unchanged. Negatives are written first.
 
+**Amendment, same day, before the build (lane-assay's census item A8).** A compiled experimental
+rule's strength is the largest |EffectSize| among the regulated pairs of one element, gene and cell
+(`measured.rule_links`), a maximum used as a parameter whenever there is more than one pair. The
+compiler will write each link's pair count on the measured element's evidence note (`<gene> in
+<cell> from <n> pairs`). The bridge maps a link that rests on one pair as RHO = 1 + f and reports a
+link that rests on several as `observation_summarised`; it never fits to the maximum. No summary
+rule (median, mean, a meta-analysis) is chosen here; choosing one is its own registration. The
+audit will also count the experimental links that rest on more than one pair.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
