@@ -8826,6 +8826,51 @@ its assumptions attached rather than a number.
 **Cost.** 0 AlphaGenome requests. 11 s; no genome archive is opened, and the committed clause 2
 results are read and never rewritten.
 
+## Reproduced before anything changed: the committed power simulation, set from a 13.45% window anchor, produces 16.80% element detection and 56.96% positive windows (item 12 S2, 2026-09-28, lane-s2)
+
+The second external review (docs/ROADMAP.md section 5, item 12, row S2) reports that the simulation
+behind the 20-to-5,000 range above does not reproduce the quantity it was anchored on. **Both figures
+it reports come back exactly from the committed code**, run unchanged at its registered reference
+configuration (window anchor 0.1345, sensitivity 0.6674 from `PowerAtEffectSize20`, no false
+positives, 6 tested elements per block and per window, 3 windows per block, ICC 0.30) on the committed
+seed 20260928, whose first draw in `sweep` is exactly this call: **element detection 0.16802 and
+positive windows 0.5696** (positive blocks 0.5695, as the null requires), identical to the committed
+result's reference row at ratio 1.0. `scripts/clause2_design_power.py --reproduce-review` prints it;
+`reproduce_the_review` and four new tests in `tests/test_clause2_design_power.py` hold it.
+
+**Where each figure comes from**, computed in closed form (Gauss-Hermite quadrature, no simulation) by
+`quadrature_of_the_committed_reference` and agreeing with the simulation to within its Monte Carlo
+error (0.16824 and 0.5693):
+
+1. **The level.** The anchor is 30 of 223 *windows* carrying a CRISPRi-tested element, and `moments`
+   reads a window as positive if *any* of its six tested elements is. Six elements each detected at
+   13.45% give 1 - 0.8655^6 = 57.97% positive windows on their own; the anchor was matched as an
+   element rate and the simulation's windows are more than four times as often positive as the windows it was
+   anchored on.
+2. **The element rate is not the anchor either.** `moments` puts the logit-normal intercept's
+   *location* at logit(0.1345 / 0.6674) = logit(0.2015). With a spread of 1.187 on the logit (the
+   latent identity applied to 0.30), the *mean* true rate is 0.2521, not 0.2015, so the observed
+   element rate is 0.6674 x 0.2521 = 16.8%.
+3. **Observed and latent correlation were not kept apart.** The 0.30 is a one-way ANOVA ICC of 0/1
+   calls on the benchmark's elements: an observed-scale figure. It was entered into the latent-scale
+   identity, and the observed-scale correlation the simulation then produces is **0.115**, well
+   under half the correlation that was measured. The registration said the realised binary-scale ICC
+   would be reported beside the latent one; the committed result carries only the latent one.
+4. **The test that watched the anchor looked where the definitions coincide.**
+   `test_the_window_arm_reproduces_the_observed_anchor` runs `moments` at 1 element, 1 window and ICC
+   0, the one configuration in which window, element and location rates are the same number. It
+   passed, and the reference configuration was never checked against its anchor.
+
+**The upper end is above the population.** `N_GRID` searches up to 5,000 compared blocks. The tier
+holds 882 blocks and 531 of them carry a scored element; 1,000, 1,500, 2,000, 3,000 and 5,000 exceed
+the tier, and 750 exceeds the carrying blocks, so the committed reference entry of 750 at ratio 0.75
+and the 5,000 at the top of the range are sizes no experiment on this tier can have.
+
+**What this does and does not change.** Nothing committed is altered: the 20-to-5,000 table stays as
+the record of what that run computed, read as exploratory, as the correction under milestone 1.3 says.
+This section establishes only that the review's two figures are the committed code's own output, and
+why. The recalibrated model is registered next, before it is run. 0 AlphaGenome requests; 0.5 s.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

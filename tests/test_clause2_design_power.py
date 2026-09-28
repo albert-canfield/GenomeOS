@@ -265,3 +265,52 @@ def test_the_five_review_points_are_each_corrected_somewhere():
     assert "minimum-reporting rule" in text  # (3) the floor is not a power result
     assert "reciprocal overlap" in text and "denominator" in text  # (4) coverage rule and denominator
     assert "no difference detected" in text  # (5) not equivalence
+
+
+# ---- item 12 S2: the committed reference against its own anchor (lane-s2) ------------------------------
+
+
+def test_the_committed_reference_produces_the_reviews_two_figures_and_not_its_anchor():
+    """The first draw `sweep` makes, at the reference configuration on the committed seed, gives the
+    review's 16.80% element detection and 56.96% positive windows. The anchor it was set from is 13.45%."""
+    rng = np.random.default_rng(20260928)
+    m = dp.moments(0.1345, 1.0, 0.6674, 0.0, 6, 3, 0.30, 200_000, rng)
+    assert m["realised_element_detection_probability"] == 0.16802
+    assert m["window_endpoint_rate"] == 0.5696
+    assert round(m["realised_element_detection_probability"], 4) == dp.REVIEW_REPORTED["element_detection"]
+    assert m["window_endpoint_rate"] - 0.1345 > 0.4
+
+
+def test_the_committed_result_row_is_the_one_the_review_read():
+    import json
+
+    p = dp.RESULTS_DIR / f"{dp.RESULT}.json"
+    if not p.exists():
+        pytest.skip("committed result not present")
+    row = next(
+        r
+        for r in json.loads(p.read_text())["sweep"]["rows"]
+        if r["configuration"] == "reference" and r["ratio"] == 1.0
+    )
+    assert row["realised_element_detection_probability"] == 0.16802
+    assert row["window_endpoint_rate"] == 0.5696
+
+
+def test_the_closed_form_traces_both_figures_to_their_causes():
+    got = dp.quadrature_of_the_committed_reference(0.1345, 0.6674, 0.30, 6)
+    # the element rate: the intercept's location is at 0.1345 / 0.6674, its mean is above it
+    assert got["true_rate_at_the_intercept_location"] == pytest.approx(0.2015, abs=1e-4)
+    assert got["mean_true_rate"] > got["true_rate_at_the_intercept_location"] + 0.04
+    assert got["observed_element_rate"] == pytest.approx(0.1680, abs=0.001)
+    # the window rate: any of six elements
+    assert got["positive_unit_rate_from_any_of_the_elements_alone"] == pytest.approx(0.5797, abs=1e-4)
+    assert got["observed_positive_unit_rate"] == pytest.approx(0.5696, abs=0.002)
+    # an observed-scale 0.30 entered as latent comes back far below 0.30 on the observed scale
+    assert got["observed_scale_icc_it_implies"] < 0.2
+
+
+def test_the_closed_form_agrees_with_moments_where_the_old_test_looked():
+    """At 1 element and ICC 0 the three rates coincide, which is why the old anchor test passed."""
+    got = dp.quadrature_of_the_committed_reference(0.1345, 0.6674, 0.0, 1)
+    assert got["observed_element_rate"] == pytest.approx(0.1345, abs=1e-4)
+    assert got["observed_positive_unit_rate"] == pytest.approx(0.1345, abs=1e-4)

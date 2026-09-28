@@ -1303,6 +1303,132 @@ def manifest(blocks: int, seed: int) -> dict[str, Any]:
     }
 
 
+# ==== item 12 S2 (second external review, 2026-09-28, lane-s2): the committed reference against its anchor
+
+
+#: what the review reports the committed reference configuration produces, read before anything changed
+REVIEW_REPORTED = {"element_detection": 0.1680, "positive_windows": 0.5696}
+
+#: Gauss-Hermite nodes for expectations over a standard normal intercept (probabilists' weights, summing
+#: to 1). 96 nodes put the quadrature error far below the Monte Carlo error of any figure it is set beside
+_GH_X, _GH_W = np.polynomial.hermite_e.hermegauss(96)
+_GH_W = _GH_W / _GH_W.sum()
+
+
+def _observed_probability(eta: np.ndarray, sensitivity: float, false_positive: float) -> np.ndarray:
+    """P(an element is observed positive | its logit): the assay applied to the latent state."""
+    p = _expit(eta)
+    return p * sensitivity + (1 - p) * false_positive
+
+
+def quadrature_of_the_committed_reference(
+    window_rate: float, sensitivity: float, icc: float, elements: int, false_positive: float = 0.0
+) -> dict[str, float]:
+    """What `moments` computes, in closed form: the committed model's own expectations.
+
+    `moments` puts the logit-normal intercept's LOCATION at logit(rate / sensitivity), so the mean true
+    rate is not rate / sensitivity once the intercept has any spread, and it reads a window as positive if
+    ANY of its `elements` tested elements is. Both are computed here without simulation, so the two
+    figures the review reports can be traced to their two causes.
+    """
+    p_loc = min(1.0, window_rate / sensitivity)
+    lo = math.log(p_loc / (1 - p_loc))
+    sigma = sigma_for_icc(icc)
+    p = _expit(lo + sigma * _GH_X)
+    q = _observed_probability(lo + sigma * _GH_X, sensitivity, false_positive)
+    p_bar, q_bar = float(_GH_W @ p), float(_GH_W @ q)
+    return {
+        "true_rate_at_the_intercept_location": round(p_loc, 4),
+        "mean_true_rate": round(p_bar, 4),
+        "observed_element_rate": round(q_bar, 5),
+        "observed_positive_unit_rate": round(1 - float(_GH_W @ (1 - q) ** elements), 4),
+        "positive_unit_rate_from_any_of_the_elements_alone": round(1 - (1 - window_rate) ** elements, 4),
+        "latent_icc_given": icc,
+        "observed_scale_icc_it_implies": round(float(_GH_W @ (q - q_bar) ** 2) / (q_bar * (1 - q_bar)), 4),
+    }
+
+
+def reproduce_the_review(
+    results_dir: Path = RESULTS_DIR, blocks: int = 200_000, seed: int = 20260928
+) -> dict[str, Any]:
+    """The review's two figures, from the committed code at its reference configuration, before any change.
+
+    The first draw `sweep` makes is `moments` at the reference configuration and ratio 1.0 on
+    `default_rng(seed)`, so the same call on a fresh generator is that draw exactly. The committed row is
+    read from the committed result beside it, and the closed form says where each figure comes from.
+    """
+    anch = anchors()
+    win = window_anchor_from_the_measured_arm(results_dir)
+    rate = win.get("rate") or 0.1345
+    ref = reference(anch, rate)
+    m = moments(
+        ref["window_observed_rate"],
+        1.0,
+        ref["sensitivity"],
+        ref["false_positive"],
+        ref["elements_per_block"],
+        ref["windows_per_block"],
+        ref["icc"],
+        blocks,
+        np.random.default_rng(seed),
+    )
+    committed = {}
+    p = results_dir / f"{RESULT}.json"
+    if p.exists():
+        row = next(
+            r
+            for r in json.loads(p.read_text())["sweep"]["rows"]
+            if r["configuration"] == "reference" and r["ratio"] == 1.0
+        )
+        committed = {k: row[k] for k in ("realised_element_detection_probability", "window_endpoint_rate")}
+    closed = quadrature_of_the_committed_reference(
+        rate, ref["sensitivity"], ref["icc"], ref["elements_per_block"], ref["false_positive"]
+    )
+    tier = json.loads((results_dir / f"{MEASURED_ARM}.json").read_text())["coverage"]["real_unknown"]
+    return {
+        "reference_configuration": ref,
+        "anchor": {"rate": rate, "unit": win.get("unit")},
+        "rerun_now": {
+            "element_detection": m["realised_element_detection_probability"],
+            "positive_windows": m["window_endpoint_rate"],
+            "positive_blocks": m["block_endpoint_rate"],
+            "seed": seed,
+            "simulated_blocks": blocks,
+        },
+        "committed_row": committed,
+        "review_reported": REVIEW_REPORTED,
+        "reproduced": (
+            round(m["realised_element_detection_probability"], 4) == REVIEW_REPORTED["element_detection"]
+            and round(m["window_endpoint_rate"], 4) == REVIEW_REPORTED["positive_windows"]
+        ),
+        "closed_form": closed,
+        "why_the_anchor_is_not_reproduced": [
+            "the anchor counts WINDOWS carrying a tested element (30 of 223), and `moments` reads a "
+            "window as positive if any of its 6 tested elements is, so the quantity it matched to the "
+            "anchor is not the quantity the anchor measured",
+            "even at the element level it does not come back: the intercept's location is set at "
+            "logit(0.1345 / sensitivity) and a logit-normal intercept with spread raises the MEAN rate "
+            "above its location, so the observed element rate is sensitivity x mean rate, not 0.1345",
+            "the registered ICC (0.30) is an observed-scale correlation measured on 0/1 calls, and it "
+            "was entered into the latent-scale identity; the observed-scale correlation the simulation "
+            "then produces is the figure under `closed_form.observed_scale_icc_it_implies`. The "
+            "registration promised the realised binary-scale ICC beside the latent one; the committed "
+            "result carries only the latent one",
+            "the committed test that watches the anchor runs `moments` at 1 element, 1 window and ICC "
+            "0, the one configuration where window, element and location rates coincide",
+        ],
+        "sizes_above_the_tier": {
+            "largest_n_searched": max(N_GRID),
+            "tier_blocks": tier["blocks"],
+            "blocks_carrying_a_scored_element": tier["blocks_carrying_a_scored_element"],
+            "n_grid_entries_above_the_tier": [n for n in N_GRID if n > tier["blocks"]],
+            "n_grid_entries_above_the_carrying_blocks": [
+                n for n in N_GRID if n > tier["blocks_carrying_a_scored_element"]
+            ],
+        },
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--blocks", type=int, default=200_000, help="simulated blocks per configuration")
@@ -1315,7 +1441,15 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="add the corrected keys beside the committed clause 2 results (additive, never in place)",
     )
+    ap.add_argument(
+        "--reproduce-review",
+        action="store_true",
+        help="item 12 S2: rerun the committed reference configuration and print what it produces",
+    )
     args = ap.parse_args(argv)
+    if args.reproduce_review:
+        print(json.dumps(reproduce_the_review(), indent=1))
+        return 0
     if args.annotate:
         for name, what in annotate_committed_results().items():
             print(f"{name}: {what}")
