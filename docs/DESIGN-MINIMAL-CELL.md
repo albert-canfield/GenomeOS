@@ -568,3 +568,43 @@ and its record; the lane says so rather than presenting a foregone verdict
 as a discovery. The CRISPRi outcomes had not been counted when this was
 written (only the table's schema was read); `tests/test_activator_combination.py`
 pins the constants and the identities each rule's prediction rests on.
+
+**The run, once, after the registration was committed (`7f3e597`).**
+Written to `data/results/activator_combination_choice.json` (the computation
+was executed again, unchanged, only to write that file beside the census
+record rather than over it; it is deterministic and every figure was the
+same). Negatives
+first. **No rule survives, so the mean is retained and the choice
+is undetermined**, as expected. Contradicted by: mean, knirps late and
+hunchback central (additive pairs, where the mean gives their average);
+sum_capped and or, snail (a pair below its stronger single, which no
+monotone rule can give); max, all three of those and the CRISPRi count.
+Knirps early (super-additive) was set aside as contradicting all four.
+
+The CRISPRi training split (10,356 element-gene rows in K562, no conflicting
+repeats, 2,113 gene-cells): 239 gene-cells have one significant decrease and
+**81 have two or more** (47 two, 19 three, 7 four, 8 five or more; MYC nine),
+so max is contradicted by 81 against the registered 10. Descriptive, not
+judged: 14 of those 81 carry any significant increase, and the summed
+increase magnitude is **0.075 of the summed decrease** on them, where the
+mean predicts 1 if the screen had tested every activator of those genes. It
+did not test every element, so this says only that the mean needs untested
+or undetected activators whose removal raises expression by as much as the
+measured decreases lower it.
+
+What it means. The four candidates form one family (a fixed function of the
+terms) and the measured pairs change behaviour with enhancer strength:
+weak pairs add, strong pairs fall short of adding and, in snail, interfere,
+which Bothma et al. attribute to competition for the promoter. No member of
+the family reproduces both, so choosing one would be taste. The mean stays
+the named assumption, and lane-bridge's finding stands unchanged: a gene
+with two or more mechanisms in one context (76,469 of 237,613 compiled
+gene-cell pairs) cannot be parameterised from single-removal observations,
+because under the mean each removal's effect depends on every other
+activator's term (ΔA_i = (A − t_i)/(n − 1)), and no double-removal data exist
+in the project to separate them. A form with a strength-dependent
+interaction (promoter competition) would be its own registration, and it
+would need numbers the project does not have. Nothing moved: no rule
+changed, no pin changed, the census verdict is the `5cbce26` one
+(falsified). The per-rule gastrulation table above is the answer to "does
+the rule explain the missing mesoderm": it does not.

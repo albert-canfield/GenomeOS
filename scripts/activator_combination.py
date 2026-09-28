@@ -17,6 +17,8 @@ genes a run there would give two or more activating rules, and whether any of th
 `scripts/activator_combination_patch.py` (pytest plugin and `bio test` wrapper) and writes which tests
 and program self-tests pass or fail under each candidate rule. Writes
 `data/results/activator_combination_census.json`. No network, no AlphaGenome.
+The choice test's one run (`choose`) writes `data/results/activator_combination_choice.json`
+instead, so the committed census record is kept as it was.
 """
 
 from __future__ import annotations
@@ -34,6 +36,7 @@ from genomeos.results import RESULTS_DIR, save_result
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "activator_combination_census"
+CHOICE = "activator_combination_choice"
 PROGRAM_DIRS = ["data/demo", "data/organisms", "genomeos/std"]
 COMPILED_DIR = ROOT / "data/knowledge/compiled"
 RULES = ("mean", "sum_capped", "max", "or")
@@ -128,6 +131,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", help="write here instead of data/results")
     args = ap.parse_args(argv)
     path = Path(args.out) if args.out else RESULTS_DIR / f"{NAME}.json"
+    if args.step == "choose":
+        path = Path(args.out) if args.out else RESULTS_DIR / f"{CHOICE}.json"
     doc = json.loads(path.read_text()) if path.exists() else {}
     if args.step == "static":
         doc["static"] = static()
@@ -144,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     if args.out:
         path.write_text(json.dumps(doc, indent=1, sort_keys=True))
+    elif args.step == "choose":
+        save_result(CHOICE, doc, manifest=manifest(True))
     else:
         save_result(NAME, doc, manifest=manifest("choice_test" in doc))
 
