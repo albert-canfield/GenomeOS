@@ -205,3 +205,63 @@ def test_the_two_quoted_shares_are_the_same_numerator_over_different_denominator
     assert "59 of the 531" in got["the_two_shares_that_are_quoted"]["11.1%"]
     assert got["the_overlap_rule"]["0.25"].startswith("72")
     assert got["the_overlap_rule"]["0.75"].startswith("10")
+
+
+# ---- the additive correction in the measured arm ----------------------------------------------------
+
+
+def test_the_measured_arm_keeps_its_record_and_gains_the_separation():
+    """`coverage_needed` must stay exactly as it was; the new function is beside it, not instead."""
+    arm = _load("clause2_measured_arm")
+    assert hasattr(arm, "coverage_needed")
+    assert hasattr(arm, "reporting_floor_and_power_assumptions")
+    records = [
+        {
+            "elements": 1,
+            "carrying": 4,
+            "drawn": 4,
+            "yes": {arm.MODEL_QUESTION: i % 2 == 0},
+            "windows_yes": {arm.MODEL_QUESTION: i % 3},
+        }
+        for i in range(40)
+    ]
+    old = arm.coverage_needed(records, 1)
+    new = arm.reporting_floor_and_power_assumptions(records, 1)
+    assert new["record_of_what_was_computed"] == old  # the record is carried, unchanged
+    assert new["reporting_floor"]["blocks_short_of_the_floor"] == arm.MIN_BLOCKS - 1
+    assert "reporting" in new["reporting_floor"]["what_it_is"]
+    assert new["provisional_calculation"]["is_a_power_result_for_the_measured_experiment"] is False
+    for part in new["model_derived_assumptions"].values():
+        if isinstance(part, dict):
+            assert part["is"].startswith("AN ASSUMPTION")
+    assert new["where_the_power_question_is_answered"].endswith("clause2_design_power.py")
+
+
+# ---- the corrected keys on the committed results ----------------------------------------------------
+
+
+def test_the_annotation_is_additive_and_refuses_otherwise(tmp_path):
+    payload = {"result": "clause2_measured_arm", "primary": {"n_blocks_compared": 1}, "keep": [1, 2]}
+    (tmp_path / "clause2_measured_arm.json").write_text(__import__("json").dumps(payload))
+    done = dp.annotate_committed_results(tmp_path)
+    assert done["clause2_measured_arm"]
+    assert done["clause2_matched_control"] == "absent"
+    got = __import__("json").loads((tmp_path / "clause2_measured_arm.json").read_text())
+    assert {k: v for k, v in got.items() if k != dp.CORRECTION_KEY} == payload
+    assert got[dp.CORRECTION_KEY]["additive"] is True
+
+
+def test_every_correction_names_what_it_corrects():
+    for name, entries in dp.CORRECTIONS.items():
+        assert entries, name
+        for field, text in entries.items():
+            assert field and len(text) > 60, (name, field)
+
+
+def test_the_five_review_points_are_each_corrected_somewhere():
+    text = " ".join(t for e in dp.CORRECTIONS.values() for t in e.values()).lower()
+    assert "target-naming frequency" in text  # (1) what 9.18% against 44.04% measures
+    assert "persists after adjustment" in text  # (2) adjustment does not identify a cause
+    assert "minimum-reporting rule" in text  # (3) the floor is not a power result
+    assert "reciprocal overlap" in text and "denominator" in text  # (4) coverage rule and denominator
+    assert "no difference detected" in text  # (5) not equivalence

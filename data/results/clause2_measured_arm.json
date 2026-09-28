@@ -2136,5 +2136,19 @@
       "python": "3.14.3"
     },
     "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "coverage_needed": "this field is kept as the record of what the run computed. It is NOT a power result for the measured experiment: `effect_to_detect` and `model_arm_sd_of_per_block_differences` are both model output, used to size an experiment whose endpoint is a measurement, and `blocks_short_of_the_floor` is 20 minus the 1 block compared -- the distance to `measured.MIN_FOR_A_COMPARISON`, a minimum-reporting rule. That the formula also returned 20 is a coincidence, not a confirmation. The power question is answered in `clause2_design_power`, from the measured endpoint",
+      "primary_reading.text": "the phrase 'the coverage that would be needed ... for 80% power against an effect the size of the model arm's own -27.25 points' names the mismatch in its own words: the effect is the model arm's. Read it as a provisional assumption, not as the size of the experiment",
+      "coverage.windows_matched_real_unknown.windows_with": "these are WINDOWS satisfying each predicate, not elements. The 223 and the 30 behind the 13.45% rate are windows carrying a CRISPRi-tested element; several windows of one block can carry the same element, so they are not 223 independent measurements. The element-level rates over the benchmark's own distinct tested elements are 12.15% (training, 479 of 3,941) and 14.56% (held-out, 247 of 1,697)",
+      "coverage.real_unknown.blocks_with_no_measured_element": "823 means: no assay measures any of the block's scored elements at reciprocal overlap 0.5. It does not mean no part of those blocks was ever measured. At overlap 0.25 the measured count is 72 blocks and at 0.75 it is 10, against 59 at the committed rule, so the count is a property of the rule as much as of the data",
+      "the_two_shares": "59 measured blocks is 6.7% of the 882 tier blocks and 11.1% of the 531 that carry a scored element. Both are correct and neither may be quoted without its denominator",
+      "sample_size_answer": "see `clause2_design_power.sample_size_range_by_ratio`: a RANGE of compared blocks per assumed effect, not a number"
+    }
   }
 }

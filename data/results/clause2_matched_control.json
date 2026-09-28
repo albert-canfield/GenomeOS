@@ -1878,5 +1878,15 @@
       "python": "3.14.3"
     },
     "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "secondary_real_minus_neutral": "an interval of -4.55 to +4.30 points is NO DIFFERENCE DETECTED, not equivalence and not 'the two tiers behave identically'. It permits a real difference in either direction of up to about four and a half points. No equivalence margin can be justified from outside these data, so no equivalence test is run; see `clause2_design_power.equivalence`",
+      "primary": "`names_a_coding_gene` is the deletion model naming a target. The difference is in TARGET-NAMING FREQUENCY, not in prediction accuracy, and it shows neither that the model failed nor that these sequences lack regulatory function"
+    }
   }
 }

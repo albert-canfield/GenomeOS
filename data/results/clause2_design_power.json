@@ -1,0 +1,5632 @@
+{
+  "result": "clause2_design_power",
+  "date": "2026-09-28",
+  "registration": {
+    "registered": "2026-09-28",
+    "lane": "lane-design",
+    "registered_before": "any simulated block was drawn. The grids, their justifications, the endpoint, the estimator, the test, the clustering treatment, the reference configuration, the reported quantities and the words the answer may be stated in are all fixed in this dict, which was committed before the script was run",
+    "question": "for the experiment clause 2 actually needs -- a CRISPRi (or equivalently powered) screen that tests elements inside constrained-unknown blocks against protein-coding genes, against elements in matched windows -- how many compared blocks would be needed, over what range of assumptions, for the committed estimator to detect a difference of an assumed size",
+    "endpoint": "MEASURED, not modelled: per element, does the assay find a significant change in a protein-coding gene's expression on silencing that element (either sign, as R2 settled). Per block, the block's endpoint is 1 if at least one of its tested elements is found to regulate a coding gene. This is `clause2_measured_arm.PRIMARY_QUESTION`, unchanged",
+    "estimator": "the committed one, unchanged: d_i = Y_i - Wbar_i over compared blocks, where Y_i is the block's 0/1 endpoint and Wbar_i is the share of that block's TESTED matched windows whose endpoint is 1. The reported statistic is the mean of d_i in points",
+    "test": "the committed reading rule: the 95% interval over blocks excludes 0. Power is computed from the normal approximation to that interval (|mean| > 1.959964 * SE), because the committed interval is a percentile bootstrap of a mean over blocks and the two agree in the range that matters. That agreement is not assumed: a registered subset of cells is also run with the actual percentile bootstrap (2,000 resamples, 1,000 simulated experiments) and the largest disagreement in power is reported in the result. If it exceeds 0.05 the bootstrap numbers are the ones to read, and the result says so",
+    "two_powers_reported": "`power_any_direction` (the interval excludes 0 either way) and `power_correct_direction` (it excludes 0 on the side the simulated truth is on). The second is the one a reader wants and the one quoted",
+    "the_floor_is_not_power": "`measured.MIN_FOR_A_COMPARISON` = 20 blocks is a minimum-reporting rule: below it no interval is printed at all. It is applied here as a hard floor on the answer (an experiment of fewer than that many compared blocks reports nothing, whatever its power), and it is never reported as a power result. Where a power calculation returns a number below the floor, both are printed, separately named",
+    "the_model_effect_is_excluded_by_name": "the model arm's -27.25 points is NOT used as the effect to detect anywhere in this script. It is a difference in how often a deletion model names a target, measured on the same sequence; it is not an estimate of a difference in measured regulation, and there is no basis for treating it as one. The same goes for s = 0.4324, the model arm's per-block dispersion",
+    "grids": {
+      "window_true_rate": {
+        "values_observed_scale": [
+          0.0926,
+          0.1345,
+          0.1864
+        ],
+        "justification": "the one empirical anchor the project holds: 30 of 223 matched windows carrying a CRISPRi-tested element hold one measured to move a coding gene, 13.45%, from `clause2_measured_arm.json`. Its exact binomial 95% interval is 9.26% to 18.64% and that interval is the grid. Two independent anchors agree and are reported beside it rather than pooled in: over the whole ENCODE benchmark, 12.15% of the 3,941 distinct tested elements in the training file and 14.56% of the 1,697 in the held-out file have at least one significant pair. NOTE, and this is a correction to the write-up the anchor comes from: the 223 and the 30 are WINDOWS containing such an element, not tested elements; the element-level anchors are the ones that are element-level. The rate is carried on the OBSERVED scale, so the simulated true rate is observed / sensitivity, capped at 1"
+      },
+      "block_rate_ratio": {
+        "values": [
+          1.0,
+          0.75,
+          0.5,
+          0.25,
+          0.1,
+          0.0
+        ],
+        "justification": "the true per-element regulation rate inside the blocks as a multiple of the windows'. 1.0 is the null the design must be able to sit at (the blocks regulate as often as their windows); 0.0 is the clause's strongest form (they regulate nothing); the rest span the range between. No value is taken from the model arm, and no published estimate of this ratio exists to take one from, which is exactly why a range is reported and not a number"
+      },
+      "assay_sensitivity": {
+        "values": "the mean of each of the five power columns of the ENCODE benchmark files",
+        "justification": "`measured.POWER_COLUMNS` (PowerAtEffectSize10..50) state, per tested pair, the probability the screen would have called an effect of that size. Their means over the 14,734 valid pairs are the sensitivities a real screen of this kind achieves, read from the project's own tables rather than assumed. They are reported by split as well, because the held-out file is better powered than the training file. The sequence is not monotone in effect size (the 25% column is the benchmark's own filter and sits near 1 for every pair); the columns are used as five separate sensitivity levels and the non-monotonicity is reported, not smoothed"
+      },
+      "false_positive_rate": {
+        "values": [
+          0.0,
+          0.01
+        ],
+        "justification": "the benchmark controls its own false discovery rate, so 0 is the design's intent and 0.01 per tested element is the sensitivity analysis. A false positive rate acts on both arms and mostly costs power by flattening the contrast"
+      },
+      "tested_elements_per_block": {
+        "values": [
+          1,
+          2,
+          6
+        ],
+        "justification": "6 is 6.177, the scored elements per carrying block in the committed matched control, so it is what a screen that tested every scored element in a block would have; 1 is the minimum that makes a block testable and is what the 3 tested blocks that exist today actually have; 2 is between them. The same count is used per tested window"
+      },
+      "tested_windows_per_block": {
+        "values": [
+          1,
+          3,
+          10
+        ],
+        "justification": "the matched control draws 50 windows per block, of which only some would be tested. Today 223 windows over 134 blocks carry a tested element, about 1.7 each, so 1 is the realistic low end; 3 and 10 say what buying more control measurements is worth. More windows shrink the variance of Wbar_i and therefore of d_i"
+      },
+      "elements_within_block_icc": {
+        "values": [
+          0.0,
+          0.21,
+          0.3,
+          0.35
+        ],
+        "justification": "measured, not guessed. Whether an element is found to regulate a coding gene is correlated between nearby elements: the one-way ANOVA estimator on the benchmark's 5,638 distinct tested elements gives an intraclass correlation of 0.375 within 25 kb clusters, 0.350 within 50 kb, 0.300 within 100 kb, 0.273 within 250 kb and 0.209 within 1 Mb. A constrained-unknown block is an intergenic gap of that order, so the grid is 0 (independence, for contrast), 0.21, 0.30 and 0.35. The script recomputes these from the tables at run time and reports them"
+      },
+      "blocks_within_chromosome_icc": {
+        "values": [
+          0.0,
+          0.014,
+          0.03
+        ],
+        "justification": "the same estimator with chromosomes as clusters gives 0.0142 over the 23 chromosomes the benchmark touches. 0 and 0.03 bracket it"
+      }
+    },
+    "clustering_treatment": {
+      "elements_within_a_block": "HIERARCHICAL SIMULATION. Each block carries a random intercept u ~ Normal(0, sigma) on the logit of its elements' regulation probability, with sigma fixed from the registered ICC by the latent-scale identity sigma^2 / (sigma^2 + pi^2/3) = ICC. Its elements are then conditionally independent given u. Each tested window carries its own independent intercept, because a window is somewhere else in the genome. The realised binary-scale ICC of the simulated elements is reported beside the latent one, since they differ",
+      "blocks_within_a_chromosome": "DESIGN EFFECT, applied to the variance of the mean and not simulated: Var(mean d) = sigma_d^2 / N * (1 + (N / 24 - 1) * rho_chrom), the standard equal-cluster design effect with the N blocks spread over the 24 chromosomes. This is deliberate and it is the conservative direction to be explicit about: the committed interval is a bootstrap over BLOCKS, which assumes blocks are independent, so where rho_chrom > 0 the committed test is anti-conservative and the design effect is what says by how much"
+    },
+    "reference_configuration": {
+      "window_observed_rate": 0.1345,
+      "block_rate_ratio": "swept",
+      "assay_sensitivity": "PowerAtEffectSize20, pooled mean",
+      "false_positive_rate": 0.0,
+      "tested_elements_per_block": 6,
+      "tested_windows_per_block": 3,
+      "elements_within_block_icc": 0.3,
+      "blocks_within_chromosome_icc": 0.014,
+      "justification": "each field is the middle or the measured value of its own grid, so the sensitivity analysis varies one factor at a time from a configuration that is defensible on its own"
+    },
+    "sweep": "the primary sweep is the block-rate ratio at the reference configuration, over N_GRID. The sensitivity analysis is one factor at a time: every other value of every grid, at each ratio, over the same N_GRID. Cells are not crossed exhaustively, because a fully crossed grid would report a range whose extremes are combinations no one would defend",
+    "how_the_moments_are_obtained": "for each configuration, 200,000 simulated blocks with their windows are drawn once and the mean and standard deviation of d_i are taken from them; power at every N then follows in closed form from the normal approximation and the chromosome design effect. This is a Monte Carlo estimate of the estimator's own moments, not a Monte Carlo of the test, and its own error is reported (the standard error of the simulated mean)",
+    "reported": "for every configuration: the smallest N in N_GRID reaching 50%, 80% and 90% correct-direction power, or 'above the largest N searched'; the floor applied separately; and across the configurations, the RANGE of the 80% number at each ratio. The headline is a range with its assumptions attached, and the result states in its own text that power is a probability of detection under assumptions, not a guarantee that the experiment decides clause 2",
+    "equivalence_decision_registered_before_computing": "for the neutral tier against the real unknown (committed contrast -0.10 points, 95% -4.55 to +4.30 on `names_a_coding_gene`; -0.71, -5.58 to +4.17 element-count-matched), an equivalence claim needs a margin justified from OUTSIDE these data. The rule fixed here, before looking: a margin is admissible only if it comes from a source that is not this project's own analysis of these blocks -- a published threshold for a meaningful difference in regulatory annotation rate, a decision-theoretic cost, or a downstream requirement stated elsewhere in the project before this lane. The project's own 5-point chance band is NOT admissible: it was chosen in d717b28 for this very comparison. If no admissible margin exists, no equivalence test is run and the finding is stated as 'no difference detected'; the script then reports, descriptively and labelled as such, the smallest margin at which a TOST on the committed interval would pass -- which is a statement about what the data would need, not a margin anyone has justified",
+    "denominator_table": "every population used across the four clause 2 lanes, each count with its denominator and the rule that produced it, read from the committed result files rather than retyped, including the overlap-rule sensitivity at 0.25, 0.5 and 0.75",
+    "falsifier": "if the registered bootstrap check disagrees with the normal approximation by more than 0.05 in power at any checked cell, the normal-approximation table is reported as unreliable and the bootstrap numbers replace it in the reading",
+    "cost": "0 AlphaGenome requests; no model is called and no per-element cache is opened"
+  },
+  "anchors": {
+    "crispri_pairs": 14734,
+    "crispri_invalid_pairs": 0,
+    "power_columns": {
+      "PowerAtEffectSize10": {
+        "pairs": 14734,
+        "mean": 0.4324,
+        "share_at_or_above_0.8": 0.0831,
+        "mean_by_split": {
+          "training": 0.3899,
+          "heldout": 0.5329
+        }
+      },
+      "PowerAtEffectSize15": {
+        "pairs": 14734,
+        "mean": 0.6075,
+        "share_at_or_above_0.8": 0.6769,
+        "mean_by_split": {
+          "training": 0.5348,
+          "heldout": 0.7796
+        }
+      },
+      "PowerAtEffectSize20": {
+        "pairs": 14734,
+        "mean": 0.6674,
+        "share_at_or_above_0.8": 0.6865,
+        "mean_by_split": {
+          "training": 0.5903,
+          "heldout": 0.8497
+        }
+      },
+      "PowerAtEffectSize25": {
+        "pairs": 14734,
+        "mean": 0.978,
+        "share_at_or_above_0.8": 0.9835,
+        "mean_by_split": {
+          "training": 0.9754,
+          "heldout": 0.9842
+        }
+      },
+      "PowerAtEffectSize50": {
+        "pairs": 14734,
+        "mean": 0.7052,
+        "share_at_or_above_0.8": 0.7039,
+        "mean_by_split": {
+          "training": 0.6352,
+          "heldout": 0.8708
+        }
+      }
+    },
+    "power_columns_are_not_monotone_in_effect_size": "PowerAtEffectSize25 sits near 1 for essentially every pair because it is the benchmark's own inclusion filter, so the column means do not increase with effect size. The five columns are used as five sensitivity levels, in the order they are reported, not as a curve",
+    "element_level_regulation_rate": {
+      "training": {
+        "tested_elements": 3941,
+        "with_a_significant_pair": 479,
+        "rate": 0.1215
+      },
+      "heldout": {
+        "tested_elements": 1697,
+        "with_a_significant_pair": 247,
+        "rate": 0.1456
+      },
+      "all": {
+        "tested_elements": 5638,
+        "with_a_significant_pair": 726,
+        "rate": 0.1288
+      }
+    },
+    "elements_within_cluster_icc": {
+      "25kb": {
+        "clusters": 1096,
+        "elements": 3355,
+        "mean_cluster_size": 3.06,
+        "icc": 0.3745
+      },
+      "50kb": {
+        "clusters": 1091,
+        "elements": 3910,
+        "mean_cluster_size": 3.582,
+        "icc": 0.3495
+      },
+      "100kb": {
+        "clusters": 1015,
+        "elements": 4368,
+        "mean_cluster_size": 4.3,
+        "icc": 0.2998
+      },
+      "250kb": {
+        "clusters": 862,
+        "elements": 4831,
+        "mean_cluster_size": 5.594,
+        "icc": 0.2727
+      },
+      "1000kb": {
+        "clusters": 620,
+        "elements": 5286,
+        "mean_cluster_size": 8.485,
+        "icc": 0.209
+      }
+    },
+    "blocks_within_chromosome_icc": {
+      "clusters": 23,
+      "elements": 5638,
+      "mean_cluster_size": 236.485,
+      "icc": 0.0142
+    }
+  },
+  "window_rate_anchor": {
+    "numerator": 30,
+    "denominator": 223,
+    "rate": 0.1345,
+    "exact_95_interval": [
+      0.0926,
+      0.1864
+    ],
+    "unit": "matched windows containing at least one CRISPRi-tested element",
+    "correction": "the lane-measured write-up calls these 'tested elements'. They are windows: the count comes from `windows_with`, which counts windows satisfying the predicate. Windows of the same block can contain the same tested element, so the 223 are not 223 independent measurements and the exact interval above is narrower than the truth. The element-level rates over the benchmark's own distinct elements are the element-level anchors"
+  },
+  "sweep": {
+    "configurations": 17,
+    "ratios": [
+      1.0,
+      0.75,
+      0.5,
+      0.25,
+      0.1,
+      0.0
+    ],
+    "rows": [
+      {
+        "configuration": "reference",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5695,
+        "window_endpoint_rate": 0.5696,
+        "mean_difference_points": -0.007,
+        "sd_of_per_block_difference": 0.5714,
+        "monte_carlo_se_of_the_mean_points": 0.1278,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16802,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.025,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0251,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0251,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "reference",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4901,
+        "window_endpoint_rate": 0.5705,
+        "mean_difference_points": -8.035,
+        "sd_of_per_block_difference": 0.5758,
+        "monte_carlo_se_of_the_mean_points": 0.1287,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13481,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0957,
+          "correct_direction": 0.0908,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2765,
+          "correct_direction": 0.2761,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7883,
+          "correct_direction": 0.7883,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "reference",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3903,
+        "window_endpoint_rate": 0.5692,
+        "mean_difference_points": -17.893,
+        "sd_of_per_block_difference": 0.5662,
+        "monte_carlo_se_of_the_mean_points": 0.1266,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09789,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2927,
+          "correct_direction": 0.2923,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8713,
+          "correct_direction": 0.8713,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "reference",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2512,
+        "window_endpoint_rate": 0.5685,
+        "mean_difference_points": -31.731,
+        "sd_of_per_block_difference": 0.5195,
+        "monte_carlo_se_of_the_mean_points": 0.1162,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05525,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7798,
+          "correct_direction": 0.7798,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "reference",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1245,
+        "window_endpoint_rate": 0.5687,
+        "mean_difference_points": -44.429,
+        "sd_of_per_block_difference": 0.4368,
+        "monte_carlo_se_of_the_mean_points": 0.0977,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02442,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9952,
+          "correct_direction": 0.9952,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "reference",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.569,
+        "mean_difference_points": -56.897,
+        "sd_of_per_block_difference": 0.2846,
+        "monte_carlo_se_of_the_mean_points": 0.0636,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.3111,
+        "block_endpoint_rate": 0.5584,
+        "window_endpoint_rate": 0.5594,
+        "mean_difference_points": -0.099,
+        "sd_of_per_block_difference": 0.5726,
+        "monte_carlo_se_of_the_mean_points": 0.128,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.15045,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0255,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.026,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0271,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.2333,
+        "block_endpoint_rate": 0.4809,
+        "window_endpoint_rate": 0.5601,
+        "mean_difference_points": -7.928,
+        "sd_of_per_block_difference": 0.5762,
+        "monte_carlo_se_of_the_mean_points": 0.1288,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.12185,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0944,
+          "correct_direction": 0.0894,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2702,
+          "correct_direction": 0.2697,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7769,
+          "correct_direction": 0.7769,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.1555,
+        "block_endpoint_rate": 0.379,
+        "window_endpoint_rate": 0.5587,
+        "mean_difference_points": -17.966,
+        "sd_of_per_block_difference": 0.5636,
+        "monte_carlo_se_of_the_mean_points": 0.126,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.08924,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2969,
+          "correct_direction": 0.2965,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8768,
+          "correct_direction": 0.8768,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.0778,
+        "block_endpoint_rate": 0.2426,
+        "window_endpoint_rate": 0.5583,
+        "mean_difference_points": -31.572,
+        "sd_of_per_block_difference": 0.5154,
+        "monte_carlo_se_of_the_mean_points": 0.1152,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05142,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7822,
+          "correct_direction": 0.7822,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.0311,
+        "block_endpoint_rate": 0.1237,
+        "window_endpoint_rate": 0.5601,
+        "mean_difference_points": -43.641,
+        "sd_of_per_block_difference": 0.4372,
+        "monte_carlo_se_of_the_mean_points": 0.0978,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02354,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9939,
+          "correct_direction": 0.9939,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.4324,
+          "sensitivity_column": "PowerAtEffectSize10",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.3111,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5592,
+        "mean_difference_points": -55.923,
+        "sd_of_per_block_difference": 0.2865,
+        "monte_carlo_se_of_the_mean_points": 0.0641,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.2214,
+        "block_endpoint_rate": 0.5658,
+        "window_endpoint_rate": 0.5682,
+        "mean_difference_points": -0.242,
+        "sd_of_per_block_difference": 0.5725,
+        "monte_carlo_se_of_the_mean_points": 0.128,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16438,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0261,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0502,
+          "correct_direction": 0.0275,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0508,
+          "correct_direction": 0.0303,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.166,
+        "block_endpoint_rate": 0.4906,
+        "window_endpoint_rate": 0.5674,
+        "mean_difference_points": -7.68,
+        "sd_of_per_block_difference": 0.5755,
+        "monte_carlo_se_of_the_mean_points": 0.1287,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.1323,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0917,
+          "correct_direction": 0.0864,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2571,
+          "correct_direction": 0.2565,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7517,
+          "correct_direction": 0.7517,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.1107,
+        "block_endpoint_rate": 0.3903,
+        "window_endpoint_rate": 0.567,
+        "mean_difference_points": -17.672,
+        "sd_of_per_block_difference": 0.5642,
+        "monte_carlo_se_of_the_mean_points": 0.1262,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09629,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2884,
+          "correct_direction": 0.288,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8654,
+          "correct_direction": 0.8654,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.0553,
+        "block_endpoint_rate": 0.2509,
+        "window_endpoint_rate": 0.5691,
+        "mean_difference_points": -31.821,
+        "sd_of_per_block_difference": 0.5191,
+        "monte_carlo_se_of_the_mean_points": 0.1161,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05467,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7827,
+          "correct_direction": 0.7827,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.0221,
+        "block_endpoint_rate": 0.1239,
+        "window_endpoint_rate": 0.5679,
+        "mean_difference_points": -44.404,
+        "sd_of_per_block_difference": 0.4361,
+        "monte_carlo_se_of_the_mean_points": 0.0975,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02415,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9953,
+          "correct_direction": 0.9953,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6075,
+          "sensitivity_column": "PowerAtEffectSize15",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2214,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5685,
+        "mean_difference_points": -56.847,
+        "sd_of_per_block_difference": 0.2864,
+        "monte_carlo_se_of_the_mean_points": 0.064,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.1375,
+        "block_endpoint_rate": 0.5748,
+        "window_endpoint_rate": 0.5738,
+        "mean_difference_points": 0.096,
+        "sd_of_per_block_difference": 0.5712,
+        "monte_carlo_se_of_the_mean_points": 0.1277,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.1841,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0254,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.026,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.027,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.1031,
+        "block_endpoint_rate": 0.4972,
+        "window_endpoint_rate": 0.5734,
+        "mean_difference_points": -7.626,
+        "sd_of_per_block_difference": 0.5762,
+        "monte_carlo_se_of_the_mean_points": 0.1288,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.1462,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.091,
+          "correct_direction": 0.0856,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2536,
+          "correct_direction": 0.2531,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7448,
+          "correct_direction": 0.7448,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.0688,
+        "block_endpoint_rate": 0.3984,
+        "window_endpoint_rate": 0.5741,
+        "mean_difference_points": -17.571,
+        "sd_of_per_block_difference": 0.5666,
+        "monte_carlo_se_of_the_mean_points": 0.1267,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.10532,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2837,
+          "correct_direction": 0.2833,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8587,
+          "correct_direction": 0.8587,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.0344,
+        "block_endpoint_rate": 0.2555,
+        "window_endpoint_rate": 0.5742,
+        "mean_difference_points": -31.869,
+        "sd_of_per_block_difference": 0.521,
+        "monte_carlo_se_of_the_mean_points": 0.1165,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05816,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.781,
+          "correct_direction": 0.781,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.0138,
+        "block_endpoint_rate": 0.1268,
+        "window_endpoint_rate": 0.5744,
+        "mean_difference_points": -44.761,
+        "sd_of_per_block_difference": 0.4386,
+        "monte_carlo_se_of_the_mean_points": 0.0981,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02519,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9954,
+          "correct_direction": 0.9954,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.978,
+          "sensitivity_column": "PowerAtEffectSize25",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1375,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5741,
+        "mean_difference_points": -57.413,
+        "sd_of_per_block_difference": 0.285,
+        "monte_carlo_se_of_the_mean_points": 0.0637,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.1907,
+        "block_endpoint_rate": 0.5686,
+        "window_endpoint_rate": 0.5707,
+        "mean_difference_points": -0.216,
+        "sd_of_per_block_difference": 0.5718,
+        "monte_carlo_se_of_the_mean_points": 0.1279,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16995,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.026,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0502,
+          "correct_direction": 0.0272,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0506,
+          "correct_direction": 0.0297,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.143,
+        "block_endpoint_rate": 0.4927,
+        "window_endpoint_rate": 0.5699,
+        "mean_difference_points": -7.717,
+        "sd_of_per_block_difference": 0.5751,
+        "monte_carlo_se_of_the_mean_points": 0.1286,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13646,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0922,
+          "correct_direction": 0.0869,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2594,
+          "correct_direction": 0.2588,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7563,
+          "correct_direction": 0.7563,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.0954,
+        "block_endpoint_rate": 0.3932,
+        "window_endpoint_rate": 0.5709,
+        "mean_difference_points": -17.766,
+        "sd_of_per_block_difference": 0.5645,
+        "monte_carlo_se_of_the_mean_points": 0.1262,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09909,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2907,
+          "correct_direction": 0.2903,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8686,
+          "correct_direction": 0.8686,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.0477,
+        "block_endpoint_rate": 0.2514,
+        "window_endpoint_rate": 0.57,
+        "mean_difference_points": -31.86,
+        "sd_of_per_block_difference": 0.5204,
+        "monte_carlo_se_of_the_mean_points": 0.1164,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05581,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7817,
+          "correct_direction": 0.7817,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.0191,
+        "block_endpoint_rate": 0.1261,
+        "window_endpoint_rate": 0.5701,
+        "mean_difference_points": -44.399,
+        "sd_of_per_block_difference": 0.4383,
+        "monte_carlo_se_of_the_mean_points": 0.098,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02461,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9949,
+          "correct_direction": 0.9949,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.7052,
+          "sensitivity_column": "PowerAtEffectSize50",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1907,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5698,
+        "mean_difference_points": -56.976,
+        "sd_of_per_block_difference": 0.2858,
+        "monte_carlo_se_of_the_mean_points": 0.0639,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.1689,
+        "window_endpoint_rate": 0.1683,
+        "mean_difference_points": 0.062,
+        "sd_of_per_block_difference": 0.4318,
+        "monte_carlo_se_of_the_mean_points": 0.0966,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.1684,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0254,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0258,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0267,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.1352,
+        "window_endpoint_rate": 0.1691,
+        "mean_difference_points": -3.394,
+        "sd_of_per_block_difference": 0.4044,
+        "monte_carlo_se_of_the_mean_points": 0.0904,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13477,
+        "n_for_power": {
+          "0.5": 1000,
+          "0.8": 5000,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0663,
+          "correct_direction": 0.0565,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.1301,
+          "correct_direction": 0.1274,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.3823,
+          "correct_direction": 0.3822,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.0983,
+        "window_endpoint_rate": 0.1686,
+        "mean_difference_points": -7.022,
+        "sd_of_per_block_difference": 0.3683,
+        "monte_carlo_se_of_the_mean_points": 0.0823,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09792,
+        "n_for_power": {
+          "0.5": 150,
+          "0.8": 300,
+          "0.9": 500
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.1365,
+          "correct_direction": 0.1341,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.4625,
+          "correct_direction": 0.4624,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.965,
+          "correct_direction": 0.965,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.0549,
+        "window_endpoint_rate": 0.1672,
+        "mean_difference_points": -11.229,
+        "sd_of_per_block_difference": 0.3132,
+        "monte_carlo_se_of_the_mean_points": 0.07,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05541,
+        "n_for_power": {
+          "0.5": 30,
+          "0.8": 75,
+          "0.9": 100
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.3609,
+          "correct_direction": 0.3607,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9392,
+          "correct_direction": 0.9392,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.024,
+        "window_endpoint_rate": 0.1679,
+        "mean_difference_points": -14.396,
+        "sd_of_per_block_difference": 0.2649,
+        "monte_carlo_se_of_the_mean_points": 0.0592,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02455,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.681,
+          "correct_direction": 0.681,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9996,
+          "correct_direction": 0.9996,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 1,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.168,
+        "mean_difference_points": -16.796,
+        "sd_of_per_block_difference": 0.2163,
+        "monte_carlo_se_of_the_mean_points": 0.0484,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9348,
+          "correct_direction": 0.9348,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.2937,
+        "window_endpoint_rate": 0.2923,
+        "mean_difference_points": 0.138,
+        "sd_of_per_block_difference": 0.5261,
+        "monte_carlo_se_of_the_mean_points": 0.1176,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16792,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0257,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0265,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.0282,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.24,
+        "window_endpoint_rate": 0.2925,
+        "mean_difference_points": -5.245,
+        "sd_of_per_block_difference": 0.5025,
+        "monte_carlo_se_of_the_mean_points": 0.1124,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13509,
+        "n_for_power": {
+          "0.5": 500,
+          "0.8": 1500,
+          "0.9": 3000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0753,
+          "correct_direction": 0.0677,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.1754,
+          "correct_direction": 0.174,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.5418,
+          "correct_direction": 0.5418,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.1783,
+        "window_endpoint_rate": 0.2926,
+        "mean_difference_points": -11.429,
+        "sd_of_per_block_difference": 0.465,
+        "monte_carlo_se_of_the_mean_points": 0.104,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09829,
+        "n_for_power": {
+          "0.5": 75,
+          "0.8": 150,
+          "0.9": 200
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.1958,
+          "correct_direction": 0.1947,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.6719,
+          "correct_direction": 0.6719,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.9981,
+          "correct_direction": 0.9981,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.1036,
+        "window_endpoint_rate": 0.2931,
+        "mean_difference_points": -18.948,
+        "sd_of_per_block_difference": 0.403,
+        "monte_carlo_se_of_the_mean_points": 0.0901,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05533,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 50,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.5568,
+          "correct_direction": 0.5567,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9959,
+          "correct_direction": 0.9959,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.0476,
+        "window_endpoint_rate": 0.2906,
+        "mean_difference_points": -24.299,
+        "sd_of_per_block_difference": 0.3375,
+        "monte_carlo_se_of_the_mean_points": 0.0755,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02449,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.8961,
+          "correct_direction": 0.8961,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 2,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.2922,
+        "mean_difference_points": -29.224,
+        "sd_of_per_block_difference": 0.2629,
+        "monte_carlo_se_of_the_mean_points": 0.0588,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9987,
+          "correct_direction": 0.9987,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5702,
+        "window_endpoint_rate": 0.5675,
+        "mean_difference_points": 0.268,
+        "sd_of_per_block_difference": 0.7011,
+        "monte_carlo_se_of_the_mean_points": 0.1568,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16868,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.026,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0502,
+          "correct_direction": 0.0273,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0507,
+          "correct_direction": 0.0298,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4923,
+        "window_endpoint_rate": 0.5682,
+        "mean_difference_points": -7.586,
+        "sd_of_per_block_difference": 0.7043,
+        "monte_carlo_se_of_the_mean_points": 0.1575,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13503,
+        "n_for_power": {
+          "0.5": 500,
+          "0.8": 1500,
+          "0.9": 2000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.077,
+          "correct_direction": 0.0697,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.1838,
+          "correct_direction": 0.1825,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.5678,
+          "correct_direction": 0.5678,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3908,
+        "window_endpoint_rate": 0.5681,
+        "mean_difference_points": -17.728,
+        "sd_of_per_block_difference": 0.6953,
+        "monte_carlo_se_of_the_mean_points": 0.1555,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09816,
+        "n_for_power": {
+          "0.5": 75,
+          "0.8": 150,
+          "0.9": 200
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2072,
+          "correct_direction": 0.2062,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.7037,
+          "correct_direction": 0.7037,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.999,
+          "correct_direction": 0.999,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2513,
+        "window_endpoint_rate": 0.5702,
+        "mean_difference_points": -31.891,
+        "sd_of_per_block_difference": 0.6592,
+        "monte_carlo_se_of_the_mean_points": 0.1474,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05545,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 50,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.5807,
+          "correct_direction": 0.5807,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9972,
+          "correct_direction": 0.9972,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1251,
+        "window_endpoint_rate": 0.569,
+        "mean_difference_points": -44.392,
+        "sd_of_per_block_difference": 0.595,
+        "monte_carlo_se_of_the_mean_points": 0.133,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02441,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9157,
+          "correct_direction": 0.9157,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 1,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5686,
+        "mean_difference_points": -56.861,
+        "sd_of_per_block_difference": 0.4953,
+        "monte_carlo_se_of_the_mean_points": 0.1107,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9992,
+          "correct_direction": 0.9992,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5693,
+        "window_endpoint_rate": 0.5693,
+        "mean_difference_points": 0.006,
+        "sd_of_per_block_difference": 0.5191,
+        "monte_carlo_se_of_the_mean_points": 0.1161,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16834,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.025,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0251,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0251,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4931,
+        "window_endpoint_rate": 0.5698,
+        "mean_difference_points": -7.67,
+        "sd_of_per_block_difference": 0.5239,
+        "monte_carlo_se_of_the_mean_points": 0.1171,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13481,
+        "n_for_power": {
+          "0.5": 200,
+          "0.8": 500,
+          "0.9": 750
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.1004,
+          "correct_direction": 0.0959,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2993,
+          "correct_direction": 0.299,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.8254,
+          "correct_direction": 0.8254,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3925,
+        "window_endpoint_rate": 0.5694,
+        "mean_difference_points": -17.693,
+        "sd_of_per_block_difference": 0.5126,
+        "monte_carlo_se_of_the_mean_points": 0.1146,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09806,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 75,
+          "0.9": 100
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.3388,
+          "correct_direction": 0.3386,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9218,
+          "correct_direction": 0.9218,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2506,
+        "window_endpoint_rate": 0.5697,
+        "mean_difference_points": -31.912,
+        "sd_of_per_block_difference": 0.4613,
+        "monte_carlo_se_of_the_mean_points": 0.1031,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05531,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.8716,
+          "correct_direction": 0.8716,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1245,
+        "window_endpoint_rate": 0.5696,
+        "mean_difference_points": -44.51,
+        "sd_of_per_block_difference": 0.3651,
+        "monte_carlo_se_of_the_mean_points": 0.0816,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02445,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9998,
+          "correct_direction": 0.9998,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 10,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5698,
+        "mean_difference_points": -56.98,
+        "sd_of_per_block_difference": 0.1561,
+        "monte_carlo_se_of_the_mean_points": 0.0349,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5793,
+        "window_endpoint_rate": 0.5806,
+        "mean_difference_points": -0.134,
+        "sd_of_per_block_difference": 0.5694,
+        "monte_carlo_se_of_the_mean_points": 0.1273,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.1345,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0256,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0264,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0502,
+          "correct_direction": 0.0278,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4726,
+        "window_endpoint_rate": 0.5798,
+        "mean_difference_points": -10.718,
+        "sd_of_per_block_difference": 0.5753,
+        "monte_carlo_se_of_the_mean_points": 0.1286,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.10088,
+        "n_for_power": {
+          "0.5": 150,
+          "0.8": 300,
+          "0.9": 500
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.1325,
+          "correct_direction": 0.1299,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.4456,
+          "correct_direction": 0.4456,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.9578,
+          "correct_direction": 0.9578,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.343,
+        "window_endpoint_rate": 0.5792,
+        "mean_difference_points": -23.622,
+        "sd_of_per_block_difference": 0.5541,
+        "monte_carlo_se_of_the_mean_points": 0.1239,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.06725,
+        "n_for_power": {
+          "0.5": 30,
+          "0.8": 50,
+          "0.9": 75
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.4787,
+          "correct_direction": 0.4787,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9865,
+          "correct_direction": 0.9865,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.1844,
+        "window_endpoint_rate": 0.5793,
+        "mean_difference_points": -39.487,
+        "sd_of_per_block_difference": 0.4811,
+        "monte_carlo_se_of_the_mean_points": 0.1076,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.03363,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9564,
+          "correct_direction": 0.9564,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.078,
+        "window_endpoint_rate": 0.5797,
+        "mean_difference_points": -50.17,
+        "sd_of_per_block_difference": 0.3916,
+        "monte_carlo_se_of_the_mean_points": 0.0876,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.01345,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.0,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5784,
+        "mean_difference_points": -57.844,
+        "sd_of_per_block_difference": 0.2848,
+        "monte_carlo_se_of_the_mean_points": 0.0637,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.0,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5742,
+        "window_endpoint_rate": 0.5728,
+        "mean_difference_points": 0.141,
+        "sd_of_per_block_difference": 0.5719,
+        "monte_carlo_se_of_the_mean_points": 0.1279,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.15787,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0257,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0264,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.028,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4865,
+        "window_endpoint_rate": 0.5733,
+        "mean_difference_points": -8.686,
+        "sd_of_per_block_difference": 0.5761,
+        "monte_carlo_se_of_the_mean_points": 0.1288,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.12404,
+        "n_for_power": {
+          "0.5": 200,
+          "0.8": 500,
+          "0.9": 750
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.1035,
+          "correct_direction": 0.0993,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.3143,
+          "correct_direction": 0.314,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.8468,
+          "correct_direction": 0.8468,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3779,
+        "window_endpoint_rate": 0.5737,
+        "mean_difference_points": -19.583,
+        "sd_of_per_block_difference": 0.5621,
+        "monte_carlo_se_of_the_mean_points": 0.1257,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.08723,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 75,
+          "0.9": 100
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.3441,
+          "correct_direction": 0.3439,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9264,
+          "correct_direction": 0.9264,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2304,
+        "window_endpoint_rate": 0.5733,
+        "mean_difference_points": -34.295,
+        "sd_of_per_block_difference": 0.5094,
+        "monte_carlo_se_of_the_mean_points": 0.1139,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.04705,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.8533,
+          "correct_direction": 0.8533,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.108,
+        "window_endpoint_rate": 0.5742,
+        "mean_difference_points": -46.621,
+        "sd_of_per_block_difference": 0.4222,
+        "monte_carlo_se_of_the_mean_points": 0.0944,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.0199,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9986,
+          "correct_direction": 0.9986,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.21,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5728,
+        "mean_difference_points": -57.279,
+        "sd_of_per_block_difference": 0.286,
+        "monte_carlo_se_of_the_mean_points": 0.064,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.21,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5668,
+        "window_endpoint_rate": 0.5667,
+        "mean_difference_points": 0.017,
+        "sd_of_per_block_difference": 0.5721,
+        "monte_carlo_se_of_the_mean_points": 0.1279,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.17436,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0251,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0252,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0253,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4939,
+        "window_endpoint_rate": 0.5662,
+        "mean_difference_points": -7.23,
+        "sd_of_per_block_difference": 0.5773,
+        "monte_carlo_se_of_the_mean_points": 0.1291,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.14157,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1500
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0866,
+          "correct_direction": 0.0808,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2321,
+          "correct_direction": 0.2313,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.6976,
+          "correct_direction": 0.6976,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3982,
+        "window_endpoint_rate": 0.5663,
+        "mean_difference_points": -16.81,
+        "sd_of_per_block_difference": 0.5666,
+        "monte_carlo_se_of_the_mean_points": 0.1267,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.10452,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2638,
+          "correct_direction": 0.2633,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8272,
+          "correct_direction": 0.8272,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2627,
+        "window_endpoint_rate": 0.5677,
+        "mean_difference_points": -30.506,
+        "sd_of_per_block_difference": 0.5243,
+        "monte_carlo_se_of_the_mean_points": 0.1172,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.06071,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7396,
+          "correct_direction": 0.7396,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1377,
+        "window_endpoint_rate": 0.5669,
+        "mean_difference_points": -42.914,
+        "sd_of_per_block_difference": 0.4483,
+        "monte_carlo_se_of_the_mean_points": 0.1002,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.02772,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9899,
+          "correct_direction": 0.9899,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.35,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5669,
+        "mean_difference_points": -56.687,
+        "sd_of_per_block_difference": 0.2864,
+        "monte_carlo_se_of_the_mean_points": 0.064,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.35,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5687,
+        "window_endpoint_rate": 0.5684,
+        "mean_difference_points": 0.033,
+        "sd_of_per_block_difference": 0.5715,
+        "monte_carlo_se_of_the_mean_points": 0.1278,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16831,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0252,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0253,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0258,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4915,
+        "window_endpoint_rate": 0.5684,
+        "mean_difference_points": -7.687,
+        "sd_of_per_block_difference": 0.5751,
+        "monte_carlo_se_of_the_mean_points": 0.1286,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13487,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 500,
+          "0.9": 750
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0918,
+          "correct_direction": 0.0866,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.267,
+          "correct_direction": 0.2665,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.8482,
+          "correct_direction": 0.8482,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3908,
+        "window_endpoint_rate": 0.5698,
+        "mean_difference_points": -17.899,
+        "sd_of_per_block_difference": 0.565,
+        "monte_carlo_se_of_the_mean_points": 0.1263,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09823,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2939,
+          "correct_direction": 0.2935,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8865,
+          "correct_direction": 0.8865,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2518,
+        "window_endpoint_rate": 0.5696,
+        "mean_difference_points": -31.781,
+        "sd_of_per_block_difference": 0.5192,
+        "monte_carlo_se_of_the_mean_points": 0.1161,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05529,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7816,
+          "correct_direction": 0.7816,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1259,
+        "window_endpoint_rate": 0.5692,
+        "mean_difference_points": -44.334,
+        "sd_of_per_block_difference": 0.4381,
+        "monte_carlo_se_of_the_mean_points": 0.098,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02448,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9949,
+          "correct_direction": 0.9949,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.0
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5699,
+        "mean_difference_points": -56.994,
+        "sd_of_per_block_difference": 0.286,
+        "monte_carlo_se_of_the_mean_points": 0.0639,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5697,
+        "window_endpoint_rate": 0.5679,
+        "mean_difference_points": 0.177,
+        "sd_of_per_block_difference": 0.5708,
+        "monte_carlo_se_of_the_mean_points": 0.1276,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.16813,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0258,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0268,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.0284,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.4915,
+        "window_endpoint_rate": 0.5692,
+        "mean_difference_points": -7.771,
+        "sd_of_per_block_difference": 0.5762,
+        "monte_carlo_se_of_the_mean_points": 0.1288,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.13477,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 1000,
+          "0.9": 3000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0926,
+          "correct_direction": 0.0874,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2516,
+          "correct_direction": 0.2511,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.6656,
+          "correct_direction": 0.6656,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.3936,
+        "window_endpoint_rate": 0.5699,
+        "mean_difference_points": -17.629,
+        "sd_of_per_block_difference": 0.5659,
+        "monte_carlo_se_of_the_mean_points": 0.1265,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.09831,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2858,
+          "correct_direction": 0.2854,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8454,
+          "correct_direction": 0.8454,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.9998,
+          "correct_direction": 0.9998,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2521,
+        "window_endpoint_rate": 0.568,
+        "mean_difference_points": -31.593,
+        "sd_of_per_block_difference": 0.52,
+        "monte_carlo_se_of_the_mean_points": 0.1163,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.05532,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7755,
+          "correct_direction": 0.7755,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1251,
+        "window_endpoint_rate": 0.569,
+        "mean_difference_points": -44.388,
+        "sd_of_per_block_difference": 0.438,
+        "monte_carlo_se_of_the_mean_points": 0.0979,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.02443,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9949,
+          "correct_direction": 0.9949,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.03
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.5702,
+        "mean_difference_points": -57.023,
+        "sd_of_per_block_difference": 0.285,
+        "monte_carlo_se_of_the_mean_points": 0.0637,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.095
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.595
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.1387,
+        "block_endpoint_rate": 0.4688,
+        "window_endpoint_rate": 0.4703,
+        "mean_difference_points": -0.147,
+        "sd_of_per_block_difference": 0.5755,
+        "monte_carlo_se_of_the_mean_points": 0.1287,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.12622,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0257,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0265,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.0281,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.1041,
+        "block_endpoint_rate": 0.4003,
+        "window_endpoint_rate": 0.4708,
+        "mean_difference_points": -7.047,
+        "sd_of_per_block_difference": 0.5691,
+        "monte_carlo_se_of_the_mean_points": 0.1273,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.10073,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1500
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0858,
+          "correct_direction": 0.0798,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2279,
+          "correct_direction": 0.2272,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.6878,
+          "correct_direction": 0.6878,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.0694,
+        "block_endpoint_rate": 0.311,
+        "window_endpoint_rate": 0.4706,
+        "mean_difference_points": -15.957,
+        "sd_of_per_block_difference": 0.5459,
+        "monte_carlo_se_of_the_mean_points": 0.1221,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.07259,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2575,
+          "correct_direction": 0.257,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.816,
+          "correct_direction": 0.816,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.0347,
+        "block_endpoint_rate": 0.1912,
+        "window_endpoint_rate": 0.4708,
+        "mean_difference_points": -27.96,
+        "sd_of_per_block_difference": 0.4875,
+        "monte_carlo_se_of_the_mean_points": 0.109,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.03991,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.7274,
+          "correct_direction": 0.7274,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.0139,
+        "block_endpoint_rate": 0.092,
+        "window_endpoint_rate": 0.4703,
+        "mean_difference_points": -37.825,
+        "sd_of_per_block_difference": 0.4081,
+        "monte_carlo_se_of_the_mean_points": 0.0913,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.01733,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9856,
+          "correct_direction": 0.9856,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.0926,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.1387,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.4701,
+        "mean_difference_points": -47.007,
+        "sd_of_per_block_difference": 0.288,
+        "monte_carlo_se_of_the_mean_points": 0.0644,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.2793,
+        "block_endpoint_rate": 0.6628,
+        "window_endpoint_rate": 0.6614,
+        "mean_difference_points": 0.138,
+        "sd_of_per_block_difference": 0.5469,
+        "monte_carlo_se_of_the_mean_points": 0.1223,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.21486,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.05,
+          "correct_direction": 0.0257,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0265,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.0281,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.2095,
+        "block_endpoint_rate": 0.5823,
+        "window_endpoint_rate": 0.6618,
+        "mean_difference_points": -7.946,
+        "sd_of_per_block_difference": 0.5638,
+        "monte_carlo_se_of_the_mean_points": 0.1261,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.17368,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1000
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0966,
+          "correct_direction": 0.0918,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2811,
+          "correct_direction": 0.2807,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7962,
+          "correct_direction": 0.7962,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.1396,
+        "block_endpoint_rate": 0.4745,
+        "window_endpoint_rate": 0.662,
+        "mean_difference_points": -18.743,
+        "sd_of_per_block_difference": 0.5685,
+        "monte_carlo_se_of_the_mean_points": 0.1271,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.12726,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 75,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.3139,
+          "correct_direction": 0.3136,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8973,
+          "correct_direction": 0.8973,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.0698,
+        "block_endpoint_rate": 0.3121,
+        "window_endpoint_rate": 0.6629,
+        "mean_difference_points": -35.08,
+        "sd_of_per_block_difference": 0.5373,
+        "monte_carlo_se_of_the_mean_points": 0.1201,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.07268,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 30
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.8314,
+          "correct_direction": 0.8314,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.0279,
+        "block_endpoint_rate": 0.1609,
+        "window_endpoint_rate": 0.6622,
+        "mean_difference_points": -50.135,
+        "sd_of_per_block_difference": 0.458,
+        "monte_carlo_se_of_the_mean_points": 0.1024,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.03297,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9983,
+          "correct_direction": 0.9983,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1864,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.0,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2793,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0,
+        "window_endpoint_rate": 0.6625,
+        "mean_difference_points": -66.246,
+        "sd_of_per_block_difference": 0.2725,
+        "monte_carlo_se_of_the_mean_points": 0.0609,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.0,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 1.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.2015,
+        "block_endpoint_rate": 0.5906,
+        "window_endpoint_rate": 0.5934,
+        "mean_difference_points": -0.28,
+        "sd_of_per_block_difference": 0.5676,
+        "monte_carlo_se_of_the_mean_points": 0.1269,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.17599,
+        "n_for_power": {
+          "0.5": null,
+          "0.8": null,
+          "0.9": null
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0501,
+          "correct_direction": 0.0263,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.0503,
+          "correct_direction": 0.028,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.0511,
+          "correct_direction": 0.0313,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 0.75,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1511,
+        "block_endpoint_rate": 0.5205,
+        "window_endpoint_rate": 0.5933,
+        "mean_difference_points": -7.282,
+        "sd_of_per_block_difference": 0.5752,
+        "monte_carlo_se_of_the_mean_points": 0.1286,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.14341,
+        "n_for_power": {
+          "0.5": 300,
+          "0.8": 750,
+          "0.9": 1500
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.0875,
+          "correct_direction": 0.0817,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.2361,
+          "correct_direction": 0.2354,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.7069,
+          "correct_direction": 0.7069,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 0.5,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.1008,
+        "block_endpoint_rate": 0.4271,
+        "window_endpoint_rate": 0.5931,
+        "mean_difference_points": -16.598,
+        "sd_of_per_block_difference": 0.5693,
+        "monte_carlo_se_of_the_mean_points": 0.1273,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.10655,
+        "n_for_power": {
+          "0.5": 50,
+          "0.8": 100,
+          "0.9": 150
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.2564,
+          "correct_direction": 0.2559,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.8141,
+          "correct_direction": 0.8141,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 0.9999,
+          "correct_direction": 0.9999,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 0.25,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0504,
+        "block_endpoint_rate": 0.2945,
+        "window_endpoint_rate": 0.5932,
+        "mean_difference_points": -29.877,
+        "sd_of_per_block_difference": 0.5381,
+        "monte_carlo_se_of_the_mean_points": 0.1203,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.06439,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 30,
+          "0.9": 50
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.6996,
+          "correct_direction": 0.6995,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 0.9997,
+          "correct_direction": 0.9997,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 0.1,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0202,
+        "block_endpoint_rate": 0.1757,
+        "window_endpoint_rate": 0.5935,
+        "mean_difference_points": -41.774,
+        "sd_of_per_block_difference": 0.4746,
+        "monte_carlo_se_of_the_mean_points": 0.1061,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.03418,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 0.9759,
+          "correct_direction": 0.9759,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "ratio": 0.0,
+        "settings": {
+          "window_observed_rate": 0.1345,
+          "sensitivity": 0.6674,
+          "sensitivity_column": "PowerAtEffectSize20",
+          "false_positive": 0.01,
+          "elements_per_block": 6,
+          "windows_per_block": 3,
+          "icc": 0.3,
+          "rho_chrom": 0.014
+        },
+        "window_true_rate": 0.2015,
+        "block_true_rate": 0.0,
+        "block_endpoint_rate": 0.0586,
+        "window_endpoint_rate": 0.5944,
+        "mean_difference_points": -53.577,
+        "sd_of_per_block_difference": 0.3686,
+        "monte_carlo_se_of_the_mean_points": 0.0824,
+        "simulated_blocks": 200000,
+        "latent_icc": 0.3,
+        "realised_element_detection_probability": 0.01,
+        "n_for_power": {
+          "0.5": 20,
+          "0.8": 20,
+          "0.9": 20
+        },
+        "power_at_the_reporting_floor": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0
+        },
+        "power_at_100_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.0443
+        },
+        "power_at_500_blocks": {
+          "any_direction": 1.0,
+          "correct_direction": 1.0,
+          "design_effect": 1.2777
+        }
+      }
+    ]
+  },
+  "sample_size_range_by_ratio": {
+    "1.0": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 0,
+      "smallest": null,
+      "smallest_under": null,
+      "largest": null,
+      "largest_under": null,
+      "did_not_reach_80_percent_by_n": [
+        "reference",
+        "sensitivity=PowerAtEffectSize10",
+        "sensitivity=PowerAtEffectSize15",
+        "sensitivity=PowerAtEffectSize25",
+        "sensitivity=PowerAtEffectSize50",
+        "elements_per_block=1",
+        "elements_per_block=2",
+        "windows_per_block=1",
+        "windows_per_block=10",
+        "element_icc=0.0",
+        "element_icc=0.21",
+        "element_icc=0.35",
+        "chromosome_icc=0.0",
+        "chromosome_icc=0.03",
+        "window_observed_rate=0.0926",
+        "window_observed_rate=0.1864",
+        "false_positive=0.01"
+      ],
+      "reference_configuration": null
+    },
+    "0.75": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 17,
+      "smallest": 300,
+      "smallest_under": "element_icc=0.0",
+      "largest": 5000,
+      "largest_under": "elements_per_block=1",
+      "did_not_reach_80_percent_by_n": [],
+      "reference_configuration": 750
+    },
+    "0.5": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 17,
+      "smallest": 50,
+      "smallest_under": "element_icc=0.0",
+      "largest": 300,
+      "largest_under": "elements_per_block=1",
+      "did_not_reach_80_percent_by_n": [],
+      "reference_configuration": 100
+    },
+    "0.25": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 17,
+      "smallest": 20,
+      "smallest_under": "element_icc=0.0",
+      "largest": 75,
+      "largest_under": "elements_per_block=1",
+      "did_not_reach_80_percent_by_n": [],
+      "reference_configuration": 30
+    },
+    "0.1": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 17,
+      "smallest": 20,
+      "smallest_under": "chromosome_icc=0.0",
+      "largest": 30,
+      "largest_under": "elements_per_block=1",
+      "did_not_reach_80_percent_by_n": [],
+      "reference_configuration": 20
+    },
+    "0.0": {
+      "configurations": 17,
+      "reached_80_percent_within_the_searched_range": 17,
+      "smallest": 20,
+      "smallest_under": "chromosome_icc=0.0",
+      "largest": 20,
+      "largest_under": "windows_per_block=10",
+      "did_not_reach_80_percent_by_n": [],
+      "reference_configuration": 20
+    }
+  },
+  "bootstrap_check": {
+    "cells": [
+      {
+        "ratio": 0.5,
+        "n_blocks": 20,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.304,
+        "bootstrap_power_correct_direction": 0.302,
+        "normal_power_any_direction": 0.2919,
+        "normal_power_correct_direction": 0.2916,
+        "largest_disagreement": 0.0121
+      },
+      {
+        "ratio": 0.5,
+        "n_blocks": 50,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.597,
+        "bootstrap_power_correct_direction": 0.597,
+        "normal_power_any_direction": 0.6057,
+        "normal_power_correct_direction": 0.6057,
+        "largest_disagreement": 0.0087
+      },
+      {
+        "ratio": 0.5,
+        "n_blocks": 200,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.992,
+        "bootstrap_power_correct_direction": 0.992,
+        "normal_power_any_direction": 0.9924,
+        "normal_power_correct_direction": 0.9924,
+        "largest_disagreement": 0.0004
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 20,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.724,
+        "bootstrap_power_correct_direction": 0.724,
+        "normal_power_any_direction": 0.7789,
+        "normal_power_correct_direction": 0.7789,
+        "largest_disagreement": 0.0549
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 50,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.98,
+        "bootstrap_power_correct_direction": 0.98,
+        "normal_power_any_direction": 0.9914,
+        "normal_power_correct_direction": 0.9914,
+        "largest_disagreement": 0.0114
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 200,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 1.0,
+        "bootstrap_power_correct_direction": 1.0,
+        "normal_power_any_direction": 1.0,
+        "normal_power_correct_direction": 1.0,
+        "largest_disagreement": 0.0
+      }
+    ],
+    "largest_disagreement_in_power": 0.0549,
+    "threshold": 0.05,
+    "normal_approximation_usable": false,
+    "note": "the check cells set the chromosome ICC to 0, because the design effect is applied to the normal formula and not simulated; the check is of the approximation, not of the clustering",
+    "extended_cells_added_after_the_falsifier_fired": [
+      {
+        "ratio": 0.5,
+        "n_blocks": 30,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.381,
+        "bootstrap_power_correct_direction": 0.381,
+        "normal_power_any_direction": 0.4066,
+        "normal_power_correct_direction": 0.4065,
+        "largest_disagreement": 0.0256
+      },
+      {
+        "ratio": 0.5,
+        "n_blocks": 75,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.751,
+        "bootstrap_power_correct_direction": 0.751,
+        "normal_power_any_direction": 0.7751,
+        "normal_power_correct_direction": 0.7751,
+        "largest_disagreement": 0.0241
+      },
+      {
+        "ratio": 0.5,
+        "n_blocks": 100,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.865,
+        "bootstrap_power_correct_direction": 0.865,
+        "normal_power_any_direction": 0.8772,
+        "normal_power_correct_direction": 0.8772,
+        "largest_disagreement": 0.0122
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 30,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.878,
+        "bootstrap_power_correct_direction": 0.878,
+        "normal_power_any_direction": 0.9179,
+        "normal_power_correct_direction": 0.9179,
+        "largest_disagreement": 0.0399
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 75,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 0.998,
+        "bootstrap_power_correct_direction": 0.998,
+        "normal_power_any_direction": 0.9996,
+        "normal_power_correct_direction": 0.9996,
+        "largest_disagreement": 0.0016
+      },
+      {
+        "ratio": 0.25,
+        "n_blocks": 100,
+        "experiments": 1000,
+        "resamples": 2000,
+        "bootstrap_power_any_direction": 1.0,
+        "bootstrap_power_correct_direction": 1.0,
+        "normal_power_any_direction": 1.0,
+        "normal_power_correct_direction": 1.0,
+        "largest_disagreement": 0.0
+      }
+    ],
+    "extended_cells_are_post_hoc": "these sample sizes were not in the registered check. They were added once the registered check failed, to locate where the normal approximation becomes safe, and they change no grid, threshold or reading. Read them as a diagnostic of the approximation, not as part of the registered analysis",
+    "largest_disagreement_above_the_floor": 0.0399
+  },
+  "null_calibration": {
+    "what_this_is": "at ratio 1.0 the two arms have the same true rate, so `power_any_direction` is the test's false-positive rate and nothing else. It is reported because a power table whose null is not calibrated is not readable",
+    "false_positive_rate_at_the_reporting_floor": [
+      {
+        "configuration": "reference",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "n_blocks": 20,
+        "rate": 0.05
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "n_blocks": 20,
+        "rate": 0.0501
+      }
+    ],
+    "false_positive_rate_at_500_blocks": [
+      {
+        "configuration": "reference",
+        "rate": 0.05
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "rate": 0.0501
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "rate": 0.0508
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "rate": 0.0501
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "rate": 0.0506
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "rate": 0.0501
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "rate": 0.0503
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "rate": 0.0507
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "rate": 0.05
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "rate": 0.0502
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "rate": 0.0503
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "rate": 0.05
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "rate": 0.05
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "rate": 0.0503
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "rate": 0.0503
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "rate": 0.0503
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "rate": 0.0511
+      }
+    ],
+    "monte_carlo_error_of_the_null_mean_points": [
+      {
+        "configuration": "reference",
+        "se": 0.1278,
+        "mean": -0.007
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize10",
+        "se": 0.128,
+        "mean": -0.099
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize15",
+        "se": 0.128,
+        "mean": -0.242
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize25",
+        "se": 0.1277,
+        "mean": 0.096
+      },
+      {
+        "configuration": "sensitivity=PowerAtEffectSize50",
+        "se": 0.1279,
+        "mean": -0.216
+      },
+      {
+        "configuration": "elements_per_block=1",
+        "se": 0.0966,
+        "mean": 0.062
+      },
+      {
+        "configuration": "elements_per_block=2",
+        "se": 0.1176,
+        "mean": 0.138
+      },
+      {
+        "configuration": "windows_per_block=1",
+        "se": 0.1568,
+        "mean": 0.268
+      },
+      {
+        "configuration": "windows_per_block=10",
+        "se": 0.1161,
+        "mean": 0.006
+      },
+      {
+        "configuration": "element_icc=0.0",
+        "se": 0.1273,
+        "mean": -0.134
+      },
+      {
+        "configuration": "element_icc=0.21",
+        "se": 0.1279,
+        "mean": 0.141
+      },
+      {
+        "configuration": "element_icc=0.35",
+        "se": 0.1279,
+        "mean": 0.017
+      },
+      {
+        "configuration": "chromosome_icc=0.0",
+        "se": 0.1278,
+        "mean": 0.033
+      },
+      {
+        "configuration": "chromosome_icc=0.03",
+        "se": 0.1276,
+        "mean": 0.177
+      },
+      {
+        "configuration": "window_observed_rate=0.0926",
+        "se": 0.1287,
+        "mean": -0.147
+      },
+      {
+        "configuration": "window_observed_rate=0.1864",
+        "se": 0.1223,
+        "mean": 0.138
+      },
+      {
+        "configuration": "false_positive=0.01",
+        "se": 0.1269,
+        "mean": -0.28
+      }
+    ]
+  },
+  "equivalence": {
+    "claim_reviewed": "the neutral tier and the real unknown are indistinguishable / behave identically",
+    "margin_search": "sources looked at for a margin, before any computation: (1) published thresholds for a 'meaningful' difference in the rate at which sequence is annotated as regulatory -- none states one; the ENCODE benchmark and the enhancer-gene literature report effect sizes and power, not equivalence bounds; (2) a decision-theoretic cost, which would need a stated consequence of treating the neutral tier as the real unknown -- the project states none; (3) an earlier requirement in this project fixed before this comparison -- the only candidate is the 5-point chance band of d717b28, which was chosen inside this analysis for this comparison and is ruled inadmissible by the registration above. No admissible margin was found",
+    "admissible_margin_found": false,
+    "test_run": null,
+    "finding": "NO DIFFERENCE DETECTED. Not equivalence, and not 'identical'. No equivalence test is run, because no margin can be justified from outside these data, and the registration fixed that rule before the contrasts were read",
+    "contrasts": [
+      {
+        "result": "clause2_matched_control",
+        "question": "names_a_coding_gene",
+        "points": -0.1,
+        "ci95": [
+          -4.55,
+          4.3
+        ],
+        "smallest_margin_a_tost_would_pass_at_points": 4.55,
+        "what_the_interval_permits": "a real-unknown rate anywhere from 4.55 points below the neutral tier's to 4.30 points above it. Differences in either direction of that size are compatible with the data"
+      },
+      {
+        "result": "clause2_matched_control",
+        "question": "moves_a_gene",
+        "points": -2.91,
+        "ci95": [
+          -7.87,
+          2.06
+        ],
+        "smallest_margin_a_tost_would_pass_at_points": 7.87,
+        "what_the_interval_permits": "a real-unknown rate anywhere from 7.87 points below the neutral tier's to 2.06 points above it. Differences in either direction of that size are compatible with the data"
+      },
+      {
+        "result": "clause2_element_count_control",
+        "question": "names_a_coding_gene",
+        "points": -0.71,
+        "ci95": [
+          -5.58,
+          4.17
+        ],
+        "smallest_margin_a_tost_would_pass_at_points": 5.58,
+        "what_the_interval_permits": "a real-unknown rate anywhere from 5.58 points below the neutral tier's to 4.17 points above it. Differences in either direction of that size are compatible with the data"
+      },
+      {
+        "result": "clause2_element_count_control",
+        "question": "moves_a_gene",
+        "points": -5.47,
+        "ci95": [
+          -10.53,
+          -0.44
+        ],
+        "smallest_margin_a_tost_would_pass_at_points": 10.53,
+        "what_the_interval_permits": "a real-unknown rate anywhere from 10.53 points below the neutral tier's to 0.44 points above it. Differences in either direction of that size are compatible with the data"
+      }
+    ],
+    "smallest_margin_note": "`smallest_margin_a_tost_would_pass_at_points` is the margin the DATA would need for a two-one-sided-test to declare equivalence, computed by inverting the committed 95% interval (conservative: a TOST at 5% uses the 90% interval, which is narrower). It is a description of what these data could support, NOT a margin anyone has justified, and it must never be quoted as one. Reading it as a margin would be choosing the bound after seeing the estimate"
+  },
+  "denominators": {
+    "rows": [
+      {
+        "population": "constrained-unknown blocks, copies out (the real unknown)",
+        "count": 882,
+        "denominator": "itself: the tier",
+        "denominator_count": 882,
+        "share": 1.0,
+        "rule": "organise.blocks on 24 chromosomes, the `constrained_unknown` tier with duplicate copies removed",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks"
+      },
+      {
+        "population": "real-unknown blocks carrying at least one scored element",
+        "count": 531,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.602,
+        "rule": "at least one ENCODE SCREEN cCRE in the all-element archive has its midpoint inside the block",
+        "source": "clause2_measured_arm.json coverage.real_unknown"
+      },
+      {
+        "population": "scored elements inside real-unknown blocks",
+        "count": 3280,
+        "denominator": "elements, not blocks",
+        "denominator_count": 3280,
+        "share": 1.0,
+        "rule": "every scored element of a carrying block; the per-element estimator's denominator",
+        "source": "clause2_measured_arm.json coverage.real_unknown.scored_elements"
+      },
+      {
+        "population": "real-unknown blocks eligible for an assay (shares one base with a tested interval)",
+        "count": 89,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.1009,
+        "rule": "reciprocal overlap 0.5 both ways, except eligibility which is one shared base",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks eligible for an assay (shares one base with a tested interval), against the carrying blocks",
+        "count": 89,
+        "denominator": "real-unknown blocks carrying a scored element",
+        "denominator_count": 531,
+        "share": 0.1676,
+        "rule": "same counts, the other denominator: this is where 6.7% and 11.1% differ",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks measured by an element-level assay",
+        "count": 59,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0669,
+        "rule": "reciprocal overlap 0.5 both ways, except eligibility which is one shared base",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks measured by an element-level assay, against the carrying blocks",
+        "count": 59,
+        "denominator": "real-unknown blocks carrying a scored element",
+        "denominator_count": 531,
+        "share": 0.1111,
+        "rule": "same counts, the other denominator: this is where 6.7% and 11.1% differ",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks CRISPRi-tested against a protein-coding gene",
+        "count": 3,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0034,
+        "rule": "reciprocal overlap 0.5 both ways, except eligibility which is one shared base",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks CRISPRi-tested against a protein-coding gene, against the carrying blocks",
+        "count": 3,
+        "denominator": "real-unknown blocks carrying a scored element",
+        "denominator_count": 531,
+        "share": 0.0056,
+        "rule": "same counts, the other denominator: this is where 6.7% and 11.1% differ",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks measured to move a coding gene",
+        "count": 0,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0,
+        "rule": "reciprocal overlap 0.5 both ways, except eligibility which is one shared base",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks measured to move a coding gene, against the carrying blocks",
+        "count": 0,
+        "denominator": "real-unknown blocks carrying a scored element",
+        "denominator_count": 531,
+        "share": 0.0,
+        "rule": "same counts, the other denominator: this is where 6.7% and 11.1% differ",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with"
+      },
+      {
+        "population": "real-unknown blocks with no measured element at all",
+        "count": 823,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.9331,
+        "rule": "no assay measures ANY of the block's scored elements at reciprocal overlap 0.5. It does NOT mean no part of the block was ever measured, and it does not speak about a block that carries no scored element",
+        "source": "clause2_measured_arm.json coverage.real_unknown.blocks_with_no_measured_element"
+      },
+      {
+        "population": "neutral-tier blocks",
+        "count": 2632,
+        "denominator": "itself: the tier",
+        "denominator_count": 2632,
+        "share": 1.0,
+        "rule": "the secondary target set, same construction",
+        "source": "clause2_measured_arm.json coverage.neutral.blocks"
+      },
+      {
+        "population": "neutral-tier blocks carrying a scored element",
+        "count": 1181,
+        "denominator": "neutral-tier blocks",
+        "denominator_count": 2632,
+        "share": 0.4487,
+        "rule": "as above",
+        "source": "clause2_measured_arm.json coverage.neutral"
+      },
+      {
+        "population": "matched windows drawn",
+        "count": 44081,
+        "denominator": "windows",
+        "denominator_count": 44081,
+        "share": 1.0,
+        "rule": "50 accepted windows per block of the block's exact length, coding-TSS decile matched, 20,000 tries, seed 20260913",
+        "source": "clause2_measured_arm.json coverage.windows_matched_real_unknown"
+      },
+      {
+        "population": "matched windows carrying a scored element",
+        "count": 31554,
+        "denominator": "matched windows drawn",
+        "denominator_count": 44081,
+        "share": 0.7158,
+        "rule": "at least one scored element's midpoint inside the window",
+        "source": "clause2_measured_arm.json coverage.windows_matched_real_unknown"
+      },
+      {
+        "population": "matched windows carrying a CRISPRi-tested element",
+        "count": 223,
+        "denominator": "matched windows drawn",
+        "denominator_count": 44081,
+        "share": 0.0051,
+        "rule": "WINDOWS, not elements: several windows of one block can carry the same tested element, so these are not independent measurements",
+        "source": "clause2_measured_arm.json coverage.windows_matched_real_unknown.windows_with"
+      },
+      {
+        "population": "matched windows holding an element measured to move a coding gene",
+        "count": 30,
+        "denominator": "matched windows carrying a CRISPRi-tested element",
+        "denominator_count": 223,
+        "share": 0.1345,
+        "rule": "the 13.45% anchor. Its unit is windows; the lane-measured write-up calls it elements",
+        "source": "clause2_measured_arm.json coverage.windows_matched_real_unknown.windows_with"
+      },
+      {
+        "population": "real-unknown blocks with a measured element at reciprocal overlap 0.25",
+        "count": 72,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0816,
+        "rule": "the overlap rule set to 0.25 instead of 0.5; the count is a property of the rule",
+        "source": "clause2_measured_arm.json coverage.sensitivity_by_overlap"
+      },
+      {
+        "population": "real-unknown blocks CRISPRi-tested against a coding gene at overlap 0.25",
+        "count": 3,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0034,
+        "rule": "the overlap rule set to 0.25; no setting of it produces a usable arm",
+        "source": "clause2_measured_arm.json coverage.sensitivity_by_overlap"
+      },
+      {
+        "population": "real-unknown blocks with a measured element at reciprocal overlap 0.75",
+        "count": 10,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0113,
+        "rule": "the overlap rule set to 0.75 instead of 0.5; the count is a property of the rule",
+        "source": "clause2_measured_arm.json coverage.sensitivity_by_overlap"
+      },
+      {
+        "population": "real-unknown blocks CRISPRi-tested against a coding gene at overlap 0.75",
+        "count": 0,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0,
+        "rule": "the overlap rule set to 0.75; no setting of it produces a usable arm",
+        "source": "clause2_measured_arm.json coverage.sensitivity_by_overlap"
+      },
+      {
+        "population": "blocks the measured primary could compare",
+        "count": 1,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.0011,
+        "rule": "block AND at least one of its matched windows both carry a CRISPRi-tested element",
+        "source": "clause2_measured_arm.json primary.n_blocks_compared"
+      },
+      {
+        "population": "blocks the model arm compares (density-matched)",
+        "count": 531,
+        "denominator": "real-unknown blocks",
+        "denominator_count": 882,
+        "share": 0.602,
+        "rule": "block carries a scored element and has at least one accepted window carrying one",
+        "source": "clause2_matched_control.json primary"
+      },
+      {
+        "population": "window-elements the per-element estimator uses",
+        "count": 456573,
+        "denominator": "elements in the unmatched windows of the 531 compared blocks",
+        "denominator_count": 456573,
+        "share": 1.0,
+        "rule": "every scored element inside every drawn window; 9.18% vs 44.04% is over these, and both are TARGET-NAMING FREQUENCIES of the deletion model, not accuracies",
+        "source": "clause2_element_count_control.json secondary_per_element"
+      },
+      {
+        "population": "block elements entering the reach standardisation",
+        "count": 3252,
+        "denominator": "scored elements inside real-unknown blocks",
+        "denominator_count": 3280,
+        "share": 0.9915,
+        "rule": "elements in strata holding at least 30 elements in each arm; excluded strata are reported",
+        "source": "clause2_reach_control.json reach"
+      }
+    ],
+    "the_two_shares_that_are_quoted": {
+      "6.7%": "59 of 882 tier blocks measured at reciprocal overlap 0.5",
+      "11.1%": "59 of the 531 blocks that carry a scored element, same numerator",
+      "note": "both are correct; neither may be quoted without its denominator"
+    },
+    "the_overlap_rule": {
+      "0.25": "72 measured blocks",
+      "0.5": "59 measured blocks (the committed rule)",
+      "0.75": "10 measured blocks",
+      "note": "the coverage count is a property of the rule as much as of the data"
+    }
+  },
+  "reporting_floor_is_not_a_power_result": {
+    "floor_blocks": 20,
+    "what_it_is": "measured.MIN_FOR_A_COMPARISON, a minimum-reporting rule",
+    "what_it_is_not": "a power calculation, an effect size, or a sample size",
+    "compared_now": 1,
+    "blocks_short_of_the_floor": 19,
+    "the_withdrawn_sentence": "'19 more blocks would decide it' and 'an experiment whose size is known'. 19 is 20 minus the 1 block compared today, the distance to a reporting floor. The power formula beside it returned 20 from a model effect and a model dispersion, which made the coincidence look like a result"
+  },
+  "power_is_a_probability": "every number here is the probability that an experiment of that size would produce an interval excluding 0, IF the assumptions of its configuration hold. It is not a guarantee that such an experiment decides clause 2, and an experiment at 80% power fails to detect a real effect of the assumed size one time in five",
+  "seconds": 14.9,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256. Read for its power columns and its element-level regulation rates only"
+      },
+      {
+        "accession": "this repository, data/results/clause2_*.json",
+        "version": "0c8b82d, faeb0da, a7f207f, e8aa571: the committed clause 2 results, read and never rewritten"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/results/clause2_measured_arm.json",
+        "sha256": "ea1ad582533c8ebed2a2c3f469f8a2c5333480f65a8b5fd658e4d26866248576",
+        "bytes": 84514,
+        "partition": null
+      },
+      {
+        "path": "data/results/clause2_matched_control.json",
+        "sha256": "3dba41ac44bfd807e19f6732c7b13b81e0780ae6d5593f10ab8483c036a9bb4e",
+        "bytes": 68504,
+        "partition": null
+      },
+      {
+        "path": "data/results/clause2_element_count_control.json",
+        "sha256": "fde4fbd09f96d9da7eaac46ebab20698a83089e0090bd04662452877fab42be5",
+        "bytes": 78574,
+        "partition": null
+      },
+      {
+        "path": "data/results/clause2_reach_control.json",
+        "sha256": "c5f2672f46859db916ec72826a00fb97fba6ed5827108fecefd70e7db6ab6148",
+        "bytes": 87349,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "simulated_blocks_per_configuration": 200000,
+      "seed": 20260928,
+      "n_grid": [
+        20,
+        30,
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        500,
+        750,
+        1000,
+        1500,
+        2000,
+        3000,
+        5000
+      ],
+      "power_targets": [
+        0.5,
+        0.8,
+        0.9
+      ],
+      "min_blocks_reporting_floor": 20,
+      "chromosomes": 24,
+      "block_rate_ratio_grid": [
+        1.0,
+        0.75,
+        0.5,
+        0.25,
+        0.1,
+        0.0
+      ],
+      "element_icc_grid": [
+        0.0,
+        0.21,
+        0.3,
+        0.35
+      ],
+      "chromosome_icc_grid": [
+        0.0,
+        0.014,
+        0.03
+      ]
+    },
+    "exclusions": [
+      "the model arm's -27.25 points is not used as an effect size anywhere",
+      "the model arm's per-block dispersion 0.4324 is not used as a dispersion anywhere",
+      "no AlphaGenome request is made and no per-element response cache is opened",
+      "no new descriptive statistic about the blocks is computed; the committed ones are read",
+      "configurations are not fully crossed: one factor at a time from a registered reference"
+    ],
+    "partitions": {
+      "training": "ENCODE benchmark training file, read for power columns and element rates",
+      "heldout": "ENCODE benchmark held-out file, read for the same and reported apart"
+    },
+    "code": {
+      "git_sha": "f6cb4d728a1e9568e378f49fd1ed849c65742d60",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/clause2_design_power.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/clause2_design_power.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

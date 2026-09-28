@@ -498,6 +498,85 @@ def coverage_needed(
     }
 
 
+#: Where the power question is actually answered, after the statistical review of 2026-09-28 found
+#: that `coverage_needed` above could not answer it. `coverage_needed` is kept exactly as it was,
+#: because it is the record of what this run computed and what a7f207f reported from it.
+POWER_LANE = "scripts/clause2_design_power.py"
+
+
+def reporting_floor_and_power_assumptions(
+    records: list[dict[str, Any]], compared_now: int, model_q: str = MODEL_QUESTION
+) -> dict[str, Any]:
+    """The same three numbers `coverage_needed` returns, separated into what each one is.
+
+    Added 2026-09-28 (lane-design) after a statistical review of milestone 1.3's notes. Nothing above
+    is changed or removed: `coverage_needed` stays as the record of what was computed and published.
+    This function exists because that record's field names let three different things be read as one:
+
+    * a **reporting floor**, `measured.MIN_FOR_A_COMPARISON`, which is a rule about when a number may
+      be printed and carries no statement about power at all. The "19 blocks short" that was quoted
+      is this and nothing else: 20 minus the 1 block compared;
+    * two **assumptions borrowed from the model arm** -- the effect to detect and the dispersion --
+      used to size an experiment whose endpoint is a measurement. Both are model output. Nothing
+      licenses carrying them across, and they are labelled here as assumptions wherever they appear;
+    * a **provisional calculation** from those assumptions, which is not a power result for the
+      measured experiment and must not be quoted as the size of it.
+    """
+    base = coverage_needed(records, compared_now, model_q)
+    return {
+        "reporting_floor": {
+            "floor_blocks": MIN_BLOCKS,
+            "blocks_compared_now": compared_now,
+            "blocks_short_of_the_floor": base["blocks_short_of_the_floor"],
+            "what_it_is": (
+                "`measured.MIN_FOR_A_COMPARISON`: below this many compared blocks no interval is "
+                "printed. A rule about reporting"
+            ),
+            "what_it_is_not": (
+                "a power calculation, an effect size, a sample size, or a statement that this many "
+                "blocks would decide anything"
+            ),
+        },
+        "model_derived_assumptions": {
+            "effect_to_detect": {
+                "value": EFFECT_TO_DETECT,
+                "is": "AN ASSUMPTION, not an estimate for this endpoint",
+                "source": (
+                    "the model arm's committed matched difference (0c8b82d): a difference in how "
+                    "often a deletion model names a target. It is not an estimate of a difference in "
+                    "measured regulation"
+                ),
+            },
+            "dispersion": {
+                "value": base["model_arm_sd_of_per_block_differences"],
+                "is": "AN ASSUMPTION, not an estimate for this endpoint",
+                "source": "the standard deviation of this run's per-block MODEL-arm differences",
+            },
+            "endpoint_they_were_used_for": PRIMARY_QUESTION,
+            "why_that_is_a_mismatch": (
+                "both inputs describe the model's behaviour; the experiment they size has a measured "
+                "outcome. A model's effect size and a model's dispersion are not transferable to it"
+            ),
+        },
+        "provisional_calculation": {
+            "n_if_those_assumptions_held": base["n_for_80_percent_power"],
+            "is_a_power_result_for_the_measured_experiment": False,
+            "why_not": (
+                "its two inputs are model output, and 80% power is in any case the probability of "
+                "detecting an effect of an assumed size, never a guarantee that an experiment decides "
+                "the clause"
+            ),
+            "coincidence_to_note": (
+                "this returned 20, which is also the reporting floor, so the floor's '19 short' and "
+                "the calculation's '19 short' looked like one number confirming another. They are "
+                "unrelated quantities that happened to agree"
+            ),
+        },
+        "where_the_power_question_is_answered": POWER_LANE,
+        "record_of_what_was_computed": base,
+    }
+
+
 # ---- the run ------------------------------------------------------------------------------------
 
 
@@ -638,6 +717,10 @@ def collect(chroms: list[str]) -> dict[str, Any]:
     primary = summarise_measured(runs["matched_real_unknown"], PRIMARY_QUESTION)
     out["primary"] = primary
     out["coverage_needed"] = coverage_needed(allrec, primary["n_blocks_compared"])
+    # beside it, never in place of it: the same three numbers with what each one is (lane-design)
+    out["reporting_floor_and_power_assumptions"] = reporting_floor_and_power_assumptions(
+        allrec, primary["n_blocks_compared"]
+    )
     out["primary_reading"] = measured_reading(primary)
     out["secondary"] = {
         "decrease_only": summarise_measured(runs["matched_real_unknown"], "measured_regulated_decrease_only"),

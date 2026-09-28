@@ -2096,5 +2096,15 @@
       "python": "3.14.3"
     },
     "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "secondary_real_minus_neutral": "an interval of -5.58 to +4.17 points is NO DIFFERENCE DETECTED, not equivalence. See `clause2_design_power.equivalence` for why no margin can be justified",
+      "secondary_per_element": "9.18% against 44.04% is the share of scored elements for which the deletion model names a protein-coding gene, in each arm. It is a difference in target-naming frequency, not in accuracy: no experimental outcome enters it, so it cannot show that the model failed nor that the blocks' sequence lacks regulatory function"
+    }
   }
 }

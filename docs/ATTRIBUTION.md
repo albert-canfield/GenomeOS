@@ -7836,6 +7836,18 @@ and it is not run.
 
 **Cost.** 0 AlphaGenome requests; the response cache is never opened.
 
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Two readings of this registration need narrowing. (a) The question it fixes, "does a block or window
+> carrying a scored element carry one whose deletion names a protein-coding gene", is a **target-naming
+> frequency of the deletion model**. A difference in it is not a difference in prediction accuracy, and
+> on its own it shows neither that the model failed nor that the blocks' sequence lacks regulatory
+> function; no experimental outcome enters it. (b) "0.45% of unknown space has any assay", in
+> *Registered, not run*, is a coverage figure and needs its rule and denominator like every other: the
+> corresponding block-level counts are 59 of 882 tier blocks (6.7%) or 59 of the 531 carrying a scored
+> element (11.1%) at reciprocal overlap 0.5, and 72 or 10 blocks if that rule is set to 0.25 or 0.75.
+> The full denominator table is in the lane-design result section below.
+
 ## The result: in HCT116 the frozen deletion model gains +0.022 with an interval across zero, so the CRISPRi result passes its second cell type but is not replicated there (2026-09-28, lane-hct116)
 
 The registration is `crispri.PREREGISTERED_PUBLISHED['second_cell_type']` (fe61c36, 2026-09-27,
@@ -8242,6 +8254,20 @@ measured arm stays registered and unrun in its own lane.
 **Cost.** 0 AlphaGenome requests. 4,182 s over 24 chromosomes; one chromosome's archive in memory at a
 time. Result: `data/results/clause2_element_count_control.json`.
 
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Three narrowings. (a) **9.18% against 44.04%** is the share of scored elements for which the deletion
+> model names a protein-coding gene, in each arm. It is a **difference in target-naming frequency, not
+> in accuracy**: no measured outcome enters it, so "a scored element inside a constrained-unknown block
+> names a coding gene about a fifth as often" is a statement about the model's output on two sets of
+> sequence and not about either the model's correctness or the sequence's function. (b) "No covariate
+> named so far explains the reading" is the right form, and the stronger form some later notes took
+> from it is not: adjustment shows that **the tested covariates do not explain the difference**, never
+> what does. (c) "the two tiers remain indistinguishable" should read **no difference detected**: the
+> contrast is -0.71 points with a 95% interval of -5.58 to +4.17, which permits a real difference of
+> over five points in either direction. No equivalence margin can be justified from outside these data,
+> so no equivalence test is run; the reasoning is in the lane-design sections below.
+
 ## Pre-registration: the two descriptive controls clause 2 has left -- element class and reach inside the model's own window (2026-09-28, lane-tssreach)
 
 Milestone 1.3's clause 2 is settled as not met across three matched controls and one control-free
@@ -8418,6 +8444,29 @@ experiment is now a number.
 **Cost.** 0 AlphaGenome requests. 527 s over 24 chromosomes; one chromosome's element archive and one
 chromosome's measured layer in memory at a time.
 
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Four narrowings, three of them about the same paragraph. (a) **"The coverage that would be needed ...
+> 20 compared blocks for 80% power ... 19 short" is withdrawn as a power result.** Both inputs of that
+> formula are model output -- the effect is the model arm's own matched difference in target-naming
+> frequency and the dispersion is the standard deviation of the model arm's per-block differences -- and
+> they were used to size an experiment whose endpoint is a **measurement**. The "19" quoted beside it is
+> `MIN_BLOCKS - compared_now` = 20 - 1, the distance to `measured.MIN_FOR_A_COMPARISON`, a
+> **minimum-reporting rule**; that the formula also returned 20 is a coincidence, not a confirmation.
+> (b) Consequently **"the shortfall is 19 blocks" and "the size of the experiment is now a number" are
+> withdrawn.** A power simulation of the actual design gives a **range**: 20 to 75 compared blocks if
+> the blocks truly regulate a quarter as often as their windows, 50 to 300 at a half, and 300 to 5,000
+> at three quarters, with no configuration reaching 80% power at the null. (c) **"13.45% of the matched
+> windows' CRISPRi-tested elements move a coding gene (30 of 223)"**: the 223 and the 30 are **windows**
+> carrying such an element, not elements, so they are not 223 independent measurements. The
+> element-level rates over the benchmark's own distinct tested elements are 12.15% (479 of 3,941,
+> training) and 14.56% (247 of 1,697, held-out), which agree with it. (d) **"823 of the 882 blocks hold
+> no measured element at all"** means no qualifying measurement attached to the block's *scored
+> elements* under the 0.5 reciprocal-overlap rule; it does not mean no part of those blocks was ever
+> measured, and at 0.25 or 0.75 the measured count is 72 or 10 blocks against 59. The committed result
+> file carries the same corrections as an additive key, and `coverage_needed` is kept in the code as the
+> record of what was computed, with `reporting_floor_and_power_assumptions` beside it.
+
 ## The result: the model really can see three times fewer coding genes from inside a constrained-unknown block, and that accounts for under a third of the gap (2026-09-28, lane-tssreach, later)
 
 Both controls of the registration above ran once, genome-wide, 280 s, **0 AlphaGenome requests**, the
@@ -8483,6 +8532,18 @@ it on. One thing is named and not run: `genes_in_window` was registered as a des
 and standardising on it rather than on TSS reach was not registered, so it is left for whoever takes it
 up rather than computed after the fact. The clause's third part, scored against measurement, is
 untouched. Result: `data/results/clause2_reach_control.json`.
+
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> **"Clause 2's failure is about the sequence, not the window" is withdrawn**, and so is the same
+> sentence in the registered reading `reach_short_but_gap_survives` and in the class reading. What the
+> run establishes is narrower and still worth having: **the gap persists after adjustment for the
+> tested reach and class variables**. Standardising on a covariate and finding the difference survives
+> says that covariate does not explain it; it does not identify what does. Unmeasured context,
+> selection effects, limitations of the model itself and remaining geometric differences between the
+> two element sets are all still open. The measured quantities in this section -- 2.229 coding starts
+> against 7.219, 28.08% against 6.20% with none in the window, the per-stratum rates -- are unaffected
+> and stand as written. The committed result file carries the same correction as an additive key.
 
 ## Pre-registration: a power simulation for the experiment clause 2 actually needs, and an equivalence decision taken before the contrasts are read (2026-09-28, lane-design)
 
@@ -8610,6 +8671,160 @@ value, reading or falsifier was changed after any output was seen.
 
 **Cost.** 0 AlphaGenome requests. The model is not called; the per-element response cache is never
 opened; the committed result files are read and never rewritten.
+
+## The result: the measured experiment behind clause 2 needs between 20 and 5,000 compared blocks depending on an effect nobody has estimated, and "19 short" was a reporting floor (2026-09-28, lane-design, later)
+
+The registration above was committed as `f6cb4d7` before the registered run. The run then happened
+once, in 11 s, with **0 AlphaGenome requests**. Result: `data/results/clause2_design_power.json`.
+
+**The negatives first, and there are four.**
+
+1. **The registered falsifier fired.** The check on the normal approximation to the committed interval
+   allowed a disagreement of 0.05 in power. The largest is **0.0549**, at ratio 0.25 with **20 blocks**
+   -- the reporting floor -- where the bootstrap gives 0.724 and the approximation 0.779. So the
+   approximation is **optimistic at the floor** and, by the rule fixed in advance, the bootstrap
+   numbers are the ones to read there. A post-hoc extension of the same check, named as post-hoc in
+   the result, locates the boundary: above the floor the largest disagreement is 0.0399 (ratio 0.25 at
+   30 blocks) and it falls to 0.026 or less from 50 blocks upward. **Every entry in the tables below
+   that reads 20 or 30 blocks is therefore a lower bound**, and anyone designing at that size should
+   simulate rather than read it off.
+2. **No sample size can be given without an assumed effect, and there is no estimate of that effect.**
+   The ratio of the blocks' true regulation rate to the windows' is the one quantity that decides the
+   answer, and nothing measures it. That is not a gap in this lane; it is the reason clause 2 is
+   undecided.
+3. **The measured arm's own null is not powered at all by anything the project can afford.** At ratio
+   0.75 -- the blocks regulating three quarters as often as their windows -- **no configuration
+   reaches 80% power below 300 compared blocks**, and the reference configuration needs 750. Against
+   the 3 blocks that carry a tested element today, and the 1 the primary could compare, a difference
+   of that size is out of reach by three orders of magnitude.
+4. **No equivalence margin can be justified**, so "the neutral tier behaves identically" cannot be
+   rescued into a claim. It becomes "no difference detected".
+
+**The sample-size range, with its assumptions.** Compared blocks -- blocks carrying a tested element in
+**both** arms -- for 80% correct-direction power, across the 17 registered configurations. The
+reference configuration is in brackets.
+
+| true block rate, as a multiple of the windows' | 80% power at | reference | what widens it | what narrows it |
+| --- | --- | --- | --- | --- |
+| 1.0 (the null) | never, by construction | — | — | — |
+| 0.75 | **300 to 5,000** | 750 | 1 tested element per block (5,000) | no clustering inside a block (300) |
+| 0.5 | **50 to 300** | 100 | 1 tested element per block (300) | no clustering inside a block (50) |
+| 0.25 | **20 to 75** | 30 | 1 tested element per block (75) | no clustering inside a block (20) |
+| 0.1 | **20 to 30** | 20 | 1 tested element per block (30) | — |
+| 0.0 (the clause's strongest form) | **20** | 20 | — | — |
+
+The assumptions behind every row: the windows' measured rate is 13.45% on the observed scale, assay
+sensitivity is the pooled mean of `PowerAtEffectSize20` (0.6674), there are no false positives, six
+elements are tested per block and three tested windows accompany it, elements within a block correlate
+at 0.30 and blocks within a chromosome at 0.014. Varying each of those one at a time is what produces
+the ranges. **The single largest lever is not the effect but the number of elements tested per block**:
+testing one element rather than six multiplies the requirement by three to seven, because a block's
+endpoint is "any tested element regulates" and one element is a much blunter instrument than six.
+Clustering is the second lever, in the other direction: pretending elements inside a block are
+independent makes the experiment look between a third and a half cheaper than it is.
+
+**Power is a probability.** Every number above is the probability that an experiment of that size
+produces an interval excluding 0, *if* its configuration's assumptions hold. At 80% power a real
+effect of the assumed size is missed one time in five. No sample size makes an experiment guaranteed
+to decide clause 2, and none of these numbers says that an experiment of that size would.
+
+**The anchors, all measured rather than chosen.** Assay sensitivity comes from the benchmark's own
+power columns: means of 0.4324, 0.6075, 0.6674, 0.9780 and 0.7052 for effects of 10, 15, 20, 25 and
+50%, which is **not monotone** -- the 25% column is the benchmark's own inclusion filter and sits near
+1 for nearly every pair -- so the five are used as five sensitivity levels and the non-monotonicity is
+reported rather than smoothed. The held-out file is better powered than the training file throughout
+(0.8497 against 0.5903 at 20%). Clustering comes from the one-way ANOVA estimator on the benchmark's
+5,638 distinct tested elements: the intraclass correlation of "this element regulates a coding gene"
+is **0.3745 within 25 kb, 0.3495 within 50 kb, 0.2998 within 100 kb, 0.2727 within 250 kb, 0.2090
+within 1 Mb**, and **0.0142 between chromosomes**. The window rate anchor is 30 of 223, 13.45%, exact
+interval 9.26% to 18.64%, and the benchmark's own element-level rates agree with it without being
+pooled into it: **12.15%** of 3,941 tested elements in the training file and **14.56%** of 1,697 in
+the held-out file, 12.88% over all 5,638.
+
+**A correction to the anchor's own wording.** The 223 and the 30 are **windows carrying a
+CRISPRi-tested element**, not tested elements: they come from a count over windows. Several of a
+block's 50 windows can carry the same tested element, so the 223 are not 223 independent measurements
+and the exact interval above understates the uncertainty. The number survives its mislabel -- the
+element-level rates land in the same place -- but the unit is now written down.
+
+**Null calibration.** At ratio 1.0 the two arms have the same true rate, so what the table would call
+power is the test's false-positive rate. It is **0.0500 at the reporting floor and 0.0500 to 0.0508 at
+500 blocks** in all 17 configurations, so the table's null is calibrated and the rest of it can be
+read. The Monte Carlo error of the simulated null mean is under 0.13 points.
+
+**The reporting floor, separated from every power statement.** `measured.MIN_FOR_A_COMPARISON` is 20
+compared blocks and is a rule about when a number may be printed. "19 short" is 20 minus the 1 block
+compared today and is that rule's distance, nothing else. The formula published beside it in
+`clause2_measured_arm.coverage_needed` took **both** its inputs from the model arm -- the effect to
+detect and the dispersion -- to size an experiment with a measured endpoint, and returned 20, so the
+two appeared to confirm each other. They are unrelated quantities that happened to agree.
+`coverage_needed` is **kept exactly as it was**, because it is the record of what that run computed
+and what `a7f207f` reported; `reporting_floor_and_power_assumptions` is added beside it and separates
+the floor, the two model-derived assumptions (each labelled as an assumption, with its source) and the
+provisional calculation, which states in its own field that it is not a power result for the measured
+experiment. A test asserts that neither 0.2725 nor 0.4324 appears as a number anywhere in the
+simulation script.
+
+**Equivalence: no margin, so no test.** The admissibility rule was fixed before the contrasts were
+read. Nothing supplies a margin from outside these data: no published threshold states what difference
+in regulatory annotation rate is meaningful, the project states no decision cost for treating the
+neutral tier as the real unknown, and the only in-project candidate -- the five-point chance band --
+was chosen in `d717b28` for this very comparison and is inadmissible by that rule. **So no equivalence
+test is run and the finding is "no difference detected."** The committed contrast of -0.10 points,
+95% -4.55 to +4.30, permits a real difference of up to about four and a half points in either
+direction. For the record, and labelled in the result as a description and never as a margin, the
+smallest margin at which a two-one-sided test on the committed interval would pass is 4.55 points for
+`names_a_coding_gene` density-matched, 5.58 element-count-matched, 7.87 and 10.53 on `moves_a_gene` --
+what the data would need, not what anyone has justified.
+
+**The denominators, every population in one table.** Read from the committed result files, not
+retyped. Each count carries its denominator and the rule that produced it.
+
+| population | count | denominator | share | rule |
+| --- | ---: | --- | ---: | --- |
+| constrained-unknown blocks, copies out | 882 | the tier itself | — | `organise.blocks`, 24 chromosomes, duplicates removed |
+| ... carrying a scored element | 531 | 882 blocks | 60.2% | a cCRE midpoint inside the block |
+| scored elements inside them | 3,280 | elements, not blocks | — | every scored element of a carrying block |
+| blocks eligible for an assay | 89 | 882 blocks | 10.1% | one shared base with a tested interval |
+| blocks eligible for an assay | 89 | 531 carrying blocks | 16.8% | same numerator, other denominator |
+| blocks with a measured element | 59 | 882 blocks | **6.7%** | reciprocal overlap 0.5 both ways |
+| blocks with a measured element | 59 | 531 carrying blocks | **11.1%** | same numerator, other denominator |
+| blocks CRISPRi-tested against a coding gene | 3 | 882 blocks | 0.34% | overlap 0.5, gene protein-coding |
+| blocks measured to move a coding gene | 0 | 882 blocks | 0% | significant either sign |
+| blocks with no measured element at all | 823 | 882 blocks | 93.3% | **no assay measures any of its scored elements at overlap 0.5** -- not "no part of the block was ever measured" |
+| blocks the measured primary could compare | 1 | 882 blocks | 0.11% | tested element in the block AND in one of its windows |
+| blocks with a measured element, overlap 0.25 | 72 | 882 blocks | 8.2% | the rule set to 0.25 |
+| blocks with a measured element, overlap 0.75 | 10 | 882 blocks | 1.1% | the rule set to 0.75 |
+| blocks CRISPRi-tested, overlap 0.25 / 0.75 | 3 / 0 | 882 blocks | 0.34% / 0% | no setting of the rule produces a usable arm |
+| neutral-tier blocks | 2,632 | the tier itself | — | the secondary target set |
+| ... carrying a scored element | 1,181 | 2,632 blocks | 44.9% | as above |
+| matched windows drawn | 44,081 | windows | — | 50 per block, exact length, coding-TSS decile |
+| ... carrying a scored element | 31,554 | 44,081 windows | 71.6% | a cCRE midpoint inside the window |
+| ... carrying a CRISPRi-tested element | 223 | 44,081 windows | 0.51% | **windows, not elements** |
+| ... holding one measured to move a coding gene | 30 | 223 windows | **13.45%** | the anchor, in windows |
+| blocks the model arm compares | 531 | 882 blocks | 60.2% | carries an element and has a carrying window |
+| window-elements in the per-element estimator | 456,573 | elements in the unmatched windows of the 531 | — | 9.18% against 44.04% is over these |
+| block elements entering the reach standardisation | 3,252 | 3,280 block elements | 99.2% | strata with 30 elements in each arm |
+
+**The sweep of the four lanes' own write-ups.** Their dated sections above now carry an annotation
+paragraph each, added beneath the original text and never in place of it, and the four committed
+result files each carry an additive
+`corrections_after_the_statistical_review_2026_09_28` key naming the field or the string it corrects.
+No existing key or value in any of them was changed, and the annotator refuses to write if one would
+be. What the sweep found, beyond the five points the review named: the 30-of-223 unit error above,
+which no lane would have caught from its own numbers.
+
+**What this settles and what it does not.** It settles that the size of clause 2's experiment was
+never known: what was published as its size was a reporting floor with a model-derived calculation
+beside it. It replaces that with a range that is honest about depending on an unestimated effect, and
+it says which design choice moves the range most (how many elements per block are tested, not how many
+blocks). It does not make clause 2 decidable, it does not estimate the effect, and it does not say
+that an experiment of any size here would decide the clause -- power is the probability of detection
+under assumptions. Clause 2 stays not met, and now waits on an experiment whose size is a range with
+its assumptions attached rather than a number.
+
+**Cost.** 0 AlphaGenome requests. 11 s; no genome archive is opened, and the committed clause 2
+results are read and never rewritten.
 
 ## What comes next, in order
 

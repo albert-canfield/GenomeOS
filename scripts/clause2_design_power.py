@@ -992,6 +992,126 @@ def denominators(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     }
 
 
+# ---- corrected keys for the committed results ------------------------------------------------------
+
+#: The top-level key this lane adds to a committed result. It is ADDITIVE: no existing key or value in
+#: any of the four files is changed, and each entry names the string it corrects so a reader who has
+#: the old wording in hand can find the correction from it.
+CORRECTION_KEY = "corrections_after_the_statistical_review_2026_09_28"
+
+CORRECTIONS: dict[str, dict[str, Any]] = {
+    MEASURED_ARM: {
+        "coverage_needed": (
+            "this field is kept as the record of what the run computed. It is NOT a power result for "
+            "the measured experiment: `effect_to_detect` and `model_arm_sd_of_per_block_differences` "
+            "are both model output, used to size an experiment whose endpoint is a measurement, and "
+            "`blocks_short_of_the_floor` is 20 minus the 1 block compared -- the distance to "
+            "`measured.MIN_FOR_A_COMPARISON`, a minimum-reporting rule. That the formula also returned "
+            "20 is a coincidence, not a confirmation. The power question is answered in "
+            "`clause2_design_power`, from the measured endpoint"
+        ),
+        "primary_reading.text": (
+            "the phrase 'the coverage that would be needed ... for 80% power against an effect the "
+            "size of the model arm's own -27.25 points' names the mismatch in its own words: the "
+            "effect is the model arm's. Read it as a provisional assumption, not as the size of the "
+            "experiment"
+        ),
+        "coverage.windows_matched_real_unknown.windows_with": (
+            "these are WINDOWS satisfying each predicate, not elements. The 223 and the 30 behind the "
+            "13.45% rate are windows carrying a CRISPRi-tested element; several windows of one block "
+            "can carry the same element, so they are not 223 independent measurements. The "
+            "element-level rates over the benchmark's own distinct tested elements are 12.15% "
+            "(training, 479 of 3,941) and 14.56% (held-out, 247 of 1,697)"
+        ),
+        "coverage.real_unknown.blocks_with_no_measured_element": (
+            "823 means: no assay measures any of the block's scored elements at reciprocal overlap "
+            "0.5. It does not mean no part of those blocks was ever measured. At overlap 0.25 the "
+            "measured count is 72 blocks and at 0.75 it is 10, against 59 at the committed rule, so "
+            "the count is a property of the rule as much as of the data"
+        ),
+        "the_two_shares": (
+            "59 measured blocks is 6.7% of the 882 tier blocks and 11.1% of the 531 that carry a "
+            "scored element. Both are correct and neither may be quoted without its denominator"
+        ),
+        "sample_size_answer": (
+            "see `clause2_design_power.sample_size_range_by_ratio`: a RANGE of compared blocks per "
+            "assumed effect, not a number"
+        ),
+    },
+    MATCHED_CONTROL: {
+        "secondary_real_minus_neutral": (
+            "an interval of -4.55 to +4.30 points is NO DIFFERENCE DETECTED, not equivalence and not "
+            "'the two tiers behave identically'. It permits a real difference in either direction of "
+            "up to about four and a half points. No equivalence margin can be justified from outside "
+            "these data, so no equivalence test is run; see `clause2_design_power.equivalence`"
+        ),
+        "primary": (
+            "`names_a_coding_gene` is the deletion model naming a target. The difference is in "
+            "TARGET-NAMING FREQUENCY, not in prediction accuracy, and it shows neither that the model "
+            "failed nor that these sequences lack regulatory function"
+        ),
+    },
+    ELEMENT_COUNT_CONTROL: {
+        "secondary_real_minus_neutral": (
+            "an interval of -5.58 to +4.17 points is NO DIFFERENCE DETECTED, not equivalence. See "
+            "`clause2_design_power.equivalence` for why no margin can be justified"
+        ),
+        "secondary_per_element": (
+            "9.18% against 44.04% is the share of scored elements for which the deletion model names a "
+            "protein-coding gene, in each arm. It is a difference in target-naming frequency, not in "
+            "accuracy: no experimental outcome enters it, so it cannot show that the model failed nor "
+            "that the blocks' sequence lacks regulatory function"
+        ),
+    },
+    REACH_CONTROL: {
+        "reach_reading.text": (
+            "'the failure stays about the sequence' is withdrawn. What the run shows is that the gap "
+            "persists after standardising on the tested covariates, reach and class. That the tested "
+            "covariates do not explain it is not evidence of what does: unmeasured context, selection "
+            "effects, model limitations and remaining geometric differences are all still open. The "
+            "defensible sentence is: the gap persists after adjustment for the tested reach and class "
+            "variables"
+        ),
+        "classes.reading": (
+            "same correction: class composition not explaining the gap does not identify what does"
+        ),
+    },
+}
+
+#: what every correction above shares, written once into each file it touches
+CORRECTION_PREAMBLE = (
+    "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this "
+    "entry is additive and names the field or the string it corrects. The corrections follow a "
+    "statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md "
+    "beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md."
+)
+
+
+def annotate_committed_results(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """Add the corrected keys beside the committed ones. Nothing existing is read back out."""
+    done: dict[str, Any] = {}
+    for name, entries in CORRECTIONS.items():
+        p = results_dir / f"{name}.json"
+        if not p.exists():
+            done[name] = "absent"
+            continue
+        payload = json.loads(p.read_text())
+        before = {k: v for k, v in payload.items() if k != CORRECTION_KEY}
+        payload[CORRECTION_KEY] = {
+            "added": "2026-09-28",
+            "by": "lane-design",
+            "preamble": CORRECTION_PREAMBLE,
+            "additive": True,
+            "corrects": entries,
+        }
+        after = {k: v for k, v in payload.items() if k != CORRECTION_KEY}
+        if after != before:  # never reachable; the guard is the point
+            raise AssertionError(f"{p}: an existing value changed; refusing to write")
+        p.write_text(json.dumps(payload, indent=2, default=str))
+        done[name] = sorted(entries)
+    return done
+
+
 # ---- the run ---------------------------------------------------------------------------------------
 
 
@@ -1022,6 +1142,29 @@ def collect(blocks: int, seed: int, check_experiments: int, check_resamples: int
                 {"ratio": ratio, **bootstrap_check(m, cfg, n, check_experiments, check_resamples, rng)}
             )
     worst = max(c["largest_disagreement"] for c in checks) if checks else None
+    # Added after the registered check fired its falsifier, and named as such wherever it is read:
+    # the registered cells show the disagreement only at the reporting floor, so the same check is
+    # run at more sample sizes to say WHERE the approximation becomes safe. It changes no grid, no
+    # threshold and no reading; the registered cells above are drawn first and are unaffected by it.
+    extended = []
+    if worst is not None and worst > 0.05:
+        for ratio in (0.5, 0.25):
+            for n in (30, 75, 100):
+                cfg = {**ref, "ratio": ratio, "rho_chrom": 0.0}
+                m = moments(
+                    cfg["window_observed_rate"],
+                    ratio,
+                    cfg["sensitivity"],
+                    cfg["false_positive"],
+                    cfg["elements_per_block"],
+                    cfg["windows_per_block"],
+                    cfg["icc"],
+                    blocks,
+                    rng,
+                )
+                extended.append(
+                    {"ratio": ratio, **bootstrap_check(m, cfg, n, check_experiments, check_resamples, rng)}
+                )
     null_rows = [r for r in sw["rows"] if r["ratio"] == 1.0]
     calibration = {
         "what_this_is": (
@@ -1066,6 +1209,21 @@ def collect(blocks: int, seed: int, check_experiments: int, check_resamples: int
                 "the check cells set the chromosome ICC to 0, because the design effect is applied to "
                 "the normal formula and not simulated; the check is of the approximation, not of the "
                 "clustering"
+            ),
+            "extended_cells_added_after_the_falsifier_fired": extended,
+            "extended_cells_are_post_hoc": (
+                "these sample sizes were not in the registered check. They were added once the "
+                "registered check failed, to locate where the normal approximation becomes safe, and "
+                "they change no grid, threshold or reading. Read them as a diagnostic of the "
+                "approximation, not as part of the registered analysis"
+            ),
+            "largest_disagreement_above_the_floor": (
+                round(
+                    max(c["largest_disagreement"] for c in checks + extended if c["n_blocks"] > MIN_BLOCKS),
+                    4,
+                )
+                if any(c["n_blocks"] > MIN_BLOCKS for c in checks + extended)
+                else None
             ),
         },
         "null_calibration": calibration,
@@ -1152,7 +1310,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--check-experiments", type=int, default=1000)
     ap.add_argument("--check-resamples", type=int, default=2000)
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument(
+        "--annotate",
+        action="store_true",
+        help="add the corrected keys beside the committed clause 2 results (additive, never in place)",
+    )
     args = ap.parse_args(argv)
+    if args.annotate:
+        for name, what in annotate_committed_results().items():
+            print(f"{name}: {what}")
+        return 0
     out = collect(args.blocks, args.seed, args.check_experiments, args.check_resamples)
     if args.no_save:
         print("not saved")

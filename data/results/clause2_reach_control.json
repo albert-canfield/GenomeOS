@@ -2398,5 +2398,15 @@
       "python": "3.14.3"
     },
     "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "reach_reading.text": "'the failure stays about the sequence' is withdrawn. What the run shows is that the gap persists after standardising on the tested covariates, reach and class. That the tested covariates do not explain it is not evidence of what does: unmeasured context, selection effects, model limitations and remaining geometric differences are all still open. The defensible sentence is: the gap persists after adjustment for the tested reach and class variables",
+      "classes.reading": "same correction: class composition not explaining the gap does not identify what does"
+    }
   }
 }
