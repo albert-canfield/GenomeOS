@@ -51,6 +51,13 @@ feature it reaches the range of the published ENCODE-rE2G models on the same pai
 is against published intervals, not a paired test, so it supports "in the range of", not
 "better than".
 
+*(Added 2026-09-28.)* The point estimate, 0.639, lies just above the upper end of ENCODE-rE2G's
+published interval (0.631), and the result file's band field records it as "above the published
+interval". The wording above stays "in the range of" for three stated reasons: the comparison is
+unpaired, with our own interval not set against theirs on shared resamples; the DNase-only model
+was chosen after the held-out filter was found; and the margin, 0.008, is smaller than either
+interval's width.
+
 **The gain does not come from which pairs were scored.** Regulated pairs were more often on a
 scored element (96.6% against 90.6% in held-out K562), so three checks were registered:
 
