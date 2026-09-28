@@ -101,6 +101,76 @@ READINGS = {
 }
 
 
+# Registered 2026-09-28 after the census above (b6e6d17) and before the build.
+REGISTERED: dict[str, Any] = {
+    "classifier": {
+        "change": "classify_block reads RepeatMasker right after the gap test, before the telomere and "
+        "regulatory returns, and records repeat_coverage, interspersed_coverage and origin "
+        "(repeat_derived/<top class> at >= 0.5 interspersed, partly_repeat_derived/<top> above 0, unique "
+        "at 0) whenever RepeatMasker was consulted, an empty coverage included; the rules that name a class "
+        "are unchanged and keep their order, so a regulatory block is also repeat_derived when it is",
+        "must_not_move": "the class, evidence and confidence of every block; stored unknown_<chrom> files",
+        "expected": {"regulatory blocks mostly repeat": 8709, "partly": 6275, "unique": 268},
+    },
+    "budget": {
+        "change": "new writes go to budget_axes_<chrom> and budget_axes_genome_wide with a manifest; each "
+        "guess states evidence_status (the constraint reading as selection only), origin, the legacy tier "
+        "beside the new one, and a label that reads no function into missing constraint",
+        "tier_renamed": {"fossil": "repeat_unconstrained", "neutral": "unconstrained_unknown"},
+        "labels_renamed": {
+            "transposable-element fossil, unconstrained": (
+                "repeat-derived sequence; no sign of selection, which is not a sign of no function"
+            ),
+            "transposable-element fossil, weak constraint": "repeat-derived sequence; weak sign of selection",
+            "repeat-derived sequence under constraint: possibly exapted as a regulatory element": (
+                "repeat-derived sequence under selection; role unknown"
+            ),
+            "regulatory elements by the registry, little constraint: lineage-specific or weak": (
+                "regulatory elements by the registry; selection weak or not detected; target gene unassigned"
+            ),
+            "long open reading frame under constraint: unannotated coding or a young pseudogene": (
+                "long open reading frame under selection; coding candidate, role unknown"
+            ),
+            "long open reading frame without constraint: a chance frame or a dead pseudogene": (
+                "long open reading frame; selection weak or not detected; role unknown"
+            ),
+            "unconstrained unique sequence: no evidence of function, best guess neutral": (
+                "unique non-coding sequence; no sign of selection, which is not a sign of no function"
+            ),
+            "weakly constrained unique sequence: mostly neutral": (
+                "unique non-coding sequence; weak sign of selection; role unknown"
+            ),
+        },
+        "must_not_move": [
+            "26,806 blocks; per tier under the rename: regulatory 15,536, repeat_unconstrained 7,302, "
+            "unconstrained_unknown 2,632, constrained_unknown 1,098, structural 238, and their bp",
+            "every block's confidence, so guessed_fraction; measured_bp, constrained_bp",
+            "labels map one to one, so the count on each label is the count on the old one",
+            "budget_<chrom>, budget_genome_wide and unknown_<chrom> byte for byte; every consumer, since all "
+            "read budget_<chrom>: no organise, compile, panel, lexicon, web or loci figure moves",
+        ],
+        "expected": {
+            "evidence_status": {
+                "selection_not_detected": 21283,
+                "selection_weak": 2962,
+                "under_selection": 2410,
+                "selection_not_measured": 33,
+                "none (gap)": 118,
+            },
+            "new labels saying neutral, fossil, dead, best guess, lineage-specific or exapted": 0,
+            "regulatory-tier blocks with origin repeat_derived": 8709,
+            "origin equal to compile.py region_axes origin (first group), over all blocks": "all",
+        },
+        "negatives_registered": [
+            "16 blocks without a constraint reading keep the constrained_unknown tier (a tier the rule "
+            "gives when phyloP is missing); not moved here",
+            "the tier keys fossil and neutral stay in budget_<chrom> and in every consumer until each is "
+            "moved to budget_axes_<chrom>",
+        ],
+    },
+}
+
+
 def selection(fa: float | None) -> str:
     from genomeos.attribution.budget import CONSTRAINED_MIN, NEUTRAL_MAX
 
@@ -197,6 +267,7 @@ def before() -> dict[str, Any]:
         "budget_label_by_selection": _flat(tot["label_selection"]),
         "budget_blocks_by_constraint_reading": _flat(by_reading),
         "budget_bp_by_tier": dict(tot["bp"]),
+        "registered": REGISTERED,
     }
 
 
