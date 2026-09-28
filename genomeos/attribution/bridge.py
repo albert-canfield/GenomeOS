@@ -251,6 +251,209 @@ RATE_EXPECTED = (
     " rise from 0 by the same order. If the count lands outside 15,000-60,000 the miss is reported"
 )
 
+# ---- the second rate source: a survey for a HUMAN absolute rate (lane-rates2, 2026-09-28) ---------
+#: The R3 rate table leaves 138,543 gene-cell pairs on a gene nobody measured, and every rate it does
+#: carry is mouse NIH 3T3. Both limits have the same fix: a second source of ABSOLUTE transcription
+#: rates, ideally human. This block is the survey, written before anything was applied. Each record is
+#: what this lane read in the primary source itself, and -- the part that matters -- why the source
+#: cannot supply T. A source that reports only half-lives cannot supply a synthesis rate; saying so is
+#: the result, and no rate here is manufactured by pairing a half-life with a copy number from another
+#: study. Reading a paywalled article was not bought: where that is the case the record says exactly
+#: what was read (the deposit, the abstract) and claims nothing beyond it.
+HUMAN_RATE_SOURCE_SURVEY = {
+    "schwalb2016": {
+        "citation": "Schwalb et al. 2016, Science 352:1225-1228, doi 10.1126/science.aad9841 (TT-seq)",
+        "species": "Homo sapiens",
+        "cell": "K562",
+        "quantity": "RNA synthesis rates and half-lives from a 5 min 4sU pulse with RNA fragmentation",
+        "units": "not established here: the article was not readable by this lane (science.org 403)",
+        "absolute": "unknown from the article; NOT distributed as an absolute per-gene table",
+        "n_genes": "over 10,000 transient RNAs mapped (from the GEO summary), rates per gene not deposited",
+        "licence": "subscription article; GEO deposit GSE75792 is public",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75792",
+        "why_not": (
+            "what is actually distributed, and what this lane read, is the GEO deposit: a binned count"
+            " table, a binning annotation, a transcript annotation and exon/intron count tables. Read"
+            " counts, no per-gene rate and no cell-number or RNA-per-cell calibration. Deriving"
+            " molecules/(cell*h) from it would be a new analysis of raw reads, not the use of a source"
+        ),
+    },
+    "michel2017": {
+        "citation": "Michel et al. 2017, Mol Syst Biol 13:920, PMC5371733 (TT-seq)",
+        "species": "Homo sapiens",
+        "cell": "Jurkat T cells",
+        "quantity": "synthesis rate mu_i and degradation rate lambda_i per transcription unit",
+        "units": "relative: labelled/total ratios under first-order kinetics",
+        "absolute": "no",
+        "n_genes": "22,141 transcription units (8,878 mRNA, 590 lincRNA, 12,673 ncRNA)",
+        "licence": "CC BY 4.0",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5371733/",
+        "why_not": (
+            "the spike-ins set sequencing depth sigma_j and cross-contamination epsilon_j per sample,"
+            " not a number of cells or an RNA mass per cell. mu_i is therefore a rate in library units"
+            " and carries no molecules/cell. Nothing in it fixes the absolute scale T needs"
+        ),
+    },
+    "wachutka2019": {
+        "citation": "Wachutka et al. 2019, eLife 8:e45056, PMC6548502 (TT-seq)",
+        "species": "Homo sapiens",
+        "cell": "K562",
+        "quantity": "synthesis and cleavage rates of individual phosphodiester bonds; bond half-lives",
+        "units": "minutes for half-lives; synthesis spike-in normalised, no per-cell unit stated",
+        "absolute": "no",
+        "n_genes": "per splice site, not per gene",
+        "licence": "CC BY",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6548502/",
+        "why_not": "a bond-level rate is not a gene's transcription rate, and no per-cell unit is given",
+    },
+    "ietswaart2024": {
+        "citation": "Ietswaart et al. 2024, Mol Cell 84:2765-2784, PMC11315470 (subcellular TimeLapse-seq)",
+        "species": "Homo sapiens and Mus musculus",
+        "cell": "K562 and NIH 3T3",
+        "quantity": "chromatin-release, nuclear-export, polysome-loading and degradation rate constants",
+        "units": "first-order rate constants (per hour) and half-lives, from the record read here",
+        "absolute": "not established: the full text was not readable by this lane (cell.com 403, no OA copy)",
+        "n_genes": "all expressed genes, per the abstract",
+        "licence": "subscription article",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11315470/",
+        "why_not": (
+            "only the record and abstract were read, and they describe rate constants and half-lives,"
+            " not a synthesis rate in molecules/(cell*h). It is named here as the FIRST PLACE THE NEXT"
+            " LANE SHOULD LOOK, for a reason worth more than a rate: it measures human K562 and mouse"
+            " NIH 3T3 -- the very cell type the R3 rates come from -- by one method, which would replace"
+            " the present species falsifier (mouse MEF against human K562) with a matched one"
+        ),
+    },
+    "shao2022": {
+        "citation": "Shao et al. 2022, Mol Syst Biol 18:e10407, PMC8754154 (TT-seq, spike-in scaled)",
+        "species": "Mus musculus",
+        "cell": "embryonic stem cells (serum/LIF, 2i, mTORi)",
+        "quantity": "RNA synthesis rate = labelled rate * transcript copy number per cell",
+        "units": "cell^-1 min^-1 (copy/min per cell) -- genuinely absolute, in the source's own words",
+        "absolute": "yes",
+        "n_genes": "about 10,674 genes carry the TT-seq/Pol II quantities",
+        "licence": "CC BY 4.0",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8754154/",
+        "why_not": (
+            "it is the one source found that reports an absolute synthesis rate per cell, and it is"
+            " MOUSE, so it cannot answer the human question at all; it would only swap one borrowed"
+            " species for the same one in another cell type. And its per-gene rates are not"
+            " distributed: Table EV1 is elongation velocities, and the rates live in GSE168378 as raw"
+            " and processed TT-seq. Using it means re-deriving rates from reads, a lane of its own"
+        ),
+    },
+    "hausser2019": {
+        "citation": "Hausser, Mayo, Keren & Alon 2019, Nat Commun 10:68, PMC6325141",
+        "species": "Homo sapiens (also mouse, yeast, E. coli)",
+        "cell": "HeLa",
+        "quantity": "transcription rate beta_m for thousands of human genes",
+        "units": "mRNA per cell per hour -- absolute in form",
+        "absolute": "in form yes, in provenance no: CONSTRUCTED, not measured",
+        "n_genes": "thousands (from Eichhorn et al. 2014 mRNA-seq and ribosome profiling)",
+        "licence": "CC BY 4.0",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6325141/",
+        "why_not": (
+            "this is the closest thing to a human Schwanhausser, and reading it settles the question."
+            " Their per-gene beta_m is an abundance rescaled by two constants: a total of about 225,000"
+            " mRNAs per HeLa cell, which they obtained by taking the 180,000 mRNAs per MOUSE 3T3 cell"
+            " and scaling it by a cell-volume ratio 2500/2000, and ONE global decay rate"
+            " alpha_m = 0.06 /h from a median HEK293 half-life of 11.4 h. In their own words: 'We could"
+            " not find direct measurements of the number of mRNAs per HeLa cell N_m.' So the published"
+            " human transcription rates are anchored on the same mouse constant this lane is trying to"
+            " escape, and per gene they are proportional to expression and carry no kinetics of their"
+            " own. Adopting them would launder a borrowed mouse number into a human-labelled one"
+        ),
+    },
+    "slam_drop_seq2023": {
+        "citation": "Liu et al. 2023, Mol Syst Biol 19:e11427, PMC10568207 (SLAM-Drop-seq)",
+        "species": "Homo sapiens",
+        "cell": "HEK293 (A549 re-analysis; K562 used only as a half-life comparison)",
+        "quantity": "transcription, splicing and degradation rates along the cell cycle",
+        "units": "counts per hour after CPM normalisation ('from absolute counts to counts per million')",
+        "absolute": "no: single-cell capture-limited counts, then rescaled to CPM",
+        "n_genes": "a core set of 399 cycling genes",
+        "licence": "CC BY 4.0",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10568207/",
+        "why_not": "CPM per hour is not molecules per cell per hour, and 399 genes would move nothing",
+    },
+    "nascseq2_2024": {
+        "citation": "Ramskold et al. 2024, Nat Cell Biol 26:1725-1733, PMC11469958 (NASC-seq2)",
+        "species": "Homo sapiens and Mus musculus",
+        "cell": "K562 single cells; primary fibroblasts",
+        "quantity": "transcriptional on/off rates, burst size and synthesis rate from new-RNA profiles",
+        "units": "burst parameters; the per-cell counts reported are DETECTED molecules, capture-limited",
+        "absolute": "no per-gene molecules/(cell*h) found in what was read",
+        "n_genes": "single-cell, transcriptome-wide",
+        "licence": "CC BY 4.0",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11469958/",
+        "why_not": "detected molecules per cell depend on capture efficiency; burst rates are not T",
+    },
+    "schofield2018": {
+        "citation": "Schofield et al. 2018, Nature Methods 15:221-225 (already cached; see above)",
+        "species": "Homo sapiens and Mus musculus",
+        "cell": "K562 and mouse embryonic fibroblasts",
+        "quantity": "transcript half-lives",
+        "units": "hours",
+        "absolute": "n/a: a half-life is not a synthesis rate",
+        "n_genes": "5,419 human transcripts, 2,992 mouse",
+        "licence": "subscription supplementary, cached and never redistributed",
+        "url": "https://www.nature.com/articles/nmeth.4582",
+        "why_not": (
+            "A HALF-LIFE CANNOT SUPPLY A SYNTHESIS RATE. It sets delta_m and nothing else. The only way"
+            " it becomes a T is T = N * ln2 / t_half with a measured copy number N, and that is a"
+            " construction, not a measurement; see `HUMAN_RATE_CONSTRUCTION_NOT_TAKEN`"
+        ),
+    },
+}
+#: the construction deliberately NOT made, and why it could not be made even if it were wanted
+HUMAN_RATE_CONSTRUCTION_NOT_TAKEN = (
+    "T = N * ln2 / t_half would turn a human half-life into a human absolute rate. It needs a measured"
+    " per-gene human mRNA copy number N. This lane found none genome-wide, and the strongest evidence"
+    " that none exists is that Hausser et al. 2019, who needed exactly that number, say they could not"
+    " find even the per-cell TOTAL for HeLa and scaled the mouse 3T3 figure instead. There is also a"
+    " measured reason to distrust the identity: over the 4,309 Schwanhausser genes carrying vsr, copy"
+    " number and half-life together, median |vsr - N*ln2/t_half| / vsr = 0.236. So the construction has"
+    " no human input AND a 24% disagreement with the one measurement it can be checked against. It is"
+    " not made, and no number in the rate table comes from it"
+)
+#: the verdict, and the one sentence that is the lane's result
+HUMAN_RATE_SURVEY_VERDICT = (
+    "NO usable human absolute transcription-rate source exists. Human metabolic labelling (TT-seq,"
+    " TimeLapse-seq, SLAM-seq, single-cell new-RNA) reports half-lives and rates in library or CPM"
+    " units; the one study found that reports a genuinely absolute rate per cell (copy/min per cell) is"
+    " MOUSE embryonic stem cells and does not distribute it per gene; and the one published set of"
+    " human genome-wide transcription rates is constructed from abundance times a mouse-derived count"
+    " of mRNAs per cell times one global decay constant. The R3 rates therefore stay mouse NIH 3T3, the"
+    " 138,543 pairs on an unmeasured gene stay unmeasured, and every rate keeps its borrowed flag"
+)
+#: what would overturn the verdict, named in advance so the next lane has a target and not an opinion
+HUMAN_RATE_SURVEY_FALSIFIER = (
+    "a dataset distributing PER GENE, for a human cell type, a transcription or synthesis rate in"
+    " molecules per cell per unit time (or a stated conversion to it), with the per-cell calibration"
+    " named -- a cell count, an RNA mass per cell, or a spike-in weight per cell. Producing one"
+    " overturns this record. Ietswaart et al. 2024 (human K562 and mouse NIH 3T3 by one method) is the"
+    " first place to look, and Shao et al. 2022's GSE168378 shows the calibration that would be needed"
+)
+#: how a human rate would be kept apart from a mouse one if one ever arrives. Registered NOW, and
+#: implemented now with a single source, so that a second source cannot be silently pooled with the
+#: first: every row of the rate table carries its own `source` and `species_cell`, the audit counts
+#: simulable pairs by the species of the rate they used, and a pair on a mouse rate is never reported
+#: as a human result. Pooling two sources into one median, or averaging a human and a mouse rate for
+#: one gene, is forbidden: with two sources the row keeps both and the audit reports them separately.
+RATE_ROW_PROVENANCE = (
+    "every rate row carries `source` (a key of MEASURED_RATE_SOURCES) and `species_cell`; the audit"
+    " counts `pairs_on_a_human_measured_rate` and `pairs_on_a_borrowed_species_rate` per tier, and"
+    " today the first is 0 by construction. Two sources are never averaged and never pooled"
+)
+#: the expected change, with a direction, before the re-run: NOTHING MOVES. A survey is not a rate.
+HUMAN_RATE_SURVEY_EXPECTED = (
+    "no count changes. measured stays 22,576 simulable gene-cell pairs, borrowed 160,392,"
+    " gene_rate_unmeasured 138,543, not_identifiable 76,469, and the number of pairs on a human rate is"
+    " 0. If any of those moves, the labelling changed a number it was not allowed to touch and the"
+    " change is a defect, not a finding"
+)
+
+
 # ---- one mechanism, one parameter -----------------------------------------------------------------
 #: a mechanism is (element, target gene, cell context); `<id>` and `<id>_measured` are one element
 MECHANISM_KEY = ("element id without the _measured suffix", "target gene", "when clauses")

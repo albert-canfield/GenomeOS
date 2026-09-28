@@ -799,3 +799,55 @@ within 1% so the level reads in molecules per cell, doubling the measured
 half-life doubles the level and moves no fold, an unmeasured gene gets a
 marker and no number, an inhibition beyond the bound is reported and not
 clipped, and a borrowed rate changes no strength.
+
+## Registration: a second rate source, and a human one if there is one (2026-09-28)
+
+Written before any source was applied, alongside the constants in
+`genomeos/attribution/bridge.py`
+(`HUMAN_RATE_SOURCE_SURVEY`, `HUMAN_RATE_CONSTRUCTION_NOT_TAKEN`,
+`HUMAN_RATE_SURVEY_VERDICT`, `HUMAN_RATE_SURVEY_FALSIFIER`,
+`RATE_ROW_PROVENANCE`, `HUMAN_RATE_SURVEY_EXPECTED`).
+
+**The question.** The rates above leave two limits. 138,543 gene-cell pairs
+sit on a gene nobody measured and carry a marker with no number. Every rate
+that does exist is mouse NIH 3T3 fibroblast, so all 22,576 human pairs borrow
+across species and cell type. Both have the same candidate fix: a second
+source of **absolute** transcription rates, ideally human.
+
+**What counts as a source.** A per-gene transcription or synthesis rate in
+molecules per cell per unit time, or a quantity with a stated conversion to
+it, with the per-cell calibration named: a cell count, an RNA mass per cell,
+or a spike-in weight per cell. **A source that reports only half-lives cannot
+supply a synthesis rate**, and recording that is the result, not a failure.
+No rate is manufactured by pairing a half-life from one study with a copy
+number from another unless this registration names that as an explicit,
+labelled construction with its assumptions - and it does not.
+
+**What a rate would NOT license,** carried over unchanged from the rates
+registration: a measured total rate `T` becomes `basal_rate + max_rate * A * R`
+at the observed state and **never becomes `max_rate`**; a half-life becomes
+`delta_m` and sets no level; a copy number becomes nothing and is held only
+for the acceptance check.
+
+**How human and mouse would be kept apart.** Per row, not per note. Every row
+of `data/results/gene_rates.json` carries `source` and `species_cell`, and the
+audit counts `pairs_on_a_human_measured_rate` and
+`pairs_on_a_borrowed_species_rate` for every tier. Two sources are never
+averaged for one gene and never pooled into one median; a pair standing on a
+mouse constant is never reported as a human result.
+
+**The expected change, with a direction.** If a human absolute source is
+found, simulable pairs on a measured rate rise above 22,576 and
+`gene_rate_unmeasured` falls below 138,543. If none is found, **no count
+changes at all**: measured stays 22,576, borrowed 160,392,
+`gene_rate_unmeasured` 138,543, `not_identifiable` 76,469, and pairs on a
+human rate stay 0. A survey is not a rate.
+
+**The invariant.** The 76,469 not-identifiable pairs do not move, in any tier.
+No existing measured figure moves: the 3,603 genes, the median of 1.76 and the
+range 0.08 to 610.52 are unchanged, because nothing was added to the table.
+
+**The falsifier.** A dataset distributing, per gene, for a human cell type, a
+rate in molecules per cell per unit time with its per-cell calibration named.
+`tests/test_human_rate_survey.py` holds it as a test that fails the day a
+candidate is recorded as both human and absolute.
