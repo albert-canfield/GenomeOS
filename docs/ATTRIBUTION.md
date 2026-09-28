@@ -7646,6 +7646,34 @@ elements; filling it needs phyloP over 440,377 intervals. Segmental duplication 
 only. The committed chr21 copy received the axis lines and the header paragraph as pure additions
 (29,108 lines, none removed), leaving its guard-held rule lines as they were until 2026-09-30.
 
+## Pre-registration: every budget reader through one reader, names only (R7 follow-up, consumers, 2026-09-28)
+
+The budget's R7 restatement (`budget_axes_<chrom>`, commits b6e6d17, bbce3d8, 308484a) renames two
+tiers (fossil to `repeat_unconstrained`, neutral to `unconstrained_unknown`) and eight labels, and
+adds `evidence_status`, `origin` and `legacy_tier`. Every consumer still read `budget_<chrom>`. This
+step moves them all onto one reader, `budget.read_axes(chrom)`, registered in
+`budget.CONSUMERS_REGISTERED` before any consumer moves.
+
+- **What moves.** The reader returns the axes record, with the measurements the restatement dropped
+  (class evidence, phyloP mean and max, conserved elements, cost) filled back from the stored budget
+  after a block-by-block agreement check. A consumer whose own result joins on the old key reads
+  `legacy_tier`, so organise, compress, human_panel, lexicon, variation, unknown_scoring,
+  duplications, element_types and the epigenome keep their stored keys. The CLI, the web budget panel
+  and a compiled region's `role:` line show the new tier names and labels.
+- **The invariant.** No numeric figure moves: tier counts and base pairs are identical by
+  construction, and every number a consumer writes must be identical before and after. Only names
+  move, and only where a person reads them. Run times and a byte counter of files read are exempt.
+- **The proof.** Each consumer that writes a result is run before and after into scratch, never over
+  a committed result, and every numeric leaf is compared, tier keys mapped through `LEGACY_TIER`.
+  Any other difference is a failure of the move and is reported with its cause.
+- **Negatives first.** Seven modules the census counted as budget readers read a tier through
+  `organise.blocks` or lexicon's context map, not the budget file; they change through organise and
+  keep the legacy key. The censuses (`budget_axes_census.py`, `ontology_census.py`) and the
+  restatement itself keep reading `budget_<chrom>`, because they describe it.
+- **Not in this step.** Regenerating `unknown_<chrom>` so the classifier's origin is stored, and
+  compile.py reading that origin instead of re-deriving it, go ahead only if cheap and only if the
+  comparison shows no numeric change; otherwise after 2026-09-30.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

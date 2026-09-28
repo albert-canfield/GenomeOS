@@ -404,6 +404,61 @@ def distil(results_dir: Path | None = None, name: str = "budget", tiers: tuple[s
 
 AXES_NAME = "budget_axes"
 
+#: R7 follow-up, consumers (registered 2026-09-28, before any consumer moves). Every reader of a
+#: chromosome's budget goes through one function, `read_axes(chrom)`, which returns the
+#: budget_axes_<chrom> record with `legacy_tier` beside each tier. A consumer whose own result joins
+#: on the old key reads `legacy_tier`, so its stored keys stay; a person reads the R7 names.
+CONSUMERS_REGISTERED = {
+    "date": "2026-09-28",
+    "reader": "genomeos.attribution.budget.read_axes(chrom[, results_dir]) and read_axes_genome_wide()",
+    "direct_readers": (
+        "attribution/organise.py blocks",
+        "attribution/compress.py tier_blocks",
+        "attribution/human_panel.py build",
+        "attribution/lexicon.py maps",
+        "attribution/variation.py build",
+        "attribution/unknown_scoring.py unknown_blocks",
+        "attribution/panel_background.py rebuild (chromosome length only)",
+        "attribution/element_types.py _block_tiers",
+        "attribution/compile.py compile_chromosome (region role:)",
+        "genome/duplications.py run_and_save",
+        "genome/epigenome.py summarise_chromosome (the budget its callers pass)",
+        "cli.py budget and epigenome",
+        "web/server.py budget_wide and static/index.html",
+        "jobs.py budget_genome_wide progress",
+        "scripts/epigenome.py",
+        "scripts/budget_genome_wide.py",
+        "scripts/variation_genome_wide.py",
+        "scripts/panel_leftover_classes.py",
+    ),
+    "indirect_readers": (
+        "read a tier through organise.blocks or lexicon's context map, never the budget file, and keep"
+        " its legacy key: syntax_tiling.py, measurability.py, motif_transfer.py, lexicon_axes.py,"
+        " scripts/unknown_coverage.py, scripts/syntax_blocks_matched.py,"
+        " scripts/constrained_unknown_targets.py;"
+        " organise.inputs names both budget files for their manifests"
+    ),
+    "left_on_budget_by_design": (
+        "budget.restate and scripts/budget_axes.py (the source of the axes record);"
+        " scripts/budget_axes_census.py and scripts/ontology_census.py (censuses of the stored labels)"
+    ),
+    "invariant": (
+        "no numeric figure moves: every tier count, base pair, fraction, score and every number a consumer"
+        " writes is identical before and after, because legacy_tier equals the stored tier on every block;"
+        " only tier names and labels change, and only where a person reads them (CLI, web, a compiled"
+        " region's role line)"
+    ),
+    "exempt": "run time in seconds, and a cost counter of bytes read from a result file",
+    "proof": (
+        "each consumer that writes a result is run before and after into scratch, never over a committed"
+        " result, and every numeric leaf is compared with tier keys mapped through LEGACY_TIER"
+    ),
+    "falsifier": (
+        "any numeric difference outside `exempt` is a failure of the move and is reported with its cause"
+    ),
+    "banned_in_person_facing_text": ("neutral", "fossil", "dead", "best guess"),
+}
+
 
 def _manifest(chrom: str, names: list[str], phylop: bool = True, results_dir: Path | None = None) -> dict:
     from genomeos import manifest as mf
