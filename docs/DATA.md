@@ -507,6 +507,113 @@ post-zygotic call for each candidate, which needs reads. Result files hold
 counts only: `data/results/trio_q100_phase.json` and
 `data/results/trio_q100_population.json`.
 
+## Allele fractions of the trio candidates (2026-09-28)
+
+The phasing above left one question per candidate: germline, or arisen after
+fertilisation? Reads answer part of it. A germline heterozygous allele is in
+every cell, so about half the reads carry it. An allele present in only some
+of the sequenced cells is carried by fewer.
+
+**The resource, from primary sources (read 2026-09-28).** GIAB's v4.2.1
+HG002 GRCh38 benchmark VCF,
+<https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/AshkenazimTrio/HG002_NA24385_son/NISTv4.2.1/GRCh38/HG002_GRCh38_1_22_v4.2.1_benchmark.vcf.gz>
+(156,252,944 bytes, md5 dc750b3807d4af1f7ffec852e9c2f771; the release's
+`md5.in` does not list it), is the file the trio's HG002 calls were cut
+from. Its FORMAT carries `ADALL`, "net allele depths across all datasets",
+and `AD`, the same over the unfiltered datasets with a called genotype. So
+every candidate already has read counts, pooled over Illumina, PacBio HiFi,
+10x and the other datasets. It is NIST data, not subject to US copyright
+(17 USC 105), provided AS IS, used here with acknowledgement. It is stored
+under the git-ignored `data/cache/v421/`. No BAM or CRAM is read. The 300x
+BAM that `genome/bam_range.py` streams for the telomere would cost several
+GB at 1,430 positions, above this lane's 2 GB cap, and is not needed.
+
+**A truncation to state before the run.** The v4.2.1 README (the v3.3
+changes, kept since) says heterozygous calls with a net allele fraction
+below 0.2 or above 0.8 are excluded from the benchmark regions. The 1,430
+candidates were drawn inside those regions. A mosaic allele below 0.2 could
+never have become a candidate. This measurement sees only the 0.2 to 0.8
+window.
+
+**What allele fraction can and cannot say here.** HG002's DNA comes from a
+lymphoblastoid cell line. Such lines grow from one or a few B cells. Any
+mutation that the founding cell carried, whether it arose in a parent's
+germline, in the early embryo, or in that B cell during the donor's life, is
+in every cell of a clonal line and sits at 0.5. Somatic mutations
+accumulate in B lymphocytes with age, from hundreds per cell at birth to
+over a thousand in adults (Zhang et al. 2019, PNAS 116:9014). So:
+
+- a fraction clearly below 0.5 means the allele is in part of the sequenced
+  cells: a mosaic from the embryo, or a subclone of the culture;
+- a fraction near 0.5 means clonal in the sequenced cells. It does not mean
+  germline.
+
+The phasing already gives an expectation. The Q100 assembly carries 1,382
+candidates on one haplotype. A consensus assembly carries an allele on a
+haplotype only when most of that haplotype's reads show it. So most of
+those candidates should be clonal or close to it.
+
+**Pre-registration, written and committed before the run.** The code is
+`trio_allele_fractions` in `genomeos/genome/individuals.py`, run by
+`scripts/trio_vaf.py`. It rebuilds the candidates exactly as `trio` defines
+them, and the run is refused unless the count is 1,430. It reads `ADALL`
+with alleles normalised the same way. The control is the phasing's: the
+child's heterozygous calls that exactly one parent carries, from the same
+file.
+
+Each call is classed from its reference and alternate read counts:
+
+| Class | Rule | Read as |
+|---|---|---|
+| shallow | fewer than 30 reads for the two alleles | not assessed |
+| low | fraction below 0.40, and a one-sided binomial test against 0.5 gives p < 0.001 | in only part of the sequenced cells |
+| high | fraction above 0.60, and the mirror test gives p < 0.001 | more than half the reads (a copy-number or mapping effect) |
+| half | anything else | clonal in the sequenced cells |
+
+Pooled depth is high, so the binomial test alone would flag ordinary hets
+that sit at 0.47 through reference bias. The 0.40 bound stops that. The
+control measures how often an ordinary het is classed low anyway.
+
+**Checks.** The reading is void, and recorded as void, if any fails:
+
+- **C1.** The control SNVs' median fraction is between 0.45 and 0.55.
+- **C2.** At most 5% of the control SNVs are classed low.
+- **C3.** At least 80% of the control SNVs are assessed (depth 30 or more).
+- The candidate total is not 1,430.
+
+**Predictions**, for the father + mother candidates (on one haplotype of
+the assembly):
+
+- **P1.** At most 25% are classed low. This follows from the assembly and
+  the 0.2 truncation.
+- **P2.** More are classed low than the control's rate predicts
+  (the control's SNV and indel rates weighted by the candidates' own mix;
+  one-sided binomial p < 0.01). The lane-q100 reading, that most candidates
+  arose after fertilisation, allows some subclonal ones even inside the
+  window.
+
+**Outcomes and readings.** Let s be the share of assessed father + mother
+candidates classed low, and s0 the control's rate for the same mix.
+
+| Outcome | Condition | Reading |
+|---|---|---|
+| clonal | s ≤ s0 + 0.05 | the candidates are clonal in the sequenced DNA. Allele fraction cannot tell germline from the founding cell's own mutations. With the even parental split (germline would be about 80% paternal), the reading becomes: mostly mutations of the cell that founded the line, or of the very early embryo, with germline de novos a minority the split cannot count (about 40 ± 60). The share arisen after fertilisation is not measurable from these reads. |
+| clonal majority with a subclonal minority | s0 + 0.05 < s < 0.50 | s is a lower bound on the subclonal share: fractions below 0.2 never entered the set, and clonal candidates can also be post-zygotic |
+| subclonal majority | s ≥ 0.50 | most candidates are in only part of the cells: embryonic mosaics or culture subclones, measured rather than inferred. P1 fails. |
+
+**Falsifier of the expectation.** s above 0.25 fails P1: the assembly's
+consensus would then carry many alleles that most of the reads lack, and the
+argument from the assembly would be wrong.
+
+Also reported, not predicted: the same classes for all 1,430, for SNVs and
+indels, for the 48 candidates outside the assembly or absent or nearby, and
+for the father + mother candidates inside and outside NIST's de novo and
+mosaic exclusion regions.
+
+**Result.** Filled in below after the run. It goes to
+`data/results/trio_vaf.json`: counts, medians and 0.05-wide histograms per
+group, never a position, an allele or a genotype.
+
 ## Telomere from a BAM read by ranges (2026-09-12)
 
 GIAB's 300x Illumina BAM of HG002 on GRCh38 (601 GB, NCBI FTP over HTTPS,
