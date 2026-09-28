@@ -1,0 +1,38 @@
+# Stage 4 of the economy model, smallest program that exercises it (BIOLANG-v0.4-ECONOMY.md §8, §9.3).
+# Three proteins that differ in one thing only: the half-life they declare, or declare not at all.
+# That is the whole design. If the three answered alike after several divisions, either the
+# partitioning or the turnover would be doing nothing, and the gate would say which.
+module demo.stage4_division
+
+regime counted { units: copies; threshold: 50; treatment: auto; update: event; seed: 0
+  evidence: inferred "the v0.4 §8 defaults, written out so the partitioning rule is in the program"
+  confidence: 0.3 }
+
+compartment Cytosol { volume: 0.7; absolute_volume: 1400 fL; translation: yes
+  evidence: experimental "a HeLa-scale cell, for a demonstration"; confidence: 0.4 }
+
+pool ATP { location: Cytosol; size: 3e9; regenerates: from Glycolysis, OXPHOS; returns_as: ADP
+  evidence: experimental "Milo 2013, BioEssays 35:1050"; confidence: 0.5 }
+
+# The stable and the short-lived protein. Both numbers are DECLARED, not measured: this project
+# holds no protein turnover table (§9.3, §10 decision 6), and a gate clause says so rather than
+# comparing them with a measurement that does not exist here.
+protein STABLEp { location: Cytosol; half_life: 240
+  evidence: inferred "a declared long half-life, chosen before the run; not a measurement"
+  confidence: 0.2 }
+protein SHORTp { location: Cytosol; half_life: 6
+  evidence: inferred "a declared short half-life, chosen before the run; not a measurement"
+  confidence: 0.2 }
+
+# The third declares no half-life at all, and the engine does not invent one for it: it is never
+# degraded, and division is the only thing that can remove it. That is what dilution does on its own.
+protein UNDEGRADEDp { location: Cytosol
+  evidence: inferred "no turnover is claimed for this protein, so none is applied"
+  confidence: 0.2 }
+
+# The checkpoint: the division fires when the cell has reached twice its birth size, and it is paid
+# for. `when` is the same matcher every guard in the language uses, so the checkpoint is not a
+# private mechanism of the division code.
+event divide { rate: 1 /day; partition: contents; when: size >= 2; cost: ATP 1e10 per division
+  evidence: inferred "a size checkpoint and a division cost of the order Milo 2013 implies"
+  confidence: 0.2 }

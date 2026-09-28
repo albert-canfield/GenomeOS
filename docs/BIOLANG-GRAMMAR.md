@@ -141,6 +141,7 @@ May contain `transcript` blocks.
 | `when` | `k = v, ...` | guards |
 | `effect` | `var op number [unit]` | repeatable; op in += -= *= = |
 | `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
+| `partition` | `duplicate | contents | binomial` | v0.4 stage 4: what a division does to the contents; default duplicate (contents = binomial below the regime threshold, exact halves above) |
 
 ### `transcript`
 
@@ -406,7 +407,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`, `costs`
 - **CellType**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `name`, `parent`, `expresses`, `ontology_id`
 - **Effect**: `target`, `op`, `value`, `unit`
-- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `evidence`, `confidence`
+- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `partition`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
 - **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`

@@ -45,6 +45,7 @@ from genomeos.ir import (
     COST_UNITS,
     DECISION_ACTIONS,
     MOLAR_UNITS,
+    PARTITION_MODES,
     REGIME_ALLOCATIONS,
     REGIME_FATES,
     REGIME_RECHECKS,
@@ -556,6 +557,14 @@ def _compile_block(b: Block, module: Module) -> None:
             e.when = _parse_when(p["when"])
         if "cost" in p:
             e.costs = _costs(p["cost"], b.line)
+        if "partition" in p:
+            mode = p["partition"].strip()
+            if mode not in PARTITION_MODES:
+                raise BioLangError(
+                    f"line {b.line}: event {b.header!r} has partition {mode!r}; "
+                    f"expected one of {', '.join(PARTITION_MODES)}"
+                )
+            e.partition = mode
         for eff in p.get("effect", "").split(" ; "):
             eff = eff.strip()
             if not eff:

@@ -117,6 +117,11 @@ BLOCKS: dict[str, dict] = {
             "when": ("k = v, ...", "guards"),
             "effect": ("var op number [unit]", "repeatable; op in += -= *= ="),
             "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
+            "partition": (
+                "duplicate | contents | binomial",
+                "v0.4 stage 4: what a division does to the contents; default duplicate "
+                "(contents = binomial below the regime threshold, exact halves above)",
+            ),
         },
     },
     "organism": {

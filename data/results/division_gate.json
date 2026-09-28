@@ -1,0 +1,749 @@
+{
+  "result": "division_gate",
+  "date": "2026-09-28",
+  "pre_registration": {
+    "written": "2026-09-28, before genomeos/runtime/division.py and scripts/division_gate.py existed and before any number was produced; committed in this file before either of them",
+    "claim": "a divide event that partitions contents removes a protein the program never gives a half-life to, which no amount of turnover can remove, and removes it by exactly 2^-n over n divisions; and partitioning is conservative, so no molecule is created by dividing",
+    "counter_claim_registered_in_advance": "dilution does NOT separate a stable protein from a short-lived one. Partitioning multiplies every species by the same one-half, so the division term cancels out of the stable:short ratio, and the instrument must return the same 9.392136 decades whether contents are partitioned or duplicated. In a steady state division compresses the separation from 40.0000 to 4.5455, a factor of 8.8000. \u00a78's gate as worded is therefore refuted rather than passed, and the verdict says so",
+    "design": "one program (data/demo/stage4_division.bio) with three proteins that differ only in the half-life they declare: a stable one at 240.0 h, a short-lived one at 6.0 h, and one that declares none at all. A chase (no synthesis) runs 8 divisions 24.0 h apart from 1e+06 of each, in two arms: contents partitioned, and contents duplicated (the pre-stage-4 behaviour, which is the falsifier arm for every dilution claim). A separate stochastic arm partitions 20 copies over 2000 seeds",
+    "clauses": {
+      "1_closed_form": "every amount in the partitioned arm equals A0 * 2^-n * 2^(-nT/t) and every amount in the duplicating arm equals A0 * 2^(-nT/t), to a relative 1e-09",
+      "2_dilution_only": "the protein with no declared half-life stands at exactly 0.00390625 of its start in the partitioned arm and at exactly 1.0 of it in the duplicating arm. This is the positive clause: the one removal that is dilution's and turnover's alone cannot be",
+      "3_dilution_separates_nothing": "the stable:short separation is identical in the two arms to a relative 1e-09. If it is not, partitioning is indexed by protein, which is a bug",
+      "4_compression": "the steady-state stable:short ratio with division equals 4.545455 and without it 40.000000",
+      "5_conservation": "at every division, in both the deterministic and the binomial arm, the two daughters' amounts sum to the parent's exactly; no species and no seed is exempt",
+      "6_binomial": "partitioning 20 copies over 2000 seeds has mean within 0.25 of 10.0 and variance within 15% of 5.0, every daughter is a whole number, and the same species at 1e+06 copies (above the regime threshold) has variance exactly 0",
+      "7_equal_half_lives": "falsifier: with both half-lives set equal, the two proteins are identical at every division in both arms, difference exactly 0. A difference would mean the separation came from bookkeeping rather than from turnover",
+      "8_checkpoint": "falsifier: with the checkpoint's condition unmet, 0 divisions fire, and every amount equals the decay-only value. A model that divides anyway is not checkpointed, and growth would then cost nothing, which is the thing \u00a78 asks the checkpoint to prevent"
+    },
+    "not_askable": {
+      "measured_turnover": "whether these half-lives are any protein's. bio.std.human_turnover holds cell lifespans, not protein half-lives, and no protein turnover table is under data/knowledge. \u00a710 decision 6 stays open; what would close it is a digitised set (Mathieson et al. 2018, Nat Commun 9:689, or Schwanh\u00e4usser et al. 2011, Nature 473:337) with its cell type and method stated",
+      "partitioning_noise": "whether real partitioning is binomial. Huh & Paulsson 2011 show clustering makes it noisier; this project holds no partitioning-error dataset, so the binomial arm is checked against its own analytic moments and never against a measurement",
+      "gate_b": "whether a per-gene half-life would move stage 2's gate (b). That is a proteome-scale run needing the turnover set above; nothing here is evidence about it"
+    },
+    "must_not_move": {
+      "body_runtime": "genomeos/runtime/body.py is not touched and `partition` defaults to `duplicate`, so area E's numbers stand: 1,439 of 1,439 fates, terminal 496 of 555, 45 ambiguous decision points to 0, 522 of 555 under \u00a77.5",
+      "stage_2": "burden factors 1.0,1.0,1.0,1.0,0.50,0.25,0.05; abundance MAE 0.952005, improvement 0.0",
+      "stage_1": "13 of 13 chrM, 1,123 of 1,123 imported, 0 with the routes closed",
+      "engine_package": "12 of 12 checks"
+    }
+  },
+  "program": "data/demo/stage4_division.bio",
+  "runs": {
+    "partitioned": {
+      "mode": "contents",
+      "event": "divide",
+      "divisions_asked": 8,
+      "divisions_fired": 8,
+      "interval_h": 24.0,
+      "seed": 0,
+      "dilution_only": [
+        "UNDEGRADEDp"
+      ],
+      "conserved": true,
+      "trace": [
+        {
+          "division": 0,
+          "hours": 0.0,
+          "amounts": {
+            "STABLEp": 1000000.0,
+            "SHORTp": 1000000.0,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 1,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 24.0,
+          "amounts": {
+            "SHORTp": 31250.0,
+            "STABLEp": 466516.4957684037,
+            "UNDEGRADEDp": 500000.0
+          }
+        },
+        {
+          "division": 2,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 48.0,
+          "amounts": {
+            "SHORTp": 976.5625,
+            "STABLEp": 217637.64082403103,
+            "UNDEGRADEDp": 250000.0
+          }
+        },
+        {
+          "division": 3,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 72.0,
+          "amounts": {
+            "SHORTp": 30.517578125,
+            "STABLEp": 101531.54954452944,
+            "UNDEGRADEDp": 125000.0
+          }
+        },
+        {
+          "division": 4,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 96.0,
+          "amounts": {
+            "SHORTp": 0.95367431640625,
+            "STABLEp": 47366.142703449936,
+            "UNDEGRADEDp": 62500.0
+          }
+        },
+        {
+          "division": 5,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 120.0,
+          "amounts": {
+            "SHORTp": 0.029802322387695312,
+            "STABLEp": 22097.08691207961,
+            "UNDEGRADEDp": 31250.0
+          }
+        },
+        {
+          "division": 6,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 144.0,
+          "amounts": {
+            "SHORTp": 0.0009313225746154785,
+            "STABLEp": 10308.655552913237,
+            "UNDEGRADEDp": 15625.0
+          }
+        },
+        {
+          "division": 7,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 168.0,
+          "amounts": {
+            "SHORTp": 2.9103830456733704e-05,
+            "STABLEp": 4809.157864628579,
+            "UNDEGRADEDp": 7812.5
+          }
+        },
+        {
+          "division": 8,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 192.0,
+          "amounts": {
+            "SHORTp": 9.094947017729282e-07,
+            "STABLEp": 2243.5514746035838,
+            "UNDEGRADEDp": 3906.25
+          }
+        }
+      ],
+      "final": {
+        "SHORTp": 9.094947017729282e-07,
+        "STABLEp": 2243.5514746035838,
+        "UNDEGRADEDp": 3906.25
+      },
+      "closed_form": {
+        "STABLEp": 2243.5514746035838,
+        "SHORTp": 9.094947017729282e-07,
+        "UNDEGRADEDp": 3906.25
+      },
+      "matches_closed_form": true,
+      "separation_decades": 9.392135864716213
+    },
+    "duplicating": {
+      "mode": "duplicate",
+      "event": "divide",
+      "divisions_asked": 8,
+      "divisions_fired": 8,
+      "interval_h": 24.0,
+      "seed": 0,
+      "dilution_only": [
+        "UNDEGRADEDp"
+      ],
+      "conserved": true,
+      "trace": [
+        {
+          "division": 0,
+          "hours": 0.0,
+          "amounts": {
+            "STABLEp": 1000000.0,
+            "SHORTp": 1000000.0,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 1,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 24.0,
+          "amounts": {
+            "SHORTp": 62500.0,
+            "STABLEp": 933032.9915368074,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 2,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 48.0,
+          "amounts": {
+            "SHORTp": 3906.25,
+            "STABLEp": 870550.5632961241,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 3,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 72.0,
+          "amounts": {
+            "SHORTp": 244.140625,
+            "STABLEp": 812252.3963562355,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 4,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 96.0,
+          "amounts": {
+            "SHORTp": 15.2587890625,
+            "STABLEp": 757858.283255199,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 5,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 120.0,
+          "amounts": {
+            "SHORTp": 0.95367431640625,
+            "STABLEp": 707106.7811865475,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 6,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 144.0,
+          "amounts": {
+            "SHORTp": 0.059604644775390625,
+            "STABLEp": 659753.9553864471,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 7,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 168.0,
+          "amounts": {
+            "SHORTp": 0.003725290298461914,
+            "STABLEp": 615572.2066724581,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 8,
+          "divided": true,
+          "rule": {
+            "SHORTp": "duplicated",
+            "STABLEp": "duplicated",
+            "UNDEGRADEDp": "duplicated"
+          },
+          "hours": 192.0,
+          "amounts": {
+            "SHORTp": 0.00023283064365386963,
+            "STABLEp": 574349.1774985174,
+            "UNDEGRADEDp": 1000000.0
+          }
+        }
+      ],
+      "final": {
+        "SHORTp": 0.00023283064365386963,
+        "STABLEp": 574349.1774985174,
+        "UNDEGRADEDp": 1000000.0
+      },
+      "closed_form": {
+        "STABLEp": 574349.1774985174,
+        "SHORTp": 0.00023283064365386963,
+        "UNDEGRADEDp": 1000000.0
+      },
+      "matches_closed_form": true,
+      "separation_decades": 9.392135864716213
+    },
+    "equal_half_lives": {
+      "mode": "contents",
+      "event": "divide",
+      "divisions_asked": 8,
+      "divisions_fired": 8,
+      "interval_h": 24.0,
+      "seed": 0,
+      "dilution_only": [
+        "UNDEGRADEDp"
+      ],
+      "conserved": true,
+      "trace": [
+        {
+          "division": 0,
+          "hours": 0.0,
+          "amounts": {
+            "STABLEp": 1000000.0,
+            "SHORTp": 1000000.0,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 1,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 24.0,
+          "amounts": {
+            "SHORTp": 466516.4957684037,
+            "STABLEp": 466516.4957684037,
+            "UNDEGRADEDp": 500000.0
+          }
+        },
+        {
+          "division": 2,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 48.0,
+          "amounts": {
+            "SHORTp": 217637.64082403103,
+            "STABLEp": 217637.64082403103,
+            "UNDEGRADEDp": 250000.0
+          }
+        },
+        {
+          "division": 3,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 72.0,
+          "amounts": {
+            "SHORTp": 101531.54954452944,
+            "STABLEp": 101531.54954452944,
+            "UNDEGRADEDp": 125000.0
+          }
+        },
+        {
+          "division": 4,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 96.0,
+          "amounts": {
+            "SHORTp": 47366.142703449936,
+            "STABLEp": 47366.142703449936,
+            "UNDEGRADEDp": 62500.0
+          }
+        },
+        {
+          "division": 5,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 120.0,
+          "amounts": {
+            "SHORTp": 22097.08691207961,
+            "STABLEp": 22097.08691207961,
+            "UNDEGRADEDp": 31250.0
+          }
+        },
+        {
+          "division": 6,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 144.0,
+          "amounts": {
+            "SHORTp": 10308.655552913237,
+            "STABLEp": 10308.655552913237,
+            "UNDEGRADEDp": 15625.0
+          }
+        },
+        {
+          "division": 7,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 168.0,
+          "amounts": {
+            "SHORTp": 4809.157864628579,
+            "STABLEp": 4809.157864628579,
+            "UNDEGRADEDp": 7812.5
+          }
+        },
+        {
+          "division": 8,
+          "divided": true,
+          "rule": {
+            "SHORTp": "halves",
+            "STABLEp": "halves",
+            "UNDEGRADEDp": "halves"
+          },
+          "hours": 192.0,
+          "amounts": {
+            "SHORTp": 2243.5514746035838,
+            "STABLEp": 2243.5514746035838,
+            "UNDEGRADEDp": 3906.25
+          }
+        }
+      ],
+      "final": {
+        "SHORTp": 2243.5514746035838,
+        "STABLEp": 2243.5514746035838,
+        "UNDEGRADEDp": 3906.25
+      },
+      "closed_form": {
+        "STABLEp": 2243.5514746035838,
+        "SHORTp": 2243.5514746035838,
+        "UNDEGRADEDp": 3906.25
+      },
+      "matches_closed_form": true,
+      "separation_decades": 0.0
+    },
+    "checkpoint_unmet": {
+      "mode": "contents",
+      "event": "divide",
+      "divisions_asked": 8,
+      "divisions_fired": 0,
+      "interval_h": 24.0,
+      "seed": 0,
+      "dilution_only": [
+        "UNDEGRADEDp"
+      ],
+      "conserved": true,
+      "trace": [
+        {
+          "division": 0,
+          "hours": 0.0,
+          "amounts": {
+            "STABLEp": 1000000.0,
+            "SHORTp": 1000000.0,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 1,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 24.0,
+          "amounts": {
+            "STABLEp": 933032.9915368074,
+            "SHORTp": 62500.0,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 2,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 48.0,
+          "amounts": {
+            "STABLEp": 870550.5632961241,
+            "SHORTp": 3906.25,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 3,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 72.0,
+          "amounts": {
+            "STABLEp": 812252.3963562355,
+            "SHORTp": 244.140625,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 4,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 96.0,
+          "amounts": {
+            "STABLEp": 757858.283255199,
+            "SHORTp": 15.2587890625,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 5,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 120.0,
+          "amounts": {
+            "STABLEp": 707106.7811865475,
+            "SHORTp": 0.95367431640625,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 6,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 144.0,
+          "amounts": {
+            "STABLEp": 659753.9553864471,
+            "SHORTp": 0.059604644775390625,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 7,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 168.0,
+          "amounts": {
+            "STABLEp": 615572.2066724581,
+            "SHORTp": 0.003725290298461914,
+            "UNDEGRADEDp": 1000000.0
+          }
+        },
+        {
+          "division": 8,
+          "divided": false,
+          "why": "checkpoint unmet: {'size': '>=2'} against {'size': '1'}",
+          "hours": 192.0,
+          "amounts": {
+            "STABLEp": 574349.1774985174,
+            "SHORTp": 0.00023283064365386963,
+            "UNDEGRADEDp": 1000000.0
+          }
+        }
+      ],
+      "final": {
+        "STABLEp": 574349.1774985174,
+        "SHORTp": 0.00023283064365386963,
+        "UNDEGRADEDp": 1000000.0
+      },
+      "closed_form": {
+        "STABLEp": 574349.1774985174,
+        "SHORTp": 0.00023283064365386963,
+        "UNDEGRADEDp": 1000000.0
+      },
+      "matches_closed_form": true,
+      "separation_decades": 9.392135864716213
+    },
+    "binomial_low": {
+      "copies": 20.0,
+      "seeds": 2000,
+      "mean": 9.8895,
+      "variance": 4.89928975,
+      "analytic_mean": 10.0,
+      "analytic_variance": 5.0,
+      "conserved": 2000,
+      "whole_daughters": 2000,
+      "distinct_values": 15
+    },
+    "binomial_high": {
+      "copies": 1000000.0,
+      "seeds": 2000,
+      "mean": 500000.0,
+      "variance": 0.0,
+      "analytic_mean": 500000.0,
+      "analytic_variance": 250000.0,
+      "conserved": 2000,
+      "whole_daughters": 2000,
+      "distinct_values": 1
+    },
+    "resource_checkpoint": {
+      "contributes_to_verdict": false,
+      "as_declared": {
+        "ready": false,
+        "why": "cannot pay for the division: factor 0.3 of what it costs"
+      },
+      "pools_x1000": {
+        "ready": true,
+        "why": "ready"
+      },
+      "unaffordable": {
+        "ready": false,
+        "why": "cannot pay for the division: factor 1e-10 of what it costs"
+      },
+      "discriminates": true,
+      "finding": "the program declares \u00a75.2's own example, `event divide { cost: ATP 1e10 }`, against \u00a75.1's own ATP pool of 3e9, so the resource checkpoint refuses every division: one division costs more ATP than the cell holds. That is not a bug in either number. A pool is a standing stock and a division cost is a draw over a whole cycle, and nothing in the engine converts between them: `regenerates` takes a rate, this pool declares none (`from Glycolysis, OXPHOS`), and `Economy` never integrates a rate over an interval. So the resource form of \u00a78's checkpoint is only askable against a standing stock today, and is reported rather than scored. What would make it askable is stage 3, which is what supplies ATP over time"
+    },
+    "steady_state": {
+      "ratio_static": 40.0,
+      "ratio_dividing": 4.545454545454546,
+      "compression": 8.799999999999999
+    }
+  },
+  "clauses": {
+    "1_closed_form": true,
+    "2_dilution_only": true,
+    "3_dilution_separates_nothing": true,
+    "4_compression": true,
+    "5_conservation": true,
+    "6_binomial": true,
+    "7_equal_half_lives": true,
+    "8_checkpoint": true
+  },
+  "passed": true,
+  "separation_partitioned_decades": 9.392135864716213,
+  "separation_duplicating_decades": 9.392135864716213,
+  "dilution_contributes_decades": 0.0,
+  "resource_checkpoint_excluded": "the program declares \u00a75.2's own example, `event divide { cost: ATP 1e10 }`, against \u00a75.1's own ATP pool of 3e9, so the resource checkpoint refuses every division: one division costs more ATP than the cell holds. That is not a bug in either number. A pool is a standing stock and a division cost is a draw over a whole cycle, and nothing in the engine converts between them: `regenerates` takes a rate, this pool declares none (`from Glycolysis, OXPHOS`), and `Economy` never integrates a rate over an interval. So the resource form of \u00a78's checkpoint is only askable against a standing stock today, and is reported rather than scored. What would make it askable is stage 3, which is what supplies ATP over time",
+  "measured_turnover": "not askable: this project holds no protein turnover table, so no clause compares these declared half-lives with a measurement (registered)",
+  "gate_as_worded": "REFUTED, as registered before the run: dilution contributes 0.0e+00 decades of the 9.392136 that separate a stable protein from a short-lived one, and in a steady state division compresses the separation 8.80-fold. What separates them is turnover, which separates them just as well in a cell that never divides",
+  "verdict": "stage 4's mechanism passes all eight registered clauses. \u00a78's gate as worded is not passed by them and cannot be: it is answered with a negative, derived before the run",
+  "seconds": 0.05,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "no external dataset",
+        "version": "n/a: the half-lives are declared by data/demo/stage4_division.bio, not measured; \u00a710 decision 6 is open"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": null
+      },
+      {
+        "path": "genomeos/runtime/division.py",
+        "sha256": "f95adfd46a9a9e85386ea7b893199fdb267872afa6ab2da8d76ccbe91f193321",
+        "bytes": 12811,
+        "partition": null
+      },
+      {
+        "path": "genomeos/runtime/division_gate.py",
+        "sha256": "ac6419a989bfd2be8bd830af37db8f49606e92eac2f921ae1f80604e9d03ed86",
+        "bytes": 12306,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: no genomic coordinate is read",
+    "coordinates": "n/a: no genomic coordinate is read",
+    "parameters": {
+      "divisions": 8,
+      "interval_h": 24.0,
+      "stable_half_life_h": 240.0,
+      "short_half_life_h": 6.0,
+      "start_amount": 1000000.0,
+      "low_copies": 20,
+      "seeds": 2000,
+      "closed_form_rtol": 1e-09,
+      "binomial_mean_tol": 0.25,
+      "binomial_var_rtol": 0.15
+    },
+    "exclusions": [
+      "the resource form of the checkpoint: measured and reported, excluded from the verdict because the registration's clause 8 is the `when` form alone",
+      "any comparison with a measured protein turnover set: registered as not askable"
+    ],
+    "partitions": "n/a: nothing is fitted, so there is nothing to hold out",
+    "code": {
+      "git_sha": "d3f51f0fc0e3ec9b2601cd732d1aaec28b31e489",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/ir/model.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/parser.py",
+        "scripts/bridge_audit.py",
+        "scripts/node_independence_audit.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/division_gate.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

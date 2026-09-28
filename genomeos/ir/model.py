@@ -234,9 +234,22 @@ class Effect:
     unit: str = ""
 
 
+#: v0.4 §8 stage 4: what a division does to the contents of the cell that divides.
+#: `duplicate` is the behaviour every program had before stage 4 and stays the default, so no
+#: program changes by being reparsed; `contents` partitions, binomially below the regime threshold
+#: and by exact halves above it; `binomial` partitions stochastically whatever the amount.
+PARTITION_MODES = ("duplicate", "contents", "binomial")
+
+
 @dataclass(slots=True)
 class Event:
-    """A discrete event (divide, differentiate, die, ...) with a rate, guards and effects."""
+    """A discrete event (divide, differentiate, die, ...) with a rate, guards and effects.
+
+    `partition` is stage 4's one new key, and it is a claim about the cell rather than a switch:
+    a cell that divides its contents has half of each of them afterwards, and one that duplicates
+    them makes matter out of nothing. The default is `duplicate` because that is what the runtime
+    did before stage 4 existed, and changing it silently would move results nobody re-ran.
+    """
 
     id: str
     rate: float = 0.0
@@ -244,6 +257,7 @@ class Event:
     when: dict[str, str] = field(default_factory=dict)
     effects: list[Effect] = field(default_factory=list)
     costs: list[Cost] = field(default_factory=list)  # v0.4 §5.2: what the event spends
+    partition: str = "duplicate"  # v0.4 §8 stage 4; one of PARTITION_MODES
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
 
@@ -1071,6 +1085,7 @@ __all__ = [
     "COST_UNITS",
     "DECISION_ACTIONS",
     "MOLAR_UNITS",
+    "PARTITION_MODES",
     "REGIME_ALLOCATIONS",
     "REGIME_FATES",
     "REGIME_RECHECKS",
