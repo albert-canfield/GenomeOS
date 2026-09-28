@@ -3763,7 +3763,7 @@ def cmd_predict(args: argparse.Namespace) -> int:
                             "tissue": e.tissue,
                             "log2_fold_change": round(e.log2_fold_change, 4),
                             "direction": getattr(e.direction, "value", str(e.direction)),
-                            "confidence": round(e.confidence, 3),
+                            "certainty": e.certainty.to_dict(),
                         }
                         for e in effects
                     ],
@@ -3773,6 +3773,7 @@ def cmd_predict(args: argparse.Namespace) -> int:
         )
         return 0
     print(f"{chrom}:{pos} {ref}>{alt}: {len(effects)} predicted tissue effects [predicted, {st['model']}]")
+    print("  each an effect in log2 fold change, not a confidence; probability unavailable (no calibration)")
     if scan:
         print(
             f"  scanned {scan['genes']} genes in the 1 Mb window across {scan['tracks']} RNA-seq tracks; "
@@ -3781,8 +3782,7 @@ def cmd_predict(args: argparse.Namespace) -> int:
     for e in effects[: args.top]:
         d = getattr(e.direction, "value", str(e.direction))
         print(
-            f"  {e.gene:12} {e.tissue[:44]:44} log2FC {e.log2_fold_change:+.2f}  {d:9} "
-            f"confidence {e.confidence:.2f}"
+            f"  {e.gene:12} {e.tissue[:44]:44} log2FC {e.log2_fold_change:+.2f}  {d}",
         )
     if len(effects) > args.top:
         print(f"  … {len(effects) - args.top} more (--top N or --json)")

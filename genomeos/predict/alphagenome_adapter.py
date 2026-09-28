@@ -5,8 +5,12 @@ needs ALPHAGENOME_API_KEY (free, non-commercial). Without a key the adapter
 still works with an injected `scorer` callable, which is how the tests run.
 
 Output is always BioIR: each predicted tissue effect becomes a Rule with
-evidence kind `predicted`, the model name as source, and confidence derived
-from the effect magnitude. Nothing here is ever labelled experimental.
+evidence kind `predicted`, the model name as source, and no confidence: since
+review R4 (R4f, 2026-09-28) an effect carries its log2 fold change in its unit
+and a `genomeos.certainty.Certainty` record (model score = |log2 fold change|,
+named; probability None with its reason). The size of a predicted effect is not
+how sure anyone is, so nothing here converts it into a certainty. Nothing here
+is ever labelled experimental.
 """
 
 from __future__ import annotations
@@ -16,7 +20,9 @@ import os
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from genomeos.certainty import Certainty
 from genomeos.ir import Action, Entity, Evidence, EvidenceKind, Module, Rule
+from genomeos.ir.model import UNSTATED
 
 MODEL_NAME = "AlphaGenome (google-deepmind/alphagenome 0.9)"
 KEY_VAR = "ALPHAGENOME_API_KEY"
@@ -27,7 +33,17 @@ HOW_TO_ENABLE = (
 )
 LICENCE_NOTE = (
     "AlphaGenome is free for non-commercial use under Google DeepMind's terms; its predictions enter "
-    "GenomeOS only as `predicted` evidence capped at confidence 0.7, and nothing in the core depends on it"
+    "GenomeOS only as `predicted` evidence, each effect with its unit and no probability, and nothing in the"
+    " core depends on it"
+)
+EFFECT_UNIT = (
+    "log2 fold change of the gene's predicted RNA-seq expression, alternate allele over reference"
+    " (AlphaGenome RNA_SEQ variant scorer, one track)"
+)
+MODEL_SCORE_NAME = "|log2 fold change| on that track: the magnitude effects are sorted by, not a probability"
+NO_PROBABILITY = (
+    "no calibration record: no predicted variant effect has been scored against a measured outcome"
+    " population by a stated method, so no probability that this variant moves this gene is quoted"
 )
 
 # What the key enables. Every feature is always listed; without the key it is loaded but disabled.
@@ -76,9 +92,19 @@ class PredictedEffect:
         return Action.ACTIVATE if self.log2_fold_change > 0 else Action.INHIBIT
 
     @property
-    def confidence(self) -> float:
-        """Magnitude-based confidence, capped at 0.7 because it is a prediction."""
-        return min(0.7, 0.2 + abs(self.log2_fold_change) * 0.25)
+    def certainty(self) -> Certainty:
+        """What the effect rests on (R4f): the effect in its unit, the score named, no probability.
+        Only the effect and the score depend on the magnitude; nothing converts either into a
+        certainty. It replaces `confidence = min(0.7, 0.2 + 0.25 |log2FC|)`."""
+        return Certainty(
+            evidence_category=f"predicted: {MODEL_NAME}, one model run",
+            effect_estimate=self.log2_fold_change,
+            effect_unit=EFFECT_UNIT,
+            uncertainty_note="one deterministic model run; no spread computed",
+            model_score=abs(self.log2_fold_change),
+            model_score_name=MODEL_SCORE_NAME,
+            probability_unavailable=NO_PROBABILITY,
+        )
 
 
 def _dotenv_key(name: str, path: str = ".env") -> str | None:
@@ -200,9 +226,11 @@ class AlphaGenomeAdapter:
                     strength=min(1.0, abs(e.log2_fold_change)),
                     when={"tissue": e.tissue},
                     evidence=Evidence(
-                        EvidenceKind.PREDICTED, MODEL_NAME, note=f"log2FC={e.log2_fold_change:+.3f}"
+                        EvidenceKind.PREDICTED,
+                        MODEL_NAME,
+                        note=f"log2FC={e.log2_fold_change:+.3f}, probability unavailable",
                     ),
-                    confidence=e.confidence,
+                    confidence=UNSTATED,  # R4f: an effect's size is not a confidence; none is stated
                 )
             )
         return m

@@ -3,6 +3,7 @@ import os
 import pytest
 
 from genomeos.ir import Action, EvidenceKind
+from genomeos.ir.model import confidence_stated
 from genomeos.predict import AlphaGenomeAdapter
 
 
@@ -17,10 +18,10 @@ def test_adapter_emits_predicted_rules_only():
     m = ad.to_module("chr21", 25897620, "C", "T", effects)
     assert len(m.rules) == 3
     assert all(r.evidence.kind is EvidenceKind.PREDICTED for r in m.rules)
-    assert all(r.confidence <= 0.7 for r in m.rules)
+    # R4f: a predicted rule states no confidence, whatever the size of its effect
+    assert all(not confidence_stated(r.confidence) for r in m.rules)
     brain = next(r for r in m.rules if r.when == {"tissue": "brain"} and r.target == "APP")
-    assert brain.action is Action.INHIBIT and brain.confidence > 0.35
-    assert m.confidence_report()["rule"] < 0.7
+    assert brain.action is Action.INHIBIT and "probability unavailable" in brain.evidence.note
 
 
 @pytest.mark.skipif(

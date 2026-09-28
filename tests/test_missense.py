@@ -88,4 +88,7 @@ def test_annotate_reranks_by_effect_and_counts_classes():
         "unscored": 1,
     }
     assert out["missense_likely_pathogenic_homozygous"] == 1
-    assert missense[0]["predicted"]["confidence"] == 0.7 and missense[2]["predicted"] is None
+    # R4f: no confidence is written; the score is named in a certainty record with no probability
+    pr = missense[0]["predicted"]
+    assert "confidence" not in pr and missense[2]["predicted"] is None
+    assert pr["certainty"]["model_score"] == pr["score"] and pr["certainty"]["probability"] is None

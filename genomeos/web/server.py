@@ -1799,7 +1799,7 @@ class Api:
                     "tissue": e.tissue,
                     "log2_fold_change": round(e.log2_fold_change, 4),
                     "direction": getattr(e.direction, "value", str(e.direction)),
-                    "confidence": round(e.confidence, 3),
+                    "certainty": e.certainty.to_dict(),
                 }
                 for e in effects
             ],
