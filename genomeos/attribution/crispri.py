@@ -227,6 +227,13 @@ class Pair:
     contact: dict[str, Any] | None = None
     weight: float = 1.0  # the benchmark's probability that the pair's effect is direct
     category: str = ""  # the benchmark's elementChromatinCategory of the tested element
+    # the benchmark's five power columns (PowerAtEffectSize10..50), as measured.CrispriPair carries
+    # them: None where a table lacks the column or leaves it empty. Carried, read by no scorer.
+    power_at_effect_size_10: float | None = None
+    power_at_effect_size_15: float | None = None
+    power_at_effect_size_20: float | None = None
+    power_at_effect_size_25: float | None = None
+    power_at_effect_size_50: float | None = None
 
     @property
     def element(self) -> tuple[str, str, int, int]:
@@ -255,6 +262,16 @@ def _weight(value: str | None) -> float:
         return 1.0
 
 
+def _power(value: str | None) -> float | None:
+    """A power column's value; None for an absent, empty or NA cell, never a made-up zero."""
+    if value in (None, "", "NA"):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 def parse(lines: Any) -> list[Pair]:
     """Valid pairs of one benchmark table; pairs flagged as promoter or exon overlaps are dropped."""
     out = []
@@ -276,6 +293,11 @@ def parse(lines: Any) -> list[Pair]:
                 tss=int(r["startTSS"]) if r.get("startTSS") else None,
                 weight=_weight(r.get("direct_vs_indirect_negative")),
                 category=r.get("elementChromatinCategory") or "",
+                power_at_effect_size_10=_power(r.get("PowerAtEffectSize10")),
+                power_at_effect_size_15=_power(r.get("PowerAtEffectSize15")),
+                power_at_effect_size_20=_power(r.get("PowerAtEffectSize20")),
+                power_at_effect_size_25=_power(r.get("PowerAtEffectSize25")),
+                power_at_effect_size_50=_power(r.get("PowerAtEffectSize50")),
             )
         )
     return out

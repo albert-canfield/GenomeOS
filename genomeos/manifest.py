@@ -14,6 +14,7 @@ A manifest is a dict kept under the result's `result_manifest` key (26 older res
     assembly     "GRCh38", or "n/a: <why>"
     coordinates  {base: 0 | 1, interval: "half-open" | "closed"}, or "n/a: <why>"
     code         {git_sha, dirty, dirty_code_paths, argv}   filled in by the writer, never by the caller
+                 (and dirty_result_paths: results that differ from the commit, which are output, not code)
     parameters   {name: value}                  every knob that changes the numbers
     exclusions   [str | dict]                   what was dropped and why; [] says nothing was
     partitions   {name: description}, or "n/a: <why>"   the evaluation partitions the result reports
@@ -66,18 +67,29 @@ def _git(root: Path, *args: str) -> str | None:
     return out.stdout
 
 
+#: tracked paths that hold results, not code: a result an earlier writer rewrote in the same checkout
+#: is output, so it is recorded under `dirty_result_paths` and does not make the code dirty.
+RESULT_PATHS = ("data/results/",)
+
+
 def code_revision(root: Path | None = None) -> dict[str, Any]:
     """The revision of the code that wrote a result. `dirty` counts tracked files that differ from
     the commit, because in a shared checkout the sha alone does not say what ran."""
+    # Since 2026-09-28 a modified file under data/results/ is not counted: a chain of writers in one
+    # checkout would otherwise mark every result after the first dirty with its predecessor's output.
+    # Those paths are recorded apart, under dirty_result_paths.
     root = root or Path.cwd()
     sha = _git(root, "rev-parse", "HEAD")
     status = _git(root, "status", "--porcelain", "--untracked-files=no")
     dirty_paths = sorted(line[3:] for line in (status or "").splitlines() if line.strip())
+    result_paths = [p for p in dirty_paths if p.startswith(RESULT_PATHS)]
+    dirty_paths = [p for p in dirty_paths if not p.startswith(RESULT_PATHS)]
     code_paths = [p for p in dirty_paths if p.startswith(("genomeos/", "scripts/"))]
     return {
         "git_sha": sha.strip() if sha else None,
         "dirty": bool(dirty_paths) if status is not None else None,
         "dirty_code_paths": code_paths,
+        "dirty_result_paths": result_paths,
         "argv": _argv(root),
         "python": sys.version.split()[0],
     }

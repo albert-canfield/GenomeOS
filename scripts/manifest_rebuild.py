@@ -17,6 +17,8 @@ rebuild with the reason:
    fresh`, offline) or the checkout's own (`--venv shared`);
 5. compare the rebuilt result with RESULT.json field by field, ignoring only `date` and the
    `code` block of the manifest (which records the run, not the result).
+   Since 2026-09-28 wall-clock timing keys are ignored too, at any depth (`seconds`, `*_seconds`,
+   `seconds_*`, `*_per_second`); the report lists their paths under `timing_fields_ignored`.
 """
 
 from __future__ import annotations
@@ -34,6 +36,35 @@ from genomeos import manifest as mf
 
 STORES = ("reference", "knowledge", "cache")
 IGNORED = ("date",)
+
+
+def is_timing(key: Any) -> bool:
+    """A wall-clock key: `seconds`, or a snake_case name with a `seconds` token or ending `per_second`.
+    `second` alone (an ordinal, as in second_endpoint) and `duration` (often biological) are compared."""
+    if not isinstance(key, str):
+        return False
+    tokens = key.lower().split("_")
+    return "seconds" in tokens or tokens[-2:] == ["per", "second"]
+
+
+def _strip_timing(x: Any) -> Any:
+    if isinstance(x, dict):
+        return {k: _strip_timing(v) for k, v in x.items() if not is_timing(k)}
+    if isinstance(x, list):
+        return [_strip_timing(v) for v in x]
+    return x
+
+
+def timing_paths(x: Any, where: str = "") -> list[str]:
+    """Every path at which comparable() drops a timing key."""
+    if isinstance(x, dict):
+        out = []
+        for k, v in x.items():
+            out.extend([f"{where}/{k}"] if is_timing(k) else timing_paths(v, f"{where}/{k}"))
+        return out
+    if isinstance(x, list):
+        return [p for i, v in enumerate(x) for p in timing_paths(v, f"{where}[{i}]")]
+    return []
 
 
 def diff(a: Any, b: Any, where: str = "") -> list[str]:
@@ -59,6 +90,7 @@ def comparable(payload: dict[str, Any]) -> dict[str, Any]:
     m.pop("code", None)
     if m:
         out[mf.KEY] = m
+    out = _strip_timing(out)
     return out
 
 
@@ -135,8 +167,10 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
         rebuilt = json.loads((wt / "data" / "results" / result.name).read_text())
         report["rebuilt_sha256"] = mf.sha256_of(written)[0]
         report["differences"] = diff(comparable(original), comparable(rebuilt))
+        report["timing_fields_ignored"] = sorted(set(timing_paths(original)) | set(timing_paths(rebuilt)))
         report["fields_compared"] = len(comparable(original))
         # despite its name this key compares fields (date and the code block ignored); the next is bytes
+        # (timing keys are ignored as well, and listed in timing_fields_ignored)
         report["identical_bytes_except_date_and_run"] = not report["differences"]
         report["identical_bytes"] = written.read_bytes() == result.read_bytes()
         return {**report, "rebuilt": True}
