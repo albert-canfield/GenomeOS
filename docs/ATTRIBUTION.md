@@ -8484,6 +8484,133 @@ and standardising on it rather than on TSS reach was not registered, so it is le
 up rather than computed after the fact. The clause's third part, scored against measurement, is
 untouched. Result: `data/results/clause2_reach_control.json`.
 
+## Pre-registration: a power simulation for the experiment clause 2 actually needs, and an equivalence decision taken before the contrasts are read (2026-09-28, lane-design)
+
+A statistical review of the four clause 2 lanes found five places where the notes claim more than the
+data carry, and the coordinator's corrections are in docs/ROADMAP.md beneath milestone 1.3. This lane
+takes the two that are matters of design rather than of wording -- the sample size and the equivalence
+claim -- and settles them with a simulation registered in advance. Script:
+`scripts/clause2_design_power.py`, whose `PRE_REGISTRATION` holds every grid and justification below;
+tests in `tests/test_clause2_design_power.py`. No simulated block had been drawn at the registered
+settings when this was committed. **Nothing here re-opens, weakens or restates a committed figure**,
+no new descriptive statistic about the blocks is computed, and the run makes **0 AlphaGenome
+requests**.
+
+**What is wrong with the number this replaces.** `clause2_measured_arm.coverage_needed` published
+`n_for_80_percent_power = 20` blocks and "19 short". Two separate faults, and they compound.
+
+1. Both inputs of that formula are **model output** used to size an experiment with a **measured**
+   endpoint. The effect is the model arm's own matched difference in how often a deletion model names
+   a target, and the dispersion is the standard deviation of the model arm's per-block differences.
+   Neither is an estimate of anything about measured regulation. They are named here so that they can
+   be excluded by name, and the script carries a test asserting that neither appears as a number in
+   it.
+2. The "19" that was reported is `MIN_BLOCKS - compared_now` = 20 - 1: the distance to
+   `measured.MIN_FOR_A_COMPARISON`, a **minimum-reporting floor**, which is a rule about when a number
+   may be printed. The power formula returned 20 as well, and the coincidence made a reporting rule
+   read as a power result.
+
+**The design being powered.** A CRISPRi screen (or an assay of equivalent power that names a gene)
+tests elements inside constrained-unknown blocks against protein-coding genes, and elements inside the
+same matched windows the four lanes drew. Per element the endpoint is the committed one: a significant
+change in a coding gene's expression on silencing, either sign. Per block it is 1 if at least one
+tested element is found to regulate a coding gene. The estimator and the reading rule are the
+committed ones, unchanged: the mean over compared blocks of (block endpoint) minus (share of that
+block's tested windows whose endpoint is 1), read as a detection when the 95% interval over blocks
+excludes 0.
+
+**The grids, each with what fixes it.**
+
+- **Window regulation rate.** The one empirical anchor the project holds: 30 of 223, 13.45%, with the
+  exact binomial interval 9.26% to 18.64% as the grid. Two independent anchors are reported beside it
+  and not pooled in: 12.15% of the 3,941 distinct tested elements of the benchmark's training file and
+  14.56% of the 1,697 of the held-out file have at least one significant pair. **A correction is
+  recorded here rather than left to be found**: the 223 and the 30 are *windows carrying a tested
+  element*, not tested elements, because they come from a count of windows; several windows of one
+  block can carry the same element, so those 223 are not 223 independent measurements and the exact
+  interval understates the uncertainty. The element-level anchors are the element-level ones.
+- **Block regulation rate.** Registered as a *ratio* to the window rate: 1.0 (the null the design must
+  be able to sit at), 0.75, 0.5, 0.25, 0.1, 0.0 (the clause's strongest form). **The model arm's
+  -27.25 points is not used**, here or anywhere: it is a difference in target-naming frequency, not an
+  estimate of a difference in measured regulation, and no published estimate of the latter exists,
+  which is why the answer is a range over this grid rather than a number.
+- **Assay sensitivity.** The means of the five power columns of the ENCODE benchmark files
+  (`PowerAtEffectSize10..50`), read from the tables rather than assumed, and reported by split because
+  the held-out file is better powered. The columns are not monotone in effect size -- the 25% column
+  is the benchmark's own inclusion filter and sits near 1 for nearly every pair -- so they are used as
+  five separate sensitivity levels and the non-monotonicity is reported rather than smoothed.
+- **False positive rate.** 0 (the benchmark controls its own) and 0.01 per tested element.
+- **Tested elements per block.** 1 (the minimum that makes a block testable, and what the three tested
+  blocks that exist today have), 2, and 6 (6.177, the scored elements per carrying block of the
+  matched control).
+- **Tested windows per block.** 1 (today's 223 windows over 134 blocks is about 1.7), 3, 10.
+- **Clustering.** Measured, not guessed. The one-way ANOVA estimator on the benchmark's 5,638 distinct
+  tested elements puts the intraclass correlation of "this element regulates a coding gene" at 0.375
+  within 25 kb, 0.350 within 50 kb, 0.300 within 100 kb, 0.273 within 250 kb and 0.209 within 1 Mb;
+  the same estimator with chromosomes as clusters gives 0.0142. The grids are 0, 0.21, 0.30, 0.35
+  within a block and 0, 0.014, 0.03 between chromosomes, and the script recomputes all of them at run
+  time.
+
+**How the two levels of clustering are handled, said plainly.** Elements within a block are a
+**hierarchical simulation**: each block, and each window separately, carries a logit-normal random
+intercept whose latent-scale variance is fixed from the registered ICC, and its elements are
+conditionally independent given it. Blocks within a chromosome are a **design effect** applied to the
+variance of the mean, `1 + (N / 24 - 1) * rho`, not simulated. That asymmetry is deliberate and is the
+conservative thing to be explicit about: the committed interval is a bootstrap over blocks, which
+assumes blocks independent, so wherever the chromosome ICC is above 0 the committed test is
+anti-conservative and the design effect is what says by how much.
+
+**Reference configuration and sweep.** The reference is the middle or the measured value of each grid:
+window rate 13.45%, sensitivity `PowerAtEffectSize20` pooled, no false positives, 6 elements per
+block, 3 tested windows per block, element ICC 0.30, chromosome ICC 0.014. The primary sweep is the
+block-rate ratio at that reference; the sensitivity analysis is one factor at a time. The grids are
+not fully crossed, because a range whose ends are combinations nobody would defend is not a range.
+
+**How the numbers are obtained.** For each configuration, 200,000 simulated blocks with their windows
+give the mean and standard deviation of the per-block difference; power at every sample size then
+follows from the normal approximation to the committed interval, with the chromosome design effect.
+That the approximation is safe is **checked and not assumed**: registered cells (ratio 0.5 and 0.25,
+at 20, 50 and 200 blocks, chromosome ICC set to 0 so the comparison is of the approximation alone) are
+also run with the actual percentile bootstrap, 2,000 resamples over 1,000 simulated experiments each.
+**Falsifier:** if the largest disagreement in power exceeds 0.05, the normal-approximation table is
+reported as unreliable and the bootstrap numbers are the ones read.
+
+**What is reported.** For every configuration the smallest sample size reaching 50%, 80% and 90%
+power, and across configurations the **range** at each ratio with the assumption at each end.
+Sample sizes are in *compared blocks*: blocks with a tested element in both arms. The
+minimum-reporting floor of 20 is applied as a floor on the answer and is **never** reported as a power
+result. At ratio 1.0 the two arms have the same true rate, so what the table calls power is the test's
+false-positive rate, and it is reported under its own name as the null calibration. Every number is a
+probability of detection under its configuration's assumptions, and the result says so in its own
+text: 80% power means failing to detect a real effect of the assumed size one time in five, and no
+sample size guarantees that an experiment decides clause 2.
+
+**Equivalence, decided before the contrasts are read.** The committed real-minus-neutral contrast is
+-0.10 points, 95% -4.55 to +4.30 (`names_a_coding_gene`, density-matched) and -0.71, -5.58 to +4.17
+element-count-matched. "The neutral tier behaves identically" is not what those intervals say. An
+equivalence claim needs a margin justified from **outside** these data, and the admissibility rule is
+fixed here before looking: a margin may come from a published threshold for a meaningful difference in
+regulatory annotation rate, from a stated decision cost, or from a requirement fixed elsewhere in this
+project before this comparison. The project's own five-point chance band is **inadmissible**, because
+it was chosen in d717b28 for this very comparison. If no admissible margin exists, **no equivalence
+test is run** and the finding is stated as "no difference detected". The script then reports, labelled
+as a description and never as a margin, the smallest margin at which a two-one-sided test on the
+committed interval would pass -- a statement about what the data would need, not about what anyone has
+justified.
+
+**The denominator table.** Every population the four lanes count over, each count with its denominator
+and the rule that produced it, read from the committed result files rather than retyped, including the
+overlap-rule sensitivity at 0.25, 0.5 and 0.75 and the two shares that share a numerator (59 of 882
+tier blocks, 6.7%; 59 of the 531 carrying blocks, 11.1%).
+
+**Registered honestly about its own history.** The script was executed once at non-registered settings
+(2,000 simulated blocks, 20 check experiments) as a code check before this commit, and one reported
+quantity was added afterwards: the null calibration described above. No grid, threshold, reference
+value, reading or falsifier was changed after any output was seen.
+
+**Cost.** 0 AlphaGenome requests. The model is not called; the per-element response cache is never
+opened; the committed result files are read and never rewritten.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
