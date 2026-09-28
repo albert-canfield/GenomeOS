@@ -348,6 +348,7 @@ def test_the_class_and_the_score_describe_the_product_and_not_the_gene():
     )
 
 
+@needs_caches
 def test_a_five_prime_partner_keeps_its_own_ectodomain():
     """The rule is about which end the gene contributes, not about fusions.
 
