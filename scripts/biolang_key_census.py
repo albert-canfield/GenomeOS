@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Which `key: value` lines in the repo's BioLang programs name a key their block does not read.
 
 Before this census the parser stored every key it was given and read only the ones it knew, so a

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Which `when` values on rules and events use a construct the old equality test could not match.
 
 Decisions and timers read `when` with `genomeos.ir.model.matches`, which knows `any`, `unknown`,
