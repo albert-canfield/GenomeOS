@@ -124,12 +124,12 @@ CATALOG: dict[str, dict] = {
 
 CATALOG["budget_genome_wide"] = {
     "argv": [sys.executable, "scripts/budget_genome_wide.py"],
-    "describe": "The 98%: Zoonomia constraint over every UNKNOWN block and a best guess per block.",
+    "describe": "The 98%: Zoonomia constraint over every UNKNOWN block and a tier per block.",
     "total": 24,
     "result": None,
     "count": None,
-    "progress": lambda root: len(list((root / "data" / "results").glob("budget_chr*.json"))),
-    "complete": lambda root: len(list((root / "data" / "results").glob("budget_chr*.json"))) >= 24,
+    "progress": lambda root: len(list((root / "data" / "results").glob("budget_axes_chr*.json"))),
+    "complete": lambda root: len(list((root / "data" / "results").glob("budget_axes_chr*.json"))) >= 24,
     "auto_heal": True,
 }
 

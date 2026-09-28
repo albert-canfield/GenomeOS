@@ -1973,7 +1973,10 @@ def build(
     say = progress or (lambda *a: None)
     t0 = time.time()
     panel = Panel(cache / chrom)
-    budget = load_result(f"budget_{chrom}", results_dir) or {}
+    from genomeos.attribution.budget import read_axes
+
+    # the one budget reader; blocks join on legacy_tier, the stored key TIERS and every result here use
+    budget = read_axes(chrom, results_dir) or {}
     variation = load_result(f"variation_{chrom}", results_dir) or {}
     duplication = load_result(f"duplication_{chrom}", results_dir) or {}
     length = budget.get("chromosome_length") or panel.block_end[-1]
@@ -2039,7 +2042,7 @@ def build(
                 "end": b["end"],
                 "length": b["length"],
                 "sequence_class": b["class"],
-                "tier": b["guess"]["tier"],
+                "tier": b["guess"]["legacy_tier"],
                 "mammal_fraction": (b.get("phylop") or {}).get("fraction_above"),
                 "gnocchi_case": (v.get("case") or {}).get("case") or "unmeasured",
                 "human_fraction": (v.get("gnocchi") or {}).get("fraction_above"),
@@ -2058,7 +2061,7 @@ def build(
         gene_rows.append(row)
     pooled = {}
     for name, ivs in [("cds", cds_all)] + [
-        (t, [(b["start"], b["end"]) for b in blocks if b["guess"]["tier"] == t]) for t in TIERS
+        (t, [(b["start"], b["end"]) for b in blocks if b["guess"]["legacy_tier"] == t]) for t in TIERS
     ]:
         if not ivs:
             continue
@@ -2099,7 +2102,9 @@ def build(
     # -- matched control windows for every callable block --------------------------------------
     say("matched windows")
     rng = random.Random(SEED)
-    forbidden = cds_all + [(b["start"], b["end"]) for b in blocks if b["guess"]["tier"] == "structural"]
+    forbidden = cds_all + [
+        (b["start"], b["end"]) for b in blocks if b["guess"]["legacy_tier"] == "structural"
+    ]
     matched_by_tier: dict[str, Counter] = {t: Counter() for t in TIERS}
     matched_cds: Counter = Counter()
     for r in block_rows:
@@ -2152,7 +2157,7 @@ def build(
     for i, b in enumerate(blocks):
         if b["class"] == "gap":
             continue
-        units += unit_rows_for(b["guess"]["tier"], tile([(b["start"], b["end"])], width), i)
+        units += unit_rows_for(b["guess"]["legacy_tier"], tile([(b["start"], b["end"])], width), i)
     unknown_ivs = merge_intervals([(b["start"], b["end"]) for b in blocks])
     background_pieces = []
     cds_starts = [s for s, _ in cds_all]

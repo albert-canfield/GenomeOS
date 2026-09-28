@@ -1390,16 +1390,29 @@ def cmd_cancer(args: argparse.Namespace) -> int:
     return 0
 
 
+def _tier_name(tier: str | None) -> str | None:
+    """A budget tier as a person reads it: the R7 name, whatever key the result stored."""
+    from genomeos.attribution.budget import tier_name
+
+    return tier_name(tier)
+
+
 def _pct(x: float | None, digits: int = 1) -> str:
     return f"{x:.{digits}%}" if x is not None else ""
 
 
 def cmd_budget(args: argparse.Namespace) -> int:
-    """The 98%: every UNKNOWN block with constraint attached and a best guess (docs/ATTRIBUTION.md)."""
+    """The 98%: every UNKNOWN block with constraint attached and a tier (docs/ATTRIBUTION.md)."""
     import time
 
-    from genomeos.attribution.budget import TIERS, distil, run_and_save
-    from genomeos.results import load_result, save_result
+    from genomeos.attribution.budget import (
+        AXES_NAME,
+        AXES_TIERS,
+        distil,
+        read_axes,
+        read_axes_genome_wide,
+        run_and_save,
+    )
 
     if args.chrom and args.bio:
         from genomeos.attribution.compile import compile_chromosome, write_program
@@ -1411,7 +1424,7 @@ def cmd_budget(args: argparse.Namespace) -> int:
             print(compile_chromosome(args.chrom), end="")
         return 0
     if args.chrom:
-        out = load_result(f"budget_{args.chrom}") if args.cached else None
+        out = read_axes(args.chrom) if args.cached else None
         if out is None:
             last = [0.0]
 
@@ -1469,18 +1482,19 @@ def cmd_budget(args: argparse.Namespace) -> int:
             )
         print(
             "  [phyloP: Zoonomia 241 mammals, read per base from UCSC, never stored; elements: 100"
-            " vertebrates; a tier is a best guess with its confidence, not a verdict]"
+            " vertebrates; a tier reads sequence class and constraint, not a verdict; constraint is"
+            " evidence of selection only, and its absence is not evidence of no function]"
         )
         return 0
-    s = distil()
+    # the R7 sum scripts/budget_axes.py writes with its manifest; summed here when it is missing
+    s = read_axes_genome_wide() or distil(name=AXES_NAME, tiers=AXES_TIERS)
     if not s["chromosomes"]:
-        print("no budget_chr*.json yet: genomeos budget --chrom chr21, or the budget_genome_wide job")
+        print("no budget_axes_chr*.json yet: genomeos budget --chrom chr21, or scripts/budget_axes.py")
         return 1
-    save_result("budget_genome_wide", s)
     print(
         f"{s['chromosomes']} chromosomes: {s['unknown_bp'] / 1e6:.0f} Mb of UNKNOWN blocks in "
         f"{s['genome_bp'] / 1e6:.0f} Mb; constrained {s['constrained_fraction']:.2%} of measured bases; "
-        f"a guess at confidence >= 0.5 on {s['guessed_fraction']:.1%}"
+        f"an evidence-quality score >= 0.5 (not a probability) on {s['guessed_fraction']:.1%}"
     )
     rows = [
         {
@@ -1492,7 +1506,7 @@ def cmd_budget(args: argparse.Namespace) -> int:
             "constrained Mb": f"{v['constrained_bp'] / 1e6:.2f}",
         }
         for t, v in s["by_tier"].items()
-        if t in TIERS
+        if t in AXES_TIERS
     ]
     print(_table(rows, ["tier", "blocks", "Mb", "of UNKNOWN", "of genome", "constrained Mb"]))
     rows = [
@@ -1726,7 +1740,7 @@ def cmd_duplications(args: argparse.Namespace) -> int:
             _table(
                 [
                     {
-                        "tier": t,
+                        "tier": _tier_name(t),
                         "blocks": v["blocks"],
                         "Mb": f"{v['bp'] / 1e6:.2f}",
                         "duplicated": _pct(v["duplicated_fraction"]),
@@ -1759,7 +1773,7 @@ def cmd_duplications(args: argparse.Namespace) -> int:
                     {
                         "locus": f"{args.chrom}:{b['start']:,}-{b['end']:,}",
                         "kb": f"{(b['end'] - b['start']) / 1e3:.0f}",
-                        "tier": b["tier"],
+                        "tier": _tier_name(b["tier"]),
                         "duplicated": _pct(b["duplicated_fraction"]),
                         "pairs": b["pairs"],
                         "partner": b["partners"][0] if b["partners"] else "",
@@ -2005,7 +2019,7 @@ def cmd_variation(args: argparse.Namespace) -> int:
         cases = v.get("cases", {})
         rows.append(
             {
-                "tier": tier,
+                "tier": _tier_name(tier),
                 "blocks": v["blocks"],
                 "Mb": f"{v['bp'] / 1e6:.2f}",
                 "human-constrained": _pct(v["human_constrained_fraction"]),
@@ -2019,7 +2033,9 @@ def cmd_variation(args: argparse.Namespace) -> int:
             f"  controls: canonical coding segments {_pct(ctrl['canonical_cds']['fraction_above'])} of "
             f"kilobases constrained among people, introns "
             f"{_pct(ctrl['canonical_introns']['fraction_above'])}, "
-            + ", ".join(f"{t} {_pct(f)}" for t, f in ctrl["unknown_by_tier"].items() if f is not None)
+            + ", ".join(
+                f"{_tier_name(t)} {_pct(f)}" for t, f in ctrl["unknown_by_tier"].items() if f is not None
+            )
         )
     ec = r["by_element_case"]["by_case"]
     print(
@@ -2051,7 +2067,7 @@ def cmd_variation(args: argparse.Namespace) -> int:
                     {
                         "locus": f"{args.chrom}:{b['start']:,}-{b['end']:,}",
                         "kb": f"{b['length'] / 1e3:.0f}",
-                        "tier": b["tier"],
+                        "tier": _tier_name(b["tier"]),
                         "mammals": _pct(b["mammal_fraction"]),
                         "people": _pct(b["gnocchi"]["fraction_above"]),
                         "max Z": b["gnocchi"]["maximum"],
@@ -2084,7 +2100,7 @@ def cmd_organise(args: argparse.Namespace) -> int:
         )
         rows = [
             {
-                "tier": t,
+                "tier": _tier_name(t),
                 "blocks": v["blocks"],
                 "copies": v["copies"],
                 "after copies": v["blocks"] - v["copies"],
@@ -2123,7 +2139,7 @@ def cmd_organise(args: argparse.Namespace) -> int:
     )
     rows = [
         {
-            "tier": t,
+            "tier": _tier_name(t),
             "blocks": v["blocks"],
             "copies": v["copies"],
             "after copies": v["after_copies"],
@@ -2176,7 +2192,7 @@ def cmd_organise(args: argparse.Namespace) -> int:
                 [
                     {
                         "block": f"{r['start']:,}-{r['end']:,}",
-                        "tier": r["tier"],
+                        "tier": _tier_name(r["tier"]),
                         "copy": "copy" if r["copy"] else "",
                         "case": r["case"] or "",
                         "elements": r["attributed_elements"] or "",
@@ -2981,9 +2997,9 @@ def cmd_epigenome(args: argparse.Namespace) -> int:
         return 0
     cells = args.cell_type or list(ep.CELL_TYPES)
     if args.action == "summary":
+        from genomeos.attribution.budget import read_axes
         from genomeos.genome import Annotation, default_gencode
         from genomeos.genome.regulatory import load_ccres
-        from genomeos.results import load_result
 
         gff = default_gencode({args.chrom})
         if not gff:
@@ -2996,7 +3012,7 @@ def cmd_epigenome(args: argparse.Namespace) -> int:
             args.chrom,
             ann,
             load_ccres(args.chrom),
-            budget=load_result(f"budget_{args.chrom}"),
+            budget=read_axes(args.chrom),
             cell_types=cells,
         )
         p = save_result(f"epigenome_{args.chrom}", s)
@@ -5020,9 +5036,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--save")
     p.set_defaults(fn=cmd_unknown)
 
-    p = sub.add_parser(
-        "budget", help="the 98%%: every UNKNOWN block with constraint attached and a best guess"
-    )
+    p = sub.add_parser("budget", help="the 98%%: every UNKNOWN block with constraint attached and a tier")
     p.add_argument("--chrom", help="one chromosome (reads Zoonomia phyloP over its blocks); omit: the genome")
     p.add_argument(
         "--threshold", type=float, default=2.27, help="phyloP for a constrained base (Zoonomia 5%% FDR)"

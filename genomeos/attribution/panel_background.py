@@ -282,7 +282,9 @@ def rebuild(chrom: str, cache: Path = CACHE, results_dir: Path | None = None) ->
     results_dir = results_dir or RESULTS_DIR
     panel = Panel(cache / chrom)
     committed = load_result(f"human_panel_{chrom}", results_dir) or {}
-    budget = load_result(f"budget_{chrom}", results_dir) or {}
+    from genomeos.attribution.budget import read_axes
+
+    budget = read_axes(chrom, results_dir) or {}
     length = budget.get("chromosome_length") or panel.block_end[-1]
     evs = events(panel, [(0, length)])
     rt_path = cache / chrom / "replication_timing.json"

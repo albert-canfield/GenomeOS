@@ -31,6 +31,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
+from genomeos.attribution.budget import read_axes
 from genomeos.attribution.human_panel import CACHE, TIERS
 from genomeos.attribution.panel_background import reads_explained
 from genomeos.attribution.panel_leftover import (
@@ -84,7 +85,7 @@ def chromosomes(results_dir: Path = RESULTS_DIR, cache: Path = CACHE) -> list[st
     out = []
     for p in sorted(glob.glob(str(results_dir / "human_panel_chr*.json"))):
         c = Path(p).stem.split("_")[-1]
-        if (cache / c / "meta.json").exists() and (results_dir / f"budget_{c}.json").exists():
+        if (cache / c / "meta.json").exists() and read_axes(c, results_dir):
             out.append(c)
     # smallest store first: a long run that has to be stopped has read the cheap chromosomes already
     return sorted(out, key=lambda c: (cache / c / "sites.tsv.gz").stat().st_size)

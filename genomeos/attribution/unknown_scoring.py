@@ -86,11 +86,10 @@ def scored_elements(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[st
 
 def unknown_blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
     """The UNKNOWN blocks with their tier, their mammalian constraint and their case on the two axes."""
+    from genomeos.attribution.budget import read_axes
+
     unknown = load_result(f"unknown_{chrom}", results_dir) or {}
-    budget = {
-        (b["start"], b["end"]): b
-        for b in (load_result(f"budget_{chrom}", results_dir) or {}).get("blocks", [])
-    }
+    budget = {(b["start"], b["end"]): b for b in (read_axes(chrom, results_dir) or {}).get("blocks", [])}
     var = {
         (b["start"], b["end"]): b
         for b in (load_result(f"variation_{chrom}", results_dir) or {}).get("blocks", [])
@@ -105,7 +104,7 @@ def unknown_blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str
                 "end": b["end"],
                 "length": b["length"],
                 "class": b["class"],
-                "tier": (bu.get("guess") or {}).get("tier"),
+                "tier": (bu.get("guess") or {}).get("legacy_tier"),  # the stored key this result keeps
                 "mammal_fraction": (bu.get("phylop") or {}).get("fraction_above"),
                 "case": (v.get("case") or {}).get("case"),
                 "human_fraction": (v.get("gnocchi") or {}).get("fraction_above"),

@@ -5,6 +5,8 @@ The coding genome is decoded and the rest is classified by sequence class
 (``genomeos.genome.unknown``). This package attaches *evidence about function* to
 those blocks, starting with evolutionary constraint (Zoonomia phyloP over 241
 mammals and the 100-vertebrate conserved elements), and turns the class plus the
-evidence into a best guess with a confidence: structural, fossil, regulatory,
-constrained-unknown or neutral. docs/ATTRIBUTION.md is the design document.
+evidence into a tier with an evidence-quality score: structural, repeat_unconstrained,
+regulatory, constrained_unknown or unconstrained_unknown. Constraint is evidence of
+selection only; its absence is not evidence of no function. docs/ATTRIBUTION.md is the
+design document.
 """

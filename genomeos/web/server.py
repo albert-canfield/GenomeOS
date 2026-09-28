@@ -1438,27 +1438,32 @@ class Api:
     def budget_wide(self) -> dict:
         """The 98%: every chromosome's composition budget (tiers, constraint) and the job's state."""
         from genomeos import jobs
-        from genomeos.attribution.budget import PHYLOP_THRESHOLD, TIERS
+        from genomeos.attribution.budget import AXES_TIERS, PHYLOP_THRESHOLD, read_axes
 
         rd = self.root / "data" / "results"
         cache = getattr(self, "_budget_cache", None)
         if cache is None:
             cache = self._budget_cache = {}
         rows = []
-        tiers = dict.fromkeys(TIERS, 0)
+        tiers = dict.fromkeys(AXES_TIERS, 0)
         unknown_bp = constrained = measured = genome = 0
 
         def order(q: Path) -> tuple[int, str]:
             c = q.stem.split("_chr")[-1]
             return (int(c), "") if c.isdigit() else (100, c)
 
-        for path in sorted(rd.glob("budget_chr*.json"), key=order):
-            key = (str(path), path.stat().st_mtime)
+        # every chromosome with a budget, read through the one reader under the R7 tier names
+        paths = {p.stem.split("_")[-1]: p for p in rd.glob("budget_chr*.json")}
+        paths.update({p.stem.split("_")[-1]: p for p in rd.glob("budget_axes_chr*.json")})
+        for path in sorted(paths.values(), key=order):
+            chrom = path.stem.split("_")[-1]
+            stored = rd / f"budget_{chrom}.json"
+            key = (str(path), path.stat().st_mtime, stored.stat().st_mtime if stored.exists() else None)
             row = cache.get(key)
             if row is None:
                 try:
-                    r = json.loads(path.read_text())
-                except (OSError, json.JSONDecodeError):
+                    r = read_axes(chrom, rd) or {}
+                except (OSError, ValueError):
                     continue
                 if not r.get("by_tier"):
                     continue

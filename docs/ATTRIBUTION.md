@@ -7674,6 +7674,53 @@ step moves them all onto one reader, `budget.read_axes(chrom)`, registered in
   compile.py reading that origin instead of re-deriving it, go ahead only if cheap and only if the
   comparison shows no numeric change; otherwise after 2026-09-30.
 
+## The result: every budget reader now goes through one reader, and across 24 chromosomes and 19 consumer outputs no number moved (R7 follow-up, consumers, 2026-09-28, later)
+
+Built as registered above. `budget.read_axes(chrom)` returns the `budget_axes_<chrom>` record and
+fills back the stored measurements after its agreement check, which holds on all 24 chromosomes
+(26,806 blocks). `read_axes_genome_wide()` returns the R7 genome-wide sum and `tier_name()` gives a
+person the R7 name of any tier key.
+
+**Negatives first.** Nothing had to be explained away: 0 numeric differences in every comparison.
+The only non-exempt differences are names and one input list. Seven modules the census counted read a
+tier through `organise.blocks` or lexicon's context map, so they moved with organise and needed no
+edit. The consumers' stored results keep the legacy keys `fossil` and `neutral`, as do result names
+such as `epigenome_fossil` and lexicon's `unknown_fossil` context; renaming those keys changes the
+stored schemas of the consumers and every reader of them, not the budget, and is not done here. variation.py's
+case reading still says "a best guess" (a reading of the two axes, not of the budget tier): its two
+lines were added on 2026-09-27 and are held by the removal guard until 2026-09-30.
+
+| Consumer (run before and after, into scratch) | Numeric leaves compared | Differences |
+| --- | ---: | ---: |
+| organise.organise, 24 chromosomes | 12,862 | 0 (23 run times exempt) |
+| organise.blocks, 24 chromosomes (also what syntax_tiling, measurability, motif_transfer, unknown_coverage, syntax_blocks_matched, constrained_unknown_targets read) | 265,301 | 0 |
+| compress.tier_blocks, 24 | 53,612 | 0 |
+| unknown_scoring.unknown_blocks, 24 | 131,389 | 0 |
+| element_types block tiers, 24 | 53,612 | 0 |
+| duplications.run_and_save (not saved), 24 | 108,137 | 0 |
+| variation.build, chr21, chr22, chrY, human axis stubbed (no request) | 22,223 | 0 |
+| human_panel.build, chr21, human axis stubbed | 3,621,823 | 0 (1 run time) |
+| lexicon context map, chr21 | 1,797 | 0 |
+| panel_background.rebuild, chr21 | 2 | 0 |
+| epigenome summary, fossil and alu actions, chr21 | 3,185 | 0 |
+| budget distil, legacy and R7 | 610 | 0 |
+| web budget card | 347 | 0 |
+| CLI budget (chr21 and genome), duplications, variation, organise text | 491 numbers | 0 lines whose numbers differ |
+| compiled programs, 24 chromosomes | 9,896,402 numbers | 0 lines whose numbers differ |
+
+`organise.inputs` now names `budget_axes_<chrom>` beside `budget_<chrom>`, so a manifest built from it
+lists both files the reader opens. The compiled programs changed on role lines only: 397 of 446 regions
+on chr21 and 23,708 of 26,806 genome-wide, each now `role: repeat_unconstrained, repeat-derived sequence, no
+sign of selection, which is not a sign of no function` and the like; no role line in any of the 24
+programs says neutral, fossil, dead or best guess. The committed chr21 copy received exactly those 397
+role lines (all from 2026-09-12, none guard-held); its held rule lines are untouched. The CLI and the web
+budget card print the R7 tier names, and their notes say constraint is evidence of selection only.
+
+**Left for after 2026-09-30.** Regenerating `unknown_<chrom>` so the classifier's origin is stored,
+and compile.py reading that origin instead of re-deriving it: the comparison shows no numeric change,
+but the step is not cheap (24 classifier runs and 24 rewritten results) and it changes origin text on
+11 blocks whose interspersed coverage sits just under one half (commit 308484a), so it is not names only.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import time
 
+from genomeos.attribution.budget import read_axes
 from genomeos.attribution.variation import distil, run_and_save
 from genomeos.jobs import heartbeat
 from genomeos.results import load_result, save_result
@@ -45,7 +46,7 @@ def main() -> None:
     todo = [c for c in args.chroms if not load_result(f"variation_{c}")]
     print(f"{len(todo)} chromosomes to read: {' '.join(todo)}", flush=True)
     for chrom in todo:
-        if not load_result(f"budget_{chrom}"):
+        if not read_axes(chrom):
             print(f"{chrom}: no budget result, skipped", flush=True)
             continue
         t0 = time.time()

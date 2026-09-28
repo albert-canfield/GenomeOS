@@ -99,7 +99,8 @@ def test_api_grow_reports_the_organism_and_its_space():
 def test_api_budget_wide(tmp_path):
     """The 98% card: per-chromosome budgets summed, the job's state attached, empty when nothing ran."""
     empty = Api(tmp_path).budget_wide()
-    assert empty["done"] == 0 and empty["table"] == [] and empty["tiers"]["neutral"] == 0
+    assert empty["done"] == 0 and empty["table"] == [] and empty["tiers"]["unconstrained_unknown"] == 0
+    assert "neutral" not in empty["tiers"] and "fossil" not in empty["tiers"]
     (tmp_path / "data" / "results").mkdir(parents=True)
     (tmp_path / "data" / "results" / "budget_chr21.json").write_text(
         json.dumps(
@@ -125,6 +126,8 @@ def test_api_budget_wide(tmp_path):
     b = Api(tmp_path).budget_wide()
     assert b["done"] == 1 and b["total"] == 24 and b["unknown_bp"] == 1000 and b["genome_bp"] == 4000
     assert b["tiers"]["constrained_unknown"] == 300 and b["constrained_fraction"] == 0.01
+    # a stored budget with no axes record reads under the R7 names, numbers as stored
+    assert b["tiers"]["unconstrained_unknown"] == 600 and "neutral" not in b["tiers"]
     row = b["table"][0]
     assert row["blocks"] == 2 and row["constrained_unknown_blocks"] == 1 and row["mb_fetched"] == 3.0
     assert b["job"] is None or b["job"]["name"] == "budget_genome_wide"

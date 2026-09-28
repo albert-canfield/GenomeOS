@@ -211,7 +211,7 @@ def summarise(
                 }
             )
             frac = round(c / b["length"], 4) if b["length"] else 0.0
-            tier = b["guess"]["tier"]
+            tier = b["guess"].get("legacy_tier", b["guess"]["tier"])  # duplication_<chrom> keeps stored keys
             t = by_tier.setdefault(
                 tier, {"blocks": 0, "bp": 0, "duplicated_bp": 0, "blocks_mostly_duplicated": 0}
             )
@@ -277,7 +277,9 @@ def run_and_save(chrom: str, results_dir: Path = RESULTS_DIR, dups: list[SegDup]
     if dups is None:
         dups = load_rows(chrom, results_dir) or fetch(chrom)
     save_rows(chrom, dups, results_dir)
-    budget = load_result(f"budget_{chrom}", results_dir) or {}
+    from genomeos.attribution.budget import read_axes
+
+    budget = read_axes(chrom, results_dir) or {}
     unknown = load_result(f"unknown_{chrom}", results_dir) or {}
     out = summarise(
         chrom,

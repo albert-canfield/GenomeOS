@@ -231,13 +231,14 @@ class Maps:
             arr[a:b] = b"\x01" * (b - a)
 
     def _fill(self, results_dir: Path) -> None:
+        from genomeos.attribution.budget import read_axes
         from genomeos.genome import Annotation
         from genomeos.genome.annotation import default_gencode
 
         # painted in rising priority: blocks, gene bodies, the registry, exons, coding sequence
         budget = {
-            (b["start"], b["end"]): (b["guess"] or {}).get("tier")
-            for b in (load_result(f"budget_{self.chrom}", results_dir) or {}).get("blocks", [])
+            (b["start"], b["end"]): (b["guess"] or {}).get("legacy_tier")  # the contexts keep stored keys
+            for b in (read_axes(self.chrom, results_dir) or {}).get("blocks", [])
         }
         var = {
             (b["start"], b["end"]): b

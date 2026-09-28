@@ -33,7 +33,7 @@ from pathlib import Path
 from typing import Any
 
 from genomeos.attribution.bigwig import BigWig, IntervalStats
-from genomeos.attribution.budget import CONSTRAINED_MIN
+from genomeos.attribution.budget import CONSTRAINED_MIN, read_axes
 from genomeos.attribution.constraint import PHYLOP_241_URL, PHYLOP_THRESHOLD, phylop_over_blocks
 from genomeos.certainty import Certainty
 from genomeos.results import RESULTS_DIR, load_result, save_result
@@ -173,7 +173,9 @@ def classify_blocks(blocks: list[dict], stats: list[IntervalStats | None]) -> li
                 "end": b["end"],
                 "length": b["length"],
                 "class": b["class"],
-                "tier": b["guess"]["tier"],
+                "tier": b["guess"].get(
+                    "legacy_tier", b["guess"]["tier"]
+                ),  # variation_<chrom> keeps stored keys
                 "mammal_fraction": mf,
                 "gnocchi": g,
                 "case": case_of(mf, g["fraction_above"] if g else None),
@@ -411,7 +413,7 @@ def known_value(kv: dict, ccres: list | None = None) -> dict:
 
 def build(chrom: str, progress=None, results_dir: Path = RESULTS_DIR, controls: bool = True) -> dict:
     """Both axes over one chromosome's UNKNOWN blocks, attributed elements and VISTA elements."""
-    budget = load_result(f"budget_{chrom}", results_dir)
+    budget = read_axes(chrom, results_dir)
     if not budget:
         raise FileNotFoundError(f"no budget_{chrom} result; run genomeos budget --chrom {chrom}")
     t0 = time.time()

@@ -1395,14 +1395,16 @@ def motif_layer(test: Chromosome, results_dir: Path, ledger=None) -> Layer | Non
 
 
 def tier_blocks(chrom: str, results_dir: Path) -> list[dict[str, Any]]:
-    budget = load_result(f"budget_{chrom}", results_dir) or {}
+    from genomeos.attribution.budget import read_axes
+
+    budget = read_axes(chrom, results_dir) or {}
     unknown = {
         (b["start"], b["end"]): b["class"]
         for b in (load_result(f"unknown_{chrom}", results_dir) or {}).get("blocks", [])
     }
     out = []
     for b in budget.get("blocks", []):
-        tier = (b.get("guess") or {}).get("tier")
+        tier = (b.get("guess") or {}).get("legacy_tier")  # TIERS keeps the stored keys and their order
         if tier in TIERS:
             out.append(
                 {

@@ -490,6 +490,77 @@ def _manifest(chrom: str, names: list[str], phylop: bool = True, results_dir: Pa
     }
 
 
+#: fields of a stored budget_<chrom> row the restatement does not carry, filled back by read_axes
+STORED_ROW_FIELDS = ("class_evidence", "class_confidence", "elements")
+#: fields of a stored budget_<chrom> record the restatement does not carry
+STORED_TOP_FIELDS = ("composition_bp", "sources", "cost")
+
+
+def tier_name(tier: str | None) -> str | None:
+    """The R7 name of a tier, for a person to read: a legacy key maps to its new name, any other
+    tier (or None) is returned as it is."""
+    return AXES_TIER.get(tier, tier) if tier is not None else None
+
+
+def read_axes(chrom: str, results_dir: Path | None = None) -> dict | None:
+    """The one reader of a chromosome's budget (R7 follow-up, consumers, 2026-09-28).
+
+    Returns the `budget_axes_<chrom>` record: tiers under the R7 names, each guess with its label,
+    `evidence_status`, `origin` and `legacy_tier`, the stored budget's key, for a join that needs it.
+    The restatement drops measurements no tier rests on; where the stored `budget_<chrom>` exists they
+    are filled back from it (STORED_ROW_FIELDS, phyloP mean and max, the guess's certainty record,
+    STORED_TOP_FIELDS) after checking the two agree on every block: start, end, length, class,
+    constrained fraction, and legacy tier equal to the stored tier. Without an axes record the stored
+    budget is returned with its tiers renamed and `axes_source` saying so, labels as stored."""
+    kw = {"results_dir": results_dir} if results_dir else {}
+    axes = load_result(f"{AXES_NAME}_{chrom}", **kw)
+    stored = load_result(f"budget_{chrom}", **kw)
+    if not axes and not stored:
+        return None
+    if not axes:
+        out = dict(stored)
+        out["blocks"] = [
+            {**b, "guess": {**g, "tier": tier_name(g.get("tier")), "legacy_tier": g.get("tier")}}
+            if (g := b.get("guess"))
+            else b
+            for b in stored.get("blocks", [])
+        ]
+        out["by_tier"] = {tier_name(t): v for t, v in (stored.get("by_tier") or {}).items()}
+        out["axes_source"] = f"budget_{chrom} with tiers renamed; not restated, labels as stored"
+        return out
+    out = {k: stored[k] for k in STORED_TOP_FIELDS if stored and k in stored}
+    out.update(axes)
+    out["axes_source"] = f"{AXES_NAME}_{chrom}"
+    if not stored:
+        return out
+    old = {b["start"]: b for b in stored["blocks"]}
+    if len(old) != len(axes["blocks"]):
+        raise ValueError(f"{AXES_NAME}_{chrom} has {len(axes['blocks'])} blocks, budget_{chrom} {len(old)}")
+    rows = []
+    for b in axes["blocks"]:
+        s = old.get(b["start"])
+        sp, bp = (s or {}).get("phylop") or {}, b.get("phylop") or {}
+        if (
+            s is None
+            or (s["end"], s["length"], s["class"]) != (b["end"], b["length"], b["class"])
+            or sp.get("fraction_above") != bp.get("fraction_above")
+            or s["guess"]["tier"] != b["guess"]["legacy_tier"]
+        ):
+            raise ValueError(f"{AXES_NAME}_{chrom} and budget_{chrom} disagree at block {b['start']}")
+        row = {**{k: s[k] for k in STORED_ROW_FIELDS if k in s}, **b, "phylop": s.get("phylop")}
+        if "certainty" in s["guess"]:
+            row["guess"] = {**b["guess"], "certainty": s["guess"]["certainty"]}
+        rows.append(row)
+    out["blocks"] = rows
+    return out
+
+
+def read_axes_genome_wide(results_dir: Path | None = None) -> dict | None:
+    """The genome-wide sum under the R7 names (`budget_axes_genome_wide`)."""
+    kw = {"results_dir": results_dir} if results_dir else {}
+    return load_result(f"{AXES_NAME}_genome_wide", **kw)
+
+
 def run_and_save(chrom: str, **kw) -> dict:
     """Build and save under the R7 name `budget_axes_<chrom>`; stored `budget_<chrom>` keeps its values."""
     out = build(chrom, **kw)

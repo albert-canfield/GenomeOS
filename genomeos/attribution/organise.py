@@ -30,7 +30,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from genomeos.attribution.budget import TIERS
+from genomeos.attribution.budget import TIERS, read_axes
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 COPY_MIN = 0.5  # duplicated fraction from which a block is read as a copy first
@@ -46,7 +46,7 @@ CASE_READING = {
 def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
     """Every UNKNOWN block of the chromosome with its tier, both constraint axes, the copy flag
     and the attributed elements inside it."""
-    budget = load_result(f"budget_{chrom}", results_dir)
+    budget = read_axes(chrom, results_dir)
     if not budget:
         raise FileNotFoundError(f"no budget_{chrom} result; run genomeos budget --chrom {chrom}")
     var = {
@@ -71,7 +71,7 @@ def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
             "end": b["end"],
             "length": b["length"],
             "class": b["class"],
-            "tier": b["guess"]["tier"],
+            "tier": b["guess"]["legacy_tier"],  # the stored key organise_<chrom> joins on
             "confidence": b["guess"]["confidence"],
             "mammal_fraction": (b.get("phylop") or {}).get("fraction_above"),
             "conserved_elements": (b.get("elements") or {}).get("n"),
@@ -94,6 +94,7 @@ def inputs(chrom: str, results_dir: Path = RESULTS_DIR) -> list[Path]:
     from genomeos.attribution.targets import RUNS
 
     names = [f"budget_{chrom}", f"variation_{chrom}", f"duplication_{chrom}", *(f"{r}_{chrom}" for r in RUNS)]
+    names.insert(0, f"budget_axes_{chrom}")  # read_axes opens both budget files
     out = []
     for name in names:
         p = results_dir / f"{name}.json"

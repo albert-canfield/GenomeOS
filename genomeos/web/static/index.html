@@ -877,7 +877,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-mouse" class="scroll"></div>
     </div>
     <div class="card">
-      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a best guess: structural, fossil, regulatory, constrained unknown, neutral. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
+      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a tier: structural, repeat unconstrained, regulatory, constrained unknown, unconstrained unknown. Constraint is evidence of selection only: its absence is not evidence of no function. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
       <div id="j-budget" class="scroll"></div>
     </div>
     <div class="card">
@@ -1578,8 +1578,8 @@ async function loadBudgetWide() {
     const j = b.job || {};
     const startBtn = `<button class="ghost" id="j-budget-start" data-tip="Budget every chromosome in the background, smallest first; about 2.5 GB of range requests over the genome, nothing stored."><i class="ic">▶️</i>Start the job</button>`;
     if (!b.table.length) { el.innerHTML = `<span class="muted">not run yet (genomeos budget --chrom chr21, or start the budget_genome_wide job)</span> ${j.state === 'running' ? '' : startBtn}`; const s0 = $('#j-budget-start'); if (s0) s0.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); }; return; }
-    const col = {structural: 'var(--muted)', fossil: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', neutral: 'var(--line)'};
-    const names = {structural: 'structural', fossil: 'fossil', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', neutral: 'neutral'};
+    const col = {structural: 'var(--muted)', repeat_unconstrained: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', unconstrained_unknown: 'var(--line)'};
+    const names = {structural: 'structural', repeat_unconstrained: 'repeat, unconstrained', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', unconstrained_unknown: 'unconstrained unknown'};
     const pct = (x, d = 2) => x == null ? '-' : (x * 100).toFixed(d) + '%';
     const bar = (tiers, total) => `<div class="bar" style="display:flex;width:220px">${Object.entries(tiers).map(([k, v]) => `<i style="width:${(v / total * 100).toFixed(2)}%;background:${col[k]}" data-tip="${names[k]} ${(v / total * 100).toFixed(1)}%"></i>`).join('')}</div>`;
     const tot = Object.values(b.tiers).reduce((a, c) => a + c, 0) || 1;
@@ -1591,7 +1591,7 @@ async function loadBudgetWide() {
       <div style="font-size:12px;margin:6px 0">${Object.entries(b.tiers).map(([k, v]) => `<span class="chip"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col[k]};margin-right:4px;vertical-align:middle"></i>${names[k]} ${(v / tot * 100).toFixed(1)}%</span>`).join(' ')}</div>
       <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th>tiers</th><th class="num">constrained</th><th class="num" data-tip="blocks in the constrained-unknown tier">unknown blocks</th><th class="num" data-tip="MB of phyloP range requests">MB</th><th class="num">s</th></tr>` +
       b.table.map(r => { const t = Object.values(r.tiers).reduce((a, c) => a + c, 0) || 1; return `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${(r.unknown_bp / 1e6).toFixed(1)}</td><td>${bar(r.tiers, t)}</td><td class="num">${pct(r.constrained_fraction)}</td><td class="num">${r.constrained_unknown_blocks}</td><td class="num">${r.mb_fetched ?? ''}</td><td class="num">${r.seconds != null ? Math.round(r.seconds) : ''}</td></tr>`; }).join('') + `</table>
-      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier is a best guess with its confidence, not a verdict (docs/ATTRIBUTION.md)</div>`;
+      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier reads sequence class and constraint, not a verdict; constraint is evidence of selection only (docs/ATTRIBUTION.md)</div>`;
     const s = $('#j-budget-start'); if (s) s.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); };
   } catch (e) { $('#j-budget').innerHTML = `<span class="muted">${e.message}</span>`; }
 }

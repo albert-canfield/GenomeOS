@@ -3,9 +3,9 @@
 
 Per chromosome, smallest first: read Zoonomia phyloP over the blocks with range
 requests (about 3 bytes per base, nothing stored), fetch the 100-vertebrate
-conserved elements once into the knowledge cache, save `budget_<chrom>.json`.
-Then distil the genome-wide summary. Resumable: a chromosome with a saved budget
-is skipped.
+conserved elements once into the knowledge cache, save `budget_axes_<chrom>.json`
+(the R7 tier names). Then distil the genome-wide summary. Resumable: a chromosome with
+a saved budget is skipped, and with nothing to budget the stored summary stands.
 
     uv run python scripts/budget_genome_wide.py [--chroms chr21 chr22 ...] [--threshold 2.27]
 """
@@ -15,7 +15,7 @@ from __future__ import annotations
 import argparse
 import time
 
-from genomeos.attribution.budget import distil, run_and_save
+from genomeos.attribution.budget import AXES_NAME, AXES_TIERS, distil, read_axes, run_and_save
 from genomeos.jobs import heartbeat
 from genomeos.results import load_result, save_result
 
@@ -44,8 +44,14 @@ def main() -> None:
     ap.add_argument("--chroms", nargs="*", default=ORDER)
     ap.add_argument("--threshold", type=float, default=2.27)
     args = ap.parse_args()
-    todo = [c for c in args.chroms if not load_result(f"budget_{c}")]
+    todo = [c for c in args.chroms if not read_axes(c)]
     print(f"{len(todo)} chromosomes to budget: {' '.join(todo)}", flush=True)
+    if not todo:
+        print(
+            f"nothing to budget; {AXES_NAME}_genome_wide stands (scripts/budget_axes.py writes it)",
+            flush=True,
+        )
+        return
     for chrom in todo:
         if not load_result(f"unknown_{chrom}"):
             print(f"{chrom}: no UNKNOWN result, skipped", flush=True)
@@ -71,12 +77,12 @@ def main() -> None:
             f"{out['cost'].get('phylop', {}).get('mb_fetched', 0)} MB in {out['cost']['seconds']} s",
             flush=True,
         )
-    s = distil()
-    save_result(JOB, s)
+    s = distil(name=AXES_NAME, tiers=AXES_TIERS)
+    save_result(f"{AXES_NAME}_genome_wide", s)
     print(
         f"genome-wide: {s['chromosomes']} chromosomes, {s['unknown_bp'] / 1e6:.0f} Mb of UNKNOWN blocks, "
         f"constrained {s['constrained_fraction']:.2%} of measured bases, "
-        f"guessed at >= 0.5: {s['guessed_fraction']:.1%}",
+        f"evidence-quality score >= 0.5: {s['guessed_fraction']:.1%}",
         flush=True,
     )
 

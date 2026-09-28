@@ -76,10 +76,10 @@ NO_PROBABILITY = (
 REGION_SCORE_NOTE = "confidence is the budget's hand-set evidence-quality score per rule, not a probability"
 EVIDENCE_BY_TIER = {
     "structural": ("curated", "RepeatMasker and the assembly, classified by genomeos unknown"),
-    "fossil": ("curated", "RepeatMasker family, Zoonomia phyloP over 241 mammals"),
+    "repeat_unconstrained": ("curated", "RepeatMasker family, Zoonomia phyloP over 241 mammals"),
     "regulatory": ("curated", "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals"),
     "constrained_unknown": ("inferred", "Zoonomia phyloP over 241 mammals, 100-vertebrate elements"),
-    "neutral": ("inferred", "Zoonomia phyloP over 241 mammals, no registry element"),
+    "unconstrained_unknown": ("inferred", "Zoonomia phyloP over 241 mammals, no registry element"),
 }
 
 
@@ -542,7 +542,10 @@ def _measured_blocks(
 
 
 def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any = None) -> str:
-    budget = load_result(f"budget_{chrom}", results_dir)
+    from genomeos.attribution.budget import read_axes
+
+    # the R7 tier names and labels on each region's role line; every number as in budget_<chrom>
+    budget = read_axes(chrom, results_dir)
     human = _human_axis(chrom, results_dir)
     copies = _copies(chrom, results_dir)
     if not budget:
