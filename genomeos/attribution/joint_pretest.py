@@ -25,6 +25,15 @@ independent score is `d` itself (a one-feature logistic ranks exactly as `d` doe
 `d / (d + TAU)` is the control: it has the same nonlinearity and no partner, so a gain it also shows
 is not coupling. Outcomes follow R2: a significant decrease is a positive, a well-powered null a
 negative, and increases and underpowered nulls are counted apart and never scored.
+
+*Correction, 2026-09-29 (item 12 S3, the second external review of 2026-09-28; lane-pilot).* The reading
+this module registered for a negative (`READINGS["neither_passes"]`, kept below as written) states more
+than the pretest showed. The run rejected **two particular score transformations**, element competition
+and gene budget (`VARIANTS`), on the K562 training pairs the cache covered. It did not show that joint
+inference cannot help, and "no search engine is built" does not follow from it. What stands: the
+negative for those two transformations, which are retired (`RETIRED`) and are not used by the coherence
+pilot (`genomeos/attribution/pilot.py`) or anything after it. What is withdrawn: the conclusion that a
+joint search cannot beat per-block scoring. The corrected reading is `READING_CORRECTIONS`.
 """
 
 from __future__ import annotations
@@ -76,6 +85,25 @@ READINGS = {
     ),
     "both_pass": "both terms are kept, frozen as registered, and R8 proceeds to its build",
     "void": "the falsifier fired: reported as a negative with the control's gain beside it; R8 closes",
+}
+# Correction, 2026-09-29 (item 12 S3, lane-pilot), beside the original and not in place of it: the
+# reading above for a negative overstated it. The two transformations are retired; the objective is not.
+RETIRED = VARIANTS
+RETIRED_ON = "2026-09-29"
+RETIRED_WHY = (
+    "element competition and gene budget, each a share d / (sum d + TAU) of the per-element deletion "
+    "score, did not beat independent per-element scoring on the K562 training pairs the cache covered "
+    "(R8's pretest). They are not used again, by the coherence pilot or by anything after it"
+)
+READING_CORRECTIONS = {
+    "neither_passes": (
+        "a negative for two particular score transformations: neither element competition nor gene "
+        "budget carries information about CRISPRi targets beyond independent per-element deletion "
+        "scoring, on the K562 training pairs the cache covered. Both are retired. This does not show "
+        "that joint inference cannot help, and it does not rule out a joint search: the coherence "
+        "objective is reopened as a bounded pilot (item 12 S3; item 13 C1-C3), scored on withheld "
+        "evidence"
+    ),
 }
 
 POSITIVE, NEGATIVE = measured.DECREASE, measured.NULL_INFORMATIVE

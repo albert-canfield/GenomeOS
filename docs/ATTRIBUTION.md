@@ -9721,6 +9721,173 @@ Origin is judged on 0 / 470,077 and molecular role on 0 / 659,403. **What it may
 validation; the accuracy of the labels on the 440,279 unjudged targets, which the screens did not choose
 to test; a single score; or evidence that any unjudged element has no function.
 
+## Item 13 pilot registered: one debugger over local neighbourhoods, and a synthetic gate that needs two simultaneous corrections before anything biological is scored (item 12 S3, item 13 C1-C3, 2026-09-29, lane-pilot)
+
+This section registers the pilot's model and search, and its first gate, before the gate is run and
+before any score of any pilot labelling on any held-out source is read. The biological gate (the
+chromosomes, the pass rule against the three baselines, the metric and the compute budget) is
+registered in its own section before it runs. The code is `genomeos/attribution/pilot.py`; the gate's
+script is `scripts/pilot_synthetic_gate.py`. No model request; the per-element response cache is not
+opened.
+
+### R8's reading, corrected beside the original
+
+R8's pretest registered, for a negative, the reading "coupling carries no information about CRISPRi
+targets beyond independent per-element scoring ... so a joint search over this score cannot beat
+per-block scoring. R8 closes; no search engine is built". That states more than the run showed. The
+run rejected **two particular score transformations**, element competition and gene budget (each a
+share d / (sum d + TAU) of the per-element deletion score), on the K562 training pairs the cache
+covered. It did not show that joint inference cannot help. The original text stays in
+`joint_pretest.READINGS`; the corrected reading is `joint_pretest.READING_CORRECTIONS`, and the two
+transformations are `joint_pretest.RETIRED`. The pilot uses neither: no share of a score over genes or
+over elements is computed anywhere in it.
+
+### The model
+
+- **Blocks** are ENCODE cCREs (v3). A block's label is one target gene or no target, and the set of
+  contexts it is active in (K562, HepG2, WTC11, `invivo` for VISTA, `other` for saturation
+  mutagenesis, and any other cell an observation names).
+- **Observations** are weighted soft constraints over the blocks their interval overlaps, read as an
+  OR. A CRISPRi significant decrease of gene g in cell c is explained when some overlapping block
+  targets g and is active in c; a well-powered null is contradicted when that holds. A reporter tile,
+  a VISTA element or a saturation-mutagenesis locus is explained when some overlapping block is active
+  in its context. A GTEx association is explained when some overlapping block targets its gene.
+  CRISPRi increases, underpowered nulls, GTEx non-associations and missing effects are not used.
+- **Priors**, never from a held-out source: distance to the candidate gene's TSS as a power law,
+  -ln(1 + d / 5 kb); the compiled predicted target (the unchanged labels) with a bonus of
+  1 + min(strength, 1); and activity from ENCODE H3K27ac replicated peaks (a block's own cell for K562
+  and HepG2; for other contexts the share of 13 biosamples with a peak). A part's prior is the
+  share-weighted sum of each block's own prior over the interval it covers, so a split conserves a
+  block's prior, a merge neither adds nor drops one, and no block lends its compiled target to its
+  neighbour.
+- **Gene-level coupling** (the pilot only): a gene that the view saw decrease under CRISPRi at
+  another element gets +1.0 as a target; a gene with at least three well-powered nulls elsewhere and
+  no decrease gets -0.5. The element asked about is excluded, so direct evidence is never counted twice.
+- **Hard constraints** are only the mandatory ones: a part lies inside its block, parts do not
+  overlap, and no part is shorter than 50 bp.
+
+**Weights, in nats, registered and not fitted.**
+
+| term | weight |
+| --- | --- |
+| CRISPRi significant decrease left unexplained | 3.0 |
+| CRISPRi well-powered null contradicted | 1.5 |
+| GTEx association left unexplained | 0.5 |
+| reporter tile active / inactive | 1.0 / 0.3 |
+| VISTA positive / negative | 1.0 / 0.5 |
+| saturation mutagenesis functional / inert | 1.0 / 0.3 |
+| activity prior (logit) | -1.0 |
+| own-cell H3K27ac peak / no peak (logit) | +2.0 / -1.0 |
+| breadth, other contexts (logit) | 2.0 x share of the 13 biosamples |
+| the compiled link's model cell is this context (logit) | +0.5 |
+| no target (log-weight) | -3.0, that of a gene at about 100 kb |
+| split (fragmentation) / merge / an observation group marked inadequate | 2.0 / 1.0 / 2.0 |
+
+### C1, C2 and C3 as built
+
+- **The debugger (C1).** From the starting labels (the compiled target, and the activity the
+  annotation implies), the violated observations name the conflicting blocks. Repairs are proposed
+  only on those blocks' variables:
+  - change the target, to a gene an observation there names, the compiled target, or no target;
+  - change an activity context an observation there names;
+  - split the block where evidence changes;
+  - merge it with an adjacent block within 500 bp;
+  - mark one observation kind at that block as having an inadequate observation model. This is
+    allowed for reporter, VISTA, saturation mutagenesis and GTEx, and never for CRISPRi, the endpoint
+    of regulation, whose lower null weight already carries incomplete knockdown.
+
+  Every single repair is evaluated, and every pair whose second repair lies in the conflict the first
+  leaves. Only the touched blocks' energy is recomputed. The best repair is applied while it lowers
+  the energy by more than 0.05 nat, for up to six rounds. Each violated observation is reduced to a
+  smallest conflicting set of observations and label assumptions (deletion-based, exact by
+  enumeration over the involved parts). It is reported beside the conflict among the observations
+  themselves, which is where a block boundary shows up as an assumption.
+- **Boundaries (C2).** A split is proposed only at an observation's edge or an H3K27ac peak's edge
+  inside the block. Splits and merges are counted as corrections and must improve prediction of
+  withheld evidence like any other correction.
+- **Families (C3).**
+  - Alternatives within 1.0 nat of the best survive. Survivors that predict the same value for every
+    observation of the neighbourhood form one family.
+  - A change of the best alternative is committed only if every survivor shares it. Otherwise the
+    pilot abstains.
+  - The next measurement is the cheapest candidate that separates the best alternative from its
+    strongest surviving rival. The candidates are a reporter tile (cost 1) or a CRISPRi pair (cost 4)
+    over a block or a part of one. Ties are broken by expected information over all survivors. When
+    none separates those two, the candidate with the most information per unit cost is chosen.
+- **What a neighbourhood returns:** the ranked alternatives with their energies, the supporting and
+  conflicting observations for each, the families, the committed and abstained changes, and the next
+  measurement.
+
+### Gate 1: the synthetic gate
+
+**Four motifs.** Each is built on a synthetic chromosome under the weights above. Instance 0 of each is
+hand-built, and 100 more are generated from seed 20260929.
+
+1. **Split and retarget** (C2 with C1). One block's two halves are screened against two genes with
+   opposite results. The truth is to split at the evidence edge and retarget one half.
+2. **Swap** (C1, across blocks). Two blocks sit under two screens that each span both. The truth
+   exchanges their targets together.
+3. **Context and hand-off** (C1, context and target). The linked block is not active in K562 after all,
+   and its neighbour carries the link instead.
+4. **Indistinguishable** (C3). One screen spans two blocks, and nothing else tells which of them
+   regulates the gene.
+
+**Validity, by brute force** over every single repair and every pair of repairs in the full move
+space: every gene and no target, every context, every breakpoint, merge and excuse. A two-correction
+instance is kept only if all four conditions hold:
+
+1. no single repair fits the evidence;
+2. no single repair lowers the energy by more than 0.05 nat, so a one-repair-at-a-time search is stuck
+   at the starting labels;
+3. the planted pair fits;
+4. the planted pair's energy is below every other alternative of at most two repairs by more than
+   1.0 nat.
+
+A family instance is kept only if both single alternatives fit, predict the same for every
+observation, and lie within 1.0 nat of each other and of the best alternative of at most two repairs.
+
+**Checks done before this registration.** These checks were construction only, and the pilot's search
+was not run on any gate instance. All four hand-built instances pass the validity check. On 200 draws
+from another seed, these are the acceptance rates:
+
+| motif | draws accepted |
+| --- | --- |
+| split and retarget | 188 of 200 |
+| swap | 81 of 200 |
+| context and hand-off | 200 of 200 |
+| indistinguishable | 160 of 200 |
+
+**The pass rule.**
+
+- **The three two-correction motifs.** This part must hold on each hand-built case and on at least 95%
+  of the 100 generated instances of each motif. The pilot's returned labels must equal the planted
+  truth, and both planted corrections must be committed.
+- **The family motif.** This part must hold on the hand-built case and on at least 95% of the 100
+  instances. The two alternatives must both survive in one family, and the pilot must abstain on which
+  block supplies the link. Its next measurement's predicted outcome must also differ between them.
+
+**If the gate fails, the pilot stops and nothing biological is scored.**
+
+**Controls (descriptive, not in the pass rule):**
+- the same search without pairs (greedy);
+- the independent-block variant, in which each block is its own neighbourhood with its own copy of
+  every observation over it and there is no coupling;
+- a noisy copy of each instance with one extra random observation.
+
+**Falsifier.** The gate is void if the greedy control recovers the planted truth on any kept instance:
+the validity check would then not be doing its job.
+
+**Compute.** At most 10 CPU minutes, measured with `time.process_time` in the run's own process.
+
+**What each outcome means.**
+
+- **Pass.** The search finds repairs that need two simultaneous changes, and it keeps indistinguishable
+  alternatives apart as a family. That is all it means: it is a solver test on constructed cases, and
+  says nothing about biology.
+- **Fail.** The pilot is not fit to be scored. It is recorded as a discontinued investigation, and
+  gate 2 is not run.
+- **Void.** Reported as a failure of the gate's construction, with gate 2 not run.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
