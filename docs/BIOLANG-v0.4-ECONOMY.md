@@ -1315,6 +1315,67 @@ a burden of the documented shape, and it improves no prediction of protein
 abundance. A program that wants a burden should declare pools; a program that
 wants abundance gains nothing by declaring them.
 
+### 9.3 Stage 4 registered (2026-09-28), before the instrument existed
+
+The registration is `genomeos/runtime/division_gate.py`, committed before
+`genomeos/runtime/division.py` and `scripts/division_gate.py` were written and
+before any number existed. It registers a **negative about the gate's own
+wording**, which is the part worth reading before the result.
+
+**§8 asks for something partitioning cannot give.** "Over several divisions
+dilution must separate a stable protein from a short-lived one." Partitioning
+multiplies every species in the cell by the same one-half; it carries no index
+over proteins, exactly as stage 2's `Economy._share` carried none over genes
+(§9.2). In a chase, after `n` divisions of interval `T`, a protein of half-life
+`t` stands at `A0 · 2^-n · 2^(-nT/t)`, so
+
+    log10(A_stable / A_short) = n · T · log10(2) · (1/t_short − 1/t_stable)
+
+and the division term has cancelled. **Dilution separates nothing.** It removes
+both proteins by the same factor, and turnover — which does the separating —
+separates them just as well in a cell that never divides. In a steady state
+with synthesis on it is worse than neutral: a level is
+`s / (k_degradation + k_division)`, so dividing adds the same constant to both
+denominators and **compresses** the separation. With the registered constants
+(240 h and 6 h, dividing every 24 h) the stable:short ratio falls from 40.0 to
+4.545, a compression of **8.80×**. The instrument must reproduce that, and a run
+that showed dilution separating the two would mean the partitioning is indexed
+by protein, which is a bug of exactly the shape that looks like the finding.
+
+**What dilution does do, and what the gate therefore asks instead.** A protein
+the program gives no half-life is never degraded, so in a cell that does not
+divide it never leaves. Division is its only removal, by exactly `2^-n`. That is
+the one separation dilution makes on its own — between what turnover can remove
+and what only division can — and it is the registered positive clause.
+
+**The eight clauses**, each able to fail: the closed form in both arms; the
+dilution-only protein at exactly `2^-8` partitioned and exactly 1.0 duplicating;
+the two arms' separation identical; the steady-state compression; exact
+conservation at every division, every species and every seed; the binomial arm's
+mean and variance against their analytic values with a whole-number daughter and
+zero variance above the regime threshold; and two falsifiers — equal half-lives
+must make the two proteins identical, and an unmet checkpoint must fire zero
+divisions and leave the decay-only amounts.
+
+**Registered as not askable rather than attempted.** Whether these half-lives
+are any real protein's: `bio.std.human_turnover` holds *cell* lifespans (Sender
+& Milo 2021), no protein turnover table is under `data/knowledge`, and §10
+decision 6 stays open. Whether real partitioning is binomial: Huh & Paulsson
+2011 show clustering makes it noisier, and this project holds no
+partitioning-error dataset, so the binomial arm is checked against its own
+analytic moments and never against a measurement. And whether a per-gene
+half-life would move stage 2's gate (b): §9.2 named a per-gene term as the thing
+that could, and a half-life is one, but that is a proteome-scale run needing the
+turnover set this paragraph has just said the project does not hold. **Nothing
+in stage 4 is evidence about gate (b).**
+
+**Figures that must not move**, registered: area E's 1,439 of 1,439 fates,
+terminal 496 of 555, 45 ambiguous decision points to 0 and 522 of 555 under
+§7.5 — `runtime/body.py` is not touched and `partition` defaults to `duplicate`,
+so no program that does not ask for partitioning behaves differently; stage 2's
+burden factors and its 0.952005 MAE; stage 1's 13 of 13 and 1,123 of 1,123; and
+the engine package's 12 of 12.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
