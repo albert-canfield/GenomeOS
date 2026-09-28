@@ -1,0 +1,271 @@
+{
+  "result": "joint_pretest",
+  "date": "2026-09-28",
+  "question": "does a coupling term (an element's candidate genes competing, or a gene's share of its regulators) beat independent per-element deletion scoring at naming CRISPRi-measured targets?",
+  "registration": {
+    "date": "2026-09-28",
+    "pass_rule": "a coupling variant passes if the lower end of its 97.5% component-bootstrap interval of AUPRC gain over the independent score, on out-of-fold scores pooled over the leave-one-chromosome-out folds, lies above 0, and its point gain exceeds the self-share control's point gain. R8 proceeds if at least one variant passes",
+    "falsifier": "a pass is void if the self-share control, which has the share's nonlinearity but no partner, gains at least as much as the variant: the gain is then a reshaping of d, not coupling. A positive that holds on components but whose chromosome-bootstrap interval includes 0 is reported as a weak pass and names the chromosome that carries it",
+    "readings": {
+      "neither_passes": "a negative: coupling carries no information about CRISPRi targets beyond independent per-element scoring on the data held, so a joint search over this score cannot beat per-block scoring. R8 closes; no search engine is built",
+      "one_passes": "the passing coupling term is kept, frozen at the form registered here, and R8 proceeds to its build (fixed-boundary search on a synthetic two-change case first); the other term is dropped",
+      "both_pass": "both terms are kept, frozen as registered, and R8 proceeds to its build",
+      "void": "the falsifier fired: reported as a negative with the control's gain beside it; R8 closes"
+    }
+  },
+  "counts": {
+    "pairs": 10356,
+    "by_cell": {
+      "K562": 10356
+    },
+    "outcomes": {
+      "significant_decrease": 471,
+      "not_significant_well_powered": 6169,
+      "significant_increase": 75,
+      "not_significant_underpowered": 3641
+    },
+    "missing": {
+      "no cached element overlaps the tested interval": 1119,
+      "no overlapping element scored this gene in this cell": 3410
+    },
+    "scored": 5827,
+    "scored_outcomes": {
+      "significant_decrease": 423,
+      "not_significant_well_powered": 3290,
+      "significant_increase": 46,
+      "not_significant_underpowered": 2068
+    },
+    "excluded_from_metric": {
+      "significant_increase": 46,
+      "not_significant_underpowered": 2068,
+      "missing_outcome": 0
+    }
+  },
+  "pooled": {
+    "pairs_scored": 3713,
+    "positives": 423,
+    "negatives": 3290,
+    "components": 534,
+    "chromosomes": 23,
+    "auprc": {
+      "independent": 0.7662,
+      "element_competition": 0.7536,
+      "gene_budget": 0.7467,
+      "self_share": 0.7583,
+      "share_alone_element_competition": 0.7584,
+      "share_alone_gene_budget": 0.7048
+    },
+    "gain_over_independent": {
+      "element_competition": {
+        "by_component": {
+          "gain": -0.0126,
+          "interval": [
+            -0.0239,
+            0.0008
+          ],
+          "resamples": 2000,
+          "groups": 534
+        },
+        "by_chromosome": {
+          "gain": -0.0126,
+          "interval": [
+            -0.0218,
+            -0.0001
+          ],
+          "resamples": 2000,
+          "groups": 23
+        }
+      },
+      "gene_budget": {
+        "by_component": {
+          "gain": -0.0196,
+          "interval": [
+            -0.0268,
+            -0.0108
+          ],
+          "resamples": 2000,
+          "groups": 534
+        },
+        "by_chromosome": {
+          "gain": -0.0196,
+          "interval": [
+            -0.0289,
+            -0.0081
+          ],
+          "resamples": 2000,
+          "groups": 23
+        }
+      },
+      "self_share": {
+        "by_component": {
+          "gain": -0.008,
+          "interval": [
+            -0.0145,
+            -0.003
+          ],
+          "resamples": 2000,
+          "groups": 534
+        },
+        "by_chromosome": {
+          "gain": -0.008,
+          "interval": [
+            -0.0126,
+            -0.003
+          ],
+          "resamples": 2000,
+          "groups": 23
+        }
+      }
+    },
+    "secondary_with_partners": {
+      "element_competition": {
+        "pairs": 2444,
+        "positives": 235,
+        "auprc_independent": 0.7013,
+        "auprc_coupled": 0.6777,
+        "gain_by_component": {
+          "gain": -0.0236,
+          "interval": [
+            -0.0452,
+            -0.0015
+          ],
+          "resamples": 2000,
+          "groups": 215
+        }
+      },
+      "gene_budget": {
+        "pairs": 2894,
+        "positives": 270,
+        "auprc_independent": 0.7073,
+        "auprc_coupled": 0.6764,
+        "gain_by_component": {
+          "gain": -0.0309,
+          "interval": [
+            -0.04,
+            -0.021
+          ],
+          "resamples": 2000,
+          "groups": 247
+        }
+      }
+    },
+    "verdict": {
+      "element_competition": {
+        "interval_above_zero": false,
+        "beats_self_share_control": false,
+        "passes": false,
+        "weak": false
+      },
+      "gene_budget": {
+        "interval_above_zero": false,
+        "beats_self_share_control": false,
+        "passes": false,
+        "weak": false
+      }
+    },
+    "reading": "neither_passes",
+    "reading_text": "a negative: coupling carries no information about CRISPRi targets beyond independent per-element scoring on the data held, so a joint search over this score cannot beat per-block scoring. R8 closes; no search engine is built",
+    "r8": "closes"
+  },
+  "per_cell": {
+    "K562": {
+      "computed": true,
+      "same_as_pooled": true
+    }
+  },
+  "heldout_overlap_note": "lane-split's split_overlap found 249 held-out pairs sharing bases with training intervals; irrelevant here, since the held-out file is never read",
+  "alphagenome_requests": 0,
+  "seconds": 83.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025), training file",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "this repository, the all-enhancer AlphaGenome deletion sweep and its per-element cache",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements",
+        "sha256": "f27d2c56ab54283b359e1aa8fe064a5109b7d1eea1792b44304f4f7365eeb82c",
+        "bytes": 622783785,
+        "partition": null,
+        "files": 24
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements",
+        "sha256": "41dc8a631dee0a3f95ca7eb894c3f09bc930dc080b9f378aed0261a0f338034e",
+        "bytes": 805894526,
+        "partition": null,
+        "files": 3233
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "registered": "2026-09-28",
+      "tau": 0.1,
+      "variants": [
+        "element_competition",
+        "gene_budget"
+      ],
+      "control": "self_share",
+      "bootstraps": 2000,
+      "seed": 0,
+      "interval_quantiles": [
+        0.0125,
+        0.9875
+      ],
+      "ridge": 0.001,
+      "folds": "leave-one-chromosome-out within the training split",
+      "cells_scored": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "overlap_reach": 10000,
+      "well_powered": 0.8,
+      "pass_rule": "a coupling variant passes if the lower end of its 97.5% component-bootstrap interval of AUPRC gain over the independent score, on out-of-fold scores pooled over the leave-one-chromosome-out folds, lies above 0, and its point gain exceeds the self-share control's point gain. R8 proceeds if at least one variant passes",
+      "falsifier": "a pass is void if the self-share control, which has the share's nonlinearity but no partner, gains at least as much as the variant: the gain is then a reshaping of d, not coupling. A positive that holds on components but whose chromosome-bootstrap interval includes 0 is reported as a weak pass and names the chromosome that carries it"
+    },
+    "exclusions": [
+      "the held-out CRISPRi file: never opened in this lane (R5)",
+      "significant increases and underpowered or power-unknown nulls: counted, never scored (R2)",
+      "pairs no cached element answers: missing, never imputed",
+      "pairs the benchmark marks as not a valid connection: never read"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562), the only one read"
+    },
+    "code": {
+      "git_sha": "dcc277ba407594a77e41183ae1120624d2112fdd",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/runtime/grn.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/joint_pretest.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

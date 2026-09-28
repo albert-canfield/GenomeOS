@@ -7440,6 +7440,46 @@ per-block scoring; **R8 closes and no search engine is built**. One passes: that
 as registered, and R8 proceeds to its build (the synthetic two-change case first). Both pass: both are
 kept. Void: reported as a negative with the control's gain beside it; R8 closes.
 
+## The result: neither coupling term beats independent deletion scoring, so R8 closes and no search is built (R8, 2026-09-28, later)
+
+Run once as registered above (`scripts/joint_pretest.py`, result `joint_pretest`, 0 AlphaGenome
+requests, 84 s, peak resident memory 5.4 GB with one cache reader and one chromosome at a time).
+Training split only; the held-out file was never opened.
+
+**Negatives first.** On 3,713 scored and labelled K562 pairs (423 significant decreases, 3,290
+well-powered nulls; 534 components, 23 chromosomes), out-of-fold AUPRC:
+
+| score | AUPRC | gain over independent | 97.5% interval, components | 97.5% interval, chromosomes |
+| --- | --- | --- | --- | --- |
+| independent (predicted drop) | 0.766 | | | |
+| element competition | 0.754 | −0.013 | −0.024 to +0.001 | −0.022 to −0.000 |
+| gene budget | 0.747 | −0.020 | −0.027 to −0.011 | −0.029 to −0.008 |
+| self-share control | 0.758 | −0.008 | −0.015 to −0.003 | −0.013 to −0.003 |
+
+Neither variant's interval lies above 0, and neither beats the control's point gain: the registered
+reading is **neither passes**. Gene budget is worse than the independent score with an interval that
+excludes 0; element competition is worse at the point and its component interval just reaches 0.
+Restricted to pairs that have at least one scored partner, where the coupling is not trivial, both
+lose more: element competition 0.678 against 0.701 (2,444 pairs, 235 positives, −0.024, −0.045 to
+−0.002), gene budget 0.676 against 0.707 (2,894 pairs, 270 positives, −0.031, −0.040 to −0.021). The
+share read alone, with no fit, is no better: 0.758 for element competition and 0.705 for gene budget.
+
+**Counted apart.** Of 10,356 training pairs (all K562; no other cell is in the training file, so the
+per-cell result is the pooled one), 1,119 have no cached element overlapping the tested interval and
+3,410 have an overlapping element that did not score the gene in K562: 4,529 missing, never imputed.
+Of the 5,827 scored, 46 significant increases and 2,068 underpowered nulls are kept out of the metric.
+The 0.766 is therefore an AUPRC on the pairs the sweep answers, which excludes genes outside its
+window; it is not comparable with the benchmark's all-pairs figures.
+
+**Reading.** On the data held, a gene's rank among the genes tested against the same perturbation, and
+an element's share of its gene's predicted regulators, carry no information about which pairs a
+CRISPRi screen calls regulated beyond each pair's own predicted drop; both lower precision. A joint
+search over this score cannot beat per-block scoring, so **R8 closes as a negative and no search
+engine is built**. What this does not say: it tests coupling of the deletion score as held, in K562
+alone, on the pairs the sweep answers; it does not test coupling of a different score or in a cell
+with its own training data. lane-split's overlap check (249 held-out pairs share bases with training
+intervals) did not bear on this run, because the held-out file was not read.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
