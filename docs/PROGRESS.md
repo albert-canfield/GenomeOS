@@ -1068,3 +1068,47 @@ defect count at 0 and the preference question open in its place.
 docs/ROADMAP.md §5 items 3b, 4, 5 and 9; LOCI-BENCHMARK.md §22;
 BIOLANG-v0.4-ECONOMY.md §9.2; LESSONS.md; `data/results/loci_fourth.json`,
 `abundance_gate.json`, `therapeutic_benchmark.json`.
+
+## 2026-09-28 — an external review becomes the order of work, and the first five of its items are done overnight
+
+**What Albert owes, first.** (1) Whether to spend 705 AlphaGenome requests on the HCT116 arm of the
+CRISPRi result. It is now the only near-term route to an independent target benchmark: the one
+never-read screen tried overnight had 13 usable positives against a registered floor of 20.
+Recommended: yes. (2) A permission rule so `scripts/commit_own.sh --force` can run; two things wait on
+it, including the regenerated `engine_package.json`. (3) The licence of the engine-only test files
+shipped in the Apache-2.0 engine package (recommended: list them as Apache 2.0).
+
+**The review.** A read-only external review found the project's strength to be evidence that stays
+traceable, including evidence against it, and its gap predictive reliability. Its nine items are
+ROADMAP §5 item 11, with its acceptance tests and its order: R1–R5 before any increase in model
+complexity. The README no longer says "the whole genome is decoded"; it gives five separate
+measures.
+
+**Done overnight, each registered before it was measured:**
+- R1: every compiled rule carries its cell as an executable condition; a rule of unknown cell runs
+  nowhere. A chr21 run as HepG2 now uses 155 of its 5,176 rules.
+- R2 and R5: every CRISPRi record carries its partition, study, assay and power; no reported held-out
+  figure had seen its test set; increases and underpowered nulls are read as their own outcomes
+  (measured-layer agreement 0.76 → 0.81).
+- R3: the runtime names how it combines regulators and reports every input it would have read as a
+  silent zero. The audit: **none of the 440,589 compiled rules can be simulated as compiled.** The
+  annotation is not yet a model.
+- R4: the fixed 0.3 in BioForge and every confidence derived from effect size are gone; a probability
+  now exists only with its outcome, population and method, and none does yet.
+- R6: one strong reporter tile no longer makes an element active (126 elements now read "tiles
+  conflict"); the ENCODE reporter is described as integrated, not episomal.
+- R8: the joint annotation engine's pretest was negative (coupling lost to independent scoring), so it
+  is not built.
+- R9: all six headline results behind the README rebuild from a clean checkout with no value
+  different.
+
+**Negatives, found and kept.** The gastrulation model's target proportions had no source; against the
+one measured human gastrula it misses all three germ layers, and correcting a rule's sign to match
+its paper removed its mesoderm entirely, because the runtime averages activators. The simulator's
+clamp was a knockdown, not a knockout (fixed). A test passed on a floating-point rounding error.
+
+**Still open.** R7 (a compositional ontology) and the evidence explorer's unstated-versus-low
+confidence were running at the time of writing. Results held by the removal guard are rebuilt after
+2026-09-30.
+
+docs/ROADMAP.md §5 item 11; docs/CRISPRI-RESULT.md; docs/DESIGN-MINIMAL-CELL.md; docs/ATTRIBUTION.md.
