@@ -336,6 +336,102 @@ agreement with itself, not an external confirmation rate. The 86,979
 reference sites without a curated counterpart are observations the curated
 layer lacks; they are not added as sites here. Occupancy stays blocked.
 
+## Relative abundance in tumours (2026-09-28)
+
+**What the field means:** `relative_abundance_in_tumours` gives, per CPTAC
+study on cBioPortal, the number of tumours with a value for a phosphosite and
+the median of the per-tumour log2 ratio of that site's abundance to a pooled
+reference of tumours from the same study. It is **not** occupancy (the
+fraction of the protein phosphorylated there), not an absolute level
+comparable across studies, and never per patient in the repository. A
+curated site with no entry is absent from these profiles, which is not
+evidence that it is never phosphorylated.
+
+This builds route 2 of the section above. The obstacle was the site names:
+gene symbol plus a position on a RefSeq protein, not UniProt accession and
+residue. `scripts/cptac_phospho.py map` builds that mapping;
+`ptm.parse_cptac_entity` and `ptm.transfer_position` are its two rules.
+
+**Mapping, before any join.**
+
+- Entities. Twelve phospho profiles, 430,832 entities. Four name their
+  RefSeq protein (lung adenocarcinoma 2020, glioblastoma 2021, pancreatic
+  2021, paediatric brain 2020); seven name the gene only (breast 2020,
+  endometrial 2020, colon 2019, the two TCGA breast and two TCGA ovarian
+  quantifications); the lung squamous 2021 profile holds 7,729 gene-level
+  aggregates whose ids end in `acetylprotein` and is excluded whole.
+- Single sites only. An entity counts only when it names one localised
+  S/T/Y site. Dropped at parse time: several sites in one entity (lung
+  5,919; glioblastoma 17,202; brain 464; breast 2020 5,911; TCGA breast
+  13,100 and PanCan 1,880; TCGA ovarian 456 and PanCan 31), site not
+  localised (lung 7,537; breast 2020 6,926), a second glioblastoma entity
+  for the same site (the `.1` suffix, 7,620), not a RefSeq protein (11
+  lung smORF or YP entities).
+- RefSeq to UniProt. 12,025 RefSeq protein accessions, versioned as CPTAC
+  used them. UniProt REST ID mapping (`RefSeq_Protein` to `UniProtKB`,
+  release 2026_03, CC BY 4.0): the reviewed entries among the project's
+  compiled definitions. A superseded version (`NP_x.1` when `.2` is
+  current) has no cross-reference, so the unversioned accession is asked
+  instead (3,893 proteins); the sequence compared is still the exact
+  version, fetched from NCBI E-utilities. Result: 7,521 identical to the
+  UniProt canonical sequence, 3,123 different, 1,074 with no UniProt
+  entry, 305 with no reviewed entry among the compiled definitions, 2 with
+  two compiled entries.
+- Position transfer. Identical sequences carry the position (87,207 site
+  entities); otherwise the 15-residue window around the site must occur
+  exactly once in the UniProt sequence (27,029 carried). The residue letter
+  must match at the RefSeq end (27 disagree, 0.02%) and at the UniProt end.
+  Dropped: window not found (lung 494, glioblastoma 401, pancreatic 925,
+  brain 63), window occurs more than once (12), RefSeq protein not mapped
+  to one compiled entry (lung 2,682, glioblastoma 4,747, pancreatic 4,769,
+  brain 426), several entities on one UniProt site in one profile (all
+  dropped as ambiguous: 51, 0, 161, 96).
+- Mapped, RefSeq-keyed: lung 24,491, glioblastoma 40,357, pancreatic
+  45,586, brain 3,494; 66,427 distinct UniProt sites on 8,791 proteins
+  (S 84%, T 14%, Y 2% of site entities).
+- Gene-keyed profiles. The position is on an unnamed RefSeq isoform. Taken
+  on the UniProt canonical of the one compiled entry for the gene symbol,
+  the residue letter disagrees for 31,424 of 219,179 site entities
+  (14.3%; 4.3% colon, 13.5% breast 2020, 14.6% endometrial, 16.2% to 17.6% TCGA
+  breast, 18.4% to 19.2% TCGA ovarian). That rate says many positions are on
+  another isoform, and a letter that matches by chance on a wrong isoform
+  cannot be told apart, so these profiles are counted and **not
+  committed**.
+
+**Registration (written after the mapping, before any curated site was
+joined or any value fetched; constants `ptm.CPTAC_REGISTRATION`).**
+
+- Join: UniProt accession + position + residue letter must equal a curated
+  site of class `phospho` (S, T or Y). Committed tier: RefSeq-keyed
+  profiles only; a gene-keyed tier would need a residue mismatch under 2%,
+  the same bound as the RefSeq tier, and at 14.3% it is counted only.
+- Expected coverage of the 41,661 curated phospho sites: **35% to 55%**
+  from the RefSeq-keyed profiles, 45% to 65% with the gene-keyed profiles
+  counted. Why: the Ochoa reference, 116,258 sites from 104 cell types or
+  tissues, reached 70.3%; these profiles give 66,427 mapped sites (109,474
+  with gene-keyed ones) from four tumour types, single localised sites
+  only, and tumour tissue lacks the cell-line studies much of UniProt's
+  curation came from.
+- Checks that would show the join wrong: EGFR Y1092 (P00533; legacy Y1068)
+  present in lung adenocarcinoma; NPM1 S125 (P06748) present; TP53 M1 absent;
+  no joined site off S, T or Y; RefSeq-end residue mismatches under 2%; the
+  median of the per-site, per-study median log2 ratios within ±0.5 (pooled
+  reference ratios centre near zero). AKT1 S473 is reported without an
+  expectation: its tryptic peptide is poorly seen in global
+  phosphoproteomes.
+- Field: `relative_abundance_in_tumours`, per site a list of (study,
+  tumours with a value, median log2 ratio). Never `occupancy`, `modified`
+  or `active`; no per-tumour value is written to the repository (values are
+  summarised in memory and never cached).
+- Licences. cBioPortal data are under the ODC Open Database License 1.0
+  unless a study says otherwise. Obligations and how the result meets
+  them: attribution (the result's `licence` field and this section name
+  CPTAC, cBioPortal and every profile used); share-alike (the per-site
+  summary is a derived database and the result file declares it is offered
+  under ODbL 1.0, separately from the code licences); keep open (it is a
+  plain JSON file in the public repository). UniProt CC BY 4.0 and NCBI
+  RefSeq are attributed the same way.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had
