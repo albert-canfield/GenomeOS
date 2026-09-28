@@ -2733,6 +2733,42 @@ def flag_the_committed_table(
     }
 
 
+def cheapest_with_a_calibrated_null(result: dict[str, Any]) -> list[dict[str, Any]]:
+    """Derived AFTER the registered run, from its own null rule and nothing else: per ratio, the cheapest
+    design reaching 80% whose null cell at the same number of blocks is calibrated. The registered
+    `cheapest_feasible_design_at_80_percent` is kept as computed; the registration says a design with an
+    anti-conservative null has sizes to be read as optimistic, and this names the cheapest one that has not.
+    """
+    null = {(c["k"], c["m"], c["g"], c["n_blocks"]): c for c in result["null_calibration"]["cells"]}
+    out = []
+    for row in result["sample_size_at_equal_cost"]:
+        ok = []
+        for x in row["designs"]:
+            if x["n_blocks"] == "infeasible":
+                continue
+            cell = null[(x["k"], x["m"], x["g"], x["n_blocks"])]
+            if cell["calibrated"]:
+                ok.append({**x, "null_false_positive_rate": cell["false_positive_rate"]})
+        reg = row["cheapest_feasible_design_at_80_percent"]
+        out.append(
+            {
+                "ratio": row["ratio"],
+                "registered_cheapest": reg,
+                "registered_cheapest_null_false_positive_rate": (
+                    null[(reg["k"], reg["m"], reg["g"], reg["n_blocks"])]["false_positive_rate"]
+                    if reg
+                    else None
+                ),
+                "feasible_designs": sum(1 for x in row["designs"] if x["n_blocks"] != "infeasible"),
+                "feasible_with_a_calibrated_null": len(ok),
+                "cheapest_with_a_calibrated_null": (
+                    min(ok, key=lambda x: (x["assay_cost_elements"], x["n_blocks"])) if ok else None
+                ),
+            }
+        )
+    return out
+
+
 @mf.depends_on_models("alphagenome")  # the scored-element set the windows are drawn over is the sweep's
 def manifest_calibrated(experiments: int, seed: int) -> dict[str, Any]:
     arm = _measured_arm_module()
@@ -2798,7 +2834,16 @@ def main(argv: list[str] | None = None) -> int:
         help="item 12 S2: run the calibrated model registered in S2_REGISTRATION (writes a new result)",
     )
     ap.add_argument("--experiments", type=int, default=S2_EXPERIMENTS, help="simulated experiments per cell")
+    ap.add_argument(
+        "--read-calibrated",
+        action="store_true",
+        help="item 12 S2: print the derived cheapest-with-a-calibrated-null view of the committed result",
+    )
     args = ap.parse_args(argv)
+    if args.read_calibrated:
+        got = json.loads((RESULTS_DIR / f"{RESULT_CALIBRATED}.json").read_text())
+        print(json.dumps(cheapest_with_a_calibrated_null(got), indent=1))
+        return 0
     if args.calibrated:
         out = collect_calibrated(args.experiments, S2_SEED)
         if args.no_save:

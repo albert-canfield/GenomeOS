@@ -8954,6 +8954,100 @@ share the latent spread and differ only in the mean.
 **Words.** Every size is a probability-of-detection statement under the calibrated assumptions, never a
 guarantee that an experiment decides clause 2.
 
+## The result: recalibrated, the power model reproduces its 13.45% anchor, no design reaches 80% at a three-quarters rate within the eligible blocks, and shared controls are anti-conservative in every cell (item 12 S2, 2026-09-28, lane-s2, later)
+
+The model registered in `019a9ab` was run once (1,562 s, **0 AlphaGenome requests**) and written to
+`data/results/clause2_design_power_calibrated.json` with a complete manifest; the stamp is dirty only
+with peers' files. The run went through a scratch driver that calls `collect_calibrated` and
+`save_result` exactly as `--calibrated` does and also kept a copy of the output in case the save
+failed; the manifest's argv names it. lane-design's table stays as the record.
+
+**The gate.** The redraw reproduced the committed window draw to the digit: 44,081 windows, 31,554
+carrying, 223 with a tested element, 30 with a regulating one, 134 and 27 blocks, 882 and 531.
+
+**The anchor at its level.** 159 of the 223 windows carry one tested element and 64 carry 2 to 11.
+Beneath them are 241 distinct tested elements, 23 of which regulate a coding gene (9.54%, an
+element-level rate below the 13.45% window rate, as it has to be). 127 windows share a tested element
+with another. Clustered, the anchor's interval is **7.88% to 19.80%** over shared-element components
+(design effect 1.74, about 128 effective windows) and 8.82% to 18.81% over blocks, against the
+as-if-independent 9.26% to 18.64%; the sensitivity grid used 7.88% and 19.80%.
+
+**The calibration, latent and observed kept apart.** The median carrying block is 31.6 kb, so the
+registered rule took the 25-kb benchmark ICC, **0.3745 on the observed scale**. Solved at sensitivity
+0.6674 and false-positive rate 0.01: total logit spread 5.04, chromosome part 1.28. **The latent ICC
+this implies is 0.885, against 0.3745 observed**; for chromosomes, 0.057 latent against 0.0142
+observed. The mean true per-element rate of the window arm is 14.94%, while the rate at the
+intercept's location is 0.39%: most units almost never regulate and a few often do, which is what a
+0.37 observed correlation at 67% sensitivity requires. The implied observed element rate is 10.82%,
+set beside 9.54% beneath the anchor's windows and the benchmark's 12.15% and 14.56%.
+
+**The check S2 exists for: the anchor is reproduced.** Simulated, the anchor's own 223 windows come
+back **13.459% positive against 13.45%** (+0.009 points; tolerance 0.5) and clusters of calls give an
+**observed ICC of 0.3704 against 0.3745** (tolerance 0.02). The committed reference under the same check
+gives 56.96% and 0.115. Every feasible sensitivity variant reproduces its own anchor too. One variant
+has no solution: at `PowerAtEffectSize10`'s sensitivity no spread produces an observed ICC above 0.280,
+so the measured 0.3745 is out of reach of an assay that weak.
+
+**The null, simulated with its shared controls and clustering.** 210 null cells, 2,000 experiments
+each, nominal 0.05. **With shared controls (g = 4) all 105 cells are anti-conservative, false-positive
+rate 0.069 to 0.214**, and under the alternatives the interval covers the true difference in 65% to
+93% of experiments: the registered prediction is confirmed. Without them 87 of 105 cells are calibrated; the failures sit at 20
+to 30 blocks with 3 or 10 windows (up to 0.1205), and from 50 blocks up 76 of 81 are calibrated
+(largest 0.066). One window per block is calibrated in all 35 of its cells (at most 0.054). The interval
+over chromosomes runs 0.045 to 0.139. The exact interval over blocks and the committed 10,000-resample
+one read 0 to 3 of 200 simulated experiments differently per checked cell.
+
+**What the endpoint can show.** Even if the blocks regulated nothing (ratio 0), the expected difference
+is -9.82 points with one tested element per unit and -22.02 with six; at a three-quarters rate it is
+-2.46 and -4.83.
+
+**The sample-size table at equal cost** (80% probability of detection under the calibrated
+assumptions; cost in tested elements; "infeasible" = not reached within the design's eligible
+population: 531 blocks for one element, 347 for two, 284 for three, 187 for six):
+
+| Blocks regulate, relative to windows | Designs reaching 80% (of 24) | Registered cheapest (its null rate) | Cheapest whose null is calibrated |
+| --- | --- | --- | --- |
+| 0.75 | **0: infeasible in every design** | infeasible | infeasible; at all 531 blocks the best is 0.466 |
+| 0.5 | 16 | 1 element, 3 shared windows: 400 blocks, 727 elements (0.142) | 1 element, 1 window: **all 531 blocks**, 1,062 elements, 0.809 |
+| 0.25 | 24 | 1, 3 shared: 150 blocks, 290 elements (0.125) | 1, 1: 200 blocks, 400 elements, 0.824 |
+| 0.1 | 24 | 1, 3 shared: 75 blocks, 158 elements (0.122) | 1, 3: 75 blocks, 300 elements, 0.852 |
+| 0 | 24 | 1, 3 shared: 50 blocks, 114 elements (0.107) | 1, 1: 100 blocks, 200 elements, 0.893 |
+
+The registered cheapest design at every ratio shares its windows, and its null is anti-conservative,
+so by the registered rule its sizes read as optimistic. The last column is derived after the run from
+that rule and nothing else (`cheapest_with_a_calibrated_null`, `--read-calibrated`), and is labelled so
+in the code. At lane-design's reference design (6 elements, 3 windows) the committed 750 / 100 / 30 /
+20 / 20 become **infeasible (0.263 at all 187 eligible blocks) / 187, all of them / 75 / 50 / 30**.
+
+**At fixed budgets.** With 250, 500, 1,000 and 2,000 tested elements the best design with its own
+windows detects a half-rate difference with probability 0.283, 0.482, 0.788 and 0.942. At 4,000 and
+8,000 elements 19 and 22 of the 24 designs are infeasible, because the budget buys more blocks than the
+tier holds. No design at any budget or size detects a three-quarters rate with probability above 0.47.
+
+**The registered reading, simulated.** With 20 or more compared blocks the measured arm reads
+"model_failed" whenever the interval over blocks reaches 0. At a three-quarters rate, with every
+eligible block tested, that reading comes out in 53% to 82% of experiments depending on the design: the
+rule reads an interval that could not decide as the blocks regulating no less often than their windows.
+
+**Sensitivity, one factor at a time.** At a three-quarters rate both reference designs are infeasible
+in every variant. At a half, one element with three windows needs 200 blocks (anchor at 19.80%) to 531
+(false-positive rate 0.03), and is infeasible at the anchor's low end; six elements with three windows
+need 150 to 187 or are infeasible (anchor's low end; false-positive rate 0.03).
+
+**lane-design's table against the eligible population.** 50 of its committed entries exceed their own
+design's eligible population, among them the reference 750 at 0.75 against 187 and the 5,000 at the top
+of that ratio's range; they are listed in the result as infeasible and the committed file is unchanged.
+
+**What this settles and what it does not.** It settles that the power model now reproduces the quantity
+it is anchored on, at the level the anchor was measured, with its correlation on the right scale, and
+that the planned analysis has been simulated under the null with the structure a real experiment would
+have. It shows that the committed interval cannot be used with shared controls, and that, under these
+assumptions, no searched design on this tier detects blocks regulating three quarters as often as their
+windows with probability above 0.47. It does not estimate the
+effect, which remains the reason every size is conditional, and the window arm's per-element rate is
+carried from elements a benchmark chose to test. Every size here is a probability of detection under
+these assumptions, never a guarantee that an experiment decides clause 2. Clause 2 stays not met.
+
 ## Item 13 C4 registered: hide evidence and predict it, with the AlphaGenome ablation run first (2026-09-28, lane-c4)
 
 This section registers the measuring stick for the coherence programme (ROADMAP section 5, item 13):

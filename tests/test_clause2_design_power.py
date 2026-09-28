@@ -458,3 +458,52 @@ def test_the_recorder_leaves_the_committed_draw_unchanged():
     assert sum(any(e["_hit"] for e in u["els"]) for u in windows) == sum(
         r["windows_yes"]["hit"] for r in plain
     )
+
+
+# ---- item 12 S2: the committed calibrated result keeps its own rules (lane-s2) ---------------------------
+
+
+def _calibrated():
+    import json
+
+    p = dp.RESULTS_DIR / f"{dp.RESULT_CALIBRATED}.json"
+    if not p.exists():
+        pytest.skip("calibrated result not present")
+    return json.loads(p.read_text())
+
+
+def test_the_calibrated_result_prints_no_size_above_its_eligible_population():
+    got = _calibrated()
+    for row in got["sample_size_at_equal_cost"]:
+        for d in row["designs"]:
+            assert d["n_blocks"] == "infeasible" or d["n_blocks"] <= d["eligible_population"]
+    caps = {
+        int(k): v["blocks"] for k, v in got["eligible_population"]["by_elements_tested_per_block"].items()
+    }
+    for row in got["power_at_fixed_budgets"]:
+        if row["status"] == "simulated":
+            assert row["n_blocks"] <= caps[row["k"]]
+        elif row["status"].startswith("infeasible"):
+            assert row["n_blocks"] == "infeasible"
+    for r in got["by_design"]:
+        assert all(c["n_blocks"] <= r["eligible_population"] for c in r["cells"])
+
+
+def test_the_calibrated_result_is_gated_and_checked_against_its_anchor():
+    got = _calibrated()
+    assert got["anchor_redraw_gate"]["passed"] is True
+    assert got["anchor"]["windows"] == 223 and got["anchor"]["positive_windows"] == 30
+    check = got["anchor_reproduced"]
+    assert set(check) >= {"simulated_window_rate", "simulated_observed_icc", "reproduced"}
+    cal = got["calibration_reference"]
+    assert cal["latent_icc_unit_plus_chromosome"] != cal["observed_icc_achieved"]
+
+
+def test_the_derived_view_only_names_designs_whose_null_is_calibrated():
+    got = _calibrated()
+    null = {(c["k"], c["m"], c["g"], c["n_blocks"]): c for c in got["null_calibration"]["cells"]}
+    for row in dp.cheapest_with_a_calibrated_null(got):
+        best = row["cheapest_with_a_calibrated_null"]
+        if best is not None:
+            assert null[(best["k"], best["m"], best["g"], best["n_blocks"])]["calibrated"] is True
+            assert best["n_blocks"] <= best["eligible_population"]
