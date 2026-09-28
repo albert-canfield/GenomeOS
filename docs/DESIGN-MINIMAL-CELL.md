@@ -207,3 +207,105 @@ endoderm 0.417 to 0.425. Both move away from the module's stated expectation
 (mesoderm 0.35, endoderm 0.20), and the test's mesoderm stays within the 0.25
 bar only by floating-point rounding (0.35 - 0.1 = 0.24999999999999997). The
 layer order is unchanged; the cell view does not move.
+
+## Gastrulation against a measured census (registered 2026-09-28)
+
+**What the module models.** `data/demo/gastrulation.bio` names human genes
+and proteins (GENCODE; UniProt P48431, O15178, Q9H6I2, Q96S42) and cites
+mouse and stem-cell papers for its interactions; it names no stage. It is a
+generic amniote germ-layer switch read on a 1-D NODAL axis at steady state,
+and its three `expected_*` proportions cite nothing.
+
+**The census.** The only measured human gastrula with per-cell labels is
+Tyser et al. 2021 (Nature 600:285, E-MTAB-9388): one Carnegie stage 7 embryo
+(16–19 days), 1,195 Smart-seq2 cells after QC, FACS-sorted from three
+dissected regions (665 caudal, 340 rostral, 190 yolk sac), eleven author
+clusters. It counts sampled cells, not the embryo: the region shares are how
+many cells were sorted, and n = 1. Its "endodermal cell" cluster holds
+hypoblast and yolk-sac endoderm with definitive endoderm, its "ectodermal
+cell" cluster holds amnion with non-neural ectoderm (subclusters are not in
+the public SDRF), and its primordial germ cells sit inside "primitive
+streak". The mouse atlas (Pijuan-Sala et al. 2019, Nature 566:490,
+E-MTAB-6967; 116,312 10x cells, pooled whole embryos, E6.5–E8.5) is the
+secondary, at E7.0, E7.25 and E7.5, the stages Tyser et al. match to human
+CS7 epiblast and streak. Counts are distilled by
+`scripts/gastrulation_census.py distill` into
+`data/results/gastrulation_census_counts.json`.
+
+**Is it comparable at all.** Only partly, and the registration says so
+before the number. The model has three fates and a position; the census has
+an undifferentiated epiblast, a primitive streak and extraembryonic tissue
+that the model has no state for, and it changes with stage while the model
+has none. The model's shares are fractions of axis length, set by two
+unsourced gradient numbers (`decay_length`, `nodal_max`), so a pass would
+show little; a large miss at default parameters is still informative,
+because it says what the default gradient claims about an embryo is wrong.
+
+**Registered comparison** (constants in `genomeos/runtime/gastrulation.py`):
+
+- Model: one run of `run_gastrulation` with the command-line defaults, 120
+  cells, 40 h, dt 0.05, `nodal_max` 6, `decay_length` 0.35
+  (`CENSUS_MODEL_RUN`). No parameter is changed before or after.
+- Human labels never mapped: yolk sac mesoderm, hemogenic endothelial
+  progenitor, erythrocyte (extraembryonic or yolk-sac blood, off the
+  embryonic axis).
+- Two mappings. *differentiated*: ectoderm = ectodermal cell; mesoderm =
+  nascent, emergent, advanced and axial mesoderm; endoderm = endodermal
+  cell; epiblast and primitive streak left out. *marker*, the model's own
+  reading: the SOX2 default holds the epiblast (ectoderm += epiblast cell)
+  and TBXT holds the streak (mesoderm += primitive streak).
+- Two site filters: all three regions, and the embryonic disc only
+  (rostral and caudal), which removes the yolk-sac share of the endoderm
+  cluster.
+- Each variant gives three shares renormalised over its mapped cells. The
+  census interval per layer is the lowest to highest share over the four
+  variants; mapping ambiguity is carried by that spread, not by the
+  tolerance.
+- Tolerance 0.05 beyond the interval: the binomial standard error of a
+  share at the smallest mapped total (about 600 cells) is at most 0.02, so
+  0.05 is about 2.5 standard errors, and nothing larger is defensible for
+  one embryo without inventing an embryo-to-embryo spread.
+- Falsifier: any of the three model shares outside its interval by more
+  than 0.05 on the human census. The verdict is then "falsified" for the
+  default proportions; otherwise "not contradicted", never "validated".
+- Mouse: the same two mappings (extraembryonic, blood, PGC, caudal
+  epiblast and NMP labels never mapped; *marker* adds Epiblast to
+  ectoderm, Primitive Streak to mesoderm, Anterior Primitive Streak to
+  endoderm) at the three stages, reported beside it with no verdict.
+
+**What was seen before this was written.** The model's shares (lane-gastrula,
+`19423bd`: 0.475 / 0.10 / 0.425 at these defaults) and the distilled census
+counts were both open while the mappings were chosen, so this registration
+protects against choosing a mapping or tolerance after the verdict, not
+against knowing the data. Expected outcome, stated now: falsified on
+mesoderm, which dominates the sampled CS7 cells in every mapping.
+
+**Sourced parameters for a later, separately registered lane** (none
+applied here):
+
+- `Tbxt inhibits SOX17` (inferred, strength 0.6) has the wrong sign for the
+  published evidence: Lolas et al. 2014 (PNAS 111:4478, PMC3970479) find
+  *Sox17* a direct Brachyury target that Brachyury activates, in mouse ES
+  cell embryoid bodies (ChIP-seq), with Sox17 in turn repressing Brachyury
+  (overexpression) and the two anti-correlated in E7.5 embryos. They report
+  no dose, threshold or binding strength. Change: `Tbxt activates SOX17`,
+  evidence experimental Lolas 2014, strength and threshold still unsourced;
+  expected effect: the brake on SOX17 becomes an accelerator, endoderm
+  widens and the mesoderm band narrows, away from the census.
+- `Sox17 inhibits TBXT` (inferred) gains the same citation; no number.
+- NODAL thresholds: the one measured dose ratio is Xenopus, not mammalian.
+  Dyson & Gurdon 1998 (Cell 93:557) find about 100 and 300 bound activin
+  molecules per animal-cap cell switch on *Xbra* and *Xgsc* (2% and 6% of
+  receptors), and Shimizu & Gurdon 1999 (PNAS 96:6791) carry the same
+  threefold step to nuclear SMAD2. The model's TBXT and SOX17 thresholds
+  (1.0 and 3.0) happen to be threefold apart, but the numbers do not map:
+  the units are occupied receptors per cell against model NODAL units with
+  no stated relation, the measure is onset rather than a Hill half-maximum,
+  and goosecoid is an organizer gene, not SOX17. Vincent et al. 2003 (Genes
+  Dev 17:1646) give only an order in the mouse (lowering Nodal/Smad2 loses
+  anterior definitive endoderm and prechordal plate first); D'Amour et al.
+  2005 (Nat Biotechnol 23:1534) give an activin dose in a dish. Dubrulle et
+  al. 2015 (eLife 4:e05042) find in zebrafish that thresholds on Nodal
+  concentration do not predict target ranges, induction kinetics do: that
+  bears on the model class (a clamped level read at 40 h), not on a number.
+  No threshold here is citable as a value.

@@ -1,0 +1,398 @@
+{
+  "result": "gastrulation_census_counts",
+  "date": "2026-09-28",
+  "question": "measured cell-type counts in a human and a mouse gastrula, the census genomeos/runtime/gastrulation.py is compared with",
+  "human_cs7": {
+    "cells": 1195,
+    "by_label_and_site": {
+      "advanced mesoderm": {
+        "rostral": 69,
+        "caudal": 95
+      },
+      "axial mesoderm": {
+        "caudal": 23
+      },
+      "ectodermal cell": {
+        "rostral": 23,
+        "caudal": 6
+      },
+      "emergent mesoderm": {
+        "rostral": 56,
+        "caudal": 129
+      },
+      "endodermal cell": {
+        "rostral": 86,
+        "yolk sac": 26,
+        "caudal": 23
+      },
+      "epiblast cell": {
+        "rostral": 60,
+        "caudal": 73
+      },
+      "erythrocyte": {
+        "yolk sac": 26,
+        "caudal": 6
+      },
+      "hemogenic endothelial progenitor": {
+        "yolk sac": 80,
+        "rostral": 14,
+        "caudal": 17
+      },
+      "nascent mesoderm": {
+        "caudal": 97,
+        "yolk sac": 1
+      },
+      "primitive streak": {
+        "rostral": 8,
+        "caudal": 194
+      },
+      "yolk sac mesoderm": {
+        "yolk sac": 57,
+        "rostral": 24,
+        "caudal": 2
+      }
+    }
+  },
+  "mouse_atlas": {
+    "cells": 116312,
+    "unlabelled_dropped": {
+      "stripped": 9463,
+      "doublet": 13556
+    },
+    "by_stage_and_label": {
+      "E6.5": {
+        "Epiblast": 2276,
+        "ExE ectoderm": 633,
+        "Primitive Streak": 381,
+        "ExE endoderm": 126,
+        "Visceral endoderm": 52,
+        "Parietal endoderm": 10,
+        "Nascent mesoderm": 4,
+        "Rostral neurectoderm": 1,
+        "Surface ectoderm": 1
+      },
+      "E6.75": {
+        "Epiblast": 856,
+        "ExE ectoderm": 403,
+        "Primitive Streak": 326,
+        "ExE endoderm": 197,
+        "Nascent mesoderm": 138,
+        "Visceral endoderm": 109,
+        "Mixed mesoderm": 20,
+        "Anterior Primitive Streak": 13,
+        "PGC": 3,
+        "Surface ectoderm": 3,
+        "Haematoendothelial progenitors": 3,
+        "Rostral neurectoderm": 2,
+        "Def. endoderm": 2
+      },
+      "E7.0": {
+        "Epiblast": 5068,
+        "Primitive Streak": 2957,
+        "ExE ectoderm": 2027,
+        "Nascent mesoderm": 1588,
+        "ExE endoderm": 1336,
+        "Anterior Primitive Streak": 577,
+        "Visceral endoderm": 347,
+        "Mixed mesoderm": 309,
+        "Haematoendothelial progenitors": 206,
+        "Parietal endoderm": 109,
+        "Def. endoderm": 61,
+        "Surface ectoderm": 36,
+        "PGC": 35,
+        "Mesenchyme": 24,
+        "Blood progenitors 2": 24,
+        "Blood progenitors 1": 19,
+        "Rostral neurectoderm": 13,
+        "ExE mesoderm": 10,
+        "Gut": 2,
+        "Caudal epiblast": 1
+      },
+      "E7.25": {
+        "Epiblast": 4155,
+        "Primitive Streak": 2229,
+        "Nascent mesoderm": 1944,
+        "ExE ectoderm": 1631,
+        "ExE endoderm": 1312,
+        "Mixed mesoderm": 505,
+        "Anterior Primitive Streak": 396,
+        "Def. endoderm": 347,
+        "Haematoendothelial progenitors": 245,
+        "Visceral endoderm": 230,
+        "Mesenchyme": 129,
+        "Parietal endoderm": 86,
+        "ExE mesoderm": 74,
+        "Rostral neurectoderm": 63,
+        "Blood progenitors 1": 61,
+        "PGC": 54,
+        "Surface ectoderm": 45,
+        "Notochord": 10,
+        "Caudal epiblast": 8,
+        "Gut": 5,
+        "Intermediate mesoderm": 3,
+        "Blood progenitors 2": 2,
+        "Erythroid3": 1,
+        "Erythroid2": 1,
+        "Caudal Mesoderm": 1
+      },
+      "E7.5": {
+        "ExE ectoderm": 2121,
+        "ExE endoderm": 1640,
+        "Rostral neurectoderm": 1036,
+        "Epiblast": 924,
+        "Nascent mesoderm": 645,
+        "Mesenchyme": 597,
+        "Mixed mesoderm": 580,
+        "Primitive Streak": 538,
+        "Caudal epiblast": 418,
+        "Blood progenitors 2": 268,
+        "Haematoendothelial progenitors": 254,
+        "Def. endoderm": 235,
+        "Visceral endoderm": 232,
+        "Intermediate mesoderm": 220,
+        "Blood progenitors 1": 201,
+        "Gut": 164,
+        "Surface ectoderm": 145,
+        "ExE mesoderm": 141,
+        "Pharyngeal mesoderm": 111,
+        "Paraxial mesoderm": 90,
+        "Anterior Primitive Streak": 74,
+        "Caudal neurectoderm": 71,
+        "Notochord": 69,
+        "PGC": 68,
+        "Somitic mesoderm": 54,
+        "Caudal Mesoderm": 52,
+        "Parietal endoderm": 31,
+        "Allantois": 12,
+        "Erythroid1": 2,
+        "Endothelium": 1
+      },
+      "E7.75": {
+        "ExE ectoderm": 2323,
+        "ExE endoderm": 2004,
+        "Rostral neurectoderm": 1627,
+        "Blood progenitors 2": 940,
+        "Mesenchyme": 922,
+        "Intermediate mesoderm": 627,
+        "Caudal epiblast": 622,
+        "Erythroid1": 582,
+        "Surface ectoderm": 432,
+        "Pharyngeal mesoderm": 419,
+        "Paraxial mesoderm": 409,
+        "Haematoendothelial progenitors": 386,
+        "Gut": 360,
+        "ExE mesoderm": 316,
+        "Caudal neurectoderm": 288,
+        "Allantois": 238,
+        "Caudal Mesoderm": 233,
+        "Somitic mesoderm": 228,
+        "Mixed mesoderm": 189,
+        "Forebrain/Midbrain/Hindbrain": 166,
+        "Blood progenitors 1": 162,
+        "Visceral endoderm": 148,
+        "Notochord": 140,
+        "Cardiomyocytes": 102,
+        "Nascent mesoderm": 101,
+        "Epiblast": 98,
+        "Def. endoderm": 87,
+        "PGC": 87,
+        "Endothelium": 85,
+        "Primitive Streak": 64,
+        "Spinal cord": 57,
+        "Erythroid2": 25,
+        "Parietal endoderm": 13,
+        "NMP": 12,
+        "Anterior Primitive Streak": 1
+      },
+      "E8.0": {
+        "Rostral neurectoderm": 1569,
+        "Erythroid1": 1544,
+        "Intermediate mesoderm": 1370,
+        "ExE endoderm": 1165,
+        "Caudal epiblast": 1020,
+        "Blood progenitors 2": 983,
+        "Mesenchyme": 966,
+        "ExE ectoderm": 960,
+        "Paraxial mesoderm": 857,
+        "Pharyngeal mesoderm": 830,
+        "Surface ectoderm": 682,
+        "Haematoendothelial progenitors": 567,
+        "Somitic mesoderm": 544,
+        "Caudal Mesoderm": 504,
+        "ExE mesoderm": 488,
+        "Caudal neurectoderm": 458,
+        "Allantois": 418,
+        "Gut": 381,
+        "Spinal cord": 208,
+        "Endothelium": 174,
+        "Erythroid2": 169,
+        "Notochord": 157,
+        "Forebrain/Midbrain/Hindbrain": 153,
+        "Cardiomyocytes": 138,
+        "Blood progenitors 1": 109,
+        "NMP": 66,
+        "Visceral endoderm": 59,
+        "Def. endoderm": 57,
+        "PGC": 54,
+        "Parietal endoderm": 22,
+        "Erythroid3": 6,
+        "Mixed mesoderm": 3
+      },
+      "E8.25": {
+        "Forebrain/Midbrain/Hindbrain": 1999,
+        "Paraxial mesoderm": 1224,
+        "Surface ectoderm": 1070,
+        "NMP": 1045,
+        "Mesenchyme": 976,
+        "Pharyngeal mesoderm": 844,
+        "Intermediate mesoderm": 838,
+        "Erythroid1": 728,
+        "Somitic mesoderm": 718,
+        "Spinal cord": 702,
+        "ExE mesoderm": 651,
+        "Erythroid2": 605,
+        "ExE endoderm": 599,
+        "Allantois": 526,
+        "Cardiomyocytes": 464,
+        "Haematoendothelial progenitors": 451,
+        "Gut": 384,
+        "Rostral neurectoderm": 384,
+        "Endothelium": 358,
+        "ExE ectoderm": 289,
+        "Caudal Mesoderm": 209,
+        "Caudal epiblast": 183,
+        "Erythroid3": 172,
+        "Blood progenitors 2": 156,
+        "Caudal neurectoderm": 91,
+        "Neural crest": 78,
+        "Def. endoderm": 62,
+        "Blood progenitors 1": 34,
+        "PGC": 34,
+        "Notochord": 33,
+        "Visceral endoderm": 22,
+        "Parietal endoderm": 5,
+        "Anterior Primitive Streak": 1
+      },
+      "E8.5": {
+        "Forebrain/Midbrain/Hindbrain": 2536,
+        "Erythroid3": 2518,
+        "Paraxial mesoderm": 1177,
+        "Surface ectoderm": 1018,
+        "Mesenchyme": 1016,
+        "NMP": 918,
+        "Spinal cord": 829,
+        "ExE mesoderm": 814,
+        "Pharyngeal mesoderm": 804,
+        "Allantois": 618,
+        "Gut": 563,
+        "ExE endoderm": 546,
+        "Neural crest": 544,
+        "Somitic mesoderm": 525,
+        "Cardiomyocytes": 502,
+        "Endothelium": 466,
+        "Intermediate mesoderm": 414,
+        "Haematoendothelial progenitors": 405,
+        "Erythroid2": 306,
+        "Blood progenitors 2": 87,
+        "Def. endoderm": 81,
+        "Erythroid1": 73,
+        "Caudal Mesoderm": 64,
+        "Blood progenitors 1": 37,
+        "PGC": 21,
+        "Visceral endoderm": 14,
+        "Rostral neurectoderm": 9,
+        "Parietal endoderm": 2,
+        "Notochord": 2
+      },
+      "mixed_gastrulation": {
+        "ExE ectoderm": 1371,
+        "Epiblast": 1242,
+        "Primitive Streak": 770,
+        "Rostral neurectoderm": 688,
+        "Nascent mesoderm": 608,
+        "ExE endoderm": 414,
+        "Mixed mesoderm": 388,
+        "Mesenchyme": 349,
+        "Haematoendothelial progenitors": 216,
+        "Caudal epiblast": 193,
+        "Def. endoderm": 176,
+        "Blood progenitors 2": 127,
+        "Blood progenitors 1": 122,
+        "Anterior Primitive Streak": 96,
+        "Surface ectoderm": 91,
+        "Gut": 81,
+        "Intermediate mesoderm": 79,
+        "Pharyngeal mesoderm": 78,
+        "ExE mesoderm": 77,
+        "Visceral endoderm": 70,
+        "Paraxial mesoderm": 54,
+        "Notochord": 53,
+        "Caudal neurectoderm": 40,
+        "PGC": 36,
+        "Caudal Mesoderm": 12,
+        "Somitic mesoderm": 10,
+        "Allantois": 8,
+        "Parietal endoderm": 6
+      }
+    }
+  },
+  "sampling_notes": [
+    "Both count sampled cells, not cells in the embryo. Human: one embryo, cells FACS-sorted into plates per region, so the region shares (665/340/190) reflect how many were sorted, not tissue size. Mouse: pooled whole embryos per sample, 10x capture; per-stage totals vary 2,075-16,909.",
+    "Human 'endodermal cell' holds hypoblast and yolk-sac endoderm (extraembryonic) with definitive endoderm; the subclusters are not in the SDRF. Human 'ectodermal cell' holds amnion with non-neural ectoderm. Primordial germ cells sit inside the human 'primitive streak' cluster."
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "E-MTAB-9388",
+        "version": "ArrayExpress SDRF, public release 2021-08-23",
+        "paper": "Tyser RCV et al. 2021, Nature 600:285-289, doi:10.1038/s41586-021-04158-y (PMC7615353)",
+        "counts": "1,195 Smart-seq2 cells after QC from one CS7 human embryo (16-19 days), FACS-isolated from three dissected regions (665 caudal, 340 rostral, 190 yolk sac); author cluster labels",
+        "licence": "EMBL-EBI ArrayExpress terms of use (public, no restriction stated); no personal data beyond stage and sex is in the SDRF and none is kept"
+      },
+      {
+        "accession": "E-MTAB-6967",
+        "version": "meta.tab.gz, content.cruk.cam.ac.uk/jmlab/atlas_data (MouseGastrulationData 1.x source)",
+        "paper": "Pijuan-Sala B et al. 2019, Nature 566:490-495, doi:10.1038/s41586-019-0933-9 (PMC6522369)",
+        "counts": "116,312 10x cells from pooled whole C57BL/6 embryos at nine time points E6.5-E8.5; author celltype labels; doublets and stripped nuclei carry no label and are dropped",
+        "licence": "ArrayExpress terms of use; the Bioconductor wrapper MouseGastrulationData is GPL-3"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/gastrulation/E-MTAB-9388.sdrf.txt",
+        "sha256": "861168302157615143ecc24f0e068c80239bf3316d367f753aa545a3e802d169",
+        "bytes": 1287875,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gastrulation/pijuan_sala_2019_meta.tab.gz",
+        "sha256": "1b5e09b6c16803278f9b2d427dff0888f20d41889de3369eebbae840cc886988",
+        "bytes": 4941002,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: cell annotations, no genome coordinates",
+    "coordinates": "n/a: no genomic intervals",
+    "parameters": {
+      "human_label_column": "inferred cell type - authors labels",
+      "mouse_label_column": "celltype"
+    },
+    "exclusions": [
+      "mouse cells with celltype NA (doublets, stripped nuclei), counted in unlabelled_dropped"
+    ],
+    "partitions": "n/a: no evaluation split",
+    "code": {
+      "git_sha": "25f81c626ba72380f5685a29b075ad97b8d03b73",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/runtime/gastrulation.py"
+      ],
+      "argv": [
+        "scripts/gastrulation_census.py",
+        "distill"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

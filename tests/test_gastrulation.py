@@ -70,3 +70,43 @@ def test_ectoderm_and_endoderm_within_unsourced_expectation(result):
 def test_mesoderm_within_unsourced_expectation(result):
     props, exp = result.proportions(), _expected(result)
     assert _within(props["mesoderm"], exp["mesoderm"]), (props["mesoderm"], exp["mesoderm"])
+
+
+# Census comparison, registered 2026-09-28 (docs/DESIGN-MINIMAL-CELL.md).
+
+
+def _census_counts():
+    import json
+    from pathlib import Path
+
+    return json.loads(Path("data/results/gastrulation_census_counts.json").read_text())
+
+
+def test_census_counts_match_the_papers():
+    c = _census_counts()
+    hum = c["human_cs7"]
+    assert hum["cells"] == 1195  # Tyser et al. 2021: 665 caudal, 340 rostral, 190 yolk sac
+    sites: dict[str, int] = {}
+    for by in hum["by_label_and_site"].values():
+        for s, n in by.items():
+            sites[s] = sites.get(s, 0) + n
+    assert sites == {"caudal": 665, "rostral": 340, "yolk sac": 190}
+    assert c["mouse_atlas"]["cells"] == 116312  # Pijuan-Sala et al. 2019
+
+
+def test_census_mappings_are_disjoint_and_use_real_labels():
+    from genomeos.runtime import gastrulation as g
+
+    c = _census_counts()
+    human_labels = set(c["human_cs7"]["by_label_and_site"])
+    mouse_labels = {lab for by in c["mouse_atlas"]["by_stage_and_label"].values() for lab in by}
+    for mappings, labels in (
+        (g.CENSUS_HUMAN_MAPPINGS, human_labels),
+        (g.CENSUS_MOUSE_MAPPINGS, mouse_labels),
+    ):
+        for mapping in mappings.values():
+            used = [lab for layer in mapping.values() for lab in layer]
+            assert len(used) == len(set(used)), mapping
+            assert set(used) <= labels, set(used) - labels
+    for mapping in g.CENSUS_HUMAN_MAPPINGS.values():
+        assert not set(g.CENSUS_HUMAN_EXTRAEMBRYONIC) & {lab for layer in mapping.values() for lab in layer}
