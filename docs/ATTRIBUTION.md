@@ -8242,6 +8242,100 @@ measured arm stays registered and unrun in its own lane.
 **Cost.** 0 AlphaGenome requests. 4,182 s over 24 chromosomes; one chromosome's archive in memory at a
 time. Result: `data/results/clause2_element_count_control.json`.
 
+## Pre-registration: the two descriptive controls clause 2 has left -- element class and reach inside the model's own window (2026-09-28, lane-tssreach)
+
+Milestone 1.3's clause 2 is settled as not met across three matched controls and one control-free
+estimator. The sharpest number needs no matching at all: per element, **9.18% of the 3,280 elements
+inside the real unknown name a coding gene against 44.04% of the 456,573 elements in their windows**, a
+pooled **-34.86 points**, **-28.77** as a mean over the 531 compared blocks (`faeb0da`). lane-elemcount
+named two descriptive controls it did not run and called the second the sharper. This registers both and
+runs them once. **Nothing here restates, weakens or re-opens any existing claim**, and neither control can
+make the clause pass: both are descriptions of the same elements, and the best either can do is move the
+-34.86 toward 0, which replaces "below chance" with "explained by where the blocks sit" -- not with
+"attributed". The clause's third part, scored against measurement, is untouched by every outcome below.
+
+**(a) Class composition.** A block's cCREs may be dELS or CTCF-only where a window's include PLS and
+pELS. Per element, its ENCODE SCREEN class from `data/results/ccres_<chrom>.bed.gz` field 5, joined by
+element id; an id absent from the registry is counted `unclassified` and reported, never dropped.
+
+**(b) Reach.** *The model can only name a gene it can see.* Per element, on its midpoint
+`m = (start + end) // 2`:
+
+1. `reach_count` -- GENCODE protein-coding TSSs in `[m - 524288, m + 524288)`, half-open. The window is
+   the scorer's own and is read from the scorer, not assumed: `AlphaGenomeAdapter._live_scorer` resizes
+   the variant's reference interval to `dna_client.SEQUENCE_LENGTH_1MB` = **1,048,576 bp** before every
+   deletion score, and every element in the archive was read in that window.
+2. `reach_distance` -- `|m - nearest coding TSS|` in bp, uncapped.
+3. `genes_in_window` -- protein-coding genes whose annotated span intersects the same window, as the
+   sensitivity closer to what the RNA-seq gene scorer enumerated: a gene whose body reaches the window
+   but whose TSS does not is still scored.
+
+The earlier TSS matching (`0c8b82d`) was at block-midpoint level, which is not this quantity.
+
+**Comparison and draw.** Elements inside real-unknown blocks against the elements of that block's own
+accepted windows, over the same 531 blocks, on `d717b28`'s **unmatched** draw unchanged -- 50 windows of
+the block's exact length per block, uniform inside the span of the chromosome's scored-element midpoints,
+rejected on overlap with any organiser block, 4,000 tries, seed 20260913 per chromosome. No matching is
+added, because the quantity to be described is the same in every window the -34.86 was computed on. The
+coding-TSS-density-matched draw of `0c8b82d` and the neutral tier are registered sensitivities.
+
+**Estimators.** Primary for (b): the per-block difference in mean `reach_count` (block elements minus its
+carrying windows' elements), in coding TSSs, with the pooled means, the zero-reach shares and the same
+statistic for `log10(1 + reach_distance)` and `genes_in_window` beside it. The statistic that **decides
+between the readings** is the per-element rate of `names_a_coding_gene` **directly standardised** on
+reach: both arms' elements fall in the fixed strata **0, 1, 2, 3-4, 5-6, 7-9, 10-14, 15-24, 25+** -- cut
+points fixed here, not read from the data -- a stratum enters when it holds at least 30 elements in each
+arm, block elements in every excluded stratum are reported with their share and their own rate, and the
+standardised difference is the block rate minus the block-weighted sum of the window rates. It answers:
+*if the block's elements had sat in windows of the same reach, how much of the gap would be left?* The
+same standardisation on the six classes answers (a), with the per-class rates in both arms so it can be
+seen whether the gap lives between classes or inside them; class x stratum jointly is a sensitivity.
+
+**Interval.** 95% percentile bootstrap over the compared blocks, 10,000 resamples,
+`default_rng(20260913)`, with the bootstrap over the 24 chromosomes beside it -- the two bootstraps of the
+matched control, unchanged. For a standardised difference the resample is over blocks, recomputing the
+block weights and rates and holding the window per-stratum rates at their pooled values, because the
+window arm is the reference population and has 100 times the elements.
+
+**Gate.** Before any reach or class figure is read, this script's draw must reproduce `d717b28`'s pooled
+counts for both target sets to the digit (real unknown 44,100 / 31,676 / 21,217, 531 and 158 blocks;
+neutral 131,600 / 88,317 / 57,212, 1,181 and 340) **and** `faeb0da`'s per-element counts (3,280 block
+elements, 301 naming; 456,573 window elements, 201,072 naming). If either fails, nothing is reported.
+
+**Thresholds, fixed before the run.** The half-the-gap convention of `e1dbcf3` and `da5764e`, on the
+pooled per-element scale: a description **explains** the gap when standardising on it leaves the pooled
+difference above **-17.43 points**, and does not when it stays at or below. "Far fewer" for reach is
+fixed as either the pooled mean `reach_count` inside the blocks being below half the window mean, or the
+zero-reach share inside the blocks exceeding the window share by more than 10 points. "Comparable" is
+fixed as the per-block reach difference's 95% interval lying wholly inside +/-1.0 coding TSS of 0 and the
+two zero-reach shares differing by less than 2 points.
+
+**The readings, in advance.**
+
+- **Reach far lower and standardising closes more than half.** The instrument was asked to name a gene it
+  could not see, and the -28.77 is partly an artefact of reach. What clause 2's failure *means* changes:
+  it stops being a statement about the blocks' sequence and becomes a statement about where the blocks
+  sit relative to coding genes -- which is what the organiser selected them for. The clause still does not
+  pass; the standardised difference becomes the number to quote, and it is still negative.
+- **Reach far lower but the gap survives standardisation.** The reach imbalance is real and must be
+  stated, but it is not the explanation; the reach-standardised difference becomes the number to quote
+  and the failure stays about the sequence.
+- **Reach comparable.** The model could see as many coding genes from inside the blocks as from their
+  windows, the instrument was not asked to do the impossible, and the failure is about the sequence, not
+  the window. Nothing about the clause's status changes and the -28.77 stands as written.
+- **Reach comparable yet the gap closes.** Incoherent on its face: to be reported as a likely
+  implementation error in this script, not as a finding about clause 2, until it is traced.
+- **(a) explains** when the class-standardised difference closes more than half: the blocks hold a
+  different mix of cCRE classes and the per-element gap is largely composition, and the per-class rates
+  become the number to quote. **(a) does not explain** when it keeps at least half: inside every class
+  with enough elements the block elements still name a coding gene far less often, so class composition
+  is a real difference between the two element sets and not the cause of the gap.
+
+**Cost.** 0 AlphaGenome requests; the per-element response cache is never opened; one chromosome's
+archive in memory at a time. No matching is added, so no window's contents are evaluated on a rejected
+try: lane-elemcount's 3,811 s chr2 cost came from exactly that and does not arise here. Script:
+`scripts/clause2_reach_control.py`; result: `data/results/clause2_reach_control.json`.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
