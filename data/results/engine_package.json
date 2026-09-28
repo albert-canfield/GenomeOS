@@ -1,6 +1,6 @@
 {
   "result": "engine_package",
-  "date": "2026-09-27",
+  "date": "2026-09-28",
   "name": "biolang",
   "built": {
     "files": 36,
@@ -9,6 +9,7 @@
     "dangling references": [],
     "version": "0.1.0",
     "test files": [
+      "test_activator_combination.py",
       "test_bio.py",
       "test_body_contacts.py",
       "test_boolean.py",
@@ -18,8 +19,10 @@
       "test_economy.py",
       "test_gastrulation.py",
       "test_grammar.py",
+      "test_grn_clamp.py",
       "test_human_body.py",
       "test_lang.py",
+      "test_lang_keys.py",
       "test_lang_v02.py",
       "test_lang_v03.py",
       "test_lang_v04.py",
@@ -32,9 +35,11 @@
       "test_segmentation.py",
       "test_share.py",
       "test_spatial.py",
-      "test_uncertainty.py"
+      "test_uncertainty.py",
+      "test_when_matcher.py",
+      "test_when_not_equal.py"
     ],
-    "test functions": 146,
+    "test functions": 177,
     "fixtures": [
       "data/demo/cell_context.bio",
       "data/demo/gastrulation.bio",
@@ -56,7 +61,17 @@
       "data/organisms/celegans/timers.bio",
       "data/organisms/human/body.bio",
       "data/organisms/human/tissues.bio",
+      "data/results/gastrulation_census_comparison.json",
+      "data/results/gastrulation_census_comparison_sign_corrected.json",
+      "data/results/gastrulation_census_counts.json",
       "docs/BIOLANG-GRAMMAR.md"
+    ],
+    "docs": [
+      "BIOLANG-GRAMMAR.md",
+      "BIOLANG-v0.1.md",
+      "BIOLANG-v0.2.md",
+      "BIOLANG-v0.3.md",
+      "BIOLANG-v0.4-ECONOMY.md"
     ]
   },
   "checks": [
@@ -111,9 +126,9 @@
     {
       "check": "the engine's own pytest suite",
       "ok": true,
-      "output": "154 passed, 3 skipped in 47.85s",
+      "output": "285 passed, 3 skipped, 3 xfailed in 34.64s",
       "error": "",
-      "passed": 154,
+      "passed": 285,
       "failed": 0,
       "skipped": 3,
       "skip reasons": [
@@ -121,7 +136,49 @@
         "SKIPPED [1] tests/test_compose.py:21: process-bigraph not installed (uv sync --extra compose)",
         "SKIPPED [1] tests/test_compose.py:33: process-bigraph not installed (uv sync --extra compose)"
       ]
+    },
+    {
+      "check": "the grammar and the specs are in the package, and the grammar is what its parser renders",
+      "ok": true,
+      "output": "DOCS 5 documents, grammar current, 6 files",
+      "error": ""
+    },
+    {
+      "check": "bio repl (driven through stdin)",
+      "ok": true,
+      "output": "    A produces Ap  [curated] 0.9 |   A.mRNA         final     0.98   min     0.00   max     0.98   peaks 0 |   Ap             final     0.98   min     0.00   max     0.98   peaks 0",
+      "error": ""
+    },
+    {
+      "check": "import protein: with no resolver installed stops and names what is missing",
+      "ok": true,
+      "output": "",
+      "error": "bio: no resolver registered for import scheme 'protein' (have []): `import protein:SYMBOL` reads a protein block from a proteome, and the engine ships none; an application has to supply one (GenomeOS "
     }
   ],
-  "passed": true
+  "passed": true,
+  "result_manifest": {
+    "code": {
+      "git_sha": "e9724e3fe963cdb4d8806795c1886b1ea5eb314a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/package_engine.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": false,
+    "problems": [
+      "missing sources",
+      "missing inputs",
+      "missing assembly",
+      "missing coordinates",
+      "missing parameters",
+      "missing exclusions",
+      "missing partitions"
+    ]
+  }
 }
