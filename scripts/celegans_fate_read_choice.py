@@ -131,13 +131,15 @@ if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
 
 from genomeos.lang import parse_file  # noqa: E402
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from genomeos.runtime.body import Body, Cell  # noqa: E402
 from scripts.celegans_fate_credit import ORG, credit, rule_targets  # noqa: E402
 from scripts.celegans_fate_reads import Arm, harvest, program_rules  # noqa: E402
 
-RESULT = Path("data/results/celegans_fate_read_choice.json")
+RESULT = Path("data/results/celegans_fate_read_choice.json")  # written through save_result (item 12 S6)
 HATCH = 800.0
 SHIPPED = "exposure(lineage) >= 15 (shipped)"
 ALT = "mean(lineage) >= 0.25"
@@ -256,6 +258,7 @@ def free_credit(a: dict) -> int:
 
 
 def main() -> None:
+    entries = pv.inputs(programs=[ORG])
     ref = ReferenceLineage.load()
     term = fr.embryonic_terminal(ref)
     labels = {c.id: c.tissue for c in term}
@@ -457,8 +460,13 @@ def main() -> None:
         },
     }
 
-    RESULT.parent.mkdir(parents=True, exist_ok=True)
-    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    manifest = pv.manifest(
+        entries,
+        {"hatch_min": HATCH, "reads": {k: list(v) for k, v in READS.items()}},
+        exclusions=["cells the lookup answers are given no credit (the honest metric of 542d613)"],
+        partitions=pv.FOUNDER_HOLDOUT,
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
 
     print(f"\n{'arm':<58} {'claimed':>8} {'honest':>7} {'indep':>6} {'prec':>7} {'fallback':>9}")
     for name, a in arms.items():

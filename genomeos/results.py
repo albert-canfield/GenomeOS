@@ -39,6 +39,7 @@ def save_result(
     results_dir: Path = RESULTS_DIR,
     manifest: dict[str, Any] | None = None,
     strict: bool | None = None,
+    compact: bool = False,
 ) -> Path:
     """Write a result with its manifest (genomeos/manifest.py, review item R9), or quarantine it.
 
@@ -57,6 +58,10 @@ def save_result(
     `strict=True` enforces in any directory; `strict=False` cannot admit a name that is not on the
     allowlist into the registry. Outside the registry (tests, scratch) an incomplete result warns
     unless `strict=True`.
+
+    `compact=True` writes the JSON without whitespace (`separators=(",", ":")`), for the per-cell and
+    per-site tables that were written compact before they came under the contract (item 12 S6
+    follow-up, lane-contract); the values are the same either way.
     """
     p = results_dir / f"{name}.json"
     body = dict(payload)
@@ -76,7 +81,8 @@ def save_result(
             f"{results_dir}; quarantined at {q}; {why})"
         )
     results_dir.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(out, indent=2, default=str))
+    fmt: dict[str, Any] = {"separators": (",", ":")} if compact else {"indent": 2}
+    p.write_text(json.dumps(out, default=str, **fmt))
     if stamped["complete"]:
         with contextlib.suppress(OSError):
             q.unlink(missing_ok=True)  # an earlier failed attempt at this name is superseded

@@ -1087,3 +1087,49 @@ manifest tests pass, two of them rewritten from asserting the defect to assertin
 `tests/test_manifest_enforced.py` adds 19. In this shared checkout at build time the stamp named
 three untracked files peers had not yet committed (one script, two tests) and marked the revision
 dirty; before, it said nothing about them.
+
+### Every writer through `save_result` (item 12 S6 follow-up, lane-contract, 2026-09-29)
+
+**Census** (`d6a77dd`, `scripts/results_writer_census.py`, a static taint analysis of every Python file
+under `genomeos/` and `scripts/`, replacing lane-s6's pattern): 36 sites in 28 files wrote into
+`data/results/` without `save_result`. lane-s6's 13 writers were a lower bound by seven: `cmd_signals`,
+`tf_atlas.save_cells`, `storage._distil_celegans_lineage`, `phosphosite_observation`,
+`reader_depth_family` (three results), `trio_q100_population` and `variation_rerun_chain`'s backup. Three
+registry files have no code writer at all (`alphagenome_rs12740374`, `manifest_headlines`,
+`clinvar_chr21_coding.vcf.gz`); no static check can see a hand edit.
+
+**Converted.** The 17 direct writers and the backup now go through `save_result` with a complete
+manifest (sources, inputs with sha256, assembly, coordinates, parameters, exclusions, partitions).
+Shared pieces: `genomeos/organism/provenance.py` (the worm's two sources and common inputs),
+`manifest.files_entry` (one digest over a set of files read together, named relative to the checkout),
+and `save_result(..., compact=True)` for the three per-cell and per-site tables that were written compact.
+The two in-place editors became results of their own, because an edit inside a result sits under a
+manifest that describes another run and rewriting the file through `save_result` would replace its
+committed code stamp: `crispri_hct116` (its block in `crispri_published.json` is kept as committed; that
+block's own manifest lacked `sources` and `exclusions`, which no check read while it lived inside another
+result, and `save_result` refused it until they were stated) and `clause2_statistical_corrections` (the
+four blocks lane-design added under `corrections_after_the_statistical_review_2026_09_28` stay as
+committed). `variation_rerun_chain` keeps its backup in `data/cache/variation_rerun/`. No committed result
+was rewritten: the legacy names regenerate with their manifest the next time their writer runs.
+
+**No figure moved.** Each converted writer ran at the base commit and with the change, in two clean
+worktrees, and every value except `date`, timing keys and the manifest was compared: 0 differences in
+every output (22; the table is in the commit message). The only additions are the `result` and `date`
+keys `save_result` writes. 0 AlphaGenome requests (no key in the worktrees; the HCT116 ledger unchanged).
+Two side findings, before and after alike and not changed here: `celegans_commitment`'s competence nulls
+depend on Python's string hash seed (12 values move in the fourth decimal between `PYTHONHASHSEED` 0 and
+1), and `celegans_fate_reads` no longer reproduces its committed file (82 values) at this base.
+
+**Out of scope, decided.** Ten sites write fetched reference data into `data/results/`
+(`superdups_`, `rmsk_`, `ccres_`, `ccres_mm10_`, `dnase_*_<chrom>.bed.gz`, `gencode_v50_*.gff3.gz`, the two
+orthology tables, `HG002_chr21.vcf`) and one deletes `rmsk_` files. They are not results: none is JSON,
+the registry lists `*.json` only, and a manifest is a key inside a result's JSON. They do not belong under
+`data/results/`; moving them is a separate change (their readers and the tracked chr21 subsets move with
+them) and is not done here.
+
+**The guard** is `tests/test_results_writers_guard.py`: it fails on any site under `genomeos/` or
+`scripts/` that writes into `data/results/` other than through `save_result`, unless it is on one of two
+lists with a reason each: two exceptions (`manifest_rebuild` copies inside its disposable second
+checkout; `activator_combination --out` is a false positive of the flow-insensitive analysis) and the
+eleven fetched-data sites. An entry that no longer matches a site fails too. The analysis is tested on
+each pattern the census found and on reads that must not be flagged; a planted direct write fails it.

@@ -16,7 +16,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.genome import individuals as ind  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
+from scripts.trio_q100_phase import manifest  # noqa: E402
 
 C = Path("data/cache/q100")
 VCF = C / "GRCh38_HG2-T2TQ100-V1.1_dipcall-z2k.dip.vcf.gz"
@@ -103,5 +106,26 @@ out = {
     "registered": False,
     "date": time.strftime("%Y-%m-%d"),
 }
-Path("data/results/trio_q100_population.json").write_text(json.dumps(out, indent=1) + "\n")
+panel = [Path(f"data/knowledge/human_panel/{c}/{f}") for c in chroms for f in ("sites.tsv.gz", "meta.json")]
+save_result(
+    "trio_q100_population",
+    out,
+    manifest=manifest(
+        {
+            "control_every_nth_one_parent_het_snv": 100,
+            "panel_assemblies_left_out": ["hs1"],
+            "chromosomes": chroms,
+        },
+        extra_inputs=[
+            mf.files_entry("data/knowledge/human_panel chr1-chr22 sites.tsv.gz and meta.json", panel)
+        ],
+        extra_sources=[
+            {
+                "accession": "UCSC hg38 hprc cactus90way (88 HPRC year-1 haplotypes), as distilled in "
+                "data/knowledge/human_panel",
+                "version": "hprc cactus90way",
+            }
+        ],
+    ),
+)
 print(json.dumps(out["groups"], indent=1))

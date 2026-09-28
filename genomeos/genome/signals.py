@@ -101,10 +101,36 @@ class SignalSet:
     pwms: dict[str, Pwm]
     stats: dict[str, object] = field(default_factory=dict)
 
+    def to_dict(self) -> dict:
+        return {"pwms": {k: v.to_dict() for k, v in self.pwms.items()}, "stats": self.stats}
+
     def save(self, path: str | Path) -> None:
-        Path(path).write_text(
-            json.dumps({"pwms": {k: v.to_dict() for k, v in self.pwms.items()}, "stats": self.stats})
-        )
+        Path(path).write_text(json.dumps(self.to_dict()))
+
+    def save_result(
+        self, chrom: str, gff: str | Path, genome: str | Path, results_dir: Path | None = None
+    ) -> Path:
+        """Keep the learned set as the result signals_<chrom>, through save_result with its manifest (item
+        12 S6 follow-up); `save` still writes wherever it is told."""
+        from genomeos import manifest as mf
+        from genomeos.results import RESULTS_DIR, save_result
+
+        manifest = {
+            "sources": [
+                {"accession": "GENCODE comprehensive annotation (GFF3)", "version": "v50"},
+                {"accession": "UCSC hg38 chromosome FASTA (GRCh38)", "version": "hg38"},
+            ],
+            "inputs": [mf.input_entry(gff), mf.input_entry(genome)],
+            "assembly": "GRCh38",
+            "coordinates": {"base": 0, "interval": "half-open"},
+            "parameters": {
+                "chromosome": chrom,
+                "transcripts": "protein-coding, Ensembl_canonical, with a CDS",
+            },
+            "exclusions": ["transcripts without a CDS or without the Ensembl_canonical tag"],
+            "partitions": "n/a: every canonical transcript of the chromosome is read",
+        }
+        return save_result(f"signals_{chrom}", self.to_dict(), results_dir or RESULTS_DIR, manifest=manifest)
 
     @classmethod
     def load(cls, path: str | Path) -> SignalSet:

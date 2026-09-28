@@ -27,11 +27,84 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-RESULTS = os.path.join(ROOT, "data", "results")
+RESULTS = os.path.join(ROOT, "data", "results")  # read here; written through save_result (item 12 S6)
 ODD = [f"chr{i}" for i in range(1, 23, 2)]
 EVEN = [f"chr{i}" for i in range(2, 23, 2)]
 PERMUTATIONS = 10_000
 SEED = 20260922
+
+
+def _slug(cell: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "_", cell).strip("_")
+
+
+def _in_results(names: list[str]) -> list[str]:
+    return [p for p in (os.path.join(RESULTS, n) for n in names) if os.path.exists(p)]
+
+
+def manifest(
+    parameters: dict,
+    cells: list[str],
+    chroms: list[str],
+    *,
+    readings: list[str] = ("reader_genome_wide.json",),
+    epigenome: bool = True,
+    node_tables: list[str] = (),
+    gencode: bool = False,
+    partitions: dict | str = "n/a: no evaluation split",
+) -> dict:
+    """What a reader-family result read: the committed readings, the per-chromosome epigenome summaries,
+    the DNase peak files of the biosamples scored, and (normalised, rarefied) the node tables."""
+    from genomeos import manifest as mf
+
+    inputs = [mf.input_entry(p) for p in _in_results(list(readings))]
+    if epigenome:
+        epi = sorted(
+            p for p in glob.glob(os.path.join(RESULTS, "epigenome_chr*.json")) if "genome_wide" not in p
+        )
+        inputs.append(mf.files_entry("data/results/epigenome_chr*.json (per-chromosome peak counts)", epi))
+    peaks = _in_results([f"dnase_{_slug(c)}_{ch}.bed.gz" for c in cells for ch in chroms])
+    inputs.append(
+        mf.files_entry(f"data/results/dnase_<biosample>_<chrom>.bed.gz, {len(cells)} biosamples", peaks)
+    )
+    if node_tables:
+        tables = _in_results(list(node_tables))
+        inputs.append(mf.files_entry("data/results/reader_<biosample>_<chrom>.json (node tables)", tables))
+    if gencode:
+        from genomeos.genome import default_gencode
+
+        gffs = sorted({str(default_gencode({ch})) for ch in chroms})
+        inputs.append(mf.files_entry("GENCODE v50 GFF3 per chromosome", gffs))
+    return {
+        "sources": [
+            {
+                "accession": "ENCODE DNase-seq peak files (one per biosample) and Histone ChIP-seq peak "
+                "counts, as fetched by genomeos.genome.reader and genomeos.genome.epigenome",
+                "version": "as on disk at the run; the files' sha256 is in inputs",
+            },
+            {
+                "accession": "the reader's own committed readings (data/results/reader_*.json)",
+                "version": "on disk",
+            },
+        ]
+        + (
+            [{"accession": "GENCODE v50 comprehensive annotation (GFF3)", "version": "v50"}]
+            if gencode
+            else []
+        ),
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": parameters,
+        "exclusions": ["epigenome_genome_wide*.json (a sum of the per-chromosome files, not read twice)"],
+        "partitions": partitions,
+    }
+
+
+SPLIT_HALF = {
+    "odd_chromosomes": "chr1, chr3, ... chr21: the first half of the registered split-half replication",
+    "even_chromosomes": "chr2, chr4, ... chr22: the second half",
+}
 
 
 def _rank(v: list[float]) -> list[float]:
@@ -270,9 +343,12 @@ def main() -> None:
             "derived: ENCODE DNase-seq and Histone ChIP-seq peak counts already on disk; no request made"
         ),
     }
-    path = os.path.join(RESULTS, "reader_depth_family.json")
-    with open(path, "w") as f:
-        json.dump(out, f, indent=1)
+    from genomeos.results import save_result
+
+    params = {"permutations": PERMUTATIONS, "seed": SEED}
+    path = save_result(
+        "reader_depth_family", out, manifest=manifest(params, cells, ODD + EVEN, partitions=SPLIT_HALF)
+    )
     print(json.dumps({k: out[k] for k in ("family", "residual_replication", "verdict")}, indent=1))
     print(json.dumps(out["residual_vs_peak_width"], indent=1))
     print(json.dumps(out["rate"], indent=1))
@@ -483,9 +559,19 @@ def main_normalised() -> None:
         "evidence": "derived: ENCODE DNase-seq and Histone ChIP-seq peak counts already on disk; "
         "no request made",
     }
-    path = os.path.join(RESULTS, "reader_normalised.json")
-    with open(path, "w") as f:
-        json.dump(out, f, indent=1)
+    from genomeos.results import save_result
+
+    path = save_result(
+        "reader_normalised",
+        out,
+        manifest=manifest(
+            {"permutations": PERMUTATIONS, "seed": NORMALISED_SEED},
+            cells,
+            AUTOSOMES,
+            node_tables=[f"reader_{_slug(c)}_{ch}.json" for c in cells for ch in all_chroms],
+            partitions=SPLIT_HALF,
+        ),
+    )
     print(json.dumps(first, indent=1))
     for f, sc in scores.items():
         print(
@@ -601,15 +687,24 @@ def main_rarefied(n: int | None = None) -> None:
         "agreement": agreement,
         "evidence": "derived: ENCODE DNase-seq peaks already on disk, strongest n kept; no request made",
     }
-    path = os.path.join(RESULTS, "reader_rarefied.json")
-    existing = {}
-    if os.path.exists(path):
-        with open(path) as f:
-            existing = json.load(f)
+    from genomeos.results import load_result, save_result
+
+    existing = load_result("reader_rarefied") or {}
     runs = existing.get("runs", {})
     runs[str(n)] = out
-    with open(path, "w") as f:
-        json.dump({"result": "reader_rarefied", "registered": False, "runs": runs}, f, indent=1)
+    path = save_result(
+        "reader_rarefied",
+        {"result": "reader_rarefied", "registered": False, "runs": runs},
+        manifest=manifest(
+            {"peaks_kept_per_biosample": n, "runs_in_file": sorted(runs, key=int)},
+            cells,
+            chroms,
+            readings=["reader_normalised.json"],
+            epigenome=False,
+            node_tables=[f"reader_K562_{ch}.json" for ch in chroms],
+            gencode=True,
+        ),
+    )
     print(json.dumps(agreement, indent=1))
     print(f"written: {path}", flush=True)
 

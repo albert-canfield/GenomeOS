@@ -27,7 +27,6 @@ No model calls, no network, about three minutes on one core. Result: data/result
 
 from __future__ import annotations
 
-import json
 import shutil
 import sys
 import tempfile
@@ -43,13 +42,15 @@ if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
 from genomeos.lang import parse_file  # noqa: E402
 from genomeos.organism import atlas_levels  # noqa: E402
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism.diff import compare  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from genomeos.runtime.body import Body  # noqa: E402
 
 ORG = Path("data/organisms/celegans")
-RESULT = Path("data/results/celegans_fate_reads.json")
+RESULT = Path("data/results/celegans_fate_reads.json")  # written through save_result (item 12 S6)
 HATCH = 800.0
 ADULT = 6000.0
 
@@ -320,6 +321,7 @@ def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: 
 
 
 def main() -> None:
+    entries = pv.inputs(levels=True, programs=[ORG])  # hashed before fates.bio is rewritten below
     ref = ReferenceLineage.load()
     term = fr.embryonic_terminal(ref)
     labels = {c.id: c.tissue for c in term}
@@ -455,7 +457,19 @@ def main() -> None:
     ]
     out["threshold"] = {"minutes": fr.THRESHOLD_MIN, "basis": fr.THRESHOLD_BASIS}
     out["generated"] = [str(ORG / "fates.bio")]
-    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    manifest = pv.manifest(
+        entries,
+        {
+            "hatch_min": HATCH,
+            "adult_min": ADULT,
+            "windows": list(WINDOWS),
+            "kinds": list(KINDS),
+            "exposure_threshold_min": fr.THRESHOLD_MIN,
+        },
+        exclusions=[],
+        partitions=pv.FOUNDER_HOLDOUT,
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
     for name, a in out["arms"].items():
         i, h = a["in_sample"], a.get("held_out", {})
         print(

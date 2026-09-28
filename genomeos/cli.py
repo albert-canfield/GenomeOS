@@ -932,8 +932,11 @@ def cmd_signals(args: argparse.Namespace) -> int:
         genome = IndexedGenome(args.genome)
         sig = learn_signals(ann, genome, args.chrom)
         genome.close()
-        out = Path(args.output or f"data/results/signals_{args.chrom}.json")
-        sig.save(out)
+        if args.output:
+            out = Path(args.output)
+            sig.save(out)
+        else:  # the registry, through save_result (item 12 S6 follow-up)
+            out = sig.save_result(args.chrom, gff, args.genome)
         st = sig.stats
         print(f"learned from {st['transcripts']} transcripts, {st['introns']} introns on {args.chrom}")
         for k, v in sig.stats.items():
@@ -2207,14 +2210,12 @@ def cmd_organise(args: argparse.Namespace) -> int:
 
 def cmd_syntax(args: argparse.Namespace) -> int:
     """Syntax against values at one gene: constrained bases, where people differ, and the overlap."""
-    from genomeos.attribution.syntax import save_path, syntax_values
+    from genomeos.attribution.syntax import save, syntax_values
 
     names = [n.strip() for n in args.name.split(",")] if args.name else None
     r = syntax_values(args.gene, args.chrom, names=names, flank=args.flank)
     if args.save:
-        out = save_path(args.gene, r["people"])
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(r, indent=1))
+        out = save(r, args.gene)  # the registry through save_result, or a private person's own directory
         print(f"saved {out}")
     print(
         f"{r['gene']} {r['chrom']}:{r['span'][0]:,}-{r['span'][1]:,} ({r['bases'] / 1e3:.0f} kb, strand "

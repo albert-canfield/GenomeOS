@@ -86,7 +86,6 @@ No model calls, no network, about two minutes on one core. Result: data/results/
 
 from __future__ import annotations
 
-import json
 import random
 import shutil
 import sys
@@ -102,13 +101,15 @@ if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
 
 from genomeos.lang import parse_file  # noqa: E402
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from genomeos.runtime.body import Body  # noqa: E402
 from scripts.celegans_fate_reads import Arm, harvest, presence_at_birth, program_rules  # noqa: E402
 
 ORG = Path("data/organisms/celegans")
-RESULT = Path("data/results/celegans_fate_credit.json")
+RESULT = Path("data/results/celegans_fate_credit.json")  # written through save_result (item 12 S6)
 HATCH = 800.0
 PERMUTATIONS = 200
 
@@ -414,6 +415,7 @@ def arm_for(
 
 
 def main() -> None:
+    entries = pv.inputs(programs=[ORG])
     ref = ReferenceLineage.load()
     term = fr.embryonic_terminal(ref)
     labels = {c.id: c.tissue for c in term}
@@ -718,7 +720,18 @@ def main() -> None:
             "held": cited["honest"] > null["right_mean"] + 2 * null["right_sd"],
         },
     }
-    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    manifest = pv.manifest(
+        entries,
+        {
+            "hatch_min": HATCH,
+            "permutations": PERMUTATIONS,
+            "null_seed": 0,
+            "exposure_threshold_min": fr.THRESHOLD_MIN,
+        },
+        exclusions=["cells the lookup answers are given no credit (the honest metric; see the docstring)"],
+        partitions=pv.FOUNDER_HOLDOUT,
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
 
     print(f"\n{'arm':<52} {'claimed':>8} {'right':>6} {'of 555':>7} {'fallback':>9}")
     for name, a in arms.items():

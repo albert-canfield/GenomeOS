@@ -17,7 +17,6 @@ from a statistic of the finished run, is gone.
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 import urllib.request
 from datetime import date
@@ -30,13 +29,15 @@ if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
 from genomeos.lang import parse_file  # noqa: E402
 from genomeos.organism import atlas_levels  # noqa: E402
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism.diff import compare  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import ZENODO_URL, load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from genomeos.runtime.body import Body  # noqa: E402
 
 ORG = Path("data/organisms/celegans")
-RESULT = Path("data/results/celegans_fate_rules.json")
+RESULT = Path("data/results/celegans_fate_rules.json")  # written through save_result (item 12 S6)
 KEYS = (
     "cells",
     "decided_by_factors",
@@ -106,6 +107,7 @@ def main() -> None:
     args = ap.parse_args()
     ref = ReferenceLineage.load()
     levels = _levels()
+    entries = pv.inputs(levels=True, programs=[ORG])
     atlas = load_cells()
     term = fr.embryonic_terminal(ref)
     labels = {c.id: c.tissue for c in term}
@@ -197,7 +199,17 @@ def main() -> None:
         "factors": _body_diff(ORG / "embryo_factors.bio", ref, 800.0),
         "factors_to_adult": _body_diff(ORG / "embryo_factors.bio", ref, 6000.0),
     }
-    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    manifest = pv.manifest(
+        entries,
+        {
+            "permutations": args.permutations,
+            "exposure_threshold_min": fr.THRESHOLD_MIN,
+            "body_until_min": [800.0, 6000.0],
+        },
+        exclusions=["reference cells born after the run's end, not terminal, or that die (body scores)"],
+        partitions=pv.FOUNDER_HOLDOUT,
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
     b = out["body"]
     print("body lookup", b["lookup"]["fates_correct"], "/", b["lookup"]["fates_checked"])
     print("body factors", b["factors"]["fates_correct"], "/", b["factors"]["fates_checked"])

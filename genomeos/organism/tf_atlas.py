@@ -28,6 +28,7 @@ SOURCE = "Ma et al. 2021, Nat Methods 18:893 (Zenodo 4737593)"
 PRESENCE_FRACTION = 0.2  # of the factor's maximum adjusted expression over all cells
 FRAME_MIN = 1.25  # minutes per frame
 CELLS_FILE = Path("data/results/celegans_tf_atlas_cells.json")
+CELLS_NAME = CELLS_FILE.stem  # the result name save_cells writes under (item 12 S6 follow-up)
 
 # Textbook factor -> tissue relations to check the atlas and the lineage against each other.
 # WormWeb tissue labels; "pharynx" is checked against Packer 2019 cell types instead (WormWeb has no class).
@@ -234,10 +235,33 @@ def summary(table: dict, checks: list[dict]) -> dict:
     }
 
 
-def save_cells(table: dict, path: Path = CELLS_FILE) -> Path:
+def cells_manifest(archive: bytes) -> dict:
+    """The manifest of the per-cell table distilled from `archive` (the Zenodo zip as fetched, not kept)."""
+    from .provenance import ASSEMBLY, COORDINATES, MA2021, NO_SPLIT, bytes_entry
+
+    return {
+        "sources": [MA2021],
+        "inputs": [bytes_entry(f"{ZENODO_URL} (streamed, not kept)", archive)],
+        "assembly": ASSEMBLY,
+        "coordinates": COORDINATES,
+        "parameters": {"presence_fraction_of_max": PRESENCE_FRACTION, "minutes_per_frame": FRAME_MIN},
+        "exclusions": [
+            "archive members that are not .csv",
+            "rows whose Adjustment-expression or Time is not a number",
+            "cells below the factor's presence threshold (PRESENCE_FRACTION of its maximum)",
+        ],
+        "partitions": NO_SPLIT,
+    }
+
+
+def save_cells(table: dict, manifest: dict | None = None, results_dir: Path | None = None) -> Path:
     """Compact per-cell table: factor names once, then for each cell the indices of the factors it carries
-    and the frame each was first seen (about a fifth of the size of a per-factor listing)."""
-    path.parent.mkdir(parents=True, exist_ok=True)
+    and the frame each was first seen (about a fifth of the size of a per-factor listing).
+
+    Written through `save_result` as CELLS_NAME (item 12 S6 follow-up), compact as before; `manifest` is
+    `cells_manifest(archive)` for the archive the table was distilled from."""
+    from genomeos.results import RESULTS_DIR, save_result
+
     factors = sorted(tf for tf in table if not tf.startswith("_"))
     index = {tf: i for i, tf in enumerate(factors)}
     cells: dict[str, list[list[int]]] = defaultdict(list)
@@ -255,8 +279,7 @@ def save_cells(table: dict, path: Path = CELLS_FILE) -> Path:
         "cells": {c: sorted(v) for c, v in sorted(cells.items())},
         "lifetimes": table.get("_lifetimes", {}),
     }
-    path.write_text(json.dumps(compact, separators=(",", ":")))
-    return path
+    return save_result(CELLS_NAME, compact, results_dir or RESULTS_DIR, manifest=manifest, compact=True)
 
 
 def load_cells(path: Path = CELLS_FILE) -> dict[str, list[str]]:

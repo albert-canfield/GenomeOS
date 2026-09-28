@@ -54,9 +54,14 @@ COSTED = 705
 CAP = 760  # owner's approval, 2026-09-28: 705 costed plus a retry margin
 WORKERS = 4
 CALL_TIMEOUT = 300
+# The first --score (2026-09-28) inserted its block into crispri_published.json under KEY without
+# changing a line; that block stays there as committed and is never rewritten. Since the item 12 S6
+# follow-up (lane-contract) a --score writes its own result, NAME, through save_result: the headline
+# result's manifest describes crispri_published.py's run and its writer never writes this block, so a
+# rebuild from that manifest could not reproduce it, and an in-place edit is outside the contract.
 RESULT = Path("data/results/crispri_published.json")
 KEY = "second_cell_type_hct116"
-INSERT_BEFORE = "post_hoc_positive_filter"  # a key inserted before an existing one changes no line
+NAME = "crispri_hct116"
 
 
 def to_score(heldout: list[crispri.Pair], table: crispri.DeletionTable) -> dict[str, dict[str, Any]]:
@@ -364,10 +369,32 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair], versions
     inputs.append(
         mf.input_entry(ELEMENT_CACHE_HCT116, partition=None, role="ElementCache: HCT116 deletion values")
     )
+    # sources and exclusions were missing while this block lived inside crispri_published.json, where no
+    # check read it; save_result refuses the arm without them (item 12 S6 follow-up)
     return {
+        "sources": [
+            {
+                "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data, EPCrisprBenchmark "
+                "training_K562 and heldout_5_cell_types (Gschwind et al.)",
+                "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+                "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/"
+                "crispr_data/",
+            },
+            {
+                "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion: the sweep's per-element "
+                "cache (the frozen weights) and this arm's HCT116 cache",
+                "version": "the sweep unpinned (2026-09-12 to 09-16); HCT116 answers asked for ALL_FOLDS "
+                "(2026-09-28); pinned here by sha256 and model_dependencies",
+            },
+        ],
         "inputs": inputs,
         "assembly": "GRCh38",
         "coordinates": {"base": 0, "interval": "half-open"},
+        "exclusions": [
+            "pairs the benchmark marks as no test of an enhancer-gene link (as in crispri_published)",
+            "held-out HCT116 pairs no registry element overlaps are not covered and not in the registered "
+            "estimator; score_published's per-cell block beside it reads every pair",
+        ],
         "parameters": {
             "cells_kept_per_gene": list(KEPT_CELLS),
             "estimator": "crispri.gain_interval (average precision, chromosome bootstrap)",
@@ -388,16 +415,12 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair], versions
     }
 
 
-def write_additively(block: dict[str, Any]) -> None:
-    """Insert KEY before INSERT_BEFORE in the committed file, so no existing line changes."""
-    text = RESULT.read_text()
-    if f'\n  "{KEY}": ' in text:
-        raise SystemExit(f"{KEY} is already in {RESULT}; not overwritten")
-    i = text.index(f'\n  "{INSERT_BEFORE}": ')
-    body = json.dumps({KEY: block}, indent=2)[2:-2]  # the key and its value, at the top level's indent
-    new = text[: i + 1] + body + ",\n" + text[i + 1 :]
-    json.loads(new)
-    RESULT.write_text(new)
+def write_result(block: dict[str, Any], manifest: dict[str, Any], results_dir: Path | None = None) -> Path:
+    """The arm's result under its own name, through save_result; crispri_published.json is not touched."""
+    from genomeos.results import RESULTS_DIR, save_result
+
+    body = {**block, "first_run": f"{RESULT} key {KEY} (2026-09-28), kept as committed"}
+    return save_result(NAME, body, results_dir or RESULTS_DIR, manifest=manifest)
 
 
 def main() -> int:
@@ -428,13 +451,9 @@ def main() -> int:
         versions[mf.MODEL_VERSION_UNREQUESTED] = (
             versions.get(mf.MODEL_VERSION_UNREQUESTED, 0) + r["sweep_answers_behind_the_weights"]
         )
-        r["result_manifest"] = manifest(training, heldout, versions)
-        r["date"] = time.strftime("%Y-%m-%d")
-        write_additively(r)
-        print(
-            json.dumps({k: v for k, v in r.items() if k not in ("registered", "result_manifest")}, indent=1)
-        )
-        print(f"({time.time() - t0:.0f} s) -> {RESULT} [{KEY}]")
+        path = write_result(r, manifest(training, heldout, versions))
+        print(json.dumps({k: v for k, v in r.items() if k != "registered"}, indent=1))
+        print(f"({time.time() - t0:.0f} s) -> {path}")
     return 0
 
 

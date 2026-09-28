@@ -60,7 +60,8 @@ def test_distil_calls_presence_per_factor_and_merges_strains():
 
 def test_compact_table_round_trips(tmp_path):
     table = distil(_archive())
-    path = save_cells(table, tmp_path / "cells.json")
+    path = save_cells(table, results_dir=tmp_path)  # through save_result since item 12 S6's follow-up
+    assert path == tmp_path / "celegans_tf_atlas_cells.json"
     data = json.loads(path.read_text())
     assert data["factors"] == ["ELT-2", "HLH-1"] and data["cells"]["Ea"] == [[0, 2]]
     assert load_cells(path) == {"ABa": ["HLH-1"], "Ea": ["ELT-2"], "Ep": ["ELT-2"]}

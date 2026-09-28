@@ -177,6 +177,40 @@ def input_entry(path: str | Path, partition: str | None = None, **extra: Any) ->
     return {**entry, **extra}
 
 
+def files_entry(label: str, paths: Any, partition: str | None = None, **extra: Any) -> dict[str, Any]:
+    """One input made of several files read together (a person's per-chromosome calls, the tracked
+    programs of a census): sha256 over each file's path and bytes in sorted path order, the way
+    `sha256_of` hashes a directory, so the same files give the same digest. Added by the item 12 S6
+    follow-up (lane-contract) for the writers it brought under the contract."""
+    h = hashlib.sha256()
+    total = 0
+    files = sorted({_repo_relative(x) for x in paths})
+    for name in files:
+        h.update(name.encode() + b"\0")
+        with Path(name).open("rb") as f:
+            for chunk in iter(lambda f=f: f.read(1 << 20), b""):
+                h.update(chunk)
+                total += len(chunk)
+    return {
+        "path": label,
+        "sha256": h.hexdigest(),
+        "bytes": total,
+        "files": len(files),
+        "partition": partition,
+        **extra,
+    }
+
+
+def _repo_relative(path: str | Path) -> str:
+    """A path as the repository names it (relative to the working directory) when it lies inside it, so
+    the digest of a set of files does not depend on where the checkout sits."""
+    import os
+
+    with contextlib.suppress(ValueError, OSError):
+        return str(Path(os.path.abspath(path)).relative_to(os.getcwd()))
+    return str(path)
+
+
 def _not_applicable(v: Any) -> bool:
     return isinstance(v, str) and v.startswith(NOT_APPLICABLE) and len(v) > len(NOT_APPLICABLE) + 2
 

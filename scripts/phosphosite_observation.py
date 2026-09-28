@@ -23,7 +23,9 @@ from statistics import median
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.molecules import ptm  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 
 RAW = "https://raw.githubusercontent.com/evocellnet/funscoR/master/data/feature_spectral_counts.rda"
 SOURCE = (
@@ -36,12 +38,18 @@ CHECK_PRESENT = ("P06748", 125)  # NPM1 S125, constitutive CK2 site
 CHECK_ABSENT = ("P04637", 1)  # TP53 M1
 
 
-def reference() -> dict[tuple[str, int], tuple[str, int, int]]:
+def reference(inputs: list[dict] | None = None) -> dict[tuple[str, int], tuple[str, int, int]]:
+    """The reference phosphoproteome; the fetched file's sha256 is appended to `inputs` before the
+    temporary copy is deleted (stream, distil, discard)."""
     import rdata
 
     with tempfile.TemporaryDirectory() as tmp:
         f = Path(tmp) / "feature_spectral_counts.rda"
         urllib.request.urlretrieve(RAW, f)
+        if inputs is not None:
+            inputs.append(
+                {**mf.input_entry(f), "path": f"{RAW} (fetched to a temporary file, not kept)", "kept": False}
+            )
         df = next(iter(rdata.read_rda(str(f)).values()))
     out = {}
     for acc, res, pos, n, psm in zip(
@@ -51,7 +59,8 @@ def reference() -> dict[tuple[str, int], tuple[str, int, int]]:
     return out
 
 
-def definitions():
+def definitions(paths: list[Path] | None = None):
+    """The curated definitions; each file yielded is appended to `paths` for the manifest."""
     for p in sorted(ptm.CACHE.glob("*.json")):
         if p.name.startswith("_"):
             continue
@@ -60,12 +69,48 @@ def definitions():
         except (OSError, json.JSONDecodeError):
             continue
         if "sections" in d:
+            if paths is not None:
+                paths.append(p)
             yield d
 
 
+def manifest(inputs: list[dict], reg: tuple[float, float]) -> dict:
+    return {
+        "sources": [
+            {
+                "accession": "funscoR feature_spectral_counts.rda (Ochoa et al. 2020, Nat Biotechnol 38:365; "
+                "raw data PRIDE PXD012174)",
+                "version": "evocellnet/funscoR master, as fetched; the file's sha256 is in inputs",
+                "url": RAW,
+                "licence": "LGPL (funscoR package)",
+            },
+            {
+                "accession": "the project's curated protein definitions, data/knowledge/proteins/*.json",
+                "version": "as on disk at the run; the set's sha256 is in inputs",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "n/a: UniProt protein sequences, not a genome",
+        "coordinates": "n/a: 1-based residue positions on UniProt accessions, not genomic intervals",
+        "parameters": {
+            "registered_fraction_of_curated_phospho": list(reg),
+            "check_present": list(CHECK_PRESENT),
+            "check_absent": list(CHECK_ABSENT),
+        },
+        "exclusions": [
+            "definition files whose name starts with _ or that carry no sections, or do not parse"
+        ],
+        "partitions": "n/a: a join of two tables; no evaluation split",
+    }
+
+
 def main() -> None:
-    ref = reference()
-    j = ptm.join_observations(ref, definitions())
+    inputs: list[dict] = []
+    ref = reference(inputs)
+    paths: list[Path] = []
+    defs = list(definitions(paths))
+    inputs.append(mf.files_entry("data/knowledge/proteins/*.json (the curated definitions read)", paths))
+    j = ptm.join_observations(ref, defs)
     ns = [s[2] for v in j["sites"].values() for s in v]
     present = any(s[0] == CHECK_PRESENT[1] for s in j["sites"].get(CHECK_PRESENT[0], []))
     absent = not any(s[0] == CHECK_ABSENT[1] for s in j["sites"].get(CHECK_ABSENT[0], []))
@@ -112,8 +157,7 @@ def main() -> None:
         ),
         "sites": j["sites"],
     }
-    ptm.OBSERVATION.parent.mkdir(parents=True, exist_ok=True)
-    ptm.OBSERVATION.write_text(json.dumps(result, separators=(",", ":")))
+    save_result(ptm.OBSERVATION.stem, result, manifest=manifest(inputs, (reg_lo, reg_hi)), compact=True)
     print(json.dumps({k: v for k, v in result.items() if k != "sites"}, indent=1))
 
 

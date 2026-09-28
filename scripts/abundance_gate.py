@@ -45,7 +45,7 @@ PAXDB_URL = "https://pax-db.org/downloads/latest/datasets/9606/9606-WHOLE_ORGANI
 PAXDB_FILE = ROOT / "data" / "knowledge" / "paxdb" / "9606-WHOLE_ORGANISM-integrated.txt"
 GTEX_FILE = ROOT / "data" / "knowledge" / "gtex" / "median_tpm_distilled.tsv"
 PROTEINS = ROOT / "data" / "knowledge" / "proteins"
-OUT = ROOT / "data" / "results" / "abundance_gate.json"
+OUT = ROOT / "data" / "results" / "abundance_gate.json"  # written through save_result (item 12 S6)
 
 BOOTSTRAP = 2000
 SEED = 20260921
@@ -260,6 +260,60 @@ def global_factor(symbols: list[str], demand: dict[str, float], length: dict[str
         " not even binding, so at proteome scale the pool layer currently does nothing at all"
     )
     return out
+
+
+def manifest(rna: dict[str, Any]) -> dict[str, Any]:
+    """The gate's inputs: the two distilled arms and the residue counts read from the packaged proteome."""
+    from genomeos import manifest as mf
+
+    def rel(p: Path) -> dict[str, Any]:
+        return {**mf.input_entry(p), "path": str(p.relative_to(ROOT))}
+
+    residues = [PROTEINS / f"{s}.json" for s in sorted(rna) if (PROTEINS / f"{s}.json").exists()]
+    return {
+        "sources": [
+            {
+                "accession": "PaxDb 9606-WHOLE_ORGANISM-integrated",
+                "version": "latest at the fetch",
+                "url": PAXDB_URL,
+            },
+            {
+                "accession": "GTEx v8 gene median TPM (GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9)",
+                "version": "v8",
+                "url": TRANSCRIPT_SOURCE["url"],
+            },
+            {
+                "accession": "the packaged proteome, data/knowledge/proteins (UniProt-reviewed lengths)",
+                "version": "on disk",
+            },
+        ],
+        "inputs": [
+            rel(PAXDB_FILE),
+            rel(GTEX_FILE),
+            mf.files_entry(
+                "data/knowledge/proteins/<symbol>.json for every GTEx symbol that has one", residues
+            ),
+        ],
+        "assembly": "n/a: gene-level abundances joined by symbol",
+        "coordinates": "n/a: no genomic intervals",
+        "parameters": {
+            "bootstrap": BOOTSTRAP,
+            "seed": SEED,
+            "declared_tissue": TRANSCRIPT_SOURCE["tissue"],
+            "min_copies": MIN_COPIES,
+            "measured_total_proteins": MEASURED_TOTAL_PROTEINS,
+            "ribosome_capacity": RIBOSOME_CAPACITY,
+            "elongation_aa_per_s": ELONGATION_AA_PER_S,
+            "protein_half_life_h": PROTEIN_HALF_LIFE_H,
+            "min_improvement_log10": MIN_IMPROVEMENT_LOG10,
+            "derivation_tolerance_log10": DERIVATION_TOLERANCE_LOG10,
+        },
+        "exclusions": [
+            "shared genes below MIN_COPIES copies per cell, with zero TPM in the declared tissue, or with no "
+            "residue count (counted under the result's dropped key)",
+        ],
+        "partitions": "n/a: every joined gene is read; no evaluation split",
+    }
 
 
 def main() -> None:
@@ -482,8 +536,9 @@ def main() -> None:
             ),
         },
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(result, indent=1) + "\n")
+    from genomeos.results import save_result
+
+    save_result(OUT.stem, result, manifest=manifest(rna))
     print(f"analysed {len(kept)} genes of {len(shared)} shared")
     for label, row in factors.items():
         if isinstance(row, dict):

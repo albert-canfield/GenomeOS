@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""The HCT116 arm: HCT116 is read only when asked for, and the result is written without changing a line."""
+"""The HCT116 arm: HCT116 is read only when asked for, and a re-scored result is its own result, written
+through save_result, never an edit of crispri_published.json (item 12 S6 follow-up)."""
 
 from __future__ import annotations
 
@@ -42,14 +43,22 @@ def test_kept_cells_are_the_sweeps_four_plus_hct116():
     assert hct.CAP == 760
 
 
-def test_result_is_inserted_without_changing_an_existing_line(tmp_path, monkeypatch):
-    f = tmp_path / "r.json"
-    original = {"a": 1, "second_cell_type": {"run": False}, "post_hoc_positive_filter": {"x": 2}, "z": 0}
-    f.write_text(json.dumps(original, indent=2) + "\n")
-    monkeypatch.setattr(hct, "RESULT", f)
-    before = f.read_text().splitlines()
-    hct.write_additively({"verdict": "v", "n": [1, 2]})
-    after = f.read_text().splitlines()
-    assert [line for line in before if line not in after] == []
-    data = json.loads(f.read_text())
-    assert data[hct.KEY] == {"verdict": "v", "n": [1, 2]} and data["z"] == 0
+def test_a_rescore_is_its_own_result_and_leaves_the_headline_file_alone(tmp_path, monkeypatch):
+    headline = tmp_path / "crispri_published.json"
+    headline.write_text(json.dumps({"a": 1, hct.KEY: {"verdict": "first run"}}, indent=2) + "\n")
+    before = headline.read_bytes()
+    monkeypatch.setattr(hct, "RESULT", headline)
+    manifest = {
+        "sources": [{"accession": "a", "version": "1"}],
+        "inputs": [{"path": "p", "sha256": "0" * 64, "partition": None}],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {},
+        "exclusions": [],
+        "partitions": "n/a: test",
+    }
+    p = hct.write_result({"verdict": "v", "n": [1, 2]}, manifest, results_dir=tmp_path)
+    assert p == tmp_path / f"{hct.NAME}.json" and headline.read_bytes() == before
+    data = json.loads(p.read_text())
+    assert data["verdict"] == "v" and data["n"] == [1, 2] and data["result"] == hct.NAME
+    assert data["result_manifest"]["complete"] and hct.KEY in data["first_run"]

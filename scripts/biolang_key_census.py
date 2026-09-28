@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 from genomeos.lang import grammar  # noqa: E402
 from genomeos.lang import parser as lang_parser  # noqa: E402
 
-OUT = ROOT / "data/results/biolang_key_census.json"
+OUT = ROOT / "data/results/biolang_key_census.json"  # written through save_result (item 12 S6)
 FENCE = re.compile(r"^```[^\n]*\n(.*?)^```", re.S | re.M)
 
 
@@ -234,7 +234,37 @@ def main(argv: list[str]) -> int:
     result["total_hits"] = sum(
         len(part["hits"]) for part in result.values() if isinstance(part, dict) and "hits" in part
     )
-    OUT.write_text(json.dumps(result, indent=1) + "\n")
+    # scripts/when_census.py, this census's sibling, writes the same way
+    from genomeos import manifest as mf
+    from genomeos.results import save_result
+
+    def ls(*patterns: str) -> list[Path]:
+        out = subprocess.run(["git", "ls-files", *patterns], cwd=ROOT, capture_output=True, text=True)
+        return [ROOT / p for p in out.stdout.split()]
+
+    manifest = {
+        "sources": [
+            {
+                "accession": "git ls-files *.bio, *.md fences, *.py/*.js/*.html literals",
+                "version": "the checkout's tracked files at the run (code.git_sha; digests in inputs)",
+            },
+            {"accession": "data/knowledge/compiled/*.bio", "version": "untracked, as built in this checkout"},
+        ],
+        "inputs": [
+            mf.input_entry("genomeos/lang/parser.py"),
+            mf.input_entry("genomeos/lang/grammar.py"),
+            mf.files_entry("tracked *.bio", tracked),
+            mf.files_entry("tracked *.md", ls("*.md")),
+            mf.files_entry("tracked *.py, *.js, *.html", ls("*.py", "*.js", "*.html")),
+            mf.files_entry("data/knowledge/compiled/*.bio (untracked)", generated),
+        ],
+        "assembly": "n/a: program text, no genome coordinates",
+        "coordinates": "n/a: no genomic intervals",
+        "parameters": {"tests": "--tests" in argv},
+        "exclusions": [],
+        "partitions": "n/a: no evaluation split",
+    }
+    save_result(OUT.stem, result, manifest=manifest)
     for part, v in result.items():
         if isinstance(v, dict):
             print(part, v.get("programs"), "programs,", len(v["hits"]), "hits", v.get("pytest", ""))
