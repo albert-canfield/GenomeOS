@@ -8336,6 +8336,88 @@ archive in memory at a time. No matching is added, so no window's contents are e
 try: lane-elemcount's 3,811 s chr2 cost came from exactly that and does not arise here. Script:
 `scripts/clause2_reach_control.py`; result: `data/results/clause2_reach_control.json`.
 
+## The measured arm of clause 2: 3 of the 882 real-unknown blocks hold an element a screen ever tested against a coding gene, and the arm cannot decide (area I, 2026-09-28, lane-measured)
+
+Registration: `clause2_measured_arm.PRE_REGISTRATION` (`c17eedc`, committed before any assay was
+counted), on top of `clause2_matched_control.PRE_REGISTRATION` (`e1dbcf3`, above), whose target sets,
+window draw, decile matching, seed, estimator, both bootstraps and reproduction gate are imported
+rather than restated. The model question rides through the same draw, so the gate is free: this run
+gave back `0c8b82d`'s committed matched primary to the digit -- -27.25 points, 95% -30.91 to -23.58,
+531 compared blocks, 44,081 windows, 158 blocks yes, 12,876 window-yes of 22,228 -- and only then was
+a measured figure read. Script: `scripts/clause2_measured_arm.py`, tests in
+`tests/test_clause2_measured_arm.py`; result `data/results/clause2_measured_arm.json`. 0 AlphaGenome
+requests; the per-element response cache is never opened.
+
+**What was left registered and unrun, and what this is.** Every lane on clause 2 ended with the same
+sentence: beyond the descriptive controls, only measurement separates "these blocks hold no element
+that regulates a coding gene" from "the deletion model cannot name a target for sequence like this".
+The arm they registered (`second_route_not_run`) is a **designed** experiment -- 284,001 unsynthesised
+oligos over 878 blocks -- and it correctly said nothing measured exists for it. That is still true and
+it is still unrun. This is the other arm: the measurements the project already holds (CRISPRi,
+lentiMPRA, VISTA, saturation mutagenesis, through `genomeos/attribution/measured.py`), asked of the
+same elements, in the same blocks, against the same windows, with the same statistic.
+
+**Coverage, which is the first result and was registered as such.** Of the 882 real-unknown blocks
+(3,280 scored elements in the 531 that carry one):
+
+| | blocks | elements |
+| --- | ---: | ---: |
+| eligible: some assay's interval shares a base with an element | 89 | 151 |
+| measured: some assay measures an element at reciprocal overlap 0.5 | 59 | 78 |
+| — lentiMPRA | 57 | 75 |
+| — CRISPRi | 3 | 3 |
+| — VISTA | 1 | 1 |
+| — saturation mutagenesis | 0 | 0 |
+| CRISPRi tested it against a protein-coding gene | **3** | **3** |
+| measured to move a coding gene (decrease or increase) | **0** | **0** |
+| measured a well-powered null on every coding gene tested | 3 | 3 |
+| measured active with no gene named (lentiMPRA or VISTA) | 8 | 9 |
+
+**823 of the 882 blocks hold no measured element at all**, and 3 blocks -- 0.34% -- hold the only kind
+of element that can answer a clause asking for a gene. Of the 3, one has a matched window that is also
+CRISPRi-tested, so the primary compares one block. The registered floor is 20
+(`measured.MIN_FOR_A_COMPARISON`, adopted unchanged), so **no interval is read and the registered
+reading is `cannot_decide`**: the measured arm cannot separate the two accounts of clause 2, and that
+was registered in advance as a finished lane and a real result rather than a failure.
+
+**Why 0 of 3 is not an answer.** All three tested elements came back well-powered nulls, which points
+the same way the model does. It is not evidence: 13.45% of the matched windows' CRISPRi-tested
+elements move a coding gene (30 of 223), and under that rate three tested elements come back all-null
+65% of the time. The neutral tier is thinner still -- 1 block tested, 1 regulated, 0 comparable.
+
+**The coverage that would be needed**, by the formula fixed before the count (d = 0.2725, the model
+arm's own matched difference; s = 0.4324, the standard deviation of this run's per-block model-arm
+differences): **20 compared blocks for 80% power**, which is also the floor, against the 1 there is --
+19 short. In assay terms that is a CRISPRi screen reaching roughly twenty times as much constrained
+unknown sequence as every published screen this project holds reaches today: about 2.3% of the real
+unknown's blocks, against 0.34%.
+
+**A well-powered negative that is not about clause 2 at all.** On the same windows, with the same
+estimator and 531 compared blocks, a real-unknown block holds a measured element 11.11% of the time
+against 25.99% for its length- and gene-density-matched windows: **-12.23 points, 95% -14.81 to
+-9.57**. Measurement is not missing from these blocks at random with respect to the control. The
+assays were pointed at candidate regulatory sequence near expressed genes in a handful of cell lines,
+which is the same property the deletion model scores highly, so the sequence clause 2 is about is
+exactly the sequence the screens avoided. Any future measured arm has to beat that selection, not
+just add volume. (The same table at reciprocal overlap 0.25 gives 72 measured blocks and at 0.75 gives
+10, with 3 and 0 CRISPRi-coding blocks: the rule is visible, and no setting of it produces a usable
+arm.)
+
+**What this does and does not settle.** It does not decide clause 2, and it was registered not to
+pretend otherwise. Both readings stay open and both are written down: if measurement ever says these
+blocks hold elements that regulate coding genes, the failure is the model's and the clause's stated
+reason changes from "these blocks hold nothing" to "the deletion model cannot name a target for
+sequence like this"; if measurement says they hold none while their matched windows do, the model was
+right and clause 2's **wording** is what is wrong, because a milestone cannot ask for a gene and a
+tissue from sequence that regulates no gene. What the run does settle is that the project cannot reach
+either reading from the measurements it holds, that the shortfall is 19 blocks rather than a few
+thousand, and that the measured layer is biased against the target set by 12 points before any of that
+begins. The descriptive route is finished; clause 2 now waits on an experiment, and the size of the
+experiment is now a number.
+
+**Cost.** 0 AlphaGenome requests. 527 s over 24 chromosomes; one chromosome's element archive and one
+chromosome's measured layer in memory at a time.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
