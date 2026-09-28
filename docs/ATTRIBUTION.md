@@ -9951,6 +9951,195 @@ the pilot, or coupling, improves biological labels. Gate 2 is registered in its 
 runs. That gate scores the pilot's revised labels on withheld sources against three baselines: the
 unchanged labels, the independent-block variant and distance to TSS.
 
+## Item 13 pilot, gate 2 registered: the revised labels scored on withheld sources against the unchanged labels, the independent-block variant and distance to TSS, on seven validation chromosomes (item 12 S3, item 13, 2026-09-29, lane-pilot)
+
+This section was written before any score of any pilot labelling, any validation of a correction and
+any S4 judgement was computed, on any chromosome. The model and the search are exactly those
+registered in `a9660ff` and passed by gate 1; no weight or search constant changed after gate 1. The
+code is `genomeos/attribution/pilot_bio.py`, the script `scripts/pilot_biological_gate.py`, and the
+result will be `data/results/pilot_biological_gate.json`. The result may be called **an internal
+development result on withheld sources**. It is never a validation: every source here has been read
+by this project before, and the CRISPRi held-out file is a reused benchmark that is never evidence.
+
+### What runs
+
+The harness's scorable sources are held out in turn:
+
+- Gasperini2019, Morris, Schraivogel2020 and Xie (CRISPRi);
+- the three lentiMPRA cells;
+- VISTA;
+- saturation mutagenesis;
+- GTEx.
+
+For each held-out source S, the pilot reads only `holdout.evidence(without=S)`. It builds neighbourhoods
+of ENCODE cCREs on the validation chromosomes around the blocks S's units overlap. S's units give it
+coordinates only, and their outcomes are never read by a labelling. The pilot then solves them, and the
+harness scores the result on S with `holdout.evaluate(..., chroms=VALIDATION)`. That call uses a locus
+bootstrap with 1,000 resamples, seed 20260928, and the same resamples for every labelling. WTC11_DC_TAP
+is not held out: its only scorable endpoint (increase, 20 positives genome-wide) is below the floors on
+any chromosome subset.
+
+**Chromosomes are the validation partitions.** The validation chromosomes are chr1, chr6, chr8, chr9,
+chr10, chr11 and chr19. They are the smallest set found by unit counts alone that keeps all four CRISPRi
+decrease endpoints above the harness's floors (20 positives, 20 negatives, 10 loci):
+
+| endpoint | positives / negatives on the validation chromosomes | loci |
+| --- | --- | --- |
+| Gasperini2019 decrease | 150 / 2,637 | 201 |
+| Morris decrease | 21 / 71 | 33 |
+| Schraivogel2020 decrease (chr8 and chr11 hold all its units) | 23 / 1,276 | 12 |
+| Xie decrease | 26 / 148 | 22 |
+
+Odd or even chromosomes lose Schraivogel2020 and one of Morris or Xie. Of the 15 endpoints C4 scored,
+14 stay scorable. The other 17 chromosomes are the development partition. The pilot was timed and
+debugged there, and nothing is scored there.
+
+### The labellings
+
+| labelling | role | what it is |
+| --- | --- | --- |
+| `pilot` | scored | The joint debugger: neighbourhoods are the blocks joined by an observation over two or more of them or by adjacency within 500 bp, cut into windows of at most 60 with the outside blocks held fixed, so an observation crossing a cut is kept on both sides. Gene-level coupling is on |
+| `independent_block` | baseline | The same model and search with each block its own neighbourhood, holding its own copy of every observation over it, and no gene-level coupling: each block revised alone |
+| `unchanged` | baseline | `holdout.unchanged_labels()`, the compiled predicted layer |
+| `distance` | baseline | `holdout.distance_labels()` |
+| `prior_only` | descriptive | The pilot's priors alone (distance, the compiled target, H3K27ac), reading no holdable source |
+| `pilot_at_unchanged_coverage` | descriptive | The pilot, abstaining wherever the unchanged labels abstain |
+
+**How a labelling scores a unit.**
+
+- **What it reads of the unit:** only the query, which is the unit's interval, gene, TSS and cell.
+- **A pair unit** (CRISPRi, GTEx) gets the block's link probability for that gene. For CRISPRi the gene
+  must also be active in the unit's cell. The probability is contrasted with "no target" (and
+  inactive), with the rest of the neighbourhood as in each surviving alternative. It is never a share
+  over other genes.
+- **An element unit** gets the block's activity probability in the unit's context: the lentiMPRA cell,
+  `invivo` for VISTA, `other` for saturation mutagenesis.
+- **Several alternatives:** the score is mixed over the surviving alternatives with weights exp(-ΔE).
+- **Several blocks:** the largest score over the blocks the unit overlaps is taken.
+- **No solved block:** the labelling abstains (None), which the harness ranks last and reports as coverage.
+- **Direction:** the pilot does not model the sign of a regulation, so its `increase` score is its link
+  score.
+- **Reads:** the pilot and independent-block labellings declare every source in the view,
+  `built_without=S`, and the non-holdable inputs (GENCODE v50, the cCRE registry, the compiled layer and
+  so the model, H3K27ac).
+
+### The pass rule, the falsifier, the readings and the stop rule
+
+**Primary endpoints:** the four CRISPRi significant-decrease endpoints (Gasperini2019, Morris,
+Schraivogel2020, Xie) on the validation chromosomes. **Secondary, reported beside and not in the rule:**
+Gasperini2019 increase, lentiMPRA activity and active in each cell, VISTA, saturation mutagenesis and
+GTEx.
+
+**Pass.** The pilot passes if two conditions hold:
+1. On at least 2 of the 4 primary endpoints, its paired difference in average precision has a 95%
+   locus-bootstrap interval above zero against each of the three baselines, at a coverage of at least
+   0.80 of the endpoint's units.
+2. On no primary endpoint is its interval against any baseline entirely below zero.
+
+The rule tests three baselines on four endpoints and asks for two endpoints against all three, so a
+chance pass is unlikely without any correction for multiplicity.
+
+**Falsifier.** A pass is void in either of two cases:
+
+- The prior-only labelling, which reads no holdable source, passes against the unchanged labels and
+  distance on the same endpoints, and the pilot's interval against it includes zero there. The gain is
+  then the priors', not the debugger's.
+- The pilot restricted to the unchanged labels' coverage does not beat them. The pass against the
+  unchanged labels is then reported as coverage.
+
+Any LeakError is fatal and never caught.
+
+**Readings, fixed now.**
+
+| outcome | reading |
+| --- | --- |
+| pass | An internal development result on withheld sources: joint revision predicts the held-out CRISPRi decreases better than the unchanged labels, the same revision one block at a time, and distance to TSS, on the endpoints named, at the coverage given. Phase C may follow; genome-wide deployment waits for a fresh set |
+| beats the unchanged labels and distance, not the independent blocks | A failure of the coherence pilot. Revision helps but coupling adds nothing measurable. The joint debugger stops as a discontinued investigation; the per-block revision is a separate finding, to be registered on its own before any use |
+| beats the unchanged labels only | A failure. The pilot stops as a discontinued investigation |
+| beats none | A failure. The pilot stops and is recorded as a discontinued investigation, apart from implemented capabilities |
+| void | A failure of the kind the falsifier names. The pilot stops |
+
+**Stop rule (item 13, binding).** If the pilot does not improve prediction on withheld evidence at
+useful coverage, it stops. It is then recorded as a discontinued investigation, separately from
+implemented capabilities. A higher internal coherence score is never success.
+
+### The metric: validated corrections per compute-hour
+
+A **committed correction** is a target, activity, split or merge change of the best alternative that
+every surviving alternative shares. Each is validated against the held-out source's own binary endpoint:
+
+- CRISPRi: decrease;
+- lentiMPRA: active;
+- VISTA: positive;
+- saturation mutagenesis: functional;
+- GTEx: associated.
+
+The test runs over the units on the validation chromosomes that the correction touches. For each
+touched unit, δ = +1 if the correction newly predicts it (its new target's pairs, a context switched on)
+and -1 if it stops predicting it (the old target's pairs, a context switched off). A split or merge is
+judged by its parts' labels against the block's starting label. With π the source's prevalence on
+those chromosomes, the correction is:
+
+- **validated** when sum((y - π) δ) > 0;
+- an **error** when the sum is below zero;
+- **neutral** at zero;
+- **untested** when it touches no unit.
+
+**Compute-hours** are the pilot's own CPU time for building neighbourhoods and searching, over all
+held-out sources, measured with `time.process_time`. The harness's scoring time and the loading time
+are reported beside. Reported beside the metric:
+
+- errors;
+- neutral and untested corrections;
+- abstentions: changes not committed, and neighbourhoods by status;
+- observation groups marked inadequate.
+
+Counts are given for the independent-block variant as well.
+
+### S4 beside, not in the rule
+
+Two sets of claims are judged by `correctness.judge(..., sources=[S])`:
+
+- the pilot's committed labels on the blocks it solved, as target claims (one per active cell, or
+  unstated) and context claims;
+- the unchanged labels' claims on the same blocks.
+
+Target accuracy, role accuracy and coverage are reported apart, with coverage beside every accuracy.
+The pilot states no molecular role and no direction, so it has no role claims. A revision that improves
+accuracy on the few judgeable claims while coverage stays near zero is an internal development result
+at tiny coverage, and is reported as such.
+
+### Compute budget
+
+The pilot's own work may take at most **2 CPU-hours** over all held-out sources. Per neighbourhood the
+search caps of `pilot.SEARCH` apply, and a capped neighbourhood is counted. The run uses one process and
+cached data. It opens no per-element response cache and makes no model request, and peak memory is
+measured.
+
+### What was done before this registration, and what was expected
+
+**On the development partition, and nowhere else.** Nothing done there computed a held-out score, a
+correction's validation or an S4 judgement.
+
+- **Timing.** The joint pilot was timed on chr2 and chr12 with Gasperini2019, Morris, GTEx, lentiMPRA
+  K562 and VISTA held out: at most 28.4 CPU seconds a source, 2 neighbourhoods capped, peak 487 MB.
+- **Disputes.** Most disputed neighbourhoods there are one reporter tile against the activity H3K27ac
+  implies. Most abstain under the registered margin: a flip within 1 nat survives, and so does a no-op
+  merge at exactly 1 nat.
+- **Smoke run.** The whole script was run on chr21 and chr22 with every call that reads a held-out
+  outcome stubbed. That run fixed one crash: a reused outcome's merged parts were not registered in the
+  new neighbourhood.
+
+**Expected, before the run.**
+
+- Distance should stay hard to beat on the CRISPRi decrease endpoints, as C4 found.
+- The pilot's priors contain distance and H3K27ac activity, which is an ABC-like combination, so any gain
+  over distance should appear in `prior_only` too.
+- The independent-block variant should be close to the pilot: committed corrections were few on the
+  development chromosomes, and most disputes abstain.
+
+None of this changes a rule above.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

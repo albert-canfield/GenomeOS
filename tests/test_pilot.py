@@ -210,3 +210,116 @@ def test_the_weights_are_log_odds_and_the_registration_is_complete():
     )
     assert set(reg) >= {"weights", "search", "contexts", "measurement_cost", "retired_never_used"}
     assert all(math.isfinite(v) for v in pl.W.values())
+
+
+# --- gate 2's machinery (genomeos/attribution/pilot_bio.py), on toy inputs --------------------------
+def _fixed_toy():
+    from genomeos.attribution import pilot_bio as pb
+
+    blocks = pb.Blocks("chrT", ["A", "B", "C"], [100, 2000, 5000], [500, 2400, 5400], 400)
+    peaks = pl.Peaks({"K562": [(0, 2500)], "HepG2": []})
+    return pb.Fixed(
+        {"chrT": blocks},
+        {"chrT": peaks},
+        {"chrT": {"GA": 40_000, "GB": 60_000}},
+        {"chrT": {"A": ("GA", 0.8, "K562")}},
+    )
+
+
+def test_a_gate2_labelling_abstains_off_the_blocks_and_scores_on_them():
+    from genomeos.attribution import holdout as ho
+    from genomeos.attribution import pilot_bio as pb
+
+    fx = _fixed_toy()
+    obs = _obs([("crispri", 0, 1500, True, "GB", "K562")])
+    obs = [
+        pl.Obs(o.idx, o.kind, "chrT", o.start, o.end, o.positive, o.gene, o.ctx, o.source, o.weight)
+        for o in obs
+    ]
+    sv = pb.solve("joint", "chrT", [0, 1], obs, fx, None, {})
+    lab = pb.labels_from("pilot", {"chrT": sv}, fx, frozenset({"gtex"}), "crispri:Toy")
+    on = ho.Unit("crispri:Toy", "chrT", 2050, 2200, gene="GB", tss=60_000, cell="K562")
+    off = ho.Unit("crispri:Toy", "chrT", 20_000, 20_100, gene="GB", tss=60_000, cell="K562")
+    assert lab.predict(off, "decrease") is None
+    assert 0.0 < lab.predict(on, "decrease") < 1.0
+
+
+def test_gate2_counts_a_correction_validated_only_when_it_improves_the_withheld_units():
+    from genomeos.attribution import holdout as ho
+    from genomeos.attribution import measured as ms
+    from genomeos.attribution import pilot_bio as pb
+
+    fx = _fixed_toy()
+    # the screen says A regulates GB, not its compiled GA; the held-out pairs agree, or not
+    obs = [
+        pl.make_obs(0, "crispri", "chrT", 100, 500, True, gene="GB", ctx="K562"),
+        pl.make_obs(1, "crispri", "chrT", 100, 500, False, gene="GA", ctx="K562"),
+    ]
+    sv = pb.solve("joint", "chrT", [0], obs, fx, None, {})
+    (_, res) = sv.hoods[0]
+    assert [c["kind"] for c in res.committed] == ["target"]
+    agree = [
+        ho.Unit("crispri:Toy", "chrT", 150, 450, outcome=ms.DECREASE, gene="GB", cell="K562"),
+        ho.Unit("crispri:Toy", "chrT", 150, 450, outcome=ms.NULL_INFORMATIVE, gene="GA", cell="K562"),
+        ho.Unit("crispri:Toy", "chrT", 5100, 5200, outcome=ms.NULL_INFORMATIVE, gene="GA", cell="K562"),
+    ]
+    v = pb.validate({"chrT": sv}, agree, "decrease")
+    assert (v["validated"], v["errors"]) == (1, 0)
+    disagree = [
+        ho.Unit("crispri:Toy", "chrT", 150, 450, outcome=ms.NULL_INFORMATIVE, gene="GB", cell="K562"),
+        ho.Unit("crispri:Toy", "chrT", 150, 450, outcome=ms.DECREASE, gene="GA", cell="K562"),
+        ho.Unit("crispri:Toy", "chrT", 5100, 5200, outcome=ms.NULL_INFORMATIVE, gene="GA", cell="K562"),
+    ]
+    v = pb.validate({"chrT": sv}, disagree, "decrease")
+    assert (v["validated"], v["errors"]) == (0, 1)
+
+
+def test_gate2_pass_rule_needs_two_endpoints_above_all_three_baselines_at_useful_coverage():
+    from genomeos.attribution import holdout as ho
+    from genomeos.attribution import pilot_bio as pb
+
+    def comp(src, a, b, lo, hi):
+        return {
+            "source": src,
+            "endpoint": "decrease",
+            "a": a,
+            "b": b,
+            "status": "scored",
+            "interval": [lo, hi],
+        }
+
+    def run(ivs, cov=0.9):
+        comps, scores = [], []
+        for src, _ in pb.PRIMARY:
+            scores.append(
+                {"source": src, "endpoint": "decrease", "labels": pb.PILOT, "coverage": {"share": cov}}
+            )
+            for b in pb.BASELINES:
+                comps.append(comp(src, pb.PILOT, b, *ivs.get((src, b), (-0.1, 0.1))))
+            comps.append(comp(src, pb.PILOT, pb.PRIOR, 0.01, 0.2))
+            comps.append(comp(src, pb.PILOT_COVERAGE, ho.UNCHANGED, 0.01, 0.2))
+        return pb.assess(comps, scores)
+
+    two = {(s, b): (0.01, 0.2) for s, _ in pb.PRIMARY[:2] for b in pb.BASELINES}
+    assert run(two)["reading"] == "pass"
+    assert run(two, cov=0.5)["reading"] != "pass"  # not at useful coverage
+    one = {(s, b): (0.01, 0.2) for s, _ in pb.PRIMARY[:1] for b in pb.BASELINES}
+    assert run(one)["reading"] == "beats_none" and run(one)["stop_rule_fires"]
+    worse = dict(two)
+    worse[(pb.PRIMARY[3][0], ho.DISTANCE)] = (-0.3, -0.1)
+    assert run(worse)["reading"] != "pass"
+    no_coupling = {(s, b): (0.01, 0.2) for s, _ in pb.PRIMARY[:2] for b in (ho.UNCHANGED, ho.DISTANCE)}
+    assert run(no_coupling)["reading"] == "beats_unchanged_and_distance_not_independent"
+
+
+def test_gate2_labellings_carry_their_reads_and_a_leak_is_never_swallowed():
+    from genomeos.attribution import holdout as ho
+    from genomeos.attribution import pilot_bio as pb
+
+    fx = _fixed_toy()
+    sv = pb.solve("prior", "chrT", [0], [], fx, None, {})
+    bad = pb.labels_from("pilot", {"chrT": sv}, fx, frozenset({"crispri:Gasperini2019"}), "crispri:Morris")
+    with pytest.raises(ho.LeakError):
+        ho.check_provenance(bad, "crispri:Gasperini2019")
+    assert "crispri_heldout_file" not in pb.READS_ALWAYS
+    assert set(pb.VALIDATION).isdisjoint(pb.DEVELOPMENT)
