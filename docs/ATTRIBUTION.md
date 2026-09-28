@@ -7036,6 +7036,87 @@ is not changed here. Two tests in
 deleted, because the checkout's removal guard refuses to take out lines that lane-split wrote the
 same night. Their invariant is re-pinned per cell in the new file.
 
+## Pre-registration: one independent benchmark, the IGVF MHC CRISPRi screen in K562 (review item 11, 2026-09-28)
+
+Review item 11 asks for one independent biological benchmark before any widening of scope, and for
+generalisation shown on evidence that is truly independent before any claim of discovery. lane-split's
+audit (`0af7e1b`) found the ENCODE CRISPRi held-out file reused by at least ten scored results, so it
+cannot serve as that benchmark any more. This section fixes a test on a screen that no script here has
+read. The test is registered before scoring and costs 0 AlphaGenome requests.
+
+**Census of what the attribution layer has read** (grep of `data/knowledge/`, `scripts/`, `genomeos/`,
+`docs/DATA.md`). CRISPRi: both ENCODE EPCrisprBenchmark files, i.e. Nasser 2021 (Fulco 2016/2019,
+Ulirsch, Klann 2017, Xie 2017 and the rest), Gasperini 2019, Schraivogel 2020 in training, and Xie 2019,
+Morris 2023 (STING-seq), Klann 2021, Reilly 2021, Ray 2025 DC-TAP (K562, WTC11), Guckelberger 2024
+(HCT116), Nasser GM12878/Jurkat held out. Activity: ENCODE4 lentiMPRA ENCSR106SZM (K562, HepG2, WTC11)
+and Kircher 2019 saturation mutagenesis (GSE126550). Other sources: VISTA, GTEx v8 eQTLs with DAP-G,
+the GWAS Catalog, ClinVar non-coding, and the reporter-allele sets behind E1 (Tewhey, Abell). Features:
+the ENCODE cCRE registry V3, the ENCODE epigenome, and 4DN Hi-C (GM12878, K562). Nothing from the IGVF
+portal has been read.
+
+**Candidates checked on the primary portals** (ENCODE and IGVF APIs, 2026-09-28):
+
+| Candidate | Measures | n | Cell | Licence | Coverage with 0 requests |
+| --- | --- | --- | --- | --- | --- |
+| **IGVF K562 MHC CRISPRi Perturb-seq** (Gersbach; IGVFDS7132YVKO, file IGVFFI4093WUVB, 0.96 MB, released 2026-06-08) | element → gene, signed effect and FDR (FRACTEL) | 34,279 pairs, 581 DHSs, 59 genes, chr6 | K562 | CC BY 4.0 | 4,472 of 6,544 eligible pairs within 500 kb (68%); **chosen** |
+| ENCODE Flow-FISH K562 genes outside the benchmark (TRIR, OTUD5 Engreitz; FADS2, PVT1, HBS1L Sabeti) | element → one gene | 5 genes | K562 | ENCODE, open | yes, but five loci are too few for a readable test |
+| IGVF K562 CRISPRi Perturb-seq "many loci" (Gersbach, 16 sets, 2026-07-27) | element → gene | not processed | K562 | CC BY 4.0 | no released element-level table; raw reads only |
+| IGVF HCT116 FlowFISH (Engreitz: CCND1, MYC, KITLG, FAM3C, ITPRID2) | element → one gene | 156 sets | HCT116 | CC BY 4.0 | the sweep has no HCT116 track; this is the 705-request item |
+| IGVF HepG2 electroporated MPRA (Mohlke) and CYP3A4 MPRA (Ahituv) | variant allelic effect | about 10⁴ variants | HepG2 | CC BY 4.0 | the sweep deletes whole elements and never scores alleles; not covered |
+| IGVF lentiMPRA IGVFDS9175DMRR | element activity | genome-wide | HEK293T | CC BY 4.0 | the sweep has no HEK293T track |
+| Morris 2023 STING-seq | element → gene | — | K562 | — | already read (in the held-out file) |
+
+**The published model.** scE2G v1.2 in K562 (IGVF prediction set IGVFDS5428HHMB, unfiltered file
+IGVFFI1706PNVV, 326 MB, CC BY 4.0). Its chr6 27–36 Mb rows are distilled to
+`data/cache/indep/scE2G_K562_chr6_MHC.tsv.gz`. It was trained on the ENCODE CRISPRi benchmark, which
+does not contain this screen.
+
+**What was seen before this registration.** The column names, the table's shape (34,279 rows, 581
+elements, 59 genes, chr6 only), the count of rows at FDR < 0.05 in either direction (385), and a
+label-blind coverage count. Of 20,228 eligible pairs, the sweep covers 4,651. Within 500 kb of the TSS
+it covers 4,472 of 6,544. Beyond 500 kb it covers almost nothing, because the scorer read only the genes
+inside its 1 Mb window. No label was joined to any prediction.
+
+**The registered test** (`genomeos/attribution/indep.py`, `PREREGISTERED`; `scripts/indep_benchmark.py`
+is fixed in the same commit):
+
+- **Pairs.** One DHS and one gene. Excluded and counted: elements within 1 kb of any GENCODE v50 TSS
+  (12,921 pairs), genes absent from GENCODE v50 chr6 (1,086), and pairs whose gene and an overlapping
+  element also appear in either ENCODE benchmark file (44). The primary population is the pairs within
+  500 kb of the TSS, the sweep's reach; the 13,684 pairs beyond it are counted and not scored.
+- **Labels (R2).** A decrease is FDR < 0.05 with effect < 0, and it is the positive. An increase is kept
+  apart and reported alone. "Not detected" (FDR ≥ 0.05) is the negative. The screen gives no power, so
+  "not detected" does not mean "no effect".
+- **Coverage.** A pair is covered when a sweep element overlaps the DHS and the per-element cache has
+  a K562 value for the gene. Pairs that are not covered are missing: never imputed and never scored as
+  zero. The test is not read if fewer than 20 covered positives remain, or if the covered share falls
+  below 0.5. As a selection check, the distance AP on uncovered pairs is reported beside the AP on
+  covered pairs.
+- **Predictor and baselines.** The predictor is the deletion's largest predicted fall on K562's own
+  track. The baselines are:
+  - distance: minus the log distance from the element to the TSS;
+  - the current annotation: 1 when the gene is the element's compiled top target;
+  - the node rule: 1 when the gene is the nearest TSS in the element's CTCF node;
+  - scE2G's `Score`, compared on the pairs that both it and the sweep cover.
+- **Metric.** AUPRC (average precision, with tied scores counted as one threshold). The 95% interval
+  comes from 2,000 bootstrap resamples of elements (seed 20260928), with the paired difference taken
+  on the same resamples. A resample of the 59 genes is reported as a sensitivity check. The base rate
+  is reported beside every AP.
+- **Pass.** The 95% interval of AP(deletion) − AP(distance) lies wholly above 0.
+- **Falsifier.** That interval lies wholly below 0, or the upper bound of AP(deletion) does not exceed
+  the base rate. In either case the result is FAIL.
+- **Anything else is NOT ESTABLISHED.**
+- **Readings.**
+  - PASS: the ranking transfers to one new K562 screen at one locus, and to nothing wider.
+  - FAIL: the ranking that the ENCODE file supported does not transfer. The target bands and the
+    calibration must then be restated as unvalidated outside that file.
+  - NOT ESTABLISHED: this screen cannot separate the deletion from distance, and that is not support.
+  - NOT READABLE: coverage is the whole result.
+
+  One locus bounds every reading. The element bootstrap does not sample variation from locus to locus,
+  and the MHC is unusual. AlphaGenome was trained on ENCODE K562 tracks, so the objection that it has
+  seen K562 chromatin remains open.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
