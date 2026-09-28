@@ -4201,6 +4201,9 @@ entire sweep. What is next, in order of what it decides:
    E 64% of its agenda with **0 fates decided independently of the lineage**, F 9/9 routes, G 100% of
    requirements with **release readiness 0 of 3**, H 50% of its goal, I 89–93% of its ledger, J **100%
    built and 17% surviving** (one of six falsifiable claims).
+   *(2026-09-28, named so the figure can be checked: the three are the ones area G's **Missing** bullet lists —
+   **no git tag** (1.0.0 is untagged), **no PyPI package**, and **no "known phenotypes it must reproduce" list per
+   library from a biologist**, which area G notes is a person this project does not have rather than a task.)*
 
    **There is no breakthrough, and the assessment says so.** There is one result worth showing an
    outside reader — the AlphaGenome deletion feature lifting held-out CRISPRi AUPRC 0.550 → 0.633
@@ -4371,6 +4374,20 @@ entire sweep. What is next, in order of what it decides:
    **Three status measures, kept apart from now on:** software delivered; biology independently
    validated; release readiness. Discontinued investigations are recorded separately from implemented
    capabilities.
+
+   *(Built 2026-09-28, lane-status, `9f18960`: `/api/state` now returns the three measures and a separate
+   discontinued list, computed from files and never summed. **Software delivered** (software, not knowledge):
+   6 of 7 milestones; item 11 **8 of 9 — R8 reopened, not done**, since an item's state is now read from its
+   follow-up rows and a row recording a negative never closes its item; item 12 3 of 8; engine checks 12 of 12,
+   built from a dirty tree. **Biology independently validated**, seven categories: **one counted**, the CRISPRi
+   result in README's wording with its qualifications (HCT116 passes, not replicated; not a paired test; a
+   reused benchmark); node containment shown, not counted (not independent); clause 2 not met; the therapeutic
+   benchmark built knowing its answers; **none** in function, activity, context, origin, therapeutic target and
+   label revision. A claim whose required qualification cannot be read is withheld, and the claim panel's bare
+   band field ("above the published interval") is removed. **Release readiness** lists what is missing and
+   what is met, reading CI from a cached file that shows its age; the promotion gate is only ever dry-run.
+   **Discontinued**, counted by no measure: nine investigations, each quoted from its own row. The CI cache is
+   refreshed with `scripts/ci_status_cache.py`.)*
 
    | # | Item | Code it names | Acceptance (the review's) | Order |
    | --- | --- | --- | --- | --- |
