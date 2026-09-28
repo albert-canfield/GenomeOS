@@ -4376,6 +4376,37 @@ entire sweep. What is next, in order of what it decides:
    neighbourhoods, chromosomes as validation partitions, supported connections kept across neighbourhood
    boundaries; genome-wide deployment only after the pilot shows improvement.
 
+13. **The coherence programme, 2026-09-28: six approaches, organised as the design of item 12's pilot (S3)
+   and what follows it.** Brought by the owner the same day as item 12. The organising idea: stop asking
+   "is this block X or Y" one block at a time, and ask which **smallest set of assumptions cannot explain
+   the observations together**, which repairs remove the contradiction, and which repairs the evidence
+   cannot tell apart. **The metric is fixed before anything is built:** validated corrections per
+   compute-hour, with errors and abstentions reported beside it, where a correction counts as validated
+   only if it improves prediction of evidence it did not see. Internal coherence is never the score.
+   Scale is decided on prediction, not on how many consistent stories are found.
+
+   | # | Approach | What it does | Depends on | Phase, lane |
+   | --- | --- | --- | --- | --- |
+   | C4 | **Hide evidence, predict it** | Hold out one assay or study, infer labels from the rest, predict what was held out; rotate. Split by locus and study, track shared provenance (R5), model each assay's endpoint separately (R2, R6). Plus the diagnostic run first: **remove AlphaGenome predictions entirely — which conclusions survive on experimental evidence alone?** An internal development benchmark only: evidence already used repeatedly cannot become a fresh external validation set, and it is labelled so | cached data; R5 provenance | **A, now: lane-c4** — it is the measuring stick every other approach is scored by |
+   | C5 | **Natural variation as experiments** | Different haplotypes are alternative versions of regulatory sequence; where genotype and a molecular measurement are paired (allele-specific expression, splicing, chromatin), ask whether an explanation predicts the allelic difference. Mapping bias, imprinting and linked variants handled explicitly. VCFs alone supply no outcome | a paired dataset, if one is reachable | **A, now: lane-c5 probe** (what paired data exists, its licence, size, and bias controls); build in phase C |
+   | C1 | **The biological debugger** | For a disagreement (a proposed link, a cell-specific activity and a measured perturbation), find the smallest conflicting set and test alternative repairs: change the target, change the context, split the block, or question the observation model. Weighted constraints, hard only for truly mandatory rules (valid coordinates); recompute only the affected neighbourhood | C4 harness; S1 (uncertainty survives), S6 (only validated results registered) | **B: lane-pilot** |
+   | C2 | **Are the boundaries wrong** | Compare relabel, split and merge; propose boundaries only where evidence changes (transcription, accessibility, assay tiles, annotation); penalise fragmentation; spend computation around disputed boundaries. A split must improve prediction of withheld evidence, or it is manufacturing fit | C4; C1's neighbourhoods | **B: lane-pilot** (with C1 and C3, one pilot on several chromosomes) |
+   | C3 | **Families of indistinguishable explanations** | Group assignments that make effectively identical predictions and return the family ("the data support this relationship but cannot say whether A or B supplies it"), then the **cheapest measurement that separates the surviving families** | C1 | **B: lane-pilot**; its "next measurement" output feeds S8 |
+   | C6 | **Hidden redundancy** | A block can matter although silencing it alone changes little, because another compensates. Compare additive, redundant and cooperative explanations in selected neighbourhoods; nominate a small informative set of paired perturbations where they predict differently. Shared targets or contacts nominate candidates; they do not establish an interaction | C1–C3 pilot; published combinatorial deletions | **C** |
+
+   **Sequence.** Phase A runs now beside item 12's wave 1. Phase B is one pilot combining C1, C2 and C3 on
+   several chromosomes, with chromosomes as validation partitions and supported connections kept across
+   neighbourhood boundaries; it starts when C4's harness exists and S1 and S6 have landed. Its first gate
+   is item 12's: a synthetic case that needs two simultaneous corrections. Its second is the metric
+   above on C4's withheld evidence, against unchanged labels and independent-block scoring. **If the
+   pilot does not improve prediction, it stops and is recorded as a discontinued investigation**, apart
+   from implemented capabilities. Phase C (C6, C5's build, S8's experiment design) follows only a pilot
+   that helped. Ordinary CPUs and cached data throughout; no model requests unless the owner approves.
+
+   **What the pilot returns**, per disputed neighbourhood: ranked alternative assignments; the
+   supporting and conflicting evidence for each; the families it cannot separate; and the next
+   measurement that would.
+
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 
 The ordered list across areas, each with the milestone it serves and the
