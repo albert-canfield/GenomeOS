@@ -7316,6 +7316,68 @@ compiler reads the maximum. That belongs to the compiler's owner. The saturation
 still read from the primary experiment; the repeats, SORT1-flip included, are listed beside it with
 their disagreement counted.
 
+## Pre-registration: a bridge from compiled annotation to dynamics, and what it will not claim (R3, 2026-09-28)
+
+Registered before any of it was built; the constants are in `genomeos/attribution/bridge.py`.
+
+**The problem.** A compiled program is executable annotation. Its rule `strength` is an
+observation's magnitude in that observation's own unit (|log2 fold change| clipped at 1 for an
+AlphaGenome deletion, |fractional change| for a CRISPRi screen), its target genes are stubs with no
+transcription parameters, and the element it names as a source is not a species the runtime
+holds. `runtime/grn.py` read a missing source as 0.0 and a missing `max_rate` as 0.0 without a
+word, so a compiled rule ran and moved nothing.
+
+**The mapping.** One observation: removing element E changes gene G's steady-state expression in
+cell C by the fold RHO = expression(removed) / expression(intact); RHO = 2^x for a predicted log2
+fold change x read from the rule's evidence note (a strength of exactly 1 with no note is
+censored), RHO = 1 + f for a CRISPRi EffectSize f. One model: E's state is its presence (1 intact,
+0 removed, held by clamp, never defaulted); G must declare `basal_rate` b > 0 and `max_rate` V > 0
+(a.u./h); Hill threshold 1 and coefficient 2 are declared assumptions, so H(intact) = h = 0.5. For
+one mechanism alone on its gene in its cell, activates: s = b(1/RHO - 1)/(V h); inhibits:
+s = (b + V)(1 - 1/RHO)/(V h). A fitted s outside (0, 1] means the declared parameters cannot
+produce the observed response, and is reported, not clipped.
+
+**What it will not claim.** A deletion log2 fold change is an observed effect, not a rate constant,
+not an affinity, not a dose response, and says nothing about any other perturbation. The bridge
+fits one dimensionless strength so that the model reproduces that one response under parameters
+the caller declares; anything else the simulation says is the model's.
+
+**The combination rules, named.** The runtime combines a gene's activators as a mean of
+s_i H(x_i) and its inhibitors as a product. Under the mean, adding an activator that is low where
+another is high halves the drive there, so adding an activator can lower expression (lane-sign,
+`b1f3405`, `5cbce26`: correcting Tbxt to activate SOX17 removed mesoderm from the gastrulation
+model). The bridge states this as an assumption and does not change it; a change would be its own
+registration, with the gastrulation and design tests as dependents. Because a gene with two or
+more regulating mechanisms in one context cannot be parameterised from single-deletion
+observations under these rules, the bridge reports it as not identifiable.
+
+**The diagnostic.** Every reason a mechanism does not become a parameter is reported by name:
+regulator state missing, gene parameter missing, observation missing, observation censored, not
+identifiable, conflicting observations, response out of range. The runtime reports a regulator
+with no state and a regulated gene with no `max_rate` on every run (`UnresolvedModel` in strict
+mode, a warning and a list on the trajectory otherwise); the values it integrates do not change.
+A source renamed `<id>@zero`, network_experiment's edge knockout, is a declared zero and is not
+unresolved.
+
+**One mechanism, one parameter.** A mechanism is (element without `_measured`, gene, cell). When
+a predicted and a measured rule describe it, the measured one is simulated and the predicted one
+is recorded as superseded; another citation of the same kind with the same observation is the same
+parameter; with a different observation it is a conflict, reported and not averaged.
+
+**The double-counting audit's question, asked before it is answered.** In the 24 compiled
+programs, how many (element, gene, cell) mechanisms carry both a predicted and a measured rule that
+one run in that cell would integrate side by side, and how many (gene, cell) pairs have more than
+one active regulatory rule, so that no single-deletion observation identifies a strength under the
+mean rule?
+
+**Acceptance, fixed now.** (1) End to end: a program compiled from one element whose deletion is
+observed at log2 fold change -1 in K562, parameterised with declared b and V, reproduces
+expression(removed)/expression(intact) = 0.5 within 1% with the element clamped at 1 and at 0.
+(2) A run whose regulator has no state raises `UnresolvedModel` naming the missing state in strict
+mode and records it otherwise; an `@zero` source raises nothing. (3) A second citation of the same
+mechanism, a duplicate rule citing another source or a predicted rule beside a measured one,
+leaves the simulated strength unchanged. Negatives are written first.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
