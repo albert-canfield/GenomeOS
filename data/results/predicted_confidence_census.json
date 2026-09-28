@@ -1,0 +1,843 @@
+{
+  "result": "predicted_confidence_census",
+  "date": "2026-09-28",
+  "readers": [
+    {
+      "site": "genomeos/attribution/compile.py element_certainty",
+      "reads": "pc.get('confidence') as the Certainty model_score",
+      "both_forms": "old yes; new: model_score None unless it reads certainty.model_score",
+      "owner": "lane-ontology (reported, not edited here)"
+    },
+    {
+      "site": "genomeos/attribution/confidence_calibration.py stated_confidence",
+      "reads": "pc['confidence'], falling back to |log2 fold change|, for the retired formula",
+      "both_forms": "yes (the fallback is the same number before the 0.7/0.05 clip it applies)",
+      "owner": "lane-evid2"
+    },
+    {
+      "site": "genomeos/attribution/confidence_calibration.py model_score",
+      "reads": "log2_fold_change first, confidence only when no fold change was kept",
+      "both_forms": "yes",
+      "owner": "lane-evid2"
+    },
+    {
+      "site": "genomeos/decompile.py _elements and render",
+      "reads": "pc.get('confidence'), printed as '[predicted: AlphaGenome, <confidence>]'",
+      "both_forms": "old yes; new would print None",
+      "owner": "lane-evid2"
+    },
+    {
+      "site": "genomeos/cli.py cmd enhancer-target (one element)",
+      "reads": "p['confidence'] printed beside the fold change",
+      "both_forms": "old yes; new KeyError",
+      "owner": "lane-evid2"
+    },
+    {
+      "site": "scripts/node_containment_audit.py census",
+      "reads": "counts links with a confidence (has_confidence, predicted_coding_has_confidence)",
+      "both_forms": "old yes; new counts 0",
+      "owner": "lane-evid2"
+    }
+  ],
+  "fixtures": [
+    "tests/test_enhancer_target.py (asserts the written confidence 0.45)",
+    "tests/test_decompile.py (link dict with confidence 0.4)",
+    "tests/test_confidence_calibration.py (links with confidence 0.4321 and 0.99)",
+    "tests/test_compile_certainty.py, tests/test_grn_bridge.py, tests/test_ontology.py (confidence=|lfc|)"
+  ],
+  "not_readers": [
+    "genomeos/web/static/index.html and genomeos/web/server.py: no predicted-link confidence read",
+    "genomeos/attribution/target_calibration.py raw_confidence: recomputes min(1, |lfc|) from features",
+    "genomeos/attribution/measured.py, candidates.py, organise.py: their own confidences, not the link's",
+    "scripts/enhancer_targets*.py: copy the link dict whole (compact), read no confidence"
+  ],
+  "related_leftovers": [
+    "genomeos/predict/alphagenome_adapter.py VariantEffect.confidence: magnitude-based, capped at 0.7",
+    "genomeos/genome/missense.py: confidence = round(min(0.7, score), 3) on missense predictions"
+  ],
+  "committed_sampled_runs": {
+    "per_chromosome": {
+      "chr1": {
+        "links": 226,
+        "with_confidence": 226,
+        "confidence_differs_from_abs_lfc": 214,
+        "cap_applied": 26,
+        "with_certainty": 0,
+        "predicted_coding_links": 98,
+        "predicted_coding_differs_from_abs_lfc": 94
+      },
+      "chr2": {
+        "links": 218,
+        "with_confidence": 218,
+        "confidence_differs_from_abs_lfc": 205,
+        "cap_applied": 9,
+        "with_certainty": 0,
+        "predicted_coding_links": 97,
+        "predicted_coding_differs_from_abs_lfc": 91
+      },
+      "chr3": {
+        "links": 225,
+        "with_confidence": 225,
+        "confidence_differs_from_abs_lfc": 206,
+        "cap_applied": 15,
+        "with_certainty": 0,
+        "predicted_coding_links": 98,
+        "predicted_coding_differs_from_abs_lfc": 89
+      },
+      "chr4": {
+        "links": 233,
+        "with_confidence": 233,
+        "confidence_differs_from_abs_lfc": 209,
+        "cap_applied": 17,
+        "with_certainty": 0,
+        "predicted_coding_links": 106,
+        "predicted_coding_differs_from_abs_lfc": 94
+      },
+      "chr5": {
+        "links": 210,
+        "with_confidence": 210,
+        "confidence_differs_from_abs_lfc": 194,
+        "cap_applied": 3,
+        "with_certainty": 0,
+        "predicted_coding_links": 90,
+        "predicted_coding_differs_from_abs_lfc": 84
+      },
+      "chr6": {
+        "links": 214,
+        "with_confidence": 214,
+        "confidence_differs_from_abs_lfc": 201,
+        "cap_applied": 11,
+        "with_certainty": 0,
+        "predicted_coding_links": 89,
+        "predicted_coding_differs_from_abs_lfc": 84
+      },
+      "chr7": {
+        "links": 206,
+        "with_confidence": 206,
+        "confidence_differs_from_abs_lfc": 184,
+        "cap_applied": 14,
+        "with_certainty": 0,
+        "predicted_coding_links": 91,
+        "predicted_coding_differs_from_abs_lfc": 80
+      },
+      "chr8": {
+        "links": 211,
+        "with_confidence": 211,
+        "confidence_differs_from_abs_lfc": 193,
+        "cap_applied": 6,
+        "with_certainty": 0,
+        "predicted_coding_links": 94,
+        "predicted_coding_differs_from_abs_lfc": 85
+      },
+      "chr9": {
+        "links": 240,
+        "with_confidence": 240,
+        "confidence_differs_from_abs_lfc": 215,
+        "cap_applied": 10,
+        "with_certainty": 0,
+        "predicted_coding_links": 108,
+        "predicted_coding_differs_from_abs_lfc": 97
+      },
+      "chr10": {
+        "links": 209,
+        "with_confidence": 209,
+        "confidence_differs_from_abs_lfc": 187,
+        "cap_applied": 8,
+        "with_certainty": 0,
+        "predicted_coding_links": 91,
+        "predicted_coding_differs_from_abs_lfc": 83
+      },
+      "chr11": {
+        "links": 242,
+        "with_confidence": 242,
+        "confidence_differs_from_abs_lfc": 214,
+        "cap_applied": 15,
+        "with_certainty": 0,
+        "predicted_coding_links": 107,
+        "predicted_coding_differs_from_abs_lfc": 94
+      },
+      "chr12": {
+        "links": 243,
+        "with_confidence": 243,
+        "confidence_differs_from_abs_lfc": 222,
+        "cap_applied": 12,
+        "with_certainty": 0,
+        "predicted_coding_links": 109,
+        "predicted_coding_differs_from_abs_lfc": 98
+      },
+      "chr13": {
+        "links": 233,
+        "with_confidence": 233,
+        "confidence_differs_from_abs_lfc": 210,
+        "cap_applied": 10,
+        "with_certainty": 0,
+        "predicted_coding_links": 97,
+        "predicted_coding_differs_from_abs_lfc": 87
+      },
+      "chr14": {
+        "links": 210,
+        "with_confidence": 210,
+        "confidence_differs_from_abs_lfc": 201,
+        "cap_applied": 10,
+        "with_certainty": 0,
+        "predicted_coding_links": 89,
+        "predicted_coding_differs_from_abs_lfc": 86
+      },
+      "chr15": {
+        "links": 236,
+        "with_confidence": 236,
+        "confidence_differs_from_abs_lfc": 216,
+        "cap_applied": 6,
+        "with_certainty": 0,
+        "predicted_coding_links": 101,
+        "predicted_coding_differs_from_abs_lfc": 91
+      },
+      "chr16": {
+        "links": 209,
+        "with_confidence": 209,
+        "confidence_differs_from_abs_lfc": 196,
+        "cap_applied": 17,
+        "with_certainty": 0,
+        "predicted_coding_links": 89,
+        "predicted_coding_differs_from_abs_lfc": 85
+      },
+      "chr17": {
+        "links": 230,
+        "with_confidence": 230,
+        "confidence_differs_from_abs_lfc": 207,
+        "cap_applied": 15,
+        "with_certainty": 0,
+        "predicted_coding_links": 104,
+        "predicted_coding_differs_from_abs_lfc": 94
+      },
+      "chr18": {
+        "links": 223,
+        "with_confidence": 223,
+        "confidence_differs_from_abs_lfc": 195,
+        "cap_applied": 5,
+        "with_certainty": 0,
+        "predicted_coding_links": 94,
+        "predicted_coding_differs_from_abs_lfc": 83
+      },
+      "chr19": {
+        "links": 233,
+        "with_confidence": 233,
+        "confidence_differs_from_abs_lfc": 206,
+        "cap_applied": 20,
+        "with_certainty": 0,
+        "predicted_coding_links": 107,
+        "predicted_coding_differs_from_abs_lfc": 96
+      },
+      "chr20": {
+        "links": 216,
+        "with_confidence": 216,
+        "confidence_differs_from_abs_lfc": 194,
+        "cap_applied": 14,
+        "with_certainty": 0,
+        "predicted_coding_links": 98,
+        "predicted_coding_differs_from_abs_lfc": 87
+      },
+      "chr21": {
+        "links": 217,
+        "with_confidence": 217,
+        "confidence_differs_from_abs_lfc": 188,
+        "cap_applied": 10,
+        "with_certainty": 0,
+        "predicted_coding_links": 90,
+        "predicted_coding_differs_from_abs_lfc": 75
+      },
+      "chr22": {
+        "links": 225,
+        "with_confidence": 225,
+        "confidence_differs_from_abs_lfc": 204,
+        "cap_applied": 13,
+        "with_certainty": 0,
+        "predicted_coding_links": 103,
+        "predicted_coding_differs_from_abs_lfc": 94
+      },
+      "chrX": {
+        "links": 219,
+        "with_confidence": 219,
+        "confidence_differs_from_abs_lfc": 197,
+        "cap_applied": 14,
+        "with_certainty": 0,
+        "predicted_coding_links": 99,
+        "predicted_coding_differs_from_abs_lfc": 88
+      },
+      "chrY": {
+        "links": 157,
+        "with_confidence": 157,
+        "confidence_differs_from_abs_lfc": 148,
+        "cap_applied": 7,
+        "with_certainty": 0,
+        "predicted_coding_links": 42,
+        "predicted_coding_differs_from_abs_lfc": 41
+      }
+    },
+    "total": {
+      "links": 5285,
+      "with_confidence": 5285,
+      "confidence_differs_from_abs_lfc": 4806,
+      "cap_applied": 287,
+      "with_certainty": 0,
+      "predicted_coding_links": 2291,
+      "predicted_coding_differs_from_abs_lfc": 2080
+    }
+  },
+  "local_all_element_tables": {
+    "per_chromosome": {
+      "chr1": {
+        "links": 101575,
+        "with_confidence": 101575,
+        "confidence_differs_from_abs_lfc": 92149,
+        "cap_applied": 8601,
+        "with_certainty": 0,
+        "predicted_coding_links": 43681,
+        "predicted_coding_differs_from_abs_lfc": 39540
+      },
+      "chr2": {
+        "links": 81627,
+        "with_confidence": 81627,
+        "confidence_differs_from_abs_lfc": 74066,
+        "cap_applied": 5179,
+        "with_certainty": 0,
+        "predicted_coding_links": 32917,
+        "predicted_coding_differs_from_abs_lfc": 29890
+      },
+      "chr3": {
+        "links": 66380,
+        "with_confidence": 66380,
+        "confidence_differs_from_abs_lfc": 60191,
+        "cap_applied": 4101,
+        "with_certainty": 0,
+        "predicted_coding_links": 27682,
+        "predicted_coding_differs_from_abs_lfc": 25116
+      },
+      "chr4": {
+        "links": 49424,
+        "with_confidence": 49424,
+        "confidence_differs_from_abs_lfc": 44757,
+        "cap_applied": 3174,
+        "with_certainty": 0,
+        "predicted_coding_links": 20646,
+        "predicted_coding_differs_from_abs_lfc": 18684
+      },
+      "chr5": {
+        "links": 55765,
+        "with_confidence": 55765,
+        "confidence_differs_from_abs_lfc": 50604,
+        "cap_applied": 3487,
+        "with_certainty": 0,
+        "predicted_coding_links": 22772,
+        "predicted_coding_differs_from_abs_lfc": 20644
+      },
+      "chr6": {
+        "links": 58929,
+        "with_confidence": 58929,
+        "confidence_differs_from_abs_lfc": 53388,
+        "cap_applied": 4243,
+        "with_certainty": 0,
+        "predicted_coding_links": 23769,
+        "predicted_coding_differs_from_abs_lfc": 21533
+      },
+      "chr7": {
+        "links": 53506,
+        "with_confidence": 53506,
+        "confidence_differs_from_abs_lfc": 48504,
+        "cap_applied": 3753,
+        "with_certainty": 0,
+        "predicted_coding_links": 22596,
+        "predicted_coding_differs_from_abs_lfc": 20462
+      },
+      "chr8": {
+        "links": 46028,
+        "with_confidence": 46028,
+        "confidence_differs_from_abs_lfc": 41569,
+        "cap_applied": 2872,
+        "with_certainty": 0,
+        "predicted_coding_links": 18552,
+        "predicted_coding_differs_from_abs_lfc": 16715
+      },
+      "chr9": {
+        "links": 45410,
+        "with_confidence": 45410,
+        "confidence_differs_from_abs_lfc": 41133,
+        "cap_applied": 3040,
+        "with_certainty": 0,
+        "predicted_coding_links": 19272,
+        "predicted_coding_differs_from_abs_lfc": 17460
+      },
+      "chr10": {
+        "links": 49888,
+        "with_confidence": 49888,
+        "confidence_differs_from_abs_lfc": 45137,
+        "cap_applied": 3231,
+        "with_certainty": 0,
+        "predicted_coding_links": 21023,
+        "predicted_coding_differs_from_abs_lfc": 18980
+      },
+      "chr11": {
+        "links": 59315,
+        "with_confidence": 59315,
+        "confidence_differs_from_abs_lfc": 53818,
+        "cap_applied": 4829,
+        "with_certainty": 0,
+        "predicted_coding_links": 25731,
+        "predicted_coding_differs_from_abs_lfc": 23319
+      },
+      "chr12": {
+        "links": 54440,
+        "with_confidence": 54440,
+        "confidence_differs_from_abs_lfc": 49540,
+        "cap_applied": 4212,
+        "with_certainty": 0,
+        "predicted_coding_links": 22814,
+        "predicted_coding_differs_from_abs_lfc": 20731
+      },
+      "chr13": {
+        "links": 24596,
+        "with_confidence": 24596,
+        "confidence_differs_from_abs_lfc": 22331,
+        "cap_applied": 1441,
+        "with_certainty": 0,
+        "predicted_coding_links": 9711,
+        "predicted_coding_differs_from_abs_lfc": 8824
+      },
+      "chr14": {
+        "links": 33190,
+        "with_confidence": 33190,
+        "confidence_differs_from_abs_lfc": 30196,
+        "cap_applied": 2450,
+        "with_certainty": 0,
+        "predicted_coding_links": 13385,
+        "predicted_coding_differs_from_abs_lfc": 12141
+      },
+      "chr15": {
+        "links": 35305,
+        "with_confidence": 35305,
+        "confidence_differs_from_abs_lfc": 32032,
+        "cap_applied": 2387,
+        "with_certainty": 0,
+        "predicted_coding_links": 14474,
+        "predicted_coding_differs_from_abs_lfc": 13112
+      },
+      "chr16": {
+        "links": 35602,
+        "with_confidence": 35602,
+        "confidence_differs_from_abs_lfc": 32329,
+        "cap_applied": 3211,
+        "with_certainty": 0,
+        "predicted_coding_links": 14799,
+        "predicted_coding_differs_from_abs_lfc": 13414
+      },
+      "chr17": {
+        "links": 49938,
+        "with_confidence": 49938,
+        "confidence_differs_from_abs_lfc": 45426,
+        "cap_applied": 4855,
+        "with_certainty": 0,
+        "predicted_coding_links": 21608,
+        "predicted_coding_differs_from_abs_lfc": 19595
+      },
+      "chr18": {
+        "links": 22900,
+        "with_confidence": 22900,
+        "confidence_differs_from_abs_lfc": 20721,
+        "cap_applied": 1262,
+        "with_certainty": 0,
+        "predicted_coding_links": 9250,
+        "predicted_coding_differs_from_abs_lfc": 8365
+      },
+      "chr19": {
+        "links": 38065,
+        "with_confidence": 38065,
+        "confidence_differs_from_abs_lfc": 34801,
+        "cap_applied": 5055,
+        "with_certainty": 0,
+        "predicted_coding_links": 17265,
+        "predicted_coding_differs_from_abs_lfc": 15767
+      },
+      "chr20": {
+        "links": 29692,
+        "with_confidence": 29692,
+        "confidence_differs_from_abs_lfc": 26988,
+        "cap_applied": 2311,
+        "with_certainty": 0,
+        "predicted_coding_links": 12702,
+        "predicted_coding_differs_from_abs_lfc": 11524
+      },
+      "chr21": {
+        "links": 13020,
+        "with_confidence": 13020,
+        "confidence_differs_from_abs_lfc": 11783,
+        "cap_applied": 912,
+        "with_certainty": 0,
+        "predicted_coding_links": 5174,
+        "predicted_coding_differs_from_abs_lfc": 4663
+      },
+      "chr22": {
+        "links": 22720,
+        "with_confidence": 22720,
+        "confidence_differs_from_abs_lfc": 20594,
+        "cap_applied": 1959,
+        "with_certainty": 0,
+        "predicted_coding_links": 9612,
+        "predicted_coding_differs_from_abs_lfc": 8678
+      },
+      "chrX": {
+        "links": 24706,
+        "with_confidence": 24706,
+        "confidence_differs_from_abs_lfc": 22432,
+        "cap_applied": 2219,
+        "with_certainty": 0,
+        "predicted_coding_links": 10817,
+        "predicted_coding_differs_from_abs_lfc": 9829
+      },
+      "chrY": {
+        "links": 679,
+        "with_confidence": 679,
+        "confidence_differs_from_abs_lfc": 617,
+        "cap_applied": 72,
+        "with_certainty": 0,
+        "predicted_coding_links": 125,
+        "predicted_coding_differs_from_abs_lfc": 116
+      }
+    },
+    "total": {
+      "links": 1052700,
+      "with_confidence": 1052700,
+      "confidence_differs_from_abs_lfc": 955106,
+      "cap_applied": 78856,
+      "with_certainty": 0,
+      "predicted_coding_links": 440377,
+      "predicted_coding_differs_from_abs_lfc": 399102
+    }
+  },
+  "reading": "stored files keep their values: the write changes for new runs only, and every reader listed accepts a link with the old `confidence` or with the new `certainty` record",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository, enhancer_targets_<chrom> runs and the all-element tables",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: counts of fields, no interval is read",
+    "parameters": {
+      "cap": 0.7,
+      "links": [
+        "predicted",
+        "predicted_coding"
+      ]
+    },
+    "exclusions": [
+      "links with no gene are not counted"
+    ],
+    "partitions": "n/a: no evaluation partition",
+    "code": {
+      "git_sha": "0dab1a4311fc47afc4a82d74ed02325d29bad224",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/predicted_confidence_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
