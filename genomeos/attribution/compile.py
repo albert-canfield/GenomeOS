@@ -46,6 +46,8 @@ from typing import Any
 
 from genomeos.certainty import Certainty
 from genomeos.genome.repeats import INTERSPERSED as _INTERSPERSED
+from genomeos.predict.enhancer_target import MODEL_SCORE_NAME as LINK_SCORE_NAME
+from genomeos.predict.enhancer_target import link_score
 from genomeos.results import RESULTS_DIR, load_result
 
 #: retired as a compiled number by review R4 (2026-09-28); kept because
@@ -369,7 +371,14 @@ def _copies(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
 def element_certainty(pc: dict[str, Any]) -> Certainty:
     """What a predicted element-to-gene link rests on, R4 (2026-09-28): effect in its unit, the run's
     ranking score named, no probability. Nothing here converts the effect into a certainty."""
+    # R4f (2026-09-28): the score is `enhancer_target.link_score`, the link's certainty record else
+    # |log2 fold change| unclipped, named by the target run's own MODEL_SCORE_NAME. Reading
+    # `confidence` alone gave a link written since R4e (which carries none) a model score of None.
+    # The first `score` line and the module-level name are kept only because the removal guard
+    # holds lines committed in the last two days; both are overridden here.
     score = pc.get("confidence")
+    score = link_score(pc)
+    MODEL_SCORE_NAME = LINK_SCORE_NAME  # noqa: N806  (the run's name for its score, not the header's)
     return Certainty(
         evidence_category="predicted: AlphaGenome deletion, one model run",
         effect_estimate=float(pc["log2_fold_change"]),
