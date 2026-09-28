@@ -1,6 +1,6 @@
 {
   "result": "engine_package",
-  "date": "2026-09-28",
+  "date": "2026-09-29",
   "name": "biolang",
   "built": {
     "files": 38,
@@ -128,7 +128,7 @@
     {
       "check": "the engine's own pytest suite",
       "ok": true,
-      "output": "317 passed, 3 skipped, 3 xfailed in 40.72s",
+      "output": "317 passed, 3 skipped, 3 xfailed in 53.57s",
       "error": "",
       "passed": 317,
       "failed": 0,
@@ -161,17 +161,12 @@
   "passed": true,
   "result_manifest": {
     "code": {
-      "git_sha": "cc824f4407cfa612123e9c74abbda177c430ba4b",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/web/server.py",
-        "scripts/c5_paired_variation_probe.py"
-      ],
-      "untracked_code_paths": [
-        "scripts/c5_paired_variation_probe.py"
-      ],
+      "git_sha": "56fad910910cb65e55dffbe2cf72a2d3748cf551",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
       "dirty_result_paths": [
-        "data/results/c5_paired_variation_probe.json",
+        "data/results/clause2_design_power_calibrated.json",
         "data/results/engine_package.json"
       ],
       "argv": [
