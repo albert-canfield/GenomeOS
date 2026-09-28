@@ -1,0 +1,1785 @@
+{
+  "result": "c5_paired_variation_probe",
+  "date": "2026-09-28",
+  "question": "Which open resource pairs genotype with an allelic molecular readout, and how much of the attribution layer's element set could it reach? Feasibility only: counts of overlap, no allelic outcome read, nothing registered that measures.",
+  "universe": {
+    "elements": 961227,
+    "pairs_with_predicted_coding_target": 440377,
+    "pairs_strong": 108599,
+    "pairs_target_not_in_gencode_v50": 0,
+    "elements_active_in_gm12878_h3k27ac": 121151,
+    "pairs_lcl_context": 58737,
+    "targets_expressed_in_lcl_gtex_v8": 14174,
+    "where": "data/knowledge/alphagenome/all_elements"
+  },
+  "candidates": [
+    {
+      "name": "GTEx v8 allelic expression (Castel et al. 2020, Genome Biology)",
+      "paired": "RNA-seq haplotype counts per gene per sample (phASER, with and without WASP) with the donors' WGS genotypes",
+      "samples": "15,253 samples, 54 tissues, 838 donors",
+      "access": "open: the phASER haplotype expression matrices on the GTEx portal (adult-gtex bucket, haplotype-expression/v8/); controlled (dbGaP phs000424.v8): SNP-level ASE, the WGS genotypes and the read-back phased genotypes. No haplotype expression in v10 or v11 (bulk-qtl and bulk-gex only)",
+      "licence": "GTEx portal open-access data; article CC BY 4.0; genotypes under dbGaP terms",
+      "size": "phASER_WASP_GTEx_v8_matrix.gw_phased.txt.gz 461.5 MB (the three other matrices 513.6 to 555.0 MB)",
+      "format": "one string per gene per sample, HAP_A_COUNT|HAP_B_COUNT; no variant ids, no genotypes",
+      "allele_counts": "provided (gene-level haplotype counts)",
+      "assembly": "GRCh38",
+      "feasible_here": "the open matrix pairs with nothing open: which haplotype carries an element's allele is in the controlled genotypes, so no element-level prediction can be checked without dbGaP access (not requested)"
+    },
+    {
+      "name": "Geuvadis (Lappalainen et al. 2013), ArrayExpress E-GEUV-1",
+      "paired": "LCL RNA-seq ASE per individual per site, with 1000 Genomes phased genotypes",
+      "samples": "462 unique RNA samples (EUR 373, YRI 89); one cell type (LCL)",
+      "access": "open (BioStudies E-GEUV-1, no registration); the 1000 Genomes 30x phased panel is open",
+      "licence": "EMBL-EBI terms of use; IGSR: 1000 Genomes data available without embargo",
+      "size": "GD462.ASE.COV8.ANNOT_PTV.txt.gz 918 MB; phased genotypes 621 MB (chr22) to 3.5 GB (chr1); one BAM per sample",
+      "format": "ASE: INDIVIDUAL, RSID, CHR, POS, ALLELES, REF_COUNT, NONREF_COUNT, TOTAL_COUNT, REF_RATIO (per-sample null), binomial PVALUE, GENOTYPE; the name says COV8, a coverage floor the README does not define",
+      "allele_counts": "provided",
+      "assembly": "GRCh37 (1000 Genomes phase 1); a lift or a GRCh38 re-count is needed",
+      "feasible_here": "yes for the table (under 1 GB); the genotype side can come from the GRCh38 30x phased panel instead, which this probe streams for chr21"
+    },
+    {
+      "name": "EN-TEx (Rozowsky et al. 2023, Cell)",
+      "paired": "haplotype-resolved read counts for ATAC, DNase, histone and CTCF/POLR2A ChIP and RNA-seq on each donor's own phased diploid genome",
+      "samples": "4 donors, about 30 tissues, 1,635 datasets; the AS pipeline ran on about 1,000 samples",
+      "access": "open: 'fully open-consented and accessible without registration'; the four donors' personalized genome assemblies on the ENCODE portal (ENCSR792RVV, ENCSR866HYZ, ENCSR780BKN, ENCSR083ETH; 1.7 to 3.6 GB each)",
+      "licence": "ENCODE data use policy ('freely download, analyze and publish ... without restrictions'); article CC BY 4.0",
+      "size": "cCREs_default_AS.tsv 711 MB; genes_default_AS.tsv 94 MB; hetSNVs_default_AS.tsv 2.5 GB",
+      "format": "chr, start, end, region_id (cCRE V2 accession or Ensembl gene id), hap1_count, hap2_count, experiment, donor, tissue, assay, hap1_allele_ratio, p_betabinom, imbalance_significance",
+      "allele_counts": "provided (AlleleSeq2: reads mapped to both personal haplotypes, beta-binomial test)",
+      "assembly": "GRCh38 coordinates in the tables",
+      "feasible_here": "yes: both tables are under 1 GB and keyed to cCREs and genes, the element and readout sides of the archive's pairs"
+    },
+    {
+      "name": "ADASTRA release Mabel v6.1 (Nov 2024; allele-specific TF binding)",
+      "paired": "ChIP-seq allelic read counts at heterozygous SNVs called from the reads themselves",
+      "samples": "1,073 TFs and 649 cell types from 15,970 GTRD alignments (Bill Cipher v5 base)",
+      "access": "open (Zenodo 14174114); the ADASTRA site's downloads page returned HTTP 502 on 2026-09-28",
+      "licence": "CC BY 4.0 (Zenodo record)",
+      "size": "ADASTRA.v.6.1.Mabel.zip 942.7 MB; the four context-cell files 26 MB compressed",
+      "format": "per cell type and per TF: every eligible SNV passing the coverage thresholds, with aggregated effect sizes and FDR per allele (hg38, 0-based start)",
+      "allele_counts": "aggregated statistics per SNV per cell type, not per-sample counts",
+      "assembly": "GRCh38",
+      "feasible_here": "yes, by HTTP ranges on the zip; binding only, so it reads the element side and never the gene"
+    },
+    {
+      "name": "UDACHA release IceKing v1.0.3 (June 2023; allele-specific accessibility)",
+      "paired": "DNase-, ATAC- and FAIRE-seq allelic read counts at SNVs called from the reads",
+      "samples": "5,858 chromatin accessibility datasets from GTRD",
+      "access": "open (Yandex Disk link on udacha.autosome.org)",
+      "licence": "no data licence found on the site; the article (Nat Commun 2025) is CC BY-NC-ND 4.0",
+      "size": "UDACHA_IceKing_May2023_release.zip 826.5 MB; the context-cell files 12 MB compressed",
+      "format": "per cell type per assay: #chr, start, end, mean_bad, id, max_cover, ref, alt, n_reps, then effect sizes, p-values and FDRs; no readme in the zip, so that a file lists every coverage-passing SNV and not only the significant ones is not stated by this release",
+      "allele_counts": "aggregated statistics per SNV per cell type",
+      "assembly": "GRCh38",
+      "feasible_here": "yes, by HTTP ranges; accessibility only, element side"
+    },
+    {
+      "name": "AlleleDB (Chen et al. 2016)",
+      "paired": "ASB and ASE on 1000 Genomes individuals' personal genomes",
+      "samples": "382 individuals",
+      "access": "open (archive.gersteinlab.org/proj/alleledb/download/), last updated 2016-08",
+      "licence": "not stated",
+      "size": "accE v2.1 96 MB, accB 6.1 MB, ASE 7.6 MB, ASB 213 kB",
+      "format": "accessible SNVs and AS calls",
+      "allele_counts": "provided for accessible SNVs",
+      "assembly": "GRCh37",
+      "feasible_here": "reachable, but for this purpose EN-TEx (same lab, personal genomes, GRCh38, tissues) and ADASTRA/UDACHA (binding, accessibility) cover it"
+    },
+    {
+      "name": "ENCODE4 Hi-C genophasing (43 biosamples)",
+      "paired": "phased variant calls from Hi-C, including HepG2 and IMR-90; its 'allele-specific variants' output is the Hi-C diploid layout, not a molecular readout",
+      "samples": "43 annotations (HepG2 ENCSR777ARQ, IMR-90 ENCSR425DIX; none for K562 or GM12878)",
+      "access": "open (ENCODE portal)",
+      "licence": "ENCODE data use policy (no restrictions)",
+      "size": "phased VCF 122 to 198 MB each",
+      "format": "VCF",
+      "allele_counts": "none; would be computed from ENCODE RNA, DNase or ATAC BAMs",
+      "assembly": "GRCh38",
+      "feasible_here": "genotype side only; allele counting from multi-GB BAMs is possible by ranges (genomeos/genome/bam_range.py) but is a build, not a probe"
+    },
+    {
+      "name": "GIAB HG002 RNA-seq (NIST RNA-seq pilot)",
+      "paired": "Illumina mRNA and lncRNA, PacBio and ONT reads on three HG002 cell stocks (GM24385, GM26105, GM27730), with the Q100 assembly phased by parent",
+      "samples": "one individual",
+      "access": "open (GIAB FTP)",
+      "licence": "NIST data use policy (17 USC 105)",
+      "size": "mRNA BAMs 7.3 to 9.1 GB each (.bai 4 to 5 MB); FASTQ 6 to 7 GB per mate",
+      "format": "reads only",
+      "allele_counts": "none; must be computed",
+      "assembly": "GRCh38",
+      "feasible_here": "by range reads of the indexed BAM at the heterozygous sites this probe counts; one individual, so it can check a direction but cannot separate an element from its linked variants"
+    }
+  ],
+  "overlap": {
+    "NA12878": {
+      "label": "NA12878 (GM12878), GIAB HG001 v4.2.1",
+      "elements": 961227,
+      "elements_in_confident_regions": 854568,
+      "elements_with_het_snv": 142700,
+      "pairs": 440377,
+      "pairs_target_not_in_gencode": 0,
+      "pairs_element_het": 64712,
+      "pairs_target_exon_het": 338434,
+      "pairs_both_het": 59185,
+      "pairs_both_het_autosomal": 59185,
+      "pairs_both_het_autosomal_target_imprinted": 684,
+      "pairs_both_het_autosomal_target_imprinted_predicted": 407,
+      "pairs_both_het_autosomal_target_immunoglobulin_or_HLA": 118,
+      "pairs_both_het_autosomal_lcl_context": 7155,
+      "het_snvs": 2028130,
+      "het_snvs_written_phased": 0,
+      "fraction_elements_with_het_snv": 0.1485,
+      "distinct_targets_both_het_autosomal": 9568,
+      "distinct_targets_both_het_autosomal_lcl_context": 3143,
+      "het_snvs_in_target_tss_window": {
+        "min": 94.0,
+        "q1": 1302.0,
+        "median": 1580.0,
+        "q3": 1902.0,
+        "max": 10791.0
+      },
+      "per_chromosome": {
+        "chr1": {
+          "elements": 88109,
+          "with_het": 12666,
+          "pairs_both_het": 5695
+        },
+        "chr2": {
+          "elements": 79639,
+          "with_het": 11998,
+          "pairs_both_het": 4408
+        },
+        "chr3": {
+          "elements": 62502,
+          "with_het": 8892,
+          "pairs_both_het": 3600
+        },
+        "chr4": {
+          "elements": 46124,
+          "with_het": 7205,
+          "pairs_both_het": 2832
+        },
+        "chr5": {
+          "elements": 53114,
+          "with_het": 8353,
+          "pairs_both_het": 3158
+        },
+        "chr6": {
+          "elements": 56945,
+          "with_het": 9246,
+          "pairs_both_het": 3458
+        },
+        "chr7": {
+          "elements": 49296,
+          "with_het": 7575,
+          "pairs_both_het": 3229
+        },
+        "chr8": {
+          "elements": 45332,
+          "with_het": 7299,
+          "pairs_both_het": 2695
+        },
+        "chr9": {
+          "elements": 41640,
+          "with_het": 6645,
+          "pairs_both_het": 2854
+        },
+        "chr10": {
+          "elements": 47419,
+          "with_het": 7477,
+          "pairs_both_het": 2998
+        },
+        "chr11": {
+          "elements": 48380,
+          "with_het": 6961,
+          "pairs_both_het": 3180
+        },
+        "chr12": {
+          "elements": 46582,
+          "with_het": 6975,
+          "pairs_both_het": 3193
+        },
+        "chr13": {
+          "elements": 25634,
+          "with_het": 4023,
+          "pairs_both_het": 1371
+        },
+        "chr14": {
+          "elements": 31794,
+          "with_het": 4578,
+          "pairs_both_het": 1834
+        },
+        "chr15": {
+          "elements": 31058,
+          "with_het": 4674,
+          "pairs_both_het": 2048
+        },
+        "chr16": {
+          "elements": 32314,
+          "with_het": 5194,
+          "pairs_both_het": 2206
+        },
+        "chr17": {
+          "elements": 41396,
+          "with_het": 5410,
+          "pairs_both_het": 2486
+        },
+        "chr18": {
+          "elements": 21973,
+          "with_het": 3540,
+          "pairs_both_het": 1363
+        },
+        "chr19": {
+          "elements": 29374,
+          "with_het": 4461,
+          "pairs_both_het": 2440
+        },
+        "chr20": {
+          "elements": 26954,
+          "with_het": 3888,
+          "pairs_both_het": 1637
+        },
+        "chr21": {
+          "elements": 12139,
+          "with_het": 2129,
+          "pairs_both_het": 946
+        },
+        "chr22": {
+          "elements": 19708,
+          "with_het": 3511,
+          "pairs_both_het": 1554
+        },
+        "chrX": {
+          "elements": 22894,
+          "with_het": 0,
+          "pairs_both_het": 0
+        },
+        "chrY": {
+          "elements": 907,
+          "with_het": 0,
+          "pairs_both_het": 0
+        }
+      }
+    },
+    "HG002": {
+      "label": "HG002, T2T Q100 v1.1 dipcall",
+      "elements": 961227,
+      "elements_in_confident_regions": 940738,
+      "elements_with_het_snv": 152427,
+      "pairs": 440377,
+      "pairs_target_not_in_gencode": 0,
+      "pairs_element_het": 68750,
+      "pairs_target_exon_het": 347037,
+      "pairs_both_het": 63645,
+      "pairs_both_het_autosomal": 63515,
+      "pairs_both_het_autosomal_target_imprinted": 716,
+      "pairs_both_het_autosomal_target_imprinted_predicted": 389,
+      "pairs_both_het_autosomal_target_immunoglobulin_or_HLA": 84,
+      "pairs_both_het_autosomal_lcl_context": 7681,
+      "het_snvs": 2417532,
+      "het_snvs_written_phased": 2417532,
+      "fraction_elements_with_het_snv": 0.1586,
+      "distinct_targets_both_het_autosomal": 9951,
+      "distinct_targets_both_het_autosomal_lcl_context": 3330,
+      "het_snvs_in_target_tss_window": {
+        "min": 199.0,
+        "q1": 1513.0,
+        "median": 1809.0,
+        "q3": 2169.0,
+        "max": 8408.0
+      },
+      "per_chromosome": {
+        "chr1": {
+          "elements": 88109,
+          "with_het": 13471,
+          "pairs_both_het": 5990
+        },
+        "chr2": {
+          "elements": 79639,
+          "with_het": 11927,
+          "pairs_both_het": 4581
+        },
+        "chr3": {
+          "elements": 62502,
+          "with_het": 9925,
+          "pairs_both_het": 4036
+        },
+        "chr4": {
+          "elements": 46124,
+          "with_het": 7585,
+          "pairs_both_het": 2957
+        },
+        "chr5": {
+          "elements": 53114,
+          "with_het": 8903,
+          "pairs_both_het": 3498
+        },
+        "chr6": {
+          "elements": 56945,
+          "with_het": 9288,
+          "pairs_both_het": 3543
+        },
+        "chr7": {
+          "elements": 49296,
+          "with_het": 8465,
+          "pairs_both_het": 3533
+        },
+        "chr8": {
+          "elements": 45332,
+          "with_het": 7669,
+          "pairs_both_het": 2864
+        },
+        "chr9": {
+          "elements": 41640,
+          "with_het": 6912,
+          "pairs_both_het": 2885
+        },
+        "chr10": {
+          "elements": 47419,
+          "with_het": 8142,
+          "pairs_both_het": 3246
+        },
+        "chr11": {
+          "elements": 48380,
+          "with_het": 7377,
+          "pairs_both_het": 3438
+        },
+        "chr12": {
+          "elements": 46582,
+          "with_het": 7589,
+          "pairs_both_het": 3426
+        },
+        "chr13": {
+          "elements": 25634,
+          "with_het": 4397,
+          "pairs_both_het": 1528
+        },
+        "chr14": {
+          "elements": 31794,
+          "with_het": 5257,
+          "pairs_both_het": 2066
+        },
+        "chr15": {
+          "elements": 31058,
+          "with_het": 4926,
+          "pairs_both_het": 2235
+        },
+        "chr16": {
+          "elements": 32314,
+          "with_het": 5264,
+          "pairs_both_het": 2311
+        },
+        "chr17": {
+          "elements": 41396,
+          "with_het": 6142,
+          "pairs_both_het": 2874
+        },
+        "chr18": {
+          "elements": 21973,
+          "with_het": 3708,
+          "pairs_both_het": 1515
+        },
+        "chr19": {
+          "elements": 29374,
+          "with_het": 4885,
+          "pairs_both_het": 2534
+        },
+        "chr20": {
+          "elements": 26954,
+          "with_het": 4495,
+          "pairs_both_het": 1863
+        },
+        "chr21": {
+          "elements": 12139,
+          "with_het": 2259,
+          "pairs_both_het": 906
+        },
+        "chr22": {
+          "elements": 19708,
+          "with_het": 3556,
+          "pairs_both_het": 1686
+        },
+        "chrX": {
+          "elements": 22894,
+          "with_het": 285,
+          "pairs_both_het": 130
+        },
+        "chrY": {
+          "elements": 907,
+          "with_het": 0,
+          "pairs_both_het": 0
+        }
+      }
+    },
+    "Geuvadis_1kGP_chr21": {
+      "chrom": "chr21",
+      "samples": 449,
+      "elements": 12139,
+      "pairs": 5174,
+      "elements_with_het_in_at_least": {
+        "1": 11123,
+        "10": 8428,
+        "30": 6493
+      },
+      "median_het_samples_per_element": 38.0,
+      "pairs_both_het_in_at_least": {
+        "1": 4727,
+        "10": 3609,
+        "30": 2766
+      },
+      "pairs_contrastable": 3608,
+      "pairs_contrastable_target_imprinted": 91,
+      "distinct_targets_contrastable": 177,
+      "pairs_lcl_context": 588,
+      "pairs_contrastable_lcl_context": 395,
+      "pairs_contrastable_lcl_context_not_imprinted": 395,
+      "distinct_targets_contrastable_lcl_context": 83,
+      "het_snvs_in_target_tss_window": {
+        "min": 159.0,
+        "q1": 1691.0,
+        "median": 2012.0,
+        "q3": 2316.0,
+        "max": 3471.0
+      },
+      "het_snvs_per_sample": {
+        "min": 26054.0,
+        "q1": 30908.0,
+        "median": 32082.0,
+        "q3": 33668.0,
+        "max": 45616.0
+      },
+      "sdrf_sample_ids": 462,
+      "panel": {
+        "url": "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz",
+        "sha256": "a925c112a1085faf01332bef0707b7f0304079fbd974a82de402d248037ea48b",
+        "bytes": 427136458,
+        "chrom": "chr21",
+        "samples_in_panel": 3202,
+        "snv_records": 876432
+      }
+    },
+    "ADASTRA": {
+      "release": {
+        "archive_bytes": 942669336,
+        "members_total": 1801,
+        "files": {
+          "GM12878": {
+            "member": "CL/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+            "bytes": 18908093,
+            "crc32": "2d8dbd56",
+            "sha256": "cde553cfdb566dc94dfdb2a02f18a42b3af65c9bcf68f358a268178dab41774a",
+            "rows": 179831,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "ID",
+              "ref",
+              "alt",
+              "repeat_type",
+              "mean_BAD",
+              "mean_SNP_per_segment",
+              "n_aggregated",
+              "total_cover",
+              "es_mean_ref",
+              "es_mean_alt",
+              "fdrp_bh_ref",
+              "fdrp_bh_alt"
+            ]
+          },
+          "K562": {
+            "member": "CL/K562__myelogenous_leukemia_.tsv",
+            "bytes": 27763145,
+            "crc32": "9d0b421d",
+            "sha256": "7578231260bae671105164931f26516eb974b04f1eff93e2afb40a96661a2e3e",
+            "rows": 327939,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "ID",
+              "ref",
+              "alt",
+              "repeat_type",
+              "mean_BAD",
+              "mean_SNP_per_segment",
+              "n_aggregated",
+              "total_cover",
+              "es_mean_ref",
+              "es_mean_alt",
+              "fdrp_bh_ref",
+              "fdrp_bh_alt"
+            ]
+          },
+          "HepG2": {
+            "member": "CL/HepG2__hepatoblastoma_.tsv",
+            "bytes": 30675750,
+            "crc32": "7a42817d",
+            "sha256": "88ff0870fd9e20b6b5421fa6590fe5f4278c33835418b5e551a359d43bfd5dc6",
+            "rows": 286296,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "ID",
+              "ref",
+              "alt",
+              "repeat_type",
+              "mean_BAD",
+              "mean_SNP_per_segment",
+              "n_aggregated",
+              "total_cover",
+              "es_mean_ref",
+              "es_mean_alt",
+              "fdrp_bh_ref",
+              "fdrp_bh_alt"
+            ]
+          },
+          "IMR-90": {
+            "member": "CL/IMR90__lung_fibroblasts_.tsv",
+            "bytes": 800808,
+            "crc32": "92607bc5",
+            "sha256": "17415d23bb95775ed5a502d07cf3b1bf26961df3158ae145694403bba6d55e72",
+            "rows": 7648,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "ID",
+              "ref",
+              "alt",
+              "repeat_type",
+              "mean_BAD",
+              "mean_SNP_per_segment",
+              "n_aggregated",
+              "total_cover",
+              "es_mean_ref",
+              "es_mean_alt",
+              "fdrp_bh_ref",
+              "fdrp_bh_alt"
+            ]
+          }
+        },
+        "bytes_fetched": 27391021
+      },
+      "reach": {
+        "GM12878": {
+          "eligible_snvs": 179831,
+          "eligible_snvs_inside_elements": 59278,
+          "elements_with_eligible_snv": 47673,
+          "fraction_of_elements": 0.0496
+        },
+        "K562": {
+          "eligible_snvs": 327939,
+          "eligible_snvs_inside_elements": 63686,
+          "elements_with_eligible_snv": 51787,
+          "fraction_of_elements": 0.05388
+        },
+        "HepG2": {
+          "eligible_snvs": 286296,
+          "eligible_snvs_inside_elements": 58538,
+          "elements_with_eligible_snv": 48323,
+          "fraction_of_elements": 0.05027
+        },
+        "IMR-90": {
+          "eligible_snvs": 7648,
+          "eligible_snvs_inside_elements": 4657,
+          "elements_with_eligible_snv": 4058,
+          "fraction_of_elements": 0.00422
+        }
+      }
+    },
+    "UDACHA": {
+      "release": {
+        "archive_bytes": 826503730,
+        "members_total": 918,
+        "files": {
+          "GM12878 dnase": {
+            "member": "dnase/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+            "bytes": 7896239,
+            "crc32": "5bda8496",
+            "sha256": "bc6a2f94df29493e0b3aa1344b626d3f70b05f8eee39e2caffa208c0b31ff675",
+            "rows": 34907,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "K562 dnase": {
+            "member": "dnase/K562__myelogenous_leukemia_.tsv",
+            "bytes": 7683928,
+            "crc32": "8f9b7221",
+            "sha256": "96f1a0c8b6dbefcf721430fa94eacd7e932971e501420264a518aa0b33e648c9",
+            "rows": 33688,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "HepG2 dnase": {
+            "member": "dnase/HepG2__hepatoblastoma_.tsv",
+            "bytes": 3391645,
+            "crc32": "b36a53ef",
+            "sha256": "c37d03c2c0e046a4ae2549acd17810ce589f850a947fc8ef3ac5d93902c19e55",
+            "rows": 15047,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "IMR-90 dnase": {
+            "member": "dnase/IMR90__lung_fibroblasts_.tsv",
+            "bytes": 4482260,
+            "crc32": "2c90a80c",
+            "sha256": "6f4d16d44910d1b41a0ce99c72d806c2e0726c5366fa6e8af6e4fb8e138e1f97",
+            "rows": 20685,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "GM12878 atac": {
+            "member": "atac/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+            "bytes": 1357086,
+            "crc32": "9ec630d2",
+            "sha256": "d3d7559f5737be74e7dca5575763a774b844502326be33abacd3b90098efc0e9",
+            "rows": 5941,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "K562 atac": {
+            "member": "atac/K562__myelogenous_leukemia_.tsv",
+            "bytes": 2138034,
+            "crc32": "d117ac2d",
+            "sha256": "7778890cdf37e839f540cd1cc236e30e2a3942d8d6ee805a30ca42186787a736",
+            "rows": 9293,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "HepG2 atac": {
+            "member": "atac/HepG2__hepatoblastoma_.tsv",
+            "bytes": 3808746,
+            "crc32": "0e40464b",
+            "sha256": "c6b18eee94563c6fbbfde88a7ee6d9ca5cdda94a169c2c3fe4d04e994d564805",
+            "rows": 16868,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          },
+          "IMR-90 atac": {
+            "member": "atac/IMR90__lung_fibroblasts_.tsv",
+            "bytes": 4662098,
+            "crc32": "d3833b8b",
+            "sha256": "46e11574e5dfe73d22d14ed7597fe2acc8b54b367593d9bb7e873240a43845bc",
+            "rows": 20672,
+            "header": [
+              "#chr",
+              "start",
+              "end",
+              "mean_bad",
+              "id",
+              "max_cover",
+              "ref",
+              "alt",
+              "n_reps",
+              "ref_comb_es",
+              "alt_comb_es",
+              "ref_comb_pval",
+              "alt_comb_pval",
+              "ref_fdr_comb_pval",
+              "alt_fdr_comb_pval",
+              "pref_allele",
+              "comb_es",
+              "comb_pval",
+              "fdr_comb_pval"
+            ]
+          }
+        },
+        "bytes_fetched": 16855557
+      },
+      "reach": {
+        "GM12878 dnase": {
+          "eligible_snvs": 34907,
+          "eligible_snvs_inside_elements": 19457,
+          "elements_with_eligible_snv": 16101,
+          "fraction_of_elements": 0.01675
+        },
+        "K562 dnase": {
+          "eligible_snvs": 33688,
+          "eligible_snvs_inside_elements": 17977,
+          "elements_with_eligible_snv": 15171,
+          "fraction_of_elements": 0.01578
+        },
+        "HepG2 dnase": {
+          "eligible_snvs": 15047,
+          "eligible_snvs_inside_elements": 9257,
+          "elements_with_eligible_snv": 7931,
+          "fraction_of_elements": 0.00825
+        },
+        "IMR-90 dnase": {
+          "eligible_snvs": 20685,
+          "eligible_snvs_inside_elements": 14493,
+          "elements_with_eligible_snv": 12727,
+          "fraction_of_elements": 0.01324
+        },
+        "GM12878 atac": {
+          "eligible_snvs": 5941,
+          "eligible_snvs_inside_elements": 3045,
+          "elements_with_eligible_snv": 2591,
+          "fraction_of_elements": 0.0027
+        },
+        "K562 atac": {
+          "eligible_snvs": 9293,
+          "eligible_snvs_inside_elements": 4897,
+          "elements_with_eligible_snv": 4168,
+          "fraction_of_elements": 0.00434
+        },
+        "HepG2 atac": {
+          "eligible_snvs": 16868,
+          "eligible_snvs_inside_elements": 10125,
+          "elements_with_eligible_snv": 8628,
+          "fraction_of_elements": 0.00898
+        },
+        "IMR-90 atac": {
+          "eligible_snvs": 20672,
+          "eligible_snvs_inside_elements": 12836,
+          "elements_with_eligible_snv": 10960,
+          "fraction_of_elements": 0.0114
+        }
+      }
+    },
+    "EN-TEx": {
+      "ccre_table": {
+        "url": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "sha256": "679d916cf78008b0f6c279a30ef7131d8e6a5645c7bb5e6051a7906c0500ba28",
+        "bytes": 745298142,
+        "rows": 5330335
+      },
+      "ccre_rows_by_assay": {
+        "HM-ChIP-seq_H3K27ac": 1181650,
+        "TF-ChIP-seq_CTCF": 1075083,
+        "HM-ChIP-seq_H3K4me3": 864495,
+        "ATAC-seq": 608143,
+        "HM-ChIP-seq_H3K4me1": 497010,
+        "TF-ChIP-seq_POLR2AphosphoS5": 362527,
+        "TF-ChIP-seq_POLR2A": 351813,
+        "HM-ChIP-seq_H3K27me3": 193870,
+        "HM-ChIP-seq_H3K36me3": 85979,
+        "TF-ChIP-seq_EP300": 73082,
+        "HM-ChIP-seq_H3K9me3": 36683
+      },
+      "ccre_rows_by_donor": {
+        "ENC-001": 1443699,
+        "ENC-004": 1372788,
+        "ENC-003": 1340428,
+        "ENC-002": 1173420
+      },
+      "distinct_chromatin_regions": 250722,
+      "distinct_chromatin_regions_overlapping_an_element": 198063,
+      "gene_table": {
+        "url": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "sha256": "0e3f290facc7963353075df78d2c0e0ac46a0e1f935b30e91b98fbc796c6daeb",
+        "bytes": 97973665,
+        "rows": 793882
+      },
+      "gene_rows_by_assay": {
+        "RNA-seq": 793882
+      },
+      "gene_rna_rows_not_in_gencode_v50": 20994,
+      "elements_accessible_any_donor": 207479,
+      "fraction_of_elements": 0.21585,
+      "pairs_accessible_same_donor_and_tissue": 85571,
+      "fraction_of_pairs": 0.19431,
+      "pairs_strong_accessible": 23508,
+      "per_donor": {
+        "ENC-001": {
+          "tissues": 23,
+          "tissues_with_chromatin_and_rna": 19,
+          "elements_accessible_chromatin": 88306,
+          "pairs_element_and_target_accessible_same_tissue": 36396
+        },
+        "ENC-002": {
+          "tissues": 23,
+          "tissues_with_chromatin_and_rna": 18,
+          "elements_accessible_chromatin": 88820,
+          "pairs_element_and_target_accessible_same_tissue": 33870
+        },
+        "ENC-003": {
+          "tissues": 28,
+          "tissues_with_chromatin_and_rna": 23,
+          "elements_accessible_chromatin": 88700,
+          "pairs_element_and_target_accessible_same_tissue": 36744
+        },
+        "ENC-004": {
+          "tissues": 27,
+          "tissues_with_chromatin_and_rna": 22,
+          "elements_accessible_chromatin": 75241,
+          "pairs_element_and_target_accessible_same_tissue": 31384
+        }
+      }
+    }
+  },
+  "flags": {
+    "imprinted": 131,
+    "imprinted_predicted": 104,
+    "immunoglobulin_or_HLA": 456
+  },
+  "bias_controls_design": {
+    "reads_for_80pct_power_single_binomial_test_alpha_0.05": {
+      "0.55": 783,
+      "0.6": 194,
+      "0.65": 85,
+      "0.7": 47
+    },
+    "cis_window_bp": 1000000,
+    "contrast_min_samples_each_side": 10
+  },
+  "label_blind": {
+    "columns_read": {
+      "EN-TEx": [
+        "chr",
+        "start",
+        "end",
+        "region_id",
+        "experiment_accession",
+        "donor",
+        "tissue",
+        "assay"
+      ],
+      "ADASTRA": [
+        "chr",
+        "start"
+      ],
+      "UDACHA": [
+        "chr",
+        "start"
+      ]
+    },
+    "columns_never_read": {
+      "EN-TEx": [
+        "hap1_count",
+        "hap2_count",
+        "hap1_allele_ratio",
+        "p_betabinom",
+        "imbalance_significance"
+      ],
+      "ADASTRA": [
+        "every column after the position (BAD, coverage, effect sizes, FDR, motif)"
+      ],
+      "UDACHA": [
+        "every column after the position"
+      ]
+    }
+  },
+  "alphagenome_requests": 0,
+  "seconds": 139,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element archive)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256",
+        "path": "data/knowledge/alphagenome/all_elements"
+      },
+      {
+        "accession": "GENCODE human gene annotation",
+        "version": "release 50 (GRCh38.p14)"
+      },
+      {
+        "accession": "GIAB HG001 (NA12878) benchmark small variants",
+        "version": "NISTv4.2.1 GRCh38",
+        "url": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/NISTv4.2.1/GRCh38/"
+      },
+      {
+        "accession": "GIAB HG002 T2T Q100 dipcall calls and v5.0q small-variant benchmark bed",
+        "version": "v5.0q"
+      },
+      {
+        "accession": "1000 Genomes 30x phased panel (NYGC, Byrska-Bishop et al. 2022)",
+        "version": "20220422_3202_phased_SNV_INDEL_SV",
+        "url": "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+      },
+      {
+        "accession": "Geuvadis E-GEUV-1 (sample list only)",
+        "version": "BioStudies release, modified 2022-11-02",
+        "url": "https://ftp.ebi.ac.uk/biostudies/fire/E-GEUV-/001/E-GEUV-1/Files/E-GEUV-1.sdrf.txt"
+      },
+      {
+        "accession": "ADASTRA (Zenodo 14174114)",
+        "version": "Mabel v6.1, Nov 2024",
+        "url": "https://zenodo.org/records/14174114/files/ADASTRA.v.6.1.Mabel.zip?download=1"
+      },
+      {
+        "accession": "UDACHA",
+        "version": "IceKing v1.0.3, 2023-06-13",
+        "url": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ"
+      },
+      {
+        "accession": "EN-TEx AS catalogue (Rozowsky et al. 2023)",
+        "version": "cCREs_default_AS.tsv and genes_default_AS.tsv dated 2021-12-10",
+        "url": "http://entex.encodeproject.org/data/"
+      },
+      {
+        "accession": "geneimprint.com human imprinted genes (symbols only, as a filter)",
+        "version": "as served 2026-09-28",
+        "url": "https://www.geneimprint.com/site/genes-by-species.Homo+sapiens"
+      },
+      {
+        "accession": "GTEx v8 gene median TPM (LCL column only)",
+        "version": "2017-06-05 v8 RNASeQC 1.1.9"
+      },
+      {
+        "accession": "ENCODE ENCFF361XMX (ENCSR000AKC) GM12878 H3K27ac replicated peaks",
+        "version": "as cached"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "data/cache/c5/HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz",
+        "sha256": "93bc4c2c696eaf13515ab058caecc064bfed704f85bac7482330ca91bc730daa",
+        "bytes": 125932193,
+        "partition": null,
+        "url": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/NISTv4.2.1/GRCh38/HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz"
+      },
+      {
+        "path": "data/cache/c5/HG001_GRCh38_1_22_v4.2.1_benchmark.bed",
+        "sha256": "dc3485e60447a3e863c34dfc063c3710ea5ed5efae50855c5197ba62538263b9",
+        "bytes": 15479939,
+        "partition": null,
+        "url": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/NISTv4.2.1/GRCh38/HG001_GRCh38_1_22_v4.2.1_benchmark.bed"
+      },
+      {
+        "path": "data/cache/q100/GRCh38_HG2-T2TQ100-V1.1_dipcall-z2k.dip.vcf.gz",
+        "sha256": "4c7568a4ec5922e57b8505cfb16c15ac70247a5e798ff063c8bfc8e223e719fb",
+        "bytes": 42354341,
+        "partition": null
+      },
+      {
+        "path": "data/cache/q100/HG002_GRCh38_v5.0q_smvar.benchmark.bed",
+        "sha256": "ef7d898dd421ea357bb9db915894ab3e5c6c1689e36ccf619befda4bbf1cef5b",
+        "bytes": 685544,
+        "partition": null
+      },
+      {
+        "path": "data/cache/c5/E-GEUV-1.sdrf.txt",
+        "sha256": "7d3a28e06a1fc815ef79533dded53fcbc96c9cc785acfe0fd06452a6b3bb0fff",
+        "bytes": 423201,
+        "partition": null,
+        "url": "https://ftp.ebi.ac.uk/biostudies/fire/E-GEUV-/001/E-GEUV-1/Files/E-GEUV-1.sdrf.txt"
+      },
+      {
+        "path": "data/cache/c5/geneimprint_human.html",
+        "sha256": "0a818ddabc54130f0a7d12c1a1184284d08307c91575f016b6d7f1045bbf84b4",
+        "bytes": 100523,
+        "partition": null,
+        "url": "https://www.geneimprint.com/site/genes-by-species.Homo+sapiens"
+      },
+      {
+        "path": "data/cache/c5/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+        "sha256": "ee7201ff2f280b0de5657d4b08e9a240362d9757efed7f7bd5dba35a5f8617b8",
+        "bytes": 6952331,
+        "partition": null,
+        "url": "https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz"
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr1.bed.gz",
+        "sha256": "19a9b1c694048cffab123608b831e77576a5d76a06e24a9ec4d25d103a323eb8",
+        "bytes": 52696,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr10.bed.gz",
+        "sha256": "6ac41b736cba76ed28ad3bc04222030cf0dd11c2c1be91fd6aa385098adaddbd",
+        "bytes": 26874,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr11.bed.gz",
+        "sha256": "5b0d37f77f16b5b90a21f8e28e307d115558e6a36dfb3e0e82b5b39410fdef03",
+        "bytes": 27468,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr12.bed.gz",
+        "sha256": "30f0d8c2803ee414f15bffaaac937bf004955f5f609fea5416c526558dd4720a",
+        "bytes": 30367,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr13.bed.gz",
+        "sha256": "9df50f67cd6c35ae3215927ae8b65287c72c7305194e07d3858056415482faaa",
+        "bytes": 12779,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr14.bed.gz",
+        "sha256": "4c18fe3999259216cf443ce68557a1000f7e51e8ca838e82f006eccd2f2a129c",
+        "bytes": 21295,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr15.bed.gz",
+        "sha256": "40fb948e9c85c8960b2d5cc4a6c9c9841b5fc39c32817cbf02f2c644108edf20",
+        "bytes": 20675,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr16.bed.gz",
+        "sha256": "c71ddae87082f8d7fee01c3016d6cad020464b0a7070247d918494b327e2d0b1",
+        "bytes": 22110,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr17.bed.gz",
+        "sha256": "058e6cf20e6a62a05404ac102255dd1ab19ea108f0063e647cf67b5572b8b722",
+        "bytes": 28578,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr18.bed.gz",
+        "sha256": "64017a9c79bb8ac61dc83f2af7445b20254b4e407ed68431a4971994d6d00dc1",
+        "bytes": 12105,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr19.bed.gz",
+        "sha256": "02737365f93c0f39d94b488bd9f5d2450b461eacdddd57a225ef647bddd0a7f0",
+        "bytes": 26502,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr2.bed.gz",
+        "sha256": "52924da94ad308b3cc082cb65000ef911a735c99083875219f53c38ce1f6d202",
+        "bytes": 42914,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr20.bed.gz",
+        "sha256": "b9f5b8229805a86da8f1ac31aed847321a4d3b4216db8717ace285c782919347",
+        "bytes": 15544,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr21.bed.gz",
+        "sha256": "28e407e3a8f1f6fd32f9e78f26c69917a101dfa28a4fc003c117dc22ba8b1391",
+        "bytes": 6362,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr22.bed.gz",
+        "sha256": "a14f6a4f137e6a649e04fe90bf36422e86731e3ad171044f8c4a6be157b77b9f",
+        "bytes": 13533,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr3.bed.gz",
+        "sha256": "4ed5ddc7c91e06295a82053bb9c79b5108301787f7d8f92453e3e1202c0220c1",
+        "bytes": 36172,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr4.bed.gz",
+        "sha256": "12d91ded6883704605ffd477fe22183400d0537fe31dc59e43b214f0f7f646d0",
+        "bytes": 22586,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr5.bed.gz",
+        "sha256": "996b273c1e9efafcaff9118f8019d361bf9826aaace604835c576975e459ba67",
+        "bytes": 29825,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr6.bed.gz",
+        "sha256": "3b79dff1d1faebe44e03a5db291853e172d9f7e71ca3164db0280dbb3ba8db29",
+        "bytes": 35799,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr7.bed.gz",
+        "sha256": "8e4897c69208efcbf7e5a5cacf5b9cbc556c919073883c458a678818cd9baa19",
+        "bytes": 27933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr8.bed.gz",
+        "sha256": "fd919ec47e22e344d37db43a348ca9205d25693fd95fe4376e26debff2f19f5a",
+        "bytes": 23445,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chr9.bed.gz",
+        "sha256": "bf15bf803ec829f44f6dd2231213789bed09a3e2efe0b2cc3372a42b37215e10",
+        "bytes": 22605,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chrX.bed.gz",
+        "sha256": "06034d3434b81846aaa322598df35df59cbedc49effc62633a60861d75a6e76a",
+        "bytes": 16519,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/GM12878_H3K27ac_chrY.bed.gz",
+        "sha256": "b36bef484242401e03f1deab619a6ec0d1cb78f918e02402c4fd5866d1396c13",
+        "bytes": 139,
+        "partition": null
+      },
+      {
+        "url": "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz",
+        "sha256": "a925c112a1085faf01332bef0707b7f0304079fbd974a82de402d248037ea48b",
+        "bytes": 427136458,
+        "chrom": "chr21",
+        "samples_in_panel": 3202,
+        "snv_records": 876432,
+        "path": "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz",
+        "partition": null,
+        "streamed": true
+      },
+      {
+        "url": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "sha256": "679d916cf78008b0f6c279a30ef7131d8e6a5645c7bb5e6051a7906c0500ba28",
+        "bytes": 745298142,
+        "rows": 5330335,
+        "path": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "partition": null,
+        "streamed": true
+      },
+      {
+        "url": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "sha256": "0e3f290facc7963353075df78d2c0e0ac46a0e1f935b30e91b98fbc796c6daeb",
+        "bytes": 97973665,
+        "rows": 793882,
+        "path": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "partition": null,
+        "streamed": true
+      },
+      {
+        "path": "https://zenodo.org/records/14174114/files/ADASTRA.v.6.1.Mabel.zip?download=1#CL/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+        "sha256": "cde553cfdb566dc94dfdb2a02f18a42b3af65c9bcf68f358a268178dab41774a",
+        "bytes": 18908093,
+        "partition": null,
+        "release": "ADASTRA",
+        "cell": "GM12878",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://zenodo.org/records/14174114/files/ADASTRA.v.6.1.Mabel.zip?download=1#CL/K562__myelogenous_leukemia_.tsv",
+        "sha256": "7578231260bae671105164931f26516eb974b04f1eff93e2afb40a96661a2e3e",
+        "bytes": 27763145,
+        "partition": null,
+        "release": "ADASTRA",
+        "cell": "K562",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://zenodo.org/records/14174114/files/ADASTRA.v.6.1.Mabel.zip?download=1#CL/HepG2__hepatoblastoma_.tsv",
+        "sha256": "88ff0870fd9e20b6b5421fa6590fe5f4278c33835418b5e551a359d43bfd5dc6",
+        "bytes": 30675750,
+        "partition": null,
+        "release": "ADASTRA",
+        "cell": "HepG2",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://zenodo.org/records/14174114/files/ADASTRA.v.6.1.Mabel.zip?download=1#CL/IMR90__lung_fibroblasts_.tsv",
+        "sha256": "17415d23bb95775ed5a502d07cf3b1bf26961df3158ae145694403bba6d55e72",
+        "bytes": 800808,
+        "partition": null,
+        "release": "ADASTRA",
+        "cell": "IMR-90",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#dnase/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+        "sha256": "bc6a2f94df29493e0b3aa1344b626d3f70b05f8eee39e2caffa208c0b31ff675",
+        "bytes": 7896239,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "GM12878 dnase",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#dnase/K562__myelogenous_leukemia_.tsv",
+        "sha256": "96f1a0c8b6dbefcf721430fa94eacd7e932971e501420264a518aa0b33e648c9",
+        "bytes": 7683928,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "K562 dnase",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#dnase/HepG2__hepatoblastoma_.tsv",
+        "sha256": "c37d03c2c0e046a4ae2549acd17810ce589f850a947fc8ef3ac5d93902c19e55",
+        "bytes": 3391645,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "HepG2 dnase",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#dnase/IMR90__lung_fibroblasts_.tsv",
+        "sha256": "6f4d16d44910d1b41a0ce99c72d806c2e0726c5366fa6e8af6e4fb8e138e1f97",
+        "bytes": 4482260,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "IMR-90 dnase",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#atac/GM12878__female_B-cells_lymphoblastoid_cell_line_.tsv",
+        "sha256": "d3d7559f5737be74e7dca5575763a774b844502326be33abacd3b90098efc0e9",
+        "bytes": 1357086,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "GM12878 atac",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#atac/K562__myelogenous_leukemia_.tsv",
+        "sha256": "7778890cdf37e839f540cd1cc236e30e2a3942d8d6ee805a30ca42186787a736",
+        "bytes": 2138034,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "K562 atac",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#atac/HepG2__hepatoblastoma_.tsv",
+        "sha256": "c6b18eee94563c6fbbfde88a7ee6d9ca5cdda94a169c2c3fe4d04e994d564805",
+        "bytes": 3808746,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "HepG2 atac",
+        "read_by_http_range": true
+      },
+      {
+        "path": "https://disk.yandex.ru/d/8Shsn1-OgDuwzQ#atac/IMR90__lung_fibroblasts_.tsv",
+        "sha256": "46e11574e5dfe73d22d14ed7597fe2acc8b54b367593d9bb7e873240a43845bc",
+        "bytes": 4662098,
+        "partition": null,
+        "release": "UDACHA",
+        "cell": "IMR-90 atac",
+        "read_by_http_range": true
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "cis_window_bp": 1000000,
+      "population_chromosome": "chr21",
+      "geuvadis_thresholds": [
+        1,
+        10,
+        30
+      ],
+      "contrast_min_samples_each_side": 10,
+      "het": "SNV whose GT holds two different alleles; indels and symbolic alleles excluded",
+      "element_overlap": "at least one base (EN-TEx V2 regions to archive V3 elements)",
+      "target_exons": "union of every GENCODE v50 exon of the target symbol's gene",
+      "chromatin_assays": [
+        "ATAC",
+        "DNase",
+        "ChIP"
+      ],
+      "lcl_context": "element overlaps a GM12878 H3K27ac peak and target GTEx v8 median TPM >= 1.0 in 'Cells - EBV-transformed lymphocytes'"
+    },
+    "exclusions": [
+      "indels and symbolic alleles: allele counting reads SNVs",
+      "chrX and chrY from the autosomal pair counts of the two genomes (X inactivation in NA12878, hemizygous in HG002)",
+      "HG002 dipcall calls with a FILTER other than PASS or '.'",
+      "the population count covers chr21 only; the panel's other chromosomes were not streamed",
+      "every allelic count, ratio, effect-size and significance column (label-blind)"
+    ],
+    "partitions": "n/a: a feasibility census; no evaluation partition is scored",
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "a1900285f414e65619370b18bbf50cf3ffe4ffa3",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/web/server.py",
+        "genomeos/web/static/index.html",
+        "scripts/c5_paired_variation_probe.py",
+        "scripts/ci_status_cache.py",
+        "scripts/results_writer_census.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/c5_paired_variation_probe.py",
+        "scripts/ci_status_cache.py",
+        "scripts/results_writer_census.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/c4_alphagenome_ablation.json",
+        "data/results/c4_holdout_scores.json",
+        "data/results/c5_paired_variation_probe.json",
+        "data/results/clause2_design_power_calibrated.json"
+      ],
+      "argv": [
+        "scripts/c5_paired_variation_probe.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

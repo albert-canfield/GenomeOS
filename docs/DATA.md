@@ -869,6 +869,139 @@ carries the molecular consequence as its last column, so
 `genomeos individual screen --distil` (or `clinvar.distil()`) once to add the
 column to an older local copy. `consequence_targets.json` is committed.
 
+## Natural variation as experiments: the C5 probe (2026-09-28)
+
+Item 13 C5 (docs/ROADMAP.md section 5) asks whether human haplotypes can
+serve as experiments. Two haplotypes are two versions of the same regulatory
+sequence. Where a genotype and a molecular readout are measured in the same
+samples, an explanation from the attribution layer ("this element regulates
+that gene") predicts an allelic difference that can be checked. VCFs alone
+carry no outcome. This lane is the probe: what paired data is open, what it
+costs, and how much of the attribution layer it reaches. It measures nothing
+and registers nothing that measures. `scripts/c5_paired_variation_probe.py`
+writes `data/results/c5_paired_variation_probe.json`, counts only.
+
+**What is paired and reachable (read on the portals, 2026-09-28).**
+
+| Resource | What is paired | Samples | Access | Licence | Size | Allele counts |
+| --- | --- | --- | --- | --- | --- | --- |
+| GTEx v8 allelic expression | RNA haplotype counts per gene per sample (phASER, with and without WASP) with WGS genotypes | 15,253 samples, 54 tissues, 838 donors | haplotype matrices open on the portal; SNP-level ASE, genotypes and read-back phasing in dbGaP phs000424.v8 (not requested); no haplotype expression in v10 or v11 | portal open access; article CC BY 4.0 | 461.5 to 555.0 MB per matrix | provided, per gene |
+| Geuvadis E-GEUV-1 | LCL RNA-seq ASE per individual per site, with 1000 Genomes phased genotypes | 462 (EUR 373, YRI 89), LCL only | open, no registration | EMBL-EBI terms; IGSR: available without embargo | ASE table 918 MB (GRCh37); genotypes 621 MB to 3.5 GB per chromosome | provided (the file is named COV8; the README does not define the floor) |
+| EN-TEx | haplotype read counts for ATAC, histone ChIP, CTCF, POLR2A and EP300 ChIP, and RNA-seq, on each donor's own phased diploid genome | 4 donors, 18 to 23 tissues each with both chromatin and RNA | open, "fully open-consented and accessible without registration"; the donors' personalized genomes on the ENCODE portal, 1.7 to 3.6 GB each | ENCODE data use policy (no restrictions); article CC BY 4.0 | `cCREs_default_AS.tsv` 711 MB, `genes_default_AS.tsv` 94 MB, per-SNV table 2.5 GB | provided (AlleleSeq2) |
+| ADASTRA Mabel v6.1 | TF ChIP-seq allelic reads at SNVs called from the reads | 1,073 TFs, 649 cell types, 15,970 alignments | open, Zenodo 14174114 (the site's downloads page answered HTTP 502) | CC BY 4.0 | zip 942.7 MB; the four context cells 26 MB | aggregated per SNV per cell type |
+| UDACHA IceKing v1.0.3 | DNase, ATAC and FAIRE allelic reads | 5,858 datasets | open, Yandex Disk | none stated for the data; article CC BY-NC-ND 4.0 | zip 826.5 MB; the four context cells 12 MB | aggregated per SNV per cell type |
+| AlleleDB (2016) | ASB and ASE on personal genomes | 382 individuals | open | not stated | 0.2 to 96 MB | provided; GRCh37 |
+| ENCODE4 Hi-C genophasing | phased variant calls for 43 biosamples, HepG2 and IMR-90 among them; no molecular readout | 43 | open | ENCODE, no restrictions | 122 to 198 MB per VCF | none: from BAMs |
+| GIAB HG002 RNA-seq | Illumina, PacBio and ONT RNA on three HG002 cell stocks, with the Q100 assembly phased by parent | 1 individual | open | NIST (17 USC 105) | 7.3 to 9.1 GB per mRNA BAM | none: computable by range reads |
+
+GTEx is the largest and the one that cannot be used. Its open matrix gives
+two haplotype counts per gene and nothing about which haplotype carries an
+element's allele; that is in the controlled genotypes.
+
+**The element universe.** The all-element archive holds 961,227 elements.
+440,377 of them name a predicted coding target (108,599 "strong"); those
+element-gene pairs are the explanations a paired readout could check. Every
+target symbol is in GENCODE v50. NA12878, HG002 and Geuvadis were all read
+from lymphoblastoid lines, so the probe also counts the LCL context:
+121,151 elements overlap a GM12878 H3K27ac peak (ENCFF361XMX), 14,174 genes
+have a GTEx v8 median TPM of 1 or more in EBV-transformed lymphocytes, and
+58,737 pairs meet both. Neither filter is an allelic quantity.
+
+**Overlap, label-blind.** A pair is readable in a genome when its element
+carries a heterozygous SNV (otherwise both haplotypes hold the same sequence
+and the explanation predicts no difference) and its target's exons carry one
+(otherwise expression cannot be split by haplotype). From the allelic tables
+only identifier, position, donor, tissue and assay columns were read, never a
+count, ratio or significance.
+
+| Resource | Elements reached | Pairs reached |
+| --- | --- | --- |
+| NA12878, GIAB HG001 v4.2.1 | 142,700 carry a heterozygous SNV (14.85%) | 59,185 heterozygous at both; 7,155 of them in the LCL context (3,143 targets) |
+| HG002, Q100 dipcall | 152,427 (15.86%) | 63,645 (63,515 autosomal); 7,681 in the LCL context (3,330 targets) |
+| Geuvadis, 449 samples, chr21 only | 11,123 of 12,139 heterozygous in at least one sample, 8,428 in 10 or more; median 38 samples | 3,608 of 5,174 contrastable (at least 10 samples heterozygous at both, and at least 10 with a readable target and a homozygous element); 395 of those in the LCL context (83 targets) |
+| EN-TEx, 4 donors | 207,479 accessible in at least one chromatin assay (21.6%); 75,241 to 88,820 per donor | 85,571 with element and target both accessible in the same donor and tissue (19.4%; 23,508 strong); 31,384 to 36,744 per donor |
+| ADASTRA, eligible SNVs | GM12878 47,673 (4.96%), K562 51,787, HepG2 48,323, IMR-90 4,058 | none: binding reads the element, never the gene |
+| UDACHA, eligible SNVs | DNase: GM12878 16,101, K562 15,171, HepG2 7,931, IMR-90 12,727; ATAC 2,591 to 10,960 | none: accessibility only |
+
+Reached is not powered: whether a reached pair has enough reads is in the
+count columns this probe did not read. EN-TEx matches its V2 cCRE regions to
+the archive's V3 elements by overlap (198,063 of its 250,722 chromatin
+regions overlap an element). The panel drops singletons (MAC 2 or more), and
+the GIAB benchmark VCFs cover their confident regions only (854,568 and
+940,738 elements lie inside them), so the genome counts are floors. The
+UDACHA release carries no readme; that its files list every coverage-passing
+SNV and not only the significant ones is not stated by the release.
+
+**Bias controls a build would need, for EN-TEx and Geuvadis.**
+
+- *Reference mapping bias.* EN-TEx maps every read to both of the donor's
+  haplotypes (AlleleSeq2) and filters ambiguous mappings, so the reference
+  allele is not favoured by construction. The Geuvadis table was mapped to
+  GRCh37; its REF_RATIO column is a per-sample, per-allele-pair null, which
+  absorbs the average bias but not a site's own. A build drops sites in the
+  project's low-mappability track and treats any site that decides a result
+  with a WASP-style remap or the panel's personal haplotypes.
+- *Imprinted and monoallelic genes.* Among the readable pairs, 684
+  (NA12878) and 716 (HG002) have a target geneimprint lists as imprinted,
+  407 and 389 one it lists as predicted, and 118 and 84 an immunoglobulin or
+  HLA gene, which a clonal B-cell line expresses from one rearranged allele.
+  On chr21, 91 of Geuvadis's 3,608 contrastable pairs have an imprinted
+  target, none of them in the LCL context. X-linked targets are left out (X
+  inactivation in the female line, one X in HG002). HG002's Q100 haplotypes
+  are labelled by parent, and EN-TEx publishes the parental origin of each
+  phased block (`phased_block.tar.gz`), so parent-of-origin expression can
+  be separated in both.
+- *Linked variants.* This is the control that decides what a result can
+  say. Within 1 Mb either side of a readable target's TSS, one genome
+  carries a median of 1,580 (NA12878) and 1,809 (HG002) heterozygous SNVs,
+  and a Geuvadis sample 2,012 on chr21. An allelic imbalance belongs to the
+  whole haplotype; in one person it cannot be credited to the element. So
+  EN-TEx's four donors support a coordination test (does the target's
+  expression lean to the haplotype whose copy of the element is the more
+  active, more often than a non-target gene at matched distance?), not an
+  attribution. The Geuvadis contrast, samples heterozygous at the element
+  against samples homozygous at it with the target readable in both, can
+  condition on other variants; that is why the probe asks for 10 samples on
+  each side.
+- *Low counts.* One binomial test at α 0.05 with 80% power needs 47 allelic
+  reads to tell 0.70 from 0.50, 85 for 0.65, 194 for 0.60 and 783 for 0.55
+  (normal approximation; overdispersion raises each). The Geuvadis file is
+  named COV8, which reads as a floor of 8 reads. Counts are summed over a gene's heterozygous exonic sites per
+  haplotype, as phASER does, and tested beta-binomially, as EN-TEx does.
+- *Phase.* The element's allele and the exon's allele must sit on known
+  haplotypes. HG002 is phased by parent genome-wide and EN-TEx's genomes
+  with long reads. The 1000 Genomes panel is statistical phasing with a
+  pedigree correction (SHAPEIT2-duohmm, its README), whose switch errors grow
+  with distance. GIAB HG001 v4.2.1 writes no phase (0 of 2,028,130
+  heterozygous SNVs), so NA12878's would come from the panel or from the
+  NA12878 personal genome on the EN-TEx portal.
+- *Shared provenance.* GTEx eQTLs already enter the attribution layer
+  (`eqtl_targets`), so an allelic readout from GTEx donors and reads would
+  not be independent of them. EN-TEx's four donors are GTEx donors, and the
+  cCRE registry is built from ENCODE assays; whether registry V3 drew on
+  EN-TEx datasets was not checked. C4's provenance field (R5) carries both.
+
+**Recommendation.** Open, paired data does reach the element set: EN-TEx
+reaches about a fifth of the elements and of the element-gene pairs, with
+counts provided, on personal genomes, under no restriction. If the phase B
+pilot helps, build C5 on EN-TEx first, as a within-donor coordination test
+against matched non-target genes, and on Geuvadis with the GRCh38 panel
+second, as the between-individual test in the LCL context, the only one of
+the two that can address linked variants. GTEx stays out while its genotypes
+are controlled. ADASTRA and UDACHA are the only open allelic data in the
+archive's own four cells and can check the element side there, never the
+gene. HG002's RNA can check a direction in one person.
+
+**What was read.** Cached in the git-ignored `data/cache/c5/` (151 MB): the
+GIAB HG001 v4.2.1 VCF and bed, the Geuvadis sdrf (sample ids only),
+geneimprint's human table (symbols only) and GTEx v8 median TPM (the LCL
+column only). Streamed and discarded, with the sha256 of the bytes that
+passed in the manifest: 1000 Genomes chr21 (427 MB) and EN-TEx's two tables
+(745 and 98 MB). Pulled from the release zips by HTTP range: ADASTRA 27 MB,
+UDACHA 17 MB. No single download reached 1 GB; the script ran four times
+while it settled, streaming each time. 0 AlphaGenome requests: the targets
+come from the cached archive.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether
