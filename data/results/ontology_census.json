@@ -1,0 +1,989 @@
+{
+  "result": "ontology_census",
+  "date": "2026-09-28",
+  "review_item": "R7",
+  "programs": 24,
+  "assignments": [
+    {
+      "where": "genomeos/attribution/compile.py:390 (compile_chromosome, attributed elements)",
+      "label": "element `class:`",
+      "assigns": "the constant `enhancer` for every predicted element, whatever the rule's action"
+    },
+    {
+      "where": "genomeos/attribution/compile.py:229 (_measured_blocks)",
+      "label": "element `class:` of `<id>_measured`",
+      "assigns": "row['class'] or `enhancer`; no measured row carries a class, so always `enhancer`"
+    },
+    {
+      "where": "genomeos/attribution/compile.py:149-152 (_region)",
+      "label": "region `role:`",
+      "assigns": "`<tier>, <budget label>`, prefixed `copy, ` for a duplicated block; `unknown` for the constrained_unknown tier (that is what Module.unknowns counts)"
+    },
+    {
+      "where": "genomeos/attribution/budget.py:81-155 (_rule)",
+      "label": "budget tier and label",
+      "assigns": "one tier from the block's one sequence class plus constraint; the label reads constraint as function or its absence as none (see constraint_readings)"
+    },
+    {
+      "where": "genomeos/genome/unknown.py:272-383 (classify_block)",
+      "label": "block sequence class",
+      "assigns": "first matching rule wins: a block dense in ENCODE cCREs is `regulatory` before its RepeatMasker coverage is read, so a repeat-derived regulatory block keeps only `regulatory`"
+    },
+    {
+      "where": "genomeos/attribution/organise.py:125-140 (reading)",
+      "label": "block reading",
+      "assigns": "copy first, else the tier; reads the budget, assigns no new class"
+    },
+    {
+      "where": "genomeos/genome/regulation.py:34-41 (CLS)",
+      "label": "RegulatoryElement.cls from ENCODE",
+      "assigns": "PLS promoter, pELS/dELS enhancer, CTCF-only insulator, DNase-H3K4me3 open_chromatin; a different path from compile.py, not used by the compiled programs"
+    },
+    {
+      "where": "genomeos/lang/parser.py:477-500, genomeos/lang/grammar.py:56-69",
+      "label": "grammar",
+      "assigns": "region `role: text | unknown` (free text); element `class: promoter | enhancer | insulator | open_chromatin` (one value, not checked); no key for origin, activity or status"
+    }
+  ],
+  "consumers": [
+    {
+      "what": "RegulatoryElement.cls (parsed `class:`)",
+      "readers": "genome/regulation.py:136-153, genome/regdiff.py:74-81, predict/enhancer_target.py:352 (all on elements built from ENCODE by regulation.py, none on a compiled program); tests/test_regulation.py; test fixtures in tests/test_grn_bridge.py and tests/test_measured_layer.py write `class: enhancer` by hand"
+    },
+    {
+      "what": "Region.role (parsed `role:`)",
+      "readers": "ir/model.py Module.unknowns (role is UNKNOWN), the `# test: unknowns ==` line of every compiled program, ir/model.py from_dict"
+    },
+    {
+      "what": "the runtime",
+      "readers": "runtime/grn.py reads rules, strength and `when`; it reads neither `class:` nor `role:`"
+    },
+    {
+      "what": "evidence explorer and web",
+      "readers": "evidence.py and web/server.py read evidence kinds and confidences, not `class:`; web/static/blocks.js and index.html show the unknown classes and cCRE classes from results, not from programs"
+    },
+    {
+      "what": "stored results",
+      "readers": "budget_<chrom>.json (tier, label), organise_<chrom>.json (tier), the committed data/organisms/human/noncoding_chr21.bio"
+    }
+  ],
+  "element_class": {
+    "predicted | enhancer": 440377,
+    "measured | enhancer": 19072
+  },
+  "rules_by_element_class_and_action": {
+    "predicted | enhancer | activates": 283452,
+    "predicted | enhancer | inhibits": 156925,
+    "measured | enhancer | activates": 212
+  },
+  "region_role_head": {
+    "regulatory": 14847,
+    "fossil": 6062,
+    "copy": 2678,
+    "neutral": 1939,
+    "unknown": 1098,
+    "structural": 182
+  },
+  "region_role": {
+    "regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak": 13145,
+    "fossil, transposable-element fossil, unconstrained": 5695,
+    "neutral, unconstrained unique sequence, no evidence of function, best guess neutral": 1897,
+    "regulatory, regulatory elements under constraint, target gene unassigned": 1691,
+    "copy, fossil, transposable-element fossil, unconstrained": 1172,
+    "unknown": 1098,
+    "copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral": 649,
+    "copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak": 629,
+    "fossil, transposable-element fossil, weak constraint": 367,
+    "structural, assembly gap, no sequence to attribute": 118,
+    "copy, fossil, transposable-element fossil, weak constraint": 68,
+    "copy, regulatory, regulatory elements under constraint, target gene unassigned": 54,
+    "copy, structural, satellite array, repeat array with a mechanical role, not read as genes": 47,
+    "structural, satellite array, repeat array with a mechanical role, not read as genes": 41,
+    "copy, neutral, long open reading frame without constraint, a chance frame or a dead pseudogene": 36,
+    "neutral, long open reading frame without constraint, a chance frame or a dead pseudogene": 35,
+    "structural, centromere, repeat array with a mechanical role, not read as genes": 21,
+    "regulatory, regulatory, constraint not measured": 11,
+    "copy, neutral, weakly constrained unique sequence, mostly neutral": 8,
+    "neutral, weakly constrained unique sequence, mostly neutral": 7,
+    "copy, regulatory, promoter like, constraint not measured": 5,
+    "copy, structural, tandem repeat, repeat array with a mechanical role, not read as genes": 5,
+    "copy, structural, centromere, repeat array with a mechanical role, not read as genes": 4,
+    "structural, tandem repeat, repeat array with a mechanical role, not read as genes": 2,
+    "copy, regulatory, regulatory, constraint not measured": 1
+  },
+  "constraint_readings": {
+    "transposable-element fossil, unconstrained": {
+      "reading": "absence of constraint read as a dead fossil",
+      "regions": 6867
+    },
+    "unconstrained unique sequence, no evidence of function, best guess neutral": {
+      "reading": "absence read as neutral",
+      "regions": 2546
+    },
+    "long open reading frame without constraint, a chance frame or a dead pseudogene": {
+      "reading": "absence read as dead",
+      "regions": 71
+    },
+    "weakly constrained unique sequence, mostly neutral": {
+      "reading": "weak constraint read as neutral",
+      "regions": 15
+    },
+    "regulatory elements by the registry, little constraint, lineage-specific or weak": {
+      "reading": "little constraint read as weak function",
+      "regions": 13774
+    },
+    "repeat-derived sequence under constraint, possibly exapted as a regulatory element": {
+      "reading": "constraint read as a regulatory mechanism (hedged)",
+      "regions": 0
+    },
+    "long open reading frame under constraint, unannotated coding or a young pseudogene": {
+      "reading": "constraint read as coding (two alternatives)",
+      "regions": 0
+    }
+  },
+  "predicted_elements_by_registry_class": {
+    "dELS": 206805,
+    "dELS CTCF-bound": 127895,
+    "pELS CTCF-bound": 65132,
+    "pELS": 40545
+  },
+  "predicted_elements_by_repeat_origin": {
+    "none": 258308,
+    "repeat_derived (>=0.5 interspersed)": 101011,
+    "partly (>0, <0.5)": 81058,
+    "repeat_derived LINE": 32334,
+    "repeat_derived SINE": 29769,
+    "repeat_derived LTR": 27689,
+    "repeat_derived DNA": 11079,
+    "repeat_derived Retroposon": 89,
+    "repeat_derived RC": 51
+  },
+  "regions_by_sequence_class_and_interspersed_coverage": {
+    "regulatory | interspersed not read": 15252,
+    "interspersed_repeat_LINE | interspersed >=0.5": 4802,
+    "unclassified | interspersed >0": 2316,
+    "interspersed_repeat_SINE | interspersed >=0.5": 1388,
+    "interspersed_repeat_LTR | interspersed >=0.5": 946,
+    "unique_intergenic | interspersed >0": 893,
+    "promoter_like | interspersed >0": 259,
+    "mixed_intergenic | interspersed >0": 136,
+    "gap | interspersed not read": 118,
+    "interspersed_repeat_SINE | interspersed >0": 116,
+    "interspersed_repeat | interspersed >0": 111,
+    "interspersed_repeat_DNA | interspersed >=0.5": 86,
+    "long_orf | interspersed >0": 79,
+    "satellite_array | interspersed >0": 73,
+    "unclassified | interspersed not read": 60,
+    "unclassified | interspersed 0": 55,
+    "centromere | interspersed >0": 25,
+    "interspersed_repeat_Retroposon | interspersed >=0.5": 21,
+    "promoter_like | interspersed 0": 20,
+    "satellite_array | interspersed 0": 15,
+    "long_orf | interspersed 0": 7,
+    "tandem_repeat | interspersed >0": 5,
+    "promoter_like | interspersed not read": 5,
+    "unique_intergenic | interspersed >=0.5": 5,
+    "unclassified | interspersed >=0.5": 4,
+    "long_orf | interspersed not read": 3,
+    "mixed_intergenic | interspersed >=0.5": 2,
+    "tandem_repeat | interspersed 0": 2,
+    "interspersed_repeat | interspersed >=0.5": 1,
+    "interspersed_repeat | interspersed 0": 1
+  },
+  "reading": "every compiled element says `class: enhancer`, including every element whose rule inhibits; the class is a constant, not a reading of the registry, the prediction or the sequence. Region roles join origin, function and a constraint reading in one string, and several of them read the absence of constraint as the absence of function",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository, the 24 compiled programs",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs v3",
+        "version": "ccres_<chrom> as distilled"
+      },
+      {
+        "accession": "UCSC rmsk track, hg38",
+        "version": "rmsk_<chrom> as distilled"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "cba936846b705fd96e739c651aa495325b2e43e033f15ba323312ae09612d946",
+        "bytes": 29656140,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr1.bed.gz",
+        "sha256": "130ad2956b572a714db85e437aed8fb86d4bb1e61b7ef6acf89305656b0bb30a",
+        "bytes": 5018492,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr1.json",
+        "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+        "bytes": 1500070,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr1.json",
+        "sha256": "0ea17e176558ab21774c662f0b5ca9fc2e00b1ad9cd8a5790d3ced356271e08d",
+        "bytes": 1881224,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "2e958682a2f6f2de779b44bcf14a3e3ba4c761b237b86961cb1de6a00c0cf988",
+        "bytes": 22323034,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr2.bed.gz",
+        "sha256": "560b3ad8e201ba13c1887d7c027a82400e42f9827475c558c275f8401c036cd4",
+        "bytes": 4839992,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr2.json",
+        "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+        "bytes": 1204585,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr2.json",
+        "sha256": "f7f017173e7cde20c71ef2689daac34c892464a2abfb17e423dd2b0720980af3",
+        "bytes": 1554678,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "cd19d4708d0ce1982058f7351c98dc0b727615edd3bc730f2abdc063a2bd012d",
+        "bytes": 18592842,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr3.bed.gz",
+        "sha256": "c766fca328a074b93331026b71fa57a5431cfa2b63ee1066025a37e6e2c5109d",
+        "bytes": 4046282,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr3.json",
+        "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+        "bytes": 806712,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr3.json",
+        "sha256": "81cc631c96fa20521c17e703415a5e5ef3e27f961e97bbc75cee3334708de650",
+        "bytes": 1050744,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "55624624d61d323f49f1ed68a2ac0d829117aabc8c557bb56799f52b4b94c57f",
+        "bytes": 14044889,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr4.bed.gz",
+        "sha256": "dbb0abe212a9a6a395a98d6998a1e3bd65955d93396bd6ce26f7e8e01572274e",
+        "bytes": 3702406,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr4.json",
+        "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+        "bytes": 867246,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr4.json",
+        "sha256": "3d456b9e39466f653b521b8f5f05bc384f5827a6a4a05a42d1ddf3cc0a5ace69",
+        "bytes": 1181485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "f163526ce90304f6feb987c50a1d5999d5feb369be21e3f078c665998c7322a3",
+        "bytes": 15380678,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr5.bed.gz",
+        "sha256": "89ad6b94b43aa407d6b203cbe44805383a5618b32a6358b20c2f29e1919ce18b",
+        "bytes": 3573930,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr5.json",
+        "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+        "bytes": 845931,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr5.json",
+        "sha256": "9c44e9f30da60dfc3f2874ebb7b91bdfd496871d106371c2c38c4b08405b4787",
+        "bytes": 1125896,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "d0a37d709822d46c6f4fdb7f9e2f5f2131983303ae73a6b876c76738d71b4abd",
+        "bytes": 16171797,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr6.bed.gz",
+        "sha256": "53064945d25d56e3812effcc30bb1ccfc1d82b35f4167f29eb2e9f00f9c59f5e",
+        "bytes": 3359277,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr6.json",
+        "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+        "bytes": 867522,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr6.json",
+        "sha256": "aa4f650e774506accb93ef8056d5e183ef6cfec3c9e630d77e02fc47e4885d38",
+        "bytes": 1111527,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "cae27d9b08a81afa5903dfea5b2943d73adefec306cec573af6a5743045dfc24",
+        "bytes": 15368458,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr7.bed.gz",
+        "sha256": "893e60028fd60a6164f894113c48fcc30eb911e647980f88d0aa237b77284cd7",
+        "bytes": 3224881,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr7.json",
+        "sha256": "048216b53d9bc8ca3cf8cd0d69bf2bf3fe7646344e9896f4921bd55ffd81bc1c",
+        "bytes": 1118734,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "875ff4f4c0d7786468b8b8c88b3411a0fca556be5adb9ab7cf6ca7030c4a0f84",
+        "bytes": 12612883,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr8.bed.gz",
+        "sha256": "9b85cc574890919a11f41a1a720ed29a38a08c7fd19728afb9bdf970b16c4ded",
+        "bytes": 2932525,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr8.json",
+        "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+        "bytes": 731185,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr8.json",
+        "sha256": "c76fb6328a608d5f5ebc35d924b7e65dfe0aa5fe733665d5f392a110fc4cdbcd",
+        "bytes": 950316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "71c81b29d43699ae27fd1cac4ebcaab9595c0b103ecabf1e4ab0acc617ad0998",
+        "bytes": 13009846,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr9.bed.gz",
+        "sha256": "ddbd1ad428fbf12aebb559f7c58593e977c88a50884c1836a10ad46848a0a0de",
+        "bytes": 2555414,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr9.json",
+        "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+        "bytes": 666533,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr9.json",
+        "sha256": "b0fa3ccb02523ec0a9201d550bd48a7d6ab0e7cbc9ac2a38aed8f16aac3875b0",
+        "bytes": 851731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "2014bab66c9822e5940ba7341195236b2a72075fd79d4326377c431279ed43d3",
+        "bytes": 14279336,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr10.bed.gz",
+        "sha256": "ef58eefc10b0a50d1dc8d591ee4d5a537d1eee929e57fa7159fcb661e99594c2",
+        "bytes": 2724814,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr10.json",
+        "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+        "bytes": 739499,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr10.json",
+        "sha256": "0d9544dccec3520775856ad13cb13a004d0a5fe5393b3be0b4eddccdc6219746",
+        "bytes": 938916,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "80c1599f15672f5c8a88b3ff7eb909711232e385d135af3be044285602ca6b02",
+        "bytes": 17474460,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr11.bed.gz",
+        "sha256": "d8da3468cbc2830169172c2f6143f62f7ceca2fd9767e2cdd7c4a4e7dbe784ac",
+        "bytes": 2774350,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr11.json",
+        "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+        "bytes": 897717,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr11.json",
+        "sha256": "6ada5268ecc4a1fa4e9481a9ed23eb1dfcec091b2972e4c091c19152d19d31b4",
+        "bytes": 1134973,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "0bde0392d9f2367d3bda3eeb2360f702231e333ce97f109d0e4a67daaf702951",
+        "bytes": 15385028,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr12.bed.gz",
+        "sha256": "2c94f594b2bd667133c1fd01f075018a72a130f73a7561f9c07243f9caf9fc14",
+        "bytes": 2871469,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr12.json",
+        "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+        "bytes": 723141,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr12.json",
+        "sha256": "369e0d7b7f26b0136b032a5057bc4db2c94f3e921a8d13ef875356b02a543dc5",
+        "bytes": 922395,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "fecf999c8b2c6c5448f78950af7029e0e4814b3221d968e013597d956275bc2b",
+        "bytes": 6650569,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr13.bed.gz",
+        "sha256": "9611f30315222c3c6f2bd3f5dfca3f21ee907a4b247f5e2a6a9bc7c3a0e61fda",
+        "bytes": 1875578,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr13.json",
+        "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+        "bytes": 479558,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr13.json",
+        "sha256": "612afe71ea57227bc7e97ccd57bbb238636c0ec35d177ebcb0705b93f083b2b1",
+        "bytes": 645168,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "b7fd7f1944fa830526ddf922a2d1dbb208e9bb2d503880db70a1663abea04d53",
+        "bytes": 9118749,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr14.bed.gz",
+        "sha256": "11716c79cd03a1760b3cbb885c749e38be7b152b34aadb33e9489392653e97d9",
+        "bytes": 1850291,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr14.json",
+        "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+        "bytes": 584688,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr14.json",
+        "sha256": "9fea6e91ddbd1ce8e452323ce12b0a8584ffed1535f38cdf20aa7e8a8e1b43eb",
+        "bytes": 729374,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "da3451a5e8ebb1f5cd40ebb37362e2dd9caaba8956ba88c1ce0d4d161214f99a",
+        "bytes": 9731885,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr15.bed.gz",
+        "sha256": "183512a0d0e33e208959bb598e86a2019f042e12fa16b0c3cc6d2302da8e0ea2",
+        "bytes": 1767689,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr15.json",
+        "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+        "bytes": 423577,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr15.json",
+        "sha256": "06fcfb203e459e1e653898713830a7a89cbe8b8b0e338040ddd19406f048fd6e",
+        "bytes": 527266,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "50de6729810f131d27c9ed35534c5b68754563b78cfaa9238d7bec52956a0749",
+        "bytes": 10066586,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr16.bed.gz",
+        "sha256": "245667a1a1720abafe0a9046bc78db41da21e6134cde3ac477db4803a67031a3",
+        "bytes": 1929823,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr16.json",
+        "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+        "bytes": 534109,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr16.json",
+        "sha256": "50ab821f598dfc9c655f98d09c3d48446098fa5cd3225bbbe59845217e530340",
+        "bytes": 664294,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "11fd8811aad60dc91830906681cba856b7f25e05dfc0c38d4d37405e967cd32e",
+        "bytes": 14595965,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr17.bed.gz",
+        "sha256": "97d568ffc601eef77b398ab2f7c92896bddba2a8c7528795adeb3bddfcb1ef61",
+        "bytes": 1881051,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr17.json",
+        "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+        "bytes": 633946,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr17.json",
+        "sha256": "e8e434e8c71cbf201d8431770517e2d8203437fbe538831efa1f84905402f3fb",
+        "bytes": 757592,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "842eea551a1b90a4bc5973a42e948347027d68ace8890fe7e138714b441ed615",
+        "bytes": 6297734,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr18.bed.gz",
+        "sha256": "f5b39387c6436a659a33b764225e65f23152b703e21352e5315ba7e5f6ac370d",
+        "bytes": 1472333,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr18.json",
+        "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+        "bytes": 382016,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr18.json",
+        "sha256": "9a45151a4f5b6fe21f3ae5f06470f4d15684d64b6dab66afcc5a9bb4b5f31d04",
+        "bytes": 505023,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "4fe84abe28d8e7e9a53e8cb7cd51cc0ce4013d0cdb3a5ef23ea98b96ffc44647",
+        "bytes": 11863560,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr19.bed.gz",
+        "sha256": "ead8cbcf54cc4daf267ae03a7bbdf3960b7f2e43d5bed6f0a46bd3e16cc09113",
+        "bytes": 1454121,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr19.json",
+        "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+        "bytes": 657776,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr19.json",
+        "sha256": "1e090944853279c9a3fe871072b4206dfd89269ef141aa3e056a3097cd88d858",
+        "bytes": 787075,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "8caf38eeeeacabfae865fd511f33f5b728d46c7dbc6f1b08036d0d1db36f65d4",
+        "bytes": 8640755,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr20.bed.gz",
+        "sha256": "89ad074ad73163f03cd86141c56d718d1664f91301f63296068ef82bcb959b63",
+        "bytes": 1435638,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr20.json",
+        "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+        "bytes": 474640,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr20.json",
+        "sha256": "5d58fabefffc8053751ce0fa3338a8df0185f9ed3c741dc7dbcd6d4f94810251",
+        "bytes": 590017,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "cfd3055c9597f326a687f1018def1d2bb3a1f73f3cf8352ccd00eae2c2bf0bd1",
+        "bytes": 3554391,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr21.bed.gz",
+        "sha256": "f4d3ca63604c892470f0bfe842d780f382c5bb618402c8a48c2a63470ac63aaf",
+        "bytes": 744112,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr21.json",
+        "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+        "bytes": 355767,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "6e7a4465e73db373e9ee1478adbe0fde4ea8a9d8b239800dd62b89f56d1cbcba",
+        "bytes": 6559396,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr22.bed.gz",
+        "sha256": "d0ad98843321b34730fe7997d1cf3e1a2182c9a9c12ffe56edd3a3072f5c56e0",
+        "bytes": 876493,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr22.json",
+        "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+        "bytes": 394442,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr22.json",
+        "sha256": "9d46f67b821f2767940453155aa091f55bc2852fb435afe67fd6ff10cad74d0c",
+        "bytes": 461165,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "42fbd481d99b9bc590989db4d96f9f6959cd672f2f0b2e35c15a3ad7bb40e052",
+        "bytes": 7750351,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrX.bed.gz",
+        "sha256": "7f2838afbefa3e089c38fc48871ac77e908cfd5eafa23a5b8fe2485f25349e38",
+        "bytes": 3039693,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrX.json",
+        "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+        "bytes": 819979,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrX.json",
+        "sha256": "985082ee4a87c253e98cbb4250d39584889b42337f3581a319c3a2b405c9830e",
+        "bytes": 1179588,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "4423b6548c8cc0b7b1a427812265f5fd2bc2e74a3b9c8846f3731f6c354433e5",
+        "bytes": 245806,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrY.bed.gz",
+        "sha256": "3975ed929c4cab77dc8156daf6afe8beee3e7259d54a0d9b32c54b549593b680",
+        "bytes": 471020,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrY.json",
+        "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+        "bytes": 229765,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrY.json",
+        "sha256": "b6e6fc010c5c14e9913f256962b0627f01129ac183cca726d2e03d82363b6223",
+        "bytes": 319837,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "repeat_derived_min_interspersed_fraction": 0.5,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [],
+    "partitions": "n/a: a census of labels, no evaluation",
+    "code": {
+      "git_sha": "9d48550e3af1eaaa44a77d319f8a009b464ab2a5",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/confidence_calibration.py",
+        "genomeos/cli.py",
+        "genomeos/evidence.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/parser.py",
+        "genomeos/web/static/index.html",
+        "scripts/confidence_calibration.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/ontology_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
