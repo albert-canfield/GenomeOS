@@ -1,6 +1,6 @@
 {
   "result": "bridge_audit",
-  "date": "2026-09-28",
+  "date": "2026-09-29",
   "review_item": "R3",
   "question": "In the 24 compiled programs, how many (element, gene, cell) mechanisms carry both a predicted rule and a measured rule that one run in that cell would integrate side by side, and how many (gene, cell) pairs have more than one active regulatory rule, so that no single-deletion observation identifies a strength under the mean rule?",
   "registered_in": "06b7557 (amended b986238)",
@@ -28,6 +28,8 @@
   "genes_with_a_measured_rate": 3603,
   "genes_with_a_human_measured_rate": 0,
   "rate_row_provenance": "every rate row carries `source` (a key of MEASURED_RATE_SOURCES) and `species_cell`; the audit counts `pairs_on_a_human_measured_rate` and `pairs_on_a_borrowed_species_rate` per tier, and today the first is 0 by construction. Two sources are never averaged and never pooled",
+  "simulation_status": "assumption-dependent simulation, not measured human dynamics",
+  "transfer_label": "per gene: the quantity, its tier (measured | borrowed_median), its source key, the species and cell it was measured in, and the cell context it is used in; per run: the same list plus the runtime parameters taken from defaults",
   "human_rate_survey_verdict": "NO usable human absolute transcription-rate source exists. Human metabolic labelling (TT-seq, TimeLapse-seq, SLAM-seq, single-cell new-RNA) reports half-lives and rates in library or CPM units; the one study found that reports a genuinely absolute rate per cell (copy/min per cell) is MOUSE embryonic stem cells and does not distribute it per gene; and the one published set of human genome-wide transcription rates is constructed from abundance times a mouse-derived count of mRNAs per cell times one global decay constant. The R3 rates therefore stay mouse NIH 3T3, the 138,543 pairs on an unmeasured gene stay unmeasured, and every rate keeps its borrowed flag",
   "human_rate_survey_falsifier": "a dataset distributing PER GENE, for a human cell type, a transcription or synthesis rate in molecules per cell per unit time (or a stated conversion to it), with the per-cell calibration named -- a cell count, an RNA mass per cell, or a spike-in weight per cell. Producing one overturns this record. Ietswaart et al. 2024 (human K562 and mouse NIH 3T3 by one method) is the first place to look, and Shao et al. 2022's GSE168378 shows the calibration that would be needed",
   "pooled_by_tier": {
@@ -40,6 +42,11 @@
       "genes_on_a_borrowed_median": 0,
       "pairs_on_a_human_measured_rate": 0,
       "pairs_on_a_borrowed_species_rate": 0,
+      "labelled_pairs": 0,
+      "labelled_pairs_measured": 0,
+      "labelled_pairs_borrowed_median": 0,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
       "inhibitory_mechanisms_at_the_split": 0
     },
     "measured": {
@@ -51,6 +58,11 @@
       "genes_on_a_borrowed_median": 0,
       "pairs_on_a_human_measured_rate": 0,
       "pairs_on_a_borrowed_species_rate": 22576,
+      "labelled_pairs": 22576,
+      "labelled_pairs_measured": 22576,
+      "labelled_pairs_borrowed_median": 0,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
       "inhibitory_mechanisms_at_the_split": 5220
     },
     "borrowed": {
@@ -62,6 +74,11 @@
       "genes_on_a_borrowed_median": 137816,
       "pairs_on_a_human_measured_rate": 0,
       "pairs_on_a_borrowed_species_rate": 22576,
+      "labelled_pairs": 160392,
+      "labelled_pairs_measured": 22576,
+      "labelled_pairs_borrowed_median": 137816,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
       "inhibitory_mechanisms_at_the_split": 47144
     }
   },
@@ -101,6 +118,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -112,6 +134,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 2217,
+          "labelled_pairs": 2217,
+          "labelled_pairs_measured": 2217,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 546
         },
         "borrowed": {
@@ -123,6 +150,11 @@
           "genes_on_a_borrowed_median": 14373,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 2217,
+          "labelled_pairs": 16590,
+          "labelled_pairs_measured": 2217,
+          "labelled_pairs_borrowed_median": 14373,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 4905
         }
       },
@@ -166,6 +198,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -177,6 +214,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1530,
+          "labelled_pairs": 1530,
+          "labelled_pairs_measured": 1530,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 362
         },
         "borrowed": {
@@ -188,6 +230,11 @@
           "genes_on_a_borrowed_median": 9390,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1530,
+          "labelled_pairs": 10920,
+          "labelled_pairs_measured": 1530,
+          "labelled_pairs_borrowed_median": 9390,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 3221
         }
       },
@@ -231,6 +278,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -242,6 +294,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1431,
+          "labelled_pairs": 1431,
+          "labelled_pairs_measured": 1431,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 303
         },
         "borrowed": {
@@ -253,6 +310,11 @@
           "genes_on_a_borrowed_median": 7953,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1431,
+          "labelled_pairs": 9384,
+          "labelled_pairs_measured": 1431,
+          "labelled_pairs_borrowed_median": 7953,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2702
         }
       },
@@ -296,6 +358,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -307,6 +374,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 881,
+          "labelled_pairs": 881,
+          "labelled_pairs_measured": 881,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 198
         },
         "borrowed": {
@@ -318,6 +390,11 @@
           "genes_on_a_borrowed_median": 5766,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 881,
+          "labelled_pairs": 6647,
+          "labelled_pairs_measured": 881,
+          "labelled_pairs_borrowed_median": 5766,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1987
         }
       },
@@ -361,6 +438,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -372,6 +454,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1100,
+          "labelled_pairs": 1100,
+          "labelled_pairs_measured": 1100,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 256
         },
         "borrowed": {
@@ -383,6 +470,11 @@
           "genes_on_a_borrowed_median": 6260,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1100,
+          "labelled_pairs": 7360,
+          "labelled_pairs_measured": 1100,
+          "labelled_pairs_borrowed_median": 6260,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2154
         }
       },
@@ -425,6 +517,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -436,6 +533,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 975,
+          "labelled_pairs": 975,
+          "labelled_pairs_measured": 975,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 235
         },
         "borrowed": {
@@ -447,6 +549,11 @@
           "genes_on_a_borrowed_median": 7454,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 975,
+          "labelled_pairs": 8429,
+          "labelled_pairs_measured": 975,
+          "labelled_pairs_borrowed_median": 7454,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2560
         }
       },
@@ -489,6 +596,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -500,6 +612,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1235,
+          "labelled_pairs": 1235,
+          "labelled_pairs_measured": 1235,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 297
         },
         "borrowed": {
@@ -511,6 +628,11 @@
           "genes_on_a_borrowed_median": 6580,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1235,
+          "labelled_pairs": 7815,
+          "labelled_pairs_measured": 1235,
+          "labelled_pairs_borrowed_median": 6580,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2372
         }
       },
@@ -554,6 +676,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -565,6 +692,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 579,
+          "labelled_pairs": 579,
+          "labelled_pairs_measured": 579,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 132
         },
         "borrowed": {
@@ -576,6 +708,11 @@
           "genes_on_a_borrowed_median": 5517,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 579,
+          "labelled_pairs": 6096,
+          "labelled_pairs_measured": 579,
+          "labelled_pairs_borrowed_median": 5517,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1792
         }
       },
@@ -618,6 +755,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -629,6 +771,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1128,
+          "labelled_pairs": 1128,
+          "labelled_pairs_measured": 1128,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 256
         },
         "borrowed": {
@@ -640,6 +787,11 @@
           "genes_on_a_borrowed_median": 5508,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1128,
+          "labelled_pairs": 6636,
+          "labelled_pairs_measured": 1128,
+          "labelled_pairs_borrowed_median": 5508,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1956
         }
       },
@@ -683,6 +835,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -694,6 +851,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1098,
+          "labelled_pairs": 1098,
+          "labelled_pairs_measured": 1098,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 281
         },
         "borrowed": {
@@ -705,6 +867,11 @@
           "genes_on_a_borrowed_median": 5706,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1098,
+          "labelled_pairs": 6804,
+          "labelled_pairs_measured": 1098,
+          "labelled_pairs_borrowed_median": 5706,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2004
         }
       },
@@ -747,6 +914,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -758,6 +930,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1448,
+          "labelled_pairs": 1448,
+          "labelled_pairs_measured": 1448,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 340
         },
         "borrowed": {
@@ -769,6 +946,11 @@
           "genes_on_a_borrowed_median": 7922,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1448,
+          "labelled_pairs": 9370,
+          "labelled_pairs_measured": 1448,
+          "labelled_pairs_borrowed_median": 7922,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2790
         }
       },
@@ -812,6 +994,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -823,6 +1010,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1101,
+          "labelled_pairs": 1101,
+          "labelled_pairs_measured": 1101,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 279
         },
         "borrowed": {
@@ -834,6 +1026,11 @@
           "genes_on_a_borrowed_median": 7422,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1101,
+          "labelled_pairs": 8523,
+          "labelled_pairs_measured": 1101,
+          "labelled_pairs_borrowed_median": 7422,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2493
         }
       },
@@ -877,6 +1074,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -888,6 +1090,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 317,
+          "labelled_pairs": 317,
+          "labelled_pairs_measured": 317,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 71
         },
         "borrowed": {
@@ -899,6 +1106,11 @@
           "genes_on_a_borrowed_median": 2695,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 317,
+          "labelled_pairs": 3012,
+          "labelled_pairs_measured": 317,
+          "labelled_pairs_borrowed_median": 2695,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 912
         }
       },
@@ -941,6 +1153,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -952,6 +1169,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 713,
+          "labelled_pairs": 713,
+          "labelled_pairs_measured": 713,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 152
         },
         "borrowed": {
@@ -963,6 +1185,11 @@
           "genes_on_a_borrowed_median": 4218,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 713,
+          "labelled_pairs": 4931,
+          "labelled_pairs_measured": 713,
+          "labelled_pairs_borrowed_median": 4218,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1470
         }
       },
@@ -1005,6 +1232,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1016,6 +1248,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 723,
+          "labelled_pairs": 723,
+          "labelled_pairs_measured": 723,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 179
         },
         "borrowed": {
@@ -1027,6 +1264,11 @@
           "genes_on_a_borrowed_median": 4413,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 723,
+          "labelled_pairs": 5136,
+          "labelled_pairs_measured": 723,
+          "labelled_pairs_borrowed_median": 4413,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1511
         }
       },
@@ -1070,6 +1312,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1081,6 +1328,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 882,
+          "labelled_pairs": 882,
+          "labelled_pairs_measured": 882,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 181
         },
         "borrowed": {
@@ -1092,6 +1344,11 @@
           "genes_on_a_borrowed_median": 5625,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 882,
+          "labelled_pairs": 6507,
+          "labelled_pairs_measured": 882,
+          "labelled_pairs_borrowed_median": 5625,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1820
         }
       },
@@ -1134,6 +1391,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1145,6 +1407,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1432,
+          "labelled_pairs": 1432,
+          "labelled_pairs_measured": 1432,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 334
         },
         "borrowed": {
@@ -1156,6 +1423,11 @@
           "genes_on_a_borrowed_median": 7808,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1432,
+          "labelled_pairs": 9240,
+          "labelled_pairs_measured": 1432,
+          "labelled_pairs_borrowed_median": 7808,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2637
         }
       },
@@ -1199,6 +1471,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1210,6 +1487,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 247,
+          "labelled_pairs": 247,
+          "labelled_pairs_measured": 247,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 61
         },
         "borrowed": {
@@ -1221,6 +1503,11 @@
           "genes_on_a_borrowed_median": 2277,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 247,
+          "labelled_pairs": 2524,
+          "labelled_pairs_measured": 247,
+          "labelled_pairs_borrowed_median": 2277,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 760
         }
       },
@@ -1264,6 +1551,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1275,6 +1567,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1441,
+          "labelled_pairs": 1441,
+          "labelled_pairs_measured": 1441,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 303
         },
         "borrowed": {
@@ -1286,6 +1583,11 @@
           "genes_on_a_borrowed_median": 7970,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 1441,
+          "labelled_pairs": 9411,
+          "labelled_pairs_measured": 1441,
+          "labelled_pairs_borrowed_median": 7970,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 2688
         }
       },
@@ -1329,6 +1631,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1340,6 +1647,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 619,
+          "labelled_pairs": 619,
+          "labelled_pairs_measured": 619,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 133
         },
         "borrowed": {
@@ -1351,6 +1663,11 @@
           "genes_on_a_borrowed_median": 3983,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 619,
+          "labelled_pairs": 4602,
+          "labelled_pairs_measured": 619,
+          "labelled_pairs_borrowed_median": 3983,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1405
         }
       },
@@ -1394,6 +1711,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1405,6 +1727,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 229,
+          "labelled_pairs": 229,
+          "labelled_pairs_measured": 229,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 68
         },
         "borrowed": {
@@ -1416,6 +1743,11 @@
           "genes_on_a_borrowed_median": 1380,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 229,
+          "labelled_pairs": 1609,
+          "labelled_pairs_measured": 229,
+          "labelled_pairs_borrowed_median": 1380,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 519
         }
       },
@@ -1459,6 +1791,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1470,6 +1807,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 577,
+          "labelled_pairs": 577,
+          "labelled_pairs_measured": 577,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 107
         },
         "borrowed": {
@@ -1481,6 +1823,11 @@
           "genes_on_a_borrowed_median": 3248,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 577,
+          "labelled_pairs": 3825,
+          "labelled_pairs_measured": 577,
+          "labelled_pairs_borrowed_median": 3248,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1132
         }
       },
@@ -1524,6 +1871,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1535,6 +1887,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 671,
+          "labelled_pairs": 671,
+          "labelled_pairs_measured": 671,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 145
         },
         "borrowed": {
@@ -1546,6 +1903,11 @@
           "genes_on_a_borrowed_median": 4278,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 671,
+          "labelled_pairs": 4949,
+          "labelled_pairs_measured": 671,
+          "labelled_pairs_borrowed_median": 4278,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1335
         }
       },
@@ -1588,6 +1950,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 0
         },
         "measured": {
@@ -1599,6 +1966,11 @@
           "genes_on_a_borrowed_median": 0,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 2,
+          "labelled_pairs": 2,
+          "labelled_pairs_measured": 2,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 1
         },
         "borrowed": {
@@ -1610,6 +1982,11 @@
           "genes_on_a_borrowed_median": 70,
           "pairs_on_a_human_measured_rate": 0,
           "pairs_on_a_borrowed_species_rate": 2,
+          "labelled_pairs": 72,
+          "labelled_pairs_measured": 2,
+          "labelled_pairs_borrowed_median": 70,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
           "inhibitory_mechanisms_at_the_split": 19
         }
       },
@@ -1634,7 +2011,7 @@
     }
   },
   "reading": "a context is a cell_type a compiled rule is gated on; one rule can count once per program because each rule names one context. gene_parameter_missing counts mechanisms that pass every other check and fail only because the compiled genes are stubs",
-  "seconds": 367.5,
+  "seconds": 559.0,
   "result_manifest": {
     "sources": [
       {
@@ -1822,19 +2199,51 @@
         "mRNA copy number [molecules/cell]": "becomes nothing. It is held as the steady state a run should land on, for the acceptance check only, and is never supplied as a parameter",
         "cell lifespan [d] (Sender & Milo)": "becomes nothing here; see MEASURED_RATE_SOURCES"
       },
-      "declared_strength": 1.0
+      "declared_strength": 1.0,
+      "transfer_label": "per gene: the quantity, its tier (measured | borrowed_median), its source key, the species and cell it was measured in, and the cell context it is used in; per run: the same list plus the runtime parameters taken from defaults"
     },
     "exclusions": [],
     "partitions": "n/a: the audit counts rules as compiled; held-out rules are counted with the rest",
     "code": {
-      "git_sha": "4b7734d5332100a215e2e2abf5a63d9b5f45cd67",
+      "git_sha": "1ef8990c33f911f92260544ac9f65b18dd2e4f8b",
       "dirty": true,
       "dirty_code_paths": [
-        "scripts/bridge_audit.py",
-        "scripts/build_gene_rates.py"
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/joint_pretest.py",
+        "genomeos/attribution/syntax.py",
+        "genomeos/cli.py",
+        "genomeos/genome/signals.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/storage.py",
+        "scripts/abundance_gate.py",
+        "scripts/biolang_key_census.py",
+        "scripts/celegans_commitment.py",
+        "scripts/celegans_fate_credit.py",
+        "scripts/celegans_fate_read_choice.py",
+        "scripts/celegans_fate_reads.py",
+        "scripts/celegans_fates.py",
+        "scripts/celegans_terminality.py",
+        "scripts/compact_reference.py",
+        "scripts/crispri_hct116.py",
+        "scripts/phosphosite_observation.py",
+        "scripts/reader_depth_family.py",
+        "scripts/trio_q100_phase.py",
+        "scripts/trio_q100_population.py",
+        "scripts/variation_rerun_chain.py",
+        "tests/test_crispri_hct116.py",
+        "tests/test_results_writers_guard.py",
+        "tests/test_tf_atlas.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/correctness.py",
+        "genomeos/organism/provenance.py",
+        "tests/test_results_writers_guard.py"
       ],
       "dirty_result_paths": [
-        "data/results/gene_rates.json"
+        "data/results/engine_package.json"
       ],
       "argv": [
         "scripts/bridge_audit.py"
