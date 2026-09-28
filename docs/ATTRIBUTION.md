@@ -9450,6 +9450,205 @@ then the revised reading where the interval clears a line, with its probabilitie
 "model_failed" from an interval that only reaches 0. Every probability is a probability under cab70d9's
 calibrated assumptions, never a guarantee. 0 AlphaGenome requests.
 
+## S4 registered: what a correct attribution means, one table of what each observation can establish, refute or say nothing about, and a scorer that keeps target accuracy, role accuracy and coverage apart (item 12 S4, 2026-09-29, lane-s4)
+
+The second external review (ROADMAP section 5, item 12, S4) asked the project to **define what a correct
+attribution means** before it scores one. This section is that definition, fixed before the scorer was
+applied to any real labelling. The constants are in `genomeos/attribution/correctness.py`; the runner is
+`scripts/s4_correctness_run.py`; the tests are `tests/test_attribution_correctness.py`. Nothing calls the
+model (0 requests).
+
+**What was read before this registration.** The ablation's published counts (C4, above): 93 of the 128
+measured links survive, 28 are contradicted (23 by a well-powered null, 5 by the opposite sign), 7 are
+inconclusive, and 39 rules survive in their own cell with none contradicted there. R2's five CRISPRi
+outcomes and R6's reporter rule (`measured.py`), R7's five axes (`lang/grammar.py`), the C4 harness
+(`holdout.py`) and the C5 probe's linkage counts. The runner was exercised once on a synthetic program
+against the real held-out units, to check that it runs; no compiled label was read.
+
+### The definition
+
+**Five claims, kept apart.** An attribution is correct or not claim by claim, and a claim is about one
+of five things:
+
+| Axis | What the claim says | Where the compiled labels state it |
+| --- | --- | --- |
+| origin | where the sequence came from | R7 `origin` |
+| molecular role | what the element is biochemically | R7 `molecular_role` |
+| activity | the direction of its effect on its target in place, or its activity in a reporter | R7 `activity`, and the rule's action |
+| target | which gene it acts on | the gene a rule names (R7 `target_relation` says how it was named) |
+| cell context | the cell in which the relation holds | the rule's `when: cell_type` (R1) |
+
+`evidence_status` states what a claim rests on (a registry, a model, a measurement, constraint). It is
+not a claim about the biology and is never judged.
+
+**Not naming a coding gene is not absence of function.** No axis has a value meaning "no function".
+`unknown`, `unassigned` and a group of unchosen alternatives (`silencer|insulator_like|...`) are not
+claims: they are counted beside, and never judged. A well-powered CRISPRi null refutes one named gene in
+one cell for an effect of 20% or more, and nothing else.
+
+**Five verdicts.** A claim is *correct* when an observation the table allows establishes it and none
+refutes it; *incorrect* in the reverse case; *unresolved* when both are present; *the observation model is
+inadequate* when the observations exist but the assay's own reading rule cannot produce a label (a
+lentiMPRA cell whose tiles split evenly under R6's share rule; one element, gene and cell significant in
+both directions); and *not judged* otherwise, with one reason. **Competing explanations are kept, never
+resolved by the scorer.** "The observation model is inadequate" stays live beside every verdict an
+observation decides. An unresolved claim keeps four: the claim holds and the refuting observation is
+wrong; the claim is wrong and the establishing one is wrong; the answer differs between studies,
+conditions or contexts; the observation model is inadequate. A refuted target also keeps "a redundant
+element compensates, which only a combinatorial perturbation separates".
+
+### The table: what each observation can say about each axis
+
+**E** establishes, **R** refutes, **M** the observation model is inadequate (the assay's rule cannot read a
+label), **S** suggests only (counted beside, never decides a verdict), **—** cannot establish (says
+nothing, and is never consulted to decide one). *Not loaded* means no holdout source supplies it, so it
+judges nothing in the run registered below.
+
+| Observation | Origin | Molecular role | Activity | Target | Cell context |
+| --- | --- | --- | --- | --- | --- |
+| CRISPRi, significant decrease (R2) | — | S (enhancer or promoter) | E activates; R represses, no effect | E, any cell | E, the cell screened |
+| CRISPRi, significant increase (R2) | — | S (silencer, insulator, competing promoter; never chosen) | E represses; R activates, no effect | E, any cell | E, the cell screened |
+| CRISPRi, well-powered null (R2) | — | — | E `no_effect_measured` only; never a direction | R, only in the cell screened | R, when the gene responds in another cell |
+| CRISPRi, underpowered null (R2) | — | — | — | — | — |
+| CRISPRi, missing (R2) | — | — | — | — | — |
+| Two elements silenced together, a change (*not loaded*) | — | — | E a direction; R no effect | E | E |
+| Two elements silenced together, a null (*not loaded*) | — | — | E no effect | R, removing redundancy as the explanation of a single null | — |
+| lentiMPRA, one cell, active by R6 | — | S | E active in reporter; R inactive; never a direction | **—** | S |
+| lentiMPRA, one cell, silent by R6 | — | — | E inactive in reporter; R active (that cell) | — | — |
+| lentiMPRA, one cell, tiles split evenly | — | — | **M** | — | — |
+| VISTA, positive (mouse e11.5) | — | S | E active in reporter; R inactive | — | — |
+| VISTA, negative | — | — | E inactive in reporter; R active (e11.5 only) | — | — |
+| Saturation mutagenesis, a functional base | — | S | S (the bases, not the element) | — | — |
+| Saturation mutagenesis, every base inert | — | — | — | — | — |
+| GTEx eQTL, associated | — | — | S (association, not perturbation) | S (linkage not excluded) | — (the units pool 49 tissues) |
+| GTEx, not associated | — | — | — | — | — |
+| Chromatin contact present (*not loaded*) | — | — | — | S | S |
+| Chromatin contact absent (*not loaded*) | — | — | — | — | — |
+| Conservation, constrained (*not loaded*; the labels' input) | — | — | — | — | — |
+| Conservation, not detected (*not loaded*) | — | — | — | — | — |
+| Allele-specific readout, imbalance (C5, *not loaded*) | — | — | S | S (a haplotype, not an element) | S |
+| Allele-specific readout, balance (C5, *not loaded*) | — | — | — | — | — |
+| AlphaGenome deletion prediction (a model output) | — | — | — | — | — |
+| Sequence annotation (*not loaded*; the labels' input) | E / R | — | — | — | — |
+| ENCODE cCRE registry (*not loaded*; the labels' input) | — | E / R (promoter-, enhancer-, insulator-like, open chromatin) | — | — | — |
+
+**The cells that cannot establish, stated plainly.**
+
+- A reporter (a lentiMPRA tile, a VISTA embryo, a saturation-mutagenesis base) can establish activity in
+  a reporter. It can never establish a target, and never a direction of effect in place: activity is not
+  regulation.
+- CRISPRi can establish a target, a direction and a cell context. It can never establish a biochemical
+  role (an increase is not a silencer) or an origin.
+- A well-powered null refutes one gene in one cell. It never establishes absence of function, and it
+  says nothing about direction.
+- Conservation can suggest selection, which is recorded on `evidence_status`. It never establishes a
+  role, an activity, a target, a context or an origin; an exapted repeat can be constrained.
+- Contact and association (GTEx, an allelic imbalance) can suggest a target and never establish one. A
+  within-person imbalance cannot be credited to one element when a median 1,580 to 2,012 heterozygous
+  SNVs lie within 1 Mb of the TSS (C5).
+- A model output is a claim to be judged, never an observation that judges one.
+- An annotation or the registry establishes origin or signature only for a labelling that did not read
+  it. The compiled labels read both, so neither is their check.
+- Nothing in the table establishes a silencer, a competing promoter, a structural role or a coding
+  candidate.
+- **Combinatorial perturbation** is the route when single perturbations cannot separate additive,
+  redundant and cooperative explanations. A joint null removes redundancy between the two as the
+  explanation of a single null (C6, phase C). No paired perturbation is among the cached screens.
+
+### How each axis is judged
+
+- **Target.** Established by a significant change of the named gene on silencing the element, in any
+  cell. Refuted by a well-powered null of that gene in the cell the claim states, and only when the gene
+  responds in no cell. A response in another cell with a null in the stated cell leaves the target
+  established and refutes the context. A response and a null both in the stated cell is unresolved. A
+  null in another cell is not a refutation; it is counted (`well_powered_null_only_in_another_context`).
+  A claim with no stated cell can be established and never refuted. `refutable` counts the claims whose
+  stated cell was screened on the named gene with an outcome that can establish or refute.
+- **Cell context.** Judged only where the gene responds to the element in some cell. Established by a
+  response in the stated cell; refuted by a well-powered null there. A claim whose target never responded
+  is not judged on context, so one failure is never counted on both axes.
+- **Activity.** The direction (activates, represses) is judged only where the named gene responded: in
+  the stated cell when it responded there, otherwise in every cell it responded in. Both directions in
+  one cell is *the observation model is inadequate*; different directions in different cells are
+  *unresolved*. A null is read on the target axis, never as a wrong direction. Reporter values are judged
+  by reporter observations in the stated cell when one was measured there, otherwise as R7 defines them
+  (active in at least one reporter context; inactive in every one).
+- **Molecular role.** Judged only by an observation the table lets establish a biochemical signature.
+  Activity in a reporter or in place suggests, and never decides.
+- **Origin.** Judged only by a sequence annotation the labelling did not read.
+
+**Matching.** An observation is of the element when its interval meets the measured layer's rule
+(`measured.measures`, reciprocal overlap at least 0.5) for CRISPRi pairs, lentiMPRA tiles and VISTA
+elements. A saturation-mutagenesis base must lie inside the element, and a GTEx unit's element must share
+a base with it. lentiMPRA is read per cell from the matched tiles by R6's share rule. Genes are matched by
+symbol, and cells after lowercasing and dropping every character that is not a letter or a digit (the
+ablation's rule).
+
+### The three quantities, never combined
+
+`judge(claims, labels)` returns a report with three quantities, each per axis, each a `Share` with its own
+numerator and denominator:
+
+- **target accuracy**: target claims established over target claims established or refuted;
+- **role accuracy**: the same, on molecular role and on activity, reported apart and never pooled across
+  the two;
+- **coverage**: claims that some observation the table allows establishes, refutes or cannot read, over
+  claims stated with one definite value, on all five axes.
+
+Unresolved and observation-model-inadequate counts are reported beside each accuracy, never folded into
+it. `refutable` is reported beside target and context. The reasons a claim was not judged are reported
+beside coverage, one per claim, the first that applies in this order: judging observations outside the
+claim's scope (another gene, another cell), not judged until the target responds, only observations that
+suggest, only observations that cannot judge this axis, no observation. Origin and context accuracy are
+reported under their own names beside the three. **A `Share` refuses addition, and no field of the report
+combines two quantities or two axes.**
+
+**The split.** The scorer uses C4's discipline and nothing else. Every held-out source that judges a
+labelling is first passed to `holdout.check_provenance`, and its `LeakError` is never caught. A labelling
+built from `holdout.evidence(without=S)` is judged with `sources=[S]` alone. An observation of a kind
+holdout does not load is refused with the same error when the labelling read its source. The pilot (S3,
+lane-pilot) is scored by the same call.
+
+### Applied once, to the unchanged compiled labels
+
+**Scope.** The compiled programs as they stand, the same files C4 reads. Origin and molecular role come
+from every predicted `element` block and every `region` block. Target, activity and context come from
+every `rule` with `evidence: predicted`. The measured twins are the evidence, never the labelling, and
+are not read. The labelling reads the model, the cCRE registry, RepeatMasker, the segmental duplication
+track, phyloP constraint, GENCODE v50 and the unknown-block classes: none of them is a holdout source.
+Every holdout source judges it: ten CRISPRi studies, three lentiMPRA cells, VISTA, saturation mutagenesis
+and GTEx.
+
+**Expected, written before the run.** Most claims on every axis are not judged. Origin and molecular role
+are judged by no loaded source: 0 claims, by construction. Target is judged on the order of 100 of the
+440,377 rules and refuted on about none, because a refutation needs a null in the stated cell; the claims
+whose only null is in another cell (about 20) are counted beside. Activity is judged on about the same
+claims as target, a few of them refuted by the opposite sign. Context is established on about 40 and
+refuted on about none.
+
+**What it may be called:** an internal development benchmark reading: of N claims a labelling states on
+axis A, J can be judged by an observation the S4 table lets establish or refute A (coverage J / N); of
+the J, C are established and I refuted (accuracy C / (C + I)), with U unresolved and M
+observation-model-inadequate beside. **What it may not be called:**
+
+- a validation, fresh or external: every source here has been read by this project before;
+- the accuracy of the labelling on claims no observation judges: the judged claims are the ones screens
+  chose to test, near the genes they chose, mostly in K562;
+- a single score, or a comparison between axes: each quantity has its own denominator and evidence;
+- evidence that an unjudged element has no function.
+
+**Tests** (`tests/test_attribution_correctness.py`, synthetic units only):
+
+- the three quantities are never summed: a `Share` raises on addition, `sum` fails, and no key in the
+  serialised report names a combined score;
+- for every observation kind, axis and value, observations the table marks *cannot* or *suggests* never
+  decide a verdict, even several of them in the claim's scope;
+- *the observation model is inadequate* is a verdict, and it survives JSON serialisation of a verdict and
+  of a whole report;
+- a labelling that read a source, or the CRISPRi held-out file, raises `LeakError`, and every source passes
+  through `holdout.check_provenance`;
+- a response elsewhere with a null in the stated cell is one context error, not also a target error.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
