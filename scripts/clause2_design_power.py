@@ -2183,6 +2183,32 @@ def exact_block_bootstrap_tails(
     return {"p_below": below, "p_at_or_below": at_or_below}
 
 
+def exact_block_bootstrap_tails_at(
+    y: np.ndarray, wbar: np.ndarray, m: int, deltas: list[float]
+) -> list[dict[str, np.ndarray]]:
+    """`exact_block_bootstrap_tails` at several lines from one convolution (lane-rule, 2026-09-29): the
+    same lattice distribution, read at each delta in turn. A test pins it to the single-line function."""
+    e, n = y.shape
+    code = (y.astype(np.int64) * m - np.rint(wbar * m).astype(np.int64)) + m
+    u = 2 * m + 1
+    pmf = np.stack([(code == j).sum(axis=1) for j in range(u)], axis=1) / n
+    size = 1 << int(math.ceil(math.log2(2 * m * n + 1)))
+    dist = np.fft.irfft(np.fft.rfft(pmf, size, axis=1) ** n, size, axis=1)[:, : 2 * m * n + 1]
+    dist = np.clip(dist, 0.0, None)
+    dist /= dist.sum(axis=1, keepdims=True)
+    js = np.arange(2 * m * n + 1)
+    out = []
+    for delta in deltas:
+        cut = delta * m * n + m * n
+        out.append(
+            {
+                "p_below": dist[:, js < cut - 1e-9].sum(axis=1),
+                "p_at_or_below": dist[:, js <= cut + 1e-9].sum(axis=1),
+            }
+        )
+    return out
+
+
 def _chromosome_interval(
     d: np.ndarray, chrom: np.ndarray, resamples: int, rng: np.random.Generator
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -2220,6 +2246,7 @@ def simulate_design(
     delta: float,
     chromosome_resamples: int = S2_CHROMOSOME_RESAMPLES,
     chunk: int = 250,
+    lines: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     """`experiments` runs of the planned experiment and its committed analysis at `n` compared blocks.
 
@@ -2229,6 +2256,10 @@ def simulate_design(
     registered sensitivity and false-positive rate; a unit is positive if any of its calls is. Windows are
     shared by g blocks of the same chromosome. The committed estimator and both committed intervals are then
     computed on the simulated data.
+
+    `lines` (lane-rule, 2026-09-29) also reads the same interval over blocks against each named line, and
+    keeps each experiment's estimate and block rate under `_per_experiment`. It draws no random number, so
+    the simulated experiments are the ones the call without it simulates.
     """
     k, m, g = design
     if n > len(eligible_chroms):
@@ -2279,13 +2310,25 @@ def simulate_design(
         stats["chrom_below"].append(chi < 0)
         stats["chrom_above"].append(clo > 0)
         stats["cost"].append(n * k + window_sets * m * k)
+        if lines:
+            tails = exact_block_bootstrap_tails_at(y, wbar, m, list(lines.values()))
+            for name, t in zip(lines, tails, strict=True):
+                stats[f"_below:{name}"].append(t["p_below"] >= 0.975)
+                stats[f"_above:{name}"].append(t["p_at_or_below"] < 0.025)
+            stats["_block_rate"].append(y.mean(axis=1))
     a = {key: np.concatenate(v) for key, v in stats.items()}
     below, above = a["below"].mean(), a["above"].mean()
 
     def se(p: float) -> float:
         return round(math.sqrt(max(p * (1 - p), 1e-12) / experiments), 4)
 
+    extra: dict[str, Any] = {}
+    if lines:
+        extra["interval_wholly_below"] = {name: round(float(a[f"_below:{name}"].mean()), 4) for name in lines}
+        extra["interval_wholly_above"] = {name: round(float(a[f"_above:{name}"].mean()), 4) for name in lines}
+        extra["_per_experiment"] = {"estimate": a["mean"], "block_rate": a["_block_rate"]}
     return {
+        **extra,
         "n_blocks": n,
         "experiments": experiments,
         "expected_difference_points": round(100 * delta, 3),
@@ -2844,6 +2887,521 @@ def manifest_calibrated(experiments: int, seed: int) -> dict[str, Any]:
     return base
 
 
+# ==== the measured arm's reading rule, scored: lane-rule, 2026-09-29 ======================================
+#
+# The rule and the error rates it must meet are registered in clause2_measured_arm.READING_RULE_2026_09_29
+# (1cb7559) before anything below was run. This simulates c17eedc's committed rule and the revised rule on
+# the same experiments of cab70d9's calibrated model, unchanged, and writes a new result beside cab70d9's.
+
+RESULT_READING_RULE = "clause2_reading_rule"
+RR_SEED = 2026092913
+#: the designs whose caps carry the descriptive robustness check
+RR_ROBUSTNESS_DESIGNS = ((1, 10, 1), (1, 3, 1), (6, 3, 1))
+#: the weaker margins reported descriptively beside the registered ones
+RR_DESCRIPTIVE_MARGINS = {"model_failed": (0.75, 0.5), "wording_wrong": (0.1, 0.25, 0.5)}
+
+
+def _line_name(ratio: float) -> str:
+    return f"ratio={ratio}"
+
+
+def _reference_setup() -> dict[str, Any]:
+    """cab70d9's reference calibration and eligible populations, recomputed through the same redraw and
+    the same rules as `collect_calibrated`, with the variants of its one-factor analysis."""
+    from statistics import median
+
+    anch = anchors()
+    red = redraw_the_anchor()
+    if not red["gate"]["passed"]:
+        return {"gate": red["gate"], "passed": False}
+    struct = anchor_structure(red["anchor_windows"], S2_SEED)
+    k_counts = {int(k): c for k, c in struct["tested_elements_per_window"].items()}
+    cidx = {c: i for i, c in enumerate(red["chromosomes"])}
+    eligible = {
+        k: np.array([cidx[b["chrom"]] for b in red["blocks"] if b["scored_elements"] >= k], dtype=np.int64)
+        for k in S2_K
+    }
+    med = float(median(b["length"] for b in red["blocks"] if b["scored_elements"]))
+    icc_bin = min(S2_ICC_BINS_KB, key=lambda kb: abs(math.log(kb * 1000 / med)))
+    ref = {
+        "anchor_rate": struct["rate"],
+        "k_counts": k_counts,
+        "sensitivity": anch["power_columns"][S2_REFERENCE_SENSITIVITY_COLUMN]["mean"],
+        "false_positive": S2_REFERENCE_FALSE_POSITIVE,
+        "icc_target": anch["elements_within_cluster_icc"][f"{icc_bin}kb"]["icc"],
+        "chromosome_icc_target": anch["blocks_within_chromosome_icc"]["icc"],
+    }
+    lo, hi = struct["grid_ends_used"]
+    variants: list[tuple[str, dict[str, Any]]] = [
+        (f"anchor={lo}", {**ref, "anchor_rate": lo}),
+        (f"anchor={hi}", {**ref, "anchor_rate": hi}),
+    ]
+    for col in ms.POWER_COLUMNS:
+        if col != S2_REFERENCE_SENSITIVITY_COLUMN:
+            variants.append(
+                (f"sensitivity={col}", {**ref, "sensitivity": anch["power_columns"][col]["mean"]})
+            )
+    for fp in S2_FALSE_POSITIVE:
+        if fp != S2_REFERENCE_FALSE_POSITIVE:
+            variants.append((f"false_positive={fp}", {**ref, "false_positive": fp}))
+    for kb in S2_ICC_BINS_KB:
+        if kb != icc_bin:
+            icc = anch["elements_within_cluster_icc"][f"{kb}kb"]["icc"]
+            variants.append((f"icc_scale={kb}kb", {**ref, "icc_target": icc}))
+    for rho in S2_CHROMOSOME_ICC_VARIANTS:
+        variants.append((f"chromosome_icc={rho}", {**ref, "chromosome_icc_target": rho}))
+    return {
+        "passed": True,
+        "gate": red["gate"],
+        "calibration": calibrate(**ref),
+        "eligible": eligible,
+        "variants": variants,
+    }
+
+
+def _se(p: float, experiments: int) -> float:
+    return math.sqrt(max(p * (1 - p), 1e-12) / experiments)
+
+
+def _meets(p: float, experiments: int) -> bool:
+    """cab70d9's null_calibration_rule, the tolerance the registration adopts: 0.05 + 2 Monte Carlo SE."""
+    return p <= 0.05 + 2 * _se(p, experiments)
+
+
+def reading_probabilities(cell: dict[str, Any], k: int) -> dict[str, Any]:
+    """Each reading's probability in one simulated cell, by c17eedc's rule and by the 2026-09-29 rule
+    before its cell check (`revised_before_the_cell_check`), plus the ratios the interval excludes."""
+    arm = _measured_arm_module()
+    mf_line = _line_name(arm.REVISED_RULE_MARGINS["model_failed"])
+    ww_line = _line_name(arm.REVISED_RULE_MARGINS["wording_wrong"])
+    below0 = cell["interval_below_zero"]
+    mf, ww = cell["interval_wholly_above"][mf_line], cell["interval_wholly_below"][ww_line]
+    return {
+        "committed_c17eedc": {
+            "model_failed": round(1 - below0, 4),
+            "wording_wrong": round(below0, 4),
+            "cannot_decide": 0.0,  # every searched size is at or above the 20-block floor
+        },
+        "revised_before_the_cell_check": {
+            "model_failed": mf,
+            "wording_wrong": ww,
+            "cannot_decide": round(1 - mf - ww, 4),
+        },
+        "interval_excludes_ratio": {
+            str(r): round(
+                cell["interval_wholly_below"][_line_name(r)] + cell["interval_wholly_above"][_line_name(r)], 4
+            )
+            for r in S2_RATIOS
+        },
+    }
+
+
+def _best_rule_on(values: dict[float, np.ndarray], margin: float, side: str, target: float) -> dict[str, Any]:
+    """Neyman-Pearson on a simulated statistic: the threshold that every ratio on the wrong side of `margin`
+    passes at most 5% of the time, and the probability the `target` ratio's experiments pass it. `side` is
+    'above' for model_failed (wrong side: ratios at or below the margin) and 'below' for wording_wrong
+    (wrong side: ratios at or above it). Read and scored on the same experiments, so slightly optimistic."""
+    if side == "above":
+        wrong = [r for r in values if r <= margin]
+        t = max(float(np.quantile(values[r], 0.95, method="higher")) for r in wrong)
+        power = float((values[target] > t).mean())
+        err = max(float((values[r] > t).mean()) for r in wrong)
+    else:
+        wrong = [r for r in values if r >= margin]
+        t = min(float(np.quantile(values[r], 0.05, method="lower")) for r in wrong)
+        power = float((values[target] < t).mean())
+        err = max(float((values[r] < t).mean()) for r in wrong)
+    return {
+        "margin": margin,
+        "threshold_points": round(100 * t, 3),
+        "probability_at_the_true_pole": round(power, 4),
+        "largest_error_on_the_wrong_side": round(err, 4),
+    }
+
+
+def score_the_cells(
+    cells: list[dict[str, Any]], best: dict[tuple[int, int, int, int], dict[str, Any]], experiments: int
+) -> list[dict[str, Any]]:
+    """Per (design, compared blocks): the registered bounds checked over every ratio, the revised rule as
+    it reads after the cell check, whether it decides, and the committed rule beside it."""
+    arm = _measured_arm_module()
+    by: dict[tuple[int, int, int, int], dict[float, dict[str, Any]]] = defaultdict(dict)
+    for c in cells:
+        by[(c["k"], c["m"], c["g"], c["n_blocks"])][c["ratio"]] = c
+    mf_margin, ww_margin = arm.REVISED_RULE_MARGINS["model_failed"], arm.REVISED_RULE_MARGINS["wording_wrong"]
+    out = []
+    for (k, m, g, n), per in by.items():
+        rev = {r: per[r]["readings"]["revised_before_the_cell_check"] for r in per}
+        mf_err = max((rev[r]["model_failed"], r) for r in per if r <= mf_margin)
+        ww_err = max((rev[r]["wording_wrong"], r) for r in per if r >= ww_margin)
+        mf_ok, ww_ok = _meets(mf_err[0], experiments), _meets(ww_err[0], experiments)
+        admissible = mf_ok and ww_ok
+        applied = {
+            str(r): (
+                rev[r] if admissible else {"model_failed": 0.0, "wording_wrong": 0.0, "cannot_decide": 1.0}
+            )
+            for r in S2_RATIOS
+        }
+        p_mf, p_ww = applied["1.0"]["model_failed"], applied["0.0"]["wording_wrong"]
+        out.append(
+            {
+                "k": k,
+                "m": m,
+                "g": g,
+                "n_blocks": n,
+                "model_failed_error": {"largest": mf_err[0], "at_ratio": mf_err[1], "meets_the_bound": mf_ok},
+                "wording_wrong_error": {
+                    "largest": ww_err[0],
+                    "at_ratio": ww_err[1],
+                    "meets_the_bound": ww_ok,
+                },
+                "rule_may_read_here": admissible,
+                "revised_rule": applied,
+                "committed_rule": {str(r): per[r]["readings"]["committed_c17eedc"] for r in S2_RATIOS},
+                "model_failed_at_ratio_1": p_mf,
+                "wording_wrong_at_ratio_0": p_ww,
+                "decides_clause_2": admissible
+                and p_mf >= arm.REVISED_RULE_DECIDES_AT
+                and p_ww >= arm.REVISED_RULE_DECIDES_AT,
+                **best[(k, m, g, n)],
+            }
+        )
+    return out
+
+
+def collect_reading_rule(experiments: int = S2_EXPERIMENTS, seed: int = RR_SEED) -> dict[str, Any]:
+    arm = _measured_arm_module()
+    t0 = time.time()
+    rng = np.random.default_rng(seed)
+    out: dict[str, Any] = {
+        "result": RESULT_READING_RULE,
+        "registration": arm.READING_RULE_2026_09_29,
+        "registered_lines_points": {
+            str(k): {str(r): x for r, x in v.items()} for k, v in arm.REVISED_RULE_LINES_POINTS.items()
+        },
+        "committed_rule_c17eedc": arm.PRE_REGISTRATION["readings"],
+    }
+    setup = _reference_setup()
+    out["anchor_redraw_gate"] = setup["gate"]
+    if not setup["passed"]:
+        out["reading"] = "the redraw did not reproduce the anchor's windows: nothing is simulated"
+        out["seconds"] = round(time.time() - t0, 1)
+        return out
+    cal, eligible = setup["calibration"], setup["eligible"]
+    committed = json.loads((RESULTS_DIR / f"{RESULT_CALIBRATED}.json").read_text())
+    lines_now = {
+        k: {r: round(100 * expected_difference(cal, block_arm(cal, r)["mu_block"], k), 3) for r in S2_RATIOS}
+        for k in S2_K
+    }
+    gate = {
+        "calibration_equals_cab70d9": cal == committed["calibration_reference"],
+        "eligible_populations_equal_cab70d9": {str(k): int(len(v)) for k, v in eligible.items()}
+        == {
+            k: v["blocks"]
+            for k, v in committed["eligible_population"]["by_elements_tested_per_block"].items()
+        },
+        "lines_equal_the_registered_ones": lines_now == arm.REVISED_RULE_LINES_POINTS,
+    }
+    gate["passed"] = all(gate.values())
+    out["gate_against_cab70d9"] = gate
+    out["calibration_reference"] = cal
+    if not gate["passed"]:
+        out["reading"] = (
+            "the recomputed calibration or lines differ from the registered ones: nothing is scored"
+        )
+        out["seconds"] = round(time.time() - t0, 1)
+        return out
+    designs = [(k, m, g) for k in S2_K for m in S2_M for g in S2_G]
+    cells: list[dict[str, Any]] = []
+    best_by: dict[tuple[int, int, int, int], dict[str, Any]] = {}
+    for d in designs:
+        k = d[0]
+        lines = {_line_name(r): arm.REVISED_RULE_LINES_POINTS[k][r] / 100 for r in S2_RATIOS}
+        for n in n_grid_for(len(eligible[k])):
+            est: dict[float, np.ndarray] = {}
+            rate: dict[float, np.ndarray] = {}
+            here = []
+            for ratio in S2_RATIOS:
+                blk = block_arm(cal, ratio)
+                delta = expected_difference(cal, blk["mu_block"], k)
+                c = simulate_design(
+                    cal, blk["mu_block"], d, n, eligible[k], experiments, rng, delta, lines=lines
+                )
+                per = c.pop("_per_experiment")
+                est[ratio], rate[ratio] = per["estimate"], per["block_rate"]
+                here.append(
+                    {
+                        "k": d[0],
+                        "m": d[1],
+                        "g": d[2],
+                        "ratio": ratio,
+                        **{x: v for x, v in c.items() if not x.startswith("interval_wholly_")},
+                        "readings": reading_probabilities(c, k),
+                    }
+                )
+            best_by[(d[0], d[1], d[2], n)] = {
+                name: {
+                    "model_failed": [
+                        _best_rule_on(v, mg, "above", 1.0) for mg in RR_DESCRIPTIVE_MARGINS["model_failed"]
+                    ],
+                    "wording_wrong": [
+                        _best_rule_on(v, mg, "below", 0.0) for mg in RR_DESCRIPTIVE_MARGINS["wording_wrong"]
+                    ],
+                }
+                for name, v in (
+                    ("best_rule_on_the_estimator", est),
+                    ("best_rule_on_the_block_rate_alone", rate),
+                )
+            }
+            cells.extend(here)
+        print(f"design {d}: done ({time.time() - t0:.0f} s)", flush=True)
+    out["cells"] = cells
+    scored = score_the_cells(cells, best_by, experiments)
+    out["by_design_and_size"] = scored
+    out["summary"] = summarise_the_rule(scored, {k: int(len(v)) for k, v in eligible.items()})
+    # descriptive: the lines held at the reference while the truth comes from each one-factor variant
+    rob = []
+    for name, settings in setup["variants"]:
+        vcal = calibrate(**settings)
+        entry: dict[str, Any] = {"variant": name, "feasible": vcal["feasible"]}
+        if not vcal["feasible"]:
+            entry["why"] = vcal["why"]
+            rob.append(entry)
+            continue
+        entry["designs"] = []
+        for d in RR_ROBUSTNESS_DESIGNS:
+            k = d[0]
+            lines = {_line_name(r): arm.REVISED_RULE_LINES_POINTS[k][r] / 100 for r in S2_RATIOS}
+            n = len(eligible[k])
+            per_ratio = {}
+            for ratio in S2_RATIOS:
+                blk = block_arm(vcal, ratio)
+                delta = expected_difference(vcal, blk["mu_block"], k)
+                c = simulate_design(
+                    vcal, blk["mu_block"], d, n, eligible[k], experiments, rng, delta, lines=lines
+                )
+                c.pop("_per_experiment")
+                per_ratio[ratio] = {
+                    "true_expected_difference_points": c["expected_difference_points"],
+                    **reading_probabilities(c, k)["revised_before_the_cell_check"],
+                }
+            mf_err = max(per_ratio[r]["model_failed"] for r in S2_RATIOS if r <= 0.75)
+            ww_err = max(per_ratio[r]["wording_wrong"] for r in S2_RATIOS if r >= 0.1)
+            entry["designs"].append(
+                {
+                    "k": d[0],
+                    "m": d[1],
+                    "g": d[2],
+                    "n_blocks": n,
+                    "by_ratio": {str(r): v for r, v in per_ratio.items()},
+                    "model_failed_error": mf_err,
+                    "wording_wrong_error": ww_err,
+                    "both_bounds_met": _meets(mf_err, experiments) and _meets(ww_err, experiments),
+                }
+            )
+        rob.append(entry)
+        print(f"variant {name}: done ({time.time() - t0:.0f} s)", flush=True)
+    out["robustness_lines_at_the_reference_truth_from_a_variant"] = rob
+    measured = json.loads((RESULTS_DIR / f"{MEASURED_ARM}.json").read_text())
+    primary = measured.get("primary") or {}
+    out["applied_to_the_committed_measured_arm"] = {
+        "committed_reading": (measured.get("primary_reading") or {}).get("outcome"),
+        "revised_reading": arm.revised_reading(primary, None)["outcome"],
+        "why": "fewer than 20 compared blocks, and an arm with varying tested elements per unit has no line",
+    }
+    out["expected_before_running_scored"] = score_the_expectations(out)
+    out["probabilities_are_conditional"] = arm.READING_RULE_2026_09_29["words"]
+    out["seconds"] = round(time.time() - t0, 1)
+    return out
+
+
+def summarise_the_rule(scored: list[dict[str, Any]], caps: dict[int, int]) -> dict[str, Any]:
+    """The headline numbers: the committed rule at every design's cap, how many cells the revised rule may
+    read in, whether any decides, and the best either pole reaches, by the rule and by any rule."""
+    at_cap = [s for s in scored if s["n_blocks"] == caps[s["k"]]]
+    own = [s for s in scored if s["g"] == 1]
+
+    def best(rows: list[dict[str, Any]], key: str) -> dict[str, Any]:
+        top = max(rows, key=lambda s: (s[key], -s["n_blocks"]))
+        return {
+            "probability": top[key],
+            "k": top["k"],
+            "m": top["m"],
+            "g": top["g"],
+            "n_blocks": top["n_blocks"],
+        }
+
+    def best_any(rows: list[dict[str, Any]], which: str, pole: str, margin: float) -> dict[str, Any]:
+        pick = [
+            (x["probability_at_the_true_pole"], s)
+            for s in rows
+            for x in s[which][pole]
+            if x["margin"] == margin
+        ]
+        p, s = max(pick, key=lambda t: (t[0], -t[1]["n_blocks"]))
+        return {"probability": p, "k": s["k"], "m": s["m"], "g": s["g"], "n_blocks": s["n_blocks"]}
+
+    committed_075 = [s["committed_rule"]["0.75"]["model_failed"] for s in at_cap]
+
+    def triple(x: dict[str, float]) -> list[float]:
+        return [x["model_failed"], x["wording_wrong"], x["cannot_decide"]]
+
+    table = [
+        {
+            "k": s["k"],
+            "m": s["m"],
+            "g": s["g"],
+            "n_blocks": s["n_blocks"],
+            "rule_may_read_here": s["rule_may_read_here"],
+            "committed_c17eedc": {r: triple(v) for r, v in s["committed_rule"].items()},
+            "revised_2026_09_29": {r: triple(v) for r, v in s["revised_rule"].items()},
+        }
+        for s in at_cap
+    ]
+    return {
+        "reading_probabilities_at_every_cap": {
+            "columns": ["model_failed", "wording_wrong", "cannot_decide"],
+            "rows": table,
+            "what": "each design at its eligible population (every eligible block tested), by true ratio",
+        },
+        "cells": len(scored),
+        "cells_where_the_rule_may_read": sum(s["rule_may_read_here"] for s in scored),
+        "own_window_cells": len(own),
+        "own_window_cells_where_the_rule_may_read": sum(s["rule_may_read_here"] for s in own),
+        "own_window_cells_from_50_blocks": sum(1 for s in own if s["n_blocks"] >= 50),
+        "own_window_cells_from_50_blocks_where_the_rule_may_read": sum(
+            1 for s in own if s["n_blocks"] >= 50 and s["rule_may_read_here"]
+        ),
+        "shared_control_cells_where_the_rule_may_read": sum(
+            s["rule_may_read_here"] for s in scored if s["g"] > 1
+        ),
+        "cells_failing_the_model_failed_bound": sum(
+            not s["model_failed_error"]["meets_the_bound"] for s in scored
+        ),
+        "cells_failing_the_wording_wrong_bound": sum(
+            not s["wording_wrong_error"]["meets_the_bound"] for s in scored
+        ),
+        "cells_that_decide_clause_2": [
+            {"k": s["k"], "m": s["m"], "g": s["g"], "n_blocks": s["n_blocks"]}
+            for s in scored
+            if s["decides_clause_2"]
+        ],
+        "committed_rule_model_failed_at_ratio_075_at_every_cap": [min(committed_075), max(committed_075)],
+        "committed_rule_wording_wrong_at_ratio_05_at_every_cap": [
+            min(s["committed_rule"]["0.5"]["wording_wrong"] for s in at_cap),
+            max(s["committed_rule"]["0.5"]["wording_wrong"] for s in at_cap),
+        ],
+        "revised_model_failed_at_ratio_1_best": best(scored, "model_failed_at_ratio_1"),
+        "revised_wording_wrong_at_ratio_0_best": best(scored, "wording_wrong_at_ratio_0"),
+        "best_rule_on_the_estimator": {
+            "model_failed_margin_075": best_any(scored, "best_rule_on_the_estimator", "model_failed", 0.75),
+            "wording_wrong_margin_01": best_any(scored, "best_rule_on_the_estimator", "wording_wrong", 0.1),
+        },
+        "best_rule_on_the_block_rate_alone": {
+            "model_failed_margin_075": best_any(
+                scored, "best_rule_on_the_block_rate_alone", "model_failed", 0.75
+            ),
+            "wording_wrong_margin_01": best_any(
+                scored, "best_rule_on_the_block_rate_alone", "wording_wrong", 0.1
+            ),
+        },
+        "descriptive_weaker_margins_best_rule_on_the_estimator": {
+            "model_failed_margin_05": best_any(scored, "best_rule_on_the_estimator", "model_failed", 0.5),
+            "wording_wrong_margin_025": best_any(scored, "best_rule_on_the_estimator", "wording_wrong", 0.25),
+            "wording_wrong_margin_05": best_any(scored, "best_rule_on_the_estimator", "wording_wrong", 0.5),
+        },
+    }
+
+
+def score_the_expectations(out: dict[str, Any]) -> list[dict[str, Any]]:
+    """The five expectations registered before the run, each scored from the result by a stated test."""
+    s = out["summary"]
+    rob = out["robustness_lines_at_the_reference_truth_from_a_variant"]
+    failing = sorted(
+        {e["variant"] for e in rob if e.get("feasible") for d in e["designs"] if not d["both_bounds_met"]}
+    )
+    best_est = s["best_rule_on_the_estimator"]
+    return [
+        {
+            "expected": "both bounds met in every own-window cell from 50 blocks up",
+            "test": "every own-window cell from 50 blocks up may read",
+            "held": s["own_window_cells_from_50_blocks_where_the_rule_may_read"]
+            == s["own_window_cells_from_50_blocks"],
+        },
+        {
+            "expected": "no design decides clause 2; revised model_failed at ratio 1 about 0.5 at best",
+            "test": "no deciding cell and the best below 0.8",
+            "held": not s["cells_that_decide_clause_2"]
+            and s["revised_model_failed_at_ratio_1_best"]["probability"] < 0.8,
+            "value": s["revised_model_failed_at_ratio_1_best"]["probability"],
+        },
+        {
+            "expected": "revised wording_wrong at ratio 0 below 0.8 everywhere, about 0.2 at best",
+            "test": "the best below 0.8",
+            "held": s["revised_wording_wrong_at_ratio_0_best"]["probability"] < 0.8,
+            "value": s["revised_wording_wrong_at_ratio_0_best"]["probability"],
+        },
+        {
+            "expected": "the best rule on the estimator also below 0.8 for both poles (about 0.6 and 0.3)",
+            "test": "both bests below 0.8",
+            "held": best_est["model_failed_margin_075"]["probability"] < 0.8
+            and best_est["wording_wrong_margin_01"]["probability"] < 0.8,
+            "value": [
+                best_est["model_failed_margin_075"]["probability"],
+                best_est["wording_wrong_margin_01"]["probability"],
+            ],
+        },
+        {
+            "expected": "the bounds fail under some variant (low anchor, or no false positives)",
+            "test": "at least one feasible variant with a design failing a bound",
+            "held": bool(failing),
+            "value": failing,
+        },
+    ]
+
+
+@mf.depends_on_models("alphagenome")  # the scored-element set the windows are drawn over is the sweep's
+def manifest_reading_rule(experiments: int) -> dict[str, Any]:
+    arm = _measured_arm_module()
+    base = arm.manifest(json.loads((RESULTS_DIR / f"{MEASURED_ARM}.json").read_text())["chromosomes"])
+    base["inputs"] = list(base["inputs"]) + [
+        mf.input_entry(RESULTS_DIR / f"{name}.json", partition=None)
+        for name in (MEASURED_ARM, RESULT_CALIBRATED)
+    ]
+    base["sources"] = list(base["sources"]) + [
+        {
+            "accession": "this repository, data/results/clause2_design_power_calibrated.json at cab70d9",
+            "version": "git cab70d9: the reference calibration and eligible populations the gate compares",
+        }
+    ]
+    base["parameters"] = {
+        **base["parameters"],
+        "seed": RR_SEED,
+        "experiments_per_cell": experiments,
+        "designs_k": list(S2_K),
+        "designs_m": list(S2_M),
+        "designs_g": list(S2_G),
+        "n_grid": list(S2_N_GRID),
+        "ratios": list(S2_RATIOS),
+        "reference_false_positive": S2_REFERENCE_FALSE_POSITIVE,
+        "reference_sensitivity_column": S2_REFERENCE_SENSITIVITY_COLUMN,
+        "chromosome_resamples": S2_CHROMOSOME_RESAMPLES,
+        "reading_rule_registered": arm.READING_RULE_2026_09_29["registered"],
+        "margins": arm.REVISED_RULE_MARGINS,
+        "error_bound": arm.REVISED_RULE_ERROR_BOUND,
+        "decides_at": arm.REVISED_RULE_DECIDES_AT,
+        "robustness_designs": [list(d) for d in RR_ROBUSTNESS_DESIGNS],
+        "descriptive_margins": {k: list(v) for k, v in RR_DESCRIPTIVE_MARGINS.items()},
+    }
+    base["exclusions"] = list(base["exclusions"]) + [
+        "the model arm's -27.25 points and its per-block dispersion are not used anywhere",
+        "no model answer is read: the element archive is opened for which elements are scored",
+        "no size above a design's eligible population is simulated",
+        "the revised rule's lines are the registered numbers, never re-estimated from a simulated experiment",
+    ]
+    return base
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--blocks", type=int, default=200_000, help="simulated blocks per configuration")
@@ -2872,7 +3430,25 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="item 12 S2: print the derived cheapest-with-a-calibrated-null view of the committed result",
     )
+    ap.add_argument(
+        "--reading-rule",
+        action="store_true",
+        help=(
+            "item 12 S2 follow-up (lane-rule): score c17eedc's reading rule and the one registered on "
+            "2026-09-29 on the calibrated model (writes a new result)"
+        ),
+    )
     args = ap.parse_args(argv)
+    if args.reading_rule:
+        out = collect_reading_rule(args.experiments, RR_SEED)
+        if args.no_save:
+            print("not saved")
+        else:
+            man = manifest_reading_rule(args.experiments)
+            print(f"saved {save_result(RESULT_READING_RULE, out, manifest=man)}")
+        print("gate against cab70d9:", (out.get("gate_against_cab70d9") or {}).get("passed"))
+        print(json.dumps(out.get("summary"), indent=1))
+        return 0
     if args.read_calibrated:
         got = json.loads((RESULTS_DIR / f"{RESULT_CALIBRATED}.json").read_text())
         print(json.dumps(cheapest_with_a_calibrated_null(got), indent=1))

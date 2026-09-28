@@ -511,3 +511,140 @@ def test_the_derived_view_only_names_designs_whose_null_is_calibrated():
         if best is not None:
             assert null[(best["k"], best["m"], best["g"], best["n_blocks"])]["calibrated"] is True
             assert best["n_blocks"] <= best["eligible_population"]
+
+
+# ---- the measured arm's reading rule, scored (lane-rule, 2026-09-29) ---------------------------------
+
+
+def test_the_multi_line_tails_equal_the_single_line_function():
+    rng = np.random.default_rng(11)
+    y = rng.random((5, 40)) < 0.2
+    wbar = (rng.random((5, 40, 3)) < 0.25).mean(axis=2)
+    deltas = [0.0, -0.05, -0.1234, 0.03]
+    many = dp.exact_block_bootstrap_tails_at(y, wbar, 3, deltas)
+    for delta, got in zip(deltas, many, strict=True):
+        one = dp.exact_block_bootstrap_tails(y, wbar, 3, delta)
+        assert np.allclose(got["p_below"], one["p_below"])
+        assert np.allclose(got["p_at_or_below"], one["p_at_or_below"])
+
+
+def test_reading_lines_change_no_simulated_experiment():
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.0, 0.2, 0.0)
+    chroms = np.repeat(np.arange(24), 20)
+    plain = dp.simulate_design(
+        cal, cal["mu_window"], (1, 3, 4), 60, chroms, 300, np.random.default_rng(3), 0.0
+    )
+    lined = dp.simulate_design(
+        cal, cal["mu_window"], (1, 3, 4), 60, chroms, 300, np.random.default_rng(3), 0.0, lines={"z": 0.0}
+    )
+    lined.pop("_per_experiment")
+    assert lined.pop("interval_wholly_below")["z"] == plain["interval_below_zero"]
+    assert lined.pop("interval_wholly_above")["z"] == plain["interval_above_zero"]
+    assert lined == plain
+
+
+def _toy_lines(cal, k):
+    return {
+        dp._line_name(r): dp.expected_difference(cal, dp.block_arm(cal, r)["mu_block"], k)
+        for r in dp.S2_RATIOS
+    }
+
+
+def test_a_line_at_the_margin_stops_an_undecided_interval_being_read_as_a_model_failure():
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.01, 0.2, 0.0)
+    chroms = np.repeat(np.arange(24), 20)
+    lines = _toy_lines(cal, 1)
+    arm = dp.block_arm(cal, 0.75)
+    delta = dp.expected_difference(cal, arm["mu_block"], 1)
+    got = dp.simulate_design(
+        cal, arm["mu_block"], (1, 3, 1), 100, chroms, 400, np.random.default_rng(8), delta, lines=lines
+    )
+    committed_model_failed = 1 - got["interval_below_zero"]
+    revised_model_failed = got["interval_wholly_above"][dp._line_name(0.75)]
+    assert committed_model_failed > 0.5
+    assert revised_model_failed < 0.08
+
+
+def test_reading_probabilities_add_up_and_keep_the_committed_rule_beside():
+    names = {dp._line_name(r) for r in dp.S2_RATIOS}
+    cell = {
+        "interval_below_zero": 0.3,
+        "interval_wholly_below": {n: 0.1 for n in names},
+        "interval_wholly_above": {n: 0.2 for n in names},
+    }
+    got = dp.reading_probabilities(cell, 1)
+    assert got["committed_c17eedc"] == {"model_failed": 0.7, "wording_wrong": 0.3, "cannot_decide": 0.0}
+    rev = got["revised_before_the_cell_check"]
+    assert rev == {"model_failed": 0.2, "wording_wrong": 0.1, "cannot_decide": 0.7}
+    assert got["interval_excludes_ratio"]["0.5"] == pytest.approx(0.3)
+
+
+def test_the_best_rule_bounds_its_error_on_every_wrong_ratio():
+    rng = np.random.default_rng(4)
+    values = {r: rng.normal(r, 0.1, 4000) for r in dp.S2_RATIOS}
+    mf = dp._best_rule_on(values, 0.75, "above", 1.0)
+    ww = dp._best_rule_on(values, 0.1, "below", 0.0)
+    assert mf["largest_error_on_the_wrong_side"] <= 0.05 and ww["largest_error_on_the_wrong_side"] <= 0.05
+    # one-sided 5% at 2.5 sd apart: Phi(2.5 - 1.645) = 0.80; at 1 sd apart: Phi(1 - 1.645) = 0.26
+    assert mf["probability_at_the_true_pole"] == pytest.approx(0.80, abs=0.03)
+    assert ww["probability_at_the_true_pole"] == pytest.approx(0.26, abs=0.03)
+
+
+def _scored(rev_by_ratio, experiments=2000):
+    cells = []
+    for r in dp.S2_RATIOS:
+        mf, ww = rev_by_ratio[r]
+        cells.append(
+            {
+                "k": 1,
+                "m": 3,
+                "g": 1,
+                "n_blocks": 100,
+                "ratio": r,
+                "readings": {
+                    "committed_c17eedc": {"model_failed": 1.0, "wording_wrong": 0.0, "cannot_decide": 0.0},
+                    "revised_before_the_cell_check": {
+                        "model_failed": mf,
+                        "wording_wrong": ww,
+                        "cannot_decide": round(1 - mf - ww, 4),
+                    },
+                },
+            }
+        )
+    best = {(1, 3, 1, 100): {"best_rule_on_the_estimator": {}, "best_rule_on_the_block_rate_alone": {}}}
+    return dp.score_the_cells(cells, best, experiments)[0]
+
+
+def test_a_cell_failing_a_bound_reads_cannot_decide_whatever_its_interval():
+    ok = {
+        1.0: (0.9, 0.0),
+        0.75: (0.02, 0.0),
+        0.5: (0.0, 0.0),
+        0.25: (0.0, 0.01),
+        0.1: (0.0, 0.03),
+        0.0: (0.0, 0.9),
+    }
+    got = _scored(ok)
+    assert got["rule_may_read_here"] and got["decides_clause_2"]
+    bad = {**ok, 0.75: (0.2, 0.0)}
+    got = _scored(bad)
+    assert not got["rule_may_read_here"] and not got["decides_clause_2"]
+    assert got["model_failed_error"] == {"largest": 0.2, "at_ratio": 0.75, "meets_the_bound": False}
+    assert all(
+        v == {"model_failed": 0.0, "wording_wrong": 0.0, "cannot_decide": 1.0}
+        for v in got["revised_rule"].values()
+    )
+
+
+def test_deciding_needs_both_poles():
+    one_pole = {
+        1.0: (0.9, 0.0),
+        0.75: (0.02, 0.0),
+        0.5: (0.0, 0.0),
+        0.25: (0.0, 0.0),
+        0.1: (0.0, 0.02),
+        0.0: (0.0, 0.3),
+    }
+    got = _scored(one_pole)
+    assert got["rule_may_read_here"] and not got["decides_clause_2"]
+    assert got["model_failed_at_ratio_1"] == 0.9 and got["wording_wrong_at_ratio_0"] == 0.3
