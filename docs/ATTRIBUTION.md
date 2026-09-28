@@ -7608,6 +7608,44 @@ repeat-derived `regulatory` blocks is not known in advance (never read) and is r
 Known costs: programs grow by five lines per element and region; the committed chr21 copy's changed
 lines may be held by the removal guard until 2026-09-30.
 
+## The result: every compiled element and region states five axes, no count the programs test moved, and a repression is never a silencer (R7, 2026-09-28, later)
+
+Built as registered (`genomeos.lang.grammar.AXES`, the parser's `_ontology`, `compile.py`'s
+`element_axes`, `measured_axes` and `region_axes`; `tests/test_ontology.py`, 7 tests). The 24
+programs in `data/knowledge/compiled` were recompiled and every line that is not an axis line or the
+new header paragraph is byte-identical to the programs before (checked per file), so nothing
+registered as unchanged moved: 440,377 + 19,072 `class: enhancer`, 440,589 rules, 1,098 unknowns,
+every region `role:`. Counts after (`data/results/ontology_census_after.json`, beside the census):
+
+- **Predicted elements (440,377, all five axes):** origin `repeat_derived` 101,011, `partly_repeat_derived`
+  81,058, `unique` 258,308, exactly as registered; role `enhancer_like` 440,377 with `insulator_like`
+  beside it on 193,027; `represses_target` 156,925, every one with the role left as
+  `silencer|insulator_like|competing_promoter|unknown`, and `silencer` alone on 0; target relation
+  `predicted_deletion_target` 440,377, `nearest_tss_in_domain` beside it on 268,940; status
+  `selection_not_measured` on all, because the element runs carry no constraint.
+- **Measured blocks (19,072):** activity `inactive_in_reporter` 14,539, `active_in_reporter` 3,296, the
+  two as alternatives (a lentiMPRA tie) 126, `no_effect_measured` 976, `activates_target` 181,
+  `represses_target` 43 (the role left open on all 43), `unknown` 243; relation
+  `measured_perturbation_target` 145, `tested_no_effect` 1,284, `unassigned` 17,643; status
+  `conflicting` 14,537, `measured_negative` 1,406.
+- **Regions (26,806):** origin `repeat_derived` 16,192, `partly_repeat_derived` 9,958, `unique` 418,
+  `segmental_duplication` beside another origin on 2,894, `assembly_gap` 118, `satellite` 113,
+  `tandem_repeat` 7. Of the 15,536 regions with a registry or CpG role, **8,709 are at least half
+  interspersed repeat and 6,534 partly**: the repeat-derived regulatory blocks the classifier had
+  hidden, the count the registration could not predict. Role `unknown` 11,061; no region carries a
+  value meaning no function; `selection_not_detected` 21,283, `selection_weak` 2,962,
+  `under_selection` 2,410, `selection_not_measured` 33.
+
+**Negatives and limits.** The derived `class:` moved nothing because every predicted element is pELS
+or dELS in the registry: the old constant was right for the registry and wrong in kind, and the
+change is that it is now read, not assumed. A region's `role:` keeps the budget's strings, including
+"no evidence of function, best guess neutral" on 2,546 regions; the axes beside it say `unknown` and
+`selection_not_detected`, and rewriting the budget's labels (24 stored results) is its own step. No
+element has a per-element constraint reading, so the selection axis is unmeasured for all predicted
+elements; filling it needs phyloP over 440,377 intervals. Segmental duplication is read for regions
+only. The committed chr21 copy received the axis lines and the header paragraph as pure additions
+(29,108 lines, none removed), leaving its guard-held rule lines as they were until 2026-09-30.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

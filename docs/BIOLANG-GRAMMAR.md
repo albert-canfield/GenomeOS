@@ -80,7 +80,12 @@ May contain `transcript` blocks.
 | property | form | meaning |
 |---|---|---|
 | `locus` | `locus` |  |
-| `role` | `text | unknown` |  |
+| `role` | `text | unknown` | the budget's tier summary, kept verbatim (Module.unknowns counts `unknown`); the five axes below are the authoritative reading (R7) |
+| `origin` | `unique | repeat_derived | partly_repeat_derived | satellite | tandem_repeat | segmental_duplication | assembly_gap | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `molecular_role` | `promoter_like | enhancer_like | insulator_like | open_chromatin | silencer | competing_promoter | structural | coding_candidate | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `activity` | `activates_target | represses_target | no_effect_measured | active_in_reporter | inactive_in_reporter | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `target_relation` | `predicted_deletion_target | nearest_tss_in_domain | measured_perturbation_target | tested_no_effect | unassigned` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `evidence_status` | `curated_annotation | registry_biochemical | predicted_model | measured | measured_negative | conflicting | under_selection | selection_weak | selection_not_detected | selection_not_measured | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
 
 ### `element`
 
@@ -88,11 +93,16 @@ May contain `transcript` blocks.
 
 | property | form | meaning |
 |---|---|---|
-| `class` | `promoter | enhancer | insulator | open_chromatin` | regulatory element class |
+| `class` | `promoter | enhancer | insulator | open_chromatin | unknown` | a summary derived from the registry role (R7), never from the activity; the five axes below are the authoritative reading |
 | `locus` | `locus` |  |
 | `domain` | `Id` | the node (domain) it lies in |
 | `targets` | `Id, Id` | genes it reaches |
 | `basis` | `text` | how the targets were assigned |
+| `origin` | `unique | repeat_derived | partly_repeat_derived | satellite | tandem_repeat | segmental_duplication | assembly_gap | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `molecular_role` | `promoter_like | enhancer_like | insulator_like | open_chromatin | silencer | competing_promoter | structural | coding_candidate | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `activity` | `activates_target | represses_target | no_effect_measured | active_in_reporter | inactive_in_reporter | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `target_relation` | `predicted_deletion_target | nearest_tss_in_domain | measured_perturbation_target | tested_no_effect | unassigned` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `evidence_status` | `curated_annotation | registry_biochemical | predicted_model | measured | measured_negative | conflicting | under_selection | selection_weak | selection_not_detected | selection_not_measured | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
 
 ### `rule`
 

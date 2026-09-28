@@ -349,6 +349,29 @@ def _arrows(value: str, line_no: int) -> dict[str, str]:
     return out
 
 
+def _ontology(p: dict[str, str], line_no: int) -> dict[str, list[list[str]]]:
+    """The five R7 axes a block states, as {axis: [[alternative, ...], ...]}.
+
+    `,` separates values that all hold and `|` alternatives of which one holds and none is chosen;
+    a value may carry a qualifier after `/`. A value outside `grammar.AXES` is refused, so a typo
+    cannot become a new role."""
+    from genomeos.lang import grammar
+
+    out: dict[str, list[list[str]]] = {}
+    for axis, vocabulary in grammar.AXES.items():
+        if axis not in p:
+            continue
+        groups = [[v.strip() for v in item.split("|") if v.strip()] for item in _list(p[axis])]
+        for group in groups:
+            for v in group:
+                if v.split("/", 1)[0] not in vocabulary:
+                    raise BioLangError(
+                        f"line {line_no}: {axis} has no value {v!r}. It accepts: {', '.join(vocabulary)}"
+                    )
+        out[axis] = [g for g in groups if g]
+    return out
+
+
 @functools.cache
 def _accepted(kind: str) -> tuple[str, ...]:
     """The keys a block of this kind reads: the grammar table's properties plus the common keys.
@@ -484,6 +507,8 @@ def _compile_block(b: Block, module: Module) -> None:
             confidence=conf,
             role=UNKNOWN if role.lower() == "unknown" else role,
         )
+        if axes := _ontology(p, b.line):
+            r.attrs["ontology"] = axes
         if "locus" in p:
             r.locus = Locus.parse(p["locus"])
         module.add(r)
@@ -495,6 +520,8 @@ def _compile_block(b: Block, module: Module) -> None:
             confidence=conf,
             cls=p.get("class", "unknown"),
         )
+        if axes := _ontology(p, b.line):
+            el.attrs["ontology"] = axes
         if "locus" in p:
             el.locus = Locus.parse(p["locus"])
         if "domain" in p:

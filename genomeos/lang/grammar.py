@@ -55,12 +55,23 @@ BLOCKS: dict[str, dict] = {
     },
     "region": {
         "header": "region <Id> { ... }",
-        "props": {"locus": ("locus", ""), "role": ("text | unknown", "")},
+        "props": {
+            "locus": ("locus", ""),
+            "role": (
+                "text | unknown",
+                "the budget's tier summary, kept verbatim (Module.unknowns counts `unknown`); the five "
+                "axes below are the authoritative reading (R7)",
+            ),
+        },
     },
     "element": {
         "header": "element <Id> { ... }",
         "props": {
-            "class": ("promoter | enhancer | insulator | open_chromatin", "regulatory element class"),
+            "class": (
+                "promoter | enhancer | insulator | open_chromatin | unknown",
+                "a summary derived from the registry role (R7), never from the activity; the five axes "
+                "below are the authoritative reading",
+            ),
             "locus": ("locus", ""),
             "domain": ("Id", "the node (domain) it lies in"),
             "targets": ("Id, Id", "genes it reaches"),
@@ -384,6 +395,14 @@ AXES: dict[str, dict[str, str]] = {
         "unknown": "nothing stated",
     },
 }
+#: the five axes as `element` and `region` properties, after each block's own keys
+AXIS_PROPS: dict[str, tuple[str, str]] = {
+    axis: (" | ".join(vals), "R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier")
+    for axis, vals in AXES.items()
+}
+for _kind in ("region", "element"):
+    BLOCKS[_kind]["props"].update(AXIS_PROPS)
+
 COMMON = {
     "evidence": ('kind "source" [note]', "kind in experimental, curated, predicted, inferred, none"),
     "confidence": ("0..1", ""),

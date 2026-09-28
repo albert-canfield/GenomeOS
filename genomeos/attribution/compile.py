@@ -37,12 +37,15 @@ The layer is thin on purpose; the census in `measured_layer_genome` says how thi
 
 from __future__ import annotations
 
+import bisect
+import gzip
 import re
 import time
 from pathlib import Path
 from typing import Any
 
 from genomeos.certainty import Certainty
+from genomeos.genome.repeats import INTERSPERSED as _INTERSPERSED
 from genomeos.results import RESULTS_DIR, load_result
 
 #: retired as a compiled number by review R4 (2026-09-28); kept because
@@ -94,6 +97,235 @@ REPRESSION_ALTERNATIVES = ("silencer", "insulator_like", "competing_promoter", "
 REPEAT_DERIVED_MIN = 0.5
 #: duplicated share of a block from which it reads as a segmental duplication (as the copy flag)
 DUPLICATED_MIN = 0.5
+#: sequence classes of `genomeos unknown` whose origin the class itself states
+CLASS_ORIGIN = {
+    "gap": "assembly_gap",
+    "centromere": "satellite",
+    "satellite_array": "satellite",
+    "tandem_repeat": "tandem_repeat",
+    "telomere": "tandem_repeat",
+}
+CLASS_ROLE = {
+    "promoter_like": [["promoter_like", "unknown"]],
+    "centromere": [["structural"]],
+    "satellite_array": [["structural", "unknown"]],
+    "tandem_repeat": [["structural", "unknown"]],
+    "long_orf": [["coding_candidate", "unknown"]],
+}
+AXIS_ORDER = ("origin", "molecular_role", "activity", "target_relation", "evidence_status")
+
+
+def _ccres(chrom: str, results_dir: Path) -> dict[str, tuple[str, bool]]:
+    """The ENCODE registry's class and CTCF flag per cCRE id, from ccres_<chrom> when present."""
+    p = results_dir / f"ccres_{chrom}.bed.gz"
+    if not p.exists():
+        return {}
+    out = {}
+    with gzip.open(p, "rt") as fh:
+        for line in fh:
+            if not line.startswith("#"):
+                f = line.rstrip("\n").split("\t")
+                out[f[3]] = (f[4], f[5] == "1")
+    return out
+
+
+class _Interspersed:
+    """Interspersed-repeat coverage of any interval, and its largest class, from rmsk_<chrom>."""
+
+    def __init__(self, chrom: str, results_dir: Path) -> None:
+        rows: list[tuple[int, int, str]] = []
+        p = results_dir / f"rmsk_{chrom}.bed.gz"
+        if p.exists():
+            with gzip.open(p, "rt") as fh:
+                for line in fh:
+                    f = line.split("\t", 3)
+                    if f[2] in _INTERSPERSED:
+                        rows.append((int(f[0]), int(f[1]), f[2]))
+        rows.sort()
+        self.rows = rows
+        self.starts = [r[0] for r in rows]
+        self.max_len = max((r[1] - r[0] for r in rows), default=0)
+
+    def __bool__(self) -> bool:
+        return bool(self.rows)
+
+    def cover(self, start: int, end: int) -> tuple[float, str]:
+        by: dict[str, int] = {}
+        for s, e, c in self.rows[bisect.bisect_left(self.starts, start - self.max_len) :]:
+            if s >= end:
+                break
+            ov = min(e, end) - max(s, start)
+            if ov > 0:
+                by[c] = by.get(c, 0) + ov
+        if not by:
+            return 0.0, ""
+        return min(1.0, sum(by.values()) / max(1, end - start)), max(by, key=lambda k: by[k])
+
+
+def _origin(fraction: float | None, top: str) -> str:
+    if fraction is None:
+        return "unknown"
+    if fraction >= REPEAT_DERIVED_MIN:
+        return f"repeat_derived/{top}" if top else "repeat_derived"
+    if fraction > 0:
+        return f"partly_repeat_derived/{top}" if top else "partly_repeat_derived"
+    return "unique"
+
+
+def selection(fraction: float | None) -> str:
+    """Constraint as evidence of selection, never as a mechanism; its absence is not no function."""
+    from genomeos.attribution.budget import CONSTRAINED_MIN, NEUTRAL_MAX
+
+    if fraction is None:
+        return "selection_not_measured"
+    if fraction >= CONSTRAINED_MIN:
+        return "under_selection"
+    return "selection_weak" if fraction >= NEUTRAL_MAX else "selection_not_detected"
+
+
+def registry_roles(cls: str | None, ctcf_bound: bool = False) -> list[str]:
+    roles = [CCRE_ROLE[cls]] if cls in CCRE_ROLE else []
+    if ctcf_bound and "insulator_like" not in roles:
+        roles.append("insulator_like")
+    return roles
+
+
+def derived_class(axes: dict[str, list[list[str]]]) -> str:
+    """`class:` as a summary of the first registry role the element holds for certain, else unknown."""
+    for group in axes.get("molecular_role", []):
+        if len(group) == 1 and group[0] in ROLE_CLASS:
+            return ROLE_CLASS[group[0]]
+    return "unknown"
+
+
+def axis_lines(axes: dict[str, list[list[str]]]) -> list[str]:
+    """`axis: a, b|c` per stated axis, in the grammar's order: `,` all hold, `|` unresolved."""
+    return [f"{k}: {', '.join('|'.join(g) for g in axes[k])}" for k in AXIS_ORDER if axes.get(k)]
+
+
+def element_axes(e: dict, ccre: dict[str, tuple[str, bool]], rep: _Interspersed | None) -> dict:
+    """The five axes of a predicted element (R7): sequence facts from the registry and RepeatMasker,
+    the direction from the prediction, and a repression left as unresolved alternatives."""
+    cls, ctcf = ccre.get(e["id"], (None, False))
+    frac, top = rep.cover(e["start"], e["end"]) if rep else (None, "")
+    roles = [[r] for r in registry_roles(cls, ctcf)]
+    pc = e["predicted_coding"]
+    represses = pc.get("action") != "activates"
+    if represses:
+        roles.append(list(REPRESSION_ALTERNATIVES))
+    relation = [["predicted_deletion_target"]]
+    if e.get("verdict_coding") == "agrees with nearest TSS in domain":
+        relation.append(["nearest_tss_in_domain"])
+    status = (["registry_biochemical"] if cls else []) + ["predicted_model"]
+    status.append(selection(e.get("constrained_fraction")))
+    return {
+        "origin": [[_origin(frac, top)]],
+        "molecular_role": roles or [["unknown"]],
+        "activity": [["represses_target" if represses else "activates_target"]],
+        "target_relation": relation,
+        "evidence_status": [[s] for s in status],
+    }
+
+
+def measured_axes(row: dict, sequence: dict | None) -> dict:
+    """The five axes of a `_measured` block: the sequence facts of its predicted twin, and activity,
+    relation and status from the assays alone."""
+    from genomeos.attribution import measured as ms
+
+    seq = sequence or {}
+    roles = [g for g in seq.get("molecular_role", []) if g != list(REPRESSION_ALTERNATIVES)]
+    m = row["measured"]
+    activity: list[list[str]] = []
+    relation: list[list[str]] = []
+    status = ["measured"]
+    c = m.get("crispri")
+    if c:
+        actions = {a for _, a, _, _, _ in ms.rule_links(row)}
+        if "activates" in actions:
+            activity.append(["activates_target"])
+        if "inhibits" in actions or c.get("genes_increased"):
+            activity.append(["represses_target"])
+            roles.append(list(REPRESSION_ALTERNATIVES))
+        if not activity and c.get("genes_no_effect_well_powered"):
+            activity.append(["no_effect_measured"])
+        if c.get("genes_regulated_training"):
+            relation.append(["measured_perturbation_target"])
+        elif c.get("genes_tested") and not c.get("genes_regulated") and not c.get("genes_increased"):
+            relation.append(["tested_no_effect"])
+        if c.get("genes_not_regulated"):
+            status.append("measured_negative")
+    lt = m.get("lentimpra")
+    if lt:
+        if lt.get("cells_active"):
+            activity.append(["active_in_reporter"])
+        elif lt.get("cells_conflicting"):
+            activity.append(["active_in_reporter", "inactive_in_reporter"])
+        elif lt.get("cells_silent"):
+            activity.append(["inactive_in_reporter"])
+    v = m.get("vista")
+    if v:
+        if v.get("positive"):
+            activity.append(["active_in_reporter"])
+        elif v.get("negative"):
+            activity.append(["inactive_in_reporter"])
+    if row.get("agreement", {}).get("verdict") == ms.DISAGREES:
+        status.append("conflicting")
+    seen: list[list[str]] = []
+    for g in activity:
+        if g not in seen:
+            seen.append(g)
+    return {
+        "origin": seq.get("origin") or [["unknown"]],
+        "molecular_role": roles or [["unknown"]],
+        "activity": seen or [["unknown"]],
+        "target_relation": relation or [["unassigned"]],
+        "evidence_status": [[s] for s in status],
+    }
+
+
+def region_axes(b: dict, features: dict | None, rep: _Interspersed | None, duplicated: float | None) -> dict:
+    """The five axes of an UNKNOWN block: origin from its sequence class or RepeatMasker, roles from
+    the registry classes it contains, and constraint only as a reading of selection."""
+    cls = b["class"]
+    f = features or {}
+    status: list[str] = []
+    if cls in CLASS_ORIGIN or cls.startswith("interspersed_repeat"):
+        top = cls.removeprefix("interspersed_repeat").lstrip("_")
+        origin = CLASS_ORIGIN.get(cls) or (f"repeat_derived/{top}" if top else "repeat_derived")
+        if b.get("class_evidence") == "curated":
+            status.append("curated_annotation")
+    elif f.get("interspersed_coverage") is not None:
+        cover = {k: v for k, v in (f.get("repeat_coverage") or {}).items() if k in _INTERSPERSED}
+        origin = _origin(f["interspersed_coverage"], max(cover, key=lambda k: cover[k]) if cover else "")
+        status.append("curated_annotation")
+    elif rep:
+        origin = _origin(*rep.cover(b["start"], b["end"]))
+        status.append("curated_annotation")
+    else:
+        origin = "unknown"
+    origins = [[origin]]
+    if duplicated is not None and duplicated >= DUPLICATED_MIN:
+        origins.append(["segmental_duplication"])
+    if cls in ("regulatory",) and f.get("ccre"):
+        counts = f["ccre"]
+        roles: list[str] = []
+        for k in sorted(counts, key=lambda k: -counts[k]):
+            r = CCRE_ROLE.get(k)
+            if counts[k] and r and r not in roles:
+                roles.append(r)
+        role_groups = [[r] for r in roles] or [["unknown"]]
+        status.insert(0, "registry_biochemical")
+    else:
+        role_groups = CLASS_ROLE.get(cls, [["unknown"]])
+    if cls != "gap":
+        status.append(selection((b.get("phylop") or {}).get("fraction_above")))
+    return {
+        "origin": origins,
+        "molecular_role": role_groups,
+        "activity": [["unknown"]],
+        "target_relation": [["unassigned"]],
+        "evidence_status": [[s] for s in (status or ["unknown"])],
+    }
 
 
 def ident(s: str) -> str:
@@ -150,7 +382,12 @@ def _effect_note(pc: dict[str, Any]) -> str:
 
 
 def _region(
-    chrom: str, b: dict, human: dict[int, dict] | None = None, copies: dict[int, dict] | None = None
+    chrom: str,
+    b: dict,
+    human: dict[int, dict] | None = None,
+    copies: dict[int, dict] | None = None,
+    features: dict | None = None,
+    rep: _Interspersed | None = None,
 ) -> list[str]:
     tier = b["guess"]["tier"]
     kind, source = EVIDENCE_BY_TIER.get(tier, ("inferred", "genomeos budget"))
@@ -181,6 +418,7 @@ def _region(
         f"  role: {role}",
         f'  evidence: {kind} "{_text(source)}" {_text(", ".join([*facts, REGION_SCORE_NOTE]))}',
         f"  confidence: {min(b['guess']['confidence'], 1.0):.2f}",
+        *(f"  {ln}" for ln in axis_lines(region_axes(b, features, rep, c and c["duplicated_fraction"]))),
         "}",
     ]
 
@@ -247,11 +485,14 @@ def link_pairs(row: dict) -> dict[tuple[str, str], int]:
     return out
 
 
-def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> list[str]:
+def _measured_blocks(
+    chrom: str, row: dict, domains: dict, ident_of: dict, sequence: dict | None = None
+) -> list[str]:
     """One `<id>_measured` element and one rule per measured regulated link, all experimental."""
     from genomeos.attribution import measured as ms
 
-    props = [f"class: {row.get('class') or 'enhancer'}", f"locus: {chrom}:{row['start']}-{row['end']}"]
+    axes = measured_axes(row, sequence)
+    props = [f"class: {derived_class(axes)}", f"locus: {chrom}:{row['start']}-{row['end']}"]
     if row.get("domain") in domains:
         props.append(f"domain: {ident(row['domain'])}")
     c = row["measured"].get("crispri", {})
@@ -269,6 +510,7 @@ def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> li
         ),
         f"confidence: {row['confidence']:.2f}",
     ]
+    props += axis_lines(axes)
     lines = [f"element {row['id']}_measured {{}}".replace("{}", "{")]
     lines += [f"  {p}" for p in props]
     lines.append("}")
@@ -297,6 +539,13 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
     ]
     readers = [r for r in readers if r and r.get("node_table")]
     elements = _attributed(chrom, results_dir)
+    ccre = _ccres(chrom, results_dir)
+    rep = _Interspersed(chrom, results_dir)
+    features = {
+        blk["start"]: blk.get("features") or {}
+        for blk in (load_result(f"unknown_{chrom}", results_dir) or {}).get("blocks", [])
+    }
+    sequence: dict[str, dict] = {}
     layer, measured_rows = _measured_rows(chrom, elements, results_dir, layer)
     from genomeos.attribution.measured import rule_links
 
@@ -354,6 +603,14 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         "# no basal or max rate and an element is not a species, so a runtime run of this program reports",
         "# both as unresolved. genomeos.attribution.bridge.parameterize turns one observation per gene and",
         "# cell into one fitted strength, given declared rates, and names every input it lacks.",
+        "#",
+        "# Five axes, not one label (review R7, 2026-09-28). Elements and regions state `origin`,",
+        "# `molecular_role`, `activity`, `target_relation` and `evidence_status` (vocabulary:",
+        "# genomeos.lang.grammar.AXES). `,` joins values that all hold, `|` alternatives none of which is",
+        "# chosen. A predicted or measured increase on removal is `represses_target` with the role left",
+        "# as silencer|insulator_like|competing_promoter|unknown, never a silencer label. Constraint is",
+        "# read only as evidence of selection; its absence is `selection_not_detected`, not no function.",
+        "# `class:` is a summary of the registry role and a region's `role:` the budget's tier summary.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")
@@ -374,7 +631,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",
     ]
     for b in regions:
-        lines += _region(chrom, b, human, copies)
+        lines += _region(chrom, b, human, copies, features.get(b["start"]), rep)
     if used_domains:
         lines += [
             "",
@@ -412,7 +669,9 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
                 basis += f", constrained {e['constrained_fraction'] * 100:.0f}% of bases (Zoonomia)"
             if e.get("verdict_coding"):
                 basis += f", {e['verdict_coding']}"
-            props = ["class: enhancer", f"locus: {chrom}:{e['start']}-{e['end']}"]
+            axes = element_axes(e, ccre, rep)
+            sequence[e["id"]] = axes
+            props = [f"class: {derived_class(axes)}", f"locus: {chrom}:{e['start']}-{e['end']}"]
             if e.get("domain") in domains:
                 props.append(f"domain: {ident(e['domain'])}")
             props += [
@@ -420,6 +679,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
                 f"basis: {_text(basis)}",
                 'evidence: predicted "AlphaGenome RNA-seq gene scorer, expression change on deletion" '
                 + _text(_effect_note(pc)),
+                *axis_lines(axes),
             ]
             lines.append(f"element {e['id']} {{")
             lines += [f"  {p}" for p in props]
@@ -471,7 +731,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             "program states no experimental fact."
         )
     for r in measured_rows:
-        lines += _measured_blocks(chrom, r, domains, ident_of)
+        lines += _measured_blocks(chrom, r, domains, ident_of, sequence.get(r["id"]))
     return "\n".join(lines) + "\n"
 
 

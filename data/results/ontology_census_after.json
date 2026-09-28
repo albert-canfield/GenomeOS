@@ -1,0 +1,907 @@
+{
+  "result": "ontology_census_after",
+  "date": "2026-09-28",
+  "review_item": "R7",
+  "stage": "after the build",
+  "values": {
+    "measured activity": {
+      "inactive_in_reporter": 14539,
+      "active_in_reporter": 3296,
+      "no_effect_measured": 976,
+      "unknown": 243,
+      "activates_target": 181,
+      "active_in_reporter|inactive_in_reporter": 126,
+      "represses_target": 43
+    },
+    "measured class": {
+      "enhancer": 19072
+    },
+    "measured evidence_status": {
+      "measured": 19072,
+      "conflicting": 14537,
+      "measured_negative": 1406
+    },
+    "measured molecular_role": {
+      "enhancer_like": 19072,
+      "insulator_like": 12605,
+      "silencer|insulator_like|competing_promoter|unknown": 43
+    },
+    "measured origin": {
+      "unique": 11034,
+      "partly_repeat_derived": 4046,
+      "repeat_derived": 3992
+    },
+    "measured target_relation": {
+      "unassigned": 17643,
+      "tested_no_effect": 1284,
+      "measured_perturbation_target": 145
+    },
+    "predicted activity": {
+      "activates_target": 283452,
+      "represses_target": 156925
+    },
+    "predicted class": {
+      "enhancer": 440377
+    },
+    "predicted evidence_status": {
+      "registry_biochemical": 440377,
+      "predicted_model": 440377,
+      "selection_not_measured": 440377
+    },
+    "predicted molecular_role": {
+      "enhancer_like": 440377,
+      "insulator_like": 193027,
+      "silencer|insulator_like|competing_promoter|unknown": 156925
+    },
+    "predicted origin": {
+      "unique": 258308,
+      "repeat_derived": 101011,
+      "partly_repeat_derived": 81058
+    },
+    "predicted target_relation": {
+      "predicted_deletion_target": 440377,
+      "nearest_tss_in_domain": 268940
+    },
+    "region activity": {
+      "unknown": 26806
+    },
+    "region evidence_status": {
+      "curated_annotation": 26556,
+      "selection_not_detected": 21283,
+      "registry_biochemical": 15252,
+      "selection_weak": 2962,
+      "under_selection": 2410,
+      "selection_not_measured": 33
+    },
+    "region molecular_role": {
+      "enhancer_like": 15230,
+      "unknown": 11061,
+      "promoter_like": 4608,
+      "insulator_like": 3519,
+      "open_chromatin": 2617,
+      "promoter_like|unknown": 284,
+      "structural|unknown": 95,
+      "coding_candidate|unknown": 89,
+      "structural": 25
+    },
+    "region origin": {
+      "repeat_derived": 16192,
+      "partly_repeat_derived": 9958,
+      "segmental_duplication": 2894,
+      "unique": 418,
+      "assembly_gap": 118,
+      "satellite": 113,
+      "tandem_repeat": 7
+    },
+    "region target_relation": {
+      "unassigned": 26806
+    }
+  },
+  "checks": {
+    "region blocks": 26806,
+    "region blocks stating all five axes": 26806,
+    "regions repeat-derived and with a registry role": 15243,
+    "predicted blocks": 440377,
+    "predicted blocks stating all five axes": 440377,
+    "predicted elements repeat-derived and with a registry role": 182069,
+    "predicted represses_target": 156925,
+    "predicted represses_target with the role left open": 156925,
+    "measured blocks": 19072,
+    "measured blocks stating all five axes": 19072,
+    "measured represses_target": 43,
+    "measured represses_target with the role left open": 43
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository, the 24 compiled programs",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs v3",
+        "version": "ccres_<chrom> as distilled"
+      },
+      {
+        "accession": "UCSC rmsk track, hg38",
+        "version": "rmsk_<chrom> as distilled"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "67c4ba65ce6e4d18d4128dd45344bc916ba43156fdcbb9dac739ed42db254c01",
+        "bytes": 41450427,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr1.bed.gz",
+        "sha256": "130ad2956b572a714db85e437aed8fb86d4bb1e61b7ef6acf89305656b0bb30a",
+        "bytes": 5018492,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr1.json",
+        "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+        "bytes": 1500070,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr1.json",
+        "sha256": "0ea17e176558ab21774c662f0b5ca9fc2e00b1ad9cd8a5790d3ced356271e08d",
+        "bytes": 1881224,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "86b91e1c4e847ac0e668237707d4afa361de1e72126f2a2de97073c55ed120cd",
+        "bytes": 31176919,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr2.bed.gz",
+        "sha256": "560b3ad8e201ba13c1887d7c027a82400e42f9827475c558c275f8401c036cd4",
+        "bytes": 4839992,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr2.json",
+        "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+        "bytes": 1204585,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr2.json",
+        "sha256": "f7f017173e7cde20c71ef2689daac34c892464a2abfb17e423dd2b0720980af3",
+        "bytes": 1554678,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "3e26c59b179bc247602d4651c9d6e19350973e483737ceca6be0d8a68fd00e6a",
+        "bytes": 25913580,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr3.bed.gz",
+        "sha256": "c766fca328a074b93331026b71fa57a5431cfa2b63ee1066025a37e6e2c5109d",
+        "bytes": 4046282,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr3.json",
+        "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+        "bytes": 806712,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr3.json",
+        "sha256": "81cc631c96fa20521c17e703415a5e5ef3e27f961e97bbc75cee3334708de650",
+        "bytes": 1050744,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "c673dbd4974381c71e0e35e3a073043d439fb1181eb2fa80ef3a59d02ad34387",
+        "bytes": 19591868,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr4.bed.gz",
+        "sha256": "dbb0abe212a9a6a395a98d6998a1e3bd65955d93396bd6ce26f7e8e01572274e",
+        "bytes": 3702406,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr4.json",
+        "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+        "bytes": 867246,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr4.json",
+        "sha256": "3d456b9e39466f653b521b8f5f05bc384f5827a6a4a05a42d1ddf3cc0a5ace69",
+        "bytes": 1181485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "6a9f0813836c160d85f38eeeef197ef65fc0fbc323dda7d34d8d21ba89d124af",
+        "bytes": 21461110,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr5.bed.gz",
+        "sha256": "89ad6b94b43aa407d6b203cbe44805383a5618b32a6358b20c2f29e1919ce18b",
+        "bytes": 3573930,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr5.json",
+        "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+        "bytes": 845931,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr5.json",
+        "sha256": "9c44e9f30da60dfc3f2874ebb7b91bdfd496871d106371c2c38c4b08405b4787",
+        "bytes": 1125896,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "1c30d817f8dabce6a06d5c7fd2d5d15c5aadd896c33afbd6cf34384ab9ef6293",
+        "bytes": 22565991,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr6.bed.gz",
+        "sha256": "53064945d25d56e3812effcc30bb1ccfc1d82b35f4167f29eb2e9f00f9c59f5e",
+        "bytes": 3359277,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr6.json",
+        "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+        "bytes": 867522,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr6.json",
+        "sha256": "aa4f650e774506accb93ef8056d5e183ef6cfec3c9e630d77e02fc47e4885d38",
+        "bytes": 1111527,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "a404871be5f3bd3525c9a0e2158a3bc1b4808e01bc7d290a0e091b88c8d61e44",
+        "bytes": 21423208,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr7.bed.gz",
+        "sha256": "893e60028fd60a6164f894113c48fcc30eb911e647980f88d0aa237b77284cd7",
+        "bytes": 3224881,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr7.json",
+        "sha256": "048216b53d9bc8ca3cf8cd0d69bf2bf3fe7646344e9896f4921bd55ffd81bc1c",
+        "bytes": 1118734,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "d0ec9cce9870b6c98da226739915e82a42813c3c805dd184d2d7634d00b362a6",
+        "bytes": 17604287,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr8.bed.gz",
+        "sha256": "9b85cc574890919a11f41a1a720ed29a38a08c7fd19728afb9bdf970b16c4ded",
+        "bytes": 2932525,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr8.json",
+        "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+        "bytes": 731185,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr8.json",
+        "sha256": "c76fb6328a608d5f5ebc35d924b7e65dfe0aa5fe733665d5f392a110fc4cdbcd",
+        "bytes": 950316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "66d04765967356d6026c390530e64dac4f943243d3ad77f07bf4caefa09c0d28",
+        "bytes": 18189179,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr9.bed.gz",
+        "sha256": "ddbd1ad428fbf12aebb559f7c58593e977c88a50884c1836a10ad46848a0a0de",
+        "bytes": 2555414,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr9.json",
+        "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+        "bytes": 666533,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr9.json",
+        "sha256": "b0fa3ccb02523ec0a9201d550bd48a7d6ab0e7cbc9ac2a38aed8f16aac3875b0",
+        "bytes": 851731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "9d5ca7a7f8c1fb1405667c3db9ed747cd7a10f9c3fdc49a56792703ab7836d4f",
+        "bytes": 19929308,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr10.bed.gz",
+        "sha256": "ef58eefc10b0a50d1dc8d591ee4d5a537d1eee929e57fa7159fcb661e99594c2",
+        "bytes": 2724814,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr10.json",
+        "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+        "bytes": 739499,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr10.json",
+        "sha256": "0d9544dccec3520775856ad13cb13a004d0a5fe5393b3be0b4eddccdc6219746",
+        "bytes": 938916,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "666d9002f3ba4fd832c2ca117870170f98d742300195d8facb61d84543a86d09",
+        "bytes": 24409779,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr11.bed.gz",
+        "sha256": "d8da3468cbc2830169172c2f6143f62f7ceca2fd9767e2cdd7c4a4e7dbe784ac",
+        "bytes": 2774350,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr11.json",
+        "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+        "bytes": 897717,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr11.json",
+        "sha256": "6ada5268ecc4a1fa4e9481a9ed23eb1dfcec091b2972e4c091c19152d19d31b4",
+        "bytes": 1134973,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "30d6588a52dbc52c4cd42874dabe74262a8bcdbc424c484511e07f22b30fe116",
+        "bytes": 21457760,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr12.bed.gz",
+        "sha256": "2c94f594b2bd667133c1fd01f075018a72a130f73a7561f9c07243f9caf9fc14",
+        "bytes": 2871469,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr12.json",
+        "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+        "bytes": 723141,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr12.json",
+        "sha256": "369e0d7b7f26b0136b032a5057bc4db2c94f3e921a8d13ef875356b02a543dc5",
+        "bytes": 922395,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "682918e73718833f41dd8609a1f8e35319d8906de563c9c730aa571f7709e3b1",
+        "bytes": 9261574,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr13.bed.gz",
+        "sha256": "9611f30315222c3c6f2bd3f5dfca3f21ee907a4b247f5e2a6a9bc7c3a0e61fda",
+        "bytes": 1875578,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr13.json",
+        "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+        "bytes": 479558,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr13.json",
+        "sha256": "612afe71ea57227bc7e97ccd57bbb238636c0ec35d177ebcb0705b93f083b2b1",
+        "bytes": 645168,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "594e37be81ea4e1f25026588b86f6f416708f5fa607ff745c6f42a43cfde7433",
+        "bytes": 12734567,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr14.bed.gz",
+        "sha256": "11716c79cd03a1760b3cbb885c749e38be7b152b34aadb33e9489392653e97d9",
+        "bytes": 1850291,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr14.json",
+        "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+        "bytes": 584688,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr14.json",
+        "sha256": "9fea6e91ddbd1ce8e452323ce12b0a8584ffed1535f38cdf20aa7e8a8e1b43eb",
+        "bytes": 729374,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "22adc52918bac5c268015b3fbad920c8572c9a8b0b41f24ecd0655a0110865fc",
+        "bytes": 13580855,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr15.bed.gz",
+        "sha256": "183512a0d0e33e208959bb598e86a2019f042e12fa16b0c3cc6d2302da8e0ea2",
+        "bytes": 1767689,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr15.json",
+        "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+        "bytes": 423577,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr15.json",
+        "sha256": "06fcfb203e459e1e653898713830a7a89cbe8b8b0e338040ddd19406f048fd6e",
+        "bytes": 527266,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "d5064670692fa3e825b6a9551f44cd9e5cd9ebdb797c4721c2a552f0585fbd65",
+        "bytes": 14058696,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr16.bed.gz",
+        "sha256": "245667a1a1720abafe0a9046bc78db41da21e6134cde3ac477db4803a67031a3",
+        "bytes": 1929823,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr16.json",
+        "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+        "bytes": 534109,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr16.json",
+        "sha256": "50ab821f598dfc9c655f98d09c3d48446098fa5cd3225bbbe59845217e530340",
+        "bytes": 664294,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "22c4d9b0d7298980b610c68c6a1ea57f285e10bc95065331fac4155ba796698f",
+        "bytes": 20400122,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr17.bed.gz",
+        "sha256": "97d568ffc601eef77b398ab2f7c92896bddba2a8c7528795adeb3bddfcb1ef61",
+        "bytes": 1881051,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr17.json",
+        "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+        "bytes": 633946,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr17.json",
+        "sha256": "e8e434e8c71cbf201d8431770517e2d8203437fbe538831efa1f84905402f3fb",
+        "bytes": 757592,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "233343bcc572cc605cfb2d06a6b16d38dfbbc45a889a8f39665cc4ded2b133e6",
+        "bytes": 8786420,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr18.bed.gz",
+        "sha256": "f5b39387c6436a659a33b764225e65f23152b703e21352e5315ba7e5f6ac370d",
+        "bytes": 1472333,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr18.json",
+        "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+        "bytes": 382016,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr18.json",
+        "sha256": "9a45151a4f5b6fe21f3ae5f06470f4d15684d64b6dab66afcc5a9bb4b5f31d04",
+        "bytes": 505023,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "745053a1216b80339b868e207c15d26cacf115296aae389c8906003be8660ff9",
+        "bytes": 16587189,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr19.bed.gz",
+        "sha256": "ead8cbcf54cc4daf267ae03a7bbdf3960b7f2e43d5bed6f0a46bd3e16cc09113",
+        "bytes": 1454121,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr19.json",
+        "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+        "bytes": 657776,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr19.json",
+        "sha256": "1e090944853279c9a3fe871072b4206dfd89269ef141aa3e056a3097cd88d858",
+        "bytes": 787075,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "e74dbbb8fb5709d755c2662ae09e4cc7bf7963f5b90fccf736e3e32f58e79c75",
+        "bytes": 12095653,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr20.bed.gz",
+        "sha256": "89ad074ad73163f03cd86141c56d718d1664f91301f63296068ef82bcb959b63",
+        "bytes": 1435638,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr20.json",
+        "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+        "bytes": 474640,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr20.json",
+        "sha256": "5d58fabefffc8053751ce0fa3338a8df0185f9ed3c741dc7dbcd6d4f94810251",
+        "bytes": 590017,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "31571f39f839061813505f52c883b02ece623570192232098d92875afbbdbddf",
+        "bytes": 4969922,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr21.bed.gz",
+        "sha256": "f4d3ca63604c892470f0bfe842d780f382c5bb618402c8a48c2a63470ac63aaf",
+        "bytes": 744112,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr21.json",
+        "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+        "bytes": 355767,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "dc34cc98491d0d32efa18a9bb8db7613ddde1196362e1fcf08c5693e6f9d72b7",
+        "bytes": 9186819,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr22.bed.gz",
+        "sha256": "d0ad98843321b34730fe7997d1cf3e1a2182c9a9c12ffe56edd3a3072f5c56e0",
+        "bytes": 876493,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr22.json",
+        "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+        "bytes": 394442,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr22.json",
+        "sha256": "9d46f67b821f2767940453155aa091f55bc2852fb435afe67fd6ff10cad74d0c",
+        "bytes": 461165,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b45cb2ccaf885e1b1219a1d7a70eaf218b380dff0530963c2c727f8e55dc782",
+        "bytes": 10763609,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrX.bed.gz",
+        "sha256": "7f2838afbefa3e089c38fc48871ac77e908cfd5eafa23a5b8fe2485f25349e38",
+        "bytes": 3039693,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrX.json",
+        "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+        "bytes": 819979,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrX.json",
+        "sha256": "985082ee4a87c253e98cbb4250d39584889b42337f3581a319c3a2b405c9830e",
+        "bytes": 1179588,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "105f237dfa5d714dae89399244f1df979a9141fcb161409d54e2762d93137fa7",
+        "bytes": 347088,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrY.bed.gz",
+        "sha256": "3975ed929c4cab77dc8156daf6afe8beee3e7259d54a0d9b32c54b549593b680",
+        "bytes": 471020,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrY.json",
+        "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+        "bytes": 229765,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrY.json",
+        "sha256": "b6e6fc010c5c14e9913f256962b0627f01129ac183cca726d2e03d82363b6223",
+        "bytes": 319837,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "repeat_derived_min_interspersed_fraction": 0.5,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [],
+    "partitions": "n/a: a census of labels, no evaluation",
+    "code": {
+      "git_sha": "262ea4e021e65e94f2f6c4c187738d6847e6ee8d",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/parser.py",
+        "scripts/ontology_census.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/ontology_census.py",
+        "--after"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

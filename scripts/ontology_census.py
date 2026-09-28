@@ -244,10 +244,67 @@ def _flat(c: Counter) -> dict[str, int]:
     return {(" | ".join(k) if isinstance(k, tuple) else k): v for k, v in c.most_common()}
 
 
+AXIS_KEYS = ("origin", "molecular_role", "activity", "target_relation", "evidence_status")
+
+
+def axis_census() -> dict[str, Any]:
+    """After the build: what the programs state on each axis, per block kind, counted per value (a
+    `|` group counted as one alternatives value), plus the checks the pre-registration named."""
+    by: dict[str, Counter] = {}
+    checks: Counter = Counter()
+    for ch in CHROMS:
+        p = COMPILED / f"noncoding_{ch}.bio"
+        if not p.exists():
+            continue
+        kind = None
+        block: dict[str, str] = {}
+        for line in p.open():
+            if line.startswith(("element ", "region ")) and line.rstrip().endswith("{"):
+                name = line.split()[1]
+                kind = (
+                    "region"
+                    if line.startswith("region")
+                    else ("measured" if name.endswith("_measured") else "predicted")
+                )
+                block = {}
+            elif kind and line.startswith("}"):
+                checks[f"{kind} blocks"] += 1
+                if all(k in block for k in AXIS_KEYS):
+                    checks[f"{kind} blocks stating all five axes"] += 1
+                role = block.get("molecular_role", "")
+                if "silencer" in [v.strip() for v in role.split(",")]:
+                    checks[f"{kind} with silencer as a label on its own"] += 1
+                if "represses_target" in block.get("activity", ""):
+                    checks[f"{kind} represses_target"] += 1
+                    if "silencer|" in role:
+                        checks[f"{kind} represses_target with the role left open"] += 1
+                if kind == "region" and "repeat_derived" in block.get("origin", "") and "_like" in role:
+                    checks["regions repeat-derived and with a registry role"] += 1
+                if kind == "predicted" and "repeat_derived" in block.get("origin", "") and "_like" in role:
+                    checks["predicted elements repeat-derived and with a registry role"] += 1
+                kind = None
+            elif kind:
+                key, _, value = line.strip().partition(": ")
+                if key in AXIS_KEYS or key == "class":
+                    block[key] = value
+                    for v in value.split(", "):
+                        base = v if "|" in v else v.split("/")[0]
+                        by.setdefault(f"{kind} {key}", Counter())[base] += 1
+    return {"values": {k: dict(c.most_common()) for k, c in sorted(by.items())}, "checks": dict(checks)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument("--after", action="store_true", help="count the five axes in rebuilt programs")
     args = ap.parse_args()
+    if args.after:
+        payload = {"review_item": "R7", "stage": "after the build", **axis_census()}
+        for k, v in payload["checks"].items():
+            print(f"{k}: {v}")
+        if not args.no_save:
+            print(f"saved {save_result('ontology_census_after', payload, manifest=manifest())}")
+        return 0
     tot: dict[str, Counter] = {k: Counter() for k in ("class", "heads", "roles", "actions", "ccre", "origin")}
     regions: Counter = Counter()
     programs = 0
