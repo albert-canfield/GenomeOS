@@ -728,3 +728,74 @@ those genes are the abundant ones, which may be over- or under-represented
 among the targets of compiled non-coding elements. Simulable gene-cell pairs
 rise from 0 by the same order. A count outside 15,000-60,000 is reported as a
 miss.
+
+## What the rates bought: 22,576 of 161,144, in molecules and not in a.u. (2026-09-28)
+
+The registration above was committed in `ff2062a`; these are its counts, from
+`scripts/build_gene_rates.py` and a re-run of `scripts/bridge_audit.py` over
+all 24 compiled programs (`data/results/gene_rates.json`,
+`data/results/bridge_audit.json`).
+
+**The table.** Schwanhausser's 5,028 protein groups carry 4,338 transcription
+rates. Requiring that every mouse symbol on a row point at the same human
+gene through a 1:1 MGI homology class, and dropping the 19 human symbols that
+would have received two different rows, leaves **3,603 human genes** with a
+measured total transcription rate, a median of 1.76 molecules per cell per
+hour and a range from 0.08 to 610.52. The strict alternative (rows naming
+exactly one mouse symbol) would have left 1,945 rows and 1,424 genes; the cost
+of that choice is recorded rather than hidden.
+
+**The counts, before and after.** Nothing else changed: 440,589 active
+regulatory rules, 440,550 mechanisms, 237,613 gene-cell pairs, 6,938 contexts.
+
+| | before (no rates) | measured | borrowed median |
+| --- | --- | --- | --- |
+| simulable mechanisms | 0 | **22,576** | 160,392 |
+| simulable gene-cell pairs (of 237,613) | 0 | **22,576** | 160,392 |
+| compiled rules simulated (of 440,589) | 0 | **22,580** | 160,405 |
+| `gene_parameter_missing` | 161,144 | 0 | 0 |
+| `gene_rate_unmeasured` | - | 138,543 | 0 |
+| `rate_split_infeasible` | - | 25 | 752 |
+| `not_identifiable` | 76,469 | 76,469 | 76,469 |
+
+**Against the registration.** The predicted interval was 15,000 to 60,000 and
+the measured count is 22,576, inside it; the direction held, strictly above 0
+and strictly below 161,144. The invariant held exactly: `not_identifiable`
+stays at 76,469 in all three tiers, so no rate was mistaken for an
+observation. The inhibitor bound was not the binding limit: 25 of the 5,245
+inhibitory mechanisms that reached the split failed it, 0.48%, against the
+registered "more than half" that would have convicted the declared Hill
+assumptions. The species falsifier passed as registered, at a Spearman of
+0.617 between Schofield's mouse fibroblast and human K562 half-lives over
+2,133 one-to-one homologues, above the 0.5 threshold.
+
+**What stays unresolved, and why.** 76,469 gene-cell pairs still carry more
+than one mechanism and no single-removal observation identifies a strength
+under the mean rule: unchanged, and no rate could have changed it. 138,543
+mechanisms sit on a gene the source never measured, and they are marked, not
+filled. 25 are inhibitions whose removal more than doubles the gene, which
+the declared split cannot give a positive basal rate. That is the whole of
+the 161,144.
+
+**What the number does not mean.** Three things, plainly. First, the fitted
+strength is unchanged by the measured rate, so the 22,576 is a gain in units
+and in the basal fraction, not in knowledge of the regulation: what those
+runs now report is molecules per cell per hour instead of arbitrary units.
+Second, every one of those genes is a human gene in a human cell type running
+on a **mouse fibroblast** constant, and in most of those contexts (K562,
+placenta, glutamatergic neuron) it borrows across cell type as well as across
+species. The matched Schofield measurement puts a number on the second
+borrowing: the median transcript half-life is 2.73 h in mouse fibroblasts and
+1.56 h in human K562, so the same gene's steady-state level moves by about a
+factor of 1.75 between the two, a factor the rank correlation of 0.617 does
+not see and the transferability verdict does not cover. Third, the borrowed
+median tier makes 160,392 pairs runnable but fixes no absolute number at all:
+those runs are in relative units and are never to be reported as measured.
+
+**Where the acceptance was checked.** `tests/test_gene_rates.py`, eleven
+tests: the split returns the measured total and the observed fold, the fold is
+reproduced end to end within 1%, the intact steady state lands on `T / delta_m`
+within 1% so the level reads in molecules per cell, doubling the measured
+half-life doubles the level and moves no fold, an unmeasured gene gets a
+marker and no number, an inhibition beyond the bound is reported and not
+clipped, and a borrowed rate changes no strength.
