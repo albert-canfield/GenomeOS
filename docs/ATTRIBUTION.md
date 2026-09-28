@@ -1936,6 +1936,9 @@ no `rule`, because a rule would state a relation the assay says is not there —
 element, the relation lives on the rule, and neither field answers the other's question. The 212
 regulated pairs do become experimental rules, with the direction read from the sign of the effect: the
 screen silences the element, so a gene that falls was being activated by it.
+*(2026-09-28: superseded by R2, `1cff24a`. With significant increases and underpowered nulls read as their own
+outcomes, 4,613 → 4,565 pairs measured as not regulated, n 128 → 120, observed 0.7578 → 0.8083, ECE 0.4108 →
+0.4507. See "CRISPRi negatives read as outcomes" below; the figures here are kept as they were.)*
 
 **What lentiMPRA's 14,508 disagreements do and do not mean.** An episomal reporter measures whether a
 200 bp sequence drives transcription out of its chromosome; the compiled claim is that deleting the
@@ -2174,6 +2177,9 @@ Every compiled fact carries a confidence and the Evidence explorer counts them. 
 3,908 compiled elements in this assay's footprint and 1,505 measured; 128 of them are ones where the screen tested the very gene the deletion named.
 
 **where_the_predicted_gene_was_tested** — n = 128, observed 0.7578, mean stated 0.347, expected calibration error 0.4108.
+*(2026-09-28: superseded by R2, `1cff24a`. With significant increases and underpowered nulls read as their own
+outcomes, 4,613 → 4,565 pairs measured as not regulated, n 128 → 120, observed 0.7578 → 0.8083, ECE 0.4108 →
+0.4507. See "CRISPRi negatives read as outcomes" below; the figures here are kept as they were.)*
 
 | band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
