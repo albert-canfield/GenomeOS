@@ -455,5 +455,129 @@
       }
     }
   },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data, EPCrisprBenchmark training_K562 and heldout_5_cell_types (Gschwind et al.)",
+        "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Table 3",
+        "version": "as published (PMC13471189), read 2026-09-27; its AUPRCs and intervals are transcribed in genomeos/attribution/crispri.PUBLISHED, not read from a file",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13471189/"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element table and per-element response cache)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "pairs": 10356
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "pairs": 4378
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements",
+        "sha256": "f27d2c56ab54283b359e1aa8fe064a5109b7d1eea1792b44304f4f7365eeb82c",
+        "bytes": 622783785,
+        "partition": null,
+        "files": 24,
+        "role": "DeletionTable: elements by overlap"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements",
+        "sha256": "41dc8a631dee0a3f95ca7eb894c3f09bc930dc080b9f378aed0261a0f338034e",
+        "bytes": 805894526,
+        "partition": null,
+        "files": 3233,
+        "role": "ElementCache: every gene's deletion value"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "features": {
+        "distance": [
+          "log_distance"
+        ],
+        "activity + distance": [
+          "log_distance",
+          "log_activity",
+          "activity_over_distance"
+        ],
+        "activity + distance + deletion": [
+          "log_distance",
+          "log_activity",
+          "activity_over_distance",
+          "top_target",
+          "deletion_drop"
+        ]
+      },
+      "fit": "crispri.logistic_fit, lam 1e-3, 25 rounds, on the covered training pairs",
+      "training_scoring": "hold-one-chromosome-out over all training pairs; uncovered pairs carry deletion features of zero",
+      "heldout_scoring": "frozen weights, all held-out pairs pooled",
+      "estimator": "crispri.benchmark_auprc (yardstick pr_curve, first and last points dropped, trapezoid)",
+      "heldout_weight": "direct_vs_indirect_negative",
+      "model_cells": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "min_distance": 1000,
+      "reach": 10000,
+      "bootstraps": 200,
+      "bootstrap_seed": 0,
+      "match_draws": 1000,
+      "request_budget": 20,
+      "alphagenome_requests": 0
+    },
+    "exclusions": [
+      {
+        "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "dropped_by_valid_connection": {},
+        "why": "the benchmark marks these pairs as no test of an enhancer-gene link"
+      },
+      {
+        "file": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "dropped_by_valid_connection": {},
+        "why": "the benchmark marks these pairs as no test of an enhancer-gene link"
+      },
+      "held-out HCT116, Jurkat and WTC11 pairs carry no deletion value (the sweep kept four cell lines); they are scored with deletion features of zero, not dropped",
+      "HCT116 as a second cell type: costed, not run (second_cell_type)",
+      "per-cell held-out blocks for a cell with no regulated pair are omitted"
+    ],
+    "partitions": {
+      "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz": "training",
+      "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz": "heldout",
+      "training": "fitted and scored by hold-one-chromosome-out (training_published_split)",
+      "heldout": "evaluation only, frozen weights (heldout_published_pairs, coverage_arms_k562_heldout, post_hoc_positive_filter)"
+    },
+    "code": {
+      "git_sha": "012634640a1ae31cd389d94be6cdb5cde93ee7d9",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/crispri_published.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
   "alphagenome_requests": 0
 }

@@ -67,3 +67,23 @@ def test_the_first_run_check_reads_history_not_the_file_on_disk():
 def test_crispri_published_is_named_as_pending_until_it_is_rebuilt():
     pending = {p["result"] for p in RECORD["pending"]}
     assert "crispri_published" in pending or "crispri_published" in REBUILT
+
+
+def test_the_crispri_figures_quoted_are_the_ones_on_disk_and_its_inputs_carry_the_split():
+    from genomeos.attribution.measured import CRISPRI_SPLIT_OF
+
+    d = load("crispri_published")
+    tr = d["training_published_split"]["models"]
+    assert (tr["activity + distance"]["auprc"], tr["activity + distance + deletion"]["auprc"]) == (
+        0.5068,
+        0.7241,
+    )
+    dn = d["post_hoc_positive_filter"]["dnase_only_diagnostic"]["heldout_pooled_weighted"]["models"]
+    assert (dn["dnase + distance"]["auprc"], dn["dnase + distance + deletion"]["auprc"]) == (0.4757, 0.6393)
+    arm1 = d["coverage_arms_k562_heldout"]["arm1_all_pairs"]
+    assert (arm1["gain"], arm1["ci95"]) == (0.1361, [0.081, 0.2248])
+    m = d[mf.KEY]
+    got = {Path(i["path"]).name: i["partition"] for i in m["inputs"]}
+    assert {n: got[n] for n in CRISPRI_SPLIT_OF} == CRISPRI_SPLIT_OF
+    assert m["code"]["dirty_result_paths"] == [] and d["alphagenome_requests"] == 0
+    assert any("Supplementary Table 3" in s["accession"] for s in m["sources"])

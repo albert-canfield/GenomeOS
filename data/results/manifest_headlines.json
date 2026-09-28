@@ -128,6 +128,28 @@
       "second_rerun_differences": [],
       "alphagenome_requests": 0,
       "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+    },
+    {
+      "result": "crispri_published",
+      "figure": "CRISPRi deletion feature against ENCODE-rE2G on the published pair sets: training AUPRC with the deletion, leave-one-chromosome-out",
+      "quoted_as": "0.724 (baseline 0.507); held-out DNase-only 0.476 -> 0.639; K562 gain +0.136 [+0.081, +0.225]",
+      "quoted_in": "docs/CRISPRI-RESULT.md; docs/ATTRIBUTION.md",
+      "value": 0.7241,
+      "writer": "scripts/crispri_published.py",
+      "argv": [
+        "scripts/crispri_published.py"
+      ],
+      "rebuilt_at": "012634640a1ae31cd389d94be6cdb5cde93ee7d9",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 256,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept (written 2026-09-27 at 42d7b1b), result_manifest added from the second rerun",
+      "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 0126346, fresh environment, 4 of 4 inputs matching their sha256 (both benchmark tables, the all-element deletion table and the per-element cache, 1.43 GB), 0 differences, 0 timing fields",
+      "scorer_record_changed": "crispri.Pair gained the five PowerAtEffectSize fields at 0126346, before both reruns; no value moved"
     }
   ],
   "pending": [
@@ -136,6 +158,7 @@
       "figure": "CRISPRi deletion feature against ENCODE-rE2G (docs/CRISPRI-RESULT.md)",
       "writer": "scripts/crispri_published.py",
       "status": "pending",
+      "resolved": "rebuilt in the third pass on 2026-09-28 at 0126346: see its entry under rebuilt",
       "why": "lane-split (the CRISPRi split and partition fix) had not finished when this pass ran; the writer gets its manifest after it, so that its inputs carry the final partition field"
     }
   ],
@@ -151,6 +174,15 @@
     "pending": "not rebuilt in this pass; why says why"
   },
   "guard_note": "the committed files keep every committed line and gain result_manifest as an added key: the shared checkout's guard refuses a commit that removes recently added lines, and the reruns' date and seconds lines differ only by the day and the wall clock. scripts/manifest_rebuild.py ignores only the top-level date, so a rebuild of therapeutic_benchmark or constrained_unknown_targets will list their 'seconds' timings as differences",
+  "third_pass": {
+    "date": "2026-09-28",
+    "how": "crispri_published rerun twice at 0126346, each in its own fresh git worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline), UV_OFFLINE, no AlphaGenome key in the worktree, data/reference, data/knowledge and data/cache linked; every value compared with the committed file except date; the two reruns equal each other including the manifest; 107 s and 3.9 GB peak each",
+    "contract_fixes": [
+      "code.dirty no longer counts modified files under data/results/; they are listed in code.dirty_result_paths",
+      "scripts/manifest_rebuild.py ignores wall-clock timing keys at any depth (seconds, *_seconds, seconds_*, *_per_second) and lists them under timing_fields_ignored"
+    ],
+    "note": "this record's own result_manifest covers the second pass's five results; the third pass's inputs are data/results/crispri_published.json"
+  },
   "result_manifest": {
     "sources": [
       {
