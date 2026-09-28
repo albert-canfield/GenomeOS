@@ -35,6 +35,7 @@ from typing import Any
 
 from genomeos.certainty import Certainty
 from genomeos.coords import Locus
+from genomeos.manifest import MODEL_VERSION_UNREQUESTED
 
 CACHE = Path("data/knowledge/alphagenome/elements")
 MIN_EFFECT = 0.1  # smallest |log2 fold change| that names a target
@@ -271,6 +272,30 @@ def compare(
     return "gene outside the domain"
 
 
+def model_version_of(answer: dict[str, Any] | None) -> str:
+    """The model version one answer was asked of: the version its run record requested, or
+    MODEL_VERSION_UNREQUESTED for an answer made with none requested (every answer before 2026-09-28,
+    which carries no run record or one with model_version None). Reads a cached answer or a scored
+    row; both kinds stay in the cache side by side, labelled, and neither is re-asked."""
+    if not answer:
+        return MODEL_VERSION_UNREQUESTED
+    label = answer.get("model_version")
+    if isinstance(label, str) and label:
+        return label
+    model = answer.get("model")
+    requested = model.get("model_version") if isinstance(model, dict) else None
+    return str(requested) if requested else MODEL_VERSION_UNREQUESTED
+
+
+def model_versions(rows: list[dict[str, Any]]) -> dict[str, int]:
+    """How many answers were asked of each model version (model_version_of), largest first."""
+    counts: dict[str, int] = {}
+    for r in rows:
+        v = model_version_of(r)
+        counts[v] = counts.get(v, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
+
+
 def score_element(
     scorer: Scorer,
     fetch: Callable[[Locus], str],
@@ -318,6 +343,7 @@ def score_element(
         predict_target([g for g in hit["genes"] if g["gene"] in coding], min_effect) if coding else pred
     )
     out = {k: v for k, v in hit.items() if k != "genes"}
+    out["model_version"] = model_version_of(hit)  # "unrequested" for answers made before the pin
     out["predicted"] = pred
     out["predicted_coding"] = pred_coding
     out["predicted_by_cell"] = by_cell_of(hit["genes"], pred)
@@ -371,6 +397,8 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "fraction_inside_domain": round(in_domain / named, 3) if named else None,
         "top_tissues": dict(sorted(tissues.items(), key=lambda kv: -kv[1])[:12]),
         "median_distance_when_agreeing": sorted(distances)[len(distances) // 2] if distances else None,
+        # answers per requested model version; more than one key means the summary mixes models
+        "answers_by_model_version": model_versions(rows),
     }
 
 

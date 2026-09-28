@@ -120,6 +120,25 @@ UNREQUESTED = (
 )
 
 
+#: The model version every AlphaGenome client in this project asks for (coordinator decision, ROADMAP
+#: section 5 item 11, R9 model-dependency row, 2026-09-28). The name of a member of the installed
+#: client's `alphagenome.models.dna_model.ModelVersion` enum (0.9.0: ALL_FOLDS, FOLD_0..FOLD_3), passed
+#: as `dna_client.create(api_key, model_version=...)`. ALL_FOLDS is the distilled all-folds model the
+#: 0.9.0 client names as its default; asking for it by name makes each request carry it instead of an
+#: empty field. Answers made before 2026-09-28 asked for nothing and are labelled "unrequested", since
+#: the server's choice then is not guaranteed to be the model that answers a named request.
+ALPHAGENOME_MODEL_VERSION = "ALL_FOLDS"
+
+
+def create_client(api_key: str | None, **kwargs: object) -> object:
+    """A live AlphaGenome client that requests ALPHAGENOME_MODEL_VERSION; every place that makes a
+    client goes through here. `kwargs` pass on to `dna_client.create` (timeout, address)."""
+    from alphagenome.models import dna_client  # type: ignore[import-not-found]
+
+    version = dna_client.ModelVersion[ALPHAGENOME_MODEL_VERSION]
+    return dna_client.create(api_key, model_version=version, **kwargs)
+
+
 def run_metadata(client: object | None = None, date: str | None = None) -> dict:
     """What a live request is made with, kept beside each cached answer (review R9 follow-up): the client
     package and its installed version, the model version the client asks for (None when it asks for
@@ -130,6 +149,8 @@ def run_metadata(client: object | None = None, date: str | None = None) -> dict:
     except importlib.metadata.PackageNotFoundError:
         version = None
     requested = getattr(client, "_model_version", None)  # DnaClient keeps the requested ModelVersion's name
+    if client is None:  # no client: the version create_client asks for (a client made with none says None)
+        requested = ALPHAGENOME_MODEL_VERSION
     return {
         "client": "alphagenome",
         "client_version": version,
@@ -192,7 +213,7 @@ class AlphaGenomeAdapter:
         from alphagenome.models import dna_client, variant_scorers  # type: ignore[import-not-found]
 
         if self._client is None:
-            self._client = dna_client.create(self.api_key)
+            self._client = create_client(self.api_key)
         client = self._client
         model = run_metadata(client)
 

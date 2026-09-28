@@ -368,6 +368,42 @@ def model_dependency(name: str) -> dict[str, Any]:
     return block
 
 
+#: The label of an answer made with no model version requested (review R9 follow-up, 2026-09-28).
+MODEL_VERSION_UNREQUESTED = "unrequested"
+
+
+def answers_model_dependency(name: str, counts: dict[str, int]) -> dict[str, Any]:
+    """The model dependency of a result built from cached answers, `counts` being answers per requested
+    model version (MODEL_VERSION_UNREQUESTED for none). Answers asked of no version and answers asked of
+    a named one are not guaranteed to come from the same model, so a result holding both says so in
+    `mixed`; one holding only named answers of one version pins it."""
+    block = model_dependency(name)
+    counts = {str(k): int(v) for k, v in counts.items() if v}
+    block["answers_by_model_version"] = counts
+    named = sorted(k for k in counts if k != MODEL_VERSION_UNREQUESTED)
+    unrequested = counts.get(MODEL_VERSION_UNREQUESTED, 0)
+    block["mixed"] = None
+    if len(named) + bool(unrequested) > 1:
+        parts = [f"{counts[k]:,} asked for {k}" for k in named]
+        if unrequested:
+            parts.insert(0, f"{unrequested:,} asked for no model version (the server chose)")
+        block["mixed"] = (
+            "mixed: of the answers this result reads, "
+            + "; ".join(parts)
+            + ". They are not guaranteed to come from the same model, and nothing on disk says "
+            "whether they did"
+        )
+    elif named:
+        block["model_version"] = named[0]
+        block["unpinned"] = None
+        block["model_version_evidence"] = (
+            f"every answer this result reads carries a run record that requested {named[0]} "
+            "(dna_client.create(api_key, model_version=...)); the client and api fields above describe "
+            "the earlier unpinned sweep and the same client"
+        )
+    return block
+
+
 def with_model_dependencies(manifest: dict[str, Any], *names: str) -> dict[str, Any]:
     """A manifest with `model_dependencies` added for the named models; the caller's dict is untouched."""
     return {**manifest, "model_dependencies": [model_dependency(n) for n in names]}
