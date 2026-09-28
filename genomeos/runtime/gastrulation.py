@@ -73,6 +73,40 @@ CENSUS_MOUSE_MAPPINGS = {
     },
 }
 
+# Sign correction, pre-registered 2026-09-28 (docs/DESIGN-MINIMAL-CELL.md, "The Tbxt-SOX17 sign,
+# corrected (registered 2026-09-28)"). A correction to a cited fact, not a tuning. Lolas et al. 2014
+# (PNAS 111:4478, PMC3970479), mouse ES-cell embryoid bodies and E7.5 embryos: Brachyury binds Sox17
+# (ChIP-seq, Fig. 1A) and its knockdown lowers Sox17 protein and mRNA (Fig. 3A), so `Tbxt inhibits
+# SOX17` (inferred) becomes `Tbxt activates SOX17`; Sox17 overexpression lowers Brachyury (Fig. 3C),
+# so `Sox17 inhibits TBXT` keeps its sign and gains the citation. The paper reports no dose, strength,
+# threshold or Hill coefficient: both rules keep their numbers and confidences, labelled unsourced.
+SIGN_CORRECTION_SOURCE = "Lolas M et al. 2014, PNAS 111:4478-4483, doi:10.1073/pnas.1402612111 (PMC3970479)"
+SIGN_CORRECTION = {
+    "Tbxt -> SOX17": {
+        "before": "inhibits",
+        "after": "activates",
+        "strength": 0.6,
+        "threshold": 4.0,
+        "hill": 3,
+    },
+    "Sox17 -> TBXT": {
+        "before": "inhibits",
+        "after": "inhibits",
+        "strength": 1.0,
+        "threshold": 2.0,
+        "hill": 3,
+    },
+}
+# Shares before the correction, as measured and committed: CENSUS_MODEL_RUN (d55cb19) and the
+# 60-cell, 30 h test fixture (a398e9c).
+SIGN_CORRECTION_BEFORE = {
+    "census_run": {"ectoderm": 0.475, "mesoderm": 0.1, "endoderm": 0.425},
+    "test_fixture": {"ectoderm": 0.4667, "mesoderm": 0.1, "endoderm": 0.4333},
+}
+# Expected direction, stated before the run: the brake on SOX17 becomes an accelerator, so endoderm
+# widens and mesoderm narrows (or vanishes), further from the CS7 census; the verdict stays falsified.
+SIGN_CORRECTION_EXPECTED = {"endoderm": "up", "mesoderm": "down or equal", "census_verdict": "falsified"}
+
 
 @dataclass(slots=True)
 class GastrulationResult:

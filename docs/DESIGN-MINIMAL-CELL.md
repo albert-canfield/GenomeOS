@@ -335,3 +335,65 @@ embryo is not the shares of a 1-D axis, and the model has no stage. It does
 not say the network is wrong; it says the default gradient's germ-layer
 shares are not those of a measured gastrula, and that no sourced number
 exists yet to set them.
+
+## The Tbxt-SOX17 sign, corrected (registered 2026-09-28)
+
+A correction to a cited fact, registered before the module is changed or
+run. It is not a tuning: no number is chosen, and the change is expected to
+move the model further from the CS7 census, not closer.
+
+**The source, read in full** (Lolas M, Valenzuela PDT, Tjian R, Liu Z 2014,
+PNAS 111:4478–4483, doi:10.1073/pnas.1402612111, PMC3970479; mouse ES-cell
+embryoid bodies and E7.5 embryos):
+
+- Brachyury binds and activates *Sox17*: "many key developmental genes
+  (Fgf8, Foxa2, Foxj1, Sox17, and Dusp6) were directly targeted by
+  Brachyury" (ChIP-seq, Fig. 1A, SI Fig. S8); "Brachyury depletion
+  decreased Foxa2 and Sox17 expression at both protein and mRNA levels"
+  (Fig. 3A, SI Fig. S9 A–B); the model they favour: "Brachyury first
+  targets and promotes the expression of Foxa2 and Sox17".
+- Sox17 represses *Brachyury*: "high levels of Sox17 would, in turn,
+  directly or indirectly repress the expression of Brachyury (Fig. 3H) ...
+  we overexpressed Sox17 after 2 days of differentiation ... we observed
+  significant down-regulation of Brachyury at EB day 4 (Fig. 3C)"; in the
+  embryo "Brachyury and Sox17 expression was negatively correlated in the
+  definite endoderm region" (Fig. 3 D–F). Direct or indirect is left open.
+- No dose, binding strength, threshold or Hill coefficient is reported for
+  either interaction. Mouse, not human; embryoid bodies with activin, not a
+  NODAL gradient.
+
+**The change** (`SIGN_CORRECTION` in `genomeos/runtime/gastrulation.py`):
+
+- `rule Tbxt inhibits SOX17 { strength: 0.6; threshold: 4.0; hill: 3;
+  evidence: inferred "mesoderm dampens endoderm" }` becomes `rule Tbxt
+  activates SOX17` with evidence experimental Lolas 2014; the old line stays
+  in the module as a dated comment.
+- `rule Sox17 inhibits TBXT` keeps its sign and numbers; its evidence
+  becomes experimental Lolas 2014 (Fig. 3C).
+- Strength, threshold and Hill stay exactly as they were (0.6 / 4.0 / 3
+  and 1.0 / 2.0 / 3), and so do both confidences (0.4): the paper supports
+  the sign and nothing else, and the module comment says so. No value is
+  picked to improve any fit, now or after the run.
+
+**Expected direction, stated before the run** (lane-census's prediction):
+the brake on SOX17 in TBXT-high cells becomes an accelerator, so the
+endoderm band widens and the mesoderm band narrows or vanishes; the model
+moves further from the CS7 census, and the census verdict stays falsified.
+
+**What will be measured, once, after this is committed:**
+
+1. The default run's three shares, at `CENSUS_MODEL_RUN` (120 cells, 40 h;
+   before: 0.475 / 0.100 / 0.425) and at the 60-cell, 30 h test fixture
+   (before: 0.467 / 0.100 / 0.433), `SIGN_CORRECTION_BEFORE`.
+2. `scripts/gastrulation_census.py compare`, with the mappings, site
+   filters, tolerance (0.05) and model run registered in `3c4e301`,
+   unchanged. The result file is rewritten for the corrected model and
+   carries the pre-correction shares beside the new ones.
+3. `tests/test_gastrulation.py` as it stands. A test is changed only where
+   the corrected sign changes its outcome, with the reason and the old value
+   in a comment; a claim the corrected model no longer meets becomes a
+   strict xfail, never a wider tolerance. The mesoderm strict xfail from
+   `a398e9c` stays: if the corrected model makes it pass, that is reported
+   as a change, not hidden. Predicted: endoderm may leave the unsourced
+   0.20 ± 0.25 band (above 0.45), and the layer-order test fails if
+   mesoderm vanishes.
