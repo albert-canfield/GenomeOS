@@ -275,7 +275,16 @@ def _parse_when(value: str) -> dict[str, str]:
         if not v:
             raise BioLangError(f"bad when clause: {clause!r}")
         key, val = k.strip(), v.strip()
-        if key[-1:] in (">", "<", "!"):  # `X >= 3` is the same clause as `X = >=3`, not a key called "X >"
+        if key[-1:] == "!" or val.startswith("!="):
+            # no matcher implements `!=`, and implementing it means deciding what a missing key
+            # means, which no program needs; before this refusal the clause silently matched only
+            # the literal string "!=v" (data/results/when_census.json: 0 of 456,157 clauses used it)
+            raise BioLangError(
+                f"when clause {clause.strip()!r}: `!=` is not supported. Name the values that do "
+                "match instead: alternatives `k = a|b`, `k = absent`, or a comparison `>=n` `<=n` "
+                "`>n` `<n`"
+            )
+        if key[-1:] in (">", "<"):  # `X >= 3` is the same clause as `X = >=3`, not a key called "X >"
             key, val = key[:-1].strip(), key[-1] + "=" + val
         if (".exposure" in key or ".mean" in key) and not _READ.match(key):
             raise BioLangError(

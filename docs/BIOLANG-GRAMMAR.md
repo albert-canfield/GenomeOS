@@ -18,9 +18,17 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
   `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an
   event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's
   programs, compiled chromosomes or test programs uses them (data/results/when_census.json).
+  SUPERSEDED, no longer true: see the current-behaviour bullet two below.
 - Superseded the same day by the fix: rules and events now read `when` through `matches` as
   well, one function for every block, so `absent`, `a|b` and the comparisons hold on a rule or
   an event exactly as on a decision; the bullet above records the state the census measured.
+- Current behaviour: every block that has a `when` (decisions, timers, rules, events,
+  competence windows, commitments and signals) reads it with the one matcher,
+  `genomeos.ir.model.matches`, so `any`, `absent`, `a|b`, the comparisons and `unknown` mean
+  the same on each.
+- `!=` is refused: `k != v` is a parse error naming the clause. Write the values that do match
+  instead (`a|b`, `absent`, or a comparison); what `!=` would mean on a missing key is
+  undecided, and no program in the repo uses it.
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives
