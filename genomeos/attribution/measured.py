@@ -13,7 +13,10 @@ Four assays, each kept under its own name:
   as not regulated is evidence, not an absence of evidence**: it is carried through to the program as
   an experimental fact, never dropped and never turned back into UNKNOWN.
 - **lentiMPRA** (ENCODE4 joint library ENCSR106SZM, K562 / HepG2 / WTC11): how much a 200 bp sequence
-  drives transcription from a reporter. Episomal, so it measures the sequence and not the locus.
+  drives transcription from a reporter integrated by lentivirus (Agarwal et al. 2025, Nature): integrated,
+  but outside the sequence's native locus, so it measures the sequence and not the locus. (Called
+  episomal here until R6, 2026-09-28; the assay is not episomal.) Several tiles can match one element:
+  every tile is kept and the label follows `REPORTER_LABEL_RULE`, never the strongest tile.
 - **VISTA** (LBNL, transgenic mouse e11.5): whether a sequence is an enhancer in a living embryo,
   positive or negative.
 - **saturation mutagenesis** (Kircher et al. 2019, GSE126550, read through `knowledge/satmut.py`):
@@ -508,6 +511,9 @@ class SatmutElement:
     experiment: str  # the primary experiment of the locus, as satmut.loci chooses it
     repeats: int  # experiments of the same locus, this one included; the others are not counted twice
     bases: dict[int, dict]
+    # R6: the other experiments of the locus, (name, base table), read and listed beside the primary
+    # but never pooled into it; SORT1's group holds SORT1-flip, the element in the other orientation
+    repeat_bases: tuple[tuple[str, dict], ...] = ()
 
 
 @lru_cache(maxsize=2)
@@ -535,6 +541,9 @@ def _satmut_primaries(path: Path) -> tuple[SatmutElement, ...]:
                 experiment=lead,
                 repeats=len(group),
                 bases=table,
+                repeat_bases=tuple(
+                    (name, satmut_knowledge.base_table(experiments[name])) for name in group if name != lead
+                ),
             )
         )
     return tuple(sorted(out, key=lambda e: (e.chrom, e.start)))
@@ -543,6 +552,74 @@ def _satmut_primaries(path: Path) -> tuple[SatmutElement, ...]:
 def load_satmut(chrom: str, path: Path = satmut_knowledge.DATA_PATH) -> list[SatmutElement]:
     """The saturation-mutagenesis experiments of one chromosome from the local cache, without fetching."""
     return [e for e in _satmut_primaries(path) if e.chrom == chrom]
+
+
+# --- the manifest (R9) of every result built on this layer -------------------------------------------
+def result_manifest(chroms: list[str], results_dir: Path = RESULTS_DIR, **parameters: Any) -> dict[str, Any]:
+    """The provenance contract of a result read from this layer: the assay files by sha256 and the
+    compiled element runs it matched them to. Shared by `scripts/measured_layer.py` and
+    `scripts/confidence_calibration.py` so the two cannot drift apart (R6, 2026-09-28)."""
+    from genomeos import manifest as mf
+    from genomeos.attribution.targets import RUNS
+
+    inputs = []
+    for name in CRISPRI_FILES:
+        p = CRISPRI_KNOWLEDGE / name
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=CRISPRI_SPLIT_OF[name]))
+    for acc in mpra.FILES.values():
+        p = mpra.KNOWLEDGE / f"{acc}.bed.gz"
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    for p in (vista.locus_path(vista.KNOWLEDGE), satmut_knowledge.DATA_PATH):
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    for chrom in chroms:
+        for run in RUNS:
+            p = results_dir / f"{run}_{chrom}.json"
+            if p.exists():
+                inputs.append(mf.input_entry(p, partition=None))
+    return {
+        "sources": [
+            {
+                "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+                "version": "main, as fetched; pinned by sha256",
+            },
+            {
+                "accession": f"ENCODE {mpra.LIBRARY} ({', '.join(mpra.FILES.values())})",
+                "version": "as fetched 2026-09-12; pinned by sha256",
+            },
+            {
+                "accession": "VISTA Enhancer Browser locus table (vista-data)",
+                "version": "main, as fetched; pinned by sha256",
+            },
+            {
+                "accession": "GEO GSE126550 (Kircher et al. 2019, kircherlab/MPRA_SaturationMutagenesis)",
+                "version": "as fetched; pinned by sha256",
+            },
+            {
+                "accession": "this repository, the compiled element runs " + ", ".join(RUNS),
+                "version": "pinned by sha256",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "reciprocal_overlap": RECIPROCAL_OVERLAP,
+            "mpra_active_log2": MPRA_ACTIVE,
+            "reporter_label_rule": REPORTER_LABEL_RULE,
+            "power_for_negatives": POWER_FOR_NEGATIVES,
+            "well_powered": WELL_POWERED,
+            "chromosomes": list(chroms),
+            **parameters,
+        },
+        "exclusions": ["CRISPRi pairs the benchmark marks as not a valid connection are counted, never read"],
+        "partitions": {
+            TRAINING: "the CRISPRi benchmark's training file (K562)",
+            HELDOUT: "the CRISPRi benchmark's held-out file, evaluation only",
+        },
+    }
 
 
 # --- the layer ------------------------------------------------------------------------------------
@@ -626,6 +703,7 @@ class Layer:
             inconclusive = sorted(outcomes[NULL_INCONCLUSIVE] - moved - set(informative))
             missing = sorted(set(tested) - moved - set(informative) - set(inconclusive))
             out["crispri"] = {
+                "outcome_kind": OUTCOME_KIND["crispri"],
                 "genes_tested": tested,
                 "genes_regulated": regulated,
                 "genes_increased": increased,
@@ -666,18 +744,7 @@ class Layer:
         ]
         hits = [(e, f) for e, f in hits if f >= fraction]
         if hits:
-            best: dict[str, float] = {}
-            for e, _ in hits:
-                for cell, value in e.activity.items():
-                    best[cell] = max(best.get(cell, value), value)
-            out["lentimpra"] = {
-                "activity": {c: round(v, 4) for c, v in sorted(best.items())},
-                "cells_active": sorted(c for c, v in best.items() if v >= MPRA_ACTIVE),
-                "cells_silent": sorted(c for c, v in best.items() if v < MPRA_ACTIVE),
-                "max_activity": round(max(best.values()), 4) if best else None,
-                "overlap": round(max(f for _, f in hits), 3),
-                "elements": sorted({e.name for e, _ in hits}),
-            }
+            out["lentimpra"] = reporter_block(hits)
 
         vs = [
             (e, reciprocal_overlap(start, end, e.start, e.end)) for e in self.near("vista", start, end, reach)
@@ -685,6 +752,7 @@ class Layer:
         vs = [(e, f) for e, f in vs if f >= fraction]
         if vs:
             out["vista"] = {
+                "outcome_kind": OUTCOME_KIND["vista"],
                 "positive": sorted(e.id for e, _ in vs if e.status == "positive"),
                 "negative": sorted(e.id for e, _ in vs if e.status != "positive"),
                 "tissues": sorted({t for e, _ in vs for t in e.tissues}),
@@ -717,7 +785,33 @@ class Layer:
         functional = [b for b in inside.values() if b["functional"]]
         strong = [b for b in inside.values() if b["strong"]]
         n = len(inside)
+        # R6: every experiment of each matched locus over the element's own bases, primary and repeats,
+        # listed apart; the verdict stays on the primary and the disagreement is counted, not resolved
+        read: list[dict[str, Any]] = []
+        calls: dict[int, set[bool]] = defaultdict(set)
+        seen_by: dict[int, int] = defaultdict(int)
+        for e, _ in hits:
+            for role, name, table in [("primary", e.experiment, e.bases)] + [
+                ("repeat", name, t) for name, t in e.repeat_bases
+            ]:
+                own = {pos: b for pos, b in table.items() if start <= pos - 1 < end}
+                for pos, b in own.items():
+                    calls[pos].add(bool(b["functional"]))
+                    seen_by[pos] += 1
+                read.append(
+                    {
+                        "experiment": name,
+                        "role": role,
+                        "bases_measured": len(own),
+                        "bases_functional": sum(1 for b in own.values() if b["functional"]),
+                    }
+                )
         return {
+            "outcome_kind": OUTCOME_KIND["satmut"],
+            "experiments_read": read,
+            "bases_measured_by_more_than_one_experiment": sum(1 for v in seen_by.values() if v > 1),
+            "bases_where_experiments_disagree": sum(1 for v in calls.values() if len(v) > 1),
+            "verdict_read_from": "the primary experiment of each locus; repeats are listed, never pooled",
             "experiments": sorted(e.experiment for e, _ in hits),
             "repeat_experiments": sum(e.repeats - 1 for e, _ in hits),
             "bases_in_element": end - start,
@@ -732,6 +826,71 @@ class Layer:
             ),
             "overlap": round(max(f for _, f in hits), 3),
         }
+
+
+# --- R6: reporter tiles, one label per cell from a declared rule ------------------------------------
+LABEL_ACTIVE, LABEL_SILENT, LABEL_CONFLICTING = "active", "silent", "conflicting"
+
+
+def reporter_label(values: list[float], threshold: float = MPRA_ACTIVE) -> str:
+    """One cell's label from its tiles under `REPORTER_LABEL_RULE`: the share of tiles on each side of
+    the threshold decides, never one tile's value."""
+    above = sum(1 for v in values if v >= threshold)
+    below = len(values) - above
+    return LABEL_ACTIVE if above > below else LABEL_SILENT if below > above else LABEL_CONFLICTING
+
+
+def _median(values: list[float]) -> float:
+    v = sorted(values)
+    n = len(v)
+    return v[n // 2] if n % 2 else (v[n // 2 - 1] + v[n // 2]) / 2
+
+
+def reporter_block(hits: list[tuple[mpra.Element, float]]) -> dict[str, Any]:
+    """The lentiMPRA block of one compiled element (R6, 2026-09-28): every matched tile kept, the
+    per-cell label from `REPORTER_LABEL_RULE`, the median as the reported value and the maximum only
+    under `REPORTER_MAX_FIELD`. Before R6 the per-cell value was the maximum over tiles and the label
+    was read from it, so one strong tile made the element active."""
+    tiles = sorted(hits, key=lambda x: (x[0].start, x[0].end))
+    per_cell: dict[str, list[float]] = defaultdict(list)
+    for e, _ in tiles:
+        for cell, value in e.activity.items():
+            per_cell[cell].append(value)
+    cells = sorted(per_cell)
+    label = {c: reporter_label(per_cell[c]) for c in cells}
+    top = {c: max(per_cell[c]) for c in cells}
+    return {
+        "outcome_kind": OUTCOME_KIND["lentimpra"],
+        "aggregation": {
+            "unit": list(REPORTER_UNIT),
+            "label_rule": REPORTER_LABEL_RULE,
+            "activity_is": REPORTER_SUMMARY,
+            "threshold_log2": MPRA_ACTIVE,
+            "uncertainty": REPORTER_UNCERTAINTY,
+        },
+        "activity": {c: round(_median(per_cell[c]), 4) for c in cells},
+        "label_by_cell": label,
+        "cells_active": [c for c in cells if label[c] == LABEL_ACTIVE],
+        "cells_silent": [c for c in cells if label[c] == LABEL_SILENT],
+        "cells_conflicting": [c for c in cells if label[c] == LABEL_CONFLICTING],
+        "tiles_by_cell": {c: len(per_cell[c]) for c in cells},
+        "tiles_active_by_cell": {c: sum(1 for v in per_cell[c] if v >= MPRA_ACTIVE) for c in cells},
+        REPORTER_MAX_FIELD: {c: round(v, 4) for c, v in top.items()},
+        "max_activity_descriptive": round(max(top.values()), 4) if top else None,
+        "overlap": round(max(f for _, f in tiles), 3),
+        "elements": sorted({e.name for e, _ in tiles}),
+        "tiles": [
+            {
+                "name": e.name,
+                "start": e.start,
+                "end": e.end,
+                "strand": dict(sorted(e.strand.items())),
+                "overlap": round(f, 3),
+                "activity": {c: round(v, 4) for c, v in sorted(e.activity.items())},
+            }
+            for e, f in tiles
+        ],
+    }
 
 
 # --- prediction against measurement ---------------------------------------------------------------
@@ -780,7 +939,18 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
         )
     m = measured.get("lentimpra")
     if m:
-        out["lentimpra"] = AGREES if m["cells_active"] else DISAGREES
+        # R6: a cell whose tiles split evenly is neither; with no active cell and one such, the
+        # verdict is TILES_CONFLICT, counted in neither `assays_agreeing` nor `assays_disagreeing`
+        if m["cells_active"]:
+            out["lentimpra"] = AGREES
+        elif m.get("cells_conflicting"):
+            out["lentimpra"] = TILES_CONFLICT
+            out["lentimpra_detail"] = (
+                "no cell active; in " + ", ".join(m["cells_conflicting"]) + " the matched tiles split "
+                "evenly about the threshold"
+            )
+        else:
+            out["lentimpra"] = DISAGREES
     v = measured.get("vista")
     if v:
         out["vista"] = AGREES if v["positive"] else DISAGREES
@@ -814,6 +984,9 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
         if out["assays_agreeing"]
         else DISAGREES
         if out["assays_disagreeing"]
+        # R6: a reporter whose tiles split is not an untested prediction, and is named as what it is
+        else TILES_CONFLICT
+        if out.get("lentimpra") == TILES_CONFLICT
         else NOT_TESTED
     )
     return out
@@ -822,8 +995,11 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
 def confidence_of(measured: dict[str, Any]) -> float:
     """The strongest assay present decides: a perturbation or an embryo outranks a reporter.
 
-    Saturation mutagenesis is a reporter assay - the element is read out episomally, one substitution
-    at a time - so it lands with lentiMPRA and not with CRISPRi, however fine its resolution.
+    Saturation mutagenesis is a reporter assay - the element is read out away from its locus, one
+    substitution at a time - so it lands with lentiMPRA and not with CRISPRi, however fine its
+    resolution. (Called episomal until R6, 2026-09-28; whether each Kircher et al. experiment was
+    plasmid or lentiviral was not checked, and the conclusion rests only on the reporter being outside
+    the locus.)
     """
     if measured.get("crispri") or measured.get("vista"):
         return PERTURBATION_CONFIDENCE
@@ -979,8 +1155,37 @@ def census(
         "agreement_denominator_predicted_gene_tested": tested,
         "crispri_pairs_regulated": regulated_pairs,
         "crispri_pairs_measured_as_not_regulated": negative_pairs,
+        # R6: the reporter's own counters, kept apart from agrees and disagrees
+        **reporter_counts(measured_rows),
         # the base-level assay, under its own name: its zero in `disagrees` is a property of the assay
         "satmut": satmut_counts(measured_rows, eligible),
+    }
+
+
+REPORTER_COUNT_KEYS = (
+    "lentimpra_tiles_conflict",
+    "lentimpra_elements_over_more_than_one_tile",
+    "lentimpra_cells_conflicting",
+    "lentimpra_cells_where_tiles_disagree",
+)
+
+
+def reporter_counts(measured_rows: list[dict[str, Any]]) -> dict[str, int]:
+    """R6: how many lentiMPRA verdicts are `TILES_CONFLICT`, how many elements match more than one tile,
+    and in how many cell readings the tiles fall on both sides of the threshold."""
+    blocks = [r["measured"]["lentimpra"] for r in measured_rows if "lentimpra" in r["measured"]]
+    return {
+        "lentimpra_tiles_conflict": sum(
+            1 for r in measured_rows if r["agreement"].get("lentimpra") == TILES_CONFLICT
+        ),
+        "lentimpra_elements_over_more_than_one_tile": sum(1 for b in blocks if len(b.get("tiles", ())) > 1),
+        "lentimpra_cells_conflicting": sum(len(b.get("cells_conflicting", ())) for b in blocks),
+        "lentimpra_cells_where_tiles_disagree": sum(
+            1
+            for b in blocks
+            for c, n in (b.get("tiles_by_cell") or {}).items()
+            if 0 < b["tiles_active_by_cell"][c] < n
+        ),
     }
 
 
@@ -1007,6 +1212,11 @@ def satmut_counts(measured_rows: list[dict[str, Any]], eligible: dict[str, Any])
         "bases_measured": sum(s["bases_measured"] for s in sat),
         "bases_functional": sum(s["bases_functional"] for s in sat),
         "bases_strong": sum(s["bases_strong"] for s in sat),
+        # R6: repeat experiments read over the same bases, and where their functional calls differ
+        "bases_measured_by_more_than_one_experiment": sum(
+            s.get("bases_measured_by_more_than_one_experiment", 0) for s in sat
+        ),
+        "bases_where_experiments_disagree": sum(s.get("bases_where_experiments_disagree", 0) for s in sat),
         "experiments_matched": sorted({x for s in sat for x in s["experiments"]}),
         "why_it_can_never_disagree": SATMUT_CANNOT_DISAGREE,
     }
@@ -1104,6 +1314,7 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "crispri_pairs_regulated",
         "crispri_pairs_measured_as_not_regulated",
         "crispri_pairs_the_benchmark_calls_invalid",
+        *REPORTER_COUNT_KEYS,
     )
     satmut_keys = (
         "elements_measured_base_by_base",
@@ -1114,6 +1325,8 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "bases_measured",
         "bases_functional",
         "bases_strong",
+        "bases_measured_by_more_than_one_experiment",
+        "bases_where_experiments_disagree",
     )
     satmut: dict[str, Any] = dict.fromkeys(satmut_keys, 0)
     experiments: set[str] = set()
@@ -1286,10 +1499,21 @@ def basis_text(row: dict[str, Any]) -> str:
     m = row["measured"].get("lentimpra")
     if m:
         act = ", ".join(f"{k} {v:+.2f}" for k, v in m["activity"].items())
-        parts.append(
+        text = (
             f"lentiMPRA log2(RNA/DNA) {act}, active in {len(m['cells_active'])} of "
             f"{len(m['activity'])} cells at {MPRA_ACTIVE}"
         )
+        # R6: where more than one tile matched, every tile's value is named and the value above is
+        # their median; a cell whose tiles split evenly is named as conflicting
+        many = [c for c, n in (m.get("tiles_by_cell") or {}).items() if n > 1]
+        if many:
+            text += "; " + "; ".join(
+                f"{c} median of {m['tiles_by_cell'][c]} tiles "
+                + ", ".join(f"{t['activity'][c]:+.2f}" for t in m["tiles"] if c in t["activity"])
+                + f" ({m['label_by_cell'][c]})"
+                for c in many
+            )
+        parts.append(text)
     v = row["measured"].get("vista")
     if v:
         parts.append(

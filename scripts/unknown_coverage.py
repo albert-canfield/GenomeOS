@@ -12,7 +12,8 @@ and 721 hold none — and this is that number for every tier, with the shape an 
 
 It reads the measured layers this project already holds, each through its own loader:
 
-- **lentiMPRA** (ENCODE4 K562/HepG2/WTC11): the elements an episomal reporter measured;
+- **lentiMPRA** (ENCODE4 K562/HepG2/WTC11): the elements an integrated lentiviral reporter measured,
+  outside their native locus (called episomal before R6, 2026-09-28);
 - **VISTA**: in-vivo enhancer tests, positive and negative alike, since a negative is a measurement;
 - **CRISPRi** (the ENCODE enhancer-gene benchmark, training and held-out): the elements a screen
   perturbed in their own chromosomes.

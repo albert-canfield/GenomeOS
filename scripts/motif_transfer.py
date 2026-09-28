@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Does §17's motif-count positive transfer off the episomal reporter? Two readings, both pre-registered.
+"""Does §17's motif-count positive transfer off the reporter construct? Two readings, both pre-registered.
 
     uv run python scripts/motif_transfer.py --stage sites            # cache the VISTA site counts
     uv run python scripts/motif_transfer.py --stage preregister      # training numbers only, no held-out

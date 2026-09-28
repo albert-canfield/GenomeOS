@@ -50,6 +50,8 @@ class Element:
     end: int
     name: str
     activity: dict[str, float] = field(default_factory=dict)
+    # the reporter's orientation per cell, the file's strand column; "+/-" if rows of both were averaged
+    strand: dict[str, str] = field(default_factory=dict)
 
     @property
     def key(self) -> str:
@@ -73,8 +75,13 @@ def fetch(knowledge: Path = KNOWLEDGE) -> dict[str, Path]:
 
 
 def parse(lines, cell: str, chrom: str | None, into: dict[str, Element]) -> None:
-    """Rows of one cell's file folded into elements; forward and reverse copies are averaged."""
+    """Rows of one cell's file folded into elements; forward and reverse copies are averaged.
+
+    In the three ENCODE files no interval has more than one row per file (the R6 census,
+    data/results/measured_aggregation_census.json), so the mean never fires; each row's strand is
+    kept in `strand` so the orientation is not lost either way."""
     sums: dict[str, list[float]] = {}
+    strands: dict[str, set[str]] = {}
     for line in lines:
         f = line.rstrip("\n").split("\t")
         if len(f) < 7 or (chrom and f[0] != chrom):
@@ -84,8 +91,10 @@ def parse(lines, cell: str, chrom: str | None, into: dict[str, Element]) -> None
         if e is None:
             e = into[key] = Element(f[0], int(f[1]), int(f[2]), f[3].removesuffix("_Reversed:"))
         sums.setdefault(key, []).append(float(f[6]))
+        strands.setdefault(key, set()).add(f[5])
     for key, vals in sums.items():
         into[key].activity[cell] = round(sum(vals) / len(vals), 4)
+        into[key].strand[cell] = "/".join(sorted(strands[key]))
 
 
 def load(chrom: str | None = None, knowledge: Path = KNOWLEDGE) -> list[Element]:

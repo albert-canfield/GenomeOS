@@ -233,6 +233,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="", help="comma separated; default every chromosome")
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument(
+        "--result-name", default="measured_layer_genome", help="the name to save under (R6 saves beside)"
+    )
     ap.add_argument("--no-comparison", action="store_true", help="skip the standardised comparisons")
     ap.add_argument("--write-programs", action="store_true", help="recompile the programs with the layer")
     ap.add_argument("--no-evidence", action="store_true", help="skip the 30 s read over the compiled tree")
@@ -352,7 +355,8 @@ def main(argv: list[str] | None = None) -> int:
         f"(n={pooled['agreement_denominator_predicted_gene_tested']})"
     )
     if not args.no_save:
-        p = save_result("measured_layer_genome", payload)
+        m = measured.result_manifest(list(per), comparison=not args.no_comparison)
+        p = save_result(args.result_name, payload, manifest=m)
         print(f"saved {p}")
     return 0
 

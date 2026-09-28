@@ -298,6 +298,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="", help="comma separated; default every chromosome")
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument(
+        "--result-name", default=RESULT, help="the name to save under (R6 saves beside, not over)"
+    )
     ap.add_argument("--markdown", action="store_true", help="print the doc section from the saved result")
     args = ap.parse_args(argv)
 
@@ -338,7 +341,8 @@ def main(argv: list[str] | None = None) -> int:
         print(cc.summary_line(payload, assay), flush=True)
 
     if not args.no_save:
-        print(f"\nwrote {save_result(RESULT, payload)}")
+        m = measured.result_manifest(list(per_chromosome))
+        print(f"\nwrote {save_result(args.result_name, payload, manifest=m)}")
     return 0
 
 

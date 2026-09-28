@@ -7269,6 +7269,11 @@ Built as registered (`attribution/measured.py` `reporter_block`, `reporter_label
 tests `tests/test_measured_aggregation.py`). The layer and the calibration were rebuilt in a clean
 worktree at `49aca5d`, with only this lane's files changed, through `save_result` with complete
 manifests. 0 requests.
+The results are saved beside the old ones rather than over them, as
+`data/results/measured_layer_genome_r6.json` and `data/results/confidence_calibration_genome_r6.json`,
+because the removal guard protects lines of the old files committed in the last two days. The old
+names still hold the pre-R6 figures, and the next rebuild after 2026-09-30 can overwrite them with
+`--result-name` left at its default.
 
 **What moved, old -> new, and nothing else did** (element by element against a rebuild without the
 change at the same commit):
@@ -7302,6 +7307,7 @@ level inside its interval (it was 12 and 2).
 **Not from this change.** The rebuilt `measured_layer_genome.json` also reports 928,094 weak compiled
 facts where the stored copy said 812,921. That comes from `96bc5e5` (compiled predictions no longer
 state a confidence), since the stored file had not been rebuilt after it. R6 moved no confidence.
+(The rebuilt file is `measured_layer_genome_r6.json`; see above.)
 
 **What R6 did not do.** No per-tile uncertainty exists in the ENCODE element files, so none is carried.
 The row names this rather than inventing one. A8, the strength of a compiled experimental rule, is still

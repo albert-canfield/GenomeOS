@@ -132,9 +132,10 @@ WHAT_AGREEMENT_MEANS: dict[str, dict[str, Any]] = {
         "is_the_compiled_claim": False,
         "level_interpretable": False,
         "why": (
-            "episomal: it measures the sequence and not the locus, and it never sees the predicted "
-            "gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has "
-            "no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
+            "an integrated lentiviral reporter outside the native locus (Agarwal et al. 2025; called "
+            "episomal before R6): it measures the sequence and not the locus, and it never sees the "
+            "predicted gene. A silence is a weak contradiction, and the base rate of 'active in a "
+            "reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
         ),
     },
     "vista": {

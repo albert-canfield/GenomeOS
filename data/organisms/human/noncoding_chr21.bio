@@ -49808,7 +49808,7 @@ rule EH38E3465311 inhibits PRMT2 { strength: 0.192; when: cell_type = sigmoid_co
 
 # ---- the experimental layer (200 of 5174 elements, 3.87%): what an assay measured over the same DNA
 # The rule is reciprocal overlap >= 0.5; nothing is raised on proximity or
-# on an interval that merely contains the element. 44 elements agree with the
+# on an interval that merely contains the element. 43 elements agree with the
 # prediction, 146 disagree, and 31 element-gene pairs were measured as not
 # regulated - those are experimental facts about the absence of an effect, kept as such.
 # Eligible first, raised second: 259 of 5174 elements lie in some assay's footprint at all, 4915 were never covered by one.
@@ -49856,7 +49856,7 @@ element EH38E2131313_measured {
   class: enhancer
   locus: chr21:15753054-15753389
   domain: chr21_D25
-  basis: lentiMPRA log2(RNA/DNA) HepG2 +1.42, K562 +1.31, WTC11 +2.47, active in 3 of 3 cells at 1.0, against the predicted target USP25, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 +1.02, K562 +0.99, WTC11 +1.56, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles +1.42, +0.63 (conflicting), K562 median of 2 tiles +1.31, +0.67 (conflicting), WTC11 median of 2 tiles +2.47, +0.66 (conflicting), against the predicted target USP25, 0 assays agrees and 0 disagrees (reporter_tiles_conflict), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -49944,7 +49944,7 @@ element EH38E3452950_measured {
   class: enhancer
   locus: chr21:25881831-25882119
   domain: chr21_D90
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.34, K562 -0.02, WTC11 -0.81, active in 0 of 3 cells at 1.0, against the predicted target APP, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.39, K562 -0.10, WTC11 -0.84, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.44, -0.34 (silent), K562 median of 2 tiles -0.17, -0.02 (silent), WTC11 median of 2 tiles -0.81, -0.88 (silent), against the predicted target APP, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -49960,7 +49960,7 @@ element EH38E3453927_measured {
   class: enhancer
   locus: chr21:29002633-29002982
   domain: chr21_D105
-  basis: lentiMPRA log2(RNA/DNA) HepG2 +1.27, K562 +1.84, WTC11 +2.94, active in 3 of 3 cells at 1.0, against the predicted target RWDD2B, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 +1.26, K562 +1.81, WTC11 +2.66, active in 3 of 3 cells at 1.0, HepG2 median of 2 tiles +1.24, +1.27 (active), K562 median of 2 tiles +1.78, +1.84 (active), WTC11 median of 2 tiles +2.38, +2.94 (active), against the predicted target RWDD2B, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50136,7 +50136,7 @@ element EH38E3455522_measured {
   class: enhancer
   locus: chr21:33127355-33127638
   domain: chr21_D144
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.49, K562 -0.28, WTC11 -0.39, active in 0 of 3 cells at 1.0, against the predicted target OLIG1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.57, K562 -0.33, WTC11 -0.51, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.64, -0.49 (silent), K562 median of 2 tiles -0.38, -0.28 (silent), WTC11 median of 2 tiles -0.39, -0.62 (silent), against the predicted target OLIG1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50168,7 +50168,7 @@ element EH38E3455701_measured {
   class: enhancer
   locus: chr21:33380552-33380899
   domain: chr21_D145
-  basis: CRISPRi in K562 tested 2 genes, measured no effect on MRPS6, SON, lentiMPRA log2(RNA/DNA) HepG2 +2.34, K562 +1.58, WTC11 -0.07, active in 2 of 3 cells at 1.0, against the predicted target IFNGR2, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
+  basis: CRISPRi in K562 tested 2 genes, measured no effect on MRPS6, SON, lentiMPRA log2(RNA/DNA) HepG2 +2.24, K562 +1.09, WTC11 -0.39, active in 1 of 3 cells at 1.0, HepG2 median of 2 tiles +2.13, +2.34 (active), K562 median of 2 tiles +0.59, +1.58 (conflicting), WTC11 median of 2 tiles -0.71, -0.07 (silent), against the predicted target IFNGR2, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
   evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.90
 }
@@ -50672,7 +50672,7 @@ element EH38E2143401_measured {
   class: enhancer
   locus: chr21:41134032-41134211
   domain: chr21_D196
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.45, K562 -0.29, WTC11 -0.48, active in 0 of 3 cells at 1.0, against the predicted target BACE2, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.55, K562 -0.39, WTC11 -0.58, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.45, -0.66 (silent), K562 median of 2 tiles -0.29, -0.49 (silent), WTC11 median of 2 tiles -0.48, -0.68 (silent), against the predicted target BACE2, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50800,7 +50800,7 @@ element EH38E3460583_measured {
   class: enhancer
   locus: chr21:42145532-42145870
   domain: chr21_D200
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.06, K562 -0.02, WTC11 +0.96, active in 0 of 3 cells at 1.0, against the predicted target UMODL1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.15, K562 -0.17, WTC11 +0.44, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.06, -0.24 (silent), K562 median of 2 tiles -0.02, -0.32 (silent), WTC11 median of 2 tiles +0.96, -0.09 (silent), against the predicted target UMODL1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50816,7 +50816,7 @@ element EH38E3460681_measured {
   class: enhancer
   locus: chr21:42233591-42233940
   domain: chr21_D200
-  basis: lentiMPRA log2(RNA/DNA) HepG2 +0.36, K562 +0.03, WTC11 -0.48, active in 0 of 3 cells at 1.0, against the predicted target ABCG1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.23, K562 -0.33, WTC11 -1.17, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles +0.36, -0.81 (silent), K562 median of 2 tiles +0.03, -0.69 (silent), WTC11 median of 2 tiles -0.48, -1.85 (silent), against the predicted target ABCG1, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50936,7 +50936,7 @@ element EH38E3461098_measured {
   class: enhancer
   locus: chr21:42593241-42593588
   domain: chr21_D203
-  basis: lentiMPRA log2(RNA/DNA) HepG2 +0.34, K562 +0.54, WTC11 +0.77, active in 0 of 3 cells at 1.0, against the predicted target PDE9A, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 +0.29, K562 +0.42, WTC11 +0.71, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles +0.34, +0.24 (silent), K562 median of 2 tiles +0.54, +0.29 (silent), WTC11 median of 2 tiles +0.77, +0.65 (silent), against the predicted target PDE9A, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -50960,7 +50960,7 @@ element EH38E2144932_measured {
   class: enhancer
   locus: chr21:42669157-42669501
   domain: chr21_D203
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.11, K562 -0.29, WTC11 -0.27, active in 0 of 3 cells at 1.0, against the predicted target PDE9A, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.25, K562 -0.42, WTC11 -0.48, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.39, -0.11 (silent), K562 median of 2 tiles -0.54, -0.29 (silent), WTC11 median of 2 tiles -0.69, -0.27 (silent), against the predicted target PDE9A, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -51121,7 +51121,7 @@ element EH38E3462723_measured {
   class: enhancer
   locus: chr21:44510530-44510867
   domain: chr21_D214
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.58, K562 -0.75, WTC11 -0.55, active in 0 of 3 cells at 1.0, against the predicted target TSPEAR, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.63, K562 -0.76, WTC11 -0.69, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.58, -0.69 (silent), K562 median of 2 tiles -0.75, -0.77 (silent), WTC11 median of 2 tiles -0.55, -0.83 (silent), against the predicted target TSPEAR, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }
@@ -51185,7 +51185,7 @@ element EH38E3463103_measured {
   class: enhancer
   locus: chr21:44892805-44893155
   domain: chr21_D217
-  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.23, K562 -0.02, WTC11 -0.72, active in 0 of 3 cells at 1.0, against the predicted target ITGB2, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
+  basis: lentiMPRA log2(RNA/DNA) HepG2 -0.24, K562 -0.10, WTC11 -0.74, active in 0 of 3 cells at 1.0, HepG2 median of 2 tiles -0.26, -0.23 (silent), K562 median of 2 tiles -0.02, -0.18 (silent), WTC11 median of 2 tiles -0.77, -0.72 (silent), against the predicted target ITGB2, 0 assays agrees and 1 disagrees (disagrees), reciprocal overlap rule 0.5
   evidence: experimental "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp"
   confidence: 0.75
 }

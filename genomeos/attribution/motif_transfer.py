@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Does §17's one positive transfer, or is it a property of the episomal reporter?
+"""Does §17's one positive transfer, or is it a property of the reporter construct?
 
 Section 17 of GRAMMAR-BY-COMPARISON.md tested motif *arrangement* against motif *counts* on 51,376
 lentiMPRA elements and failed the arrangement claim in all three cell lines. The one large positive it
