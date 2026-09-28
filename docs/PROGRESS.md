@@ -1112,3 +1112,12 @@ confidence were running at the time of writing. Results held by the removal guar
 2026-09-30.
 
 docs/ROADMAP.md §5 item 11; docs/CRISPRI-RESULT.md; docs/DESIGN-MINIMAL-CELL.md; docs/ATTRIBUTION.md.
+
+**Later the same night.** R7 closed the review: elements and regions state origin, role, activity,
+target and evidence separately, and no label reads missing constraint as missing function (the
+classifier had never read repeat coverage for 15,320 blocks; most regulatory blocks are mostly
+repeat). Every confidence derived from effect size is gone; the evidence explorer shows that 919,534
+of 986,941 facts state no confidence at all. The results that rest on the AlphaGenome sweep record
+that its model version was never requested; new requests name it. Moving the budget's readers to the
+new labels changed 0 of about 14 million numbers compared. The three decisions at the top of this
+entry are unchanged.
