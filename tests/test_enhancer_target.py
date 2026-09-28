@@ -22,7 +22,8 @@ def test_aggregate_and_predict_target():
     assert rows[0]["gene"] == "GENE_A" and rows[0]["max_drop_tissue"] == "liver"
     p = predict_target(rows)
     assert p["gene"] == "GENE_A" and p["action"] == "activates" and p["strength"] == "strong"
-    assert p["confidence"] == 0.45 and p["tissue"] == "liver"
+    assert "confidence" not in p and p["tissue"] == "liver" and p["log2_fold_change"] == -0.45
+    assert p["certainty"]["probability"] is None and p["certainty"]["effect_estimate"] == -0.45
     # below the threshold nothing is named
     assert predict_target(rows, min_effect=0.5) is None
     # a silencer: only the rise survives a threshold above the drop... use a rows set where rise wins
@@ -102,3 +103,60 @@ def test_pack_folds_a_chromosome_and_load_cached_reads_the_archive(tmp_path):
     cache_path("chr21", "E3", tmp_path).write_text(json.dumps({"id": "E3", "genes": []}))
     assert load_cached("chr21", "E3", tmp_path)["id"] == "E3"
     assert pack("chr21", tmp_path, remove=True)["elements"] == 3
+
+
+# ---- review R4: effect magnitude alone never raises a stored certainty (negatives first)
+
+
+def _link(lfc: float) -> dict:
+    from genomeos.predict.enhancer_target import aggregate
+
+    return predict_target(aggregate([("G", "liver", lfc), ("G", "brain", 0.0)]))
+
+
+def test_a_new_link_states_no_confidence_whatever_its_effect():
+    for lfc in (-0.1, -0.3, -0.69, -0.7, -0.71, -1.5, -4.0, 0.2, 0.9, 3.0):
+        p = _link(lfc)
+        assert "confidence" not in p, lfc
+        assert p["certainty"]["probability"] is None and p["certainty"]["probability_unavailable"], lfc
+
+
+def test_effect_magnitude_alone_never_raises_any_stored_certainty():
+    """Across magnitudes 0.1..6 of either sign, only the effect, its score and its size band move."""
+    import random
+
+    rng = random.Random(28)
+    moving = {"effect_estimate", "model_score"}
+    base = None
+    for _ in range(300):
+        lfc = rng.choice((-1, 1)) * rng.uniform(0.1, 6.0)
+        c = _link(lfc)["certainty"]
+        assert c["probability"] is None and c["measurement_uncertainty"] is None
+        assert c["effect_estimate"] == round(lfc, 4) and c["model_score"] == abs(round(lfc, 4))
+        fixed = {k: v for k, v in c.items() if k not in moving}
+        base = base or fixed
+        assert fixed == base  # category, unit, uncertainty and probability do not depend on the size
+    # and the link itself carries no other number that grows with the effect
+    a, b = _link(-0.2), _link(-5.0)
+    diff = {k for k in a if a[k] != b[k]}
+    assert diff == {"log2_fold_change", "certainty", "strength"}
+
+
+def test_the_model_score_is_unclipped_where_the_old_confidence_was_capped():
+    from genomeos.predict.enhancer_target import link_score, stated_confidence
+
+    p = _link(-2.345)
+    assert link_score(p) == 2.345 and stated_confidence(p) is None
+    old = {"gene": "G", "log2_fold_change": -2.345, "confidence": 0.7}
+    assert link_score(old) == 2.345 and stated_confidence(old) == 0.7
+    assert link_score({"gene": "G", "confidence": 0.4}) == 0.4  # a pre-R4 link with no fold change
+    assert link_score(None) is None and stated_confidence(None) is None
+
+
+def test_the_calibration_reads_a_new_link_by_its_fold_change():
+    from genomeos.attribution import confidence_calibration as cc
+
+    p = _link(-2.345)
+    assert cc.model_score({"predicted_coding": p}) == 2.345
+    # the retired formula, for reading old results, recomputes from the fold change when no confidence
+    assert cc.stated_confidence({"predicted_coding": p}) == cc.PREDICTED_CAP

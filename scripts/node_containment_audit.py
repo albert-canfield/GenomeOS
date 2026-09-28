@@ -201,6 +201,9 @@ def chrom_row(chrom: str) -> dict:
         "predicted_coding_gene_protein_coding": 0,
         "has_confidence": 0,
         "predicted_coding_has_confidence": 0,
+        # R4: a link written since states no confidence and carries a certainty record instead
+        "has_certainty": 0,
+        "predicted_coding_has_certainty": 0,
     }
     pairs: list[tuple[int, int]] = []
     pairs_any: list[tuple[int, int]] = []
@@ -212,10 +215,14 @@ def chrom_row(chrom: str) -> dict:
             census["has_predicted"] += 1
         if p.get("confidence") is not None:
             census["has_confidence"] += 1
+        if p.get("certainty") is not None:
+            census["has_certainty"] += 1
         if pc.get("gene"):
             census["has_predicted_coding"] += 1
             if pc.get("confidence") is not None:
                 census["predicted_coding_has_confidence"] += 1
+            if pc.get("certainty") is not None:
+                census["predicted_coding_has_certainty"] += 1
             if pc["gene"] in anyg:
                 census["predicted_coding_gene_in_annotation"] += 1
             if pc["gene"] in coding:

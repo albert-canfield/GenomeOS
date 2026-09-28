@@ -3828,7 +3828,7 @@ def _predict_element(args: argparse.Namespace, st: dict) -> int:
     if p:
         print(
             f"  predicted target: {p['gene']} ({p['action']}, log2FC {p['log2_fold_change']:+.2f} "
-            f"in {p['tissue']}, {p['strength']}, confidence {p['confidence']})"
+            f"in {p['tissue']}, {p['strength']} effect; probability unavailable)"
         )
     else:
         print(f"  predicted target: none (no gene moves by {args.min} log2)")
