@@ -1088,28 +1088,61 @@ CORRECTION_PREAMBLE = (
 )
 
 
+#: Since the item 12 S6 follow-up (lane-contract) `--annotate` writes the corrections as their own result
+#: through save_result instead of editing the four results in place. lane-design's first run (70801de)
+#: added CORRECTION_KEY to each committed file; those keys stay exactly as committed and are never
+#: rewritten. An in-place edit would sit under a manifest that describes another run, and rewriting a
+#: file through save_result would replace its committed code stamp.
+RESULT_CORRECTIONS = "clause2_statistical_corrections"
+
+
+def correction_block(entries: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "added": "2026-09-28",
+        "by": "lane-design",
+        "preamble": CORRECTION_PREAMBLE,
+        "additive": True,
+        "corrects": entries,
+    }
+
+
 def annotate_committed_results(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
-    """Add the corrected keys beside the committed ones. Nothing existing is read back out."""
+    """The corrections of the committed results, as the result RESULT_CORRECTIONS (one block per result,
+    the block lane-design first added beside each file's own keys). No committed file is written."""
     done: dict[str, Any] = {}
+    blocks: dict[str, Any] = {}
+    read: list[Path] = []
     for name, entries in CORRECTIONS.items():
         p = results_dir / f"{name}.json"
         if not p.exists():
             done[name] = "absent"
             continue
-        payload = json.loads(p.read_text())
-        before = {k: v for k, v in payload.items() if k != CORRECTION_KEY}
-        payload[CORRECTION_KEY] = {
-            "added": "2026-09-28",
-            "by": "lane-design",
-            "preamble": CORRECTION_PREAMBLE,
-            "additive": True,
-            "corrects": entries,
-        }
-        after = {k: v for k, v in payload.items() if k != CORRECTION_KEY}
-        if after != before:  # never reachable; the guard is the point
-            raise AssertionError(f"{p}: an existing value changed; refusing to write")
-        p.write_text(json.dumps(payload, indent=2, default=str))
+        read.append(p)
+        blocks[name] = correction_block(entries)
         done[name] = sorted(entries)
+    payload = {
+        "correction_key": CORRECTION_KEY,
+        "corrections": blocks,
+        "absent": sorted(n for n, v in done.items() if v == "absent"),
+        "first_written": f"each of the {len(blocks)} results carries its block under {CORRECTION_KEY}, added "
+        "by lane-design (70801de) and kept as committed",
+    }
+    manifest = {
+        "sources": [
+            {
+                "accession": "statistical review of milestone 1.3 clause 2's notes (docs/ROADMAP.md) and "
+                "lane-design's audit (f6cb4d7, 70801de)",
+                "version": "2026-09-28",
+            }
+        ],
+        "inputs": [mf.input_entry(p) for p in read],
+        "assembly": "n/a: corrections of wording and of field meanings, no genomic data",
+        "coordinates": "n/a: no genomic intervals",
+        "parameters": {"correction_key": CORRECTION_KEY},
+        "exclusions": [f"{n}: absent from the results directory" for n in payload["absent"]],
+        "partitions": "n/a: no evaluation split",
+    }
+    save_result(RESULT_CORRECTIONS, payload, results_dir, manifest=manifest)
     return done
 
 

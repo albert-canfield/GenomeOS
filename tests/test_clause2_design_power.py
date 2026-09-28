@@ -240,15 +240,19 @@ def test_the_measured_arm_keeps_its_record_and_gains_the_separation():
 # ---- the corrected keys on the committed results ----------------------------------------------------
 
 
-def test_the_annotation_is_additive_and_refuses_otherwise(tmp_path):
+def test_the_annotation_is_its_own_result_and_edits_no_committed_file(tmp_path):
     payload = {"result": "clause2_measured_arm", "primary": {"n_blocks_compared": 1}, "keep": [1, 2]}
-    (tmp_path / "clause2_measured_arm.json").write_text(__import__("json").dumps(payload))
+    committed = tmp_path / "clause2_measured_arm.json"
+    committed.write_text(__import__("json").dumps(payload))
+    before = committed.read_bytes()
     done = dp.annotate_committed_results(tmp_path)
     assert done["clause2_measured_arm"]
     assert done["clause2_matched_control"] == "absent"
-    got = __import__("json").loads((tmp_path / "clause2_measured_arm.json").read_text())
-    assert {k: v for k, v in got.items() if k != dp.CORRECTION_KEY} == payload
-    assert got[dp.CORRECTION_KEY]["additive"] is True
+    assert committed.read_bytes() == before  # item 12 S6 follow-up: no in-place edit
+    got = __import__("json").loads((tmp_path / f"{dp.RESULT_CORRECTIONS}.json").read_text())
+    block = got["corrections"]["clause2_measured_arm"]
+    assert block == dp.correction_block(dp.CORRECTIONS["clause2_measured_arm"]) and block["additive"] is True
+    assert got["result_manifest"]["complete"] and "clause2_matched_control" in got["absent"]
 
 
 def test_every_correction_names_what_it_corrects():
