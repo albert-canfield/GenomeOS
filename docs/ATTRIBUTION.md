@@ -7912,6 +7912,179 @@ weights were fitted on the same model's answers.
   more requests for these five. It also needs pairs inside 1 Mb, or a longer-range feature
   registered for them.
 
+## Pre-registration: milestone 1.3's second clause against a control matched on length and scored-element count (2026-09-28, lane-elemcount)
+
+**What is compared.** Clause 2 of milestone 1.3 is still held as not met. d717b28 put the real unknown
+-37.23 points below length-matched random windows on "names a coding gene"; e1dbcf3/0c8b82d matched
+those windows on local coding-gene density as well and the gap stayed -27.25 points (95% over blocks
+-30.91 to -23.58, n = 531 blocks), with the neutral tier equally low and every sensitivity agreeing.
+That run matched its covariate (4.11 coding TSSs per compared block against 4.05 per window) and
+reported exactly one residual imbalance, naming it the last live explanation for the gap besides "the
+instrument does not work": a carrying window holds 13.27 scored elements against 6.18 per carrying
+block, so a window has more chances to name a gene. This test closes that imbalance. Script:
+`scripts/clause2_element_count_control.py`, whose `PRE_REGISTRATION` holds the constants below; tests in
+`tests/test_clause2_element_count_control.py`. `scripts/clause2_matched_control.py` is not rewritten;
+its draw, gate, estimator and reading bands are imported and reused. No element-count-matched figure had
+been computed on any chromosome when this was committed.
+
+**Admissibility, decided before the numbers.** The imbalance is expected by construction, and matching
+on it is therefore only half admissible. An organiser block is an intergenic gap: `unknown_blocks`
+carves blocks out of the sequence left between annotated gene bodies, so no block contains a gene,
+while a window placed uniformly at the same length usually straddles one. The budget's classifier then
+sends CpG-island blocks to the `regulatory` tier, so the most promoter-like -- hence most cCRE-dense --
+intergenic blocks are removed from `constrained_unknown` before this comparison starts. Scored elements
+are ENCODE SCREEN cCREs, which cluster at promoters and inside gene bodies. A constrained-unknown block
+is element-poorer than a random window of its length by definition, not by accident, and matching on
+element count conditions on a variable the target set's own definition sets. Two consequences are
+registered here rather than chosen afterwards.
+
+1. The matched window set is pulled toward the target set itself. Windows as element-poor as a block,
+   at the block's length, are disproportionately the same intergenic deserts the blocks are. This
+   control can therefore only attenuate a difference, never inflate one, so a difference that stays far
+   below 0 is informative and cannot be an element-count artefact.
+2. A difference that moves to 0 is weak. It is equally consistent with the element-count artefact and
+   with the control having become a copy of the target. On its own it does not restore clause 2: it
+   replaces "below chance" with "unresolved by this instrument" and hands the question on.
+
+Because of (2), a second estimator is registered that removes the number-of-trials imbalance
+arithmetically instead of by matching, and it is read first if the matched difference moves: the
+per-element rate, which does not depend on how many elements anything holds, computed on d717b28's own
+unmatched windows.
+
+**Targets.** Unchanged from e1dbcf3. The real unknown: constrained-unknown blocks with copies out (882
+blocks, 531 carrying a scored element), all 24 chromosomes. The neutral tier (2,632 blocks, 1,181
+carrying) is the secondary target set.
+
+**Control.** For each block, in start order, windows of the block's exact length drawn as d717b28 drew
+them (uniform inside the span of scored-element midpoints, rejected on overlap with any organiser
+block, one random number per try, same seed 20260913 per chromosome), and additionally rejected unless
+the number of scored elements whose midpoint falls inside the window lies in the same decile of
+scored-element count as the block's own number. 50 accepted windows per block, at most 20,000 tries,
+e1dbcf3's cap unchanged. A block for which no window is accepted inside the cap is counted as
+undrawable and leaves the comparison; a block that carries an element but gets no accepted window
+carrying one also leaves the comparison. Both counts are reported. Both rules are e1dbcf3's.
+
+**Banding.** Deciles of scored-element count: the nearest-rank 10th to 90th percentiles of the target
+set's own per-block element counts, pooled genome-wide over every block of the set including the blocks
+that hold none, ties collapsed so there may be fewer than ten bins. This is the same `decile_edges`
+e1dbcf3 used for coding-TSS count, applied to the new variable. Each target set is banded on its own
+distribution. A block holding no element falls in the lowest bin and can only draw windows holding
+none, so it leaves the comparison as it already did.
+
+**Question, statistic, interval.** Unchanged. The question is whether a block or window carrying at
+least one scored element carries one whose deletion names a protein-coding gene. The primary is the
+per-block matched difference: over blocks that carry an element and have at least one accepted window
+carrying one, the mean of (block yes, 0 or 1) minus (share of that block's carrying windows saying
+yes), in points. The interval is a 95% percentile bootstrap over blocks, 10,000 resamples,
+`default_rng(20260913)`, with a bootstrap over the 24 chromosomes reported beside it and the pooled
+rates as d717b28 printed them.
+
+**Secondaries.** The per-element rate described above, on the unmatched windows and on the
+element-count-matched ones; the neutral tier under the same matching with its own deciles; real unknown
+minus neutral; and the question "moves a gene" on both sets. Sensitivities: matching jointly on the
+scored-element decile and e1dbcf3's coding-TSS decile, so both imbalances are closed at once; matching
+on the exact element count rather than its decile; and rejecting windows only on overlap with the
+target set itself.
+
+**Gate.** Before any element-count-matched figure is read, the same draw function with the element test
+switched off and d717b28's 4,000-try cap must reproduce d717b28's pooled counts for both sets to the
+digit: real unknown 44,100 windows drawn, 31,676 carrying, 21,217 naming a coding gene, 531 and 158
+blocks; neutral 131,600 / 88,317 / 57,212, 1,181 and 340. If it does not, no matched figure is reported.
+
+**Balance check, reported and not gated.** Scored elements per carrying block against per carrying
+window -- the quantity being matched, which must come close to equal for the matching to have worked --
+and the mean coding-TSS count of the compared blocks against their windows', which is free again here
+and may drift back apart.
+
+**Pass rule.** Clause 2 passes on this instrument only if the primary's 95% interval lies wholly above
+0: a real-unknown block then names a coding gene more often than sequence of the same length holding as
+many scored elements. The clause's third part (scored against measurement) is untouched by any outcome.
+
+**Readings, fixed here.**
+
+- Interval wholly above 0: clause 2 passes as a labelled lead against an element-count-matched control,
+  with measurement still outstanding.
+- Interval covering 0, that is the difference moving close to 0: the element-count imbalance was the
+  gap, the below-chance readings of d717b28 and 0c8b82d were an element-count artefact, and clause 2's
+  status must be re-examined -- it stops being "below chance" and becomes "unresolved by this
+  instrument", not "met". By the admissibility judgement above this outcome is weak on its own, because
+  the matched control is pulled toward the target set; the per-element secondary is read next, and the
+  clause stays not met until a measured arm answers it.
+- Interval wholly below 0: element count is not the cause either. With length, coding-gene density and
+  the number of scored elements all matched and the difference still far below 0, no covariate named so
+  far explains the reading, and clause 2 stays not met and below chance on its existing ground.
+
+**Falsifier.** The element-count account of the gap is falsified if the element-count-matched difference
+keeps more than half of d717b28's unmatched gap, that is if it is below -18.61 points (half of -37.23).
+This is e1dbcf3's threshold, unchanged so that the two controls are read on one scale. The share of the
+unmatched gap and the share of the density-matched -27.25 points that element count closes are both
+reported.
+
+**The measured arm is not run.** It stays registered for its own lane, and no figure from it is read
+here. Nothing measured exists for these blocks: 0.45% of unknown space has any assay.
+
+**Cost.** 0 AlphaGenome requests. The per-element response cache is never opened; the stored all-element
+archive is read one chromosome at a time.
+
+## Pre-registration: how independent the node containment result is, and what a fresh CRISPRi set could see (area B, 2026-09-28, lane-nodeindep)
+
+**What is audited.** The node containment claim (area B): on 661 CRISPRi `Regulated=TRUE` pairs the
+element and its measured gene share a node 5.89 points more often than under the published
+random-boundary control, 95% +3.18 to +8.46 (`data/results/node_containment_measured.json`,
+`scripts/node_containment_audit.py` stage 2). lane-split (`0af7e1b`) classified that arm
+EVALUATION-ONLY and flagged the ENCODE held-out file as a reused benchmark. EVALUATION-ONLY says a
+scorer fitted nothing to the pairs; it does not say the scorer was built without them. This audit
+asks the second question of every component of the node caller and reports it under lane-split's
+legend: CLEAN, EXPOSED, EVALUATION-ONLY. Script: `scripts/node_independence_audit.py`; tests in
+`tests/test_node_independence_audit.py`. No figure of the existing claim is changed by any outcome;
+a qualification, if one is owed, is written beside it.
+
+**Checks, fixed here.** (1) The default caller is imported in a fresh interpreter and every
+`genomeos` module it pulls in is listed, so "the caller never reads CRISPRi" is a fact about the
+import closure. (2) `git log -S` dates each constant of the caller — the 50 kb node floor, the 5 kb
+boundary merge, the CTCF-only class filter, the node confidence, the control's seed and draw count —
+against the first commit naming the benchmark. (3) The stage 2 containment counts are recomputed on
+every covered chromosome from the CRISPRi tables and the caller alone, with the AlphaGenome archive
+never opened, and held against the committed result: identical counts show the measured arm does not
+depend on the model output stage 1 scores. (4) The 661 pairs are decomposed by benchmark file and
+cell. (5) The six rejected node callers are scored on the same pairs. (6) Every CRISPRi set this
+project has not scored for containment is counted and its power stated.
+
+**The sensitivity, and how it will be read, before it is run.** The default caller `ctcf_only` was
+kept over six orientation callers on 2026-09-14 (`26da99a`) and again on 2026-09-21 (`56e2c50`), on
+four measurements: 4DN Hi-C boundary support, node content over the AlphaGenome archive, mouse
+synteny and the HOXD interval. Node content is the containment statistic in its modelled form, so the
+default is the maximum of seven callers on a statistic correlated with the one it is now scored on.
+All seven are therefore scored on the 661 measured pairs, each against its own controls (`uniform`,
+`uniform_merged`, `circular`; `count_matched` is left to the committed result, being the slow draw
+and unnecessary for a within-caller comparison). Reading rule, fixed here: if the rejected callers
+also clear zero, the selection cost is small and the claim's excess is close to what any CTCF-based
+caller would give; if only the default clears zero, the measured excess carries a selection premium,
+and the spread across the seven callers is the size of it. This is a sensitivity on pairs already
+read, not a new test, and it is reported as one.
+
+**Power, and the rule for whether an independent arm runs.** An exact one-sided binomial at 0.05, null
+share = the pooled `uniform` control share, alternative = the measured share. An arm runs only if its
+regulated pairs reach 80% power at the claim's own effect. Candidates: the IGVF MHC Perturb-seq screen
+(`data/results/indep_mhc_crispri.json`), the IGVF DC-TAP K562 remainder (`IGVFFI0957PYTA`, the pairs
+not in either ENCODE file, scored by no result here), and the IGVF many-loci K562 library, unreleased.
+
+**Seen before this was committed.** For the DC-TAP file, label-blind: 7,475 rows, 6,512 distal
+targeting pairs, 948 elements, 263 genes, K562 only, 15 chromosomes, 29 loci at 2 Mb clustering, 5,069
+distal pairs not in either ENCODE file. Then, to do the power arithmetic and for no other purpose, the
+count of its positives: 92 distal significant pairs, 51 of them decreases, 36 of those not in either
+ENCODE file, from 35 elements. Their containment — which pair falls inside which node — has not been
+computed and is not computed by this audit. From the MHC result, already committed: 19 eligible distal
+decreases. No containment figure for either set existed when this was committed.
+
+**Why the arms are counted and not run.** Stated in advance: 19 pairs and 36 pairs are the whole of
+what is readable at 0 requests, and the arithmetic above is what they can see. Reading their
+containment now converts the only unread pairs this project holds into read ones for a test that
+cannot separate the claim from chance; they are left unread and logged, so a pooled arm stays possible
+when IGVF releases the many-loci table.
+
+**Cost.** 0 AlphaGenome requests; no cache reader, nothing fetched.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
