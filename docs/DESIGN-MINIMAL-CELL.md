@@ -309,3 +309,29 @@ applied here):
   concentration do not predict target ranges, induction kinetics do: that
   bears on the model class (a clamped level read at 40 h), not on a number.
   No threshold here is citable as a value.
+
+**The one comparison, run after the registration was committed (`3c4e301`).**
+`scripts/gastrulation_census.py compare`, defaults, once; values in
+`data/results/gastrulation_census_comparison.json`. Verdict: **falsified**,
+on all three layers, not only mesoderm.
+
+| layer | model (120 cells, 40 h) | human CS7 interval over four variants | outside by |
+|---|---|---|---|
+| ectoderm | 0.475 | 0.046 – 0.172 | 0.303 |
+| mesoderm | 0.100 | 0.694 – 0.773 | 0.594 |
+| endoderm | 0.425 | 0.116 – 0.213 | 0.212 |
+
+Sampled CS7 cells are mostly mesoderm in every mapping; the model puts most
+of its axis in ectoderm and endoderm. The mouse secondary (no verdict) says
+the same for mesoderm and endoderm: across E7.0–E7.5 and both mappings,
+mesoderm 0.46–0.94 and endoderm 0.03–0.12 against the model's 0.10 and
+0.425; the model's ectoderm (0.475) falls inside the mouse range only
+because the *marker* mapping counts the large E7.0 epiblast as ectoderm.
+Descriptive, not registered: the module's own unsourced `expected_*`
+values (0.45 / 0.35 / 0.20) would also miss the human interval on ectoderm
+and mesoderm and sit inside it only on endoderm. What the miss means is
+bounded by the comparability note above: a sampled cell census of one
+embryo is not the shares of a 1-D axis, and the model has no stage. It does
+not say the network is wrong; it says the default gradient's germ-layer
+shares are not those of a measured gastrula, and that no sourced number
+exists yet to set them.

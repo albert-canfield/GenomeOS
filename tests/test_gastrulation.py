@@ -110,3 +110,20 @@ def test_census_mappings_are_disjoint_and_use_real_labels():
             assert set(used) <= labels, set(used) - labels
     for mapping in g.CENSUS_HUMAN_MAPPINGS.values():
         assert not set(g.CENSUS_HUMAN_EXTRAEMBRYONIC) & {lab for layer in mapping.values() for lab in layer}
+
+
+def test_census_comparison_as_run_once():
+    # the one registered run (2026-09-28): falsified on all three layers of the human CS7 census
+    import json
+    from pathlib import Path
+
+    from genomeos.runtime import gastrulation as g
+
+    d = json.loads(Path("data/results/gastrulation_census_comparison.json").read_text())
+    assert d["tolerance"] == g.CENSUS_TOLERANCE and d["model_run"] == g.CENSUS_MODEL_RUN
+    fresh = run_gastrulation(**g.CENSUS_MODEL_RUN).proportions()
+    assert {k: round(v, 4) for k, v in fresh.items()} == d["model"]
+    assert d["verdict"] == "falsified"
+    j = d["human_cs7_judgement"]
+    assert not any(j[k]["pass"] for k in ("ectoderm", "mesoderm", "endoderm"))
+    assert j["mesoderm"]["interval"][0] > 0.69 and d["model"]["mesoderm"] == 0.1
