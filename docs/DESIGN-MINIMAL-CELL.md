@@ -851,3 +851,93 @@ range 0.08 to 610.52 are unchanged, because nothing was added to the table.
 rate in molecules per cell per unit time with its per-cell calibration named.
 `tests/test_human_rate_survey.py` holds it as a test that fails the day a
 candidate is recorded as both human and absolute.
+
+## The finding: there is no human absolute transcription rate to borrow (2026-09-28)
+
+Ten candidates were read in the primary source. Three classes were searched:
+metabolic labelling that reports synthesis and not only decay (TT-seq,
+TimeLapse-seq, SLAM-seq, Bru-seq, single-cell new-RNA), absolute
+transcriptome or proteome quantification paired with turnover, and any human
+equivalent of Schwanhausser. Europe PMC full-text queries and the GEO
+deposits were used; two articles (Schwalb 2016 in *Science*, Ietswaart 2024 in
+*Molecular Cell*) were not readable by this lane and their records say exactly
+what was read instead and claim nothing beyond it.
+
+| source | species | cell | quantity | units | absolute | licence |
+| --- | --- | --- | --- | --- | --- | --- |
+| Schwalb 2016 (TT-seq) | human | K562 | synthesis rates, half-lives | not established here | not distributed per gene | subscription; GSE75792 public |
+| Michel 2017 (TT-seq) | human | Jurkat | synthesis rate mu, decay lambda, 22,141 TUs | library units | no | CC BY 4.0 |
+| Wachutka 2019 (TT-seq) | human | K562 | bond synthesis and cleavage | minutes | no | CC BY |
+| Ietswaart 2024 (subcellular TimeLapse-seq) | human + mouse | K562 + NIH 3T3 | release, export, degradation constants | per hour | not established | subscription |
+| Shao 2022 (TT-seq) | **mouse** | ESC | synthesis rate = labelled rate x copies per cell | **cell^-1 min^-1** | **yes** | CC BY 4.0 |
+| Hausser 2019 | human | HeLa | transcription rate beta_m, thousands of genes | mRNA per cell per hour | **constructed** | CC BY 4.0 |
+| Liu 2023 (SLAM-Drop-seq) | human | HEK293 | transcription, splicing, degradation, 399 genes | CPM per hour | no | CC BY 4.0 |
+| Ramskold 2024 (NASC-seq2) | human + mouse | K562, fibroblasts | burst on/off rates, burst size | detected molecules | no | CC BY 4.0 |
+| Schofield 2018 (cached) | human + mouse | K562 + MEF | transcript half-lives | hours | n/a | subscription, cached |
+| Schwanhausser 2011 (in use) | **mouse** | NIH 3T3 | 4,338 transcription rates | molecules/(cell*h) | yes | subscription, cached |
+
+Three of those rows decide it.
+
+**The only absolute per-cell rate found is mouse.** Shao et al. 2022 state it
+exactly: "RNA synthesis rate (cell^-1 min^-1, or copy/min per cell) was
+calculated by multiplying labeled rate and transcript copy number", with the
+copy number per cell coming from a spike-in weight model. So the method works
+and the units are real - in mouse embryonic stem cells. Adopting it would swap
+one borrowed species for the same species in another cell type, and its
+per-gene rates are not distributed anyway: Table EV1 is elongation velocities,
+and the rates would have to be re-derived from GSE168378.
+
+**The one published set of human transcription rates is anchored on a mouse
+constant.** Hausser et al. 2019 report `beta_m` for thousands of human HeLa
+genes in mRNA per cell per hour, which is the right form. Reading the methods
+settles it: the per-gene number is an abundance (from Eichhorn 2014 mRNA-seq
+and ribosome profiling) rescaled by a total of about 225,000 mRNAs per HeLa
+cell and by **one** global decay rate, 0.06 /h, from a median HEK293 half-life
+of 11.4 h. And that 225,000 is not measured: they write "We could not find
+direct measurements of the number of mRNAs per HeLa cell N_m", and obtain it by
+taking the 180,000 mRNAs of a **mouse 3T3 cell** and scaling by a cell-volume
+ratio 2500/2000. Adopting these rates would launder the very constant this
+lane set out to escape into a human-labelled number, and per gene they are
+proportional to expression and carry no kinetics of their own.
+
+**The construction was available and was not made.** `T = N * ln2 / t_half`
+would turn a human half-life into a human absolute rate. It needs a measured
+per-gene human mRNA copy number; none was found genome-wide, and the strongest
+evidence that none exists is the sentence above, from a group that needed it.
+There is also a measured reason to distrust the identity: over the 4,309
+Schwanhausser genes carrying a rate, a copy number and a half-life together,
+the median relative disagreement between the measured `vsr` and
+`N * ln2 / t_half` is **0.236**. So the construction has no human input and a
+24% disagreement with the one measurement it can be checked against.
+`tests/test_human_rate_survey.py` checks in the data that no rate in the table
+is that construction.
+
+**The counts, before and after: identical, as registered.** The re-run of
+`scripts/bridge_audit.py` over all 24 compiled programs moved nothing.
+
+| | before | after |
+| --- | --- | --- |
+| simulable gene-cell pairs, measured tier | 22,576 | 22,576 |
+| simulable gene-cell pairs, borrowed tier | 160,392 | 160,392 |
+| `gene_rate_unmeasured` | 138,543 | 138,543 |
+| `not_identifiable` | 76,469 | 76,469 |
+| pairs on a **human** measured rate | (not counted) | **0** |
+| pairs on a borrowed-species rate | (not counted) | **22,576** |
+
+The two new rows are the whole of what changed: the borrowing is now counted
+per pair rather than stated once in a header, so no later result can quote the
+22,576 without the species travelling with it.
+
+**What stays unmeasured.** All of it. 138,543 pairs sit on a gene with no
+measured transcription rate in any species, and this lane found no source that
+reduces that number for a human cell. 76,469 remain not identifiable, which no
+rate could ever change. The 22,576 that do run keep their mouse fibroblast
+constant, and the honest description of the human rate table is that it is
+empty.
+
+**Where the next lane should look.** Ietswaart et al. 2024 measures human K562
+and mouse NIH 3T3 - the very cell type the R3 rates come from - by one method.
+It is named in the falsifier for a reason worth more than a rate: it would
+replace the present species test (mouse MEF against human K562, which confounds
+species with cell type) with a matched one. Shao et al. 2022's GSE168378 shows
+the spike-in-per-cell calibration a human TT-seq dataset would need.

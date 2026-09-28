@@ -29,6 +29,10 @@ from genomeos import manifest as mf
 from genomeos.attribution import bridge
 from genomeos.results import save_result
 
+#: rate source key -> the species and cell every row from it carries. One entry today; the survey in
+#: `bridge.HUMAN_RATE_SOURCE_SURVEY` says why there is no human second entry.
+SPECIES_CELL = {"schwanhausser2011": "Mus musculus, NIH 3T3 fibroblast"}
+
 CACHE = Path("data/cache/rates")
 SCHWAN = CACHE / "schwanhausser2011_TableS3.xls"
 SCHOFIELD = CACHE / "schofield2018_TableS2_halflives.xlsx"
@@ -97,6 +101,11 @@ def rate_table(h2m: dict[str, str]) -> tuple[dict, dict]:
             continue
         row = {k: (None if pd.isna(r[c]) else round(float(r[c]), 4)) for k, c in COLS.items()}
         row["mouse_symbol"] = str(r["Gene Names"])
+        # provenance per ROW, registered in bridge.RATE_ROW_PROVENANCE: a second source's rows must be
+        # distinguishable from these ones, and a human rate must never be pooled with a borrowed one.
+        # Today every row says the same thing, and that is the point: it says it per row, not in a note
+        row["source"] = "schwanhausser2011"
+        row["species_cell"] = SPECIES_CELL["schwanhausser2011"]
         rows[h] = row
     counts["human_genes_in_the_table"] = len(rows)
     return rows, counts
@@ -192,6 +201,15 @@ def main(argv: list[str] | None = None) -> int:
         "borrowed_median_transcription_rate": round(median, 4),
         "transcription_rate_range": [ts[0], ts[-1]],
         "species_falsifier": species_falsifier(h2m),
+        "row_provenance": bridge.RATE_ROW_PROVENANCE,
+        "rates_by_source": {k: sum(1 for r in rows.values() if r["source"] == k) for k in SPECIES_CELL},
+        "human_measured_rates": sum(1 for r in rows.values() if r["species_cell"].startswith("Homo")),
+        "human_rate_survey": {
+            "verdict": bridge.HUMAN_RATE_SURVEY_VERDICT,
+            "falsifier": bridge.HUMAN_RATE_SURVEY_FALSIFIER,
+            "construction_not_taken": bridge.HUMAN_RATE_CONSTRUCTION_NOT_TAKEN,
+            "candidates": bridge.HUMAN_RATE_SOURCE_SURVEY,
+        },
         "rates": rows,
     }
     if not args.no_save:
