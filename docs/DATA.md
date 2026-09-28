@@ -614,6 +614,92 @@ mosaic exclusion regions.
 `data/results/trio_vaf.json`: counts, medians and 0.05-wide histograms per
 group, never a position, an allele or a genotype.
 
+**Result, run 2026-09-28 after the registration was committed (bf789a3).**
+`scripts/trio_vaf.py` took 36 s. It reproduced 1,430 candidates, so the run
+stands. Negatives first.
+
+- **Neither pure outcome.** The candidates are not clonal like the control,
+  and they are not mostly subclonal. The registered outcome is the middle
+  one, "clonal majority with a subclonal minority". The next point shows
+  that label misdescribes the shape.
+- **The registered classes miss the main feature.** The rule expected two
+  groups, one at 0.5 and one clearly lower. The candidates form one group,
+  shifted: their median fraction is 0.442 against the control's 0.495. The
+  0.40 bound puts most of that group in "half". So the 11% classed low are
+  mostly the lower tail of the shifted group, not a separate subclonal
+  minority.
+- **Checks pass.** C1: the control SNVs' median is 0.495. C2: 0.95% of
+  control SNVs are classed low. C3: 99.5% are assessed (median depth 322).
+  The reading is not void.
+
+| Group | Assessed | Low | Share low | Median fraction | Median depth |
+|---|---|---|---|---|---|
+| control, one-parent inherited hets | 1,476,629 | 14,653 | 0.99% | 0.495 | 321 |
+| control SNVs | 1,282,858 | 12,179 | 0.95% | 0.495 | 322 |
+| control indels | 193,771 | 2,474 | 1.28% | 0.499 | 318 |
+| candidates, all | 1,414 | 167 | 11.8% | 0.442 | 328 |
+| father + mother | 1,375 | 156 | 11.3% (95% 9.8 to 13.1) | 0.442 | 329 |
+| father | 699 | 82 | 11.7% | 0.447 | 330 |
+| mother | 676 | 74 | 10.9% | 0.439 | 329 |
+| absent from the assembly | 15 | 8 | 53% | 0.389 | 328 |
+| nearby | 8 | 0 | 0% | 0.478 | 331 |
+| outside the assembly | 16 | 3 | 19% | 0.451 | 77 |
+| father + mother, in NIST's de novo and mosaic regions | 953 | 112 | 11.8% | 0.440 | 323 |
+| father + mother, outside them | 422 | 44 | 10.4% | 0.447 | 350 |
+
+No candidate is classed high. 16 of the 1,430 lack `ADALL` or have under 30
+reads. Share of each group by fraction (0.05-wide bins):
+
+| Fraction | 0.35 to 0.40 | 0.40 to 0.45 | 0.45 to 0.50 | 0.50 to 0.55 | 0.55 to 0.60 |
+|---|---|---|---|---|---|
+| control, all | 0.6% | 7.7% | 46.2% | 38.7% | 3.9% |
+| father + mother | 10.2% | 46.5% | 35.1% | 5.8% | 0.7% |
+
+- **Verdicts.**
+  - P1 holds: 11.3% are classed low, against at most 25%.
+  - P2 holds: the control's rate for the same SNV and indel mix predicts
+    1.0%; 156 of 1,375 gives one-sided p ≈ 7 × 10⁻¹⁰⁸.
+  - Reported, not predicted: the absent class, the one the assembly does not
+    carry, has the highest low share (8 of 15), as the assembly argument
+    implies.
+
+**Exploratory, not registered.**
+
+- **A clone at about 88% of the cells.** A heterozygous mutation in a
+  fraction c of the cells sits at a read fraction c/2. A median of 0.442
+  gives c ≈ 0.88. The depth is the control's, and the shift is the same for
+  SNVs (0.441) and indels (0.456), for the father's and the mother's
+  chromosomes, and inside and outside NIST's regions. The simplest reading is
+  that most candidates are mutations of one clone that makes up about 88% of
+  the sequenced cells, with the rest of the cells lacking them. The mutations
+  predate the clone's expansion: in the B cell that founded the line, or in
+  its lineage in the donor. They are not germline: a germline allele sits at
+  0.495 like the control.
+- **The germline de novos are in the upper tail.** 89 of the 1,375 sit at
+  0.50 or above, where 42.7% of the control sits. Even if all 89 were
+  germline, the germline count is at most 89 / 0.427 ≈ 208. Among those 89,
+  58 are on the father's chromosome (0.65, two-sided p ≈ 0.006 against 0.5).
+  Below 0.50 the split is 641 to 645 (0.498). The paternal excess expected of
+  germline de novos appears where germline alleles would sit, and nowhere
+  else.
+
+**Reading.** Read fractions replace the phasing's interpretation with a
+measurement, but a different one from what was asked. Most of the 1,382
+are not germline. They are at about 0.44, not 0.5. They are also not a
+scatter of late subclones: they share one fraction, as a single clone's
+mutations would. The measured subclonal share, 11.3%, is a lower bound on
+post-zygotic events and mostly reflects that shared fraction. A per-candidate
+germline call is still not possible: a germline de novo and a clonal somatic
+mutation overlap within the binomial spread at depth 330. What the set now
+supports is a count: germline de novos are at most about 200, a paternal
+excess sits among the candidates at 0.5, and the bulk belong to one clone at
+about 88% of the cells. Separating early-embryonic from line-founder
+mutations needs DNA that never went through culture, which this lane did not find
+among GIAB's public HG002 data.
+
+The result file is `data/results/trio_vaf.json`. It holds counts, medians
+and histograms only.
+
 ## Telomere from a BAM read by ranges (2026-09-12)
 
 GIAB's 300x Illumina BAM of HG002 on GRCh38 (601 GB, NCBI FTP over HTTPS,
