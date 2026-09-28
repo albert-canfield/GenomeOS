@@ -713,3 +713,32 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   population became reachable.** The mismatch that is real sits INSIDE the gate — 31.8% of the
   fitted 245 pairs are K562-named against 5.3% of the sweep, and 34.3% carry a drop above 0.2
   against 5.8%.
+
+## Summaries are where claims grow
+
+On 2026-09-28 four lanes tested milestone 1.3's clause 2 and reported carefully: the measured arm
+said *cannot decide*; the reach control said its registered threshold was not met. The coordinator
+compressed those reports into the plan and the progress log, and in compressing them made five claims
+none of the lanes had made — that the failure was "about the sequence, not the window", that "19 more
+blocks would decide it", that 823 blocks held "no measured element at all", that the neutral tier
+"behaves identically", and, by the framing, that a difference in how often the model names a gene was a
+verdict on the model's accuracy. A statistical review caught all five the same day.
+
+Each is a different slip, and each is common:
+
+- **An adjustment that fails to explain a difference does not explain it either.** "The tested
+  covariates do not account for the gap" is what the data say; naming the cause is not.
+- **A sample size planned from the model's own output, for an experiment measuring a different
+  endpoint, is circular.** Both the effect and the variance came from the thing under test. And the
+  "19" was not even that calculation's answer: it was the distance to a minimum-reporting floor.
+- **A count needs its denominator and its rule.** 59 of 882 and 59 of 531 are different statements;
+  59 at one overlap rule is 72 or 10 at another.
+- **An interval that covers zero is absence of evidence of a difference, not evidence of none.**
+  Equivalence needs a margin justified from outside the data.
+- **Frequency is not accuracy.** How often an instrument says something is a property of the
+  instrument until an outcome is measured.
+
+**The rule adopted:** when a lane's result is carried into the plan or the log, its registered reading
+travels with it word for word (*cannot decide*, *persists after adjustment*, *no difference detected*),
+and any stronger sentence the summariser wants to write is a new claim that needs its own evidence. The
+lanes' own discipline did not fail here; the step after it did.

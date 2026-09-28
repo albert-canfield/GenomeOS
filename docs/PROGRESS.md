@@ -1159,3 +1159,15 @@ project holds can separate those, and the experiment that would is now specified
 for.
 
 docs/ROADMAP.md milestone 1.3 notes; docs/ATTRIBUTION.md; `data/results/clause2_*.json`.
+
+**Correction, the same day.** A statistical review found this entry overstates five things, and
+the overstatement was the coordinator's, introduced in summarising the lanes. The full list is beneath
+milestone 1.3's notes in docs/ROADMAP.md. In short: the figure is target-naming frequency, not accuracy;
+"about the sequence, not the window" is withdrawn in favour of "the gap persists after adjustment for
+the tested variables"; **"19 more blocks would decide it" is withdrawn** — it was a reporting floor, not
+a power result, and the power arithmetic beside it borrowed its effect and variance from the model
+being tested; "823 hold no measured element at all" means none under this analysis's overlap rule;
+and the neutral tier shows no *detected* difference, which is not the same as none. **What stands:**
+target naming is substantially less frequent in these elements and the difference persists under
+several adjustments; the measurements held cannot tell biology from model limitation; what an
+experiment would need is not yet known.

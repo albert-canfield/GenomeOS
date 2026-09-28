@@ -4486,6 +4486,37 @@ density-matched windows, where element-level reach balances (−0.14, interval c
 −23.89. **Clause 2's failure is about the sequence, not the window.** The reach imbalance is real and
 belongs beside the −28.77 wherever it is quoted. What remains is measurement, and its size is known.)*
 
+*(2026-09-28, later — **corrections by the coordinator to the notes above, after a statistical review.**
+The notes compressed the lanes' reports into stronger claims than the lanes or the data support. Each
+original sentence is kept; these supersede them.
+1. **What the figure measures.** 9.18% against 44.04% is a difference in **target-naming frequency** by
+   the model, not in prediction accuracy. Without experimental outcomes it cannot show that the model
+   failed, nor that these sequences lack regulatory function.
+2. **"Clause 2's failure is about the sequence, not the window" is withdrawn.** Adjustment shows the
+   tested covariates do not fully explain the difference; it does not identify the cause. Unmeasured
+   context, selection effects, model limitations and remaining geometric differences are all still
+   open. Defensible: *the gap persists after adjustment for the tested reach and class variables.*
+3. **"19 blocks would decide it" and "an experiment whose size is known" are withdrawn.** In
+   `scripts/clause2_measured_arm.py` `coverage_needed`, both the effect to detect (the model arm's
+   −27.25) and the standard deviation come from **model output**, and are used to size an experiment
+   whose endpoint is a *measured* outcome — a provisional assumption, not an experimental sample-size
+   calculation. Worse than that: the "19" is `MIN_BLOCKS − compared_now`, the distance to a **minimum
+   reporting floor** of 20, not a power result; the formula happened to land nearby. And 80% power
+   never guarantees a decisive result. A power simulation for the actual design is now its own lane.
+4. **Coverage needs its denominator and rule.** "823 blocks hold no measured element at all" means no
+   *qualifying* measurement attached to the *scored* elements *under a 0.5 reciprocal-overlap rule*; it
+   does not mean no part of those blocks was ever measured. The count depends on the rule: 72 blocks
+   measured at 0.25 overlap, 59 at 0.5, 10 at 0.75. Populations: 59 of 882 blocks (6.7%) in the tier;
+   the 11.1% elsewhere is 59 of the 531 blocks that carry a scored element.
+5. **"The neutral tier stays indistinguishable" becomes "no difference detected."** An interval of
+   about −4.55 to +4.30 points permits a difference in either direction; equivalence would need a
+   justified margin and a test for it.
+
+**The strongest defensible conclusion:** target naming is substantially less frequent in the analysed
+constrained-unknown elements, and the difference persists under several adjustments. The available
+measurements cannot distinguish biological differences from model limitations. Experimental
+requirements remain provisional. Clause 2 stays not met.)*
+
 **1.3's row above cites "node +2.88 points over random boundaries" as evidence that a clause was met.**
 Re-audited 2026-09-27 (area B's node containment row): **+2.90, 95% CI +2.03 to +3.81** on a control
 matched on boundary count only, +1.2 to +6.6 across four baselines, and **+5.89, CI +3.18 to +8.46, on
