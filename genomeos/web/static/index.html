@@ -161,6 +161,9 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
    two-valued state said "next" for items whose own body reported them closed. */
 .st.planned,.st.next{color:var(--muted);border-color:var(--line)}
 .pp-sec{margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.pp-claim{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12.5px;margin-bottom:6px}
+.pp-claim .fig{font-size:13.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+.pp-claim .src{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .pp-sec>summary{cursor:pointer;font-weight:600}
 .pp-item{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
 .pp-item:first-of-type{border-top:0}
@@ -825,6 +828,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button data-pp="done" role="tab"><i class="ic">✅</i>Done <span class="muted" id="pp-done-n"></span></button>
     </div>
     <div id="pp-now">
+      <div id="pp-state-kpi" class="kpi"></div>
+      <h3 class="pp-h">What is true today<span style="text-transform:none;letter-spacing:0;font-weight:400"> — the claims README separates, each figure read from the result file it rests on</span></h3>
+      <div id="pp-claims"></div>
+      <div id="pp-caveats"></div>
+      <div class="grid cols-2" style="margin-top:12px">
+        <div><h3 class="pp-h">Milestones (roadmap &sect;6)</h3><div id="pp-miles" class="scroll" style="max-height:420px"></div></div>
+        <div><h3 class="pp-h">External review R1&ndash;R9 (roadmap &sect;5 item 11)</h3><div id="pp-review" class="scroll" style="max-height:420px"></div></div>
+      </div>
+      <h3 class="pp-h">Waiting on the owner</h3>
+      <div id="pp-owed"></div>
       <h3 class="pp-h">Working now</h3>
       <div id="pp-board"></div>
       <div class="grid cols-2" style="margin-top:12px">
@@ -836,7 +849,6 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h3 class="pp-h" style="margin-top:18px">What happens next, in order (roadmap §5)</h3>
       <div id="pp-next" class="pp-areas"></div>
       <h3 class="pp-h" style="margin-top:18px">Planned, by roadmap area</h3>
-      <div id="pp-milestones" class="pp-chips"></div>
       <div id="pp-areas" class="pp-areas"></div>
       <div id="pp-waiting"></div>
     </div>
@@ -1725,7 +1737,63 @@ document.querySelectorAll('.pp-tabs button').forEach(b => b.onclick = () => {
   $('#pp-done').hidden = b.dataset.pp !== 'done';
 });
 async function loadProjectProgress() {
-  await Promise.allSettled([loadWork(), loadRoadmap(), loadProgress()]);
+  await Promise.allSettled([loadState(), loadWork(), loadRoadmap(), loadProgress()]);
+}
+// The state panels: milestones, the external review, the claim panel and what the owner owes.
+// Every number below is printed exactly as /api/state read it out of its file — no rounding here,
+// no figure written into this page — and each one carries the file it came from and that file's date.
+function figureLine(f) {
+  if (!f) return '';
+  const bits = [];
+  if (f.percent != null) bits.push(`<b>${fmt(f.measured_bp)}</b> of <b>${fmt(f.total_bp)}</b> bases — <b>${f.percent}%</b>`);
+  if (f.blocks_measured != null) bits.push(`${fmt(f.blocks_measured)} of ${fmt(f.blocks)} blocks touched by any of ${(f.assays || []).join(', ')}`);
+  if (f.held_out_gain != null) bits.push(`held-out gain <b>${f.held_out_gain}</b>${f.ci95 ? ` (95% ${f.ci95[0]} to ${f.ci95[1]})` : ''}, ${escH(f.against_encode_re2g || '')}`);
+  const rep = f.replication;
+  if (rep && rep.gain != null) bits.push(`second cell type ${escH(rep.cell_type)}: gain ${rep.gain}${rep.ci95 ? ` (95% ${rep.ci95[0]} to ${rep.ci95[1]})` : ''} on ${fmt(rep.covered_pairs)} pairs — <b>${rep.replicated ? 'replicated' : 'not replicated'}</b>`);
+  return bits.map(b => `<div class="fig">${b}</div>`).join('');
+}
+async function loadState() {
+  try {
+    const s = await api('/api/state');
+    const m = s.milestones, rv = s.review, o = s.owed;
+    $('#pp-state-kpi').innerHTML = `<div><b>${m.reached} of ${m.total}</b><span>milestones reached</span></div>
+      <div><b>${rv.done} of ${rv.total}</b><span>external review items done</span></div>
+      <div><b>${o.count}</b><span>waiting on the owner</span></div>
+      <div><b>${s.claims.rows.length}</b><span>claims stated separately</span></div>`;
+    $('#pp-claims').innerHTML = s.claims.rows.map(c => `<div class="pp-claim">
+        <div><b>${escH(c.claim)}</b>${c.figure ? ` <span class="st done">${escH(c.figure.date || '')}</span>` : ''}${c.agrees_with_readme === false ? ' <span class="st blocked">README disagrees with its result file</span>' : ''}</div>
+        <div class="muted">${mdInline(c.text)}</div>
+        ${figureLine(c.figure)}
+        ${c.figure && c.figure.qualification ? `<div class="muted" style="margin-top:3px">qualification, as the file states it: ${escH(c.figure.qualification)}</div>` : ''}
+        ${c.figure ? `<div class="src">${escH(c.figure.source)}</div>` : ''}
+      </div>`).join('') + `<div class="muted" style="font-size:11px">words from ${escH(s.claims.source)} (Status ${escH(s.claims.version || '')}, ${escH(s.claims.date || '')}); this panel may not say more than it does</div>`;
+    $('#pp-caveats').innerHTML = (s.claims.caveats || []).map(c => `<details class="pp-sec"><summary>Qualification carried with a claim made elsewhere: ${escH(c.about)}</summary>
+        <div style="font-size:12.5px;margin-top:4px">${escH(c.verdict)}</div>
+        <div class="muted" style="font-size:12px">components: ${Object.entries(c.components || {}).map(([k, v]) => `${v} ${escH(k)}`).join(', ')} · selection premium: default ${c.selection_premium.default}, best rejected ${c.selection_premium.best_rejected}, worst ${c.selection_premium.worst_rejected}, spread ${c.selection_premium.spread_points} points</div>
+        <div class="src">${escH(c.source)} · ${escH(c.date || '')}</div></details>`).join('');
+    $('#pp-miles').innerHTML = m.rows.map(x => `<div class="pp-item">
+        <div><span class="st ${x.state}">${x.state === 'done' ? 'reached' : x.state === 'partial' ? 'held' : 'planned'}</span><b>${escH(x.milestone)}</b></div>
+        <div class="muted" style="margin-top:2px">${mdInline(x.goal)}</div>
+        ${x.reason ? `<div style="margin-top:3px"><b>held because</b> ${escH(x.reason)}</div>` : ''}
+        ${x.emphasised && x.emphasised.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">what the row itself emphasises (${x.emphasised.length})</summary>${x.emphasised.map(t => `<div style="margin-top:3px">${escH(t)}</div>`).join('')}</details>` : ''}
+      </div>`).join('') + `<div class="src">${escH(m.source)}</div>`;
+    $('#pp-review').innerHTML = rv.rows.map(r => `<div class="pp-item">
+        <div><span class="st ${r.state === 'done' ? 'done' : 'next'}">${escH(r.state)}</span><b>${escH(r.item)}</b> ${escH(r.title)}</div>
+        <div class="muted" style="margin-top:2px">acceptance: ${escH(r.acceptance)}</div>
+        ${r.follow_ups.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">${r.follow_ups.length} follow-up row${r.follow_ups.length > 1 ? 's' : ''}</summary>${r.follow_ups.map(f => `<div style="margin-top:3px">${mdInline(f.note)}</div>`).join('')}</details>` : ''}
+      </div>`).join('') + `<div class="src">${escH(rv.source)}</div>`;
+    const owed = [
+      ...o.data_jobs.map(j => ['data job (roadmap §4)', j.job, j.detail]),
+      ...o.steps.map(x => [x.where, x.text, '']),
+      ...o.board.map(b => [`${b.who} · ${b.state}`, b.task, b.asks.join(' ')]),
+    ];
+    $('#pp-owed').innerHTML = (owed.length
+        ? `<table><tr><th>where</th><th>what</th><th>what it asks</th></tr>${owed.map(r => `<tr><td class="mono" style="font-size:11px">${escH(r[0])}</td><td>${mdInline(r[1])}</td><td class="muted" style="font-size:12px">${mdInline(r[2])}</td></tr>`).join('')}</table>`
+        : '<div class="muted" style="font-size:12.5px">nothing in the plan or on the board is waiting on a decision</div>')
+      + (o.ledger ? `<details class="pp-sec"><summary class="muted" style="font-size:12px">night-shift ledger, untracked: ${o.ledger.open.length} lane${o.ledger.open.length === 1 ? '' : 's'} open${o.ledger.armed ? ', armed' : ''}</summary><div class="files" style="font-size:12px">${o.ledger.open.map(escH).join('<br>')}</div></details>` : '');
+  } catch (e) {
+    $('#pp-claims').innerHTML = `<span class="muted">${escH(e.message)}</span>`;
+  }
 }
 async function loadWork() {
   try {
@@ -1769,7 +1837,6 @@ function renderPlanned(r) {
       <h4><span class="pp-letter">${escH(s.number)}</span><span style="${s.state === 'done' ? 'text-decoration:line-through' : ''}">${mdInline(s.title)}</span> <span class="st ${s.progress || s.state}">${s.progress || s.state}</span></h4>
       <details><summary class="muted" style="cursor:pointer;font-size:12px">why, and what it decides</summary><div class="pp-md">${md(s.text)}</div></details>
     </div>`).join('') : '<div class="muted">roadmap §5 has no items</div>';
-  $('#pp-milestones').innerHTML = r.milestones.map(m => `<span class="pill" data-tip="${escH(m.goal)} — ${escH(m.proof)}"><span class="st ${m.state}" style="border:0;padding:0">${m.state === 'done' ? '✓' : m.state === 'partial' ? '◐' : '○'}</span>${escH(m.milestone)}</span>`).join('');
   $('#pp-areas').innerHTML = r.areas.map(a => {
     const open = a.next.filter(s => s.state !== 'done');
     const now = board.filter(e => e.area === a.letter);

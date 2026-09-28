@@ -9,6 +9,7 @@ directory. No external dependencies; the page is a single static HTML file.
 from __future__ import annotations
 
 import json
+import re
 import threading
 import webbrowser
 from functools import lru_cache
@@ -52,6 +53,341 @@ def _all_elements_card(r: dict) -> dict:
         k: v
         for k, v in r.items()
         if k in ("elements_total", "scored", "complete", "summary", "requests_this_run")
+    }
+
+
+# ---- the Progress tab's state: every figure computed from a file at request time -------------
+#
+# The tab used to show the plan's prose and a hand-kept task log, and lagged behind both. Nothing
+# below states a figure of its own: the milestones and the external review are parsed from
+# docs/ROADMAP.md at request time, the claim panel's words are README's Status section verbatim
+# and its numbers are read from the result files those claims rest on, and the comparison between
+# the two is reported rather than assumed, so a README figure that no longer matches its result
+# shows up here as a disagreement instead of quietly reading as the truth.
+
+_OWNER = re.compile(r"\bAlbert\b|\bthe owner\b|\bowner's\b", re.I)
+_BOLD = re.compile(r"\*\*(.+?)\*\*", re.S)
+_SENTENCE = re.compile(r"(?<=[.;])\s+")
+_NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+
+
+def _plain(text: str) -> str:
+    """Markdown emphasis removed and whitespace folded; the words are left exactly as written."""
+    return re.sub(r"\s+", " ", re.sub(r"[*`~]", "", text or "")).strip()
+
+
+def _numbers(text: str) -> set[str]:
+    """Every number a passage states, thousands separators dropped, so two spellings compare."""
+    return {m.group(0).replace(",", "") for m in _NUMBER.finditer(text or "")}
+
+
+def _held_reason(row: dict) -> str | None:
+    """Why a milestone is held: the emphasised passage of its own row, else the row's first sentence.
+
+    The roadmap bolds the sentence that says what is not met (1.3's third clause, for one), so the
+    reason is taken from the row rather than written here, and a row that states none reads as none.
+    """
+    if row.get("state") == "done":
+        return None
+    for cell in (row.get("goal") or "", row.get("proof") or ""):
+        m = _BOLD.search(cell)
+        if m:
+            return _plain(m.group(1))
+    return _plain(_SENTENCE.split(row.get("proof") or "", 1)[0]) or None
+
+
+def _emphasised(row: dict) -> list[str]:
+    """Every passage the milestone row emphasises: the caveats a reached version still carries.
+
+    1.0 is reached and its row says BioForge "prices its answer" is not true; 1.1 is reached and
+    its row says the flagship 74%/65% reading is about 70% depth. A panel that showed the tick and
+    not the sentence beside it would be the overstatement this tab exists to stop, so the row's own
+    emphasis travels with its state and nothing is summarised.
+    """
+    found = [
+        _plain(m.group(1))
+        for cell in (row.get("goal") or "", row.get("proof") or "")
+        for m in _BOLD.finditer(cell)
+    ]
+    return [t[:400] for t in found if t][:4]
+
+
+def _milestones(text: str) -> dict:
+    """Section 6 through the roadmap's own parser, with each held row's reason beside its state."""
+    from genomeos import roadmap
+
+    rows = [
+        {**r, "reason": _held_reason(r), "emphasised": _emphasised(r)} for r in roadmap.parse_milestones(text)
+    ]
+    return {
+        "source": "docs/ROADMAP.md section 6",
+        "rows": rows,
+        "total": len(rows),
+        "reached": sum(1 for r in rows if r["state"] == "done"),
+        "held": [r["milestone"] for r in rows if r["state"] != "done"],
+    }
+
+
+def _review_lines(text: str) -> list[str]:
+    """Section 5 item 11's own lines: from its numbered head to the next numbered item or section."""
+    lines = text.splitlines()
+    start = next(
+        (i for i, ln in enumerate(lines) if ln.startswith("11.") and "external review" in ln.lower()),
+        None,
+    )
+    if start is None:
+        return []
+    out = []
+    for ln in lines[start + 1 :]:
+        if re.match(r"^(##\s|\d+[a-z]?\.\s)", ln):
+            break
+        out.append(ln)
+    return out
+
+
+def _review(text: str) -> dict:
+    """The external review's nine items (R1-R9) with their acceptance tests and follow-up rows.
+
+    The table's first cell carries the item, a continuation row marking itself with an arrow; one
+    row can close two items (R5 and R2 were done together) and one item can take several rows, so
+    the number is read from the cell rather than from the row's position.
+    """
+    items: dict[str, dict] = {}
+    order: list[str] = []
+    for ln in _review_lines(text):
+        s = ln.strip()
+        if not s.startswith("|"):
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        if len(cells) < 4 or set("".join(cells)) <= set("-: "):
+            continue
+        follow = cells[0].startswith("↳")
+        nums = re.findall(r"\bR([1-9])[a-f]?\b", cells[0])
+        for n in nums:
+            key = f"R{n}"
+            if key not in items:
+                items[key] = {
+                    "item": key,
+                    "title": "",
+                    "code": "",
+                    "acceptance": "",
+                    "state": "open",
+                    "follow_ups": [],
+                }
+                order.append(key)
+            it = items[key]
+            if follow:
+                it["follow_ups"].append({"note": _plain(cells[1]), "code": _plain(cells[2])})
+                if re.search(r"\bdone\b|\bcloses\b", cells[1], re.I):
+                    it["state"] = "done"
+            else:
+                it["title"] = _plain(cells[1])
+                it["code"] = _plain(cells[2])
+                it["acceptance"] = _plain(cells[3])
+    rows = [items[k] for k in sorted(order)]
+    return {
+        "source": "docs/ROADMAP.md section 5 item 11",
+        "rows": rows,
+        "total": len(rows),
+        "done": sum(1 for r in rows if r["state"] == "done"),
+    }
+
+
+def _readme_status(root: Path) -> dict:
+    """README's Status section as it separates the claims: one row per bullet, its words unchanged."""
+    p = root / "README.md"
+    if not p.exists():
+        return {"source": "README.md", "version": None, "date": None, "rows": []}
+    text = p.read_text()
+    head = re.search(r"^##\s+Status\s*\(([^)]*)\)\s*$", text, re.M)
+    if not head:
+        return {"source": "README.md", "version": None, "date": None, "rows": []}
+    end = text.find("\n## ", head.end())
+    body = text[head.end() : end if end > 0 else len(text)]
+    stamp = [s.strip() for s in head.group(1).split(",")]
+    date = next((s for s in stamp if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s)), None)
+    # only the first bullet list: that is the list README introduces with "measured separately,
+    # because these are different claims", and it is the whole of what this panel may say. The
+    # section goes on to list what 0.9 means, which is a different question and not a claim panel.
+    first = next((b for b in re.split(r"\n\s*\n", body) if b.lstrip().startswith("- ")), "")
+    rows = []
+    for block in re.split(r"\n(?=- )", first):
+        m = re.match(r"-\s+\*\*(.+?)\*\*:\s*(.+)", block.strip(), re.S)
+        if m:
+            rows.append({"claim": _plain(m.group(1)), "text": _plain(m.group(2))})
+    return {
+        "source": "README.md",
+        "version": next((s for s in stamp if s != date), None),
+        "date": date,
+        "rows": rows,
+    }
+
+
+def _coverage_figure(root: Path) -> dict | None:
+    """How much of the real unknown any assay has read, from the coverage result's own counts."""
+    from genomeos.results import load_result
+
+    r = load_result("unknown_coverage", root / "data" / "results")
+    u = (r or {}).get("real_unknown") or {}
+    bp, measured = u.get("bp"), u.get("measured_bp")
+    if not bp or measured is None:
+        return None
+    return {
+        "source": "data/results/unknown_coverage.json",
+        "date": r.get("date"),
+        "measured_bp": measured,
+        "total_bp": bp,
+        "percent": round(measured / bp * 100, 2),
+        "blocks": u.get("blocks"),
+        "blocks_measured": u.get("blocks_measured"),
+        "untouched_mb": u.get("untouched_mb"),
+        "assays": r.get("assays"),
+        "qualification": _plain(r.get("reading") or ""),
+        "stated": [measured, bp, round(measured / bp * 100, 2)],
+    }
+
+
+def _prediction_figure(root: Path) -> dict | None:
+    """The one independent prediction, with the replication arm's own verdict beside its number."""
+    from genomeos.results import load_result
+
+    r = load_result("crispri_published", root / "data" / "results")
+    if not r:
+        return None
+    held = r.get("heldout_published_pairs") or {}
+    gain = held.get("deletion_gain") or {}
+    second = r.get("second_cell_type_hct116") or {}
+    second_gain = second.get("deletion_gain") or {}
+    return {
+        "source": "data/results/crispri_published.json",
+        "date": r.get("date"),
+        "held_out_gain": gain.get("gain"),
+        "ci95": gain.get("ci95"),
+        "against_encode_re2g": held.get("against_encode_re2g"),
+        "cell_types_scored": sorted(held.get("per_cell_type_weighted") or {}),
+        "published_source": r.get("published_source"),
+        "qualification": _plain(second.get("verdict") or ""),
+        "replication": {
+            "cell_type": "HCT116",
+            "replicated": second.get("replicated"),
+            "gain": second_gain.get("gain"),
+            "ci95": second_gain.get("ci95"),
+            "covered_pairs": second.get("covered_pairs"),
+            "regulated": second.get("regulated"),
+            "date": second.get("date"),
+        },
+        "stated": [],
+    }
+
+
+#: A claim gets a figure only where a result file holds one; the others stay words, as README has them.
+_FIGURES = {"assay coverage": _coverage_figure, "independent prediction": _prediction_figure}
+
+
+def _claims(root: Path) -> dict:
+    """README's Status claims, each with the figure its own result file reports, and the comparison.
+
+    The panel is not allowed to say more than README does, so the words are README's and the only
+    thing added is the number read from the file the claim rests on. `agrees_with_readme` is the
+    guard: it is false the moment a figure in README stops matching the result it quotes.
+    """
+    status = _readme_status(root)
+    rows = []
+    for row in status["rows"]:
+        fig = _FIGURES.get(row["claim"].lower(), lambda _root: None)(root)
+        agrees = None
+        if fig and fig.get("stated"):
+            have = _numbers(row["text"])
+            agrees = all(str(v) in have for v in fig["stated"])
+        rows.append({**row, "figure": fig, "agrees_with_readme": agrees})
+    return {**status, "rows": rows, "caveats": _caveats(root)}
+
+
+def _caveats(root: Path) -> list[dict]:
+    """Qualifications a result file states about a claim made elsewhere, carried with the number."""
+    from genomeos.results import load_result
+
+    out = []
+    a = load_result("node_independence_audit", root / "data" / "results")
+    if a:
+        premium = a.get("selection_premium") or {}
+        states: dict[str, int] = {}
+        for c in a.get("components") or []:
+            states[c.get("status", "?")] = states.get(c.get("status", "?"), 0) + 1
+        out.append(
+            {
+                "about": "the node containment result, cited by milestone 1.3's row",
+                "source": "data/results/node_independence_audit.json",
+                "date": a.get("date"),
+                "verdict": _plain((a.get("independent_arms_at_zero_requests") or {}).get("verdict") or ""),
+                "components": states,
+                "selection_premium": {
+                    k: premium.get(k) for k in ("default", "best_rejected", "worst_rejected", "spread_points")
+                },
+            }
+        )
+    return out
+
+
+def _ledger(root: Path) -> dict | None:
+    """The night-shift ledger, if a session left one. It is untracked, so its absence is normal."""
+    try:
+        d = json.loads((root / ".claude" / "nightshift" / "state.json").read_text())
+    except (OSError, ValueError, TypeError):
+        return None
+    lanes = [x for x in d.get("lanes") or [] if isinstance(x, dict) and x.get("state") != "done"]
+    return {
+        "armed": bool(d.get("armed")),
+        "who": d.get("who"),
+        "open": [_plain(x.get("name", "")) for x in lanes],
+    }
+
+
+def _owed(root: Path, text: str) -> dict:
+    """What is waiting on the owner: the blocked items whose class is a decision only he can take.
+
+    Three tracked sources, no hand-kept list: section 4's jobs whose owner column names him, the
+    roadmap steps that say they are blocked and name him, and the board entries that are waiting
+    or whose note asks him something. The night-shift ledger is added when it exists and skipped
+    when it does not, because it is untracked and no shipped view may depend on it.
+    """
+    from genomeos import roadmap, work
+
+    jobs = [
+        j
+        for j in roadmap.parse_data_jobs(text)
+        if j.get("state") != "done" and _OWNER.search(j.get("owner") or "")
+    ]
+    steps = []
+    for a in roadmap.parse_areas(text):
+        for s in a.get("next") or []:
+            if s.get("state") == "blocked" and _OWNER.search(s.get("text") or ""):
+                steps.append({"where": f"area {a['letter']}", "text": _plain(s["text"])})
+    for s in roadmap.parse_next_steps(text):
+        if s.get("progress") == "blocked" and _OWNER.search(s.get("text") or ""):
+            steps.append({"where": f"section 5 item {s['number']}", "text": _plain(s["text"])})
+    board = []
+    for e in work.board(root):
+        if e.get("state") == "done":
+            continue
+        said = " ".join(x for x in (e.get("note"), e.get("next")) if x)
+        asks = [_plain(x) for x in _SENTENCE.split(said) if _OWNER.search(x)]
+        if e.get("state") == "waiting" or asks:
+            board.append(
+                {
+                    "who": e.get("who"),
+                    "state": e.get("state"),
+                    "task": _plain(e.get("task") or ""),
+                    "asks": asks,
+                }
+            )
+    return {
+        "source": "docs/ROADMAP.md sections 4 and 5, the work board",
+        "data_jobs": jobs,
+        "steps": steps,
+        "board": board,
+        "ledger": _ledger(root),
+        "count": len(jobs) + len(steps) + len(board),
     }
 
 
@@ -1306,6 +1642,25 @@ class Api:
 
         return roadmap.load(self.root)
 
+    def state(self) -> dict:
+        """The project's real state, computed from files at request time so it cannot go stale.
+
+        Four questions a reader of the Progress tab is actually asking, each answered by a file
+        rather than by a sentence somebody remembered to update: which milestones are reached and
+        why the held ones are held (docs/ROADMAP.md section 6), where the external review stands
+        (section 5 item 11), what the project claims and on what number (README's Status section
+        with the result files it rests on), and what is waiting on the owner.
+        """
+        p = self.root / "docs" / "ROADMAP.md"
+        text = p.read_text() if p.exists() else ""
+        return {
+            "milestones": _milestones(text),
+            "review": _review(text),
+            "claims": _claims(self.root),
+            "owed": _owed(self.root, text),
+            "roadmap_modified": p.stat().st_mtime if p.exists() else None,
+        }
+
     def work(self) -> dict:
         """What is going on: the work board, running jobs, uncommitted files by area, the day's commits."""
         from genomeos import jobs, roadmap, work
@@ -2265,6 +2620,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.roadmap())
             if u.path == "/api/work":
                 return self._json(self.api.work())
+            if u.path == "/api/state":
+                return self._json(self.api.state())
             if u.path == "/api/features":
                 return self._json(self.api.features())
             if u.path == "/api/predict":

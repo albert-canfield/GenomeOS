@@ -131,3 +131,87 @@ def test_api_budget_wide(tmp_path):
     row = b["table"][0]
     assert row["blocks"] == 2 and row["constrained_unknown_blocks"] == 1 and row["mb_fetched"] == 3.0
     assert b["job"] is None or b["job"]["name"] == "budget_genome_wide"
+
+
+def test_api_state_milestones_are_the_roadmap_parser_s():
+    """The Progress tab's milestone states are the parser's, not a second reading of the same table."""
+    from genomeos import roadmap
+
+    s = Api(ROOT).state()
+    parsed = roadmap.parse_milestones((ROOT / "docs" / "ROADMAP.md").read_text())
+    rows = s["milestones"]["rows"]
+    assert [(r["milestone"], r["state"]) for r in rows] == [(p["milestone"], p["state"]) for p in parsed]
+    assert s["milestones"]["reached"] == sum(1 for p in parsed if p["state"] == "done")
+    assert s["milestones"]["held"] == [p["milestone"] for p in parsed if p["state"] != "done"]
+    # a held milestone carries the reason its own row states; a reached one claims no reason
+    for r in rows:
+        assert (r["reason"] is None) == (r["state"] == "done")
+    held = [r for r in rows if r["state"] != "done"]
+    assert all(len(r["reason"]) > 20 for r in held)
+
+
+def test_api_state_review_reports_the_nine_items_with_their_acceptance_tests():
+    s = Api(ROOT).state()["review"]
+    assert [r["item"] for r in s["rows"]] == [f"R{i}" for i in range(1, 10)]
+    assert all(r["acceptance"] and r["title"] for r in s["rows"])
+    assert all(r["state"] in ("done", "open") for r in s["rows"])
+    assert s["done"] == sum(1 for r in s["rows"] if r["state"] == "done")
+    # an item is only done because a follow-up row in the plan says so
+    assert all(r["follow_ups"] for r in s["rows"] if r["state"] == "done")
+
+
+def test_api_state_claims_read_their_result_files_and_never_restate_a_figure():
+    """The honest panel: README's words, the result files' numbers, and no figure written by hand."""
+    s = Api(ROOT).state()["claims"]
+    readme = (ROOT / "README.md").read_text()
+    assert [r["claim"] for r in s["rows"]] == [
+        "Sequence",
+        "Annotation",
+        "Assay coverage",
+        "Software correctness",
+        "Independent prediction",
+    ]
+    for r in s["rows"]:
+        assert r["text"][:40] in " ".join(readme.split())  # the words are README's, unchanged
+
+    coverage = json.loads((ROOT / "data/results/unknown_coverage.json").read_text())
+    fig = next(r["figure"] for r in s["rows"] if r["claim"] == "Assay coverage")
+    real = coverage["real_unknown"]
+    assert fig["measured_bp"] == real["measured_bp"] and fig["total_bp"] == real["bp"]
+    assert fig["percent"] == round(real["measured_bp"] / real["bp"] * 100, 2)
+    assert fig["date"] == coverage["date"] and fig["source"].endswith("unknown_coverage.json")
+    # README quotes this result, so a README that stops matching its file is reported, not believed
+    assert next(r["agrees_with_readme"] for r in s["rows"] if r["claim"] == "Assay coverage") is True
+
+    crispri = json.loads((ROOT / "data/results/crispri_published.json").read_text())
+    pred = next(r["figure"] for r in s["rows"] if r["claim"] == "Independent prediction")
+    held = crispri["heldout_published_pairs"]
+    assert pred["held_out_gain"] == held["deletion_gain"]["gain"]
+    assert pred["ci95"] == held["deletion_gain"]["ci95"]
+    assert pred["against_encode_re2g"] == held["against_encode_re2g"]
+    # the qualification travels with the number: one cell type, and the second one did not replicate
+    assert pred["qualification"] == crispri["second_cell_type_hct116"]["verdict"]
+    assert pred["replication"]["replicated"] is crispri["second_cell_type_hct116"]["replicated"]
+
+    source = (ROOT / "genomeos" / "web" / "server.py").read_text()
+    page = (ROOT / "genomeos" / "web" / "static" / "index.html").read_text()
+    for stale in ("160447", "160,447", "30602182", "30,602,182", "0.52%", "0.1095"):
+        assert stale not in source, f"{stale} is a result's figure; read it from the file"
+        assert stale not in page, f"{stale} is a result's figure; the page may not carry it"
+
+
+def test_api_state_renders_with_an_empty_work_board(tmp_path):
+    """A checkout with the plan and the README but nobody working and nothing computed."""
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "ROADMAP.md").write_text((ROOT / "docs" / "ROADMAP.md").read_text())
+    (tmp_path / "README.md").write_text((ROOT / "README.md").read_text())
+    api = Api(tmp_path)
+    assert api.work()["board"] == [] and api.work()["uncommitted"] == []
+    s = api.state()
+    assert s["milestones"]["total"] and s["review"]["total"] == 9
+    # every claim is still stated; the figures are absent rather than invented
+    assert len(s["claims"]["rows"]) == 5
+    assert all(r["figure"] is None and r["agrees_with_readme"] is None for r in s["claims"]["rows"])
+    assert s["claims"]["caveats"] == []
+    assert s["owed"]["board"] == [] and s["owed"]["ledger"] is None
+    assert s["owed"]["count"] == len(s["owed"]["data_jobs"]) + len(s["owed"]["steps"])

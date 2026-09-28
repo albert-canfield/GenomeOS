@@ -51,6 +51,7 @@ Updated as each task is completed (tests + lint green before moving on).
 | UI: class summary + highlight | done | chips with share of bases per block type and UNKNOWN class; click a chip or "Highlight all" in the block panel to mute everything else |
 | conceptual model: nodes / reader / writer / executor | recorded | docs/NODES-READER-WRITER.md maps it to TADs and CTCF (nodes), the epigenome (reader), replication/epigenetic/germline writers, runtime (executor); next design step: a `Domain` block above `Gene` |
 | molecules: RNA and proteins | started | `genomeos protein SYMBOL` and the Molecules tab: our translation of the canonical transcript checked against UniProt (APP: 770 aa, 100% identical to P05067), UniProt function, location and features (curated), AlphaFold model with per-residue pLDDT (predicted) drawn as a rotating backbone coloured by confidence; structures cached, nothing else stored |
+| UI: Progress tab read from files | done | `/api/state`: milestones and the external review R1–R9 parsed from docs/ROADMAP.md at request time, the claim panel's words from README's Status section and its figures from their own result files with each file's date and its own qualification, the work board, and what is waiting on the owner; tests/test_web.py fails if a result's figure is written into the server or the page |
 
 ## 2026-09-10 (evening 2) — flow trace, nodes, protein compiler
 
