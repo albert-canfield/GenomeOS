@@ -7176,6 +7176,57 @@ with 0 requests and at sufficient size. What remains:
    cost 0 requests but give five loci, and each would need its own registration with a floor it can
    meet.
 
+## Probe: no second independent benchmark exists yet, because the 16 many-loci K562 sets are raw reads and their analysis set is unreleased (review item 11, 2026-09-28, lane-indep2)
+
+**Negative first.** The IGVF portal holds no processed element-gene table for the Gersbach K562 CRISPRi
+Perturb-seq over many loci, and none for any other K562, HepG2, GM12878 or IMR-90 CRISPRi screen that
+the project has not already read. No benchmark was registered and nothing was scored. The project still
+has no independent target benchmark. `scripts/indep_igvf_probe.py` records the census and the two
+label-blind counts below (`data/results/indep_igvf_probe.json`, 0 requests, portal read through
+`https://api.data.igvf.org` on 2026-09-28, IGVF data CC BY 4.0).
+
+**The 16 many-loci K562 sets** (IGVFDS5637QJRP, 8708IDCC, 5440YEBR, 6162UVFJ, 0567GXFW, 5791LZOT,
+5632GXBM, 2463TEJP, 1341HYXT, 8094NBFV, 0146NONB, 6790CUPS, 6013FBZQ, 6260UZSB, 1474DQOO, 8491ILFO;
+released 2026-07-27) each carry only fastq and seqspec files: 597 GB of reads, plus 94 GB in their
+16 gRNA-capture auxiliary sets. Each set is `input_for` an analysis set that exists but is not released
+(HTTP 403): IGVFDS3624DGBH for 15 of them and IGVFDS3481OUHP for one. The processed table is therefore
+coming, and has not arrived. Three further K562 sets from 2026-02-06 (IGVFDS1915EGTT, 2136PGKM,
+5321WVPQ) feed a third unreleased analysis set, IGVFDS1588RHDM, and use the MHC library, so they are the
+same locus again.
+
+**What the library says, label-free.** The guide file (IGVFFI9377CEMM, 39 kB, md5 2c1975d5…, released
+2026-07-27) describes "350 DHS genome-wide with transcriptome-wide Perturb-seq and growth readout":
+1,587 targeting guides on 342 elements across 23 chromosomes. Of those, 63 lie within 1 kb of a
+GENCODE v50 TSS, 9 overlap an ENCODE benchmark element, and 161 of the 279 distal elements (58%) are
+covered by the stored sweep, giving 5,676 element-gene pairs with a K562 value. This clears the 0.5
+coverage floor before any label is seen. Whether it clears the floor of 20 covered distal positives is
+unknown until the table is released.
+
+**Processing it here is not feasible.** It would mean 691 GB of downloads against 19 GiB free disk and a
+2 GB cap, so it cannot be done even one set at a time. The steps would be the IGVF Perturb-seq pipeline
+(Cell Ranger or kallisto|bustools for gene and guide counts, then guide assignment, then SCEPTRE or
+PerTurbo per element and gene), with several CPU-hours and 32–64 GB RAM per set. This lane stops here,
+as its brief says.
+
+**The one other released K562 table has already been read.** The Engreitz "K562 Random DC-TAP-seq"
+(IGVFDS7288SJVF; file IGVFFI0957PYTA, 0.57 MB, md5 758e1162…, released 2026-08-08, replacing the revoked
+IGVFFI2436YUJO and the archived IGVFFI9586LSUT) is Ray et al. 2025, and that study sits in the ENCODE
+held-out file. A label-blind overlap check read only the coordinate, gene, type, power and promoter
+columns. It found 1,289 of the 7,281 targeting pairs (920 elements) matching a K562_DC_TAP benchmark pair for the same
+gene, and 88 more matching pairs from other ENCODE studies. Another 1,222 distal pairs with power ≥ 0.8 at a 15% effect are absent from the ENCODE file, but
+they come from the same screen, cells and pipeline whose positives already informed the project's
+thresholds. A remainder of a study already read is not independent evidence, so it was not registered.
+
+**Everything else on the portal is out of reach at 0 requests.** The sweep scores only K562, HepG2,
+GM12878 and IMR-90. The remaining released element-level CRISPRi tables are in WTC11 (Gersbach
+IGVFDS0523KGZP; Engreitz IGVFDS4617SJVM and IGVFDS3911MOCN; Hon IGVFDS7340YDHF and four cardiomyocyte
+sets), in WTC11-derived neurons and endothelial cells, or in HCT116 (the 705-request item). HepG2 has
+only a phenotype FACS screen with guide counts (Sherwood IGVFDS6504OLWV). GM12878 and IMR-90 have none.
+
+**Next.** Watch IGVFDS3624DGBH. When it is released, fetch its element-level file, count label-blind
+coverage, and pre-register on it exactly as `genomeos/attribution/indep.py` did for the MHC. It needs 0
+requests, and the covered share is already known to be 0.58.
+
 ## Census: every summary in the measured layer, what reads it, and how often it bites (R6, 2026-09-28)
 
 Review item R6 says the measured layer keeps the highest reporter activity over matching intervals and
