@@ -2,6 +2,7 @@
 """R7 follow-up: who reads the block classifier's and the budget's output, and what they say now.
 
     uv run python scripts/budget_axes_census.py [--no-save]
+    uv run python scripts/budget_axes_census.py --after [--no-save]
 
 Two findings of review item R7 are left open by lane-ontology (329c2f9). `genome/unknown.py`
 `classify_block` returns `regulatory` before it reads RepeatMasker, so a regulatory block never had
@@ -12,11 +13,15 @@ outputs and the field each reads, and counts over the stored `unknown_<chrom>` a
 results: blocks per sequence class and whether their repeat coverage was read, what RepeatMasker
 says over the blocks it was not read for, and every budget (tier, label) pair with its selection
 reading. No requests, no model.
+
+With `--after` it counts the `budget_axes_<chrom>` results against the stored budget, the
+registration below and the compiled programs' origin and selection lines.
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 from collections import Counter
 from typing import Any
 
@@ -271,10 +276,98 @@ def before() -> dict[str, Any]:
     }
 
 
+def program_regions(chrom: str) -> dict[int, dict[str, str]]:
+    """Region start -> origin and evidence_status as the compiled program states them."""
+    from pathlib import Path
+
+    p = Path("data/knowledge/compiled") / f"noncoding_{chrom}.bio"
+    out: dict[int, dict[str, str]] = {}
+    if not p.exists():
+        return out
+    cur: dict[str, str] | None = None
+    for line in p.open():
+        if line.startswith("region "):
+            cur = {}
+        elif cur is not None and line.startswith("}"):
+            if "locus" in cur:
+                out[int(cur["locus"].split(":")[1].split("-")[0])] = cur
+            cur = None
+        elif cur is not None and line.startswith("  ") and ": " in line:
+            k, v = line.strip().split(": ", 1)
+            cur[k] = v
+    return out
+
+
+def after() -> dict[str, Any]:
+    from genomeos.attribution.budget import LEGACY_TIER
+
+    renamed = REGISTERED["budget"]["labels_renamed"]
+    c: dict[str, Counter] = {
+        k: Counter() for k in ("tier", "label", "evidence_status", "origin", "regulatory_origin", "checks")
+    }
+    for ch in CHROMS:
+        new = load_result(f"budget_axes_{ch}")
+        old = load_result(f"budget_{ch}")
+        if not new or not old:
+            continue
+        prog = program_regions(ch)
+        olds = {b["start"]: b for b in old["blocks"]}
+        for b in new["blocks"]:
+            g, o = b["guess"], olds[b["start"]]
+            og = o["guess"]
+            c["tier"][g["tier"]] += 1
+            c["label"][g["label"]] += 1
+            c["evidence_status"][str(g["evidence_status"])] += 1
+            c["origin"][g["origin"].split("/")[0]] += 1
+            if g["tier"] == "regulatory":
+                c["regulatory_origin"][g["origin"].split("/")[0]] += 1
+            ck = c["checks"]
+            ck["blocks"] += 1
+            ck["legacy tier equals the stored tier"] += g["legacy_tier"] == og["tier"]
+            ck["new tier maps back to the stored tier"] += LEGACY_TIER.get(g["tier"], g["tier"]) == og["tier"]
+            ck["confidence equals the stored confidence"] += g["confidence"] == og["confidence"]
+            ck["label equals the registered rename of the stored label"] += g["label"] == renamed.get(
+                og["label"], og["label"]
+            )
+            ck["label says neutral, fossil, dead, best guess, lineage-specific or exapted"] += bool(
+                re.search(r"neutral|fossil|dead|best guess|lineage-specific|exapted", g["label"])
+            )
+            r = prog.get(b["start"])
+            if r is not None:
+                ck["blocks in a compiled program"] += 1
+                ck["origin equals the compiled origin"] += g["origin"] == r.get("origin", "").split(", ")[0]
+                st = [
+                    v
+                    for v in r.get("evidence_status", "").split(", ")
+                    if v.startswith("selection") or v.startswith("under")
+                ]
+                if g["evidence_status"] is not None:
+                    ck["evidence_status equals the compiled selection reading"] += st == [
+                        g["evidence_status"]
+                    ]
+        print(ch, "done", flush=True)
+    wide = load_result("budget_axes_genome_wide") or {}
+    return {
+        "review_item": "R7 follow-up, after the build",
+        "checks": dict(c["checks"]),
+        "blocks_by_tier": _flat(c["tier"]),
+        "blocks_by_label": _flat(c["label"]),
+        "blocks_by_evidence_status": _flat(c["evidence_status"]),
+        "blocks_by_origin": _flat(c["origin"]),
+        "regulatory_tier_by_origin": _flat(c["regulatory_origin"]),
+        "genome_wide_by_tier": wide.get("by_tier"),
+        "genome_wide_guessed_fraction": wide.get("guessed_fraction"),
+        "registered": REGISTERED,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument("--after", action="store_true", help="count the budget_axes_<chrom> results")
     args = ap.parse_args()
+    if args.after:
+        return save_after(args.no_save)
     payload = before()
     name = "budget_axes_census"
     for k, v in payload.items():
@@ -282,6 +375,16 @@ def main() -> int:
             print(k, v if not isinstance(v, dict) else dict(list(v.items())[:12]))
     if not args.no_save:
         print(f"saved {save_result(name, payload, manifest=manifest())}")
+    return 0
+
+
+def save_after(no_save: bool) -> int:
+    payload = after()
+    for k, v in payload.items():
+        print(k, v if not isinstance(v, dict) else dict(list(v.items())[:12]))
+    if not no_save:
+        m = manifest(("budget", "unknown", "budget_axes"))
+        print(f"saved {save_result('budget_axes_census_after', payload, manifest=m)}")
     return 0
 
 

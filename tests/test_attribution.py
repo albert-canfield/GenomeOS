@@ -111,20 +111,23 @@ def test_elements_over_blocks_clips_and_counts():
 def test_guess_tiers():
     assert guess("gap", 1.0, None, None)["tier"] == "structural"
     assert guess("centromere", 0.5, {"fraction_above": 0.0}, None)["tier"] == "structural"
-    assert guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.01}, None)["tier"] == "fossil"
+    g = guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.01}, None)
+    assert g["tier"] == "repeat_unconstrained" and g["legacy_tier"] == "fossil"
     g = guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.12}, None)
-    assert g["tier"] == "constrained_unknown" and "exapted" in g["label"]
+    assert g["tier"] == "constrained_unknown" and "under selection" in g["label"]
     assert guess("regulatory", 0.7, {"fraction_above": 0.08}, None)["tier"] == "regulatory"
-    assert guess("unique_intergenic", 0.3, {"fraction_above": 0.01}, {"n": 0})["tier"] == "neutral"
+    assert (
+        guess("unique_intergenic", 0.3, {"fraction_above": 0.01}, {"n": 0})["tier"] == "unconstrained_unknown"
+    )
     assert (
         guess("unique_intergenic", 0.3, {"fraction_above": 0.07}, {"n": 0})["tier"] == "constrained_unknown"
     )
     assert guess("unclassified", 0.0, {"fraction_above": 0.035}, {"n": 4})["tier"] == "constrained_unknown"
-    assert guess("long_orf", 0.4, {"fraction_above": 0.0}, None)["tier"] == "neutral"
+    assert guess("long_orf", 0.4, {"fraction_above": 0.0}, None)["legacy_tier"] == "neutral"
     unmeasured = guess("unique_intergenic", 0.3, None, None)
     assert unmeasured["confidence"] <= 0.3 and "not measured" in unmeasured["label"]
     assert all(
-        guess(c, 0.5, {"fraction_above": 0.5}, None)["tier"] in TIERS
+        guess(c, 0.5, {"fraction_above": 0.5}, None)["legacy_tier"] in TIERS
         for c in ("regulatory", "mixed_intergenic", "gap")
     )
 
