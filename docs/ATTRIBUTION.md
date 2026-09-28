@@ -7836,6 +7836,82 @@ and it is not run.
 
 **Cost.** 0 AlphaGenome requests; the response cache is never opened.
 
+## The result: in HCT116 the frozen deletion model gains +0.022 with an interval across zero, so the CRISPRi result passes its second cell type but is not replicated there (2026-09-28, lane-hct116)
+
+The registration is `crispri.PREREGISTERED_PUBLISHED['second_cell_type']` (fe61c36, 2026-09-27,
+above): the same code path with HCT116 added to the cells kept per gene, weights unchanged; it
+passes if the gain on the 363 covered HCT116 pairs is above zero, and counts as a replication only
+if the chromosome-bootstrap interval excludes zero. The owner approved up to 760 requests on
+2026-09-28. The fetch and scoring code (`scripts/crispri_hct116.py`) was committed in 6257b95
+before any HCT116 value was read. The result is `data/results/crispri_published.json`, key
+`second_cell_type_hct116`, inserted beside `second_cell_type` without changing any existing line.
+
+**AlphaGenome requests: 705,** the costed figure exactly. All 705 were answered; there were no quota
+refusals and no retries. Each answer is stored in the sweep's cache format under its own root
+(`data/knowledge/alphagenome/elements_hct116`, local), with a ledger entry written before every
+request was sent.
+
+### The registered verdict first
+
+| covered HCT116 pairs (363; 34 regulated; 5 chromosomes) | AUPRC (average precision) |
+|---|---|
+| distance | 0.334 |
+| activity + distance | 0.517 |
+| activity + distance + deletion | 0.539 |
+| **gain** | **+0.022, 95% −0.058 to +0.145** (200 chromosome resamples) |
+
+**Passes, not replicated.** The gain is above zero, so the rule that would have made this "a K562
+result" does not fire. The interval includes zero, so the registration forbids calling it a
+replication. score_published's per-cell block (all 396 pairs, weighted, the benchmark's estimator)
+agrees: 0.495 → 0.509, gain +0.014 (95% −0.042 to +0.126). The frozen weights reproduce the K562
+headline to the last digit on the same run: +0.1407 (95% +0.082 to +0.231), 1,744 pairs.
+
+The registration left one choice open, and it was fixed before scoring. It names the pairs, the
+sign rule and the bootstrap, but not the AUPRC estimator. The primary figure uses the estimator of
+the K562 headline this arm replicates.
+
+### Why this arm could say so little: five genes, and most pairs out of the model's reach
+
+These limits were not stated in the registration. They are reported here and change no verdict.
+
+- **The 34 positives are five genes at five loci:** SSFA2 (10), FAM3C (8), MYC (7), KITLG (5) and
+  CCND1 (4). The pairs fall on chr8 (257), chr11 (74), chr2 (34), chr7 (26) and chr12 (5). A
+  chromosome bootstrap over five units is a bootstrap over five loci, which is why the interval is
+  wide. The registration's "34 regulated" read as more evidence than it is.
+- **228 of the 363 covered pairs get no deletion value in any cell,** 11 of the 34 regulated among
+  them. Their gene lies outside the scorer's 1 Mb window: the median distance is 2.16 Mb for these
+  pairs against 245 kb for the answered ones, and they are mostly the long-range MYC and CCND1
+  screens. Only 135 pairs (23 regulated) carry a deletion answer, and 106 (21 regulated) carry a
+  predicted fall. That is 37% of covered pairs answered, against 66% in held-out K562 (1,152 of
+  1,744). "Covered" in the registration meant "on a deleted element", not "within the model's
+  reach". The two had not been told apart.
+
+### The model version: mixed by rule, identical by measurement
+
+Every new request asked for ALL_FOLDS through `alphagenome_adapter.create_client`. The frozen weights
+and the `top_target` flag read 6,097 answers from the 2026-09 sweep, which asked for no version.
+So the manifest says **mixed** (`result_manifest.model_dependencies[0].mixed`), as the rule requires.
+
+The purchase also measured what the rule could only assume. Each of the 705 elements was answered
+twice, once by the sweep with no version requested and once now with ALL_FOLDS requested. Across
+54,760 gene-by-cell values on K562, HepG2, GM12878 and IMR-90, **all 54,760 agree to four decimal
+places**, and the top predicted target is the same for all 705 elements
+(`second_cell_type_hct116.versus_the_sweep`). For these elements, the unrequested sweep answered as
+ALL_FOLDS answers now. The flag stays because the rule counts labels, and 705 elements are not the
+whole sweep. For this claim, though, the mixed versions do not explain the weak HCT116 gain: the
+weights were fitted on the same model's answers.
+
+### What the CRISPRi result may now be called
+
+- Allowed: the K562 sentence of 2026-09-27, unchanged, then: "In a second cell type, HCT116
+  (363 pairs, 34 regulated, five genes), the frozen model's gain is +0.02 (95% −0.06 to +0.14):
+  positive, not significant, and limited by the 1 Mb window, which reaches only 135 of the pairs."
+- Not allowed: "replicated in a second cell type", "generalises across cell types".
+- The registration's failure clause did not fire, so the claim need not be withdrawn to K562. It
+  remains **replicated in one cell type**. An informative second cell type needs more genes, not
+  more requests for these five. It also needs pairs inside 1 Mb, or a longer-range feature
+  registered for them.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

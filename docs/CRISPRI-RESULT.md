@@ -9,6 +9,12 @@ model raises held-out K562 AUPRC from 0.55 to 0.69 (+0.14, 95% +0.08 to +0.23). 
 expression drop AlphaGenome predicts when the enhancer is deleted, and the model was frozen before
 the held-out pairs were scored. The result has been tested in **one cell type**.
 
+*(Added 2026-09-28.)* HCT116 has now been scored as registered (705 model requests). The frozen
+model's gain there is **+0.022 (95% −0.058 to +0.145; 363 pairs, 34 regulated)**. That is positive,
+so the pre-registered pass rule is met, but the interval includes zero, so it is **not a
+replication**. The 34 positives cover only five genes, and 228 of the 363 pairs lie beyond the
+model's 1 Mb window. The result is still replicated in one cell type.
+
 ## The setup
 
 - **Data.** The ENCODE enhancer–gene benchmark (EngreitzLab/CRISPR_comparison; Gschwind et al.,
@@ -73,6 +79,10 @@ scored element (96.6% against 90.6% in held-out K562), so three checks were regi
    regulated). AlphaGenome has HCT116 tracks, but scoring it costs 705 model requests, and that has
    not been done. GM12878 (68 pairs, 16 regulated) gives +0.015 [−0.094, +0.205]: uninformative.
    WTC11 (15 regulated) and Jurkat (7) are too small to carry a result.
+   *(Added 2026-09-28.)* HCT116 is now scored: +0.022 [−0.058, +0.145], which passes but is not
+   replicated. Its 34 positives are five genes (SSFA2, FAM3C, MYC, KITLG, CCND1), and only 135 of
+   the 363 pairs have their gene inside the 1 Mb window. `docs/ATTRIBUTION.md`, section of
+   2026-09-28 (lane-hct116); `data/results/crispri_published.json`, key `second_cell_type_hct116`.
 2. **The held-out positives were selected on H3K27ac.** All 190 sit in H3K27ac elements, and 1,438
    of the 4,188 negatives do not. A model that reads H3K27ac, as the pre-registered baseline does,
    is flattered on that set. ENCODE-rE2G's published held-out model reads DNase only. That is why the
