@@ -7158,6 +7158,55 @@ with 0 requests and at sufficient size. What remains:
    cost 0 requests but give five loci, and each would need its own registration with a floor it can
    meet.
 
+## Census: every summary in the measured layer, what reads it, and how often it bites (R6, 2026-09-28)
+
+Review item R6 says the measured layer keeps the highest reporter activity over matching intervals and
+the strongest CRISPRi effect, and that such summaries favour extremes and hide disagreement. Before any
+change, `scripts/measured_aggregation_census.py` (result `data/results/measured_aggregation_census.json`,
+0 requests) lists every aggregation in `attribution/measured.py` at `0924a5c`, with the consumers
+`git grep` finds, and counts genome-wide how often each one is taken over more than one observation.
+
+**One summary decides a label: the lentiMPRA maximum (A1).** `Layer.for_element` keeps, per cell, the
+largest log2(RNA/DNA) of every tile that meets the overlap rule, and `cells_active` is read from that
+maximum. It feeds the lentiMPRA verdict, the pooled verdict and `assays_agreeing`, the census counts in
+`measured_layer_genome.json`, the calibration table in `confidence_calibration_genome.json`, the
+agree/disagree header of every compiled programme, and the `basis:` line of every `<id>_measured`
+block. Of the 17,869 elements lentiMPRA measures, 16,863 match one tile, 975 match two and 31 three or
+more. That gives 3,018 cell readings over more than one tile, and in **237 of them the tiles disagree
+about the threshold**: 224 are ties (one of two tiles active), 7 have a minority of tiles active and 6 a
+majority. Under the maximum, all 237 read active.
+
+**The rest, and why they are out of scope or harmless.**
+- A2, `max_activity`, and A3, the `overlap` of every assay: maxima that no code reads. They are kept but
+  should be named as descriptive.
+- A4, `lentimpra.elements`: tile names without values, strand or overlap. The disagreement above cannot
+  be seen in a row today.
+- A5, `mpra.parse`: averages the rows that share an interval in one cell's file. The average never
+  fires, because each of the three ENCODE files (ENCFF802FUV, ENCFF475FKV, ENCFF769REH) holds one row
+  per interval. The strand column is dropped (28 rows per file are on `-`). The p and q columns are -1
+  throughout, and no file has a replicate-level value, so **no per-tile uncertainty exists to keep**.
+- A6 and A7, the pooled CRISPRi gene lists and `outcomes_by_cell`: strongest outcome across cells and
+  across datasets. R1 (`6a4a8a9`) left every pair and each cell's own outcome in the row and names
+  differing cells in `basis:`, so these are left alone.
+- A8, `rule_links`: a compiled rule's `strength:` is the largest |effect| among the training pairs of
+  one element, gene and cell. The compiler reads it. It is reported to the coordinator, not changed here.
+- A9, VISTA: an element agrees when any matched VISTA element is positive. 5 of the 98 VISTA elements
+  match more than one, and **none matches a positive and a negative**.
+- A10, saturation mutagenesis: only a locus's primary experiment is read, and its repeats are counted but
+  never looked at. 2 repeats sit under the 4 matched elements, both in SORT1's group (SORT1.2 primary,
+  plus SORT1 and SORT1-flip, which is the same element in the other orientation). This is the one
+  orientation measurement the layer holds, and it is discarded.
+- A11, `confidence_of`: the strongest assay present sets the row's confidence. The docstring names this,
+  and R4's lanes own confidences.
+- A12, the pooled verdict: already keeps conflict as `mixed`.
+
+**The word "episomal".** It describes the ENCODE4 lentiMPRA in `measured.py`,
+`confidence_calibration.py`, `scripts/unknown_coverage.py`, four places in this file,
+GRAMMAR-BY-COMPARISON and ROADMAP. The cited assay integrates its reporters by lentivirus (Agarwal et al.
+2025, Nature, https://www.nature.com/articles/s41586-024-08430-9). An integrated reporter still sits
+outside its native locus, so the conclusion drawn from the word ("it measures the sequence and not the
+locus") stands, but the word itself is wrong.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
