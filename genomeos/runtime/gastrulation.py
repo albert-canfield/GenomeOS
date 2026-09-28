@@ -135,6 +135,7 @@ def run_gastrulation(
 
     The module's expected_* proportions are unsourced guesses, and the defaults
     here miss the mesoderm one: 0.10 against 0.35 (endoderm 0.43 against 0.20).
+    Since the Tbxt-SOX17 sign correction (2026-09-28) no cell ends as mesoderm at all.
     Each fate holds a fixed band of NODAL level, so decay_length and nodal_max
     (neither sourced, both in model units) only move the band edges along the
     axis, and two free numbers can fit any three proportions. Meeting the

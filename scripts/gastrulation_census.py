@@ -34,6 +34,9 @@ HUMAN = CACHE / "E-MTAB-9388.sdrf.txt"
 MOUSE = CACHE / "pijuan_sala_2019_meta.tab.gz"
 COUNTS = "gastrulation_census_counts"
 COMPARISON = "gastrulation_census_comparison"
+# Since the Tbxt-SOX17 sign correction (registered 2026-09-28, b1f3405) `compare` writes here; the file
+# above stays the record of the one run of 3c4e301 on the uncorrected module.
+COMPARISON = "gastrulation_census_comparison_sign_corrected"
 LAYERS = ("ectoderm", "mesoderm", "endoderm")
 
 SOURCES = [
@@ -169,6 +172,14 @@ def compare() -> None:
         "tolerance": g.CENSUS_TOLERANCE,
         "model_run": g.CENSUS_MODEL_RUN,
         "model": model,
+        "sign_correction": {
+            "registration": "docs/DESIGN-MINIMAL-CELL.md, 'The Tbxt-SOX17 sign, corrected (registered "
+            "2026-09-28)'; SIGN_CORRECTION in genomeos/runtime/gastrulation.py",
+            "source": g.SIGN_CORRECTION_SOURCE,
+            "rules": g.SIGN_CORRECTION,
+            "model_before": g.SIGN_CORRECTION_BEFORE["census_run"],
+            "expected": g.SIGN_CORRECTION_EXPECTED,
+        },
         "human_cs7_variants": human,
         "human_cs7_judgement": human_j,
         "verdict": verdict,

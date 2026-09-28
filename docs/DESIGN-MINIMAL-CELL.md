@@ -397,3 +397,48 @@ moves further from the CS7 census, and the census verdict stays falsified.
    as a change, not hidden. Predicted: endoderm may leave the unsourced
    0.20 ± 0.25 band (above 0.45), and the layer-order test fails if
    mesoderm vanishes.
+
+**The run, once, after the registration was committed (`b1f3405`).**
+Negatives first. The registered direction was half wrong: endoderm did
+**not** widen, it narrowed, 0.425 to 0.367; mesoderm did narrow, and all
+the way to nothing, 0.100 to 0.000; the cells went to ectoderm, 0.475 to
+0.633. The reason is the runtime, not the paper: `genomeos/runtime/grn.py`
+takes the *mean* over a gene's activators, so a second activator that is
+low where NODAL is high (Tbxt there is about 0.3) halves SOX17's drive in
+the endoderm band (Sox17 at x = 0.09 falls from 35.8 to 18.0), and caps it
+at 0.8 of what NODAL alone gave. In the former mesoderm band (x ≈ 0.5)
+Tbxt no longer wins: Sox2 ends at 35.9 against Tbxt 0.24, where Tbxt had
+been 21.7. The prediction assumed activators add; the runtime averages
+them, and the registration did not look.
+
+| layer | before (census run) | after | human CS7 interval | outside by, before → after |
+|---|---|---|---|---|
+| ectoderm | 0.475 | 0.633 | 0.046 – 0.172 | 0.303 → 0.461 |
+| mesoderm | 0.100 | 0.000 | 0.694 – 0.773 | 0.594 → 0.694 |
+| endoderm | 0.425 | 0.367 | 0.116 – 0.213 | 0.212 → 0.154 |
+
+Census verdict, same mappings, site filters, tolerance and model run as
+`3c4e301`, written to
+`data/results/gastrulation_census_comparison_sign_corrected.json` (one
+departure from the registration: the corrected run gets its own file, so
+the committed record of the `3c4e301` run is kept, not rewritten; its test
+is now a strict xfail on the fresh-run check): **falsified** on all three
+layers, as before; endoderm moved
+closer and still misses by 0.154, three times the tolerance; mesoderm and
+ectoderm moved further. The 60-cell, 30 h test fixture gives the same
+shares (0.633 / 0.000 / 0.367, before 0.467 / 0.100 / 0.433).
+
+Tests: `test_three_layers_in_order` now fails (0 of 60 cells are mesoderm,
+before 6) and is a strict xfail with that reason; its end-order and
+uncertainty checks moved to a test of their own and pass. The molecular
+uncertainty label rose from "low" to "medium" because two rules moved from
+inferred to experimental evidence, although their numbers are still
+unsourced; the test now asserts "medium" and says so. The mesoderm strict
+xfail from `a398e9c` still xfails, now at 0.0 against 0.35. Ectoderm 0.633
+and endoderm 0.367 are both still within 0.25 of the unsourced 0.45 and
+0.20. No number was changed after the run.
+
+What it says: with a sourced sign and unsourced numbers, this network in
+this runtime has no mesoderm band at the default gradient. Whether that is
+the numbers, the mean-of-activators rule, or a missing interaction is not
+decided here; each would be its own registered lane.
