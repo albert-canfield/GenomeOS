@@ -71,6 +71,15 @@ def _git(root: Path, *args: str) -> str | None:
 #: is output, so it is recorded under `dirty_result_paths` and does not make the code dirty.
 RESULT_PATHS = ("data/results/",)
 
+#: fe0880a, the commit that introduced this contract (review R9). A result name is historical when it
+#: was in the registry before it (item 12 S6, docs/DATA.md "The result registry").
+CONTRACT_COMMIT = "fe0880ab7423b064a38da130e326fa57d4efeb28"
+#: Item 12 S6: what counts as code in the revision stamp, tracked or untracked. tests/ because a writer
+#: imports from it (scripts/grn_clamp_census.py); *.bio anywhere because writers execute BioLang
+#: programs under data/organisms and data/demo. Untracked data files do not count (docs/DATA.md).
+CODE_ROOTS = ("genomeos/", "scripts/", "tests/")
+CODE_SUFFIXES = (".bio",)
+
 
 def code_revision(root: Path | None = None) -> dict[str, Any]:
     """The revision of the code that wrote a result. `dirty` counts tracked files that differ from

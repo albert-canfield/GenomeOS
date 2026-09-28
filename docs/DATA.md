@@ -885,3 +885,63 @@ reported as unavailable, never invented).
 the default is the first installed. `/api/features` and the Progress tab list
 both with their licence and their state. GenomeOS never downloads or
 redistributes NetMHCpan; a commercial user needs a licence from DTU.
+
+## The result registry: what enters it and what is quarantined (item 12 S6, 2026-09-28)
+
+Registered before the build. The second external review (ROADMAP section 5, item 12, S6) confirmed
+two defects in the contract built for review R9 (`fe0880a`): `save_result` wrote a new result
+before refusing it, and decided "historical" by `not p.exists()`, so a retry found the file it had
+just written and only warned; and the revision stamp ran `git status --untracked-files=no`, so a
+result could record a clean revision while an untracked script wrote it.
+
+**Census before the change** (`0e50036`, `scripts/manifest_census.py --enforcement`): 221
+`save_result` call sites in 148 files; 1,015 results on disk, 955 of them historical at `fe0880a`
+(656 tracked in its parent, 299 git-ignored `reader_*_chr*.json` written before it); all 60 names
+added since carry a complete manifest, in all 69 of their committed versions, so nothing committed
+shows the retry path used. 13 writers put or edit results in `data/results/` without
+`save_result`; the contract does not see them and this item does not change them.
+
+**What enters `data/results/`.** A write reaches the registry only when its manifest is complete,
+or when its name is on the legacy allowlist (it then warns, as before). Anything else is a failed
+new result: it is written to the quarantine and `ManifestError` names that path. `strict=None` in
+the registry means exactly "not on the allowlist"; whether the file already exists no longer
+matters. `strict=True` enforces in any directory; `strict=False` cannot admit a name that is not
+on the allowlist into the registry. Outside the registry (tests, scratch) an incomplete manifest
+still only warns unless `strict=True`. A later complete write of the same name removes its
+quarantined copy.
+
+**The quarantine** is `data/quarantine/results/` (the rule is `<results_dir's parent>/quarantine/
+<results_dir's name>`, so a test's directory gets its own). It is **git-ignored**, by a
+`.gitignore` holding `*` that the writer creates in `data/quarantine/`: a quarantined file is a
+computation that failed its contract, and tracking it would let the next `git add` publish
+unvalidated numbers; its reason is per-machine run state, like `data/jobs/`. The self-ignoring
+directory needs no edit to the shared root `.gitignore` and holds in worktrees and test
+directories. Each file keeps the whole result plus a `quarantine` block: reason, the problems, the
+path it was meant for, and when.
+
+**The legacy allowlist** is `data/results_legacy.txt`: the 955 names historical at `fe0880a`, each
+with its source (`tracked` in the tree of `fe0880a^`, or `ignored-local`: a git-ignored
+`data/results/*.json` on this disk last written before `fe0880a`). `scripts/manifest_legacy.py`
+generated it once from git history and refuses to overwrite it. No code ever adds to it; a name is
+added only by a reviewed commit that says why. If it cannot be read, it counts as empty, so every
+incomplete write in the registry is quarantined (fails closed).
+
+**The revision stamp** reads `git status --porcelain -z --untracked-files=all`. An untracked file
+counts as code when it sits under `genomeos/`, `scripts/` or `tests/` (a writer,
+`scripts/grn_clamp_census.py`, imports `tests/test_grn_clamp.py`), or is a BioLang program
+(`*.bio`) anywhere, since writers execute `data/organisms/*.bio` and `data/demo/*.bio`. Such files
+are listed under `code.untracked_code_paths`, included in `code.dirty_code_paths`, and make
+`code.dirty` true. **Untracked data files do not count and are not listed**: what a result read is
+pinned by its manifest's `inputs` (path and sha256), which is the contract's mechanism for data;
+counting them would mark dirty any result written while a peer has an unrelated file open in this
+shared checkout, and the git-ignored stores (`data/reference`, `data/knowledge`, `data/cache`) are
+invisible to `git status` anyway. An untracked file under `data/results/` is an earlier writer's
+output and is recorded apart under `dirty_result_paths`, as a modified one already is.
+
+**Predicted census after the build**: the same 1,015 results, 71 carrying a manifest, 67
+complete (nothing is rewritten); 955 names on the allowlist, 60 on disk not on it, all complete;
+0 quarantined. **Falsifiers**: the list generated from history is not 955 names or differs from
+the census's historical set; or an existing test fails other than the two that assert the defect
+(`test_a_new_result_without_the_contract_is_written_then_refused` and the retry half of
+`test_strict_is_the_default_for_a_new_name_in_the_registry_only`), which would mean a legacy
+writer was broken.

@@ -19,6 +19,13 @@ from typing import Any
 from genomeos import manifest as mf
 
 RESULTS_DIR = Path("data/results")
+#: Item 12 S6 (docs/DATA.md, "The result registry"): a failed new result is written to
+#: <results_dir's parent>/QUARANTINE/<results_dir's name>, never into the registry.
+QUARANTINE = "quarantine"
+#: The explicit list of the result names written before the contract (fe0880a), generated once from
+#: git history by scripts/manifest_legacy.py and never extended by code.
+LEGACY_ALLOWLIST = Path("data/results_legacy.txt")
+LEGACY_COUNT = 955
 
 
 class ManifestWarning(UserWarning):
