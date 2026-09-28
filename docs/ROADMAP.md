@@ -1774,6 +1774,23 @@ useless as a *count* is depth-invariant as a *membership*.
   rather than ordering them as though a modality existed. **Negative: the gate closed no case**, so
   its value is untested against a tumour where an unreachable candidate outranks a target, and the
   tiebreak has never fired end to end because the demo VCFs carry no allele fraction.
+- **The gate's case (2026-09-28, lane-gatecase, `eb18c40` registered, `64f0afe` run, `204ce6c` tests).** A
+  tenth benchmark case, chosen and registered before it ran: HER2-positive gastroesophageal
+  adenocarcinoma with a co-amplified MYC, from TCGA stomach adenocarcinoma (ERBB2 amplified in 58 of 440,
+  MYC in 53, both in 20), at that subgroup's median copy numbers, with TP53 R175H at the cohort's median
+  allele fraction 0.49 — the benchmark's first allele fraction; cohort summaries only. Approved targets:
+  trastuzumab (FDA 2010) and trastuzumab deruxtecan (FDA 2021). **Negative: the gate closed nothing
+  again** — the rank without the gate equals the rank in all ten cases; MYC scores 0.246, last of six,
+  because the annotations that make a gene unreachable are the ones that score it low. The configuration
+  the gate prevents needs an unreachable surface receptor beside an amplified approved target, two
+  independent drivers in one tumour: in MSK-IMPACT 2017, of 42 tumours whose structural variants make a
+  surface receptor the 3′ partner, one also has an amplified ERBB2. **Second negative: the tiebreak was
+  never asked** — every score tie is between hypotheses, which carry no measured quantity. A registered
+  prediction was falsified by the registration (a row publishes the target's magnitude, so the 0.49 sits
+  on TP53); amended additively. ERBB2 rank 1; the nine earlier rows unchanged. **Open:** the regenerated
+  result is not committed — it is a headline result, so landing the tenth case is one commit that
+  rebuilds it cleanly and moves the (9, 9, 9) pins and README's "9/9" to ten; its four tests skip until
+  then.
 - **Missing.** The demo runs at data level 1 only; what a deep deletion is
   actually worth (the dependency it creates) is not modelled; the scan's
   healthy reference is 20 tissues of population consensus, not a matched
