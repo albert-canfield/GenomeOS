@@ -6999,6 +6999,43 @@ compiled rule; before, every one ran. Old and new counts are reported with the r
 **Falsifiers.** Any compiled rule without a `when`; an experimental rule count below the old one;
 a training rule whose strength changes; a HepG2 run that integrates a K562 rule.
 
+## The result: every compiled rule now runs only in its own cell, and no measured link in the genome was regulated in two cells, so no rule count moved (R1, 2026-09-28, later)
+
+Built as registered. `measured.rule_links` yields one link per (gene, cell), with the split rule
+applied within each cell; the compiler writes `when: cell_type = <cell>` on every experimental and
+every predicted rule; `Rule.applies` and `matches` treat `unknown` as matching no context, and the
+grammar's `when` text says so (BIOLANG-GRAMMAR.md regenerated; `package_engine.py` 12 of 12).
+`for_element` keeps each cell's own outcome per gene (`outcomes_by_cell`), and the measured
+element's basis names every cell whose outcome the pooled per-gene lists hide. Tests:
+`tests/test_rule_context.py`, 9, written first and failing 8 of 9 before the build.
+
+**Counts, all 24 programs recompiled (old → new).** Rules 440,589 → 440,589; experimental rules
+212 → 212; held-out-marked experimental rules 43 → 43; predicted rules 440,377 → 440,377. Rules
+without a `when`: 440,589 → 0. Rules gated on `unknown`: 0 (every predicted rule named its track's
+biosample, and every CRISPRi pair its cell). Every program's `# test: rules ==` line is unchanged
+and still holds. Measured element blocks 19,072 → 19,072. Basis lines that name a cell-level
+difference: 0 → 2, both held-out, both a link in one cell beside an underpowered null in the
+other (IL6ST on chr5, regulated in Jurkat, underpowered in GM12878; PPIF on chr10, regulated in
+GM12878, underpowered in Jurkat). Before, the null in the second cell was dropped from the element
+without a word. Across the genome the rules fall into 317 contexts. K562 has the most, 27,445.
+chr21 in a HepG2 run integrates 154 of its 5,176 rules; before, it integrated all 5,176.
+
+**What the zero means.** The experimental count could only move if one element-gene link was
+regulated in two cells, and in this benchmark, intersected with the compiled elements, none is.
+The collapse the review found was real in the code and had no case to act on in the data. The
+synthetic tests are the only place a two-cell conflict exists so far, and they pin that it
+survives compilation and the BioIR round trip (text, parse, `to_dict`, JSON, `from_dict`).
+
+**Negatives.** A compiled program run with no `cell_type` in its context now integrates none of
+its rules. That is intended, but any caller that ran one without a context got every rule before
+and now gets none. `Rule.applies` and `Event.applies` still compare a `when` value by plain
+equality, so the grammar's alternatives (`a|b`), `absent` and comparisons work for decisions and
+timers, which call `matches`, but not for rules or events. That was already the case before R1 and
+is not changed here. Two tests in
+`tests/test_crispri_split.py` pinned one rule per element and gene. They are now strict xfail, not
+deleted, because the checkout's removal guard refuses to take out lines that lane-split wrote the
+same night. Their invariant is re-pinned per cell in the new file.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

@@ -599,6 +599,8 @@ class Layer:
                 # a measured null, well powered or not: never a significant increase (R2)
                 "genes_not_regulated": sorted(set(informative) | set(inconclusive)),
                 "cells": sorted({p.cell for p, _ in pairs}),
+                # R1: each cell's own outcome per gene, so one cell's link never erases another's null
+                "outcomes_by_cell": outcomes_by_cell([p for p, _ in pairs]),
                 "overlap": round(max(f for _, f in pairs), 3),
                 "pairs": [
                     {
@@ -1034,8 +1036,9 @@ def base_level_rows(elements: list[dict[str, Any]], layer: Layer) -> dict[str, A
 
 
 def regulated_pairs_blocks(measured_rows: list[dict[str, Any]]) -> int:
-    """One experimental rule per (element, gene) a screen measured as regulated, deduplicated."""
-    return sum(len(r["measured"].get("crispri", {}).get("genes_regulated", [])) for r in measured_rows)
+    """One experimental rule per (element, gene, cell) a screen measured as regulated (R1, 2026-09-28;
+    before it, one per element and gene)."""
+    return sum(len(rule_links(r)) for r in measured_rows)
 
 
 def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
@@ -1160,6 +1163,51 @@ def sensitivity(
     return out
 
 
+#: the order in which one cell's pairs on one gene settle into one outcome, strongest first, the same
+#: order `for_element` uses across cells
+OUTCOME_ORDER = (DECREASE, INCREASE, NULL_INFORMATIVE, NULL_INCONCLUSIVE, MISSING)
+OUTCOME_WORDS = {
+    DECREASE: "regulated",
+    INCREASE: "significantly increased",
+    NULL_INFORMATIVE: "measured no effect on",
+    NULL_INCONCLUSIVE: "no significant effect, underpowered, on",
+    MISSING: "no effect size for",
+}
+
+
+def outcomes_by_cell(pairs: list[CrispriPair]) -> dict[str, dict[str, str]]:
+    """{cell: {gene: outcome}}, each cell settled on its own pairs only (R1, 2026-09-28)."""
+    out: dict[str, dict[str, str]] = {}
+    for p in pairs:
+        genes = out.setdefault(p.cell, {})
+        o = DECREASE if p.regulated else p.outcome
+        if p.gene not in genes or OUTCOME_ORDER.index(o) < OUTCOME_ORDER.index(genes[p.gene]):
+            genes[p.gene] = o
+    return {cell: dict(sorted(genes.items())) for cell, genes in sorted(out.items())}
+
+
+def context_differences(c: dict[str, Any]) -> list[tuple[str, str, str]]:
+    """(cell, gene, outcome) for every cell whose own outcome on a gene is not the one the pooled lists
+    give that gene: the observations the per-gene lists would otherwise hide."""
+    by_cell = c.get("outcomes_by_cell") or {}
+    pooled: dict[str, str] = {}
+    for key, o in (
+        ("genes_effect_missing", MISSING),
+        ("genes_no_effect_underpowered", NULL_INCONCLUSIVE),
+        ("genes_no_effect_well_powered", NULL_INFORMATIVE),
+        ("genes_increased", INCREASE),
+        ("genes_regulated", DECREASE),
+    ):
+        for g in c.get(key, []):
+            pooled[g] = o
+    return [
+        (cell, gene, o)
+        for cell, genes in by_cell.items()
+        for gene, o in genes.items()
+        if gene in pooled and o != pooled[gene]
+    ]
+
+
 # --- the program ----------------------------------------------------------------------------------
 def basis_text(row: dict[str, Any]) -> str:
     """What the assays measured, in words, with every measured negative named."""
@@ -1182,6 +1230,12 @@ def basis_text(row: dict[str, Any]) -> str:
                 )
         elif c["genes_not_regulated"]:
             bits.append("measured no effect on " + ", ".join(c["genes_not_regulated"]))
+        differ = context_differences(c)
+        if differ:
+            bits.append(
+                "where the cells differ, "
+                + ", ".join(f"in {cell} {OUTCOME_WORDS[o]} {gene}" for cell, gene, o in differ)
+            )
         held = [p for p in c["pairs"] if p.get("split", TRAINING) == HELDOUT]
         if held:
             bits.append(
@@ -1251,13 +1305,18 @@ def rule_links(row: dict[str, Any]) -> list[tuple[str, str, float, str, str]]:
     A link with any regulated training pair takes its action and strength from the training pairs
     only, so a held-out measurement never sets a compiled number. A link found only in held-out pairs
     keeps split "heldout", and the compiler marks it with `HELDOUT_MARK`.
+
+    Since R1 (2026-09-28) a link is one (gene, cell): the split rule above applies within each cell,
+    and two cells that measured the same gene are two links, never the stronger of the two. The
+    returned cell is the one the compiler gates the rule on (`when: cell_type = <cell>`).
     """
     c = row["measured"].get("crispri")
     if not c:
         return []
     out = []
-    for gene in c["genes_regulated"]:
-        hit = [p for p in c["pairs"] if p["gene"] == gene and p["regulated"]]
+    linked = sorted({(p["gene"], p["cell"]) for p in c["pairs"] if p["regulated"]})
+    for gene, cell in linked:
+        hit = [p for p in c["pairs"] if p["gene"] == gene and p["cell"] == cell and p["regulated"]]
         train = [p for p in hit if p.get("split", TRAINING) == TRAINING]
         split = TRAINING if train else HELDOUT
         strongest = max(train or hit, key=lambda p: abs(p["effect_size"]))

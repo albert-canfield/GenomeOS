@@ -119,6 +119,11 @@ def test_the_layer_keeps_every_link_and_names_the_training_ones(knowledge):
     assert {p["split"] for p in c["pairs"] if p["gene"] == "DDD"} == {measured.HELDOUT}
 
 
+# Superseded by R1 (2026-09-28, docs/ATTRIBUTION.md): this pins one rule per element and gene, and
+# AAA is now two rules, K562 (training, 0.2) and WTC11 (held-out, 0.8, marked). The invariant it
+# guards - a held-out pair never sets a training rule's number - is re-pinned per cell in
+# tests/test_rule_context.py. Kept, strict, until the removal window lets it be rewritten.
+@pytest.mark.xfail(strict=True, reason="R1: one rule per (element, gene, cell), not per (element, gene)")
 def test_a_held_out_measurement_never_sets_a_compiled_number(knowledge):
     links = {g: rest for g, *rest in measured.rule_links(compiled_row(knowledge))}
     assert links["AAA"] == ["activates", 0.2, "K562", measured.TRAINING]  # not WTC11's -0.8
@@ -129,6 +134,11 @@ def test_a_held_out_measurement_never_sets_a_compiled_number(knowledge):
     ]
 
 
+# Superseded by R1 (2026-09-28, docs/ATTRIBUTION.md): this pins one rule per element and gene, and
+# AAA is now two rules, K562 (training, 0.2) and WTC11 (held-out, 0.8, marked). The invariant it
+# guards - a held-out pair never sets a training rule's number - is re-pinned per cell in
+# tests/test_rule_context.py. Kept, strict, until the removal window lets it be rewritten.
+@pytest.mark.xfail(strict=True, reason="R1: one rule per (element, gene, cell), not per (element, gene)")
 def test_the_compiled_block_keeps_held_out_links_out_of_targets_and_marks_their_rules(knowledge):
     r = compiled_row(knowledge)
     ident_of = {g: cp.ident(g) for g in ("AAA", "DDD")}

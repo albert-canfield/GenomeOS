@@ -61,6 +61,14 @@ def _text(s: str) -> str:
     return re.sub(r"[;{}\"]", ",", str(s)).replace(":", ",")
 
 
+def context(name: str | None) -> str:
+    """The `when: cell_type = ...` value for a cell or biosample name, or `unknown` when none was
+    recorded (R1, 2026-09-28): a missing context stays explicit and never makes a rule universal."""
+    from genomeos.attribution.measured import CONTEXT_UNKNOWN
+
+    return ident(name) if name and name.strip() else CONTEXT_UNKNOWN
+
+
 def _human_axis(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
     """The human constraint axis per block start, from variation_<chrom> when it has been read."""
     r = load_result(f"variation_{chrom}", results_dir) or {}
@@ -177,6 +185,7 @@ def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> li
         mark = f", {ms.HELDOUT_MARK}" if split == ms.HELDOUT else ""
         lines.append(
             f"rule {row['id']}_measured {action} {ident_of[gene]} {{ strength: {strength}; "
+            f"when: {ms.CONTEXT_KEY} = {context(cell)}; "
             f'evidence: experimental "{_text(ms.SOURCES["crispri"])}, silenced in {_text(cell)}{mark}"; '
             f"confidence: {row['confidence']:.2f} }}"
         )
@@ -198,9 +207,10 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
     readers = [r for r in readers if r and r.get("node_table")]
     elements = _attributed(chrom, results_dir)
     layer, measured_rows = _measured_rows(chrom, elements, results_dir, layer)
-    n_measured_rules = sum(
-        len(r["measured"].get("crispri", {}).get("genes_regulated", [])) for r in measured_rows
-    )
+    from genomeos.attribution.measured import rule_links
+
+    # one experimental rule per (element, gene, cell), R1 of 2026-09-28
+    n_measured_rules = sum(len(rule_links(r)) for r in measured_rows)
 
     lines = [
         f"module human.noncoding.{chrom}",
@@ -223,6 +233,10 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         "# element matter. It can support the compiled claim and cannot contradict it, so an element",
         "# whose measured bases are all inert is stated as a fact about those bases and never as a",
         "# verdict on the element, and it raises no rule, because it names no gene.",
+        "#",
+        "# Every rule is gated on the cell it was measured or predicted in (`when: cell_type = K562`), one",
+        "# rule per element, gene and cell, so a run in HepG2 integrates none of K562's. A rule whose",
+        "# cell was not recorded says `cell_type = unknown`, which matches no cell: it is never universal.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")
@@ -299,6 +313,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             strength = round(min(1.0, abs(float(pc["log2_fold_change"]))), 3)
             lines.append(
                 f"rule {e['id']} {action} {ident(pc['gene'])} {{ strength: {strength}; "
+                f"when: cell_type = {context(pc.get('tissue'))}; "
                 f'evidence: predicted "AlphaGenome deletion, {_text(pc.get("tissue") or "strongest track")}";'
                 " "
                 f"confidence: {conf:.2f} }}"

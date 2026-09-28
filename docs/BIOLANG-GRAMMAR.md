@@ -12,7 +12,8 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 - Only `transcript` nests (inside `gene`). Repeatable keys: assert, cost, effect, keep, observe, source, target, vary.
 - Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
-  `>=n` `<=n` `>n` `<n`.
+  `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no
+  context, so a rule gated on it runs in no cell rather than in every cell.
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives

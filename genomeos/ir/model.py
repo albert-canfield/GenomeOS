@@ -65,12 +65,18 @@ class Action(StrEnum):
     DEGRADE = "degrades"
 
 
+#: a `when` value for a context that was not recorded: it matches no context at all
+UNKNOWN_CONTEXT = "unknown"
+
+
 def matches(when: dict[str, str], context: dict[str, str]) -> bool:
-    """`when` clauses against a context. `any` matches anything present or absent;
-    `a|b` lists alternatives; `>=n` / `<=n` / `>n` / `<n` compare numerically."""
+    """`when` clauses against a context. `any` matches anything present or absent; `unknown`
+    matches nothing; `a|b` lists alternatives; `>=n` / `<=n` / `>n` / `<n` compare numerically."""
     for key, wanted in when.items():
         if wanted == "any":
             continue
+        if wanted == UNKNOWN_CONTEXT:
+            return False  # a context nobody recorded matches no context (R1, 2026-09-28)
         got = context.get(key)
         if got == wanted:  # the common case: plain equality
             continue
@@ -267,6 +273,10 @@ class Rule:
         for key, wanted in self.when.items():
             if wanted == "any":
                 continue
+            if wanted == UNKNOWN_CONTEXT:
+                # the context was never recorded, so no simulated cell can be said to be in it; a
+                # rule gated on it runs nowhere rather than everywhere (R1, 2026-09-28)
+                return False
             if context.get(key) != wanted:
                 return False
         return True
