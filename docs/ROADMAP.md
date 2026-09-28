@@ -1007,6 +1007,19 @@ useless as a *count* is depth-invariant as a *membership*.
   CPTAC through cBioPortal is reachable (12 phosphoprotein profiles, ODbL, log2 ratios to a pooled
   reference) and usable only as `relative_abundance_in_tumours`, not built: it is keyed by RefSeq
   position and needs a RefSeq-to-UniProt residue mapping first. docs/PROTEIN.md has the detail.
+- **Tumour abundance joined (2026-09-28, lane-cptac, `cae8d7d` registered, `5938b5d` result).** CPTAC
+  phosphoproteomics through cBioPortal, mapped RefSeq → UniProt (10,644 of 12,025 proteins; 114,236
+  single localised sites carried by identical sequence or a unique 15-residue window, residue letter
+  checked, 0.02% mismatch) and joined to the curated sites as `relative_abundance_in_tumours` (per
+  study: tumours with a value and the median log2 ratio to the pooled reference; never occupancy, never
+  per patient; the result is an ODbL 1.0 derived database with its attribution inside). **19,104
+  curated phospho sites on 5,105 proteins (45.9%)** from lung adenocarcinoma, glioblastoma and paediatric
+  brain; EGFR Y1092 present, TP53 M1 absent, nothing off S/T/Y. **Negatives:** the pancreatic 2021
+  profile holds log2 intensities, not ratios (median 18.8), and is excluded — the registered pooled
+  check passed with it inside, so that check was too weak and a per-profile check caught it; coverage
+  missed high on both registered ranges (55.3% against 35–55%, 68.6% against 45–65%), reported as a miss;
+  the seven gene-keyed profiles stay uncommitted at 14.3% residue mismatch until their isoforms are
+  known. Occupancy stays blocked. docs/PROTEIN.md, "Relative abundance in tumours (2026-09-28)".
 - **Missing, and blocked on data (checked 2026-09-12).** Modification state
   is possibility, not occupancy: measured phosphoproteomics has no open
   per-site, per-tissue table the project could stream and distil as it does
