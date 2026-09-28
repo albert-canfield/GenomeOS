@@ -1945,6 +1945,11 @@ CRISPRi negative on the named gene, and it is reported under its own assay name 
 reason. It is also consistent with what the lentiMPRA lane already found: the reporter and the locus
 are different questions.
 
+*R6 note (2026-09-28): "episomal" above is wrong for this assay. The ENCODE4 lentiMPRA integrates
+its reporter by lentivirus (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9). The reading still holds, because an integrated reporter also sits
+outside the sequence's native locus. After R6 the lentiMPRA disagreements number 14,512, and 126
+elements whose tiles split evenly are counted apart (see the R6 result below).*
+
 **Is the measured 4.33% a fair sample?** Both comparisons go through `genomeos/compare.py`, standardised
 on length, GC and distance to the nearest coding TSS, with the medians of both arms printed:
 
@@ -2109,6 +2114,10 @@ element that would most likely have shown it (chr1, 68 bases measured, none func
 overlap 0.113 and is not raised. And nothing at all about the 99.9991% of compiled elements this
 assay has never been pointed at.
 
+*R6 note (2026-09-28): "the assay is episomal" was not checked against Kircher et al. 2019 for each
+experiment. The conclusion depends only on the reporter being outside the locus, which holds whether
+the construct is a plasmid or integrated.*
+
 **Cost.** 24 chromosomes read, matched, compared and recompiled, plus the 960,096-fact evidence read:
 **159 seconds** and no requests, against 106 before the fourth assay. The satmut table is 2.6 MB
 gzipped, parsed once per process and cached. `uv run python scripts/measured_layer.py
@@ -2195,6 +2204,8 @@ Standardised on length, GC and distance to a coding TSS: 349 high-confidence ele
 ### lentimpra
 
 *out of its chromosome, does a 200 bp copy of this sequence drive a reporter?* — episomal: it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only.
+
+*R6 note (2026-09-28): this assay is an integrated lentiviral reporter (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9), not episomal; the rebuilt result states it that way. The reporter is still outside its native locus.*
 
 21,133 compiled elements in this assay's footprint and 17,869 measured; 17,869 of them are tested by it, which is every one, so the two denominators coincide - this assay never asks about the predicted gene at all, and the wide rate is kept as a named key so the narrow one is never the only rate on the page.
 
@@ -4865,6 +4876,7 @@ than one oligo, so nothing is lost to being too small to tile.
 Family B is where the loss looks catastrophic, so it is the one that had to be checked against reality
 rather than against another tier. The same rules were run over 18,991 300 bp windows centred on
 **lentiMPRA elements — sequence an episomal reporter has already ordered and got numbers out of**
+*(R6 note, 2026-09-28: the reporter is integrated by lentivirus, not episomal; Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9.)*
 (both columns are charged, mutually-exclusive counts, so Family B is counted after Family A):
 
 | | untouched real unknown | lentiMPRA, already measured |
@@ -7250,6 +7262,53 @@ agreeing. CRISPRi and VISTA counts, the 19,072 experimental element blocks and 2
 compiled rule stay the same. Programme text changes only on `basis:` lines and the header's agree and
 disagree counts. The calibration table's lentiMPRA arm loses the elements that become conflicting. Any
 other change is a fault of the build.
+
+## The result: no reporter label now rests on one tile, and 130 elements the maximum had called active are not (R6, 2026-09-28, later)
+
+Built as registered (`attribution/measured.py` `reporter_block`, `reporter_label`, `reporter_counts`;
+tests `tests/test_measured_aggregation.py`). The layer and the calibration were rebuilt in a clean
+worktree at `49aca5d`, with only this lane's files changed, through `save_result` with complete
+manifests. 0 requests.
+
+**What moved, old -> new, and nothing else did** (element by element against a rebuild without the
+change at the same commit):
+
+| count | before | after |
+| --- | ---: | ---: |
+| lentiMPRA agrees | 3,361 | 3,231 |
+| lentiMPRA disagrees | 14,508 | 14,512 |
+| lentiMPRA `reporter_tiles_conflict` (new, counted apart) | — | 126 |
+| elements matched by more than one tile | (not recorded) | 1,006 |
+| cell readings where tiles disagree / of them conflicting | (not recorded) | 237 / 224 |
+| pooled verdict agrees -> `reporter_tiles_conflict` | — | 125 |
+| pooled verdict agrees -> disagrees | — | 4 |
+| satmut bases read by more than one experiment / functional calls differ | (not read) | 349 / 84 |
+| CRISPRi and VISTA agrees/disagrees, element blocks 19,072, rule blocks 212, every rule and every confidence | — | unchanged |
+
+So 130 elements that the maximum had called reporter-active now read otherwise: 126 because their tiles
+split evenly, and 4 because a minority of their tiles were active. That is inside the registered bound
+(at most 224 conflicting and 7 silent cell readings; no element moved towards agreement). `basis:`
+changed on the 1,006 multi-tile elements, and on chr21 on 12 lines plus the header count (44 -> 43
+agreeing). The committed `noncoding_chr21.bio` takes those 13 lines only; it stays held as its own
+header says.
+
+**The calibration table.** The lentiMPRA arm's narrow denominator loses the 126 conflicting elements
+(17,869 -> 17,743), the observed rate falls from 0.1881 to 0.1821, and ECE rises from 0.0905 to 0.0963.
+Its wide denominator is now a different set of rows and is reported (17,869, observed 0.1808): a
+conflict counts there as not agreeing. The level stays withheld, as before, because this assay's
+agreement is not the compiled claim. Across all tables, 15 bands are populated and 1 has the stated
+level inside its interval (it was 12 and 2).
+
+**Not from this change.** The rebuilt `measured_layer_genome.json` also reports 928,094 weak compiled
+facts where the stored copy said 812,921. That comes from `96bc5e5` (compiled predictions no longer
+state a confidence), since the stored file had not been rebuilt after it. R6 moved no confidence.
+
+**What R6 did not do.** No per-tile uncertainty exists in the ENCODE element files, so none is carried.
+The row names this rather than inventing one. A8, the strength of a compiled experimental rule, is still
+the largest training |effect| within one element, gene and cell. The pairs sit in the row, but the
+compiler reads the maximum. That belongs to the compiler's owner. The saturation-mutagenesis verdict is
+still read from the primary experiment; the repeats, SORT1-flip included, are listed beside it with
+their disagreement counted.
 
 ## What comes next, in order
 
