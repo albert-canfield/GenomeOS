@@ -3,8 +3,8 @@
   "date": "2026-09-28",
   "name": "biolang",
   "built": {
-    "files": 36,
-    "rewritten": 22,
+    "files": 38,
+    "rewritten": 23,
     "package": "/Users/AlbertCanfield/SITES DEV/GenomeOS/build/biolang/biolang",
     "dangling references": [],
     "version": "0.1.0",
@@ -16,6 +16,7 @@
       "test_compose.py",
       "test_concentration.py",
       "test_debugger.py",
+      "test_division.py",
       "test_economy.py",
       "test_gastrulation.py",
       "test_grammar.py",
@@ -39,7 +40,7 @@
       "test_when_matcher.py",
       "test_when_not_equal.py"
     ],
-    "test functions": 177,
+    "test functions": 192,
     "fixtures": [
       "data/demo/cell_context.bio",
       "data/demo/gastrulation.bio",
@@ -126,15 +127,15 @@
     {
       "check": "the engine's own pytest suite",
       "ok": true,
-      "output": "285 passed, 3 skipped, 3 xfailed in 34.64s",
+      "output": "300 passed, 3 skipped, 3 xfailed in 53.40s",
       "error": "",
-      "passed": 285,
+      "passed": 300,
       "failed": 0,
       "skipped": 3,
       "skip reasons": [
-        "SKIPPED [1] tests/test_compose.py:10: process-bigraph not installed (uv sync --extra compose)",
-        "SKIPPED [1] tests/test_compose.py:21: process-bigraph not installed (uv sync --extra compose)",
-        "SKIPPED [1] tests/test_compose.py:33: process-bigraph not installed (uv sync --extra compose)"
+        "SKIPPED [1] tests/test_compose.py:11: process-bigraph not installed (uv sync --extra compose)",
+        "SKIPPED [1] tests/test_compose.py:22: process-bigraph not installed (uv sync --extra compose)",
+        "SKIPPED [1] tests/test_compose.py:34: process-bigraph not installed (uv sync --extra compose)"
       ]
     },
     {
@@ -159,12 +160,10 @@
   "passed": true,
   "result_manifest": {
     "code": {
-      "git_sha": "e9724e3fe963cdb4d8806795c1886b1ea5eb314a",
+      "git_sha": "95d0e6ec41062ae7543b3c6ab5f8aae1dcd428e5",
       "dirty": false,
       "dirty_code_paths": [],
-      "dirty_result_paths": [
-        "data/results/engine_package.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/package_engine.py"
       ],
