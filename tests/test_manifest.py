@@ -40,20 +40,31 @@ def test_the_caller_cannot_state_its_own_code_revision(tmp_path):
     assert json.loads(p.read_text())[mf.KEY]["code"]["git_sha"] != "0" * 40
 
 
-def test_a_new_result_without_the_contract_is_written_then_refused(tmp_path):
+def test_a_new_result_without_the_contract_is_quarantined_then_refused(tmp_path):
+    """Item 12 S6: until 2026-09-28 this test asserted the defect, that the failed result was written
+    where it was meant to go. It is kept, but in the quarantine."""
+    reg = tmp_path / "results"
     with pytest.raises(mf.ManifestError, match="missing sources"):
-        save_result("demo", {"value": 1}, tmp_path, strict=True)
-    kept = json.loads((tmp_path / "demo.json").read_text())
+        save_result("demo", {"value": 1}, reg, strict=True)
+    assert not (reg / "demo.json").exists()
+    kept = json.loads((results.quarantine_dir(reg) / "demo.json").read_text())
     assert kept["value"] == 1 and kept[mf.KEY]["complete"] is False  # the compute is not lost
 
 
-def test_strict_is_the_default_for_a_new_name_in_the_registry_only(tmp_path, monkeypatch):
-    monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
+def test_strict_is_the_default_for_a_name_off_the_allowlist_in_the_registry_only(tmp_path, monkeypatch):
+    reg = tmp_path / "results"
+    monkeypatch.setattr(results, "RESULTS_DIR", reg)
+    monkeypatch.setattr(results, "LEGACY_ALLOWLIST", tmp_path / "legacy.txt")
+    (tmp_path / "legacy.txt").write_text("# header\nold_one\ttracked\n")
     with pytest.raises(mf.ManifestError):
-        save_result("brand_new", {"value": 1}, tmp_path)
-    # rewriting a name that already exists warns: historical results keep regenerating
+        save_result("brand_new", {"value": 1}, reg)
+    # a retry is refused again: before item 12 S6 it found its own file and only warned
+    with pytest.raises(mf.ManifestError):
+        save_result("brand_new", {"value": 2}, reg)
+    assert not (reg / "brand_new.json").exists()
+    # a name on the allowlist warns: historical results keep regenerating
     with pytest.warns(ManifestWarning, match="manifest incomplete"):
-        save_result("brand_new", {"value": 2}, tmp_path)
+        save_result("old_one", {"value": 2}, reg)
     # outside the registry (tests, scratch) a write warns rather than fails
     other = tmp_path / "elsewhere"
     with pytest.warns(ManifestWarning):

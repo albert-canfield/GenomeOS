@@ -945,3 +945,12 @@ the census's historical set; or an existing test fails other than the two that a
 (`test_a_new_result_without_the_contract_is_written_then_refused` and the retry half of
 `test_strict_is_the_default_for_a_new_name_in_the_registry_only`), which would mean a legacy
 writer was broken.
+
+**Result, as predicted.** `scripts/manifest_legacy.py` generated 955 names from history (656
+tracked, 299 ignored-local); `--check` finds 0 differences from the census's historical set. The
+census after the build: the same 1,015 results, 71 carrying a manifest, 67 complete (nothing
+rewritten); 955 on the allowlist, 60 not, 0 of those incomplete; 0 quarantined. The 76 existing
+manifest tests pass, two of them rewritten from asserting the defect to asserting the fix, and
+`tests/test_manifest_enforced.py` adds 19. In this shared checkout at build time the stamp named
+three untracked files peers had not yet committed (one script, two tests) and marked the revision
+dirty; before, it said nothing about them.

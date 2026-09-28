@@ -14,7 +14,8 @@ A manifest is a dict kept under the result's `result_manifest` key (26 older res
     assembly     "GRCh38", or "n/a: <why>"
     coordinates  {base: 0 | 1, interval: "half-open" | "closed"}, or "n/a: <why>"
     code         {git_sha, dirty, dirty_code_paths, argv}   filled in by the writer, never by the caller
-                 (and dirty_result_paths: results that differ from the commit, which are output, not code)
+                 (and dirty_result_paths: results that differ from the commit, which are output, not code;
+                 untracked_code_paths: code the commit does not hold, which makes it dirty; item 12 S6)
     parameters   {name: value}                  every knob that changes the numbers
     exclusions   [str | dict]                   what was dropped and why; [] says nothing was
     partitions   {name: description}, or "n/a: <why>"   the evaluation partitions the result reports
@@ -22,6 +23,10 @@ A manifest is a dict kept under the result's `result_manifest` key (26 older res
 `validate` names what a manifest lacks. `read` is tolerant: it accepts the 955 results written before
 the contract, reports which fields they carry, and never raises. The historical files are not
 rewritten; `scripts/manifest_census.py` counts what they already hold.
+
+Item 12 S6 (2026-09-28, docs/DATA.md "The result registry"): those 955 names are an explicit committed
+list (data/results_legacy.txt, genomeos/results.py), a new result that fails `validate` is quarantined
+rather than written, and the revision stamp counts untracked code.
 """
 
 from __future__ import annotations
@@ -81,23 +86,55 @@ CODE_ROOTS = ("genomeos/", "scripts/", "tests/")
 CODE_SUFFIXES = (".bio",)
 
 
+def is_code(path: str) -> bool:
+    """Whether a repository path counts as code in the revision stamp (CODE_ROOTS, CODE_SUFFIXES)."""
+    return path.startswith(CODE_ROOTS) or path.endswith(CODE_SUFFIXES)
+
+
+def _status_paths(status: str) -> tuple[list[str], list[str]]:
+    """`git status --porcelain -z` as (tracked paths that differ from the commit, untracked paths).
+    A rename or copy entry is followed by its original path, which is skipped."""
+    tracked: list[str] = []
+    untracked: list[str] = []
+    entries = status.split("\0")
+    i = 0
+    while i < len(entries):
+        entry = entries[i]
+        i += 1
+        if len(entry) < 4:
+            continue
+        xy, path = entry[:2], entry[3:]
+        if xy == "??":
+            untracked.append(path)
+        elif xy != "!!":
+            tracked.append(path)
+            if "R" in xy or "C" in xy:
+                i += 1
+    return sorted(tracked), sorted(untracked)
+
+
 def code_revision(root: Path | None = None) -> dict[str, Any]:
     """The revision of the code that wrote a result. `dirty` counts tracked files that differ from
-    the commit, because in a shared checkout the sha alone does not say what ran."""
+    the commit and untracked code, because in a shared checkout the sha alone does not say what ran."""
     # Since 2026-09-28 a modified file under data/results/ is not counted: a chain of writers in one
     # checkout would otherwise mark every result after the first dirty with its predecessor's output.
     # Those paths are recorded apart, under dirty_result_paths.
+    # Since item 12 S6 (2026-09-28) untracked files are read too (--untracked-files=all): one that is
+    # code (is_code) makes the stamp dirty and is listed under untracked_code_paths and
+    # dirty_code_paths, since the commit cannot reproduce a result an untracked script wrote. An
+    # untracked data file does not count and is not listed: the manifest's inputs pin data by sha256.
     root = root or Path.cwd()
     sha = _git(root, "rev-parse", "HEAD")
-    status = _git(root, "status", "--porcelain", "--untracked-files=no")
-    dirty_paths = sorted(line[3:] for line in (status or "").splitlines() if line.strip())
-    result_paths = [p for p in dirty_paths if p.startswith(RESULT_PATHS)]
-    dirty_paths = [p for p in dirty_paths if not p.startswith(RESULT_PATHS)]
-    code_paths = [p for p in dirty_paths if p.startswith(("genomeos/", "scripts/"))]
+    status = _git(root, "status", "--porcelain", "-z", "--untracked-files=all")
+    tracked, untracked = _status_paths(status or "")
+    result_paths = sorted(p for p in tracked + untracked if p.startswith(RESULT_PATHS))
+    tracked = [p for p in tracked if not p.startswith(RESULT_PATHS)]
+    untracked_code = [p for p in untracked if is_code(p) and not p.startswith(RESULT_PATHS)]
     return {
         "git_sha": sha.strip() if sha else None,
-        "dirty": bool(dirty_paths) if status is not None else None,
-        "dirty_code_paths": code_paths,
+        "dirty": bool(tracked or untracked_code) if status is not None else None,
+        "dirty_code_paths": sorted({p for p in tracked if is_code(p)} | set(untracked_code)),
+        "untracked_code_paths": untracked_code,
         "dirty_result_paths": result_paths,
         "argv": _argv(root),
         "python": sys.version.split()[0],

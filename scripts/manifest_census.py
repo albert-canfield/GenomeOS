@@ -34,7 +34,7 @@ import sys
 from pathlib import Path
 
 from genomeos import manifest as mf
-from genomeos.results import RESULTS_DIR
+from genomeos.results import RESULTS_DIR, legacy_names, quarantine_dir
 
 
 def census(results_dir: Path = RESULTS_DIR) -> dict:
@@ -56,8 +56,16 @@ def census(results_dir: Path = RESULTS_DIR) -> dict:
         }
         for f in mf.REQUIRED
     }
+    legacy = legacy_names()
+    unlisted = [n for n in per_file if n not in legacy]
+    qdir = quarantine_dir(results_dir)
     return {
         "results": len(per_file),
+        "legacy_allowlist": len(legacy),
+        "on_allowlist": len(per_file) - len(unlisted),
+        "not_on_allowlist": len(unlisted),
+        "not_on_allowlist_incomplete": sorted(n for n in unlisted if not per_file[n]["complete"]),
+        "quarantined": sorted(p.stem for p in qdir.glob("*.json")) if qdir.is_dir() else [],
         "unreadable": unreadable,
         "with_manifest": sum(1 for v in per_file.values() if v["declared"]),
         "complete": sum(1 for v in per_file.values() if v["complete"]),
@@ -71,7 +79,7 @@ def census(results_dir: Path = RESULTS_DIR) -> dict:
 
 #: fe0880a, the commit that introduced the contract (review R9, lane-manifest, 2026-09-28 00:12 +0100).
 #: A result name is historical when it was in the registry before this commit.
-CONTRACT_COMMIT = "fe0880ab7423b064a38da130e326fa57d4efeb28"
+CONTRACT_COMMIT = mf.CONTRACT_COMMIT
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOTS = ("genomeos", "scripts", "tests")
 
@@ -335,6 +343,12 @@ def main(argv: list[str] | None = None) -> int:
         f"{c['results']} results read ({len(c['unreadable'])} unreadable); "
         f"{c['with_manifest']} carry a manifest, {c['complete']} meet the contract, "
         f"{c['no_field_at_all']} say nothing on any field"
+    )
+    bad, quarantined = c["not_on_allowlist_incomplete"], c["quarantined"]
+    print(
+        f"legacy allowlist {c['legacy_allowlist']} names: {c['on_allowlist']} results on it, "
+        f"{c['not_on_allowlist']} not, of which {len(bad)} incomplete{': ' + ', '.join(bad) if bad else ''}; "
+        f"{len(quarantined)} quarantined{': ' + ', '.join(quarantined) if quarantined else ''}"
     )
     print(f"{'field':<12} {'declared':>9} {'legacy':>7} {'none':>6}")
     for f, n in c["fields"].items():
