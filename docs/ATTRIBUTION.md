@@ -9395,6 +9395,61 @@ resamples. **What it may not be called:** a validation of anything, or a finding
 predict one another. `rest` is one unfitted rule, and it is now the reference labelling to beat, not a
 ceiling.
 
+## Pre-registration: the measured arm's reading rule revisited, with the error rates a rule must meet fixed before any rule is scored (item 12 S2 follow-up, 2026-09-29, lane-rule)
+
+c17eedc's rule reads "model_failed" whenever the 95% interval over blocks reaches 0 with at least 20
+compared blocks, and its text says the blocks regulate coding genes "at a rate not below their matched
+windows". cab70d9 simulated it: at a true three-quarters rate, with every eligible block tested, it reads
+so in 53% to 82% of experiments, so a failure to detect is read as a finding. Its "wording_wrong" says the
+blocks hold no element that regulates a coding gene, and it is read whenever the interval lies below 0,
+which a half or a three-quarters rate also produces. The committed rule stays the record
+(`measured_reading`, unchanged). The revised one is `revised_reading` beside it, registered in
+`READING_RULE_2026_09_29` in `scripts/clause2_measured_arm.py` before any probability of it, or of any
+rule other than c17eedc's, was computed.
+
+**What each reading claims.** model_failed: a true ratio of 1 (the blocks' mean true per-element rate
+over their windows'). wording_wrong: a true ratio of 0. cannot_decide: nothing.
+
+**The error rates a rule must meet.** model_failed in at most 5% of experiments at every true ratio of
+0.75 or below: the null of this reading is that the blocks regulate less than their windows, and 0.75 is
+the smallest departure on the grid. wording_wrong in at most 5% at every true ratio of 0.1 or above,
+since a tenth of the windows' rate is not "no element". A rate meets its bound within 0.05 + 2 Monte
+Carlo standard errors (cab70d9's null rule), in every (design, size) cell where the rule may read; a cell
+that fails either bound reads cannot_decide. cannot_decide is never an error, and its cost is reported as
+the probability of deciding. The rule **decides** clause 2 at a design and size only if it also reads
+model_failed with probability at least 0.8 at a true ratio of 1 and wording_wrong with probability at
+least 0.8 at a true ratio of 0.
+
+**The rule.** The committed estimator, interval and 20-block floor are unchanged. Only the lines move.
+model_failed if the interval lies wholly above the expected difference at a three-quarters rate (-2.456,
+-3.589, -4.168 and -4.832 points for 1, 2, 3 and 6 tested elements per unit). wording_wrong if it lies
+wholly below the expected difference at a tenth (-8.84, -13.267, -15.757, -19.175). cannot_decide
+otherwise. The lines come from cab70d9's reference calibration and are never re-estimated from an
+experiment's own data. An arm whose units carry varying numbers of tested elements, as c17eedc's does,
+has no line. No other line is tried. Reported beside the reading, and never as one: the registered
+ratios the interval excludes.
+
+**The best any rule on this estimator could do**, reported beside the rule: the Neyman-Pearson threshold
+on the estimator's simulated distribution, and the same on the blocks' own rate as if the windows' rate
+were known exactly. Descriptively, the same at the weaker margins (0.5 for model_failed; 0.25 and 0.5
+for wording_wrong), to show which weaker claims the arm could support.
+
+**The simulation.** cab70d9's, unchanged. The calibration is recomputed through the same redraw and gated
+against the committed one. 24 designs, every size up to each design's cap, every ratio, 2,000
+experiments per cell, seed 2026092913; the committed and the revised readings are computed on the same
+experiments. Robustness, descriptive only: the lines stay at the reference while the truth comes from
+each feasible one-factor variant, at the caps of designs (1, 10, 1), (1, 3, 1) and (6, 3, 1).
+
+**Expected before running.** Both bounds are met in every own-window cell from 50 blocks up; some cells
+at 20 to 30 blocks and some with shared controls fail. No design decides. The revised model_failed at
+ratio 1 is about 0.5 at best, and wording_wrong at ratio 0 about 0.2 at best. The best rule on the
+estimator also stays below 0.8 (about 0.6 and 0.3). The bounds do not survive every variant: an anchor at
+its low end, or no false positives in truth, puts a reading's error above 5%. If no design decides, the
+arm reports its coverage first, then its estimate and interval with the ratios the interval excludes,
+then the revised reading where the interval clears a line, with its probabilities. It never reports
+"model_failed" from an interval that only reaches 0. Every probability is a probability under cab70d9's
+calibrated assumptions, never a guarantee. 0 AlphaGenome requests.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

@@ -259,3 +259,74 @@ def test_pooled_coverage_adds_the_chromosomes_up():
     pooled = arm.pool_coverage([one, one])
     assert pooled["blocks"] == 2
     assert pooled["blocks_with"]["measured_by_any_assay"] == 0
+
+
+# --- the reading rule revisited (lane-rule, registered 2026-09-29) ------------------------------------
+
+
+def test_the_committed_rule_stays_the_record_beside_the_revised_one():
+    assert set(arm.PRE_REGISTRATION["readings"]) == {"model_failed", "wording_wrong", "cannot_decide"}
+    assert arm.PRE_REGISTRATION["registered"] == "2026-09-28"
+    reg = arm.READING_RULE_2026_09_29
+    assert reg["registered"] == "2026-09-29" and reg["lane"] == "lane-rule"
+    assert set(reg["readings"]) == set(arm.PRE_REGISTRATION["readings"])
+    across = {"matched_difference_points": -1.0, "ci95_over_blocks": [-3.5, 1.5]}
+    got = arm.revised_reading(across, 1)
+    assert got["committed_rule_c17eedc"] == arm.measured_reading(across)["outcome"] == "model_failed"
+
+
+def test_the_error_bounds_are_registered_before_the_rule_is_scored():
+    reg = arm.READING_RULE_2026_09_29["error_rates_a_rule_must_meet"]
+    assert "0.75 or below" in reg["model_failed"] and "0.1 or above" in reg["wording_wrong"]
+    assert arm.REVISED_RULE_ERROR_BOUND == 0.05 and arm.REVISED_RULE_DECIDES_AT == 0.8
+    assert arm.REVISED_RULE_MARGINS == {"model_failed": 0.75, "wording_wrong": 0.1}
+    assert "cannot_decide_is_never_an_error" in reg
+
+
+def test_an_interval_that_merely_reaches_zero_is_not_a_model_failure():
+    across = {"matched_difference_points": -1.0, "ci95_over_blocks": [-3.5, 1.5]}
+    assert arm.revised_reading(across, 1)["outcome"] == "cannot_decide"
+    assert arm.revised_reading(across, 1)["decides_clause_2"] is False
+
+
+def test_model_failed_needs_the_interval_above_the_three_quarters_line():
+    line = arm.REVISED_RULE_LINES_POINTS[1][0.75]
+    above = {"matched_difference_points": 0.0, "ci95_over_blocks": [line + 0.01, 2.5]}
+    at = {"matched_difference_points": 0.0, "ci95_over_blocks": [line, 2.5]}
+    assert arm.revised_reading(above, 1)["outcome"] == "model_failed"
+    assert arm.revised_reading(at, 1)["outcome"] == "cannot_decide"
+
+
+def test_wording_wrong_needs_the_interval_below_the_one_tenth_line_not_below_zero():
+    line = arm.REVISED_RULE_LINES_POINTS[1][0.1]
+    below_zero_only = {"matched_difference_points": -5.0, "ci95_over_blocks": [-8.0, -2.0]}
+    assert arm.measured_reading(below_zero_only)["outcome"] == "wording_wrong"
+    assert arm.revised_reading(below_zero_only, 1)["outcome"] == "cannot_decide"
+    below = {"matched_difference_points": -12.0, "ci95_over_blocks": [-14.0, line - 0.01]}
+    assert arm.revised_reading(below, 1)["outcome"] == "wording_wrong"
+
+
+def test_no_line_no_floor_or_a_failed_cell_reads_cannot_decide():
+    clear = {"matched_difference_points": 0.0, "ci95_over_blocks": [-1.0, 1.0]}
+    assert arm.revised_reading(clear, None)["outcome"] == "cannot_decide"  # varying elements per unit
+    assert arm.revised_reading(clear, 4)["outcome"] == "cannot_decide"  # no registered design
+    assert arm.revised_reading(clear, 1, admissible=False)["outcome"] == "cannot_decide"
+    assert arm.revised_reading({"matched_difference_points": None}, 1)["outcome"] == "cannot_decide"
+
+
+def test_the_ratios_an_interval_excludes_are_reported_and_are_not_a_reading():
+    got = arm.revised_reading({"matched_difference_points": -4.5, "ci95_over_blocks": [-6.0, -3.0]}, 1)
+    assert got["outcome"] == "cannot_decide"
+    assert got["ratios_the_interval_excludes"] == [1.0, 0.75, 0.25, 0.1, 0.0]
+
+
+def test_the_lines_are_the_committed_calibrations_expected_differences():
+    import json
+
+    p = Path(__file__).resolve().parents[1] / "data" / "results" / "clause2_design_power_calibrated.json"
+    if not p.exists():
+        pytest.skip("the calibrated result is not in this checkout")
+    seen: dict[int, dict[float, float]] = {}
+    for r in json.loads(p.read_text())["by_design"]:
+        seen.setdefault(r["design"]["k"], {})[r["ratio"]] = r["expected_difference_points"]
+    assert seen == arm.REVISED_RULE_LINES_POINTS

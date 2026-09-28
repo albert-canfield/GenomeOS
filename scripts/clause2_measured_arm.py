@@ -605,6 +605,224 @@ def measured_reading(primary: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+# ==== the reading rule revisited: registered by lane-rule on 2026-09-29, before any probability of it ====
+#
+# `measured_reading` and `PRE_REGISTRATION["readings"]` above are c17eedc's rule and stay exactly as
+# registered: they are the record, and every run that reads the revised rule reports the committed one
+# beside it. What follows is a second rule, dated and registered here, never a silent replacement.
+
+#: the expected difference, in points, that each registered true ratio produces in the designed experiment
+#: of cab70d9 (k tested elements per block and per window), from its reference calibration (sensitivity
+#: 0.6674, false-positive rate 0.01, window location -5.554014, spread 5.035207, chromosome part 1.276456)
+#: by `clause2_design_power.expected_difference`, copied from `clause2_design_power_calibrated.json`
+#: (`by_design[].expected_difference_points`). The simulation that scores the rule recomputes them and
+#: stops if they differ.
+REVISED_RULE_LINES_POINTS: dict[int, dict[float, float]] = {
+    1: {1.0: -0.0, 0.75: -2.456, 0.5: -4.911, 0.25: -7.366, 0.1: -8.84, 0.0: -9.822},
+    2: {1.0: -0.0, 0.75: -3.589, 0.5: -7.236, 0.25: -10.965, 0.1: -13.267, 0.0: -14.868},
+    3: {1.0: -0.0, 0.75: -4.168, 0.5: -8.461, 0.25: -12.933, 0.1: -15.757, 0.0: -17.792},
+    6: {1.0: -0.001, 0.75: -4.832, 0.5: -9.961, 0.25: -15.505, 0.1: -19.175, 0.0: -22.02},
+}
+#: the ratio whose line each revised reading is compared with
+REVISED_RULE_MARGINS = {"model_failed": 0.75, "wording_wrong": 0.1}
+#: the error rate each reading may not exceed, and the probability a rule must reach to decide
+REVISED_RULE_ERROR_BOUND = 0.05
+REVISED_RULE_DECIDES_AT = 0.8
+
+READING_RULE_2026_09_29: dict[str, Any] = {
+    "registered": "2026-09-29",
+    "lane": "lane-rule",
+    "item": "docs/ROADMAP.md section 5, item 12, row S2 follow-up: the measured arm's reading rule",
+    "registered_before": (
+        "any probability of the revised rule, or of any other rule than c17eedc's, was computed. Known when "
+        "this was written: the committed rule's reading probabilities in cab70d9 "
+        "(clause2_design_power_calibrated.json, `registered_reading_*` per cell) and the expected "
+        "differences per design and ratio in the same file; nothing else"
+    ),
+    "why": (
+        "c17eedc's rule reads 'model_failed' whenever the 95% interval over blocks reaches 0 with at least "
+        f"{MIN_BLOCKS} compared blocks, and its text says the blocks regulate coding genes 'at a rate not "
+        "below their matched windows'. Under cab70d9's calibrated simulation, at a true three-quarters "
+        "rate with every eligible block tested, it reads so in 53% to 82% of experiments: a failure to "
+        "detect is read as a finding. Its other reading, 'wording_wrong', says the blocks hold NO element "
+        "measured to regulate a coding gene, and it is read whenever the interval lies wholly below 0, "
+        "which a true half or three-quarters rate also produces"
+    ),
+    "the_committed_rule_is_kept": (
+        "`measured_reading` and PRE_REGISTRATION['readings'] are unchanged and remain c17eedc's record. "
+        "The revised rule is `revised_reading`, beside it; every result that reads it carries the "
+        "committed reading of the same interval next to it"
+    ),
+    "what_each_reading_claims": {
+        "model_failed": "the blocks' mean true per-element rate is not below their windows' (true ratio 1)",
+        "wording_wrong": "the blocks hold no element that regulates a coding gene (true ratio 0)",
+        "cannot_decide": "nothing: no claim about the ratio beyond what the interval excludes",
+    },
+    "the_true_ratio": (
+        "as in cab70d9: the block arm's mean true per-element regulation rate over the window arm's, on the "
+        "registered grid 1.0, 0.75, 0.5, 0.25, 0.1, 0.0"
+    ),
+    "error_rates_a_rule_must_meet": {
+        "model_failed": (
+            f"read in at most {REVISED_RULE_ERROR_BOUND:.0%} of experiments at EVERY true ratio of 0.75 or "
+            "below. 'The null' of this reading is that the blocks regulate less than their windows; a "
+            "three-quarters rate contradicts 'not below', and it is the smallest departure on the grid and "
+            "the one at which the committed rule was measured"
+        ),
+        "wording_wrong": (
+            f"read in at most {REVISED_RULE_ERROR_BOUND:.0%} of experiments at EVERY true ratio of 0.1 or "
+            "above. A tenth of the windows' rate contradicts 'no element', and 0.1 is the smallest "
+            "positive ratio on the grid"
+        ),
+        "tolerance": (
+            "a simulated rate meets its bound if it is at most 0.05 + 2 Monte Carlo standard errors, "
+            "cab70d9's null_calibration_rule"
+        ),
+        "where": (
+            "in every simulated (design, compared blocks) cell in which the rule may read anything but "
+            "cannot_decide. A cell that fails either bound reads cannot_decide whatever its interval, so "
+            "the cells where the rule may read at all are a result of the simulation, listed per cell"
+        ),
+        "cannot_decide_is_never_an_error": (
+            "it claims nothing. A rule that says cannot_decide when a reading cannot be supported meets both "
+            "bounds by construction; what that costs is reported as the probability of deciding"
+        ),
+    },
+    "what_deciding_means": (
+        f"the rule DECIDES clause 2 at a design and size if, besides meeting both bounds there, it reads "
+        f"model_failed with probability at least {REVISED_RULE_DECIDES_AT} at a true ratio of 1.0 AND "
+        f"wording_wrong with probability at least {REVISED_RULE_DECIDES_AT} at a true ratio of 0 (80%, the "
+        "target every clause 2 lane used). Each half is reported apart as well"
+    ),
+    "the_rule": {
+        "estimator_and_interval": (
+            "the committed ones, unchanged: `summarise_measured`'s mean over compared blocks of (block yes) "
+            "minus (share of its tested windows saying yes), and its 95% percentile bootstrap over blocks; "
+            f"the {MIN_BLOCKS}-block floor unchanged"
+        ),
+        "what_changes": (
+            "only the line each end of the interval is compared with. 0 is where the blocks' and windows' "
+            "rates are equal; a claim about a ratio needs the line at the difference that ratio produces"
+        ),
+        "lines": (
+            "for a design testing k elements per unit, the model_failed line is the expected difference at "
+            "a true ratio of 0.75 and the wording_wrong line the expected difference at 0.1 "
+            "(REVISED_RULE_LINES_POINTS), fixed from cab70d9's reference calibration before any experiment "
+            "and never re-estimated from an experiment's own data. An arm whose units carry varying "
+            "numbers of tested elements, as the measured arm of c17eedc does, has no registered line and "
+            "reads cannot_decide by this rule until one is registered"
+        ),
+        "model_failed": "the interval lies wholly above the model_failed line",
+        "wording_wrong": "the interval lies wholly below the wording_wrong line",
+        "cannot_decide": (
+            f"anything else; fewer than {MIN_BLOCKS} compared blocks; no registered line for the design; or "
+            "a (design, size) cell that fails a bound"
+        ),
+        "also_reported": (
+            "which registered ratios the interval excludes (their expected differences lie outside it): "
+            "compatibility statements under the calibrated assumptions, never a reading"
+        ),
+    },
+    "why_the_lines_sit_at_the_margins": (
+        "with a two-sided 95% interval that covers as it should, a line at the margin's own expected "
+        "difference gives each reading about 2.5% at that ratio, inside the 5% bound with room for the "
+        "anti-conservative intervals cab70d9 found at 20 to 30 blocks and with shared controls. No other "
+        "line is tried: the rule is not tuned on the simulation that scores it"
+    ),
+    "readings": {
+        "model_failed": (
+            "the blocks regulate coding genes at no less than three quarters of their matched windows' "
+            "rate: the interval over blocks lies wholly above the difference a three-quarters rate would "
+            "produce, under cab70d9's calibrated assumptions. The deletion model's failure to name a target "
+            "is then mostly the model's and not the sequence's; clause 2 stays not met and its stated reason "
+            "becomes the instrument"
+        ),
+        "wording_wrong": (
+            "the blocks regulate coding genes at less than a tenth of their matched windows' rate: the "
+            "interval over blocks lies wholly below the difference a one-tenth rate would produce, under "
+            "cab70d9's calibrated assumptions. A milestone that asks these blocks for a gene and a tissue "
+            "asks for something they rarely do; the clause is to be rewritten rather than re-tested"
+        ),
+        "cannot_decide": (
+            "this experiment supports neither reading at the registered error rates. What it can state is "
+            "its estimate, its interval and the registered ratios the interval excludes, each under the "
+            "calibrated assumptions; both readings stay open"
+        ),
+    },
+    "the_best_any_rule_on_this_estimator_could_do": (
+        "reported beside the rule, not as a rule: per (design, size), the threshold on the committed "
+        "estimator that the simulated experiments at every ratio on the wrong side of a margin exceed at "
+        "most 5% of the time, and the probability the true pole's experiments pass it (Neyman-Pearson on "
+        "the estimator's simulated distribution; the threshold is read from the same simulated experiments "
+        "it is scored on, so it is slightly optimistic). The same on the blocks' own rate alone, which is "
+        "what a rule could do if the windows' rate were known exactly. Also at the other margins on the "
+        "grid (model_failed against 0.5; wording_wrong against 0.25 and 0.5), labelled descriptive: which "
+        "weaker claims the arm could support. If these bounds are below 0.8 in every design, no rule that "
+        "reads the committed estimator can decide clause 2 within the eligible blocks at these error rates"
+    ),
+    "simulation": (
+        "cab70d9's, unchanged: `clause2_design_power.simulate_design` with the same reference calibration "
+        "(recomputed through the same redraw and gated against the committed one), the same eligible "
+        "populations, the 24 designs and each design's searched sizes cut at its cap; every size at every "
+        "ratio (no early stop); 2,000 experiments per cell; seed 2026092913. The committed and the revised "
+        "readings are computed on the same simulated experiments"
+    ),
+    "robustness": (
+        "descriptive: the lines stay at the reference calibration while the truth is simulated from each of "
+        "cab70d9's feasible one-factor variants, at the cap of designs (1, 10, 1), (1, 3, 1) and (6, 3, 1): "
+        "whether the bounds survive a calibration that is wrong"
+    ),
+    "expected_before_running": [
+        "the revised rule meets both bounds in every own-window (g = 1) cell from 50 blocks up; some "
+        "cells at 20 to 30 blocks, and some with shared controls, fail and read cannot_decide",
+        "no design decides clause 2. The revised model_failed at a true ratio of 1.0 stays below 0.8 in "
+        "every design, about 0.5 at best (at all 531 blocks the interval's half-width, about 2.5 points, "
+        "is as large as the 2.46-point distance to the line)",
+        "the revised wording_wrong at a true ratio of 0 stays below 0.8 in every design, about 0.2 at best "
+        "(the line sits 1.0 to 2.8 points from the ratio-0 difference, within one standard error)",
+        "the best rule on the committed estimator also stays below 0.8 for both halves (about 0.6 and 0.3)",
+        "the bounds do not survive every variant: an anchor at its low end, or no false positives in truth, "
+        "moves the true differences toward the lines and puts a reading's error above 5%",
+    ],
+    "if_no_design_decides": (
+        "then the arm reports, as registered in c17eedc, its coverage; then its estimate and interval with "
+        "the registered ratios the interval excludes; then the revised reading where the interval clears a "
+        "line, with its simulated probabilities beside it. It does not report 'model_failed' from an "
+        "interval that merely reaches 0"
+    ),
+    "words": "every probability is a probability under cab70d9's calibrated assumptions, never a guarantee",
+    "cost": "0 AlphaGenome requests",
+}
+
+
+def revised_reading(primary: dict[str, Any], k: int | None, admissible: bool = True) -> dict[str, Any]:
+    """The 2026-09-29 rule (READING_RULE_2026_09_29), with c17eedc's reading of the same interval beside it.
+
+    `k` is the tested elements per unit of the designed experiment the interval comes from; None (an arm
+    whose units carry varying numbers) has no registered line. `admissible` is False where the simulation
+    found the (design, size) cell failing an error bound.
+    """
+    lines = REVISED_RULE_LINES_POINTS.get(k) if k is not None else None
+    ci = primary.get("ci95_over_blocks") if primary.get("matched_difference_points") is not None else None
+    key = "cannot_decide"
+    excluded: list[float] = []
+    if ci is not None and lines is not None:
+        lo, hi = ci
+        excluded = [r for r, x in lines.items() if x < lo or x > hi]
+        if admissible and lo > lines[REVISED_RULE_MARGINS["model_failed"]]:
+            key = "model_failed"
+        elif admissible and hi < lines[REVISED_RULE_MARGINS["wording_wrong"]]:
+            key = "wording_wrong"
+    return {
+        "rule": "2026-09-29, lane-rule (READING_RULE_2026_09_29)",
+        "outcome": key,
+        "decides_clause_2": key != "cannot_decide",
+        "text": READING_RULE_2026_09_29["readings"][key],
+        "ratios_the_interval_excludes": excluded,
+        "committed_rule_c17eedc": measured_reading(primary)["outcome"],
+    }
+
+
 def drop_boots(s: dict[str, Any]) -> dict[str, Any]:
     s.pop("_boots", None)
     return s
