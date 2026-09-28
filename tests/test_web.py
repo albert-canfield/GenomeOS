@@ -154,10 +154,14 @@ def test_api_state_review_reports_the_nine_items_with_their_acceptance_tests():
     s = Api(ROOT).state()["review"]
     assert [r["item"] for r in s["rows"]] == [f"R{i}" for i in range(1, 10)]
     assert all(r["acceptance"] and r["title"] for r in s["rows"])
-    assert all(r["state"] in ("done", "open") for r in s["rows"])
+    assert all(r["state"] in ("done", "open", "reopened", "closed") for r in s["rows"])
     assert s["done"] == sum(1 for r in s["rows"] if r["state"] == "done")
     # an item is only done because a follow-up row in the plan says so
     assert all(r["follow_ups"] for r in s["rows"] if r["state"] == "done")
+    # and a row the plan reopened is not done: R8 closed on a negative pretest, then reopened as S3
+    for r in s["rows"]:
+        if any("reopened" in f["state"].lower() for f in r["follow_ups"]):
+            assert r["state"] == "reopened" and r["item"] in s["reopened"]
 
 
 def test_api_state_claims_read_their_result_files_and_never_restate_a_figure():

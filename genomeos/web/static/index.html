@@ -165,6 +165,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 .pp-claim .fig{font-size:13.5px;margin-top:3px;font-variant-numeric:tabular-nums}
 .pp-claim .src{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .pp-sec>summary{cursor:pointer;font-weight:600}
+/* the second review's three measures, side by side and never summed (roadmap §5 item 12) */
+.pp-measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:1100px){.pp-measures{grid-template-columns:1fr}}
+.pp-measure{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px}
+.pp-measure h4{margin:0 0 4px;font-size:13.5px}
+.pp-def{font-size:11.5px;color:var(--muted);margin-bottom:6px;line-height:1.45}
+.pp-measure .fig,.pp-bio .fig{margin-top:4px;font-variant-numeric:tabular-nums}
+.pp-measure .src,.pp-bio .src,.pp-disc .src{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.pp-quote{margin:4px 0 0;padding-left:8px;border-left:2px solid var(--line)}
+.pp-none{font-weight:600;color:var(--muted)}
 .pp-item{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
 .pp-item:first-of-type{border-top:0}
 .pp-item details summary{cursor:pointer;color:var(--muted);font-size:12px}
@@ -828,7 +838,13 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button data-pp="done" role="tab"><i class="ic">✅</i>Done <span class="muted" id="pp-done-n"></span></button>
     </div>
     <div id="pp-now">
-      <div id="pp-state-kpi" class="kpi"></div>
+      <h3 class="pp-h">Three status measures, kept apart<span style="text-transform:none;letter-spacing:0;font-weight:400"> — the second external review (roadmap &sect;5 item 12): each carries its own definition, none of them is the objective, and they are never added together</span></h3>
+      <div id="pp-measures" class="pp-measures"></div>
+      <h3 class="pp-h">Biology independently validated, by category<span style="text-transform:none;letter-spacing:0;font-weight:400"> — each claim in its registered wording and with its qualification, or not at all</span></h3>
+      <div id="pp-bio" class="pp-bio"></div>
+      <h3 class="pp-h">Discontinued investigations<span style="text-transform:none;letter-spacing:0;font-weight:400"> — closed on a negative, kept apart from what is built, and counted by no measure</span></h3>
+      <div id="pp-disc" class="pp-disc"></div>
+      <div id="pp-state-kpi" class="kpi" style="margin-top:12px"></div>
       <h3 class="pp-h">What is true today<span style="text-transform:none;letter-spacing:0;font-weight:400"> — the claims README separates, each figure read from the result file it rests on</span></h3>
       <div id="pp-claims"></div>
       <div id="pp-caveats"></div>
@@ -1750,18 +1766,91 @@ function figureLine(f) {
   const bits = [];
   if (f.percent != null) bits.push(`<b>${fmt(f.measured_bp)}</b> of <b>${fmt(f.total_bp)}</b> bases — <b>${f.percent}%</b>`);
   if (f.blocks_measured != null) bits.push(`${fmt(f.blocks_measured)} of ${fmt(f.blocks)} blocks touched by any of ${(f.assays || []).join(', ')}`);
-  if (f.held_out_gain != null) bits.push(`held-out gain <b>${f.held_out_gain}</b>${f.ci95 ? ` (95% ${f.ci95[0]} to ${f.ci95[1]})` : ''}, ${escH(f.against_encode_re2g || '')}`);
+  // the file's band field is not the claim's wording (docs/CRISPRI-RESULT.md keeps "in the range of"), so it is not printed here
+  if (f.held_out_gain != null) bits.push(`held-out gain <b>${f.held_out_gain}</b>${f.ci95 ? ` (95% ${f.ci95[0]} to ${f.ci95[1]})` : ''}`);
   const rep = f.replication;
   if (rep && rep.gain != null) bits.push(`second cell type ${escH(rep.cell_type)}: gain ${rep.gain}${rep.ci95 ? ` (95% ${rep.ci95[0]} to ${rep.ci95[1]})` : ''} on ${fmt(rep.covered_pairs)} pairs — <b>${rep.replicated ? 'replicated' : 'not replicated'}</b>`);
   return bits.map(b => `<div class="fig">${b}</div>`).join('');
+}
+// The second review's three measures (roadmap §5 item 12) and the discontinued list. Each measure is
+// drawn with its definition beside it and from /api/state only; nothing here sums them, and a claim
+// is drawn only in its registered wording and only with its qualification.
+const ppList = xs => (xs || []).map(escH).join(', ');
+function ppCheck(c) {
+  const pill = c.ok === true ? '<span class="st done">met</span>' : c.ok === false ? '<span class="st blocked">missing</span>' : '<span class="st next">not known here</span>';
+  return `<div class="fig">${pill}${escH(c.check)} <div class="muted" style="font-size:11.5px">${escH(c.detail)}</div></div>`;
+}
+function ppFigures(f) {
+  const bits = Object.entries(f || {}).filter(([, v]) => v != null && v !== '').map(([k, v]) => {
+    const val = Array.isArray(v) ? `${v[0]} to ${v[v.length - 1]}` : typeof v === 'object' ? Object.entries(v).map(([a, b]) => `${escH(a)} ${escH(b)}`).join(', ') : escH(v);
+    return `${escH(k.replace(/_/g, ' '))} <b>${val}</b>`;
+  });
+  return bits.length ? `<div class="fig" style="font-size:12px">${bits.join(' · ')}</div>` : '';
+}
+function ppEntry(e) {
+  // the page's own copy of the server's rule: no wording without a qualification beside it
+  if (!e.wording || !(e.qualifications || []).length) {
+    return `<div class="pp-item"><span class="st blocked">withheld</span><b>${escH(e.name)}</b> <span class="muted">${escH(e.withheld_because || 'its qualification could not be read')}</span></div>`;
+  }
+  const cls = e.counted ? 'done' : e.class === 'not met' ? 'blocked' : 'partial';
+  return `<div class="pp-item">
+      <div><span class="st ${cls}">${escH(e.class)}</span><b>${escH(e.name)}</b>${e.date ? ` <span class="muted">${escH(e.date)}</span>` : ''}</div>
+      <div class="pp-quote">${mdInline(e.wording)} <span class="src">${escH(e.wording_source)}</span></div>
+      <div style="margin-top:4px"><b>qualification${e.qualifications.length > 1 ? 's' : ''}, as their sources state them</b>${e.qualifications.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</div>
+      ${e.reused_benchmark && e.reused_benchmark.flag ? `<div class="note" style="margin-top:4px"><b>reused benchmark:</b> ${escH(e.reused_benchmark.text)} <span class="src">${escH(e.reused_benchmark.source)}</span></div>` : ''}
+      ${ppFigures(e.figures)}
+      ${(e.why || []).length ? `<details><summary>why it is classed as “${escH(e.class)}”</summary>${e.why.map(w => `<div class="pp-quote">${escH(w.text)} <span class="src">${escH(w.source)}</span></div>`).join('')}</details>` : ''}
+    </div>`;
+}
+function ppMeasures(ms, disc) {
+  const sw = ms.software, bio = ms.biology, rel = ms.release, t = sw.tests, ep = sw.engine_package;
+  const none = bio.categories.filter(c => c.none).map(c => c.category);
+  const software = `<div class="pp-measure"><h4>Software delivered <span class="st">software, not knowledge</span></h4>
+      <div class="pp-def">${escH(sw.definition)}</div>
+      <div class="fig"><b>${sw.milestones.reached} of ${sw.milestones.total}</b> milestones reached${sw.milestones.held.length ? ` <span class="muted">held: ${ppList(sw.milestones.held)}</span>` : ''}</div>
+      ${sw.reviews.map(r => `<div class="fig"><b>${r.done} of ${r.total}</b> items done in ${escH(r.source.replace('docs/ROADMAP.md ', ''))}${r.reopened.length ? ` <span class="muted">reopened: ${ppList(r.reopened)}</span>` : ''}${r.closed.length ? ` <span class="muted">closed: ${ppList(r.closed)}</span>` : ''}${r.open.length ? ` <span class="muted">open: ${ppList(r.open)}</span>` : ''}</div>`).join('')}
+      ${ep ? `<div class="fig">engine package: <b>${ep.checks_passed} of ${ep.checks_total}</b> checks <span class="muted">(${escH(ep.date)}${ep.suite ? `; its suite: ${escH(ep.suite)}` : ''})</span></div>` : '<div class="fig muted">no engine package result</div>'}
+      ${t.present ? `<div class="fig">test suite, latest completed CI run: <span class="st ${t.conclusion === 'success' ? 'done' : 'blocked'}">${escH(t.conclusion)}</span>${escH(t.summary || 'no summary line')} <span class="muted">on ${escH(String(t.sha || '').slice(0, 10))}, ${escH(t.created)}${t.failed_tests.length ? `; failed: ${ppList(t.failed_tests)}` : ''}; read ${ago(t.age_seconds)}</span></div>` : `<div class="fig muted">test suite: no cached CI status (${escH(t.source)})</div>`}
+      <div class="muted" style="margin-top:6px;font-size:11.5px">not counted here: the ${disc.total} discontinued investigations listed below</div></div>`;
+  const biology = `<div class="pp-measure"><h4>Biology independently validated</h4>
+      <div class="pp-def">${escH(bio.definition)}</div>
+      <div class="fig"><b>${bio.counted}</b> result${bio.counted === 1 ? '' : 's'} counted, each with its qualification, of ${bio.candidates} classified</div>
+      <div class="fig"><span class="pp-none">none</span> in ${none.length} of ${bio.categories.length} categories: ${ppList(none)}</div>
+      ${bio.withheld.length ? `<div class="fig"><span class="st blocked">withheld</span>${ppList(bio.withheld)}</div>` : ''}
+      ${bio.categories_source ? `<div class="muted" style="margin-top:6px;font-size:11.5px">categories kept apart: “${escH(bio.categories_source.text)}” <span class="src">${escH(bio.categories_source.source)}</span></div>` : ''}</div>`;
+  const ci = rel.ci;
+  const release = `<div class="pp-measure"><h4>Release readiness</h4>
+      <div class="pp-def">${escH(rel.definition)}</div>
+      <div class="fig"><b>${rel.met.length}</b> met · <b>${rel.missing.length}</b> missing · <b>${rel.unknown.length}</b> not known here</div>
+      ${rel.checks.map(ppCheck).join('')}
+      <div class="muted" style="margin-top:6px;font-size:11.5px">${ci.present ? `CI status cached ${ago(ci.age_seconds)} (${escH(ci.written)}); ${ci.consecutive_failures} completed run${ci.consecutive_failures === 1 ? '' : 's'} in a row not green` : `no cached CI status`}; refresh with <span class="mono">${escH(ci.refresh)}</span></div>
+      ${rel.criteria.length ? `<details><summary>the plan's own release criteria (${rel.criteria.length})</summary>${rel.criteria.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</details>` : ''}</div>`;
+  return software + biology + release;
+}
+function ppBio(bio) {
+  return bio.categories.map(c => `<div class="pp-claim">
+      <div><b>${escH(c.category)}</b> <span class="muted">${escH(c.means)}</span> — ${c.none ? '<span class="pp-none">none</span>' : `<b>${c.validated.length}</b> counted`}</div>
+      ${c.measured_by ? `<div class="pp-quote muted">what counts: ${escH(c.measured_by.text)} <span class="src">${escH(c.measured_by.source)}</span></div>` : ''}
+      ${c.validated.map(ppEntry).join('')}
+      ${c.not_counted.length ? `<details${c.none ? ' open' : ''}><summary>shown, not counted (${c.not_counted.length})</summary>${c.not_counted.map(ppEntry).join('')}</details>` : ''}
+    </div>`).join('');
+}
+function ppDisc(d) {
+  return `<div class="muted" style="font-size:11.5px;margin-bottom:4px">${escH(d.definition)}</div>` + d.rows.map(r => `<div class="pp-claim">
+      <div><span class="st ${r.state === 'closed on a negative' ? 'blocked' : 'next'}">${escH(r.state)}</span>${r.reopened.length ? '<span class="st partial">question reopened</span>' : ''}<b>${escH(r.name)}</b>${r.review_item ? ` <span class="muted">(review item ${escH(r.review_item)}, not counted as done)</span>` : ''}</div>
+      ${r.closed.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}
+      ${r.result ? `<div class="fig" style="font-size:12px">result file: <b>${escH(r.result.verdict)}</b> <span class="src">${escH(r.result.source)} · ${escH(r.result.date || '')}</span></div>` : ''}
+      ${r.reopened.length ? `<div style="margin-top:4px"><b>reopened</b>${r.reopened.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</div>` : ''}
+    </div>`).join('');
 }
 async function loadState() {
   try {
     const s = await api('/api/state');
     const m = s.milestones, rv = s.review, o = s.owed;
-    $('#pp-state-kpi').innerHTML = `<div><b>${m.reached} of ${m.total}</b><span>milestones reached</span></div>
-      <div><b>${rv.done} of ${rv.total}</b><span>external review items done</span></div>
-      <div><b>${o.count}</b><span>waiting on the owner</span></div>
+    $('#pp-measures').innerHTML = ppMeasures(s.measures, s.discontinued);
+    $('#pp-bio').innerHTML = ppBio(s.measures.biology);
+    $('#pp-disc').innerHTML = ppDisc(s.discontinued);
+    $('#pp-state-kpi').innerHTML = `<div><b>${o.count}</b><span>waiting on the owner</span></div>
       <div><b>${s.claims.rows.length}</b><span>claims stated separately</span></div>`;
     $('#pp-claims').innerHTML = s.claims.rows.map(c => `<div class="pp-claim">
         <div><b>${escH(c.claim)}</b>${c.figure ? ` <span class="st done">${escH(c.figure.date || '')}</span>` : ''}${c.agrees_with_readme === false ? ' <span class="st blocked">README disagrees with its result file</span>' : ''}</div>
@@ -1781,7 +1870,7 @@ async function loadState() {
         ${x.emphasised && x.emphasised.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">what the row itself emphasises (${x.emphasised.length})</summary>${x.emphasised.map(t => `<div style="margin-top:3px">${escH(t)}</div>`).join('')}</details>` : ''}
       </div>`).join('') + `<div class="src">${escH(m.source)}</div>`;
     $('#pp-review').innerHTML = rv.rows.map(r => `<div class="pp-item">
-        <div><span class="st ${r.state === 'done' ? 'done' : 'next'}">${escH(r.state)}</span><b>${escH(r.item)}</b> ${escH(r.title)}</div>
+        <div><span class="st ${r.state === 'done' ? 'done' : r.state === 'reopened' ? 'partial' : 'next'}">${escH(r.state)}</span><b>${escH(r.item)}</b> ${escH(r.title)}</div>
         <div class="muted" style="margin-top:2px">acceptance: ${escH(r.acceptance)}</div>
         ${r.follow_ups.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">${r.follow_ups.length} follow-up row${r.follow_ups.length > 1 ? 's' : ''}</summary>${r.follow_ups.map(f => `<div style="margin-top:3px">${mdInline(f.note)}</div>`).join('')}</details>` : ''}
       </div>`).join('') + `<div class="src">${escH(rv.source)}</div>`;
