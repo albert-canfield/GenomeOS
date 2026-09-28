@@ -7117,6 +7117,47 @@ is fixed in the same commit):
   and the MHC is unusual. AlphaGenome was trained on ENCODE K562 tracks, so the objection that it has
   seen K562 chromatin remains open.
 
+## The result: the independent MHC screen cannot be read, because only 19 distal pairs in it are measured decreases and 13 of those fall within the sweep's reach (review item 11, 2026-09-28, later)
+
+The test registered in `042a4aa` was scored once (`scripts/indep_benchmark.py`, result
+`data/results/indep_mhc_crispri.json`, partition `independent`, source IGVFFI4093WUVB, 0 AlphaGenome
+requests). **Verdict: NOT READABLE.** No AUPRC was computed, and none is quoted here, because the
+registration forbids reading a test below its floors.
+
+**Why it cannot be read.** The registration requires at least 20 covered positives; the screen supplies
+13. Of the screen's 93 significant decreases, 74 lie on promoters: the element sits within 1 kb of a
+GENCODE v50 TSS, so these are the TSS controls and promoter hits the registration excludes. That leaves
+**19 distal decreases in 21,358 distal pairs**. Of those 19, 14 lie within 500 kb of the gene's TSS, and
+13 of the 14 are covered. Coverage is not the limit: 4,472 of 6,544 pairs within reach are covered
+(68%, above the 0.5 floor). The shortfall is in the measurement: in this locus the screen finds almost
+no distal element that lowers a gene.
+
+**The measurement leans the other way.** Among distal pairs the screen calls **181 significant
+increases against 19 decreases**; within reach the count is 72 against 14. Under R2 these are kept as
+their own outcome. A CRISPRi screen whose distal hits are mostly increases is measuring something other
+than enhancers being silenced, such as indirect effects, silencers, or the FRACTEL test's pooling of the
+two directions. Before this screen is used as a target benchmark in any form, its authors' reading of
+those increases is needed. The sweep predicts no fall for 16 of the 54 covered increases; that is
+descriptive, not a test.
+
+**The selection check**, reported as registered and read as descriptive only: the distance baseline's
+AP is 0.119 on covered pairs (base rate 0.0029) and 0.25 on uncovered pairs within reach (base rate
+0.0005, one positive). With one positive, that second number means nothing.
+
+**What this means for item 11.** The project still has no independent target benchmark, and that has to
+be said rather than papered over. Every target claim continues to rest on the reused ENCODE file, so it
+remains in-sample by R5's definition. The census found no other study that the stored sweep can score
+with 0 requests and at sufficient size. What remains:
+
+1. the IGVF K562 CRISPRi Perturb-seq over many loci (Gersbach, 16 measurement sets, 2026-07-27). It
+   needs 0 model requests, but no element-level table has been released: using it means processing raw
+   single-cell reads, or waiting for the IGVF analysis set;
+2. HCT116 (Guckelberger 2024, IGVF FlowFISH). The sweep has no HCT116 track, so this costs the 705
+   requests already waiting on the owner's approval;
+3. the five ENCODE K562 FlowFISH genes outside the benchmark (TRIR, OTUD5, FADS2, PVT1, HBS1L). These
+   cost 0 requests but give five loci, and each would need its own registration with a floor it can
+   meet.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

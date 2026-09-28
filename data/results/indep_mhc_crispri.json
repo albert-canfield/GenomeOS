@@ -1,0 +1,201 @@
+{
+  "result": "indep_mhc_crispri",
+  "date": "2026-09-28",
+  "partition": "independent",
+  "source_accession": "IGVFFI4093WUVB",
+  "question": "Does the stored AlphaGenome deletion sweep rank measured CRISPRi targets above distance on a screen no script in this repository had read (IGVF K562 MHC CRISPRi Perturb-seq)?",
+  "verdict": "NOT READABLE",
+  "preregistered": "Registered 2026-09-28 by lane-indep, before any pair of IGVFFI4093WUVB was scored. Seen before registration: the column names, 34,279 rows, 581 elements, 59 genes, all on chr6, 385 rows at FDR < 0.05 in either direction, and the label-blind coverage of pairs by the sweep: of 20,228 eligible pairs 4,651 are covered (23%); within 500 kb of the TSS 4,472 of 6,544 (68%), beyond it almost none, because the sweep scored only the genes inside its 1 Mb window. The reach below was fixed from that label-blind count.\n\nPAIRS. Each row is one element (DHS) and one gene. Excluded before scoring, each counted: an element within 1 kb of any GENCODE v50 gene TSS on chr6 (a promoter or a TSS control); a gene GENCODE v50 does not carry on chr6 (matched by Ensembl id, then symbol); a pair whose gene and overlapping element also appear in either ENCODE EPCrisprBenchmark file (reused evidence). REACH: the primary population is the eligible pairs whose element midpoint lies within 500 kb of the gene's TSS, the half-width of the window the sweep scored; pairs beyond it are counted as out of the sweep's reach and not scored, since the sweep never saw those genes.\n\nLABELS (R2's outcome classes, kept apart). decrease: FDR < 0.05 and effect < 0 (the positive). increase: FDR < 0.05 and effect > 0, excluded from the primary test and reported alone, never read as 'no effect'. not detected: FDR >= 0.05 (the negative). The screen publishes no power column, so 'not detected' is not 'no effect', and the negatives carry that caveat.\n\nCOVERAGE. A pair is covered when a sweep element overlaps the DHS and the per-element cache holds a K562 value for the pair's gene. Uncovered pairs are missing: counted, never imputed, never scored as zero. The test is not read (outcome 'not readable') if fewer than 20 covered positives remain or the covered share of in-reach decrease-or-not-detected pairs is below 0.5. Selection check, reported: the distance baseline's AP on the in-reach pairs the sweep did not cover against the pairs it did, so an easier covered subset is visible.\n\nPREDICTOR. The deletion: the largest predicted fall of the pair's gene on K562's own track over the overlapping sweep elements (crispri.deletion_drop, floored at zero).\n\nBASELINES. (1) distance: minus the log distance from the element's midpoint to the gene's GENCODE v50 TSS (floored at 1 kb). (2) the current annotation: 1 when the gene is an overlapping element's compiled target (the compact table's top predicted gene, coding or any), else 0; and the node rule, 1 when the gene is the nearest TSS in the element's CTCF node. (3) the published model: scE2G v1.2 in K562 (IGVFFI1706PNVV), the largest `Score` over its elements overlapping the DHS for the same Ensembl gene; pairs it does not score are missing for it and it is compared on the pairs both cover.\n\nMETRIC. Average precision (AUPRC, ties as one threshold) on covered pairs, with a 95% interval from 2,000 bootstrap resamples of ELEMENTS (all pairs of a drawn element move together; seed 20260928), and the paired difference on the same resamples. Resampling genes (59) is reported as a sensitivity reading. The base rate (positives over covered pairs) is reported beside every AP.\n\nPASS. The 95% interval of AP(deletion) - AP(distance) lies above 0.\nFALSIFIER. The deletion fails on independent evidence if that interval lies below 0, or if the upper bound of AP(deletion) does not exceed the base rate.\nOtherwise NOT ESTABLISHED: the interval straddles 0.\nSecondary, reported and not part of the verdict: the deletion against the annotation, the node rule and scE2G (paired, on shared pairs); the gene-resampled interval; the increases alone.\n\nREADINGS. PASS: on one new K562 screen in one locus, the deletion ranks measured targets above distance; a statement about K562 and the MHC, not about other cells or loci. FAIL: the ranking that the ENCODE held-out file supported does not transfer to evidence the project never read, and every claim built on that file (target bands, the calibration) must be restated as unvalidated outside it. NOT ESTABLISHED: this screen cannot tell the deletion from distance, which is not support. NOT READABLE: the sweep does not cover the screen, and the lane's result is the coverage. In every case one locus bounds the claim: the element bootstrap does not sample locus-to-locus variation, and the MHC is unusual (HLA polymorphism, K562's low class I expression). AlphaGenome was trained on ENCODE K562 tracks, not on this screen; the objection that it has seen K562 chromatin stays open and is stated, not closed.",
+  "alphagenome_requests": 0,
+  "coverage": {
+    "rows": 34279,
+    "excluded": {
+      "promoter": 12921,
+      "gene_not_in_gencode_v50": 1086,
+      "reused_in_encode_benchmark": 44
+    },
+    "eligible_pairs": 20228,
+    "out_of_reach_pairs": 13684,
+    "in_reach_pairs": 6544,
+    "in_reach_overlapping_a_sweep_element": 4555,
+    "in_reach_covered": 4472,
+    "in_reach_scored_by_sce2g": 4496,
+    "in_reach_test_pairs": 6472,
+    "covered_share": 0.6826
+  },
+  "outcomes_eligible": {
+    "decrease": 19,
+    "increase": 155,
+    "not_detected": 20054
+  },
+  "outcomes_in_reach": {
+    "decrease": 14,
+    "increase": 72,
+    "not_detected": 6458
+  },
+  "primary_element_bootstrap": null,
+  "sensitivity_gene_bootstrap": null,
+  "against_published_model_on_shared_pairs": null,
+  "selection_check_distance_ap": {
+    "covered": {
+      "pairs": 4418,
+      "ap": 0.1188,
+      "base_rate": 0.0029
+    },
+    "uncovered_in_reach": {
+      "pairs": 2054,
+      "ap": 0.25,
+      "base_rate": 0.0005
+    }
+  },
+  "increases_in_reach": {
+    "pairs": 72,
+    "covered": 54,
+    "covered_with_no_predicted_fall": 16
+  },
+  "evidence": "experimental: IGVF K562 CRISPRi Perturb-seq of the MHC (IGVFFI4093WUVB); predicted: AlphaGenome deletion sweep, stored; baseline: scE2G v1.2 K562 (IGVFFI1706PNVV)",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "IGVFFI4093WUVB",
+        "analysis_set": "IGVFDS7132YVKO",
+        "doi": "10.65695/IGVFDS7132YVKO",
+        "url": "https://api.data.igvf.org/tabular-files/IGVFFI4093WUVB/@@download/IGVFFI4093WUVB.tsv.gz",
+        "md5": "c6d0c44d5db44888743feb6b60c33a79",
+        "released": "2026-06-08",
+        "lab": "Charles Gersbach, Duke (IGVF)",
+        "assay": "CRISPRi (dCas9-KRAB) Perturb-seq, targeted panel, FRACTEL element-level test",
+        "cell": "K562",
+        "assembly": "GRCh38",
+        "annotation": "GENCODE 32",
+        "coordinates": "BED-like, 0-based half-open (IGVF column specification)",
+        "licence": "CC BY 4.0 (IGVF data, Registry of Open Data on AWS)",
+        "version": "released 2026-06-08"
+      },
+      {
+        "accession": "IGVFFI1706PNVV",
+        "prediction_set": "IGVFDS5428HHMB",
+        "model": "scE2G v1.2 (Multiome), K562-CRISPRi, unfiltered element-gene scores, column `Score`",
+        "url": "https://api.data.igvf.org/tabular-files/IGVFFI1706PNVV/@@download/IGVFFI1706PNVV.tsv.gz",
+        "md5": "96232c244a50d7e522d8830cd0665aed",
+        "released": "2025-06-25",
+        "licence": "CC BY 4.0 (IGVF data)",
+        "note": "trained on the ENCODE CRISPRi benchmark, which does not contain this screen",
+        "version": "scE2G v1.2.0"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark",
+        "version": "main (sha256 pinned)"
+      },
+      {
+        "accession": "GENCODE",
+        "version": "v50, chr6"
+      },
+      {
+        "accession": "AlphaGenome all-element deletion sweep",
+        "version": "stored, 2026-09-13..16"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/indep/IGVFFI4093WUVB.tsv.gz",
+        "sha256": "6191c56518c30cd289bd82b52abb6f32dfd324a70ec61dcf5e4e91d512a9780f",
+        "bytes": 960084,
+        "partition": "independent"
+      },
+      {
+        "path": "data/cache/indep/scE2G_K562_chr6_MHC.tsv.gz",
+        "sha256": "bfeb1662c78ced0f890779a98617ae38a5237b295310c1801f71ca05255ad8fb",
+        "bytes": 10309257,
+        "partition": "n/a: published baseline"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training (overlap check only)"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout (overlap check only)"
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "cell": "K562",
+      "fdr": 0.05,
+      "promoter_window": 1000,
+      "reach": 500000,
+      "min_positives": 20,
+      "min_coverage": 0.5,
+      "bootstraps": 2000,
+      "seed": 20260928,
+      "min_distance": 1000
+    },
+    "exclusions": [
+      {
+        "reason": "promoter",
+        "pairs": 12921
+      },
+      {
+        "reason": "gene_not_in_gencode_v50",
+        "pairs": 1086
+      },
+      {
+        "reason": "reused_in_encode_benchmark",
+        "pairs": 44
+      },
+      {
+        "reason": "beyond the sweep's 500 kb reach",
+        "pairs": 13684
+      },
+      {
+        "reason": "significant increase, reported apart",
+        "pairs": 72
+      },
+      {
+        "reason": "in reach, not covered by the sweep (missing, not imputed)",
+        "pairs": 2054
+      }
+    ],
+    "partitions": {
+      "independent": "IGVF MHC CRISPRi screen, read by no earlier script; scored once",
+      "training": "ENCODE K562 training pairs, read only to exclude overlapping pairs",
+      "heldout": "ENCODE held-out pairs, read only to exclude overlapping pairs"
+    },
+    "code": {
+      "git_sha": "042a4aa42fa2a7fcaf52faa0831bef9f46e8ec71",
+      "dirty": true,
+      "dirty_code_paths": [],
+      "argv": [
+        "scripts/indep_benchmark.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
