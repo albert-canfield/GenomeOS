@@ -22,6 +22,7 @@ from genomeos.results import save_result
 CELLS = ("K562", "GM12878")
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
 def manifest() -> dict:
     """The provenance contract (review item R9): the representative result a second environment
     rebuilds. The CRISPRi tables are fetched from a branch, not a tag, so the sha256 is the pin."""

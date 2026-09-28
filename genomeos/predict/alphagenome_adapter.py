@@ -15,6 +15,9 @@ is ever labelled experimental.
 
 from __future__ import annotations
 
+import datetime
+import hashlib
+import importlib.metadata
 import importlib.util
 import os
 from collections.abc import Callable
@@ -107,6 +110,37 @@ class PredictedEffect:
         )
 
 
+API_SERVICE = {
+    "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+    "address": "dns:///gdmscience.googleapis.com:443",
+}
+UNREQUESTED = (
+    "unrequested: dna_client.create was given no model_version, so the server chose; alphagenome 0.9.0 "
+    "documents ALL_FOLDS as its default, and no response says which model answered"
+)
+
+
+def run_metadata(client: object | None = None, date: str | None = None) -> dict:
+    """What a live request is made with, kept beside each cached answer (review R9 follow-up): the client
+    package and its installed version, the model version the client asks for (None when it asks for
+    none, which is how every run before 2026-09-28 asked), the service and the date. Reads the installed
+    package and the client object only; makes no request."""
+    try:
+        version = importlib.metadata.version("alphagenome")
+    except importlib.metadata.PackageNotFoundError:
+        version = None
+    requested = getattr(client, "_model_version", None)  # DnaClient keeps the requested ModelVersion's name
+    return {
+        "client": "alphagenome",
+        "client_version": version,
+        "model_version": requested,
+        "model_version_note": None if requested else UNREQUESTED,
+        "api": dict(API_SERVICE),
+        "scorer": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+        "date": date or datetime.datetime.now(datetime.UTC).date().isoformat(),
+    }
+
+
 def _dotenv_key(name: str, path: str = ".env") -> str | None:
     """Read NAME=value from a local .env file (git-ignored) when the variable is not exported."""
     try:
@@ -160,6 +194,7 @@ class AlphaGenomeAdapter:
         if self._client is None:
             self._client = dna_client.create(self.api_key)
         client = self._client
+        model = run_metadata(client)
 
         def score(chrom: str, pos: int, ref: str, alt: str) -> list[tuple[str, str, float]]:
             variant = genome.Variant(chromosome=chrom, position=pos, reference_bases=ref, alternate_bases=alt)
@@ -175,6 +210,13 @@ class AlphaGenomeAdapter:
                 for g, n in zip(gtex, names, strict=False):
                     tissues.append(str(g) if g and str(g) not in ("nan", "") else str(n))
                 self.last_scan = {"genes": len(genes), "tracks": len(tissues), "max_abs_log2fc": 0.0}
+                # the track table this answer was read on, as a checksum: no request, the response's own
+                model["tracks"] = len(tissues)
+                model["tracks_sha256"] = hashlib.sha256(
+                    "\n".join(
+                        f"{i}\t{n}\t{t}" for i, n, t in zip(adata.var.index, names, tissues, strict=False)
+                    ).encode()
+                ).hexdigest()
                 for gi, gene in enumerate(genes):
                     for ti, tissue in enumerate(tissues):
                         val = float(adata.X[gi, ti])
@@ -184,6 +226,7 @@ class AlphaGenomeAdapter:
                             out.append((str(gene), str(tissue), val))
             return out
 
+        score.model = model  # type: ignore[attr-defined]  # read by enhancer_target.score_element
         return score
 
     def predict(

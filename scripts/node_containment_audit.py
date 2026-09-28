@@ -427,6 +427,7 @@ def readings(rows: list[dict], label: str) -> dict:
     return out
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
 def manifest(stage: int, rows: list[dict]) -> dict:
     """The provenance contract (review item R9). Stage 1 reads the model's archive; stage 2 reads the
     CRISPRi benchmark in its place. Both read the same node caller over the same annotation."""

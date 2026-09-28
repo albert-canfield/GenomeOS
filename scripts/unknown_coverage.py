@@ -142,6 +142,7 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return out
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
 def manifest(chroms: list[str]) -> dict[str, Any]:
     """The provenance contract (review item R9) for the assay-coverage headline."""
     inputs = [mf.input_entry(p, partition=None) for c in chroms for p in organise.inputs(c)]

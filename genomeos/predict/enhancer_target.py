@@ -307,6 +307,9 @@ def score_element(
             "seconds": round(time.time() - t0, 1),
             "genes": rows,
         }
+        model = getattr(scorer, "model", None)  # the live scorer's run metadata (review R9 follow-up)
+        if model:
+            hit["model"] = dict(model)
         p = cache_path(chrom, element_id, cache)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(hit))

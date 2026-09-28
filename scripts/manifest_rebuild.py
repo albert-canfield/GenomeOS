@@ -88,6 +88,9 @@ def comparable(payload: dict[str, Any]) -> dict[str, Any]:
     out = {k: v for k, v in payload.items() if k not in IGNORED}
     m = dict(out.get(mf.KEY) or {})
     m.pop("code", None)
+    # recorded after the fact for results made before 2026-09-28 (R9 follow-up), so a rerun at their
+    # revision cannot write it: it states the inputs' provenance, not a value the run computes
+    m.pop("model_dependencies", None)
     if m:
         out[mf.KEY] = m
     out = _strip_timing(out)

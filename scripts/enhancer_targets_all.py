@@ -33,6 +33,7 @@ from pathlib import Path
 
 from genomeos.jobs import heartbeat
 from genomeos.predict import AlphaGenomeAdapter, status
+from genomeos.predict.alphagenome_adapter import run_metadata
 from genomeos.predict.enhancer_target import Context, cache_path, has_cells, load_cached, summarise
 from genomeos.results import save_result
 
@@ -169,6 +170,9 @@ def main() -> int:
                 "workers": args.workers,
                 "capped_to": args.limit,
                 "cells": ["K562", "HepG2", "GM12878", "IMR-90"],
+                # client version, requested model version (None: the server chose) and date; each new
+                # cached answer carries the same record plus its track checksum (review R9 follow-up)
+                "model_run": run_metadata(),
                 # a capped run cannot know the chromosome is finished, so it never claims it is
                 "complete": bool(final and not args.limit and len(rows) >= total_elements),
                 "summary": s,

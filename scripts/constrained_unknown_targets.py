@@ -540,6 +540,7 @@ def first_run() -> dict[str, Any] | None:
     return json.loads(blob)
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
 def manifest(chroms: list[str], control: bool, window: bool) -> dict[str, Any]:
     """The provenance contract (review item R9) for the real-unknown headline."""
     from genomeos.attribution.targets import ELEMENT_CACHE

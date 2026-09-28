@@ -32,6 +32,7 @@ def invalid_connections(name: str) -> dict[str, int]:
     return dict(sorted(c.items()))
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
 def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair]) -> dict:
     """The provenance contract (review item R9): what this result read, which release and which bytes."""
     inputs = [

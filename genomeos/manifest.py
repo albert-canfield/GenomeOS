@@ -178,7 +178,23 @@ def validate(manifest: Any) -> list[str]:
     part = manifest.get("partitions")
     if "partitions" in manifest and not (isinstance(part, dict) or _not_applicable(part)):
         problems.append("partitions must be a dict, or n/a: why")
+    if "model_dependencies" in manifest:  # optional: stated where a result rests on a served model
+        deps = manifest["model_dependencies"]
+        if not isinstance(deps, list):
+            problems.append("model dependencies must be a list, one model dependency per served model")
+        else:
+            for d in deps:
+                if not _pins_or_says_why(d):
+                    problems.append(
+                        f"a model dependency needs a name and a model_version or unpinned: why: {d!r}"[:300]
+                    )
     return problems
+
+
+def _pins_or_says_why(d: Any) -> bool:
+    if not isinstance(d, dict) or not d.get("name"):
+        return False
+    return bool(d.get("model_version")) or str(d.get("unpinned", "")).startswith("unpinned: ")
 
 
 def stamp(manifest: dict[str, Any] | None, root: Path | None = None) -> dict[str, Any]:
@@ -216,3 +232,158 @@ def read(payload: Any) -> dict[str, Any]:
         "fields": fields,
         "manifest": m if declared else None,
     }
+
+
+# --- model dependencies (R9 follow-up, 2026-09-28) ------------------------------------------------
+#
+# A result that rests on a served model cannot be rebuilt from its inputs' sha256 alone once those
+# inputs are gone: a second machine must ask the model again, and gets the model the server serves
+# that day. `model_dependencies` (optional in a manifest, checked by `validate` when present) says
+# which model a result's inputs were made with, as far as the disk establishes it, and "unpinned: why"
+# for each part it cannot. Everything below was read from files on this machine; no request was made.
+
+LOCK = Path("uv.lock")
+
+
+def lock_version(package: str, lock: Path = LOCK) -> str | None:
+    """The version of `package` in uv.lock, or None when the lock or the package is not there."""
+    try:
+        text = lock.read_text()
+    except OSError:
+        return None
+    for block in text.split("[[package]]"):
+        lines = [x.strip() for x in block.strip().splitlines()]
+        if f'name = "{package}"' in lines:
+            for x in lines:
+                if x.startswith("version = "):
+                    return x.split("=", 1)[1].strip().strip('"')
+    return None
+
+
+def track_fingerprint(answers: Any) -> dict[str, Any]:
+    """What cached deletion answers say about the tracks behind them, when the track table itself was
+    never stored: how many tracks each answer read (its modal count) and the sorted set of tissue names
+    its genes' largest moves were read on, with that set's sha256. A fingerprint of names observed in
+    the answers, never a checksum of the model's output_metadata."""
+    counts: dict[Any, int] = {}
+    names: set[str] = set()
+    n = 0
+    for a in answers:
+        n += 1
+        counts[a.get("tracks")] = counts.get(a.get("tracks"), 0) + 1
+        for g in a.get("genes") or []:
+            for k in ("max_drop_tissue", "max_rise_tissue"):
+                if g.get(k):
+                    names.add(str(g[k]))
+    modal = max(counts.items(), key=lambda kv: (kv[1], str(kv[0])))[0] if counts else None
+    return {
+        "elements_scanned": n,
+        "tracks_per_element_modal": modal,
+        "elements_at_modal": counts.get(modal, 0),
+        "distinct_track_counts": len(counts),
+        "tissue_names": len(names),
+        "tissue_names_sha256": hashlib.sha256("\n".join(sorted(names)).encode()).hexdigest(),
+    }
+
+
+#: The AlphaGenome all-element deletion sweep (scripts/enhancer_targets_all.py, chained by
+#: scripts/enhancer_targets_all_chain.py) and its per-element response cache, as established from disk
+#: on 2026-09-28. Every value names its evidence; nothing was asked of the model.
+ALPHAGENOME_SWEEP: dict[str, Any] = {
+    "name": "AlphaGenome",
+    "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element "
+    "response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+    "client": {
+        "package": "alphagenome",
+        "version": "0.9.0",
+        "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+        "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 "
+        "(2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; "
+        "the installed client says __version__ 0.9.0",
+    },
+    "api": {
+        "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+        "method": "ScoreVariant",
+        "address": "dns:///gdmscience.googleapis.com:443",
+        "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and "
+        "dna_client.create's default address; neither alphagenome_adapter._live_scorer nor "
+        "enhancer_targets_all.worker_scorer passes an address",
+    },
+    "scorer": {
+        "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+        "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+        "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+        "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the "
+        "sweep; the repr is the installed 0.9.0 client's",
+    },
+    "model_version": None,
+    "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and "
+    "create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an "
+    "empty model_version and the server chose. No response message carries a model version "
+    "(model_version is a request field only in dna_model_service.proto) and no cache file, result or "
+    "job log records one, so which model answered cannot be established from disk",
+    "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on "
+    "alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+    "run_dates": {
+        "first": "2026-09-12",
+        "last": "2026-09-16",
+        "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; "
+        "has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); "
+        "data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every "
+        "chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 "
+        "15:10; result files dated 2026-09-13 to 2026-09-16",
+        "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to "
+        "2026-09-21 by later deletion runs through the same unpinned client (file mtimes)",
+    },
+    "track_metadata": {
+        "stored": False,
+        "sha256": None,
+        "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, "
+        "largest drop, largest rise and four cell lines' values, so the track table it averaged over is "
+        "not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell "
+        "lines' track counts, not the table",
+        "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the "
+            "3,209 loose element files, read 2026-09-28",
+        },
+    },
+}
+
+MODEL_DEPENDENCIES: dict[str, dict[str, Any]] = {"alphagenome": ALPHAGENOME_SWEEP}
+
+
+def model_dependency(name: str) -> dict[str, Any]:
+    """The recorded block for one served model (KeyError for a model with none), as a fresh copy, with
+    the client version uv.lock holds now beside the one the runs were made with."""
+    import copy
+
+    block = copy.deepcopy(MODEL_DEPENDENCIES[name.lower()])
+    block["client"]["version_in_lock_now"] = lock_version(block["client"]["package"])
+    return block
+
+
+def with_model_dependencies(manifest: dict[str, Any], *names: str) -> dict[str, Any]:
+    """A manifest with `model_dependencies` added for the named models; the caller's dict is untouched."""
+    return {**manifest, "model_dependencies": [model_dependency(n) for n in names]}
+
+
+def depends_on_models(*names: str):
+    """Decorator for a writer's manifest function: its manifests carry `model_dependencies` for the named
+    models (with_model_dependencies), so a writer states its model in one added line."""
+
+    def wrap(fn):
+        import functools
+
+        @functools.wraps(fn)
+        def inner(*a: Any, **k: Any) -> dict[str, Any]:
+            return with_model_dependencies(fn(*a, **k), *names)
+
+        return inner
+
+    return wrap

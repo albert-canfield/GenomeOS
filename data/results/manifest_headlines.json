@@ -1,4 +1,17 @@
 {
+  "model_dependency_pass": {
+    "what": "R9 follow-up (2026-09-28): result_manifest.model_dependencies added to the five results that read the AlphaGenome all-element sweep, as 48 added lines each and no removed line; the block is genomeos.manifest.model_dependency('alphagenome'): client alphagenome 0.9.0 from uv.lock, API google.gdm.gdmscience.alphagenome.v1main, run dates 2026-09-12 to 2026-09-16, model version unpinned (none was requested; no response or file records one), track table not stored (a fingerprint of the names observed in the cache instead)",
+    "effect_on_the_records_above": "every value of the five files but the added key is equal to the file before (checked by json equality when the lines were added), so each rebuild and comparison above stands; the files' own sha256 changed with the added lines, so the inputs sha256 in this file's result_manifest is the file as rebuilt, and the sha256 below is the file as it now stands",
+    "sha256_now": {
+      "node_containment_audit": "82712a0ab168080c079ccbf60130aa0bb6d5ae9c4de3419dda555dbe8a914ef9",
+      "node_containment_measured": "c039ca9c325c2badf8fd94bd6f5f9dedf79fecb9b06bc816f4ee8b5c2faa4a61",
+      "constrained_unknown_targets": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
+      "crispri_published": "8787833d90dfe736219c096eed213a4dc8d806037b3ce224ceab6f2f3295d96b",
+      "unknown_coverage": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402"
+    },
+    "therapeutic_benchmark": "not given the block: none of its 22 inputs is an AlphaGenome file",
+    "manifest_rebuild": "scripts/manifest_rebuild.py leaves model_dependencies out of the comparison, like code: it is recorded after the run and states the inputs' provenance"
+  },
   "result": "manifest_headlines",
   "date": "2026-09-28",
   "review_item": "R9",
