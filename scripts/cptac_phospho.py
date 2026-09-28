@@ -141,6 +141,24 @@ def _paged(url: str) -> str:
     return "\n".join(lines)
 
 
+def curated_file_counts() -> tuple[Counter, int]:
+    """Definition files per accession, and curated phospho sites counted per file (the 41,661 basis)."""
+    per_acc: Counter = Counter()
+    n = 0
+    for p in sorted(ptm.CACHE.glob("*.json")):
+        if p.name.startswith("_"):
+            continue
+        try:
+            d = json.loads(p.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if "sections" not in d:
+            continue
+        per_acc[ptm.accession_of(d)] += 1
+        n += sum(1 for s in ptm.sites(d) if s["class"] == "phospho")
+    return per_acc, n
+
+
 def uniprot_idmapping(ids: list[str]) -> dict[str, list[list[Any]]]:
     p = CACHE / "idmapping.json"
     cached = json.loads(p.read_text()) if p.exists() else {}
@@ -334,6 +352,9 @@ def fetch_summaries(client: CBioPortal, profile: str, entities: list[str]) -> di
 
 
 def join() -> None:
+    # Superseded before its result was committed: join_committed adds the per-profile check that the
+    # values are log2 ratios (the pancreatic profile holds log2 intensities). Kept as first registered.
+    return join_committed()
     from genomeos import manifest as mf
     from genomeos.results import save_result
 
@@ -501,6 +522,212 @@ def join() -> None:
         "exclusions": [
             "multi-site and unlocalised entities",
             "gene-level lusc aggregate",
+            "entities whose residue letter disagrees",
+            "several entities on one site in one profile",
+        ],
+        "partitions": "n/a: descriptive join, no fitted model",
+    }
+    path = save_result("phosphosite_tumour_abundance", payload, manifest=manifest)
+    print(json.dumps({k: v for k, v in payload.items() if k not in ("sites",)}, indent=1)[:12000])
+    print(path)
+
+
+def join_committed() -> None:
+    """The join as committed: the registered join plus a per-profile units check."""
+    from genomeos import manifest as mf
+    from genomeos.results import save_result
+
+    client = CBioPortal()
+    m = json.loads((CACHE / "mapped.json").read_text())
+    msum, mapped = m["summary"], m["mapped"]
+    defs = definitions()
+    curated_phospho = {(a, p) for a, d in defs.items() for p, cls in d["sites"] if cls == "phospho"}
+    curated_other = {(a, p): cls for a, d in defs.items() for p, cls in d["sites"] if cls != "phospho"}
+    n_curated_all = sum(len(d["sites"]) for d in defs.values())
+    files_per_acc, n_curated_phospho_files = curated_file_counts()
+
+    reg = ptm.CPTAC_REGISTRATION
+    lo, hi = reg["median_log2_ratio_within"]
+    per_profile: dict[str, dict[str, Any]] = {}
+    other_class: Counter = Counter()
+    found: list[tuple[tuple[str, int], str, str, str, int, float]] = []  # key, residue, profile, tier, n, med
+    ratio_units: dict[str, bool] = {}
+    for prof in PROFILES:
+        rows = mapped.get(prof, [])
+        hit = [x for x in rows if (x[1], x[2]) in curated_phospho]
+        for x in rows:
+            if (x[1], x[2]) in curated_other:
+                other_class[curated_other[(x[1], x[2])]] += 1
+        stats: dict[str, Any] = {"mapped_sites": len(rows), "on_curated_phospho_site": len(hit)}
+        if hit:
+            cache = CACHE / f"summary_{prof}.json"  # per-site counts and medians only, never per tumour
+            if cache.exists():
+                vals = {k: tuple(v) for k, v in json.loads(cache.read_text()).items()}
+            else:
+                vals = fetch_summaries(client, prof, [x[0] for x in hit])
+                cache.write_text(json.dumps(vals))
+            stats["with_a_value"] = len(vals)
+            meds = [v[1] for v in vals.values()]
+            if meds:
+                pm = round(median(meds), 3)
+                stats["median_of_site_medians"] = pm
+                # units check: ratios to a pooled reference centre near zero; log2 intensities do not
+                ratio_units[prof] = lo <= pm <= hi
+                stats["log2_ratio_units"] = ratio_units[prof]
+            for sid, acc, pos, res, tier in hit:
+                if sid in vals:
+                    found.append(((acc, pos), res, prof, tier, int(vals[sid][0]), float(vals[sid][1])))
+        per_profile[prof] = stats
+        print(prof, stats, f"downloaded {_downloaded / 1e6:.0f} MB", flush=True)
+
+    def frac(keys: set) -> float:
+        return round(len(keys) / len(curated_phospho), 4) if curated_phospho else 0.0
+
+    def frac_files(keys: set) -> float:
+        return round(sum(files_per_acc[a] for a, _ in keys) / n_curated_phospho_files, 4)
+
+    refseq_keys = {f[0] for f in found if f[3] == "refseq"}
+    all_keys = {f[0] for f in found}
+
+    def mismatch_rate(tier: str) -> float | None:
+        bad = good = 0
+        for prof, c in msum["per_profile"].items():
+            bad += c.get(f"map: residue letter disagrees with UniProt ({tier}-keyed)", 0)
+            if tier == "refseq":
+                bad += c.get("map: residue letter disagrees with the RefSeq sequence", 0)
+            good += sum(1 for x in mapped.get(prof, []) if x[4] == tier)
+        return round(bad / (bad + good), 4) if bad + good else None
+
+    mm_ref, mm_gene = mismatch_rate("refseq"), mismatch_rate("gene")
+    gene_withheld = mm_gene is None or mm_gene >= reg["gene_keyed_mismatch_bound"]
+    committed_profiles = [
+        p for p in PROFILES if ratio_units.get(p) and (p in PROFILES[:4] or not gene_withheld)
+    ]
+    studies = committed_profiles
+    joined: dict[tuple[str, int], dict[str, Any]] = {}
+    for key, res, prof, _tier, n, med in found:
+        if prof in committed_profiles:
+            j = joined.setdefault(key, {"residue": res, "rows": []})
+            j["rows"].append([studies.index(prof), n, round(med, 3)])
+    off = [
+        f"{a}:{v['residue']}{p}" for (a, p), v in joined.items() if v["residue"] not in ptm.PHOSPHO_ACCEPTORS
+    ]
+    akt1 = sorted({f[2] for f in found if f[0] == reg["check_reported_only"][:2]})
+    egfr_ok = any(f[0] == reg["check_present_lung"][:2] and f[2].startswith("luad") for f in found)
+    npm1_ok = reg["check_present_any"][:2] in all_keys
+    tp53_absent = reg["check_absent"] not in all_keys
+    sites: dict[str, list[list[Any]]] = defaultdict(list)
+    for (acc, pos), v in sorted(joined.items()):
+        sites[acc].append([pos, v["residue"], sorted(v["rows"])])
+    n_studies = [len(v["rows"]) for v in joined.values()]
+    meds = [r[2] for v in joined.values() for r in v["rows"]]
+    payload = {
+        "field": ptm.CPTAC_FIELD,
+        "meaning": ptm.CPTAC_MEANING,
+        "negatives_first": {
+            "curated_phospho_sites_without_a_value": len(curated_phospho) - len(joined),
+            "mapping_drops_by_profile": msum["per_profile"],
+            "refseq_proteins_not_mapped": {
+                k: v
+                for k, v in msum["refseq_status"].items()
+                if not k.startswith(("identical", "differs", "of which"))
+            },
+            "profiles_not_in_log2_ratio_units": sorted(p for p, ok in ratio_units.items() if not ok),
+            "mapped_sites_on_a_curated_site_of_another_class": dict(other_class.most_common()),
+            "gene_keyed_profiles_withheld": gene_withheld,
+        },
+        "curated_sites": n_curated_all,
+        "curated_phospho_sites": len(curated_phospho),
+        "curated_phospho_sites_counted_per_definition_file": n_curated_phospho_files,
+        "joined_refseq_keyed": len(refseq_keys),
+        "joined_any_profile": len(all_keys),
+        "joined_committed": len(joined),
+        "fraction_of_curated_phospho_refseq_keyed": frac(refseq_keys),
+        "fraction_of_curated_phospho_any_profile": frac(all_keys),
+        "fraction_of_curated_phospho_committed": frac(set(joined)),
+        "fraction_per_definition_file": {
+            "refseq_keyed": frac_files(refseq_keys),
+            "any_profile": frac_files(all_keys),
+            "committed": frac_files(set(joined)),
+        },
+        "committed_profiles": committed_profiles,
+        "proteins_with_joined_sites": len(sites),
+        "studies_per_joined_site": {
+            "median": median(n_studies) if n_studies else None,
+            "one": sum(1 for n in n_studies if n == 1),
+            "all_committed_profiles": sum(1 for n in n_studies if n == len(studies)),
+        },
+        "median_log2_ratio_across_site_study_pairs": {
+            "median": round(median(meds), 3) if meds else None,
+            "min": min(meds) if meds else None,
+            "max": max(meds) if meds else None,
+        },
+        "per_profile": per_profile,
+        "mapping": {
+            k: msum[k]
+            for k in ("entities", "refseq_accessions", "refseq_status", "how_positions_were_carried")
+        },
+        "registration": {
+            **{k: (list(v) if isinstance(v, tuple) else v) for k, v in reg.items()},
+            "refseq_keyed_within": reg["expected_refseq_keyed"][0]
+            <= frac_files(refseq_keys)
+            <= reg["expected_refseq_keyed"][1],
+            "any_profile_within": reg["expected_any_profile"][0]
+            <= frac_files(all_keys)
+            <= reg["expected_any_profile"][1],
+            "egfr_y1092_in_lung": egfr_ok,
+            "npm1_s125_present": npm1_ok,
+            "akt1_s473_reported_in": akt1,
+            "median_log2_ratio_refseq_keyed_as_registered": round(
+                median([f[5] for f in found if f[3] == "refseq"]), 3
+            ),
+            "median_log2_ratio_within_bound_committed": bool(meds)
+            and reg["median_log2_ratio_within"][0] <= median(meds) <= reg["median_log2_ratio_within"][1],
+            "tp53_m1_absent": tp53_absent,
+            "off_acceptor_joined": off,
+            "residue_mismatch_rate_refseq_keyed": mm_ref,
+            "residue_mismatch_refseq_keyed_under_bound": mm_ref is not None
+            and mm_ref < reg["refseq_keyed_mismatch_bound"],
+            "residue_mismatch_rate_gene_keyed": mm_gene,
+        },
+        "studies": studies,
+        "sites_format": (
+            "accession -> [[position, residue, [[study index, tumours with a value, median log2 ratio]]]]"
+        ),
+        "sites": dict(sites),
+        "licence": ptm.CPTAC_LICENCE,
+        "downloaded_bytes": _downloaded,
+    }
+    manifest = {
+        "sources": [
+            {
+                "accession": f"cBioPortal:{p}",
+                "version": "public API, fetched 2026-09-28",
+                "licence": "ODbL-1.0",
+            }
+            for p in studies
+        ]
+        + [
+            {
+                "accession": "UniProt REST idmapping RefSeq_Protein->UniProtKB",
+                "version": "2026_03",
+                "licence": "CC BY 4.0",
+            },
+            {
+                "accession": "NCBI RefSeq protein (E-utilities efetch, versioned accessions)",
+                "version": "as versioned",
+                "licence": "NCBI public data",
+            },
+        ],
+        "inputs": [mf.input_entry(str(CACHE / "mapped.json"), None), mf.input_entry(str(ptm.CACHE), None)],
+        "assembly": "n/a: protein residue positions on UniProt canonical sequences",
+        "coordinates": {"base": 1, "interval": "closed"},
+        "code": {},
+        "parameters": {"flank": 7, "profiles": list(PROFILES), "download_cap_bytes": DOWNLOAD_CAP},
+        "exclusions": [
+            "multi-site and unlocalised entities",
+            "gene-level lusc aggregate",
+            "profiles whose median of site medians is outside the registered log2-ratio bound",
             "entities whose residue letter disagrees",
             "several entities on one site in one profile",
         ],

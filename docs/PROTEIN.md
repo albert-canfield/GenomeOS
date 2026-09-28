@@ -432,6 +432,56 @@ joined or any value fetched; constants `ptm.CPTAC_REGISTRATION`).**
   plain JSON file in the public repository). UniProt CC BY 4.0 and NCBI
   RefSeq are attributed the same way.
 
+**Result, against the registration, negatives first.**
+`scripts/cptac_phospho.py join` writes
+`data/results/phosphosite_tumour_abundance.json` (3.6 MB, per-site
+per-study summaries only, manifest complete); 133 MB fetched from
+cBioPortal (gzip), no AlphaGenome request. `ptm.relative_abundance_in_tumours(accession,
+position, result)` returns one site's list with the meaning attached.
+
+- **The pancreatic 2021 profile is not in log2-ratio units.** The median of
+  its per-site medians is 18.8 (lung 0.04, glioblastoma -0.02, brain -0.29):
+  those are log2 intensities, whatever the profile's name says. It is
+  excluded from the committed field. The registered pooled check (median of
+  the RefSeq-keyed site medians within ±0.5) **passed at 0.11 with the
+  pancreatic values inside it**, so that check was too weak to catch a
+  whole profile in the wrong units; the per-profile medians found it. The
+  gene-keyed TCGA breast PanCan profile sits at -0.52, just outside the
+  bound; it is not committed either way.
+- **Coverage missed high on both registered ranges.** RefSeq-keyed
+  profiles, as registered (pancreatic included): 55.3% of the 41,661
+  curated phospho sites counted per definition file (55.7% of 41,244
+  distinct accession-position sites; 59 accessions sit in more than one
+  definition file), against 35% to 55%. All profiles: 68.6% against 45% to
+  65%. The expectation was too low, as it was for the Ochoa join, and is
+  reported as missed, not moved. Committed after the units exclusion
+  (lung adenocarcinoma, glioblastoma, paediatric brain): 19,104 sites on
+  5,105 proteins, 45.9%.
+- Not reached: 22,140 distinct curated phospho sites have no committed
+  value. Mapped CPTAC sites that fall on a curated site of another class
+  (glyco 205, acetyl 162, ADP-ribosyl 65, sulfo 25, nitro 7, other 4, lipid
+  1, methyl 1) are counted and not joined.
+- Checks: EGFR Y1092 (legacy Y1068) is present in lung adenocarcinoma
+  (32 tumours, median log2 ratio -0.23) and glioblastoma; NPM1 S125 present
+  (brain, 217 tumours); TP53 M1 absent; no joined site off S, T or Y;
+  RefSeq-end residue mismatches 0.02% against 2%; committed median of
+  site medians -0.02. AKT1 S473 is in no profile, as the registration
+  allowed.
+
+| committed profile | curated sites with a value | tumours per site (median) |
+|---|---|---|
+| lung adenocarcinoma 2020 | 12,330 | 102 |
+| glioblastoma 2021 | 16,119 | 73 |
+| paediatric brain 2020 | 2,594 | 217 |
+
+Sites in all three: 1,745; in one only: 8,910. Read with its limits: a
+median log2 ratio near zero says the site sits near the pooled reference of
+that study, not that it is unphosphorylated; ratios from different studies
+share no reference and are not compared. The gene-keyed profiles (breast,
+endometrial, colon, TCGA breast and ovarian) stay uncommitted until their
+RefSeq isoforms are known; `mapping_drops_by_profile` in the result keeps
+every drop count per profile.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had
