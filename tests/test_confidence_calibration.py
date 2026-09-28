@@ -238,3 +238,68 @@ def test_the_report_holds_no_pooled_rate():
     assert "pooled" not in got["per_assay"]
     assert set(got["per_assay"]) == {"crispri", "lentimpra", "vista", "satmut"}
     assert got["scope"] and got["falsifies_transfer"]
+
+
+# --- after review R4: the compiler states no confidence, so the model score is described instead ---
+def scored(score, verdict=None, eligible=("crispri",)):
+    return cc.Scored(
+        id=f"s{next(COUNTER)}",
+        chrom=CHROM,
+        score=score,
+        length=300.0,
+        gc=0.5,
+        nearest_coding_tss=10_000.0,
+        eligible=frozenset(eligible),
+        verdicts={"crispri": verdict} if verdict else {},
+    )
+
+
+def test_the_model_score_is_neither_clipped_nor_rounded():
+    """The retired formula clipped at 0.05 and 0.7; the score is the run's magnitude as written."""
+    assert cc.model_score({"predicted_coding": {"gene": "G", "log2_fold_change": -2.345678}}) == 2.345678
+    assert cc.model_score({"predicted_coding": {"gene": "G", "log2_fold_change": 0.001}}) == 0.001
+    # the stored `confidence` is capped at 0.7 upstream, so the fold change wins where both exist
+    assert (
+        cc.model_score({"predicted_coding": {"gene": "G", "confidence": 0.7, "log2_fold_change": -3.2}})
+        == 3.2
+    )
+    assert cc.model_score({"predicted_coding": {"gene": "G", "confidence": 0.3}}) == 0.3
+    assert cc.model_score({"predicted_coding": {}}) is None
+    # an unbounded magnitude gets the open band, not the last probability band
+    assert cc.score_band_of(2.3) == cc.SCORE_BAND_NAMES[-1] == "1.01-inf"
+    assert cc.score_band_of(0.3) == "0.25-0.5"
+
+
+def test_the_score_curve_reads_ordering_and_never_a_level():
+    pop = (
+        [scored(0.15, AGREES) for _ in range(10)]
+        + [scored(0.15, DISAGREES) for _ in range(30)]
+        + [scored(0.35, AGREES) for _ in range(20)]
+        + [scored(0.35, DISAGREES) for _ in range(20)]
+        + [scored(1.5, AGREES) for _ in range(36)]
+        + [scored(1.5, DISAGREES) for _ in range(4)]
+        + [scored(0.2) for _ in range(100)]
+    )
+    got = cc.score_report(pop, {})
+    assert got["probability"] is None and got["predicted_facts_with_a_stated_confidence_to_calibrate"] == 0
+    block = got["per_assay"]["crispri"]["where_the_predicted_gene_was_tested"]
+    assert block["ordering"]["pattern"] == "ordered" and block["ordering"]["probability"] is None
+    for row in block["table"]["rows"]:
+        assert not {
+            "gap_observed_minus_stated",
+            "stated_inside_the_interval",
+            "mean_stated_confidence",
+        } & set(row)
+    assert "expected_calibration_error" not in block["table"]
+    assert block["table"]["rows"][-1]["measured_by_this_assay"] == 40  # the open band holds the 1.5s
+    assert got["the_answer"]["crispri:where_the_predicted_gene_was_tested"]["elements"] == 120
+
+
+def test_the_score_split_selects_the_same_elements_as_the_september_cut():
+    """The retired formula clipped to [0.05, 0.7] and rounded before the 0.5 cut; only rounding moves one."""
+    for raw in (0.01, 0.2, 0.49, 0.5, 0.69, 0.7, 3.0):
+        old = cc.stated_confidence({"predicted_coding": {"gene": "G", "log2_fold_change": raw}})
+        new = cc.model_score({"predicted_coding": {"gene": "G", "log2_fold_change": raw}})
+        assert (old >= cc.HIGH_CONFIDENCE) == (new >= cc.HIGH_SCORE)
+    rounded_up = {"predicted_coding": {"gene": "G", "log2_fold_change": 0.497}}
+    assert cc.stated_confidence(rounded_up) >= cc.HIGH_CONFIDENCE > cc.model_score(rounded_up)
