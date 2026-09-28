@@ -71,6 +71,31 @@ EVIDENCE_BY_TIER = {
 }
 
 
+# ---- review R7 (2026-09-28): five axes kept apart (vocabulary: genomeos.lang.grammar.AXES) ----
+#: the biochemical signature the ENCODE registry states, per cCRE class
+CCRE_ROLE = {
+    "PLS": "promoter_like",
+    "pELS": "enhancer_like",
+    "dELS": "enhancer_like",
+    "CTCF-only": "insulator_like",
+    "DNase-H3K4me3": "open_chromatin",
+}
+#: `class:` is kept as a derived, labelled summary of the registry role (the first one), never of
+#: the activity; an element the registry does not hold says `class: unknown`
+ROLE_CLASS = {
+    "promoter_like": "promoter",
+    "enhancer_like": "enhancer",
+    "open_chromatin": "open_chromatin",
+    "insulator_like": "insulator",
+}
+#: what a predicted or measured increase on removal can mean; none is chosen, so none is forced
+REPRESSION_ALTERNATIVES = ("silencer", "insulator_like", "competing_promoter", "unknown")
+#: interspersed-repeat share of an interval from which it reads as repeat-derived (below: partly)
+REPEAT_DERIVED_MIN = 0.5
+#: duplicated share of a block from which it reads as a segmental duplication (as the copy flag)
+DUPLICATED_MIN = 0.5
+
+
 def ident(s: str) -> str:
     """A BioLang identifier from any label: word characters only, never starting with a digit."""
     out = re.sub(r"[^A-Za-z0-9_]", "_", s)

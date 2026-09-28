@@ -7524,6 +7524,90 @@ expression; changing it is its own registration. The committed chr21 copy holds 
 at their earlier text under the removal guard until 2026-09-30; the 24 git-ignored programs carry
 everything.
 
+## Pre-registration: five axes instead of one label, class kept as a derived summary (R7, 2026-09-28)
+
+Review item R7. The census (`2ba726b`, `data/results/ontology_census.json`) found every one of the
+459,449 compiled elements saying `class: enhancer`, the constant written by `compile.py`, including
+the 156,925 whose rule inhibits its gene; 101,011 predicted elements at least half interspersed repeat
+with nothing saying so; and region roles that join a tier, a budget label and a copy flag in one
+string, 9,499 of which read an absence of constraint as a fossil, a dead frame or neutral sequence.
+The 15,252 regulatory blocks never had their repeat coverage read, because the block classifier names
+a block `regulatory` before it reads RepeatMasker.
+
+**The axes.** An `element` and a `region` may state five keys, each with a closed vocabulary held in
+`genomeos.lang.grammar.AXES` (every axis has `unknown`; a value may take a qualifier after `/`):
+
+- `origin`: `unique`, `repeat_derived/CLASS` (>= 0.5 of the interval interspersed repeat, CLASS the
+  largest), `partly_repeat_derived/CLASS` (> 0, < 0.5), `satellite`, `tandem_repeat`,
+  `segmental_duplication` (>= 0.5 duplicated), `assembly_gap`.
+- `molecular_role`: `promoter_like`, `enhancer_like`, `insulator_like`, `open_chromatin`, `silencer`,
+  `competing_promoter`, `structural`, `coding_candidate`.
+- `activity`: `activates_target`, `represses_target`, `no_effect_measured`, `active_in_reporter`,
+  `inactive_in_reporter`.
+- `target_relation`: `predicted_deletion_target`, `nearest_tss_in_domain`,
+  `measured_perturbation_target`, `tested_no_effect`, `unassigned`.
+- `evidence_status`: `curated_annotation`, `registry_biochemical`, `predicted_model`, `measured`,
+  `measured_negative`, `conflicting`, `under_selection` (>= 5% of bases at phyloP >= 2.27),
+  `selection_weak` (3-5%), `selection_not_detected` (< 3%), `selection_not_measured`.
+
+`,` joins values that all hold (overlapping roles: a CTCF-bound dELS is `enhancer_like,
+insulator_like`); `|` joins unresolved alternatives, one of which holds and none of which is chosen.
+The parser refuses a value outside the vocabulary and keeps the axes in the entity's `attrs` as
+`{"ontology": {axis: [[alternative, ...], ...]}}`, which `Module.to_dict` and `from_dict` carry.
+
+**Constraint.** Constraint is evidence of selection and is stated only on `evidence_status`. No axis
+has a value meaning "no function"; an unconstrained fossil or unique block says `molecular_role:
+unknown` and `evidence_status: ..., selection_not_detected`. The predicted elements carry no
+constraint field in their runs, so they say `selection_not_measured` (nothing is fetched to fill it).
+
+**What each block says.** A predicted element: origin from RepeatMasker over its interval; role from
+the registry entry of its own id (`CCRE_ROLE`, plus `insulator_like` when CTCF-bound); activity from
+the rule's direction; target relation `predicted_deletion_target`, plus `nearest_tss_in_domain` when
+the run's verdict says they agree; status `registry_biochemical, predicted_model,
+selection_not_measured`. When the prediction is an increase on deletion, the role gains the
+unresolved group `silencer|insulator_like|competing_promoter|unknown` and the activity says
+`represses_target`: a direction of effect never becomes a silencer label. A `_measured` block keeps
+the sequence facts (origin, role) and states its own activity, relation and status from the assays:
+CRISPRi decrease `activates_target`, increase `represses_target` (with the same group), well-powered
+nulls only `no_effect_measured` and `tested_no_effect`; lentiMPRA or VISTA active in any cell
+`active_in_reporter`, inactive everywhere `inactive_in_reporter`, a lentiMPRA tie the two as
+alternatives; `measured`, `measured_negative` when a gene was measured unchanged, `conflicting` when
+the agreement verdict is disagrees. A region: origin from its sequence class, or for a block whose
+class is not a repeat class from RepeatMasker over the block, plus `segmental_duplication` from the
+copy flag; role from the registry classes it contains for a `regulatory` block, `promoter_like|unknown`
+for a CpG-island block, `structural` for a centromere, `structural|unknown` for a satellite or tandem
+array, `coding_candidate|unknown` for a long ORF, `unknown` otherwise; activity `unknown`; relation
+`unassigned`; status the annotation it rests on plus the selection reading.
+
+**Backward compatibility.** Two choices, both the least disruptive the census allows. `class:` stays,
+now derived from the registry role (`ROLE_CLASS`, the first role) and labelled as that summary in the
+grammar; since the census shows every predicted element is pELS or dELS, the derived class is
+`enhancer` for all of them and no class count moves, while an element outside the registry would now
+say `unknown` rather than inherit `enhancer`. No runtime, evidence-explorer or web path reads `class:`
+from a compiled program (census, consumers), so nothing downstream changes. A region's `role:` stays
+verbatim: `Module.unknowns` counts `role: unknown`, and every program's `# test: unknowns ==` line and
+the organiser read it, so it is kept as the budget's tier summary, labelled so in the grammar, with
+the five axes beside it as the authoritative reading. Rewriting the budget's labels is a separate
+step (24 stored budget results).
+
+**Acceptance (the review's, as tests).** (1) A repeat-derived regulatory element keeps both: an
+element over a LINE with a dELS registry entry compiles to `origin: repeat_derived/LINE` and
+`molecular_role: enhancer_like`, and a regulatory region over repeats keeps `repeat_derived` beside
+its registry roles. (2) A predicted expression increase on deletion does not force a silencer label:
+the element's `class:` is the registry summary, its activity `represses_target`, and `silencer`
+appears only inside the unresolved group. (3) Unresolved alternatives survive serialisation: compile
+-> parse -> `Module.to_dict` -> JSON -> `from_dict` returns the same groups, and an out-of-vocabulary
+value is a parse error.
+
+**Expected counts over the 24 programs.** Unchanged: 440,377 + 19,072 `class: enhancer`; 440,589
+rules; 1,098 unknowns; every region `role:`. New: 459,449 elements and 26,806 regions each state five
+axes. Predicted elements: `repeat_derived` 101,011, `partly_repeat_derived` 81,058, `unique` 258,308;
+`insulator_like` beside `enhancer_like` on 193,027; `represses_target` with the unresolved group on
+156,925 and `silencer` alone on 0. Regions with `molecular_role` meaning no function: 0. The count of
+repeat-derived `regulatory` blocks is not known in advance (never read) and is reported as found.
+Known costs: programs grow by five lines per element and region; the committed chr21 copy's changed
+lines may be held by the removal guard until 2026-09-30.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

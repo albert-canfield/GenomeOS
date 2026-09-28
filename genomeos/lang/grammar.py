@@ -323,6 +323,67 @@ BLOCKS: dict[str, dict] = {
         },
     },
 }
+#: Review R7 (2026-09-28): five axes an `element` or `region` may state, each on its own key, so that
+#: where a sequence came from, what it is biochemically, what it was seen or predicted to do, how it
+#: relates to a gene and what the claim rests on are never folded into one label. A value may carry a
+#: qualifier after `/` (`repeat_derived/LINE`). In a property, `,` joins values that all hold (roles
+#: overlap: a CTCF-bound enhancer-like element is both) and `|` joins alternatives of which one holds
+#: and none is chosen (`silencer|insulator_like|competing_promoter|unknown`). `unknown` is a value on
+#: every axis. No axis has a value meaning "no function": constraint is evidence of selection, and its
+#: absence proves nothing, so it lives on `evidence_status`, never on `molecular_role`.
+AXES: dict[str, dict[str, str]] = {
+    "origin": {
+        "unique": "no interspersed repeat over the interval",
+        "repeat_derived": "at least half the interval is interspersed repeat (RepeatMasker); /CLASS",
+        "partly_repeat_derived": "some but under half of the interval is interspersed repeat; /CLASS",
+        "satellite": "satellite or centromeric array",
+        "tandem_repeat": "simple or tandem repeat array",
+        "segmental_duplication": "at least half the interval is a curated segmental duplication",
+        "assembly_gap": "no sequence to attribute",
+        "unknown": "origin not read",
+    },
+    "molecular_role": {
+        "promoter_like": "promoter-like biochemical signature (ENCODE PLS, or a CpG island)",
+        "enhancer_like": "enhancer-like biochemical signature (ENCODE pELS or dELS)",
+        "insulator_like": "CTCF signature (CTCF-only, or a CTCF-bound cCRE)",
+        "open_chromatin": "open chromatin with a promoter mark (ENCODE DNase-H3K4me3)",
+        "silencer": "a repressive element; never inferred from a direction of effect alone",
+        "competing_promoter": "represses a gene by competing for its regulators",
+        "structural": "a mechanical role (centromere, satellite array)",
+        "coding_candidate": "a long open reading frame that may code",
+        "unknown": "no role read",
+    },
+    "activity": {
+        "activates_target": "removing it lowers its target's expression (predicted or measured)",
+        "represses_target": "removing it raises its target's expression (predicted or measured)",
+        "no_effect_measured": "a well-powered perturbation measured no effect on the genes tested",
+        "active_in_reporter": "a reporter assay read it active in at least one cell or tissue",
+        "inactive_in_reporter": "a reporter assay read it inactive everywhere it was tested",
+        "unknown": "no activity read",
+    },
+    "target_relation": {
+        "predicted_deletion_target": "a model deletion names the gene",
+        "nearest_tss_in_domain": "the gene is the nearest TSS in its domain",
+        "measured_perturbation_target": "silencing it in place changed the gene (training split)",
+        "tested_no_effect": "genes were tested in place and none changed",
+        "unassigned": "no gene assigned",
+    },
+    "evidence_status": {
+        "curated_annotation": "an annotation (RepeatMasker, the assembly) states the origin",
+        "registry_biochemical": "the ENCODE cCRE registry states the biochemical signature",
+        "predicted_model": "a model prediction states the activity or target",
+        "measured": "an assay measured it",
+        "measured_negative": "an assay measured the absence of an effect",
+        "conflicting": "a measurement disagrees with the prediction",
+        "under_selection": "constrained across mammals (>= 5% of bases at phyloP >= 2.27)",
+        "selection_weak": "some constraint (3% to 5% of bases)",
+        "selection_not_detected": (
+            "under 3% of bases constrained: no sign of selection, not a sign of no function"
+        ),
+        "selection_not_measured": "constraint not read over this interval",
+        "unknown": "nothing stated",
+    },
+}
 COMMON = {
     "evidence": ('kind "source" [note]', "kind in experimental, curated, predicted, inferred, none"),
     "confidence": ("0..1", ""),
