@@ -1287,6 +1287,18 @@ useless as a *count* is depth-invariant as a *membership*.
   only. 2. Germline versus post-zygotic per candidate, which needs read allele fractions. 3. The note in
   `trio()` still calls an excess "representation differences"; docs/DATA.md records that this is wrong
   after normalisation.
+  **Read allele fractions, done 2026-09-28 (lane-vaf, `bf789a3` registered, `0125926` result).** GIAB
+  v4.2.1's own pooled read depths (ADALL; 156 MB, NIST public domain, no BAM needed). **The 1,375
+  parent-assigned candidates sit at a median read fraction of 0.442 against 0.495 for 1.28 million
+  inherited heterozygous SNVs** (all checks pass; median depth 329). They form one shifted group, not a
+  germline group at 0.5 plus a subclonal tail: the registered classes, which expected two groups,
+  count 11.3% as low, mostly the lower edge of that one group. Read as one clone's mutations carried in
+  about 88% of cells — the cell that founded the line, or its lineage in the donor — not germline.
+  Exploratory: at most about 208 can be germline, and the 89 at or above 0.5 are 65% paternal (p ≈
+  0.006), the excess germline de novos would show, while the rest split evenly. Limits: the benchmark
+  excluded calls below 0.2 or above 0.8, and HG002 DNA is from a cell line. Still open: a per-candidate
+  germline call, and telling early-embryonic from line-founder mutations, both of which need DNA that
+  never went through culture.
 - **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### E. From one cell to an organism
