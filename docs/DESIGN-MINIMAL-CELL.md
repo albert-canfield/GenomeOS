@@ -941,3 +941,120 @@ It is named in the falsifier for a reason worth more than a rate: it would
 replace the present species test (mouse MEF against human K562, which confounds
 species with cell type) with a matched one. Shao et al. 2022's GSE168378 shows
 the spike-in-per-cell calibration a human TT-seq dataset would need.
+
+## Registration: runnable simulation kept apart from validated human kinetics (item 12 S5, 2026-09-28)
+
+Written and committed before any label was built and before any pair was run
+across a range, beside the constants in `genomeos/attribution/bridge.py`
+(`SIMULATION_STATUS`, `TRANSFER_LABEL`, `S5_RANGES`, `S5_COMBINATION_RANGE`,
+`S5_NOT_PROPAGATED`, `S5_PREDICTIONS`, `S5_SAMPLE`, `S5_EXPECTED`,
+`S5_FALSIFIERS`, `S5_RUNTIME_GAP`, `S5_HUMAN_CONTEXT_KINDS`). The range widths
+were read from the rate sources alone; no compiled program had been run and no
+simulated level or classification existed.
+
+**What the review found and what this does with it.** 22,580 of 440,589
+compiled rules (5.1%) are simulable, every rate behind them is mouse NIH 3T3,
+and that supports **assumption-dependent simulation, not measured human
+dynamics**. That phrase is now a constant, and every output built on the bridge
+carries it. A second category, validated human kinetics, is named and holds
+nothing: a prediction checked against a human measurement that was not an input
+to it, in the cell it is about. **Stable across the ranges below is not
+validated**, and no count from this work is reported under that name.
+
+**Negatives first.** Four things were already true before anything was run.
+The runtime holds one mRNA half-life per module, and the bridge sets none, so a
+compiled program run with measured rates reports a mouse transcription rate
+divided by an a.u. default decay: mixed units, which the label will name. The
+combination rule applies to no simulable pair, because the bridge fits only a
+gene with one mechanism in its cell, and with one activator mean, capped sum,
+max and OR are the same function; it is run anyway and every difference counted.
+The Hill threshold and coefficient and `DECLARED_STRENGTH` are declared
+assumptions, not transferred rates, and no measured spread for them can be
+read, so they are not propagated: at the two states the bridge fits (element
+present, element removed) no prediction depends on them, and the predictions
+that do (a partial dose, whether an inhibitory pair is feasible at all) are
+named undetermined. And the one matched human-against-mouse half-life figure
+quoted so far, 1.56 h against 2.73 h, compares Schofield's human K562 with
+Schofield's mouse MEF; the half-lives the rate table actually carries are
+Schwanhausser's NIH 3T3 ones, median 9.96 h, so the distance between what the
+model would use and the human measurement is larger than that figure says, and
+most of it is method rather than species.
+
+**Step 1, the label.** On the output, per gene and per run, never in a header.
+`parameterize(rate_provenance=...)` writes the rate's source, the species and
+cell it was measured in, and its tier on each gene whose rate it used, and
+returns the same per gene; the runtime reads them back onto the trajectory with
+the cell the run is in, and lists every parameter the run took from its a.u.
+defaults. A rate whose species the caller did not state is labelled
+`unstated`, never assumed mouse or human. The bridge audit counts labelled
+pairs per tier and they must equal simulable pairs.
+
+**Step 2, the ranges** (log2; percentiles by linear interpolation). Two
+quantities are transferred into a simulable pair: `T`, the gene's total
+transcription rate, and `t_half`, its mRNA half-life.
+
+| range | read from | width |
+| --- | --- | --- |
+| R1 measurement | Schwanhausser's experiment and replicate columns: 95th percentile of \|log2(experiment/replicate)\| over every row with both (3,604 for `T`, 4,658 for `t_half`) | `T` x 2^±1.1186, `t_half` x 2^±1.1210 |
+| R2 transfer to a human cell | per gene, log2 of Schofield's human K562 half-life over the Schwanhausser NIH 3T3 half-life the table carries, 2,262 genes | `t_half` x 2^[-3.6966, -0.6457] (0.077 to 0.639; median 0.229) |
+| R2 for `T` | no matched human rate exists, so two readings of that one measurement bracket it: the mouse rate carries over, or the mouse copy number does (then `T` scales inversely with the half-life) | corners r in {0.077, 0.639} x reading in {rate, copy number} |
+| R3 no transfer (sensitivity) | the across-gene central 90%: Schwanhausser `T` over 3,603 table genes, Schofield K562 `t_half` over 5,419 | `T` 0.39 to 10.02, `t_half` 0.40 to 7.03 h, the same box for every pair |
+
+The primary range is the nominal mouse values together with every corner of R1
+and R2. R3 asks what survives if the gene's own mouse numbers say nothing about
+the human gene, and is reported beside the primary, never as it. K562 is the
+only human cell whose half-lives are cached, so its spread stands in for every
+human context and is a lower bound on the transfer to any other; cell-type
+differences within one species at one method cannot be read from anything
+cached.
+
+**Step 3, the predictions and what stable means** (`S5_PREDICTIONS`). A
+prediction is stable when it gives the same answer at every point of the
+range. Direction and fold are the observation reproduced, and are listed so
+that their stability is never mistaken for a result. Level and effect size in
+molecules per cell, and response time (hours to cover half the way to the
+removed level), are stable if their spread over the points is at most two-fold,
+one log2 unit, the unit the observations are in. On/off (at least one molecule
+per cell, the smallest level with a physical reading) and switch (removal takes
+an expressed gene below one molecule) are stable if their answer never changes.
+Rank is the order of two pairs in one cell context, each free anywhere in its
+own range, reported as the share of within-context comparisons whose order
+cannot change.
+
+**The sample.** 1,000 measured-tier simulable pairs, a simple random sample
+without replacement by `random.Random(20260928).sample` from the pairs sorted by
+chromosome, cell, gene and element. Each is a one-gene program parameterised
+through the bridge with its label and integrated by `NetworkRuntime` at every
+point: to steady state with the element present, then from that state with it
+removed. The same predictions for all 22,576 pairs come from the model's closed
+form and are reported only if they agree with the runtime on every sampled
+pair.
+
+**Expected, with a direction.** The first four follow from the widths by
+arithmetic and are consequences, not tests. Level and effect size are stable
+for **no** pair: a multiplicative range of one width gives every pair the same
+spread (R1 22.3-fold, R2 13.0-fold, primary 61.2-fold), so whether a level is
+stable is decided by the width and not by the pair. Response time is stable for
+no pair (4.7, 8.3 and 28.2-fold). Direction and fold are stable for all 22,576.
+The combination rule changes no sampled pair. Then the tests: on/off is stable
+for more than half of the pairs and fewer than all (stable on needs a nominal
+level of at least 12.97 molecules per cell, stable off one below 0.212); switch
+is stable for no more pairs than on/off; fewer than half of the within-context
+rank comparisons are stable; under R3, on/off, switch and rank are stable for no
+pair and only direction and fold survive.
+
+**Falsifiers** (`S5_FALSIFIERS`). Runtime against formula on the sample: steady
+states within 1%, response times within 2%, classifications identical except
+within 1% of a threshold, or the census is withdrawn and only the sample with
+its Wilson interval is reported. Label: every sampled trajectory names its
+source, species, cell and context, and labelled pairs equal simulable pairs in
+every tier of the audit, or step 1 is not met. Combination: any difference is a
+bridge defect. Invariant: the audit re-run moves no existing count.
+
+**Step 4, the one human context.** Chosen by a rule fixed now: among contexts
+holding simulable pairs, the one where the project holds the most of seven
+measurement kinds in that very cell (CRISPRi of elements, lentiMPRA, DNase,
+human mRNA half-lives, an absolute human transcription rate, absolute mRNA
+copies per cell, a time course after a perturbation), ties to the context with
+more simulable pairs. It is named with what a validated human-kinetics test
+there would need that is missing. Nothing is built.

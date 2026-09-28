@@ -454,6 +454,195 @@ HUMAN_RATE_SURVEY_EXPECTED = (
 )
 
 
+# ---- item 12 S5: runnable simulation kept apart from validated human kinetics (2026-09-28) --------
+#: The second external review: 22,580 of 440,589 compiled rules (5.1%) are simulable, every rate
+#: behind them is mouse NIH 3T3, and that supports ASSUMPTION-DEPENDENT SIMULATION, NOT MEASURED HUMAN
+#: DYNAMICS. This block was written and committed before any label was built and before any pair was
+#: run across a range. The range widths below were read from the rate sources alone (the replicate
+#: columns of Schwanhausser's table, Schofield's two sheets, the gene_rates table); no compiled
+#: program, no simulated level and no classification had been computed when they were written.
+#: What every simulation output built on the bridge is, whatever its numbers say. No code path in this
+#: repository produces the other kind, and nothing here may be called by its name.
+SIMULATION_STATUS = "assumption-dependent simulation, not measured human dynamics"
+VALIDATED_HUMAN_KINETICS = (
+    "a separate category that holds nothing today: a prediction checked against a human measurement"
+    " that was not an input to it, in the cell it is about. Stable across the ranges below is NOT"
+    " validated, and no count from this block is ever reported under that name"
+)
+
+#: STEP 1, the label. It travels on the output, per gene and per run, never in a header or a note:
+#: `parameterize(rate_provenance=...)` writes `rate_source`, `rate_species_cell` and `rate_tier` on
+#: every gene whose rate it used and returns the same as `Bridged.transferred`; `runtime/grn.py`
+#: reads them back onto `Trajectory.transferred` together with the cell the run is in, and lists every
+#: runtime parameter the module left at its a.u. default on `Trajectory.defaulted`, because a level
+#: computed from a transferred rate and a defaulted half-life is in mixed units. A rate whose species
+#: the caller did not state is labelled `unstated`, never assumed mouse or human.
+TRANSFER_LABEL = (
+    "per gene: the quantity, its tier (measured | borrowed_median), its source key, the species and"
+    " cell it was measured in, and the cell context it is used in; per run: the same list plus the"
+    " runtime parameters taken from defaults"
+)
+
+#: STEP 2, the ranges, each read from a measured spread and never an invented width. log2 units;
+#: percentiles by numpy.percentile (linear interpolation). Two quantities are transferred into a
+#: simulable pair: T, the gene's total transcription rate, and t_half, its mRNA half-life (the
+#: registered mapping makes it delta_m; the bridge itself does not set it yet, see S5_RUNTIME_GAP).
+S5_RANGES = {
+    "R1_measurement": {
+        "what": "how far two measurements of the same gene in the same mouse cells disagree",
+        "source": "Schwanhausser 2011 Table S3, columns 'experiment' and 'replicate'",
+        "population": "every row with both values > 0: 3,604 rows for T, 4,658 for t_half",
+        "statistic": "w = 95th percentile of |log2(experiment / replicate)|",
+        "w_T": 1.1186,
+        "w_t_half": 1.1210,
+        "range": "T * 2**[-w_T, +w_T] and t_half * 2**[-w_t_half, +w_t_half], independently",
+        "note": (
+            "conservative: the table carries the average of the two, whose own error is smaller than"
+            " the disagreement between them"
+        ),
+    },
+    "R2_transfer_to_a_human_cell": {
+        "what": "how far the mouse number the model would use sits from a human measurement of the same gene",
+        "source": (
+            "Schofield 2018 Table S2_K562 mean_half_life (HUMAN K562, TimeLapse-seq) against the"
+            " Schwanhausser NIH 3T3 mRNA half-life the gene_rates table carries, per gene"
+        ),
+        "population": "2,262 human symbols carrying both, through the gene_rates table's 1:1 homology",
+        "statistic": "q05, q50, q95 of log2(t_half K562 / t_half 3T3)",
+        "q05": -3.6966,
+        "q50": -2.1236,
+        "q95": -0.6457,
+        "t_half_range": "t_half * 2**[q05, q95]: factors 0.0771 to 0.6392 (median 0.2295)",
+        "T_range": (
+            "NO matched human rate exists (lane-rates2), so T is bracketed by two readings of the one"
+            " matched measurement, never by a width of its own: (a) the mouse RATE carries over, T_h ="
+            " T; (b) the mouse COPY NUMBER carries over, so T_h = T * t_half_3T3 / t_half_h. Corners:"
+            " r in {2**q05, 2**q95} x reading in {a, b}; the level T*t_half/ln2 is then L*r under (a)"
+            " and L under (b)"
+        ),
+        "note": (
+            "the shift is mostly method, not species: medians are 9.96 h (Schwanhausser 3T3), 2.73 h"
+            " (Schofield mouse MEF) and 1.56 h (Schofield human K562), so the matched-method species"
+            " and cell factor is about 0.57 and the method and laboratory factor about 0.27. K562 is the"
+            " only human cell whose half-lives are cached, so its spread stands in for every human cell"
+            " context and is a LOWER bound on the transfer to any other; cell-type differences within"
+            " one species at one method cannot be read from anything cached"
+        ),
+    },
+    "R3_no_transfer": {
+        "what": "a sensitivity: the gene's own mouse numbers are taken to say nothing about the human gene",
+        "source": (
+            "the across-gene spread: Schwanhausser T (3,603 table genes), Schofield K562 t_half (5,419)"
+        ),
+        "statistic": "central 90% (q05, q95) of each",
+        "T": (0.39, 10.018),
+        "t_half": (0.3975, 7.0281),
+        "range": "the same box for every pair; reported beside the primary, never as it",
+    },
+    "primary": "R0 (the nominal mouse values) together with every corner of R1 and of R2",
+}
+#: the combination rule, as a range where it applies. It applies to NO simulable pair: the bridge fits
+#: only a gene with ONE mechanism in its cell, and under one activator mean, capped sum, max and OR are
+#: the same function. So it is run anyway on the sample and every difference is counted, expecting
+#: none; it is what makes the 76,469 not identifiable, and that tier is outside this block
+S5_COMBINATION_RANGE = {"rules": ("mean", "sum_capped", "max", "or"), "applies_to_simulable_pairs": 0}
+#: declared assumptions that are NOT transferred rates and are NOT propagated, because no measured
+#: spread for them can be read: the Hill threshold and coefficient of an element's presence and
+#: DECLARED_STRENGTH. At the two states the bridge fits (element 1 and 0) no prediction depends on
+#: them; a partial dose does, and whether an inhibitory pair is feasible at all does (RHO < 1/(1-s*h)).
+#: Predictions that need them are named undetermined here, not tested for stability
+S5_NOT_PROPAGATED = ("hill_threshold", "hill_coefficient", "declared_strength")
+
+#: STEP 3, the predictions and what "stable" means for each, fixed before the run. A point is one
+#: corner of a range; a prediction is stable when it gives the same answer at every point of the
+#: primary range. One molecule per cell is the only threshold: the smallest level with a physical
+#: reading. Two-fold is one log2 unit, the unit the observations themselves are in
+S5_PREDICTIONS = {
+    "direction": "sign of removed/intact - 1: stable iff the same sign at every point (it is an INPUT)",
+    "fold": "removed/intact within 1% of the observed RHO at every point (an INPUT, reproduced)",
+    "level": "intact steady-state mRNA, molecules per cell: stable iff max/min over the points <= 2",
+    "effect_size": "|intact - removed| in molecules per cell: stable iff max/min <= 2",
+    "on_off": "intact level >= 1 molecule per cell: stable iff the same answer at every point",
+    "switch": "removal takes an expressed gene below 1 molecule per cell: stable iff the same answer",
+    "response_time": "hours for mRNA to cover half the way to its removed level: stable iff max/min <= 2",
+    "rank": (
+        "within one cell context, the order of two pairs by level (and separately by effect size and"
+        " by response time), each pair free to sit anywhere in its own range: stable iff the order is"
+        " the same at every combination, i.e. the two ranges do not overlap; reported as the share of"
+        " within-context comparisons"
+    ),
+}
+#: the registered sample: the runtime itself, not a formula, run at every point
+S5_SAMPLE = {
+    "size": 1000,
+    "selection": (
+        "simple random sample without replacement, random.Random(20260928).sample, from the"
+        " measured-tier simulable pairs sorted by (chromosome in 1..22, X, Y order, cell, gene,"
+        " element)"
+    ),
+    "run": (
+        "a one-gene program per pair (the runtime holds ONE mRNA half-life per module, so a gene's own"
+        " half-life cannot be carried in a multi-gene run), parameterised through the bridge with its"
+        " label, integrated by NetworkRuntime with dt = t_half/100: to steady state with the element"
+        " clamped at 1 for 20 half-lives, then clamped at 0 from that state for 20 half-lives"
+    ),
+    "census": (
+        "the same predictions for all 22,576 pairs from the model's closed form (steady state"
+        " production/delta_m, response time = t_half), reported only if it agrees with the runtime on"
+        " every sampled pair"
+    ),
+}
+#: expected, with a direction, before the run. The first four follow from the widths by arithmetic
+#: and are stated as consequences, not as tests
+S5_EXPECTED = (
+    "level and effect size: stable for 0 pairs, because a multiplicative range of one width gives"
+    " every pair the same spread (R1 22.3-fold, R2 13.0-fold, primary 61.2-fold); whether a level is"
+    " stable is decided by the width, not by the pair",
+    "response time: stable for 0 pairs (R1 4.7-fold, R2 8.3-fold, primary 28.2-fold)",
+    "direction and fold: stable for all 22,576, because they are the observation reproduced",
+    "combination rule: 0 of the sampled pairs change under any of the four rules",
+    "on/off: stable for more than half of the pairs and fewer than all (stable on needs a nominal level"
+    " of at least 12.97 molecules per cell, stable off one below 0.212)",
+    "switch: stable for no more pairs than on/off (an unstable on/off makes the switch unstable too)",
+    "rank: fewer than half of the within-context comparisons stable",
+    "R3 (no transfer): on/off, switch and rank stable for 0 pairs; only direction and fold survive",
+)
+S5_FALSIFIERS = {
+    "runtime_vs_formula": (
+        "on the 1,000 sampled pairs at every point, runtime steady states within 1% and response times"
+        " within 2% of the closed form, and every classification identical except where a value lies"
+        " within 1% of a threshold (counted). Any other disagreement withdraws the census and only the"
+        " sample, with its Wilson 95% interval, is reported"
+    ),
+    "label": (
+        "every sampled trajectory carries a transferred entry naming its source, species and cell and"
+        " the context it ran in; the audit's labelled pairs equal its simulable pairs in every tier."
+        " One pair without its label and step 1 is not met"
+    ),
+    "combination": "any difference between the four rules on a simulable pair is a bridge defect, reported",
+    "invariant": "the bridge_audit re-run moves no existing count; it adds the label counts only",
+}
+#: the gap the propagation has to work around, disclosed before the run
+S5_RUNTIME_GAP = (
+    "the runtime holds one mRNA half-life per module (DEFAULTS['mrna_half_life'] = ln2 h unless the"
+    " module declares it), and the bridge sets none, so a compiled program run with measured rates"
+    " reports T molecules per cell per 1/h of an a.u. decay: mixed units. The label names it"
+)
+#: STEP 4, how the one human context is chosen, fixed before the counts are read: among the cell
+#: contexts holding simulable pairs, the one where the project holds the most of these measurement
+#: kinds in that very cell; ties go to the context with more simulable pairs. It is named with what a
+#: validated human-kinetics test there would need that is missing, and nothing is built
+S5_HUMAN_CONTEXT_KINDS = (
+    "CRISPRi perturbation of elements",
+    "reporter activity (lentiMPRA)",
+    "chromatin accessibility (DNase)",
+    "human mRNA half-lives",
+    "an absolute human transcription rate",
+    "absolute mRNA copies per cell",
+    "a time course after a perturbation",
+)
+
+
 # ---- one mechanism, one parameter -----------------------------------------------------------------
 #: a mechanism is (element, target gene, cell context); `<id>` and `<id>_measured` are one element
 MECHANISM_KEY = ("element id without the _measured suffix", "target gene", "when clauses")
