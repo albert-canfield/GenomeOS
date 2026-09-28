@@ -8085,6 +8085,72 @@ when IGVF releases the many-loci table.
 
 **Cost.** 0 AlphaGenome requests; no cache reader, nothing fetched.
 
+## The result: matched on the number of scored elements the real unknown still names a coding gene 24 points below its windows, and the per-element rate, which needs no matching, is 29 points down (2026-09-28, lane-elemcount, later)
+
+The registration above was committed as da5764e before the run. The run then happened once, over all 24
+chromosomes, with 0 AlphaGenome requests and the per-element cache never opened.
+
+**Gate.** Passed. With the element test switched off and d717b28's 4,000-try cap the same draw function
+gave back d717b28's pooled counts to the digit for both target sets: real unknown 44,100 windows drawn,
+31,676 carrying, 21,217 naming a coding gene, 531 and 158 blocks; neutral 131,600 / 88,317 / 57,212,
+1,181 and 340.
+
+**Bands.** The real unknown's scored-element deciles collapse to the cuts 0, 1, 3, 6, 11 (five bins,
+because 351 of the 882 blocks hold no element at all); the neutral tier's to 0, 1, 2, 7.
+
+**Primary.** The element-count-matched difference is **-23.99 points**, 95% over blocks **-27.95 to
+-19.93**, over chromosomes -27.71 to -20.56, **n = 531 blocks**. No block was undrawable and no carrying
+block failed to draw a carrying window, so the comparison is the same 531 blocks as before. 29.76% of
+the blocks name a coding gene against 53.75% of their matched carrying windows. The interval is wholly
+below 0, the point is far below the five-point chance band, and the falsifier fired: element count
+closes 35.6% of d717b28's unmatched gap and 12.0% of the density-matched -27.25 of 0c8b82d. By the
+registered reading, **element count is not the cause of the gap either and clause 2 stays not met**.
+
+**How much of the imbalance the deciles actually closed, and the sensitivity that closes all of it.**
+The registered banding is coarse where it matters: with five bins and a top bin open above 11 elements,
+a carrying window still holds 11.94 scored elements against 6.18 per carrying block, against 17.90 in
+this run's own unmatched draw and 13.27 in 0c8b82d's density-matched one. So the primary closed a little
+over half the imbalance, not all of it. The registered sensitivity that closes it exactly -- matching on
+the block's own element count rather than its decile, so every accepted window holds the same number of
+elements as its block, 6.177 against 6.177 -- gives **-18.57 points, 95% -22.48 to -14.55, n = 531**,
+with no undrawable block. With the number of chances made identical, the real unknown is still about
+eighteen and a half points below. Matching jointly on the element decile and e1dbcf3's coding-TSS decile
+gives -18.07 (-21.73 to -14.36) with both covariates balanced (4.11 TSSs against 4.02); rejecting only
+on overlap with the target set gives -18.12 (-22.14 to -13.99). All three sensitivities agree with the
+primary in sign and magnitude, and the exact-count point sits a hundredth of a point on the shallow side
+of the registered falsifier line, which is fired on the primary as registered.
+
+**The per-element rate, which removes the imbalance arithmetically.** On d717b28's own unmatched windows,
+with nothing matched away at all, the share of a block's scored elements that name a coding gene minus
+the share of its windows' elements that do is **-28.77 points, 95% over blocks -31.66 to -25.77**, over
+chromosomes -31.82 to -25.91, n = 531. Pooled, 301 of the 3,280 elements inside the real unknown name a
+coding gene (9.18%) against 201,072 of 456,573 window elements (44.04%). The element-count-matched
+windows give -18.81 (-21.70 to -15.82). This is the registered answer to the imbalance that needs no
+control at all, and it says the same thing: a scored element inside a constrained-unknown block names a
+coding gene about a fifth as often as a scored element in comparable sequence outside one. The gap is not
+a number-of-trials effect.
+
+**Secondaries.** The neutral tier under its own element-count matching sits at -23.28 (-26.03 to -20.47,
+n = 1,181), and real unknown minus neutral is -0.71 (-5.58 to +4.17): the two tiers remain
+indistinguishable, as in 0c8b82d. Per element and unmatched, the neutral tier is -26.43 (-28.52 to
+-24.23). On the broader question "moves a gene" the real unknown is -15.89 (-20.18 to -11.77).
+
+**What this settles and what it does not.** The imbalance that 0c8b82d named as the last live
+explanation is now tested and rejected. Three quantities have been matched -- block length, local
+coding-gene density and the number of scored elements -- and a fourth estimator avoids the third by
+arithmetic, and the real unknown stays between 18 and 29 points below its control on every one of them.
+No covariate named so far explains the reading. What the run does not settle is why: it cannot separate
+"these blocks hold no element that regulates a coding gene" from "the deletion model cannot name a
+target for sequence like this". Two further descriptive controls remain testable from the archive alone,
+and neither has been run: the class composition of the elements (a block's cCREs may be dELS and
+CTCF-only where a window's include PLS and pELS), and the distance from each element to the nearest
+coding TSS inside the model's 1 Mb input, which is the sharpest remaining candidate because the model
+can only name a gene it can see. Beyond those, only measurement separates the two readings, and the
+measured arm stays registered and unrun in its own lane.
+
+**Cost.** 0 AlphaGenome requests. 4,182 s over 24 chromosomes; one chromosome's archive in memory at a
+time. Result: `data/results/clause2_element_count_control.json`.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
