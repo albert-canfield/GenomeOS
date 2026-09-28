@@ -1075,3 +1075,113 @@ switched off and its switch answer is stable whatever its on/off answer. Both
 hold among activating pairs only. On/off and switch are therefore also reported
 among activating pairs, and the two sentences as written are reported as wrong
 by arithmetic, not by data.
+
+## What survives the ranges: a sign and "expressed", never a level (item 12 S5, 2026-09-29)
+
+The registered run of `scripts/s5_rate_ranges.py` under `0ea0a90` and its
+pre-run amendment (`83013e6`), `data/results/s5_rate_ranges.json`, with
+`data/results/bridge_audit.json` re-run for the label counts. The gate passed:
+every range width re-read from the sources equals the registered number to four
+decimals. 0 AlphaGenome requests.
+
+**Everything below is assumption-dependent simulation, not measured human
+dynamics. Stable across these ranges is not validated.** Nothing here was
+compared with a human measurement it did not take as an input.
+
+**The label reached every output.** All 22,576 measured-tier simulable pairs
+(22,580 compiled rules) carry their label: source `schwanhausser2011`, measured
+in *Mus musculus* NIH 3T3 fibroblasts, used in the pair's own human context;
+0 unlabelled, 0 unstated, 0 on a human rate. In the audit, labelled pairs equal
+simulable pairs in every tier (22,576 measured; 160,392 in the borrowed tier, of
+which 137,816 are labelled `borrowed_median`), and no existing count moved. Every
+one of the 26,000 trajectories the sample ran carried its transfer entry with
+the right source, species, tier and context.
+
+**The runtime and the formula agree.** On the 1,000 sampled pairs, at all 13
+points each, the runtime's steady states were within 1% and its half-way times
+within 2% of the closed form at 13,000 of 13,000 points, and all 1,000
+classifications were identical, so the census over all 22,576 is reported. The
+four activator rules gave identical runs on all 1,000 pairs: the combination rule
+applies to no simulable pair, because the simulable tier is exactly the set of
+genes with one mechanism.
+
+**What is stable, over the primary range** (the nominal mouse values and every
+corner of R1 and R2), census of 22,576 pairs:
+
+| prediction | stable pairs | share | what the stable answer is |
+| --- | --- | --- | --- |
+| direction of the removal effect | 22,576 | 100% | the observation itself, reproduced |
+| fold on removal | 22,576 | 100% | the observation itself, reproduced |
+| level, molecules per cell | 0 | 0% | - |
+| effect size, molecules per cell | 0 | 0% | - |
+| response time after removal | 0 | 0% | - |
+| on/off (at least one molecule per cell) | 16,101 | 71.3% | every one "on"; no pair is stably off |
+| switch (removal silences it) | 16,295 | 72.2% | every one "not a switch"; no pair is a stable switch |
+| on/off and switch together | 14,680 (14,683 rules) | 65.0% | |
+
+The sample, through the runtime, agrees: on/off 702 of 1,000 (Wilson 95%
+67.3%-73.0%), switch 720 (69.1%-74.7%), both 644 (61.4%-67.3%); each census
+share lies inside its interval. Among the 17,356 activating pairs, on/off is
+stable for 12,496 (72.0%) and switch for 11,075 (63.8%).
+
+**Ranks.** Of 3,027,815 comparisons between two pairs in one cell context, the
+order of their levels is fixed for 25,629 (0.85%), of their effect sizes for
+59,628 (1.97%), and of their response times for none.
+
+**Under R3** (the gene's own mouse numbers say nothing): on/off is stable for no
+pair, switch only for the 5,220 inhibiting pairs that removal can never silence,
+level and response-time ranks for no comparison, and effect-size ranks for 10 of
+3,027,815. Only direction and fold survive, as expected.
+
+**Against the registration.** Level, effect size and response time stable for
+no pair: as derived, because one width gives every pair the same spread (61.2-
+and 28.2-fold) and whether a level is stable is decided by the width, not by the
+pair. Direction and fold stable for all: as derived, being inputs. Combination
+rule: 0 differences, as expected. On/off stable for more than half and fewer
+than all: **met**, 71.3%. Rank stable in fewer than half of comparisons:
+**met**, 0.85%, 1.97% and 0%. The two sentences the amendment named are wrong
+as written, by arithmetic: switch is stable for more pairs than on/off (16,295
+against 16,101) and, under R3, for 5,220 pairs, all of them inhibitions; among
+activating pairs both hold (11,075 against 12,496; 0 under R3). One registered
+expectation **failed on the data**: under R3 rank is stable for "no pair", and
+10 effect-size comparisons are stable, because effect size carries the observed
+fold, which R3 does not vary.
+
+**What the kinds of answer mean.** The answers that survive are the ones that
+never depended on the transferred numbers (the direction and size of the fold,
+which are the observation) and the threshold answers far from their threshold:
+a gene whose nominal level is at least 13 molecules per cell stays expressed at
+every point, and its removal does not silence it. Every number the simulation
+adds to the observation - how many molecules, how large the change in
+molecules, how fast the change - is unstable for every pair, and the order of
+two genes by level survives for fewer than one comparison in a hundred. The
+nominal level itself sits at the top of the transfer range: if the mouse rate
+carried over, the human K562 half-lives would put the level 1.6 to 13 times
+lower than the nominal for the central 90% of genes, and nothing measured says
+which reading holds.
+
+**The one human context: K562.** By the registered rule it is K562, the only
+cell type holding four of the seven kinds in that very cell (a census of the
+cached files): CRISPRi of elements (the ENCODE benchmark's 10,356 training and
+1,918 held-out K562 pairs, and the IGVF MHC screen), lentiMPRA (51,375
+elements), DNase, and human mRNA half-lives (Schofield, 5,419 transcripts). The
+next, GM12878, WTC11 and HepG2, hold two or three; HepG2 has no CRISPRi set. 347
+simulable pairs are in K562 (1.5% of the tier; 316 AlphaGenome, 31 CRISPRi), and
+199 of them are on a gene with a human K562 half-life; 186 of those 199 fall
+inside R2, which is in-sample by construction and not a test.
+
+**What a validated human-kinetics test in K562 would need that is missing.**
+No cell type holds the other three kinds, and each is what a test needs. First,
+a readout that is not an input: the CRISPRi fold is what the bridge fits, so it
+cannot validate anything the model then says. Second, **a time course after an
+acute perturbation** in K562 (an inducible CRISPRi or a degron, sampled over
+hours, for genes that carry a K562 half-life): with Schofield's human half-life
+as the decay constant, the model's one dynamic prediction built wholly on human
+K562 inputs is that the mRNA covers half the way to its new level in one K562
+half-life, and nothing held measures it; the perturbation's own onset kinetics
+would have to be measured too. Third, **an absolute transcription rate or
+absolute copies per cell** in K562 (a spike-in-per-cell calibration of TT-seq or
+RNA-seq), without which no level in molecules is human; none exists
+(lane-rates2). Today 199 K562 pairs could run on a human degradation constant,
+but their transcription rate would still be mouse, and a test of them would
+still need the time course. Nothing was built here.

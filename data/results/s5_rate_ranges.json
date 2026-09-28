@@ -1,0 +1,959 @@
+{
+  "result": "s5_rate_ranges",
+  "date": "2026-09-29",
+  "review_item": "item 12 S5 (second external review, 2026-09-28)",
+  "registered_in": "0ea0a90",
+  "simulation_status": "assumption-dependent simulation, not measured human dynamics",
+  "validated_human_kinetics": "a separate category that holds nothing today: a prediction checked against a human measurement that was not an input to it, in the cell it is about. Stable across the ranges below is NOT validated, and no count from this block is ever reported under that name",
+  "reading": "stable means the same qualitative answer at every registered point; it is NOT validated. Direction and fold are the observation reproduced, so their stability is not a result",
+  "ranges": {
+    "registered": {
+      "R1_measurement": {
+        "what": "how far two measurements of the same gene in the same mouse cells disagree",
+        "source": "Schwanhausser 2011 Table S3, columns 'experiment' and 'replicate'",
+        "population": "every row with both values > 0: 3,604 rows for T, 4,658 for t_half",
+        "statistic": "w = 95th percentile of |log2(experiment / replicate)|",
+        "w_T": 1.1186,
+        "w_t_half": 1.121,
+        "range": "T * 2**[-w_T, +w_T] and t_half * 2**[-w_t_half, +w_t_half], independently",
+        "note": "conservative: the table carries the average of the two, whose own error is smaller than the disagreement between them"
+      },
+      "R2_transfer_to_a_human_cell": {
+        "what": "how far the mouse number the model would use sits from a human measurement of the same gene",
+        "source": "Schofield 2018 Table S2_K562 mean_half_life (HUMAN K562, TimeLapse-seq) against the Schwanhausser NIH 3T3 mRNA half-life the gene_rates table carries, per gene",
+        "population": "2,262 human symbols carrying both, through the gene_rates table's 1:1 homology",
+        "statistic": "q05, q50, q95 of log2(t_half K562 / t_half 3T3)",
+        "q05": -3.6966,
+        "q50": -2.1236,
+        "q95": -0.6457,
+        "t_half_range": "t_half * 2**[q05, q95]: factors 0.0771 to 0.6392 (median 0.2295)",
+        "T_range": "NO matched human rate exists (lane-rates2), so T is bracketed by two readings of the one matched measurement, never by a width of its own: (a) the mouse RATE carries over, T_h = T; (b) the mouse COPY NUMBER carries over, so T_h = T * t_half_3T3 / t_half_h. Corners: r in {2**q05, 2**q95} x reading in {a, b}; the level T*t_half/ln2 is then L*r under (a) and L under (b)",
+        "note": "the shift is mostly method, not species: medians are 9.96 h (Schwanhausser 3T3), 2.73 h (Schofield mouse MEF) and 1.56 h (Schofield human K562), so the matched-method species and cell factor is about 0.57 and the method and laboratory factor about 0.27. K562 is the only human cell whose half-lives are cached, so its spread stands in for every human cell context and is a LOWER bound on the transfer to any other; cell-type differences within one species at one method cannot be read from anything cached"
+      },
+      "R3_no_transfer": {
+        "what": "a sensitivity: the gene's own mouse numbers are taken to say nothing about the human gene",
+        "source": "the across-gene spread: Schwanhausser T (3,603 table genes), Schofield K562 t_half (5,419)",
+        "statistic": "central 90% (q05, q95) of each",
+        "T": [
+          0.39,
+          10.018
+        ],
+        "t_half": [
+          0.3975,
+          7.0281
+        ],
+        "range": "the same box for every pair; reported beside the primary, never as it"
+      },
+      "primary": "R0 (the nominal mouse values) together with every corner of R1 and of R2"
+    },
+    "re_read": {
+      "w_T": 1.1186249927127345,
+      "w_T_rows": 3604,
+      "w_t_half": 1.1210028131487408,
+      "w_t_half_rows": 4658,
+      "q05": -3.696551338719884,
+      "q50": -2.1235556615624596,
+      "q95": -0.645706147477351,
+      "r2_genes": 2262,
+      "R3_T": [
+        0.39,
+        10.017999999999992
+      ],
+      "R3_t_half": [
+        0.3975032983589438,
+        7.02808470552002
+      ]
+    },
+    "gate": "equal to the registration in the fourth decimal"
+  },
+  "combination_range": {
+    "rules": [
+      "mean",
+      "sum_capped",
+      "max",
+      "or"
+    ],
+    "applies_to_simulable_pairs": 0
+  },
+  "not_propagated": [
+    "hill_threshold",
+    "hill_coefficient",
+    "declared_strength"
+  ],
+  "predictions": {
+    "direction": "sign of removed/intact - 1: stable iff the same sign at every point (it is an INPUT)",
+    "fold": "removed/intact within 1% of the observed RHO at every point (an INPUT, reproduced)",
+    "level": "intact steady-state mRNA, molecules per cell: stable iff max/min over the points <= 2",
+    "effect_size": "|intact - removed| in molecules per cell: stable iff max/min <= 2",
+    "on_off": "intact level >= 1 molecule per cell: stable iff the same answer at every point",
+    "switch": "removal takes an expressed gene below 1 molecule per cell: stable iff the same answer",
+    "response_time": "hours for mRNA to cover half the way to its removed level: stable iff max/min <= 2",
+    "rank": "within one cell context, the order of two pairs by level (and separately by effect size and by response time), each pair free to sit anywhere in its own range: stable iff the order is the same at every combination, i.e. the two ranges do not overlap; reported as the share of within-context comparisons"
+  },
+  "expected": [
+    "level and effect size: stable for 0 pairs, because a multiplicative range of one width gives every pair the same spread (R1 22.3-fold, R2 13.0-fold, primary 61.2-fold); whether a level is stable is decided by the width, not by the pair",
+    "response time: stable for 0 pairs (R1 4.7-fold, R2 8.3-fold, primary 28.2-fold)",
+    "direction and fold: stable for all 22,576, because they are the observation reproduced",
+    "combination rule: 0 of the sampled pairs change under any of the four rules",
+    "on/off: stable for more than half of the pairs and fewer than all (stable on needs a nominal level of at least 12.97 molecules per cell, stable off one below 0.212)",
+    "switch: stable for no more pairs than on/off (an unstable on/off makes the switch unstable too)",
+    "rank: fewer than half of the within-context comparisons stable",
+    "R3 (no transfer): on/off, switch and rank stable for 0 pairs; only direction and fold survive"
+  ],
+  "falsifiers": {
+    "runtime_vs_formula": "on the 1,000 sampled pairs at every point, runtime steady states within 1% and response times within 2% of the closed form, and every classification identical except where a value lies within 1% of a threshold (counted). Any other disagreement withdraws the census and only the sample, with its Wilson 95% interval, is reported",
+    "label": "every sampled trajectory carries a transferred entry naming its source, species and cell and the context it ran in; the audit's labelled pairs equal its simulable pairs in every tier. One pair without its label and step 1 is not met",
+    "combination": "any difference between the four rules on a simulable pair is a bridge defect, reported",
+    "invariant": "the bridge_audit re-run moves no existing count; it adds the label counts only"
+  },
+  "runtime_gap": "the runtime holds one mRNA half-life per module (DEFAULTS['mrna_half_life'] = ln2 h unless the module declares it), and the bridge sets none, so a compiled program run with measured rates reports T molecules per cell per 1/h of an a.u. decay: mixed units. The label names it",
+  "pairs": {
+    "simulable_pairs": 22576,
+    "compiled_rules": 22580,
+    "unlabelled_pairs": 0,
+    "labels_by_species_cell": {
+      "Mus musculus, NIH 3T3 fibroblast": 22576
+    },
+    "by_kind": {
+      "predicted": 22543,
+      "experimental": 33
+    },
+    "activating": 17356,
+    "inhibiting": 5220,
+    "contexts": 297,
+    "largest_contexts": [
+      [
+        "CD8_positive__alpha_beta_T_cell",
+        839
+      ],
+      [
+        "Whole_Blood",
+        759
+      ],
+      [
+        "Purkinje_cell",
+        653
+      ],
+      [
+        "left_lobe_of_liver",
+        512
+      ],
+      [
+        "psoas_muscle",
+        492
+      ],
+      [
+        "placenta",
+        472
+      ],
+      [
+        "small_intestine",
+        459
+      ],
+      [
+        "CD4_positive__alpha_beta_T_cell",
+        445
+      ],
+      [
+        "neural_cell",
+        439
+      ],
+      [
+        "mammary_stem_cell",
+        437
+      ]
+    ]
+  },
+  "sample": {
+    "design": {
+      "size": 1000,
+      "selection": "simple random sample without replacement, random.Random(20260928).sample, from the measured-tier simulable pairs sorted by (chromosome in 1..22, X, Y order, cell, gene, element)",
+      "run": "a one-gene program per pair (the runtime holds ONE mRNA half-life per module, so a gene's own half-life cannot be carried in a multi-gene run), parameterised through the bridge with its label, integrated by NetworkRuntime with dt = t_half/100: to steady state with the element clamped at 1 for 20 half-lives, then clamped at 0 from that state for 20 half-lives",
+      "census": "the same predictions for all 22,576 pairs from the model's closed form (steady state production/delta_m, response time = t_half), reported only if it agrees with the runtime on every sampled pair"
+    },
+    "size": 1000,
+    "agreement_with_formula": {
+      "points": 13000,
+      "levels_within_1pct": 13000,
+      "times_within_2pct": 13000,
+      "classification_identical": 1000
+    },
+    "label_failures": 0,
+    "label_failure_examples": [],
+    "combination_rule_differences": 0,
+    "stable_primary": {
+      "direction": {
+        "stable_pairs": 1000,
+        "of_pairs": 1000,
+        "stable_rules": 1000,
+        "of_rules": 1000,
+        "wilson95": [
+          0.9962,
+          1.0
+        ]
+      },
+      "fold": {
+        "stable_pairs": 1000,
+        "of_pairs": 1000,
+        "stable_rules": 1000,
+        "of_rules": 1000,
+        "wilson95": [
+          0.9962,
+          1.0
+        ]
+      },
+      "level": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "effect_size": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "on_off": {
+        "stable_pairs": 702,
+        "of_pairs": 1000,
+        "stable_rules": 702,
+        "of_rules": 1000,
+        "wilson95": [
+          0.6729,
+          0.7295
+        ]
+      },
+      "switch": {
+        "stable_pairs": 720,
+        "of_pairs": 1000,
+        "stable_rules": 720,
+        "of_rules": 1000,
+        "wilson95": [
+          0.6914,
+          0.7469
+        ]
+      },
+      "response_time": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "on_off_and_switch": {
+        "stable_pairs": 644,
+        "of_pairs": 1000,
+        "stable_rules": 644,
+        "wilson95": [
+          0.6138,
+          0.6731
+        ]
+      },
+      "activating_pairs_only": {
+        "on_off": {
+          "stable_pairs": 558,
+          "of_pairs": 780,
+          "wilson95": [
+            0.6827,
+            0.7459
+          ]
+        },
+        "switch": {
+          "stable_pairs": 500,
+          "of_pairs": 780,
+          "wilson95": [
+            0.6067,
+            0.6739
+          ]
+        }
+      }
+    },
+    "stable_R3": {
+      "direction": {
+        "stable_pairs": 1000,
+        "of_pairs": 1000,
+        "stable_rules": 1000,
+        "of_rules": 1000,
+        "wilson95": [
+          0.9962,
+          1.0
+        ]
+      },
+      "fold": {
+        "stable_pairs": 1000,
+        "of_pairs": 1000,
+        "stable_rules": 1000,
+        "of_rules": 1000,
+        "wilson95": [
+          0.9962,
+          1.0
+        ]
+      },
+      "level": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "effect_size": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "on_off": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "switch": {
+        "stable_pairs": 220,
+        "of_pairs": 1000,
+        "stable_rules": 220,
+        "of_rules": 1000,
+        "wilson95": [
+          0.1954,
+          0.2467
+        ]
+      },
+      "response_time": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "of_rules": 1000,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "on_off_and_switch": {
+        "stable_pairs": 0,
+        "of_pairs": 1000,
+        "stable_rules": 0,
+        "wilson95": [
+          0.0,
+          0.0038
+        ]
+      },
+      "activating_pairs_only": {
+        "on_off": {
+          "stable_pairs": 0,
+          "of_pairs": 780,
+          "wilson95": [
+            0.0,
+            0.0049
+          ]
+        },
+        "switch": {
+          "stable_pairs": 0,
+          "of_pairs": 780,
+          "wilson95": [
+            0.0,
+            0.0049
+          ]
+        }
+      }
+    },
+    "on_off_answers": {
+      "on_off stable: on": 702
+    }
+  },
+  "census": {
+    "reported": true,
+    "why": "the closed form agreed with the runtime on every sampled pair",
+    "stable_primary": {
+      "direction": {
+        "stable_pairs": 22576,
+        "of_pairs": 22576,
+        "stable_rules": 22580,
+        "of_rules": 22580,
+        "wilson95": [
+          0.9998,
+          1.0
+        ]
+      },
+      "fold": {
+        "stable_pairs": 22576,
+        "of_pairs": 22576,
+        "stable_rules": 22580,
+        "of_rules": 22580,
+        "wilson95": [
+          0.9998,
+          1.0
+        ]
+      },
+      "level": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "effect_size": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "on_off": {
+        "stable_pairs": 16101,
+        "of_pairs": 22576,
+        "stable_rules": 16104,
+        "of_rules": 22580,
+        "wilson95": [
+          0.7073,
+          0.7191
+        ]
+      },
+      "switch": {
+        "stable_pairs": 16295,
+        "of_pairs": 22576,
+        "stable_rules": 16298,
+        "of_rules": 22580,
+        "wilson95": [
+          0.7159,
+          0.7276
+        ]
+      },
+      "response_time": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "on_off_and_switch": {
+        "stable_pairs": 14680,
+        "of_pairs": 22576,
+        "stable_rules": 14683,
+        "wilson95": [
+          0.644,
+          0.6564
+        ]
+      },
+      "activating_pairs_only": {
+        "on_off": {
+          "stable_pairs": 12496,
+          "of_pairs": 17356,
+          "wilson95": [
+            0.7133,
+            0.7266
+          ]
+        },
+        "switch": {
+          "stable_pairs": 11075,
+          "of_pairs": 17356,
+          "wilson95": [
+            0.6309,
+            0.6452
+          ]
+        }
+      }
+    },
+    "stable_R3": {
+      "direction": {
+        "stable_pairs": 22576,
+        "of_pairs": 22576,
+        "stable_rules": 22580,
+        "of_rules": 22580,
+        "wilson95": [
+          0.9998,
+          1.0
+        ]
+      },
+      "fold": {
+        "stable_pairs": 22576,
+        "of_pairs": 22576,
+        "stable_rules": 22580,
+        "of_rules": 22580,
+        "wilson95": [
+          0.9998,
+          1.0
+        ]
+      },
+      "level": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "effect_size": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "on_off": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "switch": {
+        "stable_pairs": 5220,
+        "of_pairs": 22576,
+        "stable_rules": 5220,
+        "of_rules": 22580,
+        "wilson95": [
+          0.2258,
+          0.2368
+        ]
+      },
+      "response_time": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "of_rules": 22580,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "on_off_and_switch": {
+        "stable_pairs": 0,
+        "of_pairs": 22576,
+        "stable_rules": 0,
+        "wilson95": [
+          0.0,
+          0.0002
+        ]
+      },
+      "activating_pairs_only": {
+        "on_off": {
+          "stable_pairs": 0,
+          "of_pairs": 17356,
+          "wilson95": [
+            0.0,
+            0.0002
+          ]
+        },
+        "switch": {
+          "stable_pairs": 0,
+          "of_pairs": 17356,
+          "wilson95": [
+            0.0,
+            0.0002
+          ]
+        }
+      }
+    },
+    "amendment": "(1) The switch is not monotone in the level: removal switches an activated gene off only when 1 <= intact < 1/RHO, a band, so an answer read at the corners of a range can miss the band's interior. It is evaluated over the whole level interval the corners span (the primary range and R3 are connected intervals in the level); every other prediction is monotone in the level or the half-life, so its corners are its extremes. (2) The registered consequence 'switch stable for no more pairs than on/off' is false as written: removal RAISES an inhibited gene, so an inhibitory pair can never be switched off and its switch answer is stable whatever its on/off answer. It holds among activating pairs only, and so does R3's 'switch stable for no pair'; on/off and switch are also reported among activating pairs, and the two sentences as written are reported as wrong by arithmetic, not by data",
+    "answers": {
+      "on_off stable: on": 16101,
+      "switch stable: not a switch": 16295
+    },
+    "rank_comparisons": {
+      "primary": {
+        "level": {
+          "stable": 25629,
+          "comparisons": 3027815,
+          "share": 0.0085
+        },
+        "effect_size": {
+          "stable": 59628,
+          "comparisons": 3027815,
+          "share": 0.0197
+        },
+        "response_time": {
+          "stable": 0,
+          "comparisons": 3027815,
+          "share": 0.0
+        }
+      },
+      "R3": {
+        "level": {
+          "stable": 0,
+          "comparisons": 3027815,
+          "share": 0.0
+        },
+        "effect_size": {
+          "stable": 10,
+          "comparisons": 3027815,
+          "share": 0.0
+        },
+        "response_time": {
+          "stable": 0,
+          "comparisons": 3027815,
+          "share": 0.0
+        }
+      }
+    }
+  },
+  "human_context": {
+    "kinds": [
+      "CRISPRi perturbation of elements",
+      "reporter activity (lentiMPRA)",
+      "chromatin accessibility (DNase)",
+      "human mRNA half-lives",
+      "an absolute human transcription rate",
+      "absolute mRNA copies per cell",
+      "a time course after a perturbation"
+    ],
+    "k562_simulable_pairs": 347,
+    "k562_pairs_by_kind": {
+      "predicted": 316,
+      "experimental": 31
+    },
+    "k562_pairs_with_a_human_k562_half_life": 199,
+    "k562_human_half_life_inside_R2": 186,
+    "in_sample_note": "R2 was computed from these very genes' half-lives, so the share inside it is in-sample by construction and is not a test"
+  },
+  "seconds": 665.1,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiled non-coding programs, scripts/compile_genome_programs.py",
+        "version": "as compiled from this revision's attribution/compile.py, pinned by sha256"
+      },
+      {
+        "accession": "schwanhausser2011: Schwanhausser et al. 2011, Nature 473:337-342, doi 10.1038/nature10098, Supplementary Table 3 (the file replaced 2013-02-13 for the corrigendum, Nature 495:126-127, doi 10.1038/nature11848), sha256 5343f73b4014a21c2b03630a579e95dabbf8b3c44f5ff0515db0df292abc12cd, 3,394,048 bytes. MOUSE NIH 3T3 fibroblasts, one unperturbed steady state. 5,028 rows; 4,338 transcription rates, 4,658 mRNA half-lives, 5,028 protein half-lives, 4,309 mRNA copy numbers. Springer Nature supplementary information, no open licence stated: cached in the git-ignored data/cache/rates/, read here, never redistributed by this repository",
+        "version": "as cached 2026-09-28"
+      },
+      {
+        "accession": "schofield2018: Schofield et al. 2018, Nature Methods 15:221-225, doi 10.1038/nmeth.4582, Supplementary Table 2, sha256 d5c010c1c2b1b22319310644e3194674ac58af059542862639cd43e720e60f19, 726,994 bytes. TimeLapse-seq transcript half-lives in HUMAN K562 (5,419 transcripts, 4 h s4U) and MOUSE embryonic fibroblasts (2,992, 1 h s4U) by one method in one paper: the only matched cross-species pair here, and therefore the species falsifier below. Same licence position",
+        "version": "as cached 2026-09-28"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/results/gene_rates.json",
+        "sha256": "0948028fe65f49e20043131e661b4f125b12c0880bcc3af216522ed1a3514bc8",
+        "bytes": 1169712,
+        "partition": null
+      },
+      {
+        "path": "data/cache/rates/schwanhausser2011_TableS3.xls",
+        "sha256": "5343f73b4014a21c2b03630a579e95dabbf8b3c44f5ff0515db0df292abc12cd",
+        "bytes": 3394048,
+        "partition": null
+      },
+      {
+        "path": "data/cache/rates/schofield2018_TableS2_halflives.xlsx",
+        "sha256": "d5c010c1c2b1b22319310644e3194674ac58af059542862639cd43e720e60f19",
+        "bytes": 726994,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: gene-cell pairs by symbol and context, no interval is reported",
+    "parameters": {
+      "ranges": {
+        "R1_measurement": {
+          "what": "how far two measurements of the same gene in the same mouse cells disagree",
+          "source": "Schwanhausser 2011 Table S3, columns 'experiment' and 'replicate'",
+          "population": "every row with both values > 0: 3,604 rows for T, 4,658 for t_half",
+          "statistic": "w = 95th percentile of |log2(experiment / replicate)|",
+          "w_T": 1.1186,
+          "w_t_half": 1.121,
+          "range": "T * 2**[-w_T, +w_T] and t_half * 2**[-w_t_half, +w_t_half], independently",
+          "note": "conservative: the table carries the average of the two, whose own error is smaller than the disagreement between them"
+        },
+        "R2_transfer_to_a_human_cell": {
+          "what": "how far the mouse number the model would use sits from a human measurement of the same gene",
+          "source": "Schofield 2018 Table S2_K562 mean_half_life (HUMAN K562, TimeLapse-seq) against the Schwanhausser NIH 3T3 mRNA half-life the gene_rates table carries, per gene",
+          "population": "2,262 human symbols carrying both, through the gene_rates table's 1:1 homology",
+          "statistic": "q05, q50, q95 of log2(t_half K562 / t_half 3T3)",
+          "q05": -3.6966,
+          "q50": -2.1236,
+          "q95": -0.6457,
+          "t_half_range": "t_half * 2**[q05, q95]: factors 0.0771 to 0.6392 (median 0.2295)",
+          "T_range": "NO matched human rate exists (lane-rates2), so T is bracketed by two readings of the one matched measurement, never by a width of its own: (a) the mouse RATE carries over, T_h = T; (b) the mouse COPY NUMBER carries over, so T_h = T * t_half_3T3 / t_half_h. Corners: r in {2**q05, 2**q95} x reading in {a, b}; the level T*t_half/ln2 is then L*r under (a) and L under (b)",
+          "note": "the shift is mostly method, not species: medians are 9.96 h (Schwanhausser 3T3), 2.73 h (Schofield mouse MEF) and 1.56 h (Schofield human K562), so the matched-method species and cell factor is about 0.57 and the method and laboratory factor about 0.27. K562 is the only human cell whose half-lives are cached, so its spread stands in for every human cell context and is a LOWER bound on the transfer to any other; cell-type differences within one species at one method cannot be read from anything cached"
+        },
+        "R3_no_transfer": {
+          "what": "a sensitivity: the gene's own mouse numbers are taken to say nothing about the human gene",
+          "source": "the across-gene spread: Schwanhausser T (3,603 table genes), Schofield K562 t_half (5,419)",
+          "statistic": "central 90% (q05, q95) of each",
+          "T": [
+            0.39,
+            10.018
+          ],
+          "t_half": [
+            0.3975,
+            7.0281
+          ],
+          "range": "the same box for every pair; reported beside the primary, never as it"
+        },
+        "primary": "R0 (the nominal mouse values) together with every corner of R1 and of R2"
+      },
+      "sample": {
+        "size": 1000,
+        "selection": "simple random sample without replacement, random.Random(20260928).sample, from the measured-tier simulable pairs sorted by (chromosome in 1..22, X, Y order, cell, gene, element)",
+        "run": "a one-gene program per pair (the runtime holds ONE mRNA half-life per module, so a gene's own half-life cannot be carried in a multi-gene run), parameterised through the bridge with its label, integrated by NetworkRuntime with dt = t_half/100: to steady state with the element clamped at 1 for 20 half-lives, then clamped at 0 from that state for 20 half-lives",
+        "census": "the same predictions for all 22,576 pairs from the model's closed form (steady state production/delta_m, response time = t_half), reported only if it agrees with the runtime on every sampled pair"
+      },
+      "predictions": {
+        "direction": "sign of removed/intact - 1: stable iff the same sign at every point (it is an INPUT)",
+        "fold": "removed/intact within 1% of the observed RHO at every point (an INPUT, reproduced)",
+        "level": "intact steady-state mRNA, molecules per cell: stable iff max/min over the points <= 2",
+        "effect_size": "|intact - removed| in molecules per cell: stable iff max/min <= 2",
+        "on_off": "intact level >= 1 molecule per cell: stable iff the same answer at every point",
+        "switch": "removal takes an expressed gene below 1 molecule per cell: stable iff the same answer",
+        "response_time": "hours for mRNA to cover half the way to its removed level: stable iff max/min <= 2",
+        "rank": "within one cell context, the order of two pairs by level (and separately by effect size and by response time), each pair free to sit anywhere in its own range: stable iff the order is the same at every combination, i.e. the two ranges do not overlap; reported as the share of within-context comparisons"
+      },
+      "on_off_threshold_molecules_per_cell": 1.0,
+      "stability_fold": 2.0,
+      "combination_rules": [
+        "mean",
+        "sum_capped",
+        "max",
+        "or"
+      ],
+      "not_propagated": [
+        "hill_threshold",
+        "hill_coefficient",
+        "declared_strength"
+      ],
+      "species": "Mus musculus, NIH 3T3 fibroblasts; every human simulation using them borrows a mouse constant",
+      "status": "assumption-dependent simulation, not measured human dynamics"
+    },
+    "exclusions": [
+      "pairs outside the measured tier (borrowed median, unmeasured, not identifiable) are not run"
+    ],
+    "partitions": "n/a: a propagation of declared parameters, not an evaluation against held-out data",
+    "code": {
+      "git_sha": "1ef8990c33f911f92260544ac9f65b18dd2e4f8b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/joint_pretest.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/syntax.py",
+        "genomeos/cli.py",
+        "genomeos/genome/signals.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/storage.py",
+        "scripts/abundance_gate.py",
+        "scripts/biolang_key_census.py",
+        "scripts/celegans_commitment.py",
+        "scripts/celegans_fate_credit.py",
+        "scripts/celegans_fate_read_choice.py",
+        "scripts/celegans_fate_reads.py",
+        "scripts/celegans_fates.py",
+        "scripts/celegans_terminality.py",
+        "scripts/compact_reference.py",
+        "scripts/crispri_hct116.py",
+        "scripts/phosphosite_observation.py",
+        "scripts/reader_depth_family.py",
+        "scripts/trio_q100_phase.py",
+        "scripts/trio_q100_population.py",
+        "scripts/variation_rerun_chain.py",
+        "tests/test_attribution_correctness.py",
+        "tests/test_crispri_hct116.py",
+        "tests/test_results_writers_guard.py",
+        "tests/test_tf_atlas.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/organism/provenance.py",
+        "tests/test_attribution_correctness.py",
+        "tests/test_results_writers_guard.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/bridge_audit.json",
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/s5_rate_ranges.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
