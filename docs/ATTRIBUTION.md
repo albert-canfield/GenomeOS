@@ -9649,6 +9649,78 @@ observation-model-inadequate beside. **What it may not be called:**
   through `holdout.check_provenance`;
 - a response elsewhere with a null in the stated cell is one context error, not also a target error.
 
+## The result: the evidence held judges no origin and no molecular role of the unchanged labels, and 98 of 440,377 targets; all 98 are established, but only the 39 stated in K562 could have been refuted (item 12 S4, 2026-09-29, lane-s4, later)
+
+Run once, as registered in the section above, in a clean worktree at `b87f59e` (the revision stamp is not
+dirty; manifest complete). Result: `data/results/attribution_correctness.json`. It took 24 s on one
+laptop CPU. Nothing called the model (0 requests), and the per-element response cache was never opened.
+All 16 holdout sources judged the labels, and each passed `holdout.check_provenance`. **Every count below
+is an internal development benchmark reading.** Each is on evidence this project has already read, and
+none is a validation. The negatives come first.
+
+### Negatives
+
+1. **Almost nothing can be judged.** Coverage per axis, with the reason each unjudged claim was not
+   judged (one reason per claim, in the registered order):
+
+   | Axis | Judged / claims | Outside the claim's scope | Until the target responds | Suggest only | Cannot judge this axis | No observation |
+   | --- | --- | --- | --- | --- | --- | --- |
+   | origin | **0 / 470,077** | 0 | 0 | 0 | 24,495 | 445,582 |
+   | molecular role | **0 / 659,403** | 0 | 0 | 3,519 | 36,112 | 619,772 |
+   | activity | **98 / 440,377** | 1,377 | 23 | 3,194 | 18,747 | 416,938 |
+   | target | **98 / 440,377** | 1,400 | 0 | 3,194 | 18,747 | 416,938 |
+   | cell context | **39 / 440,377** | 1,436 | 23 | 3,115 | 18,826 | 416,938 |
+
+   Origin and molecular role are judged on 0 claims, as registered. No loaded source can establish either
+   of them, and the two sources that could (the sequence annotation, the cCRE registry) are the labels'
+   own inputs. Beside these, the labels state 157,393 groups of unchosen role alternatives and 11,061
+   `unknown` roles; the 26,806 region blocks state no activity and no target. None of these is a claim,
+   and none is counted as absence of function.
+2. **Target accuracy is 98 of 98, and this is not evidence that the targets are right.** The rule
+   refutes a target only with a well-powered null in the cell the rule states. None of the 23 targets
+   with a well-powered null has it in its rule's stated cell; those 23 are counted apart
+   (`well_powered_null_only_in_another_context`). A rule that ignored the stated cell would have counted
+   them as wrong. **Only 39 target claims were refutable**, meaning their stated cell was screened on the
+   named gene. All 39 are established, and all 39 are stated in K562.
+3. **Every judged repression claim is wrong in direction.** Activity (role accuracy on the direction
+   axis) is **93 of 98**. All 4 judged `represses_target` claims are refuted, because the gene fell in
+   each. One `activates_target` claim is refuted by a rise: CCND1, whose deciding pair is in the HCT116
+   study of the benchmark's held-out file. The 23 claims whose gene responded nowhere are not judged on
+   direction: a null has no direction.
+4. **Role accuracy on molecular role has no denominator.** It is 0 established of 0 judged. 3,519 role
+   claims have only suggestive evidence: an active reporter, a VISTA positive, a CRISPRi response or a
+   functional saturation-mutagenesis base. By the table, none of these can decide a biochemical role.
+5. **Cell context is established on 39 and refuted on none**, all in K562 (context accuracy 39 of 39,
+   refutable 39). For 59 claims the gene responds only in cells other than the stated one, and the stated
+   cell is untested.
+6. **No claim was unresolved, and none reached "the observation model is inadequate".** On every axis
+   both counts are 0. This is a statement about these labels, not about the evidence. 181 target claims
+   sit on an element with a lentiMPRA cell whose tiles split evenly. But the unchanged labels make no
+   reporter claim, and by the table a reporter cannot judge the direction claims they do make. Every decided verdict
+   keeps "the observation model is inadequate" among its explanations.
+
+### What else it shows
+
+- **The scorer splits the ablation's measured links by axis and reproduces them.** The 128 predicted
+  links the ablation found measured on their own gene are here 98 established targets (97 decreases, 1
+  increase), 23 targets with a null only in another cell, and 7 touched only by underpowered nulls
+  (cannot judge). The ablation's "93 survive, 5 contradicted by the opposite sign" becomes 98 established
+  targets, of which 93 are right in direction and 5 are wrong. Its "23 contradicted by a well-powered
+  null" becomes 23 targets not refuted, because the null is not in the stated cell. The registered
+  expectations held on every axis. They were written from the ablation's counts, so they show
+  consistency with the ablation, not new evidence.
+- **Where the judging comes from.** 71 of the 98 target verdicts are decided by a Gasperini2019 pair
+  and 87 in K562. 14 of the 98 target and activity verdicts, and 1 of the 39 context verdicts, rest on a
+  pair of the benchmark's held-out file, which is used to judge and never as evidence.
+
+**What it may be called:** of 440,377 target claims the unchanged labels state, 98 can be judged by an
+observation the S4 table lets establish or refute a target (coverage 98 / 440,377). All 98 are
+established (accuracy 98 / 98), with 0 unresolved and 0 observation-model-inadequate beside, and 39
+refutable. Activity is 93 / 98 at coverage 98 / 440,377. Context is 39 / 39 at coverage 39 / 440,377.
+Origin is judged on 0 / 470,077 and molecular role on 0 / 659,403. **What it may not be called:** a
+validation; the accuracy of the labels on the 440,279 unjudged targets, which the screens did not choose
+to test; a single score; or evidence that any unjudged element has no function.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
