@@ -8418,6 +8418,72 @@ experiment is now a number.
 **Cost.** 0 AlphaGenome requests. 527 s over 24 chromosomes; one chromosome's element archive and one
 chromosome's measured layer in memory at a time.
 
+## The result: the model really can see three times fewer coding genes from inside a constrained-unknown block, and that accounts for under a third of the gap (2026-09-28, lane-tssreach, later)
+
+Both controls of the registration above ran once, genome-wide, 280 s, **0 AlphaGenome requests**, the
+per-element response cache never opened. The gate passed: the draw gave back `d717b28`'s pooled counts
+(44,100 windows drawn, 31,676 carrying, 21,217 naming, 531 and 158 blocks; neutral 131,600 / 88,317 /
+57,212, 1,181 and 340) and `faeb0da`'s per-element counts (3,280 block elements, 301 naming; 456,573
+window elements, 201,072 naming) to the digit.
+
+**The negative first: neither control explains the gap.** The registered threshold was that standardising
+on a description must leave the pooled per-element difference above **-17.43 points**. Standardising on
+reach leaves **-24.46 points** (95% over blocks -26.36 to -22.47; over chromosomes -26.65 to -22.33;
+n = 531 blocks, 3,252 of the 3,280 block elements). Standardising on class leaves **-33.57**
+(-35.40 to -31.49). Reach closes **29.8%** of the -34.86, class **3.7%**, the two together **31.2%**
+(-24.00, -25.86 to -22.06). The registered outcome is `reach_short_but_gap_survives`.
+
+**Reach is nonetheless far lower inside the blocks, and this is the first time it has been measured where
+the model reads it.** Per element, over the scorer's own 1,048,576 bp window centred on that element:
+
+| | inside the blocks | in their windows |
+| --- | --- | --- |
+| coding TSSs in reach (mean) | **2.229** | **7.219** |
+| elements with **no** coding TSS in reach | **28.08%** | **6.20%** |
+| coding genes whose span reaches the window (mean) | 2.55 | 7.78 |
+| mean log10(1 + bp to the nearest coding TSS) | 5.381 | 4.855 |
+
+Per block, the difference in mean reach is **-4.39 coding TSSs** (95% over blocks -4.95 to -3.81, over
+chromosomes -5.37 to -3.65), in genes whose span reaches the window -4.54 (-5.11 to -3.96), and in
+log10 distance +0.349 (+0.281 to +0.415) -- a block's elements sit about 2.2x further from the nearest
+coding gene start than the elements of sequence of the same length elsewhere. The earlier midpoint-level
+matching could not have shown this: it matched the count around a block's midpoint, not what each element
+could see.
+
+**The gap lives inside every stratum of reach, not between them.** Block rate against window rate, in
+points, by coding TSSs in reach: **0: 0.98% against 19.37% (-18.39)**; 1: 4.82 / 30.70 (-25.87); 2: 18.06
+/ 39.19 (-21.13); 3-4: 9.70 / 44.32 (-34.62); 5-6: 21.58 / 46.98 (-25.41); 7-9: 17.57 / 48.23 (-30.66);
+10-14: 38.00 / 52.48 (-14.48). The two richest strata hold 19 and 9 block elements and fall below the
+registered minimum cell of 30; they are excluded and reported here rather than dropped. Note that the
+reach = 0 stratum is **not** a hard ceiling: 19.37% of window elements with no coding TSS in reach still
+name a coding gene, because the scorer reads genes whose body enters the window without their start.
+
+**(a) Class composition is a real difference and a small one.** The all-element sweep scored only two
+registry classes in this comparison, so the mix is nearly fixed by the sweep's own selection: **dELS
+96.59% / pELS 3.41%** inside the blocks against **87.20% / 12.80%** in their windows, a per-block
+promoter-like share difference of **-0.0298** (-0.0545 to -0.0042). Inside dELS the block elements name a
+coding gene 8.46% against 42.27% (-33.81 points) and inside pELS 29.46% against 56.07% (-26.61): the gap
+is inside both classes, not between them.
+
+**The sharpest sensitivity.** On `0c8b82d`'s coding-TSS-density-matched windows, element-level reach comes
+almost into balance -- per-block difference **-0.14 coding TSSs, 95% -0.31 to +0.05**, means 2.229 against
+3.279 -- and the per-element gap is still **-27.72 crude and -23.89 reach-standardised** (-25.81 to
+-21.88). Where the model can see about as many coding genes from both arms, it still names one three
+times less often from inside the blocks. The neutral tier behaves the same way (reach 2.42 against 6.64,
+crude -34.01, reach-standardised -20.60, -21.93 to -19.17), and on the looser question `moves_a_gene`
+standardising changes almost nothing (reach -34.31, class -36.87).
+
+**What this settles and what it does not.** Reach is a real imbalance in the instrument and must be
+stated wherever the -28.77 is: the model is being asked about elements from which it can see about a
+third as many coding genes, and 28% of them have no coding start in the window at all. But it is not the
+explanation -- standardising on it keeps seven tenths of the gap, and the gap is present inside every
+stratum including the richest ones. Clause 2's failure is about the sequence, not the window, and nothing
+above changes the clause's status: it stays not met, on the ground `d717b28`, `0c8b82d` and `faeb0da` put
+it on. One thing is named and not run: `genes_in_window` was registered as a descriptive statistic only,
+and standardising on it rather than on TSS reach was not registered, so it is left for whoever takes it
+up rather than computed after the fact. The clause's third part, scored against measurement, is
+untouched. Result: `data/results/clause2_reach_control.json`.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
