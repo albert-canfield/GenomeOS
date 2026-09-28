@@ -8085,6 +8085,97 @@ when IGVF releases the many-loci table.
 
 **Cost.** 0 AlphaGenome requests; no cache reader, nothing fetched.
 
+## The result: the node caller was built before the pairs existed and reads nothing from them, and the one thing that is not independent is the size of the number (area B, 2026-09-28, lane-nodeindep, later)
+
+The registration above was committed as `da5764e`, the script's split decomposition was repaired in
+`366db9a` (the benchmark pair carries no `source_file` field, so the registered decomposition would
+have raised on its first regulated pair), and the audit then ran once: 138 caller-chromosome cells,
+0 AlphaGenome requests, nothing fetched, no per-element cache opened.
+`data/results/node_independence_audit.json`.
+
+**The table, under lane-split's legend.**
+
+| Component | Status | What decides it |
+| --- | --- | --- |
+| The 661 pairs | EVALUATION-ONLY | Both benchmark files pooled. Nothing is fitted to them, so neither is a training set and neither is a test set; but the held-out file is a reused benchmark (lane-split `0af7e1b`: at least ten scored results read it), so this is not a first touch |
+| Which split | **471 training / 190 held-out** | 71% of the claim rests on the *training* file, which is K562 only; the held-out 190 are 118 K562, 34 HCT116, 16 GM12878, 15 WTC11, 7 Jurkat |
+| CTCF cCRE input | CLEAN | ENCODE SCREEN V3, external, names no gene and no perturbation |
+| Boundary rule (CTCF-only midpoints merged within 5 kb) | CLEAN | `MERGE_BOUNDARIES_WITHIN = 5_000` written 2026-09-10, never changed; the class filter `c.cls == "CTCF-only"` written 2026-09-10 and last touched 2026-09-14 |
+| The 50 kb floor | CLEAN | `MIN_DOMAIN = 50_000` written 2026-09-10 in `0127b3f`, never changed since. Inherited as a TAD size floor. It is not neutral for the number — the published control does not pass through it, which is why `uniform_merged` is reported beside `uniform` — but it is not tuned on the pairs |
+| Thresholds inside the caller | CLEAN | The default caller has none beyond the class filter and those two lengths. `STRICT_RELATIVE = 0.95` belongs to the rejected orientation callers |
+| The annotation | CLEAN | GENCODE 50; the gene is the benchmark's own `measuredGeneSymbol` |
+| The random-boundary control | CLEAN | Seed 7 and 20 draws inherited unchanged from `scripts/oriented_domains.py` (2026-09-14); the audit's own `SEED = 7` (2026-09-27) exists to reproduce it, not to choose it |
+| The statistic | EVALUATION-ONLY | Nothing fitted; the caller's output is compared with a measurement it never saw |
+| Dependence on model output | CLEAN | Stage 2 recomputed on all 23 covered chromosomes with the AlphaGenome archive never opened: counts **identical**, 0 differences |
+| **Choice of default caller out of seven** | **EXPOSED** | Not to the pairs — to the same statistic in its modelled form |
+
+**The three facts that make "CLEAN" a measurement and not an assertion.** The default caller
+imported in a fresh interpreter pulls in **17 `genomeos` modules** and not one of them names a
+CRISPRi source; the only file under `genomeos/genome/` that mentions CRISPRi at all is
+`hic_contact.py`, which the closure does not contain. Every constant of the caller was written on
+**2026-09-10** (the 50 kb floor, the 5 kb merge, the CTCF-only class, the 0.4 node confidence) or
+**2026-09-14** (the control's seed and draw count); the first commit naming the benchmark is
+`138824f`, **2026-09-16**, and the first CRISPRi containment figure is `2b77663`, **2026-09-27**. So
+every choice inside the caller predates the arrival of the pairs by two to six days and the arrival
+of any containment number on them by thirteen to seventeen. And stage 2 reproduces to the count
+from the cCREs, GENCODE, the chromosome length and the pairs alone, so the measured arm borrows no
+credit from, and no contamination through, the model archive that stage 1 scores.
+
+**What is exposed, and how much it costs.** The default was kept over six orientation callers on
+2026-09-14 (`26da99a`) and again on 2026-09-21 (`56e2c50`), on four measurements, one of which —
+node content over the deletion archive — is this same containment statistic computed on model
+output. No CRISPRi figure existed on either date, and `scripts/oriented_domains.py` reads no CRISPRi
+file, so the exposure is not to the pairs. It is to the statistic. The registration fixed the
+reading rule before the run: if the rejected callers also clear zero the selection cost is small; if
+only the default clears zero the excess carries a selection premium and the spread is its size.
+
+The result is the second case, and not narrowly. Excess over each caller's own `uniform` control on
+the same 661 pairs: **ctcf_only +5.89**, oriented_ctcf_only +1.86 (95% -0.54 to +3.93),
+oriented_strong -3.97, oriented_strict -3.97, oriented_best_hit -13.50, oriented -14.98. **Zero of
+the six rejected callers clear zero; the spread across the seven is 20.87 points.** The default is
+the maximum of the seven on the measured statistic, exactly as it was the maximum of the seven on
+the modelled one. The direction survives this — no alternative caller reverses it, they simply fail
+— but the *size* +5.89 is a selected maximum and is not an unbiased effect estimate.
+
+Two things keep this from being worse than it is. The default was not chosen out of the seven: it
+was written on 2026-09-10 and the six challengers were built four days later to displace it and did
+not. And the ranking was fixed before any CRISPRi number existed. A selection premium is still a
+premium.
+
+**The interval, re-drawn.** This audit's own chromosome bootstrap of the default gives +5.89, 95%
+**+3.32 to +8.64**, against the committed **+3.18 to +8.46**: same point, same sign, a different
+resample stream (one generator seeded 11 walks all seven callers here; the committed result draws
+its own). The claim's interval reproduces to about a sixth of a point.
+
+**Negatives first, on the independent arms.** No arm was run, and the registration decided that in
+advance with an 80%-power gate. At the claim's own shares — null 0.699, alternative 0.7579 — an
+exact one-sided binomial needs **358 pairs** for 80% power. The IGVF MHC Perturb-seq screen brings
+**19** (power 0.127, and all 19 sit in one 4 Mb locus on chr6, so its independent-unit count is 1,
+not 19). The IGVF DC-TAP K562 remainder brings **36** (power 0.101). Together, 55 against 358. The
+IGVF many-loci K562 library is still unreleased (HTTP 403). So the answer to "is there an
+independent arm" is **no, not at 0 requests**, and their containment was left uncomputed on purpose:
+reading it now would convert the only unread pairs this project holds into read ones for a test that
+cannot separate the claim from chance. They stay logged for a pooled arm when IGVF releases the
+many-loci table.
+
+**One correction to the registration's own inventory.** The registration recorded 6,512 distal
+targeting DC-TAP pairs; recounted by the script it is **6,446** (7,475 rows, 7,281 targeting, 194
+positive control, 6,446 of the targeting rows carrying no promoter gene). Every figure derived from
+it is unchanged: 5,069 distal pairs not in either ENCODE file, 51 distal significant decreases, 36
+of those fresh, from 35 elements.
+
+**What the claim may be called.** That the node containment direction is **confirmed on a
+measurement the node caller never read, and could not have read**: no fitting, no threshold from the
+pairs, every constant older than the benchmark, and a stage-2 reproduction that never opens the
+model archive. What it may **not** be called: an *independent* confirmation, an *out-of-sample* test
+or a *held-out* result — 71% of the pairs are the training file, the held-out file is a reused
+benchmark, and the caller that scores them was selected as the best of seven on the same statistic
+in modelled form and is the only one of the seven that clears zero. And **+5.89 may not be quoted as
+an unbiased effect size**; it is the maximum of a selected family, with the four-baseline range
+(+4.5 to +10.2 across `uniform`, `uniform_merged`, `circular` and `count_matched`) and the 89.1%
+K562 composition still beside it. The existing claim is not changed by any of this; this section is
+the qualification, written beside it.
+
 ## The result: matched on the number of scored elements the real unknown still names a coding gene 24 points below its windows, and the per-element rate, which needs no matching, is 29 points down (2026-09-28, lane-elemcount, later)
 
 The registration above was committed as da5764e before the run. The run then happened once, over all 24
