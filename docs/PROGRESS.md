@@ -1171,3 +1171,12 @@ and the neutral tier shows no *detected* difference, which is not the same as no
 target naming is substantially less frequent in these elements and the difference persists under
 several adjustments; the measurements held cannot tell biology from model limitation; what an
 experiment would need is not yet known.
+
+**The design audit, the same day (lane-design, `70801de`).** The experiment clause 2 waits on now has a
+size that is a range with its assumptions, simulated for the design that would actually be run and with
+the model's own numbers excluded by a test: never at the null; 300–5,000 compared blocks if the blocks
+regulate three quarters as often as their windows; 50–300 at half; 20–75 at a quarter. The largest lever
+is how many elements are tested per block. Entries at 20 or 30 are lower bounds, because the registered
+check on the approximation fired. The neutral contrast is **no difference detected**: no equivalence
+margin can be justified from outside the data. A sixth error was found and recorded: the 13.45% anchor
+counts 223 windows, not 223 independent elements. Clause 2 stays not met.

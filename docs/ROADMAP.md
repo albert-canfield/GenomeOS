@@ -4517,6 +4517,37 @@ constrained-unknown elements, and the difference persists under several adjustme
 measurements cannot distinguish biological differences from model limitations. Experimental
 requirements remain provisional. Clause 2 stays not met.)*
 
+*(2026-09-28, lane-design, `f6cb4d7` registered, `70801de` result, 0 requests: **the size of clause 2's
+experiment is a range, and the number that was published as its size was a reporting floor.** A power
+simulation of the design that would actually be run — an assay testing elements inside constrained-
+unknown blocks against coding genes, against elements in the same matched windows, with the committed
+estimator and reading rule — was registered in full before the first simulated block. Its inputs are
+measured rather than assumed: assay sensitivity from the ENCODE files' own power columns (means 0.43 /
+0.61 / 0.67 / 0.98 / 0.71, **not monotone**, because the 25% column is the benchmark's own filter),
+clustering from the intraclass correlation of element positivity on the benchmark itself (0.37 within
+25 kb falling to 0.21 within 1 Mb, and 0.014 between chromosomes), and the windows' rate from the one
+empirical anchor the project holds. The model arm's −27.25 and its dispersion are excluded by name and
+a test enforces it. **For 80% power the experiment needs, in compared blocks: never at the null; 300 to
+5,000 if the blocks truly regulate three quarters as often as their windows; 50 to 300 at a half; 20 to
+75 at a quarter; 20 to 30 at a tenth; 20 at nothing** — 750, 100, 30, 20 and 20 at the reference
+configuration. **The biggest lever is how many elements are tested per block, not how many blocks**:
+one rather than six multiplies the requirement three- to sevenfold. **The registered falsifier fired**:
+the normal approximation to the committed interval is optimistic by 0.0549 against the actual bootstrap
+at the 20-block floor, so every entry reading 20 or 30 is a lower bound; the disagreement is 0.026 or
+less from 50 blocks up. **Power is a probability of detection under assumptions, never a guarantee that
+the clause is decided.** Three things are now fixed in the record. `coverage_needed` is kept as what the
+measured arm computed, with `reporting_floor_and_power_assumptions` beside it separating the floor from
+the two assumptions borrowed from the model arm; the neutral contrast is stated as **no difference
+detected**, because no equivalence margin can be justified from outside these data and the project's
+own 5-point chance band was chosen for this very comparison; and a denominator table gives every
+population the four lanes count over with its rule, including 59 of 882 tier blocks (6.7%) against 59
+of 531 carrying blocks (11.1%), and 72 / 59 / 10 measured blocks at overlap 0.25 / 0.5 / 0.75. A sixth
+error turned up in the sweep: the 13.45% anchor's "30 of 223 tested elements" are **223 windows**
+carrying a tested element, so they are not 223 independent measurements; the benchmark's own
+element-level rates, 12.15% and 14.56%, agree with the number anyway. The four lanes' sections and
+result files now carry annotations and additive correction keys, with nothing existing changed. Clause
+2 stays not met, and waits on an experiment whose size is a range with its assumptions attached.)*
+
 **1.3's row above cites "node +2.88 points over random boundaries" as evidence that a clause was met.**
 Re-audited 2026-09-27 (area B's node containment row): **+2.90, 95% CI +2.03 to +3.81** on a control
 matched on boundary count only, +1.2 to +6.6 across four baselines, and **+5.89, CI +3.18 to +8.46, on
