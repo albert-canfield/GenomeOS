@@ -30,6 +30,7 @@ module human.noncoding.chr21
 #   effect: unavailable log2 fold change of the target gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, one track)
 #   measurement uncertainty: unavailable (one deterministic model run; no spread computed)
 #   model score: unavailable (the target run's `confidence` field, equal to |log2 fold change|: the magnitude the run ranked by, not a probability)
+#   HELD and wrong (corrected 2026-09-28): the model score is |log2 fold change| capped at 0.7 and rounded to three places, a stored ranking field no compiled rule states as its confidence; the line above stays until the removal guard's window passes on 2026-09-30
 #   probability: unavailable (no calibration record: no compiled prediction has been scored against a measured outcome population by a stated method, so no probability that deleting this element moves this gene is quoted)
 # with the effect and the score per element. A region's `confidence:` is the budget's hand-set
 # evidence-quality score for the rule that fired, not a probability; a `_measured` block's is the

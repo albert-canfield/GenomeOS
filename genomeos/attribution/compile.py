@@ -59,6 +59,13 @@ MODEL_SCORE_NAME = (
     "the target run's `confidence` field, equal to |log2 fold change|: the magnitude the run ranked"
     " by, not a probability"
 )
+#: corrected the same day: the sentence above is wrong, the stored field is not |log2 fold change|
+#: (predict/enhancer_target.py stores round(min(0.7, |lfc|), 3), which differs on 39,540 of 43,681
+#: chr1 links). Kept above only because the removal guard holds lines committed in the last two days.
+MODEL_SCORE_NAME = (
+    "the target run's stored `confidence` field, |log2 fold change| capped at 0.7 and rounded to three"
+    " places: a stored ranking field that no compiled rule states as its confidence, not a probability"
+)
 NO_PROBABILITY = (
     "no calibration record: no compiled prediction has been scored against a measured outcome"
     " population by a stated method, so no probability that deleting this element moves this gene is"
