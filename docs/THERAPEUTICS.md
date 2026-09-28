@@ -893,6 +893,92 @@ over a subclonal one, a hotspot over a position that is not one, and twelve
 copies against a hotspot missense left deliberately unordered, because a count
 and an annotation share no unit.
 
+## The gate-and-tiebreak case, pre-registered 2026-09-28
+
+Written and committed before the case was run. The two rules above were
+registered on 2026-09-27 and then measured: neither changed anything. The gate
+partitioned the nine candidates lists and `outranked_by_unreachable` came out
+empty everywhere, because a candidate no modality reaches was already below the
+target on the evidence tier; the tiebreak never fired at all, because no demo
+VCF in the benchmark reports an allele fraction and a fusion record carries no
+quantity. A rule with a metric and no case is a rule nobody has tested. This
+section registers the tenth case, chosen so that the gate *can* matter and so
+that the tiebreak *can* have a fraction to read.
+
+### The case, and why this one
+
+A HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC. It is
+picked from the cohort rather than imagined: in TCGA stomach adenocarcinoma
+(PanCancer Atlas, `stad_tcga_pan_can_atlas_2018`, 440 samples, read through the
+project's own cBioPortal client on 2026-09-28) ERBB2 is amplified in 58 tumours
+(13.2%) and MYC in 53 (12.0%), and 20 tumours carry both — 4.5% of the cohort
+and 34% of every ERBB2-amplified tumour in it. Among those 20 the median copy
+number from the log2 segment calls is 13.0 for ERBB2, 8.1 for MYC and 1.8 for
+TP53. TP53 is mutated in 213 of the 440 (48%), most often as R175H (12 tumours,
+median variant allele fraction 0.49 from the reported read counts).
+
+Those numbers, rounded, are the demo files: `ERBB2 13, GRB7 13, MIEN1 13,
+STARD3 13, MYC 8, TP53 2` copies, and `chr17:7675088 C>T` — TP53 R175H on
+GRCh38 — at `AF=0.49`. Every figure is a cohort summary; no patient's own
+record is committed. GRB7, MIEN1 and STARD3 are there because the 17q12
+amplicon carries them: all 58 ERBB2-amplified tumours in this cohort have GRB7
+and MIEN1 amplified too, and 54 have STARD3. They take ERBB2's copy number for
+a reason worth stating on its own — a copy call is a *segment* call, so genes
+on one amplicon are measured at one number, and the magnitude tiebreak can
+never separate co-amplified neighbours however many of them a list carries.
+
+What makes the case a test of the gate: MYC is amplified, so it sits in the top
+evidence tier with ERBB2 and the tier cannot separate them, and MYC is the gene
+oncology has spent forty years failing to drug — a nuclear transcription factor
+with no outward-facing part and no modelled modality. Two approved therapies
+are written on the other gene: trastuzumab, FDA-approved in 2010 for
+HER2-overexpressing metastatic gastric and gastroesophageal junction
+adenocarcinoma (ToGA), and fam-trastuzumab deruxtecan-nxki, FDA-approved in
+January 2021 for HER2-positive advanced gastric and GEJ adenocarcinoma after a
+prior trastuzumab regimen (DESTINY-Gastric01). What is out of scope stays out:
+the case scores a ranking on public cohort data and nothing else.
+
+Also new, and unrelated to the gate: this is the first VCF in the benchmark
+that reports an allele fraction, which is the quantity the magnitude tiebreak
+has never once had.
+
+### What is predicted
+
+1. ERBB2 is recovered as a surface target and ranks **first**, and
+   `outranked_by_unreachable` is **empty**, so the pin of 0 holds across ten
+   cases.
+2. MYC, the three amplicon passengers and the mutated TP53 are all in the top
+   evidence tier with ERBB2, so the tier cannot order them and the gate is the
+   only rule that can.
+3. The gate is *tested* only if one of those unreachable candidates scores
+   strictly above ERBB2. `rank_without_gate` — the pipeline's own key with the
+   gate removed, computed for every row and written only after this section was
+   committed — is what says so. If it reads 1 for this case, the gate again
+   closed nothing and the case has produced a **negative**, not a pass: it
+   would mean an undruggable amplification scores below an approved target for
+   reasons that have nothing to do with the gate, and the gate would still be
+   waiting for its case.
+4. The row publishes a variant allele fraction of **0.49**, the VCF's own
+   value, and not one imputed for it.
+5. The tiebreak is **not** predicted to fire. It acts only where tier, gate and
+   published score are all equal and the two candidates differ on a quantity
+   both carry, and neither half can be arranged by the choice of case: the
+   amplicon genes share one segment number, and an exact tie in the score
+   between the remaining pairs is not something a tumour can be chosen for.
+   `magnitude_tiebreaks` records every score-tied group in every case and what,
+   if anything, magnitude decided inside it, so that "did not fire" is
+   distinguishable from "had no opportunity".
+
+### The falsifiers, and the pass rule
+
+Falsified if ERBB2 is not first in this case; if any of the nine earlier rows
+changes in any field but `seconds`; or if the row's magnitude publishes a
+fraction other than 0.49, or none. The case passes if ERBB2 is recovered as a
+surface target at rank 1 with nothing unreachable above it, the nine are
+unchanged, and the allele fraction is published as measured. Prediction 3 is
+the one that cannot be made to pass by choosing well: it is a measurement of
+whether the gate has a case at all, and a negative there is the result.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
