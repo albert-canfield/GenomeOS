@@ -41,6 +41,14 @@ module human.noncoding.chr21
 # ICOSLG measured rule still has no `when`. The next recompile after 2026-09-30 replaces them;
 # data/knowledge/compiled/noncoding_chr21.bio already has them.
 #
+# Executable annotation, not a simulation (review R3, 2026-09-28). A rule's `strength` is its
+# observation's magnitude in that observation's unit: |log2 fold change| clipped at 1 for a
+# predicted deletion, the largest |EffectSize| of the link's CRISPRi pairs for a measured one (the
+# measured element says how many pairs). It is not a rate constant. Target genes are stubs with
+# no basal or max rate and an element is not a species, so a runtime run of this program reports
+# both as unresolved. genomeos.attribution.bridge.parameterize turns one observation per gene and
+# cell into one fitted strength, given declared rates, and names every input it lacks.
+#
 # test: entities >= 6172
 # test: unknowns == 20
 # test: rules == 5176
@@ -51081,7 +51089,7 @@ element EH38E3462385_measured {
   locus: chr21:44196243-44196591
   domain: chr21_D211
   basis: CRISPRi in GM12878 tested 1 genes, regulated ICOSLG, 1 of the 1 pairs are the benchmark's held-out split (GM12878), evaluation only, against the predicted target ICOSLG, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
-  evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
+  evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)" links ICOSLG in GM12878 from 1 pairs
   confidence: 0.90
 }
 rule EH38E3462385_measured activates ICOSLG { strength: 0.205; evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in GM12878, held-out split, evaluation only, never a feature"; confidence: 0.90 }
@@ -51251,7 +51259,7 @@ element EH38E3463738_measured {
   domain: chr21_D219
   targets: COL18A1
   basis: CRISPRi in K562 tested 3 genes, regulated COL18A1, measured no effect on PTTG1IP, SUMO3, 1 of the 3 pairs are the benchmark's held-out split (K562), evaluation only, against the predicted target COL18A1, 1 assay agrees and 0 disagrees (agrees), reciprocal overlap rule 0.5
-  evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)"
+  evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025)" links COL18A1 in K562 from 1 pairs
   confidence: 0.90
 }
 rule EH38E3463738_measured activates COL18A1 { strength: 0.077; when: cell_type = K562; evidence: experimental "CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562"; confidence: 0.90 }

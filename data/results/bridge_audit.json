@@ -1,0 +1,596 @@
+{
+  "result": "bridge_audit",
+  "date": "2026-09-28",
+  "review_item": "R3",
+  "question": "In the 24 compiled programs, how many (element, gene, cell) mechanisms carry both a predicted rule and a measured rule that one run in that cell would integrate side by side, and how many (gene, cell) pairs have more than one active regulatory rule, so that no single-deletion observation identifies a strength under the mean rule?",
+  "registered_in": "06b7557 (amended b986238)",
+  "pooled": {
+    "superseded_rules": 13,
+    "active_regulatory_rules": 440589,
+    "mechanisms_with_predicted_and_measured": 39,
+    "mechanisms": 440550,
+    "gene_cell_pairs": 237613,
+    "gene_cell_pairs_with_several_mechanisms": 76469,
+    "mechanisms_on_those_genes": 279406,
+    "contexts": 6938
+  },
+  "unresolved_by_reason": {
+    "gene_parameter_missing": 161144,
+    "not_identifiable": 76469
+  },
+  "per_chromosome": {
+    "chr1": {
+      "counts": {
+        "superseded_rules": 1,
+        "active_regulatory_rules": 43700,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 43697,
+        "gene_cell_pairs": 24317,
+        "gene_cell_pairs_with_several_mechanisms": 7642,
+        "mechanisms_on_those_genes": 27022,
+        "contexts": 313
+      },
+      "unresolved": {
+        "gene_parameter_missing": 16675,
+        "not_identifiable": 7642
+      }
+    },
+    "chr2": {
+      "counts": {
+        "superseded_rules": 2,
+        "active_regulatory_rules": 32929,
+        "mechanisms_with_predicted_and_measured": 7,
+        "mechanisms": 32922,
+        "gene_cell_pairs": 16738,
+        "gene_cell_pairs_with_several_mechanisms": 5788,
+        "mechanisms_on_those_genes": 21972,
+        "contexts": 309
+      },
+      "unresolved": {
+        "gene_parameter_missing": 10950,
+        "not_identifiable": 5788
+      }
+    },
+    "chr3": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 27692,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 27690,
+        "gene_cell_pairs": 14220,
+        "gene_cell_pairs_with_several_mechanisms": 4789,
+        "mechanisms_on_those_genes": 18259,
+        "contexts": 304
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9431,
+        "not_identifiable": 4789
+      }
+    },
+    "chr4": {
+      "counts": {
+        "superseded_rules": 2,
+        "active_regulatory_rules": 20653,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 20650,
+        "gene_cell_pairs": 10363,
+        "gene_cell_pairs_with_several_mechanisms": 3699,
+        "mechanisms_on_those_genes": 13986,
+        "contexts": 306
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6664,
+        "not_identifiable": 3699
+      }
+    },
+    "chr5": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 22779,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 22777,
+        "gene_cell_pairs": 11377,
+        "gene_cell_pairs_with_several_mechanisms": 3987,
+        "mechanisms_on_those_genes": 15387,
+        "contexts": 300
+      },
+      "unresolved": {
+        "gene_parameter_missing": 7390,
+        "not_identifiable": 3987
+      }
+    },
+    "chr6": {
+      "counts": {
+        "superseded_rules": 2,
+        "active_regulatory_rules": 23780,
+        "mechanisms_with_predicted_and_measured": 5,
+        "mechanisms": 23775,
+        "gene_cell_pairs": 12619,
+        "gene_cell_pairs_with_several_mechanisms": 4147,
+        "mechanisms_on_those_genes": 15303,
+        "contexts": 308
+      },
+      "unresolved": {
+        "gene_parameter_missing": 8472,
+        "not_identifiable": 4147
+      }
+    },
+    "chr7": {
+      "counts": {
+        "superseded_rules": 2,
+        "active_regulatory_rules": 22604,
+        "mechanisms_with_predicted_and_measured": 4,
+        "mechanisms": 22600,
+        "gene_cell_pairs": 11732,
+        "gene_cell_pairs_with_several_mechanisms": 3892,
+        "mechanisms_on_those_genes": 14760,
+        "contexts": 307
+      },
+      "unresolved": {
+        "gene_parameter_missing": 7840,
+        "not_identifiable": 3892
+      }
+    },
+    "chr8": {
+      "counts": {
+        "superseded_rules": 1,
+        "active_regulatory_rules": 18561,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 18560,
+        "gene_cell_pairs": 9412,
+        "gene_cell_pairs_with_several_mechanisms": 3291,
+        "mechanisms_on_those_genes": 12439,
+        "contexts": 304
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6121,
+        "not_identifiable": 3291
+      }
+    },
+    "chr9": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 19278,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 19277,
+        "gene_cell_pairs": 10014,
+        "gene_cell_pairs_with_several_mechanisms": 3353,
+        "mechanisms_on_those_genes": 12616,
+        "contexts": 297
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6661,
+        "not_identifiable": 3353
+      }
+    },
+    "chr10": {
+      "counts": {
+        "superseded_rules": 2,
+        "active_regulatory_rules": 21033,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 21030,
+        "gene_cell_pairs": 10489,
+        "gene_cell_pairs_with_several_mechanisms": 3658,
+        "mechanisms_on_those_genes": 14199,
+        "contexts": 309
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6831,
+        "not_identifiable": 3658
+      }
+    },
+    "chr11": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 25768,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 25766,
+        "gene_cell_pairs": 13784,
+        "gene_cell_pairs_with_several_mechanisms": 4363,
+        "mechanisms_on_those_genes": 16345,
+        "contexts": 307
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9421,
+        "not_identifiable": 4363
+      }
+    },
+    "chr12": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 22823,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 22822,
+        "gene_cell_pairs": 12584,
+        "gene_cell_pairs_with_several_mechanisms": 4022,
+        "mechanisms_on_those_genes": 14260,
+        "contexts": 307
+      },
+      "unresolved": {
+        "gene_parameter_missing": 8562,
+        "not_identifiable": 4022
+      }
+    },
+    "chr13": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 9711,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9711,
+        "gene_cell_pairs": 4701,
+        "gene_cell_pairs_with_several_mechanisms": 1681,
+        "mechanisms_on_those_genes": 6691,
+        "contexts": 291
+      },
+      "unresolved": {
+        "gene_parameter_missing": 3020,
+        "not_identifiable": 1681
+      }
+    },
+    "chr14": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 13387,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 13386,
+        "gene_cell_pairs": 7303,
+        "gene_cell_pairs_with_several_mechanisms": 2352,
+        "mechanisms_on_those_genes": 8435,
+        "contexts": 296
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4951,
+        "not_identifiable": 2352
+      }
+    },
+    "chr15": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 14478,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 14476,
+        "gene_cell_pairs": 7689,
+        "gene_cell_pairs_with_several_mechanisms": 2540,
+        "mechanisms_on_those_genes": 9327,
+        "contexts": 291
+      },
+      "unresolved": {
+        "gene_parameter_missing": 5149,
+        "not_identifiable": 2540
+      }
+    },
+    "chr16": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 14807,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 14807,
+        "gene_cell_pairs": 8986,
+        "gene_cell_pairs_with_several_mechanisms": 2433,
+        "mechanisms_on_those_genes": 8254,
+        "contexts": 302
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6553,
+        "not_identifiable": 2433
+      }
+    },
+    "chr17": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 21619,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 21619,
+        "gene_cell_pairs": 13066,
+        "gene_cell_pairs_with_several_mechanisms": 3774,
+        "mechanisms_on_those_genes": 12327,
+        "contexts": 309
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9292,
+        "not_identifiable": 3774
+      }
+    },
+    "chr18": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 9251,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9251,
+        "gene_cell_pairs": 4142,
+        "gene_cell_pairs_with_several_mechanisms": 1611,
+        "mechanisms_on_those_genes": 6720,
+        "contexts": 278
+      },
+      "unresolved": {
+        "gene_parameter_missing": 2531,
+        "not_identifiable": 1611
+      }
+    },
+    "chr19": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 17282,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 17282,
+        "gene_cell_pairs": 12247,
+        "gene_cell_pairs_with_several_mechanisms": 2760,
+        "mechanisms_on_those_genes": 7795,
+        "contexts": 304
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9487,
+        "not_identifiable": 2760
+      }
+    },
+    "chr20": {
+      "counts": {
+        "superseded_rules": 1,
+        "active_regulatory_rules": 12708,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 12707,
+        "gene_cell_pairs": 6820,
+        "gene_cell_pairs_with_several_mechanisms": 2192,
+        "mechanisms_on_those_genes": 8079,
+        "contexts": 302
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4628,
+        "not_identifiable": 2192
+      }
+    },
+    "chr21": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 5176,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 5175,
+        "gene_cell_pairs": 2524,
+        "gene_cell_pairs_with_several_mechanisms": 909,
+        "mechanisms_on_those_genes": 3560,
+        "contexts": 253
+      },
+      "unresolved": {
+        "gene_parameter_missing": 1615,
+        "not_identifiable": 909
+      }
+    },
+    "chr22": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 9613,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9613,
+        "gene_cell_pairs": 5560,
+        "gene_cell_pairs_with_several_mechanisms": 1702,
+        "mechanisms_on_those_genes": 5755,
+        "contexts": 287
+      },
+      "unresolved": {
+        "gene_parameter_missing": 3858,
+        "not_identifiable": 1702
+      }
+    },
+    "chrX": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 10832,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 10832,
+        "gene_cell_pairs": 6835,
+        "gene_cell_pairs_with_several_mechanisms": 1866,
+        "mechanisms_on_those_genes": 5863,
+        "contexts": 289
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4969,
+        "not_identifiable": 1866
+      }
+    },
+    "chrY": {
+      "counts": {
+        "superseded_rules": 0,
+        "active_regulatory_rules": 125,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 125,
+        "gene_cell_pairs": 91,
+        "gene_cell_pairs_with_several_mechanisms": 18,
+        "mechanisms_on_those_genes": 52,
+        "contexts": 65
+      },
+      "unresolved": {
+        "gene_parameter_missing": 73,
+        "not_identifiable": 18
+      }
+    }
+  },
+  "reading": "a context is a cell_type a compiled rule is gated on; one rule can count once per program because each rule names one context. gene_parameter_missing counts mechanisms that pass every other check and fail only because the compiled genes are stubs",
+  "seconds": 148.8,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiled non-coding programs, scripts/compile_genome_programs.py",
+        "version": "as compiled from this revision's attribution/compile.py, pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "cba936846b705fd96e739c651aa495325b2e43e033f15ba323312ae09612d946",
+        "bytes": 29656140,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "2e958682a2f6f2de779b44bcf14a3e3ba4c761b237b86961cb1de6a00c0cf988",
+        "bytes": 22323034,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "cd19d4708d0ce1982058f7351c98dc0b727615edd3bc730f2abdc063a2bd012d",
+        "bytes": 18592842,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "55624624d61d323f49f1ed68a2ac0d829117aabc8c557bb56799f52b4b94c57f",
+        "bytes": 14044889,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "f163526ce90304f6feb987c50a1d5999d5feb369be21e3f078c665998c7322a3",
+        "bytes": 15380678,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "d0a37d709822d46c6f4fdb7f9e2f5f2131983303ae73a6b876c76738d71b4abd",
+        "bytes": 16171797,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "cae27d9b08a81afa5903dfea5b2943d73adefec306cec573af6a5743045dfc24",
+        "bytes": 15368458,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "875ff4f4c0d7786468b8b8c88b3411a0fca556be5adb9ab7cf6ca7030c4a0f84",
+        "bytes": 12612883,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "71c81b29d43699ae27fd1cac4ebcaab9595c0b103ecabf1e4ab0acc617ad0998",
+        "bytes": 13009846,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "2014bab66c9822e5940ba7341195236b2a72075fd79d4326377c431279ed43d3",
+        "bytes": 14279336,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "80c1599f15672f5c8a88b3ff7eb909711232e385d135af3be044285602ca6b02",
+        "bytes": 17474460,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "0bde0392d9f2367d3bda3eeb2360f702231e333ce97f109d0e4a67daaf702951",
+        "bytes": 15385028,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "fecf999c8b2c6c5448f78950af7029e0e4814b3221d968e013597d956275bc2b",
+        "bytes": 6650569,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "b7fd7f1944fa830526ddf922a2d1dbb208e9bb2d503880db70a1663abea04d53",
+        "bytes": 9118749,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "da3451a5e8ebb1f5cd40ebb37362e2dd9caaba8956ba88c1ce0d4d161214f99a",
+        "bytes": 9731885,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "50de6729810f131d27c9ed35534c5b68754563b78cfaa9238d7bec52956a0749",
+        "bytes": 10066586,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "11fd8811aad60dc91830906681cba856b7f25e05dfc0c38d4d37405e967cd32e",
+        "bytes": 14595965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "842eea551a1b90a4bc5973a42e948347027d68ace8890fe7e138714b441ed615",
+        "bytes": 6297734,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "4fe84abe28d8e7e9a53e8cb7cd51cc0ce4013d0cdb3a5ef23ea98b96ffc44647",
+        "bytes": 11863560,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "8caf38eeeeacabfae865fd511f33f5b728d46c7dbc6f1b08036d0d1db36f65d4",
+        "bytes": 8640755,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "cfd3055c9597f326a687f1018def1d2bb3a1f73f3cf8352ccd00eae2c2bf0bd1",
+        "bytes": 3554391,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "6e7a4465e73db373e9ee1478adbe0fde4ea8a9d8b239800dd62b89f56d1cbcba",
+        "bytes": 6559396,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "42fbd481d99b9bc590989db4d96f9f6959cd672f2f0b2e35c15a3ad7bb40e052",
+        "bytes": 7750351,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "4423b6548c8cc0b7b1a427812265f5fd2bc2e74a3b9c8846f3731f6c354433e5",
+        "bytes": 245806,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: counts of rules and mechanisms, no interval is reported",
+    "parameters": {
+      "precedence": [
+        "experimental",
+        "curated",
+        "predicted",
+        "inferred",
+        "none"
+      ],
+      "citation_tolerance": 1e-06,
+      "experimental_summary": "one pair maps; several pairs are unresolved (the compiled strength is their maximum)",
+      "gene_rates_supplied": "none: the compiled genes are stubs"
+    },
+    "exclusions": [],
+    "partitions": "n/a: the audit counts rules as compiled; held-out rules are counted with the rest",
+    "code": {
+      "git_sha": "4098753e8627c643679de05bf5bbeba01d6e7fa6",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/runtime/grn.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/bridge_audit.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

@@ -203,6 +203,25 @@ def _measured_rows(
     return layer, ([] if layer.empty else rows(chrom, elements, layer, results_dir=results_dir))
 
 
+def link_pairs(row: dict) -> dict[tuple[str, str], int]:
+    """How many regulated pairs each experimental rule's strength was taken from, per (gene, cell).
+
+    `measured.rule_links` takes a link's strength as the largest |EffectSize| among the regulated
+    training pairs of one (element, gene, cell), or among the held-out ones when there is no training
+    pair (lane-assay's census A8). With one pair that is an observation; with more it is a maximum. The
+    count is written on the measured element so a reader, and `attribution.bridge`, can tell (R3).
+    """
+    from genomeos.attribution import measured as ms
+
+    pairs = row["measured"].get("crispri", {}).get("pairs", [])
+    out: dict[tuple[str, str], int] = {}
+    for gene, cell in sorted({(p["gene"], p["cell"]) for p in pairs if p["regulated"]}):
+        hit = [p for p in pairs if p["gene"] == gene and p["cell"] == cell and p["regulated"]]
+        train = [p for p in hit if p.get("split", ms.TRAINING) == ms.TRAINING]
+        out[(gene, cell)] = len(train or hit)
+    return out
+
+
 def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> list[str]:
     """One `<id>_measured` element and one rule per measured regulated link, all experimental."""
     from genomeos.attribution import measured as ms
@@ -218,7 +237,11 @@ def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> li
         props.append("targets: " + ", ".join(ident_of[g] for g in regulated))
     props += [
         f"basis: {_text(ms.basis_text(row))}",
-        f'evidence: experimental "{_text(ms.sources_of(row["measured"]))}"',
+        f'evidence: experimental "{_text(ms.sources_of(row["measured"]))}"'
+        + "".join(
+            (" links " if i == 0 else ", ") + f"{ident_of[g]} in {context(cell)} from {n} pairs"
+            for i, ((g, cell), n) in enumerate(link_pairs(row).items())
+        ),
         f"confidence: {row['confidence']:.2f}",
     ]
     lines = [f"element {row['id']}_measured {{}}".replace("{}", "{")]
@@ -298,6 +321,14 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         "# evidence-quality score for the rule that fired, not a probability; a `_measured` block's is the",
         "# hand-set rank of its strongest assay kind (perturbation above reporter), not a probability.",
         "# Gene stubs and domains state no confidence.",
+        "#",
+        "# Executable annotation, not a simulation (review R3, 2026-09-28). A rule's `strength` is its",
+        "# observation's magnitude in that observation's unit: |log2 fold change| clipped at 1 for a",
+        "# predicted deletion, the largest |EffectSize| of the link's CRISPRi pairs for a measured one (the",
+        "# measured element says how many pairs). It is not a rate constant. Target genes are stubs with",
+        "# no basal or max rate and an element is not a species, so a runtime run of this program reports",
+        "# both as unresolved. genomeos.attribution.bridge.parameterize turns one observation per gene and",
+        "# cell into one fitted strength, given declared rates, and names every input it lacks.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")

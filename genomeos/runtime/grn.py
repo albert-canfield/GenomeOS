@@ -16,12 +16,26 @@ functions, the standard phenomenological form for transcription-factor binding.
 Integration: RK4 when noise == 0, Euler-Maruyama otherwise. Everything is in
 arbitrary concentration units and hours; parameters in the module override the
 defaults below and carry their own evidence.
+
+The combination rules are model assumptions, named in `ACTIVATOR_COMBINATION` and
+`INHIBITOR_COMBINATION`. Under the mean, adding an activator that is low where
+another is high lowers that gene's drive there (lane-sign, 2026-09-28).
+
+Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
+for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
+always were, but every `run` now reports them by name (`NetworkRuntime.diagnose`):
+on the trajectory's `unresolved` list and as an `UnresolvedModelWarning`, or as an
+`UnresolvedModel` error when the runtime is strict. A source whose name ends in
+`EXPLICIT_ZERO_SUFFIX` is a zero the caller declared (network_experiment's edge
+knockout) and is not unresolved. A state is given by `clamp`; `initial` does not
+hold a species the runtime does not integrate.
 """
 
 from __future__ import annotations
 
 import math
 import random
+import warnings
 from dataclasses import dataclass, field
 
 from genomeos.ir import UNKNOWN, Action, Gene, Module, Protein, Rule
@@ -35,12 +49,49 @@ DEFAULTS = {
     "noise": 0.0,  # multiplicative noise amplitude
 }
 
+#: how a gene's activators and inhibitors combine: declared model assumptions, not findings
+ACTIVATOR_COMBINATION = "mean"  # A = mean of s_i * H(x_i): a low extra activator dilutes the drive
+INHIBITOR_COMBINATION = "product"  # R = product of (1 - s_j * H(x_j))
+#: a rule source ending in this reads zero by the caller's declaration, never by omission
+EXPLICIT_ZERO_SUFFIX = "@zero"
+
+
+@dataclass(frozen=True, slots=True)
+class Unresolved:
+    """One input the model needs and was not given: why, for what, and how to give it."""
+
+    reason: str  # regulator_state_missing | gene_parameter_missing | (bridge reasons)
+    subject: str
+    detail: str = ""
+
+
+class UnresolvedModelError(ValueError):
+    """A strict run refused because the model is not resolved; `issues` names every missing input."""
+
+    def __init__(self, issues: list[Unresolved]) -> None:
+        self.issues = list(issues)
+        super().__init__(
+            "unresolved model: "
+            + "; ".join(
+                f"{i.reason} {i.subject}" + (f" ({i.detail})" if i.detail else "") for i in self.issues
+            )
+        )
+
+
+#: the name the R3 registration used
+UnresolvedModel = UnresolvedModelError
+
+
+class UnresolvedModelWarning(UserWarning):
+    """A non-strict run integrated missing inputs as zero; the trajectory lists them."""
+
 
 @dataclass(slots=True)
 class Trajectory:
     times: list[float]
     species: list[str]
     levels: dict[str, list[float]] = field(default_factory=dict)
+    unresolved: list[Unresolved] = field(default_factory=list)  # what the run read as zero undeclared
 
     def final(self) -> dict[str, float]:
         return {s: self.levels[s][-1] for s in self.species}
@@ -60,9 +111,14 @@ def _hill(x: float, k: float, n: float) -> float:
 
 class NetworkRuntime:
     def __init__(
-        self, module: Module, context: dict[str, str] | None = None, seed: int | None = None
+        self,
+        module: Module,
+        context: dict[str, str] | None = None,
+        seed: int | None = None,
+        strict: bool = False,
     ) -> None:
         self.module = module
+        self.strict = strict  # refuse to run an unresolved model instead of warning (R3)
         self.context = context or {}
         self.rng = random.Random(seed)
         self.params = dict(DEFAULTS)
@@ -107,6 +163,42 @@ class NetworkRuntime:
                 self.produces[r.target].append(r.source)
 
         self.species = [f"{g.id}.mRNA" for g in self.genes] + [p.id for p in self.proteins]
+
+    def diagnose(self, clamp: dict[str, float] | None = None) -> list[Unresolved]:
+        """Every input a run with this clamp would read as zero without anyone having said so (R3).
+
+        A regulator of an expressed gene must be a species, be clamped, or carry
+        `EXPLICIT_ZERO_SUFFIX`; a gene an active rule regulates must declare `max_rate`.
+        """
+        held = set(clamp or {})
+        species = set(self.species)
+        genes = {g.id: g for g in self.genes}
+        out: list[Unresolved] = []
+        seen: set[tuple[str, str]] = set()
+        for r in self.active_rules:
+            if r.action not in (Action.ACTIVATE, Action.INHIBIT) or r.target not in genes:
+                continue
+            if r.target in self.silenced:
+                continue
+            src = r.source
+            missing = src not in species and src not in held and not src.endswith(EXPLICIT_ZERO_SUFFIX)
+            if missing and ("regulator_state_missing", src) not in seen:
+                seen.add(("regulator_state_missing", src))
+                out.append(
+                    Unresolved(
+                        "regulator_state_missing",
+                        src,
+                        f"regulates {r.target} (rule {r.id}); not a species and not clamped, read as 0",
+                    )
+                )
+            if "max_rate" not in genes[r.target].attrs and ("gene_parameter_missing", r.target) not in seen:
+                seen.add(("gene_parameter_missing", r.target))
+                out.append(
+                    Unresolved(
+                        "gene_parameter_missing", r.target, "regulated but declares no max_rate, read as 0"
+                    )
+                )
+        return out
 
     # ---- dynamics --------------------------------------------------------
 
@@ -160,6 +252,11 @@ class NetworkRuntime:
         a tenth of the unperturbed 19.2), and a clamped signal decayed inside them.
         Census and values: data/results/grn_clamp_census.json (before), _after.json."""
         held = dict(clamp or {})
+        unresolved = self.diagnose(held)
+        if unresolved and self.strict:
+            raise UnresolvedModel(unresolved)
+        if unresolved:
+            warnings.warn(str(UnresolvedModel(unresolved)), UnresolvedModelWarning, stacklevel=2)
 
         def derivatives(st: dict[str, float]) -> dict[str, float]:
             st.update(held)  # every stage reads the clamp, including a signal outside `species`
@@ -176,7 +273,9 @@ class NetworkRuntime:
             state.update(clamp)
         noise = self.params["noise"]
         steps = int(round(hours / dt))
-        traj = Trajectory(times=[], species=list(self.species), levels={s: [] for s in self.species})
+        traj = Trajectory(
+            times=[], species=list(self.species), levels={s: [] for s in self.species}, unresolved=unresolved
+        )
 
         def record(t: float) -> None:
             traj.times.append(t)

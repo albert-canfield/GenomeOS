@@ -7480,6 +7480,44 @@ alone, on the pairs the sweep answers; it does not test coupling of a different 
 with its own training data. lane-split's overlap check (249 held-out pairs share bases with training
 intervals) did not bear on this run, because the held-out file was not read.
 
+## The result: no compiled rule can be simulated as compiled, one gene-cell pair in three has several mechanisms and cannot be parameterised from single removals, and 39 relations were carried twice (R3, 2026-09-28, later)
+
+Built as registered in `06b7557` and amended in `b986238`. `runtime/grn.py` now names its
+combination rules (`ACTIVATOR_COMBINATION = "mean"`, `INHIBITOR_COMBINATION = "product"`) and its
+declared zero (`EXPLICIT_ZERO_SUFFIX = "@zero"`), and `NetworkRuntime.diagnose` reports every
+regulator with no state and every regulated gene with no `max_rate`: on the trajectory's
+`unresolved` list and as an `UnresolvedModelWarning`, or as `UnresolvedModel` when the runtime is
+strict. The integrated values are unchanged, and no test in the suite raised the warning, so no
+existing caller depended on an undeclared zero; network_experiment's `@zero` edge knockout is
+recognised as declared. `attribution/bridge.py` reads one observation per mechanism (2^x from a
+predicted rule's effect note, 1 + f from a CRISPRi rule resting on one pair), picks one
+representation by precedence, and fits one strength per mechanism under the registered mapping.
+The compiler writes each measured link's pair count on its measured element and states in every
+program's header that it is executable annotation and not a simulation. Tests:
+`tests/test_grn_bridge.py`, 17, written first; all three acceptance tests pass, including the
+end-to-end fixture (log2 fold changes -1, -0.4 and +0.7, and a CRISPRi f = -0.3, each reproduced
+within 1%) and the fitted strength differing from the compiled |log2 fold change| in every case.
+
+**The audit's answer (`scripts/bridge_audit.py`, `data/results/bridge_audit.json`, 24 programs,
+every cell context a rule names).** Of 440,589 compiled regulatory rules, **0 can be simulated as
+compiled**: every target gene is a stub. They form 440,550 mechanisms over 237,613 (gene, cell)
+pairs. **76,469 of those pairs (32%) have more than one mechanism**, 279,406 mechanisms between them,
+and cannot be parameterised from single-removal observations under the mean rule; the other
+161,144 pairs have one mechanism whose observation reads cleanly and lack only declared rates.
+**39 relations carry both a predicted and a measured rule in the same cell**, all in K562, which a
+plain run would integrate side by side, averaging a |log2 fold change| with a |fractional change|
+(SMIM1: 0.848 beside 0.472); the bridge supersedes the predicted one where it can act (13) and the
+other 26 sit on genes that are not identifiable anyway. All 212 experimental links rest on one
+CRISPRi pair, so the maximum lane-assay's census found (A8) never summarised more than one pair in
+these data; no predicted rule is censored, because every one now carries its effect note.
+
+**Negatives.** The bridge fits one strength to one observation and nothing else: it cannot say what
+a partial deletion, a dose or a second perturbation would do, and a gene with two mechanisms is
+refused rather than solved. The mean rule stays, so adding an activator can still lower
+expression; changing it is its own registration. The committed chr21 copy holds its 5,176 rule lines
+at their earlier text under the removal guard until 2026-09-30; the 24 git-ignored programs carry
+everything.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
