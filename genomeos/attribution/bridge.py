@@ -28,7 +28,12 @@ import re
 from dataclasses import dataclass, field
 
 from genomeos.ir import Action, Module, Rule
-from genomeos.runtime.grn import Unresolved
+from genomeos.runtime.grn import (
+    RATE_PROVENANCE_ATTRS,
+    TRANSFERRED_RATE_QUANTITY,
+    UNSTATED_PROVENANCE,
+    Unresolved,
+)
 
 REGISTERED = "2026-09-28"
 
@@ -641,6 +646,21 @@ S5_HUMAN_CONTEXT_KINDS = (
     "absolute mRNA copies per cell",
     "a time course after a perturbation",
 )
+#: amendment, 2026-09-28, after the label was built and the propagation code was dry-run on chr21 (229
+#: pairs; not the registered run, and none of its numbers is reported as a result), before the
+#: registered run. Neither correction moves a range, the sample, a threshold or a criterion
+S5_AMENDMENT = (
+    "(1) The switch is not monotone in the level: removal switches an activated gene off only when"
+    " 1 <= intact < 1/RHO, a band, so an answer read at the corners of a range can miss the band's"
+    " interior. It is evaluated over the whole level interval the corners span (the primary range and"
+    " R3 are connected intervals in the level); every other prediction is monotone in the level or"
+    " the half-life, so its corners are its extremes. (2) The registered consequence 'switch stable"
+    " for no more pairs than on/off' is false as written: removal RAISES an inhibited gene, so an"
+    " inhibitory pair can never be switched off and its switch answer is stable whatever its on/off"
+    " answer. It holds among activating pairs only, and so does R3's 'switch stable for no pair'; on/off"
+    " and switch are also reported among activating pairs, and the two sentences as written are"
+    " reported as wrong by arithmetic, not by data"
+)
 
 
 # ---- one mechanism, one parameter -----------------------------------------------------------------
@@ -717,6 +737,7 @@ class Bridged:
     required_state: dict[str, float] = field(default_factory=dict)  # clamp these, intact = 1
     rates_used: dict[str, tuple] = field(default_factory=dict)  # gene -> (T, basal, max_rate), tier
     tier: dict[str, str] = field(default_factory=dict)  # gene -> RATE_TIERS key
+    transferred: dict[str, dict] = field(default_factory=dict)  # gene -> its S5 label (TRANSFER_LABEL)
     superseded: list[Rule] = field(default_factory=list)  # lower-precedence citations, never added
     unresolved: list[Unresolved] = field(default_factory=list)
 
@@ -760,6 +781,19 @@ def observation_of(rule: Rule, module: Module) -> Observation | Unresolved:
     return Unresolved("observation_missing", rule.source, f"{kind} evidence states no removal response")
 
 
+def transfer_label(tier: str, given: dict[str, str] | None, context: dict[str, str]) -> dict:
+    """The S5 label one fitted gene carries: what was transferred, from where, into which cell."""
+    given = given or {}
+    return {
+        "quantity": TRANSFERRED_RATE_QUANTITY,
+        "tier": tier,
+        "source": str(given.get("source", UNSTATED_PROVENANCE)),
+        "species_cell": str(given.get("species_cell", UNSTATED_PROVENANCE)),
+        "used_in": str(context.get("cell_type", "")),
+        "status": SIMULATION_STATUS,
+    }
+
+
 def fit(rho: float, basal: float, max_rate: float) -> float:
     """The strength that makes one mechanism alone reproduce RHO (MAPPING); may fall outside (0, 1]."""
     if rho < 1.0:
@@ -774,6 +808,8 @@ def parameterize(
     build: bool = True,
     rates: dict[str, float] | None = None,
     borrowed_rate: float | None = None,
+    rate_provenance: dict[str, dict[str, str]] | None = None,
+    borrowed_provenance: dict[str, str] | None = None,
 ) -> Bridged:
     """One fitted rule per resolved mechanism active in `context`; every other one reported by name.
 
@@ -783,6 +819,12 @@ def parameterize(
     is the single number a gene with no measurement of its own is given instead, which fixes no
     absolute scale (RATE_TIERS): passing it puts that gene in the `borrowed_median` tier, and leaving
     it None reports the gene as `gene_rate_unmeasured`. An explicit `genes` entry still wins over both.
+
+    `rate_provenance` maps a gene to the `source` and `species_cell` of its measured rate, and
+    `borrowed_provenance` gives the same for the borrowed number (item 12 S5). Every gene fitted on a
+    rate gets its label (TRANSFER_LABEL) on `Bridged.transferred` and, when `build`, on its own
+    attributes (`RATE_PROVENANCE_ATTRS`), where the runtime reads it back onto the trajectory. A
+    provenance the caller did not give is labelled unstated, never assumed.
     """
     genes = genes or {}
     out = copy.deepcopy(module) if build else module
@@ -882,10 +924,17 @@ def parameterize(
         b.strengths[key] = s
         b.observations[key] = ob
         b.required_state[key[0]] = INTACT
+        if tier is not None:
+            given = (rate_provenance or {}).get(gene) if tier == "measured" else borrowed_provenance
+            b.transferred[gene] = transfer_label(tier, given, context)
         if not build:
             continue
         g.basal_rate = float(basal)
         g.attrs["max_rate"] = float(vmax)
+        if gene in b.transferred:
+            lab = b.transferred[gene]
+            for attr, k in zip(RATE_PROVENANCE_ATTRS, ("source", "species_cell", "tier"), strict=True):
+                g.attrs[attr] = lab[k]
         src = chosen[0]
         out.rules.append(
             Rule(

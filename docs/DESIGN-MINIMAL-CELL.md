@@ -1058,3 +1058,20 @@ human mRNA half-lives, an absolute human transcription rate, absolute mRNA
 copies per cell, a time course after a perturbation), ties to the context with
 more simulable pairs. It is named with what a validated human-kinetics test
 there would need that is missing. Nothing is built.
+
+**Amendment, before the registered run** (`S5_AMENDMENT`). Written after the
+label was built and the propagation code was dry-run on chr21 (229 pairs, not
+the registered run; none of its numbers is reported as a result). Two
+corrections, neither of which moves a range, the sample, a threshold or a
+criterion. First, the switch is not monotone in the level: removal switches an
+activated gene off only when its intact level lies between one molecule and
+1/RHO, a band, so an answer read only at the corners of a range can miss the
+band's interior; it is evaluated over the whole level interval the corners span.
+Every other prediction is monotone in the level or the half-life, so its corners
+are its extremes. Second, the registered consequence "switch stable for no more
+pairs than on/off" is false as written, and so is R3's "switch stable for no
+pair": removal raises an inhibited gene, so an inhibitory pair can never be
+switched off and its switch answer is stable whatever its on/off answer. Both
+hold among activating pairs only. On/off and switch are therefore also reported
+among activating pairs, and the two sentences as written are reported as wrong
+by arithmetic, not by data.

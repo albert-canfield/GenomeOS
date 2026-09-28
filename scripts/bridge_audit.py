@@ -22,6 +22,10 @@ Since 2026-09-28 it runs each chromosome under three rate tiers and reports all 
             absolute number: such a pair is simulable in RELATIVE units only and is never added to the
             measured count
 
+Since item 12 S5 (2026-09-28) each tier also counts the pairs whose output carries the transfer label
+(`bridge.TRANSFER_LABEL`): the registered falsifier is that labelled pairs equal simulable pairs in
+every tier that uses a rate, and that no other count moves.
+
 Reads only the compiled text and the rate table; no AlphaGenome request, no assay cache.
 """
 
@@ -58,11 +62,32 @@ def load_rates() -> tuple[dict[str, float], float, dict[str, str]]:
     return rates, float(d["borrowed_median_transcription_rate"]), species
 
 
+def load_provenance() -> tuple[dict[str, dict[str, str]], dict[str, str]]:
+    """Each measured gene's S5 label inputs (source, species_cell), and the borrowed median's.
+
+    Read per row, like the species above. The borrowed median names every source and species that
+    went into it, so a lent number can never read as a measurement of its gene.
+    """
+    d = json.loads(RATE_TABLE.read_text())
+    per = {
+        g: {
+            "source": str(r.get("source", "unstated")),
+            "species_cell": str(r.get("species_cell", "unstated")),
+        }
+        for g, r in d["rates"].items()
+    }
+    sources = sorted({v["source"] for v in per.values()})
+    cells = sorted({v["species_cell"] for v in per.values()})
+    borrowed = {"source": "genome median of " + ", ".join(sources), "species_cell": "; ".join(cells)}
+    return per, borrowed
+
+
 def audit_module(
     m,
     rates: dict[str, float] | None = None,
     borrowed: float | None = None,
     species: dict[str, str] | None = None,
+    provenance: tuple[dict, dict] | None = None,
 ) -> dict:
     """Counts for one parsed program over every cell context its regulatory rules name.
 
@@ -91,10 +116,16 @@ def audit_module(
         out["mechanisms_on_those_genes"] += sum(n for n in genes.values() if n > 1)
         for tier in TIERS:
             kw = {}
+            per, lent = provenance or ({}, {})
             if tier == "measured":
-                kw = {"rates": rates}
+                kw = {"rates": rates, "rate_provenance": per}
             elif tier == "borrowed":
-                kw = {"rates": rates, "borrowed_rate": borrowed}
+                kw = {
+                    "rates": rates,
+                    "borrowed_rate": borrowed,
+                    "rate_provenance": per,
+                    "borrowed_provenance": lent,
+                }
             b = bridge.parameterize(m, ctx, build=False, **kw)
             reasons_by_tier[tier].update(i.reason for i in b.unresolved)
             c = per_tier[tier]
@@ -114,6 +145,20 @@ def audit_module(
             )
             c["pairs_on_a_borrowed_species_rate"] += sum(
                 1 for g, t in b.tier.items() if t == "measured" and not sp.get(g, "").startswith("Homo")
+            )
+            # item 12 S5: every pair fitted on a rate carries its label on the output. The falsifier
+            # is labelled == simulable in every tier that uses rates; an unstated species is counted
+            lab = b.transferred
+            c["labelled_pairs"] += len(lab)
+            c["labelled_pairs_measured"] += sum(1 for v in lab.values() if v["tier"] == "measured")
+            c["labelled_pairs_borrowed_median"] += sum(
+                1 for v in lab.values() if v["tier"] == "borrowed_median"
+            )
+            c["labelled_pairs_species_unstated"] += sum(
+                1 for v in lab.values() if v["species_cell"] == "unstated"
+            )
+            c["labelled_pairs_on_a_human_rate"] += sum(
+                1 for v in lab.values() if v["species_cell"].startswith("Homo")
             )
             # the denominator of the registered inhibitor bound: only an inhibitory mechanism can fail
             # it (an activator's split always leaves a positive basal rate), so the ratio it is judged
@@ -157,6 +202,7 @@ def manifest(chroms: list[str]) -> dict:
             "human_rate_survey": bridge.HUMAN_RATE_SURVEY_VERDICT,
             "rate_units": bridge.MEASURED_RATE_UNITS,
             "declared_strength": bridge.DECLARED_STRENGTH,
+            "transfer_label": bridge.TRANSFER_LABEL,
         },
         "exclusions": [],
         "partitions": "n/a: the audit counts rules as compiled; held-out rules are counted with the rest",
@@ -171,6 +217,7 @@ def main(argv: list[str] | None = None) -> int:
     chroms = args.chroms.split(",") if args.chroms else CHROMS
     t0 = time.time()
     rates, borrowed, species = load_rates()
+    provenance = load_provenance()
     per: dict[str, dict] = {}
     for chrom in chroms:
         path = Path(COMPILED_DIR) / f"noncoding_{chrom}.bio"
@@ -178,7 +225,11 @@ def main(argv: list[str] | None = None) -> int:
             per[chrom] = {"missing": str(path)}
             continue
         per[chrom] = audit_module(
-            parse(path.read_text(), path.stem), rates=rates, borrowed=borrowed, species=species
+            parse(path.read_text(), path.stem),
+            rates=rates,
+            borrowed=borrowed,
+            species=species,
+            provenance=provenance,
         )
         print(chrom, per[chrom]["by_tier"], flush=True)
     pooled: Counter = Counter()
@@ -205,6 +256,8 @@ def main(argv: list[str] | None = None) -> int:
         "genes_with_a_measured_rate": len(rates),
         "genes_with_a_human_measured_rate": sum(1 for v in species.values() if v.startswith("Homo")),
         "rate_row_provenance": bridge.RATE_ROW_PROVENANCE,
+        "simulation_status": bridge.SIMULATION_STATUS,
+        "transfer_label": bridge.TRANSFER_LABEL,
         "human_rate_survey_verdict": bridge.HUMAN_RATE_SURVEY_VERDICT,
         "human_rate_survey_falsifier": bridge.HUMAN_RATE_SURVEY_FALSIFIER,
         "pooled_by_tier": {t: dict(tiers[t]) for t in TIERS},

@@ -44,6 +44,15 @@ steady-state measurement observes. `attribution/bridge.py` holds the full mappin
 what each of them does not license (`MEASURED_RATE_UNITS`, `split_measured_rate`). Mixing a measured
 parameter with a defaulted one mixes units: the defaults are left in place only so that a module
 that declares nothing still runs, and such a run is in a.u.
+
+Provenance on the output (item 12 S5, 2026-09-28). A number measured somewhere other than the cell
+being simulated travels on the trajectory, never only in a header: a gene carrying the attributes in
+`RATE_PROVENANCE_ATTRS` (the application's bridge writes them when it puts a measured or borrowed
+rate on a gene) is listed on `Trajectory.transferred` with its source, the species and cell it was
+measured in, its tier and the cell context of this run, and every kinetic parameter the run took
+from `DEFAULTS` because the module declared none is listed on `Trajectory.defaulted`. A level read
+from a run with a transferred rate and a defaulted half-life is in mixed units, and the two lists
+together say so. The runtime labels; it never judges whether a number is validated.
 """
 
 from __future__ import annotations
@@ -116,6 +125,27 @@ COMBINATION_TEST = {
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
 
+#: gene attributes naming where a gene's rates were measured (item 12 S5): source key, species and
+#: cell, and tier (measured | borrowed_median). Read back onto every trajectory; a missing one is
+#: reported as `unstated`, never filled in with a species
+RATE_PROVENANCE_ATTRS = ("rate_source", "rate_species_cell", "rate_tier")
+#: the quantity a gene's `basal_rate` and `max_rate` are split from when they carry that provenance
+TRANSFERRED_RATE_QUANTITY = "total transcription rate T (split into basal_rate and max_rate)"
+UNSTATED_PROVENANCE = "unstated"
+
+
+@dataclass(frozen=True, slots=True)
+class Transferred:
+    """One number a run used that was measured somewhere other than the cell it simulates (S5)."""
+
+    quantity: str
+    subject: str  # the gene it belongs to
+    source: str
+    species_cell: str  # where it was measured
+    tier: str  # measured | borrowed_median | unstated
+    used_in: str  # the run's cell_type context, "" when the run names none
+
+
 @dataclass(frozen=True, slots=True)
 class Unresolved:
     """One input the model needs and was not given: why, for what, and how to give it."""
@@ -152,6 +182,25 @@ class Trajectory:
     species: list[str]
     levels: dict[str, list[float]] = field(default_factory=dict)
     unresolved: list[Unresolved] = field(default_factory=list)  # what the run read as zero undeclared
+    transferred: list[Transferred] = field(default_factory=list)  # numbers measured elsewhere (S5)
+    defaulted: list[str] = field(default_factory=list)  # kinetic parameters left at a.u. DEFAULTS
+
+    def provenance(self) -> dict:
+        """The run's parameter provenance as plain data, for any summary that quotes a level from it."""
+        return {
+            "transferred": [
+                {
+                    "quantity": t.quantity,
+                    "subject": t.subject,
+                    "source": t.source,
+                    "species_cell": t.species_cell,
+                    "tier": t.tier,
+                    "used_in": t.used_in,
+                }
+                for t in self.transferred
+            ],
+            "defaulted": list(self.defaulted),
+        }
 
     def final(self) -> dict[str, float]:
         return {s: self.levels[s][-1] for s in self.species}
@@ -247,6 +296,28 @@ class NetworkRuntime:
                 self.produces[r.target].append(r.source)
 
         self.species = [f"{g.id}.mRNA" for g in self.genes] + [p.id for p in self.proteins]
+        self.transferred, self.defaulted = self._provenance()
+
+    def _provenance(self) -> tuple[list[Transferred], list[str]]:
+        """Which numbers this run takes from elsewhere, and which from DEFAULTS (item 12 S5)."""
+        cell = str(self.context.get("cell_type", ""))
+        transferred = []
+        for g in self.genes:
+            if g.id in self.silenced or not any(k in g.attrs for k in RATE_PROVENANCE_ATTRS):
+                continue
+            source, species_cell, tier = (
+                str(g.attrs.get(k, UNSTATED_PROVENANCE)) for k in RATE_PROVENANCE_ATTRS
+            )
+            transferred.append(Transferred(TRANSFERRED_RATE_QUANTITY, g.id, source, species_cell, tier, cell))
+        declared = set(self.module.parameters)
+        used = []
+        if self.genes:
+            used.append("mrna_half_life")
+        if any(self.produces.values()):
+            used.append("translation_rate")
+        if any(p.half_life_h is UNKNOWN for p in self.proteins):
+            used.append("protein_half_life")
+        return transferred, [name for name in used if name not in declared]
 
     def diagnose(self, clamp: dict[str, float] | None = None) -> list[Unresolved]:
         """Every input a run with this clamp would read as zero without anyone having said so (R3).
@@ -358,7 +429,12 @@ class NetworkRuntime:
         noise = self.params["noise"]
         steps = int(round(hours / dt))
         traj = Trajectory(
-            times=[], species=list(self.species), levels={s: [] for s in self.species}, unresolved=unresolved
+            times=[],
+            species=list(self.species),
+            levels={s: [] for s in self.species},
+            unresolved=unresolved,
+            transferred=list(self.transferred),
+            defaulted=list(self.defaulted),
         )
 
         def record(t: float) -> None:
