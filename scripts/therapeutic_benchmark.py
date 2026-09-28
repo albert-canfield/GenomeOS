@@ -386,6 +386,36 @@ def magnitude_tiebreaks(candidates: list) -> list[dict]:
     return out
 
 
+def quantities_in_this_tumour(candidates: list) -> list[dict]:
+    """Every candidate that carries a measured amount, and what it is.
+
+    Added 2026-09-28 as the amendment to prediction 4, which was falsified by the
+    run and is kept in the record rather than rewritten. The prediction said the
+    tenth case's row would publish an allele fraction of 0.49. It does not, and
+    the reason is a mistake in the registration and not in the pipeline: a row
+    publishes the *target's* magnitude, the target there is reached by its
+    amplification, and the fraction the VCF reports belongs to the mutated TP53,
+    which is a different candidate. A quantity that reaches the ranking is visible
+    only if the ranking's own inputs are published, so they are.
+    """
+    out = []
+    for c in candidates:
+        m = c.alteration_magnitude or {}
+        if not m.get("quantities"):
+            continue
+        out.append(
+            {
+                "gene": c.gene,
+                "copies": m.get("copies"),
+                "vaf": m.get("vaf"),
+                "hotspot": m.get("hotspot"),
+                "gate": c.mechanism_reach,
+                "score": None if c.scores.overall is None else round(c.scores.overall, 3),
+            }
+        )
+    return out
+
+
 def run_case(case: dict, net: bool, log) -> dict:
     folder = DEMO / case.get("dir", "benchmark")
     vcf = folder / case["vcf"]
@@ -446,6 +476,7 @@ def run_case(case: dict, net: bool, log) -> dict:
         # in this tumour.
         "rank_without_gate": rank_without_gate(a["candidates"], gene),
         "magnitude_tiebreaks": magnitude_tiebreaks(a["candidates"]),
+        "quantities_in_this_tumour": quantities_in_this_tumour(a["candidates"]),
         "seconds": round(time.time() - t0, 1),
     }
     if hit is not None:
@@ -602,6 +633,9 @@ def main() -> int:
         by_call[r["driver_call"]] = by_call.get(r["driver_call"], 0) + 1
     gate_moved = [r["gene"] for r in rows if r.get("rank_without_gate") not in (None, r["rank"])]
     tie_groups = sum(len(r.get("magnitude_tiebreaks") or []) for r in rows)
+    with_vaf = [
+        r["gene"] for r in rows if any(q["vaf"] is not None for q in r.get("quantities_in_this_tumour") or [])
+    ]
     tie_fired = [
         r["gene"] for r in rows if any(g["changed_the_order"] for g in r.get("magnitude_tiebreaks") or [])
     ]
@@ -701,9 +735,43 @@ def main() -> int:
             "magnitude_tiebreaks are computed for every row, the nine included, and were written only "
             "after the registration was committed."
         ),
+        "gate_and_tiebreak_case_measured": (
+            "Negatives first. The gate closed nothing again: rank_without_gate equals rank in all ten "
+            "cases, so removing the gate from the ranking key would change no target's place, and "
+            "gate_moved_the_target is empty. The case was chosen to make the gate matter and it "
+            "measured why it does not, which is the useful part. MYC, amplified at 8 copies in the top "
+            "evidence tier, scores 0.246 - the lowest of the six altered candidates, against the "
+            "target's 0.494 - so it never threatened the target's place and the gate had nothing to "
+            "demote. The reason is structural rather than particular to MYC: the annotations that make "
+            "a gene unreachable, no outward-facing part and no epitope, are the same annotations that "
+            "make it score low, so an undruggable nuclear amplification cannot produce the "
+            "configuration the gate was written for. The configuration needs a candidate curated as a "
+            "surface receptor whose mechanisms are nonetheless all refused or unanswered - the "
+            "EML4-ALK shape, where ALK scores 0.559 against ERBB2's 0.494 - and that means two "
+            "independent drivers in one tumour. In MSK-IMPACT 2017, of the 42 tumours whose structural "
+            "variants make a surface receptor the 3' partner (6 ALK, 12 ROS1, 16 RET, 8 NTRK1), one "
+            "also carries an amplified ERBB2, one an amplified EGFR and one an amplified MET: the "
+            "defect the gate prevents is rare in real tumours because strong drivers are largely "
+            "mutually exclusive, and a benchmark case built on a single sample would be that sample's "
+            "record rather than a cohort summary. The second negative: the magnitude tiebreak had no "
+            "opportunity in the new case at all - no two candidates there are equal on tier, gate and "
+            "published score - and the four score-tied groups in the other cases are all pairs with no "
+            "quantity between them. magnitude_tiebreak_changed_order is empty. Third, a registered "
+            "prediction was falsified, and by the registration rather than by the pipeline: the tenth "
+            "row was predicted to publish a variant allele fraction of 0.49 and publishes none, "
+            "because a row publishes the target's own magnitude and the target is reached by its "
+            "amplification, while the fraction the VCF reports belongs to the mutated TP53 in the same "
+            "tumour. The prediction is kept as it was written and the amendment is additive: "
+            "quantities_in_this_tumour publishes every candidate that carries a measured amount, so "
+            "the 0.49 that reaches the ranking is visible where it actually sits. What did pass: "
+            "ERBB2 is recovered as a surface target at rank 1 with an established blocking antibody, "
+            "outranked_by_unreachable is empty and the pin of 0 holds across ten cases, and the nine "
+            "earlier rows came out identical field by field apart from their per-case timings."
+        ),
         "gate_moved_the_target": gate_moved,
         "magnitude_tiebreak_groups": tie_groups,
         "magnitude_tiebreak_changed_order": tie_fired,
+        "cases_where_a_candidate_carries_an_allele_fraction": with_vaf,
         "rows": rows,
     }
     # The committed file keeps 2805552's wording of this note: the R9 rebuild of 2026-09-28 added a

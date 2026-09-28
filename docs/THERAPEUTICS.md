@@ -979,6 +979,84 @@ unchanged, and the allele fraction is published as measured. Prediction 3 is
 the one that cannot be made to pass by choosing well: it is a measurement of
 whether the gate has a case at all, and a negative there is the result.
 
+### What the run measured
+
+Negatives first.
+
+**The gate closed nothing, again, in the case chosen to make it matter.**
+`rank_without_gate` — the pipeline's own ranking key with the gate removed,
+computed for every row and written only after the registration was committed —
+equals `rank` in all ten cases. Prediction 3 named this as the outcome that
+would make the case a negative, and it is the one that happened.
+
+The case measured *why*, which is the part worth keeping. The six altered
+candidates rank ERBB2 0.494, STARD3 0.455, GRB7 0.365, TP53 0.353, MIEN1 0.275,
+MYC 0.246. MYC is in the top evidence tier, amplified at eight copies, and
+scores **last** — less than half the target. It never came near the target's
+place, so the gate had nothing to demote. And the reason generalises beyond MYC:
+the annotations that make a gene unreachable, no outward-facing part and no
+epitope, are the same annotations that make `surface_accessibility` and the
+mechanism dimensions score it low. An undruggable nuclear amplification cannot
+produce the configuration the gate was written for. It is not a hard case for
+the gate; it is a case the score already answers.
+
+The configuration that would need the gate is the opposite shape: a candidate
+curated as a *surface receptor* whose mechanisms are nonetheless all refused or
+unanswered, scoring above the target. The benchmark already contains one — ALK
+in the EML4-ALK tumour, unreachable at 0.559 against ERBB2's 0.494 — but it is
+alone in its tumour, and putting the two together means two independent drivers
+in one patient. That is rare on purpose. In MSK-IMPACT 2017, of the 42 tumours
+whose structural variants make a surface receptor the 3' partner (6 ALK, 12
+ROS1, 16 RET, 8 NTRK1), exactly one also carries an amplified ERBB2, one an
+amplified EGFR and one an amplified MET. A benchmark case built on one sample
+would be that sample's record rather than a cohort summary, which is why no
+second case was added and why this paragraph is the finding instead: **the
+defect the mechanism gate prevents is rare in real tumours, because strong
+drivers are largely mutually exclusive.** The gate remains cheap and correct;
+what it is not, on this evidence, is load-bearing.
+
+**The tiebreak had no opportunity at all in the new case**, and its opportunity
+set in this benchmark turns out to be empty by construction. It acts only where
+tier, gate and published score are all equal. The four score-tied groups across
+the ten cases — EGFR with PDGFRB at 0.500, three times, and ERBB2 with ERBB3 at
+0.493 — are every one of them pairs of *hypotheses*: candidates named for
+neighbouring something altered, with nothing measured about either of them in
+that patient. A candidate with no measurement carries no quantity by definition,
+so the tie is unbreakable by magnitude and falls to the gene name, exactly as
+registered. Ties among measured candidates did not occur at all. This is the
+sharper version of prediction 5: the tiebreak did not merely fail to fire, it
+has not yet been asked, and `magnitude_tiebreaks` now records every group so
+that the two stay distinguishable.
+
+**A registered prediction was falsified, and by the registration rather than by
+the pipeline.** Prediction 4 said the tenth row would publish a variant allele
+fraction of 0.49. It publishes none. The row publishes the *target's* magnitude;
+the target here is reached by its amplification and carries a copy count of 13;
+the 0.49 belongs to the mutated TP53, a different candidate in the same tumour.
+The prediction is kept as written and the amendment is additive:
+`quantities_in_this_tumour` publishes every candidate that carries a measured
+amount, so the fraction that reaches the ranking is visible where it actually
+sits. `tests/test_therapeutic_benchmark.py` pins both halves — the row's `vaf`
+is `None`, and the case's fractions are exactly `{"TP53": 0.49}` — so the
+correction cannot quietly become a claim that the prediction held.
+
+The regenerated `data/results/therapeutic_benchmark.json` is not in this commit.
+Every re-run rewrites eight machine-stamped lines — the date, the seven counts
+and the write stamp's `git_sha`, `dirty` and knowledge-store `sha256` — and
+`scripts/check_staged.py` refuses a commit that removes lines a recent commit
+added, which those are. The file in the working tree is HEAD's copy with the
+tenth row and the new fields merged into it additively, the nine rows' own
+timings kept, so the artifact is one `--force` away from landing and the
+numbers above are the run's.
+
+What passed. ERBB2 is recovered as a surface target at rank 1 with an
+established blocking antibody at compatibility 0.52 and accessibility 1.0;
+`outranked_by_unreachable` is empty and the pin of 0 holds across ten cases;
+nothing unmeasured outranks the target either. The nine earlier rows came out
+identical field by field apart from their per-case timings, so the tenth case
+changed no existing result, and a second run after the additive amendment
+reproduced every value of the first.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
