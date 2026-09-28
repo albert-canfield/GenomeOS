@@ -225,7 +225,9 @@ class Event:
     confidence: Confidence = 0.0
 
     def applies(self, context: dict[str, str]) -> bool:
-        return all(v == "any" or context.get(k) == v for k, v in self.when.items())
+        # the one `when` matcher every block shares: equality here left `absent`, `a|b` and the
+        # comparisons unmatched on an event while they worked on a decision (lane-when, 2026-09-28)
+        return matches(self.when, context)
 
 
 @dataclass(slots=True)
@@ -277,7 +279,10 @@ class Rule:
                 # the context was never recorded, so no simulated cell can be said to be in it; a
                 # rule gated on it runs nowhere rather than everywhere (R1, 2026-09-28)
                 return False
-            if context.get(key) != wanted:
+            # each clause through the one matcher decisions and timers use, so `absent`, `a|b` and the
+            # comparisons hold on a rule as they do on a decision; plain equality silently never matched
+            # them (lane-when, 2026-09-28)
+            if not matches({key: wanted}, context):
                 return False
         return True
 

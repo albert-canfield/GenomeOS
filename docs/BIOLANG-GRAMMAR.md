@@ -18,6 +18,9 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
   `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an
   event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's
   programs, compiled chromosomes or test programs uses them (data/results/when_census.json).
+- Superseded the same day by the fix: rules and events now read `when` through `matches` as
+  well, one function for every block, so `absent`, `a|b` and the comparisons hold on a rule or
+  an event exactly as on a decision; the bullet above records the state the census measured.
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives
