@@ -429,26 +429,36 @@ def deletion_for(
     return top, deletion_drop(values)
 
 
-def annotate(pairs: list[Pair], table: DeletionTable, cache: ElementCache | None = None) -> None:
+def annotate(
+    pairs: list[Pair],
+    table: DeletionTable,
+    cache: ElementCache | None = None,
+    cells: tuple[str, ...] = MODEL_CELLS,
+) -> None:
     """Fill each pair's features; a pair counts as covered when a deleted element overlaps it.
 
     The pairs are walked chromosome by chromosome so that the per-element cache, which holds one
-    chromosome's archive at a time, is read once per chromosome rather than once per pair.
+    chromosome's archive at a time, is read once per chromosome rather than once per pair. `cells`
+    are the lines whose own track the cache carries; a pair in any other cell gets no deletion value.
+    The HCT116 arm (PREREGISTERED_PUBLISHED['second_cell_type']) passes MODEL_CELLS + ('HCT116',)
+    with the HCT116 cache; every other caller keeps the default.
     """
     by_chrom: dict[str, list[Pair]] = defaultdict(list)
     for p in pairs:
         by_chrom[p.chrom].append(p)
     for chrom in sorted(by_chrom):
         for p in by_chrom[chrom]:
-            _annotate_one(p, table, cache)
+            _annotate_one(p, table, cache, cells)
 
 
-def _annotate_one(p: Pair, table: DeletionTable, cache: ElementCache | None) -> None:
+def _annotate_one(
+    p: Pair, table: DeletionTable, cache: ElementCache | None, cells: tuple[str, ...] = MODEL_CELLS
+) -> None:
     els = table.overlapping(p.chrom, p.start, p.end)
     p.covered = bool(els)
     d = max(MIN_DISTANCE, p.distance)
     activity = math.sqrt(max(p.dhs, 0.0) * max(p.h3k27ac, 0.0))
-    top, values = deletion_values(els, p.gene, p.cell, cache, p.chrom) if p.cell in MODEL_CELLS else (0.0, [])
+    top, values = deletion_values(els, p.gene, p.cell, cache, p.chrom) if p.cell in cells else (0.0, [])
     p.features = {
         "node_nearest": float(any((e.get("inferred") or {}).get("gene") == p.gene for e in els)),
         "log_distance": math.log(d),
