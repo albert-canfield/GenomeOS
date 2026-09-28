@@ -1,0 +1,301 @@
+{
+  "result": "pilot_synthetic_gate",
+  "date": "2026-09-29",
+  "question": "does the pilot find a repair that needs two simultaneous corrections, where no single correction fits the evidence or lowers the energy, and does it return indistinguishable alternatives as one family with a measurement that separates them",
+  "status": "a solver gate on constructed neighbourhoods: it tests the search, not biology",
+  "pass_rule": "on each of the three hand-built cases (which must also pass the validity check) and on at least 95% of the 100 generated instances of each of the three two-correction motifs, the pilot's returned labels equal the planted truth and both planted corrections are committed (no abstention on them); and on the hand-built case and at least 95% of the 100 instances of the family motif, the two indistinguishable alternatives both survive in one family, the pilot abstains on which block supplies the link, and its next measurement's predicted outcome differs between them. If the gate fails, the pilot stops and nothing biological is scored",
+  "validity": "a two-correction instance is kept only if, by brute force over every single repair and every pair of repairs in the full move space (every gene of the neighbourhood and no target, every context, every breakpoint, merge and excuse), (1) no single repair fits the evidence, (2) no single repair lowers the energy by more than SEARCH['improve'], so a one-repair-at-a-time search is stuck at the starting labels, (3) the planted pair fits, and (4) the planted pair's energy is below every other alternative of at most two repairs by more than SEARCH['margin']. A family instance is kept only if both single alternatives fit, predict the same for every observation, and lie within SEARCH['margin'] of each other and of the best alternative of at most two repairs",
+  "controls": "descriptive, not part of the pass rule: the same search without pairs (greedy, one repair at a time); the independent-block variant (each block its own neighbourhood with its own copy of every observation over it, no coupling); and a noisy copy of each instance with one extra random observation",
+  "falsifier": "the gate is void if the greedy control recovers the planted truth on any kept instance: the validity check would then not be doing its job",
+  "motifs": {
+    "split_retarget": {
+      "hand_built": {
+        "instance": 0,
+        "hand_built": true,
+        "valid": true,
+        "why": "ok",
+        "found": true,
+        "committed_planted": true,
+        "passed": true,
+        "greedy_found": false,
+        "independent_found": true,
+        "noisy_found": true,
+        "evaluations": 26,
+        "status": "resolved"
+      },
+      "generated": 100,
+      "generated_passed": 100,
+      "generated_share": 1.0,
+      "rejected_draws": {
+        "a single repair lowers the energy": 6,
+        "draws": 106
+      },
+      "passed": true,
+      "evaluations_median": 26,
+      "status": {
+        "resolved": 101
+      },
+      "failures": [],
+      "of": 101,
+      "greedy_found": 0,
+      "independent_found": 101,
+      "noisy_found": 99
+    },
+    "swap": {
+      "hand_built": {
+        "instance": 0,
+        "hand_built": true,
+        "valid": true,
+        "why": "ok",
+        "found": true,
+        "committed_planted": true,
+        "passed": true,
+        "greedy_found": false,
+        "independent_found": true,
+        "noisy_found": true,
+        "evaluations": 52,
+        "status": "resolved"
+      },
+      "generated": 100,
+      "generated_passed": 100,
+      "generated_share": 1.0,
+      "rejected_draws": {
+        "a single repair lowers the energy": 130,
+        "draws": 230
+      },
+      "passed": true,
+      "evaluations_median": 52,
+      "status": {
+        "resolved": 101
+      },
+      "failures": [],
+      "of": 101,
+      "greedy_found": 0,
+      "independent_found": 101,
+      "noisy_found": 101
+    },
+    "context_handoff": {
+      "hand_built": {
+        "instance": 0,
+        "hand_built": true,
+        "valid": true,
+        "why": "ok",
+        "found": true,
+        "committed_planted": true,
+        "passed": true,
+        "greedy_found": false,
+        "independent_found": false,
+        "noisy_found": true,
+        "evaluations": 115,
+        "status": "resolved"
+      },
+      "generated": 100,
+      "generated_passed": 100,
+      "generated_share": 1.0,
+      "rejected_draws": {
+        "draws": 100
+      },
+      "passed": true,
+      "evaluations_median": 115,
+      "status": {
+        "resolved": 101
+      },
+      "failures": [],
+      "of": 101,
+      "greedy_found": 0,
+      "independent_found": 0,
+      "noisy_found": 84
+    },
+    "indistinguishable": {
+      "hand_built": {
+        "instance": 0,
+        "hand_built": true,
+        "valid": true,
+        "why": "ok",
+        "both_survive": true,
+        "one_family": true,
+        "abstains": true,
+        "next_measurement": {
+          "measure": "crispri",
+          "block": "B1",
+          "interval": "chrS:1000000-1000350",
+          "gene": "GA",
+          "context": "K562",
+          "cost": 4.0,
+          "bits": 0.9977,
+          "separates_best_from_rival": true,
+          "p_positive_under_survivors": 0.5283
+        },
+        "separates": true,
+        "passed": true,
+        "evaluations": 34,
+        "status": "abstained"
+      },
+      "generated": 100,
+      "generated_passed": 100,
+      "generated_share": 1.0,
+      "rejected_draws": {
+        "the two alternatives are not both within the margin of the best": 12,
+        "draws": 112
+      },
+      "passed": true,
+      "evaluations_median": 34,
+      "status": {
+        "abstained": 101
+      },
+      "failures": []
+    }
+  },
+  "instance_digests": {
+    "split_retarget": "76b43edd4b5b6f1bf13f07bd3cff562e9bdc633afcd4c61eaf6e2847e5214026",
+    "swap": "1d7b5f4b82a5d9312e45386f2bdc123d195d13be61ca9391c700da0db71b60e2",
+    "context_handoff": "821e7a02531a2eb6a64e147aa473039ac1a34b7a2288116880d3b0af2a7d3ccc",
+    "indistinguishable": "1bc2c22fdeb30257e12aef15ac513d90dfa9551d903c4a518313a9d84dd28ca1"
+  },
+  "passed": true,
+  "void": false,
+  "verdict": "pass",
+  "within_budget": true,
+  "compute": {
+    "cpu_seconds": 6.84,
+    "wall_seconds": 8.08,
+    "peak_rss_mb": 31.4,
+    "measured_with": "time.process_time and getrusage, this process"
+  },
+  "alphagenome_requests": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository: genomeos/attribution/pilot.py, the registered generator of synthetic neighbourhoods (no external data)",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/.claude/worktrees/lane-pilot/genomeos/attribution/pilot.py",
+        "sha256": "06ecbbc74923d01064e857e23f8157b7e514081c087886ef5a9ea1532dd1f480",
+        "bytes": 67799,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: synthetic neighbourhoods on a synthetic chromosome, no genome",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "registration": {
+        "registered": "2026-09-29",
+        "status": "internal development result on withheld sources",
+        "contexts": [
+          "K562",
+          "HepG2",
+          "WTC11",
+          "invivo",
+          "other"
+        ],
+        "own_chromatin": {
+          "K562": "K562",
+          "HepG2": "HepG2"
+        },
+        "breadth_biosamples": [
+          "CD14_positive_monocyte",
+          "GM12878",
+          "H1",
+          "HepG2",
+          "IMR_90",
+          "K562",
+          "SK_N_SH",
+          "astrocyte",
+          "cardiac_muscle_cell",
+          "hepatocyte",
+          "keratinocyte",
+          "ovary",
+          "testis"
+        ],
+        "model_cell_context": {
+          "K562": "K562",
+          "HepG2": "HepG2",
+          "WTC11": "WTC11"
+        },
+        "weights": {
+          "crispri_decrease": 3.0,
+          "crispri_null": 1.5,
+          "gtex_association": 0.5,
+          "reporter_active": 1.0,
+          "reporter_inactive": 0.3,
+          "vista_positive": 1.0,
+          "vista_negative": 0.5,
+          "satmut_functional": 1.0,
+          "satmut_inert": 0.3,
+          "responsive": 1.0,
+          "unresponsive": 0.5,
+          "unresponsive_min_nulls": 3,
+          "activity_prior": -1.0,
+          "own_peak": 2.0,
+          "own_no_peak": -1.0,
+          "breadth": 2.0,
+          "model_activity": 0.5,
+          "model_target_base": 1.0,
+          "model_target_strength_cap": 1.0,
+          "distance_gamma": 1.0,
+          "distance_d0": 5000.0,
+          "no_target": -3.0,
+          "split": 2.0,
+          "merge": 1.0,
+          "inadequate": 2.0
+        },
+        "inadequate_kinds": [
+          "reporter",
+          "vista",
+          "satmut",
+          "gtex"
+        ],
+        "search": {
+          "rounds": 6,
+          "margin": 1.0,
+          "improve": 0.05,
+          "min_part": 50,
+          "merge_gap": 500,
+          "max_roots": 60,
+          "max_singles": 400,
+          "max_pairs": 20000,
+          "mus_per_hood": 3,
+          "mus_max_assignments": 50000
+        },
+        "measurement_cost": {
+          "reporter": 1.0,
+          "crispri": 4.0
+        },
+        "retired_never_used": "element competition and gene budget (joint_pretest.RETIRED); no share of a score over genes or elements is computed"
+      },
+      "seed": 20260929,
+      "instances_per_motif": 100,
+      "max_draws_per_motif": 5000,
+      "pass_share": 0.95,
+      "motifs": [
+        "split_retarget",
+        "swap",
+        "context_handoff"
+      ],
+      "family_motif": "indistinguishable",
+      "compute_budget_cpu_seconds": 600
+    },
+    "exclusions": [
+      "generated draws that fail the registered validity check are counted by reason and not scored"
+    ],
+    "partitions": "n/a: a synthetic solver gate, no evidence is held out",
+    "code": {
+      "git_sha": "a9660ff9e5313dd12c3c90e3443734fe2a439e3a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pilot_synthetic_gate.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

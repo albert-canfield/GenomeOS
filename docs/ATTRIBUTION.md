@@ -9888,6 +9888,69 @@ the validity check would then not be doing its job.
   gate 2 is not run.
 - **Void.** Reported as a failure of the gate's construction, with gate 2 not run.
 
+## The result: the pilot finds every planted pair of simultaneous corrections and keeps every indistinguishable pair as one family, but the independent-block control also solves two of the three motifs (item 12 S3, 2026-09-29, lane-pilot, later)
+
+The gate was run once, as registered in the section above, in a clean worktree at `a9660ff` (the
+revision stamp is not dirty). The script is `scripts/pilot_synthetic_gate.py` and the result is
+`data/results/pilot_synthetic_gate.json`. It took **6.84 CPU seconds** (8.08 s wall, 31 MB peak),
+inside the registered budget of 600. No data was read and no model was called. **Verdict: pass.** In
+its registered wording: the search finds repairs that need two simultaneous changes, and it keeps
+indistinguishable alternatives apart as a family. That is all it means. It is a solver test on
+constructed cases, and it says nothing about biology.
+
+### What the pass does not show, first
+
+1. **The independent-block control, which has no coupling, also recovers the planted truth on two of
+   the three motifs.**
+   - **Split and retarget: 101 of 101.** Both corrections lie inside one block, where the control may
+     pair its own repairs.
+   - **Swap: 101 of 101.** Here it is right for a reason the pilot forbids. Each block's private copy of
+     the two spanning screens counts them twice, so each block alone sees a single repair that helps.
+     The pilot reads a spanning screen once, as an OR over the blocks it covers, and for the pilot no
+     single repair helps.
+   - **Context and hand-off: 0 of 101.** Only this motif needs the coupling.
+
+   So the gate shows that the search finds pairs. It shows the value of coupling on one motif of three.
+   Whether coupling helps on real evidence is gate 2's question: the pilot against the independent-block
+   variant.
+2. **One extra random observation is not in the pass rule.** With one added (the noisy control), the
+   pilot still returns the planted truth on 99, 101 and 84 of the 101 instances of the three motifs.
+   Context and hand-off, the motif that needs the coupling, is also the least robust to noise.
+3. **The greedy control found the planted truth on 0 of 303 instances.** This is the falsifier, and
+   it did not fire: the validity check did its job.
+4. **The generator rejected these draws before keeping 100 valid instances per motif:**
+   - split and retarget: 6 of 106 draws, because a single repair lowered the energy;
+   - swap: 130 of 230, for the same reason;
+   - context and hand-off: 0 of 100;
+   - indistinguishable: 12 of 112, because the two alternatives were not both within the margin of the
+     best.
+
+   The kept instances are a constructed subset. The per-motif instance digests are in the result.
+
+### The gate, motif by motif
+
+| motif | hand-built | generated passed | greedy control | independent-block control | noisy copy | median evaluations |
+| --- | --- | --- | --- | --- | --- | --- |
+| split and retarget | pass | 100 of 100 | 0 of 101 | 101 of 101 | 99 of 101 | 26 |
+| swap | pass | 100 of 100 | 0 of 101 | 101 of 101 | 101 of 101 | 52 |
+| context and hand-off | pass | 100 of 100 | 0 of 101 | 0 of 101 | 84 of 101 | 115 |
+| indistinguishable (family) | pass | 100 of 100 | — | — | — | 34 |
+
+- **The three two-correction motifs.** The pilot resolved all 303 instances, committing both planted
+  corrections with no abstention.
+- **The family motif.** The pilot abstained on all 101 instances, and both alternatives survived in one
+  family.
+  - On the hand-built case, its next measurement is a CRISPRi pair of the first block alone for the
+    gene in K562. It costs 4 and carries 0.998 bits over the survivors.
+  - That measurement separates the best alternative from its strongest rival.
+
+### What it may be called, and what follows
+
+It may be called a passed solver gate on constructed neighbourhoods. It may not be called evidence that
+the pilot, or coupling, improves biological labels. Gate 2 is registered in its own section before it
+runs. That gate scores the pilot's revised labels on withheld sources against three baselines: the
+unchanged labels, the independent-block variant and distance to TSS.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
