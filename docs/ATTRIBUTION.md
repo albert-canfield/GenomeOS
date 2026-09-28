@@ -7772,6 +7772,70 @@ and compile.py reading that origin instead of re-deriving it: the comparison sho
 but the step is not cheap (24 classifier runs and 24 rewritten results) and it changes origin text on
 11 blocks whose interspersed coverage sits just under one half (commit 308484a), so it is not names only.
 
+## Pre-registration: milestone 1.3's second clause against a control matched on length and gene density (2026-09-28)
+
+**What is compared.** Clause 2 of milestone 1.3 (the constrained-unknown blocks attributed to a gene
+and a tissue) is held as not met because the real unknown names a coding gene far below length-matched
+random windows: in d717b28, 29.8% of 531 blocks against 67.0% of windows, -37.2 points. The audit then
+found the neutral tier -36.0 points below the same control, and the real unknown +4.6 points above
+neutral inside length deciles, which names local gene density as the likely confounder. This test asks
+the same question once more against a control that accounts for it. Script:
+`scripts/clause2_matched_control.py`, whose `PRE_REGISTRATION` holds the constants below; tests in
+`tests/test_clause2_matched_control.py`. No matched figure had been computed on any chromosome when
+this was committed.
+
+**Admissibility.** The control was chosen after the audit named the confounder. That is admissible
+because the audit only named the variable; the matching variable, its bins, the estimator, the
+interval, the pass rule and the falsifier are fixed here before the comparison runs, and the same
+windows are asked of the neutral tier so the control is not tuned to the target.
+
+**Targets.** The real unknown: constrained-unknown blocks with copies out (882 blocks, 531 carrying a
+scored element), all 24 chromosomes. The neutral tier (2,632 blocks, 1,181 carrying) is the secondary
+target set.
+
+**Control.** For each block, windows of the block's exact length drawn as d717b28 drew them (uniform
+inside the span of scored-element midpoints, rejected on overlap with any organiser block, same seed
+per chromosome), and also rejected unless the count of GENCODE protein-coding TSSs within 524,288 bp
+of the window's midpoint falls in the block's own decile. Deciles are nearest-rank cuts of each target
+set's own block counts pooled genome-wide. 50 accepted windows per block, at most 20,000 tries; a block
+with no accepted window leaves the comparison as undrawable.
+
+**Question and primary.** Does a block or window carrying a scored element carry one whose deletion
+names a protein-coding gene. Primary statistic: for the real unknown, the mean over compared blocks of
+(block yes, 0 or 1) minus (share of that block's carrying windows saying yes), in points.
+
+**Interval.** 95% percentile bootstrap over blocks, 10,000 resamples, seed 20260913. A bootstrap over
+the 24 chromosomes is reported beside it as a sensitivity for correlation along a chromosome, with the
+pooled rates as d717b28 printed them.
+
+**Secondary and sensitivities.** Secondary: the neutral tier under the same matching; real unknown
+minus neutral on the matched difference; the question "moves any gene" on both sets. Sensitivities:
+matching on distance to the nearest coding TSS instead of the count; rejecting windows only on overlap
+with the target set itself. A balance check (covariate and elements per block against per window) is
+reported, not gated.
+
+**Gate.** Before any matched figure is read, the same function with the density test off and
+d717b28's 4,000-try cap must reproduce d717b28's pooled counts to the digit: real unknown 44,100
+windows drawn, 31,676 carrying, 21,217 naming a coding gene, 531 and 158 blocks; neutral 131,600,
+88,317, 57,212, 1,181 and 340. If it does not, no matched figure is reported.
+
+**Pass rule.** Clause 2, as a labelled lead with measurement still outstanding, passes on this
+instrument only if the primary's 95% interval over blocks lies wholly above 0. An interval covering 0
+reads as "at chance against a matched control" and the clause stays not met; an interval wholly below
+0 keeps it not met, and "below chance" if the point is also below -5 points. The clause's third part
+(scored against measurement) is untouched by any outcome.
+
+**Falsifier.** The audit's account (most of the gap is gene density) is falsified if the matched
+difference keeps more than half of the unmatched gap, that is, falls below -18.62 points (half of
+-37.23).
+
+**Registered, not run.** A measured arm: the designed experiment (284,001 oligos over 878 blocks)
+tiles each block and a density-matched window set, so an MPRA readout would give measured activity per
+block against its own control. Nothing measured exists for it (0.45% of unknown space has any assay),
+and it is not run.
+
+**Cost.** 0 AlphaGenome requests; the response cache is never opened.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
