@@ -7387,6 +7387,59 @@ link that rests on several as `observation_summarised`; it never fits to the max
 rule (median, mean, a meta-analysis) is chosen here; choosing one is its own registration. The
 audit will also count the experimental links that rest on more than one pair.
 
+## Pre-registration: R8's coupling pretest, and a negative closes R8 (R8, 2026-09-28)
+
+Review item R8 allows a joint inference engine only after a pretest shows that a coupling term carries
+information that independent per-element scoring does not (genomeos-8a's brief,
+`.claude/briefs/joint-annotation-search.md`). This section fixes that pretest before any number is
+produced. The code is `genomeos/attribution/joint_pretest.py`, the run `scripts/joint_pretest.py`, the
+result `joint_pretest`. No search is built in this lane, whatever the outcome.
+
+**Data and independence (R5).** The CRISPRi benchmark's training file only, through
+`measured.load_crispri(split="training")` and `development_only()`; the held-out file is never opened,
+not for fitting and not for looking (a test spies on the file opener). lane-split's `split_overlap()`
+found 249 held-out pairs sharing bases with training intervals; that is irrelevant here, because the
+held-out file is not read. Folds are leave-one-chromosome-out within the training split. The training
+file is K562 only (10,356 valid pairs), so per-cell reporting (R1) is K562; any other cell would be
+counted and computed only at 20 positives or more.
+
+**Outcomes (R2).** A positive is a significant decrease; a negative is a non-significant pair with
+PowerAtEffectSize20 at or above 0.8. Significant increases and underpowered or power-unknown nulls are
+excluded from the metric and counted apart.
+
+**Scores.** From the stored per-element response cache (`targets.ElementResponses`), 0 new requests:
+
+- *Independent* (the baseline): a pair's predicted drop `d`, the largest predicted fall of the measured
+  gene on K562's own track over the cached elements overlapping the tested interval, floored at 0
+  (`crispri.deletion_drop`). A pair no cached element answers is missing and never imputed.
+- *Element competition*: `d / (sum of d over every gene the screen tested against the same interval in
+  the same cell + 0.1)`.
+- *Gene budget*: `d / (sum of d over every interval the screen tested against that gene in that cell + 0.1)`.
+
+The floor 0.1 is the scorer's own `MIN_EFFECT` bar, not fitted. Partners are read by their predictions
+whatever their measured outcome; their labels are never read. Each coupling variant enters a logistic
+model on `[d, share]` fitted on the other chromosomes; the independent score is `d` itself. The control
+is the self-only share `d / (d + 0.1)` in the same model: the share's nonlinearity with no partner.
+
+**Metric.** AUPRC on the out-of-fold scores pooled over the folds. The gain of each variant over the
+independent score carries a 97.5% two-sided interval (Bonferroni over two variants) from 2,000
+resamples of connected components of the perturbation-gene graph (seed 0); the same interval over
+chromosomes is reported beside it. Secondary, never deciding: the same comparison restricted to pairs
+with at least one scored partner.
+
+**Pass rule.** A variant passes if the lower end of its component interval lies above 0 and its point
+gain exceeds the self-share control's. R8 proceeds if at least one variant passes.
+
+**Falsifier.** A pass is void if the self-share control gains at least as much: the gain would then be a
+reshaping of `d`, not coupling. A pass whose chromosome interval includes 0 is reported as weak and
+names the chromosome that carries it.
+
+**Readings.** Neither passes: a negative. Coupling carries no information about CRISPRi targets beyond
+independent per-element scoring on the data held, so a joint search over this score cannot beat
+per-block scoring; **R8 closes and no search engine is built**. One passes: that term is kept, frozen
+as registered, and R8 proceeds to its build (the synthetic two-change case first). Both pass: both are
+kept. Void: reported as a negative with the control's gain beside it; R8 closes.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
