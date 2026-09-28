@@ -9161,6 +9161,146 @@ decreases, as the benchmark literature finds. `rest` should add little there, be
 mask no screen of the same pair remains. The unchanged labels should have low coverage of the screens'
 pairs. None of this changes a rule above.
 
+*Correction, 2026-09-28, lane-c4, after the run.* The prose above miscounts the sources, and the rules
+are unaffected. The benchmark holds **10** CRISPRi studies, not 11: Nasser2021 spans both files and is one
+study. So there are **16** holdable sources, not the 17 of the registration commit's subject, and **14**
+CRISPRi endpoints are described without a score, not 16. The 15 scored endpoints were counted correctly.
+The error was in the counting prose, not in any constant.
+
+## The result: without the model, 93 of 440,377 predicted links survive; in the first held-out scores, neither the unfitted rest rule nor the unchanged labels beats distance to TSS on any CRISPRi decrease endpoint (2026-09-28, lane-c4, later)
+
+Both runs were made once, as registered in the section above, in a clean worktree at `cc824f4` (the
+revision stamp is not dirty). Results: `data/results/c4_alphagenome_ablation.json` and
+`data/results/c4_holdout_scores.json`. Nothing called the model (0 requests), and the per-element
+response cache was never opened. The ablation took 9 s and the harness 52 s, both on one laptop CPU.
+**Every score below is an internal development benchmark reading.** Each is on evidence this project
+has already read, and none is a fresh or external validation. The negatives come first.
+
+### Negatives
+
+1. **The prediction from the remaining sources (`rest`, an unfitted rule) is below distance to TSS on
+   all four scored CRISPRi decrease endpoints and on GTEx.** Every one of these intervals excludes zero.
+   The paired differences in average precision are:
+
+   | held-out source | rest minus distance |
+   | --- | --- |
+   | Gasperini2019 | -0.278 [-0.331, -0.221] |
+   | Morris | -0.305 [-0.429, -0.091] |
+   | Schraivogel2020 | -0.309 [-0.608, -0.140] |
+   | Xie | -0.344 [-0.440, -0.210] |
+   | GTEx | -0.155 [-0.171, -0.141] |
+
+   As registered, this says the rule transfers poorly. It says nothing about what the evidence can
+   predict. The rule puts element-level activity (an active reporter tile, a VISTA positive) ahead of
+   distance, so every gene paired with an active element moves up together. Most of those genes are that
+   element's negatives.
+2. **The unchanged labels beat distance on no CRISPRi decrease endpoint.** The compiled predicted layer
+   names one gene per element. It is below distance on three endpoints, each with an interval excluding
+   zero:
+   - Morris decrease: -0.366 [-0.522, -0.187];
+   - GTEx: -0.232 [-0.243, -0.220];
+   - WTC11_DC_TAP increase: -0.013 [-0.033, -0.004].
+
+   On Gasperini2019 (-0.068 [-0.140, +0.003]), Schraivogel2020 (-0.229 [-0.584, +0.072]) and Xie (-0.145
+   [-0.333, +0.071]) the interval spans zero. Its coverage of the screens' pairs is 45% to 77%. This is
+   **not** the deletion feature that `crispri_published` scored. That feature read every gene in the
+   scorer's window from the response cache; the compiled labels keep one target per element. The two
+   results do not contradict each other, and this one does not re-test that one.
+3. **Nothing scored here predicts reporter activity, in-vivo activity or base sensitivity well.**
+   - lentiMPRA: the AUROC of `active` is 0.503 to 0.561 across the three cells and three labellings. The
+     largest Spearman is 0.126 [0.117, 0.135] (unchanged, HepG2).
+   - VISTA: AUROC 0.529 to 0.571.
+   - Saturation mutagenesis: 19 loci. Every paired interval spans zero, and the best AUROC is distance's,
+     0.646 [0.524, 0.738].
+4. **14 of the 20 CRISPRi endpoints cannot be scored.**
+   - HCT116, Nasser2021, Klann and Reilly hold no well-powered null at all.
+   - K562_DC_TAP is under 20 positives on both endpoints.
+   - WTC11_DC_TAP is under 20 positives on `decrease`.
+   - Morris, Schraivogel2020 and Xie are under 20 positives on `increase`.
+
+   The benchmark's held-out file therefore contributes only three scored endpoints: Morris and Xie
+   `decrease`, and WTC11_DC_TAP `increase`.
+5. **Ablation: the predicted target layer does not survive the removal of the model.**
+   - Links (element, gene, direction): of 440,377 predicted links, **93 survive** (0.021%). A same-endpoint
+     measurement establishes each of these 93. The other 440,284 do not survive:
+     - 440,249 were never measured by the same endpoint. For 438,872 of these the element was never
+       screened; for 1,377 it was screened, but the predicted gene was not tested.
+     - 28 are contradicted: 23 by a well-powered null, and 5 by a significant change in the other
+       direction.
+     - 7 are inconclusive (underpowered nulls).
+   - Where a screen tested the predicted gene on the element, 93 of 128 links survive.
+   - Rules: of the 440,377 predicted rules, **39 survive in their own cell**. The other 440,338 were never
+     measured in the rule's cell, and none is contradicted there.
+   - Other endpoints: 6,434 of the never-measured links have evidence from another endpoint on the element.
+     This is 3,216 active lentiMPRA readings, 3,202 GTEx associations with the same gene, 69 VISTA
+     positives and 14 functional saturation-mutagenesis bases. None of it makes a link survive (S4).
+   - Headlines: 2 of the 6 do not survive.
+     - `constrained_unknown_targets` (62.3% against 86.0%) is inconclusive: its measured arm reads
+       `cannot_decide`.
+     - `crispri_published` is about the model.
+6. **The model's element selection kept 449 of 661 measured regulatory links out of the executable
+   programs.** These are the CRISPRi significant decreases, counted as element, gene and cell. Only 212
+   of the 661 are carried, because a twin is written only beside a model-compiled element. The 212 are
+   exactly the 212 experimental rules: 169 from training and 43 marked held-out. Of the 449 left out, 62
+   have an ENCODE cCRE that meets the same overlap rule with no model involved, and 387 have none.
+
+### What survives on experimental evidence alone
+
+- **Headline results, 4 of 6.**
+  - `node_containment_audit` survives, on its experimental arm only. The surviving figure is **+5.893
+    points [3.183, 8.458]** on 661 measured pairs against the uniform control. It is not the model's
+    +2.90.
+  - `node_containment_measured` (+5.89), `therapeutic_benchmark` (9/9) and `unknown_coverage` (0.52%)
+    were never model-dependent. The first reads model files only for chromosome names and lengths, and the
+    third only for a column that its figure does not state.
+- **Per-element labels.** Every sequence and registry label was never model-dependent. That is origin
+  (440,377), class (440,377), the registry roles (633,404 values), and the registry and selection status
+  values (880,754). All content of the 19,072 measured twins was never model-dependent either. The model's
+  own `predicted_model` status (440,377) and the twins' `conflicting` status (14,537) are about the model.
+- **Compiled rules.** The 212 experimental rules were never model-dependent in value. Their placement was
+  model-selected, as item 6 above says.
+
+### The first held-out scores beside the baselines
+
+Average precision is given with its 95% locus-bootstrap interval, and the prevalence is in brackets
+after the source. For lentiMPRA the value is the Spearman correlation of `activity`.
+
+| held-out source (endpoint) | rest | distance | unchanged (coverage) |
+| --- | --- | --- | --- |
+| Gasperini2019 decrease (0.069) | 0.215 [0.178, 0.266] | 0.493 [0.439, 0.560] | 0.425 [0.367, 0.485] (0.55) |
+| Morris decrease (0.210) | 0.447 [0.306, 0.669] | 0.752 [0.584, 0.883] | 0.386 [0.255, 0.521] (0.77) |
+| Schraivogel2020 decrease (0.018; 12 loci) | 0.082 [0.029, 0.136] | 0.390 [0.203, 0.672] | 0.162 [0.018, 0.316] (0.45) |
+| Xie decrease (0.097) | 0.245 [0.153, 0.384] | 0.589 [0.407, 0.747] | 0.444 [0.297, 0.587] (0.72) |
+| Gasperini2019 increase (0.009) | 0.011 [0.007, 0.022] | 0.011 [0.007, 0.017] | 0.032 [0.006, 0.076] (0.54) |
+| WTC11_DC_TAP increase (0.011; 22 loci) | 0.018 [0.009, 0.049] | 0.023 [0.011, 0.049] | 0.010 [0.005, 0.017] (0.65) |
+| lentiMPRA K562 activity (Spearman) | 0.061 [0.051, 0.070] | 0.061 [0.052, 0.070] | 0.068 [0.058, 0.077] (0.40) |
+| lentiMPRA HepG2 activity (Spearman) | 0.039 [0.029, 0.048] | 0.040 [0.031, 0.050] | 0.126 [0.117, 0.135] (0.40) |
+| lentiMPRA WTC11 activity (Spearman) | 0.036 [0.026, 0.047] | 0.038 [0.027, 0.049] | 0.072 [0.063, 0.082] (0.40) |
+| VISTA positive (0.519) | 0.550 [0.518, 0.587] | 0.543 [0.514, 0.575] | 0.574 [0.545, 0.605] (0.42) |
+| saturation mutagenesis functional (0.274; 19 loci) | 0.370 [0.206, 0.531] | 0.380 [0.277, 0.497] | 0.274 [0.182, 0.448] (0.31) |
+| GTEx associated (0.146) | 0.281 [0.263, 0.297] | 0.436 [0.417, 0.456] | 0.204 [0.189, 0.220] (0.59) |
+
+**The positives, in their registered wording.** On evidence this project has already read, the unchanged
+labels predict reporter activity slightly better than distance to TSS, and the intervals exclude zero:
+- HepG2 activity: Spearman +0.086 [+0.076, +0.097];
+- WTC11 activity: +0.034 [+0.024, +0.045];
+- VISTA: average precision +0.031 [+0.010, +0.050].
+
+K562 spans zero. These are activity endpoints: they are not a test of regulation, and the effects are
+small next to the endpoints' own spread.
+
+**The split did what it was registered to do.** Holding out Gasperini2019 masked 125 Nasser2021 and 76
+Schraivogel2020 training pairs at related intervals. By `measured.split_overlap`, 357 of Gasperini2019's
+5,299 pairs are related to another study's pair, and none is an identical pair. The three lentiMPRA
+cells measure the same tiles (53,988 to 53,990 per cell), so each removes the other two entirely. The 4,378 pairs of the
+held-out file were never evidence for any held-out source.
+
+**What it may be called.** It is an internal development benchmark, and a measuring stick. The pilot
+(C1 with C2 and C3) is scored against `unchanged` and `distance` with `holdout.compare`, on the same
+resamples. **What it may not be called:** a validation of anything, or a finding that the sources cannot
+predict one another. `rest` is one unfitted rule, and it is now the reference labelling to beat, not a
+ceiling.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
