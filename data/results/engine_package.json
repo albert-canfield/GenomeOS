@@ -37,10 +37,11 @@
       "test_share.py",
       "test_spatial.py",
       "test_uncertainty.py",
+      "test_unstated_confidence.py",
       "test_when_matcher.py",
       "test_when_not_equal.py"
     ],
-    "test functions": 192,
+    "test functions": 209,
     "fixtures": [
       "data/demo/cell_context.bio",
       "data/demo/gastrulation.bio",
@@ -85,7 +86,7 @@
     {
       "check": "bio check",
       "ok": true,
-      "output": "    order                           0.00 |     protein    \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588   0.90 |     rule       \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    0.87",
+      "output": "    order                           none stated (1 unstated) |     protein    \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588   0.90 |     rule       \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    0.87",
       "error": ""
     },
     {
@@ -127,9 +128,9 @@
     {
       "check": "the engine's own pytest suite",
       "ok": true,
-      "output": "300 passed, 3 skipped, 3 xfailed in 53.40s",
+      "output": "317 passed, 3 skipped, 3 xfailed in 40.72s",
       "error": "",
-      "passed": 300,
+      "passed": 317,
       "failed": 0,
       "skipped": 3,
       "skip reasons": [
@@ -160,10 +161,19 @@
   "passed": true,
   "result_manifest": {
     "code": {
-      "git_sha": "95d0e6ec41062ae7543b3c6ab5f8aae1dcd428e5",
-      "dirty": false,
-      "dirty_code_paths": [],
-      "dirty_result_paths": [],
+      "git_sha": "cc824f4407cfa612123e9c74abbda177c430ba4b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/web/server.py",
+        "scripts/c5_paired_variation_probe.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/c5_paired_variation_probe.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/c5_paired_variation_probe.json",
+        "data/results/engine_package.json"
+      ],
       "argv": [
         "scripts/package_engine.py"
       ],
