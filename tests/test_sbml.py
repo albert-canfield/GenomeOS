@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 2.3: SBML models from BioModels run unchanged."""
 
 from pathlib import Path

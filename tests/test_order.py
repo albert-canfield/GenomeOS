@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 # Part of the GenomeOS application; see LICENSING.md.
 """BioLang v0.4 §7.6: `order`, a sequence the runtime can be wrong about.
 

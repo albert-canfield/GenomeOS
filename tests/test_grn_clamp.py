@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """A clamped species in the gene-network runtime is held at its clamp value, not only between steps.
 
 Found by lane-h on 2026-09-28 (8e705f7): `NetworkRuntime.run(clamp=...)` re-applied the clamp only after

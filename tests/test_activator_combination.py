@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """The activator combination rules (lane-combine, 2026-09-28): what each can and cannot produce."""
 
 from __future__ import annotations

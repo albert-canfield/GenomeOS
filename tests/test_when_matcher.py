@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """One `when` matcher for every block that has a `when` (lane-when, 2026-09-28).
 
 Decisions and timers read `when` with `genomeos.ir.model.matches`; rules and events compared by

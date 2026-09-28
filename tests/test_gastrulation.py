@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 4.3: three germ layers in the right order along the NODAL gradient."""
 
 import math

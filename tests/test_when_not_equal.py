@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """`!=` in a `when` clause is refused (lane-ne, 2026-09-28).
 
 The parser used to turn `k != v` into the value `!=v`, which no matcher implements, so the clause

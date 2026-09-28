@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import io
 
 from genomeos.bio import Repl, evaluate, main, parse_tests

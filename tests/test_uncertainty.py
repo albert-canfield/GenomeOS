@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from genomeos.ir import Evidence, EvidenceKind, Parameter
 from genomeos.lang import parse_file
 from genomeos.runtime.uncertainty import UncertaintyReport, report_for_ageing, report_for_network

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 # Part of the GenomeOS application; see LICENSING.md.
 # ruff: noqa: E501  (BioLang source kept one block per line)
 """BioLang v0.4 stage 1: compartments, locations, targeting signals, transports, the regime record.

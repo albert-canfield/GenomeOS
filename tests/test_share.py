@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 # Part of the GenomeOS application; see LICENSING.md.
 """`share`: a partition whose numbers are the published ones (BIOLANG-v0.3.md, populations).
 

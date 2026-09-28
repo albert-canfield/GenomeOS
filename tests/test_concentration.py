@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 # Part of the GenomeOS application; see LICENSING.md.
 # ruff: noqa: E501  (BioLang source kept one block per line)
 """A compartment's absolute volume, and the concentration thresholds it makes expressible.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """A key a block does not read is an error that names it, not a silent no-op.
 
 Until 2026-09-27 the parser stored every `key: value` and read only the ones it knew, so the engine's

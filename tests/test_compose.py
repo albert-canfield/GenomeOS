@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 2.5: process-bigraph composition spike."""
 
 import pytest

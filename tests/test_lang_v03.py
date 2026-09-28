@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """BioLang v0.3: organism, stage, timer, signal, decision, domain blocks; diamond imports."""
 
 import pytest
