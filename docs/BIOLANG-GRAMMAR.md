@@ -14,6 +14,10 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
   `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no
   context, so a rule gated on it runs in no cell rather than in every cell.
+- Decisions, timers, competence windows, commitments and signals read `when` with
+  `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an
+  event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's
+  programs, compiled chromosomes or test programs uses them (data/results/when_census.json).
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives
