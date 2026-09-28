@@ -34,6 +34,7 @@ model's -27.25 is deliberately **not** the effect being powered for.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import math
 import time
@@ -1429,6 +1430,1351 @@ def reproduce_the_review(
     }
 
 
+# ==== item 12 S2: the calibrated model, registered by lane-s2 on 2026-09-28 before its first run =========
+#
+# Everything above is kept as it was computed. What follows is a second model beside it, built to meet the
+# review's acceptance: the endpoint as the committed estimator reads it, the anchor matched at the level it
+# was measured and with its clustering, the assay's sensitivity and false positives applied at the element
+# level on both sides of the calibration, observed and latent correlation kept apart, the planned analysis
+# simulated end to end under the null and each alternative with shared controls and chromosome clustering,
+# designs compared in assay units, and the eligible block population as a hard cap.
+
+RESULT_CALIBRATED = "clause2_design_power_calibrated"
+
+#: the designs compared at equal cost: tested elements per block AND per window (k), tested windows per
+#: block (m), and blocks sharing one set of tested windows (g, the shared-control factor)
+S2_K = (1, 2, 3, 6)
+S2_M = (1, 3, 10)
+S2_G = (1, 4)
+#: lane-design's reference design kept for continuity, and the design every carrying block can enter
+S2_REFERENCE_DESIGNS = ((6, 3, 1), (1, 3, 1))
+#: compared blocks searched; every design's grid is cut at its eligible population and that population
+#: itself is added, so no size above it is ever simulated or printed as a number
+S2_N_GRID = (20, 30, 50, 75, 100, 150, 200, 300, 400, 500)
+#: total assay budgets, in tested elements, for the equal-cost table
+S2_BUDGETS = (250, 500, 1000, 2000, 4000, 8000)
+S2_RATIOS = (1.0, 0.75, 0.5, 0.25, 0.1, 0.0)
+S2_POWER_TARGETS = (0.5, 0.8, 0.9)
+S2_FALSE_POSITIVE = (0.0, 0.01, 0.03)
+S2_REFERENCE_FALSE_POSITIVE = 0.01
+S2_REFERENCE_SENSITIVITY_COLUMN = "PowerAtEffectSize20"
+S2_CHROMOSOME_ICC_VARIANTS = (0.0, 0.03)
+S2_EXPERIMENTS = 2000  # simulated experiments per cell
+S2_CHROMOSOME_RESAMPLES = 1000  # Monte Carlo resamples of the chromosome interval, per experiment
+S2_ANCHOR_BOOTSTRAP = 10_000  # cluster-bootstrap resamples of the anchor
+S2_ANCHOR_REPLICATES = 4000  # simulated replicates of the anchor's own windows in the reproduction check
+S2_ANCHOR_TOLERANCE = 0.005  # the anchor is reproduced if the simulated window rate is within half a point
+S2_ICC_TOLERANCE = 0.02  # and the simulated observed-scale ICC within 0.02 of its target
+S2_BOOTSTRAP_CHECK_EXPERIMENTS = 200  # the exact block bootstrap against the committed 10,000-resample one
+S2_COMMITTED_RESAMPLES = 10_000  # clause2_matched_control.BOOTSTRAP, the committed interval's resamples
+S2_SEED = 2026092812
+S2_ICC_BINS_KB = (25, 50, 100, 250, 1000)
+
+
+S2_REGISTRATION: dict[str, Any] = {
+    "registered": "2026-09-28",
+    "lane": "lane-s2",
+    "item": "docs/ROADMAP.md section 5, item 12, row S2 (second external review)",
+    "registered_before": (
+        "the anchor's windows were redrawn and before any configuration of this model was simulated. The "
+        "constants, the equations, the grids, the checks and their tolerances, the reported quantities and "
+        "the words the answer may be stated in are fixed in this dict and in the constants beside it"
+    ),
+    "what_it_replaces_and_what_it_keeps": (
+        "lane-design's committed table (70801de) is kept as the record of what that run computed and is read "
+        "as exploratory. Its simulation reproduced neither its anchor's quantity nor its measured "
+        "correlation "
+        "(b903e1e: 0.16802 element detection and 0.5696 positive windows against a 13.45% window anchor; an "
+        "observed-scale ICC of 0.115 against the 0.30 measured). This model is written beside it under a new "
+        "result name, clause2_design_power_calibrated"
+    ),
+    "review_acceptance": [
+        "calibrate the actual experimental endpoint",
+        "incorporate sensitivity and false positives consistently",
+        "distinguish observed from latent correlation",
+        "simulate the planned analysis under the null and alternatives, including shared controls and "
+        "clustering",
+        "compare designs at equal total assay cost",
+        "flag any sample size that exceeds the eligible block population",
+    ],
+    "endpoint": (
+        "exactly as the committed estimator reads it (clause2_measured_arm.summarise_measured): per tested "
+        "element, the assay calls a significant change in a protein-coding gene (either sign); a BLOCK is "
+        "positive if any of its tested elements is called; a WINDOW is positive if any of its tested "
+        "elements "
+        "is called. Per compared block d = Y - (positive tested windows / tested windows). The endpoint is "
+        "therefore a property of a unit and of how many elements it had tested, and every rate below says "
+        "which unit and how many elements"
+    ),
+    "estimator_and_reading": (
+        "the committed ones, unchanged: the mean of d over compared blocks; the 95% percentile bootstrap "
+        "interval over blocks, and the one over chromosomes beside it; the registered readings of "
+        "clause2_measured_arm, which with at least 20 compared blocks read 'wording_wrong' when the interval "
+        "over blocks lies wholly below 0 and 'model_failed' otherwise. Probability of detection is the share "
+        "of simulated experiments whose interval over blocks lies wholly below 0 when the blocks truly "
+        "regulate less; the false-positive rate is the share whose interval excludes 0 either way at the "
+        "null. The probability of each registered reading is reported too, because 'model_failed' is read "
+        "whenever the interval reaches 0, including when an experiment is simply too small"
+    ),
+    "latent_model": (
+        "per element a TRUE state (regulates a coding gene or not) drawn with probability expit(mu_arm + c + "
+        "u): c ~ Normal(0, tau) per chromosome, shared by a block and the windows on its chromosome; u ~ "
+        "Normal(0, sigma_unit) per unit (a block, or one tested window), independent between units. Given c "
+        "and u, elements are independent. The assay then calls a true regulator with probability s "
+        "(sensitivity) and a non-regulator with probability f (false-positive rate), independently per "
+        "element. Calls, not states, make the endpoint"
+    ),
+    "anchor_at_its_level": (
+        "the anchor is 30 of 223 WINDOWS carrying a CRISPRi-tested element, and it is matched as that: the "
+        "observed rate of positive windows over those windows, each with its own number of tested elements, "
+        "must come back at 30/223. To know those numbers the anchor's windows are redrawn with the committed "
+        "draw (clause2_matched_control.matched_windows, the committed seed and decile edges, the measured "
+        "arm's own verdicts), recording which scored elements each unit holds. Gate, to the digit, before "
+        "any use: 44,081 windows drawn, 31,554 carrying a scored element, 223 with a tested element, 30 with "
+        "a regulating one, 134 and 27 blocks with such windows, 882 blocks, 531 carrying. If the gate fails "
+        "nothing is calibrated and the result says so"
+    ),
+    "anchor_clustering": (
+        "223 windows are not 223 independent units: windows of one block, and windows of different blocks on "
+        "one chromosome, can hold the same tested element. The anchor's uncertainty is a cluster bootstrap "
+        "(10,000 resamples, ratio of summed positives to summed windows) over (a) connected components of "
+        "windows linked by a shared tested element and (b) blocks; the sensitivity grid's ends are the wider "
+        "of the two intervals, end by end. The exact binomial interval is reported beside them, labelled as "
+        "the as-if-independent one"
+    ),
+    "sensitivity_and_false_positives": (
+        "applied at the ELEMENT level on both sides of the calibration: the same s and f that deconvolve the "
+        "anchor are the ones the planned experiment is simulated with (a screen of the benchmark's kind). "
+        "s is the mean of a benchmark power column (reference PowerAtEffectSize20, 0.6674; the four others "
+        "as one-factor variants). f reference 0.01: if calls are made at a false discovery rate between 5% "
+        "and 10% -- the usual range for screens of this kind, not a figure read from these tables -- a call "
+        "rate near 13% implies about 0.008 to 0.015 per non-regulating element; 0 and 0.03 are the variants"
+    ),
+    "correlation_observed_and_latent": (
+        "the benchmark ICCs (0.375 at 25 kb to 0.209 at 1 Mb; 0.0142 between chromosomes) are one-way ANOVA "
+        "ICCs of 0/1 CALLS: observed-scale figures. They are matched on the observed scale, after the assay "
+        "model: the within-unit spread is solved so that Var(q) / (qbar (1 - qbar)) of the calls equals the "
+        "measured ICC, and the chromosome spread so that the calls' between-chromosome share equals 0.0142. "
+        "The latent ICCs that result are reported beside the observed ones and never substituted for them. "
+        "The reference scale is the benchmark bin nearest the median length of the carrying blocks (log "
+        "scale); the other bins are one-factor variants"
+    ),
+    "calibration": (
+        "three equations in three unknowns (window location mu, total spread sigma, chromosome part tau), "
+        "solved by nested bisection over Gauss-Hermite quadrature: (1) the observed positive-window rate "
+        "over the anchor's windows equals the anchor; (2) the observed-scale within-unit ICC equals its "
+        "target; (3) the observed-scale chromosome ICC equals its target. A configuration with no solution "
+        "is "
+        "reported as infeasible, with the largest reachable value, and is not simulated"
+    ),
+    "the_check_s2_exists_for": (
+        "after calibration, SIMULATE (not the quadrature it was solved with) 4,000 replicates of the "
+        "anchor's "
+        "own 223 windows with their own tested-element counts, and 20,000 clusters of four calls. The anchor "
+        "is reproduced if the simulated positive-window rate is within 0.5 points of 30/223 AND the "
+        "simulated "
+        "observed-scale ICC within 0.02 of its target. If the reference calibration fails either, no size "
+        "from this run is read as calibrated and the result says so first. The implied observed ELEMENT rate "
+        "is reported beside the benchmark's element-level rates (12.15%, 14.56%) as an out-of-sample "
+        "comparison, not a gate"
+    ),
+    "block_arm": (
+        "the block arm's MEAN true per-element rate is ratio x the window arm's, at the same spreads, over "
+        "the "
+        "registered ratios 1.0, 0.75, 0.5, 0.25, 0.1, 0.0. (lane-design applied the ratio to the location, "
+        "which is not the mean once there is spread.) The estimand at each design is computed in closed form "
+        "and the interval's coverage of it is reported"
+    ),
+    "designs": (
+        "k tested elements per block AND per tested window (1, 2, 3, 6), so both arms' endpoints count the "
+        "same number of calls and the null stays a null; m tested windows per block (1, 3, 10); g blocks of "
+        "one chromosome sharing one set of m tested windows (1: none; 4: shared controls). 24 designs. "
+        "Reference designs for the one-factor sensitivity analysis: (6, 3, 1), lane-design's reference, and "
+        "(1, 3, 1), which every carrying block can enter"
+    ),
+    "shared_controls_and_clustering_simulated": (
+        "blocks are drawn without replacement from the eligible population, so their chromosomes are the "
+        "real "
+        "ones; the chromosome intercept is drawn once per experiment and shared by blocks and windows on "
+        "that "
+        "chromosome; with g = 4 the blocks of a chromosome are grouped in fours and each group's blocks read "
+        "the same windows, so their differences are correlated exactly as shared controls make them. The "
+        "committed interval over blocks treats blocks as independent; the simulation measures what that "
+        "costs rather than assuming it"
+    ),
+    "cost_model": (
+        "assay units are tested elements. A design with N compared blocks costs N k for the blocks and "
+        "(number of distinct window sets) m k for the windows; nominal per block k (1 + m / g), realised "
+        "cost "
+        "averaged over the simulated experiments. Designs are compared (a) by the realised cost of the "
+        "smallest searched N reaching 80% probability of detection, the cheapest feasible design named per "
+        "ratio, and (b) by probability of detection at fixed budgets of 250, 500, 1,000, 2,000, 4,000 and "
+        "8,000 tested elements"
+    ),
+    "eligible_population_is_a_hard_cap": (
+        "a k-element design can only use real-unknown blocks holding at least k scored elements; that count, "
+        "from the redraw, is its eligible population. N is never simulated above it; the searched grid "
+        "(20, 30, 50, 75, 100, 150, 200, 300, 400, 500) is cut at it and the population itself is added. A "
+        "power target not reached within it is printed as 'infeasible', never as a number, and so is a "
+        "budget "
+        "that buys more blocks than it. Every entry of lane-design's committed table above its own design's "
+        "eligible population is listed as infeasible beside it. The window arm's supply is reported (share "
+        "of carrying windows holding at least k scored elements) and not capped, since windows are drawn "
+        "from the rest of the chromosome"
+    ),
+    "simulation": (
+        "2,000 simulated experiments per cell. The interval over blocks is computed EXACTLY: each block's "
+        "difference is a multiple of 1/m, so the resampled mean's distribution is the n-fold convolution of "
+        "the experiment's own empirical distribution (FFT), the quantity the committed 10,000-resample "
+        "percentile interval estimates; a registered check runs the committed resampling interval on 200 "
+        "simulated experiments at 8 cells and reports how often the two readings differ. The interval over "
+        "chromosomes is the committed resampling one, 1,000 resamples per experiment. Alternatives stop at "
+        "the "
+        "first searched N reaching 90%; the null runs every N"
+    ),
+    "null_calibration_rule": (
+        "a (design, N) cell is calibrated if its false-positive rate is at most 0.05 + 2 Monte Carlo "
+        "standard "
+        "errors; otherwise it is reported as anti-conservative, and its sizes are read as optimistic by that "
+        "much. Expected before running, stated so it can be scored: shared controls (g = 4) are "
+        "anti-conservative, because the committed interval treats blocks that share windows as independent"
+    ),
+    "sensitivity_analysis": (
+        "one factor at a time from the reference calibration, at the two reference designs: the anchor at "
+        "its clustered interval's ends; the four other power columns; f = 0 and 0.03; the four other ICC "
+        "scales; chromosome ICC 0 and 0.03. Each variant is recalibrated, re-checked against the anchor "
+        "(1,000 replicates) and searched to 80%"
+    ),
+    "assumptions_stated_not_tested": [
+        "the anchor's tested elements were chosen by the benchmark's designers; the planned experiment's "
+        "elements would be scored elements chosen for the design. The window arm's per-element rate is "
+        "carried "
+        "across that difference",
+        "one sensitivity per element, taken from pair-level power; an element tested against several genes "
+        "is treated as one call",
+        "matched windows holding k scored elements exist for every block; their supply is reported",
+        "blocks and windows share the latent spread; only the mean differs between arms",
+    ],
+    "exclusions": (
+        "the model arm's -27.25 points and its per-block dispersion are not used anywhere, as in "
+        "lane-design's "
+        "registration, and the test that enforces it covers this code too. 0 AlphaGenome requests: the "
+        "element "
+        "archive is opened only for which elements are scored"
+    ),
+    "words": (
+        "every size is a probability-of-detection statement under the calibrated assumptions -- 'N compared "
+        "blocks detect a difference of this size with probability p' -- never a guarantee that an experiment "
+        "decides clause 2"
+    ),
+}
+
+
+# ---- the closed forms: expectations over the unit's logit-normal intercept -----------------------------
+
+
+def unit_positive_probability(
+    mu: float | None, sigma: float, sensitivity: float, false_positive: float, k: int
+) -> float:
+    """P(a unit with k tested elements is observed positive): 1 - E[(1 - q)^k] over its intercept.
+
+    `mu` None means the unit's elements never truly regulate (ratio 0), so only false positives remain.
+    """
+    if mu is None:
+        return 1 - (1 - false_positive) ** k
+    q = _observed_probability(mu + sigma * _GH_X, sensitivity, false_positive)
+    return float(1 - _GH_W @ (1 - q) ** k)
+
+
+def marginal_true_rate(mu: float | None, sigma: float) -> float:
+    """The mean true per-element regulation rate, E[expit(mu + sigma Z)]: the LATENT rate, not a location."""
+    if mu is None:
+        return 0.0
+    return float(_GH_W @ _expit(mu + sigma * _GH_X))
+
+
+def observed_icc(mu: float, sigma: float, sensitivity: float, false_positive: float) -> float:
+    """The OBSERVED-scale intraclass correlation of 0/1 calls of elements sharing an intercept.
+
+    Given the intercept the calls are independent Bernoulli(q), so the between-unit share of the variance
+    of a call is Var(q) / (qbar (1 - qbar)). This is the quantity a one-way ANOVA ICC of 0/1 calls
+    estimates, which is what the benchmark's 0.30 is.
+    """
+    q = _observed_probability(mu + sigma * _GH_X, sensitivity, false_positive)
+    qbar = float(_GH_W @ q)
+    return float(_GH_W @ (q - qbar) ** 2) / (qbar * (1 - qbar)) if 0 < qbar < 1 else 0.0
+
+
+def observed_chromosome_icc(
+    mu: float, sigma_total: float, tau: float, sensitivity: float, false_positive: float
+) -> float:
+    """The observed-scale ICC of calls sharing only a chromosome intercept (sd tau) of the total sigma."""
+    su = math.sqrt(max(sigma_total**2 - tau**2, 0.0))
+    eta = mu + tau * _GH_X[:, None] + su * _GH_X[None, :]
+    q = _observed_probability(eta, sensitivity, false_positive)
+    per_c = q @ _GH_W
+    qbar = float(_GH_W @ per_c)
+    return float(_GH_W @ (per_c - qbar) ** 2) / (qbar * (1 - qbar)) if 0 < qbar < 1 else 0.0
+
+
+def latent_icc(sigma: float) -> float:
+    """The latent-scale ICC of an intercept of sd sigma: sigma^2 / (sigma^2 + pi^2 / 3)."""
+    return sigma**2 / (sigma**2 + math.pi**2 / 3)
+
+
+def _bisect(fn: Any, target: float, lo: float, hi: float, iters: int = 100) -> float:
+    """Root of an INCREASING fn(x) = target on [lo, hi]."""
+    for _ in range(iters):
+        mid = (lo + hi) / 2
+        if fn(mid) < target:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+def window_rate_over(
+    mu: float, sigma: float, sensitivity: float, false_positive: float, k_counts: dict[int, int]
+) -> float:
+    """The observed positive-window rate over windows whose tested-element counts are `k_counts`."""
+    total = sum(k_counts.values())
+    return (
+        sum(
+            c * unit_positive_probability(mu, sigma, sensitivity, false_positive, k)
+            for k, c in k_counts.items()
+        )
+        / total
+    )
+
+
+def mu_for_window_rate(
+    rate: float, sigma: float, sensitivity: float, false_positive: float, k_counts: dict[int, int]
+) -> float | None:
+    """The window arm's logit location that makes the observed window rate `rate` over those windows."""
+    floor = window_rate_over(-40.0, sigma, sensitivity, false_positive, k_counts)
+    ceil = window_rate_over(40.0, sigma, sensitivity, false_positive, k_counts)
+    if not floor < rate < ceil:
+        return None
+    return _bisect(
+        lambda m: window_rate_over(m, sigma, sensitivity, false_positive, k_counts), rate, -40.0, 40.0
+    )
+
+
+def mu_for_marginal_rate(pi: float, sigma: float) -> float | None:
+    """The logit location whose MEAN true rate is `pi` at intercept spread sigma; None for pi = 0."""
+    if pi <= 0:
+        return None
+    return _bisect(lambda m: marginal_true_rate(m, sigma), pi, -40.0, 40.0)
+
+
+def calibrate(
+    anchor_rate: float,
+    k_counts: dict[int, int],
+    sensitivity: float,
+    false_positive: float,
+    icc_target: float,
+    chromosome_icc_target: float,
+) -> dict[str, Any]:
+    """Solve the latent model so that, AFTER the assay, it reproduces the anchor at the window level and
+    the measured correlations on the observed scale.
+
+    Unknowns: the window arm's logit location mu, the total intercept spread sigma (unit plus chromosome)
+    and the chromosome part tau. Equations: (1) the observed rate of positive windows over the anchor's own
+    windows, each with its own number of tested elements, equals the anchor; (2) the observed-scale ICC of
+    calls sharing an intercept equals the measured one; (3) the observed-scale ICC of calls sharing only a
+    chromosome equals the measured chromosome ICC. The latent ICCs that result are reported beside the
+    observed ones and never substituted for them.
+    """
+    out: dict[str, Any] = {
+        "anchor_rate": anchor_rate,
+        "sensitivity": sensitivity,
+        "false_positive": false_positive,
+        "observed_icc_target": icc_target,
+        "observed_chromosome_icc_target": chromosome_icc_target,
+        "anchor_tested_elements_per_window": {str(k): c for k, c in sorted(k_counts.items())},
+    }
+    if sensitivity <= false_positive:
+        return {
+            **out,
+            "feasible": False,
+            "why": "an assay no more likely to call a regulator than a non-regulator",
+        }
+
+    def icc_at(sigma: float) -> float:
+        mu = mu_for_window_rate(anchor_rate, sigma, sensitivity, false_positive, k_counts)
+        return -1.0 if mu is None else observed_icc(mu, sigma, sensitivity, false_positive)
+
+    top = 12.0
+    if icc_target <= 0:
+        sigma = 0.0
+    elif icc_at(top) < icc_target:
+        return {
+            **out,
+            "feasible": False,
+            "why": (
+                f"no intercept spread up to {top} on the logit produces an observed-scale ICC of "
+                f"{icc_target} "
+                f"at this sensitivity and anchor; the largest reachable is {round(icc_at(top), 4)}"
+            ),
+        }
+    else:
+        sigma = _bisect(icc_at, icc_target, 0.0, top)
+    mu = mu_for_window_rate(anchor_rate, sigma, sensitivity, false_positive, k_counts)
+    if mu is None:
+        return {**out, "feasible": False, "why": "the anchor is outside what this assay can produce"}
+    tau = 0.0
+    if chromosome_icc_target > 0 and sigma > 0:
+        if observed_chromosome_icc(mu, sigma, sigma, sensitivity, false_positive) < chromosome_icc_target:
+            tau = sigma
+        else:
+            tau = _bisect(
+                lambda t: observed_chromosome_icc(mu, sigma, t, sensitivity, false_positive),
+                chromosome_icc_target,
+                0.0,
+                sigma,
+            )
+    pi_w = marginal_true_rate(mu, sigma)
+    return {
+        **out,
+        "feasible": True,
+        "mu_window": round(mu, 6),
+        "sigma_total": round(sigma, 6),
+        "tau_chromosome": round(tau, 6),
+        "sigma_unit": round(math.sqrt(max(sigma**2 - tau**2, 0.0)), 6),
+        "window_true_rate_latent_mean": round(pi_w, 5),
+        "window_rate_at_the_location": round(float(_expit(np.array(mu))), 5),
+        "observed_element_rate_implied": round(sensitivity * pi_w + false_positive * (1 - pi_w), 5),
+        "observed_window_rate_achieved": round(
+            window_rate_over(mu, sigma, sensitivity, false_positive, k_counts), 5
+        ),
+        "observed_icc_achieved": round(observed_icc(mu, sigma, sensitivity, false_positive), 5),
+        "observed_chromosome_icc_achieved": round(
+            observed_chromosome_icc(mu, sigma, tau, sensitivity, false_positive), 5
+        ),
+        "latent_icc_unit_plus_chromosome": round(latent_icc(sigma), 5),
+        "latent_icc_chromosome": round(tau**2 / (sigma**2 + math.pi**2 / 3), 5),
+    }
+
+
+def block_arm(cal: dict[str, Any], ratio: float) -> dict[str, Any]:
+    """The block arm at `ratio`: its MEAN true rate is ratio x the window arm's, at the same spreads."""
+    pi_b = ratio * cal["window_true_rate_latent_mean"]
+    mu_b = mu_for_marginal_rate(pi_b, cal["sigma_total"])
+    return {"ratio": ratio, "block_true_rate_latent_mean": round(pi_b, 5), "mu_block": mu_b}
+
+
+def expected_difference(cal: dict[str, Any], mu_b: float | None, k: int) -> float:
+    """E[Y - W] per compared block for a design testing k elements per unit: the estimand, in points/100."""
+    s, f, sg = cal["sensitivity"], cal["false_positive"], cal["sigma_total"]
+    return unit_positive_probability(mu_b, sg, s, f, k) - unit_positive_probability(
+        cal["mu_window"], sg, s, f, k
+    )
+
+
+# ---- the anchor, redrawn at the level it was measured ---------------------------------------------------
+
+
+def _measured_arm_module() -> Any:
+    spec = importlib.util.spec_from_file_location(
+        "clause2_measured_arm", Path(__file__).resolve().parent / "clause2_measured_arm.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+class _UnitRecorder:
+    """Records, for the committed window draw, which scored elements each block and each window holds.
+
+    `matched_windows` calls `raw_fn(mid)` once when it opens a block and once per accepted window, and it
+    evaluates every predicate over a unit's elements. A last predicate that always answers False therefore
+    sees every element of every unit in order, and `raw_fn` marks where each unit starts. The draw itself
+    consumes no random number on either call, so the windows are the committed windows; the gate checks it.
+    """
+
+    def __init__(self, block_mids: set[int]):
+        self.block_mids = block_mids
+        self.units: list[dict[str, Any]] = []
+
+    def raw(self, mid: int) -> int:
+        self.units.append({"kind": "block" if mid in self.block_mids else "window", "mid": mid, "els": []})
+        return 0
+
+    def element(self, e: dict[str, Any]) -> bool:
+        self.units[-1]["els"].append(e)
+        return False
+
+
+def redraw_the_anchor(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """The 223 windows behind the 13.45% anchor, redrawn with the committed code and seed, with what each
+    holds: its tested elements, whether one regulates a coding gene, and which windows share an element.
+
+    Reads the element archive (for which elements are scored, never for a model answer), the organiser's
+    blocks, GENCODE and the measured layer. 0 AlphaGenome requests.
+    """
+    from genomeos.attribution import organise
+
+    arm = _measured_arm_module()
+    mcm, cutm = arm.mc, arm.cut
+    committed = json.loads((results_dir / f"{MEASURED_ARM}.json").read_text())
+    chroms = committed["chromosomes"]
+    denom, primary = arm.DENOMINATOR_QUESTION, arm.PRIMARY_QUESTION
+    blocks = {c: organise.blocks(c) for c in chroms}
+    tss = {c: mcm.coding_tss(c) for c in chroms}
+    coding = arm.coding_symbols(chroms)
+    edges = mcm.decile_edges(
+        [
+            mcm.tss_count(tss[c], (b["start"] + b["end"]) // 2)
+            for c in chroms
+            for b in mcm.target_sets(blocks[c])["real_unknown"]
+        ]
+    )
+    windows: list[dict[str, Any]] = []
+    block_rows: list[dict[str, Any]] = []
+    totals = {"windows_drawn": 0, "windows_carrying_a_scored_element": 0}
+    for c in chroms:
+        els = cutm.elements_of(c)
+        if not els:
+            continue
+        els.sort(key=lambda e: e["start"])
+        got = cutm.read_chromosome(c, els)
+        if not got:
+            continue
+        layer = ms.Layer.load(c)
+        arm.attach(els, layer, coding)
+        targets = mcm.target_sets(got)["real_unknown"]
+        rec = _UnitRecorder({(b["start"] + b["end"]) // 2 for b in targets})
+        preds = {
+            denom: lambda e: bool(e["_measured"][denom]),
+            primary: lambda e: bool(e["_measured"][primary]),
+            "_record": rec.element,
+        }
+        t = tss[c]
+        runs = mcm.matched_windows(
+            targets, got, els, preds, lambda m, t=t: mcm.bin_of(mcm.tss_count(t, m), edges), raw_fn=rec.raw
+        )
+        by_start = {r["start"]: r for r in runs}
+        current = None
+        for u in rec.units:
+            if u["kind"] == "block":
+                current = next(b for b in targets if (b["start"] + b["end"]) // 2 == u["mid"])
+                r = by_start[current["start"]]
+                block_rows.append(
+                    {
+                        "chrom": c,
+                        "block": f"{c}:{current['start']}-{current['end']}",
+                        "length": current["length"],
+                        "scored_elements": len(u["els"]),
+                        "elements_field": r["elements"],
+                        "tested": any(e["_measured"][denom] for e in u["els"]),
+                        "windows_drawn": r["drawn"],
+                        "windows_carrying": r["carrying"],
+                        "windows_tested": r["windows_yes"][denom],
+                        "windows_regulating": r["windows_yes"][primary],
+                    }
+                )
+                continue
+            totals["windows_drawn"] += 1
+            if not u["els"]:
+                continue
+            totals["windows_carrying_a_scored_element"] += 1
+            tested = [e for e in u["els"] if e["_measured"][denom]]
+            if not tested:
+                windows.append({"chrom": c, "tested": 0, "scored": len(u["els"])})
+                continue
+            windows.append(
+                {
+                    "chrom": c,
+                    "block": f"{c}:{current['start']}-{current['end']}",
+                    "window_mid": u["mid"],
+                    "scored": len(u["els"]),
+                    "tested": len(tested),
+                    "positive": any(e["_measured"][primary] for e in u["els"]),
+                    "tested_elements": sorted(f"{c}:{e['start']}-{e['end']}" for e in tested),
+                    "regulating_elements": sorted(
+                        f"{c}:{e['start']}-{e['end']}" for e in tested if e["_measured"][primary]
+                    ),
+                }
+            )
+        del els, got, layer, rec
+        print(f"{c}: redrawn", flush=True)
+    anchor = [w for w in windows if w["tested"]]
+    want = committed["coverage"]["windows_matched_real_unknown"]
+    got_counts = {
+        "windows_drawn": totals["windows_drawn"],
+        "windows_carrying_a_scored_element": totals["windows_carrying_a_scored_element"],
+        "windows_with_a_tested_element": len(anchor),
+        "windows_with_a_regulating_element": sum(w["positive"] for w in anchor),
+        "blocks_with_a_tested_window": len({w["block"] for w in anchor}),
+        "blocks_with_a_regulating_window": len({w["block"] for w in anchor if w["positive"]}),
+        "real_unknown_blocks": len(block_rows),
+        "blocks_carrying_a_scored_element": sum(1 for b in block_rows if b["scored_elements"]),
+        "per_block_counts_agree_with_the_draw": all(
+            b["scored_elements"] == b["elements_field"] for b in block_rows
+        )
+        and sum(b["windows_tested"] for b in block_rows) == len(anchor),
+    }
+    want_counts = {
+        "windows_drawn": want["windows_drawn"],
+        "windows_carrying_a_scored_element": want["windows_carrying_a_scored_element"],
+        "windows_with_a_tested_element": want["windows_with"][denom],
+        "windows_with_a_regulating_element": want["windows_with"][primary],
+        "blocks_with_a_tested_window": want["blocks_with_at_least_one_such_window"][denom],
+        "blocks_with_a_regulating_window": want["blocks_with_at_least_one_such_window"][primary],
+        "real_unknown_blocks": committed["coverage"]["real_unknown"]["blocks"],
+        "blocks_carrying_a_scored_element": committed["coverage"]["real_unknown"][
+            "blocks_carrying_a_scored_element"
+        ],
+        "per_block_counts_agree_with_the_draw": True,
+    }
+    return {
+        "chromosomes": chroms,
+        "gate": {"want": want_counts, "got": got_counts, "passed": want_counts == got_counts},
+        "anchor_windows": anchor,
+        "blocks": block_rows,
+        "window_scored_elements": [w["scored"] for w in windows],
+    }
+
+
+def anchor_structure(anchor: list[dict[str, Any]], seed: int = S2_SEED) -> dict[str, Any]:
+    """The anchor at the level it was measured: its windows' tested-element counts, the distinct elements
+    beneath them, and its uncertainty with the windows clustered (shared elements; blocks) rather than
+    counted as independent."""
+    n = len(anchor)
+    pos = sum(w["positive"] for w in anchor)
+    k_counts: dict[int, int] = defaultdict(int)
+    for w in anchor:
+        k_counts[w["tested"]] += 1
+    # components: windows linked when they share a tested element
+    parent = list(range(n))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    first: dict[str, int] = {}
+    for i, w in enumerate(anchor):
+        for e in w["tested_elements"]:
+            if e in first:
+                a, b = find(i), find(first[e])
+                if a != b:
+                    parent[a] = b
+            else:
+                first[e] = i
+    comp = [find(i) for i in range(n)]
+    distinct = {e for w in anchor for e in w["tested_elements"]}
+    regulating = {e for w in anchor for e in w["regulating_elements"]}
+
+    def cluster_interval(keys: list[Any]) -> dict[str, Any]:
+        groups: dict[Any, list[int]] = defaultdict(list)
+        for key, w in zip(keys, anchor, strict=True):
+            groups[key].append(int(w["positive"]))
+        ys = np.array([sum(g) for g in groups.values()], dtype=float)
+        ns = np.array([len(g) for g in groups.values()], dtype=float)
+        rng = np.random.default_rng(seed)
+        idx = rng.integers(0, len(ys), size=(S2_ANCHOR_BOOTSTRAP, len(ys)))
+        boots = ys[idx].sum(axis=1) / ns[idx].sum(axis=1)
+        lo, hi = np.percentile(boots, [2.5, 97.5])
+        # the design effect of the clustering on the variance of the rate
+        p = ys.sum() / ns.sum()
+        var_iid = p * (1 - p) / ns.sum()
+        return {
+            "clusters": len(ys),
+            "largest_cluster_windows": int(ns.max()),
+            "interval_95": [round(float(lo), 4), round(float(hi), 4)],
+            "design_effect": round(float(boots.var()) / var_iid, 3) if var_iid > 0 else None,
+            "effective_independent_windows": round(n / (float(boots.var()) / var_iid), 1)
+            if var_iid > 0
+            else None,
+        }
+
+    by_component = cluster_interval(comp)
+    by_block = cluster_interval([w["block"] for w in anchor])
+    lo = min(by_component["interval_95"][0], by_block["interval_95"][0])
+    hi = max(by_component["interval_95"][1], by_block["interval_95"][1])
+    return {
+        "windows": n,
+        "positive_windows": pos,
+        "rate": round(pos / n, 4) if n else None,
+        "unit": "matched windows carrying at least one CRISPRi-tested element (tested against a coding gene)",
+        "tested_elements_per_window": {str(k): c for k, c in sorted(k_counts.items())},
+        "distinct_tested_elements": len(distinct),
+        "distinct_tested_elements_regulating": len(regulating),
+        "element_level_rate_beneath_the_windows": round(len(regulating) / len(distinct), 4)
+        if distinct
+        else None,
+        "positive_windows_whose_positive_is_an_untested_element": sum(
+            1 for w in anchor if w["positive"] and not w["regulating_elements"]
+        ),
+        "windows_sharing_a_tested_element_with_another": sum(
+            1 for i in range(n) if sum(1 for j in comp if j == comp[i]) > 1
+        ),
+        "cluster_bootstrap_by_shared_element": by_component,
+        "cluster_bootstrap_by_block": by_block,
+        "exact_binomial_interval_as_if_independent": [round(x, 4) for x in _exact_binomial_interval(pos, n)],
+        "grid_ends_used": [round(lo, 4), round(hi, 4)],
+        "grid_rule": "the wider of the two clustered intervals, end by end",
+    }
+
+
+# ---- the planned experiment, simulated end to end -------------------------------------------------------
+
+
+def exact_block_bootstrap_tails(
+    y: np.ndarray, wbar: np.ndarray, m: int, delta: float = 0.0
+) -> dict[str, np.ndarray]:
+    """The committed percentile bootstrap over blocks, computed exactly rather than by resampling.
+
+    Each block's difference y - wbar is a multiple of 1/m, so the resampled mean is a lattice sum of n iid
+    draws from the experiment's own empirical distribution; its exact distribution is the n-fold
+    convolution of that distribution (by FFT). The committed 10,000-resample percentile interval estimates
+    exactly these quantiles. With the inverted-CDF percentile, the interval lies wholly below `delta` iff
+    P*(mean < delta) >= 0.975 and wholly above it iff P*(mean <= delta) < 0.025.
+    """
+    e, n = y.shape
+    code = (y.astype(np.int64) * m - np.rint(wbar * m).astype(np.int64)) + m  # 0 .. 2m
+    u = 2 * m + 1
+    pmf = np.stack([(code == j).sum(axis=1) for j in range(u)], axis=1) / n  # (e, u)
+    size = 1 << int(math.ceil(math.log2(2 * m * n + 1)))
+    phi = np.fft.rfft(pmf, size, axis=1)
+    dist = np.fft.irfft(phi**n, size, axis=1)[:, : 2 * m * n + 1]
+    dist = np.clip(dist, 0.0, None)
+    dist /= dist.sum(axis=1, keepdims=True)
+    # lattice point j is the mean (j - m n) / (m n)
+    cut = delta * m * n + m * n
+    js = np.arange(2 * m * n + 1)
+    below = dist[:, js < cut - 1e-9].sum(axis=1)
+    at_or_below = dist[:, js <= cut + 1e-9].sum(axis=1)
+    return {"p_below": below, "p_at_or_below": at_or_below}
+
+
+def _chromosome_interval(
+    d: np.ndarray, chrom: np.ndarray, resamples: int, rng: np.random.Generator
+) -> tuple[np.ndarray, np.ndarray]:
+    """The committed interval over chromosomes, per experiment: resample the chromosomes that hold a
+    compared block, with replacement, and take the ratio of summed differences to summed blocks."""
+    e, _ = d.shape
+    sums = np.zeros((e, CHROMOSOMES))
+    ns = np.zeros((e, CHROMOSOMES))
+    rows = np.repeat(np.arange(e), d.shape[1])
+    np.add.at(sums, (rows, chrom.ravel()), d.ravel())
+    np.add.at(ns, (rows, chrom.ravel()), 1)
+    present = ns > 0
+    order = np.argsort(~present, axis=1, kind="stable")  # present chromosomes first
+    counts = present.sum(axis=1)
+    s_sorted = np.take_along_axis(sums, order, axis=1)
+    n_sorted = np.take_along_axis(ns, order, axis=1)
+    lo = np.empty(e)
+    hi = np.empty(e)
+    for i in range(e):
+        held = counts[i]
+        idx = rng.integers(0, held, size=(resamples, held))
+        b = s_sorted[i, :held][idx].sum(axis=1) / n_sorted[i, :held][idx].sum(axis=1)
+        lo[i], hi[i] = np.percentile(b, [2.5, 97.5])
+    return lo, hi
+
+
+def simulate_design(
+    cal: dict[str, Any],
+    mu_b: float | None,
+    design: tuple[int, int, int],
+    n: int,
+    eligible_chroms: np.ndarray,
+    experiments: int,
+    rng: np.random.Generator,
+    delta: float,
+    chromosome_resamples: int = S2_CHROMOSOME_RESAMPLES,
+    chunk: int = 250,
+) -> dict[str, Any]:
+    """`experiments` runs of the planned experiment and its committed analysis at `n` compared blocks.
+
+    Per experiment: n blocks drawn without replacement from the eligible population (so their chromosomes
+    are the real ones); one latent intercept per chromosome shared by the blocks and the windows on it; one
+    per block and one per window set; k tested elements per unit, each called by the assay with the
+    registered sensitivity and false-positive rate; a unit is positive if any of its calls is. Windows are
+    shared by g blocks of the same chromosome. The committed estimator and both committed intervals are then
+    computed on the simulated data.
+    """
+    k, m, g = design
+    if n > len(eligible_chroms):
+        raise ValueError(f"{n} compared blocks exceeds the eligible population of {len(eligible_chroms)}")
+    s, f = cal["sensitivity"], cal["false_positive"]
+    tau, su, mu_w = cal["tau_chromosome"], cal["sigma_unit"], cal["mu_window"]
+
+    def positive(mu: float | None, shift: np.ndarray) -> np.ndarray:
+        q = np.full(shift.shape, f) if mu is None else _observed_probability(mu + shift, s, f)
+        return rng.random(shift.shape) < 1 - (1 - q) ** k
+
+    stats = defaultdict(list)
+    for start in range(0, experiments, chunk):
+        e = min(chunk, experiments - start)
+        pick = np.argsort(rng.random((e, len(eligible_chroms))), axis=1)[:, :n]
+        chrom = eligible_chroms[pick]
+        c = rng.normal(0.0, tau, (e, CHROMOSOMES))
+        cb = np.take_along_axis(c, chrom, axis=1)
+        y = positive(mu_b, cb + rng.normal(0.0, su, (e, n)))
+        if g == 1:
+            w = positive(mu_w, cb[:, :, None] + rng.normal(0.0, su, (e, n, m)))
+            wbar = w.mean(axis=2)
+            window_sets = np.full(e, n)
+        else:
+            order = np.argsort(chrom, axis=1, kind="stable")
+            sc = np.take_along_axis(chrom, order, axis=1)
+            posn = np.broadcast_to(np.arange(n), (e, n))
+            starts = np.ones((e, n), dtype=bool)
+            starts[:, 1:] = sc[:, 1:] != sc[:, :-1]
+            rank = posn - np.maximum.accumulate(np.where(starts, posn, 0), axis=1)
+            per = n // g + 1
+            gid_sorted = sc * per + rank // g
+            gid = np.empty_like(gid_sorted)
+            np.put_along_axis(gid, order, gid_sorted, axis=1)
+            grp_chrom = np.arange(CHROMOSOMES * per) // per
+            cg = c[:, grp_chrom]
+            w = positive(mu_w, cg[:, :, None] + rng.normal(0.0, su, cg.shape + (m,)))
+            wbar = np.take_along_axis(w.mean(axis=2), gid, axis=1)
+            window_sets = np.array([len(np.unique(row)) for row in gid])
+        d = y - wbar
+        tails0 = exact_block_bootstrap_tails(y, wbar, m, 0.0)
+        tails_t = exact_block_bootstrap_tails(y, wbar, m, delta)
+        clo, chi = _chromosome_interval(d, chrom, chromosome_resamples, rng)
+        stats["mean"].append(d.mean(axis=1))
+        stats["below"].append(tails0["p_below"] >= 0.975)  # interval wholly below 0
+        stats["above"].append(tails0["p_at_or_below"] < 0.025)  # wholly above 0
+        stats["covers"].append((tails_t["p_below"] < 0.975) & (tails_t["p_at_or_below"] >= 0.025))
+        stats["chrom_below"].append(chi < 0)
+        stats["chrom_above"].append(clo > 0)
+        stats["cost"].append(n * k + window_sets * m * k)
+    a = {key: np.concatenate(v) for key, v in stats.items()}
+    below, above = a["below"].mean(), a["above"].mean()
+
+    def se(p: float) -> float:
+        return round(math.sqrt(max(p * (1 - p), 1e-12) / experiments), 4)
+
+    return {
+        "n_blocks": n,
+        "experiments": experiments,
+        "expected_difference_points": round(100 * delta, 3),
+        "mean_estimate_points": round(100 * float(a["mean"].mean()), 3),
+        "sd_of_the_estimate_points": round(100 * float(a["mean"].std(ddof=1)), 3),
+        "interval_below_zero": round(float(below), 4),
+        "interval_above_zero": round(float(above), 4),
+        "interval_excludes_zero": round(float(below + above), 4),
+        "monte_carlo_se": se(float(below + above)),
+        "coverage_of_the_expected_difference": round(float(a["covers"].mean()), 4),
+        "registered_reading_wording_wrong": round(float(below), 4),
+        "registered_reading_model_failed": round(1 - float(below), 4),
+        "chromosome_interval_below_zero": round(float(a["chrom_below"].mean()), 4),
+        "chromosome_interval_excludes_zero": round(
+            float(a["chrom_below"].mean() + a["chrom_above"].mean()), 4
+        ),
+        "assay_cost_elements_mean": round(float(a["cost"].mean()), 1),
+    }
+
+
+def design_cost_per_block(design: tuple[int, int, int]) -> float:
+    """Nominal tested elements per compared block: its own k, and its share of m windows of k each."""
+    k, m, g = design
+    return k * (1 + m / g)
+
+
+def eligible_population(blocks: list[dict[str, Any]], k: int) -> int:
+    """Real-unknown blocks holding at least k scored elements: the most blocks a k-element design can use."""
+    return sum(1 for b in blocks if b["scored_elements"] >= k)
+
+
+def n_grid_for(cap: int) -> list[int]:
+    """The searched sizes for a design: the registered grid cut at its cap, and the cap itself."""
+    grid = [n for n in S2_N_GRID if n <= cap and n >= MIN_BLOCKS]
+    if cap >= MIN_BLOCKS and cap not in grid:
+        grid.append(cap)
+    return grid
+
+
+def bootstrap_agreement_check(
+    cal: dict[str, Any],
+    mu_b: float | None,
+    design: tuple[int, int, int],
+    n: int,
+    eligible_chroms: np.ndarray,
+    experiments: int,
+    rng: np.random.Generator,
+) -> dict[str, Any]:
+    """The exact block bootstrap against the committed one (10,000 resamples, percentile, as
+    `summarise_measured` runs it), on the same simulated experiments: the share of experiments where the
+    two read the interval differently."""
+    k, m, g = design
+    s, f = cal["sensitivity"], cal["false_positive"]
+    tau, su, mu_w = cal["tau_chromosome"], cal["sigma_unit"], cal["mu_window"]
+    disagree = 0
+    for _ in range(experiments):
+        pick = rng.permutation(len(eligible_chroms))[:n]
+        chrom = eligible_chroms[pick]
+        c = rng.normal(0.0, tau, CHROMOSOMES)
+        shift_b = c[chrom] + rng.normal(0.0, su, n)
+        qb = np.full(n, f) if mu_b is None else _observed_probability(mu_b + shift_b, s, f)
+        y = rng.random(n) < 1 - (1 - qb) ** k
+        shift_w = c[chrom][:, None] + rng.normal(0.0, su, (n, m))
+        qw = _observed_probability(mu_w + shift_w, s, f)
+        wbar = (rng.random((n, m)) < 1 - (1 - qw) ** k).mean(axis=1)
+        d = y.astype(float) - wbar
+        idx = rng.integers(0, n, size=(S2_COMMITTED_RESAMPLES, n))
+        lo, hi = np.percentile(d[idx].mean(axis=1), [2.5, 97.5])
+        committed = (hi < 0, lo > 0)
+        t = exact_block_bootstrap_tails(y[None, :], wbar[None, :], m, 0.0)
+        exact = (bool(t["p_below"][0] >= 0.975), bool(t["p_at_or_below"][0] < 0.025))
+        disagree += committed != exact
+    return {
+        "design": list(design),
+        "n_blocks": n,
+        "experiments": experiments,
+        "committed_resamples": S2_COMMITTED_RESAMPLES,
+        "readings_that_differ": disagree,
+        "share_that_differ": round(disagree / experiments, 4),
+    }
+
+
+# ---- the run -------------------------------------------------------------------------------------------
+
+
+def _anova_icc_equal(calls: np.ndarray) -> float:
+    """One-way ANOVA ICC for equal cluster sizes, rows = clusters: the estimator the benchmark ICC used."""
+    k, n = calls.shape[0], calls.shape[1]
+    means = calls.mean(axis=1)
+    grand = calls.mean()
+    msb = n * ((means - grand) ** 2).sum() / (k - 1)
+    msw = ((calls - means[:, None]) ** 2).sum() / (k * (n - 1))
+    return float((msb - msw) / (msb + (n - 1) * msw))
+
+
+def anchor_reproduction_check(
+    cal: dict[str, Any],
+    k_counts: dict[int, int],
+    rng: np.random.Generator,
+    replicates: int = S2_ANCHOR_REPLICATES,
+) -> dict[str, Any]:
+    """The check S2 exists for, by simulation rather than by the closed form the model was solved with:
+    simulate the anchor's own windows, each with its own number of tested elements, and compare the
+    observed positive-window rate with the anchor; simulate clusters of calls and compare the observed-
+    scale ICC with its target."""
+    s, f, sg, mu = cal["sensitivity"], cal["false_positive"], cal["sigma_total"], cal["mu_window"]
+    ks = np.repeat(np.array(sorted(k_counts)), [k_counts[k] for k in sorted(k_counts)])
+    q = _observed_probability(mu + rng.normal(0.0, sg, (replicates, len(ks))), s, f)
+    rate = float((rng.random(q.shape) < 1 - (1 - q) ** ks).mean())
+    clusters = 20_000
+    qq = _observed_probability(mu + rng.normal(0.0, sg, clusters), s, f)
+    calls = (rng.random((clusters, 4)) < qq[:, None]).astype(float)
+    icc = _anova_icc_equal(calls)
+    diff = rate - cal["anchor_rate"]
+    return {
+        "anchor_rate": cal["anchor_rate"],
+        "simulated_window_rate": round(rate, 5),
+        "difference_points": round(100 * diff, 3),
+        "tolerance_points": 100 * S2_ANCHOR_TOLERANCE,
+        "window_rate_reproduced": abs(diff) <= S2_ANCHOR_TOLERANCE,
+        "observed_icc_target": cal["observed_icc_target"],
+        "simulated_observed_icc": round(icc, 4),
+        "icc_tolerance": S2_ICC_TOLERANCE,
+        "observed_icc_reproduced": abs(icc - cal["observed_icc_target"]) <= S2_ICC_TOLERANCE,
+        "simulated_element_rate": round(float(calls.mean()), 5),
+        "reproduced": abs(diff) <= S2_ANCHOR_TOLERANCE
+        and abs(icc - cal["observed_icc_target"]) <= S2_ICC_TOLERANCE,
+        "replicates_of_the_anchor_windows": replicates,
+        "simulated_clusters_of_four": clusters,
+    }
+
+
+def _search(
+    cal: dict[str, Any],
+    design: tuple[int, int, int],
+    ratio: float,
+    eligible_chroms: np.ndarray,
+    experiments: int,
+    rng: np.random.Generator,
+    stop_at: float | None,
+) -> dict[str, Any]:
+    """Every searched size of one design at one ratio, up to its cap; alternatives stop once the highest
+    power target is reached, the null runs the whole grid."""
+    k = design[0]
+    arm = block_arm(cal, ratio)
+    delta = expected_difference(cal, arm["mu_block"], k)
+    cap = len(eligible_chroms)
+    cells = []
+    for n in n_grid_for(cap):
+        cell = simulate_design(cal, arm["mu_block"], design, n, eligible_chroms, experiments, rng, delta)
+        cells.append(cell)
+        if stop_at is not None and cell["interval_below_zero"] >= stop_at:
+            break
+    sizes: dict[str, Any] = {}
+    for t in S2_POWER_TARGETS:
+        hit = next((c for c in cells if c["interval_below_zero"] >= t), None)
+        if hit is not None:
+            sizes[str(t)] = {
+                "n_blocks": hit["n_blocks"],
+                "assay_cost_elements": hit["assay_cost_elements_mean"],
+                "power": hit["interval_below_zero"],
+            }
+        else:
+            at_cap = cells[-1] if cells else None
+            sizes[str(t)] = {
+                "n_blocks": "infeasible",
+                "why": (
+                    f"{int(100 * t)}% probability of detection is not reached within the eligible "
+                    "population of "
+                    f"{cap} blocks"
+                    + (f"; at all {cap} of them it is {at_cap['interval_below_zero']}" if at_cap else "")
+                ),
+            }
+    return {
+        "design": {"k": design[0], "m": design[1], "g": design[2]},
+        "ratio": ratio,
+        "block_true_rate_latent_mean": arm["block_true_rate_latent_mean"],
+        "expected_difference_points": round(100 * delta, 3),
+        "eligible_population": cap,
+        "cells": cells,
+        "smallest_n_for_power": sizes,
+    }
+
+
+def collect_calibrated(experiments: int = S2_EXPERIMENTS, seed: int = S2_SEED) -> dict[str, Any]:
+    from statistics import median
+
+    t0 = time.time()
+    rng = np.random.default_rng(seed)
+    out: dict[str, Any] = {
+        "result": RESULT_CALIBRATED,
+        "registration": S2_REGISTRATION,
+        "reproduction_of_the_review": reproduce_the_review(),
+    }
+    anch = anchors()
+    out["benchmark_anchors"] = {
+        "power_column_means": {c: v["mean"] for c, v in anch["power_columns"].items()},
+        "element_level_regulation_rate": anch["element_level_regulation_rate"],
+        "elements_within_cluster_icc_observed_scale": anch["elements_within_cluster_icc"],
+        "blocks_within_chromosome_icc_observed_scale": anch["blocks_within_chromosome_icc"],
+    }
+    red = redraw_the_anchor()
+    out["anchor_redraw_gate"] = red["gate"]
+    if not red["gate"]["passed"]:
+        out["reading"] = "the redraw did not reproduce the anchor's windows: nothing is calibrated from it"
+        out["seconds"] = round(time.time() - t0, 1)
+        return out
+    struct = anchor_structure(red["anchor_windows"], seed)
+    out["anchor"] = struct
+    out["anchor_windows"] = red["anchor_windows"]
+    k_counts = {int(k): c for k, c in struct["tested_elements_per_window"].items()}
+    chroms = red["chromosomes"]
+    cidx = {c: i for i, c in enumerate(chroms)}
+    eligible = {
+        k: np.array([cidx[b["chrom"]] for b in red["blocks"] if b["scored_elements"] >= k], dtype=np.int64)
+        for k in S2_K
+    }
+    carrying_windows = [x for x in red["window_scored_elements"] if x]
+    out["eligible_population"] = {
+        "tier_blocks": len(red["blocks"]),
+        "by_elements_tested_per_block": {
+            str(k): {
+                "blocks": int(len(eligible[k])),
+                "rule": f"real-unknown blocks holding at least {k} scored element(s)",
+                "carrying_windows_holding_at_least_k": round(
+                    sum(1 for x in carrying_windows if x >= k) / len(carrying_windows), 4
+                ),
+            }
+            for k in S2_K
+        },
+    }
+    lengths = [b["length"] for b in red["blocks"] if b["scored_elements"]]
+    med = float(median(lengths))
+    icc_bin = min(S2_ICC_BINS_KB, key=lambda kb: abs(math.log(kb * 1000 / med)))
+    out["icc_scale"] = {
+        "median_length_of_carrying_blocks_bp": med,
+        "bin_used_kb": icc_bin,
+        "rule": "the benchmark ICC bin nearest the median carrying-block length on a log scale",
+    }
+    icc_target = anch["elements_within_cluster_icc"][f"{icc_bin}kb"]["icc"]
+    chrom_icc = anch["blocks_within_chromosome_icc"]["icc"]
+    s_ref = anch["power_columns"][S2_REFERENCE_SENSITIVITY_COLUMN]["mean"]
+    ref_settings = {
+        "anchor_rate": struct["rate"],
+        "k_counts": k_counts,
+        "sensitivity": s_ref,
+        "false_positive": S2_REFERENCE_FALSE_POSITIVE,
+        "icc_target": icc_target,
+        "chromosome_icc_target": chrom_icc,
+    }
+    cal = calibrate(**ref_settings)
+    out["calibration_reference"] = cal
+    if not cal["feasible"]:
+        out["reading"] = "the reference calibration is infeasible: " + cal["why"]
+        out["seconds"] = round(time.time() - t0, 1)
+        return out
+    check = anchor_reproduction_check(cal, k_counts, rng)
+    out["anchor_reproduced"] = check
+    out["the_committed_reference_under_the_same_check"] = {
+        "positive_windows": out["reproduction_of_the_review"]["rerun_now"]["positive_windows"],
+        "observed_scale_icc": out["reproduction_of_the_review"]["closed_form"][
+            "observed_scale_icc_it_implies"
+        ],
+        "anchor": struct["rate"],
+        "observed_icc_measured": out["reproduction_of_the_review"]["reference_configuration"]["icc"],
+    }
+    designs = [(k, m, g) for k in S2_K for m in S2_M for g in S2_G]
+    top = max(S2_POWER_TARGETS)
+    by_design = []
+    for d in designs:
+        for ratio in S2_RATIOS:
+            by_design.append(
+                _search(cal, d, ratio, eligible[d[0]], experiments, rng, None if ratio == 1.0 else top)
+            )
+        print(f"design {d}: done ({time.time() - t0:.0f} s)", flush=True)
+    out["by_design"] = by_design
+    null_cells = [(r["design"], c) for r in by_design if r["ratio"] == 1.0 for c in r["cells"]]
+    thresh = [0.05 + 2 * c["monte_carlo_se"] for _, c in null_cells]
+    out["null_calibration"] = {
+        "what_this_is": (
+            "at ratio 1.0 blocks and windows regulate equally often, so the share of simulated experiments "
+            "whose committed interval excludes 0 is the analysis's false-positive rate; nominal 0.05"
+        ),
+        "cells": [
+            {
+                **dd,
+                "n_blocks": c["n_blocks"],
+                "false_positive_rate": c["interval_excludes_zero"],
+                "monte_carlo_se": c["monte_carlo_se"],
+                "calibrated": c["interval_excludes_zero"] <= t,
+                "chromosome_interval_false_positive_rate": c["chromosome_interval_excludes_zero"],
+                "false_wording_wrong_reading": c["registered_reading_wording_wrong"],
+            }
+            for (dd, c), t in zip(null_cells, thresh, strict=True)
+        ],
+    }
+    cells = out["null_calibration"]["cells"]
+    out["null_calibration"]["summary"] = {
+        "cells": len(cells),
+        "calibrated": sum(c["calibrated"] for c in cells),
+        "largest_false_positive_rate": max(c["false_positive_rate"] for c in cells),
+        "largest_without_shared_controls": max(c["false_positive_rate"] for c in cells if c["g"] == 1),
+        "largest_with_shared_controls": max(c["false_positive_rate"] for c in cells if c["g"] > 1),
+        "largest_chromosome_interval_rate": max(c["chromosome_interval_false_positive_rate"] for c in cells),
+    }
+    # the sample-size table at equal cost: every design's 80% size with its cost, the cheapest per ratio
+    table = []
+    for ratio in S2_RATIOS[1:]:
+        rows = []
+        for r in (x for x in by_design if x["ratio"] == ratio):
+            got = r["smallest_n_for_power"]["0.8"]
+            rows.append({**r["design"], "eligible_population": r["eligible_population"], **got})
+        feasible = [x for x in rows if x["n_blocks"] != "infeasible"]
+        best = min(feasible, key=lambda x: (x["assay_cost_elements"], x["n_blocks"])) if feasible else None
+        table.append(
+            {
+                "ratio": ratio,
+                "designs": rows,
+                "infeasible_designs": len(rows) - len(feasible),
+                "cheapest_feasible_design_at_80_percent": best,
+            }
+        )
+    out["sample_size_at_equal_cost"] = table
+    # power at fixed budgets
+    budget_rows = []
+    for budget in S2_BUDGETS:
+        for d in designs:
+            k = d[0]
+            n = int(budget // design_cost_per_block(d))
+            cap = len(eligible[k])
+            row: dict[str, Any] = {"budget_elements": budget, "k": d[0], "m": d[1], "g": d[2], "n_blocks": n}
+            if n < MIN_BLOCKS:
+                row["status"] = f"below the reporting floor: this budget buys {n} compared blocks"
+            elif n > cap:
+                row["n_blocks"] = "infeasible"
+                row["status"] = (
+                    f"infeasible: this budget buys {n} compared blocks and only {cap} hold {k} scored "
+                    "element(s)"
+                )
+            else:
+                row["status"] = "simulated"
+                row["by_ratio"] = {}
+                for ratio in S2_RATIOS:
+                    arm = block_arm(cal, ratio)
+                    delta = expected_difference(cal, arm["mu_block"], k)
+                    c = simulate_design(cal, arm["mu_block"], d, n, eligible[k], experiments, rng, delta)
+                    row["by_ratio"][str(ratio)] = {
+                        "probability_of_detection": c["interval_below_zero"],
+                        "false_positive_rate" if ratio == 1.0 else "interval_excludes_zero": c[
+                            "interval_excludes_zero"
+                        ],
+                        "assay_cost_elements": c["assay_cost_elements_mean"],
+                    }
+            budget_rows.append(row)
+        print(f"budget {budget}: done ({time.time() - t0:.0f} s)", flush=True)
+    out["power_at_fixed_budgets"] = budget_rows
+    # one factor at a time from the reference calibration, at the two reference designs
+    lo, hi = struct["grid_ends_used"]
+    variants: list[tuple[str, dict[str, Any]]] = [
+        (f"anchor={lo}", {**ref_settings, "anchor_rate": lo}),
+        (f"anchor={hi}", {**ref_settings, "anchor_rate": hi}),
+    ]
+    for col in ms.POWER_COLUMNS:
+        if col != S2_REFERENCE_SENSITIVITY_COLUMN:
+            variants.append(
+                (f"sensitivity={col}", {**ref_settings, "sensitivity": anch["power_columns"][col]["mean"]})
+            )
+    for fp in S2_FALSE_POSITIVE:
+        if fp != S2_REFERENCE_FALSE_POSITIVE:
+            variants.append((f"false_positive={fp}", {**ref_settings, "false_positive": fp}))
+    for kb in S2_ICC_BINS_KB:
+        if kb != icc_bin:
+            variants.append(
+                (
+                    f"icc_scale={kb}kb",
+                    {**ref_settings, "icc_target": anch["elements_within_cluster_icc"][f"{kb}kb"]["icc"]},
+                )
+            )
+    for rho in S2_CHROMOSOME_ICC_VARIANTS:
+        variants.append((f"chromosome_icc={rho}", {**ref_settings, "chromosome_icc_target": rho}))
+    sens = []
+    for name, settings in variants:
+        vcal = calibrate(**settings)
+        entry: dict[str, Any] = {"variant": name, "calibration": vcal}
+        if vcal["feasible"]:
+            entry["anchor_check"] = anchor_reproduction_check(vcal, k_counts, rng, replicates=1000)
+            entry["designs"] = []
+            for d in S2_REFERENCE_DESIGNS:
+                per = {"k": d[0], "m": d[1], "g": d[2], "eligible_population": int(len(eligible[d[0]]))}
+                for ratio in S2_RATIOS:
+                    r = _search(
+                        vcal, d, ratio, eligible[d[0]], experiments, rng, None if ratio == 1.0 else 0.8
+                    )
+                    if ratio == 1.0:
+                        per["null_false_positive_rate_by_n"] = {
+                            str(c["n_blocks"]): c["interval_excludes_zero"] for c in r["cells"]
+                        }
+                    else:
+                        per[f"n_for_80_percent_at_ratio_{ratio}"] = r["smallest_n_for_power"]["0.8"][
+                            "n_blocks"
+                        ]
+                entry["designs"].append(per)
+        sens.append(entry)
+        print(f"variant {name}: done ({time.time() - t0:.0f} s)", flush=True)
+    out["sensitivity_one_factor_at_a_time"] = sens
+    # the registered check of the exact bootstrap against the committed resampling one
+    agree = []
+    for d in S2_REFERENCE_DESIGNS:
+        for ratio in (1.0, 0.5):
+            for n in (20, 100):
+                if n <= len(eligible[d[0]]):
+                    arm = block_arm(cal, ratio)
+                    agree.append(
+                        {
+                            "ratio": ratio,
+                            **bootstrap_agreement_check(
+                                cal,
+                                arm["mu_block"],
+                                d,
+                                n,
+                                eligible[d[0]],
+                                S2_BOOTSTRAP_CHECK_EXPERIMENTS,
+                                rng,
+                            ),
+                        }
+                    )
+    out["exact_bootstrap_against_the_committed_one"] = agree
+    out["committed_table_against_the_eligible_population"] = flag_the_committed_table(
+        {k: int(len(v)) for k, v in eligible.items()}
+    )
+    out["power_is_a_probability"] = (
+        "every size here is the smallest searched number of compared blocks at which the simulated committed "
+        "analysis detects the assumed difference with the stated probability, IF the calibrated assumptions "
+        "hold. It is never a guarantee that an experiment of that size decides clause 2; at 80% one such "
+        "experiment in five fails to detect a real difference of the assumed size"
+    )
+    out["seconds"] = round(time.time() - t0, 1)
+    return out
+
+
+def flag_the_committed_table(
+    eligible_by_k: dict[int, int], results_dir: Path = RESULTS_DIR
+) -> dict[str, Any]:
+    """lane-design's committed sizes, each set against the eligible population of its own design. Nothing in
+    the committed file is changed; the flags are written here, beside it."""
+    committed = json.loads((results_dir / f"{RESULT}.json").read_text())
+    flagged = []
+    for r in committed["sweep"]["rows"]:
+        k = r["settings"]["elements_per_block"]
+        cap = eligible_by_k.get(k)
+        if cap is None:
+            cap = eligible_by_k[max(x for x in eligible_by_k if x <= k)]
+        for t, n in r["n_for_power"].items():
+            if n is not None and n > cap:
+                flagged.append(
+                    {
+                        "configuration": r["configuration"],
+                        "ratio": r["ratio"],
+                        "power": t,
+                        "n_blocks": n,
+                        "eligible": cap,
+                    }
+                )
+    ranges_flagged = {
+        ratio: {"largest": v["largest"], "reference": v["reference_configuration"]}
+        for ratio, v in committed["sample_size_range_by_ratio"].items()
+        if (v["largest"] or 0) > eligible_by_k[1] or (v["reference_configuration"] or 0) > eligible_by_k[1]
+    }
+    return {
+        "entries_above_their_eligible_population": flagged,
+        "count": len(flagged),
+        "ranges_whose_ends_exceed_the_carrying_blocks": ranges_flagged,
+        "reading": (
+            "each of these is a size no experiment on this tier can have: infeasible, not a number to plan "
+            "with. "
+            "The committed table is kept as the record of what that run computed"
+        ),
+    }
+
+
+@mf.depends_on_models("alphagenome")  # the scored-element set the windows are drawn over is the sweep's
+def manifest_calibrated(experiments: int, seed: int) -> dict[str, Any]:
+    arm = _measured_arm_module()
+    base = arm.manifest(json.loads((RESULTS_DIR / f"{MEASURED_ARM}.json").read_text())["chromosomes"])
+    inputs = list(base["inputs"])
+    for name in (MEASURED_ARM, RESULT):
+        p = RESULTS_DIR / f"{name}.json"
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    base["inputs"] = inputs
+    base["sources"] = list(base["sources"]) + [
+        {
+            "accession": "this repository, data/results/clause2_design_power.json at 70801de",
+            "version": "git 70801de: lane-design's committed table, read for the reproduction and the flags",
+        }
+    ]
+    base["parameters"] = {
+        **base["parameters"],
+        "seed": seed,
+        "experiments_per_cell": experiments,
+        "designs_k": list(S2_K),
+        "designs_m": list(S2_M),
+        "designs_g": list(S2_G),
+        "n_grid": list(S2_N_GRID),
+        "budgets": list(S2_BUDGETS),
+        "ratios": list(S2_RATIOS),
+        "false_positive_grid": list(S2_FALSE_POSITIVE),
+        "reference_false_positive": S2_REFERENCE_FALSE_POSITIVE,
+        "reference_sensitivity_column": S2_REFERENCE_SENSITIVITY_COLUMN,
+        "chromosome_resamples": S2_CHROMOSOME_RESAMPLES,
+        "anchor_bootstrap": S2_ANCHOR_BOOTSTRAP,
+        "anchor_tolerance": S2_ANCHOR_TOLERANCE,
+        "icc_tolerance": S2_ICC_TOLERANCE,
+    }
+    base["exclusions"] = list(base["exclusions"]) + [
+        "the model arm's -27.25 points and its per-block dispersion are not used anywhere",
+        "no model answer is read: the element archive is opened for which elements are scored",
+        "no size above a design's eligible population is simulated or printed as a number",
+    ]
+    return base
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--blocks", type=int, default=200_000, help="simulated blocks per configuration")
@@ -1446,7 +2792,23 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="item 12 S2: rerun the committed reference configuration and print what it produces",
     )
+    ap.add_argument(
+        "--calibrated",
+        action="store_true",
+        help="item 12 S2: run the calibrated model registered in S2_REGISTRATION (writes a new result)",
+    )
+    ap.add_argument("--experiments", type=int, default=S2_EXPERIMENTS, help="simulated experiments per cell")
     args = ap.parse_args(argv)
+    if args.calibrated:
+        out = collect_calibrated(args.experiments, S2_SEED)
+        if args.no_save:
+            print("not saved")
+        else:
+            man = manifest_calibrated(args.experiments, S2_SEED)
+            print(f"saved {save_result(RESULT_CALIBRATED, out, manifest=man)}")
+        print("anchor reproduced:", (out.get("anchor_reproduced") or {}).get("reproduced"))
+        print("null calibration:", (out.get("null_calibration") or {}).get("summary"))
+        return 0
     if args.reproduce_review:
         print(json.dumps(reproduce_the_review(), indent=1))
         return 0

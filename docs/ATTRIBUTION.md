@@ -8871,6 +8871,89 @@ the record of what that run computed, read as exploratory, as the correction und
 This section establishes only that the review's two figures are the committed code's own output, and
 why. The recalibrated model is registered next, before it is run. 0 AlphaGenome requests; 0.5 s.
 
+## Pre-registration: clause 2's power model recalibrated to its own anchor, with the planned analysis simulated end to end and designs compared at equal assay cost (item 12 S2, 2026-09-28, lane-s2)
+
+Registered before the anchor's windows are redrawn and before any configuration of this model is
+simulated. The full text is `S2_REGISTRATION` in `scripts/clause2_design_power.py`, with its constants
+beside it; the tests are in `tests/test_clause2_design_power.py`. The model is added beside
+lane-design's, whose table (70801de) stays as the record and is read as exploratory; the new result is
+`clause2_design_power_calibrated`. **0 AlphaGenome requests.** The model arm's -27.25 points and its
+dispersion stay excluded, and the test that enforces it now covers this code too.
+
+**The review's acceptance, and how each part is met.**
+
+1. **The endpoint, as the committed estimator reads it.** Per tested element the assay calls a
+   significant change in a protein-coding gene, either sign. A block is positive if any of its tested
+   elements is called, a window likewise; per compared block d = Y - (positive tested windows / tested
+   windows). A rate of this endpoint belongs to a unit and to how many elements it had tested, so every
+   rate in the result names both.
+2. **The anchor at the level it was measured.** 30/223 is a rate of positive *windows*. The windows are
+   redrawn with the committed draw (`clause2_matched_control.matched_windows`, committed seed and decile
+   edges, the measured arm's own verdicts) and each window's tested elements are recorded; the gate is
+   the committed counts to the digit (44,081 drawn, 31,554 carrying, 223 tested, 30 regulating, 134 and
+   27 blocks, 882 and 531). The calibration then requires the observed positive-window rate *over those
+   windows, each with its own number of tested elements* to come back at 30/223. The anchor's
+   uncertainty is a cluster bootstrap over windows linked by a shared tested element and over blocks;
+   the wider interval's ends are the sensitivity grid, and the exact binomial interval is printed beside
+   them as the as-if-independent one.
+3. **Sensitivity and false positives, consistently.** Both act on each element, and the same s and f
+   that deconvolve the anchor simulate the planned screen. s: the mean of a benchmark power column
+   (reference `PowerAtEffectSize20`, 0.6674; the other four as variants). f: reference 0.01, the rate a
+   false discovery rate of 5-10% implies at a call rate near 13% (an assumption, not read from the
+   tables); 0 and 0.03 as variants.
+4. **Observed and latent correlation, kept apart.** The benchmark ICCs are ANOVA ICCs of 0/1 calls,
+   observed-scale figures. The latent spread is solved so that the calls' observed-scale ICC equals the
+   measured one (the bin nearest the median carrying-block length; the others as variants), and the
+   chromosome spread so that the calls' chromosome ICC equals 0.0142. Latent ICCs are reported beside
+   the observed ones and never used in their place.
+5. **The planned analysis, simulated end to end.** 2,000 experiments per cell. Blocks are drawn
+   without replacement from the eligible population, so their chromosomes are the real ones; one
+   chromosome intercept is shared by the blocks and windows on it; with g = 4 the blocks of a
+   chromosome share one set of tested windows (**shared controls**). The committed estimator, the
+   interval over blocks (computed exactly, the n-fold convolution that the committed 10,000-resample
+   percentile interval estimates; a registered check on 200 experiments at 8 cells reports how often the
+   two readings differ) and the interval over chromosomes (1,000 resamples) are computed on each. At
+   the null the share excluding 0 is the **false-positive rate**; a cell is calibrated at 0.05 plus two
+   Monte Carlo standard errors or less. Written in advance so it can be scored: **shared controls are
+   expected to be anti-conservative**, because the committed interval treats blocks that share windows
+   as independent. The probability of each registered reading is reported too: with 20 or more
+   compared blocks the measured arm reads "model_failed" whenever the interval reaches 0.
+6. **Designs at equal assay cost.** k tested elements per block and per window (1, 2, 3, 6: the same in
+   both arms, so the null stays a null), m windows per block (1, 3, 10), g blocks per window set (1,
+   4): 24 designs. Cost is counted in tested elements, N k for the blocks plus (window sets) m k for the
+   windows. Designs are compared by the realised cost of the smallest searched N reaching 80%
+   probability of detection, the cheapest feasible design named per ratio, and by probability of
+   detection at budgets of 250 to 8,000 tested elements.
+7. **The eligible population as a hard cap.** A k-element design can use only the real-unknown blocks
+   holding at least k scored elements. N is never simulated above that count; a target not reached
+   within it, and a budget that buys more blocks than it, are printed **"infeasible"**, never as a
+   number. Every entry of lane-design's committed table above its own design's eligible population is
+   listed beside it as infeasible.
+
+**The check S2 exists for.** After calibration the anchor's own windows are *simulated* (4,000
+replicates) and so are 20,000 clusters of four calls. The anchor is reproduced if the simulated
+positive-window rate is within 0.5 points of 30/223 and the simulated observed-scale ICC within 0.02
+of its target. If the reference calibration fails either, no size from the run is read as calibrated
+and the result says so first. The implied element-level rate is set beside the benchmark's 12.15% and
+14.56% as an out-of-sample comparison, not a gate.
+
+**The block arm.** Its mean true per-element rate is ratio x the window arm's (1.0, 0.75, 0.5, 0.25,
+0.1, 0.0), at the same spreads; lane-design applied the ratio to the location, which is not the mean
+once there is spread. The estimand is computed in closed form and each interval's coverage of it is
+reported.
+
+**Sensitivity analysis.** One factor at a time, recalibrated and re-checked each time, at lane-design's
+reference design (6, 3, 1) and at (1, 3, 1), which every carrying block can enter.
+
+**Assumptions stated, not tested.** The anchor's tested elements were chosen by the benchmark's
+designers and the planned experiment's would be chosen for the design; the window arm's per-element
+rate is carried across that difference. One sensitivity per element, from pair-level power. Matched
+windows holding k scored elements exist for every block (their supply is reported). Blocks and windows
+share the latent spread and differ only in the mean.
+
+**Words.** Every size is a probability-of-detection statement under the calibrated assumptions, never a
+guarantee that an experiment decides clause 2.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

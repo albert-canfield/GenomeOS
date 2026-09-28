@@ -314,3 +314,147 @@ def test_the_closed_form_agrees_with_moments_where_the_old_test_looked():
     got = dp.quadrature_of_the_committed_reference(0.1345, 0.6674, 0.0, 1)
     assert got["observed_element_rate"] == pytest.approx(0.1345, abs=1e-4)
     assert got["observed_positive_unit_rate"] == pytest.approx(0.1345, abs=1e-4)
+
+
+# ---- item 12 S2: the calibrated model's machinery, on toy inputs (lane-s2) ------------------------------
+
+
+def test_the_model_arm_is_excluded_from_the_calibrated_code_too():
+    import ast
+
+    tree = ast.parse((SCRIPTS / "clause2_design_power.py").read_text())
+    numbers = {
+        node.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, int | float)
+    }
+    assert not {27.25, -27.25, 0.2725, 0.4324} & numbers
+
+
+def test_calibration_matches_the_anchor_at_the_window_level_and_the_icc_on_the_observed_scale():
+    toy = {1: 120, 2: 60, 4: 20}
+    cal = dp.calibrate(0.2, toy, 0.8, 0.02, 0.25, 0.02)
+    assert cal["feasible"]
+    assert cal["observed_window_rate_achieved"] == pytest.approx(0.2, abs=1e-4)
+    assert cal["observed_icc_achieved"] == pytest.approx(0.25, abs=1e-3)
+    assert cal["observed_chromosome_icc_achieved"] == pytest.approx(0.02, abs=1e-3)
+    # observed and latent are different numbers, and the latent one is the larger
+    assert cal["latent_icc_unit_plus_chromosome"] > cal["observed_icc_achieved"] + 0.05
+    # windows with several tested elements are positive more often than one element is called
+    assert cal["observed_element_rate_implied"] < 0.2
+
+
+def test_an_unreachable_correlation_is_reported_infeasible_not_forced():
+    cal = dp.calibrate(0.2, {1: 100}, 0.3, 0.0, 0.6, 0.0)
+    assert cal["feasible"] is False and "largest reachable" in cal["why"]
+
+
+def test_the_ratio_applies_to_the_mean_true_rate_not_the_location():
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.0, 0.25, 0.0)
+    arm = dp.block_arm(cal, 0.5)
+    got = dp.marginal_true_rate(arm["mu_block"], cal["sigma_total"])
+    assert got == pytest.approx(0.5 * cal["window_true_rate_latent_mean"], rel=1e-4)
+    assert dp.block_arm(cal, 0.0)["mu_block"] is None
+
+
+def test_unit_probability_without_spread_is_the_plain_formula():
+    s, f, k, p = 0.7, 0.01, 3, 0.2
+    mu = math.log(p / (1 - p))
+    want = 1 - (1 - (s * p + f * (1 - p))) ** k
+    assert dp.unit_positive_probability(mu, 0.0, s, f, k) == pytest.approx(want, rel=1e-9)
+    assert dp.unit_positive_probability(None, 1.0, s, f, k) == pytest.approx(1 - (1 - f) ** k)
+
+
+def test_the_exact_bootstrap_agrees_with_resampling():
+    rng = np.random.default_rng(3)
+    n, m = 40, 3
+    y = rng.random((1, n)) < 0.3
+    wbar = rng.integers(0, m + 1, (1, n)) / m
+    t = dp.exact_block_bootstrap_tails(y, wbar, m, 0.0)
+    # in integer lattice units, so the atom at 0 is not lost to floating-point sums
+    d = y[0].astype(np.int64) * m - np.rint(wbar[0] * m).astype(np.int64)
+    boots = d[rng.integers(0, n, (200_000, n))].sum(axis=1)
+    assert t["p_below"][0] == pytest.approx((boots < 0).mean(), abs=0.005)
+    assert t["p_at_or_below"][0] == pytest.approx((boots <= 0).mean(), abs=0.005)
+
+
+def test_no_size_above_the_eligible_population_is_searched_or_simulated():
+    assert dp.n_grid_for(45) == [20, 30, 45]
+    assert dp.n_grid_for(500) == list(dp.S2_N_GRID)
+    assert dp.n_grid_for(12) == []
+    assert all(n <= 531 for n in dp.n_grid_for(531)) and 531 in dp.n_grid_for(531)
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.0, 0.25, 0.0)
+    with pytest.raises(ValueError):
+        dp.simulate_design(
+            cal,
+            cal["mu_window"],
+            (1, 1, 1),
+            30,
+            np.zeros(25, dtype=np.int64),
+            10,
+            np.random.default_rng(0),
+            0.0,
+        )
+
+
+def test_cost_is_counted_in_tested_elements():
+    assert dp.design_cost_per_block((1, 1, 1)) == 2
+    assert dp.design_cost_per_block((6, 3, 1)) == 24
+    assert dp.design_cost_per_block((2, 10, 4)) == pytest.approx(7.0)
+
+
+def test_the_null_is_near_nominal_without_shared_controls_on_a_toy():
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.0, 0.2, 0.0)
+    chroms = np.repeat(np.arange(24), 20)
+    got = dp.simulate_design(
+        cal, cal["mu_window"], (1, 3, 1), 200, chroms, 600, np.random.default_rng(5), 0.0
+    )
+    assert 0.02 <= got["interval_excludes_zero"] <= 0.09
+    assert got["expected_difference_points"] == 0.0
+
+
+def test_a_real_difference_is_detected_more_often_than_the_null_on_a_toy():
+    cal = dp.calibrate(0.2, {1: 100}, 0.8, 0.0, 0.2, 0.0)
+    arm = dp.block_arm(cal, 0.25)
+    delta = dp.expected_difference(cal, arm["mu_block"], 2)
+    assert delta < 0
+    chroms = np.repeat(np.arange(24), 20)
+    got = dp.simulate_design(
+        cal, arm["mu_block"], (2, 3, 4), 100, chroms, 300, np.random.default_rng(6), delta
+    )
+    assert got["interval_below_zero"] > 0.5
+    assert got["assay_cost_elements_mean"] < 100 * 2 * (1 + 3)  # shared windows cost less than own ones
+
+
+def test_the_recorder_leaves_the_committed_draw_unchanged():
+    mc = _load("clause2_matched_control")
+    rows = [{"start": s, "end": s + 200, "_hit": s % 3 == 0} for s in range(0, 200_000, 700)]
+    targets = [
+        {"start": 50_000, "end": 58_000, "length": 8_000},
+        {"start": 120_000, "end": 131_000, "length": 11_000},
+    ]
+    preds = {"hit": lambda e: e["_hit"]}
+    plain = mc.matched_windows(targets, targets, rows, preds, None, seed=11, draws=20, max_tries=400)
+    rec = dp._UnitRecorder({(b["start"] + b["end"]) // 2 for b in targets})
+    recorded = mc.matched_windows(
+        targets,
+        targets,
+        rows,
+        {**preds, "_record": rec.element},
+        None,
+        seed=11,
+        draws=20,
+        max_tries=400,
+        raw_fn=rec.raw,
+    )
+    for a, b in zip(plain, recorded, strict=True):
+        assert a["drawn"] == b["drawn"] and a["carrying"] == b["carrying"]
+        assert a["windows_yes"]["hit"] == b["windows_yes"]["hit"]
+    blocks = [u for u in rec.units if u["kind"] == "block"]
+    windows = [u for u in rec.units if u["kind"] == "window"]
+    assert len(blocks) == 2
+    assert len(windows) == sum(r["drawn"] for r in plain)
+    assert sum(1 for u in windows if u["els"]) == sum(r["carrying"] for r in plain)
+    assert sum(any(e["_hit"] for e in u["els"]) for u in windows) == sum(
+        r["windows_yes"]["hit"] for r in plain
+    )
