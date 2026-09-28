@@ -146,6 +146,46 @@ R1_ACCEPTANCE = (
     "conflicting results from two cell types survive compilation and round-trip serialisation",
 )
 MPRA_ACTIVE = mpra.ACTIVE  # log2(RNA/DNA) at or above which a reporter element counts as active
+
+# --- R6, assay observations kept before aggregation (external review of 2026-09-28), fixed before the build
+#: what one reporter observation is: one lentiMPRA tile (an ENCODE element interval) in one cell, kept
+#: in the row with its interval, strand, overlap with the compiled element and log2(RNA/DNA)
+REPORTER_UNIT = ("tile", "cell")
+#: the declared aggregation model. The label of a cell is read from the share of tiles on each side of
+#: MPRA_ACTIVE, never from one tile's value, so one strong tile among inactive ones cannot make the
+#: element active; a cell whose tiles split evenly is `TILES_CONFLICT`, neither active nor silent
+REPORTER_LABEL_RULE = (
+    "per cell, active when more than half of the matched tiles are at or above MPRA_ACTIVE, silent "
+    "when more than half are below it, conflicting when exactly half are"
+)
+#: the per-cell value a row reports as `activity`: descriptive, and not what the label is read from
+REPORTER_SUMMARY = "median of the matched tiles' log2(RNA/DNA) in that cell"
+#: the maximum survives only under this name, as a descriptive statistic that no verdict reads
+REPORTER_MAX_FIELD = "activity_max_descriptive"
+#: why no per-tile uncertainty is carried: the three ENCODE element files hold one value per interval,
+#: their p and q columns are -1 throughout and no replicate-level value is released in them
+REPORTER_UNCERTAINTY = (
+    "not available: the ENCODE element files (ENCFF802FUV, ENCFF475FKV, ENCFF769REH) carry one value "
+    "per interval, p and q are -1 throughout, and no replicate-level value is in them"
+)
+#: the lentiMPRA verdict when no cell is active and at least one cell's tiles split evenly: not an
+#: agreement and not a disagreement, and counted under its own name
+TILES_CONFLICT = "reporter_tiles_conflict"
+#: four assays, four outcomes, never pooled into one: what each assay's block measures
+OUTCOME_KIND = {
+    "crispri": "endogenous gene regulation: a gene's expression when the element is silenced in place",
+    "lentimpra": (
+        "reporter activity: a 200 bp copy driving an integrated lentiviral reporter, outside its "
+        "native locus (Agarwal et al. 2025, Nature)"
+    ),
+    "vista": "developmental activity: a transgenic reporter in the mouse embryo at e11.5",
+    "satmut": "base-level sensitivity: single substitutions of the element read out in a reporter",
+}
+#: the review's acceptance tests, pinned in tests/test_measured_aggregation.py
+R6_ACCEPTANCE = (
+    "one unusually strong reporter tile among inactive ones does not make the element active",
+    "conflicting tiles remain listed, each with its value, strand and overlap",
+)
 REACH = 200_000  # the longest measured interval any assay holds, for the bounded overlap scan
 
 # an endogenous perturbation or an in-vivo assay; a reporter measures the sequence, not the locus

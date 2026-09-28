@@ -7207,6 +7207,50 @@ GRAMMAR-BY-COMPARISON and ROADMAP. The cited assay integrates its reporters by l
 outside its native locus, so the conclusion drawn from the word ("it measures the sequence and not the
 locus") stands, but the word itself is wrong.
 
+## Pre-registration: reporter tiles kept, the label from a declared share rule, the maximum descriptive only (R6, 2026-09-28)
+
+Fixed in `attribution/measured.py` (`REPORTER_UNIT`, `REPORTER_LABEL_RULE`, `REPORTER_SUMMARY`,
+`REPORTER_MAX_FIELD`, `REPORTER_UNCERTAINTY`, `TILES_CONFLICT`, `OUTCOME_KIND`, `R6_ACCEPTANCE`) before
+any row is rebuilt, on the census above.
+
+**The observation.** One lentiMPRA tile in one cell: its interval, strand, reciprocal overlap with the
+compiled element and log2(RNA/DNA). Every matched tile is listed in the row under `tiles`. Uncertainty
+is recorded as absent, with the reason, because the files hold none.
+
+**The aggregation model.** Per cell, a label comes from the share of tiles on each side of
+`MPRA_ACTIVE` (1.0): **active** when more than half are at or above it, **silent** when more than half
+are below, **conflicting** when exactly half are. The per-cell `activity` reported is the median of the
+tiles, and it is descriptive: the label is not read from it. The maximum stays only as
+`activity_max_descriptive` (per cell) and `max_activity_descriptive` (over cells), and no verdict reads
+either. The lentiMPRA verdict: **agrees** when some cell is active, **disagrees** when every cell is
+silent, and **`reporter_tiles_conflict`** otherwise. The last counts as neither agreement nor
+disagreement, and the census reports it under its own key. Across cells the rule is unchanged: activity
+in any cell is support, and `cells_active`, `cells_silent` and the new `cells_conflicting` list each cell.
+
+**Outcomes kept apart.** Each assay block carries `outcome_kind`: endogenous gene regulation (CRISPRi),
+reporter activity from an integrated lentiviral construct outside the native locus (lentiMPRA),
+developmental activity in the mouse embryo (VISTA) and base-level sensitivity in a reporter (saturation
+mutagenesis). The pooled verdict still counts assays, and never averages their values.
+
+**Saturation mutagenesis.** The repeat experiments of a locus are read over the element's bases and
+listed per experiment (bases measured, bases functional), with the count of bases whose functional call
+differs between experiments. The verdict stays on the primary experiment, and this is stated. For SORT1
+this puts the reverse-orientation experiment, SORT1-flip, in the row.
+
+**Acceptance (tests/test_measured_aggregation.py).** (1) An element matched by five tiles, one at +3.0
+and four at +0.2 in K562, is silent in K562, its lentiMPRA verdict is `disagrees`, all five tiles are
+listed and `activity_max_descriptive` is 3.0. (2) An element matched by two tiles at +1.5 and +0.5 is
+conflicting in K562, its verdict is `reporter_tiles_conflict`, neither counter moves, and `basis:` names
+both values. (3) A one-tile element reads exactly as before.
+
+**What may move, stated before the build.** Only the 237 cell readings where tiles disagree can change
+label: at most 224 to conflicting and 7 to silent, while 6 stay active. So the lentiMPRA `agrees` of
+3,361 can only fall, `disagrees` of 14,508 can only rise, and no element can move from disagreeing to
+agreeing. CRISPRi and VISTA counts, the 19,072 experimental element blocks and 212 rule blocks, and every
+compiled rule stay the same. Programme text changes only on `basis:` lines and the header's agree and
+disagree counts. The calibration table's lentiMPRA arm loses the elements that become conflicting. Any
+other change is a fault of the build.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
