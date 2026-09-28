@@ -20,6 +20,8 @@ defaults below and carry their own evidence.
 The combination rules are model assumptions, named in `ACTIVATOR_COMBINATION` and
 `INHIBITOR_COMBINATION`. Under the mean, adding an activator that is low where
 another is high lowers that gene's drive there (lane-sign, 2026-09-28).
+`combine_activators` computes the mean and the three alternatives the census in
+docs/DESIGN-MINIMAL-CELL.md compares; the runtime uses the one `ACTIVATOR_COMBINATION` names.
 
 Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
 for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
@@ -52,6 +54,9 @@ DEFAULTS = {
 #: how a gene's activators and inhibitors combine: declared model assumptions, not findings
 ACTIVATOR_COMBINATION = "mean"  # A = mean of s_i * H(x_i): a low extra activator dilutes the drive
 INHIBITOR_COMBINATION = "product"  # R = product of (1 - s_j * H(x_j))
+#: the activator rules the combination registration (lane-combine, 2026-09-28) compares; each is
+#: over the terms t_i = s_i * H(x_i) in [0, 1], and all four agree when a gene has one activator
+ACTIVATOR_RULES = ("mean", "sum_capped", "max", "or")
 #: a rule source ending in this reads zero by the caller's declaration, never by omission
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
@@ -107,6 +112,30 @@ def _hill(x: float, k: float, n: float) -> float:
         return 0.0
     xn = x**n
     return xn / (k**n + xn)
+
+
+def combine_activators(terms: list[float], rule: str | None = None) -> float:
+    """A gene's activator drive A from its terms t_i = s_i * H(x_i), under `rule`.
+
+    mean: sum(t) / n (the runtime's rule since the first commit); sum_capped: min(1, sum(t));
+    max: max(t); or: 1 - prod(1 - t_i), independent binding of any one activator sufficing.
+    `rule` defaults to `ACTIVATOR_COMBINATION`, read at call time.
+    """
+    rule = ACTIVATOR_COMBINATION if rule is None else rule
+    if not terms:
+        return 1.0
+    if rule == "mean":
+        return sum(terms) / len(terms)
+    if rule == "sum_capped":
+        return min(1.0, sum(terms))
+    if rule == "max":
+        return max(terms)
+    if rule == "or":
+        miss = 1.0
+        for t in terms:
+            miss *= 1.0 - t
+        return 1.0 - miss
+    raise ValueError(f"unknown activator combination {rule!r}; one of {', '.join(ACTIVATOR_RULES)}")
 
 
 class NetworkRuntime:
@@ -212,9 +241,9 @@ class NetworkRuntime:
             inhs = self.inhibitors[g.id]
             a = 1.0
             if acts:
-                a = sum(
-                    r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill) for r in acts
-                ) / len(acts)
+                a = combine_activators(
+                    [r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill) for r in acts]
+                )
             rep = 1.0
             for r in inhs:
                 rep *= 1.0 - r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill)

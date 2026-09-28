@@ -442,3 +442,62 @@ What it says: with a sourced sign and unsourced numbers, this network in
 this runtime has no mesoderm band at the default gradient. Whether that is
 the numbers, the mean-of-activators rule, or a missing interaction is not
 decided here; each would be its own registered lane.
+
+## The activator combination rule: a choice test (registered 2026-09-28)
+
+`genomeos/runtime/grn.py` combines a gene's activators by their mean
+(`ACTIVATOR_COMBINATION = "mean"`), and `runtime/located.py` repeats the
+formula inline. lane-sign found the mean made a correctly signed second
+activator lower SOX17; lane-bridge found 76,469 of 237,613 compiled gene-cell
+pairs cannot be parameterised from single removals under it. This section
+asks whether measured evidence, not taste, picks a rule among four, each over
+the terms t_i = s_i H(x_i) and all equal for one activator: **mean**
+Σt/n; **sum_capped** min(1, Σt); **max**; **or** 1 − Π(1 − t_i).
+`grn.combine_activators` computes each; the runtime still calls it with the
+mean, so no value has moved.
+
+**Census, computed before the registration** (`scripts/activator_combination.py`,
+`data/results/activator_combination_census.json`; the per-rule runs use the
+scratch instrument `scripts/activator_combination_patch.py`, which swaps the
+rule in both runtimes and records every evaluation of a gene with two or more
+activators):
+
+- Every hand-written program (41 files under data/demo, data/organisms and
+  genomeos/std, every context their rules name): **one gene, SOX17 in
+  data/demo/gastrulation.bio (Nodal and Tbxt), has two activators.** The
+  C. elegans, haematopoiesis, erythrocyte, body and std programs have none;
+  data/organisms/human/noncoding_chr21.bio has 120 such genes, none with a
+  `max_rate`, so none is simulated.
+- The 24 compiled chromosomes: 48,405 gene-cell pairs with two or more
+  activating rules (148,765 rules on them) of 183,304 with any; **0 simulable**
+  (every compiled gene is a stub, as lane-bridge's audit found).
+- The full test suite under the mean with the instrument: of about 2,050
+  tests, **four** evaluate a gene with two activators, all SOX17 or the
+  bridge's own pin: `test_gastrulation.py::test_census_comparison_as_run_once`,
+  `::test_census_comparison_after_the_sign_correction`,
+  `::test_three_layers_in_order` and
+  `test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression`.
+  `bio test` over the three program trees: 220 of 220 checks pass under all
+  four rules, and none evaluates a gene with two activators.
+- The gastrulation model under each rule (census run 120 cells, 40 h; test
+  fixture 60 cells, 30 h; no number changed):
+
+| rule | census run ecto / meso / endo | fixture | CS7 verdict (3c4e301 mappings) |
+|---|---|---|---|
+| mean | 0.633 / 0.000 / 0.367 | 0.633 / 0.000 / 0.367 | falsified |
+| sum_capped | 0.558 / 0.000 / 0.442 | 0.550 / 0.000 / 0.450 | falsified |
+| max | 0.575 / 0.000 / 0.425 | 0.567 / 0.000 / 0.433 | falsified |
+| or | 0.558 / 0.000 / 0.442 | 0.567 / 0.000 / 0.433 | falsified |
+
+- The full suite under each alternative (the tests of this lane excluded):
+  **sum_capped** fails three,
+  `test_gastrulation.py::test_census_comparison_after_the_sign_correction`
+  (the committed shares), `::test_ectoderm_and_endoderm_within_unsourced_expectation`
+  (fixture endoderm 0.450, at the edge of 0.20 ± 0.25) and the bridge's mean
+  pin; **max** and **or** fail two, the census pin and the bridge pin. No
+  strict xfail passes under any rule (the mesoderm xfails stay at 0.0). These
+  are every pin that would move.
+
+  **Negative for the sign lane's reading:** the mesoderm band is absent under
+  every rule, so the mean is not what removed it; it only sets how much
+  endoderm the second activator costs (0.367 against 0.42–0.45).
