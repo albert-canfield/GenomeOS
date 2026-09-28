@@ -12,15 +12,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from genomeos.ir import Module, confidence_stated
 from genomeos.lang import parse, parse_file
-
-CENSUS = pytest.mark.xfail(
-    strict=True,
-    reason="census 2026-09-28 (item 12 S1): this writer loses an unstated confidence; the build fixes it",
-)
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -46,7 +39,6 @@ cell_type T { expresses: A, B; evidence: curated "an atlas" }
 """
 
 
-@CENSUS
 def test_genomeos_compile_writes_null_for_unstated_and_check_reads_it_back(tmp_path, capsys):
     from genomeos.cli import main
 
@@ -69,7 +61,6 @@ def test_genomeos_compile_writes_null_for_unstated_and_check_reads_it_back(tmp_p
     assert capsys.readouterr().out == from_json  # the JSON says what the program says
 
 
-@CENSUS
 def test_genomeos_check_lists_only_stated_weak_rules(tmp_path, capsys):
     from genomeos.cli import main
 
@@ -83,7 +74,6 @@ def test_genomeos_check_lists_only_stated_weak_rules(tmp_path, capsys):
     assert "cell_type" in out and "none stated (1 unstated)" in out
 
 
-@CENSUS
 def test_the_web_compile_report_keeps_unstated_apart():
     from genomeos.web.server import Api
 
@@ -99,7 +89,6 @@ def test_the_web_compile_report_keeps_unstated_apart():
     assert got["Ap activates B"] is None and got["Bp inhibits A"] == 0.0
 
 
-@CENSUS
 def test_the_web_cell_view_sends_null_for_an_unstated_confidence(tmp_path):
     from genomeos.web.server import Api
 
@@ -113,7 +102,6 @@ def test_the_web_cell_view_sends_null_for_an_unstated_confidence(tmp_path):
     assert edges[("Ap", "B")] is None and edges[("Bp", "A")] == 0.0
 
 
-@CENSUS
 def test_the_web_debugger_sends_null_for_an_unstated_term():
     from genomeos.web.server import Api
 
@@ -125,7 +113,6 @@ def test_the_web_debugger_sends_null_for_an_unstated_term():
     assert by["mRNA decay"] is None  # the program's mrna_half_life, which states none
 
 
-@CENSUS
 def test_an_experiment_result_writes_null_for_an_experiment_that_states_none():
     from genomeos.organism.experiment import run_experiments
 
@@ -146,7 +133,6 @@ experiment judged { knockout: F; until: 10 min; evidence: inferred "a guess"; co
     assert json.loads(json.dumps(judged.to_dict()))["evidence"]["confidence"] == 0.0
 
 
-@CENSUS
 def test_the_forge_experiment_agrees_with_the_text_it_emits():
     """BioForge states no confidence on its experiment; the parsed text and the returned object used
     to disagree, because the object carried a plain 0.0 that `confidence_stated` read as judged."""

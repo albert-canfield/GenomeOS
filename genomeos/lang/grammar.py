@@ -523,6 +523,10 @@ def render() -> str:
         "Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON",
         f"(`bioir_version` {VERSION}).",
         "",
+        "A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated",
+        "0.0 by `confidence_stated()`. BioIR JSON writes it as `null` (a stated 0.0 stays `0.0`) and marks",
+        f"the file `{ir.RECORDS_UNSTATED}: true`; a file without that mark predates the difference.",
+        "",
     ]
     for name in IR_TYPES:
         cls = getattr(ir, name)

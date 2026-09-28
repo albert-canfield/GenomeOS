@@ -20,7 +20,7 @@ import re
 from dataclasses import dataclass, field
 
 from genomeos.certainty import Certainty
-from genomeos.ir import Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
+from genomeos.ir import UNSTATED, Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
 from genomeos.runtime.body import Body, evaluate_assert
 
 FORGE_EVIDENCE = Evidence(EvidenceKind.PREDICTED, "BioForge search over the organism program (not validated)")
@@ -61,8 +61,10 @@ BUDGET_KNOWN_CASE = {
 # design answer (docs/BIOFORGE-CONFIDENCE.md), so the answer now carries a `Certainty` whose probability
 # is None with the reason, and the experiment's numeric confidence is left unstated: 0.0 is what the
 # BioLang parser gives an `experiment` block with no `confidence:` key, so the emitted text and the
-# returned Experiment agree. It is the absence of a stated value, not a probability of zero.
-UNSTATED_CONFIDENCE = 0.0
+# returned Experiment agree. It is the absence of a stated value, not a probability of zero, and since
+# item 12 S1 (2026-09-28) it is the parser's own UNSTATED rather than a plain 0.0, which
+# `confidence_stated` read as a judged zero while the emitted text, parsed, gave UNSTATED.
+UNSTATED_CONFIDENCE = UNSTATED
 EFFECT_UNIT = "normalised target distance removed (wild-type loss minus answer loss; 0 = no change)"
 MODEL_SCORE_NAME = "loss: normalised distance from every target holding; 0 = all hold; lower ranks first"
 UNCERTAINTY_NOTE = (

@@ -45,16 +45,42 @@ class UnstatedConfidence(float):
     The parser reads a missing `confidence:` as 0.0, and since review R4 (2026-09-28) the compiler
     leaves it out on purpose for every predicted element and rule, because the size of a predicted
     effect is not how sure anyone is. A stated `confidence: 0.0` exists too (bio.std methylation), so
-    the number alone cannot tell "stated as low" from "not stated". This subclass can: arithmetic,
-    formatting and JSON see the float 0.0, so nothing that reads a confidence moves, and a reader that
-    needs the difference asks `confidence_stated(x)`. The distinction lives in a parsed program only:
-    BioIR JSON (`to_dict` through json, then `from_dict`) writes it as 0.0 and reads it back as stated.
+    the number alone cannot tell "stated as low" from "not stated". This subclass can: arithmetic and
+    formatting see the float 0.0, so nothing that computes with a confidence moves, and a reader that
+    needs the difference asks `confidence_stated(x)`.
+
+    Since item 12 S1 (2026-09-28) the difference also survives BioIR JSON: `to_dict` writes an unstated
+    confidence as null (`UNSTATED_JSON`) and `from_dict` reads null back as UNSTATED, and every IR field
+    defaults to UNSTATED, so an object built without a confidence states none. docs/BIOIR-v0.1.md has
+    the representation and the census of the paths it travels.
     """
 
     __slots__ = ()
 
 
 UNSTATED = UnstatedConfidence(0.0)
+
+#: How BioIR JSON, and every export that writes an IR confidence as JSON, writes one nobody stated:
+#: null, never a number. One key, so a file cannot state a number and deny it in a second field, and a
+#: reader that does arithmetic on it fails instead of pooling it with a stated 0.0 (item 12 S1).
+UNSTATED_JSON = None
+
+#: Top-level BioIR JSON key, true in every file `Module.to_dict` has written since 2026-09-28: in such a
+#: file a number is a stated confidence and null an unstated one. A file without it was written before
+#: the difference was recorded, when a stated 0.0 and an unstated confidence were both written as 0.0;
+#: `from_dict` reads such a 0.0 as the stated 0.0 the file carries, because nothing in the file can
+#: say which it was. The program the file came from can: compile it again.
+RECORDS_UNSTATED = "records_unstated_confidence"
+
+
+def confidence_to_json(value: float) -> float | None:
+    """A confidence as BioIR JSON and the exports write it: None (JSON null) when it was not stated."""
+    return UNSTATED_JSON if isinstance(value, UnstatedConfidence) else value
+
+
+def confidence_from_json(value: float | None) -> float:
+    """The inverse of `confidence_to_json`: null reads back as UNSTATED, a number as what it states."""
+    return UNSTATED if value is UNSTATED_JSON else value
 
 
 def confidence_stated(value: object) -> bool:
@@ -130,7 +156,7 @@ class Entity:
     kind: str  # "gene", "protein", "region", ...
     attrs: dict[str, Any] = field(default_factory=dict)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -259,7 +285,7 @@ class Event:
     costs: list[Cost] = field(default_factory=list)  # v0.4 §5.2: what the event spends
     partition: str = "duplicate"  # v0.4 §8 stage 4; one of PARTITION_MODES
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
     def applies(self, context: dict[str, str]) -> bool:
         # the one `when` matcher every block shares: equality here left `absent`, `a|b` and the
@@ -279,7 +305,7 @@ class Parameter:
     value: float | _Unknown
     unit: str = ""
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -305,7 +331,7 @@ class Rule:
     hill: float = 2.0
     when: dict[str, str] = field(default_factory=dict)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
     threshold_unit: str = ""  # "" = an amount; "nM", "uM", ... = a concentration
 
     def applies(self, context: dict[str, str]) -> bool:
@@ -531,7 +557,7 @@ class Regime:
     allocation: str = "competitive"
     seed: int | None = None
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
@@ -635,7 +661,7 @@ class Field:
     decay: float = 0.01  # per hour
     sources: list[tuple[int, int, float]] = field(default_factory=list)  # (x, y, rate per hour)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -650,7 +676,7 @@ class Timer:
     lengthening: float = 1.0
     when: dict[str, str] = field(default_factory=dict)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
     def applies(self, context: dict[str, str]) -> bool:
         return matches(self.when, context)
@@ -668,7 +694,7 @@ class Stage:
     end: float | None = None
     unit: str = "min"
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
     def contains(self, t_min: float) -> bool:
         s = to_minutes(self.start, self.unit)
@@ -713,7 +739,7 @@ class Decision:
     priority: int = 0  # among matching decisions of one action the highest wins; ties: first in module order
     competence: str = ""  # differentiate: the window this fate change needs open (v0.4 §7.2a)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
     def applies(self, context: dict[str, str]) -> bool:
         return matches(self.when, context)
@@ -737,7 +763,7 @@ class Competence:
     closes_on_commitment: bool = False
     closed_by: str = ""  # factor whose presence in the cell is needed for the window to close
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -753,7 +779,7 @@ class Commitment:
     inherit: bool = False  # `inherit: daughters`
     release: str = "never"
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -773,7 +799,7 @@ class Experiment:
     asserts: list[str] = field(default_factory=list)
     expect: str = ""  # the published phenotype, in words
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -793,7 +819,7 @@ class Design:
     targets: list[str] = field(default_factory=list)  # assert grammar; distance from holding is the loss
     keeps: list[str] = field(default_factory=list)  # assert grammar; must hold
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -824,7 +850,7 @@ class Organism:
     replicates: int = 0  # v0.4: runs with seeds 0..N-1 over which `exactly one of` asserts are scored
     placement: str = "nearest"  # v0.4: nearest free site, or names (a/p along x, l/r and d/v along y)
     evidence: Evidence = field(default_factory=Evidence)
-    confidence: Confidence = 0.0
+    confidence: Confidence = UNSTATED
 
 
 @dataclass(slots=True)
@@ -932,15 +958,33 @@ class Module:
     def unknowns(self) -> list[Entity]:
         return [e for e in self.entities.values() if isinstance(e, Region) and e.role is UNKNOWN]
 
-    def confidence_report(self) -> dict[str, float]:
-        """Mean confidence by entity kind and for rules. Zero if nothing of that kind."""
+    def _confidences(self) -> dict[str, list[float]]:
         by_kind: dict[str, list[float]] = {}
         for e in self.entities.values():
             by_kind.setdefault(e.kind, []).append(e.confidence)
-        report = {k: sum(v) / len(v) for k, v in by_kind.items()}
         if self.rules:
-            report["rule"] = sum(r.confidence for r in self.rules) / len(self.rules)
+            by_kind["rule"] = [r.confidence for r in self.rules]
+        return by_kind
+
+    def confidence_report(self) -> dict[str, float | None]:
+        """Mean STATED confidence by entity kind and for rules; None for a kind where none is stated.
+
+        An unstated confidence is 0.0 to arithmetic, so a mean over every value pooled it with the
+        stated ones as a judged 0.0 (item 12 S1, 2026-09-28). `confidence_counts` says how many of each
+        kind state one."""
+        report: dict[str, float | None] = {}
+        for kind, values in self._confidences().items():
+            stated = [c for c in values if confidence_stated(c)]
+            report[kind] = sum(stated) / len(stated) if stated else None
         return report
+
+    def confidence_counts(self) -> dict[str, dict[str, int]]:
+        """How many of each entity kind, and of the rules, state a confidence and how many do not."""
+        out = {}
+        for kind, values in self._confidences().items():
+            n = sum(1 for c in values if confidence_stated(c))
+            out[kind] = {"stated": n, "unstated": len(values) - n}
+        return out
 
     # ---- serialisation -------------------------------------------------
 
@@ -948,6 +992,8 @@ class Module:
         def conv(obj: Any) -> Any:
             if obj is UNKNOWN:
                 return "UNKNOWN"
+            if isinstance(obj, UnstatedConfidence):
+                return UNSTATED_JSON  # null, never 0.0: a stated 0.0 stays a number
             if isinstance(obj, Locus):
                 return str(obj)
             if isinstance(obj, Enum):
@@ -964,6 +1010,7 @@ class Module:
 
         return {
             "bioir_version": "0.4",
+            RECORDS_UNSTATED: True,
             "name": self.name,
             "imports": list(self.imports),
             "entities": [conv(e) for e in self.entities.values()],
@@ -1009,6 +1056,12 @@ class Module:
                 d.get("note", ""),
             )
 
+        def conf(d: dict) -> dict:
+            """null is an unstated confidence; a number is what it states (RECORDS_UNSTATED)."""
+            if "confidence" in d:
+                d["confidence"] = confidence_from_json(d["confidence"])
+            return d
+
         def locus(v: Any) -> Locus | None:
             return Locus.parse(v) if isinstance(v, str) else None
 
@@ -1019,6 +1072,10 @@ class Module:
         for ed in data.get("entities", []):
             t = types[ed.pop("__type__", "Entity")]
             ed["evidence"] = evid(ed.get("evidence", {}))
+            conf(ed)
+            for tg in ed.get("targets") or []:
+                if isinstance(tg, dict):
+                    conf(tg)  # an element's targets carry its confidence (the parser copies it)
             for key in ("locus", "cds"):
                 if key in ed:
                     ed[key] = locus(ed[key])
@@ -1034,19 +1091,19 @@ class Module:
             m.add(t(**ed))
         for rd in data.get("rules", []):
             rd.pop("__type__", None)
-            rd["evidence"] = evid(rd.get("evidence", {}))
+            rd["evidence"] = evid(conf(rd).get("evidence", {}))
             rd["action"] = Action(rd["action"])
             m.rules.append(Rule(**rd))
         for evd in data.get("events", []):
             evd.pop("__type__", None)
-            evd["evidence"] = evid(evd.get("evidence", {}))
+            evd["evidence"] = evid(conf(evd).get("evidence", {}))
             evd["effects"] = [
                 Effect(**{k: v for k, v in ef.items() if k != "__type__"}) for ef in evd.get("effects", [])
             ]
             m.events.append(Event(**evd))
         for pd in data.get("parameters", []):
             pd.pop("__type__", None)
-            pd["evidence"] = evid(pd.get("evidence", {}))
+            pd["evidence"] = evid(conf(pd).get("evidence", {}))
             pd["value"] = unk(pd.get("value"))
             m.parameters[pd["name"]] = Parameter(**pd)
         for fd in data.get("fields", []):
@@ -1063,19 +1120,19 @@ class Module:
         ):
             for d in data.get(key, []):
                 d.pop("__type__", None)
-                d["evidence"] = evid(d.get("evidence", {}))
+                d["evidence"] = evid(conf(d).get("evidence", {}))
                 target.append(typ(**d))
         if data.get("organism"):
             od = dict(data["organism"])
             od.pop("__type__", None)
-            od["evidence"] = evid(od.get("evidence", {}))
+            od["evidence"] = evid(conf(od).get("evidence", {}))
             if isinstance(od.get("origin"), list):
                 od["origin"] = tuple(od["origin"])
             m.organism = Organism(**od)
         if data.get("regime"):
             rd = dict(data["regime"])
             rd.pop("__type__", None)
-            rd["evidence"] = evid(rd.get("evidence", {}))
+            rd["evidence"] = evid(conf(rd).get("evidence", {}))
             m.regime = Regime(**rd)
         return m
 
@@ -1092,9 +1149,13 @@ __all__ = [
     "REGIME_TREATMENTS",
     "REGIME_UPDATES",
     "UNKNOWN",
+    "RECORDS_UNSTATED",
     "UNSTATED",
+    "UNSTATED_JSON",
     "UnstatedConfidence",
+    "confidence_from_json",
     "confidence_stated",
+    "confidence_to_json",
     "VOLUME_UNITS",
     "Action",
     "CellType",

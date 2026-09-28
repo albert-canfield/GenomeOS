@@ -122,21 +122,16 @@ def cmd_check(args: argparse.Namespace) -> int:
         )
         for r in active:
             print(f"    {r.id}")
-    rep = module.confidence_report()
-    print("  mean confidence by kind:")
-    for kind, val in sorted(rep.items()):
-        bar = "█" * int(val * 20)
-        print(f"    {kind:<10} {bar:<20} {val:.2f}")
+    from genomeos.lang.tools import confidence_lines  # stated means; unstated never counted as weak
+
+    print("\n".join(confidence_lines(module, weak=False)))
     unknowns = module.unknowns()
     if unknowns:
         print(f"  UNKNOWN regions: {len(unknowns)}")
         for u in unknowns:
             print(f"    {u.id}  {u.locus}")
-    weak = [r for r in module.rules if r.confidence < 0.5]
-    if weak:
-        print(f"  rules with confidence < 0.5: {len(weak)}")
-        for r in weak:
-            print(f"    {r.id}  ({r.evidence.kind.value}: {r.evidence.source or 'no source'})")
+    for line in confidence_lines(module, means=False):
+        print(line)
     return 0
 
 

@@ -12,7 +12,7 @@ import operator
 import re
 from dataclasses import dataclass, field
 
-from genomeos.ir import Action, Module, Parameter, Rule
+from genomeos.ir import Action, Module, Parameter, Rule, confidence_stated
 
 from .cell import CELL_TYPES, GLOBAL_PARAMS, CellRuntime, CellState
 from .grn import NetworkRuntime, _hill
@@ -63,6 +63,8 @@ class TraceLine:
     def format(self) -> str:
         ev = f"  [{self.evidence}]" if self.evidence else ""
         conf = f" conf={self.confidence:.2f}" if self.confidence is not None else ""
+        if self.confidence is not None and not confidence_stated(self.confidence):
+            conf = " conf=unstated"  # the program states none; not a judged 0.00 (item 12 S1)
         return f"t={self.time:8.3f}  {self.subject:<18} {self.message}{ev}{conf}"
 
 

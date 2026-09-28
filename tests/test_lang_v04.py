@@ -219,6 +219,21 @@ def test_confidence_follows_the_whole_chain_to_the_weakest_link():
     assert res.confidence["SDHBp@Cytosol"]["score"] > inside["score"]  # the precursor is better grounded
 
 
+def test_a_link_that_states_no_confidence_is_named_not_scored_as_zero():
+    """Item 12 S1 (2026-09-28): an unstated link was the weakest at 0 and hid the stated TOM at 0.12.
+    It is left out of the minimum and named, so the score is an upper bound on the chain."""
+    src = CELL.replace(
+        "transport TOM { from: Cytosol; to: Mitochondrion; cargo: signal = presequence; capacity: 1e4; affinity: 1e3 }",
+        "transport TOM { from: Cytosol; to: Mitochondrion; cargo: signal = presequence; capacity: 1e4; affinity: 1e3\n"
+        '  evidence: inferred "capacity not measured"; confidence: 0.3 }',
+    )
+    src += "gene SDHB { location: Nucleus; basal: 1; produces: SDHBp }\nprotein SDHBp { location: Mitochondrion; signals: presequence }\n"
+    inside = LocatedRuntime(parse(src)).run(hours=12).confidence["SDHBp@Mitochondrion"]
+    assert inside["weakest"] == "transport TOM" and inside["score"] == pytest.approx(0.3 * 0.4, abs=1e-6)
+    assert {"gene SDHB", "protein SDHBp", "rule SDHB->SDHBp"} <= set(inside["unstated"])
+    assert set(inside["unstated"]) <= set(inside["chain"])
+
+
 # ---- the Body's fate precedence, declared (v0.4 §7.3) ---------------------------------------------
 
 WORM = """

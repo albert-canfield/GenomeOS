@@ -454,7 +454,8 @@ def _compile_block(b: Block, module: Module) -> None:
                 kind="transcript",
                 gene_id=g.id,
                 evidence=cev if "evidence" in child.props else ev,
-                confidence=cconf or conf,
+                # the same for its confidence: `cconf or conf` replaced a stated 0.0 with the gene's
+                confidence=cconf if "confidence" in child.props else conf,
             )
             if "exons" in child.props:
                 tx.exons = [Locus.parse(x) for x in _list(child.props["exons"])]

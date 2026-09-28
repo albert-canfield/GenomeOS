@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from genomeos.ir import Experiment, Module, to_minutes
+from genomeos.ir import Experiment, Module, confidence_to_json, to_minutes
 from genomeos.runtime.body import Body, Cell
 
 
@@ -115,7 +115,7 @@ class ExperimentResult:
             "evidence": {
                 "kind": self.experiment.evidence.kind.value,
                 "source": self.experiment.evidence.source,
-                "confidence": self.experiment.confidence,
+                "confidence": confidence_to_json(self.experiment.confidence),  # null: none stated
             },
         }
 

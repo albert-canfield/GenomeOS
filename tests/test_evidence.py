@@ -298,23 +298,32 @@ def test_the_parser_marks_a_missing_confidence_and_keeps_its_value_zero():
     assert not confidence_stated(UNSTATED) and confidence_stated(0.0)
 
 
-def test_the_distinction_lives_in_the_parsed_ir_and_not_in_bioir_json():
-    """A stated 0.0 stays stated and an absent confidence is UNSTATED through parse and to_dict; the
-    BioIR JSON writes both as 0.0, so after json and from_dict every confidence reads as stated. The
-    distinction is a property of a parsed program, not of stored BioIR."""
+def test_the_distinction_survives_bioir_json_and_the_explorer_reads_it_back():
+    """Item 12 S1 (2026-09-28) replaces the test that accepted the loss: BioIR JSON wrote an unstated
+    confidence as 0.0 and from_dict read it back as stated. It now writes null, reads null back as
+    UNSTATED, and keeps a stated 0.0 a number; the explorer's rows from the reloaded module say
+    exactly what the rows from the parsed program say."""
     import json
 
     from genomeos.ir import Module, confidence_stated
     from genomeos.lang import parse
 
     m = parse(UNSTATED_PROGRAM)
-    d = m.to_dict()
+    text = json.dumps(m.to_dict())
+    d = json.loads(text)
+    assert d["records_unstated_confidence"] is True
     by_id = {e["id"]: e for e in d["entities"]}
-    assert not confidence_stated(by_id["NANOG"]["confidence"])  # in memory, to_dict keeps the object
-    text = json.dumps(d)
+    assert by_id["NANOG"]["confidence"] is None and d["rules"][0]["confidence"] is None
+    assert {p["name"]: p["confidence"] for p in d["parameters"]}["judged_zero"] == 0.0
     back = Module.from_dict(json.loads(text))
     assert confidence_stated(back.parameters["judged_zero"].confidence)
     assert back.parameters["judged_zero"].confidence == 0.0
-    assert back.entities["NANOG"].confidence == 0.0
-    assert confidence_stated(back.entities["NANOG"].confidence)  # lost in JSON: read as a stated 0.0
-    assert json.loads(text)["rules"][0]["confidence"] == 0.0
+    assert (
+        not confidence_stated(back.entities["NANOG"].confidence) and back.entities["NANOG"].confidence == 0.0
+    )
+    assert not confidence_stated(back.rules[0].confidence)
+    rows = [(r["label"], r["stated"], r["confidence"]) for r in evidence._rows_of(m, "u.bio")]
+    assert [(r["label"], r["stated"], r["confidence"]) for r in evidence._rows_of(back, "u.bio")] == rows
+    assert evidence.summarise(evidence._rows_of(back, "u.bio")) == evidence.summarise(
+        evidence._rows_of(m, "u.bio")
+    )

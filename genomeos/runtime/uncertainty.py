@@ -7,14 +7,17 @@ parameters and events that actually fired, weighted by evidence kind:
     experimental 1.0 · curated 0.9 · predicted 0.6 · inferred 0.4 · none 0.0
 
 A level with nothing behind it is reported as UNKNOWN rather than 0, so that
-"no information" is distinguishable from "measured to be unreliable".
+"no information" is distinguishable from "measured to be unreliable". For the
+same reason a rule, parameter or event that states no confidence (the parser's
+UNSTATED) is counted apart and never averaged in as a 0.0 (item 12 S1,
+2026-09-28): a level whose items all state none is UNKNOWN too.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from genomeos.ir import Event, EvidenceKind, Module, Parameter, Rule
+from genomeos.ir import Event, EvidenceKind, Module, Parameter, Rule, confidence_stated
 
 LEVELS = ("molecular", "cellular", "tissue", "organism")
 KIND_WEIGHT = {
@@ -32,6 +35,7 @@ class LevelReport:
     items: int = 0
     confidence: float | None = None  # None = UNKNOWN
     weakest: str = ""
+    unstated: int = 0  # of `items`, those that state no confidence: kept out of the mean
 
     @property
     def label(self) -> str:
@@ -46,15 +50,19 @@ class UncertaintyReport:
 
     def add(self, level: str, confidence: float, kind: EvidenceKind, name: str) -> None:
         lr = self.levels[level]
+        lr.items += 1
+        if not confidence_stated(confidence):
+            lr.unstated += 1
+            return
         score = confidence * KIND_WEIGHT[kind]
+        stated = lr.items - lr.unstated  # including this one
         if lr.confidence is None:
             lr.confidence = score
             lr.weakest = name
         else:
-            lr.confidence = (lr.confidence * lr.items + score) / (lr.items + 1)
+            lr.confidence = (lr.confidence * (stated - 1) + score) / stated
             if score < lr.confidence and (not lr.weakest or score < self._score_of(lr)):
                 lr.weakest = name
-        lr.items += 1
 
     @staticmethod
     def _score_of(lr: LevelReport) -> float:
@@ -76,6 +84,7 @@ class UncertaintyReport:
                 "confidence": None if r.confidence is None else round(r.confidence, 3),
                 "label": r.label,
                 "weakest": r.weakest,
+                "unstated": r.unstated,
             }
             for lv, r in self.levels.items()
         }
@@ -83,12 +92,17 @@ class UncertaintyReport:
     def format(self) -> str:
         out = ["uncertainty by level:"]
         for lv, r in self.levels.items():
-            if r.confidence is None:
+            if r.confidence is None and r.unstated:
+                out.append(f"  {lv:<10} UNKNOWN   ({r.unstated} items, none states a confidence)")
+            elif r.confidence is None:
                 out.append(f"  {lv:<10} UNKNOWN   (nothing simulated at this level)")
             else:
                 bar = "█" * int(r.confidence * 20)
                 weakest = f"  weakest: {r.weakest}" if r.weakest else ""
-                out.append(f"  {lv:<10} {bar:<20} {r.confidence:.2f} {r.label:<6} {r.items} items{weakest}")
+                unstated = f"  ({r.unstated} of them state none)" if r.unstated else ""
+                out.append(
+                    f"  {lv:<10} {bar:<20} {r.confidence:.2f} {r.label:<6} {r.items} items{weakest}{unstated}"
+                )
         return "\n".join(out)
 
 
@@ -109,7 +123,6 @@ def report_for_ageing(parameters: list[Parameter]) -> UncertaintyReport:
         rep.add_parameter(p, "cellular")
     # a population of one cell type says something about tissue, at reduced confidence
     for p in parameters:
-        rep.add(  # tissue-level claims inherit cell-level evidence discounted
-            "tissue", p.confidence * 0.6, p.evidence.kind, p.name
-        )
+        discounted = p.confidence * 0.6 if confidence_stated(p.confidence) else p.confidence
+        rep.add("tissue", discounted, p.evidence.kind, p.name)  # cell-level evidence, discounted
     return rep

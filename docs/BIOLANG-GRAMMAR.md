@@ -393,6 +393,10 @@ May contain `transcript` blocks.
 Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON
 (`bioir_version` 0.4).
 
+A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated
+0.0 by `confidence_stated()`. BioIR JSON writes it as `null` (a stated 0.0 stays `0.0`) and marks
+the file `records_unstated_confidence: true`; a file without that mark predates the difference.
+
 - **Evidence**: `kind`, `source`, `organism`, `note`
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
 - **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`

@@ -19,7 +19,7 @@ from urllib.parse import parse_qs, urlparse
 
 from genomeos import __version__
 from genomeos.genome import Locus, Sequence, read_fasta
-from genomeos.ir import UNKNOWN, Module
+from genomeos.ir import UNKNOWN, Module, confidence_stated, confidence_to_json
 from genomeos.lang import BioLangError, parse
 from genomeos.lib import LIBRARIES
 from genomeos.runtime import (
@@ -505,7 +505,9 @@ class Api:
                 "entities": len(module.entities),
                 "rules": len(module.rules),
                 "parameters": len(module.parameters),
+                # means over stated confidences, null where none is stated; counts beside (item 12 S1)
                 "confidence": module.confidence_report(),
+                "confidence_counts": module.confidence_counts(),
                 "unknown": [
                     {"id": u.id, "locus": str(u.locus) if u.locus else None} for u in module.unknowns()
                 ],
@@ -517,8 +519,9 @@ class Api:
                         "source": r.evidence.source,
                     }
                     for r in module.rules
-                    if r.confidence < 0.5
+                    if confidence_stated(r.confidence) and r.confidence < 0.5
                 ],
+                "unstated_rules": sum(1 for r in module.rules if not confidence_stated(r.confidence)),
             },
         }
 
@@ -1107,7 +1110,7 @@ class Api:
                     "subject": line.subject,
                     "message": line.message,
                     "evidence": line.evidence,
-                    "confidence": line.confidence,
+                    "confidence": confidence_to_json(line.confidence),
                 }
                 for line in dbg.explain(sp)
             ]
@@ -1481,7 +1484,7 @@ class Api:
                     "status": status,
                     "reason": why,
                     "evidence": {"kind": r.evidence.kind.value, "source": r.evidence.source},
-                    "confidence": r.confidence,
+                    "confidence": confidence_to_json(r.confidence),  # null when the rule states none
                 }
             )
 
@@ -1575,7 +1578,7 @@ class Api:
                 "ontology_id": cell.ontology_id,
                 "expresses": list(cell.expresses),
                 "evidence": {"kind": cell.evidence.kind.value, "source": cell.evidence.source},
-                "confidence": cell.confidence,
+                "confidence": confidence_to_json(cell.confidence),
             },
             "cell_types": [c.id for c in types],
             "gated_on_cell_type": gates,

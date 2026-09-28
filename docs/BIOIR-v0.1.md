@@ -217,3 +217,34 @@ and the language did not change. The mark carries the change in the JSON form.
 
 **Engine.** Everything above lives in `genomeos/ir`, `genomeos/lang`, `genomeos/runtime` and
 `genomeos/bio.py`; none of it imports the application.
+
+### Built (same day), and what moved
+
+Every path in the census now keeps the difference: `to_dict` and `from_dict` as registered; the 14
+IR defaults are `UNSTATED`; the transcript takes its gene's confidence only when it states none;
+`confidence_report` averages stated values and `confidence_counts` gives both counts;
+`lang.tools.confidence_lines` is the one place `genomeos check` and `bio check` print them from; the
+web compile report sends `confidence_counts` and `unstated_rules`; the Cell view, the debugger,
+`ExperimentResult.to_dict` and BioForge's `UNSTATED_CONFIDENCE` write or carry `UNSTATED` as null;
+the uncertainty report keeps `items` as the count of everything behind a level and adds `unstated`,
+the mean running over the rest; the located runtime names unstated links in `unstated`; the trace
+line, the REPL and the methylation note print "unstated". The 18 negatives pass, and
+`tests/test_evidence.py` holds the preservation test that replaces the one that accepted the loss.
+
+Measured before and after on the same tree (66 programs, 42 network programs run through
+`report_for_network`, 8 organism programs grown):
+
+| Figure | Before | After |
+|---|---|---|
+| Evidence explorer, whole tree: facts / stated weak / stated strong / unstated | 986,947 / 19,299 / 48,114 / 919,534 | unchanged |
+| Evidence explorer CSV, bytes (with and without the compiled programs) | 243,226,498 and 4,451,303 | unchanged |
+| Unstated confidences still unstated after BioIR JSON | 0 of 919,533 | 919,533 of 919,533 |
+| Rules in the check reports' weak list (below 0.5) | 445,072 | 4,695 (the 440,377 that state none are counted apart) |
+| Check means, 24 compiled chromosomes: `regulatory_element` | 0.026 to 0.041 | 0.750 to 0.784 |
+| the same: `rule` | 0.000 to 0.001 | 0.900 in 22; none stated in 2 |
+| the same: `gene`, `domain` | 0.00 | none stated |
+| `data/organisms/human/noncoding_chr21.bio`: `regulatory_element`; `gene`, `domain` | 0.028; 0.00 | 0.764; none stated |
+| `data/demo/repressilator.bio`: `region` | 0.00 | none stated |
+| Uncertainty reports, 42 network and 8 organism programs: confidence, label and items per level | | unchanged |
+
+Every moved figure is a live report; none is stored in a result file.

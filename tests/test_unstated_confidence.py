@@ -17,15 +17,16 @@ import copy
 import json
 import pickle
 
-import pytest
-
-from genomeos.ir import UNSTATED, Module, confidence_stated
-from genomeos.lang import parse
-
-CENSUS = pytest.mark.xfail(
-    strict=True,
-    reason="census 2026-09-28 (item 12 S1): this path loses an unstated confidence; the build fixes it",
+from genomeos.ir import (
+    RECORDS_UNSTATED,
+    UNSTATED,
+    UNSTATED_JSON,
+    Module,
+    confidence_from_json,
+    confidence_stated,
+    confidence_to_json,
 )
+from genomeos.lang import parse
 
 PROGRAM = """module test.unstated_paths
 
@@ -103,14 +104,12 @@ def test_the_parser_keeps_a_stated_zero_and_marks_a_missing_confidence():
     assert m.parameters["judged_zero"].confidence == 0.0 and m.parameters["left_out"].confidence == 0.0
 
 
-@CENSUS
 def test_a_transcript_that_states_zero_keeps_it_rather_than_its_genes():
     """`cconf or conf` treated a stated 0.0 as absent and gave the transcript its gene's 0.8."""
     tx = parse(PROGRAM).entities["NANOG-201"]
     assert confidence_stated(tx.confidence) and tx.confidence == 0.0
 
 
-@CENSUS
 def test_bioir_json_keeps_stated_and_unstated_apart():
     m = parse(PROGRAM)
     back = _json(m)
@@ -118,7 +117,6 @@ def test_bioir_json_keeps_stated_and_unstated_apart():
     assert _values(back) == _values(m)
 
 
-@CENSUS
 def test_bioir_json_writes_an_unstated_confidence_as_null():
     d = json.loads(json.dumps(parse(PROGRAM).to_dict()))
     params = {p["name"]: p for p in d["parameters"]}
@@ -126,13 +124,11 @@ def test_bioir_json_writes_an_unstated_confidence_as_null():
     assert params["judged_zero"]["confidence"] == 0.0
 
 
-@CENSUS
 def test_an_enhancer_targets_confidence_survives_json():
     back = _json(parse(PROGRAM))
     assert not confidence_stated(back.entities["E1"].targets[0]["confidence"])
 
 
-@CENSUS
 def test_an_ir_object_built_without_a_confidence_is_unstated():
     from genomeos.ir import Gene, Parameter, Rule
 
@@ -148,7 +144,6 @@ def test_copy_and_pickle_keep_the_mark():
     assert _stated(copy.deepcopy(m)) == _stated(m)
 
 
-@CENSUS
 def test_the_confidence_summary_averages_stated_values_only():
     """`confidence_report` pooled an unstated confidence into the mean as a 0.0."""
     m = parse(PROGRAM)
@@ -158,7 +153,6 @@ def test_the_confidence_summary_averages_stated_values_only():
     assert rep["regulatory_element"] is None  # nothing states one
 
 
-@CENSUS
 def test_the_check_report_does_not_list_an_unstated_rule_as_weak():
     from genomeos.lang.tools import check_module
 
@@ -167,19 +161,35 @@ def test_the_check_report_does_not_list_an_unstated_rule_as_weak():
     assert "SOX2 activates NANOG" not in text.split("rules with confidence < 0.5")[1].split("\n  ")[0]
 
 
-@CENSUS
+def test_the_json_form_is_null_and_its_inverse_is_unstated():
+    assert UNSTATED_JSON is None and confidence_to_json(UNSTATED) is None
+    assert confidence_to_json(0.0) == 0.0 and confidence_stated(confidence_to_json(0.0))
+    assert not confidence_stated(confidence_from_json(None)) and confidence_from_json(0.0) == 0.0
+    assert confidence_stated(confidence_from_json(0.0))
+
+
+def test_a_file_written_before_the_mark_reads_its_zero_as_the_stated_zero_it_carries():
+    """A BioIR file without `records_unstated_confidence` predates the difference: its 0.0 was written
+    the same way whether stated or not. from_dict reads what the file says and does not guess."""
+    d = json.loads(json.dumps(parse(PROGRAM).to_dict()))
+    assert d.pop(RECORDS_UNSTATED) is True
+    for p in d["parameters"]:
+        p["confidence"] = 0.0 if p["confidence"] is None else p["confidence"]  # the old writer
+    old = Module.from_dict(d)
+    assert confidence_stated(old.parameters["left_out"].confidence)  # cannot be told apart: read as written
+
+
 def test_bio_compile_writes_null_and_the_mark():
     from genomeos.lang.tools import compile_module
 
     d = json.loads(compile_module(parse(PROGRAM)))
-    assert d["records_unstated_confidence"] is True
+    assert d[RECORDS_UNSTATED] is True
     rules = {r["id"]: r["confidence"] for r in d["rules"]}
     assert rules == {"SOX2 activates NANOG": None, "NANOG activates SOX2": 0.0}
     targets = next(e for e in d["entities"] if e["id"] == "E1")["targets"]
     assert targets[0]["confidence"] is None  # the element's copy, written the same way
 
 
-@CENSUS
 def test_the_uncertainty_report_counts_unstated_items_apart():
     from genomeos.runtime.uncertainty import UncertaintyReport, report_for_network
 
@@ -194,7 +204,6 @@ def test_the_uncertainty_report_counts_unstated_items_apart():
     assert "none states a confidence" in only.format()
 
 
-@CENSUS
 def test_a_trace_line_prints_unstated_rather_than_zero():
     from genomeos.runtime.debugger import TraceLine
 
@@ -203,7 +212,6 @@ def test_a_trace_line_prints_unstated_rather_than_zero():
     assert "conf" not in TraceLine(1.0, "X", "m", "runtime default", None).format()
 
 
-@CENSUS
 def test_the_bio_confidence_test_is_a_mean_over_stated_rules():
     from genomeos.bio import evaluate
 
@@ -213,3 +221,25 @@ def test_the_bio_confidence_test_is_a_mean_over_stated_rules():
     none = 'module t\ngene G { evidence: curated "x" }\nrule G activates G { evidence: predicted "m" }\n'
     res = evaluate(parse(none), [("confidence", "", ">=", 0.0)])[0]
     assert res["got"] is None and res["ok"] is False  # nothing stated: the claim cannot be checked
+
+
+def test_parse_json_and_back_to_biolang_keep_stated_and_unstated():
+    """parse -> to_dict -> json -> from_dict -> BioLang text -> parse. No Module-to-BioLang writer
+    exists (census, docs/BIOIR-v0.1.md), so the text is written here the way every BioLang writer
+    must: the key only when stated, decided by `confidence_to_json`."""
+    first = parse(PROGRAM)
+    back = _json(first)
+    text = ["module test.again"]
+    for p in back.parameters.values():
+        c = confidence_to_json(p.confidence)
+        key = "" if c is None else f"; confidence: {c}"
+        text.append(
+            f'param {p.name} = {p.value} {{ evidence: {p.evidence.kind.value} "{p.evidence.source}"{key} }}'
+        )
+    again = parse("\n".join(text))
+    assert {k: confidence_stated(v.confidence) for k, v in again.parameters.items()} == {
+        k: confidence_stated(v.confidence) for k, v in first.parameters.items()
+    }
+    assert {k: float(v.confidence) for k, v in again.parameters.items()} == {
+        k: float(v.confidence) for k, v in first.parameters.items()
+    }

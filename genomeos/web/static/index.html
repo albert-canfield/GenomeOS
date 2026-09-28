@@ -1152,9 +1152,12 @@ $('#p-compile').onclick = async () => {
   $('#p-msg').textContent = '';
   const rep = r.report, conf = rep.confidence;
   $('#p-report').innerHTML = `<div class="kpi"><div><b>${rep.entities}</b><span>entities</span></div><div><b>${rep.rules}</b><span>rules</span></div><div><b>${rep.parameters}</b><span>parameters</span></div><div><b>${rep.unknown.length}</b><span>UNKNOWN regions</span></div></div>
-    <table>${Object.entries(conf).map(([k, v]) => `<tr><td style="width:90px">${k}</td><td><div class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></div></td><td class="num" style="width:50px">${v.toFixed(2)}</td></tr>`).join('')}</table>
+    <table>${Object.entries(conf).map(([k, v]) => { const u = ((rep.confidence_counts || {})[k] || {}).unstated || 0; return v == null
+      ? `<tr><td style="width:90px">${k}</td><td class="muted">none stated (${u} unstated)</td><td class="num" style="width:50px">–</td></tr>`
+      : `<tr><td style="width:90px">${k}</td><td><div class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></div>${u ? ` <span class="muted">${u} unstated</span>` : ''}</td><td class="num" style="width:50px">${v.toFixed(2)}</td></tr>`; }).join('')}</table>
     ${rep.unknown.length ? `<div class="note">UNKNOWN: ${rep.unknown.map(u => `<span class="mono">${u.id}${u.locus ? ' @ ' + u.locus : ''}</span>`).join(', ')}</div>` : ''}
     ${rep.weak_rules.length ? `<div class="note">rules with confidence &lt; 0.5: ${rep.weak_rules.map(w => `<span class="mono">${w.id}</span> <span class="pill ${w.evidence}">${w.evidence}</span>`).join(' · ')}</div>` : ''}
+    ${rep.unstated_rules ? `<div class="note">rules that state no confidence: ${rep.unstated_rules} (not counted as weak)</div>` : ''}
     <div class="note ok">compiled to BioIR v${r.module.bioir_version}: <span class="mono">${r.module.name}</span></div>`;
 };
 $('#p-run').onclick = async () => {
@@ -1986,7 +1989,7 @@ async function loadCell() {
       <div><b>${t.expresses.length || '—'}</b><span>genes it says it expresses</span></div>`;
     $('#ce-id').innerHTML = `<b>${escH(t.id)}</b>${t.ontology_id ? ` · ${escH(t.ontology_id)}` : ''}`
       + (t.lineage.length ? ` · lineage ${t.lineage.map(escH).join(' ← ')}` : ' · no parent declared')
-      + ` · <span class="pill ${escH(t.evidence.kind)}">${escH(t.evidence.kind)}</span> ${escH(t.evidence.source)} (confidence ${t.confidence.toFixed(2)})`
+      + ` · <span class="pill ${escH(t.evidence.kind)}">${escH(t.evidence.kind)}</span> ${escH(t.evidence.source)} (confidence ${t.confidence == null ? 'unstated' : t.confidence.toFixed(2)})`
       + ` · in <span class="mono">${escH(d.path)}</span>, module <span class="mono">${escH(d.module)}</span>`
       + (d.gated_on_cell_type.length ? ` · rules gated on ${d.gated_on_cell_type.map(escH).join(', ')}` : '')
       + (d.genes_silenced.length ? ` · silenced: ${d.genes_silenced.map(escH).join(', ')}` : '');
@@ -2000,7 +2003,7 @@ async function loadCell() {
           <td class="num">${r.strength}</td><td class="num">${r.threshold}${escH(r.threshold_unit)}</td><td class="num">${r.hill}</td>
           <td class="mono">${escH(Object.entries(r.when).map(([k, v]) => `${k}=${v}`).join(', '))}</td>
           <td><span class="pill ${escH(r.evidence.kind)}">${escH(r.evidence.kind)}</span> <span class="muted">${escH(r.evidence.source)}</span></td>
-          <td class="num">${r.confidence.toFixed(2)}</td></tr>`).join('') + '</table>'
+          <td class="num">${r.confidence == null ? '<span class="muted" title="no confidence stated">–</span>' : r.confidence.toFixed(2)}</td></tr>`).join('') + '</table>'
       : '<div class="muted">This program states no rule, so there is nothing to list. Its cell types are used by decisions, timers and populations.</div>';
     drawCellGraph(d);
     $('#ce-chart').innerHTML = ''; $('#ce-clegend').innerHTML = '';
@@ -2048,7 +2051,7 @@ function drawCellGraph(d) {
       'stroke-dasharray': e.status === 'active' ? 'none' : '4 3', opacity: e.status === 'active' ? 0.95 : 0.35,
       'marker-end': `url(#ce-a-${e.action in colour ? e.action : 'produces'})`,
     });
-    path.appendChild(el('title', {}, `${e.source} ${e.action} ${e.target} — ${e.status}, strength ${e.strength}, confidence ${e.confidence.toFixed(2)}`));
+    path.appendChild(el('title', {}, `${e.source} ${e.action} ${e.target} — ${e.status}, strength ${e.strength}, confidence ${e.confidence == null ? 'unstated' : e.confidence.toFixed(2)}`));
     svg.appendChild(path);
   }
   for (const n of nodes) {
