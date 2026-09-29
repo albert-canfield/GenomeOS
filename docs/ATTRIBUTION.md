@@ -11566,6 +11566,176 @@ the owner's terms, beside the v1 and v2 readings.
 - evidence that the 59 targets are right or wrong in the cell they name: they are not assessed there;
 - a correction of S4's result or of the v2 re-judge, which stand as the v1 and v2 results.
 
+## Audit A, candidate coverage: 365 of the 387 decrease links C4 counted without a registry element have one sharing their bases, 362 of them failing only the reciprocal rule's width requirement, and 21 are absent from both element sets (item 13 C4 follow-up, 2026-09-29, lane-place)
+
+This section sits beside C4 and edits nothing in it. C4 (`b7e4bf0`) sorted the 661 measured CRISPRi
+decrease links with `ablation.placement`: 212 meet the overlap rule in a compiled predicted element,
+62 more would meet it in an ENCODE cCRE, and 387 meet it in neither. The 449 not placed are placement
+failures, not 449 proven absent enhancers. This audit asks why each link fails, one cause at a time,
+over every screened pair. Decreases and nulls are reported apart at every step, and the ranking and
+the intervals stay frozen. `scripts/placement_audit.py`, `data/results/placement_audit.json`,
+`tests/test_placement_audit.py`.
+
+**Status.** This is internal development evidence and a bounded audit. It is not a biological result.
+Every outcome it reads was read before: `138824f`, `ecc3452`, `f48b909`, `a39073d`, `b7e4bf0`,
+`cc824f4` and `b7cb814` (`prior_exposure` in the result). No resplit restores independence.
+
+### Registered before any per-outcome count (2026-09-29, `dd8c49c`)
+
+- **The cascade.** Every link, keyed as C4 keys it (chrom, start, end, gene, cell, split), gets the
+  first cause that holds:
+  1. placed in a compiled element;
+  2. a registry element meets the rule (candidate exclusion, split by whether the whole-chromosome
+     sweep scored that element and named a target);
+  3. a zero-width source row;
+  4. a registry element holds at least half of the smaller interval, but the tested interval is
+     outside 75 to 700 bp, so no 150 to 350 bp registry element can ever meet the reciprocal rule;
+  5. the same, with a reachable width;
+  6. a partial boundary overlap;
+  7. no registry element shares a base.
+- **The one policy**, fixed from the conventions alone: an element carries a tested interval when
+  their overlap is at least half of the smaller of the two widths. The threshold is the measured
+  layer's own 0.5. Nothing is padded, moved or merged.
+- **Three stops.** The policy is reported as denominator or overlap inflation if any of these holds:
+  - (a) its rescue of positives minus its rescue of nulls has a gene-clustered bootstrap 95% interval
+    whose lower bound is at or below zero;
+  - (b) that excess does not beat the same excess on the same links with every tested interval moved
+    20 kb either way;
+  - (c) the excess vanishes within the 75 to 700 bp intervals.
+- The only outcome figures seen before the registration were C4's 212, 62 and 387.
+
+### Each input's build and convention
+
+The audit reproduces C4's placement exactly before it reads anything else.
+
+| Input | sha256 | Declared | Found |
+|---|---|---|---|
+| CRISPRi training file | `9eddfe18…d79405` | GRCh38, BED 0-based half-open | see below |
+| CRISPRi held-out file | `7783534a…5ffd38` | the same | see below |
+| cCRE registry, 24 files | `95e79f14…20c4a6` (combined) | ENCODE cCREs v3 GRCh38, BED 0-based half-open | 1,063,878 elements, 150 to 350 bp |
+| Compiled programs, 24 files | `20d2806e…ead0facf` (combined) | the registry's coordinates by id | all 440,377 predicted elements are registry ids at the registry's exact coordinates (0 moved, 0 missing) |
+
+What the CRISPRi files show, read without outcomes:
+
+- **Build.** The GRCh38 columns touch a registry element at 91.2% of the 5,638 distinct tested
+  intervals. The same intervals moved 20 kb touch one at 41.6% and 41.9%. The name field's source
+  coordinates, where they differ (3,749 lifted-over intervals), touch one at 37.2%, the chance level of
+  another build.
+- **TSS.** The benchmark's TSS sits within 1 kb of GENCODE v50's for 2,147 of 2,334 genes, with a median
+  difference of 29.5 bp.
+- **Liftover** kept the width of all but 66 rows.
+- **One base.** Moving every tested start or end by one base changes the cause of 1 to 3 positives and
+  23 to 25 nulls. The DC_TAP rows are 499 bp wide, a one-base end convention of the source.
+- **One source defect.** The held-out Nasser2021 PTGER4 row is chr5:40490507-40490507, with zero width
+  in its source name too.
+
+### The attrition (current rule, training / held-out)
+
+Positives are the 661 decrease links. Nulls are the 14,073 other links: 9,801 well-powered nulls,
+4,113 underpowered nulls and 159 significant increases. The result keeps each null kind apart.
+
+| Cause | Positives | Nulls |
+|---|---|---|
+| placed in a compiled element | 212 (169 / 43) | 4,613 (3,002 / 1,611) |
+| registry would: candidate exclusion | 62 (43 / 19) | 3,182 (2,236 / 946) |
+| of which: registry element not scored by the sweep | 11 | 467 |
+| of which: scored, no target named | 22 | 1,565 |
+| of which: scored, only a non-coding target named | 29 | 1,150 |
+| zero-width source row | 1 (0 / 1) | 0 |
+| rule and width: no registry element can reach the reciprocal rule at this width | 290 (183 / 107) | 3,174 (2,513 / 661) |
+| rule and width: reachable width, these widths fail it | 72 (60 / 12) | 1,892 (1,240 / 652) |
+| partial boundary overlap | 3 (1 / 2) | 111 (90 / 21) |
+| no registry element shares a base | 21 (15 / 6) | 1,101 (804 / 297) |
+
+**Reading.**
+
+- **No convention bug.** There is no build, liftover or 0/1-based error. All three sets are GRCh38 BED
+  half-open, and the compiled set is the registry's.
+- **C4's label is inaccurate.** `not_placed_no_registry_element` is wrong for 365 of its 387 links: a
+  registry element shares bases with each of them. 362 fail only because the reciprocal rule asks two
+  intervals to be within a factor of two in width. Under that rule, a tested interval wider than 700 bp
+  cannot be placed anywhere, whatever DNA it holds, and 290 of the 661 positives are that wide.
+- **Placement is width, not DNA.** The current rule places positives and nulls at the same rate:
+  32.1% against 32.8%, a difference of −0.7 points [−4.8, +3.4].
+- **Genuine absence is small.** 21 positives have no registry element sharing a base, so none in
+  either set. One more is the zero-width source row.
+- **The 62 are the model's element selection or the sweep's scope.** No compiled element was dropped
+  or moved.
+
+### The registered policy, scored (`0183ef5`, clean stamp)
+
+No registered stop fires.
+
+| | Current rule | Policy |
+|---|---|---|
+| positives placed in a compiled element | 212 / 661 (32.1%) | 497 / 661 (75.2%) |
+| nulls placed in a compiled element | 4,613 / 14,073 (32.8%) | 7,706 / 14,073 (54.8%) |
+| placed or registry would, positives / nulls | 41.5% / 55.4% | 96.2% / 91.4% |
+| placed and carried by more than one compiled element, positives / nulls | 0 / 0 | 131 (26.4%) / 1,593 (20.7%) |
+| chance placement: intervals moved +20 kb and −20 kb, positives | 3.2%, 4.4% | 21.3%, 21.5% |
+| chance placement: the same, nulls | 5.7%, 5.7% | 18.8%, 18.3% |
+
+- **Rescue.** Among the links the current rule leaves unplaced, the policy rescues 285 of 449
+  positives (63.5%) and 3,093 of 9,460 nulls (32.7%).
+- **Stop (a).** The excess is +0.308 [+0.258, +0.356].
+- **Stop (b).** The excess on moved intervals is +0.049 and +0.046, and the excess minus the moved
+  excess is +0.26 [+0.214, +0.305].
+- **Stop (c).** Within 75 to 700 bp the policy rescues 46 of 150 positives against 1,031 of 6,172 nulls,
+  an excess of +0.140 [+0.068, +0.215].
+
+**Errors and where the gain sits.** The following table was added after the first run and is outside
+the registration.
+
+- 235 of the 285 rescued positives, and 2,061 of the 3,093 rescued nulls, are tested intervals wider
+  than 700 bp.
+- In that class about half of the policy's placements are ambiguous: 117 of 235 positives and 1,081 of
+  2,061 nulls. At reachable widths it is 14 of 258 and 512 of 5,644.
+- About 28% of the policy's positive placements (21.3 / 75.2) would also occur 20 kb away, against
+  about 12% under the current rule.
+
+**Matched baseline: distance to TSS on the same links.**
+
+| Links | AUROC | AP | Prevalence |
+|---|---|---|---|
+| all 14,734 | 0.877 | 0.403 | 4.5% |
+| placed under the current rule (4,825) | 0.880 | 0.455 | 4.4% |
+| placed under the policy (8,203) | 0.876 | 0.471 | 6.1% |
+| rescued by the policy (3,378) | 0.873 | 0.508 | 8.4% |
+
+The policy's placed set is no easier or harder for distance by AUROC. Its AP rises with prevalence, so
+any score on it must be read against 0.471 on the same links, not against the current rule's figure.
+
+**Independent loci.**
+
+- Positives: 661 links on 415 genes and 594 tested intervals.
+- Nulls: 14,073 links on 2,105 genes and 5,318 intervals.
+- The intervals are gene-clustered bootstraps, 2,000 draws.
+- Fold hashes: training `a679e35a…`, held-out `0cc6255d…` (the result's `folds`).
+
+**Cost, all in.**
+
+- The run: 9.5 s wall, 9.4 s CPU and 1.14 GB peak memory. Most of the memory is the whole-chromosome
+  element tables, read for membership only.
+- A first run, discarded because another session's untracked script made its stamp dirty, cost the
+  same.
+- Preparation was a handful of outcome-blind reads of widths and name fields, each a few seconds, plus
+  three test runs of about 10 s.
+- 0 downloads, 0 model requests and 0 paid services.
+
+**What it may be called.** An internal development audit of C4's placement. It finds that the
+reciprocal rule's width requirement, not absence, is why 362 of the 387 links fail, and that one
+outcome-blind policy passes its three registered stops on development evidence.
+
+**What it may not be called:**
+
+- 449 absent enhancers, or 387 links with no registry element;
+- a validation, or independent evidence: every outcome here was read before;
+- evidence that a policy placement names the right element: a quarter of them are ambiguous, and about
+  half are in the wide class;
+- a change to C4. The policy is applied nowhere. C4's survival census uses the same reciprocal rule
+  (`CrispriIndex.of`), so it carries the same width blind spot; that is not measured here. Adopting the
+  policy anywhere would be its own registered change.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
