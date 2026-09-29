@@ -34087,27 +34087,14 @@
       }
     ],
     "code": {
-      "git_sha": "a1900285f414e65619370b18bbf50cf3ffe4ffa3",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/web/server.py",
-        "genomeos/web/static/index.html",
-        "scripts/c5_paired_variation_probe.py",
-        "scripts/ci_status_cache.py",
-        "scripts/results_writer_census.py"
-      ],
-      "untracked_code_paths": [
-        "scripts/c5_paired_variation_probe.py",
-        "scripts/ci_status_cache.py",
-        "scripts/results_writer_census.py"
-      ],
-      "dirty_result_paths": [
-        "data/results/c4_alphagenome_ablation.json",
-        "data/results/c4_holdout_scores.json",
-        "data/results/c5_paired_variation_probe.json"
-      ],
+      "git_sha": "21a7d371ea6abdf1fd9ec31d89b76197c11cff46",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
       "argv": [
-        "/private/tmp/claude-502/-Users-AlbertCanfield-SITES-DEV-GenomeOS/e6271786-4aee-495a-bcd0-5603c3ebff51/scratchpad/run_s2.py"
+        "scripts/clause2_design_power.py",
+        "--calibrated"
       ],
       "python": "3.14.3"
     },

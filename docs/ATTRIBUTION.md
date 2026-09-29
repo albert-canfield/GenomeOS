@@ -10323,6 +10323,29 @@ Three things are recorded for whoever reopens it. None of them is a result:
 3. On these sources the debugger commits almost nothing that a withheld screen can test (0 of 24 CRISPRi
    corrections tested).
 
+## Rebuilt through its committed entry point: all 25,003 values of clause2_design_power_calibrated reproduce, and a second checkout rebuilds it from its manifest with 0 differences (item 12 S2 follow-up, 2026-09-29, lane-rule)
+
+cab70d9 wrote `data/results/clause2_design_power_calibrated.json` through a scratch driver outside the
+repository. The driver called `collect_calibrated` and `save_result` as `--calibrated` does, and the
+manifest's argv named the driver: a scratchpad path, at a1900285 with a dirty tree. So
+`scripts/manifest_rebuild.py` could not run it.
+
+**The rerun.** `python scripts/clause2_design_power.py --calibrated` was run in a clean worktree at
+21a7d37 with the stores linked (1,958 s, **0 AlphaGenome requests**). Since cab70d9 the script had
+changed only by the `--read-calibrated` view, which the calibrated path does not call. Every value was
+compared with the committed file except the date, the one wall-clock key (`seconds`) and the manifest:
+**25,003 values, 0 differences**. The two manifests agree on every field except `code`.
+
+**What was written.** lane-manifest2's pattern. The committed file keeps every value, its date
+(2026-09-28) and its timing. Only `result_manifest.code` is replaced, by the clean rerun's: git 21a7d37,
+dirty false, argv `scripts/clause2_design_power.py --calibrated`.
+
+**Rebuilt from the manifest.** `scripts/manifest_rebuild.py --venv fresh` then made a second checkout at
+21a7d37, with a fresh environment from the committed uv.lock, offline. It found all 201 inputs with
+their recorded sha256, ran the recorded argv (exit 0) and compared field by field:
+**0 differences**. The bytes differ only in the date, the timing and the code stamp, which the rebuild
+ignores. The finding of cab70d9 is unchanged; what changed is that its record can now be rerun.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
