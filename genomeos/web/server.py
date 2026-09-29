@@ -562,6 +562,25 @@ DISCONTINUED = (
         "closed": (("closes decision 5 with a negative", "closes decision 5 with a negative"),),
         "reopened": (),
     },
+    {
+        "id": "coherence_pilot",
+        "name": (
+            "the coherence pilot: debugger, boundary alternatives and explanation families (item 13 C1-C3)"
+        ),
+        "review_item": None,
+        "closed": (
+            (
+                "Discontinued 2026-09-29 (lane-pilot; `a9660ff` registered",
+                "passed 0 of 4 CRISPRi decrease endpoints",
+            ),
+            (
+                "| ↳ C1–C3 | **Discontinued 2026-09-29 (lane-pilot)**",
+                "the joint debugger never beat its own blocks revised alone",
+            ),
+        ),
+        "reopened": (),
+        "result": ("pilot_biological_gate", "status"),
+    },
 )
 
 
