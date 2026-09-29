@@ -4297,6 +4297,9 @@ entire sweep. What is next, in order of what it decides:
    rather than by the machine, about **1.5 working days**, and the whole unblocked backlog about
    **3 days**. After that the project's limits are measurement it does not hold, not work it has not
    done.
+   *(2026-09-29, beside the original: this says more than any result has shown. The coherence pilot
+   established only that it did not improve prediction over simpler approaches, not that further work
+   cannot improve the biology, nor that new measurement necessarily would.)*
 
 11. **The external review of 2026-09-28, adopted as the next order of work.** A read-only review of the
    code, documents and stored results (tests not run) found the project's strongest asset is traceable

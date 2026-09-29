@@ -1206,4 +1206,10 @@ only 98 target claims can be judged by any evidence held.
 powered within the blocks that exist at small effects, and IGVF's K562 tables, the one free independent
 benchmark in reach, are not yet released.
 
+**Correction, the same day.** The owner's review found the paragraph above says more than the pilot
+showed. What the pilot established is only this: **it did not improve prediction over simpler
+approaches.** It did not establish that better code cannot improve the biology, nor that new measurement
+necessarily would. The two facts it names stand as written, as reasons the next steps wait, not as a
+finding about where the project's limit lies.
+
 docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; the Progress tab's `/api/state`.
