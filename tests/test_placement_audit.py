@@ -212,3 +212,17 @@ def test_compiled_conventions_find_moved_elements():
     got = pa.compiled_conventions(comp, reg)
     assert (got["same_id_same_coordinates_in_registry"], got["same_id_other_coordinates"]) == (1, 1)
     assert got["id_not_in_registry"] == 1
+
+
+def test_width_classes_and_the_descriptive_table():
+    assert pa.width_class(74) == "narrower_than_half_the_narrowest"
+    assert pa.width_class(75) == pa.width_class(700) == "reachable_width"
+    assert pa.width_class(701) == "wider_than_twice_the_widest"
+    pairs = [_pair(0, 1000), _pair(0, 1000, gene="N", significant=False)]
+    reg = pa.ElementSet([("chr1", 100, 400, "a")])
+    links = _links(pairs)
+    cur = pa.place(links, reg, reg, pa.current_rule)
+    pol = pa.place(links, reg, reg, pa.policy_rule)
+    got = pa.by_width(cur, pol)
+    assert got["positive"]["wider_than_twice_the_widest"]["rescued"] == 1
+    assert got["null"]["wider_than_twice_the_widest"]["placed_current_rule"] == 0

@@ -856,6 +856,7 @@ def policy_block(
                 "excess": round(excess(narrow_point), 4),
                 "excess_ci95": list(narrow_ci),
             },
+            "by_tested_width_descriptive": by_width(cur, pol),
         },
         "shifted_controls": {
             f"{sh:+d}": {
@@ -893,6 +894,29 @@ def cause_families(rows: list[Placed]) -> dict[str, dict[str, int]]:
     for p in rows:
         out["positive" if p.link.positive else "null"][fam_of[p.cause]] += 1
     return {g: {f: c[f] for f in FAMILIES} for g, c in out.items()}
+
+
+def width_class(width: int, reg_min: int = 150, reg_max: int = 350) -> str:
+    if 2 * width < reg_min:
+        return "narrower_than_half_the_narrowest"
+    if width > 2 * reg_max:
+        return "wider_than_twice_the_widest"
+    return "reachable_width"
+
+
+def by_width(cur: list[Placed], pol: list[Placed]) -> dict[str, dict[str, dict[str, int]]]:
+    """Descriptive, added after the first run and not registered: links, placed under the current rule and
+    rescued by the second rule, per tested-width class, positives and nulls apart."""
+    out: dict[str, dict[str, Counter]] = {"positive": defaultdict(Counter), "null": defaultdict(Counter)}
+    for p, q in zip(cur, pol, strict=True):
+        c = out["positive" if p.link.positive else "null"][width_class(p.link.end - p.link.start)]
+        c["links"] += 1
+        c["placed_current_rule"] += p.cause == PLACED
+        c["unplaced_current_rule"] += p.cause != PLACED
+        c["placed_second_rule"] += q.cause == PLACED
+        c["rescued"] += p.cause != PLACED and q.cause == PLACED
+        c["ambiguous_second_rule"] += q.cause == PLACED and len(q.comp.by_rule) > 1
+    return {g: {w: dict(c) for w, c in sorted(v.items())} for g, v in out.items()}
 
 
 def group_counts(links: list[Link]) -> dict[str, dict[str, int]]:
@@ -1046,6 +1070,7 @@ def main() -> None:
                 g: dict(sorted(c.items())) for g, c in touched_state.items()
             },
             "cause_families": cause_families(cur),
+            "by_tested_width_descriptive": by_width(cur, cur),
             "baseline_distance_to_tss": {
                 "all_links": baseline(links),
                 "placed_current_rule": baseline([p.link for p in cur if p.cause == PLACED]),
