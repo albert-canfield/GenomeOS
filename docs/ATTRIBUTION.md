@@ -1787,7 +1787,7 @@ the same twenty seconds. A default nobody waits for is not a default.
 
 **What it does not say.** Nothing here is a claim that the attributions are wrong. `predicted` is an
 honest label on a model's output and the project has spent two days measuring how far those outputs
-carry — the node's +2.88 points, the calibration's failure on prevalence, E1's +0.075. It says that
+carry — the node's +2.88 points *(Re-audited 2026-09-27, NODES-READER-WRITER.md: +2.90, 95% CI +2.03 to +3.81, on a control matched on boundary count only; +1.2 to +6.6 across four defensible baselines; and **+5.89, CI +3.18 to +8.46, on 661 measured CRISPRi pairs** — the direction stands on measurement, the size quoted here was never identified.)*, the calibration's failure on prevalence, E1's +0.075. It says that
 the compiled genome is a hypothesis in the shape of a program, and that it says so itself, fact by
 fact, which is what the evidence field was built for.
 
@@ -1936,6 +1936,9 @@ no `rule`, because a rule would state a relation the assay says is not there —
 element, the relation lives on the rule, and neither field answers the other's question. The 212
 regulated pairs do become experimental rules, with the direction read from the sign of the effect: the
 screen silences the element, so a gene that falls was being activated by it.
+*(2026-09-28: superseded by R2, `1cff24a`. With significant increases and underpowered nulls read as their own
+outcomes, 4,613 → 4,565 pairs measured as not regulated, n 128 → 120, observed 0.7578 → 0.8083, ECE 0.4108 →
+0.4507. See "CRISPRi negatives read as outcomes" below; the figures here are kept as they were.)*
 
 **What lentiMPRA's 14,508 disagreements do and do not mean.** An episomal reporter measures whether a
 200 bp sequence drives transcription out of its chromosome; the compiled claim is that deleting the
@@ -1944,6 +1947,11 @@ active in any of K562, HepG2 or WTC11 at log2(RNA/DNA) ≥ 1.0. That is a weaker
 CRISPRi negative on the named gene, and it is reported under its own assay name for exactly that
 reason. It is also consistent with what the lentiMPRA lane already found: the reporter and the locus
 are different questions.
+
+*R6 note (2026-09-28): "episomal" above is wrong for this assay. The ENCODE4 lentiMPRA integrates
+its reporter by lentivirus (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9). The reading still holds, because an integrated reporter also sits
+outside the sequence's native locus. After R6 the lentiMPRA disagreements number 14,512, and 126
+elements whose tiles split evenly are counted apart (see the R6 result below).*
 
 **Is the measured 4.33% a fair sample?** Both comparisons go through `genomeos/compare.py`, standardised
 on length, GC and distance to the nearest coding TSS, with the medians of both arms printed:
@@ -2109,6 +2117,10 @@ element that would most likely have shown it (chr1, 68 bases measured, none func
 overlap 0.113 and is not raised. And nothing at all about the 99.9991% of compiled elements this
 assay has never been pointed at.
 
+*R6 note (2026-09-28): "the assay is episomal" was not checked against Kircher et al. 2019 for each
+experiment. The conclusion depends only on the reporter being outside the locus, which holds whether
+the construct is a plasmid or integrated.*
+
 **Cost.** 24 chromosomes read, matched, compared and recompiled, plus the 960,096-fact evidence read:
 **159 seconds** and no requests, against 106 before the fourth assay. The satmut table is 2.6 MB
 gzipped, parsed once per process and cached. `uv run python scripts/measured_layer.py
@@ -2165,6 +2177,9 @@ Every compiled fact carries a confidence and the Evidence explorer counts them. 
 3,908 compiled elements in this assay's footprint and 1,505 measured; 128 of them are ones where the screen tested the very gene the deletion named.
 
 **where_the_predicted_gene_was_tested** — n = 128, observed 0.7578, mean stated 0.347, expected calibration error 0.4108.
+*(2026-09-28: superseded by R2, `1cff24a`. With significant increases and underpowered nulls read as their own
+outcomes, 4,613 → 4,565 pairs measured as not regulated, n 128 → 120, observed 0.7578 → 0.8083, ECE 0.4108 →
+0.4507. See "CRISPRi negatives read as outcomes" below; the figures here are kept as they were.)*
 
 | band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -2195,6 +2210,8 @@ Standardised on length, GC and distance to a coding TSS: 349 high-confidence ele
 ### lentimpra
 
 *out of its chromosome, does a 200 bp copy of this sequence drive a reporter?* — episomal: it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only.
+
+*R6 note (2026-09-28): this assay is an integrated lentiviral reporter (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9), not episomal; the rebuilt result states it that way. The reporter is still outside its native locus.*
 
 21,133 compiled elements in this assay's footprint and 17,869 measured; 17,869 of them are tested by it, which is every one, so the two denominators coincide - this assay never asks about the predicted gene at all, and the wide rate is kept as a named key so the narrow one is never the only rate on the page.
 
@@ -2604,7 +2621,7 @@ the one category where the sweep changed a block's reading rather than confirmin
 
 **What this does not say.** A named target is a prediction from one model, and the same model names a
 target at 87% of matched random windows; the number that matters is not 25 of 69 but whether these
-differ from matched controls, which the sweep's own fold answers for elements at large (+2.88 points)
+differ from matched controls, which the sweep's own fold answers for elements at large (+2.88 points) *(Re-audited 2026-09-27, NODES-READER-WRITER.md: +2.90, 95% CI +2.03 to +3.81, on a control matched on boundary count only; +1.2 to +6.6 across four defensible baselines; and **+5.89, CI +3.18 to +8.46, on 661 measured CRISPRi pairs** — the direction stands on measurement, the size quoted here was never identified.)*
 and which nobody has answered for these 69. The two-thirds that gain nothing are the honest headline:
 **scoring every element of the genome leaves 44 of 69 candidate blocks exactly where they were.**
 
@@ -3920,7 +3937,7 @@ chr22, chrX and chrY), 605,137 elements, 425,526 requests.
 |---|---|---|---|
 | names a gene at all | 64.1% | 58.1% (chr13) to 70.8% (chr19), median 62.8% | 87% of matched random windows in the locus benchmark |
 | the named coding gene is the nearest TSS | 62.0% | 48.8% (chrY) to 65.3% (chr22), median 61.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements |
+| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements. *(2026-09-27: that random set is matched on boundary count only, not on the 50 kb floor every real node passes, so it is biased low; across four baselines the excess runs +1.2 to +6.6, and on 661 measured CRISPRi pairs it is +5.89. NODES-READER-WRITER.md, the random-boundary audit.)* |
 
 **The node control, re-measured where the claim is now being made.** dbad593 qualified the old
 "90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
@@ -4865,6 +4882,7 @@ than one oligo, so nothing is lost to being too small to tile.
 Family B is where the loss looks catastrophic, so it is the one that had to be checked against reality
 rather than against another tier. The same rules were run over 18,991 300 bp windows centred on
 **lentiMPRA elements — sequence an episomal reporter has already ordered and got numbers out of**
+*(R6 note, 2026-09-28: the reporter is integrated by lentivirus, not episomal; Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9.)*
 (both columns are charged, mutually-exclusive counts, so Family B is counted after Family A):
 
 | | untouched real unknown | lentiMPRA, already measured |
@@ -6273,6 +6291,4849 @@ Nothing below has been computed.
    `coverage`, `ablation`, `mpra` and `vista` keep their names and their meanings, and the re-run
    must reproduce them to the digit; the new fields are added beside them. The 2026-09-13 section
    above is annotated in place.
+
+## The result: the window named no target the table had not, and the one count it raised it raised faster at random (2026-09-27, later)
+
+`unknown_scoring.run("chr21")` re-run with the response cache handed in (133.1 s against 32.7 s, the
+extra time being 17 chromosome archives decompressed for the syntax candidates, **0 AlphaGenome
+requests, nothing fetched**). Every pre-existing field computed from chr21's own tables reproduces
+**to the digit** — the ablation, all six stratified metrics, `mpra`, `vista`, every count in
+`coverage` — which is the control. Thirteen figures differ and all thirteen are in the two blocks
+that read *other* chromosomes' results: `syntax_candidates` (2 complete chromosomes on 2026-09-13,
+19 now) and `cost` (chr1 and chr20 finished in between). That confound was registered, and both
+readings of the candidates are computed in the same run so the cache's effect can be told from it.
+
+### The registered check: the compact table was not censoring, confirmed
+
+| | compact table | the window, same threshold | disagreements |
+|---|---|---|---|
+| elements naming a coding gene, chr21 | **5,174** of 12,139 | **5,174** of 12,139 | **0** |
+
+The same elements, not merely the same count. Ungated the window names one at 11,372 (93.7%), which
+is the threshold doing the work and not the table. **So reading the whole window cannot name a
+single target this module was not already naming**, and the naming rates of the 2026-09-13 section
+stand exactly as published.
+
+### The decider: what a named target means against matched random windows
+
+New, and on this instrument rather than borrowed from the locus benchmark: 22,200 windows, 50 per
+UNKNOWN block, of that block's length, placed uniformly at random inside the 41.6 Mb span of chr21's
+scored elements and rejected if they overlap any UNKNOWN block; 444 of 446 blocks drawable, the two
+that are not being 5.01 Mb and 2.35 Mb long; an element belongs to the window its midpoint falls in.
+Rates over the 285 blocks and 16,706 windows that carry at least one scored element.
+
+| block-level question | UNKNOWN blocks | matched random windows | difference |
+|---|---|---|---|
+| names a coding gene — **before and after, unchanged** | 140, **49.12%** | 10,908, **65.29%** | **−16.17 points** |
+| a coding gene and a cell line, from the named gene (before) | 89, 31.23% | 8,005, 47.92% | −16.69 points |
+| a coding gene and a cell line, from the whole window (after) | 97, **34.04%** | 8,524, **51.02%** | **−16.99 points** |
+
+Two things follow and they are the answer to the task.
+
+**The 1.3 clause is weaker than the borrowed 87% made it sound, not stronger.** On this instrument
+the unknown blocks name a coding target at 49.1% where length-matched random windows on the same
+chromosome name one at 65.3%. A named target at an unknown block is not merely unremarkable against
+chance, it is **16.2 points rarer than at random sequence of the same size** — because the unknown
+space is gene-poor by construction, which is the same confound the element-level strata correct for
+and which the block-level claim never had a control for at all.
+
+**The one count the window raised, it raised faster at random.** The cell line is the only
+block-level figure the window can move, and it moves it: 89 → 97 blocks with a target and a cell by
+the midpoint rule, 90 → 99 by `coverage`'s largest-overlap rule (regulatory 81 → 89, neutral 6 → 7,
+fossil 3 → 3, constrained_unknown 0 → 0, structural 0 → 0). At the matched random windows the same
+change is 8,005 → 8,524, and the gap against the control **widens** from −16.69 to −16.99 points.
+That is an inflation and it is named as one: the extra cell lines are a property of reading a 1 Mb
+window's worth of genes, not a property of unknown sequence, and any block count quoted off them
+must be quoted against the control beside it. The registration said this outcome was to be reported
+in those words, and it is.
+
+### What the change did buy: three comparisons that were conditioned on the gate
+
+**The gate selects the two arms unequally**, which is why this matters: 1,155 of the 2,334 elements
+over an unknown block clear `MIN_EFFECT` (49.5%) against 6,691 of the other 9,805 (68.2%). Every
+metric computed only on the movers was therefore conditioned on a variable that differs between the
+arms by 18.5 points.
+
+| per element, matched inside 443 shared strata | conditioned on the gate | over every element | |
+|---|---|---|---|
+| magnitude, unknown | 0.3091 (n 1,155) | **0.1815** (n 2,334) | |
+| magnitude, rest | 0.3384 (n 6,691) | **0.2440** (n 9,805) | |
+| difference | **−0.0294**, p 0.048 | **−0.0625**, p 0.0005 | registered to grow: **it did, 2.1×** |
+| cell lines of four, unknown | 0.4523 (movers) | 0.2677 (all) | |
+| cell lines of four, rest | 0.7962 (movers) | 0.6072 (all) | |
+| difference | −0.3439, p 0.0005 | −0.3395, p 0.0005 | barely moves |
+
+The magnitude result is the one that changes standing. Published, the unknown elements' effects were
+0.309 against 0.338 matched, a 0.029 gap at p 0.048 — a difference at the edge of its null, quoted
+over the 62% of elements the gate had kept. Over every element the sweep answered for, the gap is
+0.0625 at p 0.0005. The direction was always right and the size was **less than half of what it
+is**, because the gate was removing the sub-0.1 tail from half the unknown arm and a third of the
+rest. Raw, the share of elements acting in at least one cell line goes 3,260 of 7,846 movers to
+3,693 of all 12,139, and per element 15.8% → 17.9% over unknown blocks against 29.5% → 33.4%
+elsewhere — larger on the rest arm, which is the same inflation the control catches at block level.
+
+### The zero, and the measurement it was in
+
+`against_vista` took `max((r["abs_log2"] or 0.0 ...))`, so a VISTA element covered only by elements
+the gate had silenced was scored as a predicted change of **exactly zero** — a statement the sweep
+never made — and averaged into the module's only enhancer-level measured contrast.
+
+| VISTA on chr21 | published | over what the sweep predicted |
+|---|---|---|
+| mean max effect, 13 positives | 0.4259 | **0.4393** |
+| mean max effect, 6 negatives | 0.0953 | **0.1267** |
+| the contrast | 0.3306 | **0.3126** |
+| rows that had to be given a zero | 3 positives, 2 negatives | none |
+
+Registered to shrink, and it shrank, by 0.018. **One correction to the registration**: it said four
+of the six negatives were covered only by silenced elements. Two were; the other two have no scored
+element covering them at all, so `max_abs_log2` was `None` and `_mean` dropped them rather than
+zeroing them. The new `positives_scored_as_a_structural_zero` and
+`negatives_scored_as_a_structural_zero` fields are what told the two silences apart, which is the
+distinction that was missing in the first place. With 19 elements the note above it still holds:
+reported, not read.
+
+### The falsifier fired on lentiMPRA, and it is worth more than the fix
+
+The correlation against measured activity was computed on the 329 elements whose named gene cleared
+the gate. The window's strongest per-cell effect exists for every covered element, so the same
+correlation can be taken over all 445.
+
+| lentiMPRA, chr21 | n | signed effect vs activity | unsigned magnitude vs activity |
+|---|---|---|---|
+| K562, gated | 329 | 0.2208 (p 0.0005) | 0.1043 (p 0.057) |
+| K562, every covered element | **445** | **0.1885** (p 0.0005) | **0.0893** (p 0.060) |
+| HepG2, gated | 329 | 0.2391 (p 0.0005) | 0.1699 (p 0.002) |
+| HepG2, every covered element | **445** | **0.2095** (p 0.0005) | **0.2081** (p 0.0005) |
+
+Registered: fall in magnitude or hold, with a rise named in advance as the outcome worth more than
+the fix. The signed correlation fell on both lines as registered, 0.221 → 0.189 and 0.239 → 0.210,
+which is what adding 116 small-effect elements to a signed measure does. **The unsigned magnitude
+rose on HepG2, 0.1699 → 0.2081, and its permutation p went 0.002 → 0.0005** while falling slightly
+on K562. So on one line of two the 116 elements the gate was discarding carry *more* information
+about measured activity per element than the ones it kept. That is the same finding the eQTL lane
+reached about `MIN_EFFECT` on 2026-09-22 from a completely different direction — the threshold is a
+weak confidence signal and not the line between an answer and a non-answer — and it is the first
+time it has been shown against a measurement rather than against a database.
+
+### "Nothing" was two silences, and the syntax candidates say which
+
+All 69 genome-wide syntax candidates now lie on completely scored chromosomes (19 of them; 17 caches
+decompressed, chr12's and chr14's candidates needing none). Both readings, in the same run:
+
+| the 69 candidates | compact table | the whole window |
+|---|---|---|
+| **"nothing"** | **44** | — |
+| no registry element lies inside the block: never asked | — | **35** |
+| asked, and answered below the bar | — | **9** |
+| target and magnitude, no cell line at the bar | 17 | 15 |
+| target, cell and magnitude | 8 | **10** |
+
+The 44 "nothing" rows were two different statements. Thirty-five of those blocks hold no ENCODE
+registry element at all, so the sweep was never asked about them and no amount of quota would have
+changed the answer — a fact about the element registry's coverage of the unknown space, not about
+the model. Nine were asked and answered, and the answer is a number: the strongest gene in the
+window moves by 0.0204 to 0.0947 (chr1:29,326,813 LINC01756 0.0558; chr1:156,070,514 MEX3A 0.0759;
+chr10:128,696,482 ENSG00000289400 0.0204; chr15:96,415,047 ENSG00000242295 0.0789; chr16:46,575,094
+ENSG00000260251 0.0551; chr19:53,943,950 CACNG7 0.0628; chr3:171,938,715 TMEM212-AS1 0.0573;
+chr6:108,188,805 NR2E1 0.0947; chrX:41,077,750 USP9X 0.0368). Two candidates move from "no cell line
+at the bar" to a cell line, both through a gene that is not their element's top target:
+chr17:40,365,372 (GJD3, −1.3884) and chrX:134,166,932 (CCDC160, −0.1194), each reaching the bar on
+all four lines.
+
+### The standing of milestone 1.3's second clause, stated plainly
+
+Before this the clause's result said "a named target here is a lead and not a finding" and priced
+that against 87% of matched random windows from another instrument. It can now be priced on its own:
+**140 of the 285 unknown blocks carrying a scored element name a coding gene, 49.1%, against 65.3%
+at length-matched random windows on the same chromosome.** Reading the sweep's whole window does not
+move either number and cannot, and the one count it does move it moves faster at the control. So the
+clause is not 0% defensible for want of a wider reading; it is 0% defensible because the quantity it
+reports is below its own chance level, and what would change that is a control the attribution can
+pass, not more of the model's output. The three things this lane did deliver are the control itself,
+a magnitude comparison no longer conditioned on the gate (−0.0294 at p 0.048 → −0.0625 at p 0.0005),
+and a measured contrast with no invented zeros in it.
+
+**What still reads the compact one-gene table**, unchanged and listed rather than silently left:
+`candidates.py:734`, `closure.py:69`, `compile.py:112`, `organise.py:91`,
+`confidence_calibration.py:244`, `vista.py:278`, `decompile.py:113`, `motif_transfer.py:1025`,
+`syntax_tiling.py:252`, `benchmark/loci.py:1137`, `cli.py:3832`, `target_calibration.py:173`,
+`crispri_direction.py:118`, and `scripts/constrained_unknown_targets.py:42`, which is the script that
+carries this milestone's own result and whose 87% sentence this section prices. On the evidence here,
+moving any of them will not change a naming rate: the table's target is the window's head. What it
+will change is any figure they compute over movers only, and any zero they write for an element the
+gate silenced. `annotate` reads the cache only when it is handed a reader, so
+`scripts/confidence_calibration.py` and `scripts/measured_layer.py`, which call it for covariates,
+pay nothing and see `NOT_READ` in the window fields — a fourth named silence beside the reader's
+three, because "this caller did not look" is not "the sweep did not answer".
+
+## Pre-registration: the CRISPRi result against the published baseline on the same pairs, a second cell type costed, and the gain held against coverage (2026-09-27)
+
+The one result in this project an outside reader could be shown is the CRISPRi one: adding the
+AlphaGenome predicted-deletion feature to an activity-over-distance baseline raises held-out K562
+AUPRC from 0.550 to 0.691 (gain +0.141, 95% +0.082 to +0.231, 1,744 pairs, 114 regulated). A
+sceptical reading of 2026-09-27 named what it lacks: a second cell type with real n, a published
+baseline on the same pairs, a coverage-matched arm for the *gain*, and the feature-selection
+caveat. This section registers all four before anything new is scored. The registration is also in
+code, `crispri.PREREGISTERED_PUBLISHED` and `crispri.PUBLISHED`, committed before the scoring code.
+**AlphaGenome requests: 0 prediction requests; one metadata call (`output_metadata`) to read the
+model's track list.**
+
+### A second cell type: the model has the tracks, the cache does not, and it costs 705 requests
+
+The held-out refusal said "no AlphaGenome line for this cell type". That is not true of the model.
+Its own track list, read on 2026-09-27, carries RNA-seq tracks for **HCT116 (EFO:0002824, 3
+tracks), Jurkat (CLO:0007045, 1) and WTC11 (EFO:0009747, 3)**, and DNase for all three. No proxy
+is needed and none is proposed. The refusal is a fact about the sweep's per-element cache, which
+kept per-gene values for four cell lines only (`enhancer_target.CELLS`).
+
+Whether a cell type could carry a result is settled by its regulated pairs, not by the model:
+
+| held-out cell | pairs | regulated | on a deleted element | regulated there | registry elements to score |
+|---|---|---|---|---|---|
+| K562 | 1,918 | 118 | 1,744 | 114 | (cached) |
+| HCT116 | 396 | 34 | 363 | 34 | **705** |
+| WTC11 | 1,921 | 15 | 1,616 | 14 | 614 |
+| GM12878 | 68 | 16 | 62 | 14 | (cached) |
+| Jurkat | 75 | 7 | 64 | 6 | 111 |
+
+Only HCT116 has enough positives to say anything. The frozen feature is the largest predicted drop
+over every registry element overlapping the pair, so scoring HCT116 costs one deletion request per
+overlapping registry element: **705**. Deleting the 363 CRISPR elements themselves would cost 363
+but changes the feature, so it is not the frozen model. The lane's budget is 20. **HCT116 is
+registered here and not run**; the number goes to the coordinator. When it is bought: same code
+path with HCT116 added to the cells kept per gene, weights unchanged; it passes if the gain on the
+363 covered pairs is above zero, and counts as a replication only if the chromosome-bootstrap
+interval excludes zero. A gain at or below zero makes this a K562 result, to be described as one.
+
+### The published baseline: same pairs, same split, figures from the primary source
+
+Gschwind et al., *An encyclopedia of human enhancer–gene regulatory interactions*, Nature 2026
+(doi:10.1038/s41586-026-10781-4, PMC13471189), Supplementary Table 3, benchmarks on **the same two
+files this module reads**. The training set is 10,356 K562 pairs with 471 positives, scored by
+hold-one-chromosome-out for supervised models and unweighted AUPRC. The held-out set is 4,378 pairs
+with 190 positives over five cell types, pooled, with AUPRC weighted by each pair's
+`direct_vs_indirect_negative` (the 190 positives sum to 157.39, the paper's "157.39 weighted").
+
+| set | predictor | AUPRC [95%] |
+|---|---|---|
+| training, unweighted | ENCODE-rE2G Extended | 0.737 [0.693, 0.775] |
+| | ENCODE-rE2G | 0.662 [0.616, 0.706] |
+| | ABC (DNase × H3K27ac, ENCODE Hi-C) | 0.613 [0.558, 0.657] |
+| | ABC (DNase, average Hi-C) | 0.565 [0.511, 0.610] |
+| | DHS & DNase RPM × distance (norm.) | 0.527 [0.479, 0.575] |
+| | distance to TSS | 0.436 [0.387, 0.482] |
+| held-out, weighted | ENCODE-rE2G | 0.556 [0.468, 0.631] |
+| | ABC (DNase, average Hi-C) | 0.465 [0.378, 0.541] |
+| | distance to TSS | 0.363 [0.281, 0.438] |
+
+**The comparison this module has published so far is not comparable to any of these.** It scores
+only the pairs on a deleted element (9,237 training, 1,744 held-out K562), unweighted, with
+average precision rather than the benchmark's trapezoid, and held-out K562 alone rather than the
+pooled five. So the numbers are re-scored on the published pair sets with the published estimator.
+The estimator was checked on the one predictor that needs no model, before this registration: raw
+distance to TSS gives **0.4359** unweighted on training (published 0.4359) and **0.3631** weighted
+on held-out (published 0.3631).
+
+Registered comparisons:
+
+1. **Training, published split.** Hold-one-chromosome-out on all 10,356 pairs, fitted on the
+   covered pairs of the other chromosomes (the frozen recipe); an uncovered pair carries deletion
+   features of zero, the benchmark's own minimum-score rule. Unweighted, beside the training rows
+   above. The pairs and the split are comparable. One thing is not: this module's deletion features
+   were chosen after reading the single predictors on these same pairs. ENCODE-rE2G's features were
+   also chosen by sequential selection on this set (its Fig. 4c), so both numbers carry a selection
+   on the data, and that is stated with them.
+2. **Held-out, published pairs and weighting.** The frozen weights applied to all 4,378 pairs,
+   pooled, weighted. The handicap is stated before the number: 2,392 of the 4,378 pairs (HCT116,
+   Jurkat, WTC11; 56 regulated) carry no deletion value. Bands against ENCODE-rE2G's interval
+   [0.468, 0.631]: above it, "higher than the published ENCODE-rE2G figure on the same pairs";
+   inside it, "in the range of ENCODE-rE2G"; below it, "below ENCODE-rE2G: the gain is over a
+   baseline weaker than the published state of the art". `activity + distance` is placed against
+   ABC's [0.378, 0.541] by the same bands, which says whether this project's own baseline is weak.
+   The K562-only weighted figure is reported as this module's alone, because the source gives no
+   per-cell-type held-out figure.
+
+### The coverage-matched arm, for the gain
+
+Held-out K562; the covered rate is 96.6% for regulated pairs against 90.6% for the rest.
+
+- **Arm 1:** all 1,918 pairs, uncovered ones with deletion features of zero. The gain, with its
+  chromosome-bootstrap interval.
+- **Arm 2:** the covered pairs, with the regulated arm thinned at random to the non-regulated
+  arm's coverage rate, over 1,000 draws. The median gain and the share of draws above zero.
+- **Arm 3, the control:** `activity + distance` plus a covered-or-not indicator in place of the
+  deletion features, fitted on all training pairs and scored on all 1,918. If coverage alone buys
+  the gain, this arm shows it.
+
+The gain is **invariant to coverage** only if arm 1's interval excludes zero, arm 2's share is at
+least 0.95, and arm 3's gain is below arm 1's. Otherwise the headline must say "on the pairs the
+sweep covered".
+
+### What each outcome allows the result to be called
+
+- Held-out pooled above ENCODE-rE2G's interval: "matches or exceeds the published model on its own
+  benchmark". This would be a surprise, since 55% of the pairs carry no deletion.
+- Inside the interval: "a sequence-model feature brings a simple baseline into the published
+  model's range".
+- Below the interval: "improves this project's own baseline; not competitive with the published
+  state of the art".
+- The coverage bar failing: the claim is restricted to covered pairs whatever the band.
+- HCT116 unrun: the result is **one cell type** and is described as such. GM12878 (14 regulated) is
+  reported but carries no weight.
+
+## The result: the CRISPRi gain survives coverage and the published pair sets, the held-out comparison is flattered by a filter, and the result is still one cell type (2026-09-27, later)
+
+The registration above was committed first (fe61c36). The code is `crispri.score_published`, the
+script `scripts/crispri_published.py` (90 s), and the result `data/results/crispri_published.json`.
+**AlphaGenome requests: 0.** The deletion values are the sweep's own cache.
+
+### What goes first: three limits the numbers do not remove
+
+1. **The held-out comparison with ENCODE-rE2G flatters this module, for a reason the registration
+   did not foresee.** The held-out file's positives were selected on chromatin at the tested
+   element (Gschwind et al. 2026, Methods: "filters based on effect size and chromatin state").
+   All 190 positives sit in an `H3K27ac` or `High H3K27ac` element. Of the 4,188 negatives, 1,438
+   do not (552 CTCF, 297 H3K27me3, 589 no H3K27ac). This module's activity term is
+   sqrt(DNase × H3K27ac), read from the same file, so on the held-out set it partly reads the rule
+   that made a pair positive. The published held-out figure is ENCODE-rE2G's DNase-only model, which
+   does not read H3K27ac. The registered band (below) came out "above the published interval", and
+   **that wording may not be used.** A post hoc diagnostic, not registered and labelled so, refits
+   both models with DNase alone.
+2. **It is one cell type.** HCT116 is the only other held-out cell type with enough positives, and
+   AlphaGenome has its own HCT116 tracks, but the frozen feature costs 705 deletion requests against
+   a budget of 20. It was not run. GM12878's 14 regulated covered pairs give a weighted gain of
+   +0.015 (95% −0.094 to +0.205), which says nothing either way.
+3. **The idea is not new.** The AlphaGenome preprint (Avsec et al. 2025, bioRxiv
+   10.1101/2025.06.25.661532, Fig. 4j) already added an AlphaGenome input-gradient score to
+   ENCODE-rE2G-extended on this CRISPRi dataset. What is this project's own is the deletion form of
+   the feature and a held-out test frozen before scoring. No figure from that preprint is quoted here,
+   because none was read from the source.
+
+### 1. Training, the published pair set and split (the cleanest comparison)
+
+All 10,356 pairs, hold-one-chromosome-out, unweighted, scored by the benchmark's estimator:
+
+| model | AUPRC | published, same pairs |
+|---|---|---|
+| distance (this module) | 0.423 | distance to TSS 0.436 [0.387, 0.482] |
+| activity + distance | **0.507** | ABC (DNase, avg Hi-C) 0.565 [0.511, 0.610] → **below** |
+| activity + distance + deletion | **0.724** | ENCODE-rE2G 0.662 [0.616, 0.706] → above; ENCODE-rE2G Extended 0.737 [0.693, 0.775] → **inside** |
+
+Deletion gain +0.217 (95% +0.177 to +0.261). **This project's own baseline is weaker than
+published ABC.** It sits just under ABC's interval, level with the paper's simple DHS-and-DNase
+baselines (0.506 to 0.527). With the deletion, the frozen model reaches the range of the paper's
+best model. The caveat stays attached: the deletion features were chosen after reading the single
+predictors on these same pairs. ENCODE-rE2G's features were also selected on this set (its
+Fig. 4c), so neither figure is free of selection.
+
+### 2. Held-out, the published pairs and weighting
+
+All 4,378 pairs, five cell types pooled, weighted by direct-effect probability, frozen weights:
+
+| model | weighted AUPRC | registered band |
+|---|---|---|
+| distance | 0.363 (published 0.363) | — |
+| activity + distance | 0.567 | above ABC's [0.378, 0.541] |
+| activity + distance + deletion | 0.677 | above ENCODE-rE2G's [0.468, 0.631] |
+
+Deletion gain +0.110 (95% +0.061 to +0.174). This is lower than on K562 alone, as registered,
+because 2,392 pairs carry no deletion value. Per cell type (weighted; the deletion exists only for
+K562 and GM12878):
+
+| cell | pairs | positives (weighted) | activity + distance | + deletion | gain [95%] |
+|---|---|---|---|---|---|
+| K562 | 1,918 | 118 (100.8) | 0.591 | 0.727 | +0.136 [+0.077, +0.228] |
+| GM12878 | 68 | 16 (14.3) | 0.785 | 0.799 | +0.015 [−0.094, +0.205] |
+| HCT116 | 396 | 34 (22.6) | 0.495 | 0.495 | no deletion value |
+| WTC11 | 1,921 | 15 (13.4) | 0.520 | 0.515 | no deletion value |
+| Jurkat | 75 | 7 (6.3) | 0.575 | 0.579 | no deletion value |
+
+The baseline landing *above* ABC here but *below* it on training is the filter at work.
+
+**Post hoc, DNase in place of sqrt(DNase × H3K27ac)** (not registered; found after the numbers
+above were read):
+
+| | DNase + distance | + deletion | gain [95%] |
+|---|---|---|---|
+| training, all pairs, LOCO | 0.496 | 0.720 | +0.224 [+0.182, +0.268] |
+| held-out pooled, weighted | 0.476 (ABC 0.465: inside) | 0.639 (ENCODE-rE2G upper bound 0.631) | +0.164 [+0.102, +0.237] |
+| held-out K562 covered, headline estimator | 0.502 | 0.681 | +0.179 [+0.102, +0.287] |
+
+With H3K27ac taken out, the baseline falls onto ABC, the deletion's gain gets *larger*, not
+smaller, and the combined model lands just above ENCODE-rE2G's published interval. That is an
+unpaired comparison against a published interval, not a test, so the defensible phrase is **"in
+the range of the published ENCODE-rE2G model on the same pairs"**. It is not "exceeds".
+
+### 3. The coverage-matched arms, held-out K562
+
+| arm | result | bar | met |
+|---|---|---|---|
+| 1. all 1,918 pairs, 174 uncovered at zero | gain +0.136 [+0.081, +0.225] | interval above zero | yes |
+| 2. regulated arm thinned from 96.6% to 90.6% covered (107 of 114 kept), 1,000 draws | median +0.145, range +0.124 to +0.160, 100% above zero | ≥ 95% above zero | yes |
+| 3. control: a covered-or-not indicator in place of the deletion | gain +0.001 [−0.001, +0.003] | below arm 1 | yes |
+
+**The gain is invariant to coverage.** Being on a deleted element buys nothing (arm 3). The gain
+holds when the arms are matched (arm 2) and when uncovered pairs are counted (arm 1).
+
+### What the result may now be called
+
+- Allowed: "On the ENCODE CRISPRi benchmark, adding an AlphaGenome predicted-deletion feature to an
+  activity-and-distance model, frozen before the held-out pairs were scored, raises held-out K562
+  AUPRC from 0.55 to 0.69 (+0.14, 95% +0.08 to +0.23; 1,744 pairs, 114 regulated). The gain does
+  not depend on which pairs the sweep covered, and the combined model sits in the range of the
+  published ENCODE-rE2G model on the same pairs. Tested in one cell type."
+- Not allowed: "exceeds ENCODE-rE2G" (held-out band flattered by the H3K27ac filter; unpaired);
+  "generalises across cell types" (HCT116 unrun, GM12878 uninformative); "a strong baseline" (this
+  project's own activity baseline is below published ABC on training).
+- Open, and handed to the coordinator: HCT116 at 705 requests, the only purchase that could make it
+  two cell types.
+
+The outside-reader summary is `docs/CRISPRI-RESULT.md`.
+
+## Pre-registration: the last one-target consumers under one registration, and the constrained-unknown headline against its own matched random windows (2026-09-27, third)
+
+Four modules still read one target gene per element from the compact
+`all_elements` tables: `motif_transfer.tier_blocks` (the sweep lead per block),
+`syntax_tiling.moved`, `candidates.node_context` and the locus benchmark's
+`read_gene_input`. They are moved onto `attribution.targets.ElementResponses`
+together, under this one registration, whose code form is
+`PRE_REGISTRATION` in `scripts/onetarget_consumers.py`. The old reading is
+kept beside the new one in every case, so each run carries its own control.
+0 AlphaGenome requests; one chromosome's cache archive held at a time.
+
+**The shared premise, registered as expected false.** The roadmap line said an
+element that moves a non-top gene reads as "did not move". The compact head is
+the maximum over the window by `predict_target`'s own rule, so "some gene is at
+the bar" and "the head is at the bar" are one statement. The survey measured it
+on chr21 before this registration: 7,846 elements yes/yes, 4,293 no/no, 0
+disagreements. What a one-target reader loses is how many other genes move and
+which, never the yes or no. Shared control: the window's head at the bar names
+the table's `predicted` gene and its coding head names `predicted_coding`, with 0
+disagreements required; an uncached element keeps its compact reading and is
+counted by name.
+
+| Consumer | Must reproduce to the digit | May change, and which way | Falsifier |
+| --- | --- | --- | --- |
+| motif_transfer | real unknown 531 tested / 331 with a lead; neutral 1,181 / 768; leads by case 11, 167, 19, 131, 3; hence the agreement AUROC 0.5422 by construction (count model not re-run) | a new per-block count of genes at the bar, expected at or above the distinct head genes, about 2.3 per moving element | any block's lead or tested count differs |
+| syntax_tiling | nothing: the registered run was cancelled unrun | its rows gain the genes at the bar from the cache when it runs; `moved` unchanged | a cached element where `moved` and "some gene at the bar" disagree (unit test) |
+| candidates | the chr22 candidate's node fields (the only candidate chromosome complete on 2026-09-13) | the other 68 differ from the stored file by input, counted and attributed to it; per gene, window count >= table count, strictly; the top node gene two-sided, counted | any gene whose window count is below its table count |
+| loci gene_input | all 17 loci's stored gene_input fields; strict hits 10 of 17, among 15 of 17 | strict hits hold or rise; the misses' median rank holds or improves (MYC_8q24 and PMP22_CMT1A, rank 2, likeliest to flip) | strict hits below 10, or any of SHH_ZRS, HERC2_OCA2, FTO_IRX3, SOX9_PierreRobin (where gene_input alone carries the headline) losing its hit |
+
+The benchmark's `target_derived` 15/17 is not recomputed in place: swapping a
+layer of the shared benchmark is its owner's call, so the counterfactual rate
+with the window layer is reported beside it. The candidates' labels and set
+tests stand as stored.
+
+**The constrained-unknown headline gets its own control**
+(`CONTROL_REGISTRATION` in `scripts/constrained_unknown_targets.py`).
+`matched_random_windows` is lifted into the script and first checked against
+chr21: handed the same 446 blocks and the same predicate it must reproduce
+7f7c8c1 to the digit (22,200 drawn, 2 undrawable, 16,706 carrying an element,
+10,908 naming; 140 of 285 blocks). Any difference and no genome-wide figure is
+reported. Then every field the script wrote on 2026-09-16 must reproduce (331 of
+531 blocks with an element carry a mover, 0.6234; 0.2476 per element; tiers,
+cases, deciles, the 331 named blocks), and the primary is new: the real
+unknown's 0.6234 against 50 windows per block of its length, drawn in the
+chromosome's scored span and rejected on overlap with any organiser block,
+pooled over 24 chromosomes. Readings, with a band of 5 points: **below chance**
+is a live possibility and the expected one (chr21, coding targets: 49.1% against
+65.3%) and would say a lead at a real-unknown block is rarer than at random
+sequence outside unknown space, which is what the 331 leads are worth, not a
+failure; **at chance** says a lead carries no block-level information; **above
+chance** would be the first above-chance reading of the leads. Secondary: the
+same control on "names a coding gene", the neutral tier as a second target set,
+and genes at the bar per block. Caveat registered now: the random windows avoid
+all unknown space and so sample gene-richer sequence; the tier comparison in
+length deciles remains the within-unknown control. The borrowed 87% sentence is
+replaced by whatever this measures.
+
+## The result: the last one-target readers moved onto the cache, the locus layer lost HOXD, and the real unknown names a target 24 points below chance (2026-09-27, fourth)
+
+The run of the registration above. `data/results/onetarget_consumers.json` and
+`data/results/constrained_unknown_targets.json`; 0 AlphaGenome requests; one
+chromosome's cache archive held at a time. Negatives first.
+
+**The locus benchmark's window rule is falsified.** Crediting every coding gene
+at the bar, not only each element's coding head, takes the gene-input layer's
+strict hits from 10 of 17 to 9: HOXD is lost, gained by none. HOXD was a narrow
+table win (HOXD1 13.859 against EVX2 13.199, summed |log2|), and the window
+reading hands EVX2 the lead as rank 2. No sole-carrier locus lost its hit
+(SHH_ZRS, HERC2_OCA2, FTO_IRX3 and SOX9_PierreRobin all hold), and the misses'
+median rank of the first published target improved from 6 to 5, but the
+registered falsifier is "strict hits below 10", and it fired. The one-target sum
+stays the better reader of this layer; `read_gene_input` keeps it and carries
+the window reading beside it as `window_reading`, never in place of it. The
+counterfactual `target_derived` rate with the window layer is 15 of 17, the same
+as stored, because HOXD is also hit by another derived layer.
+
+**The constrained-unknown headline reads below chance, as registered.** The
+lifted `matched_random_windows` reproduced 7f7c8c1 on chr21 to the digit
+(22,200 drawn, 2 undrawable, 16,706 carrying an element, 10,908 naming; 285 and
+140 blocks), so the genome-wide figure is reported. Of the 531 real-unknown
+blocks carrying a scored element, 331 carry one that moves a gene, 62.3%,
+against 86.0% of 44,100 length-matched random windows outside the organiser's
+blocks (27,254 of 31,676 carrying an element): -23.7 points, **below chance**.
+On "names a coding gene" the gap is -37.2 points (29.8% against 67.0%). The
+neutral tier reads the same way, -19.3 and -36.0 points (65.0% against 84.3%;
+28.8% against 64.8%), so the gap is the organiser's blocks against gene-richer
+sequence outside them, the caveat registered, rather than something special to
+the real unknown; inside length deciles the real unknown stays 4.6 points above
+neutral, the within-unknown control, unchanged. A lead at a real-unknown block is rarer than at random sequence, and
+the borrowed 87% sentence is replaced in the result by this measurement.
+
+**What reproduced to the digit.** Every field `constrained_unknown_targets`
+wrote on 2026-09-16 (331 of 531, 0.6234; 0.2476 per element; tiers, cases,
+deciles, the 331 named blocks). motif_transfer: real unknown 531 tested / 331
+with a lead, neutral 1,181 / 768, leads by case 11, 167, 19, 131, 3, so the
+agreement AUROC 0.5422 stands by construction. candidates: the chr22
+candidate's node fields reproduced; the other 68 differ from the stored file by
+input (93 elements in their nodes then, 7,285 now), as registered. loci: all 17
+stored `gene_input` fields reproduced on the input the stored benchmark had;
+on today's input MYC_8q24 differs because stated intervals were added after
+7a1c751.
+
+**The shared premise was false, as registered.** Over every element read from
+both sources (849,469 for the candidates' chromosomes, 4,794 in the locus
+windows) the window's head at the bar names the table's `predicted` gene, and
+its coding head names `predicted_coding`, with 0 disagreements; no element in a
+motif-transfer block was uncached, and no block's mover count moved. What the
+table lost is the other genes: over the 331 led real-unknown blocks, 849 genes
+at the bar against 416 head genes (179 blocks name more); neutral 2,139 against
+932. The registered "about 2.3 per moving element" was the survey's per-element
+figure; counted distinct per block it is 849 over 812 moving elements, 1.05,
+because neighbouring elements share genes. candidates: no gene's window count
+fell below its table count (the falsifier), node genes 223 to 267, and the top
+node gene changed at 3 of 58 candidates with one (SYP to FOXP3 on chrX, MAP3K12
+to SP7 and HOXC6 to HOXC11 on chr12). syntax_tiling: not re-run, as registered;
+its rows now carry `genes_at_bar` from the cache the scorer writes, and the unit
+test that `moved` equals "some gene at the bar" passes on 2,000 random records.
+
+## The CRISPRi split audited: no held-out figure read the held-out pairs through the merged loader or the compiled program, and 43 held-out links sat in the compiled programs unmarked (2026-09-28)
+
+Two defects were reported in `attribution/measured.py`. First, `CrispriPair` dropped the
+benchmark's power columns, so a well-powered negative and a blind one counted the same. Second,
+`load_crispri` merged the training file with the held-out file, and `compile.py _measured_blocks`
+wrote the regulated links from both into the compiled BioLang programs as experimental facts. The
+audit came first and was committed before any code changed. It traced every consumer of
+`load_crispri`, of the measured layer's CRISPRi data and of the `<id>_measured` blocks through
+`genomeos/` and `scripts/`. It then checked every other CRISPRi reader behind a held-out claim, to
+confirm that none of them reaches the two paths indirectly. The table is in
+`data/results/crispri_split_audit.json`.
+
+**Exposed: none.** No scorer, fit or feature behind a held-out or validation figure read held-out
+pairs through either path. Every held-out claim comes from a module that reads the two files
+separately with `crispri.load` and fits on training rows only. The defect is latent, not realised:
+the compiled programs carried **43 held-out-only links out of 212 measured rules** across the 24
+chromosomes. The committed `data/organisms/human/noncoding_chr21.bio` carried 1 of its 2 (ICOSLG,
+GM12878). The first feature to read a compiled program would have seen the test set.
+
+| consumer | path | figures | status |
+|---|---|---|---|
+| `crispri.score` (`scripts/crispri_score.py`) | `crispri.load` per file | held-out K562 AUPRC 0.550 → 0.691, +0.141 [+0.082, +0.231] (`crispri_benchmark.json`, CRISPRI-RESULT.md) | CLEAN: fit on training, held-out scored frozen |
+| `crispri.score_published` (`scripts/crispri_published.py`, 42d7b1b) | `crispri.load` per file | training LOCO 0.507 / 0.724; held-out pooled 0.567 / 0.677 registered, 0.476 / 0.639 DNase-only; coverage arms +0.136 | CLEAN; the post hoc DNase choice is already disclosed and is not a leak |
+| `crispri.score_contact` | `crispri.load` per file | `crispri_contact.json` held-out arm | CLEAN |
+| `target_calibration` and its gate and prevalence scripts | `crispri.load` per file | `heldout_k562`, `heldout_other_cells`, `held_out_before_and_after` | CLEAN: every `fit` and `fit_with_offset` runs on training |
+| `target_rebanding`, `union_axis` band levels | `crispri.load` per file | band rates | CLEAN for these paths; the rates pool training and held-out K562 by registration, so no later held-out K562 figure may be read against the re-banded table as out of sample |
+| `crispri_direction`, `crispri_direction_both` | `crispri.load` per file | per-cell sign agreement | EVALUATION-ONLY: nothing fitted |
+| `loci_fourth`, `loci_noncoding` | `crispri.load(HELDOUT)` only | locus rates | EVALUATION-ONLY: registered 2026-09-21 before the file was read |
+| `node_containment_audit.py` stage 2 | `crispri.load` of both files | 661 regulated pairs, measured share 0.758 | EVALUATION-ONLY: the pairs are ground truth for a caller built from CTCF cCREs, nothing is fitted, and the figure is not quoted as held-out |
+| `measured.rows`/`census` (`scripts/measured_layer.py`) | `load_crispri`, merged | 19,070 of 440,377 elements measured; agreement over 1,505 and over 128 | EVALUATION-ONLY: fixed rules, pooled by design, not a held-out claim |
+| `confidence_calibration` | `load_crispri`, merged | 128 elements, observed 0.758 against stated 0.347; 10 of 12 bands outside | EVALUATION-ONLY: bands imported unchanged, nothing fitted |
+| `compile._measured_blocks` → `noncoding_chr*.bio` | the compiled program | 43 of 212 rules held-out-only | REPORT-ONLY today: its readers are the evidence census, the CLI, the explorer index, `bio test` and three syntax censuses |
+| `measurability.py`, `unknown_coverage.py` | own file lists, intervals only | coverage footprints | REPORT-ONLY: no label read |
+
+**What the fix is therefore allowed to change: no figure.** `load_crispri` keeps its default of
+both files, because no exposed caller exists to move. The fix, committed after this audit, gives it a `split` argument
+(`"training"`, `"heldout"`, `"all"`). Each `CrispriPair` gains its `split`, taken from the
+file it came from, and the five power columns exactly as the headers name them:
+`PowerAtEffectSize10`, `15`, `20`, `25` and `50`. In both files every valid row has a value. The
+training file holds 9,885 negatives, 6,193 of them with power at least 0.8 at a 20% effect (the
+brief's "6,169 of 9,810" was an approximation of this). The held-out file holds 4,188 negatives,
+3,675 of them well powered.
+
+The compiled program **keeps the held-out links, marked**, and this is the least invasive choice. Removing them would change the rule
+counts every program tests itself on, and it would make the program omit a real measurement. The
+chosen mark is carried by the structured fields a feature would read, not only by a comment:
+
+- the `targets:` of a `_measured` element lists only genes regulated in a training pair;
+- a link found only in held-out pairs is written with `measured.HELDOUT_MARK` in its evidence
+  source, and `measured.is_heldout(source)` is the test any future reader must apply;
+- a link found in both splits takes its action and strength from the training pairs.
+
+A test is to assert that no held-out-only gene reaches `targets:` and that every held-out-only rule
+carries the mark.
+
+That test now exists: `tests/test_crispri_split.py`.
+
+**The fix, as built.** In the committed chr21 program, `targets: ICOSLG` left the held-out element
+and its rule gained the mark. The rule count stayed 2. Genome-wide, 1 of the 169 training-supported
+rules had taken its strength from a stronger held-out pair; it now takes it from the training pair.
+No reported figure moves. The `rules`, `entities` and `unknowns` counts each program tests itself
+on do not move either, because every measured link is still stated. Only the chr21 lines that the
+fix touches were rewritten in the committed copy. A full recompile would also have pulled in
+unrelated drift in the reader comments since 2026-09-17. The git-ignored programs under
+`data/knowledge/compiled/` pick up the mark on the next
+`scripts/measured_layer.py --write-programs`.
+
+**Evaluation independence (review item R5).**
+- *Provenance.* Every `CrispriPair` now carries its partition (`split`), its `source_file`, its
+  `assay` and its `study` (the benchmark's `Dataset` column). All four are frozen at parse time.
+- *Guard.* `measured.development_only` raises on a held-out pair rather than filtering it out
+  silently.
+- *Overlap check.* `measured.split_overlap` compares the two partitions by interval as well as by
+  identical pair, and a test recomputes it from the files against
+  `data/results/crispri_split_audit.json`.
+
+It finds **no identical pairs, but 249 of the 4,378 held-out pairs share at least one base with a
+training interval**:
+
+- 36 are on the same gene: 4 near-identical (reciprocal overlap ≥ 0.9) and 32 overlapping. By
+  cell, 23 are in HCT116 and 13 in WTC11.
+- 213 are on another gene. 66 of those sit on a near-identical element, and 164 of the 213 are in
+  K562.
+
+No held-out K562 pair repeats a training gene at an overlapping interval. `crispri.score` already
+reports an arm restricted to held-out elements absent from training; every other held-out figure
+includes the related pairs. The related-variant half of the check has nothing to compare here,
+because the benchmark tests intervals, not alleles.
+
+**Reused benchmark.** At least ten scored results have read the held-out file: crispri_benchmark,
+crispri_contact, crispri_published, crispri_direction, crispri_direction_both, target_calibration,
+target_calibration_gate, target_prevalence, target_rebanding and union_axis. loci_fourth and
+loci_noncoding read its held-out arm too. Each registration froze its model before its own read.
+The choices between registrations, however, were made by people who had seen the earlier reads. In
+the audit JSON, every row on this file is therefore flagged `reused_benchmark`, and its figures are
+to be quoted as a reused benchmark, not as a first touch of a test set.
+
+**Correction to the count above.** The brief's "6,169 of 9,810" is exact, not an approximation.
+9,810 is the number of *non-significant* training pairs, and 6,169 of them have
+`PowerAtEffectSize20` ≥ 0.8. The 9,885 quoted above also counted the 75 significant increases,
+which the benchmark marks `Regulated` FALSE.
+
+**CRISPRi negatives read as outcomes (review item R2).** In the benchmark file, `Regulated` means a
+significant *decrease*. A significant increase is therefore marked FALSE as well, and until today
+`for_element` listed such a gene as "measured no effect". Each pair now has one of five outcomes,
+kept apart before anything is pooled. The rule was fixed before any verdict was recomputed:
+
+- `significant_decrease`;
+- `significant_increase`;
+- `not_significant_well_powered`, meaning at least 0.8 power at a 20% effect;
+- `not_significant_underpowered`;
+- `missing`.
+
+Invalid comparisons (`ValidConnection` FALSE) are still counted and never read as outcomes. Both
+files hold 0 missing and 0 invalid rows. The training file has 471 decreases, 75 increases and
+9,810 non-significant pairs, 6,169 of them well powered. The held-out file has 190, 84 and 4,104,
+with 3,632 well powered. The 25% column cannot separate the nulls: every non-significant pair in
+both files is at least 0.8 there, which is the benchmark's own filter.
+
+The agreement rules change as follows:
+
+- A gene takes the strongest outcome among its pairs.
+- Only a well-powered null disagrees with the compiled claim.
+- An underpowered null is `predicted_gene_null_underpowered`.
+- An increase is `predicted_gene_increased`. Neither of these two counts as agreement or as
+  disagreement.
+- An increase raises no rule and no silencer label.
+
+The figures that move are these, old → new:
+
+| figure | old | new |
+|---|---|---|
+| CRISPRi disagreements (`measured_layer_genome`) | 31 | 23 |
+| elements where the predicted gene was tested | 128 | 120 |
+| agreement rate over them | 0.7578 | 0.8083 |
+| pairs measured as not regulated | 4,613 | 4,565 |
+| predicted gene significantly increased (new) | — | 1 |
+| predicted gene null but underpowered (new) | — | 7 |
+| pairs by outcome (new) | — | decrease 212, increase 48, well-powered null 3,130, underpowered null 1,435 |
+| confidence calibration, CRISPRi where tested: observed / mean stated | 0.7578 / 0.347 | 0.8083 / 0.3576 |
+| expected calibration error | 0.4108 | 0.4507 |
+| median gap over populated bands | +0.4724 | +0.5432 |
+| does the stated confidence carry information? matched difference (p) | 0.1374 (0.070) | 0.0898 (0.156) |
+| the same, raw (p) | 0.1886 (0.0035) | 0.1208 (0.040) |
+| committed chr21 program, pairs "measured as not regulated" in its header | 32 | 31 |
+
+Some figures do not move: the band headline (the stated level lies outside its own interval in 10
+of 12 bands), every pattern verdict, the all-matched rate of 0.0645 over 1,505, the coverage of
+19,070 of 440,377, and the `rules`, `entities` and `unknowns` counts in every program. The
+figures of 2026-09-17 in the sections above (128, 0.7578, 4,613 and the calibration table) are
+superseded by this table and are left as they were written. The 24 git-ignored programs were
+recompiled (`scripts/measured_layer.py --write-programs`), so the held-out mark and the five
+outcomes are now on disk. In the committed chr21 copy, only the header line and the one basis line
+that changed were rewritten.
+
+**Not yet in the committed chr21 copy.** Two lines are held back from this commit: the header
+count (32 → 31) and the SUMO3 basis line. The basis line replaces one this lane wrote in `36fa298`
+the same night, and the checkout's removal guard refuses that without `--force`, which this lane
+does not use. The programs in `data/knowledge/compiled/` already carry both changes. The next
+recompile of the committed copy will pick them up.
+
+## Pre-registration: context in executable rules, one rule per element, gene and cell (R1, 2026-09-28)
+
+The external review of 2026-09-28 (ROADMAP section 5 item 11, R1) found two things. The compiler
+wrote the cell a CRISPRi screen silenced an element in only into evidence text ("silenced in
+K562"), so a rule measured in K562 ran in every simulated cell. And `measured.rule_links` kept one
+rule per element and gene, the strongest result across every cell that measured it, so two cells
+that disagreed became one number.
+
+**Route.** BioLang already has the condition form: a rule's `when: k = v` clause, which the
+network runtime honours through `Module.active_rules` (a rule whose `when` does not match the
+context is not integrated). Nothing new is added to the grammar's keys. The compiler writes
+`when: cell_type = <cell>`, the context key `measured.CONTEXT_KEY`. One addition is needed in
+the runtime: `cell_type = unknown` (`measured.CONTEXT_UNKNOWN`) must match no cell. Today a
+`when` value is compared by plain equality, so `unknown` would match a context that happened to
+be called "unknown"; the addition makes it match nothing, and the grammar's text says so.
+
+**Fixed before the build.**
+
+1. The review's acceptance tests, as it words them (`measured.R1_ACCEPTANCE`): a K562-specific
+   rule is inactive in HepG2; conflicting results from two cell types survive compilation and
+   round-trip serialisation (compiled text, parse, `Module.to_dict`, JSON, `from_dict`).
+2. A rule with no recorded context is written `when: cell_type = unknown`, never without a
+   `when`. That holds for measured rules (a pair with an empty cell) and for the predicted
+   AlphaGenome rules, which name the track's biosample in their evidence ("AlphaGenome deletion,
+   K562") and are gated on it the same way. A predicted rule whose track was not recorded
+   ("strongest track") gets `unknown`.
+3. The unit of a compiled experimental rule is one (element, gene, cell) observation
+   (`measured.RULE_UNIT`). Within one cell, the split rule of the audit above is kept: a link
+   with training support in that cell takes its action and strength from the training pairs
+   only, and a link held out in that cell is marked `HELDOUT_MARK`. An element-gene link
+   regulated in K562 (training) and in WTC11 (held-out) was one training rule and becomes two
+   rules, the WTC11 one marked.
+4. What still makes no rule: a measured null and a significant increase (the benchmark's
+   `Regulated` label excludes positive effects, and the audit above pinned that an increase
+   raises no rule). Where one cell's null or increase sits beside another cell's regulated link
+   for the same gene, the measured element's basis text names it cell by cell, because
+   `for_element` today keeps only the strongest outcome per gene and drops the other cell's.
+
+**Expected counts, with the direction.** Predicted rules: unchanged in number (one per element),
+all gated. Experimental rules: the same or more per program, never fewer, because one rule per
+(element, gene) becomes one per (element, gene, cell). Every program's `# test: rules ==` line
+moves by the same amount. A simulation run with no `cell_type` in its context now activates no
+compiled rule; before, every one ran. Old and new counts are reported with the result.
+
+**Falsifiers.** Any compiled rule without a `when`; an experimental rule count below the old one;
+a training rule whose strength changes; a HepG2 run that integrates a K562 rule.
+
+## The result: every compiled rule now runs only in its own cell, and no measured link in the genome was regulated in two cells, so no rule count moved (R1, 2026-09-28, later)
+
+Built as registered. `measured.rule_links` yields one link per (gene, cell), with the split rule
+applied within each cell; the compiler writes `when: cell_type = <cell>` on every experimental and
+every predicted rule; `Rule.applies` and `matches` treat `unknown` as matching no context, and the
+grammar's `when` text says so (BIOLANG-GRAMMAR.md regenerated; `package_engine.py` 12 of 12).
+`for_element` keeps each cell's own outcome per gene (`outcomes_by_cell`), and the measured
+element's basis names every cell whose outcome the pooled per-gene lists hide. Tests:
+`tests/test_rule_context.py`, 9, written first and failing 8 of 9 before the build.
+
+**Counts, all 24 programs recompiled (old → new).** Rules 440,589 → 440,589; experimental rules
+212 → 212; held-out-marked experimental rules 43 → 43; predicted rules 440,377 → 440,377. Rules
+without a `when`: 440,589 → 0. Rules gated on `unknown`: 0 (every predicted rule named its track's
+biosample, and every CRISPRi pair its cell). Every program's `# test: rules ==` line is unchanged
+and still holds. Measured element blocks 19,072 → 19,072. Basis lines that name a cell-level
+difference: 0 → 2, both held-out, both a link in one cell beside an underpowered null in the
+other (IL6ST on chr5, regulated in Jurkat, underpowered in GM12878; PPIF on chr10, regulated in
+GM12878, underpowered in Jurkat). Before, the null in the second cell was dropped from the element
+without a word. Across the genome the rules fall into 317 contexts. K562 has the most, 27,445.
+chr21 in a HepG2 run integrates 154 of its 5,176 rules; before, it integrated all 5,176.
+
+**What the zero means.** The experimental count could only move if one element-gene link was
+regulated in two cells, and in this benchmark, intersected with the compiled elements, none is.
+The collapse the review found was real in the code and had no case to act on in the data. The
+synthetic tests are the only place a two-cell conflict exists so far, and they pin that it
+survives compilation and the BioIR round trip (text, parse, `to_dict`, JSON, `from_dict`).
+
+**Negatives.** A compiled program run with no `cell_type` in its context now integrates none of
+its rules. That is intended, but any caller that ran one without a context got every rule before
+and now gets none. `Rule.applies` and `Event.applies` still compare a `when` value by plain
+equality, so the grammar's alternatives (`a|b`), `absent` and comparisons work for decisions and
+timers, which call `matches`, but not for rules or events. That was already the case before R1 and
+is not changed here. Two tests in
+`tests/test_crispri_split.py` pinned one rule per element and gene. They are now strict xfail, not
+deleted, because the checkout's removal guard refuses to take out lines that lane-split wrote the
+same night. Their invariant is re-pinned per cell in the new file.
+
+## Pre-registration: one independent benchmark, the IGVF MHC CRISPRi screen in K562 (review item 11, 2026-09-28)
+
+Review item 11 asks for one independent biological benchmark before any widening of scope, and for
+generalisation shown on evidence that is truly independent before any claim of discovery. lane-split's
+audit (`0af7e1b`) found the ENCODE CRISPRi held-out file reused by at least ten scored results, so it
+cannot serve as that benchmark any more. This section fixes a test on a screen that no script here has
+read. The test is registered before scoring and costs 0 AlphaGenome requests.
+
+**Census of what the attribution layer has read** (grep of `data/knowledge/`, `scripts/`, `genomeos/`,
+`docs/DATA.md`). CRISPRi: both ENCODE EPCrisprBenchmark files, i.e. Nasser 2021 (Fulco 2016/2019,
+Ulirsch, Klann 2017, Xie 2017 and the rest), Gasperini 2019, Schraivogel 2020 in training, and Xie 2019,
+Morris 2023 (STING-seq), Klann 2021, Reilly 2021, Ray 2025 DC-TAP (K562, WTC11), Guckelberger 2024
+(HCT116), Nasser GM12878/Jurkat held out. Activity: ENCODE4 lentiMPRA ENCSR106SZM (K562, HepG2, WTC11)
+and Kircher 2019 saturation mutagenesis (GSE126550). Other sources: VISTA, GTEx v8 eQTLs with DAP-G,
+the GWAS Catalog, ClinVar non-coding, and the reporter-allele sets behind E1 (Tewhey, Abell). Features:
+the ENCODE cCRE registry V3, the ENCODE epigenome, and 4DN Hi-C (GM12878, K562). Nothing from the IGVF
+portal has been read.
+
+**Candidates checked on the primary portals** (ENCODE and IGVF APIs, 2026-09-28):
+
+| Candidate | Measures | n | Cell | Licence | Coverage with 0 requests |
+| --- | --- | --- | --- | --- | --- |
+| **IGVF K562 MHC CRISPRi Perturb-seq** (Gersbach; IGVFDS7132YVKO, file IGVFFI4093WUVB, 0.96 MB, released 2026-06-08) | element → gene, signed effect and FDR (FRACTEL) | 34,279 pairs, 581 DHSs, 59 genes, chr6 | K562 | CC BY 4.0 | 4,472 of 6,544 eligible pairs within 500 kb (68%); **chosen** |
+| ENCODE Flow-FISH K562 genes outside the benchmark (TRIR, OTUD5 Engreitz; FADS2, PVT1, HBS1L Sabeti) | element → one gene | 5 genes | K562 | ENCODE, open | yes, but five loci are too few for a readable test |
+| IGVF K562 CRISPRi Perturb-seq "many loci" (Gersbach, 16 sets, 2026-07-27) | element → gene | not processed | K562 | CC BY 4.0 | no released element-level table; raw reads only |
+| IGVF HCT116 FlowFISH (Engreitz: CCND1, MYC, KITLG, FAM3C, ITPRID2) | element → one gene | 156 sets | HCT116 | CC BY 4.0 | the sweep has no HCT116 track; this is the 705-request item |
+| IGVF HepG2 electroporated MPRA (Mohlke) and CYP3A4 MPRA (Ahituv) | variant allelic effect | about 10⁴ variants | HepG2 | CC BY 4.0 | the sweep deletes whole elements and never scores alleles; not covered |
+| IGVF lentiMPRA IGVFDS9175DMRR | element activity | genome-wide | HEK293T | CC BY 4.0 | the sweep has no HEK293T track |
+| Morris 2023 STING-seq | element → gene | — | K562 | — | already read (in the held-out file) |
+
+**The published model.** scE2G v1.2 in K562 (IGVF prediction set IGVFDS5428HHMB, unfiltered file
+IGVFFI1706PNVV, 326 MB, CC BY 4.0). Its chr6 27–36 Mb rows are distilled to
+`data/cache/indep/scE2G_K562_chr6_MHC.tsv.gz`. It was trained on the ENCODE CRISPRi benchmark, which
+does not contain this screen.
+
+**What was seen before this registration.** The column names, the table's shape (34,279 rows, 581
+elements, 59 genes, chr6 only), the count of rows at FDR < 0.05 in either direction (385), and a
+label-blind coverage count. Of 20,228 eligible pairs, the sweep covers 4,651. Within 500 kb of the TSS
+it covers 4,472 of 6,544. Beyond 500 kb it covers almost nothing, because the scorer read only the genes
+inside its 1 Mb window. No label was joined to any prediction.
+
+**The registered test** (`genomeos/attribution/indep.py`, `PREREGISTERED`; `scripts/indep_benchmark.py`
+is fixed in the same commit):
+
+- **Pairs.** One DHS and one gene. Excluded and counted: elements within 1 kb of any GENCODE v50 TSS
+  (12,921 pairs), genes absent from GENCODE v50 chr6 (1,086), and pairs whose gene and an overlapping
+  element also appear in either ENCODE benchmark file (44). The primary population is the pairs within
+  500 kb of the TSS, the sweep's reach; the 13,684 pairs beyond it are counted and not scored.
+- **Labels (R2).** A decrease is FDR < 0.05 with effect < 0, and it is the positive. An increase is kept
+  apart and reported alone. "Not detected" (FDR ≥ 0.05) is the negative. The screen gives no power, so
+  "not detected" does not mean "no effect".
+- **Coverage.** A pair is covered when a sweep element overlaps the DHS and the per-element cache has
+  a K562 value for the gene. Pairs that are not covered are missing: never imputed and never scored as
+  zero. The test is not read if fewer than 20 covered positives remain, or if the covered share falls
+  below 0.5. As a selection check, the distance AP on uncovered pairs is reported beside the AP on
+  covered pairs.
+- **Predictor and baselines.** The predictor is the deletion's largest predicted fall on K562's own
+  track. The baselines are:
+  - distance: minus the log distance from the element to the TSS;
+  - the current annotation: 1 when the gene is the element's compiled top target;
+  - the node rule: 1 when the gene is the nearest TSS in the element's CTCF node;
+  - scE2G's `Score`, compared on the pairs that both it and the sweep cover.
+- **Metric.** AUPRC (average precision, with tied scores counted as one threshold). The 95% interval
+  comes from 2,000 bootstrap resamples of elements (seed 20260928), with the paired difference taken
+  on the same resamples. A resample of the 59 genes is reported as a sensitivity check. The base rate
+  is reported beside every AP.
+- **Pass.** The 95% interval of AP(deletion) − AP(distance) lies wholly above 0.
+- **Falsifier.** That interval lies wholly below 0, or the upper bound of AP(deletion) does not exceed
+  the base rate. In either case the result is FAIL.
+- **Anything else is NOT ESTABLISHED.**
+- **Readings.**
+  - PASS: the ranking transfers to one new K562 screen at one locus, and to nothing wider.
+  - FAIL: the ranking that the ENCODE file supported does not transfer. The target bands and the
+    calibration must then be restated as unvalidated outside that file.
+  - NOT ESTABLISHED: this screen cannot separate the deletion from distance, and that is not support.
+  - NOT READABLE: coverage is the whole result.
+
+  One locus bounds every reading. The element bootstrap does not sample variation from locus to locus,
+  and the MHC is unusual. AlphaGenome was trained on ENCODE K562 tracks, so the objection that it has
+  seen K562 chromatin remains open.
+
+## The result: the independent MHC screen cannot be read, because only 19 distal pairs in it are measured decreases and 13 of those fall within the sweep's reach (review item 11, 2026-09-28, later)
+
+The test registered in `042a4aa` was scored once (`scripts/indep_benchmark.py`, result
+`data/results/indep_mhc_crispri.json`, partition `independent`, source IGVFFI4093WUVB, 0 AlphaGenome
+requests). **Verdict: NOT READABLE.** No AUPRC was computed, and none is quoted here, because the
+registration forbids reading a test below its floors.
+
+**Why it cannot be read.** The registration requires at least 20 covered positives; the screen supplies
+13. Of the screen's 93 significant decreases, 74 lie on promoters: the element sits within 1 kb of a
+GENCODE v50 TSS, so these are the TSS controls and promoter hits the registration excludes. That leaves
+**19 distal decreases in 21,358 distal pairs**. Of those 19, 14 lie within 500 kb of the gene's TSS, and
+13 of the 14 are covered. Coverage is not the limit: 4,472 of 6,544 pairs within reach are covered
+(68%, above the 0.5 floor). The shortfall is in the measurement: in this locus the screen finds almost
+no distal element that lowers a gene.
+
+**The measurement leans the other way.** Among distal pairs the screen calls **181 significant
+increases against 19 decreases**; within reach the count is 72 against 14. Under R2 these are kept as
+their own outcome. A CRISPRi screen whose distal hits are mostly increases is measuring something other
+than enhancers being silenced, such as indirect effects, silencers, or the FRACTEL test's pooling of the
+two directions. Before this screen is used as a target benchmark in any form, its authors' reading of
+those increases is needed. The sweep predicts no fall for 16 of the 54 covered increases; that is
+descriptive, not a test.
+
+**The selection check**, reported as registered and read as descriptive only: the distance baseline's
+AP is 0.119 on covered pairs (base rate 0.0029) and 0.25 on uncovered pairs within reach (base rate
+0.0005, one positive). With one positive, that second number means nothing.
+
+**What this means for item 11.** The project still has no independent target benchmark, and that has to
+be said rather than papered over. Every target claim continues to rest on the reused ENCODE file, so it
+remains in-sample by R5's definition. The census found no other study that the stored sweep can score
+with 0 requests and at sufficient size. What remains:
+
+1. the IGVF K562 CRISPRi Perturb-seq over many loci (Gersbach, 16 measurement sets, 2026-07-27). It
+   needs 0 model requests, but no element-level table has been released: using it means processing raw
+   single-cell reads, or waiting for the IGVF analysis set;
+2. HCT116 (Guckelberger 2024, IGVF FlowFISH). The sweep has no HCT116 track, so this costs the 705
+   requests already waiting on the owner's approval;
+3. the five ENCODE K562 FlowFISH genes outside the benchmark (TRIR, OTUD5, FADS2, PVT1, HBS1L). These
+   cost 0 requests but give five loci, and each would need its own registration with a floor it can
+   meet.
+
+## Probe: no second independent benchmark exists yet, because the 16 many-loci K562 sets are raw reads and their analysis set is unreleased (review item 11, 2026-09-28, lane-indep2)
+
+**Negative first.** The IGVF portal holds no processed element-gene table for the Gersbach K562 CRISPRi
+Perturb-seq over many loci, and none for any other K562, HepG2, GM12878 or IMR-90 CRISPRi screen that
+the project has not already read. No benchmark was registered and nothing was scored. The project still
+has no independent target benchmark. `scripts/indep_igvf_probe.py` records the census and the two
+label-blind counts below (`data/results/indep_igvf_probe.json`, 0 requests, portal read through
+`https://api.data.igvf.org` on 2026-09-28, IGVF data CC BY 4.0).
+
+**The 16 many-loci K562 sets** (IGVFDS5637QJRP, 8708IDCC, 5440YEBR, 6162UVFJ, 0567GXFW, 5791LZOT,
+5632GXBM, 2463TEJP, 1341HYXT, 8094NBFV, 0146NONB, 6790CUPS, 6013FBZQ, 6260UZSB, 1474DQOO, 8491ILFO;
+released 2026-07-27) each carry only fastq and seqspec files: 597 GB of reads, plus 94 GB in their
+16 gRNA-capture auxiliary sets. Each set is `input_for` an analysis set that exists but is not released
+(HTTP 403): IGVFDS3624DGBH for 15 of them and IGVFDS3481OUHP for one. The processed table is therefore
+coming, and has not arrived. Three further K562 sets from 2026-02-06 (IGVFDS1915EGTT, 2136PGKM,
+5321WVPQ) feed a third unreleased analysis set, IGVFDS1588RHDM, and use the MHC library, so they are the
+same locus again.
+
+**What the library says, label-free.** The guide file (IGVFFI9377CEMM, 39 kB, md5 2c1975d5…, released
+2026-07-27) describes "350 DHS genome-wide with transcriptome-wide Perturb-seq and growth readout":
+1,587 targeting guides on 342 elements across 23 chromosomes. Of those, 63 lie within 1 kb of a
+GENCODE v50 TSS, 9 overlap an ENCODE benchmark element, and 161 of the 279 distal elements (58%) are
+covered by the stored sweep, giving 5,676 element-gene pairs with a K562 value. This clears the 0.5
+coverage floor before any label is seen. Whether it clears the floor of 20 covered distal positives is
+unknown until the table is released.
+
+**Processing it here is not feasible.** It would mean 691 GB of downloads against 19 GiB free disk and a
+2 GB cap, so it cannot be done even one set at a time. The steps would be the IGVF Perturb-seq pipeline
+(Cell Ranger or kallisto|bustools for gene and guide counts, then guide assignment, then SCEPTRE or
+PerTurbo per element and gene), with several CPU-hours and 32–64 GB RAM per set. This lane stops here,
+as its brief says.
+
+**The one other released K562 table has already been read.** The Engreitz "K562 Random DC-TAP-seq"
+(IGVFDS7288SJVF; file IGVFFI0957PYTA, 0.57 MB, md5 758e1162…, released 2026-08-08, replacing the revoked
+IGVFFI2436YUJO and the archived IGVFFI9586LSUT) is Ray et al. 2025, and that study sits in the ENCODE
+held-out file. A label-blind overlap check read only the coordinate, gene, type, power and promoter
+columns. It found 1,289 of the 7,281 targeting pairs (920 elements) matching a K562_DC_TAP benchmark pair for the same
+gene, and 88 more matching pairs from other ENCODE studies. Another 1,222 distal pairs with power ≥ 0.8 at a 15% effect are absent from the ENCODE file, but
+they come from the same screen, cells and pipeline whose positives already informed the project's
+thresholds. A remainder of a study already read is not independent evidence, so it was not registered.
+
+**Everything else on the portal is out of reach at 0 requests.** The sweep scores only K562, HepG2,
+GM12878 and IMR-90. The remaining released element-level CRISPRi tables are in WTC11 (Gersbach
+IGVFDS0523KGZP; Engreitz IGVFDS4617SJVM and IGVFDS3911MOCN; Hon IGVFDS7340YDHF and four cardiomyocyte
+sets), in WTC11-derived neurons and endothelial cells, or in HCT116 (the 705-request item). HepG2 has
+only a phenotype FACS screen with guide counts (Sherwood IGVFDS6504OLWV). GM12878 and IMR-90 have none.
+
+**Next.** Watch IGVFDS3624DGBH. When it is released, fetch its element-level file, count label-blind
+coverage, and pre-register on it exactly as `genomeos/attribution/indep.py` did for the MHC. It needs 0
+requests, and the covered share is already known to be 0.58.
+
+## Census: every summary in the measured layer, what reads it, and how often it bites (R6, 2026-09-28)
+
+Review item R6 says the measured layer keeps the highest reporter activity over matching intervals and
+the strongest CRISPRi effect, and that such summaries favour extremes and hide disagreement. Before any
+change, `scripts/measured_aggregation_census.py` (result `data/results/measured_aggregation_census.json`,
+0 requests) lists every aggregation in `attribution/measured.py` at `0924a5c`, with the consumers
+`git grep` finds, and counts genome-wide how often each one is taken over more than one observation.
+
+**One summary decides a label: the lentiMPRA maximum (A1).** `Layer.for_element` keeps, per cell, the
+largest log2(RNA/DNA) of every tile that meets the overlap rule, and `cells_active` is read from that
+maximum. It feeds the lentiMPRA verdict, the pooled verdict and `assays_agreeing`, the census counts in
+`measured_layer_genome.json`, the calibration table in `confidence_calibration_genome.json`, the
+agree/disagree header of every compiled programme, and the `basis:` line of every `<id>_measured`
+block. Of the 17,869 elements lentiMPRA measures, 16,863 match one tile, 975 match two and 31 three or
+more. That gives 3,018 cell readings over more than one tile, and in **237 of them the tiles disagree
+about the threshold**: 224 are ties (one of two tiles active), 7 have a minority of tiles active and 6 a
+majority. Under the maximum, all 237 read active.
+
+**The rest, and why they are out of scope or harmless.**
+- A2, `max_activity`, and A3, the `overlap` of every assay: maxima that no code reads. They are kept but
+  should be named as descriptive.
+- A4, `lentimpra.elements`: tile names without values, strand or overlap. The disagreement above cannot
+  be seen in a row today.
+- A5, `mpra.parse`: averages the rows that share an interval in one cell's file. The average never
+  fires, because each of the three ENCODE files (ENCFF802FUV, ENCFF475FKV, ENCFF769REH) holds one row
+  per interval. The strand column is dropped (28 rows per file are on `-`). The p and q columns are -1
+  throughout, and no file has a replicate-level value, so **no per-tile uncertainty exists to keep**.
+- A6 and A7, the pooled CRISPRi gene lists and `outcomes_by_cell`: strongest outcome across cells and
+  across datasets. R1 (`6a4a8a9`) left every pair and each cell's own outcome in the row and names
+  differing cells in `basis:`, so these are left alone.
+- A8, `rule_links`: a compiled rule's `strength:` is the largest |effect| among the training pairs of
+  one element, gene and cell. The compiler reads it. It is reported to the coordinator, not changed here.
+- A9, VISTA: an element agrees when any matched VISTA element is positive. 5 of the 98 VISTA elements
+  match more than one, and **none matches a positive and a negative**.
+- A10, saturation mutagenesis: only a locus's primary experiment is read, and its repeats are counted but
+  never looked at. 2 repeats sit under the 4 matched elements, both in SORT1's group (SORT1.2 primary,
+  plus SORT1 and SORT1-flip, which is the same element in the other orientation). This is the one
+  orientation measurement the layer holds, and it is discarded.
+- A11, `confidence_of`: the strongest assay present sets the row's confidence. The docstring names this,
+  and R4's lanes own confidences.
+- A12, the pooled verdict: already keeps conflict as `mixed`.
+
+**The word "episomal".** It describes the ENCODE4 lentiMPRA in `measured.py`,
+`confidence_calibration.py`, `scripts/unknown_coverage.py`, four places in this file,
+GRAMMAR-BY-COMPARISON and ROADMAP. The cited assay integrates its reporters by lentivirus (Agarwal et al.
+2025, Nature, https://www.nature.com/articles/s41586-024-08430-9). An integrated reporter still sits
+outside its native locus, so the conclusion drawn from the word ("it measures the sequence and not the
+locus") stands, but the word itself is wrong.
+
+## Pre-registration: reporter tiles kept, the label from a declared share rule, the maximum descriptive only (R6, 2026-09-28)
+
+Fixed in `attribution/measured.py` (`REPORTER_UNIT`, `REPORTER_LABEL_RULE`, `REPORTER_SUMMARY`,
+`REPORTER_MAX_FIELD`, `REPORTER_UNCERTAINTY`, `TILES_CONFLICT`, `OUTCOME_KIND`, `R6_ACCEPTANCE`) before
+any row is rebuilt, on the census above.
+
+**The observation.** One lentiMPRA tile in one cell: its interval, strand, reciprocal overlap with the
+compiled element and log2(RNA/DNA). Every matched tile is listed in the row under `tiles`. Uncertainty
+is recorded as absent, with the reason, because the files hold none.
+
+**The aggregation model.** Per cell, a label comes from the share of tiles on each side of
+`MPRA_ACTIVE` (1.0): **active** when more than half are at or above it, **silent** when more than half
+are below, **conflicting** when exactly half are. The per-cell `activity` reported is the median of the
+tiles, and it is descriptive: the label is not read from it. The maximum stays only as
+`activity_max_descriptive` (per cell) and `max_activity_descriptive` (over cells), and no verdict reads
+either. The lentiMPRA verdict: **agrees** when some cell is active, **disagrees** when every cell is
+silent, and **`reporter_tiles_conflict`** otherwise. The last counts as neither agreement nor
+disagreement, and the census reports it under its own key. Across cells the rule is unchanged: activity
+in any cell is support, and `cells_active`, `cells_silent` and the new `cells_conflicting` list each cell.
+
+**Outcomes kept apart.** Each assay block carries `outcome_kind`: endogenous gene regulation (CRISPRi),
+reporter activity from an integrated lentiviral construct outside the native locus (lentiMPRA),
+developmental activity in the mouse embryo (VISTA) and base-level sensitivity in a reporter (saturation
+mutagenesis). The pooled verdict still counts assays, and never averages their values.
+
+**Saturation mutagenesis.** The repeat experiments of a locus are read over the element's bases and
+listed per experiment (bases measured, bases functional), with the count of bases whose functional call
+differs between experiments. The verdict stays on the primary experiment, and this is stated. For SORT1
+this puts the reverse-orientation experiment, SORT1-flip, in the row.
+
+**Acceptance (tests/test_measured_aggregation.py).** (1) An element matched by five tiles, one at +3.0
+and four at +0.2 in K562, is silent in K562, its lentiMPRA verdict is `disagrees`, all five tiles are
+listed and `activity_max_descriptive` is 3.0. (2) An element matched by two tiles at +1.5 and +0.5 is
+conflicting in K562, its verdict is `reporter_tiles_conflict`, neither counter moves, and `basis:` names
+both values. (3) A one-tile element reads exactly as before.
+
+**What may move, stated before the build.** Only the 237 cell readings where tiles disagree can change
+label: at most 224 to conflicting and 7 to silent, while 6 stay active. So the lentiMPRA `agrees` of
+3,361 can only fall, `disagrees` of 14,508 can only rise, and no element can move from disagreeing to
+agreeing. CRISPRi and VISTA counts, the 19,072 experimental element blocks and 212 rule blocks, and every
+compiled rule stay the same. Programme text changes only on `basis:` lines and the header's agree and
+disagree counts. The calibration table's lentiMPRA arm loses the elements that become conflicting. Any
+other change is a fault of the build.
+
+## The result: no reporter label now rests on one tile, and 130 elements the maximum had called active are not (R6, 2026-09-28, later)
+
+Built as registered (`attribution/measured.py` `reporter_block`, `reporter_label`, `reporter_counts`;
+tests `tests/test_measured_aggregation.py`). The layer and the calibration were rebuilt in a clean
+worktree at `49aca5d`, with only this lane's files changed, through `save_result` with complete
+manifests. 0 requests.
+The results are saved beside the old ones rather than over them, as
+`data/results/measured_layer_genome_r6.json` and `data/results/confidence_calibration_genome_r6.json`,
+because the removal guard protects lines of the old files committed in the last two days. The old
+names still hold the pre-R6 figures, and the next rebuild after 2026-09-30 can overwrite them with
+`--result-name` left at its default.
+
+**What moved, old -> new, and nothing else did** (element by element against a rebuild without the
+change at the same commit):
+
+| count | before | after |
+| --- | ---: | ---: |
+| lentiMPRA agrees | 3,361 | 3,231 |
+| lentiMPRA disagrees | 14,508 | 14,512 |
+| lentiMPRA `reporter_tiles_conflict` (new, counted apart) | — | 126 |
+| elements matched by more than one tile | (not recorded) | 1,006 |
+| cell readings where tiles disagree / of them conflicting | (not recorded) | 237 / 224 |
+| pooled verdict agrees -> `reporter_tiles_conflict` | — | 125 |
+| pooled verdict agrees -> disagrees | — | 4 |
+| satmut bases read by more than one experiment / functional calls differ | (not read) | 349 / 84 |
+| CRISPRi and VISTA agrees/disagrees, element blocks 19,072, rule blocks 212, every rule and every confidence | — | unchanged |
+
+So 130 elements that the maximum had called reporter-active now read otherwise: 126 because their tiles
+split evenly, and 4 because a minority of their tiles were active. That is inside the registered bound
+(at most 224 conflicting and 7 silent cell readings; no element moved towards agreement). `basis:`
+changed on the 1,006 multi-tile elements, and on chr21 on 12 lines plus the header count (44 -> 43
+agreeing). The committed `noncoding_chr21.bio` takes those 13 lines only; it stays held as its own
+header says.
+
+**The calibration table.** The lentiMPRA arm's narrow denominator loses the 126 conflicting elements
+(17,869 -> 17,743), the observed rate falls from 0.1881 to 0.1821, and ECE rises from 0.0905 to 0.0963.
+Its wide denominator is now a different set of rows and is reported (17,869, observed 0.1808): a
+conflict counts there as not agreeing. The level stays withheld, as before, because this assay's
+agreement is not the compiled claim. Across all tables, 15 bands are populated and 1 has the stated
+level inside its interval (it was 12 and 2).
+
+**Not from this change.** The rebuilt `measured_layer_genome.json` also reports 928,094 weak compiled
+facts where the stored copy said 812,921. That comes from `96bc5e5` (compiled predictions no longer
+state a confidence), since the stored file had not been rebuilt after it. R6 moved no confidence.
+(The rebuilt file is `measured_layer_genome_r6.json`; see above.)
+
+**What R6 did not do.** No per-tile uncertainty exists in the ENCODE element files, so none is carried.
+The row names this rather than inventing one. A8, the strength of a compiled experimental rule, is still
+the largest training |effect| within one element, gene and cell. The pairs sit in the row, but the
+compiler reads the maximum. That belongs to the compiler's owner. The saturation-mutagenesis verdict is
+still read from the primary experiment; the repeats, SORT1-flip included, are listed beside it with
+their disagreement counted.
+
+## Pre-registration: a bridge from compiled annotation to dynamics, and what it will not claim (R3, 2026-09-28)
+
+Registered before any of it was built; the constants are in `genomeos/attribution/bridge.py`.
+
+**The problem.** A compiled program is executable annotation. Its rule `strength` is an
+observation's magnitude in that observation's own unit (|log2 fold change| clipped at 1 for an
+AlphaGenome deletion, |fractional change| for a CRISPRi screen), its target genes are stubs with no
+transcription parameters, and the element it names as a source is not a species the runtime
+holds. `runtime/grn.py` read a missing source as 0.0 and a missing `max_rate` as 0.0 without a
+word, so a compiled rule ran and moved nothing.
+
+**The mapping.** One observation: removing element E changes gene G's steady-state expression in
+cell C by the fold RHO = expression(removed) / expression(intact); RHO = 2^x for a predicted log2
+fold change x read from the rule's evidence note (a strength of exactly 1 with no note is
+censored), RHO = 1 + f for a CRISPRi EffectSize f. One model: E's state is its presence (1 intact,
+0 removed, held by clamp, never defaulted); G must declare `basal_rate` b > 0 and `max_rate` V > 0
+(a.u./h); Hill threshold 1 and coefficient 2 are declared assumptions, so H(intact) = h = 0.5. For
+one mechanism alone on its gene in its cell, activates: s = b(1/RHO - 1)/(V h); inhibits:
+s = (b + V)(1 - 1/RHO)/(V h). A fitted s outside (0, 1] means the declared parameters cannot
+produce the observed response, and is reported, not clipped.
+
+**What it will not claim.** A deletion log2 fold change is an observed effect, not a rate constant,
+not an affinity, not a dose response, and says nothing about any other perturbation. The bridge
+fits one dimensionless strength so that the model reproduces that one response under parameters
+the caller declares; anything else the simulation says is the model's.
+
+**The combination rules, named.** The runtime combines a gene's activators as a mean of
+s_i H(x_i) and its inhibitors as a product. Under the mean, adding an activator that is low where
+another is high halves the drive there, so adding an activator can lower expression (lane-sign,
+`b1f3405`, `5cbce26`: correcting Tbxt to activate SOX17 removed mesoderm from the gastrulation
+model). The bridge states this as an assumption and does not change it; a change would be its own
+registration, with the gastrulation and design tests as dependents. Because a gene with two or
+more regulating mechanisms in one context cannot be parameterised from single-deletion
+observations under these rules, the bridge reports it as not identifiable.
+
+**The diagnostic.** Every reason a mechanism does not become a parameter is reported by name:
+regulator state missing, gene parameter missing, observation missing, observation censored, not
+identifiable, conflicting observations, response out of range. The runtime reports a regulator
+with no state and a regulated gene with no `max_rate` on every run (`UnresolvedModel` in strict
+mode, a warning and a list on the trajectory otherwise); the values it integrates do not change.
+A source renamed `<id>@zero`, network_experiment's edge knockout, is a declared zero and is not
+unresolved.
+
+**One mechanism, one parameter.** A mechanism is (element without `_measured`, gene, cell). When
+a predicted and a measured rule describe it, the measured one is simulated and the predicted one
+is recorded as superseded; another citation of the same kind with the same observation is the same
+parameter; with a different observation it is a conflict, reported and not averaged.
+
+**The double-counting audit's question, asked before it is answered.** In the 24 compiled
+programs, how many (element, gene, cell) mechanisms carry both a predicted and a measured rule that
+one run in that cell would integrate side by side, and how many (gene, cell) pairs have more than
+one active regulatory rule, so that no single-deletion observation identifies a strength under the
+mean rule?
+
+**Acceptance, fixed now.** (1) End to end: a program compiled from one element whose deletion is
+observed at log2 fold change -1 in K562, parameterised with declared b and V, reproduces
+expression(removed)/expression(intact) = 0.5 within 1% with the element clamped at 1 and at 0.
+(2) A run whose regulator has no state raises `UnresolvedModel` naming the missing state in strict
+mode and records it otherwise; an `@zero` source raises nothing. (3) A second citation of the same
+mechanism, a duplicate rule citing another source or a predicted rule beside a measured one,
+leaves the simulated strength unchanged. Negatives are written first.
+
+**Amendment, same day, before the build (lane-assay's census item A8).** A compiled experimental
+rule's strength is the largest |EffectSize| among the regulated pairs of one element, gene and cell
+(`measured.rule_links`), a maximum used as a parameter whenever there is more than one pair. The
+compiler will write each link's pair count on the measured element's evidence note (`<gene> in
+<cell> from <n> pairs`). The bridge maps a link that rests on one pair as RHO = 1 + f and reports a
+link that rests on several as `observation_summarised`; it never fits to the maximum. No summary
+rule (median, mean, a meta-analysis) is chosen here; choosing one is its own registration. The
+audit will also count the experimental links that rest on more than one pair.
+
+## Pre-registration: R8's coupling pretest, and a negative closes R8 (R8, 2026-09-28)
+
+Review item R8 allows a joint inference engine only after a pretest shows that a coupling term carries
+information that independent per-element scoring does not (genomeos-8a's brief,
+`.claude/briefs/joint-annotation-search.md`). This section fixes that pretest before any number is
+produced. The code is `genomeos/attribution/joint_pretest.py`, the run `scripts/joint_pretest.py`, the
+result `joint_pretest`. No search is built in this lane, whatever the outcome.
+
+**Data and independence (R5).** The CRISPRi benchmark's training file only, through
+`measured.load_crispri(split="training")` and `development_only()`; the held-out file is never opened,
+not for fitting and not for looking (a test spies on the file opener). lane-split's `split_overlap()`
+found 249 held-out pairs sharing bases with training intervals; that is irrelevant here, because the
+held-out file is not read. Folds are leave-one-chromosome-out within the training split. The training
+file is K562 only (10,356 valid pairs), so per-cell reporting (R1) is K562; any other cell would be
+counted and computed only at 20 positives or more.
+
+**Outcomes (R2).** A positive is a significant decrease; a negative is a non-significant pair with
+PowerAtEffectSize20 at or above 0.8. Significant increases and underpowered or power-unknown nulls are
+excluded from the metric and counted apart.
+
+**Scores.** From the stored per-element response cache (`targets.ElementResponses`), 0 new requests:
+
+- *Independent* (the baseline): a pair's predicted drop `d`, the largest predicted fall of the measured
+  gene on K562's own track over the cached elements overlapping the tested interval, floored at 0
+  (`crispri.deletion_drop`). A pair no cached element answers is missing and never imputed.
+- *Element competition*: `d / (sum of d over every gene the screen tested against the same interval in
+  the same cell + 0.1)`.
+- *Gene budget*: `d / (sum of d over every interval the screen tested against that gene in that cell + 0.1)`.
+
+The floor 0.1 is the scorer's own `MIN_EFFECT` bar, not fitted. Partners are read by their predictions
+whatever their measured outcome; their labels are never read. Each coupling variant enters a logistic
+model on `[d, share]` fitted on the other chromosomes; the independent score is `d` itself. The control
+is the self-only share `d / (d + 0.1)` in the same model: the share's nonlinearity with no partner.
+
+**Metric.** AUPRC on the out-of-fold scores pooled over the folds. The gain of each variant over the
+independent score carries a 97.5% two-sided interval (Bonferroni over two variants) from 2,000
+resamples of connected components of the perturbation-gene graph (seed 0); the same interval over
+chromosomes is reported beside it. Secondary, never deciding: the same comparison restricted to pairs
+with at least one scored partner.
+
+**Pass rule.** A variant passes if the lower end of its component interval lies above 0 and its point
+gain exceeds the self-share control's. R8 proceeds if at least one variant passes.
+
+**Falsifier.** A pass is void if the self-share control gains at least as much: the gain would then be a
+reshaping of `d`, not coupling. A pass whose chromosome interval includes 0 is reported as weak and
+names the chromosome that carries it.
+
+**Readings.** Neither passes: a negative. Coupling carries no information about CRISPRi targets beyond
+independent per-element scoring on the data held, so a joint search over this score cannot beat
+per-block scoring; **R8 closes and no search engine is built**. One passes: that term is kept, frozen
+as registered, and R8 proceeds to its build (the synthetic two-change case first). Both pass: both are
+kept. Void: reported as a negative with the control's gain beside it; R8 closes.
+
+## The result: neither coupling term beats independent deletion scoring, so R8 closes and no search is built (R8, 2026-09-28, later)
+
+Run once as registered above (`scripts/joint_pretest.py`, result `joint_pretest`, 0 AlphaGenome
+requests, 84 s, peak resident memory 5.4 GB with one cache reader and one chromosome at a time).
+Training split only; the held-out file was never opened.
+
+**Negatives first.** On 3,713 scored and labelled K562 pairs (423 significant decreases, 3,290
+well-powered nulls; 534 components, 23 chromosomes), out-of-fold AUPRC:
+
+| score | AUPRC | gain over independent | 97.5% interval, components | 97.5% interval, chromosomes |
+| --- | --- | --- | --- | --- |
+| independent (predicted drop) | 0.766 | | | |
+| element competition | 0.754 | −0.013 | −0.024 to +0.001 | −0.022 to −0.000 |
+| gene budget | 0.747 | −0.020 | −0.027 to −0.011 | −0.029 to −0.008 |
+| self-share control | 0.758 | −0.008 | −0.015 to −0.003 | −0.013 to −0.003 |
+
+Neither variant's interval lies above 0, and neither beats the control's point gain: the registered
+reading is **neither passes**. Gene budget is worse than the independent score with an interval that
+excludes 0; element competition is worse at the point and its component interval just reaches 0.
+Restricted to pairs that have at least one scored partner, where the coupling is not trivial, both
+lose more: element competition 0.678 against 0.701 (2,444 pairs, 235 positives, −0.024, −0.045 to
+−0.002), gene budget 0.676 against 0.707 (2,894 pairs, 270 positives, −0.031, −0.040 to −0.021). The
+share read alone, with no fit, is no better: 0.758 for element competition and 0.705 for gene budget.
+
+**Counted apart.** Of 10,356 training pairs (all K562; no other cell is in the training file, so the
+per-cell result is the pooled one), 1,119 have no cached element overlapping the tested interval and
+3,410 have an overlapping element that did not score the gene in K562: 4,529 missing, never imputed.
+Of the 5,827 scored, 46 significant increases and 2,068 underpowered nulls are kept out of the metric.
+The 0.766 is therefore an AUPRC on the pairs the sweep answers, which excludes genes outside its
+window; it is not comparable with the benchmark's all-pairs figures.
+
+**Reading.** On the data held, a gene's rank among the genes tested against the same perturbation, and
+an element's share of its gene's predicted regulators, carry no information about which pairs a
+CRISPRi screen calls regulated beyond each pair's own predicted drop; both lower precision. A joint
+search over this score cannot beat per-block scoring, so **R8 closes as a negative and no search
+engine is built**. What this does not say: it tests coupling of the deletion score as held, in K562
+alone, on the pairs the sweep answers; it does not test coupling of a different score or in a cell
+with its own training data. lane-split's overlap check (249 held-out pairs share bases with training
+intervals) did not bear on this run, because the held-out file was not read.
+
+## The result: no compiled rule can be simulated as compiled, one gene-cell pair in three has several mechanisms and cannot be parameterised from single removals, and 39 relations were carried twice (R3, 2026-09-28, later)
+
+Built as registered in `06b7557` and amended in `b986238`. `runtime/grn.py` now names its
+combination rules (`ACTIVATOR_COMBINATION = "mean"`, `INHIBITOR_COMBINATION = "product"`) and its
+declared zero (`EXPLICIT_ZERO_SUFFIX = "@zero"`), and `NetworkRuntime.diagnose` reports every
+regulator with no state and every regulated gene with no `max_rate`: on the trajectory's
+`unresolved` list and as an `UnresolvedModelWarning`, or as `UnresolvedModel` when the runtime is
+strict. The integrated values are unchanged, and no test in the suite raised the warning, so no
+existing caller depended on an undeclared zero; network_experiment's `@zero` edge knockout is
+recognised as declared. `attribution/bridge.py` reads one observation per mechanism (2^x from a
+predicted rule's effect note, 1 + f from a CRISPRi rule resting on one pair), picks one
+representation by precedence, and fits one strength per mechanism under the registered mapping.
+The compiler writes each measured link's pair count on its measured element and states in every
+program's header that it is executable annotation and not a simulation. Tests:
+`tests/test_grn_bridge.py`, 17, written first; all three acceptance tests pass, including the
+end-to-end fixture (log2 fold changes -1, -0.4 and +0.7, and a CRISPRi f = -0.3, each reproduced
+within 1%) and the fitted strength differing from the compiled |log2 fold change| in every case.
+
+**The audit's answer (`scripts/bridge_audit.py`, `data/results/bridge_audit.json`, 24 programs,
+every cell context a rule names).** Of 440,589 compiled regulatory rules, **0 can be simulated as
+compiled**: every target gene is a stub. They form 440,550 mechanisms over 237,613 (gene, cell)
+pairs. **76,469 of those pairs (32%) have more than one mechanism**, 279,406 mechanisms between them,
+and cannot be parameterised from single-removal observations under the mean rule; the other
+161,144 pairs have one mechanism whose observation reads cleanly and lack only declared rates.
+**39 relations carry both a predicted and a measured rule in the same cell**, all in K562, which a
+plain run would integrate side by side, averaging a |log2 fold change| with a |fractional change|
+(SMIM1: 0.848 beside 0.472); the bridge supersedes the predicted one where it can act (13) and the
+other 26 sit on genes that are not identifiable anyway. All 212 experimental links rest on one
+CRISPRi pair, so the maximum lane-assay's census found (A8) never summarised more than one pair in
+these data; no predicted rule is censored, because every one now carries its effect note.
+
+**Negatives.** The bridge fits one strength to one observation and nothing else: it cannot say what
+a partial deletion, a dose or a second perturbation would do, and a gene with two mechanisms is
+refused rather than solved. The mean rule stays, so adding an activator can still lower
+expression; changing it is its own registration. The committed chr21 copy holds its 5,176 rule lines
+at their earlier text under the removal guard until 2026-09-30; the 24 git-ignored programs carry
+everything.
+
+## Pre-registration: five axes instead of one label, class kept as a derived summary (R7, 2026-09-28)
+
+Review item R7. The census (`2ba726b`, `data/results/ontology_census.json`) found every one of the
+459,449 compiled elements saying `class: enhancer`, the constant written by `compile.py`, including
+the 156,925 whose rule inhibits its gene; 101,011 predicted elements at least half interspersed repeat
+with nothing saying so; and region roles that join a tier, a budget label and a copy flag in one
+string, 9,499 of which read an absence of constraint as a fossil, a dead frame or neutral sequence.
+The 15,252 regulatory blocks never had their repeat coverage read, because the block classifier names
+a block `regulatory` before it reads RepeatMasker.
+
+**The axes.** An `element` and a `region` may state five keys, each with a closed vocabulary held in
+`genomeos.lang.grammar.AXES` (every axis has `unknown`; a value may take a qualifier after `/`):
+
+- `origin`: `unique`, `repeat_derived/CLASS` (>= 0.5 of the interval interspersed repeat, CLASS the
+  largest), `partly_repeat_derived/CLASS` (> 0, < 0.5), `satellite`, `tandem_repeat`,
+  `segmental_duplication` (>= 0.5 duplicated), `assembly_gap`.
+- `molecular_role`: `promoter_like`, `enhancer_like`, `insulator_like`, `open_chromatin`, `silencer`,
+  `competing_promoter`, `structural`, `coding_candidate`.
+- `activity`: `activates_target`, `represses_target`, `no_effect_measured`, `active_in_reporter`,
+  `inactive_in_reporter`.
+- `target_relation`: `predicted_deletion_target`, `nearest_tss_in_domain`,
+  `measured_perturbation_target`, `tested_no_effect`, `unassigned`.
+- `evidence_status`: `curated_annotation`, `registry_biochemical`, `predicted_model`, `measured`,
+  `measured_negative`, `conflicting`, `under_selection` (>= 5% of bases at phyloP >= 2.27),
+  `selection_weak` (3-5%), `selection_not_detected` (< 3%), `selection_not_measured`.
+
+`,` joins values that all hold (overlapping roles: a CTCF-bound dELS is `enhancer_like,
+insulator_like`); `|` joins unresolved alternatives, one of which holds and none of which is chosen.
+The parser refuses a value outside the vocabulary and keeps the axes in the entity's `attrs` as
+`{"ontology": {axis: [[alternative, ...], ...]}}`, which `Module.to_dict` and `from_dict` carry.
+
+**Constraint.** Constraint is evidence of selection and is stated only on `evidence_status`. No axis
+has a value meaning "no function"; an unconstrained fossil or unique block says `molecular_role:
+unknown` and `evidence_status: ..., selection_not_detected`. The predicted elements carry no
+constraint field in their runs, so they say `selection_not_measured` (nothing is fetched to fill it).
+
+**What each block says.** A predicted element: origin from RepeatMasker over its interval; role from
+the registry entry of its own id (`CCRE_ROLE`, plus `insulator_like` when CTCF-bound); activity from
+the rule's direction; target relation `predicted_deletion_target`, plus `nearest_tss_in_domain` when
+the run's verdict says they agree; status `registry_biochemical, predicted_model,
+selection_not_measured`. When the prediction is an increase on deletion, the role gains the
+unresolved group `silencer|insulator_like|competing_promoter|unknown` and the activity says
+`represses_target`: a direction of effect never becomes a silencer label. A `_measured` block keeps
+the sequence facts (origin, role) and states its own activity, relation and status from the assays:
+CRISPRi decrease `activates_target`, increase `represses_target` (with the same group), well-powered
+nulls only `no_effect_measured` and `tested_no_effect`; lentiMPRA or VISTA active in any cell
+`active_in_reporter`, inactive everywhere `inactive_in_reporter`, a lentiMPRA tie the two as
+alternatives; `measured`, `measured_negative` when a gene was measured unchanged, `conflicting` when
+the agreement verdict is disagrees. A region: origin from its sequence class, or for a block whose
+class is not a repeat class from RepeatMasker over the block, plus `segmental_duplication` from the
+copy flag; role from the registry classes it contains for a `regulatory` block, `promoter_like|unknown`
+for a CpG-island block, `structural` for a centromere, `structural|unknown` for a satellite or tandem
+array, `coding_candidate|unknown` for a long ORF, `unknown` otherwise; activity `unknown`; relation
+`unassigned`; status the annotation it rests on plus the selection reading.
+
+**Backward compatibility.** Two choices, both the least disruptive the census allows. `class:` stays,
+now derived from the registry role (`ROLE_CLASS`, the first role) and labelled as that summary in the
+grammar; since the census shows every predicted element is pELS or dELS, the derived class is
+`enhancer` for all of them and no class count moves, while an element outside the registry would now
+say `unknown` rather than inherit `enhancer`. No runtime, evidence-explorer or web path reads `class:`
+from a compiled program (census, consumers), so nothing downstream changes. A region's `role:` stays
+verbatim: `Module.unknowns` counts `role: unknown`, and every program's `# test: unknowns ==` line and
+the organiser read it, so it is kept as the budget's tier summary, labelled so in the grammar, with
+the five axes beside it as the authoritative reading. Rewriting the budget's labels is a separate
+step (24 stored budget results).
+
+**Acceptance (the review's, as tests).** (1) A repeat-derived regulatory element keeps both: an
+element over a LINE with a dELS registry entry compiles to `origin: repeat_derived/LINE` and
+`molecular_role: enhancer_like`, and a regulatory region over repeats keeps `repeat_derived` beside
+its registry roles. (2) A predicted expression increase on deletion does not force a silencer label:
+the element's `class:` is the registry summary, its activity `represses_target`, and `silencer`
+appears only inside the unresolved group. (3) Unresolved alternatives survive serialisation: compile
+-> parse -> `Module.to_dict` -> JSON -> `from_dict` returns the same groups, and an out-of-vocabulary
+value is a parse error.
+
+**Expected counts over the 24 programs.** Unchanged: 440,377 + 19,072 `class: enhancer`; 440,589
+rules; 1,098 unknowns; every region `role:`. New: 459,449 elements and 26,806 regions each state five
+axes. Predicted elements: `repeat_derived` 101,011, `partly_repeat_derived` 81,058, `unique` 258,308;
+`insulator_like` beside `enhancer_like` on 193,027; `represses_target` with the unresolved group on
+156,925 and `silencer` alone on 0. Regions with `molecular_role` meaning no function: 0. The count of
+repeat-derived `regulatory` blocks is not known in advance (never read) and is reported as found.
+Known costs: programs grow by five lines per element and region; the committed chr21 copy's changed
+lines may be held by the removal guard until 2026-09-30.
+
+## The result: every compiled element and region states five axes, no count the programs test moved, and a repression is never a silencer (R7, 2026-09-28, later)
+
+Built as registered (`genomeos.lang.grammar.AXES`, the parser's `_ontology`, `compile.py`'s
+`element_axes`, `measured_axes` and `region_axes`; `tests/test_ontology.py`, 7 tests). The 24
+programs in `data/knowledge/compiled` were recompiled and every line that is not an axis line or the
+new header paragraph is byte-identical to the programs before (checked per file), so nothing
+registered as unchanged moved: 440,377 + 19,072 `class: enhancer`, 440,589 rules, 1,098 unknowns,
+every region `role:`. Counts after (`data/results/ontology_census_after.json`, beside the census):
+
+- **Predicted elements (440,377, all five axes):** origin `repeat_derived` 101,011, `partly_repeat_derived`
+  81,058, `unique` 258,308, exactly as registered; role `enhancer_like` 440,377 with `insulator_like`
+  beside it on 193,027; `represses_target` 156,925, every one with the role left as
+  `silencer|insulator_like|competing_promoter|unknown`, and `silencer` alone on 0; target relation
+  `predicted_deletion_target` 440,377, `nearest_tss_in_domain` beside it on 268,940; status
+  `selection_not_measured` on all, because the element runs carry no constraint.
+- **Measured blocks (19,072):** activity `inactive_in_reporter` 14,539, `active_in_reporter` 3,296, the
+  two as alternatives (a lentiMPRA tie) 126, `no_effect_measured` 976, `activates_target` 181,
+  `represses_target` 43 (the role left open on all 43), `unknown` 243; relation
+  `measured_perturbation_target` 145, `tested_no_effect` 1,284, `unassigned` 17,643; status
+  `conflicting` 14,537, `measured_negative` 1,406.
+- **Regions (26,806):** origin `repeat_derived` 16,192, `partly_repeat_derived` 9,958, `unique` 418,
+  `segmental_duplication` beside another origin on 2,894, `assembly_gap` 118, `satellite` 113,
+  `tandem_repeat` 7. Of the 15,536 regions with a registry or CpG role, **8,709 are at least half
+  interspersed repeat and 6,534 partly**: the repeat-derived regulatory blocks the classifier had
+  hidden, the count the registration could not predict. Role `unknown` 11,061; no region carries a
+  value meaning no function; `selection_not_detected` 21,283, `selection_weak` 2,962,
+  `under_selection` 2,410, `selection_not_measured` 33.
+
+**Negatives and limits.** The derived `class:` moved nothing because every predicted element is pELS
+or dELS in the registry: the old constant was right for the registry and wrong in kind, and the
+change is that it is now read, not assumed. A region's `role:` keeps the budget's strings, including
+"no evidence of function, best guess neutral" on 2,546 regions; the axes beside it say `unknown` and
+`selection_not_detected`, and rewriting the budget's labels (24 stored results) is its own step. No
+element has a per-element constraint reading, so the selection axis is unmeasured for all predicted
+elements; filling it needs phyloP over 440,377 intervals. Segmental duplication is read for regions
+only. The committed chr21 copy received the axis lines and the header paragraph as pure additions
+(29,108 lines, none removed), leaving its guard-held rule lines as they were until 2026-09-30.
+
+## Pre-registration: every budget reader through one reader, names only (R7 follow-up, consumers, 2026-09-28)
+
+The budget's R7 restatement (`budget_axes_<chrom>`, commits b6e6d17, bbce3d8, 308484a) renames two
+tiers (fossil to `repeat_unconstrained`, neutral to `unconstrained_unknown`) and eight labels, and
+adds `evidence_status`, `origin` and `legacy_tier`. Every consumer still read `budget_<chrom>`. This
+step moves them all onto one reader, `budget.read_axes(chrom)`, registered in
+`budget.CONSUMERS_REGISTERED` before any consumer moves.
+
+- **What moves.** The reader returns the axes record, with the measurements the restatement dropped
+  (class evidence, phyloP mean and max, conserved elements, cost) filled back from the stored budget
+  after a block-by-block agreement check. A consumer whose own result joins on the old key reads
+  `legacy_tier`, so organise, compress, human_panel, lexicon, variation, unknown_scoring,
+  duplications, element_types and the epigenome keep their stored keys. The CLI, the web budget panel
+  and a compiled region's `role:` line show the new tier names and labels.
+- **The invariant.** No numeric figure moves: tier counts and base pairs are identical by
+  construction, and every number a consumer writes must be identical before and after. Only names
+  move, and only where a person reads them. Run times and a byte counter of files read are exempt.
+- **The proof.** Each consumer that writes a result is run before and after into scratch, never over
+  a committed result, and every numeric leaf is compared, tier keys mapped through `LEGACY_TIER`.
+  Any other difference is a failure of the move and is reported with its cause.
+- **Negatives first.** Seven modules the census counted as budget readers read a tier through
+  `organise.blocks` or lexicon's context map, not the budget file; they change through organise and
+  keep the legacy key. The censuses (`budget_axes_census.py`, `ontology_census.py`) and the
+  restatement itself keep reading `budget_<chrom>`, because they describe it.
+- **Not in this step.** Regenerating `unknown_<chrom>` so the classifier's origin is stored, and
+  compile.py reading that origin instead of re-deriving it, go ahead only if cheap and only if the
+  comparison shows no numeric change; otherwise after 2026-09-30.
+
+## The result: every budget reader now goes through one reader, and across 24 chromosomes and 19 consumer outputs no number moved (R7 follow-up, consumers, 2026-09-28, later)
+
+Built as registered above. `budget.read_axes(chrom)` returns the `budget_axes_<chrom>` record and
+fills back the stored measurements after its agreement check, which holds on all 24 chromosomes
+(26,806 blocks). `read_axes_genome_wide()` returns the R7 genome-wide sum and `tier_name()` gives a
+person the R7 name of any tier key.
+
+**Negatives first.** Nothing had to be explained away: 0 numeric differences in every comparison.
+The only non-exempt differences are names and one input list. Seven modules the census counted read a
+tier through `organise.blocks` or lexicon's context map, so they moved with organise and needed no
+edit. The consumers' stored results keep the legacy keys `fossil` and `neutral`, as do result names
+such as `epigenome_fossil` and lexicon's `unknown_fossil` context; renaming those keys changes the
+stored schemas of the consumers and every reader of them, not the budget, and is not done here. variation.py's
+case reading still says "a best guess" (a reading of the two axes, not of the budget tier): its two
+lines were added on 2026-09-27 and are held by the removal guard until 2026-09-30.
+
+| Consumer (run before and after, into scratch) | Numeric leaves compared | Differences |
+| --- | ---: | ---: |
+| organise.organise, 24 chromosomes | 12,862 | 0 (23 run times exempt) |
+| organise.blocks, 24 chromosomes (also what syntax_tiling, measurability, motif_transfer, unknown_coverage, syntax_blocks_matched, constrained_unknown_targets read) | 265,301 | 0 |
+| compress.tier_blocks, 24 | 53,612 | 0 |
+| unknown_scoring.unknown_blocks, 24 | 131,389 | 0 |
+| element_types block tiers, 24 | 53,612 | 0 |
+| duplications.run_and_save (not saved), 24 | 108,137 | 0 |
+| variation.build, chr21, chr22, chrY, human axis stubbed (no request) | 22,223 | 0 |
+| human_panel.build, chr21, human axis stubbed | 3,621,823 | 0 (1 run time) |
+| lexicon context map, chr21 | 1,797 | 0 |
+| panel_background.rebuild, chr21 | 2 | 0 |
+| epigenome summary, fossil and alu actions, chr21 | 3,185 | 0 |
+| budget distil, legacy and R7 | 610 | 0 |
+| web budget card | 347 | 0 |
+| CLI budget (chr21 and genome), duplications, variation, organise text | 491 numbers | 0 lines whose numbers differ |
+| compiled programs, 24 chromosomes | 9,896,402 numbers | 0 lines whose numbers differ |
+
+`organise.inputs` now names `budget_axes_<chrom>` beside `budget_<chrom>`, so a manifest built from it
+lists both files the reader opens. The compiled programs changed on role lines only: 397 of 446 regions
+on chr21 and 23,708 of 26,806 genome-wide, each now `role: repeat_unconstrained, repeat-derived sequence, no
+sign of selection, which is not a sign of no function` and the like; no role line in any of the 24
+programs says neutral, fossil, dead or best guess. The committed chr21 copy received exactly those 397
+role lines (all from 2026-09-12, none guard-held); its held rule lines are untouched. The CLI and the web
+budget card print the R7 tier names, and their notes say constraint is evidence of selection only.
+
+**Left for after 2026-09-30.** Regenerating `unknown_<chrom>` so the classifier's origin is stored,
+and compile.py reading that origin instead of re-deriving it: the comparison shows no numeric change,
+but the step is not cheap (24 classifier runs and 24 rewritten results) and it changes origin text on
+11 blocks whose interspersed coverage sits just under one half (commit 308484a), so it is not names only.
+
+## Pre-registration: milestone 1.3's second clause against a control matched on length and gene density (2026-09-28)
+
+**What is compared.** Clause 2 of milestone 1.3 (the constrained-unknown blocks attributed to a gene
+and a tissue) is held as not met because the real unknown names a coding gene far below length-matched
+random windows: in d717b28, 29.8% of 531 blocks against 67.0% of windows, -37.2 points. The audit then
+found the neutral tier -36.0 points below the same control, and the real unknown +4.6 points above
+neutral inside length deciles, which names local gene density as the likely confounder. This test asks
+the same question once more against a control that accounts for it. Script:
+`scripts/clause2_matched_control.py`, whose `PRE_REGISTRATION` holds the constants below; tests in
+`tests/test_clause2_matched_control.py`. No matched figure had been computed on any chromosome when
+this was committed.
+
+**Admissibility.** The control was chosen after the audit named the confounder. That is admissible
+because the audit only named the variable; the matching variable, its bins, the estimator, the
+interval, the pass rule and the falsifier are fixed here before the comparison runs, and the same
+windows are asked of the neutral tier so the control is not tuned to the target.
+
+**Targets.** The real unknown: constrained-unknown blocks with copies out (882 blocks, 531 carrying a
+scored element), all 24 chromosomes. The neutral tier (2,632 blocks, 1,181 carrying) is the secondary
+target set.
+
+**Control.** For each block, windows of the block's exact length drawn as d717b28 drew them (uniform
+inside the span of scored-element midpoints, rejected on overlap with any organiser block, same seed
+per chromosome), and also rejected unless the count of GENCODE protein-coding TSSs within 524,288 bp
+of the window's midpoint falls in the block's own decile. Deciles are nearest-rank cuts of each target
+set's own block counts pooled genome-wide. 50 accepted windows per block, at most 20,000 tries; a block
+with no accepted window leaves the comparison as undrawable.
+
+**Question and primary.** Does a block or window carrying a scored element carry one whose deletion
+names a protein-coding gene. Primary statistic: for the real unknown, the mean over compared blocks of
+(block yes, 0 or 1) minus (share of that block's carrying windows saying yes), in points.
+
+**Interval.** 95% percentile bootstrap over blocks, 10,000 resamples, seed 20260913. A bootstrap over
+the 24 chromosomes is reported beside it as a sensitivity for correlation along a chromosome, with the
+pooled rates as d717b28 printed them.
+
+**Secondary and sensitivities.** Secondary: the neutral tier under the same matching; real unknown
+minus neutral on the matched difference; the question "moves any gene" on both sets. Sensitivities:
+matching on distance to the nearest coding TSS instead of the count; rejecting windows only on overlap
+with the target set itself. A balance check (covariate and elements per block against per window) is
+reported, not gated.
+
+**Gate.** Before any matched figure is read, the same function with the density test off and
+d717b28's 4,000-try cap must reproduce d717b28's pooled counts to the digit: real unknown 44,100
+windows drawn, 31,676 carrying, 21,217 naming a coding gene, 531 and 158 blocks; neutral 131,600,
+88,317, 57,212, 1,181 and 340. If it does not, no matched figure is reported.
+
+**Pass rule.** Clause 2, as a labelled lead with measurement still outstanding, passes on this
+instrument only if the primary's 95% interval over blocks lies wholly above 0. An interval covering 0
+reads as "at chance against a matched control" and the clause stays not met; an interval wholly below
+0 keeps it not met, and "below chance" if the point is also below -5 points. The clause's third part
+(scored against measurement) is untouched by any outcome.
+
+**Falsifier.** The audit's account (most of the gap is gene density) is falsified if the matched
+difference keeps more than half of the unmatched gap, that is, falls below -18.62 points (half of
+-37.23).
+
+**Registered, not run.** A measured arm: the designed experiment (284,001 oligos over 878 blocks)
+tiles each block and a density-matched window set, so an MPRA readout would give measured activity per
+block against its own control. Nothing measured exists for it (0.45% of unknown space has any assay),
+and it is not run.
+
+**Cost.** 0 AlphaGenome requests; the response cache is never opened.
+
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Two readings of this registration need narrowing. (a) The question it fixes, "does a block or window
+> carrying a scored element carry one whose deletion names a protein-coding gene", is a **target-naming
+> frequency of the deletion model**. A difference in it is not a difference in prediction accuracy, and
+> on its own it shows neither that the model failed nor that the blocks' sequence lacks regulatory
+> function; no experimental outcome enters it. (b) "0.45% of unknown space has any assay", in
+> *Registered, not run*, is a coverage figure and needs its rule and denominator like every other: the
+> corresponding block-level counts are 59 of 882 tier blocks (6.7%) or 59 of the 531 carrying a scored
+> element (11.1%) at reciprocal overlap 0.5, and 72 or 10 blocks if that rule is set to 0.25 or 0.75.
+> The full denominator table is in the lane-design result section below.
+
+## The result: in HCT116 the frozen deletion model gains +0.022 with an interval across zero, so the CRISPRi result passes its second cell type but is not replicated there (2026-09-28, lane-hct116)
+
+The registration is `crispri.PREREGISTERED_PUBLISHED['second_cell_type']` (fe61c36, 2026-09-27,
+above): the same code path with HCT116 added to the cells kept per gene, weights unchanged; it
+passes if the gain on the 363 covered HCT116 pairs is above zero, and counts as a replication only
+if the chromosome-bootstrap interval excludes zero. The owner approved up to 760 requests on
+2026-09-28. The fetch and scoring code (`scripts/crispri_hct116.py`) was committed in 6257b95
+before any HCT116 value was read. The result is `data/results/crispri_published.json`, key
+`second_cell_type_hct116`, inserted beside `second_cell_type` without changing any existing line.
+
+**AlphaGenome requests: 705,** the costed figure exactly. All 705 were answered; there were no quota
+refusals and no retries. Each answer is stored in the sweep's cache format under its own root
+(`data/knowledge/alphagenome/elements_hct116`, local), with a ledger entry written before every
+request was sent.
+
+### The registered verdict first
+
+| covered HCT116 pairs (363; 34 regulated; 5 chromosomes) | AUPRC (average precision) |
+|---|---|
+| distance | 0.334 |
+| activity + distance | 0.517 |
+| activity + distance + deletion | 0.539 |
+| **gain** | **+0.022, 95% −0.058 to +0.145** (200 chromosome resamples) |
+
+**Passes, not replicated.** The gain is above zero, so the rule that would have made this "a K562
+result" does not fire. The interval includes zero, so the registration forbids calling it a
+replication. score_published's per-cell block (all 396 pairs, weighted, the benchmark's estimator)
+agrees: 0.495 → 0.509, gain +0.014 (95% −0.042 to +0.126). The frozen weights reproduce the K562
+headline to the last digit on the same run: +0.1407 (95% +0.082 to +0.231), 1,744 pairs.
+
+The registration left one choice open, and it was fixed before scoring. It names the pairs, the
+sign rule and the bootstrap, but not the AUPRC estimator. The primary figure uses the estimator of
+the K562 headline this arm replicates.
+
+### Why this arm could say so little: five genes, and most pairs out of the model's reach
+
+These limits were not stated in the registration. They are reported here and change no verdict.
+
+- **The 34 positives are five genes at five loci:** SSFA2 (10), FAM3C (8), MYC (7), KITLG (5) and
+  CCND1 (4). The pairs fall on chr8 (257), chr11 (74), chr2 (34), chr7 (26) and chr12 (5). A
+  chromosome bootstrap over five units is a bootstrap over five loci, which is why the interval is
+  wide. The registration's "34 regulated" read as more evidence than it is.
+- **228 of the 363 covered pairs get no deletion value in any cell,** 11 of the 34 regulated among
+  them. Their gene lies outside the scorer's 1 Mb window: the median distance is 2.16 Mb for these
+  pairs against 245 kb for the answered ones, and they are mostly the long-range MYC and CCND1
+  screens. Only 135 pairs (23 regulated) carry a deletion answer, and 106 (21 regulated) carry a
+  predicted fall. That is 37% of covered pairs answered, against 66% in held-out K562 (1,152 of
+  1,744). "Covered" in the registration meant "on a deleted element", not "within the model's
+  reach". The two had not been told apart.
+
+### The model version: mixed by rule, identical by measurement
+
+Every new request asked for ALL_FOLDS through `alphagenome_adapter.create_client`. The frozen weights
+and the `top_target` flag read 6,097 answers from the 2026-09 sweep, which asked for no version.
+So the manifest says **mixed** (`result_manifest.model_dependencies[0].mixed`), as the rule requires.
+
+The purchase also measured what the rule could only assume. Each of the 705 elements was answered
+twice, once by the sweep with no version requested and once now with ALL_FOLDS requested. Across
+54,760 gene-by-cell values on K562, HepG2, GM12878 and IMR-90, **all 54,760 agree to four decimal
+places**, and the top predicted target is the same for all 705 elements
+(`second_cell_type_hct116.versus_the_sweep`). For these elements, the unrequested sweep answered as
+ALL_FOLDS answers now. The flag stays because the rule counts labels, and 705 elements are not the
+whole sweep. For this claim, though, the mixed versions do not explain the weak HCT116 gain: the
+weights were fitted on the same model's answers.
+
+### What the CRISPRi result may now be called
+
+- Allowed: the K562 sentence of 2026-09-27, unchanged, then: "In a second cell type, HCT116
+  (363 pairs, 34 regulated, five genes), the frozen model's gain is +0.02 (95% −0.06 to +0.14):
+  positive, not significant, and limited by the 1 Mb window, which reaches only 135 of the pairs."
+- Not allowed: "replicated in a second cell type", "generalises across cell types".
+- The registration's failure clause did not fire, so the claim need not be withdrawn to K562. It
+  remains **replicated in one cell type**. An informative second cell type needs more genes, not
+  more requests for these five. It also needs pairs inside 1 Mb, or a longer-range feature
+  registered for them.
+
+## Pre-registration: milestone 1.3's second clause against a control matched on length and scored-element count (2026-09-28, lane-elemcount)
+
+**What is compared.** Clause 2 of milestone 1.3 is still held as not met. d717b28 put the real unknown
+-37.23 points below length-matched random windows on "names a coding gene"; e1dbcf3/0c8b82d matched
+those windows on local coding-gene density as well and the gap stayed -27.25 points (95% over blocks
+-30.91 to -23.58, n = 531 blocks), with the neutral tier equally low and every sensitivity agreeing.
+That run matched its covariate (4.11 coding TSSs per compared block against 4.05 per window) and
+reported exactly one residual imbalance, naming it the last live explanation for the gap besides "the
+instrument does not work": a carrying window holds 13.27 scored elements against 6.18 per carrying
+block, so a window has more chances to name a gene. This test closes that imbalance. Script:
+`scripts/clause2_element_count_control.py`, whose `PRE_REGISTRATION` holds the constants below; tests in
+`tests/test_clause2_element_count_control.py`. `scripts/clause2_matched_control.py` is not rewritten;
+its draw, gate, estimator and reading bands are imported and reused. No element-count-matched figure had
+been computed on any chromosome when this was committed.
+
+**Admissibility, decided before the numbers.** The imbalance is expected by construction, and matching
+on it is therefore only half admissible. An organiser block is an intergenic gap: `unknown_blocks`
+carves blocks out of the sequence left between annotated gene bodies, so no block contains a gene,
+while a window placed uniformly at the same length usually straddles one. The budget's classifier then
+sends CpG-island blocks to the `regulatory` tier, so the most promoter-like -- hence most cCRE-dense --
+intergenic blocks are removed from `constrained_unknown` before this comparison starts. Scored elements
+are ENCODE SCREEN cCREs, which cluster at promoters and inside gene bodies. A constrained-unknown block
+is element-poorer than a random window of its length by definition, not by accident, and matching on
+element count conditions on a variable the target set's own definition sets. Two consequences are
+registered here rather than chosen afterwards.
+
+1. The matched window set is pulled toward the target set itself. Windows as element-poor as a block,
+   at the block's length, are disproportionately the same intergenic deserts the blocks are. This
+   control can therefore only attenuate a difference, never inflate one, so a difference that stays far
+   below 0 is informative and cannot be an element-count artefact.
+2. A difference that moves to 0 is weak. It is equally consistent with the element-count artefact and
+   with the control having become a copy of the target. On its own it does not restore clause 2: it
+   replaces "below chance" with "unresolved by this instrument" and hands the question on.
+
+Because of (2), a second estimator is registered that removes the number-of-trials imbalance
+arithmetically instead of by matching, and it is read first if the matched difference moves: the
+per-element rate, which does not depend on how many elements anything holds, computed on d717b28's own
+unmatched windows.
+
+**Targets.** Unchanged from e1dbcf3. The real unknown: constrained-unknown blocks with copies out (882
+blocks, 531 carrying a scored element), all 24 chromosomes. The neutral tier (2,632 blocks, 1,181
+carrying) is the secondary target set.
+
+**Control.** For each block, in start order, windows of the block's exact length drawn as d717b28 drew
+them (uniform inside the span of scored-element midpoints, rejected on overlap with any organiser
+block, one random number per try, same seed 20260913 per chromosome), and additionally rejected unless
+the number of scored elements whose midpoint falls inside the window lies in the same decile of
+scored-element count as the block's own number. 50 accepted windows per block, at most 20,000 tries,
+e1dbcf3's cap unchanged. A block for which no window is accepted inside the cap is counted as
+undrawable and leaves the comparison; a block that carries an element but gets no accepted window
+carrying one also leaves the comparison. Both counts are reported. Both rules are e1dbcf3's.
+
+**Banding.** Deciles of scored-element count: the nearest-rank 10th to 90th percentiles of the target
+set's own per-block element counts, pooled genome-wide over every block of the set including the blocks
+that hold none, ties collapsed so there may be fewer than ten bins. This is the same `decile_edges`
+e1dbcf3 used for coding-TSS count, applied to the new variable. Each target set is banded on its own
+distribution. A block holding no element falls in the lowest bin and can only draw windows holding
+none, so it leaves the comparison as it already did.
+
+**Question, statistic, interval.** Unchanged. The question is whether a block or window carrying at
+least one scored element carries one whose deletion names a protein-coding gene. The primary is the
+per-block matched difference: over blocks that carry an element and have at least one accepted window
+carrying one, the mean of (block yes, 0 or 1) minus (share of that block's carrying windows saying
+yes), in points. The interval is a 95% percentile bootstrap over blocks, 10,000 resamples,
+`default_rng(20260913)`, with a bootstrap over the 24 chromosomes reported beside it and the pooled
+rates as d717b28 printed them.
+
+**Secondaries.** The per-element rate described above, on the unmatched windows and on the
+element-count-matched ones; the neutral tier under the same matching with its own deciles; real unknown
+minus neutral; and the question "moves a gene" on both sets. Sensitivities: matching jointly on the
+scored-element decile and e1dbcf3's coding-TSS decile, so both imbalances are closed at once; matching
+on the exact element count rather than its decile; and rejecting windows only on overlap with the
+target set itself.
+
+**Gate.** Before any element-count-matched figure is read, the same draw function with the element test
+switched off and d717b28's 4,000-try cap must reproduce d717b28's pooled counts for both sets to the
+digit: real unknown 44,100 windows drawn, 31,676 carrying, 21,217 naming a coding gene, 531 and 158
+blocks; neutral 131,600 / 88,317 / 57,212, 1,181 and 340. If it does not, no matched figure is reported.
+
+**Balance check, reported and not gated.** Scored elements per carrying block against per carrying
+window -- the quantity being matched, which must come close to equal for the matching to have worked --
+and the mean coding-TSS count of the compared blocks against their windows', which is free again here
+and may drift back apart.
+
+**Pass rule.** Clause 2 passes on this instrument only if the primary's 95% interval lies wholly above
+0: a real-unknown block then names a coding gene more often than sequence of the same length holding as
+many scored elements. The clause's third part (scored against measurement) is untouched by any outcome.
+
+**Readings, fixed here.**
+
+- Interval wholly above 0: clause 2 passes as a labelled lead against an element-count-matched control,
+  with measurement still outstanding.
+- Interval covering 0, that is the difference moving close to 0: the element-count imbalance was the
+  gap, the below-chance readings of d717b28 and 0c8b82d were an element-count artefact, and clause 2's
+  status must be re-examined -- it stops being "below chance" and becomes "unresolved by this
+  instrument", not "met". By the admissibility judgement above this outcome is weak on its own, because
+  the matched control is pulled toward the target set; the per-element secondary is read next, and the
+  clause stays not met until a measured arm answers it.
+- Interval wholly below 0: element count is not the cause either. With length, coding-gene density and
+  the number of scored elements all matched and the difference still far below 0, no covariate named so
+  far explains the reading, and clause 2 stays not met and below chance on its existing ground.
+
+**Falsifier.** The element-count account of the gap is falsified if the element-count-matched difference
+keeps more than half of d717b28's unmatched gap, that is if it is below -18.61 points (half of -37.23).
+This is e1dbcf3's threshold, unchanged so that the two controls are read on one scale. The share of the
+unmatched gap and the share of the density-matched -27.25 points that element count closes are both
+reported.
+
+**The measured arm is not run.** It stays registered for its own lane, and no figure from it is read
+here. Nothing measured exists for these blocks: 0.45% of unknown space has any assay.
+
+**Cost.** 0 AlphaGenome requests. The per-element response cache is never opened; the stored all-element
+archive is read one chromosome at a time.
+
+## Pre-registration: how independent the node containment result is, and what a fresh CRISPRi set could see (area B, 2026-09-28, lane-nodeindep)
+
+**What is audited.** The node containment claim (area B): on 661 CRISPRi `Regulated=TRUE` pairs the
+element and its measured gene share a node 5.89 points more often than under the published
+random-boundary control, 95% +3.18 to +8.46 (`data/results/node_containment_measured.json`,
+`scripts/node_containment_audit.py` stage 2). lane-split (`0af7e1b`) classified that arm
+EVALUATION-ONLY and flagged the ENCODE held-out file as a reused benchmark. EVALUATION-ONLY says a
+scorer fitted nothing to the pairs; it does not say the scorer was built without them. This audit
+asks the second question of every component of the node caller and reports it under lane-split's
+legend: CLEAN, EXPOSED, EVALUATION-ONLY. Script: `scripts/node_independence_audit.py`; tests in
+`tests/test_node_independence_audit.py`. No figure of the existing claim is changed by any outcome;
+a qualification, if one is owed, is written beside it.
+
+**Checks, fixed here.** (1) The default caller is imported in a fresh interpreter and every
+`genomeos` module it pulls in is listed, so "the caller never reads CRISPRi" is a fact about the
+import closure. (2) `git log -S` dates each constant of the caller — the 50 kb node floor, the 5 kb
+boundary merge, the CTCF-only class filter, the node confidence, the control's seed and draw count —
+against the first commit naming the benchmark. (3) The stage 2 containment counts are recomputed on
+every covered chromosome from the CRISPRi tables and the caller alone, with the AlphaGenome archive
+never opened, and held against the committed result: identical counts show the measured arm does not
+depend on the model output stage 1 scores. (4) The 661 pairs are decomposed by benchmark file and
+cell. (5) The six rejected node callers are scored on the same pairs. (6) Every CRISPRi set this
+project has not scored for containment is counted and its power stated.
+
+**The sensitivity, and how it will be read, before it is run.** The default caller `ctcf_only` was
+kept over six orientation callers on 2026-09-14 (`26da99a`) and again on 2026-09-21 (`56e2c50`), on
+four measurements: 4DN Hi-C boundary support, node content over the AlphaGenome archive, mouse
+synteny and the HOXD interval. Node content is the containment statistic in its modelled form, so the
+default is the maximum of seven callers on a statistic correlated with the one it is now scored on.
+All seven are therefore scored on the 661 measured pairs, each against its own controls (`uniform`,
+`uniform_merged`, `circular`; `count_matched` is left to the committed result, being the slow draw
+and unnecessary for a within-caller comparison). Reading rule, fixed here: if the rejected callers
+also clear zero, the selection cost is small and the claim's excess is close to what any CTCF-based
+caller would give; if only the default clears zero, the measured excess carries a selection premium,
+and the spread across the seven callers is the size of it. This is a sensitivity on pairs already
+read, not a new test, and it is reported as one.
+
+**Power, and the rule for whether an independent arm runs.** An exact one-sided binomial at 0.05, null
+share = the pooled `uniform` control share, alternative = the measured share. An arm runs only if its
+regulated pairs reach 80% power at the claim's own effect. Candidates: the IGVF MHC Perturb-seq screen
+(`data/results/indep_mhc_crispri.json`), the IGVF DC-TAP K562 remainder (`IGVFFI0957PYTA`, the pairs
+not in either ENCODE file, scored by no result here), and the IGVF many-loci K562 library, unreleased.
+
+**Seen before this was committed.** For the DC-TAP file, label-blind: 7,475 rows, 6,512 distal
+targeting pairs, 948 elements, 263 genes, K562 only, 15 chromosomes, 29 loci at 2 Mb clustering, 5,069
+distal pairs not in either ENCODE file. Then, to do the power arithmetic and for no other purpose, the
+count of its positives: 92 distal significant pairs, 51 of them decreases, 36 of those not in either
+ENCODE file, from 35 elements. Their containment — which pair falls inside which node — has not been
+computed and is not computed by this audit. From the MHC result, already committed: 19 eligible distal
+decreases. No containment figure for either set existed when this was committed.
+
+**Why the arms are counted and not run.** Stated in advance: 19 pairs and 36 pairs are the whole of
+what is readable at 0 requests, and the arithmetic above is what they can see. Reading their
+containment now converts the only unread pairs this project holds into read ones for a test that
+cannot separate the claim from chance; they are left unread and logged, so a pooled arm stays possible
+when IGVF releases the many-loci table.
+
+**Cost.** 0 AlphaGenome requests; no cache reader, nothing fetched.
+
+## The result: the node caller was built before the pairs existed and reads nothing from them, and the one thing that is not independent is the size of the number (area B, 2026-09-28, lane-nodeindep, later)
+
+The registration above was committed as `da5764e`, the script's split decomposition was repaired in
+`366db9a` (the benchmark pair carries no `source_file` field, so the registered decomposition would
+have raised on its first regulated pair), and the audit then ran once: 138 caller-chromosome cells,
+0 AlphaGenome requests, nothing fetched, no per-element cache opened.
+`data/results/node_independence_audit.json`.
+
+**The table, under lane-split's legend.**
+
+| Component | Status | What decides it |
+| --- | --- | --- |
+| The 661 pairs | EVALUATION-ONLY | Both benchmark files pooled. Nothing is fitted to them, so neither is a training set and neither is a test set; but the held-out file is a reused benchmark (lane-split `0af7e1b`: at least ten scored results read it), so this is not a first touch |
+| Which split | **471 training / 190 held-out** | 71% of the claim rests on the *training* file, which is K562 only; the held-out 190 are 118 K562, 34 HCT116, 16 GM12878, 15 WTC11, 7 Jurkat |
+| CTCF cCRE input | CLEAN | ENCODE SCREEN V3, external, names no gene and no perturbation |
+| Boundary rule (CTCF-only midpoints merged within 5 kb) | CLEAN | `MERGE_BOUNDARIES_WITHIN = 5_000` written 2026-09-10, never changed; the class filter `c.cls == "CTCF-only"` written 2026-09-10 and last touched 2026-09-14 |
+| The 50 kb floor | CLEAN | `MIN_DOMAIN = 50_000` written 2026-09-10 in `0127b3f`, never changed since. Inherited as a TAD size floor. It is not neutral for the number — the published control does not pass through it, which is why `uniform_merged` is reported beside `uniform` — but it is not tuned on the pairs |
+| Thresholds inside the caller | CLEAN | The default caller has none beyond the class filter and those two lengths. `STRICT_RELATIVE = 0.95` belongs to the rejected orientation callers |
+| The annotation | CLEAN | GENCODE 50; the gene is the benchmark's own `measuredGeneSymbol` |
+| The random-boundary control | CLEAN | Seed 7 and 20 draws inherited unchanged from `scripts/oriented_domains.py` (2026-09-14); the audit's own `SEED = 7` (2026-09-27) exists to reproduce it, not to choose it |
+| The statistic | EVALUATION-ONLY | Nothing fitted; the caller's output is compared with a measurement it never saw |
+| Dependence on model output | CLEAN | Stage 2 recomputed on all 23 covered chromosomes with the AlphaGenome archive never opened: counts **identical**, 0 differences |
+| **Choice of default caller out of seven** | **EXPOSED** | Not to the pairs — to the same statistic in its modelled form |
+
+**The three facts that make "CLEAN" a measurement and not an assertion.** The default caller
+imported in a fresh interpreter pulls in **17 `genomeos` modules** and not one of them names a
+CRISPRi source; the only file under `genomeos/genome/` that mentions CRISPRi at all is
+`hic_contact.py`, which the closure does not contain. Every constant of the caller was written on
+**2026-09-10** (the 50 kb floor, the 5 kb merge, the CTCF-only class, the 0.4 node confidence) or
+**2026-09-14** (the control's seed and draw count); the first commit naming the benchmark is
+`138824f`, **2026-09-16**, and the first CRISPRi containment figure is `2b77663`, **2026-09-27**. So
+every choice inside the caller predates the arrival of the pairs by two to six days and the arrival
+of any containment number on them by thirteen to seventeen. And stage 2 reproduces to the count
+from the cCREs, GENCODE, the chromosome length and the pairs alone, so the measured arm borrows no
+credit from, and no contamination through, the model archive that stage 1 scores.
+
+**What is exposed, and how much it costs.** The default was kept over six orientation callers on
+2026-09-14 (`26da99a`) and again on 2026-09-21 (`56e2c50`), on four measurements, one of which —
+node content over the deletion archive — is this same containment statistic computed on model
+output. No CRISPRi figure existed on either date, and `scripts/oriented_domains.py` reads no CRISPRi
+file, so the exposure is not to the pairs. It is to the statistic. The registration fixed the
+reading rule before the run: if the rejected callers also clear zero the selection cost is small; if
+only the default clears zero the excess carries a selection premium and the spread is its size.
+
+The result is the second case, and not narrowly. Excess over each caller's own `uniform` control on
+the same 661 pairs: **ctcf_only +5.89**, oriented_ctcf_only +1.86 (95% -0.54 to +3.93),
+oriented_strong -3.97, oriented_strict -3.97, oriented_best_hit -13.50, oriented -14.98. **Zero of
+the six rejected callers clear zero; the spread across the seven is 20.87 points.** The default is
+the maximum of the seven on the measured statistic, exactly as it was the maximum of the seven on
+the modelled one. The direction survives this — no alternative caller reverses it, they simply fail
+— but the *size* +5.89 is a selected maximum and is not an unbiased effect estimate.
+
+Two things keep this from being worse than it is. The default was not chosen out of the seven: it
+was written on 2026-09-10 and the six challengers were built four days later to displace it and did
+not. And the ranking was fixed before any CRISPRi number existed. A selection premium is still a
+premium.
+
+**The interval, re-drawn.** This audit's own chromosome bootstrap of the default gives +5.89, 95%
+**+3.32 to +8.64**, against the committed **+3.18 to +8.46**: same point, same sign, a different
+resample stream (one generator seeded 11 walks all seven callers here; the committed result draws
+its own). The claim's interval reproduces to about a sixth of a point.
+
+**Negatives first, on the independent arms.** No arm was run, and the registration decided that in
+advance with an 80%-power gate. At the claim's own shares — null 0.699, alternative 0.7579 — an
+exact one-sided binomial needs **358 pairs** for 80% power. The IGVF MHC Perturb-seq screen brings
+**19** (power 0.127, and all 19 sit in one 4 Mb locus on chr6, so its independent-unit count is 1,
+not 19). The IGVF DC-TAP K562 remainder brings **36** (power 0.101). Together, 55 against 358. The
+IGVF many-loci K562 library is still unreleased (HTTP 403). So the answer to "is there an
+independent arm" is **no, not at 0 requests**, and their containment was left uncomputed on purpose:
+reading it now would convert the only unread pairs this project holds into read ones for a test that
+cannot separate the claim from chance. They stay logged for a pooled arm when IGVF releases the
+many-loci table.
+
+**One correction to the registration's own inventory.** The registration recorded 6,512 distal
+targeting DC-TAP pairs; recounted by the script it is **6,446** (7,475 rows, 7,281 targeting, 194
+positive control, 6,446 of the targeting rows carrying no promoter gene). Every figure derived from
+it is unchanged: 5,069 distal pairs not in either ENCODE file, 51 distal significant decreases, 36
+of those fresh, from 35 elements.
+
+**What the claim may be called.** That the node containment direction is **confirmed on a
+measurement the node caller never read, and could not have read**: no fitting, no threshold from the
+pairs, every constant older than the benchmark, and a stage-2 reproduction that never opens the
+model archive. What it may **not** be called: an *independent* confirmation, an *out-of-sample* test
+or a *held-out* result — 71% of the pairs are the training file, the held-out file is a reused
+benchmark, and the caller that scores them was selected as the best of seven on the same statistic
+in modelled form and is the only one of the seven that clears zero. And **+5.89 may not be quoted as
+an unbiased effect size**; it is the maximum of a selected family, with the four-baseline range
+(+4.5 to +10.2 across `uniform`, `uniform_merged`, `circular` and `count_matched`) and the 89.1%
+K562 composition still beside it. The existing claim is not changed by any of this; this section is
+the qualification, written beside it.
+
+## The result: matched on the number of scored elements the real unknown still names a coding gene 24 points below its windows, and the per-element rate, which needs no matching, is 29 points down (2026-09-28, lane-elemcount, later)
+
+The registration above was committed as da5764e before the run. The run then happened once, over all 24
+chromosomes, with 0 AlphaGenome requests and the per-element cache never opened.
+
+**Gate.** Passed. With the element test switched off and d717b28's 4,000-try cap the same draw function
+gave back d717b28's pooled counts to the digit for both target sets: real unknown 44,100 windows drawn,
+31,676 carrying, 21,217 naming a coding gene, 531 and 158 blocks; neutral 131,600 / 88,317 / 57,212,
+1,181 and 340.
+
+**Bands.** The real unknown's scored-element deciles collapse to the cuts 0, 1, 3, 6, 11 (five bins,
+because 351 of the 882 blocks hold no element at all); the neutral tier's to 0, 1, 2, 7.
+
+**Primary.** The element-count-matched difference is **-23.99 points**, 95% over blocks **-27.95 to
+-19.93**, over chromosomes -27.71 to -20.56, **n = 531 blocks**. No block was undrawable and no carrying
+block failed to draw a carrying window, so the comparison is the same 531 blocks as before. 29.76% of
+the blocks name a coding gene against 53.75% of their matched carrying windows. The interval is wholly
+below 0, the point is far below the five-point chance band, and the falsifier fired: element count
+closes 35.6% of d717b28's unmatched gap and 12.0% of the density-matched -27.25 of 0c8b82d. By the
+registered reading, **element count is not the cause of the gap either and clause 2 stays not met**.
+
+**How much of the imbalance the deciles actually closed, and the sensitivity that closes all of it.**
+The registered banding is coarse where it matters: with five bins and a top bin open above 11 elements,
+a carrying window still holds 11.94 scored elements against 6.18 per carrying block, against 17.90 in
+this run's own unmatched draw and 13.27 in 0c8b82d's density-matched one. So the primary closed a little
+over half the imbalance, not all of it. The registered sensitivity that closes it exactly -- matching on
+the block's own element count rather than its decile, so every accepted window holds the same number of
+elements as its block, 6.177 against 6.177 -- gives **-18.57 points, 95% -22.48 to -14.55, n = 531**,
+with no undrawable block. With the number of chances made identical, the real unknown is still about
+eighteen and a half points below. Matching jointly on the element decile and e1dbcf3's coding-TSS decile
+gives -18.07 (-21.73 to -14.36) with both covariates balanced (4.11 TSSs against 4.02); rejecting only
+on overlap with the target set gives -18.12 (-22.14 to -13.99). All three sensitivities agree with the
+primary in sign and magnitude, and the exact-count point sits a hundredth of a point on the shallow side
+of the registered falsifier line, which is fired on the primary as registered.
+
+**The per-element rate, which removes the imbalance arithmetically.** On d717b28's own unmatched windows,
+with nothing matched away at all, the share of a block's scored elements that name a coding gene minus
+the share of its windows' elements that do is **-28.77 points, 95% over blocks -31.66 to -25.77**, over
+chromosomes -31.82 to -25.91, n = 531. Pooled, 301 of the 3,280 elements inside the real unknown name a
+coding gene (9.18%) against 201,072 of 456,573 window elements (44.04%). The element-count-matched
+windows give -18.81 (-21.70 to -15.82). This is the registered answer to the imbalance that needs no
+control at all, and it says the same thing: a scored element inside a constrained-unknown block names a
+coding gene about a fifth as often as a scored element in comparable sequence outside one. The gap is not
+a number-of-trials effect.
+
+**Secondaries.** The neutral tier under its own element-count matching sits at -23.28 (-26.03 to -20.47,
+n = 1,181), and real unknown minus neutral is -0.71 (-5.58 to +4.17): the two tiers remain
+indistinguishable, as in 0c8b82d. Per element and unmatched, the neutral tier is -26.43 (-28.52 to
+-24.23). On the broader question "moves a gene" the real unknown is -15.89 (-20.18 to -11.77).
+
+**What this settles and what it does not.** The imbalance that 0c8b82d named as the last live
+explanation is now tested and rejected. Three quantities have been matched -- block length, local
+coding-gene density and the number of scored elements -- and a fourth estimator avoids the third by
+arithmetic, and the real unknown stays between 18 and 29 points below its control on every one of them.
+No covariate named so far explains the reading. What the run does not settle is why: it cannot separate
+"these blocks hold no element that regulates a coding gene" from "the deletion model cannot name a
+target for sequence like this". Two further descriptive controls remain testable from the archive alone,
+and neither has been run: the class composition of the elements (a block's cCREs may be dELS and
+CTCF-only where a window's include PLS and pELS), and the distance from each element to the nearest
+coding TSS inside the model's 1 Mb input, which is the sharpest remaining candidate because the model
+can only name a gene it can see. Beyond those, only measurement separates the two readings, and the
+measured arm stays registered and unrun in its own lane.
+
+**Cost.** 0 AlphaGenome requests. 4,182 s over 24 chromosomes; one chromosome's archive in memory at a
+time. Result: `data/results/clause2_element_count_control.json`.
+
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Three narrowings. (a) **9.18% against 44.04%** is the share of scored elements for which the deletion
+> model names a protein-coding gene, in each arm. It is a **difference in target-naming frequency, not
+> in accuracy**: no measured outcome enters it, so "a scored element inside a constrained-unknown block
+> names a coding gene about a fifth as often" is a statement about the model's output on two sets of
+> sequence and not about either the model's correctness or the sequence's function. (b) "No covariate
+> named so far explains the reading" is the right form, and the stronger form some later notes took
+> from it is not: adjustment shows that **the tested covariates do not explain the difference**, never
+> what does. (c) "the two tiers remain indistinguishable" should read **no difference detected**: the
+> contrast is -0.71 points with a 95% interval of -5.58 to +4.17, which permits a real difference of
+> over five points in either direction. No equivalence margin can be justified from outside these data,
+> so no equivalence test is run; the reasoning is in the lane-design sections below.
+
+## Pre-registration: the two descriptive controls clause 2 has left -- element class and reach inside the model's own window (2026-09-28, lane-tssreach)
+
+Milestone 1.3's clause 2 is settled as not met across three matched controls and one control-free
+estimator. The sharpest number needs no matching at all: per element, **9.18% of the 3,280 elements
+inside the real unknown name a coding gene against 44.04% of the 456,573 elements in their windows**, a
+pooled **-34.86 points**, **-28.77** as a mean over the 531 compared blocks (`faeb0da`). lane-elemcount
+named two descriptive controls it did not run and called the second the sharper. This registers both and
+runs them once. **Nothing here restates, weakens or re-opens any existing claim**, and neither control can
+make the clause pass: both are descriptions of the same elements, and the best either can do is move the
+-34.86 toward 0, which replaces "below chance" with "explained by where the blocks sit" -- not with
+"attributed". The clause's third part, scored against measurement, is untouched by every outcome below.
+
+**(a) Class composition.** A block's cCREs may be dELS or CTCF-only where a window's include PLS and
+pELS. Per element, its ENCODE SCREEN class from `data/results/ccres_<chrom>.bed.gz` field 5, joined by
+element id; an id absent from the registry is counted `unclassified` and reported, never dropped.
+
+**(b) Reach.** *The model can only name a gene it can see.* Per element, on its midpoint
+`m = (start + end) // 2`:
+
+1. `reach_count` -- GENCODE protein-coding TSSs in `[m - 524288, m + 524288)`, half-open. The window is
+   the scorer's own and is read from the scorer, not assumed: `AlphaGenomeAdapter._live_scorer` resizes
+   the variant's reference interval to `dna_client.SEQUENCE_LENGTH_1MB` = **1,048,576 bp** before every
+   deletion score, and every element in the archive was read in that window.
+2. `reach_distance` -- `|m - nearest coding TSS|` in bp, uncapped.
+3. `genes_in_window` -- protein-coding genes whose annotated span intersects the same window, as the
+   sensitivity closer to what the RNA-seq gene scorer enumerated: a gene whose body reaches the window
+   but whose TSS does not is still scored.
+
+The earlier TSS matching (`0c8b82d`) was at block-midpoint level, which is not this quantity.
+
+**Comparison and draw.** Elements inside real-unknown blocks against the elements of that block's own
+accepted windows, over the same 531 blocks, on `d717b28`'s **unmatched** draw unchanged -- 50 windows of
+the block's exact length per block, uniform inside the span of the chromosome's scored-element midpoints,
+rejected on overlap with any organiser block, 4,000 tries, seed 20260913 per chromosome. No matching is
+added, because the quantity to be described is the same in every window the -34.86 was computed on. The
+coding-TSS-density-matched draw of `0c8b82d` and the neutral tier are registered sensitivities.
+
+**Estimators.** Primary for (b): the per-block difference in mean `reach_count` (block elements minus its
+carrying windows' elements), in coding TSSs, with the pooled means, the zero-reach shares and the same
+statistic for `log10(1 + reach_distance)` and `genes_in_window` beside it. The statistic that **decides
+between the readings** is the per-element rate of `names_a_coding_gene` **directly standardised** on
+reach: both arms' elements fall in the fixed strata **0, 1, 2, 3-4, 5-6, 7-9, 10-14, 15-24, 25+** -- cut
+points fixed here, not read from the data -- a stratum enters when it holds at least 30 elements in each
+arm, block elements in every excluded stratum are reported with their share and their own rate, and the
+standardised difference is the block rate minus the block-weighted sum of the window rates. It answers:
+*if the block's elements had sat in windows of the same reach, how much of the gap would be left?* The
+same standardisation on the six classes answers (a), with the per-class rates in both arms so it can be
+seen whether the gap lives between classes or inside them; class x stratum jointly is a sensitivity.
+
+**Interval.** 95% percentile bootstrap over the compared blocks, 10,000 resamples,
+`default_rng(20260913)`, with the bootstrap over the 24 chromosomes beside it -- the two bootstraps of the
+matched control, unchanged. For a standardised difference the resample is over blocks, recomputing the
+block weights and rates and holding the window per-stratum rates at their pooled values, because the
+window arm is the reference population and has 100 times the elements.
+
+**Gate.** Before any reach or class figure is read, this script's draw must reproduce `d717b28`'s pooled
+counts for both target sets to the digit (real unknown 44,100 / 31,676 / 21,217, 531 and 158 blocks;
+neutral 131,600 / 88,317 / 57,212, 1,181 and 340) **and** `faeb0da`'s per-element counts (3,280 block
+elements, 301 naming; 456,573 window elements, 201,072 naming). If either fails, nothing is reported.
+
+**Thresholds, fixed before the run.** The half-the-gap convention of `e1dbcf3` and `da5764e`, on the
+pooled per-element scale: a description **explains** the gap when standardising on it leaves the pooled
+difference above **-17.43 points**, and does not when it stays at or below. "Far fewer" for reach is
+fixed as either the pooled mean `reach_count` inside the blocks being below half the window mean, or the
+zero-reach share inside the blocks exceeding the window share by more than 10 points. "Comparable" is
+fixed as the per-block reach difference's 95% interval lying wholly inside +/-1.0 coding TSS of 0 and the
+two zero-reach shares differing by less than 2 points.
+
+**The readings, in advance.**
+
+- **Reach far lower and standardising closes more than half.** The instrument was asked to name a gene it
+  could not see, and the -28.77 is partly an artefact of reach. What clause 2's failure *means* changes:
+  it stops being a statement about the blocks' sequence and becomes a statement about where the blocks
+  sit relative to coding genes -- which is what the organiser selected them for. The clause still does not
+  pass; the standardised difference becomes the number to quote, and it is still negative.
+- **Reach far lower but the gap survives standardisation.** The reach imbalance is real and must be
+  stated, but it is not the explanation; the reach-standardised difference becomes the number to quote
+  and the failure stays about the sequence.
+- **Reach comparable.** The model could see as many coding genes from inside the blocks as from their
+  windows, the instrument was not asked to do the impossible, and the failure is about the sequence, not
+  the window. Nothing about the clause's status changes and the -28.77 stands as written.
+- **Reach comparable yet the gap closes.** Incoherent on its face: to be reported as a likely
+  implementation error in this script, not as a finding about clause 2, until it is traced.
+- **(a) explains** when the class-standardised difference closes more than half: the blocks hold a
+  different mix of cCRE classes and the per-element gap is largely composition, and the per-class rates
+  become the number to quote. **(a) does not explain** when it keeps at least half: inside every class
+  with enough elements the block elements still name a coding gene far less often, so class composition
+  is a real difference between the two element sets and not the cause of the gap.
+
+**Cost.** 0 AlphaGenome requests; the per-element response cache is never opened; one chromosome's
+archive in memory at a time. No matching is added, so no window's contents are evaluated on a rejected
+try: lane-elemcount's 3,811 s chr2 cost came from exactly that and does not arise here. Script:
+`scripts/clause2_reach_control.py`; result: `data/results/clause2_reach_control.json`.
+
+## The measured arm of clause 2: 3 of the 882 real-unknown blocks hold an element a screen ever tested against a coding gene, and the arm cannot decide (area I, 2026-09-28, lane-measured)
+
+Registration: `clause2_measured_arm.PRE_REGISTRATION` (`c17eedc`, committed before any assay was
+counted), on top of `clause2_matched_control.PRE_REGISTRATION` (`e1dbcf3`, above), whose target sets,
+window draw, decile matching, seed, estimator, both bootstraps and reproduction gate are imported
+rather than restated. The model question rides through the same draw, so the gate is free: this run
+gave back `0c8b82d`'s committed matched primary to the digit -- -27.25 points, 95% -30.91 to -23.58,
+531 compared blocks, 44,081 windows, 158 blocks yes, 12,876 window-yes of 22,228 -- and only then was
+a measured figure read. Script: `scripts/clause2_measured_arm.py`, tests in
+`tests/test_clause2_measured_arm.py`; result `data/results/clause2_measured_arm.json`. 0 AlphaGenome
+requests; the per-element response cache is never opened.
+
+**What was left registered and unrun, and what this is.** Every lane on clause 2 ended with the same
+sentence: beyond the descriptive controls, only measurement separates "these blocks hold no element
+that regulates a coding gene" from "the deletion model cannot name a target for sequence like this".
+The arm they registered (`second_route_not_run`) is a **designed** experiment -- 284,001 unsynthesised
+oligos over 878 blocks -- and it correctly said nothing measured exists for it. That is still true and
+it is still unrun. This is the other arm: the measurements the project already holds (CRISPRi,
+lentiMPRA, VISTA, saturation mutagenesis, through `genomeos/attribution/measured.py`), asked of the
+same elements, in the same blocks, against the same windows, with the same statistic.
+
+**Coverage, which is the first result and was registered as such.** Of the 882 real-unknown blocks
+(3,280 scored elements in the 531 that carry one):
+
+| | blocks | elements |
+| --- | ---: | ---: |
+| eligible: some assay's interval shares a base with an element | 89 | 151 |
+| measured: some assay measures an element at reciprocal overlap 0.5 | 59 | 78 |
+| — lentiMPRA | 57 | 75 |
+| — CRISPRi | 3 | 3 |
+| — VISTA | 1 | 1 |
+| — saturation mutagenesis | 0 | 0 |
+| CRISPRi tested it against a protein-coding gene | **3** | **3** |
+| measured to move a coding gene (decrease or increase) | **0** | **0** |
+| measured a well-powered null on every coding gene tested | 3 | 3 |
+| measured active with no gene named (lentiMPRA or VISTA) | 8 | 9 |
+
+**823 of the 882 blocks hold no measured element at all**, and 3 blocks -- 0.34% -- hold the only kind
+of element that can answer a clause asking for a gene. Of the 3, one has a matched window that is also
+CRISPRi-tested, so the primary compares one block. The registered floor is 20
+(`measured.MIN_FOR_A_COMPARISON`, adopted unchanged), so **no interval is read and the registered
+reading is `cannot_decide`**: the measured arm cannot separate the two accounts of clause 2, and that
+was registered in advance as a finished lane and a real result rather than a failure.
+
+**Why 0 of 3 is not an answer.** All three tested elements came back well-powered nulls, which points
+the same way the model does. It is not evidence: 13.45% of the matched windows' CRISPRi-tested
+elements move a coding gene (30 of 223), and under that rate three tested elements come back all-null
+65% of the time. The neutral tier is thinner still -- 1 block tested, 1 regulated, 0 comparable.
+
+**The coverage that would be needed**, by the formula fixed before the count (d = 0.2725, the model
+arm's own matched difference; s = 0.4324, the standard deviation of this run's per-block model-arm
+differences): **20 compared blocks for 80% power**, which is also the floor, against the 1 there is --
+19 short. In assay terms that is a CRISPRi screen reaching roughly twenty times as much constrained
+unknown sequence as every published screen this project holds reaches today: about 2.3% of the real
+unknown's blocks, against 0.34%.
+
+**A well-powered negative that is not about clause 2 at all.** On the same windows, with the same
+estimator and 531 compared blocks, a real-unknown block holds a measured element 11.11% of the time
+against 25.99% for its length- and gene-density-matched windows: **-12.23 points, 95% -14.81 to
+-9.57**. Measurement is not missing from these blocks at random with respect to the control. The
+assays were pointed at candidate regulatory sequence near expressed genes in a handful of cell lines,
+which is the same property the deletion model scores highly, so the sequence clause 2 is about is
+exactly the sequence the screens avoided. Any future measured arm has to beat that selection, not
+just add volume. (The same table at reciprocal overlap 0.25 gives 72 measured blocks and at 0.75 gives
+10, with 3 and 0 CRISPRi-coding blocks: the rule is visible, and no setting of it produces a usable
+arm.)
+
+**What this does and does not settle.** It does not decide clause 2, and it was registered not to
+pretend otherwise. Both readings stay open and both are written down: if measurement ever says these
+blocks hold elements that regulate coding genes, the failure is the model's and the clause's stated
+reason changes from "these blocks hold nothing" to "the deletion model cannot name a target for
+sequence like this"; if measurement says they hold none while their matched windows do, the model was
+right and clause 2's **wording** is what is wrong, because a milestone cannot ask for a gene and a
+tissue from sequence that regulates no gene. What the run does settle is that the project cannot reach
+either reading from the measurements it holds, that the shortfall is 19 blocks rather than a few
+thousand, and that the measured layer is biased against the target set by 12 points before any of that
+begins. The descriptive route is finished; clause 2 now waits on an experiment, and the size of the
+experiment is now a number.
+
+**Cost.** 0 AlphaGenome requests. 527 s over 24 chromosomes; one chromosome's element archive and one
+chromosome's measured layer in memory at a time.
+
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> Four narrowings, three of them about the same paragraph. (a) **"The coverage that would be needed ...
+> 20 compared blocks for 80% power ... 19 short" is withdrawn as a power result.** Both inputs of that
+> formula are model output -- the effect is the model arm's own matched difference in target-naming
+> frequency and the dispersion is the standard deviation of the model arm's per-block differences -- and
+> they were used to size an experiment whose endpoint is a **measurement**. The "19" quoted beside it is
+> `MIN_BLOCKS - compared_now` = 20 - 1, the distance to `measured.MIN_FOR_A_COMPARISON`, a
+> **minimum-reporting rule**; that the formula also returned 20 is a coincidence, not a confirmation.
+> (b) Consequently **"the shortfall is 19 blocks" and "the size of the experiment is now a number" are
+> withdrawn.** A power simulation of the actual design gives a **range**: 20 to 75 compared blocks if
+> the blocks truly regulate a quarter as often as their windows, 50 to 300 at a half, and 300 to 5,000
+> at three quarters, with no configuration reaching 80% power at the null. (c) **"13.45% of the matched
+> windows' CRISPRi-tested elements move a coding gene (30 of 223)"**: the 223 and the 30 are **windows**
+> carrying such an element, not elements, so they are not 223 independent measurements. The
+> element-level rates over the benchmark's own distinct tested elements are 12.15% (479 of 3,941,
+> training) and 14.56% (247 of 1,697, held-out), which agree with it. (d) **"823 of the 882 blocks hold
+> no measured element at all"** means no qualifying measurement attached to the block's *scored
+> elements* under the 0.5 reciprocal-overlap rule; it does not mean no part of those blocks was ever
+> measured, and at 0.25 or 0.75 the measured count is 72 or 10 blocks against 59. The committed result
+> file carries the same corrections as an additive key, and `coverage_needed` is kept in the code as the
+> record of what was computed, with `reporting_floor_and_power_assumptions` beside it.
+
+## The result: the model really can see three times fewer coding genes from inside a constrained-unknown block, and that accounts for under a third of the gap (2026-09-28, lane-tssreach, later)
+
+Both controls of the registration above ran once, genome-wide, 280 s, **0 AlphaGenome requests**, the
+per-element response cache never opened. The gate passed: the draw gave back `d717b28`'s pooled counts
+(44,100 windows drawn, 31,676 carrying, 21,217 naming, 531 and 158 blocks; neutral 131,600 / 88,317 /
+57,212, 1,181 and 340) and `faeb0da`'s per-element counts (3,280 block elements, 301 naming; 456,573
+window elements, 201,072 naming) to the digit.
+
+**The negative first: neither control explains the gap.** The registered threshold was that standardising
+on a description must leave the pooled per-element difference above **-17.43 points**. Standardising on
+reach leaves **-24.46 points** (95% over blocks -26.36 to -22.47; over chromosomes -26.65 to -22.33;
+n = 531 blocks, 3,252 of the 3,280 block elements). Standardising on class leaves **-33.57**
+(-35.40 to -31.49). Reach closes **29.8%** of the -34.86, class **3.7%**, the two together **31.2%**
+(-24.00, -25.86 to -22.06). The registered outcome is `reach_short_but_gap_survives`.
+
+**Reach is nonetheless far lower inside the blocks, and this is the first time it has been measured where
+the model reads it.** Per element, over the scorer's own 1,048,576 bp window centred on that element:
+
+| | inside the blocks | in their windows |
+| --- | --- | --- |
+| coding TSSs in reach (mean) | **2.229** | **7.219** |
+| elements with **no** coding TSS in reach | **28.08%** | **6.20%** |
+| coding genes whose span reaches the window (mean) | 2.55 | 7.78 |
+| mean log10(1 + bp to the nearest coding TSS) | 5.381 | 4.855 |
+
+Per block, the difference in mean reach is **-4.39 coding TSSs** (95% over blocks -4.95 to -3.81, over
+chromosomes -5.37 to -3.65), in genes whose span reaches the window -4.54 (-5.11 to -3.96), and in
+log10 distance +0.349 (+0.281 to +0.415) -- a block's elements sit about 2.2x further from the nearest
+coding gene start than the elements of sequence of the same length elsewhere. The earlier midpoint-level
+matching could not have shown this: it matched the count around a block's midpoint, not what each element
+could see.
+
+**The gap lives inside every stratum of reach, not between them.** Block rate against window rate, in
+points, by coding TSSs in reach: **0: 0.98% against 19.37% (-18.39)**; 1: 4.82 / 30.70 (-25.87); 2: 18.06
+/ 39.19 (-21.13); 3-4: 9.70 / 44.32 (-34.62); 5-6: 21.58 / 46.98 (-25.41); 7-9: 17.57 / 48.23 (-30.66);
+10-14: 38.00 / 52.48 (-14.48). The two richest strata hold 19 and 9 block elements and fall below the
+registered minimum cell of 30; they are excluded and reported here rather than dropped. Note that the
+reach = 0 stratum is **not** a hard ceiling: 19.37% of window elements with no coding TSS in reach still
+name a coding gene, because the scorer reads genes whose body enters the window without their start.
+
+**(a) Class composition is a real difference and a small one.** The all-element sweep scored only two
+registry classes in this comparison, so the mix is nearly fixed by the sweep's own selection: **dELS
+96.59% / pELS 3.41%** inside the blocks against **87.20% / 12.80%** in their windows, a per-block
+promoter-like share difference of **-0.0298** (-0.0545 to -0.0042). Inside dELS the block elements name a
+coding gene 8.46% against 42.27% (-33.81 points) and inside pELS 29.46% against 56.07% (-26.61): the gap
+is inside both classes, not between them.
+
+**The sharpest sensitivity.** On `0c8b82d`'s coding-TSS-density-matched windows, element-level reach comes
+almost into balance -- per-block difference **-0.14 coding TSSs, 95% -0.31 to +0.05**, means 2.229 against
+3.279 -- and the per-element gap is still **-27.72 crude and -23.89 reach-standardised** (-25.81 to
+-21.88). Where the model can see about as many coding genes from both arms, it still names one three
+times less often from inside the blocks. The neutral tier behaves the same way (reach 2.42 against 6.64,
+crude -34.01, reach-standardised -20.60, -21.93 to -19.17), and on the looser question `moves_a_gene`
+standardising changes almost nothing (reach -34.31, class -36.87).
+
+**What this settles and what it does not.** Reach is a real imbalance in the instrument and must be
+stated wherever the -28.77 is: the model is being asked about elements from which it can see about a
+third as many coding genes, and 28% of them have no coding start in the window at all. But it is not the
+explanation -- standardising on it keeps seven tenths of the gap, and the gap is present inside every
+stratum including the richest ones. Clause 2's failure is about the sequence, not the window, and nothing
+above changes the clause's status: it stays not met, on the ground `d717b28`, `0c8b82d` and `faeb0da` put
+it on. One thing is named and not run: `genes_in_window` was registered as a descriptive statistic only,
+and standardising on it rather than on TSS reach was not registered, so it is left for whoever takes it
+up rather than computed after the fact. The clause's third part, scored against measurement, is
+untouched. Result: `data/results/clause2_reach_control.json`.
+
+
+> **Annotation (2026-09-28, lane-design, after a statistical review; the text above is unchanged).**
+> **"Clause 2's failure is about the sequence, not the window" is withdrawn**, and so is the same
+> sentence in the registered reading `reach_short_but_gap_survives` and in the class reading. What the
+> run establishes is narrower and still worth having: **the gap persists after adjustment for the
+> tested reach and class variables**. Standardising on a covariate and finding the difference survives
+> says that covariate does not explain it; it does not identify what does. Unmeasured context,
+> selection effects, limitations of the model itself and remaining geometric differences between the
+> two element sets are all still open. The measured quantities in this section -- 2.229 coding starts
+> against 7.219, 28.08% against 6.20% with none in the window, the per-stratum rates -- are unaffected
+> and stand as written. The committed result file carries the same correction as an additive key.
+
+## Pre-registration: a power simulation for the experiment clause 2 actually needs, and an equivalence decision taken before the contrasts are read (2026-09-28, lane-design)
+
+A statistical review of the four clause 2 lanes found five places where the notes claim more than the
+data carry, and the coordinator's corrections are in docs/ROADMAP.md beneath milestone 1.3. This lane
+takes the two that are matters of design rather than of wording -- the sample size and the equivalence
+claim -- and settles them with a simulation registered in advance. Script:
+`scripts/clause2_design_power.py`, whose `PRE_REGISTRATION` holds every grid and justification below;
+tests in `tests/test_clause2_design_power.py`. No simulated block had been drawn at the registered
+settings when this was committed. **Nothing here re-opens, weakens or restates a committed figure**,
+no new descriptive statistic about the blocks is computed, and the run makes **0 AlphaGenome
+requests**.
+
+**What is wrong with the number this replaces.** `clause2_measured_arm.coverage_needed` published
+`n_for_80_percent_power = 20` blocks and "19 short". Two separate faults, and they compound.
+
+1. Both inputs of that formula are **model output** used to size an experiment with a **measured**
+   endpoint. The effect is the model arm's own matched difference in how often a deletion model names
+   a target, and the dispersion is the standard deviation of the model arm's per-block differences.
+   Neither is an estimate of anything about measured regulation. They are named here so that they can
+   be excluded by name, and the script carries a test asserting that neither appears as a number in
+   it.
+2. The "19" that was reported is `MIN_BLOCKS - compared_now` = 20 - 1: the distance to
+   `measured.MIN_FOR_A_COMPARISON`, a **minimum-reporting floor**, which is a rule about when a number
+   may be printed. The power formula returned 20 as well, and the coincidence made a reporting rule
+   read as a power result.
+
+**The design being powered.** A CRISPRi screen (or an assay of equivalent power that names a gene)
+tests elements inside constrained-unknown blocks against protein-coding genes, and elements inside the
+same matched windows the four lanes drew. Per element the endpoint is the committed one: a significant
+change in a coding gene's expression on silencing, either sign. Per block it is 1 if at least one
+tested element is found to regulate a coding gene. The estimator and the reading rule are the
+committed ones, unchanged: the mean over compared blocks of (block endpoint) minus (share of that
+block's tested windows whose endpoint is 1), read as a detection when the 95% interval over blocks
+excludes 0.
+
+**The grids, each with what fixes it.**
+
+- **Window regulation rate.** The one empirical anchor the project holds: 30 of 223, 13.45%, with the
+  exact binomial interval 9.26% to 18.64% as the grid. Two independent anchors are reported beside it
+  and not pooled in: 12.15% of the 3,941 distinct tested elements of the benchmark's training file and
+  14.56% of the 1,697 of the held-out file have at least one significant pair. **A correction is
+  recorded here rather than left to be found**: the 223 and the 30 are *windows carrying a tested
+  element*, not tested elements, because they come from a count of windows; several windows of one
+  block can carry the same element, so those 223 are not 223 independent measurements and the exact
+  interval understates the uncertainty. The element-level anchors are the element-level ones.
+- **Block regulation rate.** Registered as a *ratio* to the window rate: 1.0 (the null the design must
+  be able to sit at), 0.75, 0.5, 0.25, 0.1, 0.0 (the clause's strongest form). **The model arm's
+  -27.25 points is not used**, here or anywhere: it is a difference in target-naming frequency, not an
+  estimate of a difference in measured regulation, and no published estimate of the latter exists,
+  which is why the answer is a range over this grid rather than a number.
+- **Assay sensitivity.** The means of the five power columns of the ENCODE benchmark files
+  (`PowerAtEffectSize10..50`), read from the tables rather than assumed, and reported by split because
+  the held-out file is better powered. The columns are not monotone in effect size -- the 25% column
+  is the benchmark's own inclusion filter and sits near 1 for nearly every pair -- so they are used as
+  five separate sensitivity levels and the non-monotonicity is reported rather than smoothed.
+- **False positive rate.** 0 (the benchmark controls its own) and 0.01 per tested element.
+- **Tested elements per block.** 1 (the minimum that makes a block testable, and what the three tested
+  blocks that exist today have), 2, and 6 (6.177, the scored elements per carrying block of the
+  matched control).
+- **Tested windows per block.** 1 (today's 223 windows over 134 blocks is about 1.7), 3, 10.
+- **Clustering.** Measured, not guessed. The one-way ANOVA estimator on the benchmark's 5,638 distinct
+  tested elements puts the intraclass correlation of "this element regulates a coding gene" at 0.375
+  within 25 kb, 0.350 within 50 kb, 0.300 within 100 kb, 0.273 within 250 kb and 0.209 within 1 Mb;
+  the same estimator with chromosomes as clusters gives 0.0142. The grids are 0, 0.21, 0.30, 0.35
+  within a block and 0, 0.014, 0.03 between chromosomes, and the script recomputes all of them at run
+  time.
+
+**How the two levels of clustering are handled, said plainly.** Elements within a block are a
+**hierarchical simulation**: each block, and each window separately, carries a logit-normal random
+intercept whose latent-scale variance is fixed from the registered ICC, and its elements are
+conditionally independent given it. Blocks within a chromosome are a **design effect** applied to the
+variance of the mean, `1 + (N / 24 - 1) * rho`, not simulated. That asymmetry is deliberate and is the
+conservative thing to be explicit about: the committed interval is a bootstrap over blocks, which
+assumes blocks independent, so wherever the chromosome ICC is above 0 the committed test is
+anti-conservative and the design effect is what says by how much.
+
+**Reference configuration and sweep.** The reference is the middle or the measured value of each grid:
+window rate 13.45%, sensitivity `PowerAtEffectSize20` pooled, no false positives, 6 elements per
+block, 3 tested windows per block, element ICC 0.30, chromosome ICC 0.014. The primary sweep is the
+block-rate ratio at that reference; the sensitivity analysis is one factor at a time. The grids are
+not fully crossed, because a range whose ends are combinations nobody would defend is not a range.
+
+**How the numbers are obtained.** For each configuration, 200,000 simulated blocks with their windows
+give the mean and standard deviation of the per-block difference; power at every sample size then
+follows from the normal approximation to the committed interval, with the chromosome design effect.
+That the approximation is safe is **checked and not assumed**: registered cells (ratio 0.5 and 0.25,
+at 20, 50 and 200 blocks, chromosome ICC set to 0 so the comparison is of the approximation alone) are
+also run with the actual percentile bootstrap, 2,000 resamples over 1,000 simulated experiments each.
+**Falsifier:** if the largest disagreement in power exceeds 0.05, the normal-approximation table is
+reported as unreliable and the bootstrap numbers are the ones read.
+
+**What is reported.** For every configuration the smallest sample size reaching 50%, 80% and 90%
+power, and across configurations the **range** at each ratio with the assumption at each end.
+Sample sizes are in *compared blocks*: blocks with a tested element in both arms. The
+minimum-reporting floor of 20 is applied as a floor on the answer and is **never** reported as a power
+result. At ratio 1.0 the two arms have the same true rate, so what the table calls power is the test's
+false-positive rate, and it is reported under its own name as the null calibration. Every number is a
+probability of detection under its configuration's assumptions, and the result says so in its own
+text: 80% power means failing to detect a real effect of the assumed size one time in five, and no
+sample size guarantees that an experiment decides clause 2.
+
+**Equivalence, decided before the contrasts are read.** The committed real-minus-neutral contrast is
+-0.10 points, 95% -4.55 to +4.30 (`names_a_coding_gene`, density-matched) and -0.71, -5.58 to +4.17
+element-count-matched. "The neutral tier behaves identically" is not what those intervals say. An
+equivalence claim needs a margin justified from **outside** these data, and the admissibility rule is
+fixed here before looking: a margin may come from a published threshold for a meaningful difference in
+regulatory annotation rate, from a stated decision cost, or from a requirement fixed elsewhere in this
+project before this comparison. The project's own five-point chance band is **inadmissible**, because
+it was chosen in d717b28 for this very comparison. If no admissible margin exists, **no equivalence
+test is run** and the finding is stated as "no difference detected". The script then reports, labelled
+as a description and never as a margin, the smallest margin at which a two-one-sided test on the
+committed interval would pass -- a statement about what the data would need, not about what anyone has
+justified.
+
+**The denominator table.** Every population the four lanes count over, each count with its denominator
+and the rule that produced it, read from the committed result files rather than retyped, including the
+overlap-rule sensitivity at 0.25, 0.5 and 0.75 and the two shares that share a numerator (59 of 882
+tier blocks, 6.7%; 59 of the 531 carrying blocks, 11.1%).
+
+**Registered honestly about its own history.** The script was executed once at non-registered settings
+(2,000 simulated blocks, 20 check experiments) as a code check before this commit, and one reported
+quantity was added afterwards: the null calibration described above. No grid, threshold, reference
+value, reading or falsifier was changed after any output was seen.
+
+**Cost.** 0 AlphaGenome requests. The model is not called; the per-element response cache is never
+opened; the committed result files are read and never rewritten.
+
+## The result: the measured experiment behind clause 2 needs between 20 and 5,000 compared blocks depending on an effect nobody has estimated, and "19 short" was a reporting floor (2026-09-28, lane-design, later)
+
+The registration above was committed as `f6cb4d7` before the registered run. The run then happened
+once, in 11 s, with **0 AlphaGenome requests**. Result: `data/results/clause2_design_power.json`.
+
+**The negatives first, and there are four.**
+
+1. **The registered falsifier fired.** The check on the normal approximation to the committed interval
+   allowed a disagreement of 0.05 in power. The largest is **0.0549**, at ratio 0.25 with **20 blocks**
+   -- the reporting floor -- where the bootstrap gives 0.724 and the approximation 0.779. So the
+   approximation is **optimistic at the floor** and, by the rule fixed in advance, the bootstrap
+   numbers are the ones to read there. A post-hoc extension of the same check, named as post-hoc in
+   the result, locates the boundary: above the floor the largest disagreement is 0.0399 (ratio 0.25 at
+   30 blocks) and it falls to 0.026 or less from 50 blocks upward. **Every entry in the tables below
+   that reads 20 or 30 blocks is therefore a lower bound**, and anyone designing at that size should
+   simulate rather than read it off.
+2. **No sample size can be given without an assumed effect, and there is no estimate of that effect.**
+   The ratio of the blocks' true regulation rate to the windows' is the one quantity that decides the
+   answer, and nothing measures it. That is not a gap in this lane; it is the reason clause 2 is
+   undecided.
+3. **The measured arm's own null is not powered at all by anything the project can afford.** At ratio
+   0.75 -- the blocks regulating three quarters as often as their windows -- **no configuration
+   reaches 80% power below 300 compared blocks**, and the reference configuration needs 750. Against
+   the 3 blocks that carry a tested element today, and the 1 the primary could compare, a difference
+   of that size is out of reach by three orders of magnitude.
+4. **No equivalence margin can be justified**, so "the neutral tier behaves identically" cannot be
+   rescued into a claim. It becomes "no difference detected".
+
+**The sample-size range, with its assumptions.** Compared blocks -- blocks carrying a tested element in
+**both** arms -- for 80% correct-direction power, across the 17 registered configurations. The
+reference configuration is in brackets.
+
+| true block rate, as a multiple of the windows' | 80% power at | reference | what widens it | what narrows it |
+| --- | --- | --- | --- | --- |
+| 1.0 (the null) | never, by construction | — | — | — |
+| 0.75 | **300 to 5,000** | 750 | 1 tested element per block (5,000) | no clustering inside a block (300) |
+| 0.5 | **50 to 300** | 100 | 1 tested element per block (300) | no clustering inside a block (50) |
+| 0.25 | **20 to 75** | 30 | 1 tested element per block (75) | no clustering inside a block (20) |
+| 0.1 | **20 to 30** | 20 | 1 tested element per block (30) | — |
+| 0.0 (the clause's strongest form) | **20** | 20 | — | — |
+
+The assumptions behind every row: the windows' measured rate is 13.45% on the observed scale, assay
+sensitivity is the pooled mean of `PowerAtEffectSize20` (0.6674), there are no false positives, six
+elements are tested per block and three tested windows accompany it, elements within a block correlate
+at 0.30 and blocks within a chromosome at 0.014. Varying each of those one at a time is what produces
+the ranges. **The single largest lever is not the effect but the number of elements tested per block**:
+testing one element rather than six multiplies the requirement by three to seven, because a block's
+endpoint is "any tested element regulates" and one element is a much blunter instrument than six.
+Clustering is the second lever, in the other direction: pretending elements inside a block are
+independent makes the experiment look between a third and a half cheaper than it is.
+
+**Power is a probability.** Every number above is the probability that an experiment of that size
+produces an interval excluding 0, *if* its configuration's assumptions hold. At 80% power a real
+effect of the assumed size is missed one time in five. No sample size makes an experiment guaranteed
+to decide clause 2, and none of these numbers says that an experiment of that size would.
+
+**The anchors, all measured rather than chosen.** Assay sensitivity comes from the benchmark's own
+power columns: means of 0.4324, 0.6075, 0.6674, 0.9780 and 0.7052 for effects of 10, 15, 20, 25 and
+50%, which is **not monotone** -- the 25% column is the benchmark's own inclusion filter and sits near
+1 for nearly every pair -- so the five are used as five sensitivity levels and the non-monotonicity is
+reported rather than smoothed. The held-out file is better powered than the training file throughout
+(0.8497 against 0.5903 at 20%). Clustering comes from the one-way ANOVA estimator on the benchmark's
+5,638 distinct tested elements: the intraclass correlation of "this element regulates a coding gene"
+is **0.3745 within 25 kb, 0.3495 within 50 kb, 0.2998 within 100 kb, 0.2727 within 250 kb, 0.2090
+within 1 Mb**, and **0.0142 between chromosomes**. The window rate anchor is 30 of 223, 13.45%, exact
+interval 9.26% to 18.64%, and the benchmark's own element-level rates agree with it without being
+pooled into it: **12.15%** of 3,941 tested elements in the training file and **14.56%** of 1,697 in
+the held-out file, 12.88% over all 5,638.
+
+**A correction to the anchor's own wording.** The 223 and the 30 are **windows carrying a
+CRISPRi-tested element**, not tested elements: they come from a count over windows. Several of a
+block's 50 windows can carry the same tested element, so the 223 are not 223 independent measurements
+and the exact interval above understates the uncertainty. The number survives its mislabel -- the
+element-level rates land in the same place -- but the unit is now written down.
+
+**Null calibration.** At ratio 1.0 the two arms have the same true rate, so what the table would call
+power is the test's false-positive rate. It is **0.0500 at the reporting floor and 0.0500 to 0.0508 at
+500 blocks** in all 17 configurations, so the table's null is calibrated and the rest of it can be
+read. The Monte Carlo error of the simulated null mean is under 0.13 points.
+
+**The reporting floor, separated from every power statement.** `measured.MIN_FOR_A_COMPARISON` is 20
+compared blocks and is a rule about when a number may be printed. "19 short" is 20 minus the 1 block
+compared today and is that rule's distance, nothing else. The formula published beside it in
+`clause2_measured_arm.coverage_needed` took **both** its inputs from the model arm -- the effect to
+detect and the dispersion -- to size an experiment with a measured endpoint, and returned 20, so the
+two appeared to confirm each other. They are unrelated quantities that happened to agree.
+`coverage_needed` is **kept exactly as it was**, because it is the record of what that run computed
+and what `a7f207f` reported; `reporting_floor_and_power_assumptions` is added beside it and separates
+the floor, the two model-derived assumptions (each labelled as an assumption, with its source) and the
+provisional calculation, which states in its own field that it is not a power result for the measured
+experiment. A test asserts that neither 0.2725 nor 0.4324 appears as a number anywhere in the
+simulation script.
+
+**Equivalence: no margin, so no test.** The admissibility rule was fixed before the contrasts were
+read. Nothing supplies a margin from outside these data: no published threshold states what difference
+in regulatory annotation rate is meaningful, the project states no decision cost for treating the
+neutral tier as the real unknown, and the only in-project candidate -- the five-point chance band --
+was chosen in `d717b28` for this very comparison and is inadmissible by that rule. **So no equivalence
+test is run and the finding is "no difference detected."** The committed contrast of -0.10 points,
+95% -4.55 to +4.30, permits a real difference of up to about four and a half points in either
+direction. For the record, and labelled in the result as a description and never as a margin, the
+smallest margin at which a two-one-sided test on the committed interval would pass is 4.55 points for
+`names_a_coding_gene` density-matched, 5.58 element-count-matched, 7.87 and 10.53 on `moves_a_gene` --
+what the data would need, not what anyone has justified.
+
+**The denominators, every population in one table.** Read from the committed result files, not
+retyped. Each count carries its denominator and the rule that produced it.
+
+| population | count | denominator | share | rule |
+| --- | ---: | --- | ---: | --- |
+| constrained-unknown blocks, copies out | 882 | the tier itself | — | `organise.blocks`, 24 chromosomes, duplicates removed |
+| ... carrying a scored element | 531 | 882 blocks | 60.2% | a cCRE midpoint inside the block |
+| scored elements inside them | 3,280 | elements, not blocks | — | every scored element of a carrying block |
+| blocks eligible for an assay | 89 | 882 blocks | 10.1% | one shared base with a tested interval |
+| blocks eligible for an assay | 89 | 531 carrying blocks | 16.8% | same numerator, other denominator |
+| blocks with a measured element | 59 | 882 blocks | **6.7%** | reciprocal overlap 0.5 both ways |
+| blocks with a measured element | 59 | 531 carrying blocks | **11.1%** | same numerator, other denominator |
+| blocks CRISPRi-tested against a coding gene | 3 | 882 blocks | 0.34% | overlap 0.5, gene protein-coding |
+| blocks measured to move a coding gene | 0 | 882 blocks | 0% | significant either sign |
+| blocks with no measured element at all | 823 | 882 blocks | 93.3% | **no assay measures any of its scored elements at overlap 0.5** -- not "no part of the block was ever measured" |
+| blocks the measured primary could compare | 1 | 882 blocks | 0.11% | tested element in the block AND in one of its windows |
+| blocks with a measured element, overlap 0.25 | 72 | 882 blocks | 8.2% | the rule set to 0.25 |
+| blocks with a measured element, overlap 0.75 | 10 | 882 blocks | 1.1% | the rule set to 0.75 |
+| blocks CRISPRi-tested, overlap 0.25 / 0.75 | 3 / 0 | 882 blocks | 0.34% / 0% | no setting of the rule produces a usable arm |
+| neutral-tier blocks | 2,632 | the tier itself | — | the secondary target set |
+| ... carrying a scored element | 1,181 | 2,632 blocks | 44.9% | as above |
+| matched windows drawn | 44,081 | windows | — | 50 per block, exact length, coding-TSS decile |
+| ... carrying a scored element | 31,554 | 44,081 windows | 71.6% | a cCRE midpoint inside the window |
+| ... carrying a CRISPRi-tested element | 223 | 44,081 windows | 0.51% | **windows, not elements** |
+| ... holding one measured to move a coding gene | 30 | 223 windows | **13.45%** | the anchor, in windows |
+| blocks the model arm compares | 531 | 882 blocks | 60.2% | carries an element and has a carrying window |
+| window-elements in the per-element estimator | 456,573 | elements in the unmatched windows of the 531 | — | 9.18% against 44.04% is over these |
+| block elements entering the reach standardisation | 3,252 | 3,280 block elements | 99.2% | strata with 30 elements in each arm |
+
+**The sweep of the four lanes' own write-ups.** Their dated sections above now carry an annotation
+paragraph each, added beneath the original text and never in place of it, and the four committed
+result files each carry an additive
+`corrections_after_the_statistical_review_2026_09_28` key naming the field or the string it corrects.
+No existing key or value in any of them was changed, and the annotator refuses to write if one would
+be. What the sweep found, beyond the five points the review named: the 30-of-223 unit error above,
+which no lane would have caught from its own numbers.
+
+**What this settles and what it does not.** It settles that the size of clause 2's experiment was
+never known: what was published as its size was a reporting floor with a model-derived calculation
+beside it. It replaces that with a range that is honest about depending on an unestimated effect, and
+it says which design choice moves the range most (how many elements per block are tested, not how many
+blocks). It does not make clause 2 decidable, it does not estimate the effect, and it does not say
+that an experiment of any size here would decide the clause -- power is the probability of detection
+under assumptions. Clause 2 stays not met, and now waits on an experiment whose size is a range with
+its assumptions attached rather than a number.
+
+**Cost.** 0 AlphaGenome requests. 11 s; no genome archive is opened, and the committed clause 2
+results are read and never rewritten.
+
+## Reproduced before anything changed: the committed power simulation, set from a 13.45% window anchor, produces 16.80% element detection and 56.96% positive windows (item 12 S2, 2026-09-28, lane-s2)
+
+The second external review (docs/ROADMAP.md section 5, item 12, row S2) reports that the simulation
+behind the 20-to-5,000 range above does not reproduce the quantity it was anchored on. **Both figures
+it reports come back exactly from the committed code**, run unchanged at its registered reference
+configuration (window anchor 0.1345, sensitivity 0.6674 from `PowerAtEffectSize20`, no false
+positives, 6 tested elements per block and per window, 3 windows per block, ICC 0.30) on the committed
+seed 20260928, whose first draw in `sweep` is exactly this call: **element detection 0.16802 and
+positive windows 0.5696** (positive blocks 0.5695, as the null requires), identical to the committed
+result's reference row at ratio 1.0. `scripts/clause2_design_power.py --reproduce-review` prints it;
+`reproduce_the_review` and four new tests in `tests/test_clause2_design_power.py` hold it.
+
+**Where each figure comes from**, computed in closed form (Gauss-Hermite quadrature, no simulation) by
+`quadrature_of_the_committed_reference` and agreeing with the simulation to within its Monte Carlo
+error (0.16824 and 0.5693):
+
+1. **The level.** The anchor is 30 of 223 *windows* carrying a CRISPRi-tested element, and `moments`
+   reads a window as positive if *any* of its six tested elements is. Six elements each detected at
+   13.45% give 1 - 0.8655^6 = 57.97% positive windows on their own; the anchor was matched as an
+   element rate and the simulation's windows are more than four times as often positive as the windows it was
+   anchored on.
+2. **The element rate is not the anchor either.** `moments` puts the logit-normal intercept's
+   *location* at logit(0.1345 / 0.6674) = logit(0.2015). With a spread of 1.187 on the logit (the
+   latent identity applied to 0.30), the *mean* true rate is 0.2521, not 0.2015, so the observed
+   element rate is 0.6674 x 0.2521 = 16.8%.
+3. **Observed and latent correlation were not kept apart.** The 0.30 is a one-way ANOVA ICC of 0/1
+   calls on the benchmark's elements: an observed-scale figure. It was entered into the latent-scale
+   identity, and the observed-scale correlation the simulation then produces is **0.115**, well
+   under half the correlation that was measured. The registration said the realised binary-scale ICC
+   would be reported beside the latent one; the committed result carries only the latent one.
+4. **The test that watched the anchor looked where the definitions coincide.**
+   `test_the_window_arm_reproduces_the_observed_anchor` runs `moments` at 1 element, 1 window and ICC
+   0, the one configuration in which window, element and location rates are the same number. It
+   passed, and the reference configuration was never checked against its anchor.
+
+**The upper end is above the population.** `N_GRID` searches up to 5,000 compared blocks. The tier
+holds 882 blocks and 531 of them carry a scored element; 1,000, 1,500, 2,000, 3,000 and 5,000 exceed
+the tier, and 750 exceeds the carrying blocks, so the committed reference entry of 750 at ratio 0.75
+and the 5,000 at the top of the range are sizes no experiment on this tier can have.
+
+**What this does and does not change.** Nothing committed is altered: the 20-to-5,000 table stays as
+the record of what that run computed, read as exploratory, as the correction under milestone 1.3 says.
+This section establishes only that the review's two figures are the committed code's own output, and
+why. The recalibrated model is registered next, before it is run. 0 AlphaGenome requests; 0.5 s.
+
+## Pre-registration: clause 2's power model recalibrated to its own anchor, with the planned analysis simulated end to end and designs compared at equal assay cost (item 12 S2, 2026-09-28, lane-s2)
+
+Registered before the anchor's windows are redrawn and before any configuration of this model is
+simulated. The full text is `S2_REGISTRATION` in `scripts/clause2_design_power.py`, with its constants
+beside it; the tests are in `tests/test_clause2_design_power.py`. The model is added beside
+lane-design's, whose table (70801de) stays as the record and is read as exploratory; the new result is
+`clause2_design_power_calibrated`. **0 AlphaGenome requests.** The model arm's -27.25 points and its
+dispersion stay excluded, and the test that enforces it now covers this code too.
+
+**The review's acceptance, and how each part is met.**
+
+1. **The endpoint, as the committed estimator reads it.** Per tested element the assay calls a
+   significant change in a protein-coding gene, either sign. A block is positive if any of its tested
+   elements is called, a window likewise; per compared block d = Y - (positive tested windows / tested
+   windows). A rate of this endpoint belongs to a unit and to how many elements it had tested, so every
+   rate in the result names both.
+2. **The anchor at the level it was measured.** 30/223 is a rate of positive *windows*. The windows are
+   redrawn with the committed draw (`clause2_matched_control.matched_windows`, committed seed and decile
+   edges, the measured arm's own verdicts) and each window's tested elements are recorded; the gate is
+   the committed counts to the digit (44,081 drawn, 31,554 carrying, 223 tested, 30 regulating, 134 and
+   27 blocks, 882 and 531). The calibration then requires the observed positive-window rate *over those
+   windows, each with its own number of tested elements* to come back at 30/223. The anchor's
+   uncertainty is a cluster bootstrap over windows linked by a shared tested element and over blocks;
+   the wider interval's ends are the sensitivity grid, and the exact binomial interval is printed beside
+   them as the as-if-independent one.
+3. **Sensitivity and false positives, consistently.** Both act on each element, and the same s and f
+   that deconvolve the anchor simulate the planned screen. s: the mean of a benchmark power column
+   (reference `PowerAtEffectSize20`, 0.6674; the other four as variants). f: reference 0.01, the rate a
+   false discovery rate of 5-10% implies at a call rate near 13% (an assumption, not read from the
+   tables); 0 and 0.03 as variants.
+4. **Observed and latent correlation, kept apart.** The benchmark ICCs are ANOVA ICCs of 0/1 calls,
+   observed-scale figures. The latent spread is solved so that the calls' observed-scale ICC equals the
+   measured one (the bin nearest the median carrying-block length; the others as variants), and the
+   chromosome spread so that the calls' chromosome ICC equals 0.0142. Latent ICCs are reported beside
+   the observed ones and never used in their place.
+5. **The planned analysis, simulated end to end.** 2,000 experiments per cell. Blocks are drawn
+   without replacement from the eligible population, so their chromosomes are the real ones; one
+   chromosome intercept is shared by the blocks and windows on it; with g = 4 the blocks of a
+   chromosome share one set of tested windows (**shared controls**). The committed estimator, the
+   interval over blocks (computed exactly, the n-fold convolution that the committed 10,000-resample
+   percentile interval estimates; a registered check on 200 experiments at 8 cells reports how often the
+   two readings differ) and the interval over chromosomes (1,000 resamples) are computed on each. At
+   the null the share excluding 0 is the **false-positive rate**; a cell is calibrated at 0.05 plus two
+   Monte Carlo standard errors or less. Written in advance so it can be scored: **shared controls are
+   expected to be anti-conservative**, because the committed interval treats blocks that share windows
+   as independent. The probability of each registered reading is reported too: with 20 or more
+   compared blocks the measured arm reads "model_failed" whenever the interval reaches 0.
+6. **Designs at equal assay cost.** k tested elements per block and per window (1, 2, 3, 6: the same in
+   both arms, so the null stays a null), m windows per block (1, 3, 10), g blocks per window set (1,
+   4): 24 designs. Cost is counted in tested elements, N k for the blocks plus (window sets) m k for the
+   windows. Designs are compared by the realised cost of the smallest searched N reaching 80%
+   probability of detection, the cheapest feasible design named per ratio, and by probability of
+   detection at budgets of 250 to 8,000 tested elements.
+7. **The eligible population as a hard cap.** A k-element design can use only the real-unknown blocks
+   holding at least k scored elements. N is never simulated above that count; a target not reached
+   within it, and a budget that buys more blocks than it, are printed **"infeasible"**, never as a
+   number. Every entry of lane-design's committed table above its own design's eligible population is
+   listed beside it as infeasible.
+
+**The check S2 exists for.** After calibration the anchor's own windows are *simulated* (4,000
+replicates) and so are 20,000 clusters of four calls. The anchor is reproduced if the simulated
+positive-window rate is within 0.5 points of 30/223 and the simulated observed-scale ICC within 0.02
+of its target. If the reference calibration fails either, no size from the run is read as calibrated
+and the result says so first. The implied element-level rate is set beside the benchmark's 12.15% and
+14.56% as an out-of-sample comparison, not a gate.
+
+**The block arm.** Its mean true per-element rate is ratio x the window arm's (1.0, 0.75, 0.5, 0.25,
+0.1, 0.0), at the same spreads; lane-design applied the ratio to the location, which is not the mean
+once there is spread. The estimand is computed in closed form and each interval's coverage of it is
+reported.
+
+**Sensitivity analysis.** One factor at a time, recalibrated and re-checked each time, at lane-design's
+reference design (6, 3, 1) and at (1, 3, 1), which every carrying block can enter.
+
+**Assumptions stated, not tested.** The anchor's tested elements were chosen by the benchmark's
+designers and the planned experiment's would be chosen for the design; the window arm's per-element
+rate is carried across that difference. One sensitivity per element, from pair-level power. Matched
+windows holding k scored elements exist for every block (their supply is reported). Blocks and windows
+share the latent spread and differ only in the mean.
+
+**Words.** Every size is a probability-of-detection statement under the calibrated assumptions, never a
+guarantee that an experiment decides clause 2.
+
+## The result: recalibrated, the power model reproduces its 13.45% anchor, no design reaches 80% at a three-quarters rate within the eligible blocks, and shared controls are anti-conservative in every cell (item 12 S2, 2026-09-28, lane-s2, later)
+
+The model registered in `019a9ab` was run once (1,562 s, **0 AlphaGenome requests**) and written to
+`data/results/clause2_design_power_calibrated.json` with a complete manifest; the stamp is dirty only
+with peers' files. The run went through a scratch driver that calls `collect_calibrated` and
+`save_result` exactly as `--calibrated` does and also kept a copy of the output in case the save
+failed; the manifest's argv names it. lane-design's table stays as the record.
+
+**The gate.** The redraw reproduced the committed window draw to the digit: 44,081 windows, 31,554
+carrying, 223 with a tested element, 30 with a regulating one, 134 and 27 blocks, 882 and 531.
+
+**The anchor at its level.** 159 of the 223 windows carry one tested element and 64 carry 2 to 11.
+Beneath them are 241 distinct tested elements, 23 of which regulate a coding gene (9.54%, an
+element-level rate below the 13.45% window rate, as it has to be). 127 windows share a tested element
+with another. Clustered, the anchor's interval is **7.88% to 19.80%** over shared-element components
+(design effect 1.74, about 128 effective windows) and 8.82% to 18.81% over blocks, against the
+as-if-independent 9.26% to 18.64%; the sensitivity grid used 7.88% and 19.80%.
+
+**The calibration, latent and observed kept apart.** The median carrying block is 31.6 kb, so the
+registered rule took the 25-kb benchmark ICC, **0.3745 on the observed scale**. Solved at sensitivity
+0.6674 and false-positive rate 0.01: total logit spread 5.04, chromosome part 1.28. **The latent ICC
+this implies is 0.885, against 0.3745 observed**; for chromosomes, 0.057 latent against 0.0142
+observed. The mean true per-element rate of the window arm is 14.94%, while the rate at the
+intercept's location is 0.39%: most units almost never regulate and a few often do, which is what a
+0.37 observed correlation at 67% sensitivity requires. The implied observed element rate is 10.82%,
+set beside 9.54% beneath the anchor's windows and the benchmark's 12.15% and 14.56%.
+
+**The check S2 exists for: the anchor is reproduced.** Simulated, the anchor's own 223 windows come
+back **13.459% positive against 13.45%** (+0.009 points; tolerance 0.5) and clusters of calls give an
+**observed ICC of 0.3704 against 0.3745** (tolerance 0.02). The committed reference under the same check
+gives 56.96% and 0.115. Every feasible sensitivity variant reproduces its own anchor too. One variant
+has no solution: at `PowerAtEffectSize10`'s sensitivity no spread produces an observed ICC above 0.280,
+so the measured 0.3745 is out of reach of an assay that weak.
+
+**The null, simulated with its shared controls and clustering.** 210 null cells, 2,000 experiments
+each, nominal 0.05. **With shared controls (g = 4) all 105 cells are anti-conservative, false-positive
+rate 0.069 to 0.214**, and under the alternatives the interval covers the true difference in 65% to
+93% of experiments: the registered prediction is confirmed. Without them 87 of 105 cells are calibrated; the failures sit at 20
+to 30 blocks with 3 or 10 windows (up to 0.1205), and from 50 blocks up 76 of 81 are calibrated
+(largest 0.066). One window per block is calibrated in all 35 of its cells (at most 0.054). The interval
+over chromosomes runs 0.045 to 0.139. The exact interval over blocks and the committed 10,000-resample
+one read 0 to 3 of 200 simulated experiments differently per checked cell.
+
+**What the endpoint can show.** Even if the blocks regulated nothing (ratio 0), the expected difference
+is -9.82 points with one tested element per unit and -22.02 with six; at a three-quarters rate it is
+-2.46 and -4.83.
+
+**The sample-size table at equal cost** (80% probability of detection under the calibrated
+assumptions; cost in tested elements; "infeasible" = not reached within the design's eligible
+population: 531 blocks for one element, 347 for two, 284 for three, 187 for six):
+
+| Blocks regulate, relative to windows | Designs reaching 80% (of 24) | Registered cheapest (its null rate) | Cheapest whose null is calibrated |
+| --- | --- | --- | --- |
+| 0.75 | **0: infeasible in every design** | infeasible | infeasible; at all 531 blocks the best is 0.466 |
+| 0.5 | 16 | 1 element, 3 shared windows: 400 blocks, 727 elements (0.142) | 1 element, 1 window: **all 531 blocks**, 1,062 elements, 0.809 |
+| 0.25 | 24 | 1, 3 shared: 150 blocks, 290 elements (0.125) | 1, 1: 200 blocks, 400 elements, 0.824 |
+| 0.1 | 24 | 1, 3 shared: 75 blocks, 158 elements (0.122) | 1, 3: 75 blocks, 300 elements, 0.852 |
+| 0 | 24 | 1, 3 shared: 50 blocks, 114 elements (0.107) | 1, 1: 100 blocks, 200 elements, 0.893 |
+
+The registered cheapest design at every ratio shares its windows, and its null is anti-conservative,
+so by the registered rule its sizes read as optimistic. The last column is derived after the run from
+that rule and nothing else (`cheapest_with_a_calibrated_null`, `--read-calibrated`), and is labelled so
+in the code. At lane-design's reference design (6 elements, 3 windows) the committed 750 / 100 / 30 /
+20 / 20 become **infeasible (0.263 at all 187 eligible blocks) / 187, all of them / 75 / 50 / 30**.
+
+**At fixed budgets.** With 250, 500, 1,000 and 2,000 tested elements the best design with its own
+windows detects a half-rate difference with probability 0.283, 0.482, 0.788 and 0.942. At 4,000 and
+8,000 elements 19 and 22 of the 24 designs are infeasible, because the budget buys more blocks than the
+tier holds. No design at any budget or size detects a three-quarters rate with probability above 0.47.
+
+**The registered reading, simulated.** With 20 or more compared blocks the measured arm reads
+"model_failed" whenever the interval over blocks reaches 0. At a three-quarters rate, with every
+eligible block tested, that reading comes out in 53% to 82% of experiments depending on the design: the
+rule reads an interval that could not decide as the blocks regulating no less often than their windows.
+
+**Sensitivity, one factor at a time.** At a three-quarters rate both reference designs are infeasible
+in every variant. At a half, one element with three windows needs 200 blocks (anchor at 19.80%) to 531
+(false-positive rate 0.03), and is infeasible at the anchor's low end; six elements with three windows
+need 150 to 187 or are infeasible (anchor's low end; false-positive rate 0.03).
+
+**lane-design's table against the eligible population.** 50 of its committed entries exceed their own
+design's eligible population, among them the reference 750 at 0.75 against 187 and the 5,000 at the top
+of that ratio's range; they are listed in the result as infeasible and the committed file is unchanged.
+
+**What this settles and what it does not.** It settles that the power model now reproduces the quantity
+it is anchored on, at the level the anchor was measured, with its correlation on the right scale, and
+that the planned analysis has been simulated under the null with the structure a real experiment would
+have. It shows that the committed interval cannot be used with shared controls, and that, under these
+assumptions, no searched design on this tier detects blocks regulating three quarters as often as their
+windows with probability above 0.47. It does not estimate the
+effect, which remains the reason every size is conditional, and the window arm's per-element rate is
+carried from elements a benchmark chose to test. Every size here is a probability of detection under
+these assumptions, never a guarantee that an experiment decides clause 2. Clause 2 stays not met.
+
+## Item 13 C4 registered: hide evidence and predict it, with the AlphaGenome ablation run first (2026-09-28, lane-c4)
+
+This section registers the measuring stick for the coherence programme (ROADMAP section 5, item 13):
+the leave-one-source-out harness that C1, C2 and C3 will all be scored by, and the diagnostic that
+runs before it, **the AlphaGenome ablation**. Both are fixed here before either is run. The constants
+are in `genomeos/attribution/ablation.py` and `genomeos/attribution/holdout.py`; the runners are
+`scripts/c4_ablation.py` and `scripts/c4_holdout_run.py`. Nothing calls the model (0 requests). The
+per-element response cache is never opened: the model's labels are read from the compiled programs,
+which are what the project states.
+
+**What was read before this registration, so the reader can judge it.** While designing the census the
+lane read the published values of the six headline results in `manifest_headlines.json`, including the
+measured arm of the node-containment result (+5.893 points, chromosome interval [3.183, 8.458]) and the
+`cannot_decide` reading of clause 2's measured arm. It also counted the units each source holds per
+endpoint (below), which decides which endpoints clear the floors, and it parsed the compiled programs
+once to confirm that they hold 440,377 predicted links, the published count. No metric of any labelling
+on any source had been computed when this section was written.
+
+**What both may and may not be called.** The harness is an **internal development benchmark only**.
+Every source in it has been read by this project before, several of them repeatedly. The ENCODE CRISPRi
+held-out file alone is read by at least ten scored results (lane-split), so it is a reused benchmark
+and cannot become fresh validation. The ablation reads the same files. A score may be called: "on
+evidence this project has already read, labelling L predicts held-out source S's own endpoint with
+metric M [95% locus-bootstrap interval] at coverage C, beside distance to TSS and the unchanged labels."
+It may not be called any of the following:
+
+- an external, independent or fresh validation;
+- evidence of biological accuracy beyond the sources held here;
+- a test of regulation, when the endpoint is reporter activity, in-vivo activity, base sensitivity or
+  association (activity is not regulation, and association is not perturbation);
+- a comparison between sources or endpoints;
+- out of sample for anything tuned on the CRISPRi benchmark;
+- a verdict on what the evidence can predict when `rest` scores low. `rest` is an unfitted rule, so a low
+  score says only that this rule transfers poorly.
+
+### Part 1, run first: the AlphaGenome ablation
+
+**Removed.** The all-element deletion sweep (`enhancer_targets_all_<chrom>`) and its per-element response
+cache; the sample target runs of the same model (`constrained_targets_*`, `enhancer_targets_*`); the
+compiled predicted layer (every `element` block without `_measured`, every `rule` with `evidence:
+predicted`); and any value computed from these. An input path containing `alphagenome`,
+`enhancer_targets`, `constrained_targets` or `knowledge/compiled/` counts as model output.
+
+**Censused.** There are three families.
+
+1. The six headline results rebuilt in `manifest_headlines.json`.
+2. Every element block of the 24 compiled programs, predicted and measured, axis value by axis value
+   (`class`, `targets`, `origin`, `molecular_role`, `activity`, `target_relation`, `evidence_status`),
+   with the region blocks counted.
+3. Every compiled rule, split by evidence kind after R1.
+
+**The classification rule.** Each conclusion is put in exactly one of three classes.
+
+- **Was never model-dependent.** No ablated input enters the stated value or selects the units it is
+  computed on. A model file read only for a quantity the conclusion does not state does not count, and it
+  is named. Examples are chromosome names and lengths, or a column that the stated figure does not use.
+  For a per-element label, the label's *value* is classified. The fact that an element carries a block at
+  all, because the model named a target, is counted separately as placement.
+- **Survives.** An ablated input enters the conclusion, and with every ablated input removed the same
+  statement is still established on experimental evidence alone.
+  - A predicted link (element, gene, direction) survives when a CRISPRi pair on the same element meets
+    `measured.RECIPROCAL_OVERLAP` (0.5), names the same gene, and is significant in the stated
+    direction: activates means `significant_decrease`, inhibits means `significant_increase`. Any cell
+    and either benchmark file counts.
+  - A compiled rule survives on the same test, measured in the rule's own `when` cell (R1).
+  - A result survives when the record holds an experimental arm of the same statistic, computed without
+    ablated input, with the model figure's sign and a 95% interval that excludes zero. The interval is
+    the result's own headline interval. The surviving figure is the arm's, never the model's.
+- **Does not survive.** Everything else, with one reason:
+  - `about_the_model`: the statement's subject is a model output (its value, its gain or its agreement);
+  - `contradicted`: the same endpoint measured the same element and gene, and found either a
+    well-powered null or a significant change in the opposite direction;
+  - `inconclusive`: the same endpoint measured it without deciding. This covers an underpowered null, a
+    missing effect, and an experimental arm that is below its floor or has an interval across zero;
+  - `never_measured`: nothing of the same endpoint was measured. The element and gene were never
+    perturbed together (for a rule: not in its cell), or the result has no experimental arm.
+
+Reporter activity, VISTA, saturation mutagenesis and GTEx association are other endpoints. They never
+make a link survive (review S4). Where they touch a link that does not survive, they are counted beside
+it.
+
+On a predicted block, the axis values that carry the link take the link's class. These are `targets`,
+`activates_target` or `represses_target`, `predicted_deletion_target`, `nearest_tss_in_domain`, and the
+repression-alternatives role group. `predicted_model` (on predicted blocks) and `conflicting` (on
+measured twins) are `about_the_model`. Every other value is sequence, registry or assay content and was
+never model-dependent. The same holds for a measured twin's activity and relation. Placement is counted
+from the measured side: of the CRISPRi significant decreases (element, gene, cell), how many have a
+model-compiled element that meets the overlap rule, and, for the rest, how many have an ENCODE cCRE that
+would carry them with no model involved.
+
+**The registered reading of each headline result.** Each reading comes from its writer, read before the
+run, and is checked at run time against the result's manifest inputs.
+
+| result | model input | reading |
+| --- | --- | --- |
+| node_containment_audit (+2.90) | value: the archive's most-moved coding gene | experimental arm `node_containment_measured`, uniform control, chromosome interval |
+| node_containment_measured (+5.89) | bookkeeping only: stage 1's rows supply chromosome name and length | never model-dependent |
+| constrained_unknown_targets (62.3% vs 86.0%) | value: the model's mover | experimental arm `clause2_measured_arm`, its registered `primary_reading` |
+| therapeutic_benchmark (9/9) | none (checked against the manifest) | never model-dependent, unless the manifest names a model input |
+| unknown_coverage (0.52%) | a column the figure does not state (organise's `attributed_elements`) | never model-dependent |
+| crispri_published (deletion feature over ENCODE-rE2G) | value: the deletion feature | `about_the_model` |
+
+### Part 2: the leave-one-source-out harness
+
+**Sources and endpoints.** Each assay is a separately holdable unit, and each endpoint is modelled apart.
+
+| source | unit | endpoint(s) | primary metric |
+| --- | --- | --- | --- |
+| `crispri:<study>` (the benchmark's `Dataset`, R5; 11 studies) | element-gene-cell pair | `decrease`: significant decrease (1) against well-powered null (0); `increase`: significant increase (1) against well-powered null (0). Underpowered nulls and missing effects are counted, never scored (R2) | average precision |
+| `lentimpra:<cell>` (K562, HepG2, WTC11) | one tile in one cell (R6, never aggregated) | `activity`: log2(RNA/DNA); `active`: at or above 1.0 | Spearman; average precision |
+| `vista` | element | positive in any tissue (1) or negative (0) | average precision |
+| `satmut` | measured base of each locus's primary experiment | functional (1) or inert (0) | average precision |
+| `gtex` | element x protein-coding gene with a TSS within 1 Mb, at the elements GTEx ties to a gene | associated in any of 49 tissues (1) or not (0; untested and null are not told apart) | average precision |
+
+AUROC is the secondary metric everywhere (for `activity`, the AUROC of `active`). The prevalence is
+reported beside average precision. The GTEx elements are the ones the eQTL distillation indexed, which
+are elements that an earlier target run predicted for, so that unit set was chosen by those runs.
+
+**Unit counts, read before this registration.**
+
+- **CRISPRi decrease, positives/negatives:**
+  - Gasperini2019: 360/4,893
+  - Schraivogel2020: 23/1,276
+  - Xie: 42/393
+  - Morris: 35/132
+  - K562_DC_TAP: 12/1,221
+  - WTC11_DC_TAP: 15/1,886
+  - HCT116: 34/0
+  - Nasser2021: 111/0
+  - Klann: 21/0
+  - Reilly: 8/0
+- **CRISPRi increase:**
+  - Gasperini2019: 42/4,893
+  - WTC11_DC_TAP: 20/1,886
+  - every other study is under 20 positives or has no informative negatives
+- **lentiMPRA:** about 54,000 tiles per cell, and 2,864 loci
+- **VISTA:** 1,267/1,175, and 948 loci
+- **saturation mutagenesis:** 2,694/7,140 bases, and 19 loci
+- **GTEx:** 21,166/124,183, and 421 loci. Of 30,210 element-gene associations, 8,333 are with a gene that
+  is not protein-coding and 711 with a gene absent from GENCODE v50. Both groups are counted and never
+  scored.
+
+**The split.** The split is by study and by locus. Holding out S does three things.
+
+1. It removes S and every provenance sibling of S. CRISPRi studies that share a value of the
+   benchmark's `Reference` column are siblings, which makes K562_DC_TAP and WTC11_DC_TAP siblings
+   (Ray et al. 2025). The three lentiMPRA cells are one library.
+2. It masks every record of S's endpoint family whose interval shares a base with an S unit. These are
+   the related intervals of lane-split's `split_overlap`, so an element measured by two studies cannot
+   leak across the split. The relation counts per source reuse `measured.split_overlap` itself.
+3. It never admits a pair from the CRISPRi benchmark's held-out file as evidence (R5), whatever is held
+   out.
+
+Records of another family are evidence in full: a reporter predicting a screen is the question, and a
+second screen of the same pair is a replicate. A labelling that declares it read S, a sibling, the
+held-out file, or a same-family source outside `evidence(without=S)` is refused (`LeakError`).
+
+**Metric and interval.**
+
+- **Interval.** A 95% percentile bootstrap over loci, never over pairs. The run uses 1,000 resamples,
+  seed 20260928, and the same resamples for every labelling of a source.
+- **Loci.** A locus is a connected component of a source's units, joined by a shared 1 Mb bin of the
+  midpoint or, for pair endpoints, a shared gene. Each resample draws as many loci as the source has.
+- **Ranks under resampling.** Spearman under resampling keeps the full-sample ranks, weighted.
+- **Abstention.** An abstention ranks below every stated score, and coverage is reported beside every
+  value.
+- **Floors.** An endpoint is described and not scored below 20 positives or 20 negatives
+  (`MIN_FOR_A_COMPARISON`), below 20 units for `activity`, or below 10 loci. By the counts above, 15
+  endpoints are scored and 16 CRISPRi endpoints are described:
+  - HCT116, Nasser2021, Klann and Reilly have no well-powered null at all;
+  - K562_DC_TAP is under 20 positives on both endpoints;
+  - WTC11_DC_TAP is under 20 positives on `decrease`;
+  - Morris, Schraivogel2020 and Xie are under 20 positives on `increase`.
+
+**The labellings of the first run.** Three labellings are scored for every source.
+
+- `distance`: minus the distance from the unit's midpoint to its gene's TSS. CRISPRi uses the
+  benchmark's own TSS columns, and GTEx uses GENCODE v50. For element and base units it is the nearest
+  GENCODE v50 protein-coding TSS.
+- `unchanged`: the compiled predicted layer as it stands, matched by one shared base. For pair endpoints
+  it is the largest strength among matched links that name the unit's gene in the endpoint's direction:
+  activates for `decrease`, inhibits for `increase`, and either for `associated`. It is 0 when the
+  matched links name another gene or direction. For element and base endpoints it is the largest strength
+  of any matched link. It abstains where no predicted element shares a base, and it never reads the
+  measured twins.
+- `rest`: the prediction from the remaining sources, an unfitted rule. The score is 10 x G + E +
+  closeness.
+  - G counts the view's sources that support this gene at this interval: a CRISPRi training pair on the
+    same gene, significant in the endpoint's direction, or a GTEx association with the same gene.
+  - E counts the sources that say the interval does something: lentiMPRA active by R6's rule in some cell,
+    a VISTA positive, or a functional saturation-mutagenesis base. For non-regulation endpoints it also
+    counts a significant CRISPRi training pair and a GTEx association on any gene.
+  - Closeness is 1 / (1 + distance / 100 kb).
+
+The three paired differences are also scored on the same resamples: rest minus distance, rest minus
+unchanged, and unchanged minus distance.
+
+**The call the pilot makes.** It is `holdout.score(labels, held_out_source)`, and `compare(a, b,
+source)` gives the paired difference. It is deterministic, with a fixed seed and resample count. It is
+cached in memory and under `data/cache/holdout`, keyed by the predictions themselves. It runs on
+ordinary CPUs, uses numpy over at most about 145,000 units, and makes no request.
+
+**Expectation, written before the run.** Distance should be the strongest simple predictor of CRISPRi
+decreases, as the benchmark literature finds. `rest` should add little there, because after the locus
+mask no screen of the same pair remains. The unchanged labels should have low coverage of the screens'
+pairs. None of this changes a rule above.
+
+*Correction, 2026-09-28, lane-c4, after the run.* The prose above miscounts the sources, and the rules
+are unaffected. The benchmark holds **10** CRISPRi studies, not 11: Nasser2021 spans both files and is one
+study. So there are **16** holdable sources, not the 17 of the registration commit's subject, and **14**
+CRISPRi endpoints are described without a score, not 16. The 15 scored endpoints were counted correctly.
+The error was in the counting prose, not in any constant.
+
+## The result: without the model, 93 of 440,377 predicted links survive; in the first held-out scores, neither the unfitted rest rule nor the unchanged labels beats distance to TSS on any CRISPRi decrease endpoint (2026-09-28, lane-c4, later)
+
+Both runs were made once, as registered in the section above, in a clean worktree at `cc824f4` (the
+revision stamp is not dirty). Results: `data/results/c4_alphagenome_ablation.json` and
+`data/results/c4_holdout_scores.json`. Nothing called the model (0 requests), and the per-element
+response cache was never opened. The ablation took 9 s and the harness 52 s, both on one laptop CPU.
+**Every score below is an internal development benchmark reading.** Each is on evidence this project
+has already read, and none is a fresh or external validation. The negatives come first.
+
+### Negatives
+
+1. **The prediction from the remaining sources (`rest`, an unfitted rule) is below distance to TSS on
+   all four scored CRISPRi decrease endpoints and on GTEx.** Every one of these intervals excludes zero.
+   The paired differences in average precision are:
+
+   | held-out source | rest minus distance |
+   | --- | --- |
+   | Gasperini2019 | -0.278 [-0.331, -0.221] |
+   | Morris | -0.305 [-0.429, -0.091] |
+   | Schraivogel2020 | -0.309 [-0.608, -0.140] |
+   | Xie | -0.344 [-0.440, -0.210] |
+   | GTEx | -0.155 [-0.171, -0.141] |
+
+   As registered, this says the rule transfers poorly. It says nothing about what the evidence can
+   predict. The rule puts element-level activity (an active reporter tile, a VISTA positive) ahead of
+   distance, so every gene paired with an active element moves up together. Most of those genes are that
+   element's negatives.
+2. **The unchanged labels beat distance on no CRISPRi decrease endpoint.** The compiled predicted layer
+   names one gene per element. It is below distance on three endpoints, each with an interval excluding
+   zero:
+   - Morris decrease: -0.366 [-0.522, -0.187];
+   - GTEx: -0.232 [-0.243, -0.220];
+   - WTC11_DC_TAP increase: -0.013 [-0.033, -0.004].
+
+   On Gasperini2019 (-0.068 [-0.140, +0.003]), Schraivogel2020 (-0.229 [-0.584, +0.072]) and Xie (-0.145
+   [-0.333, +0.071]) the interval spans zero. Its coverage of the screens' pairs is 45% to 77%. This is
+   **not** the deletion feature that `crispri_published` scored. That feature read every gene in the
+   scorer's window from the response cache; the compiled labels keep one target per element. The two
+   results do not contradict each other, and this one does not re-test that one.
+3. **Nothing scored here predicts reporter activity, in-vivo activity or base sensitivity well.**
+   - lentiMPRA: the AUROC of `active` is 0.503 to 0.561 across the three cells and three labellings. The
+     largest Spearman is 0.126 [0.117, 0.135] (unchanged, HepG2).
+   - VISTA: AUROC 0.529 to 0.571.
+   - Saturation mutagenesis: 19 loci. Every paired interval spans zero, and the best AUROC is distance's,
+     0.646 [0.524, 0.738].
+4. **14 of the 20 CRISPRi endpoints cannot be scored.**
+   - HCT116, Nasser2021, Klann and Reilly hold no well-powered null at all.
+   - K562_DC_TAP is under 20 positives on both endpoints.
+   - WTC11_DC_TAP is under 20 positives on `decrease`.
+   - Morris, Schraivogel2020 and Xie are under 20 positives on `increase`.
+
+   The benchmark's held-out file therefore contributes only three scored endpoints: Morris and Xie
+   `decrease`, and WTC11_DC_TAP `increase`.
+5. **Ablation: the predicted target layer does not survive the removal of the model.**
+   - Links (element, gene, direction): of 440,377 predicted links, **93 survive** (0.021%). A same-endpoint
+     measurement establishes each of these 93. The other 440,284 do not survive:
+     - 440,249 were never measured by the same endpoint. For 438,872 of these the element was never
+       screened; for 1,377 it was screened, but the predicted gene was not tested.
+     - 28 are contradicted: 23 by a well-powered null, and 5 by a significant change in the other
+       direction.
+     - 7 are inconclusive (underpowered nulls).
+   - Where a screen tested the predicted gene on the element, 93 of 128 links survive.
+   - Rules: of the 440,377 predicted rules, **39 survive in their own cell**. The other 440,338 were never
+     measured in the rule's cell, and none is contradicted there.
+   - Other endpoints: 6,434 of the never-measured links have evidence from another endpoint on the element.
+     This is 3,216 active lentiMPRA readings, 3,202 GTEx associations with the same gene, 69 VISTA
+     positives and 14 functional saturation-mutagenesis bases. None of it makes a link survive (S4).
+   - Headlines: 2 of the 6 do not survive.
+     - `constrained_unknown_targets` (62.3% against 86.0%) is inconclusive: its measured arm reads
+       `cannot_decide`.
+     - `crispri_published` is about the model.
+6. **The model's element selection kept 449 of 661 measured regulatory links out of the executable
+   programs.** These are the CRISPRi significant decreases, counted as element, gene and cell. Only 212
+   of the 661 are carried, because a twin is written only beside a model-compiled element. The 212 are
+   exactly the 212 experimental rules: 169 from training and 43 marked held-out. Of the 449 left out, 62
+   have an ENCODE cCRE that meets the same overlap rule with no model involved, and 387 have none.
+
+### What survives on experimental evidence alone
+
+- **Headline results, 4 of 6.**
+  - `node_containment_audit` survives, on its experimental arm only. The surviving figure is **+5.893
+    points [3.183, 8.458]** on 661 measured pairs against the uniform control. It is not the model's
+    +2.90.
+  - `node_containment_measured` (+5.89), `therapeutic_benchmark` (9/9) and `unknown_coverage` (0.52%)
+    were never model-dependent. The first reads model files only for chromosome names and lengths, and the
+    third only for a column that its figure does not state.
+- **Per-element labels.** Every sequence and registry label was never model-dependent. That is origin
+  (440,377), class (440,377), the registry roles (633,404 values), and the registry and selection status
+  values (880,754). All content of the 19,072 measured twins was never model-dependent either. The model's
+  own `predicted_model` status (440,377) and the twins' `conflicting` status (14,537) are about the model.
+- **Compiled rules.** The 212 experimental rules were never model-dependent in value. Their placement was
+  model-selected, as item 6 above says.
+
+### The first held-out scores beside the baselines
+
+Average precision is given with its 95% locus-bootstrap interval, and the prevalence is in brackets
+after the source. For lentiMPRA the value is the Spearman correlation of `activity`.
+
+| held-out source (endpoint) | rest | distance | unchanged (coverage) |
+| --- | --- | --- | --- |
+| Gasperini2019 decrease (0.069) | 0.215 [0.178, 0.266] | 0.493 [0.439, 0.560] | 0.425 [0.367, 0.485] (0.55) |
+| Morris decrease (0.210) | 0.447 [0.306, 0.669] | 0.752 [0.584, 0.883] | 0.386 [0.255, 0.521] (0.77) |
+| Schraivogel2020 decrease (0.018; 12 loci) | 0.082 [0.029, 0.136] | 0.390 [0.203, 0.672] | 0.162 [0.018, 0.316] (0.45) |
+| Xie decrease (0.097) | 0.245 [0.153, 0.384] | 0.589 [0.407, 0.747] | 0.444 [0.297, 0.587] (0.72) |
+| Gasperini2019 increase (0.009) | 0.011 [0.007, 0.022] | 0.011 [0.007, 0.017] | 0.032 [0.006, 0.076] (0.54) |
+| WTC11_DC_TAP increase (0.011; 22 loci) | 0.018 [0.009, 0.049] | 0.023 [0.011, 0.049] | 0.010 [0.005, 0.017] (0.65) |
+| lentiMPRA K562 activity (Spearman) | 0.061 [0.051, 0.070] | 0.061 [0.052, 0.070] | 0.068 [0.058, 0.077] (0.40) |
+| lentiMPRA HepG2 activity (Spearman) | 0.039 [0.029, 0.048] | 0.040 [0.031, 0.050] | 0.126 [0.117, 0.135] (0.40) |
+| lentiMPRA WTC11 activity (Spearman) | 0.036 [0.026, 0.047] | 0.038 [0.027, 0.049] | 0.072 [0.063, 0.082] (0.40) |
+| VISTA positive (0.519) | 0.550 [0.518, 0.587] | 0.543 [0.514, 0.575] | 0.574 [0.545, 0.605] (0.42) |
+| saturation mutagenesis functional (0.274; 19 loci) | 0.370 [0.206, 0.531] | 0.380 [0.277, 0.497] | 0.274 [0.182, 0.448] (0.31) |
+| GTEx associated (0.146) | 0.281 [0.263, 0.297] | 0.436 [0.417, 0.456] | 0.204 [0.189, 0.220] (0.59) |
+
+**The positives, in their registered wording.** On evidence this project has already read, the unchanged
+labels predict reporter activity slightly better than distance to TSS, and the intervals exclude zero:
+- HepG2 activity: Spearman +0.086 [+0.076, +0.097];
+- WTC11 activity: +0.034 [+0.024, +0.045];
+- VISTA: average precision +0.031 [+0.010, +0.050].
+
+K562 spans zero. These are activity endpoints: they are not a test of regulation, and the effects are
+small next to the endpoints' own spread.
+
+**The split did what it was registered to do.** Holding out Gasperini2019 masked 125 Nasser2021 and 76
+Schraivogel2020 training pairs at related intervals. By `measured.split_overlap`, 357 of Gasperini2019's
+5,299 pairs are related to another study's pair, and none is an identical pair. The three lentiMPRA
+cells measure the same tiles (53,988 to 53,990 per cell), so each removes the other two entirely. The 4,378 pairs of the
+held-out file were never evidence for any held-out source.
+
+**What it may be called.** It is an internal development benchmark, and a measuring stick. The pilot
+(C1 with C2 and C3) is scored against `unchanged` and `distance` with `holdout.compare`, on the same
+resamples. **What it may not be called:** a validation of anything, or a finding that the sources cannot
+predict one another. `rest` is one unfitted rule, and it is now the reference labelling to beat, not a
+ceiling.
+
+## Pre-registration: the measured arm's reading rule revisited, with the error rates a rule must meet fixed before any rule is scored (item 12 S2 follow-up, 2026-09-29, lane-rule)
+
+c17eedc's rule reads "model_failed" whenever the 95% interval over blocks reaches 0 with at least 20
+compared blocks, and its text says the blocks regulate coding genes "at a rate not below their matched
+windows". cab70d9 simulated it: at a true three-quarters rate, with every eligible block tested, it reads
+so in 53% to 82% of experiments, so a failure to detect is read as a finding. Its "wording_wrong" says the
+blocks hold no element that regulates a coding gene, and it is read whenever the interval lies below 0,
+which a half or a three-quarters rate also produces. The committed rule stays the record
+(`measured_reading`, unchanged). The revised one is `revised_reading` beside it, registered in
+`READING_RULE_2026_09_29` in `scripts/clause2_measured_arm.py` before any probability of it, or of any
+rule other than c17eedc's, was computed.
+
+**What each reading claims.** model_failed: a true ratio of 1 (the blocks' mean true per-element rate
+over their windows'). wording_wrong: a true ratio of 0. cannot_decide: nothing.
+
+**The error rates a rule must meet.** model_failed in at most 5% of experiments at every true ratio of
+0.75 or below: the null of this reading is that the blocks regulate less than their windows, and 0.75 is
+the smallest departure on the grid. wording_wrong in at most 5% at every true ratio of 0.1 or above,
+since a tenth of the windows' rate is not "no element". A rate meets its bound within 0.05 + 2 Monte
+Carlo standard errors (cab70d9's null rule), in every (design, size) cell where the rule may read; a cell
+that fails either bound reads cannot_decide. cannot_decide is never an error, and its cost is reported as
+the probability of deciding. The rule **decides** clause 2 at a design and size only if it also reads
+model_failed with probability at least 0.8 at a true ratio of 1 and wording_wrong with probability at
+least 0.8 at a true ratio of 0.
+
+**The rule.** The committed estimator, interval and 20-block floor are unchanged. Only the lines move.
+model_failed if the interval lies wholly above the expected difference at a three-quarters rate (-2.456,
+-3.589, -4.168 and -4.832 points for 1, 2, 3 and 6 tested elements per unit). wording_wrong if it lies
+wholly below the expected difference at a tenth (-8.84, -13.267, -15.757, -19.175). cannot_decide
+otherwise. The lines come from cab70d9's reference calibration and are never re-estimated from an
+experiment's own data. An arm whose units carry varying numbers of tested elements, as c17eedc's does,
+has no line. No other line is tried. Reported beside the reading, and never as one: the registered
+ratios the interval excludes.
+
+**The best any rule on this estimator could do**, reported beside the rule: the Neyman-Pearson threshold
+on the estimator's simulated distribution, and the same on the blocks' own rate as if the windows' rate
+were known exactly. Descriptively, the same at the weaker margins (0.5 for model_failed; 0.25 and 0.5
+for wording_wrong), to show which weaker claims the arm could support.
+
+**The simulation.** cab70d9's, unchanged. The calibration is recomputed through the same redraw and gated
+against the committed one. 24 designs, every size up to each design's cap, every ratio, 2,000
+experiments per cell, seed 2026092913; the committed and the revised readings are computed on the same
+experiments. Robustness, descriptive only: the lines stay at the reference while the truth comes from
+each feasible one-factor variant, at the caps of designs (1, 10, 1), (1, 3, 1) and (6, 3, 1).
+
+**Expected before running.** Both bounds are met in every own-window cell from 50 blocks up; some cells
+at 20 to 30 blocks and some with shared controls fail. No design decides. The revised model_failed at
+ratio 1 is about 0.5 at best, and wording_wrong at ratio 0 about 0.2 at best. The best rule on the
+estimator also stays below 0.8 (about 0.6 and 0.3). The bounds do not survive every variant: an anchor at
+its low end, or no false positives in truth, puts a reading's error above 5%. If no design decides, the
+arm reports its coverage first, then its estimate and interval with the ratios the interval excludes,
+then the revised reading where the interval clears a line, with its probabilities. It never reports
+"model_failed" from an interval that only reaches 0. Every probability is a probability under cab70d9's
+calibrated assumptions, never a guarantee. 0 AlphaGenome requests.
+
+## S4 registered: what a correct attribution means, one table of what each observation can establish, refute or say nothing about, and a scorer that keeps target accuracy, role accuracy and coverage apart (item 12 S4, 2026-09-29, lane-s4)
+
+The second external review (ROADMAP section 5, item 12, S4) asked the project to **define what a correct
+attribution means** before it scores one. This section is that definition, fixed before the scorer was
+applied to any real labelling. The constants are in `genomeos/attribution/correctness.py`; the runner is
+`scripts/s4_correctness_run.py`; the tests are `tests/test_attribution_correctness.py`. Nothing calls the
+model (0 requests).
+
+**What was read before this registration.** The ablation's published counts (C4, above): 93 of the 128
+measured links survive, 28 are contradicted (23 by a well-powered null, 5 by the opposite sign), 7 are
+inconclusive, and 39 rules survive in their own cell with none contradicted there. R2's five CRISPRi
+outcomes and R6's reporter rule (`measured.py`), R7's five axes (`lang/grammar.py`), the C4 harness
+(`holdout.py`) and the C5 probe's linkage counts. The runner was exercised once on a synthetic program
+against the real held-out units, to check that it runs; no compiled label was read.
+
+### The definition
+
+**Five claims, kept apart.** An attribution is correct or not claim by claim, and a claim is about one
+of five things:
+
+| Axis | What the claim says | Where the compiled labels state it |
+| --- | --- | --- |
+| origin | where the sequence came from | R7 `origin` |
+| molecular role | what the element is biochemically | R7 `molecular_role` |
+| activity | the direction of its effect on its target in place, or its activity in a reporter | R7 `activity`, and the rule's action |
+| target | which gene it acts on | the gene a rule names (R7 `target_relation` says how it was named) |
+| cell context | the cell in which the relation holds | the rule's `when: cell_type` (R1) |
+
+`evidence_status` states what a claim rests on (a registry, a model, a measurement, constraint). It is
+not a claim about the biology and is never judged.
+
+**Not naming a coding gene is not absence of function.** No axis has a value meaning "no function".
+`unknown`, `unassigned` and a group of unchosen alternatives (`silencer|insulator_like|...`) are not
+claims: they are counted beside, and never judged. A well-powered CRISPRi null refutes one named gene in
+one cell for an effect of 20% or more, and nothing else.
+
+**Five verdicts.** A claim is *correct* when an observation the table allows establishes it and none
+refutes it; *incorrect* in the reverse case; *unresolved* when both are present; *the observation model is
+inadequate* when the observations exist but the assay's own reading rule cannot produce a label (a
+lentiMPRA cell whose tiles split evenly under R6's share rule; one element, gene and cell significant in
+both directions); and *not judged* otherwise, with one reason. **Competing explanations are kept, never
+resolved by the scorer.** "The observation model is inadequate" stays live beside every verdict an
+observation decides. An unresolved claim keeps four: the claim holds and the refuting observation is
+wrong; the claim is wrong and the establishing one is wrong; the answer differs between studies,
+conditions or contexts; the observation model is inadequate. A refuted target also keeps "a redundant
+element compensates, which only a combinatorial perturbation separates".
+
+### The table: what each observation can say about each axis
+
+**E** establishes, **R** refutes, **M** the observation model is inadequate (the assay's rule cannot read a
+label), **S** suggests only (counted beside, never decides a verdict), **—** cannot establish (says
+nothing, and is never consulted to decide one). *Not loaded* means no holdout source supplies it, so it
+judges nothing in the run registered below.
+
+| Observation | Origin | Molecular role | Activity | Target | Cell context |
+| --- | --- | --- | --- | --- | --- |
+| CRISPRi, significant decrease (R2) | — | S (enhancer or promoter) | E activates; R represses, no effect | E, any cell | E, the cell screened |
+| CRISPRi, significant increase (R2) | — | S (silencer, insulator, competing promoter; never chosen) | E represses; R activates, no effect | E, any cell | E, the cell screened |
+| CRISPRi, well-powered null (R2) | — | — | E `no_effect_measured` only; never a direction | R, only in the cell screened | R, when the gene responds in another cell |
+| CRISPRi, underpowered null (R2) | — | — | — | — | — |
+| CRISPRi, missing (R2) | — | — | — | — | — |
+| Two elements silenced together, a change (*not loaded*) | — | — | E a direction; R no effect | E | E |
+| Two elements silenced together, a null (*not loaded*) | — | — | E no effect | R, removing redundancy as the explanation of a single null | — |
+| lentiMPRA, one cell, active by R6 | — | S | E active in reporter; R inactive; never a direction | **—** | S |
+| lentiMPRA, one cell, silent by R6 | — | — | E inactive in reporter; R active (that cell) | — | — |
+| lentiMPRA, one cell, tiles split evenly | — | — | **M** | — | — |
+| VISTA, positive (mouse e11.5) | — | S | E active in reporter; R inactive | — | — |
+| VISTA, negative | — | — | E inactive in reporter; R active (e11.5 only) | — | — |
+| Saturation mutagenesis, a functional base | — | S | S (the bases, not the element) | — | — |
+| Saturation mutagenesis, every base inert | — | — | — | — | — |
+| GTEx eQTL, associated | — | — | S (association, not perturbation) | S (linkage not excluded) | — (the units pool 49 tissues) |
+| GTEx, not associated | — | — | — | — | — |
+| Chromatin contact present (*not loaded*) | — | — | — | S | S |
+| Chromatin contact absent (*not loaded*) | — | — | — | — | — |
+| Conservation, constrained (*not loaded*; the labels' input) | — | — | — | — | — |
+| Conservation, not detected (*not loaded*) | — | — | — | — | — |
+| Allele-specific readout, imbalance (C5, *not loaded*) | — | — | S | S (a haplotype, not an element) | S |
+| Allele-specific readout, balance (C5, *not loaded*) | — | — | — | — | — |
+| AlphaGenome deletion prediction (a model output) | — | — | — | — | — |
+| Sequence annotation (*not loaded*; the labels' input) | E / R | — | — | — | — |
+| ENCODE cCRE registry (*not loaded*; the labels' input) | — | E / R (promoter-, enhancer-, insulator-like, open chromatin) | — | — | — |
+
+**The cells that cannot establish, stated plainly.**
+
+- A reporter (a lentiMPRA tile, a VISTA embryo, a saturation-mutagenesis base) can establish activity in
+  a reporter. It can never establish a target, and never a direction of effect in place: activity is not
+  regulation.
+- CRISPRi can establish a target, a direction and a cell context. It can never establish a biochemical
+  role (an increase is not a silencer) or an origin.
+- A well-powered null refutes one gene in one cell. It never establishes absence of function, and it
+  says nothing about direction.
+- Conservation can suggest selection, which is recorded on `evidence_status`. It never establishes a
+  role, an activity, a target, a context or an origin; an exapted repeat can be constrained.
+- Contact and association (GTEx, an allelic imbalance) can suggest a target and never establish one. A
+  within-person imbalance cannot be credited to one element when a median 1,580 to 2,012 heterozygous
+  SNVs lie within 1 Mb of the TSS (C5).
+- A model output is a claim to be judged, never an observation that judges one.
+- An annotation or the registry establishes origin or signature only for a labelling that did not read
+  it. The compiled labels read both, so neither is their check.
+- Nothing in the table establishes a silencer, a competing promoter, a structural role or a coding
+  candidate.
+- **Combinatorial perturbation** is the route when single perturbations cannot separate additive,
+  redundant and cooperative explanations. A joint null removes redundancy between the two as the
+  explanation of a single null (C6, phase C). No paired perturbation is among the cached screens.
+
+### How each axis is judged
+
+- **Target.** Established by a significant change of the named gene on silencing the element, in any
+  cell. Refuted by a well-powered null of that gene in the cell the claim states, and only when the gene
+  responds in no cell. A response in another cell with a null in the stated cell leaves the target
+  established and refutes the context. A response and a null both in the stated cell is unresolved. A
+  null in another cell is not a refutation; it is counted (`well_powered_null_only_in_another_context`).
+  A claim with no stated cell can be established and never refuted. `refutable` counts the claims whose
+  stated cell was screened on the named gene with an outcome that can establish or refute.
+- **Cell context.** Judged only where the gene responds to the element in some cell. Established by a
+  response in the stated cell; refuted by a well-powered null there. A claim whose target never responded
+  is not judged on context, so one failure is never counted on both axes.
+- **Activity.** The direction (activates, represses) is judged only where the named gene responded: in
+  the stated cell when it responded there, otherwise in every cell it responded in. Both directions in
+  one cell is *the observation model is inadequate*; different directions in different cells are
+  *unresolved*. A null is read on the target axis, never as a wrong direction. Reporter values are judged
+  by reporter observations in the stated cell when one was measured there, otherwise as R7 defines them
+  (active in at least one reporter context; inactive in every one).
+- **Molecular role.** Judged only by an observation the table lets establish a biochemical signature.
+  Activity in a reporter or in place suggests, and never decides.
+- **Origin.** Judged only by a sequence annotation the labelling did not read.
+
+**Matching.** An observation is of the element when its interval meets the measured layer's rule
+(`measured.measures`, reciprocal overlap at least 0.5) for CRISPRi pairs, lentiMPRA tiles and VISTA
+elements. A saturation-mutagenesis base must lie inside the element, and a GTEx unit's element must share
+a base with it. lentiMPRA is read per cell from the matched tiles by R6's share rule. Genes are matched by
+symbol, and cells after lowercasing and dropping every character that is not a letter or a digit (the
+ablation's rule).
+
+### The three quantities, never combined
+
+`judge(claims, labels)` returns a report with three quantities, each per axis, each a `Share` with its own
+numerator and denominator:
+
+- **target accuracy**: target claims established over target claims established or refuted;
+- **role accuracy**: the same, on molecular role and on activity, reported apart and never pooled across
+  the two;
+- **coverage**: claims that some observation the table allows establishes, refutes or cannot read, over
+  claims stated with one definite value, on all five axes.
+
+Unresolved and observation-model-inadequate counts are reported beside each accuracy, never folded into
+it. `refutable` is reported beside target and context. The reasons a claim was not judged are reported
+beside coverage, one per claim, the first that applies in this order: judging observations outside the
+claim's scope (another gene, another cell), not judged until the target responds, only observations that
+suggest, only observations that cannot judge this axis, no observation. Origin and context accuracy are
+reported under their own names beside the three. **A `Share` refuses addition, and no field of the report
+combines two quantities or two axes.**
+
+**The split.** The scorer uses C4's discipline and nothing else. Every held-out source that judges a
+labelling is first passed to `holdout.check_provenance`, and its `LeakError` is never caught. A labelling
+built from `holdout.evidence(without=S)` is judged with `sources=[S]` alone. An observation of a kind
+holdout does not load is refused with the same error when the labelling read its source. The pilot (S3,
+lane-pilot) is scored by the same call.
+
+### Applied once, to the unchanged compiled labels
+
+**Scope.** The compiled programs as they stand, the same files C4 reads. Origin and molecular role come
+from every predicted `element` block and every `region` block. Target, activity and context come from
+every `rule` with `evidence: predicted`. The measured twins are the evidence, never the labelling, and
+are not read. The labelling reads the model, the cCRE registry, RepeatMasker, the segmental duplication
+track, phyloP constraint, GENCODE v50 and the unknown-block classes: none of them is a holdout source.
+Every holdout source judges it: ten CRISPRi studies, three lentiMPRA cells, VISTA, saturation mutagenesis
+and GTEx.
+
+**Expected, written before the run.** Most claims on every axis are not judged. Origin and molecular role
+are judged by no loaded source: 0 claims, by construction. Target is judged on the order of 100 of the
+440,377 rules and refuted on about none, because a refutation needs a null in the stated cell; the claims
+whose only null is in another cell (about 20) are counted beside. Activity is judged on about the same
+claims as target, a few of them refuted by the opposite sign. Context is established on about 40 and
+refuted on about none.
+
+**What it may be called:** an internal development benchmark reading: of N claims a labelling states on
+axis A, J can be judged by an observation the S4 table lets establish or refute A (coverage J / N); of
+the J, C are established and I refuted (accuracy C / (C + I)), with U unresolved and M
+observation-model-inadequate beside. **What it may not be called:**
+
+- a validation, fresh or external: every source here has been read by this project before;
+- the accuracy of the labelling on claims no observation judges: the judged claims are the ones screens
+  chose to test, near the genes they chose, mostly in K562;
+- a single score, or a comparison between axes: each quantity has its own denominator and evidence;
+- evidence that an unjudged element has no function.
+
+**Tests** (`tests/test_attribution_correctness.py`, synthetic units only):
+
+- the three quantities are never summed: a `Share` raises on addition, `sum` fails, and no key in the
+  serialised report names a combined score;
+- for every observation kind, axis and value, observations the table marks *cannot* or *suggests* never
+  decide a verdict, even several of them in the claim's scope;
+- *the observation model is inadequate* is a verdict, and it survives JSON serialisation of a verdict and
+  of a whole report;
+- a labelling that read a source, or the CRISPRi held-out file, raises `LeakError`, and every source passes
+  through `holdout.check_provenance`;
+- a response elsewhere with a null in the stated cell is one context error, not also a target error.
+
+## The result: the evidence held judges no origin and no molecular role of the unchanged labels, and 98 of 440,377 targets; all 98 are established, but only the 39 stated in K562 could have been refuted (item 12 S4, 2026-09-29, lane-s4, later)
+
+Run once, as registered in the section above, in a clean worktree at `b87f59e` (the revision stamp is not
+dirty; manifest complete). Result: `data/results/attribution_correctness.json`. It took 24 s on one
+laptop CPU. Nothing called the model (0 requests), and the per-element response cache was never opened.
+All 16 holdout sources judged the labels, and each passed `holdout.check_provenance`. **Every count below
+is an internal development benchmark reading.** Each is on evidence this project has already read, and
+none is a validation. The negatives come first.
+
+### Negatives
+
+1. **Almost nothing can be judged.** Coverage per axis, with the reason each unjudged claim was not
+   judged (one reason per claim, in the registered order):
+
+   | Axis | Judged / claims | Outside the claim's scope | Until the target responds | Suggest only | Cannot judge this axis | No observation |
+   | --- | --- | --- | --- | --- | --- | --- |
+   | origin | **0 / 470,077** | 0 | 0 | 0 | 24,495 | 445,582 |
+   | molecular role | **0 / 659,403** | 0 | 0 | 3,519 | 36,112 | 619,772 |
+   | activity | **98 / 440,377** | 1,377 | 23 | 3,194 | 18,747 | 416,938 |
+   | target | **98 / 440,377** | 1,400 | 0 | 3,194 | 18,747 | 416,938 |
+   | cell context | **39 / 440,377** | 1,436 | 23 | 3,115 | 18,826 | 416,938 |
+
+   Origin and molecular role are judged on 0 claims, as registered. No loaded source can establish either
+   of them, and the two sources that could (the sequence annotation, the cCRE registry) are the labels'
+   own inputs. Beside these, the labels state 157,393 groups of unchosen role alternatives and 11,061
+   `unknown` roles; the 26,806 region blocks state no activity and no target. None of these is a claim,
+   and none is counted as absence of function.
+2. **Target accuracy is 98 of 98, and this is not evidence that the targets are right.** The rule
+   refutes a target only with a well-powered null in the cell the rule states. None of the 23 targets
+   with a well-powered null has it in its rule's stated cell; those 23 are counted apart
+   (`well_powered_null_only_in_another_context`). A rule that ignored the stated cell would have counted
+   them as wrong. **Only 39 target claims were refutable**, meaning their stated cell was screened on the
+   named gene. All 39 are established, and all 39 are stated in K562.
+3. **Every judged repression claim is wrong in direction.** Activity (role accuracy on the direction
+   axis) is **93 of 98**. All 4 judged `represses_target` claims are refuted, because the gene fell in
+   each. One `activates_target` claim is refuted by a rise: CCND1, whose deciding pair is in the HCT116
+   study of the benchmark's held-out file. The 23 claims whose gene responded nowhere are not judged on
+   direction: a null has no direction.
+4. **Role accuracy on molecular role has no denominator.** It is 0 established of 0 judged. 3,519 role
+   claims have only suggestive evidence: an active reporter, a VISTA positive, a CRISPRi response or a
+   functional saturation-mutagenesis base. By the table, none of these can decide a biochemical role.
+5. **Cell context is established on 39 and refuted on none**, all in K562 (context accuracy 39 of 39,
+   refutable 39). For 59 claims the gene responds only in cells other than the stated one, and the stated
+   cell is untested.
+6. **No claim was unresolved, and none reached "the observation model is inadequate".** On every axis
+   both counts are 0. This is a statement about these labels, not about the evidence. 181 target claims
+   sit on an element with a lentiMPRA cell whose tiles split evenly. But the unchanged labels make no
+   reporter claim, and by the table a reporter cannot judge the direction claims they do make. Every decided verdict
+   keeps "the observation model is inadequate" among its explanations.
+
+### What else it shows
+
+- **The scorer splits the ablation's measured links by axis and reproduces them.** The 128 predicted
+  links the ablation found measured on their own gene are here 98 established targets (97 decreases, 1
+  increase), 23 targets with a null only in another cell, and 7 touched only by underpowered nulls
+  (cannot judge). The ablation's "93 survive, 5 contradicted by the opposite sign" becomes 98 established
+  targets, of which 93 are right in direction and 5 are wrong. Its "23 contradicted by a well-powered
+  null" becomes 23 targets not refuted, because the null is not in the stated cell. The registered
+  expectations held on every axis. They were written from the ablation's counts, so they show
+  consistency with the ablation, not new evidence.
+- **Where the judging comes from.** 71 of the 98 target verdicts are decided by a Gasperini2019 pair
+  and 87 in K562. 14 of the 98 target and activity verdicts, and 1 of the 39 context verdicts, rest on a
+  pair of the benchmark's held-out file, which is used to judge and never as evidence.
+
+**What it may be called:** of 440,377 target claims the unchanged labels state, 98 can be judged by an
+observation the S4 table lets establish or refute a target (coverage 98 / 440,377). All 98 are
+established (accuracy 98 / 98), with 0 unresolved and 0 observation-model-inadequate beside, and 39
+refutable. Activity is 93 / 98 at coverage 98 / 440,377. Context is 39 / 39 at coverage 39 / 440,377.
+Origin is judged on 0 / 470,077 and molecular role on 0 / 659,403. **What it may not be called:** a
+validation; the accuracy of the labels on the 440,279 unjudged targets, which the screens did not choose
+to test; a single score; or evidence that any unjudged element has no function.
+
+## Item 13 pilot registered: one debugger over local neighbourhoods, and a synthetic gate that needs two simultaneous corrections before anything biological is scored (item 12 S3, item 13 C1-C3, 2026-09-29, lane-pilot)
+
+This section registers the pilot's model and search, and its first gate, before the gate is run and
+before any score of any pilot labelling on any held-out source is read. The biological gate (the
+chromosomes, the pass rule against the three baselines, the metric and the compute budget) is
+registered in its own section before it runs. The code is `genomeos/attribution/pilot.py`; the gate's
+script is `scripts/pilot_synthetic_gate.py`. No model request; the per-element response cache is not
+opened.
+
+### R8's reading, corrected beside the original
+
+R8's pretest registered, for a negative, the reading "coupling carries no information about CRISPRi
+targets beyond independent per-element scoring ... so a joint search over this score cannot beat
+per-block scoring. R8 closes; no search engine is built". That states more than the run showed. The
+run rejected **two particular score transformations**, element competition and gene budget (each a
+share d / (sum d + TAU) of the per-element deletion score), on the K562 training pairs the cache
+covered. It did not show that joint inference cannot help. The original text stays in
+`joint_pretest.READINGS`; the corrected reading is `joint_pretest.READING_CORRECTIONS`, and the two
+transformations are `joint_pretest.RETIRED`. The pilot uses neither: no share of a score over genes or
+over elements is computed anywhere in it.
+
+### The model
+
+- **Blocks** are ENCODE cCREs (v3). A block's label is one target gene or no target, and the set of
+  contexts it is active in (K562, HepG2, WTC11, `invivo` for VISTA, `other` for saturation
+  mutagenesis, and any other cell an observation names).
+- **Observations** are weighted soft constraints over the blocks their interval overlaps, read as an
+  OR. A CRISPRi significant decrease of gene g in cell c is explained when some overlapping block
+  targets g and is active in c; a well-powered null is contradicted when that holds. A reporter tile,
+  a VISTA element or a saturation-mutagenesis locus is explained when some overlapping block is active
+  in its context. A GTEx association is explained when some overlapping block targets its gene.
+  CRISPRi increases, underpowered nulls, GTEx non-associations and missing effects are not used.
+- **Priors**, never from a held-out source: distance to the candidate gene's TSS as a power law,
+  -ln(1 + d / 5 kb); the compiled predicted target (the unchanged labels) with a bonus of
+  1 + min(strength, 1); and activity from ENCODE H3K27ac replicated peaks (a block's own cell for K562
+  and HepG2; for other contexts the share of 13 biosamples with a peak). A part's prior is the
+  share-weighted sum of each block's own prior over the interval it covers, so a split conserves a
+  block's prior, a merge neither adds nor drops one, and no block lends its compiled target to its
+  neighbour.
+- **Gene-level coupling** (the pilot only): a gene that the view saw decrease under CRISPRi at
+  another element gets +1.0 as a target; a gene with at least three well-powered nulls elsewhere and
+  no decrease gets -0.5. The element asked about is excluded, so direct evidence is never counted twice.
+- **Hard constraints** are only the mandatory ones: a part lies inside its block, parts do not
+  overlap, and no part is shorter than 50 bp.
+
+**Weights, in nats, registered and not fitted.**
+
+| term | weight |
+| --- | --- |
+| CRISPRi significant decrease left unexplained | 3.0 |
+| CRISPRi well-powered null contradicted | 1.5 |
+| GTEx association left unexplained | 0.5 |
+| reporter tile active / inactive | 1.0 / 0.3 |
+| VISTA positive / negative | 1.0 / 0.5 |
+| saturation mutagenesis functional / inert | 1.0 / 0.3 |
+| activity prior (logit) | -1.0 |
+| own-cell H3K27ac peak / no peak (logit) | +2.0 / -1.0 |
+| breadth, other contexts (logit) | 2.0 x share of the 13 biosamples |
+| the compiled link's model cell is this context (logit) | +0.5 |
+| no target (log-weight) | -3.0, that of a gene at about 100 kb |
+| split (fragmentation) / merge / an observation group marked inadequate | 2.0 / 1.0 / 2.0 |
+
+### C1, C2 and C3 as built
+
+- **The debugger (C1).** From the starting labels (the compiled target, and the activity the
+  annotation implies), the violated observations name the conflicting blocks. Repairs are proposed
+  only on those blocks' variables:
+  - change the target, to a gene an observation there names, the compiled target, or no target;
+  - change an activity context an observation there names;
+  - split the block where evidence changes;
+  - merge it with an adjacent block within 500 bp;
+  - mark one observation kind at that block as having an inadequate observation model. This is
+    allowed for reporter, VISTA, saturation mutagenesis and GTEx, and never for CRISPRi, the endpoint
+    of regulation, whose lower null weight already carries incomplete knockdown.
+
+  Every single repair is evaluated, and every pair whose second repair lies in the conflict the first
+  leaves. Only the touched blocks' energy is recomputed. The best repair is applied while it lowers
+  the energy by more than 0.05 nat, for up to six rounds. Each violated observation is reduced to a
+  smallest conflicting set of observations and label assumptions (deletion-based, exact by
+  enumeration over the involved parts). It is reported beside the conflict among the observations
+  themselves, which is where a block boundary shows up as an assumption.
+- **Boundaries (C2).** A split is proposed only at an observation's edge or an H3K27ac peak's edge
+  inside the block. Splits and merges are counted as corrections and must improve prediction of
+  withheld evidence like any other correction.
+- **Families (C3).**
+  - Alternatives within 1.0 nat of the best survive. Survivors that predict the same value for every
+    observation of the neighbourhood form one family.
+  - A change of the best alternative is committed only if every survivor shares it. Otherwise the
+    pilot abstains.
+  - The next measurement is the cheapest candidate that separates the best alternative from its
+    strongest surviving rival. The candidates are a reporter tile (cost 1) or a CRISPRi pair (cost 4)
+    over a block or a part of one. Ties are broken by expected information over all survivors. When
+    none separates those two, the candidate with the most information per unit cost is chosen.
+- **What a neighbourhood returns:** the ranked alternatives with their energies, the supporting and
+  conflicting observations for each, the families, the committed and abstained changes, and the next
+  measurement.
+
+### Gate 1: the synthetic gate
+
+**Four motifs.** Each is built on a synthetic chromosome under the weights above. Instance 0 of each is
+hand-built, and 100 more are generated from seed 20260929.
+
+1. **Split and retarget** (C2 with C1). One block's two halves are screened against two genes with
+   opposite results. The truth is to split at the evidence edge and retarget one half.
+2. **Swap** (C1, across blocks). Two blocks sit under two screens that each span both. The truth
+   exchanges their targets together.
+3. **Context and hand-off** (C1, context and target). The linked block is not active in K562 after all,
+   and its neighbour carries the link instead.
+4. **Indistinguishable** (C3). One screen spans two blocks, and nothing else tells which of them
+   regulates the gene.
+
+**Validity, by brute force** over every single repair and every pair of repairs in the full move
+space: every gene and no target, every context, every breakpoint, merge and excuse. A two-correction
+instance is kept only if all four conditions hold:
+
+1. no single repair fits the evidence;
+2. no single repair lowers the energy by more than 0.05 nat, so a one-repair-at-a-time search is stuck
+   at the starting labels;
+3. the planted pair fits;
+4. the planted pair's energy is below every other alternative of at most two repairs by more than
+   1.0 nat.
+
+A family instance is kept only if both single alternatives fit, predict the same for every
+observation, and lie within 1.0 nat of each other and of the best alternative of at most two repairs.
+
+**Checks done before this registration.** These checks were construction only, and the pilot's search
+was not run on any gate instance. All four hand-built instances pass the validity check. On 200 draws
+from another seed, these are the acceptance rates:
+
+| motif | draws accepted |
+| --- | --- |
+| split and retarget | 188 of 200 |
+| swap | 81 of 200 |
+| context and hand-off | 200 of 200 |
+| indistinguishable | 160 of 200 |
+
+**The pass rule.**
+
+- **The three two-correction motifs.** This part must hold on each hand-built case and on at least 95%
+  of the 100 generated instances of each motif. The pilot's returned labels must equal the planted
+  truth, and both planted corrections must be committed.
+- **The family motif.** This part must hold on the hand-built case and on at least 95% of the 100
+  instances. The two alternatives must both survive in one family, and the pilot must abstain on which
+  block supplies the link. Its next measurement's predicted outcome must also differ between them.
+
+**If the gate fails, the pilot stops and nothing biological is scored.**
+
+**Controls (descriptive, not in the pass rule):**
+- the same search without pairs (greedy);
+- the independent-block variant, in which each block is its own neighbourhood with its own copy of
+  every observation over it and there is no coupling;
+- a noisy copy of each instance with one extra random observation.
+
+**Falsifier.** The gate is void if the greedy control recovers the planted truth on any kept instance:
+the validity check would then not be doing its job.
+
+**Compute.** At most 10 CPU minutes, measured with `time.process_time` in the run's own process.
+
+**What each outcome means.**
+
+- **Pass.** The search finds repairs that need two simultaneous changes, and it keeps indistinguishable
+  alternatives apart as a family. That is all it means: it is a solver test on constructed cases, and
+  says nothing about biology.
+- **Fail.** The pilot is not fit to be scored. It is recorded as a discontinued investigation, and
+  gate 2 is not run.
+- **Void.** Reported as a failure of the gate's construction, with gate 2 not run.
+
+## The result: the pilot finds every planted pair of simultaneous corrections and keeps every indistinguishable pair as one family, but the independent-block control also solves two of the three motifs (item 12 S3, 2026-09-29, lane-pilot, later)
+
+The gate was run once, as registered in the section above, in a clean worktree at `a9660ff` (the
+revision stamp is not dirty). The script is `scripts/pilot_synthetic_gate.py` and the result is
+`data/results/pilot_synthetic_gate.json`. It took **6.84 CPU seconds** (8.08 s wall, 31 MB peak),
+inside the registered budget of 600. No data was read and no model was called. **Verdict: pass.** In
+its registered wording: the search finds repairs that need two simultaneous changes, and it keeps
+indistinguishable alternatives apart as a family. That is all it means. It is a solver test on
+constructed cases, and it says nothing about biology.
+
+### What the pass does not show, first
+
+1. **The independent-block control, which has no coupling, also recovers the planted truth on two of
+   the three motifs.**
+   - **Split and retarget: 101 of 101.** Both corrections lie inside one block, where the control may
+     pair its own repairs.
+   - **Swap: 101 of 101.** Here it is right for a reason the pilot forbids. Each block's private copy of
+     the two spanning screens counts them twice, so each block alone sees a single repair that helps.
+     The pilot reads a spanning screen once, as an OR over the blocks it covers, and for the pilot no
+     single repair helps.
+   - **Context and hand-off: 0 of 101.** Only this motif needs the coupling.
+
+   So the gate shows that the search finds pairs. It shows the value of coupling on one motif of three.
+   Whether coupling helps on real evidence is gate 2's question: the pilot against the independent-block
+   variant.
+2. **One extra random observation is not in the pass rule.** With one added (the noisy control), the
+   pilot still returns the planted truth on 99, 101 and 84 of the 101 instances of the three motifs.
+   Context and hand-off, the motif that needs the coupling, is also the least robust to noise.
+3. **The greedy control found the planted truth on 0 of 303 instances.** This is the falsifier, and
+   it did not fire: the validity check did its job.
+4. **The generator rejected these draws before keeping 100 valid instances per motif:**
+   - split and retarget: 6 of 106 draws, because a single repair lowered the energy;
+   - swap: 130 of 230, for the same reason;
+   - context and hand-off: 0 of 100;
+   - indistinguishable: 12 of 112, because the two alternatives were not both within the margin of the
+     best.
+
+   The kept instances are a constructed subset. The per-motif instance digests are in the result.
+
+### The gate, motif by motif
+
+| motif | hand-built | generated passed | greedy control | independent-block control | noisy copy | median evaluations |
+| --- | --- | --- | --- | --- | --- | --- |
+| split and retarget | pass | 100 of 100 | 0 of 101 | 101 of 101 | 99 of 101 | 26 |
+| swap | pass | 100 of 100 | 0 of 101 | 101 of 101 | 101 of 101 | 52 |
+| context and hand-off | pass | 100 of 100 | 0 of 101 | 0 of 101 | 84 of 101 | 115 |
+| indistinguishable (family) | pass | 100 of 100 | — | — | — | 34 |
+
+- **The three two-correction motifs.** The pilot resolved all 303 instances, committing both planted
+  corrections with no abstention.
+- **The family motif.** The pilot abstained on all 101 instances, and both alternatives survived in one
+  family.
+  - On the hand-built case, its next measurement is a CRISPRi pair of the first block alone for the
+    gene in K562. It costs 4 and carries 0.998 bits over the survivors.
+  - That measurement separates the best alternative from its strongest rival.
+
+### What it may be called, and what follows
+
+It may be called a passed solver gate on constructed neighbourhoods. It may not be called evidence that
+the pilot, or coupling, improves biological labels. Gate 2 is registered in its own section before it
+runs. That gate scores the pilot's revised labels on withheld sources against three baselines: the
+unchanged labels, the independent-block variant and distance to TSS.
+
+## Item 13 pilot, gate 2 registered: the revised labels scored on withheld sources against the unchanged labels, the independent-block variant and distance to TSS, on seven validation chromosomes (item 12 S3, item 13, 2026-09-29, lane-pilot)
+
+This section was written before any score of any pilot labelling, any validation of a correction and
+any S4 judgement was computed, on any chromosome. The model and the search are exactly those
+registered in `a9660ff` and passed by gate 1; no weight or search constant changed after gate 1. The
+code is `genomeos/attribution/pilot_bio.py`, the script `scripts/pilot_biological_gate.py`, and the
+result will be `data/results/pilot_biological_gate.json`. The result may be called **an internal
+development result on withheld sources**. It is never a validation: every source here has been read
+by this project before, and the CRISPRi held-out file is a reused benchmark that is never evidence.
+
+### What runs
+
+The harness's scorable sources are held out in turn:
+
+- Gasperini2019, Morris, Schraivogel2020 and Xie (CRISPRi);
+- the three lentiMPRA cells;
+- VISTA;
+- saturation mutagenesis;
+- GTEx.
+
+For each held-out source S, the pilot reads only `holdout.evidence(without=S)`. It builds neighbourhoods
+of ENCODE cCREs on the validation chromosomes around the blocks S's units overlap. S's units give it
+coordinates only, and their outcomes are never read by a labelling. The pilot then solves them, and the
+harness scores the result on S with `holdout.evaluate(..., chroms=VALIDATION)`. That call uses a locus
+bootstrap with 1,000 resamples, seed 20260928, and the same resamples for every labelling. WTC11_DC_TAP
+is not held out: its only scorable endpoint (increase, 20 positives genome-wide) is below the floors on
+any chromosome subset.
+
+**Chromosomes are the validation partitions.** The validation chromosomes are chr1, chr6, chr8, chr9,
+chr10, chr11 and chr19. They are the smallest set found by unit counts alone that keeps all four CRISPRi
+decrease endpoints above the harness's floors (20 positives, 20 negatives, 10 loci):
+
+| endpoint | positives / negatives on the validation chromosomes | loci |
+| --- | --- | --- |
+| Gasperini2019 decrease | 150 / 2,637 | 201 |
+| Morris decrease | 21 / 71 | 33 |
+| Schraivogel2020 decrease (chr8 and chr11 hold all its units) | 23 / 1,276 | 12 |
+| Xie decrease | 26 / 148 | 22 |
+
+Odd or even chromosomes lose Schraivogel2020 and one of Morris or Xie. Of the 15 endpoints C4 scored,
+14 stay scorable. The other 17 chromosomes are the development partition. The pilot was timed and
+debugged there, and nothing is scored there.
+
+### The labellings
+
+| labelling | role | what it is |
+| --- | --- | --- |
+| `pilot` | scored | The joint debugger: neighbourhoods are the blocks joined by an observation over two or more of them or by adjacency within 500 bp, cut into windows of at most 60 with the outside blocks held fixed, so an observation crossing a cut is kept on both sides. Gene-level coupling is on |
+| `independent_block` | baseline | The same model and search with each block its own neighbourhood, holding its own copy of every observation over it, and no gene-level coupling: each block revised alone |
+| `unchanged` | baseline | `holdout.unchanged_labels()`, the compiled predicted layer |
+| `distance` | baseline | `holdout.distance_labels()` |
+| `prior_only` | descriptive | The pilot's priors alone (distance, the compiled target, H3K27ac), reading no holdable source |
+| `pilot_at_unchanged_coverage` | descriptive | The pilot, abstaining wherever the unchanged labels abstain |
+
+**How a labelling scores a unit.**
+
+- **What it reads of the unit:** only the query, which is the unit's interval, gene, TSS and cell.
+- **A pair unit** (CRISPRi, GTEx) gets the block's link probability for that gene. For CRISPRi the gene
+  must also be active in the unit's cell. The probability is contrasted with "no target" (and
+  inactive), with the rest of the neighbourhood as in each surviving alternative. It is never a share
+  over other genes.
+- **An element unit** gets the block's activity probability in the unit's context: the lentiMPRA cell,
+  `invivo` for VISTA, `other` for saturation mutagenesis.
+- **Several alternatives:** the score is mixed over the surviving alternatives with weights exp(-ΔE).
+- **Several blocks:** the largest score over the blocks the unit overlaps is taken.
+- **No solved block:** the labelling abstains (None), which the harness ranks last and reports as coverage.
+- **Direction:** the pilot does not model the sign of a regulation, so its `increase` score is its link
+  score.
+- **Reads:** the pilot and independent-block labellings declare every source in the view,
+  `built_without=S`, and the non-holdable inputs (GENCODE v50, the cCRE registry, the compiled layer and
+  so the model, H3K27ac).
+
+### The pass rule, the falsifier, the readings and the stop rule
+
+**Primary endpoints:** the four CRISPRi significant-decrease endpoints (Gasperini2019, Morris,
+Schraivogel2020, Xie) on the validation chromosomes. **Secondary, reported beside and not in the rule:**
+Gasperini2019 increase, lentiMPRA activity and active in each cell, VISTA, saturation mutagenesis and
+GTEx.
+
+**Pass.** The pilot passes if two conditions hold:
+1. On at least 2 of the 4 primary endpoints, its paired difference in average precision has a 95%
+   locus-bootstrap interval above zero against each of the three baselines, at a coverage of at least
+   0.80 of the endpoint's units.
+2. On no primary endpoint is its interval against any baseline entirely below zero.
+
+The rule tests three baselines on four endpoints and asks for two endpoints against all three, so a
+chance pass is unlikely without any correction for multiplicity.
+
+**Falsifier.** A pass is void in either of two cases:
+
+- The prior-only labelling, which reads no holdable source, passes against the unchanged labels and
+  distance on the same endpoints, and the pilot's interval against it includes zero there. The gain is
+  then the priors', not the debugger's.
+- The pilot restricted to the unchanged labels' coverage does not beat them. The pass against the
+  unchanged labels is then reported as coverage.
+
+Any LeakError is fatal and never caught.
+
+**Readings, fixed now.**
+
+| outcome | reading |
+| --- | --- |
+| pass | An internal development result on withheld sources: joint revision predicts the held-out CRISPRi decreases better than the unchanged labels, the same revision one block at a time, and distance to TSS, on the endpoints named, at the coverage given. Phase C may follow; genome-wide deployment waits for a fresh set |
+| beats the unchanged labels and distance, not the independent blocks | A failure of the coherence pilot. Revision helps but coupling adds nothing measurable. The joint debugger stops as a discontinued investigation; the per-block revision is a separate finding, to be registered on its own before any use |
+| beats the unchanged labels only | A failure. The pilot stops as a discontinued investigation |
+| beats none | A failure. The pilot stops and is recorded as a discontinued investigation, apart from implemented capabilities |
+| void | A failure of the kind the falsifier names. The pilot stops |
+
+**Stop rule (item 13, binding).** If the pilot does not improve prediction on withheld evidence at
+useful coverage, it stops. It is then recorded as a discontinued investigation, separately from
+implemented capabilities. A higher internal coherence score is never success.
+
+### The metric: validated corrections per compute-hour
+
+A **committed correction** is a target, activity, split or merge change of the best alternative that
+every surviving alternative shares. Each is validated against the held-out source's own binary endpoint:
+
+- CRISPRi: decrease;
+- lentiMPRA: active;
+- VISTA: positive;
+- saturation mutagenesis: functional;
+- GTEx: associated.
+
+The test runs over the units on the validation chromosomes that the correction touches. For each
+touched unit, δ = +1 if the correction newly predicts it (its new target's pairs, a context switched on)
+and -1 if it stops predicting it (the old target's pairs, a context switched off). A split or merge is
+judged by its parts' labels against the block's starting label. With π the source's prevalence on
+those chromosomes, the correction is:
+
+- **validated** when sum((y - π) δ) > 0;
+- an **error** when the sum is below zero;
+- **neutral** at zero;
+- **untested** when it touches no unit.
+
+**Compute-hours** are the pilot's own CPU time for building neighbourhoods and searching, over all
+held-out sources, measured with `time.process_time`. The harness's scoring time and the loading time
+are reported beside. Reported beside the metric:
+
+- errors;
+- neutral and untested corrections;
+- abstentions: changes not committed, and neighbourhoods by status;
+- observation groups marked inadequate.
+
+Counts are given for the independent-block variant as well.
+
+### S4 beside, not in the rule
+
+Two sets of claims are judged by `correctness.judge(..., sources=[S])`:
+
+- the pilot's committed labels on the blocks it solved, as target claims (one per active cell, or
+  unstated) and context claims;
+- the unchanged labels' claims on the same blocks.
+
+Target accuracy, role accuracy and coverage are reported apart, with coverage beside every accuracy.
+The pilot states no molecular role and no direction, so it has no role claims. A revision that improves
+accuracy on the few judgeable claims while coverage stays near zero is an internal development result
+at tiny coverage, and is reported as such.
+
+### Compute budget
+
+The pilot's own work may take at most **2 CPU-hours** over all held-out sources. Per neighbourhood the
+search caps of `pilot.SEARCH` apply, and a capped neighbourhood is counted. The run uses one process and
+cached data. It opens no per-element response cache and makes no model request, and peak memory is
+measured.
+
+### What was done before this registration, and what was expected
+
+**On the development partition, and nowhere else.** Nothing done there computed a held-out score, a
+correction's validation or an S4 judgement.
+
+- **Timing.** The joint pilot was timed on chr2 and chr12 with Gasperini2019, Morris, GTEx, lentiMPRA
+  K562 and VISTA held out: at most 28.4 CPU seconds a source, 2 neighbourhoods capped, peak 487 MB.
+- **Disputes.** Most disputed neighbourhoods there are one reporter tile against the activity H3K27ac
+  implies. Most abstain under the registered margin: a flip within 1 nat survives, and so does a no-op
+  merge at exactly 1 nat.
+- **Smoke run.** The whole script was run on chr21 and chr22 with every call that reads a held-out
+  outcome stubbed. That run fixed one crash: a reused outcome's merged parts were not registered in the
+  new neighbourhood.
+
+**Expected, before the run.**
+
+- Distance should stay hard to beat on the CRISPRi decrease endpoints, as C4 found.
+- The pilot's priors contain distance and H3K27ac activity, which is an ABC-like combination, so any gain
+  over distance should appear in `prior_only` too.
+- The independent-block variant should be close to the pilot: committed corrections were few on the
+  development chromosomes, and most disputes abstain.
+
+None of this changes a rule above.
+
+## The result: the pilot beats the unchanged labels but neither distance to TSS nor its own blocks revised alone on the CRISPRi decrease endpoints, and on Gasperini2019 the coupling makes it worse; the stop rule fires and the pilot is a discontinued investigation (item 12 S3, item 13, 2026-09-29, lane-pilot, later)
+
+**How it was run.**
+- **Once**, as registered in the section above.
+- **Where:** a clean worktree at `a89bf5c`; the revision stamp is not dirty.
+- **Files:** the script is `scripts/pilot_biological_gate.py` and the result is
+  `data/results/pilot_biological_gate.json`.
+- **Compute:**
+  - the pilot's own work took **0.0507 CPU-hours** (182.6 CPU seconds, inside the registered budget of 2
+    CPU-hours);
+  - the harness's scoring took 45.6 s and loading 4.8 s, for 243 CPU seconds in all;
+  - peak memory was 1.83 GB;
+  - no model request was made, and the per-element response cache was never opened.
+
+**What it may be called.** An internal development result on withheld sources, never a validation.
+
+**Registered reading: `beats_unchanged_only`.** In the registered wording, "a failure: the revision
+improves on the compiled labels but not on distance to TSS; the pilot stops as a discontinued
+investigation". **The stop rule of item 13 fires.** The coherence pilot is recorded as a discontinued
+investigation, apart from implemented capabilities.
+
+### Negatives, first
+
+1. **No primary endpoint passes.** The pass needed 2 of 4 endpoints above all three baselines.
+2. **The coupling never helps, and on Gasperini2019 it hurts.** The pilot minus the independent-block
+   variant, in average precision on the validation chromosomes:
+
+   | endpoint | pilot minus independent-block |
+   | --- | --- |
+   | Gasperini2019 | **-0.065 [-0.125, -0.012]** |
+   | Morris | +0.028 [-0.014, +0.085] |
+   | Schraivogel2020 | +0.009 [-0.015, +0.109] |
+   | Xie | +0.021 [-0.047, +0.130] |
+
+   The Gasperini2019 interval lies entirely below zero. That alone breaks the rule's second condition,
+   and means the same revision one block at a time predicts that screen better than the joint debugger.
+3. **Against distance to TSS, the pilot is above zero on one endpoint of four.**
+
+   | endpoint | pilot minus distance |
+   | --- | --- |
+   | Xie | +0.105 [+0.015, +0.261] |
+   | Gasperini2019 | +0.087 [-0.002, +0.169] |
+   | Morris | +0.003 [-0.174, +0.173] |
+   | Schraivogel2020 | -0.016 [-0.440, +0.171] |
+
+4. **What beats distance is not the debugger but its priors.** The prior-only labelling reads no
+   holdable source: distance, the compiled target and H3K27ac only.
+   - It is above distance on Gasperini2019 (+0.193 [+0.134, +0.249]) and Xie (+0.086 [+0.022, +0.181]).
+   - On Gasperini2019 it is above the pilot itself, by 0.106 [+0.041, +0.168].
+   - On the other three primary endpoints, the pilot minus prior-only interval includes zero.
+
+   Two things limit this.
+   - The priors include H3K27ac. The CRISPRi benchmark's held-out file, where Morris and Xie live,
+     selected its positives on chromatin at the element (noted 2026-09-27 above). On Xie, therefore,
+     the prior partly reads the rule that made a pair positive.
+   - The prior-only gain is descriptive and not in the rule. It is not a finding of this pilot: it
+     would need its own registration before any use.
+5. **Validated corrections per compute-hour: 78.85, and errors per compute-hour: 78.85.**
+   - Of 261 committed corrections, **4 are validated, 4 are errors, 0 are neutral, and 253 (97%) are
+     untested**.
+   - The 261 count each held-out run. The three lentiMPRA runs share one view, so they repeat the same
+     58.
+   - All 8 tested corrections are from the GTEx run:
+     - 3 validated and 3 errors are target changes;
+     - 1 validated and 1 error are merges.
+
+     The validated target changes read a GTEx "not associated" as evidence, which the harness says is
+     weaker than a well-powered null.
+   - **No committed correction was validated or refuted by any held-out CRISPRi screen.** Morris and Xie
+     had 0 committed corrections, Gasperini2019 22 and Schraivogel2020 2, all untested.
+6. **Abstentions dominate.**
+   - 1,834 changes were not committed, and 416 observation groups were marked inadequate.
+   - Over all ten runs, neighbourhoods were: 46,737 undisputed, 2,117 abstained, 129 resolved,
+     154 excused and 72 kept.
+   - Most disputes are a single reporter tile against the activity H3K27ac implies. A flip within one
+     nat survives, so these abstain.
+7. **Merges without evidence, a defect of the model found after the run.**
+   - 109 of the 261 committed corrections are merges (19 of Gasperini2019's 22).
+   - Of the 20 resolved neighbourhoods returned as examples, 6 were resolved by a merge alone that
+     explains no observation.
+   - The mechanism: the prior prefers any gene within about 100 kb to "no target" (`no_target` = -3.0),
+     so the starting labels are not prior-optimal. A merge is the one repair that can hand a block a
+     gene that no observation names.
+8. **A counting defect in the metric, found after the run.**
+   - `validate` compared a merge's label with its first block's starting label only, so the second
+     block's change was never counted. The registered definition (each block against its own starting
+     label) was not implemented for merges.
+   - The registered run's figures above are kept. A recount with the definition as registered follows in
+     its own commit.
+   - A second defect cannot matter here: the falsifier's "prior-only above the unchanged labels" arm reads
+     a comparison the run did not make, so it is always false. It matters only for a pass, and nothing
+     passed.
+9. **S4 (beside, not in the rule): coverage is tiny.**
+   - **Gasperini2019.** The pilot's target claims on its solved blocks: 36 of 44 judged are established
+     (coverage 44 of 2,558). The unchanged labels' claims on the same blocks: 28 of 28 (coverage 28 of
+     1,652).
+
+     The pilot states each target in every cell it thinks the block is active in, so its claims become
+     refutable in K562, and 8 are refuted there. The unchanged labels state the model's cell.
+
+     Context claims: the pilot 28 of 28 (coverage 28 of 2,149), the unchanged labels 12 of 12 (12 of
+     1,652).
+   - **Schraivogel2020.** Target claims: the pilot 3 of 4 (coverage 4 of 1,051), the unchanged labels 3
+     of 3 (3 of 862).
+   - **Xie.** Target claims: 1 of 1 each.
+   - **Every other held-out source** (Morris, lentiMPRA, VISTA, saturation mutagenesis, GTEx) judges
+     none.
+   - **Role accuracy.** The pilot states no role or direction. The unchanged labels' direction on
+     Gasperini2019's blocks is 27 of 28.
+
+   This is an internal development result at tiny coverage.
+10. **Secondary endpoints.**
+    - The pilot, the independent-block variant and the prior-only labelling agree within 0.002 on every
+      lentiMPRA endpoint.
+    - Against the unchanged labels, the pilot is below on WTC11 activity (-0.027 [-0.045, -0.008]). At
+      the unchanged labels' coverage, it is also below on VISTA (-0.041 [-0.075, -0.008]).
+    - On GTEx, the coupling lowers the score: the pilot minus the independent-block variant is -0.005
+      [-0.008, -0.002], and the pilot minus prior-only is -0.0065 [-0.0097, -0.0030].
+
+### The primary endpoints
+
+Average precision on the validation chromosomes is given with its 95% locus-bootstrap interval; the
+coverage is in brackets.
+
+| held-out source (positives / units, loci) | pilot | independent-block | prior-only | unchanged | distance |
+| --- | --- | --- | --- | --- | --- |
+| Gasperini2019 decrease (150 / 2,787, 201) | 0.554 [0.463, 0.677] (0.97) | 0.619 [0.527, 0.727] (0.97) | 0.660 [0.574, 0.757] (0.97) | 0.390 [0.304, 0.494] (0.57) | 0.467 [0.387, 0.581] (1.0) |
+| Morris decrease (21 / 92, 33) | 0.866 [0.695, 0.974] (0.99) | 0.838 [0.648, 0.962] | 0.828 [0.625, 0.960] | 0.435 [0.255, 0.610] (0.87) | 0.863 [0.718, 0.965] |
+| Schraivogel2020 decrease (23 / 1,299, 12) | 0.375 [0.098, 0.526] (0.85) | 0.366 [0.078, 0.530] | 0.407 [0.078, 0.574] | 0.162 [0.018, 0.316] (0.45) | 0.390 [0.203, 0.672] |
+| Xie decrease (26 / 174, 22) | 0.745 [0.566, 0.924] (0.99) | 0.725 [0.541, 0.873] | 0.726 [0.539, 0.874] | 0.469 [0.312, 0.669] (0.83) | 0.641 [0.412, 0.809] |
+
+**What holds, in the registered wording** (an internal development result on withheld sources):
+
+- The pilot's revised labels predict these screens better than the unchanged compiled labels:
+  - Gasperini2019: +0.165 [+0.074, +0.266];
+  - Morris: +0.431 [+0.269, +0.587];
+  - Xie: +0.277 [+0.087, +0.443];
+  - Schraivogel2020: +0.213 [-0.052, +0.394], an interval across zero.
+- The gain is not coverage alone. At the unchanged labels' own coverage the pilot is still above them:
+  - Gasperini2019: +0.111 [+0.026, +0.209];
+  - Morris: +0.272 [+0.119, +0.412];
+  - Xie: +0.269 [+0.086, +0.434].
+- As item 13's instruction to this lane said, beating the unchanged labels alone is not success.
+
+### What the pilot returned, three neighbourhoods of the run
+
+1. **Schraivogel2020 held out, chr8, EH38E3844209 and EH38E3844210** (compiled target CALB1).
+   - **The evidence:** a Gasperini2019 CRISPRi decrease of LINC00534 over the region.
+   - **The smallest conflicting set:** that decrease and "EH38E3844210 targets CALB1".
+   - **The one family** holds two survivors:
+     - merge both blocks under LINC00534 (energy 1.029);
+     - retarget EH38E3844210 from CALB1 to LINC00534 (1.158).
+
+     The data support the LINC00534 relationship but cannot say whether one block or both supply it.
+   - **The pilot abstains.** Its next measurement is a CRISPRi pair of EH38E3844209 alone against CALB1
+     in K562 (cost 4, 0.997 bits), which separates the two survivors.
+2. **Gasperini2019 held out, chr1, EH38E2780707.**
+   - **The dispute:** one K562 reporter tile is inactive, against the K562 activity its H3K27ac peak
+     implies. The smallest conflicting set is that tile and "EH38E2780707 is active in K562".
+   - **The survivors:**
+     - keep the labels (10.30);
+     - inactive in K562 (11.00);
+     - also active in WTC11 (11.14).
+   - **The pilot abstains.** The next measurement is a K562 reporter tile over the block (cost 1, 0.69
+     bits). This is the commonest dispute of the run.
+3. **Gasperini2019 held out, chr1, EH38E2840923,** "resolved" by merging it under MEF2D (energy -2.94 to
+   -4.29). The merge explains no observation. It is the defect in negative 7, returned as a committed
+   correction.
+
+### What follows
+
+The coherence pilot stops, as item 13's stop rule requires. It is recorded as a discontinued
+investigation, apart from implemented capabilities. Phase C (C6, C5's build, S8's experiment design)
+does not follow from it.
+
+Three things are recorded for whoever reopens it. None of them is a result:
+
+1. The prior-only labelling's lead over distance on Gasperini2019 and Xie is a separate observation. It
+   needs its own registration, with the H3K27ac selection of the held-out file's positives in mind.
+2. The merge defect and the metric's merge count are defects of this pilot's code.
+3. On these sources the debugger commits almost nothing that a withheld screen can test (0 of 24 CRISPRi
+   corrections tested).
+
+### Correction, the merge count recounted as registered (2026-09-29, lane-pilot, later)
+
+Negative 8's counting defect is fixed in `6bbf1d6`. `scripts/pilot_metric_recount.py` re-solved every
+held-out source exactly as the registered run did, in a clean worktree at that commit (stamp not
+dirty). With the run's counter it reproduced the run's counts exactly for all ten sources, and only then
+counted each merged block against its own starting label, as registered. The result is
+`data/results/pilot_metric_recount.json`. Nothing was scored again, so no score, pass or reading changed.
+
+| count | as run (kept above) | as registered |
+| --- | --- | --- |
+| committed corrections | 261 | 261 |
+| validated | 4 | **6** |
+| errors | 4 | **6** |
+| neutral | 0 | 0 |
+| untested | 253 | **249** |
+| validated per CPU-hour (0.0507 h) | 78.85 | **118.34** |
+| errors per CPU-hour | 78.85 | **118.34** |
+
+The two added validated corrections and the two added errors are GTEx merges: among the GTEx run's
+merges, 3 are now validated, 3 errors and 3 untested. Every other run's counts are unchanged. **Still no
+committed correction is validated or refuted by any held-out CRISPRi screen.** The stop rule's firing
+does not depend on this count: it fired on the scores.
+
+## Rebuilt through its committed entry point: all 25,003 values of clause2_design_power_calibrated reproduce, and a second checkout rebuilds it from its manifest with 0 differences (item 12 S2 follow-up, 2026-09-29, lane-rule)
+
+cab70d9 wrote `data/results/clause2_design_power_calibrated.json` through a scratch driver outside the
+repository. The driver called `collect_calibrated` and `save_result` as `--calibrated` does, and the
+manifest's argv named the driver: a scratchpad path, at a1900285 with a dirty tree. So
+`scripts/manifest_rebuild.py` could not run it.
+
+**The rerun.** `python scripts/clause2_design_power.py --calibrated` was run in a clean worktree at
+21a7d37 with the stores linked (1,958 s, **0 AlphaGenome requests**). Since cab70d9 the script had
+changed only by the `--read-calibrated` view, which the calibrated path does not call. Every value was
+compared with the committed file except the date, the one wall-clock key (`seconds`) and the manifest:
+**25,003 values, 0 differences**. The two manifests agree on every field except `code`.
+
+**What was written.** lane-manifest2's pattern. The committed file keeps every value, its date
+(2026-09-28) and its timing. Only `result_manifest.code` is replaced, by the clean rerun's: git 21a7d37,
+dirty false, argv `scripts/clause2_design_power.py --calibrated`.
+
+**Rebuilt from the manifest.** `scripts/manifest_rebuild.py --venv fresh` then made a second checkout at
+21a7d37, with a fresh environment from the committed uv.lock, offline. It found all 201 inputs with
+their recorded sha256, ran the recorded argv (exit 0) and compared field by field:
+**0 differences**. The bytes differ only in the date, the timing and the code stamp, which the rebuild
+ignores. The finding of cab70d9 is unchanged; what changed is that its record can now be rerun.
+
+## The result: the committed reading rule calls a three-quarters rate the model's failure in 50% to 82% of experiments and half the rate "no element" in 57% to 98%; the revised rule holds its error rates in 75 of 210 cells, decides in none, and no rule on this estimator reaches 0.8 at either pole (item 12 S2 follow-up, 2026-09-29, lane-rule, later)
+
+The rule registered in `1cb7559` was scored once, through `python scripts/clause2_design_power.py
+--reading-rule` in a clean worktree at `1ef8990` (2,092 s, **0 AlphaGenome requests**), and written to
+`data/results/clause2_reading_rule.json` with a complete manifest (dirty false). The gate passed first:
+recomputed through the same redraw, the reference calibration, the eligible populations (531, 347, 284,
+187) and the registered lines all equal cab70d9's. The model is cab70d9's: 24 designs, every size up to
+each cap, six true ratios, 2,000 experiments per cell, seed 2026092913. Both rules read the same
+simulated experiments. Every probability below holds under cab70d9's calibrated assumptions and is
+never a guarantee.
+
+### Negatives first
+
+- **No design decides clause 2.** In 0 of 210 (design, size) cells does the revised rule reach 0.8 at
+  both poles. At its best it reads model_failed at a true ratio of 1 with probability **0.376** (1
+  element, 3 own windows, all 531 blocks). It reads wording_wrong at a true ratio of 0 with
+  **0.328** (6 elements, 10 own windows, all 187 blocks).
+- **A threshold on the committed estimator does not reach 0.8 either.** The Neyman-Pearson threshold,
+  read from the simulated experiments themselves and so slightly optimistic, reaches at most
+  **0.556** for model_failed against a three-quarters rate and **0.269** for wording_wrong against a
+  tenth. A rule that knew the windows' rate exactly and thresholded the blocks' own rate reaches at most
+  0.528 and 0.478. Within the eligible blocks, at the registered error rates, no rule of either kind
+  decides the clause.
+- **The first registered expectation failed.** It predicted both bounds in every own-window cell from
+  50 blocks up; they hold in 63 of 81. With 10 windows per block the committed interval lies wholly
+  below the one-tenth line in 6% to 13% of experiments at a true tenth, against a nominal 2.5%. When
+  positives are rare, the percentile interval over blocks is anti-conservative in its lower tail. With
+  shared controls no cell meets both bounds: model_failed errors reach 0.286 and wording_wrong errors
+  0.166.
+- **The bounds do not survive the anchor's own uncertainty.** The lines are in points, and points move
+  with the anchor. With the lines held at the reference and the truth drawn at the clustered interval's
+  ends:
+  - at 7.88% the rule reads model_failed at a three-quarters rate in 12% to 21% of experiments;
+  - at 19.80% it reads wording_wrong at a tenth in 80% to 99.6%, and at a quarter in 21% to 65%;
+  - with no false positives in truth, wording_wrong at a tenth rises to 23% to 48%.
+
+  Of the two checked designs that meet both bounds under the reference, 1 element with 3 windows keeps
+  them in 7 of 12 feasible variants and 6 elements with 3 windows in 4. Only chromosome ICC 0 keeps
+  both.
+
+### The committed rule (c17eedc), simulated at every design's cap
+
+| True ratio | model_failed, range over 24 designs | wording_wrong | cannot_decide |
+| --- | --- | --- | --- |
+| 1.0 | 0.907 - 0.977 | 0.024 - 0.093 | 0 |
+| 0.75 | **0.503 - 0.822** | 0.178 - 0.496 | 0 |
+| 0.5 | 0.021 - 0.431 | **0.569 - 0.980** | 0 |
+| 0.25 | 0 - 0.113 | 0.887 - 1.000 | 0 |
+| 0.1 | 0 - 0.030 | 0.970 - 1.000 | 0 |
+| 0 | 0 - 0.006 | 0.994 - 1.000 | 0 |
+
+Above the floor it never says cannot_decide. At a three-quarters rate it reads the model's failure in at
+least half the experiments; this seed reproduces cab70d9's 53% to 82% as 50% to 82%. At half the
+windows' rate it reads that the blocks hold **no** regulating element in 57% to 98%. At a true ratio of 1
+it reads "no element" in up to 9.3%.
+
+### The revised rule (1cb7559), on the same experiments
+
+model_failed / wording_wrong / cannot_decide, at two designs where the rule may read, every eligible block
+tested; the committed rule's model_failed / wording_wrong at the first design beside them:
+
+| True ratio | 1 element, 3 own windows, 531 blocks | 6 elements, 10 own windows, 187 blocks | committed, 1 element, 3 windows |
+| --- | --- | --- | --- |
+| 1.0 | 0.376 / 0 / 0.624 | 0.296 / 0 / 0.704 | 0.975 / 0.025 |
+| 0.75 | 0.0245 / 0 / 0.9755 | 0.026 / 0 / 0.974 | 0.583 / 0.417 |
+| 0.5 | 0 / 0 / 1 | 0 / 0 / 1 | 0.042 / 0.958 |
+| 0.25 | 0 / 0.004 / 0.996 | 0 / 0.001 / 0.999 | 0 / 1 |
+| 0.1 | 0 / 0.0555 / 0.9445 | 0 / 0.052 / 0.948 | 0 / 1 |
+| 0 | 0 / 0.276 / 0.724 | 0 / 0.3275 / 0.6725 | 0 / 1 |
+
+**Where it may read:** 75 of 210 cells, every one with own windows (75 of 105), none with shared
+controls. Of the 30 own-window cells that fail, 26 have 10 windows per block and fail the wording_wrong
+bound. The other four have 20 or 30 blocks: 1 element with 1 window at 20 and 30 (model_failed at a
+three-quarters rate, 13% and 7%), and 2 and 6 elements with 3 windows at 20 (wording_wrong at a tenth,
+6.5% and 6.3%). Those cells read cannot_decide whatever their interval. In the cells where the rule may
+read, the largest error is 1.7% to 6.0% for wording_wrong (always at a tenth) and 1.4% to 5.9% for
+model_failed (always at three quarters). That is inside the tolerance of 0.05 plus 2 Monte Carlo
+standard errors, not at the nominal 2.5%.
+
+### What the arm can honestly report instead
+
+No rule decides at the feasible sizes. What the arm can honestly report, in this order:
+
+1. its coverage, as c17eedc registered;
+2. its estimate and interval in points: the difference between the blocks' and the windows' positive
+   shares, which needs no calibration;
+3. only under cab70d9's assumptions, and labelled so: the registered ratios the interval excludes, and
+   the revised reading where the interval clears a line, with the probabilities above beside it.
+
+It does not report model_failed from an interval that only reaches 0, and it does not report "no
+element" from an interval that is only below 0.
+
+Descriptively, and not as registered readings, weaker claims the estimator could carry at 0.8 are:
+
+- "no less than half the windows' rate": 0.986 at best (2 elements, 10 windows, 347 blocks);
+- "less than half": 0.999.
+
+"Less than a quarter" stays below 0.8 at 0.768. These are Neyman-Pearson bounds: optimistic, and as
+dependent on the calibration as the lines are. Applied to the committed measured arm (3 blocks), both
+rules read cannot_decide.
+
+### What this settles and what it does not
+
+Under the calibrated assumptions, the revised rule removes both of the committed rule's misreadings. A
+near-null difference is no longer read as the model's failure, and a half rate is no longer read as
+"no element". The price is that the rule rarely decides. It also shows that within the eligible blocks
+no rule on this estimator decides clause 2 at the registered error rates. The rule makes the arm decide
+nothing, and its error control holds only if the anchor is right: the anchor's own clustered interval
+breaks it. A rule whose lines scale with the experiment's own window rate would not move with the
+anchor. It is not registered here. The committed rule stays the record, the revised one sits beside it
+dated 2026-09-29, and clause 2 stays not met.
+
+## The pilot's prior-only lead, step 1: the benchmark's held-out file kept a positive only if its element carried H3K27ac, so only Gasperini2019 and Schraivogel2020 may test a prior that reads H3K27ac (item 13 follow-up, 2026-09-29, lane-prior)
+
+**Why this step exists.** Gate 2 of the coherence pilot left one descriptive lead. Its prior-only
+labelling reads no holdable source: the pilot's distance power law, the compiled target and H3K27ac.
+On the seven validation chromosomes it scored above distance to TSS:
+
+- Gasperini2019: +0.193 [+0.134, +0.249];
+- Xie: +0.086 [+0.022, +0.181].
+
+The pilot recorded a caveat itself: the held-out file, which holds Xie, chose its positives on
+chromatin. Before any score is read, this step asks of every CRISPRi study in C4's harness whether its
+tested elements or its positives were chosen using chromatin at the element.
+
+**Files.**
+
+- The record is `STUDIES` and `BENCHMARK_EVIDENCE` in `scripts/prior_only_test.py`. Every quote there
+  is verbatim, with its URL.
+- The local counts come from `uv run python scripts/prior_only_test.py --admissibility`. That command
+  counts the benchmark's own annotation and scores no labelling.
+- No score of any labelling was computed for this step.
+
+### The rule
+
+**What the prior reads at an element:**
+
+- H3K27ac, in its activity term (ENCODE replicated peaks; for K562, ENCFF532MMV of ENCSR000AKP);
+- DNase, but only through the ENCODE cCRE registry, which defines its blocks and so where it
+  abstains.
+
+**The three classes:**
+
+- **Inadmissible.** The endpoint's positives were selected or filtered using H3K27ac at the element.
+  The prior would then read the rule that made a pair positive, and a gain over distance could not be
+  told apart from the selection.
+- **Admissible, with the selection stated.** The tested elements, positives and negatives alike, were
+  chosen on chromatin before the outcome was measured.
+  - A selection that does not depend on the outcome cannot make H3K27ac predict the outcome by
+    construction.
+  - It does restrict the population, so a result holds for chromatin-selected candidates only.
+- **Admissible.** Neither of the above holds.
+
+Only the decrease endpoint is considered. The prior states a link and no direction.
+
+### What the benchmark did (Gschwind et al., Nature 2026)
+
+**Held-out file: its positives were filtered on H3K27ac. Its negatives were not.**
+
+- Supplementary Methods 22.1: "To obtain a clean set of positives likely to represent real enhancer
+  interactions, we applied filters based on effect size and chromatin state at the tested element."
+- Supplementary Methods 22.1.4: "we removed positives with elements in the CTCF element, H3K27me3
+  element, or no H3K27ac categories."
+- Methods: "Positives lacking H3K27ac signal (CTCF, H3K27me3 or no H3K27ac categories) were removed to
+  focus on enhancer-mediated regulation."
+- Negatives were filtered by power only.
+
+**The rule was reproduced here exactly.**
+
+- **The unfiltered file:** the paper's repository also holds the held-out file before this filter
+  (`EPCrisprBenchmark.combined_heldout.annotated.tsv.gz` in EngreitzLab/ENCODE-rE2G-Paper, 4,437 rows,
+  sha256 `2390273590c5…ddd`). It was read in a scratch copy and not added to the project.
+- **One rule turns it into the project's held-out file, 4,378 rows of 4,378, with no exception:** keep
+  every negative, and keep a positive only if its `elementChromatinCategory` is `H3K27ac` or
+  `High H3K27ac` and its `EffectSize` is at most -0.05.
+- **All 59 removed rows are positives.** 25 lie outside the H3K27ac categories, and 34 lie inside them
+  with a smaller effect. None was relabelled a negative.
+- **Morris lost 1 positive and Xie 2.** All three lie on validation chromosomes.
+
+**Training file: no chromatin filter.**
+
+- Methods: "Datasets were filtered to retain element–gene pairs with distances of 1 kb–1 Mb from TSS,
+  excluding elements overlapping GENCODE v.29-annotated promoters or target gene bodies. Negative pairs
+  required ≥80% power to detect a 15% decrease in expression."
+- A copy "with same filters applied as for the filtered held-out dataset" exists in the paper's
+  repository and was used for one comparison figure. The project holds the unfiltered file.
+- The local check agrees. The project's training file keeps positives outside the H3K27ac categories
+  (Gasperini2019: 3 CTCF, 2 no H3K27ac; Nasser2021: 2 CTCF), which the held-out rule would have removed.
+
+**Both files: the elements are DNase peaks.** In the benchmark's re-analysis they are "the top 150,000
+K562 DNase-seq peaks" for Gasperini2019, and the ABC pipeline's K562 DNase candidates for Xie, Klann and
+Morris. This touches positives and negatives alike.
+
+### Each study
+
+| source | file | tested elements chosen by | positives | class | decrease endpoint in the harness |
+| --- | --- | --- | --- | --- | --- |
+| Gasperini2019 | training | DNase peaks intersected with **H3K27ac**, p300, GATA1 and Pol II ChIP (pilot library); DNase peaks ranked by a classifier over 170 ChIP tracks (at scale); 948 DNase peaks chosen for epigenomic diversity | readout only | **admissible, selection stated** | 360 / 5,253 genome-wide; 210 / 2,466 on the development chromosomes |
+| Schraivogel2020 | training | DNase hotspots overlapping GenoSTAN active-enhancer states (histone marks, p300, DNase; H3K27ac among them not confirmed by a quote) | readout only | **admissible, selection stated** | 23 / 1,299, all on chr8 and chr11 (validation) |
+| Nasser2021 | both (one harness source) | K562: every DHS within 450 kb of 30 genes (Fulco 2019), tiling (Fulco 2016), DHS (Klann 2017); GM12878 and Jurkat: accessible regions, ABC-selected elements | held-out part filtered on H3K27ac | inadmissible | unscorable: 111 positives, 0 well-powered negatives |
+| HCT116 | held-out | DNase peaks around five genes | **H3K27ac above the median** in the study's own enhancer call, and the benchmark's filter | inadmissible | unscorable: 34 positives, 0 negatives |
+| K562_DC_TAP | held-out | DNase peaks chosen at random | benchmark's filter | inadmissible | 12 positives, below the floor |
+| WTC11_DC_TAP | held-out | DNase peaks chosen at random | benchmark's filter | inadmissible | 15 decreases, below the floor |
+| Klann | held-out | every K562 DNase peak | benchmark's filter | inadmissible | unscorable: 21 positives, 0 negatives |
+| Morris | held-out | fine-mapped variants in cCREs from DNase, **H3K27ac** and ATAC peaks | benchmark's filter | inadmissible | 35 / 167 genome-wide; 14 on the development chromosomes |
+| Reilly | held-out | mostly tiling; every DHS at GATA1 | benchmark's filter | inadmissible | 8 positives |
+| Xie | held-out | DNase peaks with H3K4me1, half chosen for p300 | benchmark's filter | inadmissible | 42 / 435 genome-wide; 16 on the development chromosomes |
+
+The URLs and quotes for each row are in `STUDIES`. The sources are:
+
+- Gasperini: PMC6690346;
+- Schraivogel: PMC7610614;
+- Fulco 2019: PMC6886585;
+- Nasser: PMC9153265;
+- Guckelberger: bioRxiv 10.1101/2024.07.12.603288;
+- Ray: bioRxiv 10.1101/2025.09.16.676677;
+- Klann 2021: bioRxiv 10.1101/2021.03.08.434470;
+- Morris: PMC10518238;
+- Reilly: PMC8925018;
+- Xie: PMC6904118.
+
+### What follows from it
+
+- **Inadmissible: every study of the held-out file.** Its positives are the benchmark's held-out
+  positives, kept only with H3K27ac at the element. **This covers Xie and Morris, and so half of the
+  pilot's lead.** Nasser2021 is inadmissible as the harness pools it, and unscorable anyway.
+  - Restoring the 59 removed positives from the unfiltered file would not rescue Morris or Xie. All
+    three of their removed positives lie on validation chromosomes, where the prior was already
+    scored.
+  - On the development chromosomes they have 14 and 16 positives, below the harness's floor of 20.
+- **Admissible, with the selection stated: Gasperini2019 and Schraivogel2020.** Their positives
+  are the screens' readout alone. Their tested candidates were chosen on chromatin.
+  - Gasperini2019's pilot library intersected DNase peaks with ENCSR000AKP. That is the same K562
+    H3K27ac experiment whose replicated peaks the prior reads.
+  - A result on Gasperini2019 therefore holds for chromatin-selected candidates only. It says nothing
+    about unselected elements.
+- **Where each admissible endpoint can be scored.**
+  - Schraivogel2020 has every unit on chr8 and chr11. Both are validation chromosomes, where the pilot
+    already scored the prior-only labelling.
+  - Gasperini2019 is the only admissible endpoint with units where the prior was never scored: 210
+    positives, 2,256 negatives and 329 loci on the 17 development chromosomes.
+
+### What this lane read before registering, and what it could not read
+
+**Read, and so already seen when the test is registered:**
+
+- The benchmark's chromatin category of every positive and every pair, per study, on all chromosomes.
+  - This shows H3K27ac's association with the outcome on every study. For Gasperini2019, 355 of 360
+    positives lie in an H3K27ac category, against 4,911 of 5,299 pairs.
+  - Schraivogel2020's 23 positives all lie in an H3K27ac category, against 912 of 1,306 pairs.
+- Unit counts per partition.
+- No score of any labelling.
+
+**Not read:**
+
+- the GenoSTAN mark list (S1 Appendix of Zacher et al. 2017);
+- the ten small sources behind Fulco 2019's 429 borrowed pairs;
+- the script that applied the held-out filter. It was reproduced here, not found.
+
+## The pilot's prior-only lead, step 2 registered: tested once on Gasperini2019 on the 17 chromosomes where no pilot labelling was ever scored, and decomposed on identical pairs into distance, distance plus H3K27ac, and the full prior (item 13 follow-up, 2026-09-29, lane-prior)
+
+Registered before any score of any labelling of this test was computed. The constants are in
+`scripts/prior_only_test.py` (`registration()`), and the text here is the same.
+
+**Status.** An internal development result on withheld sources, never a validation.
+
+**Compute.** No model request, and the per-element response cache is not opened.
+
+### The lead, frozen
+
+The registered lead is the pilot's own figure:
+
+- prior-only minus distance to TSS on Gasperini2019;
+- on the seven validation chromosomes;
+- **+0.1927 [+0.1335, +0.2491]**, 0.6601 against 0.4674 (197c560).
+
+The run first recomputes that figure on those chromosomes. **If it does not come back to the fourth
+decimal, the run is void and only the discrepancy is reported.** A mismatch would mean the prior, its
+inputs or the harness changed after the lead was read.
+
+Xie's half of the lead (+0.0858) is not tested: step 1 found Xie inadmissible.
+
+### Where it is tested
+
+**Fresh: the pilot's 17 development chromosomes.** No labelling of the pilot, the prior-only one
+included, was ever scored there. The pass rule is read here and nowhere else.
+
+**Primary endpoint: Gasperini2019 decrease.** It is the one admissible endpoint that clears the
+harness's floors there: 210 positives, 2,256 negatives, 329 loci.
+
+**Seen: the seven validation chromosomes.** They are reported beside and carry no weight. They hold:
+
+- the reproduction check;
+- the decomposition of the frozen lead on Gasperini2019;
+- Schraivogel2020, whose every unit lies on chr8 and chr11.
+
+### The labellings
+
+**Three prior labellings on identical pairs.** Each is built by `pilot_bio.solve(mode="prior")` over the
+ENCODE cCREs the held-out units overlap, and read by `pilot_bio.labels_from`.
+
+- They share their blocks, their units and their abstentions (None outside every cCRE).
+- They differ by one term at a time. What differs is which inputs are present; no weight of `pilot.W`
+  is changed.
+- A pair's score is sigmoid(t + 3) × sigmoid(a), the largest over the blocks the unit overlaps:
+  - d runs from the block's midpoint to the benchmark's TSS of the pair's gene;
+  - t = −ln(1 + d / 5,000) is the distance term;
+  - a is the activity logit in the pair's cell.
+
+The three are:
+
+- **(a) Distance alone, `prior_distance`.** There are no compiled links and no H3K27ac peaks, so a = −1
+  for every block and the score is monotone in d.
+- **(b) The activity-and-distance baseline, `prior_distance_activity`.** Distance plus H3K27ac:
+  a = −1, plus 2 with a K562 ENCODE H3K27ac replicated peak over the block, or −1 without. It has no
+  compiled target.
+  - It reads H3K27ac only. The pilot's prior reads no DNase except through the cCRE registry that
+    defines its blocks.
+  - **It is not ABC.** ABC multiplies activity by contact and normalises over every candidate element
+    of the gene, with activity the geometric mean of DNase and H3K27ac. The project holds no
+    experimental DNase-seq signal, only AlphaGenome's predicted DNase. So a true ABC-form score cannot
+    be computed faithfully here, and it is left out.
+- **(c) The prior-only labelling exactly as the pilot defined it, `prior_only`.** It is (b) plus the
+  compiled target:
+  - t gains 1 + min(strength, 1) where the block's compiled link names the pair's gene;
+  - a gains 0.5 where that link's model cell is the pair's cell.
+
+**Two baselines.** Both are C4's own:
+
+- **distance to TSS:** minus the distance from the unit's midpoint to the benchmark's TSS;
+- **the unchanged compiled labels.**
+
+### The metric
+
+**C4's harness, unchanged.**
+
+- **Endpoint and score:** average precision of the CRISPRi significant decrease against the
+  well-powered nulls.
+- **Abstentions:** ranked below every stated score, with coverage beside.
+- **Paired differences:** each comes from `holdout.compare`, which scores both labellings on the same
+  units and the same 1,000 locus resamples (seed 20260928), with its 95% interval.
+
+**The six comparisons:**
+
+| comparison | what it asks |
+| --- | --- |
+| (c) − distance | the frozen lead: **the pass rule** |
+| (b) − (a) | activity, on identical pairs |
+| (c) − (b) | the compiled target, on identical pairs |
+| (a) − distance | the pilot's machinery: its distance form over cCRE blocks and its abstentions |
+| (b) − distance | the activity-and-distance baseline against distance |
+| (c) − unchanged | the prior against the compiled labels |
+
+### The pass rule, the falsifier and the readings
+
+**Pass rule.** The lead replicates if, on the fresh partition, (c) − distance has a 95% locus-bootstrap
+interval above zero on Gasperini2019 decrease, at a coverage of at least 0.80 of its units.
+
+**Decomposition.** Each part is reported whatever the pass:
+
+- activity carries the gain when (b) − (a) lies above zero;
+- the compiled target adds to it when (c) − (b) lies above zero;
+- the machinery carries it when (a) − distance lies above zero.
+
+**Falsifier.** A replication is not an activity-and-distance reading:
+
+- (i) if (b) − (a) does not lie above zero;
+- (ii) if (c) − (b) lies above zero while (b) − distance does not. The gain is then the compiled
+  target's, an AlphaGenome-derived term.
+- (iii) if (a) − distance lies above zero while (b) − (a) does not. The gain is then cCRE coverage and
+  the distance form.
+
+The run is void if the reproduction check fails. Any LeakError is fatal and never caught.
+
+**Readings.**
+
+- **`replicated_activity`.** An internal development result on withheld sources:
+  - on chromosomes where it was never scored, the frozen prior predicts Gasperini2019's CRISPRi
+    decreases better than distance to TSS;
+  - on identical pairs, H3K27ac activity adds to distance.
+
+  The project's prior reproduces the known activity-and-distance relationship on CRISPRi decreases whose
+  positives were not chosen by chromatin, among candidates that were. Not a new finding; not a
+  validation of the attribution layer.
+- **`replicated_not_activity`.** The lead replicates, but a clause of the falsifier fires. No
+  activity-and-distance claim may be made, and what carries the gain is named from the decomposition.
+- **`not_replicated`.** The lead stays a descriptive observation of the validation chromosomes and may
+  not be used.
+- **`reversed`.** The lead was specific to the chromosomes it was read on.
+- **`no_admissible_endpoint`.** The lead cannot be tested with what the project holds.
+- **`void_reproduction`.** Only the discrepancy is reported.
+
+### What a pass would mean, and what it would not
+
+**What a pass would mean.** The project's prior reproduces the known relationship: an element carrying
+H3K27ac near a gene's TSS is a CRISPRi hit for that gene more often than its distance alone predicts.
+
+- Its weights were registered before any score.
+- The data are K562 CRISPRi decreases whose positives were not chosen by chromatin.
+- The chromosomes are ones where this prior was never scored.
+- The tested candidates were chosen on chromatin: DNase peaks, and for Gasperini2019 also H3K27ac, p300,
+  GATA1 and Pol II ChIP. **The statement holds for chromatin-selected candidates only.**
+
+**What a pass would not mean:**
+
+- **A new finding.** The relationship is published on these screens (Fulco 2019, Nasser 2021, Gschwind
+  2026), and this project read it on 2026-09-16 (next section).
+- **A validation** of the attribution layer, of the compiled labels, or of the coherence pilot. The
+  pilot stays discontinued.
+- **A reproduction of ABC.**
+- **An external, independent or fresh validation.**
+- **Anything about** unselected elements, about cells other than K562, or about the held-out file's
+  studies.
+
+### What had already been seen when this was registered
+
+Correction 2 of the coordinator's review: excluding a selected endpoint handles selection, not
+independence. Everything below is development evidence.
+
+1. **`crispri_benchmark` and `crispri_contact`** (138824f and 5a31c39, 2026-09-16) read "activity over
+   distance" against distance on the pooled training file (Gasperini2019, Nasser2021 and Schraivogel2020,
+   K562). **Average precision was 0.519 against 0.441** (9,237 pairs, 451 positives).
+2. **The held-out file** has been read by at least ten scored results (`crispri_split_audit`, 0af7e1b).
+3. **C4** (lane-c4, b7e4bf0, 2026-09-28) scored distance, the unchanged labels and rest on every CRISPRi
+   endpoint on all chromosomes.
+   - Gasperini2019 decrease: distance 0.493 [0.439, 0.560], and the unchanged labels 0.425 at coverage
+     0.55.
+   - Schraivogel2020: distance 0.390, the unchanged labels 0.162.
+4. **The pilot's gate 2** (lane-pilot, 197c560) scored the prior-only labelling, the pilot, the
+   independent-block variant, the unchanged labels and distance on the validation chromosomes.
+   Prior-only minus distance was:
+   - +0.1927 on Gasperini2019;
+   - +0.0858 on Xie;
+   - −0.0345 on Morris;
+   - +0.0165 [−0.4385, +0.1934] on Schraivogel2020.
+
+   Nothing was scored on the development chromosomes.
+5. **This lane, before registering** (step 1, d19ccac), read the benchmark's chromatin category of every
+   positive and pair per study. Gasperini2019 has 355 of 360 positives in an H3K27ac category, against
+   4,911 of 5,299 pairs. It also read unit counts per partition. It computed no score.
+6. **The literature.** ABC was built on Fulco 2019's screens, and ENCODE-rE2G was trained on the
+   training file.
+
+### S4 beside, and the budget
+
+**S4 is descriptive and in no rule.**
+
+- **What is judged:**
+  - (c)'s labels on the blocks it solved on the fresh partition, as target and context claims
+    (`pilot_bio.claims_of`);
+  - the unchanged labels' claims on the same blocks.
+- **How:** each is judged by `correctness.judge` with `sources=[crispri:Gasperini2019]`.
+- **What is reported:** target accuracy, context accuracy and coverage, apart.
+- (a) and (b) name no target, so they state no claim.
+
+**Budget.** One process and at most 0.5 CPU-hour.
+
+## The result: the prior's lead over distance replicates where it was never scored (+0.163 [+0.096, +0.222] on Gasperini2019), but H3K27ac does not carry it; the compiled target does, so no activity-and-distance claim may be made (item 13 follow-up, 2026-09-29, lane-prior, later)
+
+**How it was run.**
+
+- **Once**, as registered in the section above (ab837b9).
+- **Where:** a clean worktree at that commit. The revision stamp is not dirty.
+- **Files:** the script is `scripts/prior_only_test.py` and the result is
+  `data/results/prior_only_test.json`.
+- **Compute:** 8.9 CPU seconds and a peak of 1,248 MB (`ru_maxrss`). **0 AlphaGenome requests**, and the
+  per-element response cache was never opened.
+
+**What it may be called.** An internal development result on withheld sources, never a validation.
+
+**Registered reading: `replicated_not_activity`.** In the registered wording: "the lead replicates where
+it was never scored, but a clause of the falsifier fires: activity is not what carries it, and no
+activity-and-distance claim may be made. What carries it is named from the decomposition."
+
+**The frozen lead reproduced first, to the fourth decimal.** On the validation chromosomes, prior-only
+minus distance is **+0.1927 [+0.1335, +0.2491]**, 0.6601 against 0.4674. That is the pilot's 197c560
+figure, so the run is not void.
+
+### Negatives, first
+
+Every figure below is Gasperini2019 decrease on the 17 fresh chromosomes unless it says otherwise:
+
+- 210 positives, 2,256 negatives, 329 loci.
+- All three prior labellings state a score for 2,347 of 2,466 units (coverage 0.9517) and abstain on
+  the same 119.
+
+1. **Activity carries nothing measurable on identical pairs.** Distance plus H3K27ac minus distance
+   alone, (b) − (a), is **+0.0098 [−0.0188, +0.0349]**. On the seen chromosomes it is +0.0159
+   [−0.0069, +0.0427].
+2. **The activity-and-distance baseline does not beat distance to TSS.** (b) − distance is −0.0194
+   [−0.0604, +0.0185]. On the seen chromosomes it is +0.0084 [−0.0175, +0.0420].
+3. **The pilot's machinery alone is slightly worse than distance to TSS.** (a) − distance is
+   **−0.0292 [−0.0580, −0.0062]**, entirely below zero. Two things cost it:
+   - it measures from the block's midpoint rather than the unit's;
+   - it abstains on 119 units that lie outside every cCRE.
+
+   On the seen chromosomes it is −0.0075 [−0.0206, +0.0070].
+4. **Falsifier clauses (i) and (ii) fire, and (iii) does not.**
+   - (i): activity does not carry the gain.
+   - (ii): the compiled target does, and the activity-and-distance baseline is not above distance.
+
+   So the registered activity-and-distance reading, "reproduces the known activity-and-distance
+   relationship", **may not be made.**
+5. **Schraivogel2020 says nothing.** It is admissible but lies on the seen chromosomes only: 23
+   positives, 1,276 negatives, 12 loci. Every interval includes zero:
+   - (c) − distance: +0.0165 [−0.4385, +0.1934];
+   - (b) − (a): −0.0309 [−0.4027, +0.1096];
+   - (c) − (b): +0.0387 [−0.0784, +0.0796].
+6. **S4, beside and in no rule: coverage is about 5%.**
+
+   | claims judged (`correctness.judge`, `sources=[crispri:Gasperini2019]`) | target: established of judged | target coverage | context: established of judged | context coverage |
+   | --- | --- | --- | --- | --- |
+   | the prior-only labelling (c) on its fresh blocks | 53 of 59 (6 refuted) | 59 of 1,122 | 40 of 40 | 40 of 991 |
+   | the unchanged labels on the same blocks | 43 of 43 | 43 of 823 | 24 of 24 | 24 of 823 |
+
+   - The prior restates each compiled target in every cell it calls active. That makes some claims
+     refutable in K562, and 6 are refuted there. Gate 2 saw the same.
+   - (a) and (b) name no target and state no claim.
+7. **Half of the lead was never tested.** Xie is inadmissible (step 1).
+
+### What holds, in the registered wording
+
+The lead replicates on the chromosomes where the prior was never scored, at coverage 0.95 (≥ 0.80).
+
+| Gasperini2019 decrease, fresh chromosomes | average precision [95% locus bootstrap] | coverage |
+| --- | --- | --- |
+| (c) prior-only, as the pilot defined it | **0.6815 [0.6141, 0.7487]** | 0.9517 |
+| (b) distance plus H3K27ac | 0.4990 [0.4221, 0.5913] | 0.9517 |
+| (a) distance alone, in the prior's form | 0.4892 [0.4126, 0.5823] | 0.9517 |
+| distance to TSS (C4) | 0.5184 [0.4383, 0.6066] | 1.0 |
+| unchanged compiled labels (C4) | 0.4562 [0.3911, 0.5226] | 0.5365 |
+
+The paired differences (`holdout.compare`):
+
+| comparison | fresh (primary) | seen (the frozen lead, beside) |
+| --- | --- | --- |
+| (c) − distance: **the pass rule** | **+0.1631 [+0.0956, +0.2223]** | +0.1927 [+0.1335, +0.2491] |
+| (b) − (a): activity | +0.0098 [−0.0188, +0.0349] | +0.0159 [−0.0069, +0.0427] |
+| (c) − (b): the compiled target | **+0.1825 [+0.1298, +0.2280]** | +0.1843 [+0.1225, +0.2361] |
+| (a) − distance: machinery | −0.0292 [−0.0580, −0.0062] | −0.0075 [−0.0206, +0.0070] |
+| (b) − distance | −0.0194 [−0.0604, +0.0185] | +0.0084 [−0.0175, +0.0420] |
+| (c) − unchanged | +0.2253 [+0.1585, +0.2909] | +0.2705 [+0.1871, +0.3505] |
+
+**The decomposition names what carries the lead: the compiled-link terms.**
+
+- **The terms:** the compiled target's log-weight bonus, and the +0.5 activity where the link's model
+  cell is the pair's cell. Both are AlphaGenome-derived.
+- **The data:** the same on both partitions.
+- **Why the compiled labels alone score low:** alone they score below distance, at 0.54 coverage.
+  The gain comes from putting them together with distance inside the prior.
+
+### What it may and may not be called
+
+**It may be called** an internal development result on withheld sources:
+
+- on chromosomes where it was never scored, the pilot's frozen prior predicts Gasperini2019's CRISPRi
+  decreases better than distance to TSS;
+- but activity is not what carries it, and no activity-and-distance claim may be made;
+- the decomposition names the compiled target, an AlphaGenome-derived term.
+
+**It may not be called any of these:**
+
+- **A reproduction of the activity-and-distance relationship.** The registration's hoped-for reading
+  failed.
+- **ABC**, or a test of ABC.
+- **Evidence that H3K27ac does not matter.** The prior reads binary peak overlap on candidates that
+  were chosen partly by H3K27ac (Gasperini's pilot library used ENCSR000AKP, the prior's own K562
+  experiment). In this sample 4,911 of 5,299 pairs lie in an H3K27ac category. One possible reason
+  activity added nothing is that range restriction, and it was not tested. The project's earlier
+  "activity over distance" (0.519 against 0.441, 2026-09-16) used a quantitative signal on the pooled
+  training file.
+- **A finding about the compiled target or AlphaGenome.** It was not the registered hypothesis, only
+  what the decomposition names. The project has scored AlphaGenome deletion against these screens
+  before (`crispri_benchmark`, `crispri_published`), and so has the AlphaGenome preprint.
+- **A validation of any kind**, or anything about Xie, Morris or cells other than K562.
+
+### Added after the run: the coordinator's audit of how the screens chose their elements
+
+The coordinator's audit of six K562 screens arrived after the registration (ab837b9) and after the
+run. It is recorded here, dated and labelled as added later. Nothing in the registration or the result
+was changed for it.
+
+**Where it agrees with step 1's record (d19ccac), which read the same sources:**
+
+- **Gasperini 2019 used H3K27ac to select elements in both libraries.**
+  - Pilot library: DHS intersected with H3K27ac, p300, GATA1 and Pol II.
+  - At-scale library: a classifier over 170 K562 ChIP tracks.
+- **Schraivogel 2020 selected through the GenoSTAN active-enhancer state.** That state is presumed to
+  include H3K27ac, but this is not verified from S1 Appendix.
+- **Fulco 2019 (most of Nasser2021) selected on DNase only.**
+- **Fulco 2016 is tiling. Klann 2017 selected on DNase only.**
+- **Nasser2021 has a minority slice of 429 pairs** from ten smaller sources whose selection is
+  unverified.
+
+**Two additions, stated as limits:**
+
+1. **Xie did not use H3K27ac, but half its set was chosen for strong p300.** p300 binding correlates
+   with H3K27ac, so Xie's tested universe is H3K27ac-enriched through p300.
+   - Xie stays inadmissible for the reason step 1 gives.
+2. **Every tested universe except Fulco 2016's tiling is gated on DNase.** An activity term that reads
+   DNase faces that selection on every CRISPRi endpoint, and excluding datasets cannot remove it.
+   - The prior's activity term reads H3K27ac, not DNase. But its blocks are ENCODE cCREs, which are
+     DNase-anchored.
+   - Its coverage and its abstentions therefore read the same gate. On Gasperini2019 it abstains on
+     only 119 of 2,466 units, and its machinery term, (a) − distance, is slightly below distance.
+   - **This is a limit of the test, not something it handled.**
+
+**Where the audit's summary does not cover this test's endpoints.** "No screen defined its positives
+with a chromatin mark" holds for the six K562 screens audited. It does not hold for two things:
+
+- the benchmark's held-out file, whose positives the benchmark itself filtered on H3K27ac (step 1,
+  reproduced row for row);
+- Guckelberger 2024 (HCT116), whose own enhancer call required "an H3K27ac level above the median of
+  all tested elements".
+
+For the held-out file, then, the issue is a label chosen by chromatin, not only a selected universe.
+That is why step 1 excluded it.
+
+### What follows
+
+- **The pilot's lead is accounted for.** On Gasperini2019 it is the compiled target combined with
+  distance, not H3K27ac, and it holds on chromosomes the pilot never scored.
+- **Its Xie half stays untested,** because Xie is inadmissible.
+- **Any use of the compiled target's contribution needs its own registration.** That registration would
+  make the compiled target the hypothesis, on an endpoint neither the pilot nor this lane has read.
+- **The coherence pilot stays a discontinued investigation.**
+
+## The four repressions S4 judged wrong, traced: no sign error; three are judged in a cell where the model itself predicts the fall the screen measured, and ID1 is contradicted in the measured cell (item 12 S4 follow-up, 2026-09-29, lane-repress)
+
+This is an internal development trace of five existing claims. It is not a validation, and it changes no
+label and no verdict. The cause classes were registered in `scripts/repression_trace.py` before any trace
+code was written. The lane had already read the rows by then, and the registration says so. Class (f)
+and the rule that picks the primary class were written after that reading. Result:
+`data/results/repression_trace.json`. No model request was made; the per-element response cache was
+read, never asked.
+
+S4's registered reading stands as written: **every judged repression claim is wrong in direction.** The
+trace adds where each direction came from and why it disagrees.
+
+### Where each direction came from
+
+Each compiled direction comes from one element's cached AlphaGenome deletion answer. The steps are:
+
+- The answer holds the gene's largest drop and largest rise over 371 tracks.
+- `enhancer_target.predict_target` keeps the larger of the two.
+- That track's name becomes the rule's `when: cell_type`.
+- `compile.py` writes `inhibits` for a rise, and S4 reads `inhibits` as `represses_target`.
+
+For all five claims the model moves the named gene both ways on different tracks. Benchmark line numbers
+are in the decompressed table, with the header as line 1. Compiled line numbers are in the local,
+untracked programs, which the manifest pins by sha256.
+
+| Gene | Compiled rule | Largest rise | Largest drop | Wins by | Deciding row | Model on the measured cell | Classes | Primary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CD83 | chr6:53657, inhibits, K562 | +0.3049 K562 | -0.2954 OCI-LY7 | 0.0095 | held-out 67, Nasser2021, GM12878, -0.249, adj. p 3.4e-40 | GM12878 -0.0968, same sign | b, f | **b** |
+| HEMGN | chr9:144732, inhibits, Brain_Cerebellar_Hemisphere | +0.1380 cerebellar hemisphere | -0.0962 K562 | 0.0418 | training 9323, Gasperini2019, K562, -0.223, 5.9e-11 | K562 -0.0948 and -0.0962, same sign | b, d, f | **b** |
+| ID1 | chr20:73387, inhibits, Whole_Blood | +0.8119 whole blood | -0.7408 left lobe of liver | 0.0711 | training 6322, Gasperini2019, K562, -0.158, 1.8e-14 | K562 +0.1433, **opposite sign** | b, c, d, f | **c** |
+| BEX4 | chrX:105892, inhibits, hair_follicular_keratinocyte | +0.1397 hair follicular keratinocyte | -0.1229 K562 | 0.0168 | training 10306, Gasperini2019, K562, -0.294, 6e-82 | K562 -0.1208 and -0.1229, same sign | b, d, f | **b** |
+| CCND1 (comparison) | chr11:215344, activates, CD8_positive__alpha_beta_memory_T_cell | +0.1086 K562 | -0.1634 CD8 memory T cell | 0.0548 (the drop) | held-out 104, HCT116, +0.129, 1.0e-4 | no HCT116 value cached | b, f; c unknown | **b** |
+
+### The classes
+
+- **(a) Sign or convention error: absent in all five.** Every step carries the sign the step before it
+  implies. The model's value is the alternate allele over the reference, and the alternate is the
+  deletion. A rise means `represses`, which is written `inhibits` and read `represses_target`. On the
+  screen side, a significant EffectSize below 0 is a significant decrease, the benchmark's `Regulated`
+  agrees in all four, and `crispri_decrease` refutes `represses_target`. A convention flipped on one
+  side would have turned the three same-sign cells in the table into disagreements.
+- **(b) Cell mismatch: present in all five.** It is primary for CD83, HEMGN, BEX4 and CCND1. In each, the
+  claim names the model's most extreme track, and the screen measured another cell. For CD83, HEMGN and
+  BEX4, the model's own value for the measured cell has the screen's sign.
+- **(c) Genuine contradiction: present only for ID1, and primary there.** In K562 the cached model value
+  (+0.1433) and the screen (-0.158) disagree, so the disagreement survives aligning the cells. The cache
+  keeps one K562 value for ID1, and any other K562 track is not seen.
+- **(d) Indirect or ambiguous: present for HEMGN, BEX4 and ID1, and never primary.** The named gene itself
+  fell in every case, so another gene cannot be what disagrees.
+  - HEMGN: ANP32B also fell in the same screen (-0.214).
+  - BEX4: TCEAL8 also fell in the same screen (-0.074).
+  - ID1: the model's any-gene prediction is MIR3193 (-0.859 in HepG2), and the run's verdict is "another
+    gene in the same domain". The element lies 1.3 kb from MIR3193 and 1.8 kb past ID1's annotated end.
+- **(e) Judge inconsistency: absent as a defect.** `correctness.verdict_of` reproduces each verdict and its
+  deciding observation. The next subsection explains what `refutable` means.
+- **(f) Direction split across tracks: present in all five.** The rise beat the drop by 0.0095 to 0.0711
+  in the four repressions. In CCND1 the drop beat the rise by 0.0548.
+
+### What `refutable` means, and whether `incorrect` should be reachable when it is false
+
+**Where the field is set:**
+
+- `Verdict.refutable` is commented "target and context: the stated cell was screened on the gene".
+- `_target` sets it when the gene has an establishing or refuting observation in the stated cell.
+- `_context` sets it on every decided verdict.
+- `_direction` never sets it, so every activity verdict carries the default `false`.
+
+On the activity axis, `false` means "not computed". It does not mean "could not have been refuted". The
+registered quantities report the field only beside target and context. The per-verdict records and the
+per-axis tallies still carry the default on every axis.
+
+**Where `incorrect` can occur with the field false:**
+
+- **Target and context: never.** Neither can give `incorrect` with `refutable` false.
+- **Activity: yes, by the registered rule.** The direction is judged "in the stated cell when it
+  responded there, otherwise in every cell it responded in".
+
+**What the committed S4 activity verdicts show:**
+
+- All 5 wrong directions were decided only in another cell.
+- All 39 decided in the stated cell are correct.
+- The other 54 correct ones were also decided in another cell.
+
+**What another rule would give (descriptive only):**
+
+- If direction were refuted only in the stated cell, as a target is, the 5 would move to not judged and
+  activity would read 93 of 93.
+- If direction were judged only in the stated cell, activity would read 39 of 39, with 59 moved to not
+  judged.
+
+This is a tension between the S4 table, whose CRISPRi cells speak of "the cell screened", and the
+activity rule. The judge follows its registration exactly. Changing the rule is a registration question
+for the coordinator, not a bug fix, and no verdict was changed here.
+
+### The comparison case
+
+**Where it is.** The CCND1 claim that HCT116 refutes is in `attribution_correctness.json`, not in
+`pilot_biological_gate.json`. The pilot's result names neither CCND1 nor HCT116, and its sources do not
+include `crispri:HCT116`.
+
+**What it shares with the four.** It shares (b) and (f), in mirror image: the drop won on a T-cell track,
+and the screen measured a rise in HCT116. Whether the model agrees in HCT116 is unknown, because the cache
+keeps no HCT116 value.
+
+### Fixed, and found but not fixed
+
+**Nothing is fixed.** No bug was found on the path from the model's answer to the label, or from the raw
+row to the verdict.
+
+**Found but not fixed: `by_cell` keeps one value per cell name.** `enhancer_target.aggregate` keeps one
+`by_cell` value per cell name: the last track above the scorer's 0.05 recording threshold. In three cases
+the largest drop or rise sits on another track with the same cell name:
+
+- HEMGN: K562 -0.0948 is kept, against -0.0962 on another K562 track.
+- BEX4: K562 -0.1208 is kept, against -0.1229.
+- CCND1: K562 +0.1036 is kept, against +0.1086.
+
+This changes no class here, and no S4 verdict reads `by_cell`. `crispri_direction` and `closure` do read
+it as a cell's value. Which track a cell should keep is a decision, and the cached answers cannot change
+without new model requests.
+
+### What remains unknown
+
+- The model's value for CCND1 on an HCT116 track.
+- Whether another K562 track for ID1, or another GM12878 track for CD83, carries the other sign.
+- How many of the 156,925 predicted repressions (of 440,377 predicted rules) share class (f). The run
+  tables keep only the winning direction.
+- Why the model's ID1 prediction swings from -0.74 in liver to +0.81 in whole blood at this element.
+
+**What it may be called:** an internal development trace of five existing claims, showing where each
+claimed direction came from and which registered class explains its disagreement with the observation
+that decided it.
+
+**What it may not be called:**
+
+- a validation of the labels, the model or the judge;
+- a rate, because the five claims were chosen for being judged wrong;
+- evidence about claims S4 did not judge.
 
 ## What comes next, in order
 

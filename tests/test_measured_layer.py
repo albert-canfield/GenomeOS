@@ -22,7 +22,9 @@ from genomeos.lang import parse
 CHROM = "chrT"
 
 
-def pair(start, end, gene, regulated, effect=-0.3, cell="K562"):
+def pair(start, end, gene, regulated, effect=-0.3, cell="K562", power=0.95):
+    # power: since R2 (2026-09-28) only a well-powered null may disagree, so the fixture's measured
+    # negatives state the power they always stood for; before, every null counted as informative
     return measured.CrispriPair(
         chrom=CHROM,
         start=start,
@@ -35,6 +37,7 @@ def pair(start, end, gene, regulated, effect=-0.3, cell="K562"):
         significant=regulated,
         effect_size=effect,
         p_adjusted=0.001 if regulated else 0.9,
+        power_at_effect_size_20=power,
     )
 
 

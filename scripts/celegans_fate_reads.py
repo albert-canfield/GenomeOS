@@ -27,7 +27,6 @@ No model calls, no network, about three minutes on one core. Result: data/result
 
 from __future__ import annotations
 
-import json
 import shutil
 import sys
 import tempfile
@@ -43,13 +42,15 @@ if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
 from genomeos.lang import parse_file  # noqa: E402
 from genomeos.organism import atlas_levels  # noqa: E402
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism.diff import compare  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from genomeos.runtime.body import Body  # noqa: E402
 
 ORG = Path("data/organisms/celegans")
-RESULT = Path("data/results/celegans_fate_reads.json")
+RESULT = Path("data/results/celegans_fate_reads.json")  # written through save_result (item 12 S6)
 HATCH = 800.0
 ADULT = 6000.0
 
@@ -143,8 +144,8 @@ class Arm:
             (self.dir / "exposure.bio").unlink(missing_ok=True)
         (self.dir / "embryo_factors.bio").write_text(text)
 
-    def run(self, ref: ReferenceLineage, until: float = HATCH) -> tuple:
-        body = Body(parse_file(self.dir / "embryo_factors.bio"), means=True).run(until=until)
+    def run(self, ref: ReferenceLineage, until: float = HATCH, recheck: str | None = None) -> tuple:
+        body = Body(parse_file(self.dir / "embryo_factors.bio"), means=True, recheck=recheck).run(until=until)
         return compare(body, ref, until=until), body
 
 
@@ -165,15 +166,24 @@ def score_arm(
 ) -> dict:
     """`write(cells)` puts a fates.bio (and, for the baseline, an exposure.bio) fitted on `cells` into the
     arm's directory. In sample it is fitted on all 555; held out, eight times on seven founder sublineages
-    and scored only on the eighth, so no rule is credited on a lineage it saw."""
+    and scored only on the eighth, so no rule is credited on a lineage it saw.
+
+    `decided_by_factors` counts the cells on which a factor rule fired. Since 9d42485 (v0.4 §7.5,
+    `recheck: crossings` by default) a cell whose rule names a read decides again at the instant the read
+    reaches its threshold, and under `commitment terminal_fate` that re-read can only name the type the
+    cell is already locked to (celegans_fate_read_choice, R4 and R5). Such a firing is counted all the
+    same, so the in-sample arm is also run with `recheck: none`, and both counts are kept side by side."""
     cells = sorted(labels)
     write(cells)
     d, body = arm.run(ref)
+    d_none, body_none = arm.run(ref, recheck="none")
     out = {
         "in_sample": {
             "fates_correct": d.fates_correct,
             "fates_checked": d.fates_checked,
             "decided_by_factors": decided(body, cells),
+            "decided_by_factors_without_the_crossing_re_decisions": decided(body_none, cells),
+            "fates_correct_without_the_crossing_re_decisions": d_none.fates_correct,
             "cells_born": d.matched,
             "deaths_matched": d.deaths_matched,
         }
@@ -284,7 +294,10 @@ def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: 
 
     The program's answer is the `commitment terminal_fate` it now declares: a terminal fate, once taken,
     is not taken again (§7.2a). This is its ablation — the same program with the block stripped — and it
-    is the whole justification for the block, because at cadence 0 the two are identical to the cell."""
+    is the whole justification for the block. When it was written (ef56134) the two were identical to the
+    cell at cadence 0. Since 9d42485 (§7.5, `recheck: crossings`) the runtime itself re-decides a cell at
+    the instant a read it waits on reaches its threshold, cadence or none, so without the block the score
+    falls at cadence 0 as well; the rows say by how much."""
     cells = sorted(labels)
     rows = {}
     for kind, thr in (("exposure", fr.THRESHOLD_MIN), ("mean", 0.25)):
@@ -320,6 +333,7 @@ def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: 
 
 
 def main() -> None:
+    entries = pv.inputs(levels=True, programs=[ORG])  # hashed before fates.bio is rewritten below
     ref = ReferenceLineage.load()
     term = fr.embryonic_terminal(ref)
     labels = {c.id: c.tissue for c in term}
@@ -331,8 +345,11 @@ def main() -> None:
     reads, points = harvest(ref, factors)
     instant = presence_at_birth(ref)
     print(f"runtime reads harvested; decision points per terminal cell: {dict(points)}", flush=True)
+    # a window is empty when no minute of it has been carried: `exposure(cell)` is 0. Since 9d42485 a
+    # `mean(cell)` over a window of no length is the value in force, the instantaneous read, so it is
+    # not zero in an empty window and says nothing about whether the window is empty
     empty_cell_window = sum(
-        1 for r in reads.values() if not any(v > 0 for k, v in r.items() if "(cell)" in k)
+        1 for r in reads.values() if not any(v > 0 for k, v in r.items() if k.endswith(".exposure(cell)"))
     )
 
     out: dict = {
@@ -455,7 +472,19 @@ def main() -> None:
     ]
     out["threshold"] = {"minutes": fr.THRESHOLD_MIN, "basis": fr.THRESHOLD_BASIS}
     out["generated"] = [str(ORG / "fates.bio")]
-    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    manifest = pv.manifest(
+        entries,
+        {
+            "hatch_min": HATCH,
+            "adult_min": ADULT,
+            "windows": list(WINDOWS),
+            "kinds": list(KINDS),
+            "exposure_threshold_min": fr.THRESHOLD_MIN,
+        },
+        exclusions=[],
+        partitions=pv.FOUNDER_HOLDOUT,
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
     for name, a in out["arms"].items():
         i, h = a["in_sample"], a.get("held_out", {})
         print(

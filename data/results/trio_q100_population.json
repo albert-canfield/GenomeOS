@@ -1,0 +1,40 @@
+{
+ "groups": {
+  "cand_absent_in_mosaic": {
+   "snvs": 3,
+   "seen_in_panel": 0
+  },
+  "cand_absent_out_mosaic": {
+   "snvs": 3,
+   "seen_in_panel": 0
+  },
+  "cand_father_in_mosaic": {
+   "snvs": 465,
+   "seen_in_panel": 4
+  },
+  "cand_father_out_mosaic": {
+   "snvs": 119,
+   "seen_in_panel": 10
+  },
+  "cand_mother_in_mosaic": {
+   "snvs": 435,
+   "seen_in_panel": 7
+  },
+  "cand_mother_out_mosaic": {
+   "snvs": 129,
+   "seen_in_panel": 14
+  },
+  "cand_nearby_out_mosaic": {
+   "snvs": 1,
+   "seen_in_panel": 1
+  },
+  "control_one_parent": {
+   "snvs": 12871,
+   "seen_in_panel": 11950
+  }
+ },
+ "panel": "88 HPRC year-1 haplotypes (hs1 left out), UCSC hg38 hprc cactus90way, as distilled in data/knowledge/human_panel; seen = at least one haplotype carries the same alternative base",
+ "control": "every 100th child heterozygous SNV carried by exactly one parent, same regions",
+ "registered": false,
+ "date": "2026-09-27"
+}

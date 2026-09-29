@@ -1,0 +1,258 @@
+{
+  "result": "activator_combination_choice",
+  "date": "2026-09-28",
+  "choice_test": {
+    "registration": "docs/DESIGN-MINIMAL-CELL.md, 'The activator combination rule: a choice test (registered 2026-09-28)'; grn.COMBINATION_TEST",
+    "crispri_training": {
+      "rows": 10356,
+      "rows_invalid": 0,
+      "element_gene_cells": 10356,
+      "element_gene_cells_conflicting": 0,
+      "gene_cells": 2113,
+      "gene_cells_by_significant_decreases_capped_at_5": {
+        "0": 1793,
+        "1": 239,
+        "2": 47,
+        "3": 19,
+        "4": 7,
+        "5": 8
+      },
+      "gene_cells_with_2plus_decreases": 81,
+      "of_those_with_an_increase": 14,
+      "increase_over_decrease_magnitude_on_those": 0.0753,
+      "gene_cells_with_an_increase": 54,
+      "examples_2plus_decreases": [
+        {
+          "gene": "MYC",
+          "cell": "K562",
+          "decreases": 9,
+          "increases": 1
+        },
+        {
+          "gene": "HBE1",
+          "cell": "K562",
+          "decreases": 7,
+          "increases": 0
+        },
+        {
+          "gene": "IFITM1",
+          "cell": "K562",
+          "decreases": 7,
+          "increases": 0
+        },
+        {
+          "gene": "PLP2",
+          "cell": "K562",
+          "decreases": 7,
+          "increases": 7
+        },
+        {
+          "gene": "PICALM",
+          "cell": "K562",
+          "decreases": 6,
+          "increases": 0
+        },
+        {
+          "gene": "PRDX2",
+          "cell": "K562",
+          "decreases": 6,
+          "increases": 3
+        },
+        {
+          "gene": "TMSB4X",
+          "cell": "K562",
+          "decreases": 6,
+          "increases": 0
+        },
+        {
+          "gene": "PRKAR2B",
+          "cell": "K562",
+          "decreases": 5,
+          "increases": 0
+        },
+        {
+          "gene": "FAM89A",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        },
+        {
+          "gene": "FEZ1",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        },
+        {
+          "gene": "FTL",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 3
+        },
+        {
+          "gene": "HBG2",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        },
+        {
+          "gene": "IFITM2",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        },
+        {
+          "gene": "LMO2",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        },
+        {
+          "gene": "TMEM56",
+          "cell": "K562",
+          "decreases": 4,
+          "increases": 0
+        }
+      ]
+    },
+    "excluded_as_contradicting_every_rule": [
+      "bothma2015_kni_early"
+    ],
+    "contradicted_by": {
+      "mean": [
+        "bothma2015_kni_late",
+        "bothma2015_hb_central"
+      ],
+      "sum_capped": [
+        "bothma2015_sna"
+      ],
+      "max": [
+        "bothma2015_kni_late",
+        "bothma2015_hb_central",
+        "bothma2015_sna",
+        "crispri_training_two_decreases"
+      ],
+      "or": [
+        "bothma2015_sna"
+      ]
+    },
+    "surviving_alternatives": [],
+    "decision": "mean retained, undetermined",
+    "not_judged": {
+      "zhou2024_gasperini_doubles": "compares additive and multiplicative GLM links for enhancer pairs; each rule's double-removal prediction depends on the gene's other activators and saturation",
+      "crispri_training_mean": "under the mean the single-removal changes of a gene's activators sum to zero, but untested or undetected activators can carry the balancing increases",
+      "gastrulation_tbxt_knockdown": "Lolas 2014 Fig. 3A (Brachyury depletion lowers Sox17): whether the model reproduces it depends on the module's unsourced strengths and thresholds",
+      "gastrulation_census": "a fit criterion, not a mechanism test"
+    }
+  },
+  "question": "which programs, tests and results depend on how a gene's activators combine, what each candidate rule does to them, and whether measured evidence picks a rule without tuning",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "in-repo .bio programs and compiled chromosomes",
+        "version": "this revision"
+      },
+      {
+        "accession": "Bothma et al. 2015 eLife 4:e07956, PMC4532966",
+        "version": "published"
+      },
+      {
+        "accession": "Zhou et al. 2024 Cell Genomics (bioRxiv 2023.04.26.538501)",
+        "version": "published"
+      },
+      {
+        "accession": "EPCrisprBenchmark training_K562 GRCh38",
+        "version": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo",
+        "sha256": "d5181a11274cedb3255415a79b058fe2563417b50be1b11aee24e0ab1ff7451d",
+        "bytes": 478552,
+        "partition": null,
+        "files": 40
+      },
+      {
+        "path": "data/organisms",
+        "sha256": "668cfae23ee97ab256502a18136292d7ac0ab559ae7b5bab5d923855b88cc72e",
+        "bytes": 6086693,
+        "partition": null,
+        "files": 26
+      },
+      {
+        "path": "genomeos/std",
+        "sha256": "d5ad2ce38deb09d7845c1ffd2266f7b1b0cdbb52d1391f4ef78b6e97b3687a0a",
+        "bytes": 42804,
+        "partition": null,
+        "files": 7
+      },
+      {
+        "path": "data/knowledge/compiled",
+        "sha256": "2087efcf22d899cb66a2bc0e029a4ec40b5dffbe9dd8c6790e79b6a838b22ba7",
+        "bytes": 417947802,
+        "partition": null,
+        "files": 24
+      },
+      {
+        "path": "genomeos/runtime/grn.py",
+        "sha256": "31bfea217a8ad0caee3ef63ab474a19b787213eb5fca0a9877fe8cd95465af3b",
+        "bytes": 18400,
+        "partition": null
+      },
+      {
+        "path": "genomeos/runtime/located.py",
+        "sha256": "655cc5388723f31e3af3fffe75665fde611fd27666f07f157804892a3989a1ad",
+        "bytes": 25508,
+        "partition": null
+      },
+      {
+        "path": "data/results/gastrulation_census_comparison_sign_corrected.json",
+        "sha256": "1345334b3f5593661dbf40f8a2b45e9e83796b22946fb5154b94859f0d039ade",
+        "bytes": 8447,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      }
+    ],
+    "assembly": "GRCh38 for the CRISPRi table; otherwise n/a: simulated networks",
+    "coordinates": "n/a: element intervals only key elements within one table, never compared",
+    "parameters": {
+      "rules": [
+        "mean",
+        "sum_capped",
+        "max",
+        "or"
+      ],
+      "gastrulation_fixture": "60 cells, 30 h, dt 0.05"
+    },
+    "exclusions": [
+      "CRISPRi element-gene-cells with conflicting outcomes across rows"
+    ],
+    "partitions": {
+      "read": [
+        "training"
+      ],
+      "heldout": "not read; development_only enforced"
+    },
+    "code": {
+      "git_sha": "1c38ef88cb8b42ce85932bef6364030512ce8b33",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/activator_combination.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/activator_combination.py",
+        "choose"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

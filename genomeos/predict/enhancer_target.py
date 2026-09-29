@@ -10,8 +10,12 @@ track. The gene whose expression drops most is the predicted target, the track
 where it drops most is the tissue, and the drop is the magnitude. A rise means
 the element behaves as a silencer for that gene.
 
-Everything here is `predicted` evidence, capped at confidence 0.7 (docs/
-ALPHAGENOME.md). One request per element, about eight seconds, so a chromosome
+Everything here is `predicted` evidence. Since review R4 (2026-09-28) a link
+states its effect in its unit and a `certainty` record with no probability; it
+no longer states a confidence, because the one it stated, round(min(0.7,
+|log2 fold change|), 3), was the effect size under another name. Files
+written before keep their `confidence` values; readers accept both.
+One request per element, about eight seconds, so a chromosome
 is a sampled job and the per-element answers are cached under
 data/knowledge/alphagenome/elements (local, not committed); the summary that is
 committed says how often the prediction agrees with the domain inference, which
@@ -29,12 +33,26 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from genomeos.certainty import Certainty
 from genomeos.coords import Locus
+from genomeos.manifest import MODEL_VERSION_UNREQUESTED
 
 CACHE = Path("data/knowledge/alphagenome/elements")
 MIN_EFFECT = 0.1  # smallest |log2 fold change| that names a target
 STRONG_EFFECT = 0.3
-CONFIDENCE_CAP = 0.7
+CONFIDENCE_CAP = 0.7  # retired by R4: the cap of the old stored `confidence`, named for old files' readers
+EFFECT_UNIT = (
+    "log2 fold change of the gene's predicted RNA-seq expression on deleting the element"
+    " (AlphaGenome gene scorer, the track where it moves most)"
+)
+MODEL_SCORE_NAME = (
+    "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude"
+    " this run ranks candidate genes by, not a probability"
+)
+NO_PROBABILITY = (
+    "no calibration record: the effect size of one model run is not a probability that deleting the"
+    " element moves this gene, and none has been fitted against a measured outcome (review R4)"
+)
 
 Scorer = Callable[[str, int, str, str], list[tuple[str, str, float]]]
 # cell lines whose own RNA-seq track is kept per gene, so a closure test can take the cell's magnitude
@@ -193,11 +211,49 @@ def predict_target(rows: list[dict[str, Any]], min_effect: float = MIN_EFFECT) -
         "gene": gene,
         "action": action,
         "log2_fold_change": round(log2fc, 4),
+        "effect_unit": EFFECT_UNIT,
         "tissue": tissue,
-        "strength": "strong" if size >= STRONG_EFFECT else "weak",
-        "confidence": round(min(CONFIDENCE_CAP, size), 3),
+        "strength": "strong" if size >= STRONG_EFFECT else "weak",  # an effect-size band, not a certainty
+        "certainty": link_certainty(round(log2fc, 4)).to_dict(),
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)",
     }
+
+
+def link_certainty(log2fc: float) -> Certainty:
+    """What a predicted link rests on (R4): the effect in its unit, the ranking score named, no
+    probability. Only the effect and the score depend on the magnitude; nothing converts either into
+    a certainty."""
+    return Certainty(
+        evidence_category="predicted: AlphaGenome deletion, one model run",
+        effect_estimate=log2fc,
+        effect_unit=EFFECT_UNIT,
+        uncertainty_note="one deterministic model run; no spread computed",
+        model_score=abs(log2fc),
+        model_score_name=MODEL_SCORE_NAME,
+        probability_unavailable=NO_PROBABILITY,
+    )
+
+
+def stated_confidence(link: dict[str, Any] | None) -> float | None:
+    """The `confidence` a link written before R4 stored (effect size capped at 0.7), or None: a link
+    written since states none. For reading old files only; never a probability."""
+    if not link:
+        return None
+    c = link.get("confidence")
+    return None if c is None else float(c)
+
+
+def link_score(link: dict[str, Any] | None) -> float | None:
+    """The run's ranking score for a link of either form: the certainty record's model score, else
+    |log2 fold change|, else (a pre-R4 link with no fold change) the stored confidence."""
+    if not link:
+        return None
+    cert = link.get("certainty") or {}
+    if cert.get("model_score") is not None:
+        return float(cert["model_score"])
+    if link.get("log2_fold_change") is not None:
+        return abs(float(link["log2_fold_change"]))
+    return stated_confidence(link)
 
 
 def compare(
@@ -214,6 +270,30 @@ def compare(
     if prediction["gene"] in genes or prediction["gene"] in (domain_genes or []):
         return "another gene in the same domain"
     return "gene outside the domain"
+
+
+def model_version_of(answer: dict[str, Any] | None) -> str:
+    """The model version one answer was asked of: the version its run record requested, or
+    MODEL_VERSION_UNREQUESTED for an answer made with none requested (every answer before 2026-09-28,
+    which carries no run record or one with model_version None). Reads a cached answer or a scored
+    row; both kinds stay in the cache side by side, labelled, and neither is re-asked."""
+    if not answer:
+        return MODEL_VERSION_UNREQUESTED
+    label = answer.get("model_version")
+    if isinstance(label, str) and label:
+        return label
+    model = answer.get("model")
+    requested = model.get("model_version") if isinstance(model, dict) else None
+    return str(requested) if requested else MODEL_VERSION_UNREQUESTED
+
+
+def model_versions(rows: list[dict[str, Any]]) -> dict[str, int]:
+    """How many answers were asked of each model version (model_version_of), largest first."""
+    counts: dict[str, int] = {}
+    for r in rows:
+        v = model_version_of(r)
+        counts[v] = counts.get(v, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
 
 
 def score_element(
@@ -252,6 +332,9 @@ def score_element(
             "seconds": round(time.time() - t0, 1),
             "genes": rows,
         }
+        model = getattr(scorer, "model", None)  # the live scorer's run metadata (review R9 follow-up)
+        if model:
+            hit["model"] = dict(model)
         p = cache_path(chrom, element_id, cache)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(hit))
@@ -260,6 +343,7 @@ def score_element(
         predict_target([g for g in hit["genes"] if g["gene"] in coding], min_effect) if coding else pred
     )
     out = {k: v for k, v in hit.items() if k != "genes"}
+    out["model_version"] = model_version_of(hit)  # "unrequested" for answers made before the pin
     out["predicted"] = pred
     out["predicted_coding"] = pred_coding
     out["predicted_by_cell"] = by_cell_of(hit["genes"], pred)
@@ -313,6 +397,8 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "fraction_inside_domain": round(in_domain / named, 3) if named else None,
         "top_tissues": dict(sorted(tissues.items(), key=lambda kv: -kv[1])[:12]),
         "median_distance_when_agreeing": sorted(distances)[len(distances) // 2] if distances else None,
+        # answers per requested model version; more than one key means the summary mixes models
+        "answers_by_model_version": model_versions(rows),
     }
 
 

@@ -31,6 +31,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from genomeos.attribution.budget import LEGACY_TIER, read_axes, read_axes_genome_wide  # noqa: E402
 from genomeos.genome import epigenome as ep  # noqa: E402
 from genomeos.genome import reader  # noqa: E402
 
@@ -543,7 +544,7 @@ MIN_WINDOW_CALLS = 2
 def fossil(argv: list[str]) -> None:
     from genomeos.coords import Locus
     from genomeos.genome import IndexedGenome
-    from genomeos.results import load_result, save_result
+    from genomeos.results import save_result
 
     m = ep.load_manifest()
     cells = [c for c, r in m["cell_types"].items() if "cpg" in r["methylation"]]
@@ -551,7 +552,7 @@ def fossil(argv: list[str]) -> None:
     chroms = [
         c
         for c in wanted
-        if load_result(f"budget_{c}")
+        if read_axes(c)
         and all(ep.load_methylation_profile(x, c) is not None for x in cells[:1])
         and all(ep.methylation_path(x, c).exists() for x in cells)
     ]
@@ -562,9 +563,12 @@ def fossil(argv: list[str]) -> None:
     tally = {t: {"blocks": 0, "bp": 0, "windows": 0, "ref_cpg": 0} for t in tiers}
     measured = {c: {t: {"windows": 0, "covered_calls": 0} for t in tiers} for c in cells}
     families: dict = {c: {} for c in cells}
-    genome_tier_bp = (load_result("budget_genome_wide") or {}).get("by_tier", {})
+    # the R7 genome-wide sum, keyed back to the stored tier names this result keeps
+    genome_tier_bp = {
+        LEGACY_TIER.get(t, t): v for t, v in (read_axes_genome_wide() or {}).get("by_tier", {}).items()
+    }
     for chrom in chroms:
-        budget = load_result(f"budget_{chrom}")
+        budget = read_axes(chrom)
         cols = {c: ep.load_methylation_profile(c, chrom) for c in cells}
         k9idx = {}
         for c in ep.CELL_TYPES:
@@ -573,7 +577,7 @@ def fossil(argv: list[str]) -> None:
         g = IndexedGenome(f"data/reference/{chrom}.fa.gz")
         length = g.lengths[chrom]
         for bi, blk in enumerate(budget["blocks"]):
-            tier = blk["guess"]["tier"]
+            tier = blk["guess"]["legacy_tier"]
             if tier not in tally or blk["class"] == "gap":
                 continue
             key = f"{chrom}:{bi}"
@@ -748,11 +752,11 @@ def fossil(argv: list[str]) -> None:
 
 def summary(argv: list[str]) -> None:
     from genomeos.genome.regulatory import load_ccres
-    from genomeos.results import load_result, save_result
+    from genomeos.results import save_result
 
     for chrom in argv or ["chr21", "chr22"]:
         ann = _annotation(chrom)
-        s = ep.summarise_chromosome(chrom, ann, load_ccres(chrom), budget=load_result(f"budget_{chrom}"))
+        s = ep.summarise_chromosome(chrom, ann, load_ccres(chrom), budget=read_axes(chrom))
         s["manifest"] = "epigenome_manifest"
         p = save_result(f"epigenome_{chrom}", s)
         print(f"{chrom}: {p} {p.stat().st_size / 1e3:.0f} KB", flush=True)
@@ -880,18 +884,20 @@ def _wcgw_share(seq: str) -> tuple[float, int]:
 def alu(argv: list[str]) -> None:
     from genomeos.coords import Locus
     from genomeos.genome import IndexedGenome
-    from genomeos.results import load_result, save_result
+    from genomeos.results import save_result
 
     m = ep.load_manifest()
     cells = [c for c, r in m["cell_types"].items() if "cpg" in r["methylation"]]
-    chroms = argv or [c for c in ep.CHROMS if load_result(f"budget_{c}")]
+    chroms = argv or [c for c in ep.CHROMS if read_axes(c)]
     units: list[dict] = []
     for chrom in chroms:
         rp = Path(f"data/results/rmsk_{chrom}.bed.gz")
-        budget = load_result(f"budget_{chrom}")
+        budget = read_axes(chrom)
         if not rp.exists() or not budget:
             continue
-        blocks = sorted((b["start"], b["end"]) for b in budget["blocks"] if b["guess"]["tier"] == "fossil")
+        blocks = sorted(
+            (b["start"], b["end"]) for b in budget["blocks"] if b["guess"]["tier"] == "repeat_unconstrained"
+        )
         starts = [b[0] for b in blocks]
         cols = {c: ep.load_methylation_profile(c, chrom) for c in cells}
         if any(v is None for v in cols.values()):

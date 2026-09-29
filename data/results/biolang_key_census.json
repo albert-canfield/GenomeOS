@@ -1,0 +1,65 @@
+{
+ "accepted_from": "genomeos.lang.grammar.BLOCKS + COMMON",
+ "tracked_bio": {
+  "programs": 41,
+  "hits": []
+ },
+ "markdown_fenced": {
+  "programs": 14,
+  "hits": []
+ },
+ "code_literals": {
+  "programs": 149,
+  "hits": [
+   {
+    "source": "scripts/package_engine.py:217",
+    "kind": "rule",
+    "block": "A produces Ap",
+    "line": 8,
+    "key": "rate",
+    "closest": ""
+   },
+   {
+    "source": "scripts/package_engine.py:217",
+    "kind": "rule",
+    "block": "B produces Bp",
+    "line": 9,
+    "key": "rate",
+    "closest": ""
+   },
+   {
+    "source": "scripts/package_engine.py:217",
+    "kind": "rule",
+    "block": "Ap inhibits Bp",
+    "line": 10,
+    "key": "rate",
+    "closest": ""
+   },
+   {
+    "source": "scripts/package_engine.py:232",
+    "kind": "rule",
+    "block": "A produces Ap",
+    "line": 1,
+    "key": "rate",
+    "closest": ""
+   }
+  ]
+ },
+ "generated_bio_untracked": {
+  "programs": 24,
+  "hits": []
+ },
+ "test_programs": {
+  "programs": 200,
+  "pytest": "4 failed, 1641 passed, 6 skipped in 245.45s (0:04:05)",
+  "hits": []
+ },
+ "distinct_unknown_keys": [
+  {
+   "kind": "rule",
+   "key": "rate",
+   "closest": ""
+  }
+ ],
+ "total_hits": 4
+}

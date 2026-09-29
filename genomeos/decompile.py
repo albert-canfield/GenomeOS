@@ -135,7 +135,10 @@ def _elements(symbol: str, chrom: str, results_dir: Path) -> list[dict]:
                     "action": pc.get("action"),
                     "log2_fold_change": pc.get("log2_fold_change"),
                     "tissue": pc.get("tissue"),
+                    # R4: a pre-R4 link's stored confidence is the effect capped at 0.7; kept as read,
+                    # never printed as a confidence. A new link carries a certainty record instead.
                     "confidence": pc.get("confidence"),
+                    "certainty": pc.get("certainty"),
                     "mammal_fraction": v.get("mammal_fraction", e.get("constrained_fraction")),
                     "human_fraction": (v.get("gnocchi") or {}).get("fraction_above"),
                     "case": (v.get("case") or {}).get("case"),
@@ -285,7 +288,7 @@ def render(d: dict[str, Any]) -> str:
             f"  locus: {chrom}:{e['start']}-{e['end']}",
             f"  targets: {name}",
             f"  # {e['action']} by {abs(e['log2_fold_change'] or 0):.2f} log2 in {e['tissue']} when deleted "
-            f"[predicted: AlphaGenome, {e['confidence']}]",
+            "[predicted: AlphaGenome, one run; probability unavailable]",
         ]
         if axes:
             lines.append(f"  # {'; '.join(axes)}   [curated: Zoonomia, gnomAD Gnocchi, UCSC superdups]")

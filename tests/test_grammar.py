@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """The written grammar is generated from the parser and the IR, and cannot drift from them."""
 
 from pathlib import Path

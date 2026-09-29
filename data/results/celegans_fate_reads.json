@@ -1,6 +1,6 @@
 {
   "result": "celegans_fate_reads",
-  "date": "2026-09-15",
+  "date": "2026-09-29",
   "question": "with the Body computing F.exposure(window) and F.mean(window) itself, can the worm's terminal fate rules be written on a read a deciding cell could hold, and does that score better or worse than the precomputed lookup it replaces?",
   "reads_are": "absolute (minutes, or a fraction of the named window) and integrate carriage, not concentration: this program declares no cell_network, so a factor counts 1 while carried (BIOLANG-v0.4-ECONOMY.md \u00a77.2a)",
   "decision_points_per_terminal_cell": {
@@ -203,26 +203,26 @@
     {
       "read": "mean(cell)",
       "threshold": 0.01,
-      "decided": 0,
-      "right": 0,
-      "wrong": 0,
-      "with_lookup_fallback": 555
+      "decided": 225,
+      "right": 164,
+      "wrong": 61,
+      "with_lookup_fallback": 494
     },
     {
       "read": "mean(cell)",
       "threshold": 0.1,
-      "decided": 0,
-      "right": 0,
-      "wrong": 0,
-      "with_lookup_fallback": 555
+      "decided": 225,
+      "right": 164,
+      "wrong": 61,
+      "with_lookup_fallback": 494
     },
     {
       "read": "mean(cell)",
       "threshold": 0.2,
-      "decided": 0,
-      "right": 0,
-      "wrong": 0,
-      "with_lookup_fallback": 555
+      "decided": 225,
+      "right": 164,
+      "wrong": 61,
+      "with_lookup_fallback": 494
     },
     {
       "read": "instantaneous (F = present)",
@@ -238,7 +238,9 @@
       "in_sample": {
         "fates_correct": 522,
         "fates_checked": 555,
-        "decided_by_factors": 332,
+        "decided_by_factors": 414,
+        "decided_by_factors_without_the_crossing_re_decisions": 332,
+        "fates_correct_without_the_crossing_re_decisions": 522,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
@@ -326,14 +328,16 @@
       "held_out": {
         "fates_correct": 483,
         "fates_checked": 555,
-        "decided_by_factors": 340
+        "decided_by_factors": 446
       }
     },
     "mean(lineage) >= 0.25": {
       "in_sample": {
         "fates_correct": 533,
         "fates_checked": 555,
-        "decided_by_factors": 285,
+        "decided_by_factors": 414,
+        "decided_by_factors_without_the_crossing_re_decisions": 285,
+        "fates_correct_without_the_crossing_re_decisions": 533,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
@@ -418,14 +422,16 @@
       "held_out": {
         "fates_correct": 515,
         "fates_checked": 555,
-        "decided_by_factors": 251
+        "decided_by_factors": 423
       }
     },
     "exposure(cell) >= 1": {
       "in_sample": {
         "fates_correct": 555,
         "fates_checked": 555,
-        "decided_by_factors": 5,
+        "decided_by_factors": 170,
+        "decided_by_factors_without_the_crossing_re_decisions": 5,
+        "fates_correct_without_the_crossing_re_decisions": 555,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
@@ -503,31 +509,33 @@
       "held_out": {
         "fates_correct": 555,
         "fates_checked": 555,
-        "decided_by_factors": 5
+        "decided_by_factors": 170
       }
     },
     "mean(cell) >= 0.01": {
       "in_sample": {
-        "fates_correct": 555,
+        "fates_correct": 487,
         "fates_checked": 555,
-        "decided_by_factors": 5,
+        "decided_by_factors": 404,
+        "decided_by_factors_without_the_crossing_re_decisions": 404,
+        "fates_correct_without_the_crossing_re_decisions": 487,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
-          961,
+          893,
           961
         ],
         "per_tissue": {
           "neuron": {
-            "correct": 226,
+            "correct": 199,
             "cells": 226
           },
           "muscle": {
-            "correct": 122,
+            "correct": 115,
             "cells": 122
           },
           "hypoderm": {
-            "correct": 69,
+            "correct": 67,
             "cells": 69
           },
           "intestine": {
@@ -535,19 +543,19 @@
             "cells": 34
           },
           "sheath": {
-            "correct": 22,
+            "correct": 10,
             "cells": 22
           },
           "socket": {
-            "correct": 18,
+            "correct": 8,
             "cells": 18
           },
           "other": {
-            "correct": 15,
+            "correct": 14,
             "cells": 15
           },
           "epithelium": {
-            "correct": 13,
+            "correct": 12,
             "cells": 13
           },
           "marginal": {
@@ -555,11 +563,11 @@
             "cells": 9
           },
           "valve": {
-            "correct": 8,
+            "correct": 7,
             "cells": 8
           },
           "excretory": {
-            "correct": 5,
+            "correct": 3,
             "cells": 5
           },
           "gland": {
@@ -567,11 +575,11 @@
             "cells": 5
           },
           "coelomocyte": {
-            "correct": 4,
+            "correct": 0,
             "cells": 4
           },
           "rectal": {
-            "correct": 2,
+            "correct": 1,
             "cells": 2
           },
           "repro": {
@@ -583,12 +591,23 @@
             "cells": 1
           }
         },
-        "confusion": {}
+        "confusion": {
+          "neuron->Hypodermis": 16,
+          "neuron->Muscle": 11,
+          "sheath->Hypodermis": 10,
+          "socket->Hypodermis": 6,
+          "muscle->Neuron": 5,
+          "socket->Neuron": 4,
+          "coelomocyte->Muscle": 4,
+          "sheath->Neuron": 1,
+          "excretory->Hypodermis": 1,
+          "sheath->Muscle": 1
+        }
       },
       "held_out": {
-        "fates_correct": 555,
+        "fates_correct": 467,
         "fates_checked": 555,
-        "decided_by_factors": 5
+        "decided_by_factors": 395
       }
     },
     "instantaneous (F = present)": {
@@ -596,6 +615,8 @@
         "fates_correct": 483,
         "fates_checked": 555,
         "decided_by_factors": 412,
+        "decided_by_factors_without_the_crossing_re_decisions": 412,
+        "fates_correct_without_the_crossing_re_decisions": 483,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
@@ -692,6 +713,8 @@
         "fates_correct": 501,
         "fates_checked": 555,
         "decided_by_factors": 437,
+        "decided_by_factors_without_the_crossing_re_decisions": 437,
+        "fates_correct_without_the_crossing_re_decisions": 501,
         "cells_born": 1439,
         "deaths_matched": 110,
         "to_adult": [
@@ -789,113 +812,113 @@
       "read": "exposure(lineage)",
       "threshold": 1,
       "in_sample": 522,
-      "in_sample_decided": 332,
+      "in_sample_decided": 414,
       "held_out": 483,
-      "held_out_decided": 340
+      "held_out_decided": 446
     },
     {
       "read": "exposure(lineage)",
       "threshold": 15,
       "in_sample": 522,
-      "in_sample_decided": 332,
+      "in_sample_decided": 414,
       "held_out": 483,
-      "held_out_decided": 340
+      "held_out_decided": 446
     },
     {
       "read": "exposure(lineage)",
       "threshold": 30,
       "in_sample": 522,
-      "in_sample_decided": 332,
+      "in_sample_decided": 414,
       "held_out": 483,
-      "held_out_decided": 340
+      "held_out_decided": 446
     },
     {
       "read": "exposure(lineage)",
       "threshold": 60,
       "in_sample": 512,
-      "in_sample_decided": 350,
+      "in_sample_decided": 423,
       "held_out": 492,
-      "held_out_decided": 329
+      "held_out_decided": 428
     },
     {
       "read": "exposure(lineage)",
       "threshold": 90,
       "in_sample": 522,
-      "in_sample_decided": 300,
+      "in_sample_decided": 414,
       "held_out": 491,
-      "held_out_decided": 314
+      "held_out_decided": 436
     },
     {
       "read": "exposure(lineage)",
       "threshold": 120,
       "in_sample": 531,
-      "in_sample_decided": 270,
+      "in_sample_decided": 411,
       "held_out": 515,
-      "held_out_decided": 245
+      "held_out_decided": 421
     },
     {
       "read": "exposure(lineage)",
       "threshold": 180,
       "in_sample": 537,
-      "in_sample_decided": 226,
+      "in_sample_decided": 413,
       "held_out": 511,
-      "held_out_decided": 225
+      "held_out_decided": 435
     },
     {
       "read": "mean(lineage)",
       "threshold": 0.1,
       "in_sample": 523,
-      "in_sample_decided": 330,
+      "in_sample_decided": 413,
       "held_out": 476,
-      "held_out_decided": 345
+      "held_out_decided": 435
     },
     {
       "read": "mean(lineage)",
       "threshold": 0.2,
       "in_sample": 517,
-      "in_sample_decided": 329,
+      "in_sample_decided": 418,
       "held_out": 490,
-      "held_out_decided": 334
+      "held_out_decided": 441
     },
     {
       "read": "mean(lineage)",
       "threshold": 0.25,
       "in_sample": 533,
-      "in_sample_decided": 285,
+      "in_sample_decided": 414,
       "held_out": 515,
-      "held_out_decided": 251
+      "held_out_decided": 423
     },
     {
       "read": "mean(lineage)",
       "threshold": 0.4,
       "in_sample": 540,
-      "in_sample_decided": 211,
+      "in_sample_decided": 403,
       "held_out": 516,
-      "held_out_decided": 215
+      "held_out_decided": 417
     }
   ],
   "stability_under_a_re_decision_cadence": {
     "exposure(lineage) >= 15, cadence 0 min, as shipped": {
       "fates_correct": 522,
       "fates_checked": 555,
-      "overruled_fates": 0,
+      "overruled_fates": 29,
       "revised_fates": 0,
-      "refused_committed": 0,
+      "refused_committed": 269,
       "network_steps": 0
     },
     "exposure(lineage) >= 15, cadence 6 min, as shipped": {
       "fates_correct": 522,
       "fates_checked": 555,
       "overruled_fates": 104,
-      "revised_fates": 372,
+      "revised_fates": 0,
       "refused_committed": 269,
       "network_steps": 133
     },
     "exposure(lineage) >= 15, cadence 0 min, commitment removed": {
-      "fates_correct": 522,
+      "fates_correct": 412,
       "fates_checked": 555,
-      "overruled_fates": 0,
-      "revised_fates": 0,
+      "overruled_fates": 14,
+      "revised_fates": 114,
       "refused_committed": 0,
       "network_steps": 0
     },
@@ -903,31 +926,31 @@
       "fates_correct": 386,
       "fates_checked": 555,
       "overruled_fates": 188,
-      "revised_fates": 473,
+      "revised_fates": 140,
       "refused_committed": 0,
       "network_steps": 133
     },
     "mean(lineage) >= 0.25, cadence 0 min, as shipped": {
       "fates_correct": 503,
       "fates_checked": 555,
-      "overruled_fates": 0,
+      "overruled_fates": 35,
       "revised_fates": 0,
-      "refused_committed": 0,
+      "refused_committed": 734,
       "network_steps": 0
     },
     "mean(lineage) >= 0.25, cadence 6 min, as shipped": {
       "fates_correct": 503,
       "fates_checked": 555,
       "overruled_fates": 293,
-      "revised_fates": 420,
-      "refused_committed": 733,
+      "revised_fates": 0,
+      "refused_committed": 734,
       "network_steps": 133
     },
     "mean(lineage) >= 0.25, cadence 0 min, commitment removed": {
-      "fates_correct": 503,
+      "fates_correct": 347,
       "fates_checked": 555,
-      "overruled_fates": 0,
-      "revised_fates": 0,
+      "overruled_fates": 66,
+      "revised_fates": 203,
       "refused_committed": 0,
       "network_steps": 0
     },
@@ -935,7 +958,7 @@
       "fates_correct": 327,
       "fates_checked": 555,
       "overruled_fates": 568,
-      "revised_fates": 528,
+      "revised_fates": 221,
       "refused_committed": 0,
       "network_steps": 133
     }
@@ -1205,5 +1228,84 @@
   },
   "generated": [
     "data/organisms/celegans/fates.bio"
-  ]
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "WormWeb C. elegans cell lineage, json-celllineage.js (Sulston et al. 1983; Sulston and Horvitz 1977)",
+        "version": "as fetched and distilled into data/results/celegans_lineage_cells.json (first 0a8aa05, 2026-09-11); the page carries no release number, so the distilled file's sha256 pins it",
+        "url": "http://wormweb.org/js/json-celllineage.js",
+        "licence": "CC BY"
+      },
+      {
+        "accession": "Zenodo 4737593 (Ma et al. 2021, Nat Methods 18:893), Time_series_expression_dataset.zip",
+        "version": "Zenodo record 4737593",
+        "url": "https://zenodo.org/api/records/4737593/files/Time_series_expression_dataset.zip/content",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/celegans_lineage_cells.json",
+        "sha256": "93635ad98a08e4641c9f8719d63cc3420ecee6fd161c0d8fab897720fb6d4ab6",
+        "bytes": 305885,
+        "partition": null
+      },
+      {
+        "path": "data/results/celegans_tf_atlas_cells.json",
+        "sha256": "1d3495a0e1cbd84f9e684bc5548a21c6e8604d4c71741a140ab16f7b7c7c42ad",
+        "bytes": 766499,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/celegans/atlas_levels.json",
+        "sha256": "30a7b4826739248ec341b5b79e45540ae051fbedb6d47a30044730bdffdb67d7",
+        "bytes": 10268697,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans",
+        "sha256": "408f2659984aeb8570dcaa6a84bb460f386b9f72d4900ba9e603cbbeea630733",
+        "bytes": 1247361,
+        "partition": null,
+        "files": 17
+      }
+    ],
+    "assembly": "n/a: a cell lineage and per-cell factor presence; nothing is placed on a genome",
+    "coordinates": "n/a: cells are named by their lineage path, not by a genomic interval",
+    "parameters": {
+      "hatch_min": 800.0,
+      "adult_min": 6000.0,
+      "windows": [
+        "cell",
+        "lineage"
+      ],
+      "kinds": [
+        "exposure",
+        "mean"
+      ],
+      "exposure_threshold_min": 15.0,
+      "atlas_presence_fraction_of_max": 0.2,
+      "atlas_minutes_per_frame": 1.25
+    },
+    "exclusions": [],
+    "partitions": {
+      "held_out_by_founder_sublineage": "rules or thresholds learned on seven of the eight founder sublineages (fate_rules.SUBLINEAGES: ABal, ABar, ABpl, ABpr, MS, E, C, D) decide the eighth",
+      "in_sample": "every score the result marks in sample reads all cells"
+    },
+    "code": {
+      "git_sha": "b587bb126e7575851e2167ba2be789651606a799",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/celegans_commitment.json"
+      ],
+      "argv": [
+        "scripts/celegans_fate_reads.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
 }

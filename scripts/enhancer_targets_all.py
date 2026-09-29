@@ -32,8 +32,17 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 
 from genomeos.jobs import heartbeat
+from genomeos.manifest import answers_model_dependency
 from genomeos.predict import AlphaGenomeAdapter, status
-from genomeos.predict.enhancer_target import Context, cache_path, has_cells, load_cached, summarise
+from genomeos.predict.alphagenome_adapter import run_metadata
+from genomeos.predict.enhancer_target import (
+    Context,
+    cache_path,
+    has_cells,
+    load_cached,
+    model_versions,
+    summarise,
+)
 from genomeos.results import save_result
 
 SAVE_EVERY = 200
@@ -91,10 +100,10 @@ def _locked(lock: threading.Lock, fn, *a):
 def worker_scorer(local: threading.local):
     """One live scorer per worker thread, its client given the call timeout."""
     if getattr(local, "scorer", None) is None:
-        from alphagenome.models import dna_client  # type: ignore[import-not-found]
+        from genomeos.predict.alphagenome_adapter import create_client
 
         a = AlphaGenomeAdapter()
-        a._client = dna_client.create(a.api_key, timeout=CALL_TIMEOUT)  # noqa: SLF001
+        a._client = create_client(a.api_key, timeout=CALL_TIMEOUT)  # noqa: SLF001  (the pinned version)
         local.scorer = a._live_scorer(threshold=0.0)  # noqa: SLF001
     return local.scorer
 
@@ -119,6 +128,7 @@ def compact(r: dict) -> dict:
         "predicted_by_cell",
         "predicted_coding_by_cell",
         "verdict_coding",
+        "model_version",
     )
     return {k: r.get(k) for k in keys}
 
@@ -169,6 +179,9 @@ def main() -> int:
                 "workers": args.workers,
                 "capped_to": args.limit,
                 "cells": ["K562", "HepG2", "GM12878", "IMR-90"],
+                # client version, requested model version (None: the server chose) and date; each new
+                # cached answer carries the same record plus its track checksum (review R9 follow-up)
+                "model_run": run_metadata(),
                 # a capped run cannot know the chromosome is finished, so it never claims it is
                 "complete": bool(final and not args.limit and len(rows) >= total_elements),
                 "summary": s,
@@ -176,6 +189,9 @@ def main() -> int:
                 "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line "
                 "(K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes",
             },
+            # which model version each answer was asked of; `mixed` says so when unrequested (pre-pin)
+            # and requested answers are read together
+            manifest={"model_dependencies": [answers_model_dependency("alphagenome", model_versions(rows))]},
         )
 
     def score_one(index: int, e) -> tuple[int, dict]:

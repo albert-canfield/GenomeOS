@@ -1,0 +1,119 @@
+{
+  "result": "variant_confidence_census",
+  "date": "2026-09-28",
+  "readers": [
+    {
+      "site": "genomeos/predict/alphagenome_adapter.py AlphaGenomeAdapter.to_module",
+      "reads": "PredictedEffect.confidence as each predicted Rule's confidence",
+      "callers": "tests/test_alphagenome.py only; no CLI, server or script builds this module"
+    },
+    {
+      "site": "genomeos/cli.py cmd_predict (variant form)",
+      "reads": "round(e.confidence, 3) into --json effects[], and 'confidence 0.xx' per printed line",
+      "callers": "`genomeos predict chr:pos REF>ALT`"
+    },
+    {
+      "site": "genomeos/web/server.py predict",
+      "reads": "round(e.confidence, 3) into effects[] of /api/predict",
+      "callers": "the /api/predict endpoint; no page of web/static/index.html calls it"
+    },
+    {
+      "site": "genomeos/predict/alphagenome_adapter.py LICENCE_NOTE",
+      "reads": "states predictions enter 'capped at confidence 0.7' (text, shown by status)",
+      "callers": "`genomeos predict --status`, /api/predict/status"
+    },
+    {
+      "site": "tests/test_alphagenome.py test_adapter_emits_predicted_rules_only",
+      "reads": "pins rule confidence <= 0.7 and > 0.35 for |log2FC| 0.8: a pin on the retired formula",
+      "callers": "test"
+    },
+    {
+      "site": "genomeos/genome/missense.py annotate",
+      "reads": "writes predicted.confidence = round(min(0.7, score), 3) on each scored missense row",
+      "callers": "individuals.coding_variants (predict=True) -> CLI coding table, report, web panel"
+    },
+    {
+      "site": "genomeos/cli.py, genomeos/genome/individuals.py, genomeos/web/static/index.html",
+      "reads": "missense_by_effect rows: score, class, protein_variant; none reads predicted.confidence",
+      "callers": "coding-variant views"
+    },
+    {
+      "site": "tests/test_missense.py test_annotate",
+      "reads": "pins predicted.confidence == 0.7 for a score of 0.95",
+      "callers": "test"
+    },
+    {
+      "site": "genomeos/attribution/compile.py element_certainty",
+      "reads": "pc.get('confidence') as the model score of an enhancer link (R4e leftover)",
+      "callers": "tests/test_compile_certainty.py; the compiled text does not emit the per-link score"
+    }
+  ],
+  "stored_variant_result": {
+    "present": true,
+    "effects": 40,
+    "with_confidence": 40,
+    "equal_to_the_retired_formula": 40,
+    "cap_applied": 0,
+    "confidence_range": [
+      0.247,
+      0.401
+    ]
+  },
+  "people_alphamissense_caches": {
+    "HG002": {
+      "variants_with_a_score": 8933,
+      "transcript_entries": 9003,
+      "entries_above_cap": 98,
+      "stores_confidence": 0
+    }
+  },
+  "reading": "the variant-effect confidence is stored once, in the committed alphagenome_rs12740374 result, which keeps its values; the missense confidence is never stored, only computed when a person's coding variants are read, so retiring it moves no stored figure",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository and the local per-person caches",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/alphagenome_rs12740374.json",
+        "sha256": "c27820aff94153d69fbfb8b7713556f154ab5836b072510fc39eb0c61dca41a3",
+        "bytes": 6780,
+        "partition": null
+      },
+      {
+        "path": "data/individuals/HG002/alphamissense.json",
+        "sha256": "fd3fcc43ba4a22a3229e22c3a4882c4cb8557908516f278e2b707e90676480cb",
+        "bytes": 1581791,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: counts of fields, no interval is read",
+    "parameters": {
+      "cap": 0.7,
+      "adapter_formula": "min(0.7, 0.2 + 0.25*|log2FC|)"
+    },
+    "exclusions": [
+      "none"
+    ],
+    "partitions": "n/a: no evaluation partition",
+    "code": {
+      "git_sha": "bbce3d8f45ae9e16fa54dce66d6e6cf2812573b4",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/budget.py",
+        "genomeos/genome/unknown.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/variant_confidence_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

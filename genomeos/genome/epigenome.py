@@ -1056,7 +1056,7 @@ def summarise_chromosome(
             if budget:
                 tiers: dict[str, dict[str, Any]] = {}
                 for blk in budget.get("blocks", []):
-                    tier = blk["guess"]["tier"]
+                    tier = blk["guess"].get("legacy_tier", blk["guess"]["tier"])  # stored keys kept
                     m = methylation_over(cols, blk["start"], blk["end"])
                     t = tiers.setdefault(tier, {"blocks": 0, "bp": 0, "calls": 0, "covered": 0, "_fsum": 0.0})
                     t["blocks"] += 1

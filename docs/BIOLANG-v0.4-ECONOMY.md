@@ -1120,13 +1120,27 @@ telegraph promoter (`gene X { bursting: on 0.5 /h; off 5 /h }`), falsified
 against the transcriptome-wide burst frequencies and sizes of Larsson et al.
 2019 (Nature 565:251).
 
-**Stage 4, division and dilution (not implemented).** A `divide` event
-partitions contents (binomially for low copy numbers) instead of duplicating
-them, guarded by a size or resource checkpoint, so growth costs something.
-Gate: over several divisions dilution must separate a stable protein from a
-short-lived one. `bio.std.human_turnover` holds cell lifespans (Sender & Milo
-2021), not protein half-lives; the gate needs a protein turnover set (for
+**Stage 4, division and dilution (implemented 2026-09-28; the mechanism passes
+its eight registered clauses and the gate as worded below is refuted).** A
+`divide` event partitions contents (binomially for low copy numbers) instead of
+duplicating them, guarded by a size or resource checkpoint, so growth costs
+something. Gate: over several divisions dilution must separate a stable protein
+from a short-lived one. `bio.std.human_turnover` holds cell lifespans (Sender &
+Milo 2021), not protein half-lives; the gate needs a protein turnover set (for
 example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
+
+The paragraph above is left as it was written, the way §9.1 item 4 leaves its
+own superseded decision standing. What it asks for is built — `partition:
+duplicate | contents | binomial` on an `event`, `genomeos/runtime/division.py`,
+and the checkpoint as the event's own `when` clause — and the sentence that
+states its gate is **wrong**, for a reason written down before the instrument
+existed. Partitioning multiplies every species in the cell by the same one-half,
+so the division term cancels out of the stable:short ratio and **dilution
+separates nothing**; in a steady state it compresses the separation 8.80-fold.
+§9.3 registers that and §9.4 measures it. What dilution does do on its own is
+remove a protein the program gives no half-life to, which turnover cannot touch,
+and that is the clause the stage passes. The turnover set stays open, and no
+clause here needs it.
 
 ## 9. Gates and status
 
@@ -1136,7 +1150,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started; **no longer blocked** — decision 2 was resolved 2026-09-19 and the absolute volume it needed is implemented (§4.1), so the gate's concentration arm is now expressible |
 | 2 (superseding the row above, 2026-09-21) | pool, cost, allocation | burden; absolute abundance vs PaxDb | **implemented; gate (a) passed on three clauses of four, gate (b) failed** (§9.2). The burden reproduces the documented shape and vanishes when the pool is switched off; the abundance gate improves nothing, for a reason derived from the runtime and committed before the data were fetched. §5.3's consequence stands: the pool layer is **optional**. The row above is left standing rather than rewritten, the way §9.1 item 4 leaves its own superseded decision standing |
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
-| 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
+| 4 | partitioning division, checkpoint | dilution vs protein turnover | **implemented 2026-09-28; the mechanism passes all eight registered clauses and the gate as §8 words it is refuted rather than passed** (§9.3 registered, §9.4 measured). Partitioning is gene-blind, exactly as stage 2's `_share` was: dilution contributes 0.0 of the 9.392136 decades that separate a stable protein from a short-lived one, and in a steady state it compresses the separation 8.80-fold. The stage's own claim — conservation, and the removal of a protein nothing degrades — holds: 2,000 of 2,000 binomial splits conserve exactly, and a protein with no declared half-life falls by exactly 2^-8 over eight divisions and not at all when contents are duplicated. `partition` defaults to `duplicate`, so no committed program changes. The protein turnover set (§10 decision 6) stays open and no clause needed it |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
 | fate | commitment, competence | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | **passed 2026-09-14** (§7.2a): five arms reproduced, and each construct fails an arm when removed |
 | fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | **implemented 2026-09-15**, in absolute units; the gate is area E's to run, by writing their fate rules as declared reads instead of a precomputed lookup |
@@ -1315,6 +1329,147 @@ a burden of the documented shape, and it improves no prediction of protein
 abundance. A program that wants a burden should declare pools; a program that
 wants abundance gains nothing by declaring them.
 
+### 9.3 Stage 4 registered (2026-09-28), before the instrument existed
+
+The registration is `genomeos/runtime/division_gate.py`, committed before
+`genomeos/runtime/division.py` and `scripts/division_gate.py` were written and
+before any number existed. It registers a **negative about the gate's own
+wording**, which is the part worth reading before the result.
+
+**§8 asks for something partitioning cannot give.** "Over several divisions
+dilution must separate a stable protein from a short-lived one." Partitioning
+multiplies every species in the cell by the same one-half; it carries no index
+over proteins, exactly as stage 2's `Economy._share` carried none over genes
+(§9.2). In a chase, after `n` divisions of interval `T`, a protein of half-life
+`t` stands at `A0 · 2^-n · 2^(-nT/t)`, so
+
+    log10(A_stable / A_short) = n · T · log10(2) · (1/t_short − 1/t_stable)
+
+and the division term has cancelled. **Dilution separates nothing.** It removes
+both proteins by the same factor, and turnover — which does the separating —
+separates them just as well in a cell that never divides. In a steady state
+with synthesis on it is worse than neutral: a level is
+`s / (k_degradation + k_division)`, so dividing adds the same constant to both
+denominators and **compresses** the separation. With the registered constants
+(240 h and 6 h, dividing every 24 h) the stable:short ratio falls from 40.0 to
+4.545, a compression of **8.80×**. The instrument must reproduce that, and a run
+that showed dilution separating the two would mean the partitioning is indexed
+by protein, which is a bug of exactly the shape that looks like the finding.
+
+**What dilution does do, and what the gate therefore asks instead.** A protein
+the program gives no half-life is never degraded, so in a cell that does not
+divide it never leaves. Division is its only removal, by exactly `2^-n`. That is
+the one separation dilution makes on its own — between what turnover can remove
+and what only division can — and it is the registered positive clause.
+
+**The eight clauses**, each able to fail: the closed form in both arms; the
+dilution-only protein at exactly `2^-8` partitioned and exactly 1.0 duplicating;
+the two arms' separation identical; the steady-state compression; exact
+conservation at every division, every species and every seed; the binomial arm's
+mean and variance against their analytic values with a whole-number daughter and
+zero variance above the regime threshold; and two falsifiers — equal half-lives
+must make the two proteins identical, and an unmet checkpoint must fire zero
+divisions and leave the decay-only amounts.
+
+**Registered as not askable rather than attempted.** Whether these half-lives
+are any real protein's: `bio.std.human_turnover` holds *cell* lifespans (Sender
+& Milo 2021), no protein turnover table is under `data/knowledge`, and §10
+decision 6 stays open. Whether real partitioning is binomial: Huh & Paulsson
+2011 show clustering makes it noisier, and this project holds no
+partitioning-error dataset, so the binomial arm is checked against its own
+analytic moments and never against a measurement. And whether a per-gene
+half-life would move stage 2's gate (b): §9.2 named a per-gene term as the thing
+that could, and a half-life is one, but that is a proteome-scale run needing the
+turnover set this paragraph has just said the project does not hold. **Nothing
+in stage 4 is evidence about gate (b).**
+
+**Figures that must not move**, registered: area E's 1,439 of 1,439 fates,
+terminal 496 of 555, 45 ambiguous decision points to 0 and 522 of 555 under
+§7.5 — `runtime/body.py` is not touched and `partition` defaults to `duplicate`,
+so no program that does not ask for partitioning behaves differently; stage 2's
+burden factors and its 0.952005 MAE; stage 1's 13 of 13 and 1,123 of 1,123; and
+the engine package's 12 of 12.
+
+### 9.4 Stage 4 as measured (2026-09-28)
+
+The language surface is one key, `partition` on an `event`
+(`genomeos/lang/grammar.py`, `genomeos/ir/model.py`, `genomeos/lang/parser.py`);
+the arithmetic is `genomeos/runtime/division.py`; the gate is
+`genomeos/runtime/division_gate.py`, a pre-registration committed in `4ff3cd4`
+before the instrument existed, run by `scripts/division_gate.py` into
+`data/results/division_gate.json`.
+
+**The negative first, and it was registered before the run.** Over eight
+divisions 24 h apart, from 1e6 of each, a protein declaring a 240 h half-life and
+one declaring 6 h end 9.392136 decades apart. They end **the same 9.392136
+decades apart when contents are duplicated instead of partitioned**. Dilution
+contributes 0.0 decades of it, to the last bit of a double. In a steady state
+with synthesis on the stable:short ratio is 40.0 in a cell that never divides and
+4.5455 in one that divides daily, so dividing **compresses** the separation
+8.80-fold. §8's sentence — "over several divisions dilution must separate a
+stable protein from a short-lived one" — is therefore refuted, not passed, and
+for the same reason §9.2 gave about allocation: the operation carries no index
+over the things it is asked to tell apart.
+
+**What dilution does do, which is the clause the stage passes.** A protein the
+program gives no half-life is not given one by the engine. It is never degraded,
+so in a cell that does not divide it never leaves; division is its only removal.
+Over eight divisions it falls by exactly 2^-8 = 0.00390625 when contents are
+partitioned and by exactly nothing when they are duplicated. That is the one
+separation dilution makes on its own, and it is the reason the stage is worth
+having.
+
+| Reading | Number |
+|---|---|
+| stable:short separation, contents partitioned | 9.392136 decades |
+| stable:short separation, contents duplicated | 9.392136 decades |
+| dilution's contribution to it | **0.0** |
+| steady-state stable:short ratio, not dividing / dividing | 40.0000 / 4.5455 (**compression 8.80**) |
+| a protein with no declared half-life, after 8 divisions | exactly 2^-8 partitioned, exactly 1.0 duplicated |
+| binomial split of 20 copies over 2,000 seeds | mean 9.8895 (analytic 10), variance 4.8993 (analytic 5) |
+| splits conserving the parent exactly | **2,000 of 2,000** at 20 copies and 2,000 of 2,000 at 1e6 |
+| variance at 1e6 copies, above the regime threshold | **0.0**, i.e. deterministic halves |
+| divisions fired with the checkpoint unmet | **0**, and the amounts are the decay-only values |
+| registered clauses met | 8 of 8 |
+
+**A second finding, measured and deliberately not scored.** The demo program
+declares §5.2's own example, `event divide { cost: ATP 1e10 }`, against §5.1's
+own ATP pool of 3e9, and the resource checkpoint therefore refuses **every**
+division: one division costs more ATP than the cell holds. Neither number is
+wrong. A pool is a standing stock and a division cost is a draw over a whole
+cycle, and nothing in the engine converts between them — `regenerates` takes a
+rate, this pool declares none (`from Glycolysis, OXPHOS`), and `Economy` never
+integrates a rate over an interval. So the **resource** form of §8's checkpoint
+is only askable against a standing stock today; the size form, which is the
+event's own `when` clause through `ir.model.matches`, is what the registered
+clause 8 tests and what passes. Making the resource form askable is stage 3's
+job, since stage 3 is what supplies ATP over time. It is reported and excluded
+from the verdict because the registration did not name it, exactly as gate (a)
+excluded its unasked magnitude clause.
+
+**What did not move.** `runtime/body.py` is untouched and `partition` defaults to
+`duplicate`, so every committed program parses and runs as before: area E's
+1,439 fates, 496 of 555 terminal and 522 of 555 under §7.5 stand, as do stage 2's
+burden factors and its 0.952005, and stage 1's 13 of 13 and 1,123 of 1,123. The
+engine package holds 12 of 12 with the new module and the regenerated grammar
+inside it: rebuilding it gives 36 engine files to 38, 177 packaged test functions
+to 192, and its isolated suite 285 passed to 300, with the same 3 skipped and 3
+xfailed. `data/results/engine_package.json` itself is **not** updated by this
+commit: overwriting it would delete lines three earlier commits by other lanes
+put there, which is a force this lane does not take on somebody else's behalf.
+The numbers above are the run; the file follows when whoever owns that result
+rebuilds it.
+
+**And what stage 4 does not license anybody to say.** Not that these half-lives
+are any protein's: they are the program's declarations, this project holds no
+protein turnover table, and §10 decision 6 is still open. Not that real
+partitioning is binomial: Huh & Paulsson 2011 make it noisier than that, and the
+binomial arm here is checked against its own analytic moments, never against a
+measurement. And not that stage 2's gate (b) would now move: a per-gene half-life
+is the per-gene term §9.2 asked for, but whether it supplies the 0.485 decades
+per decade is a proteome-scale run needing the turnover set that does not exist
+here. Nothing measured above is evidence about it.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
@@ -1390,6 +1545,13 @@ wants abundance gains nothing by declaring them.
    mechanism; pools may deserve no default at all, forcing every program to name one.
 6. **The protein turnover set** for stage 4, and whether a human set is
    required or a mouse one (Schwanhäusser et al. 2011, Nature 473:337) is acceptable.
+   **Still open, and stage 4 shipped without it (2026-09-28, §9.4).** Every clause
+   the stage could ask is a property of its own arithmetic — conservation, the
+   closed form, the gene-blindness of dilution — so none of them needs a measured
+   half-life, and the registration recorded the comparison as *not askable* rather
+   than making one up. What a turnover set would buy is a different question from
+   the one stage 4 answers: whether a per-gene half-life supplies the 0.485 decades
+   per decade of per-gene compression §9.2 named, which is a proteome-scale run.
 7. **Which homeostats first.** The proposal is Na⁺/K⁺ and pH because their
    failure modes are the best documented.
 8. **~~When `fates: first` becomes the default.~~ Resolved 2026-09-14:** area E

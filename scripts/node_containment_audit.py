@@ -63,7 +63,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import crispri  # noqa: E402
+from genomeos.attribution.measured import CRISPRI_SPLIT_OF  # noqa: E402
 from genomeos.genome import Annotation, default_gencode  # noqa: E402
 from genomeos.genome.domains import MIN_DOMAIN, infer_domains  # noqa: E402
 from genomeos.genome.regulatory import load_ccres  # noqa: E402
@@ -199,6 +201,9 @@ def chrom_row(chrom: str) -> dict:
         "predicted_coding_gene_protein_coding": 0,
         "has_confidence": 0,
         "predicted_coding_has_confidence": 0,
+        # R4: a link written since states no confidence and carries a certainty record instead
+        "has_certainty": 0,
+        "predicted_coding_has_certainty": 0,
     }
     pairs: list[tuple[int, int]] = []
     pairs_any: list[tuple[int, int]] = []
@@ -210,10 +215,14 @@ def chrom_row(chrom: str) -> dict:
             census["has_predicted"] += 1
         if p.get("confidence") is not None:
             census["has_confidence"] += 1
+        if p.get("certainty") is not None:
+            census["has_certainty"] += 1
         if pc.get("gene"):
             census["has_predicted_coding"] += 1
             if pc.get("confidence") is not None:
                 census["predicted_coding_has_confidence"] += 1
+            if pc.get("certainty") is not None:
+                census["predicted_coding_has_certainty"] += 1
             if pc["gene"] in anyg:
                 census["predicted_coding_gene_in_annotation"] += 1
             if pc["gene"] in coding:
@@ -418,6 +427,88 @@ def readings(rows: list[dict], label: str) -> dict:
     return out
 
 
+@mf.depends_on_models("alphagenome")  # the sweep's model, as far as the disk says (R9)
+def manifest(stage: int, rows: list[dict]) -> dict:
+    """The provenance contract (review item R9). Stage 1 reads the model's archive; stage 2 reads the
+    CRISPRi benchmark in its place. Both read the same node caller over the same annotation."""
+    chroms = [r["chrom"] for r in rows]
+    inputs = []
+    for c in chroms:
+        for p in (Path(f"data/reference/{c}.fa.gz.fai"), Path(f"data/reference/{c}.fa.fai")):
+            if p.exists():
+                inputs.append(mf.input_entry(p, partition=None))
+                break
+        inputs.append(mf.input_entry(default_gencode({c}), partition=None))
+        inputs.append(mf.input_entry(Path(f"data/results/ccres_{c}.bed.gz"), partition=None))
+        if (ARCHIVE / f"{c}.json").exists():  # stage 2 reads it too, for the rows it reuses
+            inputs.append(mf.input_entry(ARCHIVE / f"{c}.json", partition=None))
+    sources = [
+        {
+            "accession": "UCSC hg38 chromosome FASTA (lengths from its faidx)",
+            "version": "GRCh38, as served at hgdownload goldenPath/hg38/chromosomes; pinned here by sha256",
+        },
+        {"accession": "GENCODE human gene annotation", "version": "release 50 (GRCh38.p14)"},
+        {
+            "accession": "ENCODE SCREEN registry of cCREs (CTCF-only elements as node boundaries)",
+            "version": "V3, downloads.wenglab.org/V3/GRCh38-cCREs.bed",
+        },
+        {
+            "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element archive)",
+            "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); "
+            "pinned here by sha256",
+            "path": str(ARCHIVE),
+        },
+    ]
+    if stage == 2:
+        sources.append(
+            {
+                "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data (Gschwind et al. 2025)",
+                "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+                "url": crispri.BASE_URL,
+            }
+        )
+        for t in CRISPRI_TABLES:
+            if (crispri.KNOWLEDGE / t).exists():
+                inputs.append(mf.input_entry(crispri.KNOWLEDGE / t, partition=CRISPRI_SPLIT_OF.get(t)))
+    exclusions: list = [
+        {"chromosomes_skipped": [c for c in CHROMS if c not in chroms], "why": "no length, GENCODE or cCREs"},
+    ]
+    if stage == 1:
+        exclusions.append(
+            "archive elements with no predicted coding gene, or whose gene is not protein_coding in "
+            "GENCODE 50, are not pairs (each step counted in denominator_census)"
+        )
+    else:
+        exclusions.append("CRISPRi pairs not Regulated=TRUE, or whose gene has no TSS in the table")
+    return {
+        "sources": sources,
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "stage": stage,
+            "node_caller": "genome.domains.infer_domains, the default ctcf_only caller",
+            "min_node_bp": MIN_DOMAIN,
+            "shuffles": SHUFFLES,
+            "seed_per_chromosome": SEED,
+            "bootstraps": BOOTSTRAPS,
+            "bootstrap_seed": 11,
+            "controls": list(CONTROLS),
+            "workers_do_not_change_numbers": True,
+        },
+        "exclusions": exclusions,
+        "partitions": (
+            "n/a: model answers over the whole genome, nothing fitted and nothing held out"
+            if stage == 1
+            else {
+                "training": "EPCrisprBenchmark training_K562 Regulated=TRUE pairs",
+                "heldout": "EPCrisprBenchmark heldout_5_cell_types Regulated=TRUE pairs",
+                "pooled": "the containment statistic pools both: it fits nothing, so no partition is a test",
+            }
+        ),
+    }
+
+
 def main() -> None:
     args = sys.argv[1:]
     workers = int(args[args.index("--workers") + 1]) if "--workers" in args else 6
@@ -468,6 +559,7 @@ def main() -> None:
         save_result(
             "node_containment_audit",
             {"denominator_census": census, "per_chromosome": thin, "modelled": modelled} | base,
+            manifest=manifest(1, rows),
         )
         print("saved stage 1", flush=True)
         return
@@ -494,6 +586,7 @@ def main() -> None:
             ],
         }
         | base,
+        manifest=manifest(2, rows),
     )
     print("saved stage 2", flush=True)
 

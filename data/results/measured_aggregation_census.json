@@ -1,0 +1,795 @@
+{
+  "result": "measured_aggregation_census",
+  "date": "2026-09-28",
+  "review_item": "R6",
+  "aggregations": [
+    {
+      "id": "A1",
+      "field": "measured.lentimpra.activity (and cells_active, cells_silent from it)",
+      "where": "measured.py Layer.for_element, lentiMPRA block",
+      "operation": "maximum over every tile that meets the overlap rule, per cell",
+      "consumers": [
+        "measured.agreement: lentimpra verdict is agrees when any cell is in cells_active",
+        "agreement verdict and assays_agreeing/disagreeing -> census agrees/disagrees -> data/results/measured_layer_genome.json",
+        "confidence_calibration.elements_of reads agreement['lentimpra'] -> data/results/confidence_calibration_genome.json",
+        "compile.py programme header counts agreeing/disagreeing elements (verdict)",
+        "measured.basis_text prints the per-cell value -> the basis: line of every <id>_measured block in data/knowledge/compiled/*.bio and data/organisms/human/noncoding_chr21.bio",
+        "tests/test_measured_layer.py (cells_active on a one-tile fixture)"
+      ],
+      "status": "R6 changes it: the label comes from a declared rule over the tiles, the maximum is kept only under a descriptive name"
+    },
+    {
+      "id": "A2",
+      "field": "measured.lentimpra.max_activity",
+      "where": "measured.py Layer.for_element",
+      "operation": "maximum over cells of the per-cell maximum over tiles",
+      "consumers": [
+        "none in code; carried in the row only"
+      ],
+      "status": "R6 keeps it, renamed to say it is descriptive"
+    },
+    {
+      "id": "A3",
+      "field": "measured.<assay>.overlap for crispri, lentimpra, vista, satmut",
+      "where": "measured.py Layer.for_element and _satmut_of",
+      "operation": "maximum reciprocal overlap over the matched intervals",
+      "consumers": [
+        "none in code; carried in the row only (CRISPRi pairs keep their own overlap)"
+      ],
+      "status": "descriptive; R6 adds each lentiMPRA tile's own overlap beside it"
+    },
+    {
+      "id": "A4",
+      "field": "measured.lentimpra.elements",
+      "where": "measured.py Layer.for_element",
+      "operation": "names of the matched tiles, without their values, strand or overlap",
+      "consumers": [
+        "none in code"
+      ],
+      "status": "R6 adds a tiles list: name, interval, strand, overlap, per-cell value"
+    },
+    {
+      "id": "A5",
+      "field": "mpra.Element.activity",
+      "where": "mpra.parse",
+      "operation": "mean of the rows that share an interval in one cell's file (forward and reverse)",
+      "consumers": [
+        "measured.load_mpra, and every mpra.load caller (measurability, unknown_coverage, mpra_score, motif_grammar, motif_transfer, syntax_tiling, candidates, benchmark.loci)"
+      ],
+      "status": "counted below: the mean never fires in the three ENCODE files (one row per interval per file), and the strand column is dropped; R6 keeps the strand beside the value"
+    },
+    {
+      "id": "A6",
+      "field": "measured.crispri.genes_regulated / genes_increased / genes_no_effect_*",
+      "where": "measured.py Layer.for_element, CRISPRi block",
+      "operation": "strongest outcome any pair of the gene has, across cells and datasets",
+      "consumers": [
+        "measured.agreement (crispri verdict)",
+        "compile.py targets: (genes_regulated_training)",
+        "basis_text, census"
+      ],
+      "status": "out of R6's scope: R1 (6a4a8a9) keeps outcomes_by_cell and every pair, and basis_text names where cells differ"
+    },
+    {
+      "id": "A7",
+      "field": "measured.crispri.outcomes_by_cell",
+      "where": "measured.outcomes_by_cell",
+      "operation": "strongest outcome within one cell across its datasets",
+      "consumers": [
+        "basis_text via context_differences"
+      ],
+      "status": "out of R6's scope; the pairs stay in the row"
+    },
+    {
+      "id": "A8",
+      "field": "rule strength of a compiled experimental rule",
+      "where": "measured.rule_links",
+      "operation": "largest |effect size| among the training pairs of one (element, gene, cell)",
+      "consumers": [
+        "compile.py _measured_blocks: strength: of every experimental rule"
+      ],
+      "status": "out of R6's scope (the compiler is lane-bridge's); reported to the coordinator"
+    },
+    {
+      "id": "A9",
+      "field": "measured.agreement vista",
+      "where": "measured.agreement",
+      "operation": "agrees when any matched VISTA element is positive",
+      "consumers": [
+        "agreement verdict, census, confidence_calibration"
+      ],
+      "status": "counted below: positive and negative lists are both kept; no element has both"
+    },
+    {
+      "id": "A10",
+      "field": "measured.satmut (every field)",
+      "where": "measured._satmut_primaries and Layer._satmut_of",
+      "operation": "the primary experiment of a locus only (repeats counted, never read); the first experiment wins a base two loci share; strongest_effect is the largest |effect|",
+      "consumers": [
+        "agreement satmut verdict, basis_text, census satmut block, base_level_rows"
+      ],
+      "status": "R6 reads the repeat experiments per base (SORT1's group holds SORT1-flip, the same element in the other orientation) and lists where they disagree"
+    },
+    {
+      "id": "A11",
+      "field": "row confidence",
+      "where": "measured.confidence_of",
+      "operation": "the strongest assay present decides (0.9 perturbation or embryo, else 0.75)",
+      "consumers": [
+        "compile.py confidence: of every <id>_measured block and rule"
+      ],
+      "status": "out of R6's scope (R4's confidence lanes); the docstring names the rule"
+    },
+    {
+      "id": "A12",
+      "field": "measured.agreement verdict",
+      "where": "measured.agreement",
+      "operation": "agrees / disagrees / mixed over the assays' own verdicts",
+      "consumers": [
+        "compile.py header, census"
+      ],
+      "status": "keeps conflict as 'mixed'; unchanged"
+    }
+  ],
+  "files": {
+    "K562": {
+      "accession": "ENCFF802FUV",
+      "rows": 53989,
+      "intervals": 53989,
+      "intervals_with_more_than_one_row": 0,
+      "rows_by_strand": {
+        "+": 53961,
+        "-": 28
+      },
+      "rows_with_a_p_or_q_value": 0
+    },
+    "HepG2": {
+      "accession": "ENCFF475FKV",
+      "rows": 53990,
+      "intervals": 53990,
+      "intervals_with_more_than_one_row": 0,
+      "rows_by_strand": {
+        "+": 53962,
+        "-": 28
+      },
+      "rows_with_a_p_or_q_value": 0
+    },
+    "WTC11": {
+      "accession": "ENCFF769REH",
+      "rows": 53988,
+      "intervals": 53988,
+      "intervals_with_more_than_one_row": 0,
+      "rows_by_strand": {
+        "+": 53960,
+        "-": 28
+      },
+      "rows_with_a_p_or_q_value": 0
+    },
+    "columns_read": "7: log2(RNA/DNA). Columns 8 and 9 hold the normalised DNA and RNA counts the ratio is made from; 10 and 11 (p and q) are -1 throughout; the files carry no replicate-level value, so no per-tile uncertainty can be read from them"
+  },
+  "elements": {
+    "lentimpra": {
+      "elements": 17869,
+      "elements_with_1_tiles": 16863,
+      "elements_with_2_tiles": 975,
+      "cells_over_more_than_one_tile": 3018,
+      "elements_with_3+_tiles": 31,
+      "cells_where_tiles_disagree": 237,
+      "cells_where_tiles_disagree_tie_active": 224,
+      "cells_where_tiles_disagree_majority_active": 6,
+      "cells_where_tiles_disagree_minority_active": 7,
+      "active_threshold_log2": 1.0,
+      "examples": [
+        {
+          "chrom": "chr1",
+          "id": "EH38E1311579",
+          "cell": "HepG2",
+          "tiles": [
+            1.139,
+            0.66
+          ]
+        },
+        {
+          "chrom": "chr1",
+          "id": "EH38E1311579",
+          "cell": "K562",
+          "tiles": [
+            1.368,
+            0.682
+          ]
+        },
+        {
+          "chrom": "chr1",
+          "id": "EH38E1311579",
+          "cell": "WTC11",
+          "tiles": [
+            2.392,
+            0.649
+          ]
+        },
+        {
+          "chrom": "chr1",
+          "id": "EH38E2788913",
+          "cell": "HepG2",
+          "tiles": [
+            1.609,
+            0.899
+          ]
+        },
+        {
+          "chrom": "chr1",
+          "id": "EH38E2792890",
+          "cell": "HepG2",
+          "tiles": [
+            1.056,
+            0.311
+          ]
+        }
+      ]
+    },
+    "vista": {
+      "elements": 98,
+      "elements_over_more_than_one_vista_element": 5,
+      "elements_with_positive_and_negative": 0
+    },
+    "satmut": {
+      "elements": 4,
+      "repeat_experiments_not_read": 2,
+      "elements_over_more_than_one_locus": 0,
+      "loci_with_repeat_experiments": {
+        "SORT1.2": [
+          "SORT1.2",
+          "SORT1-flip",
+          "SORT1"
+        ],
+        "PKLR-48h": [
+          "PKLR-48h",
+          "PKLR-24h"
+        ],
+        "LDLR.2": [
+          "LDLR.2",
+          "LDLR"
+        ],
+        "TERT-HEK": [
+          "TERT-HEK",
+          "TERT-GAa",
+          "TERT-GSc",
+          "TERT-GBM"
+        ],
+        "ZRSh-13h2": [
+          "ZRSh-13h2",
+          "ZRSh-13"
+        ]
+      }
+    }
+  },
+  "episomal_wording": "the word 'episomal' describes the ENCODE4 lentiMPRA in measured.py (module docstring), confidence_calibration.py (ASSAY_QUESTION lentimpra), scripts/unknown_coverage.py, docs/ATTRIBUTION.md (four places), docs/GRAMMAR-BY-COMPARISON.md, docs/ROADMAP.md and the stored confidence_calibration_genome.json; the cited assay integrates its reporters by lentivirus (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9)",
+  "reading": "one summary decides a label: the lentiMPRA maximum (A1). It is taken over more than one tile for the elements counted under elements.lentimpra, and where the tiles disagree the maximum has so far always read active. The other maxima are descriptive or already sit beside the observations they summarise",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE ENCSR106SZM (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12"
+      },
+      {
+        "accession": "VISTA Enhancer Browser loci (LBNL)",
+        "version": "as cached in data/knowledge/vista"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019)",
+        "version": "as cached in data/knowledge"
+      },
+      {
+        "accession": "this repository, the compiled element runs enhancer_targets_all, constrained_targets, enhancer_targets",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "reciprocal_overlap": 0.5,
+      "active_threshold_log2": 1.0,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [],
+    "partitions": "n/a: a census of summaries, no evaluation",
+    "code": {
+      "git_sha": "0924a5c2cb667099ad11c210e39eb844db2e5f61",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py"
+      ],
+      "argv": [
+        "scripts/measured_aggregation_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

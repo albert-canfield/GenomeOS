@@ -1,0 +1,267 @@
+{
+  "model_dependency_pass": {
+    "what": "R9 follow-up (2026-09-28): result_manifest.model_dependencies added to the five results that read the AlphaGenome all-element sweep, as 48 added lines each and no removed line; the block is genomeos.manifest.model_dependency('alphagenome'): client alphagenome 0.9.0 from uv.lock, API google.gdm.gdmscience.alphagenome.v1main, run dates 2026-09-12 to 2026-09-16, model version unpinned (none was requested; no response or file records one), track table not stored (a fingerprint of the names observed in the cache instead)",
+    "effect_on_the_records_above": "every value of the five files but the added key is equal to the file before (checked by json equality when the lines were added), so each rebuild and comparison above stands; the files' own sha256 changed with the added lines, so the inputs sha256 in this file's result_manifest is the file as rebuilt, and the sha256 below is the file as it now stands",
+    "sha256_now": {
+      "node_containment_audit": "82712a0ab168080c079ccbf60130aa0bb6d5ae9c4de3419dda555dbe8a914ef9",
+      "node_containment_measured": "c039ca9c325c2badf8fd94bd6f5f9dedf79fecb9b06bc816f4ee8b5c2faa4a61",
+      "constrained_unknown_targets": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
+      "crispri_published": "8787833d90dfe736219c096eed213a4dc8d806037b3ce224ceab6f2f3295d96b",
+      "unknown_coverage": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402"
+    },
+    "therapeutic_benchmark": "not given the block: none of its 22 inputs is an AlphaGenome file",
+    "manifest_rebuild": "scripts/manifest_rebuild.py leaves model_dependencies out of the comparison, like code: it is recorded after the run and states the inputs' provenance"
+  },
+  "result": "manifest_headlines",
+  "date": "2026-09-28",
+  "review_item": "R9",
+  "rebuilt": [
+    {
+      "result": "node_containment_audit",
+      "figure": "node containment excess over the published uniform control, points",
+      "quoted_as": "+2.90",
+      "quoted_in": "README; docs/NODES-READER-WRITER.md; docs/LESSONS.md",
+      "value": 2.898,
+      "writer": "scripts/node_containment_audit.py",
+      "argv": [
+        "scripts/node_containment_audit.py",
+        "--workers",
+        "2"
+      ],
+      "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 3004,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
+      "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 190a144, fresh environment, 96 of 96 inputs matching their sha256, 0 differences"
+    },
+    {
+      "result": "node_containment_measured",
+      "figure": "node containment excess on measured CRISPRi pairs, points",
+      "quoted_as": "+5.89",
+      "quoted_in": "docs/NODES-READER-WRITER.md",
+      "value": 5.893,
+      "writer": "scripts/node_containment_audit.py",
+      "argv": [
+        "scripts/node_containment_audit.py",
+        "--workers",
+        "2",
+        "--stage",
+        "2"
+      ],
+      "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 2607,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+    },
+    {
+      "result": "constrained_unknown_targets",
+      "figure": "real unknown blocks with a mover against length-matched random windows",
+      "quoted_as": "62.3% vs 86.0%",
+      "quoted_in": "docs/ATTRIBUTION.md; ROADMAP 1.3",
+      "value": {
+        "blocks_yes": 331,
+        "block_rate": 0.6234,
+        "windows_yes": 27254,
+        "random_window_rate": 0.8604,
+        "difference_in_points": -23.7,
+        "reading": "below_chance"
+      },
+      "writer": "scripts/constrained_unknown_targets.py",
+      "argv": [
+        "scripts/constrained_unknown_targets.py"
+      ],
+      "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 3059,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+    },
+    {
+      "result": "therapeutic_benchmark",
+      "figure": "targets recovered, verdicts correct, mechanisms defensible",
+      "quoted_as": "9/9",
+      "quoted_in": "README status section; docs/THERAPEUTICS.md",
+      "value": {
+        "targets_recovered": 9,
+        "verdicts_correct": 9,
+        "top_mechanism_defensible": 9,
+        "cases": 9
+      },
+      "writer": "scripts/therapeutic_benchmark.py",
+      "argv": [
+        "scripts/therapeutic_benchmark.py"
+      ],
+      "rebuilt_at": "65d2d23fd303b9e342c96f6029b04b6253d75023",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 324,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "difference_explained": "the first rerun (42e786f) differed from the committed file in one key, ordering_rules_measured, added by hand in 2805552 and written by no run. 65d2d23 makes the script write that exact wording; the rerun at 65d2d23 equals the committed file in every value (date and timings aside)",
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+    },
+    {
+      "result": "unknown_coverage",
+      "figure": "bases of the real unknown read by any assay held",
+      "quoted_as": "160,447 of 30,602,182 bp (0.52%)",
+      "quoted_in": "README status section",
+      "value": {
+        "blocks": 882,
+        "blocks_measured": 202,
+        "untouched_mb": 13.77,
+        "measured_bp": 160447,
+        "bp": 30602182
+      },
+      "writer": "scripts/unknown_coverage.py",
+      "argv": [
+        "scripts/unknown_coverage.py"
+      ],
+      "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 144,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+    },
+    {
+      "result": "crispri_published",
+      "figure": "CRISPRi deletion feature against ENCODE-rE2G on the published pair sets: training AUPRC with the deletion, leave-one-chromosome-out",
+      "quoted_as": "0.724 (baseline 0.507); held-out DNase-only 0.476 -> 0.639; K562 gain +0.136 [+0.081, +0.225]",
+      "quoted_in": "docs/CRISPRI-RESULT.md; docs/ATTRIBUTION.md",
+      "value": 0.7241,
+      "writer": "scripts/crispri_published.py",
+      "argv": [
+        "scripts/crispri_published.py"
+      ],
+      "rebuilt_at": "012634640a1ae31cd389d94be6cdb5cde93ee7d9",
+      "dirty": false,
+      "manifest_complete": true,
+      "values_compared": 256,
+      "differences": [],
+      "status": "reproduced",
+      "second_rerun_differences": [],
+      "alphagenome_requests": 0,
+      "committed_file": "the committed lines kept (written 2026-09-27 at 42d7b1b), result_manifest added from the second rerun",
+      "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 0126346, fresh environment, 4 of 4 inputs matching their sha256 (both benchmark tables, the all-element deletion table and the per-element cache, 1.43 GB), 0 differences, 0 timing fields",
+      "scorer_record_changed": "crispri.Pair gained the five PowerAtEffectSize fields at 0126346, before both reruns; no value moved"
+    }
+  ],
+  "pending": [
+    {
+      "result": "crispri_published",
+      "figure": "CRISPRi deletion feature against ENCODE-rE2G (docs/CRISPRI-RESULT.md)",
+      "writer": "scripts/crispri_published.py",
+      "status": "pending",
+      "resolved": "rebuilt in the third pass on 2026-09-28 at 0126346: see its entry under rebuilt",
+      "why": "lane-split (the CRISPRi split and partition fix) had not finished when this pass ran; the writer gets its manifest after it, so that its inputs carry the final partition field"
+    }
+  ],
+  "ignored_in_comparison": [
+    "date",
+    "result_manifest (the committed files had none)",
+    "every 'seconds' key (wall-clock timing)"
+  ],
+  "how": "each writer rerun twice in a fresh git worktree with a fresh environment from the committed uv.lock, offline, data/reference, data/knowledge and data/cache linked read-only, and every value compared with the committed file; the first rerun at 42e786f, the second at 190a144 (therapeutic_benchmark a third time at 65d2d23), whose manifest is the one attached, each result's tracked files restored before the next writer ran",
+  "statuses": {
+    "reproduced": "every compared value equal to the committed file",
+    "differs": "a value differs: the committed file is kept and the difference reported",
+    "pending": "not rebuilt in this pass; why says why"
+  },
+  "guard_note": "the committed files keep every committed line and gain result_manifest as an added key: the shared checkout's guard refuses a commit that removes recently added lines, and the reruns' date and seconds lines differ only by the day and the wall clock. scripts/manifest_rebuild.py ignores only the top-level date, so a rebuild of therapeutic_benchmark or constrained_unknown_targets will list their 'seconds' timings as differences",
+  "third_pass": {
+    "date": "2026-09-28",
+    "how": "crispri_published rerun twice at 0126346, each in its own fresh git worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline), UV_OFFLINE, no AlphaGenome key in the worktree, data/reference, data/knowledge and data/cache linked; every value compared with the committed file except date; the two reruns equal each other including the manifest; 107 s and 3.9 GB peak each",
+    "contract_fixes": [
+      "code.dirty no longer counts modified files under data/results/; they are listed in code.dirty_result_paths",
+      "scripts/manifest_rebuild.py ignores wall-clock timing keys at any depth (seconds, *_seconds, seconds_*, *_per_second) and lists them under timing_fields_ignored"
+    ],
+    "note": "this record's own result_manifest covers the second pass's five results; the third pass's inputs are data/results/crispri_published.json"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository: the five headline results, rebuilt (the inputs below) and as committed at 42e786f (the comparison)",
+        "version": "git 42e786f for the committed side; rebuilt_at per entry for the rebuilt side"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/node_containment_audit.json",
+        "sha256": "3a1ab8e8936100d1a638be893c7977dc3153b12832458007311d0a87d7425a46",
+        "bytes": 107865,
+        "partition": null
+      },
+      {
+        "path": "data/results/node_containment_measured.json",
+        "sha256": "056d951af04462543a74b593680bde686dccf493fb7b110a7cfe66a41aec648b",
+        "bytes": 88724,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_unknown_targets.json",
+        "sha256": "e7f553b7fa943bdf77317eee5d5d82725c9e895dc85e38c568d1b7a18a59f0a1",
+        "bytes": 154983,
+        "partition": null
+      },
+      {
+        "path": "data/results/therapeutic_benchmark.json",
+        "sha256": "21a57eb92845bd4329d2981561b5f702172b98ca3de86ad897f1dc6e2316c11b",
+        "bytes": 31319,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_coverage.json",
+        "sha256": "c3888432e2c277d50763a28fee215e122587460f71e16d8e9baed5e1d9475a1d",
+        "bytes": 43819,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: a record of rebuilds, not a reading of the genome",
+    "coordinates": "n/a: no coordinates",
+    "parameters": {
+      "compare": "scripts/manifest_rebuild.diff over every value",
+      "ignored": [
+        "date",
+        "result_manifest (the committed files had none)",
+        "every 'seconds' key (wall-clock timing)"
+      ],
+      "reruns": 2
+    },
+    "exclusions": [
+      {
+        "result": "crispri_published",
+        "why": "pending lane-split"
+      }
+    ],
+    "partitions": "n/a: nothing evaluated",
+    "code": {
+      "git_sha": "19423bdc717406f3c3958c7f0174ba90786e1224",
+      "dirty": true,
+      "dirty_code_paths": [],
+      "argv": [
+        "-"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

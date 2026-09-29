@@ -1,6 +1,6 @@
 {
   "result": "measured_layer_genome",
-  "date": "2026-09-17",
+  "date": "2026-09-28",
   "rule": {
     "name": "reciprocal overlap",
     "value": 0.5,
@@ -302,12 +302,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 126,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 19,
+          "significant_increase": 2,
+          "not_significant_well_powered": 349,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0522,
         "agreement_denominator_all_matched_elements": 134,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.875,
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 19,
-        "crispri_pairs_measured_as_not_regulated": 351,
+        "crispri_pairs_measured_as_not_regulated": 349,
         "satmut": {
           "elements_measured_base_by_base": 2,
           "elements_with_a_functional_base": 2,
@@ -438,10 +447,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -449,14 +458,14 @@
             "b": 0.4866,
             "difference": 0.0982,
             "p_one_sided": 0.0,
-            "upper_95": 0.1197
+            "upper_95": 0.1162
           },
           "matched": {
             "a": 0.5847,
             "b": 0.4744,
             "difference": 0.1104,
             "p_one_sided": 0.0,
-            "upper_95": 0.1402
+            "upper_95": 0.1354
           },
           "imbalance": {
             "length": {
@@ -492,10 +501,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -503,14 +512,14 @@
             "b": 0.7086,
             "difference": -0.1571,
             "p_one_sided": 1.0,
-            "upper_95": -0.1067
+            "upper_95": -0.1148
           },
           "matched": {
             "a": 0.5532,
             "b": 0.6994,
             "difference": -0.1462,
             "p_one_sided": 1.0,
-            "upper_95": -0.1129
+            "upper_95": -0.1182
           },
           "imbalance": {
             "length": {
@@ -636,12 +645,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 64,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 12,
+          "significant_increase": 2,
+          "not_significant_well_powered": 154,
+          "not_significant_underpowered": 4,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.1096,
         "agreement_denominator_all_matched_elements": 73,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.8889,
         "agreement_denominator_predicted_gene_tested": 9,
         "crispri_pairs_regulated": 12,
-        "crispri_pairs_measured_as_not_regulated": 160,
+        "crispri_pairs_measured_as_not_regulated": 158,
         "satmut": {
           "elements_measured_base_by_base": 1,
           "elements_with_a_functional_base": 1,
@@ -743,10 +761,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -754,14 +772,14 @@
             "b": 0.4304,
             "difference": 0.0664,
             "p_one_sided": 1e-06,
-            "upper_95": 0.0932
+            "upper_95": 0.0889
           },
           "matched": {
             "a": 0.4968,
             "b": 0.4103,
             "difference": 0.0865,
             "p_one_sided": 2e-06,
-            "upper_95": 0.1233
+            "upper_95": 0.1174
           },
           "imbalance": {
             "length": {
@@ -797,10 +815,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -808,14 +826,14 @@
             "b": 0.5426,
             "difference": -0.0608,
             "p_one_sided": 0.952019,
-            "upper_95": 0.0108
+            "upper_95": -0.0007
           },
           "matched": {
             "a": 0.4917,
             "b": 0.5736,
             "difference": -0.0818,
             "p_one_sided": 0.999905,
-            "upper_95": -0.0389
+            "upper_95": -0.0458
           },
           "imbalance": {
             "length": {
@@ -938,12 +956,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 73,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 10,
+          "significant_increase": 1,
+          "not_significant_well_powered": 66,
+          "not_significant_underpowered": 194,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0506,
         "agreement_denominator_all_matched_elements": 79,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 10,
-        "crispri_pairs_measured_as_not_regulated": 261,
+        "crispri_pairs_measured_as_not_regulated": 260,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -1014,10 +1041,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1025,14 +1052,14 @@
             "b": 0.4275,
             "difference": 0.0711,
             "p_one_sided": 2e-06,
-            "upper_95": 0.101
+            "upper_95": 0.0962
           },
           "matched": {
             "a": 0.4987,
             "b": 0.4172,
             "difference": 0.0814,
             "p_one_sided": 5.3e-05,
-            "upper_95": 0.1226
+            "upper_95": 0.116
           },
           "imbalance": {
             "length": {
@@ -1068,10 +1095,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1079,14 +1106,14 @@
             "b": 0.6411,
             "difference": -0.1792,
             "p_one_sided": 0.999999,
-            "upper_95": -0.1061
+            "upper_95": -0.1179
           },
           "matched": {
             "a": 0.4637,
             "b": 0.6325,
             "difference": -0.1688,
             "p_one_sided": 1.0,
-            "upper_95": -0.1207
+            "upper_95": -0.1284
           },
           "imbalance": {
             "length": {
@@ -1208,6 +1235,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 10,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 7,
+          "significant_increase": 0,
+          "not_significant_well_powered": 18,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.2667,
         "agreement_denominator_all_matched_elements": 15,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.8,
@@ -1284,10 +1320,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1295,14 +1331,14 @@
             "b": 0.4366,
             "difference": 0.0699,
             "p_one_sided": 6.8e-05,
-            "upper_95": 0.1058
+            "upper_95": 0.1
           },
           "matched": {
             "a": 0.5065,
             "b": 0.4135,
             "difference": 0.0929,
             "p_one_sided": 0.000115,
-            "upper_95": 0.1424
+            "upper_95": 0.1344
           },
           "imbalance": {
             "length": {
@@ -1338,10 +1374,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1349,14 +1385,14 @@
             "b": 0.6803,
             "difference": -0.209,
             "p_one_sided": 0.999996,
-            "upper_95": -0.1177
+            "upper_95": -0.1324
           },
           "matched": {
             "a": 0.4718,
             "b": 0.6824,
             "difference": -0.2106,
             "p_one_sided": 1.0,
-            "upper_95": -0.1544
+            "upper_95": -0.1635
           },
           "imbalance": {
             "length": {
@@ -1478,6 +1514,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 32,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 7,
+          "significant_increase": 0,
+          "not_significant_well_powered": 50,
+          "not_significant_underpowered": 2,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0833,
         "agreement_denominator_all_matched_elements": 36,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.75,
@@ -1554,10 +1599,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1565,14 +1610,14 @@
             "b": 0.4292,
             "difference": 0.0785,
             "p_one_sided": 4e-06,
-            "upper_95": 0.1129
+            "upper_95": 0.1074
           },
           "matched": {
             "a": 0.5077,
             "b": 0.4279,
             "difference": 0.0798,
             "p_one_sided": 0.000484,
-            "upper_95": 0.1273
+            "upper_95": 0.1196
           },
           "imbalance": {
             "length": {
@@ -1608,10 +1653,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1619,14 +1664,14 @@
             "b": 0.6122,
             "difference": -0.1314,
             "p_one_sided": 0.998417,
-            "upper_95": -0.0441
+            "upper_95": -0.0582
           },
           "matched": {
             "a": 0.4763,
             "b": 0.601,
             "difference": -0.1247,
             "p_one_sided": 0.999996,
-            "upper_95": -0.0702
+            "upper_95": -0.0789
           },
           "imbalance": {
             "length": {
@@ -1752,12 +1797,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 63,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 11,
+          "significant_increase": 2,
+          "not_significant_well_powered": 166,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0959,
         "agreement_denominator_all_matched_elements": 73,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.7,
         "agreement_denominator_predicted_gene_tested": 10,
         "crispri_pairs_regulated": 11,
-        "crispri_pairs_measured_as_not_regulated": 168,
+        "crispri_pairs_measured_as_not_regulated": 166,
         "satmut": {
           "elements_measured_base_by_base": 1,
           "elements_with_a_functional_base": 1,
@@ -1859,10 +1913,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1870,14 +1924,14 @@
             "b": 0.4419,
             "difference": 0.0541,
             "p_one_sided": 0.000197,
-            "upper_95": 0.084
+            "upper_95": 0.0792
           },
           "matched": {
             "a": 0.496,
             "b": 0.4221,
             "difference": 0.0739,
             "p_one_sided": 0.000211,
-            "upper_95": 0.1149
+            "upper_95": 0.1083
           },
           "imbalance": {
             "length": {
@@ -1913,10 +1967,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -1924,14 +1978,14 @@
             "b": 0.6328,
             "difference": -0.1645,
             "p_one_sided": 0.999981,
-            "upper_95": -0.0863
+            "upper_95": -0.0989
           },
           "matched": {
             "a": 0.4704,
             "b": 0.6408,
             "difference": -0.1704,
             "p_one_sided": 1.0,
-            "upper_95": -0.1232
+            "upper_95": -0.1308
           },
           "imbalance": {
             "length": {
@@ -2054,12 +2108,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 43,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 8,
+          "significant_increase": 2,
+          "not_significant_well_powered": 146,
+          "not_significant_underpowered": 3,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0816,
         "agreement_denominator_all_matched_elements": 49,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 8,
-        "crispri_pairs_measured_as_not_regulated": 151,
+        "crispri_pairs_measured_as_not_regulated": 149,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -2130,10 +2193,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -2141,14 +2204,14 @@
             "b": 0.4301,
             "difference": 0.078,
             "p_one_sided": 1e-06,
-            "upper_95": 0.11
+            "upper_95": 0.1048
           },
           "matched": {
             "a": 0.5081,
             "b": 0.4203,
             "difference": 0.0879,
             "p_one_sided": 4.4e-05,
-            "upper_95": 0.1318
+            "upper_95": 0.1248
           },
           "imbalance": {
             "length": {
@@ -2184,10 +2247,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -2195,14 +2258,14 @@
             "b": 0.6205,
             "difference": -0.1467,
             "p_one_sided": 0.999783,
-            "upper_95": -0.065
+            "upper_95": -0.0781
           },
           "matched": {
             "a": 0.4728,
             "b": 0.6045,
             "difference": -0.1317,
             "p_one_sided": 1.0,
-            "upper_95": -0.0811
+            "upper_95": -0.0893
           },
           "imbalance": {
             "length": {
@@ -2318,18 +2381,27 @@
           "satmut": 0
         },
         "disagrees": {
-          "crispri": 1,
+          "crispri": 0,
           "lentimpra": 564,
           "vista": 1,
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 100,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 1,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 9,
+          "significant_increase": 2,
+          "not_significant_well_powered": 169,
+          "not_significant_underpowered": 21,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0194,
         "agreement_denominator_all_matched_elements": 103,
-        "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
-        "agreement_denominator_predicted_gene_tested": 3,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 9,
-        "crispri_pairs_measured_as_not_regulated": 192,
+        "crispri_pairs_measured_as_not_regulated": 190,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -2443,10 +2515,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -2454,14 +2526,14 @@
             "b": 0.415,
             "difference": 0.0888,
             "p_one_sided": 1e-06,
-            "upper_95": 0.1247
+            "upper_95": 0.1189
           },
           "matched": {
             "a": 0.5039,
             "b": 0.4007,
             "difference": 0.1031,
             "p_one_sided": 2e-05,
-            "upper_95": 0.1523
+            "upper_95": 0.1444
           },
           "imbalance": {
             "length": {
@@ -2482,9 +2554,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 566,
+          "targets": 565,
           "controls": 132,
-          "targets_matched": 525,
+          "targets_matched": 524,
           "dropped_for_want_of_a_control": 41,
           "strata": {
             "length": [
@@ -2497,25 +2569,25 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
-            "a": 0.4894,
+            "a": 0.4885,
             "b": 0.5909,
-            "difference": -0.1015,
-            "p_one_sided": 0.983383,
-            "upper_95": -0.0081
+            "difference": -0.1024,
+            "p_one_sided": 0.984137,
+            "upper_95": -0.024
           },
           "matched": {
-            "a": 0.4857,
-            "b": 0.5748,
-            "difference": -0.0891,
-            "p_one_sided": 0.998163,
-            "upper_95": -0.029
+            "a": 0.4847,
+            "b": 0.5757,
+            "difference": -0.091,
+            "p_one_sided": 0.998478,
+            "upper_95": -0.0405
           },
           "imbalance": {
             "length": {
@@ -2529,9 +2601,9 @@
               "ratio": 0.968
             },
             "nearest_coding_tss": {
-              "target_median": 38964.0,
+              "target_median": 38641.0,
               "control_median": 39339.0,
-              "ratio": 0.99
+              "ratio": 0.982
             }
           }
         },
@@ -2636,6 +2708,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 11,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 6,
+          "significant_increase": 0,
+          "not_significant_well_powered": 17,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.2667,
         "agreement_denominator_all_matched_elements": 15,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
@@ -2741,10 +2822,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -2752,14 +2833,14 @@
             "b": 0.4282,
             "difference": 0.0782,
             "p_one_sided": 1e-05,
-            "upper_95": 0.114
+            "upper_95": 0.1083
           },
           "matched": {
             "a": 0.5064,
             "b": 0.4119,
             "difference": 0.0946,
             "p_one_sided": 8.5e-05,
-            "upper_95": 0.1439
+            "upper_95": 0.1359
           },
           "imbalance": {
             "length": {
@@ -2795,10 +2876,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -2806,14 +2887,14 @@
             "b": 0.5608,
             "difference": -0.0745,
             "p_one_sided": 0.949375,
-            "upper_95": 0.0146
+            "upper_95": 0.0003
           },
           "matched": {
             "a": 0.4869,
             "b": 0.5387,
             "difference": -0.0518,
             "p_one_sided": 0.960379,
-            "upper_95": 0.0061
+            "upper_95": -0.0033
           },
           "imbalance": {
             "length": {
@@ -2937,6 +3018,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 38,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 10,
+          "significant_increase": 0,
+          "not_significant_well_powered": 36,
+          "not_significant_underpowered": 16,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.1739,
         "agreement_denominator_all_matched_elements": 46,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
@@ -3042,10 +3132,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3053,14 +3143,14 @@
             "b": 0.4178,
             "difference": 0.0709,
             "p_one_sided": 1.3e-05,
-            "upper_95": 0.1038
+            "upper_95": 0.0985
           },
           "matched": {
             "a": 0.4886,
             "b": 0.4129,
             "difference": 0.0758,
             "p_one_sided": 0.000517,
-            "upper_95": 0.121
+            "upper_95": 0.1138
           },
           "imbalance": {
             "length": {
@@ -3096,10 +3186,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3107,14 +3197,14 @@
             "b": 0.5833,
             "difference": -0.1119,
             "p_one_sided": 0.994896,
-            "upper_95": -0.0265
+            "upper_95": -0.0402
           },
           "matched": {
             "a": 0.4734,
             "b": 0.5619,
             "difference": -0.0885,
             "p_one_sided": 0.999541,
-            "upper_95": -0.0362
+            "upper_95": -0.0446
           },
           "imbalance": {
             "length": {
@@ -3242,18 +3332,27 @@
           "satmut": 0
         },
         "disagrees": {
-          "crispri": 8,
+          "crispri": 3,
           "lentimpra": 809,
           "vista": 0,
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 203,
+        "crispri_predicted_gene_increased": 1,
+        "crispri_predicted_gene_null_underpowered": 4,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 37,
+          "significant_increase": 12,
+          "not_significant_well_powered": 529,
+          "not_significant_underpowered": 60,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.058,
         "agreement_denominator_all_matched_elements": 224,
-        "agreement_rate_where_the_predicted_gene_was_tested": 0.619,
-        "agreement_denominator_predicted_gene_tested": 21,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.8125,
+        "agreement_denominator_predicted_gene_tested": 16,
         "crispri_pairs_regulated": 37,
-        "crispri_pairs_measured_as_not_regulated": 601,
+        "crispri_pairs_measured_as_not_regulated": 589,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3324,10 +3423,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3335,14 +3434,14 @@
             "b": 0.462,
             "difference": 0.0846,
             "p_one_sided": 0.0,
-            "upper_95": 0.1141
+            "upper_95": 0.1093
           },
           "matched": {
             "a": 0.5466,
             "b": 0.4497,
             "difference": 0.0969,
             "p_one_sided": 2e-06,
-            "upper_95": 0.1376
+            "upper_95": 0.131
           },
           "imbalance": {
             "length": {
@@ -3363,9 +3462,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 811,
-          "controls": 183,
-          "targets_matched": 770,
+          "targets": 808,
+          "controls": 184,
+          "targets_matched": 767,
           "dropped_for_want_of_a_control": 41,
           "strata": {
             "length": [
@@ -3378,25 +3477,25 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
-            "a": 0.524,
-            "b": 0.623,
-            "difference": -0.0989,
-            "p_one_sided": 0.993423,
-            "upper_95": -0.0207
+            "a": 0.5248,
+            "b": 0.625,
+            "difference": -0.1002,
+            "p_one_sided": 0.994133,
+            "upper_95": -0.0348
           },
           "matched": {
-            "a": 0.5325,
-            "b": 0.6355,
-            "difference": -0.1031,
-            "p_one_sided": 0.999982,
-            "upper_95": -0.0541
+            "a": 0.5332,
+            "b": 0.636,
+            "difference": -0.1028,
+            "p_one_sided": 0.99998,
+            "upper_95": -0.0616
           },
           "imbalance": {
             "length": {
@@ -3405,14 +3504,14 @@
               "ratio": 0.977
             },
             "gc": {
-              "target_median": 0.5144,
-              "control_median": 0.533,
-              "ratio": 0.965
+              "target_median": 0.5143,
+              "control_median": 0.5333,
+              "ratio": 0.964
             },
             "nearest_coding_tss": {
-              "target_median": 25213.0,
-              "control_median": 22788.0,
-              "ratio": 1.106
+              "target_median": 25212.0,
+              "control_median": 22925.0,
+              "ratio": 1.1
             }
           }
         },
@@ -3511,18 +3610,27 @@
           "satmut": 0
         },
         "disagrees": {
-          "crispri": 1,
+          "crispri": 0,
           "lentimpra": 697,
           "vista": 1,
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 66,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 1,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 9,
+          "significant_increase": 2,
+          "not_significant_well_powered": 96,
+          "not_significant_underpowered": 142,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0694,
         "agreement_denominator_all_matched_elements": 72,
-        "agreement_rate_where_the_predicted_gene_was_tested": 0.8333,
-        "agreement_denominator_predicted_gene_tested": 6,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 5,
         "crispri_pairs_regulated": 9,
-        "crispri_pairs_measured_as_not_regulated": 240,
+        "crispri_pairs_measured_as_not_regulated": 238,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3593,10 +3701,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3604,14 +3712,14 @@
             "b": 0.4541,
             "difference": 0.0864,
             "p_one_sided": 0.0,
-            "upper_95": 0.1199
+            "upper_95": 0.1145
           },
           "matched": {
             "a": 0.5405,
             "b": 0.4466,
             "difference": 0.0939,
             "p_one_sided": 3.5e-05,
-            "upper_95": 0.1402
+            "upper_95": 0.1328
           },
           "imbalance": {
             "length": {
@@ -3632,9 +3740,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 697,
+          "targets": 696,
           "controls": 135,
-          "targets_matched": 650,
+          "targets_matched": 649,
           "dropped_for_want_of_a_control": 47,
           "strata": {
             "length": [
@@ -3647,25 +3755,25 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
-            "a": 0.505,
+            "a": 0.5043,
             "b": 0.6296,
-            "difference": -0.1246,
-            "p_one_sided": 0.996817,
-            "upper_95": -0.0351
+            "difference": -0.1253,
+            "p_one_sided": 0.996961,
+            "upper_95": -0.0502
           },
           "matched": {
-            "a": 0.5077,
-            "b": 0.6164,
-            "difference": -0.1087,
-            "p_one_sided": 0.999964,
-            "upper_95": -0.055
+            "a": 0.5069,
+            "b": 0.6163,
+            "difference": -0.1093,
+            "p_one_sided": 0.999968,
+            "upper_95": -0.0643
           },
           "imbalance": {
             "length": {
@@ -3674,14 +3782,14 @@
               "ratio": 0.977
             },
             "gc": {
-              "target_median": 0.4858,
+              "target_median": 0.4857,
               "control_median": 0.5211,
               "ratio": 0.932
             },
             "nearest_coding_tss": {
-              "target_median": 30102.0,
+              "target_median": 30154.0,
               "control_median": 29726.0,
-              "ratio": 1.013
+              "ratio": 1.014
             }
           }
         },
@@ -3779,6 +3887,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 0,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 0,
+          "significant_increase": 0,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": null,
         "agreement_denominator_all_matched_elements": 0,
         "agreement_rate_where_the_predicted_gene_was_tested": null,
@@ -3855,10 +3972,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3866,14 +3983,14 @@
             "b": 0.3805,
             "difference": 0.0727,
             "p_one_sided": 0.003962,
-            "upper_95": 0.1264
+            "upper_95": 0.1177
           },
           "matched": {
             "a": 0.4532,
             "b": 0.3525,
             "difference": 0.1007,
             "p_one_sided": 0.003477,
-            "upper_95": 0.1738
+            "upper_95": 0.1621
           },
           "imbalance": {
             "length": {
@@ -3909,10 +4026,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -3920,14 +4037,14 @@
             "b": 0.4921,
             "difference": -0.0476,
             "p_one_sided": 0.75289,
-            "upper_95": 0.0889
+            "upper_95": 0.067
           },
           "matched": {
             "a": 0.4436,
             "b": 0.4389,
             "difference": 0.0047,
             "p_one_sided": 0.457527,
-            "upper_95": 0.0905
+            "upper_95": 0.0767
           },
           "imbalance": {
             "length": {
@@ -4044,12 +4161,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 20,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 2,
+          "significant_increase": 1,
+          "not_significant_well_powered": 38,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0909,
         "agreement_denominator_all_matched_elements": 22,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
-        "crispri_pairs_measured_as_not_regulated": 39,
+        "crispri_pairs_measured_as_not_regulated": 38,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4120,10 +4246,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4131,14 +4257,14 @@
             "b": 0.4356,
             "difference": 0.0316,
             "p_one_sided": 0.081494,
-            "upper_95": 0.0761
+            "upper_95": 0.0689
           },
           "matched": {
             "a": 0.4672,
             "b": 0.412,
             "difference": 0.0552,
             "p_one_sided": 0.038593,
-            "upper_95": 0.1165
+            "upper_95": 0.1066
           },
           "imbalance": {
             "length": {
@@ -4174,10 +4300,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4185,14 +4311,14 @@
             "b": 0.6,
             "difference": -0.1633,
             "p_one_sided": 0.998742,
-            "upper_95": -0.0574
+            "upper_95": -0.0744
           },
           "matched": {
             "a": 0.4327,
             "b": 0.5829,
             "difference": -0.1501,
             "p_one_sided": 0.999964,
-            "upper_95": -0.0761
+            "upper_95": -0.088
           },
           "imbalance": {
             "length": {
@@ -4311,6 +4437,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 13,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 4,
+          "significant_increase": 0,
+          "not_significant_well_powered": 20,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.1875,
         "agreement_denominator_all_matched_elements": 16,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
@@ -4387,10 +4522,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4398,14 +4533,14 @@
             "b": 0.4501,
             "difference": 0.0577,
             "p_one_sided": 0.003222,
-            "upper_95": 0.0991
+            "upper_95": 0.0925
           },
           "matched": {
             "a": 0.5077,
             "b": 0.4347,
             "difference": 0.0731,
             "p_one_sided": 0.006186,
-            "upper_95": 0.1303
+            "upper_95": 0.1211
           },
           "imbalance": {
             "length": {
@@ -4441,10 +4576,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4452,14 +4587,14 @@
             "b": 0.6061,
             "difference": -0.123,
             "p_one_sided": 0.988347,
-            "upper_95": -0.0167
+            "upper_95": -0.0338
           },
           "matched": {
             "a": 0.4841,
             "b": 0.6609,
             "difference": -0.1768,
             "p_one_sided": 1.0,
-            "upper_95": -0.1125
+            "upper_95": -0.1228
           },
           "imbalance": {
             "length": {
@@ -4580,12 +4715,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 48,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 8,
+          "significant_increase": 3,
+          "not_significant_well_powered": 209,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0909,
         "agreement_denominator_all_matched_elements": 55,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.7143,
         "agreement_denominator_predicted_gene_tested": 7,
         "crispri_pairs_regulated": 8,
-        "crispri_pairs_measured_as_not_regulated": 212,
+        "crispri_pairs_measured_as_not_regulated": 209,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4656,10 +4800,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4667,14 +4811,14 @@
             "b": 0.4801,
             "difference": 0.07,
             "p_one_sided": 0.00019,
-            "upper_95": 0.1085
+            "upper_95": 0.1023
           },
           "matched": {
             "a": 0.5501,
             "b": 0.4551,
             "difference": 0.095,
             "p_one_sided": 0.000241,
-            "upper_95": 0.1483
+            "upper_95": 0.1398
           },
           "imbalance": {
             "length": {
@@ -4710,10 +4854,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4721,14 +4865,14 @@
             "b": 0.5827,
             "difference": -0.0525,
             "p_one_sided": 0.865692,
-            "upper_95": 0.0405
+            "upper_95": 0.0256
           },
           "matched": {
             "a": 0.5318,
             "b": 0.5773,
             "difference": -0.0455,
             "p_one_sided": 0.920347,
-            "upper_95": 0.0179
+            "upper_95": 0.0077
           },
           "imbalance": {
             "length": {
@@ -4852,12 +4996,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 84,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 11,
+          "significant_increase": 3,
+          "not_significant_well_powered": 339,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0455,
         "agreement_denominator_all_matched_elements": 88,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 11,
-        "crispri_pairs_measured_as_not_regulated": 342,
+        "crispri_pairs_measured_as_not_regulated": 339,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4928,10 +5081,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4939,14 +5092,14 @@
             "b": 0.4962,
             "difference": 0.0622,
             "p_one_sided": 4.8e-05,
-            "upper_95": 0.0934
+            "upper_95": 0.0884
           },
           "matched": {
             "a": 0.5584,
             "b": 0.4678,
             "difference": 0.0906,
             "p_one_sided": 2e-05,
-            "upper_95": 0.1338
+            "upper_95": 0.1269
           },
           "imbalance": {
             "length": {
@@ -4982,10 +5135,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -4993,14 +5146,14 @@
             "b": 0.6649,
             "difference": -0.1453,
             "p_one_sided": 0.999899,
-            "upper_95": -0.0687
+            "upper_95": -0.081
           },
           "matched": {
             "a": 0.5226,
             "b": 0.6973,
             "difference": -0.1747,
             "p_one_sided": 1.0,
-            "upper_95": -0.1247
+            "upper_95": -0.1327
           },
           "imbalance": {
             "length": {
@@ -5116,6 +5269,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 27,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 1,
+          "significant_increase": 0,
+          "not_significant_well_powered": 42,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0357,
         "agreement_denominator_all_matched_elements": 28,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
@@ -5192,10 +5354,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -5203,14 +5365,14 @@
             "b": 0.3944,
             "difference": 0.0805,
             "p_one_sided": 0.001388,
-            "upper_95": 0.1332
+            "upper_95": 0.1247
           },
           "matched": {
             "a": 0.4749,
             "b": 0.3733,
             "difference": 0.1015,
             "p_one_sided": 0.002858,
-            "upper_95": 0.1736
+            "upper_95": 0.162
           },
           "imbalance": {
             "length": {
@@ -5246,10 +5408,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -5257,14 +5419,14 @@
             "b": 0.5373,
             "difference": -0.0741,
             "p_one_sided": 0.861989,
-            "upper_95": 0.0592
+            "upper_95": 0.0378
           },
           "matched": {
             "a": 0.4625,
             "b": 0.5462,
             "difference": -0.0837,
             "p_one_sided": 0.967215,
-            "upper_95": 0.0054
+            "upper_95": -0.0089
           },
           "imbalance": {
             "length": {
@@ -5388,18 +5550,27 @@
           "satmut": 0
         },
         "disagrees": {
-          "crispri": 3,
+          "crispri": 2,
           "lentimpra": 539,
           "vista": 0,
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 203,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 1,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 17,
+          "significant_increase": 10,
+          "not_significant_well_powered": 499,
+          "not_significant_underpowered": 757,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0237,
         "agreement_denominator_all_matched_elements": 211,
-        "agreement_rate_where_the_predicted_gene_was_tested": 0.625,
-        "agreement_denominator_predicted_gene_tested": 8,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.7143,
+        "agreement_denominator_predicted_gene_tested": 7,
         "crispri_pairs_regulated": 17,
-        "crispri_pairs_measured_as_not_regulated": 1266,
+        "crispri_pairs_measured_as_not_regulated": 1256,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -5470,10 +5641,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -5481,14 +5652,14 @@
             "b": 0.5508,
             "difference": 0.0862,
             "p_one_sided": 0.0,
-            "upper_95": 0.1178
+            "upper_95": 0.1127
           },
           "matched": {
             "a": 0.6369,
             "b": 0.5192,
             "difference": 0.1177,
             "p_one_sided": 0.0,
-            "upper_95": 0.162
+            "upper_95": 0.1549
           },
           "imbalance": {
             "length": {
@@ -5509,9 +5680,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 542,
+          "targets": 541,
           "controls": 244,
-          "targets_matched": 531,
+          "targets_matched": 530,
           "dropped_for_want_of_a_control": 11,
           "strata": {
             "length": [
@@ -5524,25 +5695,25 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
-            "a": 0.5996,
+            "a": 0.6007,
             "b": 0.6885,
-            "difference": -0.0889,
-            "p_one_sided": 0.992757,
-            "upper_95": -0.0176
+            "difference": -0.0878,
+            "p_one_sided": 0.992114,
+            "upper_95": -0.028
           },
           "matched": {
-            "a": 0.5989,
-            "b": 0.6582,
-            "difference": -0.0593,
-            "p_one_sided": 0.97749,
-            "upper_95": -0.0013
+            "a": 0.6,
+            "b": 0.658,
+            "difference": -0.058,
+            "p_one_sided": 0.974817,
+            "upper_95": -0.0092
           },
           "imbalance": {
             "length": {
@@ -5551,14 +5722,14 @@
               "ratio": 0.953
             },
             "gc": {
-              "target_median": 0.5645,
+              "target_median": 0.5644,
               "control_median": 0.6099,
-              "ratio": 0.926
+              "ratio": 0.925
             },
             "nearest_coding_tss": {
-              "target_median": 11210.0,
+              "target_median": 11246.0,
               "control_median": 10943.0,
-              "ratio": 1.024
+              "ratio": 1.028
             }
           }
         },
@@ -5661,6 +5832,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 42,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 6,
+          "significant_increase": 0,
+          "not_significant_well_powered": 103,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.08,
         "agreement_denominator_all_matched_elements": 50,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.5,
@@ -5737,10 +5917,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -5748,14 +5928,14 @@
             "b": 0.4647,
             "difference": 0.0822,
             "p_one_sided": 3.6e-05,
-            "upper_95": 0.1228
+            "upper_95": 0.1163
           },
           "matched": {
             "a": 0.547,
             "b": 0.4414,
             "difference": 0.1056,
             "p_one_sided": 0.000108,
-            "upper_95": 0.1615
+            "upper_95": 0.1525
           },
           "imbalance": {
             "length": {
@@ -5791,10 +5971,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -5802,14 +5982,14 @@
             "b": 0.6832,
             "difference": -0.1601,
             "p_one_sided": 0.99903,
-            "upper_95": -0.0588
+            "upper_95": -0.0751
           },
           "matched": {
             "a": 0.5219,
             "b": 0.6907,
             "difference": -0.1687,
             "p_one_sided": 1.0,
-            "upper_95": -0.1046
+            "upper_95": -0.1149
           },
           "imbalance": {
             "length": {
@@ -5926,12 +6106,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 16,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 2,
+          "significant_increase": 1,
+          "not_significant_well_powered": 31,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.1111,
         "agreement_denominator_all_matched_elements": 18,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
-        "crispri_pairs_measured_as_not_regulated": 32,
+        "crispri_pairs_measured_as_not_regulated": 31,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6002,10 +6191,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6013,14 +6202,14 @@
             "b": 0.4411,
             "difference": 0.0339,
             "p_one_sided": 0.173178,
-            "upper_95": 0.1045
+            "upper_95": 0.0931
           },
           "matched": {
             "a": 0.475,
             "b": 0.4355,
             "difference": 0.0395,
             "p_one_sided": 0.21367,
-            "upper_95": 0.137
+            "upper_95": 0.1214
           },
           "imbalance": {
             "length": {
@@ -6056,10 +6245,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6067,14 +6256,14 @@
             "b": 0.6136,
             "difference": -0.1753,
             "p_one_sided": 0.981416,
-            "upper_95": -0.0104
+            "upper_95": -0.0369
           },
           "matched": {
             "a": 0.458,
             "b": 0.7128,
             "difference": -0.2548,
             "p_one_sided": 0.999993,
-            "upper_95": -0.1395
+            "upper_95": -0.1581
           },
           "imbalance": {
             "length": {
@@ -6190,6 +6379,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 13,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 1,
+          "significant_increase": 0,
+          "not_significant_well_powered": 28,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0,
         "agreement_denominator_all_matched_elements": 14,
         "agreement_rate_where_the_predicted_gene_was_tested": 0.0,
@@ -6266,10 +6464,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6277,14 +6475,14 @@
             "b": 0.4712,
             "difference": 0.0608,
             "p_one_sided": 0.007211,
-            "upper_95": 0.1096
+            "upper_95": 0.1018
           },
           "matched": {
             "a": 0.5321,
             "b": 0.4505,
             "difference": 0.0815,
             "p_one_sided": 0.008792,
-            "upper_95": 0.1488
+            "upper_95": 0.138
           },
           "imbalance": {
             "length": {
@@ -6320,10 +6518,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6331,14 +6529,14 @@
             "b": 0.5922,
             "difference": -0.0729,
             "p_one_sided": 0.902948,
-            "upper_95": 0.0371
+            "upper_95": 0.0194
           },
           "matched": {
             "a": 0.5336,
             "b": 0.5804,
             "difference": -0.0468,
             "p_one_sided": 0.869225,
-            "upper_95": 0.0349
+            "upper_95": 0.0218
           },
           "imbalance": {
             "length": {
@@ -6462,12 +6660,21 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 82,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 15,
+          "significant_increase": 5,
+          "not_significant_well_powered": 25,
+          "not_significant_underpowered": 236,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": 0.0238,
         "agreement_denominator_all_matched_elements": 84,
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 15,
-        "crispri_pairs_measured_as_not_regulated": 266,
+        "crispri_pairs_measured_as_not_regulated": 261,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6538,10 +6745,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6549,14 +6756,14 @@
             "b": 0.5091,
             "difference": 0.0961,
             "p_one_sided": 4e-06,
-            "upper_95": 0.1383
+            "upper_95": 0.1315
           },
           "matched": {
             "a": 0.6052,
             "b": 0.4995,
             "difference": 0.1057,
             "p_one_sided": 0.000217,
-            "upper_95": 0.1646
+            "upper_95": 0.1551
           },
           "imbalance": {
             "length": {
@@ -6592,10 +6799,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6603,14 +6810,14 @@
             "b": 0.6838,
             "difference": -0.1325,
             "p_one_sided": 0.997055,
-            "upper_95": -0.0382
+            "upper_95": -0.0534
           },
           "matched": {
             "a": 0.5615,
             "b": 0.6975,
             "difference": -0.1359,
             "p_one_sided": 0.999828,
-            "upper_95": -0.0615
+            "upper_95": -0.0735
           },
           "imbalance": {
             "length": {
@@ -6724,6 +6931,15 @@
           "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 0,
+        "crispri_predicted_gene_increased": 0,
+        "crispri_predicted_gene_null_underpowered": 0,
+        "crispri_pairs_by_outcome": {
+          "significant_decrease": 0,
+          "significant_increase": 0,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        },
         "agreement_rate_over_all_matched_elements": null,
         "agreement_denominator_all_matched_elements": 0,
         "agreement_rate_where_the_predicted_gene_was_tested": null,
@@ -6800,10 +7016,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6811,14 +7027,14 @@
             "b": 0.5294,
             "difference": 0.4706,
             "p_one_sided": 0.0,
-            "upper_95": 0.5603
+            "upper_95": 0.5459
           },
           "matched": {
             "a": 1.0,
             "b": 0.6432,
             "difference": 0.3568,
             "p_one_sided": 0.034051,
-            "upper_95": 0.7401
+            "upper_95": 0.6785
           },
           "imbalance": {
             "length": {
@@ -6854,10 +7070,10 @@
               0.55
             ],
             "nearest_coding_tss": [
-              1000.0,
-              5000.0,
-              20000.0,
-              100000.0
+              1000,
+              5000,
+              20000,
+              100000
             ]
           },
           "raw": {
@@ -6945,8 +7161,10 @@
     "experimental_element_blocks": 19072,
     "experimental_rule_blocks": 212,
     "crispri_predicted_gene_not_tested": 1377,
+    "crispri_predicted_gene_increased": 1,
+    "crispri_predicted_gene_null_underpowered": 7,
     "crispri_pairs_regulated": 212,
-    "crispri_pairs_measured_as_not_regulated": 4613,
+    "crispri_pairs_measured_as_not_regulated": 4565,
     "crispri_pairs_the_benchmark_calls_invalid": 0,
     "eligibility": {
       "rule": "an assay's tested interval shares at least one base with the element",
@@ -6982,15 +7200,22 @@
       "satmut": 4
     },
     "disagrees": {
-      "crispri": 31,
+      "crispri": 23,
       "lentimpra": 14508,
       "vista": 29,
       "satmut": 0
     },
     "agreement_rate_over_all_matched_elements": 0.0645,
     "agreement_denominator_all_matched_elements": 1505,
-    "agreement_rate_where_the_predicted_gene_was_tested": 0.7578,
-    "agreement_denominator_predicted_gene_tested": 128,
+    "agreement_rate_where_the_predicted_gene_was_tested": 0.8083,
+    "agreement_denominator_predicted_gene_tested": 120,
+    "crispri_pairs_by_outcome": {
+      "significant_decrease": 212,
+      "significant_increase": 48,
+      "not_significant_well_powered": 3130,
+      "not_significant_underpowered": 1435,
+      "missing": 0
+    },
     "satmut": {
       "elements_measured_base_by_base": 4,
       "elements_with_a_functional_base": 4,
@@ -7295,5 +7520,29 @@
     "chrY": "data/knowledge/compiled/noncoding_chrY.bio"
   },
   "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself. Saturation mutagenesis is thinner still by three orders of magnitude - 21 elements exist in the whole assay - and it measures bases, so it enters the census under its own counters and can never enter the disagreements",
-  "seconds": 158.8
+  "seconds": 120.1,
+  "result_manifest": {
+    "code": {
+      "git_sha": "850e9f9c05e708ce5f9ddac0e7c191f919ea6951",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/measured.py"
+      ],
+      "argv": [
+        "scripts/measured_layer.py",
+        "--write-programs"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": false,
+    "problems": [
+      "missing sources",
+      "missing inputs",
+      "missing assembly",
+      "missing coordinates",
+      "missing parameters",
+      "missing exclusions",
+      "missing partitions"
+    ]
+  }
 }

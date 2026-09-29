@@ -949,6 +949,12 @@ comparison is like for like rather than against a number in an old table.
 | `F.exposure(cell)`, any threshold | 555 / 555 | **5** | 961 / 961 | 555 / 555 | 5 |
 | `F.mean(cell)`, any threshold | 555 / 555 | **5** | 961 / 961 | 555 / 555 | 5 |
 
+*(2026-09-29, lane-repro, `b587bb1` + `236fa2b`: the two `cell` rows above describe the runtime before
+`9d42485` (§7.5, 2026-09-15). Since then a cell decides again when a read it waits on crosses its threshold.
+The `F.exposure(cell) >= 1` arm now **fires on 170 cells, of which the factors decide the fate of 5**: 165 are
+re-assertions of the type already written, 1.0 min after birth, and none changes a type. `F.mean(cell)` read at
+birth is now the instantaneous read, 487 of 555 in sample. `celegans_fate_reads.json` carries both counts.)*
+
 So the rewrite is ahead of the lookup it replaces: **501 → 522 of 555 in sample (90.3% → 94.1%),
 907 → 928 of 961 to the adult, and 476 → 483 of 555 held out (85.8% → 87.0%)**. Cells born
 1,439/1,439, parent mismatches 0, deaths 110/110, unchanged.
@@ -1007,6 +1013,10 @@ went on to carry *after* it decided what to be. A cell can only integrate its ow
 decides again later, which in this program it never does. So the honest answer to "which window
 does a cell integrate over" is that this program can only ask about the lineage window, and the
 question the earlier table appeared to settle was never posed to a deciding cell.
+*(2026-09-29: "it never does" held until `9d42485`. A cell now decides again when a read crosses its
+threshold, so a rule on a `cell` read can fire after birth; under the `terminal_fate` commitment it can only
+re-assert the type already chosen, and no fate changes. The conclusion that the cell window chooses no fate
+stands.)*
 
 What would pose it: a re-decision cadence (a `cell_network` step re-resolves every live cell, so a
 terminal cell born at 455 min would read its own window at 461, 467, …), or a `differentiate` that

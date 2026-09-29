@@ -451,7 +451,10 @@ def competence_test(
             continue
         n = sum(c.tissues.values())
         comp = {t: k / n for t, k in c.tissues.items()}
-        for f in c.factors - p.factors:
+        # sorted: a set of strings iterates in an order set by Python's string-hash seed, and the order
+        # of the rows fixes the order of the strata, hence which shuffle the seeded null draws for which
+        # stratum; unsorted, the null (and its median, excess and p) moved with PYTHONHASHSEED
+        for f in sorted(c.factors - p.factors):
             if factors is None or f in factors:
                 stratum = f"{f}|{c.sublineage}" + (f"|{ref.cells[c.id].generation}" if by_generation else "")
                 rows.append((stratum, str(time_bin(c.born)), comp, c.dominant))
@@ -517,7 +520,7 @@ def _tv(a: Counter, b: Counter) -> float:
     na, nb = sum(a.values()), sum(b.values())
     if not na or not nb:
         return float("nan")
-    return 0.5 * sum(abs(a[k] / na - b[k] / nb) for k in set(a) | set(b))
+    return 0.5 * sum(abs(a[k] / na - b[k] / nb) for k in sorted(set(a) | set(b)))  # sorted: fixed sum order
 
 
 def _pair_summary(pairs: list[tuple[AtlasCell, AtlasCell]]) -> dict:

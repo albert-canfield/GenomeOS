@@ -66,7 +66,7 @@ import random
 from dataclasses import dataclass, field, replace
 from typing import Any
 
-from genomeos.ir import UNKNOWN, Evidence, EvidenceKind, Module, Parameter
+from genomeos.ir import UNKNOWN, Evidence, EvidenceKind, Module, Parameter, confidence_stated
 
 # ---- evidence ------------------------------------------------------------------------
 
@@ -261,9 +261,11 @@ class MethylationParams:
                 continue
             values[name] = float(p.value)
             if p.confidence < 0.4 or p.evidence.kind is EvidenceKind.INFERRED:
+                # an unstated confidence is still an assumption, but it was not judged 0 (item 12 S1)
+                said = f"{p.confidence:g}" if confidence_stated(p.confidence) else "unstated"
                 notes.append(
                     f"{name} = {values[name]:g} is the program's assumption "
-                    f"(confidence {p.confidence:g}: {p.evidence.source or 'no source'})"
+                    f"(confidence {said}: {p.evidence.source or 'no source'})"
                 )
         if unknown:
             raise UnknownParametersError(sorted(unknown))

@@ -39,6 +39,8 @@ regime worm { fates: first }
 # cadence re-deciding every live cell. With it, 522 either way, and the shipped program (which declares
 # no cadence) is unchanged to the last cell. So it costs nothing here and is what makes the fate a fate.
 # Measured: `stability_under_a_re_decision_cadence` in data/results/celegans_fate_reads.json.
+# (2026-09-29: since 9d42485 a cell also decides again at a threshold crossing; without the commitment
+# the program now scores 412 of 555 even at cadence 0, not 522. See celegans_fate_reads.json.)
 commitment terminal_fate {
   establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve
   locks: cell_type

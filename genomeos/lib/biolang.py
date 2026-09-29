@@ -4,6 +4,10 @@
 `register()` tells the engine's parser how to resolve `import protein:SYMBOL`: the block comes from the
 packaged human proteome (genomeos.lib.proteome), so a program can pull a cited protein definition in
 without the engine knowing where it lives.
+
+The same function is declared in pyproject.toml as the `protein` entry point of the engine's
+`biolang_import_resolvers` group, so `bio` finds it wherever GenomeOS is installed without `register()`
+being called; a packaged engine with no GenomeOS beside it finds nothing and says so.
 """
 
 from __future__ import annotations
@@ -11,7 +15,7 @@ from __future__ import annotations
 from genomeos.lang.parser import IMPORT_RESOLVERS
 
 
-def _protein(symbol: str) -> str:
+def resolve_protein(symbol: str) -> str:
     from genomeos.lib.proteome import block
 
     text = block(symbol)
@@ -21,4 +25,4 @@ def _protein(symbol: str) -> str:
 
 
 def register() -> None:
-    IMPORT_RESOLVERS.setdefault("protein", _protein)
+    IMPORT_RESOLVERS.setdefault("protein", resolve_protein)

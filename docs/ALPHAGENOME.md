@@ -67,6 +67,11 @@ unphased sequence, so it does not see a diploid individual.
    6,618 distal enhancers of chr21 evenly along the chromosome, about eight
    seconds each, and holds each answer against the domain inference
    (`data/results/enhancer_targets_chr21.json`):
+   *(2026-09-28, review item R4, `6e833c3`: rules no longer state a confidence; each carries a
+   certainty record with the fold change as the effect and no probability. Stored results keep their
+   old values.)*
+   *(2026-09-28, R4, `2085279`: new links store the signed fold change and a certainty record, not a
+   capped confidence; the 1,052,700 stored links keep theirs.)*
 
    | | |
    |---|---|

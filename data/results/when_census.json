@@ -1,0 +1,325 @@
+{
+  "result": "when_census",
+  "date": "2026-09-28",
+  "question": "which rule and event `when` clauses used a construct Rule/Event.applies could not match",
+  "matcher": "genomeos.ir.model.matches (decisions, timers, competence windows, commitments, signals)",
+  "grammar_constructs": {
+    "plain": "k = v, equality",
+    "any": "matches anything, present or absent",
+    "unknown": "the context was not recorded: matches no context (R1, 2026-09-28)",
+    "absent": "the key is not in the context",
+    "alternatives": "a|b, any listed value",
+    "comparison": ">=n <=n >n <n, numeric; `k >= n` is parsed as `k = >=n`",
+    "not_equal": "`k != v` is parsed to `!=v` but neither the grammar nor the matcher defines it"
+  },
+  "old_behaviour": {
+    "Rule.applies": "equality; `any` passes; `unknown` fails (R1)",
+    "Event.applies": "equality; `any` passes; no caller in genomeos, scripts or tests"
+  },
+  "tracked_bio": {
+    "programs": 41,
+    "clauses": 5179,
+    "by_kind_and_construct": {
+      "event/any": 1,
+      "event/plain": 1,
+      "rule/any": 1,
+      "rule/plain": 5176
+    },
+    "non_plain_hits": [
+      {
+        "source": "data/demo/repressilator.bio",
+        "kind": "rule",
+        "block": "LacI inhibits tetR",
+        "line": 41,
+        "key": "host",
+        "value": "any",
+        "construct": "any",
+        "failed_silently_before": false
+      },
+      {
+        "source": "genomeos/std/ageing.bio",
+        "kind": "event",
+        "block": "divide",
+        "line": 6,
+        "key": "cell_type",
+        "value": "any",
+        "construct": "any",
+        "failed_silently_before": false
+      }
+    ]
+  },
+  "markdown_fenced": {
+    "programs": 14,
+    "clauses": 1,
+    "by_kind_and_construct": {
+      "event/any": 1
+    },
+    "non_plain_hits": [
+      {
+        "source": "docs/BIOLANG-v0.2.md (fenced block)",
+        "kind": "event",
+        "block": "divide",
+        "line": 21,
+        "key": "cell_type",
+        "value": "any",
+        "construct": "any",
+        "failed_silently_before": false
+      }
+    ]
+  },
+  "code_literals": {
+    "programs": 160,
+    "clauses": 1,
+    "by_kind_and_construct": {
+      "rule/plain": 1
+    },
+    "non_plain_hits": []
+  },
+  "generated_bio_untracked": {
+    "programs": 24,
+    "clauses": 440589,
+    "by_kind_and_construct": {
+      "rule/plain": 440589
+    },
+    "non_plain_hits": []
+  },
+  "test_programs": {
+    "programs": 219,
+    "clauses": 10387,
+    "by_kind_and_construct": {
+      "event/any": 1,
+      "event/plain": 1,
+      "rule/any": 1,
+      "rule/plain": 10369,
+      "rule/unknown": 15
+    },
+    "non_plain_hits": [
+      {
+        "source": "test program first parsed in tests/test_cell_view.py::test_the_same_program_reads_differently_in_two_cell_types",
+        "kind": "event",
+        "block": "divide",
+        "line": 6,
+        "key": "cell_type",
+        "value": "any",
+        "construct": "any",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_cell_view.py::test_the_index_lists_what_it_skipped_rather_than_only_what_it_found",
+        "kind": "rule",
+        "block": "LacI inhibits tetR",
+        "line": 41,
+        "key": "host",
+        "value": "any",
+        "construct": "any",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_states_the_base_level_fact_and_raises_no_rule",
+        "kind": "rule",
+        "block": "S1 activates AAA",
+        "line": 54,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_states_the_base_level_fact_and_raises_no_rule",
+        "kind": "rule",
+        "block": "S2 activates CCC",
+        "line": 63,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_states_the_base_level_fact_and_raises_no_rule",
+        "kind": "rule",
+        "block": "S4 activates EEE",
+        "line": 72,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_states_the_base_level_fact_and_raises_no_rule",
+        "kind": "rule",
+        "block": "S3 activates DDD",
+        "line": 81,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_states_the_base_level_fact_and_raises_no_rule",
+        "kind": "rule",
+        "block": "S5 activates FFF",
+        "line": 90,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_carries_the_measurement_beside_the_prediction",
+        "kind": "rule",
+        "block": "E1 activates AAA",
+        "line": 53,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_carries_the_measurement_beside_the_prediction",
+        "kind": "rule",
+        "block": "E2 activates CCC",
+        "line": 62,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_carries_the_measurement_beside_the_prediction",
+        "kind": "rule",
+        "block": "E3 inhibits DDD",
+        "line": 71,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_the_program_carries_the_measurement_beside_the_prediction",
+        "kind": "rule",
+        "block": "E4 activates EEE",
+        "line": 80,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_no_measurement_states_an_empty_layer_rather_than_staying_silent",
+        "kind": "rule",
+        "block": "E1 activates AAA",
+        "line": 53,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_no_measurement_states_an_empty_layer_rather_than_staying_silent",
+        "kind": "rule",
+        "block": "E2 activates CCC",
+        "line": 62,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_no_measurement_states_an_empty_layer_rather_than_staying_silent",
+        "kind": "rule",
+        "block": "E3 inhibits DDD",
+        "line": 71,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_measured_layer.py::test_no_measurement_states_an_empty_layer_rather_than_staying_silent",
+        "kind": "rule",
+        "block": "E4 activates EEE",
+        "line": 80,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_rule_context.py::test_a_rule_with_no_recorded_cell_is_gated_on_unknown_and_matches_no_cell",
+        "kind": "rule",
+        "block": "E1_measured activates AAA",
+        "line": 11,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      },
+      {
+        "source": "test program first parsed in tests/test_rule_context.py::test_every_compiled_rule_names_its_context",
+        "kind": "rule",
+        "block": "E3 inhibits CCC",
+        "line": 64,
+        "key": "cell_type",
+        "value": "unknown",
+        "construct": "unknown",
+        "failed_silently_before": false
+      }
+    ],
+    "pytest": "2 failed, 1782 passed, 6 skipped, 3 xfailed, 5 warnings in 342.29s (0:05:42)"
+  },
+  "silent_failures_before": [],
+  "silent_failure_count": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "git ls-files *.bio, *.md fences, *.py/*.js/*.html literals",
+        "version": "HEAD of dev"
+      },
+      {
+        "accession": "data/knowledge/compiled/*.bio",
+        "version": "untracked, as built in this checkout"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "genomeos/lang/parser.py",
+        "sha256": "351da033a0a2f0df2f6fad74660bc9010510d6a6bf3a23d73325b50c8af45e65",
+        "bytes": 53715,
+        "partition": null
+      },
+      {
+        "path": "genomeos/ir/model.py",
+        "sha256": "bcc374161f76fe6d3f720142831947f3790f0834063c3582f72e30a7f944d08d",
+        "bytes": 43363,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: program text, no genome coordinates",
+    "coordinates": "n/a: no genomic intervals",
+    "parameters": {
+      "kinds": [
+        "rule",
+        "event"
+      ],
+      "tests": true
+    },
+    "exclusions": [],
+    "partitions": "n/a: no evaluation split",
+    "code": {
+      "git_sha": "96bc5e5c202066ca5f0063d8d30c9d3e38c9291b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "scripts/gastrulation_census.py"
+      ],
+      "argv": [
+        "scripts/when_census.py",
+        "--tests",
+        "/private/tmp/claude-502/-Users-AlbertCanfield-SITES-DEV-GenomeOS/e6271786-4aee-495a-bcd0-5603c3ebff51/scratchpad/wc"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

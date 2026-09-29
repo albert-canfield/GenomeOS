@@ -1,0 +1,376 @@
+{
+  "result": "crispri_split_audit",
+  "date": "2026-09-28",
+  "question": "does any held-out or validation figure rest on a scorer or model that read held-out CRISPRi pairs through measured.load_crispri (both files merged) or through the compiled program's `<id>_measured` blocks?",
+  "answer": "no. Zero consumers are EXPOSED. Every scorer that makes a held-out claim reads the two benchmark files separately through crispri.load and fits on training only. The two defective paths feed only evaluation (measured_layer_genome, confidence_calibration_genome) and reports (evidence census, CLI, explorer, syntax censuses). The held-out links do sit in the compiled programs (43 of 212 measured rules genome-wide, 1 of 2 in the committed chr21 copy), so the defect is latent: the first feature to read a compiled program would have seen the test set.",
+  "consequence_for_the_fix": "no figure has to change. load_crispri keeps its default (both splits) because no exposed caller exists; each pair now carries its split and the five power columns, and the compiled program marks held-out links so that no feature reads them",
+  "counts": {
+    "training_valid_pairs": 10356,
+    "training_negatives": 9885,
+    "training_negatives_power_at_20pct_ge_0.8": 6193,
+    "heldout_valid_pairs": 4378,
+    "heldout_negatives": 4188,
+    "heldout_negatives_power_at_20pct_ge_0.8": 3675,
+    "power_columns_in_both_headers": [
+      "PowerAtEffectSize10",
+      "PowerAtEffectSize15",
+      "PowerAtEffectSize20",
+      "PowerAtEffectSize25",
+      "PowerAtEffectSize50"
+    ]
+  },
+  "status_legend": {
+    "EXPOSED": "a scorer's feature or fit read held-out pairs",
+    "CLEAN": "the scorer and every model it relies on read the splits apart and fit on training only",
+    "EVALUATION-ONLY": "scores against the pairs, fits nothing to them",
+    "REPORT-ONLY": "reads the path for a count, display or syntax only"
+  },
+  "exposed": [],
+  "rows": [
+    {
+      "consumer": "measured.Layer.load -> measured.rows/census -> scripts/measured_layer.py",
+      "path": "load_crispri (both files merged)",
+      "figures": "data/results/measured_layer_genome.json: 19,070 of 440,377 compiled elements measured; CRISPRi agreement over 1,505 matched elements and over the 128 where the predicted gene was tested",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "EVALUATION-ONLY",
+      "why": "compares the compiled AlphaGenome predictions with measured outcomes; RECIPROCAL_OVERLAP and the agreement rules are constants, nothing is fitted to the pairs, and the prediction side (enhancer_targets*) never reads CRISPRi. Pooled across splits by design; not quoted as a held-out figure"
+    },
+    {
+      "consumer": "genomeos/attribution/confidence_calibration.py via scripts/confidence_calibration.py",
+      "path": "measured.Layer.load -> load_crispri",
+      "figures": "data/results/confidence_calibration_genome.json: 128 tested elements, observed 0.758 against stated 0.347; stated level outside its interval in 10 of 12 bands",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "EVALUATION-ONLY",
+      "why": "a reliability table: CONFIDENCE_BANDS imported unchanged from target_calibration (fixed 2026-09-17), the confidence formula is compile.py's clipped |log2FC|; no parameter is fitted on the measured pairs"
+    },
+    {
+      "consumer": "genomeos/attribution/compile.py _measured_blocks -> data/knowledge/compiled/noncoding_chr*.bio (git-ignored) and data/organisms/human/noncoding_chr21.bio (committed)",
+      "path": "compiled program `<id>_measured` blocks",
+      "figures": "212 measured rules in the 24 compiled programs, 43 of them held-out-only links; the committed chr21 copy carries 2 rules, 1 held-out-only (ICOSLG, GM12878)",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "REPORT-ONLY",
+      "why": "the held-out links are in the program, but no scorer, fit or feature reads a compiled program: its readers are evidence.py (fact census), cli `measured-layer` (prints the JSON), the web explorer index, `bio test` on the program's own `# test:` lines, and three syntax censuses (biolang_key_census, mandatory_locations, amounts_or_concentrations)"
+    },
+    {
+      "consumer": "genomeos/evidence.py collect(compiled=True) and cli _print_measured_layer",
+      "path": "compiled program",
+      "figures": "evidence_compiled_genome counts (960,096 compiled facts by evidence kind)",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "REPORT-ONLY",
+      "why": "counts evidence kinds; reads no label as a feature"
+    },
+    {
+      "consumer": "crispri.score via scripts/crispri_score.py",
+      "path": "none of the two; crispri.load(TRAINING) and crispri.load(HELDOUT) separately",
+      "figures": "data/results/crispri_benchmark.json; docs/CRISPRI-RESULT.md headline held-out K562 AUPRC 0.550 -> 0.691, +0.141 [+0.082, +0.231]",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "CLEAN",
+      "why": "logistic_fit on covered training pairs only (and leave-one-chromosome-out inside training); held-out pairs are annotated with features and scored with frozen weights"
+    },
+    {
+      "consumer": "crispri.score_published via scripts/crispri_published.py (lane-publish, 42d7b1b)",
+      "path": "none of the two; crispri.load per file",
+      "figures": "data/results/crispri_published.json: training LOCO 0.507 / 0.724; held-out pooled weighted 0.567 / 0.677 as registered, 0.476 / 0.639 DNase-only; coverage arms +0.136 [+0.081, +0.225], 1,000 of 1,000 matched draws above zero, flag alone +0.001",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "CLEAN",
+      "why": "weights fitted on training only; the DNase-only row is a post hoc choice already disclosed in the result and in docs/CRISPRI-RESULT.md, which is a protocol matter and not a leak through these paths"
+    },
+    {
+      "consumer": "crispri.score_contact via scripts/crispri_contact.py",
+      "path": "crispri.load per file",
+      "figures": "data/results/crispri_contact.json held-out arm",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "CLEAN",
+      "why": "fit on training, held-out scored"
+    },
+    {
+      "consumer": "target_calibration.score / scripts target_calibration.py, target_calibration_gate.py, target_prevalence.py",
+      "path": "crispri.load per file",
+      "figures": "data/results/target_calibration.json (heldout_k562, heldout_other_cells), target_calibration_gate.json, target_prevalence.json (held_out_before_and_after)",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "CLEAN",
+      "why": "every fit (fit, fit_with_offset) runs on training rows; add_features reads the deletion table, GENCODE and cCRE classes, never the measured layer"
+    },
+    {
+      "consumer": "scripts/target_rebanding.py and scripts/union_axis.py band levels",
+      "path": "crispri.load per file",
+      "figures": "data/results/target_rebanding.json, union_axis.json band rates",
+      "held_out_claim": false,
+      "reused_benchmark": true,
+      "status": "CLEAN",
+      "why": "weights fitted on training; the band RATES pool training and held-out K562 pairs by registration (PREREGISTERED_BANDS, 'the level is a description of the same 285 pairs'). Not through these paths. Stated so that no later held-out K562 figure is read against the re-banded table as out of sample"
+    },
+    {
+      "consumer": "crispri_direction / crispri_direction_both",
+      "path": "crispri.load per file",
+      "figures": "data/results/crispri_direction.json, crispri_direction_both.json per-cell sign agreement",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "EVALUATION-ONLY",
+      "why": "sign agreement between the sweep's predicted change and the measured EffectSize; no parameter fitted on pairs, the training arm is labelled 'fitted on, not a test'"
+    },
+    {
+      "consumer": "benchmark/loci_fourth.py, benchmark/loci_noncoding.py",
+      "path": "crispri.load(HELDOUT) only",
+      "figures": "data/results/loci_fourth*.json, loci_noncoding.json",
+      "held_out_claim": true,
+      "reused_benchmark": true,
+      "status": "EVALUATION-ONLY",
+      "why": "registered 2026-09-21 before the held-out file was read; the held-out arm is the test and nothing is fitted to it"
+    },
+    {
+      "consumer": "scripts/node_containment_audit.py stage 2",
+      "path": "crispri.load of both files, not load_crispri",
+      "figures": "data/results/node_containment_measured.json: 661 regulated pairs (K562 589, HCT116 34, GM12878 16, WTC11 15, Jurkat 7), measured share 0.758",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "EVALUATION-ONLY",
+      "why": "the regulated pairs are the ground truth the node caller is scored against; nodes come from CTCF cCREs and GENCODE, nothing is fitted to a pair. Merging the splits is legitimate here because no model is trained, and the figure is not quoted as held-out"
+    },
+    {
+      "consumer": "measurability.py, scripts/unknown_coverage.py",
+      "path": "own CRISPRI_FILES tuples, both files, intervals only",
+      "figures": "data/results/measurability_real_unknown.json, unknown_coverage.json footprints",
+      "held_out_claim": false,
+      "reused_benchmark": false,
+      "status": "REPORT-ONLY",
+      "why": "read tested intervals as a coverage footprint; no label is read"
+    }
+  ],
+  "overlap_between_partitions": {
+    "heldout_pairs": 4378,
+    "training_pairs": 10356,
+    "near_identical_at": 0.9,
+    "counts": {
+      "identical_pair": 0,
+      "near_identical_same_gene": 4,
+      "overlapping_same_gene": 32,
+      "near_identical_other_gene": 66,
+      "overlapping_other_gene": 147,
+      "independent": 4129
+    },
+    "by_heldout_cell": {
+      "GM12878": {
+        "identical_pair": 0,
+        "near_identical_same_gene": 0,
+        "overlapping_same_gene": 0,
+        "near_identical_other_gene": 0,
+        "overlapping_other_gene": 0,
+        "independent": 68
+      },
+      "HCT116": {
+        "identical_pair": 0,
+        "near_identical_same_gene": 0,
+        "overlapping_same_gene": 23,
+        "near_identical_other_gene": 0,
+        "overlapping_other_gene": 19,
+        "independent": 354
+      },
+      "Jurkat": {
+        "identical_pair": 0,
+        "near_identical_same_gene": 0,
+        "overlapping_same_gene": 0,
+        "near_identical_other_gene": 0,
+        "overlapping_other_gene": 0,
+        "independent": 75
+      },
+      "K562": {
+        "identical_pair": 0,
+        "near_identical_same_gene": 0,
+        "overlapping_same_gene": 0,
+        "near_identical_other_gene": 54,
+        "overlapping_other_gene": 110,
+        "independent": 1754
+      },
+      "WTC11": {
+        "identical_pair": 0,
+        "near_identical_same_gene": 4,
+        "overlapping_same_gene": 9,
+        "near_identical_other_gene": 12,
+        "overlapping_other_gene": 18,
+        "independent": 1878
+      }
+    },
+    "heldout_related_to_training": 249
+  },
+  "overlap_reading": "0 identical pairs, but 249 of 4,378 held-out pairs share at least one base with a training interval: 36 on the same gene (4 near-identical, 32 overlapping; HCT116 23, WTC11 13) and 213 on another gene (K562 164). No held-out K562 pair repeats a training gene at an overlapping interval. crispri.score already reports an arm on held-out elements not in training (heldout_elements_not_in_training); every other held-out figure includes the related pairs",
+  "reused_benchmark": "the held-out file has been read by at least ten scored results (crispri_benchmark, crispri_contact, crispri_published, crispri_direction, crispri_direction_both, target_calibration, target_calibration_gate, target_prevalence, target_rebanding, union_axis, and loci_fourth/loci_noncoding for its held-out arm). Each registration froze its model before its own read, but the choices between registrations were made by people who had seen the earlier reads, so every figure on it is reported as a reused benchmark and not as a first touch",
+  "r5_provenance": "every CrispriPair now carries split (partition), source_file, assay and study (the Dataset column), frozen at parse time; measured.development_only raises on a held-out pair; measured.split_overlap is the automated overlap check, and tests/test_crispri_split.py recomputes it against this file",
+  "variants": "not applicable to CRISPRi: the benchmark tests intervals, not alleles, so the related-variant half of the overlap check has nothing to compare",
+  "figures_changed": {
+    "reported_figures": "none",
+    "compiled_programs": "held-out-only links (43 genome-wide, 1 in the committed chr21 copy) keep their rule but leave `targets:` and carry measured.HELDOUT_MARK; 1 training-supported rule genome-wide took its strength from a held-out pair and now takes it from the training pair; rule, entity and unknown counts unchanged"
+  },
+  "r2_outcomes": {
+    "rule": "a pair is significant_decrease, significant_increase, not_significant_well_powered (PowerAtEffectSize20 >= 0.8), not_significant_underpowered, or missing; ValidConnection FALSE rows are counted as invalid and never read. Only a well-powered null may disagree; an increase is its own verdict and raises no rule",
+    "files": {
+      "training": {
+        "significant_decrease": 471,
+        "significant_increase": 75,
+        "not_significant": 9810,
+        "not_significant_well_powered_at_20pct": 6169,
+        "missing": 0,
+        "invalid": 0
+      },
+      "heldout": {
+        "significant_decrease": 190,
+        "significant_increase": 84,
+        "not_significant": 4104,
+        "not_significant_well_powered_at_20pct": 3632,
+        "missing": 0,
+        "invalid": 0
+      }
+    },
+    "why_20pct": "PowerAtEffectSize25 is >= 0.8 on every non-significant pair in both files (the benchmark's own filter), so it cannot separate; 20% is the column genomeos-8a's brief counted (6,169 of 9,810)",
+    "figures_changed": [
+      {
+        "figure": "measured_layer_genome pooled.disagrees.crispri",
+        "old": 31,
+        "new": 23
+      },
+      {
+        "figure": "measured_layer_genome agreement_denominator_predicted_gene_tested",
+        "old": 128,
+        "new": 120
+      },
+      {
+        "figure": "measured_layer_genome agreement_rate_where_the_predicted_gene_was_tested",
+        "old": 0.7578,
+        "new": 0.8083
+      },
+      {
+        "figure": "measured_layer_genome crispri_pairs_measured_as_not_regulated",
+        "old": 4613,
+        "new": 4565
+      },
+      {
+        "figure": "measured_layer_genome crispri_predicted_gene_increased (new)",
+        "old": null,
+        "new": 1
+      },
+      {
+        "figure": "measured_layer_genome crispri_predicted_gene_null_underpowered (new)",
+        "old": null,
+        "new": 7
+      },
+      {
+        "figure": "measured_layer_genome crispri_pairs_by_outcome (new)",
+        "old": null,
+        "new": {
+          "significant_decrease": 212,
+          "significant_increase": 48,
+          "not_significant_well_powered": 3130,
+          "not_significant_underpowered": 1435,
+          "missing": 0
+        }
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: elements",
+        "old": 128,
+        "new": 120
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: observed",
+        "old": 0.7578,
+        "new": 0.8083
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: mean stated",
+        "old": 0.347,
+        "new": 0.3576
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: expected calibration error",
+        "old": 0.4108,
+        "new": 0.4507
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: median gap over populated bands",
+        "old": 0.4724,
+        "new": 0.5432
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: standardised difference (matched)",
+        "old": 0.1374,
+        "new": 0.0898,
+        "p_old": 0.06975,
+        "p_new": 0.155971
+      },
+      {
+        "figure": "confidence_calibration_genome crispri where tested: raw difference",
+        "old": 0.1886,
+        "new": 0.1208,
+        "p_old": 0.003525,
+        "p_new": 0.039538
+      },
+      {
+        "figure": "committed noncoding_chr21.bio experimental-layer header: pairs measured as not regulated",
+        "old": 32,
+        "new": 31
+      }
+    ],
+    "unchanged": "the band headline (stated level outside its interval in 10 of 12 bands), every pattern verdict, the all-matched agreement rate 0.0645 over 1,505, coverage 19,070 of 440,377, and every program's rules/entities/unknowns counts"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data",
+        "version": "EPCrisprBenchmark_combined_data GRCh38, cached 2026-09-16",
+        "citation": "Gschwind et al. 2026, doi:10.1038/s41586-026-10781-4"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "near_identical_at": 0.9,
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8
+    },
+    "exclusions": [
+      "rows with ValidConnection FALSE (0 in either file)"
+    ],
+    "partitions": {
+      "training": "EPCrisprBenchmark training_K562 file, development",
+      "heldout": "EPCrisprBenchmark heldout_5_cell_types file, evaluation only"
+    },
+    "code": {
+      "git_sha": "eb65f5dc1d79fe5bbd4d3f7cee97a1bb7bc369f9",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/measured.py",
+        "genomeos/organism/forge.py"
+      ],
+      "argv": [
+        "-"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
+  "not_covered": "crispri.Pair (the scorer's own dataclass) also drops the power columns; that is outside this defect and is left to the lane that weights negatives"
+}

@@ -573,6 +573,19 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
                 "protein": c.protein,
                 "uniprot": c.uniprot,
                 "target_class": c.target_class,
+                # The criterion the ranking sorted on, published beside the
+                # score, because the list is tier-major and the score alone
+                # therefore does not imply the order.
+                "evidence_tier": c.evidence_tier,
+                "evidence_tier_reason": c.evidence_tier_reason,
+                # The two rules registered 2026-09-27, both on the order and
+                # neither in the mean: whether any modelled modality reaches this
+                # candidate with its requirements answered, and how much this
+                # patient's data say the tumour altered the gene.
+                "mechanism_reach": c.mechanism_reach,
+                "mechanism_reach_reason": c.mechanism_reach_reason,
+                "alteration_magnitude": c.alteration_magnitude,
+                "alteration_magnitude_reason": c.alteration_magnitude_reason,
                 "why": c.why_interesting,
                 "origin_variants": [o.to_dict() for o in c.origins],
                 "scores": {
@@ -582,6 +595,7 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
                         for k, v in c.scores.components.items()
                         if k
                         in (
+                            "alteration_evidence",
                             "tumour_selectivity",
                             "surface_accessibility",
                             "normal_tissue_safety",

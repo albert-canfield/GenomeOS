@@ -1376,3 +1376,418 @@ def reference_alleles_carried(name: str, root: Path | None = None, annotation_fo
         "GIAB trio's do); no variant at all means the person carries hg38's allele there, a truncation the "
         "reference hides",
     }
+
+
+def read_assembly_calls(path: Path | str, chroms: set[str], base_at_for=None) -> dict[str, dict]:
+    """A phased diploid-assembly VCF (dipcall's: one sample, `a|b` with haplotype 1 first) read into
+    {chrom: {"alleles": {(pos, ref, alt): (on_hap1, on_hap2, passed)}, "positions": sorted starts}}.
+    Alleles are normalised like the trio's (`normalise_variant`) so the two sources compare; `.` in a
+    haplotype means that haplotype is uncalled there. `base_at_for(chrom)` gives a chromosome's
+    reference reader, or None to trim without left-aligning."""
+    out: dict[str, dict] = {}
+    readers: dict[str, Any] = {}
+    with open_variants(path) as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t", 10)
+            chrom = f[0]
+            if chrom not in chroms:
+                continue
+            if chrom not in readers:
+                readers[chrom] = base_at_for(chrom) if base_at_for else None
+            base_at = readers[chrom]
+            gt = f[9].split(":")[0] if len(f) > 9 else ""
+            haps = gt.split("|") if "|" in gt else [gt, gt]
+            if len(haps) != 2:
+                continue
+            passed = f[6] in ("PASS", ".")
+            d = out.setdefault(chrom, {"alleles": {}, "positions": []})
+            d["positions"].append(int(f[1]))
+            for i, alt in enumerate(f[4].split(","), 1):
+                key = (int(f[1]), f[3].upper(), alt.upper())
+                if base_at is not None and (len(f[3]) > 1 or len(alt) > 1):
+                    key = normalise_variant(*key, base_at=base_at)
+                h1, h2 = haps[0] == str(i), haps[1] == str(i)
+                if h1 or h2:
+                    o1, o2, op = d["alleles"].get(key, (False, False, True))
+                    d["alleles"][key] = (o1 or h1, o2 or h2, op and passed)
+    for d in out.values():
+        d["positions"].sort()
+    return out
+
+
+def assembly_class(key: tuple[int, str, str], calls: dict | None, window: int = 10) -> str:
+    """Where a phased assembly puts one normalised child allele: 'hap1' or 'hap2' (on one haplotype
+    only), 'both', 'filtered' (the allele is there but the assembly's own filter failed), 'nearby' (no
+    such allele, but the assembly has a variant within `window` bases: a representation disagreement)
+    or 'absent' (the assembly reads the reference there). The caller decides beforehand whether the
+    site lies inside the assembly's diploid regions."""
+    import bisect
+
+    if calls:
+        hit = calls["alleles"].get(key)
+        if hit is not None:
+            h1, h2, passed = hit
+            if not passed:
+                return "filtered"
+            return "both" if h1 and h2 else ("hap1" if h1 else "hap2")
+        pos = calls["positions"]
+        i = bisect.bisect_left(pos, key[0] - window)
+        if i < len(pos) and pos[i] <= key[0] + window:
+            return "nearby"
+    return "absent"
+
+
+def phase_trio_by_assembly(
+    child: str,
+    father: str,
+    mother: str,
+    assembly_vcf: Path | str,
+    assembly_bed: Path | str,
+    benchmark_bed: Path | str | None = None,
+    hap1_parent: str = "father",
+    other_beds: dict[str, Path | str] | None = None,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    reference: Path = Path("data/reference"),
+    window: int = 10,
+) -> dict[str, Any]:
+    """The trio's de novo candidates (child calls absent from both parents inside all trusted regions,
+    exactly as `trio` defines them) placed on a phased, parent-labelled assembly of the child, next to
+    a control: child heterozygous calls that exactly one parent carries, whose parent of origin is
+    therefore known from the trio alone. The control measures how often the assembly carries an
+    ordinary inherited allele and how often it puts it on the right parent's haplotype; the candidates
+    are read against that. Counts only: no position, allele or genotype leaves this function."""
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    for n in (child, father, mother):
+        if n not in people:
+            raise FileNotFoundError(f"{n} is not a local individual")
+    chroms = chroms or [c for c in people[child]["chromosomes"] if c not in ("chrX", "chrY", "chrM")]
+    hap_to_parent = {"hap1": hap1_parent, "hap2": "mother" if hap1_parent == "father" else "father"}
+
+    def bed(path) -> dict[str, tuple[list[tuple[int, int]], list[int]]]:
+        iv: dict[str, list[tuple[int, int]]] = {}
+        if path is None:
+            return {}
+        with open_variants(path) as fh:
+            for line in fh:
+                f = line.split("\t")
+                if len(f) >= 3 and not line.startswith(("#", "track")):
+                    iv.setdefault(f[0], []).append((int(f[1]), int(f[2])))
+        return {c: (sorted(v), [a for a, _ in sorted(v)]) for c, v in iv.items()}
+
+    dip, bench = bed(assembly_bed), bed(benchmark_bed)
+    others = {name: bed(p) for name, p in (other_beds or {}).items()}
+    cand_in_other: dict[str, dict[str, int]] = {name: {} for name in others}
+
+    def base_at_for(chrom):
+        return _reference_base_reader(chrom, reference)[0]
+
+    calls = read_assembly_calls(assembly_vcf, set(chroms), base_at_for)
+    cand = {"total": 0, "outside_assembly": 0}
+    cand_by_type: dict[str, dict[str, int]] = {"snv": {}, "indel": {}}
+    cand_in_bench: dict[str, int] = {}
+    cand_child_hom: dict[str, int] = {}
+    ctrl = {"total": 0, "outside_assembly": 0, "right_parent": 0, "wrong_parent": 0}
+    ctrl_class: dict[str, int] = {}
+    done = []
+    for chrom in chroms:
+        pc, pf, pm = (vcf_path(n, chrom, root) for n in (child, father, mother))
+        if not (pc and pf and pm):
+            continue
+        base_at, genome = _reference_base_reader(chrom, reference)
+        try:
+            gc, gf, gm = _genotypes(pc, base_at), _genotypes(pf, base_at), _genotypes(pm, base_at)
+        finally:
+            if genome is not None:
+                genome.close()
+        rf, rm, rc = (load_regions(n, chrom, root) for n in (father, mother, child))
+        sf, sm, sc = [x for x, _ in rf], [x for x, _ in rm], [x for x, _ in rc]
+        have_regions = bool(rf and rm)
+        di, ds = dip.get(chrom, ([], []))
+        bi, bs = bench.get(chrom, ([], []))
+        cc = calls.get(chrom)
+        for key, zyg in gc.items():
+            pos0 = key[0] - 1
+            trusted = (not have_regions) or (
+                _inside(rf, sf, pos0) and _inside(rm, sm, pos0) and (not rc or _inside(rc, sc, pos0))
+            )
+            if not trusted:
+                continue
+            f_has, m_has = key in gf, key in gm
+            if not f_has and not m_has:
+                cand["total"] += 1
+                if not _inside(di, ds, pos0):
+                    cand["outside_assembly"] += 1
+                    continue
+                k = assembly_class(key, cc, window)
+                k = hap_to_parent.get(k, k)
+                cand[k] = cand.get(k, 0) + 1
+                t = "snv" if len(key[1]) == 1 and len(key[2]) == 1 else "indel"
+                cand_by_type[t][k] = cand_by_type[t].get(k, 0) + 1
+                if bench and _inside(bi, bs, pos0):
+                    cand_in_bench[k] = cand_in_bench.get(k, 0) + 1
+                for name, ob in others.items():
+                    oi, os_ = ob.get(chrom, ([], []))
+                    if _inside(oi, os_, pos0):
+                        cand_in_other[name][k] = cand_in_other[name].get(k, 0) + 1
+                if zyg == "hom":
+                    cand_child_hom[k] = cand_child_hom.get(k, 0) + 1
+            elif f_has != m_has and zyg == "het":
+                ctrl["total"] += 1
+                if not _inside(di, ds, pos0):
+                    ctrl["outside_assembly"] += 1
+                    continue
+                k = assembly_class(key, cc, window)
+                ctrl_class[k] = ctrl_class.get(k, 0) + 1
+                if k in hap_to_parent:
+                    expected = "father" if f_has else "mother"
+                    ctrl["right_parent" if hap_to_parent[k] == expected else "wrong_parent"] += 1
+        done.append(chrom)
+    placed = ctrl["right_parent"] + ctrl["wrong_parent"]
+    inside = ctrl["total"] - ctrl["outside_assembly"]
+    one_parent = cand.get("father", 0) + cand.get("mother", 0)
+    return {
+        "child": child,
+        "father": father,
+        "mother": mother,
+        "chromosomes": done,
+        "window": window,
+        "candidates": cand,
+        "candidates_by_type": cand_by_type,
+        "candidates_in_benchmark_regions": cand_in_bench if bench else None,
+        "candidates_homozygous_in_child": cand_child_hom,
+        "candidates_in_other_regions": cand_in_other,
+        "control": ctrl,
+        "control_classes": ctrl_class,
+        "control_found_on_one_haplotype": round(placed / inside, 5) if inside else None,
+        "control_parent_agreement": round(ctrl["right_parent"] / placed, 5) if placed else None,
+        "candidates_paternal_share": round(cand.get("father", 0) / one_parent, 4) if one_parent else None,
+        "date": time.strftime("%Y-%m-%d"),
+    }
+
+
+def read_allele_depths(
+    path: Path | str, chroms: set[str], base_at_for=None, field: str = "ADALL"
+) -> dict[str, dict[tuple[int, str, str], tuple[int, int]]]:
+    """Per-allele read depths from one sample's VCF FORMAT field (`ADALL` or `AD`, Number=R, as in
+    GIAB's v4.2.1 benchmark): {chrom: {(pos, ref, alt): (ref_depth, alt_depth)}}, alleles normalised
+    the way `_genotypes` normalises them so the keys match the trio's. A site without the field is
+    left out."""
+    out: dict[str, dict[tuple[int, str, str], tuple[int, int]]] = {}
+    readers: dict[str, Any] = {}
+    with open_variants(path) as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t")
+            chrom = f[0]
+            if chrom not in chroms or len(f) < 10:
+                continue
+            names, values = f[8].split(":"), f[9].split(":")
+            if field not in names:
+                continue
+            i = names.index(field)
+            if i >= len(values):
+                continue
+            try:
+                depths = [int(x) for x in values[i].split(",")]
+            except ValueError:
+                continue
+            if chrom not in readers:
+                readers[chrom] = base_at_for(chrom) if base_at_for else None
+            base_at = readers[chrom]
+            d = out.setdefault(chrom, {})
+            for j, alt in enumerate(f[4].split(","), 1):
+                if j >= len(depths):
+                    break
+                key = (int(f[1]), f[3], alt)
+                if base_at is not None and (len(f[3]) > 1 or len(alt) > 1):
+                    key = normalise_variant(*key, base_at=base_at)
+                d[key] = (depths[0], depths[j])
+    return out
+
+
+def binomial_tail(k: int, n: int, p: float = 0.5, lower: bool = True) -> float:
+    """P(X <= k) (lower) or P(X >= k) (upper) for X ~ Binomial(n, p), summed in log space."""
+    import math
+
+    if n <= 0:
+        return 1.0
+    rng = range(0, k + 1) if lower else range(k, n + 1)
+    lp, lq = math.log(p), math.log1p(-p)
+    terms = [
+        math.lgamma(n + 1) - math.lgamma(i + 1) - math.lgamma(n - i + 1) + i * lp + (n - i) * lq for i in rng
+    ]
+    if not terms:
+        return 0.0
+    m = max(terms)
+    return min(1.0, math.exp(m) * sum(math.exp(t - m) for t in terms))
+
+
+def vaf_class(
+    ref_depth: int,
+    alt_depth: int,
+    min_depth: int = 30,
+    alpha: float = 0.001,
+    low_vaf: float = 0.40,
+    high_vaf: float = 0.60,
+) -> str:
+    """One heterozygous call's read support: 'shallow' (fewer than `min_depth` reads carry either
+    allele), 'low' (the alternate fraction is below `low_vaf` and a one-sided binomial test against
+    0.5 gives p < `alpha`: fewer reads than a heterozygous allele carried by every cell), 'high' (the
+    mirror above `high_vaf`), or 'half' (compatible with half the reads)."""
+    n = ref_depth + alt_depth
+    if n < min_depth:
+        return "shallow"
+    v = alt_depth / n
+    if v < low_vaf and binomial_tail(alt_depth, n, 0.5, lower=True) < alpha:
+        return "low"
+    if v > high_vaf and binomial_tail(alt_depth, n, 0.5, lower=False) < alpha:
+        return "high"
+    return "half"
+
+
+def trio_allele_fractions(
+    child: str,
+    father: str,
+    mother: str,
+    depth_vcf: Path | str,
+    assembly_vcf: Path | str,
+    assembly_bed: Path | str,
+    hap1_parent: str = "father",
+    other_beds: dict[str, Path | str] | None = None,
+    field: str = "ADALL",
+    min_depth: int = 30,
+    alpha: float = 0.001,
+    low_vaf: float = 0.40,
+    high_vaf: float = 0.60,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    reference: Path = Path("data/reference"),
+    window: int = 10,
+) -> dict[str, Any]:
+    """Read allele fractions for the trio's de novo candidates (rebuilt exactly as `trio` and
+    `phase_trio_by_assembly` define them) against a control of the child's heterozygous calls that
+    exactly one parent carries. Each call is classed by `vaf_class`; candidates are also split by where
+    the phased assembly puts them. Counts, medians and 0.05-wide histograms only: no position, allele
+    or genotype leaves this function."""
+    import statistics
+
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    for n in (child, father, mother):
+        if n not in people:
+            raise FileNotFoundError(f"{n} is not a local individual")
+    chroms = chroms or [c for c in people[child]["chromosomes"] if c not in ("chrX", "chrY", "chrM")]
+    hap_to_parent = {"hap1": hap1_parent, "hap2": "mother" if hap1_parent == "father" else "father"}
+
+    def bed(path) -> dict[str, tuple[list[tuple[int, int]], list[int]]]:
+        iv: dict[str, list[tuple[int, int]]] = {}
+        if path is None:
+            return {}
+        with open_variants(path) as fh:
+            for line in fh:
+                f = line.split("\t")
+                if len(f) >= 3 and not line.startswith(("#", "track")):
+                    iv.setdefault(f[0], []).append((int(f[1]), int(f[2])))
+        return {c: (sorted(v), [a for a, _ in sorted(v)]) for c, v in iv.items()}
+
+    def base_at_for(chrom):
+        return _reference_base_reader(chrom, reference)[0]
+
+    dip = bed(assembly_bed)
+    others = {name: bed(p) for name, p in (other_beds or {}).items()}
+    calls = read_assembly_calls(assembly_vcf, set(chroms), base_at_for)
+    depths = read_allele_depths(depth_vcf, set(chroms), base_at_for, field)
+    groups: dict[str, dict[str, Any]] = {}
+
+    def add(group: str, rd: tuple[int, int] | None) -> None:
+        g = groups.setdefault(
+            group, {"total": 0, "no_depth": 0, "shallow": 0, "low": 0, "half": 0, "high": 0, "_v": []}
+        )
+        g["total"] += 1
+        if rd is None:
+            g["no_depth"] += 1
+            return
+        c = vaf_class(rd[0], rd[1], min_depth, alpha, low_vaf, high_vaf)
+        g[c] += 1
+        if c != "shallow":
+            g["_v"].append((rd[1] / (rd[0] + rd[1]), rd[0] + rd[1]))
+
+    cand_total = 0
+    done = []
+    for chrom in chroms:
+        pc, pf, pm = (vcf_path(n, chrom, root) for n in (child, father, mother))
+        if not (pc and pf and pm):
+            continue
+        base_at, genome = _reference_base_reader(chrom, reference)
+        try:
+            gc, gf, gm = _genotypes(pc, base_at), _genotypes(pf, base_at), _genotypes(pm, base_at)
+        finally:
+            if genome is not None:
+                genome.close()
+        rf, rm, rc = (load_regions(n, chrom, root) for n in (father, mother, child))
+        sf, sm, sc = [x for x, _ in rf], [x for x, _ in rm], [x for x, _ in rc]
+        have_regions = bool(rf and rm)
+        di, ds = dip.get(chrom, ([], []))
+        cc = calls.get(chrom)
+        dd = depths.get(chrom, {})
+        for key, zyg in gc.items():
+            pos0 = key[0] - 1
+            trusted = (not have_regions) or (
+                _inside(rf, sf, pos0) and _inside(rm, sm, pos0) and (not rc or _inside(rc, sc, pos0))
+            )
+            if not trusted:
+                continue
+            t = "snv" if len(key[1]) == 1 and len(key[2]) == 1 else "indel"
+            f_has, m_has = key in gf, key in gm
+            rd = dd.get(key)
+            if not f_has and not m_has:
+                cand_total += 1
+                if not _inside(di, ds, pos0):
+                    k = "outside_assembly"
+                else:
+                    k = assembly_class(key, cc, window)
+                    k = hap_to_parent.get(k, k)
+                add("candidates", rd)
+                add(f"candidates_{t}", rd)
+                add(f"candidates_{k}", rd)
+                if k in ("father", "mother"):
+                    add("candidates_one_parent", rd)
+                    add(f"candidates_one_parent_{t}", rd)
+                    for name, ob in others.items():
+                        oi, os_ = ob.get(chrom, ([], []))
+                        add(f"candidates_one_parent_{'in' if _inside(oi, os_, pos0) else 'out'}_{name}", rd)
+                if zyg == "hom":
+                    add("candidates_hom_in_child", rd)
+            elif f_has != m_has and zyg == "het":
+                add("control", rd)
+                add(f"control_{t}", rd)
+        done.append(chrom)
+    edges = [round(0.05 * i, 2) for i in range(21)]
+    for g in groups.values():
+        vs = g.pop("_v")
+        assessed = g["low"] + g["half"] + g["high"]
+        g["assessed"] = assessed
+        g["low_share"] = round(g["low"] / assessed, 4) if assessed else None
+        g["median_vaf"] = round(statistics.median(v for v, _ in vs), 3) if vs else None
+        g["median_depth"] = int(statistics.median(n for _, n in vs)) if vs else None
+        hist = [0] * 20
+        for v, _ in vs:
+            hist[min(19, int(v / 0.05))] += 1
+        g["vaf_histogram"] = hist
+    return {
+        "child": child,
+        "father": father,
+        "mother": mother,
+        "chromosomes": done,
+        "field": field,
+        "rule": {"min_depth": min_depth, "alpha": alpha, "low_vaf": low_vaf, "high_vaf": high_vaf},
+        "histogram_edges": edges,
+        "candidates_total": cand_total,
+        "groups": groups,
+        "date": time.strftime("%Y-%m-%d"),
+    }

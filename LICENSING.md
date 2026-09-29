@@ -14,6 +14,7 @@ built on it.
 | **Documentation** — `docs/`, `README.md`, and the other Markdown files | | **Creative Commons Attribution 4.0** | quote it, teach from it, translate it; credit the project. |
 | **Distilled results** — `data/results/` | | derived from their upstream sources, whose terms apply | each summary names its source; see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md). |
 | **BioLang programs** — `data/demo/`, `data/organisms/` | | Apache License 2.0, as part of the engine's standard material | programs are meant to be copied and adapted. |
+| **Engine tests** — the test files `scripts/package_engine.py` selects because they import only the engine (29 today, each headed `SPDX-License-Identifier: Apache-2.0`) | | **Apache License 2.0**, taking precedence over the `tests/` entry above; decided by the copyright holder on 2026-09-28 | they ship inside the Apache-2.0 `biolang` package as its own test suite, so they carry its licence. |
 
 **The dependency direction is the rule that keeps the split honest.** The
 application may import the engine; the engine may never import the

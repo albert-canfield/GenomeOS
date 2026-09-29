@@ -2,7 +2,7 @@
 # Part of the GenomeOS application; see LICENSING.md.
 """Retrospective benchmark: does the therapeutic pipeline recover known targets?
 
-Nine tumours whose target and whose approved therapy are public knowledge are
+Ten tumours whose target and whose approved therapy are public knowledge are
 run through `genomeos therapeutic`, and the result is compared with what is
 actually approved for that alteration. The point is falsifiability: until a
 pipeline is asked to reproduce something already known, its rankings are
@@ -45,6 +45,16 @@ flatter the pipeline:
      saying why would be worse. They are scored as `out_of_scope_expected`,
      and the benchmark fails if the pipeline claims a surface route for them.
 
+The tenth case is the first one chosen for a rule rather than for a route. The
+mechanism gate and the magnitude tiebreak were registered on 2026-09-27 and
+neither changed anything in the nine: no candidate a modality cannot reach ever
+outranked a target, and no VCF here reported an allele fraction. A rule with a
+metric and no case is not yet evidence, so the tenth tumour is the one where the
+gate could matter - an approved antibody target and, in the same evidence tier, a
+gene nothing can be aimed at - and it carries the benchmark's first allele
+fraction. It was pre-registered, with its predictions and falsifiers, before it
+was run.
+
 Run: `uv run python scripts/therapeutic_benchmark.py`
 Writes: data/results/therapeutic_benchmark.json
 """
@@ -53,10 +63,14 @@ from __future__ import annotations
 
 import sys
 import time
+from itertools import groupby
 from pathlib import Path
 
+from genomeos import manifest as mf
 from genomeos.results import save_result
 from genomeos.therapeutics import analyse_vcf
+from genomeos.therapeutics import scoring as ranking_rules
+from genomeos.therapeutics.scoring import UNMEASURED_TIER
 
 DEMO = Path("data/demo")
 BENCH = DEMO / "benchmark"
@@ -224,7 +238,182 @@ CASES: tuple[dict, ...] = (
             "only the recovery"
         ),
     },
+    {
+        # The tenth case, pre-registered 2026-09-28 before it was run: the one
+        # chosen to make the mechanism gate matter. The gate was registered on
+        # 2026-09-27 and closed nothing in the nine, because every candidate
+        # that could have outranked a target was already below it on the
+        # evidence tier — so the rule had a metric and no case. A case that can
+        # test it needs an approved target and, in the same tumour and the same
+        # tier, a strongly altered gene no modelled modality reaches.
+        #
+        # It was chosen from the cohort and not invented. In TCGA stomach
+        # adenocarcinoma (PanCancer Atlas, stad_tcga_pan_can_atlas_2018, 440
+        # samples) ERBB2 is amplified in 58 tumours (13.2%) and MYC in 53
+        # (12.0%), and 20 tumours carry both: 4.5% of the cohort and 34% of
+        # every ERBB2-amplified tumour. Among those 20 the median copy number
+        # from the log2 segment calls is 13.0 for ERBB2 and 8.1 for MYC, and
+        # TP53 sits at 1.8. TP53 is mutated in 213 of the 440 (48%), and its
+        # most frequent protein change is R175H (12 tumours, median variant
+        # allele fraction 0.49). Those are the numbers in the two demo files,
+        # each of them a cohort summary and none of them one patient's record.
+        #
+        # GRB7, MIEN1 and STARD3 are in the table because the 17q12 amplicon
+        # carries them: in the same cohort every one of the 58 ERBB2-amplified
+        # tumours has GRB7 and MIEN1 amplified too, and 54 have STARD3. They
+        # take the same copy number as ERBB2 for a reason worth recording — a
+        # copy call is a segment call, so genes on one amplicon are measured at
+        # one number and the magnitude tiebreak can never separate them.
+        #
+        # This case is also the first in the benchmark whose VCF reports an
+        # allele fraction, which is what the magnitude tiebreak has never had.
+        "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC",
+        "vcf": "erbb2_myc_gastroesophageal.vcf",
+        "cnv": "erbb2_myc_gastroesophageal.cnv",
+        "call": "copy number",
+        "gene": "ERBB2",
+        "approved": (
+            "trastuzumab (antibody), FDA label for HER2-overexpressing metastatic gastric and "
+            "gastroesophageal junction adenocarcinoma, approved 2010 on ToGA; fam-trastuzumab "
+            "deruxtecan-nxki (antibody-drug conjugate), FDA approval for HER2-positive advanced "
+            "gastric and GEJ adenocarcinoma after a prior trastuzumab regimen, January 2021 "
+            "on DESTINY-Gastric01"
+        ),
+        "modality": "antibody",
+        "expect": "surface",
+        "why": (
+            "the tumour carries an approved antibody target and, in the same tumour and the same "
+            "evidence tier, an amplified MYC: a transcription factor with no outward-facing part "
+            "and no modelled modality, and the gene oncology has spent forty years failing to "
+            "drug. If a pipeline ranks the undruggable amplification above the one the label is "
+            "written on, the list cannot be acted on, and the gate is the rule that has to stop it"
+        ),
+    },
 )
+
+
+#: Pre-registered 2026-09-28, before the tenth case was run, alongside the dated
+#: section of docs/THERAPEUTICS.md and the pins in tests/test_therapeutic_benchmark.py.
+#:
+#: What is predicted. (1) ERBB2 is recovered as a surface target and ranks first,
+#: and `outranked_by_unreachable` is empty, so the pin of 0 holds. (2) MYC, the
+#: amplicon passengers and the mutated TP53 all sit in the top evidence tier with
+#: ERBB2 — every one of them is altered in this tumour — so the tier cannot
+#: separate them and the gate is the only rule that can. (3) The gate is *tested*
+#: only if at least one of those unreachable candidates scores strictly above
+#: ERBB2; `rank_without_gate`, computed for every row after this registration was
+#: committed, is what says so, and if it reads 1 for this case then the gate again
+#: closed nothing and the case has produced a negative rather than a pass.
+#: (4) This row publishes a variant allele fraction, the first in the benchmark,
+#: at the 0.49 the VCF reports and not a value imputed for it.
+#: (5) The magnitude tiebreak fires only where two candidates are equal on tier,
+#: gate and published score and differ on a quantity both carry. It is not
+#: predicted to fire: the amplicon genes are measured at one segment number and so
+#: carry the same count, and an exact tie in the score between the remaining pairs
+#: is not something the choice of case can arrange. `magnitude_tiebreaks` records
+#: every score-tied group and what, if anything, magnitude decided inside it.
+#:
+#: The falsifiers. (a) ERBB2 not first in this case. (b) Any of the nine earlier
+#: rows changing in any field but `seconds`. (c) The row's magnitude publishing a
+#: vaf other than the 0.49 the VCF reports, or publishing none.
+GATE_CASE_REGISTERED = "2026-09-28"
+
+
+def rank_without_gate(candidates: list, gene: str) -> int | None:
+    """Where the target would rank if the mechanism gate were not read.
+
+    The pipeline's key is tier, then gate, then score, then gene. This is the
+    same key with the gate removed, which is exactly the order the pipeline
+    produced before 2026-09-27, so the difference between it and `rank` is what
+    the gate did in this tumour and nothing else.
+    """
+    order = [
+        c.gene
+        for c in sorted(
+            candidates,
+            key=lambda c: (c.evidence_tier == UNMEASURED_TIER, -(c.scores.overall or 0.0), c.gene),
+        )
+    ]
+    return order.index(gene) + 1 if gene in order else None
+
+
+def magnitude_tiebreaks(candidates: list) -> list[dict]:
+    """Every group the score could not separate, and what magnitude did inside it.
+
+    The tiebreak can only act where tier, gate and published score are all equal,
+    so the groups are the whole of its opportunity: a run with no group of two is
+    a run in which the rule could not have fired, and saying which is the
+    difference between a rule that was measured and a rule that was quiet.
+    """
+    out: list[dict] = []
+    key = lambda c: (  # noqa: E731
+        c.evidence_tier == UNMEASURED_TIER,
+        c.mechanism_reach,
+        -(c.scores.overall or 0.0),
+    )
+    for _, group in groupby(candidates, key=key):
+        block = list(group)
+        if len(block) < 2:
+            continue
+        genes = [c.gene for c in block]
+        decided = []
+        for a, b in zip(block, block[1:], strict=False):
+            if not ranking_rules.magnitude_prefers(a.alteration_magnitude, b.alteration_magnitude):
+                continue
+            quantity = next(
+                (
+                    q
+                    for q in ranking_rules.MAGNITUDE_QUANTITIES
+                    if a.alteration_magnitude.get(q) is not None
+                    and b.alteration_magnitude.get(q) is not None
+                    and a.alteration_magnitude.get(q) != b.alteration_magnitude.get(q)
+                ),
+                None,
+            )
+            decided.append({"above": a.gene, "below": b.gene, "quantity": quantity})
+        out.append(
+            {
+                "tied_on_score": genes,
+                "score": None if block[0].scores.overall is None else round(block[0].scores.overall, 3),
+                "gate": block[0].mechanism_reach,
+                "decided_by_magnitude": decided,
+                # The fallback inside a tied group is the gene name, so the order
+                # differing from the alphabetical one is the tiebreak having moved
+                # something rather than having agreed with the fallback.
+                "changed_the_order": genes != sorted(genes),
+            }
+        )
+    return out
+
+
+def quantities_in_this_tumour(candidates: list) -> list[dict]:
+    """Every candidate that carries a measured amount, and what it is.
+
+    Added 2026-09-28 as the amendment to prediction 4, which was falsified by the
+    run and is kept in the record rather than rewritten. The prediction said the
+    tenth case's row would publish an allele fraction of 0.49. It does not, and
+    the reason is a mistake in the registration and not in the pipeline: a row
+    publishes the *target's* magnitude, the target there is reached by its
+    amplification, and the fraction the VCF reports belongs to the mutated TP53,
+    which is a different candidate. A quantity that reaches the ranking is visible
+    only if the ranking's own inputs are published, so they are.
+    """
+    out = []
+    for c in candidates:
+        m = c.alteration_magnitude or {}
+        if not m.get("quantities"):
+            continue
+        out.append(
+            {
+                "gene": c.gene,
+                "copies": m.get("copies"),
+                "vaf": m.get("vaf"),
+                "hotspot": m.get("hotspot"),
+                "gate": c.mechanism_reach,
+                "score": None if c.scores.overall is None else round(c.scores.overall, 3),
+            }
+        )
+    return out
 
 
 def run_case(case: dict, net: bool, log) -> dict:
@@ -249,14 +438,25 @@ def run_case(case: dict, net: bool, log) -> dict:
     ranked = [c.gene for c in a["candidates"]]
     hit = next((c for c in a["candidates"] if c.gene == gene), None)
     # A fourth question, and the copy-number case is what made it askable: how
-    # many candidates outrank the target while carrying no alteration in this
-    # tumour at all? A pathway-induced hypothesis has no origin — it is named
-    # for being a neighbour of something that is altered. Recovering the target
-    # and burying it under hypotheses are not the same result, and the first
-    # three questions cannot tell them apart, so the count is recorded rather
-    # than scored: it is a measurement of the ranking, not a verdict on it.
+    # many candidates outrank the target while nothing about them was measured
+    # in this patient at all? Recovering the target and burying it under
+    # hypotheses are not the same result, and the first three questions cannot
+    # tell them apart.
+    #
+    # It was first written as "candidates with no origins record", and that
+    # proxy was wrong in the direction that mattered: CD19 has no origins
+    # either, because it is reached from the patient's RNA rather than from a
+    # DNA event, so the proxy counted the one case that proves the expression
+    # route works as a case of burial. The count now reads the evidence tier,
+    # which is the thing the proxy stood for: a candidate is a hypothesis when
+    # nothing about that gene was measured in this patient.
     above = a["candidates"][: ranked.index(gene)] if hit is not None else []
-    hypotheses_above = [c.gene for c in above if not c.origins]
+    hypotheses_above = [c.gene for c in above if c.evidence_tier == UNMEASURED_TIER]
+    # A fifth question, from the mechanism gate registered 2026-09-27: how many
+    # candidates rank above the target while no modelled modality reaches them with
+    # its hard requirements answered? A gene nothing can be aimed at, ranked above a
+    # gene with an approved antibody, is a ranking that cannot be acted on.
+    unreachable_above = [c.gene for c in above if c.mechanism_reach == ranking_rules.REACH_NONE]
     out = {
         "case": case["case"],
         "gene": gene,
@@ -269,6 +469,14 @@ def run_case(case: dict, net: bool, log) -> dict:
         "recovered": hit is not None,
         "rank": (ranked.index(gene) + 1) if hit is not None else None,
         "outranked_by_hypotheses": hypotheses_above,
+        "outranked_by_unreachable": unreachable_above,
+        # Registered 2026-09-28 and computed only after the registration was
+        # committed: where the target would have ranked with the mechanism gate
+        # removed from the key. Equal to `rank` means the gate changed nothing
+        # in this tumour.
+        "rank_without_gate": rank_without_gate(a["candidates"], gene),
+        "magnitude_tiebreaks": magnitude_tiebreaks(a["candidates"]),
+        "quantities_in_this_tumour": quantities_in_this_tumour(a["candidates"]),
         "seconds": round(time.time() - t0, 1),
     }
     if hit is not None:
@@ -282,6 +490,12 @@ def run_case(case: dict, net: bool, log) -> dict:
             {
                 "target_class": hit.target_class,
                 "score": None if hit.scores.overall is None else round(hit.scores.overall, 3),
+                "evidence_tier": hit.evidence_tier,
+                "mechanism_reach": hit.mechanism_reach,
+                "mechanism_reach_reason": hit.mechanism_reach_reason,
+                "alteration_magnitude": hit.alteration_magnitude,
+                "alteration_magnitude_reason": hit.alteration_magnitude_reason,
+                "alteration_evidence": hit.scores.value("alteration_evidence"),
                 "surface_accessibility": hit.scores.value("surface_accessibility"),
                 "best_mechanism": best.mechanism if best else None,
                 "best_compatibility": round(best.compatibility, 3) if best else None,
@@ -333,6 +547,78 @@ def run_case(case: dict, net: bool, log) -> dict:
     return out
 
 
+KNOWLEDGE_READ = (
+    Path("data/knowledge/therapeutics"),
+    Path("data/knowledge/proteins"),
+    Path("data/knowledge/expression"),
+    Path("data/knowledge/pathways"),
+    Path("data/knowledge/go-basic.obo"),
+    Path("data/knowledge/goa_human.gaf.gz"),
+    Path("data/knowledge/Ensembl2Reactome.txt"),
+    Path("data/cache/gencode_genes.tsv"),
+)
+
+
+def manifest(net: bool) -> dict:
+    """The provenance contract (review item R9) for the 9/9 benchmark. The providers answer from the
+    local knowledge stores first and, with the network on, fetch what a store lacks from live
+    services that publish no version a request can pin; the stores' sha256 after the run is the pin."""
+    inputs = []
+    for case in CASES:
+        folder = DEMO / case.get("dir", "benchmark")
+        for key in ("vcf", "cnv", "sv", "rna"):
+            if case.get(key):
+                inputs.append(mf.input_entry(folder / case[key], partition=None, case=case["case"]))
+    for name in ("cancer_msk_impact_2017", "cancer_alterations_msk_impact_2017"):
+        p = Path("data/results") / f"{name}.json"
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    inputs += [mf.input_entry(p, partition=None) for p in KNOWLEDGE_READ if p.exists()]
+    return {
+        "sources": [
+            {
+                "accession": "the tenth benchmark tumour (data/demo/benchmark/erbb2_myc_"
+                "gastroesophageal.vcf and .cnv): hand-written, its copy numbers and its allele "
+                "fraction the medians of a cBioPortal cohort and no patient's own record",
+                "version": "this repository at the recorded commit",
+            },
+            {
+                "accession": "cBioPortal stad_tcga_pan_can_atlas_2018 (TCGA PanCancer Atlas, stomach "
+                "adenocarcinoma): the frequencies and medians the tenth case is built from",
+                "version": "public REST API as read 2026-09-28; cohort summaries only, no "
+                "sample-level record",
+            },
+            {
+                "accession": "cBioPortal msk_impact_2017 (Zehir et al. 2017)",
+                "version": "public REST API as read 2026-09-10; pinned by the result files' sha256",
+            },
+            {
+                "accession": "GenomeOS federated protein compiler: UniProt, Ensembl, InterPro, PDB, "
+                "AlphaFold, Reactome, STRING, HPA",
+                "version": "live services, unversioned per request; the local store's sha256 is the pin",
+            },
+            {"accession": "Human Protein Atlas normal expression", "version": "live service, CC BY-SA 4.0"},
+            {"accession": "Open Targets Platform", "version": "live GraphQL service, CC0 1.0"},
+            {"accession": "Ensembl REST (paralogues, transcript sequence)", "version": "live service"},
+            {
+                "accession": "the nine benchmark tumours (data/demo): hand-written VCF, CNV, SV and "
+                "RNA files",
+                "version": "this repository at the recorded commit",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 1, "interval": "closed"},
+        "parameters": {"network": net, "top_genes": 8, "indirect": True, "cases": len(CASES)},
+        "exclusions": [
+            "small-molecule routes are not modelled: those cases pass by not claiming a surface route",
+        ],
+        "partitions": "n/a: a retrospective benchmark of nine known targets; nothing is fitted to them",
+        "partitions_note": "the tenth case, registered 2026-09-28, is on the same terms: it was "
+        "chosen from a public cohort, registered with its predictions, and nothing is fitted to it",
+    }
+
+
 def main() -> int:
     net = "--offline" not in sys.argv
     log = sys.stdout
@@ -345,6 +631,14 @@ def main() -> int:
     by_call: dict[str, int] = {}
     for r in rows:
         by_call[r["driver_call"]] = by_call.get(r["driver_call"], 0) + 1
+    gate_moved = [r["gene"] for r in rows if r.get("rank_without_gate") not in (None, r["rank"])]
+    tie_groups = sum(len(r.get("magnitude_tiebreaks") or []) for r in rows)
+    with_vaf = [
+        r["gene"] for r in rows if any(q["vaf"] is not None for q in r.get("quantities_in_this_tumour") or [])
+    ]
+    tie_fired = [
+        r["gene"] for r in rows if any(g["changed_the_order"] for g in r.get("magnitude_tiebreaks") or [])
+    ]
     result = {
         "result": "therapeutic_benchmark",
         "cases": len(rows),
@@ -376,15 +670,125 @@ def main() -> int:
             "approved drugs are small molecules. It passes by refusing a surface route rather than "
             "by leaving the question open. "
             "outranked_by_hypotheses is recorded per row and is the question the copy-number case "
-            "made askable: candidates ranked above the target that carry no alteration in this "
-            "tumour. ERBB2 at twelve copies, whose amplification is trastuzumab's companion "
-            "diagnostic, sits behind three of them. The pipeline recovers it and does not "
-            "prefer it, and the three scored questions cannot tell those apart, so the count is "
-            "reported beside them rather than folded into a verdict."
+            "made askable: candidates ranked above the target with nothing measured about them in "
+            "this patient. Until 2026-09-27 the pipeline could recover a target without preferring "
+            "it, and the three scored questions could not tell those apart: ERBB2 at twelve copies, "
+            "whose amplification is trastuzumab's companion diagnostic, scored 0.494 and ranked "
+            "fourth behind KDR, EGFR and PDGFRB, none of them altered in that tumour, because "
+            "surface_accessibility reads curated localisation and no dimension read the alteration. "
+            "A dimension now does: alteration_evidence, on three tiers - an alteration observed in "
+            "this tumour (1.0), this patient's own measurement of the gene (0.6), a database "
+            "association with a gene that was altered (0.2) - and the ranking puts the third tier "
+            "below the other two before it looks at a score. evidence_tier and alteration_evidence "
+            "are reported per row. The tier is read from the evidence about the gene and never from "
+            "the route that proposed it, which is what keeps CD19, reached from the patient's RNA "
+            "with no alteration of any kind, from being demoted by a rule aimed at hypotheses; for "
+            "the same reason the count above no longer means 'candidates with no origins record', a "
+            "proxy under which CD19's own route read as burial. Scores before and after this change "
+            "are not comparable, because every candidate gained a dimension; the ordering is what "
+            "the change was about."
         ),
+        # The two rules of 2026-09-27 are documented in their own key rather than inside
+        # the note above, which belongs to the run that measured the evidence tier.
+        "ordering_rules": (
+            "Two rules on the order, registered before the code on 2026-09-27 and neither a term in "
+            "the weighted mean. mechanism_reach partitions candidates by whether any modelled "
+            "modality reaches them with its hard requirements answered; it is read after the "
+            "evidence tier and never before it, and provisional-only sits with nothing-at-all "
+            "because a mechanism whose requirement is unanswered has not been shown to apply. "
+            "outranked_by_unreachable counts candidates ranked above the target that no modality "
+            "reaches. alteration_magnitude publishes how much this patient's own data say the gene "
+            "was altered - copy count against the diploid 2, variant allele fraction, hotspot "
+            "status - with an absent quantity stated as absent and never imputed, and it breaks "
+            "ties only between candidates already equal on tier, gate and published score, "
+            "comparing like with like because a count and an annotation share no unit."
+        ),
+        # Hand-added to the committed file on 2026-09-28 (2805552); kept here so the script writes it
+        # and a rebuild from the manifest reproduces the file (review item R9).
+        "ordering_rules_measured": (
+            "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a "
+            "re-run on 2026-09-28, hours after the rules were registered. Every other field of every "
+            "row came out identical to the 2026-09-27 run - rank, score, target class, evidence tier, "
+            "mechanism, compatibility, accessibility, peptide route, verdict - which is the check that "
+            "the two rules changed an order and nothing else. Until the same day this key was added to "
+            "the file by hand beside the 2026-09-27 run's date and timings; since the result manifest "
+            "(R9) the whole file is this script's output, rebuilt in a clean checkout, and every field "
+            "but the date and the per-case timings came out as committed."
+        ),
+        "gate_and_tiebreak_case": (
+            "The tenth case, pre-registered 2026-09-28 before it was run, and the first chosen for a "
+            "rule rather than for a route: a HER2-positive gastroesophageal adenocarcinoma with a "
+            "co-amplified MYC. The mechanism gate and the magnitude tiebreak were registered on "
+            "2026-09-27 and neither did anything in the nine cases - no candidate outside every "
+            "modelled modality ever outranked a target, and no demo VCF reported an allele fraction, "
+            "so the tiebreak had no quantity to compare. This tumour was chosen from TCGA stomach "
+            "adenocarcinoma (PanCancer Atlas, 440 samples), where ERBB2 is amplified in 58 tumours, "
+            "MYC in 53, and 20 carry both: 34% of every ERBB2-amplified tumour in the cohort. The "
+            "copy numbers are that subgroup's medians (ERBB2 13, MYC 8, TP53 2), the 17q12 passengers "
+            "GRB7, MIEN1 and STARD3 take ERBB2's number because a copy call is a segment call, and "
+            "the TP53 R175H hotspot carries the cohort's median allele fraction for that change, "
+            "0.49. Registered predictions: ERBB2 first with outranked_by_unreachable empty; the gate "
+            "tested only if an unreachable candidate scores above ERBB2, which rank_without_gate says "
+            "per row; a published allele fraction of 0.49 and not an imputed one; and the tiebreak "
+            "not predicted to fire, since one amplicon is measured at one number and an exact tie in "
+            "the score cannot be arranged by the choice of case. rank_without_gate and "
+            "magnitude_tiebreaks are computed for every row, the nine included, and were written only "
+            "after the registration was committed."
+        ),
+        "gate_and_tiebreak_case_measured": (
+            "Negatives first. The gate closed nothing again: rank_without_gate equals rank in all ten "
+            "cases, so removing the gate from the ranking key would change no target's place, and "
+            "gate_moved_the_target is empty. The case was chosen to make the gate matter and it "
+            "measured why it does not, which is the useful part. MYC, amplified at 8 copies in the top "
+            "evidence tier, scores 0.246 - the lowest of the six altered candidates, against the "
+            "target's 0.494 - so it never threatened the target's place and the gate had nothing to "
+            "demote. The reason is structural rather than particular to MYC: the annotations that make "
+            "a gene unreachable, no outward-facing part and no epitope, are the same annotations that "
+            "make it score low, so an undruggable nuclear amplification cannot produce the "
+            "configuration the gate was written for. The configuration needs a candidate curated as a "
+            "surface receptor whose mechanisms are nonetheless all refused or unanswered - the "
+            "EML4-ALK shape, where ALK scores 0.559 against ERBB2's 0.494 - and that means two "
+            "independent drivers in one tumour. In MSK-IMPACT 2017, of the 42 tumours whose structural "
+            "variants make a surface receptor the 3' partner (6 ALK, 12 ROS1, 16 RET, 8 NTRK1), one "
+            "also carries an amplified ERBB2, one an amplified EGFR and one an amplified MET: the "
+            "defect the gate prevents is rare in real tumours because strong drivers are largely "
+            "mutually exclusive, and a benchmark case built on a single sample would be that sample's "
+            "record rather than a cohort summary. The second negative: the magnitude tiebreak had no "
+            "opportunity in the new case at all - no two candidates there are equal on tier, gate and "
+            "published score - and the four score-tied groups in the other cases are all pairs with no "
+            "quantity between them. magnitude_tiebreak_changed_order is empty. Third, a registered "
+            "prediction was falsified, and by the registration rather than by the pipeline: the tenth "
+            "row was predicted to publish a variant allele fraction of 0.49 and publishes none, "
+            "because a row publishes the target's own magnitude and the target is reached by its "
+            "amplification, while the fraction the VCF reports belongs to the mutated TP53 in the same "
+            "tumour. The prediction is kept as it was written and the amendment is additive: "
+            "quantities_in_this_tumour publishes every candidate that carries a measured amount, so "
+            "the 0.49 that reaches the ranking is visible where it actually sits. What did pass: "
+            "ERBB2 is recovered as a surface target at rank 1 with an established blocking antibody, "
+            "outranked_by_unreachable is empty and the pin of 0 holds across ten cases, and the nine "
+            "earlier rows came out identical field by field apart from their per-case timings."
+        ),
+        "gate_moved_the_target": gate_moved,
+        "magnitude_tiebreak_groups": tie_groups,
+        "magnitude_tiebreak_changed_order": tie_fired,
+        "cases_where_a_candidate_carries_an_allele_fraction": with_vaf,
         "rows": rows,
     }
-    save_result("therapeutic_benchmark", result)
+    # The committed file keeps 2805552's wording of this note: the R9 rebuild of 2026-09-28 added a
+    # manifest to the committed result rather than rewrite its lines, so its date and per-case timings
+    # are still the 2026-09-27 run's, which is what this wording says. The script writes the same
+    # wording, so a rebuild from the manifest reproduces the file; the draft wording above is superseded.
+    result["ordering_rules_measured"] = (
+        "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a "
+        "re-run on 2026-09-28, hours after the rules were registered. Every other field of every "
+        "row came out identical to the 2026-09-27 run recorded here - rank, score, target class, "
+        "evidence tier, mechanism, compatibility, accessibility, peptide route, verdict - which "
+        "is the check that the two rules changed an order and nothing else. That run's date and "
+        "per-case wall-clock timings are left as they are rather than overwritten, so that adding "
+        "these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds "
+        "per case."
+    )
+    save_result("therapeutic_benchmark", result, manifest=manifest(net))
     print(
         f"\n{recovered}/{len(rows)} targets recovered; {passed}/{len(rows)} verdicts correct; "
         f"{result['surface_cases_recovered']}/{len(surface_cases)} approved antibody targets "

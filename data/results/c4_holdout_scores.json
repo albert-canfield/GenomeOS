@@ -1,0 +1,5912 @@
+{
+  "result": "c4_holdout_scores",
+  "date": "2026-09-28",
+  "question": "held out one source at a time, how well do the remaining sources, distance to TSS and the unchanged labels predict its own endpoint",
+  "status": "internal development benchmark",
+  "reuse": "every source is evidence this project has already read, several repeatedly; the ENCODE CRISPRi held-out file is read by at least ten scored results (lane-split, 2026-09-28) and is a reused benchmark. No score from this harness is a fresh or external validation",
+  "may_be_called": "an internal development benchmark reading: on evidence this project has already read, labelling L predicts held-out source S's own endpoint with metric M [95% locus-bootstrap interval] at coverage C, beside distance to TSS and the unchanged labels",
+  "may_not_be_called": [
+    "an external, independent or fresh validation",
+    "evidence of biological accuracy beyond the sources held here",
+    "a test of regulation when the endpoint is reporter activity, in-vivo activity, base sensitivity or association (activity is not regulation; association is not perturbation)",
+    "a comparison between sources or endpoints (different units, prevalences and assays)",
+    "out of sample for anything tuned on the CRISPRi benchmark, whose held-out file is a reused benchmark",
+    "a verdict on what the evidence can predict when `rest` scores low: `rest` is an unfitted rule, so a low score says that rule transfers poorly"
+  ],
+  "registration": {
+    "registered": "2026-09-28",
+    "status": "internal development benchmark",
+    "reuse": "every source is evidence this project has already read, several repeatedly; the ENCODE CRISPRi held-out file is read by at least ten scored results (lane-split, 2026-09-28) and is a reused benchmark. No score from this harness is a fresh or external validation",
+    "may_be_called": "an internal development benchmark reading: on evidence this project has already read, labelling L predicts held-out source S's own endpoint with metric M [95% locus-bootstrap interval] at coverage C, beside distance to TSS and the unchanged labels",
+    "may_not_be_called": [
+      "an external, independent or fresh validation",
+      "evidence of biological accuracy beyond the sources held here",
+      "a test of regulation when the endpoint is reporter activity, in-vivo activity, base sensitivity or association (activity is not regulation; association is not perturbation)",
+      "a comparison between sources or endpoints (different units, prevalences and assays)",
+      "out of sample for anything tuned on the CRISPRi benchmark, whose held-out file is a reused benchmark",
+      "a verdict on what the evidence can predict when `rest` scores low: `rest` is an unfitted rule, so a low score says that rule transfers poorly"
+    ],
+    "families": {
+      "crispri": "endogenous_regulation",
+      "lentimpra": "reporter_activity",
+      "vista": "in_vivo_activity",
+      "satmut": "base_sensitivity",
+      "gtex": "natural_variation_association"
+    },
+    "endpoints": {
+      "crispri": [
+        "decrease",
+        "increase"
+      ],
+      "lentimpra": [
+        "activity",
+        "active"
+      ],
+      "vista": [
+        "positive"
+      ],
+      "satmut": [
+        "functional"
+      ],
+      "gtex": [
+        "associated"
+      ]
+    },
+    "endpoint_text": {
+      "decrease": "CRISPRi significant decrease of the measured gene (1) against a well-powered null (0); significant increases, underpowered nulls and missing effects excluded and counted (R2)",
+      "increase": "CRISPRi significant increase of the measured gene (1) against a well-powered null (0); significant decreases, underpowered nulls and missing effects excluded and counted (R2). An increase is an effect, not evidence of a silencer",
+      "activity": "one lentiMPRA tile's log2(RNA/DNA) in that cell, per tile, never aggregated (R6)",
+      "active": "one lentiMPRA tile at or above 1.0 log2(RNA/DNA) in that cell (1) or below (0)",
+      "positive": "VISTA transgenic mouse e11.5: positive in any tissue (1) or negative (0)",
+      "functional": "saturation mutagenesis: a measured base of a locus's primary experiment where some substitution is significant (1) or none is (0); repeats listed by measured.py, never pooled",
+      "associated": "GTEx v8: a significant cis-eQTL variant inside the element for this protein-coding gene in any of 49 tissues (1), or a protein-coding gene with a TSS within CIS_WINDOW and no such variant (0: not significant and not tested are not told apart, weaker than a well-powered null)"
+    },
+    "primary_metric": {
+      "decrease": "average_precision",
+      "increase": "average_precision",
+      "activity": "spearman",
+      "active": "average_precision",
+      "positive": "average_precision",
+      "functional": "average_precision",
+      "associated": "average_precision"
+    },
+    "secondary_metric": "auroc",
+    "metric_text": {
+      "average_precision": "average precision (area under the precision-recall step curve over distinct score thresholds, ties grouped), with the prevalence beside it",
+      "spearman": "Spearman rank correlation (average ranks); under resampling the full-sample ranks are kept and weighted, not recomputed",
+      "auroc": "area under the ROC curve (Mann-Whitney, ties counted one half)"
+    },
+    "split_rule": "holding out S removes S and every provenance sibling of S (CRISPRi studies sharing a value of the benchmark's Reference column; the three lentiMPRA cells, one library ENCSR106SZM); masks every record of S's endpoint family whose interval shares at least one base with an S unit (the related intervals of measured.split_overlap); and never admits a pair from the CRISPRi benchmark's held-out file as evidence (R5)",
+    "locus_rule": "a locus is a connected component of a source's units, joined when their interval midpoints fall in the same 1,000,000 bp bin of a chromosome or, for pair endpoints, when they name the same gene; each resample draws as many loci as the source has, with replacement",
+    "resamples": 1000,
+    "seed": 20260928,
+    "level": 0.95,
+    "floors": {
+      "positives": 20,
+      "negatives": 20,
+      "units": 20,
+      "loci": 10
+    },
+    "abstention": "None ranks below every stated score (tied among themselves); coverage reported beside",
+    "labellings": {
+      "rest": "unfitted: score = 10 x G + E + closeness, where G counts the sources in the view that support this gene at this interval (a CRISPRi training pair sharing a base, same gene, significant in the endpoint's direction; a GTEx association of an element sharing a base, same gene), E counts the sources that say the interval does something (lentiMPRA active by R6's rule in some cell over the tiles sharing a base; a VISTA positive sharing a base; a functional saturation-mutagenesis base inside; for non-regulation endpoints also a significant CRISPRi training pair on any gene and a GTEx association on any gene), and closeness = 1 / (1 + distance / 100 kb) with the distance of DISTANCE_RULE. G is at most 2 and E at most 5, so the order is G, then E, then distance",
+      "distance": "minus the distance from the unit's midpoint to the TSS of the unit's gene (CRISPRi: the benchmark's own TSS columns; GTEx: GENCODE v50), or for element and base units to the nearest GENCODE v50 protein-coding TSS",
+      "unchanged": "the compiled programs' predicted layer as it stands (data/knowledge/compiled/noncoding_*.bio, every `rule` with `evidence: predicted`), matched to a unit by at least one shared base. Pair endpoints: the largest strength among matched links naming the unit's gene in the endpoint's direction (decrease: activates; increase: inhibits; associated: either), 0 when the matched links name another gene or direction. Element and base endpoints: the largest strength of any matched link. None when no predicted element shares a base. The measured twins are never read"
+    },
+    "cis_window": 1000000
+  },
+  "comparisons_registered": [
+    "rest - distance",
+    "rest - unchanged",
+    "unchanged - distance"
+  ],
+  "sources": {
+    "crispri:Gasperini2019": {
+      "family": "endogenous_regulation",
+      "units": 5299,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 125,
+        "crispri:Schraivogel2020": 76
+      },
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 4,
+          "overlapping_same_gene": 9,
+          "near_identical_other_gene": 106,
+          "overlapping_other_gene": 238,
+          "independent": 4942
+        },
+        "related": 357
+      }
+    },
+    "crispri:HCT116": {
+      "family": "endogenous_regulation",
+      "units": 396,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 19,
+        "crispri:Gasperini2019": 2,
+        "crispri:Schraivogel2020": 23
+      },
+      "heldout_file_pairs_never_evidence": 3982,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 25,
+          "near_identical_other_gene": 0,
+          "overlapping_other_gene": 19,
+          "independent": 352
+        },
+        "related": 44
+      }
+    },
+    "crispri:K562_DC_TAP": {
+      "family": "endogenous_regulation",
+      "units": 1252,
+      "siblings_removed": [
+        "crispri:WTC11_DC_TAP"
+      ],
+      "masked_in_view": {
+        "crispri:Nasser2021": 28,
+        "crispri:Gasperini2019": 57
+      },
+      "heldout_file_pairs_never_evidence": 1205,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 3,
+          "overlapping_same_gene": 0,
+          "near_identical_other_gene": 49,
+          "overlapping_other_gene": 52,
+          "independent": 1148
+        },
+        "related": 104
+      }
+    },
+    "crispri:Klann": {
+      "family": "endogenous_regulation",
+      "units": 33,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 6,
+        "crispri:Gasperini2019": 13
+      },
+      "heldout_file_pairs_never_evidence": 4345,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 0,
+          "near_identical_other_gene": 1,
+          "overlapping_other_gene": 5,
+          "independent": 27
+        },
+        "related": 6
+      }
+    },
+    "crispri:Morris": {
+      "family": "endogenous_regulation",
+      "units": 184,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 13,
+        "crispri:Gasperini2019": 25
+      },
+      "heldout_file_pairs_never_evidence": 4194,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 0,
+          "near_identical_other_gene": 8,
+          "overlapping_other_gene": 22,
+          "independent": 154
+        },
+        "related": 30
+      }
+    },
+    "crispri:Nasser2021": {
+      "family": "endogenous_regulation",
+      "units": 3894,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Gasperini2019": 95,
+        "crispri:Schraivogel2020": 64
+      },
+      "heldout_file_pairs_never_evidence": 4235,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 20,
+          "near_identical_other_gene": 64,
+          "overlapping_other_gene": 163,
+          "independent": 3647
+        },
+        "related": 247
+      }
+    },
+    "crispri:Reilly": {
+      "family": "endogenous_regulation",
+      "units": 8,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 3
+      },
+      "heldout_file_pairs_never_evidence": 4370,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 0,
+          "near_identical_other_gene": 0,
+          "overlapping_other_gene": 2,
+          "independent": 6
+        },
+        "related": 2
+      }
+    },
+    "crispri:Schraivogel2020": {
+      "family": "endogenous_regulation",
+      "units": 1306,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 35,
+        "crispri:Gasperini2019": 66
+      },
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 0,
+          "near_identical_other_gene": 12,
+          "overlapping_other_gene": 151,
+          "independent": 1143
+        },
+        "related": 163
+      }
+    },
+    "crispri:WTC11_DC_TAP": {
+      "family": "endogenous_regulation",
+      "units": 1921,
+      "siblings_removed": [
+        "crispri:K562_DC_TAP"
+      ],
+      "masked_in_view": {
+        "crispri:Nasser2021": 21,
+        "crispri:Gasperini2019": 29
+      },
+      "heldout_file_pairs_never_evidence": 1205,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 7,
+          "overlapping_same_gene": 14,
+          "near_identical_other_gene": 19,
+          "overlapping_other_gene": 26,
+          "independent": 1855
+        },
+        "related": 66
+      }
+    },
+    "crispri:Xie": {
+      "family": "endogenous_regulation",
+      "units": 441,
+      "siblings_removed": [],
+      "masked_in_view": {
+        "crispri:Nasser2021": 14,
+        "crispri:Gasperini2019": 75
+      },
+      "heldout_file_pairs_never_evidence": 3937,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap",
+        "counts": {
+          "identical_pair": 0,
+          "near_identical_same_gene": 0,
+          "overlapping_same_gene": 6,
+          "near_identical_other_gene": 32,
+          "overlapping_other_gene": 52,
+          "independent": 351
+        },
+        "related": 90
+      }
+    },
+    "lentimpra:HepG2": {
+      "family": "reporter_activity",
+      "units": 53990,
+      "siblings_removed": [
+        "lentimpra:K562",
+        "lentimpra:WTC11"
+      ],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 53989,
+          "near_identical": 1,
+          "overlapping": 0,
+          "independent": 0
+        },
+        "related": 53990
+      }
+    },
+    "lentimpra:K562": {
+      "family": "reporter_activity",
+      "units": 53989,
+      "siblings_removed": [
+        "lentimpra:HepG2",
+        "lentimpra:WTC11"
+      ],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 53989,
+          "near_identical": 0,
+          "overlapping": 0,
+          "independent": 0
+        },
+        "related": 53989
+      }
+    },
+    "lentimpra:WTC11": {
+      "family": "reporter_activity",
+      "units": 53988,
+      "siblings_removed": [
+        "lentimpra:HepG2",
+        "lentimpra:K562"
+      ],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 53988,
+          "near_identical": 0,
+          "overlapping": 0,
+          "independent": 0
+        },
+        "related": 53988
+      }
+    },
+    "vista": {
+      "family": "in_vivo_activity",
+      "units": 2442,
+      "siblings_removed": [],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 0,
+          "near_identical": 0,
+          "overlapping": 0,
+          "independent": 2442
+        },
+        "related": 0
+      }
+    },
+    "satmut": {
+      "family": "base_sensitivity",
+      "units": 9834,
+      "siblings_removed": [],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 0,
+          "near_identical": 0,
+          "overlapping": 0,
+          "independent": 9834
+        },
+        "related": 0
+      }
+    },
+    "gtex": {
+      "family": "natural_variation_association",
+      "units": 145349,
+      "siblings_removed": [],
+      "masked_in_view": {},
+      "heldout_file_pairs_never_evidence": 4378,
+      "sources_in_view": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "relation_to_its_family": {
+        "reused": "measured.split_overlap's order, without the gene categories",
+        "counts": {
+          "identical": 0,
+          "near_identical": 0,
+          "overlapping": 0,
+          "independent": 145349
+        },
+        "related": 0
+      }
+    }
+  },
+  "gtex_excluded": {
+    "associations": 30210,
+    "gene_not_in_gencode_v50": 711,
+    "gene_not_protein_coding": 8333
+  },
+  "scores": [
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 5253,
+      "loci": 530,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_increase": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 360,
+      "negatives": 4893,
+      "prevalence": 0.0685,
+      "labels": "rest",
+      "reads": [
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 5253,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.2154,
+      "interval": [
+        0.1784,
+        0.2663
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.8388,
+        "interval": [
+          0.8169,
+          0.8603
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 5253,
+      "loci": 530,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_increase": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 360,
+      "negatives": 4893,
+      "prevalence": 0.0685,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 5253,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.493,
+      "interval": [
+        0.4388,
+        0.5595
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.9036,
+        "interval": [
+          0.8839,
+          0.9261
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 5253,
+      "loci": 530,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_increase": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 360,
+      "negatives": 4893,
+      "prevalence": 0.0685,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 2904,
+        "abstained": 2349,
+        "share": 0.5528
+      },
+      "status": "scored",
+      "value": 0.425,
+      "interval": [
+        0.3674,
+        0.4854
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.7279,
+        "interval": [
+          0.6925,
+          0.7618
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 4935,
+      "loci": 480,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_decrease": 360
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 4893,
+      "prevalence": 0.0085,
+      "labels": "rest",
+      "reads": [
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 4935,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0111,
+      "interval": [
+        0.0073,
+        0.022
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5369,
+        "interval": [
+          0.4433,
+          0.6341
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 4935,
+      "loci": 480,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_decrease": 360
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 4893,
+      "prevalence": 0.0085,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 4935,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0105,
+      "interval": [
+        0.0069,
+        0.0167
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5177,
+        "interval": [
+          0.424,
+          0.6184
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 4935,
+      "loci": 480,
+      "excluded": {
+        "not_significant_underpowered": 4,
+        "significant_decrease": 360
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 4893,
+      "prevalence": 0.0085,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 2651,
+        "abstained": 2284,
+        "share": 0.5372
+      },
+      "status": "scored",
+      "value": 0.0322,
+      "interval": [
+        0.0057,
+        0.0759
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5113,
+        "interval": [
+          0.4178,
+          0.6083
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 34,
+      "loci": 5,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 34,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 34,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 34,
+      "loci": 5,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 34,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 34,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 34,
+      "loci": 5,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 34,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 22,
+        "abstained": 12,
+        "share": 0.6471
+      },
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 6,
+      "loci": 3,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_decrease": 34
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 6,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 6,
+      "loci": 3,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_decrease": 34
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 6,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 6,
+      "loci": 3,
+      "excluded": {
+        "not_significant_underpowered": 356,
+        "significant_decrease": 34
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 4,
+        "abstained": 2,
+        "share": 0.6667
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1233,
+      "loci": 25,
+      "excluded": {
+        "significant_increase": 19
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 1221,
+      "prevalence": 0.0097,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1233,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1233,
+      "loci": 25,
+      "excluded": {
+        "significant_increase": 19
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 1221,
+      "prevalence": 0.0097,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1233,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1233,
+      "loci": 25,
+      "excluded": {
+        "significant_increase": 19
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 1221,
+      "prevalence": 0.0097,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 748,
+        "abstained": 485,
+        "share": 0.6067
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1240,
+      "loci": 24,
+      "excluded": {
+        "significant_decrease": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 19,
+      "negatives": 1221,
+      "prevalence": 0.0153,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1240,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1240,
+      "loci": 24,
+      "excluded": {
+        "significant_decrease": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 19,
+      "negatives": 1221,
+      "prevalence": 0.0153,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1240,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1240,
+      "loci": 24,
+      "excluded": {
+        "significant_decrease": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 19,
+      "negatives": 1221,
+      "prevalence": 0.0153,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 750,
+        "abstained": 490,
+        "share": 0.6048
+      },
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 21,
+      "loci": 17,
+      "excluded": {
+        "significant_increase": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 21,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 21,
+      "loci": 17,
+      "excluded": {
+        "significant_increase": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 21,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 21,
+      "loci": 17,
+      "excluded": {
+        "significant_increase": 12
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 15,
+        "abstained": 6,
+        "share": 0.7143
+      },
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 12,
+      "loci": 12,
+      "excluded": {
+        "significant_decrease": 21
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 12,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 12,
+      "loci": 12,
+      "excluded": {
+        "significant_decrease": 21
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 12,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 12,
+      "loci": 12,
+      "excluded": {
+        "significant_decrease": 21
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 12,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 8,
+        "abstained": 4,
+        "share": 0.6667
+      },
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 167,
+      "loci": 62,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_increase": 16
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 35,
+      "negatives": 132,
+      "prevalence": 0.2096,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 167,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.4473,
+      "interval": [
+        0.3061,
+        0.6688
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.7916,
+        "interval": [
+          0.6943,
+          0.8932
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 167,
+      "loci": 62,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_increase": 16
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 35,
+      "negatives": 132,
+      "prevalence": 0.2096,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 167,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.7524,
+      "interval": [
+        0.5844,
+        0.8827
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.8861,
+        "interval": [
+          0.79,
+          0.9544
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 167,
+      "loci": 62,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_increase": 16
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 35,
+      "negatives": 132,
+      "prevalence": 0.2096,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 129,
+        "abstained": 38,
+        "share": 0.7725
+      },
+      "status": "scored",
+      "value": 0.3861,
+      "interval": [
+        0.2545,
+        0.5211
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5705,
+        "interval": [
+          0.4578,
+          0.6757
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 148,
+      "loci": 55,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_decrease": 35
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 16,
+      "negatives": 132,
+      "prevalence": 0.1081,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 148,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 148,
+      "loci": 55,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_decrease": 35
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 16,
+      "negatives": 132,
+      "prevalence": 0.1081,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 148,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 148,
+      "loci": 55,
+      "excluded": {
+        "not_significant_underpowered": 1,
+        "significant_decrease": 35
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 16,
+      "negatives": 132,
+      "prevalence": 0.1081,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 117,
+        "abstained": 31,
+        "share": 0.7905
+      },
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 111,
+      "loci": 28,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_increase": 36
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 111,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 111,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 111,
+      "loci": 28,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_increase": 36
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 111,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 111,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 111,
+      "loci": 28,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_increase": 36
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 111,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 85,
+        "abstained": 26,
+        "share": 0.7658
+      },
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 36,
+      "loci": 8,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_decrease": 111
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 36,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 36,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 36,
+      "loci": 8,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_decrease": 111
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 36,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 36,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 36,
+      "loci": 8,
+      "excluded": {
+        "not_significant_underpowered": 3747,
+        "significant_decrease": 111
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 36,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21,
+        "abstained": 15,
+        "share": 0.5833
+      },
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 8,
+      "loci": 5,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 8,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 8,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 8,
+      "loci": 5,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 8,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 8,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 8,
+      "loci": 5,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 8,
+      "negatives": 0,
+      "prevalence": 1.0,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 6,
+        "abstained": 2,
+        "share": 0.75
+      },
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 0,
+      "loci": 0,
+      "excluded": {
+        "significant_decrease": 8
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 0,
+      "negatives": 0,
+      "prevalence": null,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 0,
+        "abstained": 0,
+        "share": null
+      },
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 0,
+      "loci": 0,
+      "excluded": {
+        "significant_decrease": 8
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 0,
+      "negatives": 0,
+      "prevalence": null,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 0,
+        "abstained": 0,
+        "share": null
+      },
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 0,
+      "loci": 0,
+      "excluded": {
+        "significant_decrease": 8
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 0,
+      "negatives": 0,
+      "prevalence": null,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 0,
+        "abstained": 0,
+        "share": null
+      },
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1299,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_increase": 2
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 23,
+      "negatives": 1276,
+      "prevalence": 0.0177,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1299,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0815,
+      "interval": [
+        0.0289,
+        0.1356
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.8711,
+        "interval": [
+          0.7347,
+          0.9254
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1299,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_increase": 2
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 23,
+      "negatives": 1276,
+      "prevalence": 0.0177,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1299,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.3903,
+      "interval": [
+        0.2025,
+        0.672
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.9148,
+        "interval": [
+          0.7702,
+          0.9704
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1299,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_increase": 2
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 23,
+      "negatives": 1276,
+      "prevalence": 0.0177,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 588,
+        "abstained": 711,
+        "share": 0.4527
+      },
+      "status": "scored",
+      "value": 0.1616,
+      "interval": [
+        0.0176,
+        0.3161
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.6621,
+        "interval": [
+          0.4412,
+          0.8009
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1278,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_decrease": 23
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2,
+      "negatives": 1276,
+      "prevalence": 0.0016,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1278,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1278,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_decrease": 23
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2,
+      "negatives": 1276,
+      "prevalence": 0.0016,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1278,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1278,
+      "loci": 12,
+      "excluded": {
+        "not_significant_underpowered": 5,
+        "significant_decrease": 23
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2,
+      "negatives": 1276,
+      "prevalence": 0.0016,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 574,
+        "abstained": 704,
+        "share": 0.4491
+      },
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1901,
+      "loci": 22,
+      "excluded": {
+        "significant_increase": 20
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 15,
+      "negatives": 1886,
+      "prevalence": 0.0079,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1901,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1901,
+      "loci": 22,
+      "excluded": {
+        "significant_increase": 20
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 15,
+      "negatives": 1886,
+      "prevalence": 0.0079,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1901,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 1901,
+      "loci": 22,
+      "excluded": {
+        "significant_increase": 20
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 15,
+      "negatives": 1886,
+      "prevalence": 0.0079,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 1242,
+        "abstained": 659,
+        "share": 0.6533
+      },
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1906,
+      "loci": 22,
+      "excluded": {
+        "significant_decrease": 15
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 20,
+      "negatives": 1886,
+      "prevalence": 0.0105,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1906,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0184,
+      "interval": [
+        0.0086,
+        0.049
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.635,
+        "interval": [
+          0.5487,
+          0.7189
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1906,
+      "loci": 22,
+      "excluded": {
+        "significant_decrease": 15
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 20,
+      "negatives": 1886,
+      "prevalence": 0.0105,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 1906,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0233,
+      "interval": [
+        0.0105,
+        0.0493
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.6761,
+        "interval": [
+          0.5867,
+          0.759
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 1906,
+      "loci": 22,
+      "excluded": {
+        "significant_decrease": 15
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 20,
+      "negatives": 1886,
+      "prevalence": 0.0105,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 1241,
+        "abstained": 665,
+        "share": 0.6511
+      },
+      "status": "scored",
+      "value": 0.01,
+      "interval": [
+        0.0048,
+        0.0174
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.474,
+        "interval": [
+          0.3851,
+          0.5976
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 435,
+      "loci": 40,
+      "excluded": {
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 393,
+      "prevalence": 0.0966,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 435,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.2447,
+      "interval": [
+        0.1527,
+        0.384
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.7566,
+        "interval": [
+          0.6641,
+          0.8305
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 435,
+      "loci": 40,
+      "excluded": {
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 393,
+      "prevalence": 0.0966,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 435,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.5885,
+      "interval": [
+        0.4073,
+        0.7465
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.8401,
+        "interval": [
+          0.7522,
+          0.9056
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "metric": "average_precision",
+      "units": 435,
+      "loci": 40,
+      "excluded": {
+        "significant_increase": 6
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 42,
+      "negatives": 393,
+      "prevalence": 0.0966,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 312,
+        "abstained": 123,
+        "share": 0.7172
+      },
+      "status": "scored",
+      "value": 0.444,
+      "interval": [
+        0.2974,
+        0.5865
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.7356,
+        "interval": [
+          0.6445,
+          0.8153
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 399,
+      "loci": 35,
+      "excluded": {
+        "significant_decrease": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 393,
+      "prevalence": 0.015,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 399,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 399,
+      "loci": 35,
+      "excluded": {
+        "significant_decrease": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 393,
+      "prevalence": 0.015,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 399,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "metric": "average_precision",
+      "units": 399,
+      "loci": 35,
+      "excluded": {
+        "significant_decrease": 42
+      },
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 6,
+      "negatives": 393,
+      "prevalence": 0.015,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 278,
+        "abstained": 121,
+        "share": 0.6967
+      },
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 3634,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53990,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0385,
+      "interval": [
+        0.0287,
+        0.0479
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5034,
+        "interval": [
+          0.4928,
+          0.5131
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 3634,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53986,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.0403,
+      "interval": [
+        0.0306,
+        0.0495
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5046,
+        "interval": [
+          0.4942,
+          0.5145
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 3634,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21672,
+        "abstained": 32318,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.126,
+      "interval": [
+        0.1172,
+        0.1348
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5606,
+        "interval": [
+          0.5505,
+          0.5706
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 3634,
+      "negatives": 50356,
+      "prevalence": 0.0673,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53990,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0682,
+      "interval": [
+        0.065,
+        0.0716
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5034,
+        "interval": [
+          0.4928,
+          0.5131
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 3634,
+      "negatives": 50356,
+      "prevalence": 0.0673,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53986,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.0707,
+      "interval": [
+        0.0671,
+        0.075
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5046,
+        "interval": [
+          0.4942,
+          0.5145
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53990,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 3634,
+      "negatives": 50356,
+      "prevalence": 0.0673,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21672,
+        "abstained": 32318,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.0892,
+      "interval": [
+        0.0841,
+        0.0943
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5606,
+        "interval": [
+          0.5505,
+          0.5706
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4296,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53989,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0605,
+      "interval": [
+        0.0513,
+        0.0696
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5414,
+        "interval": [
+          0.5309,
+          0.5516
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4296,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53985,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.0609,
+      "interval": [
+        0.0516,
+        0.0704
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5404,
+        "interval": [
+          0.5302,
+          0.5505
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4296,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21671,
+        "abstained": 32318,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.0676,
+      "interval": [
+        0.0578,
+        0.0772
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5356,
+        "interval": [
+          0.5271,
+          0.5454
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4296,
+      "negatives": 49693,
+      "prevalence": 0.0796,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53989,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0928,
+      "interval": [
+        0.0884,
+        0.0978
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5414,
+        "interval": [
+          0.5309,
+          0.5516
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4296,
+      "negatives": 49693,
+      "prevalence": 0.0796,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53985,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.0964,
+      "interval": [
+        0.091,
+        0.1031
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5404,
+        "interval": [
+          0.5302,
+          0.5505
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53989,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4296,
+      "negatives": 49693,
+      "prevalence": 0.0796,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21671,
+        "abstained": 32318,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.0964,
+      "interval": [
+        0.0917,
+        0.1019
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5356,
+        "interval": [
+          0.5271,
+          0.5454
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4574,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53988,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0362,
+      "interval": [
+        0.0255,
+        0.0466
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5216,
+        "interval": [
+          0.511,
+          0.5329
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4574,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53984,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.038,
+      "interval": [
+        0.0273,
+        0.0485
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5223,
+        "interval": [
+          0.5114,
+          0.5338
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "metric": "spearman",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "active_units": 4574,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21671,
+        "abstained": 32317,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.072,
+      "interval": [
+        0.0625,
+        0.0824
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc_of_active",
+        "value": 0.5276,
+        "interval": [
+          0.518,
+          0.5372
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4574,
+      "negatives": 49414,
+      "prevalence": 0.0847,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53988,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.0934,
+      "interval": [
+        0.0886,
+        0.099
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5216,
+        "interval": [
+          0.511,
+          0.5329
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4574,
+      "negatives": 49414,
+      "prevalence": 0.0847,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 53984,
+        "abstained": 4,
+        "share": 0.9999
+      },
+      "status": "scored",
+      "value": 0.1001,
+      "interval": [
+        0.0943,
+        0.107
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5223,
+        "interval": [
+          0.5114,
+          0.5338
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "metric": "average_precision",
+      "units": 53988,
+      "loci": 2864,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 4574,
+      "negatives": 49414,
+      "prevalence": 0.0847,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 21671,
+        "abstained": 32317,
+        "share": 0.4014
+      },
+      "status": "scored",
+      "value": 0.0982,
+      "interval": [
+        0.0932,
+        0.1034
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5276,
+        "interval": [
+          0.518,
+          0.5372
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "vista",
+      "endpoint": "positive",
+      "metric": "average_precision",
+      "units": 2442,
+      "loci": 948,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 1267,
+      "negatives": 1175,
+      "prevalence": 0.5188,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 2442,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.5499,
+      "interval": [
+        0.5183,
+        0.5866
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5298,
+        "interval": [
+          0.5052,
+          0.5554
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "vista",
+      "endpoint": "positive",
+      "metric": "average_precision",
+      "units": 2442,
+      "loci": 948,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 1267,
+      "negatives": 1175,
+      "prevalence": 0.5188,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 2442,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.5432,
+      "interval": [
+        0.5137,
+        0.5753
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5293,
+        "interval": [
+          0.5039,
+          0.5545
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "vista",
+      "endpoint": "positive",
+      "metric": "average_precision",
+      "units": 2442,
+      "loci": 948,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 1267,
+      "negatives": 1175,
+      "prevalence": 0.5188,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 1020,
+        "abstained": 1422,
+        "share": 0.4177
+      },
+      "status": "scored",
+      "value": 0.5737,
+      "interval": [
+        0.5452,
+        0.6045
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5711,
+        "interval": [
+          0.5509,
+          0.5915
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "satmut",
+      "endpoint": "functional",
+      "metric": "average_precision",
+      "units": 9834,
+      "loci": 19,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2694,
+      "negatives": 7140,
+      "prevalence": 0.2739,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "gtex",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 9834,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.37,
+      "interval": [
+        0.2063,
+        0.5305
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.572,
+        "interval": [
+          0.3962,
+          0.7199
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "satmut",
+      "endpoint": "functional",
+      "metric": "average_precision",
+      "units": 9834,
+      "loci": 19,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2694,
+      "negatives": 7140,
+      "prevalence": 0.2739,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 9834,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.3801,
+      "interval": [
+        0.2765,
+        0.4965
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.6459,
+        "interval": [
+          0.5241,
+          0.7376
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "satmut",
+      "endpoint": "functional",
+      "metric": "average_precision",
+      "units": 9834,
+      "loci": 19,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 2694,
+      "negatives": 7140,
+      "prevalence": 0.2739,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 3082,
+        "abstained": 6752,
+        "share": 0.3134
+      },
+      "status": "scored",
+      "value": 0.2743,
+      "interval": [
+        0.1817,
+        0.4482
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5066,
+        "interval": [
+          0.4053,
+          0.6054
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "gtex",
+      "endpoint": "associated",
+      "metric": "average_precision",
+      "units": 145349,
+      "loci": 421,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21166,
+      "negatives": 124183,
+      "prevalence": 0.1456,
+      "labels": "rest",
+      "reads": [
+        "crispri:Gasperini2019",
+        "crispri:Nasser2021",
+        "crispri:Schraivogel2020",
+        "gencode_v50",
+        "lentimpra:HepG2",
+        "lentimpra:K562",
+        "lentimpra:WTC11",
+        "satmut",
+        "vista"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 145349,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.2806,
+      "interval": [
+        0.2633,
+        0.2972
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.7458,
+        "interval": [
+          0.7302,
+          0.7607
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "gtex",
+      "endpoint": "associated",
+      "metric": "average_precision",
+      "units": 145349,
+      "loci": 421,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21166,
+      "negatives": 124183,
+      "prevalence": 0.1456,
+      "labels": "distance",
+      "reads": [
+        "gencode_v50"
+      ],
+      "model_dependent": false,
+      "coverage": {
+        "stated": 145349,
+        "abstained": 0,
+        "share": 1.0
+      },
+      "status": "scored",
+      "value": 0.4357,
+      "interval": [
+        0.4165,
+        0.4564
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.791,
+        "interval": [
+          0.7787,
+          0.8033
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    },
+    {
+      "source": "gtex",
+      "endpoint": "associated",
+      "metric": "average_precision",
+      "units": 145349,
+      "loci": 421,
+      "excluded": {},
+      "chromosomes": "all",
+      "benchmark_status": "internal development benchmark",
+      "positives": 21166,
+      "negatives": 124183,
+      "prevalence": 0.1456,
+      "labels": "unchanged",
+      "reads": [
+        "alphagenome",
+        "encode_ccre_registry"
+      ],
+      "model_dependent": true,
+      "coverage": {
+        "stated": 85394,
+        "abstained": 59955,
+        "share": 0.5875
+      },
+      "status": "scored",
+      "value": 0.2041,
+      "interval": [
+        0.1885,
+        0.2204
+      ],
+      "level": 0.95,
+      "secondary": {
+        "metric": "auroc",
+        "value": 0.5235,
+        "interval": [
+          0.5142,
+          0.5337
+        ]
+      },
+      "bootstrap": {
+        "unit": "locus",
+        "resamples": 1000,
+        "seed": 20260928,
+        "failed_resamples": 0
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.2776,
+      "interval": [
+        -0.3312,
+        -0.221
+      ],
+      "level": 0.95,
+      "a_value": 0.2154,
+      "b_value": 0.493
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.2096,
+      "interval": [
+        -0.2672,
+        -0.1467
+      ],
+      "level": 0.95,
+      "a_value": 0.2154,
+      "b_value": 0.425
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.068,
+      "interval": [
+        -0.1402,
+        0.0026
+      ],
+      "level": 0.95,
+      "a_value": 0.425,
+      "b_value": 0.493
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0006,
+      "interval": [
+        -0.004,
+        0.0095
+      ],
+      "level": 0.95,
+      "a_value": 0.0111,
+      "b_value": 0.0105
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0211,
+      "interval": [
+        -0.0639,
+        0.0114
+      ],
+      "level": 0.95,
+      "a_value": 0.0111,
+      "b_value": 0.0322
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Gasperini2019",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0217,
+      "interval": [
+        -0.0067,
+        0.0638
+      ],
+      "level": 0.95,
+      "a_value": 0.0322,
+      "b_value": 0.0105
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:HCT116",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "34 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:HCT116",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "12 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:K562_DC_TAP",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "19 positives and 1221 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Klann",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "21 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Klann",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "12 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.3051,
+      "interval": [
+        -0.4292,
+        -0.0908
+      ],
+      "level": 0.95,
+      "a_value": 0.4473,
+      "b_value": 0.7524
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0612,
+      "interval": [
+        -0.0896,
+        0.2688
+      ],
+      "level": 0.95,
+      "a_value": 0.4473,
+      "b_value": 0.3861
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Morris",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.3663,
+      "interval": [
+        -0.5217,
+        -0.1869
+      ],
+      "level": 0.95,
+      "a_value": 0.3861,
+      "b_value": 0.7524
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Morris",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "16 positives and 132 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Nasser2021",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "111 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Nasser2021",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "36 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Reilly",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "8 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Reilly",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "0 positives and 0 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.3088,
+      "interval": [
+        -0.6084,
+        -0.1398
+      ],
+      "level": 0.95,
+      "a_value": 0.0815,
+      "b_value": 0.3903
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0801,
+      "interval": [
+        -0.2705,
+        0.0542
+      ],
+      "level": 0.95,
+      "a_value": 0.0815,
+      "b_value": 0.1616
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.2287,
+      "interval": [
+        -0.5842,
+        0.0721
+      ],
+      "level": 0.95,
+      "a_value": 0.1616,
+      "b_value": 0.3903
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Schraivogel2020",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "2 positives and 1276 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "decrease",
+      "status": "described_not_scored",
+      "why": "15 positives and 1886 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0049,
+      "interval": [
+        -0.0181,
+        0.0265
+      ],
+      "level": 0.95,
+      "a_value": 0.0184,
+      "b_value": 0.0233
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0084,
+      "interval": [
+        0.0018,
+        0.0386
+      ],
+      "level": 0.95,
+      "a_value": 0.0184,
+      "b_value": 0.01
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:WTC11_DC_TAP",
+      "endpoint": "increase",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0133,
+      "interval": [
+        -0.0331,
+        -0.0037
+      ],
+      "level": 0.95,
+      "a_value": 0.01,
+      "b_value": 0.0233
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.3438,
+      "interval": [
+        -0.44,
+        -0.21
+      ],
+      "level": 0.95,
+      "a_value": 0.2447,
+      "b_value": 0.5885
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.1993,
+      "interval": [
+        -0.3532,
+        -0.01
+      ],
+      "level": 0.95,
+      "a_value": 0.2447,
+      "b_value": 0.444
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Xie",
+      "endpoint": "decrease",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.1445,
+      "interval": [
+        -0.3325,
+        0.0706
+      ],
+      "level": 0.95,
+      "a_value": 0.444,
+      "b_value": 0.5885
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "crispri:Xie",
+      "endpoint": "increase",
+      "status": "described_not_scored",
+      "why": "6 positives and 393 negatives; the floor is 20 of each"
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0018,
+      "interval": [
+        -0.0035,
+        -0.0001
+      ],
+      "level": 0.95,
+      "a_value": 0.0385,
+      "b_value": 0.0403
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0875,
+      "interval": [
+        -0.0985,
+        -0.0777
+      ],
+      "level": 0.95,
+      "a_value": 0.0385,
+      "b_value": 0.126
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:HepG2",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": 0.0857,
+      "interval": [
+        0.0762,
+        0.097
+      ],
+      "level": 0.95,
+      "a_value": 0.126,
+      "b_value": 0.0403
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0025,
+      "interval": [
+        -0.0046,
+        -0.0011
+      ],
+      "level": 0.95,
+      "a_value": 0.0682,
+      "b_value": 0.0707
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.021,
+      "interval": [
+        -0.0252,
+        -0.0168
+      ],
+      "level": 0.95,
+      "a_value": 0.0682,
+      "b_value": 0.0892
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:HepG2",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0185,
+      "interval": [
+        0.0135,
+        0.0231
+      ],
+      "level": 0.95,
+      "a_value": 0.0892,
+      "b_value": 0.0707
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0004,
+      "interval": [
+        -0.002,
+        0.0015
+      ],
+      "level": 0.95,
+      "a_value": 0.0605,
+      "b_value": 0.0609
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0071,
+      "interval": [
+        -0.0178,
+        0.003
+      ],
+      "level": 0.95,
+      "a_value": 0.0605,
+      "b_value": 0.0676
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:K562",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": 0.0067,
+      "interval": [
+        -0.0031,
+        0.0171
+      ],
+      "level": 0.95,
+      "a_value": 0.0676,
+      "b_value": 0.0609
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0036,
+      "interval": [
+        -0.007,
+        -0.0006
+      ],
+      "level": 0.95,
+      "a_value": 0.0928,
+      "b_value": 0.0964
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0036,
+      "interval": [
+        -0.0078,
+        0.0009
+      ],
+      "level": 0.95,
+      "a_value": 0.0928,
+      "b_value": 0.0964
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:K562",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0,
+      "interval": [
+        -0.0061,
+        0.0052
+      ],
+      "level": 0.95,
+      "a_value": 0.0964,
+      "b_value": 0.0964
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0018,
+      "interval": [
+        -0.0034,
+        -0.0002
+      ],
+      "level": 0.95,
+      "a_value": 0.0362,
+      "b_value": 0.038
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": -0.0358,
+      "interval": [
+        -0.0466,
+        -0.0258
+      ],
+      "level": 0.95,
+      "a_value": 0.0362,
+      "b_value": 0.072
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:WTC11",
+      "endpoint": "activity",
+      "status": "scored",
+      "metric": "spearman",
+      "difference": 0.034,
+      "interval": [
+        0.024,
+        0.0453
+      ],
+      "level": 0.95,
+      "a_value": 0.072,
+      "b_value": 0.038
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0067,
+      "interval": [
+        -0.0101,
+        -0.0037
+      ],
+      "level": 0.95,
+      "a_value": 0.0934,
+      "b_value": 0.1001
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0048,
+      "interval": [
+        -0.0087,
+        -0.0004
+      ],
+      "level": 0.95,
+      "a_value": 0.0934,
+      "b_value": 0.0982
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "lentimpra:WTC11",
+      "endpoint": "active",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0019,
+      "interval": [
+        -0.008,
+        0.003
+      ],
+      "level": 0.95,
+      "a_value": 0.0982,
+      "b_value": 0.1001
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "vista",
+      "endpoint": "positive",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0067,
+      "interval": [
+        -0.0104,
+        0.0247
+      ],
+      "level": 0.95,
+      "a_value": 0.5499,
+      "b_value": 0.5432
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "vista",
+      "endpoint": "positive",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0238,
+      "interval": [
+        -0.047,
+        -0.001
+      ],
+      "level": 0.95,
+      "a_value": 0.5499,
+      "b_value": 0.5737
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "vista",
+      "endpoint": "positive",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0305,
+      "interval": [
+        0.0097,
+        0.0501
+      ],
+      "level": 0.95,
+      "a_value": 0.5737,
+      "b_value": 0.5432
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "satmut",
+      "endpoint": "functional",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.0101,
+      "interval": [
+        -0.1926,
+        0.1512
+      ],
+      "level": 0.95,
+      "a_value": 0.37,
+      "b_value": 0.3801
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "satmut",
+      "endpoint": "functional",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0957,
+      "interval": [
+        -0.0974,
+        0.2254
+      ],
+      "level": 0.95,
+      "a_value": 0.37,
+      "b_value": 0.2743
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "satmut",
+      "endpoint": "functional",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.1058,
+      "interval": [
+        -0.2164,
+        0.0207
+      ],
+      "level": 0.95,
+      "a_value": 0.2743,
+      "b_value": 0.3801
+    },
+    {
+      "a": "rest",
+      "b": "distance",
+      "source": "gtex",
+      "endpoint": "associated",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.1551,
+      "interval": [
+        -0.1712,
+        -0.1405
+      ],
+      "level": 0.95,
+      "a_value": 0.2806,
+      "b_value": 0.4357
+    },
+    {
+      "a": "rest",
+      "b": "unchanged",
+      "source": "gtex",
+      "endpoint": "associated",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": 0.0765,
+      "interval": [
+        0.0614,
+        0.0902
+      ],
+      "level": 0.95,
+      "a_value": 0.2806,
+      "b_value": 0.2041
+    },
+    {
+      "a": "unchanged",
+      "b": "distance",
+      "source": "gtex",
+      "endpoint": "associated",
+      "status": "scored",
+      "metric": "average_precision",
+      "difference": -0.2316,
+      "interval": [
+        -0.2426,
+        -0.2204
+      ],
+      "level": 0.95,
+      "a_value": 0.2041,
+      "b_value": 0.4357
+    }
+  ],
+  "alphagenome_requests": 0,
+  "per_element_response_cache_opened": false,
+  "seconds": 52.2,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM lentiMPRA (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GTEx v8 single-tissue cis-eQTL, distilled by genomeos/attribution/eqtl.py",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GENCODE v50 (per chromosome)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: the 24 compiled programs data/knowledge/compiled/noncoding_<chrom>.bio (generated, untracked)",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Subcutaneous.tsv",
+        "sha256": "7e71e97c248caea71e7852bd36b6e4ef1892ae2fb80bf77bcd59662143da2b25",
+        "bytes": 1524862,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Visceral_Omentum.tsv",
+        "sha256": "95c763aa2d3697c6e7d7dedb18ec304019d80fff2c55beef7164332899835ecc",
+        "bytes": 1041488,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adrenal_Gland.tsv",
+        "sha256": "a9a98c26e59cef34cefda07e2c8aec5df0cfc3e1ef632f635a4ad1b07634ec7b",
+        "bytes": 425985,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Aorta.tsv",
+        "sha256": "78f1ed51d6103808e2ac8b374a4b8c7967adce7fa28617cc62aa10ab77493dc8",
+        "bytes": 981284,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Coronary.tsv",
+        "sha256": "68fe61a7162556c6a775ba9c493fe82103947e987f9053104cafe9dc7550ec26",
+        "bytes": 325834,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Tibial.tsv",
+        "sha256": "c3bf8c30972e32a6287ba2a3d5fe7c75d5bfc438b16fa987d93c9c4ec34c9356",
+        "bytes": 1438085,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Amygdala.tsv",
+        "sha256": "4e5ca3d45acbd822533b9d2d46bcd52ad25461ab819c16927a618ca1cb5c323f",
+        "bytes": 171980,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Anterior_cingulate_cortex_BA24.tsv",
+        "sha256": "cc1fa675de9336716749f1dba399249cf7576eb21cd509dc9494a0fcff3ea4e8",
+        "bytes": 325702,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Caudate_basal_ganglia.tsv",
+        "sha256": "3e6ceeaff34bd0b1426516abe357f502b65316a6aaf424ed52b8e00ab97e76f2",
+        "bytes": 471902,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellar_Hemisphere.tsv",
+        "sha256": "03bf9c4a26b250696b7d153d3331a49310799bb35e51ef2022e3d5b8f4fd1bc0",
+        "bytes": 641185,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellum.tsv",
+        "sha256": "5612521b498a4453b82492f5fde8eb664c98a0cf5be6306820a66e02f2b8ef14",
+        "bytes": 737242,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cortex.tsv",
+        "sha256": "6c09911f6dfe7b67f754815fcd8898c95667b39c2558d677f67250a692a19458",
+        "bytes": 477997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Frontal_Cortex_BA9.tsv",
+        "sha256": "114f5d3fff9f3a94dd9946b2b78b2df29e1fe1fc14f82d7fa5abe4cd3f59f97b",
+        "bytes": 383758,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hippocampus.tsv",
+        "sha256": "00aa835adc59b0c9b07ec72361ed16057d71dded6436a66d3295fd72f4102b8e",
+        "bytes": 266947,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hypothalamus.tsv",
+        "sha256": "fc12fe871efa8c70c521dd1aff1025dafc0936398a9176c68590741a61ac65fd",
+        "bytes": 283527,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Nucleus_accumbens_basal_ganglia.tsv",
+        "sha256": "86271aefe2a14d2ecb92249987db1bb1090686b4b3f2255e87aead8d766f3f6f",
+        "bytes": 532000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Putamen_basal_ganglia.tsv",
+        "sha256": "7dd51af07d37a2f3b8844be6e163b6f162755c7c775a15dbcf25344c6b91fceb",
+        "bytes": 366581,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Spinal_cord_cervical_c-1.tsv",
+        "sha256": "e1e48e849fdb7da737b37f473d95e15252e2e567269fcb9aaff97f6b00766d8d",
+        "bytes": 246873,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Substantia_nigra.tsv",
+        "sha256": "7c943728285f7e58e239f287a9a4c8fd6718b2f0121115c0355d8b28212dd40b",
+        "bytes": 153393,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Breast_Mammary_Tissue.tsv",
+        "sha256": "4ca8d79762774492011a72299faf8c7c6d63671533f522a901d5fdbb3ef13cf5",
+        "bytes": 816240,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_Cultured_fibroblasts.tsv",
+        "sha256": "ef687b3a868e6dacc0c73fbde086143a3d817214acfcc681bab63217e906651c",
+        "bytes": 1584825,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_EBV-transformed_lymphocytes.tsv",
+        "sha256": "0b823bcbfb19fa95f9555f23cc80ef544c8dcff98984955b852301aebed6e4ec",
+        "bytes": 276054,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Sigmoid.tsv",
+        "sha256": "a3aa863efc8e1ab78a4d41ddbbe1c1d86778f36eb0e2c4e6fdca28d0b03e7e41",
+        "bytes": 699780,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Transverse.tsv",
+        "sha256": "366f96a4dcc0abe387befe95e01f76c927d4b9d1be5f0e43c43aaec3945145b2",
+        "bytes": 773632,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Gastroesophageal_Junction.tsv",
+        "sha256": "18ebc97fc263c60f871ede4c9b83d8b7578820c8799a9f291f74f231bac6215a",
+        "bytes": 884756,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Mucosa.tsv",
+        "sha256": "86ca00d5b3a533f33cdad9725e6355a2f0ea6569f8e9a493a0a51460844c602a",
+        "bytes": 1322161,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Muscularis.tsv",
+        "sha256": "4a33d218d4e73177d113cede7855ad1e7c992bff0adf7e8c3672eb2fbe2d40e5",
+        "bytes": 1290276,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Atrial_Appendage.tsv",
+        "sha256": "b4f9bed9a2a0677c46ed84b0332f96e8fb921e1039f3942a0655a00c773e9daa",
+        "bytes": 862704,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Left_Ventricle.tsv",
+        "sha256": "8eae4bf8c11c8a074936cc2db779d66782a76e183ec5f02a1a7d6e60b92dc793",
+        "bytes": 757656,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Kidney_Cortex.tsv",
+        "sha256": "599734443cb68ee0836620a4b4a2c9aff9475d27cdcfbb4aa9c617e161c0e62d",
+        "bytes": 48661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Liver.tsv",
+        "sha256": "e9a66834e337e36ff04e4289fb96ef8e3be53acdc2aba936ceb2dbcb7677f2dd",
+        "bytes": 283674,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Lung.tsv",
+        "sha256": "359daad335e8bb1e7eba3db2389c92e218cae579119a0e0f66d1fd54105ae8ad",
+        "bytes": 1002366,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Minor_Salivary_Gland.tsv",
+        "sha256": "00979f8c71e4ca3db9ea6e923c5409488f196becf1e58c2ce5eec0e676410918",
+        "bytes": 221750,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Muscle_Skeletal.tsv",
+        "sha256": "9872bf62d2d11c632678215a1fea511f39c009e06a25a0efc85f6547a3d0bdf3",
+        "bytes": 1362211,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Nerve_Tibial.tsv",
+        "sha256": "2f950f34f8a7977a5d861a060ed4a8e8f20ffa9bd5e96bdcfd6da91648ed9aea",
+        "bytes": 1665423,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Ovary.tsv",
+        "sha256": "a50e733bd6cda9f8a75bd92d02b7b0c0e0937e7f6dfcd2984912f1ea194657f7",
+        "bytes": 241044,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pancreas.tsv",
+        "sha256": "ccdc43bdf0ffac86b49fa3c02a0d7885d2b04bbb4ba2a94e880ea89d5f572937",
+        "bytes": 628314,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pituitary.tsv",
+        "sha256": "7dcb775dc6cab29ce54d762bc497c50626a83ccc80fa241a0f43be39c37a7e94",
+        "bytes": 536244,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Prostate.tsv",
+        "sha256": "d6326e1447950dfee689b4092cd04e222063ff664687d30aa15944592134f70e",
+        "bytes": 372286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Not_Sun_Exposed_Suprapubic.tsv",
+        "sha256": "c20d3636b170cea87fee3ddc8497ffc9d24b58ccdd2813c21f1b2f89782a4042",
+        "bytes": 1622208,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Sun_Exposed_Lower_leg.tsv",
+        "sha256": "9aaf1745340ae5844d692b3524842185ddb0d68a75c19a3ab0e1ab4341f5c017",
+        "bytes": 1848227,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Small_Intestine_Terminal_Ileum.tsv",
+        "sha256": "a9a3bbe2cbd1828d4a743f00a434723716cd49fd3db07ac40a1e74e842d68780",
+        "bytes": 350856,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Spleen.tsv",
+        "sha256": "7e7ef5bb41ea8a9c401bc2503e1e18b01796e9464660096bad9aa80dbfe821a8",
+        "bytes": 528491,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Stomach.tsv",
+        "sha256": "09cfe463146d027c15ad1974bdc1002a3b4f823516152d6923cc1224534339a7",
+        "bytes": 496677,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Testis.tsv",
+        "sha256": "0d8bbe69c88732bcb49a89dedbd98ad2234a4eb124298a5afc7fb393cecf72d1",
+        "bytes": 1190074,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Thyroid.tsv",
+        "sha256": "413457100576634c78f98d4bb984df761e14ca6cb12f5a1dc4f8b42d8040f996",
+        "bytes": 1643720,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Uterus.tsv",
+        "sha256": "c1fbec57440bffe9b2867ffdd3e92aadda7c1cdb0f1b960216ca8a6f8d69589f",
+        "bytes": 140157,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Vagina.tsv",
+        "sha256": "0fae0e42ec83c251080c3f1fff5c9906ffba73f5175d2ae4b7fa2fc597bfe3b2",
+        "bytes": 141954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Whole_Blood.tsv",
+        "sha256": "1782965cd1d9b8eeb71875776c225ed1cca105b97552aa72b4e48e6c86f7a2c5",
+        "bytes": 1197811,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "registered": "2026-09-28",
+      "status": "internal development benchmark",
+      "reuse": "every source is evidence this project has already read, several repeatedly; the ENCODE CRISPRi held-out file is read by at least ten scored results (lane-split, 2026-09-28) and is a reused benchmark. No score from this harness is a fresh or external validation",
+      "may_be_called": "an internal development benchmark reading: on evidence this project has already read, labelling L predicts held-out source S's own endpoint with metric M [95% locus-bootstrap interval] at coverage C, beside distance to TSS and the unchanged labels",
+      "may_not_be_called": [
+        "an external, independent or fresh validation",
+        "evidence of biological accuracy beyond the sources held here",
+        "a test of regulation when the endpoint is reporter activity, in-vivo activity, base sensitivity or association (activity is not regulation; association is not perturbation)",
+        "a comparison between sources or endpoints (different units, prevalences and assays)",
+        "out of sample for anything tuned on the CRISPRi benchmark, whose held-out file is a reused benchmark",
+        "a verdict on what the evidence can predict when `rest` scores low: `rest` is an unfitted rule, so a low score says that rule transfers poorly"
+      ],
+      "families": {
+        "crispri": "endogenous_regulation",
+        "lentimpra": "reporter_activity",
+        "vista": "in_vivo_activity",
+        "satmut": "base_sensitivity",
+        "gtex": "natural_variation_association"
+      },
+      "endpoints": {
+        "crispri": [
+          "decrease",
+          "increase"
+        ],
+        "lentimpra": [
+          "activity",
+          "active"
+        ],
+        "vista": [
+          "positive"
+        ],
+        "satmut": [
+          "functional"
+        ],
+        "gtex": [
+          "associated"
+        ]
+      },
+      "endpoint_text": {
+        "decrease": "CRISPRi significant decrease of the measured gene (1) against a well-powered null (0); significant increases, underpowered nulls and missing effects excluded and counted (R2)",
+        "increase": "CRISPRi significant increase of the measured gene (1) against a well-powered null (0); significant decreases, underpowered nulls and missing effects excluded and counted (R2). An increase is an effect, not evidence of a silencer",
+        "activity": "one lentiMPRA tile's log2(RNA/DNA) in that cell, per tile, never aggregated (R6)",
+        "active": "one lentiMPRA tile at or above 1.0 log2(RNA/DNA) in that cell (1) or below (0)",
+        "positive": "VISTA transgenic mouse e11.5: positive in any tissue (1) or negative (0)",
+        "functional": "saturation mutagenesis: a measured base of a locus's primary experiment where some substitution is significant (1) or none is (0); repeats listed by measured.py, never pooled",
+        "associated": "GTEx v8: a significant cis-eQTL variant inside the element for this protein-coding gene in any of 49 tissues (1), or a protein-coding gene with a TSS within CIS_WINDOW and no such variant (0: not significant and not tested are not told apart, weaker than a well-powered null)"
+      },
+      "primary_metric": {
+        "decrease": "average_precision",
+        "increase": "average_precision",
+        "activity": "spearman",
+        "active": "average_precision",
+        "positive": "average_precision",
+        "functional": "average_precision",
+        "associated": "average_precision"
+      },
+      "secondary_metric": "auroc",
+      "metric_text": {
+        "average_precision": "average precision (area under the precision-recall step curve over distinct score thresholds, ties grouped), with the prevalence beside it",
+        "spearman": "Spearman rank correlation (average ranks); under resampling the full-sample ranks are kept and weighted, not recomputed",
+        "auroc": "area under the ROC curve (Mann-Whitney, ties counted one half)"
+      },
+      "split_rule": "holding out S removes S and every provenance sibling of S (CRISPRi studies sharing a value of the benchmark's Reference column; the three lentiMPRA cells, one library ENCSR106SZM); masks every record of S's endpoint family whose interval shares at least one base with an S unit (the related intervals of measured.split_overlap); and never admits a pair from the CRISPRi benchmark's held-out file as evidence (R5)",
+      "locus_rule": "a locus is a connected component of a source's units, joined when their interval midpoints fall in the same 1,000,000 bp bin of a chromosome or, for pair endpoints, when they name the same gene; each resample draws as many loci as the source has, with replacement",
+      "resamples": 1000,
+      "seed": 20260928,
+      "level": 0.95,
+      "floors": {
+        "positives": 20,
+        "negatives": 20,
+        "units": 20,
+        "loci": 10
+      },
+      "abstention": "None ranks below every stated score (tied among themselves); coverage reported beside",
+      "labellings": {
+        "rest": "unfitted: score = 10 x G + E + closeness, where G counts the sources in the view that support this gene at this interval (a CRISPRi training pair sharing a base, same gene, significant in the endpoint's direction; a GTEx association of an element sharing a base, same gene), E counts the sources that say the interval does something (lentiMPRA active by R6's rule in some cell over the tiles sharing a base; a VISTA positive sharing a base; a functional saturation-mutagenesis base inside; for non-regulation endpoints also a significant CRISPRi training pair on any gene and a GTEx association on any gene), and closeness = 1 / (1 + distance / 100 kb) with the distance of DISTANCE_RULE. G is at most 2 and E at most 5, so the order is G, then E, then distance",
+        "distance": "minus the distance from the unit's midpoint to the TSS of the unit's gene (CRISPRi: the benchmark's own TSS columns; GTEx: GENCODE v50), or for element and base units to the nearest GENCODE v50 protein-coding TSS",
+        "unchanged": "the compiled programs' predicted layer as it stands (data/knowledge/compiled/noncoding_*.bio, every `rule` with `evidence: predicted`), matched to a unit by at least one shared base. Pair endpoints: the largest strength among matched links naming the unit's gene in the endpoint's direction (decrease: activates; increase: inhibits; associated: either), 0 when the matched links name another gene or direction. Element and base endpoints: the largest strength of any matched link. None when no predicted element shares a base. The measured twins are never read"
+      },
+      "cis_window": 1000000,
+      "comparisons": [
+        "rest - distance",
+        "rest - unchanged",
+        "unchanged - distance"
+      ]
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are not read",
+      "CRISPRi underpowered nulls and missing effects are counted per endpoint, never scored (R2)",
+      "GTEx associations with a gene that is not protein-coding in GENCODE v50, or not in it, are counted, never scored",
+      "the CRISPRi benchmark's held-out file is never evidence (R5); it is held out and scored like any source",
+      "the AlphaGenome per-element response cache is not opened; the model is not called"
+    ],
+    "partitions": {
+      "held_out_source": "each source in turn is the evaluation partition; the rest, masked by locus, is the only evidence a labelling may read",
+      "training": "the CRISPRi benchmark's training file (K562): evidence when another source is held out",
+      "heldout": "the CRISPRi benchmark's held-out file: evaluation only, never evidence"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "cc824f4407cfa612123e9c74abbda177c430ba4b",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/c4_alphagenome_ablation.json"
+      ],
+      "argv": [
+        "scripts/c4_holdout_run.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

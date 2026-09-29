@@ -1,0 +1,1464 @@
+{
+  "result": "activator_combination_census",
+  "date": "2026-09-28",
+  "static": {
+    "programs": {
+      "data/demo/celegans_lineage.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/cell_context.bio": {
+        "contexts": 2,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/concentration_threshold.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/flag_organism.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/gastrulation.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [
+          "SOX17"
+        ],
+        "simulable": [
+          "SOX17"
+        ],
+        "pairs": [
+          {
+            "context": {},
+            "gene": "SOX17",
+            "activators": [
+              "Nodal",
+              "Tbxt"
+            ],
+            "simulable": true
+          }
+        ],
+        "pair_count": 1
+      },
+      "data/demo/hoxd_order.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/lateral_inhibition.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/methylation_erosion.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/repressilator.bio": {
+        "contexts": 2,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/segmentation_clock.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/demo/stage2_pools.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/acvu.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/cell_types.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/designs.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/embryo.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/embryo_contacts.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/embryo_factors.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/fates.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/founders.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/founders_contacts.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/lineage_embryo.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/lineage_larva.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/mutants.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/plasticity.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/reader.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/celegans/timers.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/body.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/erythrocyte.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/haematopoiesis.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/haematopoiesis_designs.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/haematopoiesis_mutants.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/noncoding_chr21.bio": {
+        "contexts": 254,
+        "genes_with_2plus_activators": [
+          "ABCG1",
+          "ADAMTS1",
+          "ADAMTS5",
+          "ADARB1",
+          "AIRE",
+          "APP",
+          "B3GALT5",
+          "BACE2",
+          "BACH1",
+          "C21orf91",
+          "C2CD2",
+          "CBR1",
+          "CBR3",
+          "CFAP298",
+          "CHAF1B",
+          "CHODL",
+          "CLDN14",
+          "CLDN17",
+          "CLDN8",
+          "CLIC6",
+          "COL18A1",
+          "COL6A1",
+          "COL6A2",
+          "CXADR",
+          "CYYR1",
+          "DIP2A",
+          "DOP1B",
+          "DSCAM",
+          "ENSG00000288593",
+          "ENSG00000288711",
+          "ERG",
+          "ERVH48_1",
+          "ETS2",
+          "EVA1C",
+          "FAM3B",
+          "FTCD",
+          "GET1",
+          "GRIK1",
+          "HSF2BP",
+          "HUNK",
+          "ICOSLG",
+          "IFNAR1",
+          "IFNAR2",
+          "IFNGR2",
+          "IGSF5",
+          "IL10RB",
+          "ITGB2",
+          "ITSN1",
+          "JAM2",
+          "KCNE2",
+          "KCNJ15",
+          "KCNJ6",
+          "KRTAP10_2",
+          "KRTAP10_7",
+          "KRTAP12_1",
+          "KRTAP12_3",
+          "KRTAP12_4",
+          "KRTAP13_2",
+          "KRTAP19_1",
+          "KRTAP20_2",
+          "KRTAP21_2",
+          "KRTAP24_1",
+          "KRTAP26_1",
+          "KRTAP27_1",
+          "KRTAP7_1",
+          "LIPI",
+          "LRRC3",
+          "LSS",
+          "MAP3K7CL",
+          "MORC3",
+          "MRAP",
+          "MX2",
+          "NCAM2",
+          "NRIP1",
+          "OLIG1",
+          "OLIG2",
+          "PCBP3",
+          "PCNT",
+          "PCP4",
+          "PDE9A",
+          "PDXK",
+          "PFKL",
+          "POFUT2",
+          "PRDM15",
+          "PTTG1IP",
+          "RCAN1",
+          "RIPK4",
+          "RIPPLY3",
+          "RSPH1",
+          "RUNX1",
+          "S100B",
+          "SAMSN1",
+          "SCAF4",
+          "SETD4",
+          "SIK1",
+          "SIM2",
+          "SLC19A1",
+          "SLC37A1",
+          "SLC5A3",
+          "SLX9",
+          "SPATC1L",
+          "SYNJ1",
+          "TCP10L",
+          "TFF2",
+          "TFF3",
+          "TIAM1",
+          "TMPRSS15",
+          "TMPRSS2",
+          "TMPRSS3",
+          "TPTE",
+          "TRAPPC10",
+          "TRPM2",
+          "TSPEAR",
+          "TTC3",
+          "UBASH3A",
+          "UMODL1",
+          "URB1",
+          "USP25",
+          "VPS26C",
+          "YBEY"
+        ],
+        "simulable": [],
+        "pairs": [
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "TPTE",
+            "activators": [
+              "EH38E3450362",
+              "EH38E3450415"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "CXADR",
+            "activators": [
+              "EH38E2132051",
+              "EH38E2132090"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "CHODL",
+            "activators": [
+              "EH38E2132209",
+              "EH38E2132214",
+              "EH38E2132221",
+              "EH38E3451700"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "C21orf91",
+            "activators": [
+              "EH38E3451645",
+              "EH38E3451670"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "NCAM2",
+            "activators": [
+              "EH38E2132915",
+              "EH38E2133013",
+              "EH38E3452168",
+              "EH38E3452193",
+              "EH38E3452199"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "GRIK1",
+            "activators": [
+              "EH38E2136023",
+              "EH38E2136146",
+              "EH38E3454185",
+              "EH38E3454234"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "CLDN8",
+            "activators": [
+              "EH38E2136262",
+              "EH38E2136289",
+              "EH38E3454354",
+              "EH38E3454362",
+              "EH38E3454363",
+              "EH38E3454364",
+              "EH38E3454365"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "TIAM1",
+            "activators": [
+              "EH38E2136741",
+              "EH38E2136781",
+              "EH38E3454745"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "EVA1C",
+            "activators": [
+              "EH38E2137375",
+              "EH38E2137396",
+              "EH38E2137399",
+              "EH38E2137423",
+              "EH38E3455186"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "SYNJ1",
+            "activators": [
+              "EH38E2137555",
+              "EH38E3455287"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "IFNAR2",
+            "activators": [
+              "EH38E2137887",
+              "EH38E3455576"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "RUNX1",
+            "activators": [
+              "EH38E2139811",
+              "EH38E2139842",
+              "EH38E3456924",
+              "EH38E3457023",
+              "EH38E3457027",
+              "EH38E3457030"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "CBR1",
+            "activators": [
+              "EH38E2140024",
+              "EH38E3457207"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "CBR3",
+            "activators": [
+              "EH38E2140039",
+              "EH38E3457273"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "DOP1B",
+            "activators": [
+              "EH38E3457285",
+              "EH38E3457311",
+              "EH38E3457317",
+              "EH38E3457322"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "ERG",
+            "activators": [
+              "EH38E3458395",
+              "EH38E3458427"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "B3GALT5",
+            "activators": [
+              "EH38E2142664",
+              "EH38E3459054"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "PCP4",
+            "activators": [
+              "EH38E2142794",
+              "EH38E3459187",
+              "EH38E3459204",
+              "EH38E3459209",
+              "EH38E3459248",
+              "EH38E3459257"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "DSCAM",
+            "activators": [
+              "EH38E2143220",
+              "EH38E2143257",
+              "EH38E3459376",
+              "EH38E3459377",
+              "EH38E3459407",
+              "EH38E3459425",
+              "EH38E3459463",
+              "EH38E3459480"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "BACE2",
+            "activators": [
+              "EH38E2143489",
+              "EH38E3459663",
+              "EH38E3459700"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "TMPRSS2",
+            "activators": [
+              "EH38E2143672",
+              "EH38E2143686",
+              "EH38E2143692",
+              "EH38E2143696",
+              "EH38E2143726",
+              "EH38E3459875",
+              "EH38E3459885",
+              "EH38E3459886",
+              "EH38E3459903",
+              "EH38E3459906",
+              "EH38E3459931"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "RIPK4",
+            "activators": [
+              "EH38E2143883",
+              "EH38E3460035",
+              "EH38E3460102"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "SLC37A1",
+            "activators": [
+              "EH38E2144764",
+              "EH38E3460999",
+              "EH38E3461004"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "ENSG00000288593",
+            "activators": [
+              "EH38E3462129",
+              "EH38E3462145"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "TRPM2",
+            "activators": [
+              "EH38E3462570",
+              "EH38E3462589"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "TSPEAR",
+            "activators": [
+              "EH38E2146248",
+              "EH38E3462747",
+              "EH38E3462812",
+              "EH38E3462814",
+              "EH38E3462817",
+              "EH38E3462860"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "ADARB1",
+            "activators": [
+              "EH38E2146660",
+              "EH38E2146830",
+              "EH38E3463494",
+              "EH38E3463499",
+              "EH38E3463513"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "placenta"
+            },
+            "gene": "SLC19A1",
+            "activators": [
+              "EH38E2147214",
+              "EH38E2147231",
+              "EH38E3464055",
+              "EH38E3464098"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "neural_progenitor_cell"
+            },
+            "gene": "ERVH48_1",
+            "activators": [
+              "EH38E3461431",
+              "EH38E3461437"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "CXADR",
+            "activators": [
+              "EH38E2132089",
+              "EH38E2132104"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "TMPRSS15",
+            "activators": [
+              "EH38E2132449",
+              "EH38E2132450",
+              "EH38E2132470",
+              "EH38E2132477",
+              "EH38E2132492",
+              "EH38E2132509",
+              "EH38E3451813",
+              "EH38E3451831",
+              "EH38E3451835",
+              "EH38E3451836",
+              "EH38E3451848"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "NCAM2",
+            "activators": [
+              "EH38E2133011",
+              "EH38E2133041",
+              "EH38E3452167",
+              "EH38E3452197"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "APP",
+            "activators": [
+              "EH38E2134121",
+              "EH38E2134124",
+              "EH38E2134148",
+              "EH38E2134163",
+              "EH38E2134164",
+              "EH38E2134199",
+              "EH38E2134204",
+              "EH38E2134206",
+              "EH38E2134215",
+              "EH38E3452968",
+              "EH38E3452974",
+              "EH38E3453010",
+              "EH38E3453016",
+              "EH38E3453074",
+              "EH38E3453088",
+              "EH38E3453090",
+              "EH38E3453096",
+              "EH38E3453107"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "GRIK1",
+            "activators": [
+              "EH38E2136100",
+              "EH38E2136107",
+              "EH38E2136151",
+              "EH38E2136165",
+              "EH38E2136211",
+              "EH38E3454247",
+              "EH38E3454269"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "TIAM1",
+            "activators": [
+              "EH38E2136615",
+              "EH38E2136669",
+              "EH38E2136676",
+              "EH38E3454573",
+              "EH38E3454590",
+              "EH38E3454593",
+              "EH38E3454622",
+              "EH38E3454649",
+              "EH38E3454668"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "HUNK",
+            "activators": [
+              "EH38E2137123",
+              "EH38E3454904",
+              "EH38E3454941"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "EVA1C",
+            "activators": [
+              "EH38E2137367",
+              "EH38E2137395",
+              "EH38E3455159",
+              "EH38E3455170"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "IFNAR2",
+            "activators": [
+              "EH38E3455581",
+              "EH38E3455586"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "IL10RB",
+            "activators": [
+              "EH38E2137902",
+              "EH38E3455647"
+            ],
+            "simulable": false
+          },
+          {
+            "context": {
+              "cell_type": "K562"
+            },
+            "gene": "IFNGR2",
+            "activators": [
+              "EH38E3455730",
+              "EH38E3455732"
+            ],
+            "simulable": false
+          }
+        ],
+        "pair_count": 605
+      },
+      "data/organisms/human/oxphos.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "data/organisms/human/tissues.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/ageing.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/cell_types.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/development.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/human_stages.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/human_turnover.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/methylation.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      },
+      "genomeos/std/signalling.bio": {
+        "contexts": 1,
+        "genes_with_2plus_activators": [],
+        "simulable": [],
+        "pairs": [],
+        "pair_count": 0
+      }
+    },
+    "compiled": {
+      "noncoding_chr1.bio": {
+        "cell_contexts": 313,
+        "gene_cell_pairs_with_an_activator": 18631,
+        "gene_cell_pairs_with_2plus_activators": 4742,
+        "activating_rules_on_those": 14281,
+        "of_which_simulable": 0,
+        "seconds": 11.4
+      },
+      "noncoding_chr10.bio": {
+        "cell_contexts": 309,
+        "gene_cell_pairs_with_an_activator": 8176,
+        "gene_cell_pairs_with_2plus_activators": 2412,
+        "activating_rules_on_those": 7725,
+        "of_which_simulable": 0,
+        "seconds": 4.6
+      },
+      "noncoding_chr11.bio": {
+        "cell_contexts": 307,
+        "gene_cell_pairs_with_an_activator": 10533,
+        "gene_cell_pairs_with_2plus_activators": 2707,
+        "activating_rules_on_those": 8577,
+        "of_which_simulable": 0,
+        "seconds": 5.4
+      },
+      "noncoding_chr12.bio": {
+        "cell_contexts": 307,
+        "gene_cell_pairs_with_an_activator": 9720,
+        "gene_cell_pairs_with_2plus_activators": 2548,
+        "activating_rules_on_those": 7595,
+        "of_which_simulable": 0,
+        "seconds": 4.8
+      },
+      "noncoding_chr13.bio": {
+        "cell_contexts": 291,
+        "gene_cell_pairs_with_an_activator": 3659,
+        "gene_cell_pairs_with_2plus_activators": 1093,
+        "activating_rules_on_those": 3611,
+        "of_which_simulable": 0,
+        "seconds": 2.0
+      },
+      "noncoding_chr14.bio": {
+        "cell_contexts": 296,
+        "gene_cell_pairs_with_an_activator": 5621,
+        "gene_cell_pairs_with_2plus_activators": 1476,
+        "activating_rules_on_those": 4459,
+        "of_which_simulable": 0,
+        "seconds": 2.8
+      },
+      "noncoding_chr15.bio": {
+        "cell_contexts": 291,
+        "gene_cell_pairs_with_an_activator": 5947,
+        "gene_cell_pairs_with_2plus_activators": 1580,
+        "activating_rules_on_those": 4886,
+        "of_which_simulable": 0,
+        "seconds": 2.9
+      },
+      "noncoding_chr16.bio": {
+        "cell_contexts": 302,
+        "gene_cell_pairs_with_an_activator": 6931,
+        "gene_cell_pairs_with_2plus_activators": 1537,
+        "activating_rules_on_those": 4408,
+        "of_which_simulable": 0,
+        "seconds": 3.1
+      },
+      "noncoding_chr17.bio": {
+        "cell_contexts": 309,
+        "gene_cell_pairs_with_an_activator": 10033,
+        "gene_cell_pairs_with_2plus_activators": 2278,
+        "activating_rules_on_those": 6432,
+        "of_which_simulable": 0,
+        "seconds": 4.6
+      },
+      "noncoding_chr18.bio": {
+        "cell_contexts": 278,
+        "gene_cell_pairs_with_an_activator": 3246,
+        "gene_cell_pairs_with_2plus_activators": 1084,
+        "activating_rules_on_those": 3685,
+        "of_which_simulable": 0,
+        "seconds": 1.8
+      },
+      "noncoding_chr19.bio": {
+        "cell_contexts": 304,
+        "gene_cell_pairs_with_an_activator": 9218,
+        "gene_cell_pairs_with_2plus_activators": 1585,
+        "activating_rules_on_those": 4004,
+        "of_which_simulable": 0,
+        "seconds": 3.6
+      },
+      "noncoding_chr2.bio": {
+        "cell_contexts": 309,
+        "gene_cell_pairs_with_an_activator": 12970,
+        "gene_cell_pairs_with_2plus_activators": 3659,
+        "activating_rules_on_those": 11668,
+        "of_which_simulable": 0,
+        "seconds": 7.4
+      },
+      "noncoding_chr20.bio": {
+        "cell_contexts": 302,
+        "gene_cell_pairs_with_an_activator": 5218,
+        "gene_cell_pairs_with_2plus_activators": 1375,
+        "activating_rules_on_those": 4261,
+        "of_which_simulable": 0,
+        "seconds": 2.7
+      },
+      "noncoding_chr21.bio": {
+        "cell_contexts": 253,
+        "gene_cell_pairs_with_an_activator": 1925,
+        "gene_cell_pairs_with_2plus_activators": 604,
+        "activating_rules_on_those": 1910,
+        "of_which_simulable": 0,
+        "seconds": 1.0
+      },
+      "noncoding_chr22.bio": {
+        "cell_contexts": 287,
+        "gene_cell_pairs_with_an_activator": 4230,
+        "gene_cell_pairs_with_2plus_activators": 1055,
+        "activating_rules_on_those": 3031,
+        "of_which_simulable": 0,
+        "seconds": 1.9
+      },
+      "noncoding_chr3.bio": {
+        "cell_contexts": 304,
+        "gene_cell_pairs_with_an_activator": 11088,
+        "gene_cell_pairs_with_2plus_activators": 3106,
+        "activating_rules_on_those": 9845,
+        "of_which_simulable": 0,
+        "seconds": 6.4
+      },
+      "noncoding_chr4.bio": {
+        "cell_contexts": 306,
+        "gene_cell_pairs_with_an_activator": 8067,
+        "gene_cell_pairs_with_2plus_activators": 2385,
+        "activating_rules_on_those": 7440,
+        "of_which_simulable": 0,
+        "seconds": 4.4
+      },
+      "noncoding_chr5.bio": {
+        "cell_contexts": 300,
+        "gene_cell_pairs_with_an_activator": 8902,
+        "gene_cell_pairs_with_2plus_activators": 2576,
+        "activating_rules_on_those": 8270,
+        "of_which_simulable": 0,
+        "seconds": 4.8
+      },
+      "noncoding_chr6.bio": {
+        "cell_contexts": 308,
+        "gene_cell_pairs_with_an_activator": 9682,
+        "gene_cell_pairs_with_2plus_activators": 2661,
+        "activating_rules_on_those": 8230,
+        "of_which_simulable": 0,
+        "seconds": 5.5
+      },
+      "noncoding_chr7.bio": {
+        "cell_contexts": 307,
+        "gene_cell_pairs_with_an_activator": 9028,
+        "gene_cell_pairs_with_2plus_activators": 2500,
+        "activating_rules_on_those": 7914,
+        "of_which_simulable": 0,
+        "seconds": 5.1
+      },
+      "noncoding_chr8.bio": {
+        "cell_contexts": 304,
+        "gene_cell_pairs_with_an_activator": 7320,
+        "gene_cell_pairs_with_2plus_activators": 2158,
+        "activating_rules_on_those": 6746,
+        "of_which_simulable": 0,
+        "seconds": 4.2
+      },
+      "noncoding_chr9.bio": {
+        "cell_contexts": 297,
+        "gene_cell_pairs_with_an_activator": 7770,
+        "gene_cell_pairs_with_2plus_activators": 2094,
+        "activating_rules_on_those": 6564,
+        "of_which_simulable": 0,
+        "seconds": 4.1
+      },
+      "noncoding_chrX.bio": {
+        "cell_contexts": 289,
+        "gene_cell_pairs_with_an_activator": 5319,
+        "gene_cell_pairs_with_2plus_activators": 1181,
+        "activating_rules_on_those": 3199,
+        "of_which_simulable": 0,
+        "seconds": 2.3
+      },
+      "noncoding_chrY.bio": {
+        "cell_contexts": 65,
+        "gene_cell_pairs_with_an_activator": 70,
+        "gene_cell_pairs_with_2plus_activators": 9,
+        "activating_rules_on_those": 24,
+        "of_which_simulable": 0,
+        "seconds": 0.0
+      }
+    }
+  },
+  "question": "which programs, tests and results depend on how a gene's activators combine, what each candidate rule does to them, and whether measured evidence picks a rule without tuning",
+  "gastrulation": {
+    "intervals_human_cs7": {
+      "ectoderm": [
+        0.0457,
+        0.172
+      ],
+      "mesoderm": [
+        0.6935,
+        0.7727
+      ],
+      "endoderm": [
+        0.1157,
+        0.2129
+      ]
+    },
+    "tolerance": 0.05,
+    "per_rule": {
+      "mean": {
+        "census_run": {
+          "ectoderm": 0.6333,
+          "mesoderm": 0.0,
+          "endoderm": 0.3667
+        },
+        "test_fixture_60_cells_30h": {
+          "ectoderm": 0.6333,
+          "mesoderm": 0.0,
+          "endoderm": 0.3667
+        },
+        "census_judgement": {
+          "ectoderm": {
+            "model": 0.6333,
+            "outside_by": 0.4613,
+            "pass": false
+          },
+          "mesoderm": {
+            "model": 0.0,
+            "outside_by": 0.6935,
+            "pass": false
+          },
+          "endoderm": {
+            "model": 0.3667,
+            "outside_by": 0.1538,
+            "pass": false
+          }
+        },
+        "census_verdict": "falsified"
+      },
+      "sum_capped": {
+        "census_run": {
+          "ectoderm": 0.5583,
+          "mesoderm": 0.0,
+          "endoderm": 0.4417
+        },
+        "test_fixture_60_cells_30h": {
+          "ectoderm": 0.55,
+          "mesoderm": 0.0,
+          "endoderm": 0.45
+        },
+        "census_judgement": {
+          "ectoderm": {
+            "model": 0.5583,
+            "outside_by": 0.3863,
+            "pass": false
+          },
+          "mesoderm": {
+            "model": 0.0,
+            "outside_by": 0.6935,
+            "pass": false
+          },
+          "endoderm": {
+            "model": 0.4417,
+            "outside_by": 0.2288,
+            "pass": false
+          }
+        },
+        "census_verdict": "falsified"
+      },
+      "max": {
+        "census_run": {
+          "ectoderm": 0.575,
+          "mesoderm": 0.0,
+          "endoderm": 0.425
+        },
+        "test_fixture_60_cells_30h": {
+          "ectoderm": 0.5667,
+          "mesoderm": 0.0,
+          "endoderm": 0.4333
+        },
+        "census_judgement": {
+          "ectoderm": {
+            "model": 0.575,
+            "outside_by": 0.403,
+            "pass": false
+          },
+          "mesoderm": {
+            "model": 0.0,
+            "outside_by": 0.6935,
+            "pass": false
+          },
+          "endoderm": {
+            "model": 0.425,
+            "outside_by": 0.2121,
+            "pass": false
+          }
+        },
+        "census_verdict": "falsified"
+      },
+      "or": {
+        "census_run": {
+          "ectoderm": 0.5583,
+          "mesoderm": 0.0,
+          "endoderm": 0.4417
+        },
+        "test_fixture_60_cells_30h": {
+          "ectoderm": 0.5667,
+          "mesoderm": 0.0,
+          "endoderm": 0.4333
+        },
+        "census_judgement": {
+          "ectoderm": {
+            "model": 0.5583,
+            "outside_by": 0.3863,
+            "pass": false
+          },
+          "mesoderm": {
+            "model": 0.0,
+            "outside_by": 0.6935,
+            "pass": false
+          },
+          "endoderm": {
+            "model": 0.4417,
+            "outside_by": 0.2288,
+            "pass": false
+          }
+        },
+        "census_verdict": "falsified"
+      }
+    }
+  },
+  "dynamic": {
+    "mean": {
+      "pytest_summary": "2045 passed, 6 skipped, 5 xfailed, 5 warnings in 336.43s (0:05:36)",
+      "failed": [],
+      "xpassed": [],
+      "tests_reaching_a_gene_with_2plus_activators": [
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_gastrulation.py::test_census_comparison_as_run_once",
+        "tests/test_gastrulation.py::test_three_layers_in_order",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "bio_test": "41 files, 220/220 checks passed"
+    },
+    "sum_capped": {
+      "pytest_summary": "3 failed, 2049 passed, 6 skipped, 5 xfailed, 5 warnings in 345.26s (0:05:45)",
+      "failed": [
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_gastrulation.py::test_ectoderm_and_endoderm_within_unsourced_expectation",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "xpassed": [],
+      "tests_reaching_a_gene_with_2plus_activators": [
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_gastrulation.py::test_census_comparison_as_run_once",
+        "tests/test_gastrulation.py::test_three_layers_in_order",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "bio_test": "41 files, 220/220 checks passed"
+    },
+    "max": {
+      "pytest_summary": "2 failed, 2050 passed, 6 skipped, 5 xfailed, 5 warnings in 348.48s (0:05:48)",
+      "failed": [
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "xpassed": [],
+      "tests_reaching_a_gene_with_2plus_activators": [
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_gastrulation.py::test_census_comparison_as_run_once",
+        "tests/test_gastrulation.py::test_three_layers_in_order",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "bio_test": "41 files, 220/220 checks passed"
+    },
+    "or": {
+      "pytest_summary": "3 failed, 2058 passed, 6 skipped, 5 xfailed, 5 warnings in 344.15s (0:05:44)",
+      "failed": [
+        "tests/test_activator_combination.py::test_the_runtime_still_combines_by_the_mean",
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "xpassed": [],
+      "tests_reaching_a_gene_with_2plus_activators": [
+        "tests/test_activator_combination.py::test_max_cannot_give_two_single_removal_decreases",
+        "tests/test_activator_combination.py::test_the_four_rules",
+        "tests/test_activator_combination.py::test_the_other_rules_never_fall_when_an_activator_is_added[max]",
+        "tests/test_activator_combination.py::test_the_other_rules_never_fall_when_an_activator_is_added[or]",
+        "tests/test_activator_combination.py::test_the_other_rules_never_fall_when_an_activator_is_added[sum_capped]",
+        "tests/test_activator_combination.py::test_under_the_mean_single_removal_changes_sum_to_zero",
+        "tests/test_gastrulation.py::test_census_comparison_after_the_sign_correction",
+        "tests/test_gastrulation.py::test_census_comparison_as_run_once",
+        "tests/test_gastrulation.py::test_three_layers_in_order",
+        "tests/test_grn_bridge.py::test_under_the_mean_rule_adding_an_activator_can_lower_expression"
+      ],
+      "bio_test": "41 files, 220/220 checks passed"
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "in-repo .bio programs and compiled chromosomes",
+        "version": "this revision"
+      },
+      {
+        "accession": "Bothma et al. 2015 eLife 4:e07956, PMC4532966",
+        "version": "published"
+      },
+      {
+        "accession": "Zhou et al. 2024 Cell Genomics (bioRxiv 2023.04.26.538501)",
+        "version": "published"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo",
+        "sha256": "d5181a11274cedb3255415a79b058fe2563417b50be1b11aee24e0ab1ff7451d",
+        "bytes": 478552,
+        "partition": null,
+        "files": 40
+      },
+      {
+        "path": "data/organisms",
+        "sha256": "668cfae23ee97ab256502a18136292d7ac0ab559ae7b5bab5d923855b88cc72e",
+        "bytes": 6086693,
+        "partition": null,
+        "files": 26
+      },
+      {
+        "path": "genomeos/std",
+        "sha256": "d5ad2ce38deb09d7845c1ffd2266f7b1b0cdbb52d1391f4ef78b6e97b3687a0a",
+        "bytes": 42804,
+        "partition": null,
+        "files": 7
+      },
+      {
+        "path": "data/knowledge/compiled",
+        "sha256": "2087efcf22d899cb66a2bc0e029a4ec40b5dffbe9dd8c6790e79b6a838b22ba7",
+        "bytes": 417947802,
+        "partition": null,
+        "files": 24
+      },
+      {
+        "path": "genomeos/runtime/grn.py",
+        "sha256": "8ce70b08c473e5cd53d12d4f004e9f6f2a67ccdd4c1a84c8828f8d8b629318c0",
+        "bytes": 18362,
+        "partition": null
+      },
+      {
+        "path": "genomeos/runtime/located.py",
+        "sha256": "655cc5388723f31e3af3fffe75665fde611fd27666f07f157804892a3989a1ad",
+        "bytes": 25508,
+        "partition": null
+      },
+      {
+        "path": "data/results/gastrulation_census_comparison_sign_corrected.json",
+        "sha256": "1345334b3f5593661dbf40f8a2b45e9e83796b22946fb5154b94859f0d039ade",
+        "bytes": 8447,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38 for the CRISPRi table; otherwise n/a: simulated networks",
+    "coordinates": "n/a: element intervals only key elements within one table, never compared",
+    "parameters": {
+      "rules": [
+        "mean",
+        "sum_capped",
+        "max",
+        "or"
+      ],
+      "gastrulation_fixture": "60 cells, 30 h, dt 0.05"
+    },
+    "exclusions": [
+      "CRISPRi element-gene-cells with conflicting outcomes across rows"
+    ],
+    "partitions": "n/a: no evaluation split read",
+    "code": {
+      "git_sha": "12ad319374954e55f427daa0d6599d35c9182fa1",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/runtime/grn.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/activator_combination.py",
+        "collate",
+        "--scratch",
+        "/private/tmp/claude-502/-Users-AlbertCanfield-SITES-DEV-GenomeOS/e6271786-4aee-495a-bcd0-5603c3ebff51/scratchpad/comb"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

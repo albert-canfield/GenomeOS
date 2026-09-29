@@ -37,6 +37,10 @@ from genomeos.results import RESULTS_DIR, save_result
 
 FRACTION_TOLERANCE = 0.02  # absolute move in a tier's constrained fraction that stops the chain
 MIN_TIER_BP = 100_000  # a tier smaller than this cannot stop the chain; its ratio is noise
+#: where the earlier result is kept while a chromosome re-runs, so a crash between the re-run's save and
+#: the comparison loses nothing. Outside the registry since the item 12 S6 follow-up: a .before.json
+#: beside the results would be listed as a result if a run died before removing it.
+BACKUP = Path("data/cache/variation_rerun")
 CHROMS = tuple(f"chr{c}" for c in list(range(1, 23)) + ["X", "Y"])
 FIELDS = ("measured_bp", "human_constrained_bp", "touched_bin_bp", "human_constrained_fraction")
 
@@ -97,7 +101,8 @@ def main() -> int:
             print(f"{chrom}: refused, no earlier result", flush=True)
             continue
         before = json.loads(path.read_text())
-        keep = path.with_suffix(".before.json")
+        BACKUP.mkdir(parents=True, exist_ok=True)
+        keep = BACKUP / f"variation_{chrom}.before.json"
         shutil.copyfile(path, keep)
         t1 = time.time()
         after = variation.run_and_save(chrom)

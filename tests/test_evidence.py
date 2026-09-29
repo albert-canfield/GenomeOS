@@ -102,7 +102,7 @@ def test_the_real_programs_are_read():
     assert out["whole"]["facts"] > 5000 and len(out["files"]) >= 20
     assert not [f for f in out["files"] if f.get("error")]
     assert set(out["whole"]["by_evidence"]) <= set(evidence.KINDS)
-    order = lambda r: (r["confidence"], r["path"], r["block"], r["label"])  # noqa: E731
+    order = lambda r: (not r["stated"], r["confidence"], r["path"], r["block"], r["label"])  # noqa: E731
     assert out["rows"] == sorted(out["rows"], key=order)
 
 
@@ -166,8 +166,8 @@ def test_the_pooled_mean_confidence_is_reported_as_the_mixture_it_is() -> None:
 
     assert out["mean_confidence"] == round((0.2 + 0.3 + 0.9) / 3, 3)
     by = out["mean_confidence_by_evidence"]
-    assert by["predicted"] == {"facts": 2, "mean": 0.25}
-    assert by["curated"] == {"facts": 1, "mean": 0.9}
+    assert by["predicted"] == {"facts": 2, "stated": 2, "unstated": 0, "mean": 0.25}
+    assert by["curated"] == {"facts": 1, "stated": 1, "unstated": 0, "mean": 0.9}
     # the pooled figure lies between the two and equals neither: that is the whole point
     assert by["predicted"]["mean"] < out["mean_confidence"] < by["curated"]["mean"]
     assert "not on one scale" in out["mean_confidence_is_a_mixture"]
@@ -179,5 +179,151 @@ def test_a_single_kind_still_reports_its_own_mean() -> None:
 
     out = evidence.summarise(rows)
 
-    assert out["mean_confidence_by_evidence"] == {"curated": {"facts": 1, "mean": 0.9}}
+    assert out["mean_confidence_by_evidence"] == {
+        "curated": {"facts": 1, "stated": 1, "unstated": 0, "mean": 0.9}
+    }
     assert out["mean_confidence"] == 0.9
+
+
+def test_a_program_that_fails_to_parse_is_counted_and_the_command_fails(programs, monkeypatch, capsys):
+    """2026-09-27: a demo program with a syntax error took 21 facts out of `genomeos evidence`
+    (26,845 to 26,824) and the command said nothing. A failure is now named, counted and an error."""
+    from genomeos.cli import main
+
+    (programs / "data" / "demo" / "broken.bio").write_text("module broken\n\ngene {\n")
+    evidence._cached.cache_clear()
+    out = evidence.collect(programs)
+    assert [f["path"] for f in out["failed"]] == ["data/demo/broken.bio"]
+    assert out["failed"][0]["error"]
+    monkeypatch.chdir(programs)
+    assert main(["evidence"]) == 1
+    cap = capsys.readouterr()
+    assert "broken.bio did not parse" in cap.err and "1 program(s) failed to parse" in cap.err
+    assert "5 facts in 2 programs, 1 FAILED TO PARSE" in cap.out
+
+
+def test_a_clean_run_reports_no_failures_and_succeeds(programs, monkeypatch, capsys):
+    from genomeos.cli import main
+
+    assert evidence.collect(programs)["failed"] == []
+    monkeypatch.chdir(programs)
+    assert main(["evidence"]) == 0
+    cap = capsys.readouterr()
+    assert "FAILED" not in cap.out and "ERROR" not in cap.err
+
+
+UNSTATED_PROGRAM = """module test.unstated
+
+param judged_zero = 0.1 {
+  evidence: inferred "a guess somebody judged worthless"
+  confidence: 0.0
+}
+
+param judged_weak = 0.2 { evidence: inferred "order of magnitude"; confidence: 0.4 }
+
+param judged_strong = 0.3 { evidence: curated "BioModels"; confidence: 0.9 }
+
+gene NANOG { symbol: NANOG; evidence: curated "GENCODE v50" }
+
+rule NANOG activates NANOG {
+  strength: 0.2
+  evidence: predicted "AlphaGenome deletion" effect -0.2 log2 fold change, probability unavailable
+}
+"""
+
+
+@pytest.fixture
+def unstated_program(tmp_path, monkeypatch):
+    d = tmp_path / "data" / "demo"
+    d.mkdir(parents=True)
+    (d / "u.bio").write_text(UNSTATED_PROGRAM)
+    monkeypatch.setattr(evidence, "PROGRAM_DIRS", (Path("data/demo"),))
+    evidence._cached.cache_clear()
+    return tmp_path
+
+
+def test_an_unstated_confidence_is_not_counted_as_a_weak_one(unstated_program):
+    """Review R4 (2026-09-28) took `confidence:` off every predicted compiled fact and the parser read
+    the gap as 0.0, so the explorer's weak count rose 812,921 -> 928,094 overnight on facts nobody had
+    judged. A stated 0.0 is a judgement and stays weak; a missing one is counted apart."""
+    out = evidence.collect(unstated_program)
+    w = out["whole"]
+    assert w["facts"] == 5
+    assert (w["weak"], w["strong"], w["unstated"]) == (2, 1, 2)
+    assert w["weak"] + w["strong"] + w["unstated"] == w["facts"]
+    by = {r["label"].split(" =")[0]: r for r in out["rows"]}
+    assert by["judged_zero"]["stated"] is True and by["judged_zero"]["confidence"] == 0.0
+    assert by["NANOG"]["stated"] is False and by["NANOG activates NANOG"]["stated"] is False
+    # the mean is over the three stated values, not dragged down by the two absences
+    assert w["mean_confidence"] == round((0.0 + 0.4 + 0.9) / 3, 3)
+    assert w["bands"]["unstated"] == 2
+    assert w["mean_confidence_by_evidence"]["predicted"] == {
+        "facts": 1,
+        "stated": 0,
+        "unstated": 1,
+        "mean": None,
+    }
+    assert out["files"][0]["unstated"] == 2 and out["files"][0]["weak"] == 2
+
+
+def test_the_weak_filter_and_the_review_list_keep_unstated_apart(unstated_program):
+    weak = evidence.collect(unstated_program, max_confidence=0.5)["rows"]
+    assert [r["label"].split(" =")[0] for r in weak] == ["judged_zero", "judged_weak"]
+    rows = evidence.collect(unstated_program)["rows"]
+    assert [r["stated"] for r in rows] == [True, True, True, False, False]  # judged first
+    lines = evidence.to_csv(rows).strip().splitlines()
+    assert lines[1].startswith("0.0,inferred,parameter,judged_zero")
+    assert sum(1 for x in lines[1:] if x.startswith("unstated,")) == 2
+
+
+def test_the_cli_headline_splits_weak_strong_and_unstated(unstated_program, monkeypatch, capsys):
+    from genomeos.cli import main
+
+    monkeypatch.chdir(unstated_program)
+    assert main(["evidence", "--by-program"]) == 0
+    out = capsys.readouterr().out
+    assert "confidence stated on 3: 2 at or below 0.5, 1 above" in out and "2 state none" in out
+    assert "unstated" in out.splitlines()[2]
+
+
+def test_the_parser_marks_a_missing_confidence_and_keeps_its_value_zero():
+    from genomeos.ir import UNSTATED, confidence_stated
+    from genomeos.lang import parse
+
+    m = parse(UNSTATED_PROGRAM)
+    assert not confidence_stated(m.entities["NANOG"].confidence)
+    assert m.entities["NANOG"].confidence == 0.0 and f"{m.rules[0].confidence:.2f}" == "0.00"
+    assert confidence_stated(m.parameters["judged_zero"].confidence)
+    assert m.parameters["judged_zero"].confidence == 0.0
+    assert not confidence_stated(UNSTATED) and confidence_stated(0.0)
+
+
+def test_the_distinction_survives_bioir_json_and_the_explorer_reads_it_back():
+    """Item 12 S1 (2026-09-28) replaces the test that accepted the loss: BioIR JSON wrote an unstated
+    confidence as 0.0 and from_dict read it back as stated. It now writes null, reads null back as
+    UNSTATED, and keeps a stated 0.0 a number; the explorer's rows from the reloaded module say
+    exactly what the rows from the parsed program say."""
+    import json
+
+    from genomeos.ir import Module, confidence_stated
+    from genomeos.lang import parse
+
+    m = parse(UNSTATED_PROGRAM)
+    text = json.dumps(m.to_dict())
+    d = json.loads(text)
+    assert d["records_unstated_confidence"] is True
+    by_id = {e["id"]: e for e in d["entities"]}
+    assert by_id["NANOG"]["confidence"] is None and d["rules"][0]["confidence"] is None
+    assert {p["name"]: p["confidence"] for p in d["parameters"]}["judged_zero"] == 0.0
+    back = Module.from_dict(json.loads(text))
+    assert confidence_stated(back.parameters["judged_zero"].confidence)
+    assert back.parameters["judged_zero"].confidence == 0.0
+    assert (
+        not confidence_stated(back.entities["NANOG"].confidence) and back.entities["NANOG"].confidence == 0.0
+    )
+    assert not confidence_stated(back.rules[0].confidence)
+    rows = [(r["label"], r["stated"], r["confidence"]) for r in evidence._rows_of(m, "u.bio")]
+    assert [(r["label"], r["stated"], r["confidence"]) for r in evidence._rows_of(back, "u.bio")] == rows
+    assert evidence.summarise(evidence._rows_of(back, "u.bio")) == evidence.summarise(
+        evidence._rows_of(m, "u.bio")
+    )

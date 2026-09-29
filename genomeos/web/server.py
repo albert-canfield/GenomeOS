@@ -9,6 +9,7 @@ directory. No external dependencies; the page is a single static HTML file.
 from __future__ import annotations
 
 import json
+import re
 import threading
 import webbrowser
 from functools import lru_cache
@@ -18,7 +19,7 @@ from urllib.parse import parse_qs, urlparse
 
 from genomeos import __version__
 from genomeos.genome import Locus, Sequence, read_fasta
-from genomeos.ir import UNKNOWN, Module
+from genomeos.ir import UNKNOWN, Module, confidence_stated, confidence_to_json
 from genomeos.lang import BioLangError, parse
 from genomeos.lib import LIBRARIES
 from genomeos.runtime import (
@@ -52,6 +53,1196 @@ def _all_elements_card(r: dict) -> dict:
         k: v
         for k, v in r.items()
         if k in ("elements_total", "scored", "complete", "summary", "requests_this_run")
+    }
+
+
+# ---- the Progress tab's state: every figure computed from a file at request time -------------
+#
+# The tab used to show the plan's prose and a hand-kept task log, and lagged behind both. Nothing
+# below states a figure of its own: the milestones and the external review are parsed from
+# docs/ROADMAP.md at request time, the claim panel's words are README's Status section verbatim
+# and its numbers are read from the result files those claims rest on, and the comparison between
+# the two is reported rather than assumed, so a README figure that no longer matches its result
+# shows up here as a disagreement instead of quietly reading as the truth.
+
+_OWNER = re.compile(r"\bAlbert\b|\bthe owner\b|\bowner's\b", re.I)
+_BOLD = re.compile(r"\*\*(.+?)\*\*", re.S)
+_SENTENCE = re.compile(r"(?<=[.;])\s+")
+_NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+
+
+def _plain(text: str) -> str:
+    """Markdown emphasis removed and whitespace folded; the words are left exactly as written."""
+    return re.sub(r"\s+", " ", re.sub(r"[*`~]", "", text or "")).strip()
+
+
+def _numbers(text: str) -> set[str]:
+    """Every number a passage states, thousands separators dropped, so two spellings compare."""
+    return {m.group(0).replace(",", "") for m in _NUMBER.finditer(text or "")}
+
+
+def _held_reason(row: dict) -> str | None:
+    """Why a milestone is held: the emphasised passage of its own row, else the row's first sentence.
+
+    The roadmap bolds the sentence that says what is not met (1.3's third clause, for one), so the
+    reason is taken from the row rather than written here, and a row that states none reads as none.
+    """
+    if row.get("state") == "done":
+        return None
+    for cell in (row.get("goal") or "", row.get("proof") or ""):
+        m = _BOLD.search(cell)
+        if m:
+            return _plain(m.group(1))
+    return _plain(_SENTENCE.split(row.get("proof") or "", 1)[0]) or None
+
+
+def _emphasised(row: dict) -> list[str]:
+    """Every passage the milestone row emphasises: the caveats a reached version still carries.
+
+    1.0 is reached and its row says BioForge "prices its answer" is not true; 1.1 is reached and
+    its row says the flagship 74%/65% reading is about 70% depth. A panel that showed the tick and
+    not the sentence beside it would be the overstatement this tab exists to stop, so the row's own
+    emphasis travels with its state and nothing is summarised.
+    """
+    found = [
+        _plain(m.group(1))
+        for cell in (row.get("goal") or "", row.get("proof") or "")
+        for m in _BOLD.finditer(cell)
+    ]
+    return [t[:400] for t in found if t][:4]
+
+
+def _milestones(text: str) -> dict:
+    """Section 6 through the roadmap's own parser, with each held row's reason beside its state."""
+    from genomeos import roadmap
+
+    rows = [
+        {**r, "reason": _held_reason(r), "emphasised": _emphasised(r)} for r in roadmap.parse_milestones(text)
+    ]
+    return {
+        "source": "docs/ROADMAP.md section 6",
+        "rows": rows,
+        "total": len(rows),
+        "reached": sum(1 for r in rows if r["state"] == "done"),
+        "held": [r["milestone"] for r in rows if r["state"] != "done"],
+    }
+
+
+def _review_lines(text: str, number: str = "11") -> list[str]:
+    """An external review's own lines in section 5: from its numbered head to the next item or section."""
+    lines = text.splitlines()
+    start = next(
+        (i for i, ln in enumerate(lines) if ln.startswith(f"{number}.") and "external review" in ln.lower()),
+        None,
+    )
+    if start is None:
+        return []
+    out = []
+    for ln in lines[start + 1 :]:
+        if re.match(r"^(##\s|\d+[a-z]?\.\s)", ln):
+            break
+        out.append(ln)
+    return out
+
+
+def _item_state(follow_ups: list[dict]) -> str:
+    """An item's state from the state column of its follow-up rows, never from its own row.
+
+    A row the plan reopened stays reopened, whatever came before it (R8: closed on a negative
+    pretest, then reopened as item 12's S3). A row that records an investigation closed on a
+    negative (the discontinued list below) never makes its item done: R3 is done because the
+    bridge was built, not because the search for a human rate came back empty.
+    """
+    if any("reopened" in f["state"].lower() for f in follow_ups):
+        return "reopened"
+    if any(re.search(r"\bdone\b", f["state"], re.I) for f in follow_ups if not f["discontinued"]):
+        return "done"
+    if follow_ups and follow_ups[-1]["state"].lower().startswith("closed"):
+        return "closed"
+    return "open"
+
+
+def _review(text: str, number: str = "11", prefix: str = "R") -> dict:
+    """An external review's items with their acceptance tests and follow-up rows.
+
+    Item 11 (the first review, R1-R9) and item 12 (the second, S1-S8) share one table form: the
+    first cell carries the item, a continuation row marking itself with an arrow; one row can
+    close two items (R5 and R2 were done together) and one item can take several rows, so the
+    number is read from the cell rather than from the row's position. The state is the follow-up
+    rows' own state column, and a follow-up that is a discontinued investigation is marked so.
+    """
+    marks = _discontinued_anchors()
+    label = re.compile(rf"\b{prefix}([1-9])[a-f]?\b")
+    items: dict[str, dict] = {}
+    order: list[str] = []
+    for ln in _review_lines(text, number):
+        s = ln.strip()
+        if not s.startswith("|"):
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        if len(cells) < 4 or set("".join(cells)) <= set("-: "):
+            continue
+        follow = cells[0].startswith("↳")
+        for n in label.findall(cells[0]):
+            key = f"{prefix}{n}"
+            if key not in items:
+                items[key] = {"item": key, "title": "", "code": "", "acceptance": "", "follow_ups": []}
+                order.append(key)
+            it = items[key]
+            if follow:
+                it["follow_ups"].append(
+                    {
+                        "note": _plain(cells[1]),
+                        "code": _plain(cells[2]),
+                        "state": _plain(cells[-1]),
+                        "discontinued": any(a in s for a in marks),
+                    }
+                )
+            else:
+                it["title"] = _plain(cells[1])
+                it["code"] = _plain(cells[2])
+                it["acceptance"] = _plain(cells[3])
+    rows = [{**items[k], "state": _item_state(items[k]["follow_ups"])} for k in sorted(order)]
+    return {
+        "source": f"docs/ROADMAP.md section 5 item {number}",
+        "rows": rows,
+        "total": len(rows),
+        "done": sum(1 for r in rows if r["state"] == "done"),
+        "reopened": [r["item"] for r in rows if r["state"] == "reopened"],
+        "closed": [r["item"] for r in rows if r["state"] == "closed"],
+        "open": [r["item"] for r in rows if r["state"] == "open"],
+    }
+
+
+def _readme_status(root: Path) -> dict:
+    """README's Status section as it separates the claims: one row per bullet, its words unchanged."""
+    p = root / "README.md"
+    if not p.exists():
+        return {"source": "README.md", "version": None, "date": None, "rows": []}
+    text = p.read_text()
+    head = re.search(r"^##\s+Status\s*\(([^)]*)\)\s*$", text, re.M)
+    if not head:
+        return {"source": "README.md", "version": None, "date": None, "rows": []}
+    end = text.find("\n## ", head.end())
+    body = text[head.end() : end if end > 0 else len(text)]
+    stamp = [s.strip() for s in head.group(1).split(",")]
+    date = next((s for s in stamp if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s)), None)
+    # only the first bullet list: that is the list README introduces with "measured separately,
+    # because these are different claims", and it is the whole of what this panel may say. The
+    # section goes on to list what 0.9 means, which is a different question and not a claim panel.
+    first = next((b for b in re.split(r"\n\s*\n", body) if b.lstrip().startswith("- ")), "")
+    rows = []
+    for block in re.split(r"\n(?=- )", first):
+        m = re.match(r"-\s+\*\*(.+?)\*\*:\s*(.+)", block.strip(), re.S)
+        if m:
+            rows.append({"claim": _plain(m.group(1)), "text": _plain(m.group(2))})
+    return {
+        "source": "README.md",
+        "version": next((s for s in stamp if s != date), None),
+        "date": date,
+        "rows": rows,
+    }
+
+
+def _coverage_figure(root: Path) -> dict | None:
+    """How much of the real unknown any assay has read, from the coverage result's own counts."""
+    from genomeos.results import load_result
+
+    r = load_result("unknown_coverage", root / "data" / "results")
+    u = (r or {}).get("real_unknown") or {}
+    bp, measured = u.get("bp"), u.get("measured_bp")
+    if not bp or measured is None:
+        return None
+    return {
+        "source": "data/results/unknown_coverage.json",
+        "date": r.get("date"),
+        "measured_bp": measured,
+        "total_bp": bp,
+        "percent": round(measured / bp * 100, 2),
+        "blocks": u.get("blocks"),
+        "blocks_measured": u.get("blocks_measured"),
+        "untouched_mb": u.get("untouched_mb"),
+        "assays": r.get("assays"),
+        "qualification": _plain(r.get("reading") or ""),
+        "stated": [measured, bp, round(measured / bp * 100, 2)],
+    }
+
+
+def _prediction_figure(root: Path) -> dict | None:
+    """The one independent prediction, with the replication arm's own verdict beside its number."""
+    from genomeos.results import load_result
+
+    r = load_result("crispri_published", root / "data" / "results")
+    if not r:
+        return None
+    held = r.get("heldout_published_pairs") or {}
+    gain = held.get("deletion_gain") or {}
+    second = r.get("second_cell_type_hct116") or {}
+    second_gain = second.get("deletion_gain") or {}
+    return {
+        "source": "data/results/crispri_published.json",
+        "date": r.get("date"),
+        "held_out_gain": gain.get("gain"),
+        "ci95": gain.get("ci95"),
+        "against_encode_re2g": held.get("against_encode_re2g"),
+        "cell_types_scored": sorted(held.get("per_cell_type_weighted") or {}),
+        "published_source": r.get("published_source"),
+        "qualification": _plain(second.get("verdict") or ""),
+        "replication": {
+            "cell_type": "HCT116",
+            "replicated": second.get("replicated"),
+            "gain": second_gain.get("gain"),
+            "ci95": second_gain.get("ci95"),
+            "covered_pairs": second.get("covered_pairs"),
+            "regulated": second.get("regulated"),
+            "date": second.get("date"),
+        },
+        "stated": [],
+    }
+
+
+#: A claim gets a figure only where a result file holds one; the others stay words, as README has them.
+_FIGURES = {"assay coverage": _coverage_figure, "independent prediction": _prediction_figure}
+
+
+def _claims(root: Path) -> dict:
+    """README's Status claims, each with the figure its own result file reports, and the comparison.
+
+    The panel is not allowed to say more than README does, so the words are README's and the only
+    thing added is the number read from the file the claim rests on. `agrees_with_readme` is the
+    guard: it is false the moment a figure in README stops matching the result it quotes.
+    """
+    status = _readme_status(root)
+    rows = []
+    for row in status["rows"]:
+        fig = _FIGURES.get(row["claim"].lower(), lambda _root: None)(root)
+        agrees = None
+        if fig and fig.get("stated"):
+            have = _numbers(row["text"])
+            agrees = all(str(v) in have for v in fig["stated"])
+        rows.append({**row, "figure": fig, "agrees_with_readme": agrees})
+    return {**status, "rows": rows, "caveats": _caveats(root)}
+
+
+def _caveats(root: Path) -> list[dict]:
+    """Qualifications a result file states about a claim made elsewhere, carried with the number."""
+    from genomeos.results import load_result
+
+    out = []
+    a = load_result("node_independence_audit", root / "data" / "results")
+    if a:
+        premium = a.get("selection_premium") or {}
+        states: dict[str, int] = {}
+        for c in a.get("components") or []:
+            states[c.get("status", "?")] = states.get(c.get("status", "?"), 0) + 1
+        out.append(
+            {
+                "about": "the node containment result, cited by milestone 1.3's row",
+                "source": "data/results/node_independence_audit.json",
+                "date": a.get("date"),
+                "verdict": _plain((a.get("independent_arms_at_zero_requests") or {}).get("verdict") or ""),
+                "components": states,
+                "selection_premium": {
+                    k: premium.get(k) for k in ("default", "best_rejected", "worst_rejected", "spread_points")
+                },
+            }
+        )
+    return out
+
+
+def _ledger(root: Path) -> dict | None:
+    """The night-shift ledger, if a session left one. It is untracked, so its absence is normal."""
+    try:
+        d = json.loads((root / ".claude" / "nightshift" / "state.json").read_text())
+    except (OSError, ValueError, TypeError):
+        return None
+    lanes = [x for x in d.get("lanes") or [] if isinstance(x, dict) and x.get("state") != "done"]
+    return {
+        "armed": bool(d.get("armed")),
+        "who": d.get("who"),
+        "open": [_plain(x.get("name", "")) for x in lanes],
+    }
+
+
+def _owed(root: Path, text: str) -> dict:
+    """What is waiting on the owner: the blocked items whose class is a decision only he can take.
+
+    Three tracked sources, no hand-kept list: section 4's jobs whose owner column names him, the
+    roadmap steps that say they are blocked and name him, and the board entries that are waiting
+    or whose note asks him something. The night-shift ledger is added when it exists and skipped
+    when it does not, because it is untracked and no shipped view may depend on it.
+    """
+    from genomeos import roadmap, work
+
+    jobs = [
+        j
+        for j in roadmap.parse_data_jobs(text)
+        if j.get("state") != "done" and _OWNER.search(j.get("owner") or "")
+    ]
+    steps = []
+    for a in roadmap.parse_areas(text):
+        for s in a.get("next") or []:
+            if s.get("state") == "blocked" and _OWNER.search(s.get("text") or ""):
+                steps.append({"where": f"area {a['letter']}", "text": _plain(s["text"])})
+    for s in roadmap.parse_next_steps(text):
+        if s.get("progress") == "blocked" and _OWNER.search(s.get("text") or ""):
+            steps.append({"where": f"section 5 item {s['number']}", "text": _plain(s["text"])})
+    board = []
+    for e in work.board(root):
+        if e.get("state") == "done":
+            continue
+        said = " ".join(x for x in (e.get("note"), e.get("next")) if x)
+        asks = [_plain(x) for x in _SENTENCE.split(said) if _OWNER.search(x)]
+        if e.get("state") == "waiting" or asks:
+            board.append(
+                {
+                    "who": e.get("who"),
+                    "state": e.get("state"),
+                    "task": _plain(e.get("task") or ""),
+                    "asks": asks,
+                }
+            )
+    return {
+        "source": "docs/ROADMAP.md sections 4 and 5, the work board",
+        "data_jobs": jobs,
+        "steps": steps,
+        "board": board,
+        "ledger": _ledger(root),
+        "count": len(jobs) + len(steps) + len(board),
+    }
+
+
+# ---- the three status measures, and what was discontinued ----------------------------------------
+#
+# The second external review (docs/ROADMAP.md section 5 item 12): the objective was to revise genomic
+# labels jointly and show that the revisions improve biological accuracy, and neither milestone
+# percentages nor test counts measure that. So the state is kept as three measures that are never
+# added together, each shown with its definition, and a fourth list of investigations closed on a
+# negative, which no measure counts. Every figure is read from a file at request time; the only text
+# written here is what each measure means, which rows of the plan the lists are, and a short name for
+# each entry. A result's wording and its qualification are quoted from its own files and plan rows.
+
+MEASURE_DEFINITIONS = {
+    "software": (
+        "What exists and runs: milestones reached, the external reviews' items closed, the engine "
+        "package's checks and the test suite. Software, not knowledge: a reached milestone or a green "
+        "test says the code does what it states, not that any biological claim is true."
+    ),
+    "biology": (
+        "Only results scored on evidence not used to build them, each with its registered wording and "
+        "its qualification, never stronger. Classified from each result's own file and plan row: "
+        "held out and frozen before scoring is counted; confirmed but not independent, not met, or "
+        "built knowing the answers is shown and not counted. A category with nothing counted reads none."
+    ),
+    "release": (
+        "What a release would need and what is missing: the plan's own release criteria, CI on the "
+        "revision, whether main sits on a revision with a green test run, licensing and packaging. "
+        "CI is read from a cached status file whose age is shown; no request here calls GitHub."
+    ),
+    "discontinued": (
+        "Investigations the plan records as closed on a negative: refuted, retired, not readable, or "
+        "closed as a negative. Each is quoted from its own plan row, with any reopening beside it, and "
+        "none is counted as a capability by any measure."
+    ),
+}
+
+#: Investigations the plan records as closed on a negative, each located by a passage of its own row
+#: (the anchor) and quoted by the sentence that holds the phrase. `review_item` names the external
+#: review item it would otherwise be counted under.
+DISCONTINUED = (
+    {
+        "id": "r8_transformations",
+        "name": "R8's two score transformations: element competition and gene budget",
+        "review_item": "R8",
+        "closed": (
+            ("Pretest done 2026-09-28 (lane-joint", "NEGATIVE, R8 closes"),
+            ("the row above overstates its negative", "the two transformations are retired"),
+        ),
+        "reopened": (
+            ("the row above overstates its negative", "reopened as S3"),
+            ("13. **The coherence programme", "organised as the design of item 12's pilot"),
+        ),
+    },
+    {
+        "id": "joint_engine_original",
+        "name": "the joint inference engine as first specified: a fixed-boundary search on a synthetic case",
+        "review_item": None,
+        "closed": (
+            (
+                "| R8 | The joint inference engine, bounded",
+                "then fixed-boundary search solving a synthetic",
+                ";",
+            ),
+            (
+                "Pretest done 2026-09-28 (lane-joint",
+                "the synthetic two-change case and the search are cancelled",
+            ),
+        ),
+        "reopened": (
+            ("the row above overstates its negative", "are withdrawn as conclusions"),
+            ("pilot does not improve prediction, it stops", "If the pilot does not improve prediction"),
+        ),
+    },
+    {
+        "id": "dilution_gate",
+        "name": "v0.4 stage 4's gate: dilution at division separating stable from short-lived proteins",
+        "review_item": None,
+        "closed": (
+            ("v0.4 stage 4 done 2026-09-28 (lane-v04", "the spec's own gate for this stage is refuted"),
+            ("v0.4 stage 4 done 2026-09-28 (lane-v04", "partitioning is gene-blind"),
+        ),
+        "reopened": (),
+    },
+    {
+        "id": "igvf_mhc",
+        "name": "the IGVF K562 MHC CRISPRi Perturb-seq screen as an independent target benchmark",
+        "review_item": None,
+        "closed": (
+            ("Independent benchmark probed 2026-09-28 (lane-indep", "NOT READABLE"),
+            (
+                "Independent benchmark probed 2026-09-28 (lane-indep",
+                "covered distal decreases against a floor of",
+            ),
+        ),
+        "reopened": (),
+        "result": ("indep_mhc_crispri", "verdict"),
+    },
+    {
+        "id": "human_rate",
+        "name": "the search for a human absolute transcription rate to borrow",
+        "review_item": None,
+        "closed": (
+            ("No human rate to borrow 2026-09-28 (lane-rates2", "No human rate to borrow"),
+            (
+                "No human rate to borrow 2026-09-28 (lane-rates2",
+                "The only absolute per-cell rate published is mouse",
+            ),
+        ),
+        "reopened": (),
+    },
+    {
+        "id": "site_call",
+        "name": "the stricter site call for node boundaries (area B)",
+        "review_item": None,
+        "closed": (
+            ("The stricter site call, closed as a negative", "closed as a negative"),
+            ("The stricter site call, closed as a negative", "the stricter call is a named option"),
+        ),
+        "reopened": (),
+    },
+    {
+        "id": "band_table",
+        "name": "the genome-wide target band table (area I)",
+        "review_item": None,
+        "closed": (
+            ("band table is retired rather than", "band table is retired rather than corrected"),
+            (
+                "it is the reason the table was never quotable",
+                "it is the reason the table was never quotable",
+            ),
+        ),
+        "reopened": (),
+    },
+    {
+        "id": "j_profiling",
+        "name": "area J's gene-level profiling",
+        "review_item": None,
+        "closed": (
+            (
+                "Area J's gene-level profiling closed as a negative",
+                "closed as a negative about its own method",
+            ),
+        ),
+        "reopened": (),
+    },
+    {
+        "id": "economy_policy",
+        "name": "choosing the economy's allocation policy by its gate (b)",
+        "review_item": None,
+        "closed": (("closes decision 5 with a negative", "closes decision 5 with a negative"),),
+        "reopened": (),
+    },
+    {
+        "id": "coherence_pilot",
+        "name": (
+            "the coherence pilot: debugger, boundary alternatives and explanation families (item 13 C1-C3)"
+        ),
+        "review_item": None,
+        "closed": (
+            (
+                "Discontinued 2026-09-29 (lane-pilot; `a9660ff` registered",
+                "passed 0 of 4 CRISPRi decrease endpoints",
+            ),
+            (
+                "| ↳ C1–C3 | **Discontinued 2026-09-29 (lane-pilot)**",
+                "the joint debugger never beat its own blocks revised alone",
+            ),
+        ),
+        "reopened": (),
+        "result": ("pilot_biological_gate", "status"),
+    },
+)
+
+
+def _discontinued_anchors() -> set[str]:
+    """The anchors of every row that closed an investigation on a negative."""
+    return {q[0] for d in DISCONTINUED for q in d["closed"]}
+
+
+_BLOCK_START = re.compile(r"^\s*(?:[-*]\s|#|\d+\.\s|\|)")
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
+
+
+def _passage(lines: list[str], anchor: str) -> tuple[int, str, bool] | None:
+    """The first passage holding `anchor`: its table row, or the bullet or paragraph around it."""
+    for i, ln in enumerate(lines):
+        if anchor not in ln:
+            continue
+        if ln.lstrip().startswith("|"):
+            return i + 1, ln, True
+        start = i
+        while (
+            start > 0
+            and not _BLOCK_START.match(lines[start])
+            and lines[start - 1].strip()
+            and not lines[start - 1].lstrip().startswith("|")
+        ):
+            start -= 1
+        end = i + 1
+        while end < len(lines) and lines[end].strip() and not _BLOCK_START.match(lines[end]):
+            end += 1
+        return start + 1, " ".join(x.strip() for x in lines[start:end]), False
+    return None
+
+
+def _quote(
+    lines: list[str],
+    anchor: str,
+    phrase: str,
+    source: str = "docs/ROADMAP.md",
+    split: str = _SENTENCE_END.pattern,
+) -> dict | None:
+    """The sentence holding `phrase` in the passage `anchor` locates, in the document's own words.
+
+    Markdown emphasis is dropped and nothing else is changed; a table row is read cell by cell and
+    carries its last cell, which is the plan's state column. None when either cannot be found, so
+    a row that moved reads as missing rather than as whatever sentence happens to be nearest.
+    `split` narrows a long table cell to the clause that holds the phrase.
+    """
+    found = _passage(lines, anchor)
+    if not found:
+        return None
+    line, passage, row = found
+    cells = [c.strip() for c in passage.strip().strip("|").split("|")] if row else [passage]
+    for cell in cells:
+        plain = _plain(cell)
+        if phrase not in plain:
+            continue
+        piece = next((p for p in re.split(split, plain) if phrase in p), plain)
+        while piece.endswith(")") and piece.count(")") > piece.count("("):
+            piece = piece[:-1]  # the close of an italic aside the sentence ended inside
+        return {
+            "text": re.sub(r"^(?:[-*]|\d+\.)\s+", "", piece).strip(),
+            "line": line,
+            "source": f"{source} line {line}",
+            "state": _plain(cells[-1]) if row else None,
+        }
+    return None
+
+
+def _lines(path: Path) -> list[str]:
+    return path.read_text().splitlines() if path.exists() else []
+
+
+def _discontinued(root: Path, plan: list[str]) -> dict:
+    """Investigations closed on a negative, each quoted from its own plan row, reopenings beside it."""
+    from genomeos.results import load_result
+
+    rows = []
+    for d in DISCONTINUED:
+        closed = [
+            _quote(plan, q[0], q[1], split=q[2] if len(q) > 2 else _SENTENCE_END.pattern) for q in d["closed"]
+        ]
+        reopened = [x for x in (_quote(plan, q[0], q[1]) for q in d["reopened"]) if x]
+        result = None
+        if d.get("result"):
+            name, field = d["result"]
+            r = load_result(name, root / "data" / "results")
+            if r:
+                result = {"source": f"data/results/{name}.json", "date": r.get("date"), field: r.get(field)}
+        state = "closed on a negative" if all(closed) else "not found in the plan"
+        rows.append(
+            {
+                "id": d["id"],
+                "name": d["name"],
+                "review_item": d["review_item"],
+                "state": state,
+                "closed": [q for q in closed if q],
+                "reopened": reopened,
+                "result": result,
+            }
+        )
+    return {
+        "definition": MEASURE_DEFINITIONS["discontinued"],
+        "source": "docs/ROADMAP.md, each entry's own row",
+        "rows": rows,
+        "total": len(rows),
+    }
+
+
+# -- biology independently validated ----------------------------------------------------------------
+
+#: The categories a correct attribution keeps apart (item 12's S4 names the first five), then the two
+#: this project also claims about: an approved therapeutic target, and a revised label, which is the
+#: objective item 13's metric counts. `means` is what the word refers to, not a claim about it.
+BIOLOGY_CATEGORIES = (
+    ("target", "which gene an element regulates"),
+    ("function", "what an element does, its role"),
+    ("activity", "whether and where an element is active"),
+    ("context", "the cell type or state in which a rule holds"),
+    ("origin", "where the sequence came from"),
+    ("therapeutic target", "an approved drug target recovered from a tumour"),
+    ("label revision", "a genomic label corrected and scored on evidence the correction did not see"),
+)
+
+
+def _q(quote: dict | None, required: bool = False) -> dict:
+    if not quote:
+        return {"text": None, "source": None, "required": required}
+    return {"text": quote["text"], "source": quote["source"], "required": required}
+
+
+def _fq(text, source: str, required: bool = False) -> dict:
+    return {
+        "text": _plain(text) if isinstance(text, str) and text.strip() else None,
+        "source": source,
+        "required": required,
+    }
+
+
+def _admit(c: dict) -> dict:
+    """A candidate is shown with its wording only when every qualification it requires was read.
+
+    The guard behind the panel's rule: a claim never appears without the qualification its own
+    files attach to it. If a required qualification cannot be read (a file absent, a field
+    renamed, a row moved), the entry is withheld: its wording and figures are dropped, it is not
+    counted, and the panel says why, rather than showing the claim bare.
+    """
+    missing = [
+        q["source"] or "a qualification whose source is absent"
+        for q in c["qualifications"]
+        if q["required"] and not q["text"]
+    ]
+    stated = [q for q in c["qualifications"] if q["text"]]
+    c = {**c, "why": [w for w in c.get("why") or [] if w["text"]]}
+    if not c.get("wording") or missing or not stated:
+        return {
+            **c,
+            "class": "withheld",
+            "counted": False,
+            "wording": None,
+            "figures": {},
+            "qualifications": stated,
+            "withheld_because": (
+                "its registered wording could not be read"
+                if not c.get("wording")
+                else f"a required qualification could not be read: {', '.join(missing) or 'none stated'}"
+            ),
+        }
+    return {**c, "qualifications": stated, "withheld_because": None}
+
+
+def _crispri_candidate(root: Path, plan: list[str], readme: dict) -> dict:
+    """The CRISPRi result: held out and frozen before scoring, in one cell type, on a reused benchmark."""
+    from genomeos.results import load_result
+
+    rd = root / "data" / "results"
+    r = load_result("crispri_published", rd) or {}
+    audit = load_result("crispri_split_audit", rd) or {}
+    doc = _lines(root / "docs" / "CRISPRI-RESULT.md")
+    claim = next(
+        (x for x in readme.get("rows") or [] if x["claim"].lower() == "independent prediction"), None
+    )
+    row = next(
+        (
+            x
+            for x in audit.get("rows") or []
+            if "CRISPRI-RESULT.md" in (x.get("figures") or "") and x.get("held_out_claim")
+        ),
+        None,
+    )
+    held = r.get("heldout_published_pairs") or {}
+    second = r.get("second_cell_type_hct116") or {}
+    written = (r.get("preregistered") or {}).get("written") or ""
+    clean = bool(row) and row.get("status") == "CLEAN"
+    frozen = " before " in f" {written} "
+    models = held.get("models") or {}
+    base = models.get("activity + distance") or {}
+    return {
+        "id": "crispri_heldout",
+        "name": "the CRISPRi result (README: independent prediction)",
+        "category": "target",
+        "class": "held out, frozen before scoring" if clean and frozen else "not independent",
+        "counted": clean and frozen,
+        "why": [
+            _fq(row and row.get("status"), "data/results/crispri_split_audit.json, the result's row: status"),
+            _fq(row and row.get("why"), "data/results/crispri_split_audit.json, the result's row: why"),
+            _fq(written, "data/results/crispri_published.json preregistered.written"),
+        ],
+        "wording": claim["text"] if claim else None,
+        "wording_source": "README.md Status, Independent prediction",
+        "qualifications": [
+            _fq(
+                second.get("verdict"),
+                "data/results/crispri_published.json second_cell_type_hct116.verdict",
+                True,
+            ),
+            _q(
+                _quote(plan, "HCT116 arm run 2026-09-28 (lane-hct116", "stays replicated in one cell type"),
+                True,
+            ),
+            _q(_quote(doc, "so it supports", "not a paired test", "docs/CRISPRI-RESULT.md"), True),
+            _q(_quote(doc, "The wording above stays", "for three stated reasons", "docs/CRISPRI-RESULT.md")),
+            _q(
+                _quote(
+                    plan,
+                    "| S8 | The next experiment's information value",
+                    "re-reading held-out data",
+                    split=r";\s+",
+                )
+            ),
+        ],
+        "reused_benchmark": (
+            {
+                "flag": row.get("reused_benchmark"),
+                "text": _plain(audit.get("reused_benchmark") or ""),
+                "source": "data/results/crispri_split_audit.json",
+            }
+            if row
+            else None
+        ),
+        "figures": {
+            # the gain and its interval only: the comparison with the published models is carried by
+            # the wording and its qualifications, never by two numbers set side by side here
+            "held_out_pairs": base.get("pairs"),
+            "held_out_regulated": base.get("positives"),
+            "gain": (held.get("deletion_gain") or {}).get("gain"),
+            "gain_ci95": (held.get("deletion_gain") or {}).get("ci95"),
+            "second_cell_type": "HCT116" if second else None,
+            "second_gain": (second.get("deletion_gain") or {}).get("gain"),
+            "second_ci95": (second.get("deletion_gain") or {}).get("ci95"),
+            "second_pairs": second.get("covered_pairs"),
+            "second_regulated": second.get("regulated"),
+            "second_replicated": second.get("replicated"),
+        },
+        "sources": [
+            "data/results/crispri_published.json",
+            "data/results/crispri_split_audit.json",
+            "docs/CRISPRI-RESULT.md",
+        ],
+        "date": r.get("date"),
+    }
+
+
+def _node_candidate(root: Path, plan: list[str]) -> dict:
+    """The node containment claim: confirmed on a measurement the caller never read, not independent."""
+    from genomeos.results import load_result
+
+    a = load_result("node_independence_audit", root / "data" / "results") or {}
+    states: dict[str, int] = {}
+    for c in a.get("components") or []:
+        states[c.get("status", "?")] = states.get(c.get("status", "?"), 0) + 1
+    called = _quote(plan, "How independent that measured confirmation is", "may not be called independent")
+    premium = a.get("selection_premium") or {}
+    exposed = states.get("EXPOSED", 0)
+    return {
+        "id": "node_containment",
+        "name": "the node containment claim (milestone 1.3's row cites it)",
+        "category": "target",
+        "class": "confirmed, not independent" if (exposed or called) else "unclassified",
+        "counted": False,
+        "why": [
+            _fq(
+                f"components EXPOSED: {exposed}" if a else None,
+                "data/results/node_independence_audit.json components",
+            ),
+            _fq(
+                (a.get("legend") or {}).get("EXPOSED"),
+                "data/results/node_independence_audit.json legend.EXPOSED",
+            ),
+        ],
+        "wording": called["text"] if called else None,
+        "wording_source": called["source"] if called else None,
+        "qualifications": [
+            _q(
+                _quote(plan, "How independent that measured confirmation is", "carries a selection premium"),
+                True,
+            ),
+            _q(_quote(plan, "How independent that measured confirmation is", "rests on the training split")),
+            _fq(
+                (a.get("independent_arms_at_zero_requests") or {}).get("verdict"),
+                "data/results/node_independence_audit.json independent_arms_at_zero_requests.verdict",
+                True,
+            ),
+        ],
+        "reused_benchmark": None,
+        "figures": {
+            "components": states,
+            "excess_default": premium.get("default"),
+            "best_rejected": premium.get("best_rejected"),
+            "worst_rejected": premium.get("worst_rejected"),
+            "spread_points": premium.get("spread_points"),
+            "pairs": (a.get("pairs") or {}).get("total"),
+        },
+        "sources": ["data/results/node_independence_audit.json", "docs/ROADMAP.md area B"],
+        "date": a.get("date"),
+    }
+
+
+def _clause2_candidate(root: Path, plan: list[str]) -> dict:
+    """Milestone 1.3's clause 2: not met, and a difference in target-naming frequency, not accuracy."""
+    from genomeos.results import load_result
+
+    r = load_result("clause2_matched_control", root / "data" / "results") or {}
+    reading = (r.get("primary_reading") or {}).get("clause_2")
+    fixes = next((v for k, v in r.items() if k.startswith("corrections_after")), None) or {}
+    primary = r.get("primary") or {}
+    said = _quote(plan, "The strongest defensible conclusion", "target naming is substantially less frequent")
+    return {
+        "id": "clause2",
+        "name": "milestone 1.3, clause 2: the constrained unknown attributed to a gene",
+        "category": "target",
+        "class": "not met" if reading and "not met" in reading else "unclassified",
+        "counted": False,
+        "why": [_fq(reading, "data/results/clause2_matched_control.json primary_reading.clause_2")],
+        "wording": said["text"] if said else None,
+        "wording_source": said["source"] if said else None,
+        "qualifications": [
+            _fq(
+                (fixes.get("corrects") or {}).get("primary"),
+                "data/results/clause2_matched_control.json corrections: primary",
+                True,
+            ),
+            _q(_quote(plan, "The strongest defensible conclusion", "Clause 2 stays not met")),
+        ],
+        "reused_benchmark": None,
+        "figures": {
+            "matched_difference_points": primary.get("matched_difference_points"),
+            "ci95_over_blocks": primary.get("ci95_over_blocks"),
+            "blocks_compared": primary.get("n_blocks_compared"),
+        },
+        "sources": ["data/results/clause2_matched_control.json", "docs/ROADMAP.md section 6, milestone 1.3"],
+        "date": r.get("date"),
+    }
+
+
+def _therapeutic_candidate(root: Path, plan: list[str]) -> dict:
+    """The therapeutic benchmark: approved targets recovered, on a benchmark built knowing them."""
+    from genomeos.results import load_result
+
+    r = load_result("therapeutic_benchmark", root / "data" / "results") or {}
+    parts = (r.get("result_manifest") or {}).get("partitions")
+    known = _quote(plan, "Benchmarked against known answers", "Benchmarked against known answers")
+    fixed = _quote(plan, "Four fixes the benchmark prompted", "Four fixes the benchmark prompted")
+    retro = isinstance(parts, str) and "known" in parts
+    said = _quote(plan, "| **1.2 therapeutics benchmark**", "Approved targets recovered from public tumours")
+    return {
+        "id": "therapeutic_benchmark",
+        "name": "the therapeutic benchmark (milestone 1.2)",
+        "category": "therapeutic target",
+        "class": "built knowing the answers" if (retro or known) else "unclassified",
+        "counted": False,
+        "why": [
+            _fq(parts, "data/results/therapeutic_benchmark.json result_manifest.partitions"),
+            _q(known),
+            _q(fixed),
+        ],
+        "wording": said["text"] if said else None,
+        "wording_source": said["source"] if said else None,
+        "qualifications": [
+            _fq(parts, "data/results/therapeutic_benchmark.json result_manifest.partitions", True),
+            _q(fixed),
+        ],
+        "reused_benchmark": None,
+        "figures": {
+            k: r.get(k)
+            for k in ("cases", "targets_recovered", "verdicts_correct", "top_mechanism_defensible")
+        },
+        "sources": [
+            "data/results/therapeutic_benchmark.json",
+            "docs/ROADMAP.md area F and section 6, milestone 1.2",
+        ],
+        "date": r.get("date"),
+    }
+
+
+def _biology(root: Path, plan: list[str]) -> dict:
+    """Biology independently validated, by category; a category with nothing counted says none."""
+    readme = _readme_status(root)
+    candidates = [
+        _admit(c)
+        for c in (
+            _crispri_candidate(root, plan, readme),
+            _node_candidate(root, plan),
+            _clause2_candidate(root, plan),
+            _therapeutic_candidate(root, plan),
+        )
+    ]
+    metric = _quote(
+        plan, "The metric is fixed before anything is built", "validated corrections per compute-hour"
+    )
+    categories = []
+    for name, means in BIOLOGY_CATEGORIES:
+        here = [c for c in candidates if c["category"] == name]
+        validated = [c for c in here if c["counted"]]
+        categories.append(
+            {
+                "category": name,
+                "means": means,
+                "measured_by": metric if name == "label revision" else None,
+                "validated": validated,
+                "not_counted": [c for c in here if not c["counted"]],
+                "none": not validated,
+            }
+        )
+    return {
+        "definition": MEASURE_DEFINITIONS["biology"],
+        "categories_source": _quote(
+            plan, "| S4 | What a correct attribution means", "kept separate", split=r";\s+"
+        ),
+        "categories": categories,
+        "counted": sum(len(c["validated"]) for c in categories),
+        "candidates": len(candidates),
+        "withheld": [c["id"] for c in candidates if c["class"] == "withheld"],
+    }
+
+
+# -- software delivered and release readiness --------------------------------------------------------
+
+CI_CACHE = Path("data") / "cache" / "ci_status.json"
+
+
+def _ci_status(root: Path) -> dict:
+    """The cached CI status written by scripts/ci_status_cache.py, with its age; never GitHub itself."""
+    import time
+    from datetime import datetime
+
+    p = root / CI_CACHE
+    base = {"source": str(CI_CACHE), "refresh": "uv run python scripts/ci_status_cache.py"}
+    try:
+        d = json.loads(p.read_text())
+    except (OSError, ValueError):
+        return {**base, "present": False}
+    try:
+        written = datetime.fromisoformat(str(d.get("written")).replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        written = p.stat().st_mtime
+    latest = d.get("latest_completed") or {}
+    main = d.get("main_check") or {}
+    refs = d.get("refs") or {}
+    return {
+        **base,
+        "present": True,
+        "written": d.get("written"),
+        "age_seconds": max(0, round(time.time() - written)),
+        "repo": d.get("repo"),
+        "latest_completed": latest,
+        "latest_success": d.get("latest_success"),
+        "consecutive_failures": d.get("consecutive_failures"),
+        "green": latest.get("conclusion") == "success" if latest else None,
+        "tested_dev_tip": (latest.get("sha") == refs.get("dev")) if latest and refs.get("dev") else None,
+        "refs": refs,
+        "main_check": main,
+        "main_green": (main.get("conclusion") == "success") if main else None,
+        "promote_dry_run": d.get("promote_dry_run"),
+        "errors": d.get("errors") or [],
+    }
+
+
+def _engine_package(root: Path) -> dict | None:
+    """The engine package's own checks, with the revision and tree state its manifest records."""
+    from genomeos.results import load_result
+
+    r = load_result("engine_package", root / "data" / "results")
+    if not r:
+        return None
+    checks = r.get("checks") or []
+    code = (r.get("result_manifest") or {}).get("code") or {}
+    suite = next((c for c in checks if "pytest" in (c.get("check") or "")), None)
+    return {
+        "source": "data/results/engine_package.json",
+        "date": r.get("date"),
+        "passed": r.get("passed"),
+        "checks_passed": sum(1 for c in checks if c.get("ok")),
+        "checks_total": len(checks),
+        "failed": [c.get("check") for c in checks if not c.get("ok")],
+        "suite": suite.get("output") if suite else None,
+        "version": (r.get("built") or {}).get("version"),
+        "revision": code.get("git_sha"),
+        "dirty": code.get("dirty"),
+        "manifest_complete": (r.get("result_manifest") or {}).get("complete"),
+    }
+
+
+def _software(root: Path, text: str, milestones: dict, ci: dict) -> dict:
+    """Software delivered: what exists and runs, labelled as software and never as knowledge."""
+    first, second = _review(text, "11", "R"), _review(text, "12", "S")
+    latest = ci.get("latest_completed") or {}
+    return {
+        "definition": MEASURE_DEFINITIONS["software"],
+        "milestones": {k: milestones[k] for k in ("source", "reached", "total", "held")},
+        "reviews": [
+            {k: rv[k] for k in ("source", "total", "done", "reopened", "closed", "open")}
+            for rv in (first, second)
+        ],
+        "engine_package": _engine_package(root),
+        "tests": {
+            "source": ci["source"],
+            "present": ci.get("present"),
+            "age_seconds": ci.get("age_seconds"),
+            "conclusion": latest.get("conclusion"),
+            "summary": latest.get("test_summary"),
+            "failed_tests": latest.get("failed_tests") or [],
+            "sha": latest.get("sha"),
+            "created": latest.get("created"),
+            "url": latest.get("url"),
+        },
+        "not_counted": [d["id"] for d in DISCONTINUED],
+    }
+
+
+def _pyproject(root: Path) -> dict:
+    text = (root / "pyproject.toml").read_text() if (root / "pyproject.toml").exists() else ""
+    version = re.search(r'^version\s*=\s*"([^"]+)"', text, re.M)
+    lic = re.search(r'^license\s*=\s*\{\s*text\s*=\s*"([^"]+)"', text, re.M)
+    arts = re.search(r"^artifacts\s*=\s*\[([^\]]*)\]", text, re.M)
+    return {
+        "version": version.group(1) if version else None,
+        "license": lic.group(1) if lic else None,
+        "artifacts": re.findall(r'"([^"]+)"', arts.group(1)) if arts else [],
+    }
+
+
+def _tags(root: Path, version: str | None) -> list[str] | None:
+    """The git tags naming this version, or None where the tree is not a git checkout."""
+    import subprocess
+
+    if not version:
+        return []
+    try:
+        out = subprocess.run(
+            ["git", "tag", "--list", version, f"v{version}"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return out.stdout.split() if out.returncode == 0 else None
+
+
+def _release(root: Path, plan: list[str], ci: dict, engine: dict | None) -> dict:
+    """Release readiness: the plan's criteria quoted, each check computed from files, the gaps listed."""
+    py = _pyproject(root)
+    tags = _tags(root, py["version"])
+    licence_files = ["LICENSE", "LICENSE-APACHE", "NOTICE", "LICENSING.md"]
+    present = [f for f in licence_files if (root / f).exists()]
+    latest = ci.get("latest_completed") or {} if ci.get("present") else {}
+    dry = ci.get("promote_dry_run") or {} if ci.get("present") else {}
+    main_sha = str((ci.get("refs") or {}).get("main") or "")[:10]
+    main_test = (ci.get("main_check") or {}).get("conclusion") or "no completed run"
+    shipped = ", ".join(py["artifacts"]) or "none"
+    if tags is None:
+        tagged = "not a git checkout"
+    else:
+        tagged = f"pyproject.toml version {py['version']}; tags naming it: {', '.join(tags) or 'none'}"
+    if engine:
+        tree = " with uncommitted changes" if engine["dirty"] else ""
+        built = (
+            f"{engine['checks_passed']} of {engine['checks_total']} checks, {engine['date']}, "
+            f"built from {str(engine['revision'] or '')[:10]}{tree}"
+        )
+    else:
+        built = "no engine package result"
+    checks = [
+        {
+            "check": "the version is tagged",
+            "ok": None if tags is None else bool(tags),
+            "detail": tagged,
+            "source": "pyproject.toml, git tag --list",
+        },
+        {
+            "check": "a PyPI package exists",
+            "ok": None,
+            "detail": "not checked from here; the plan's own statement is quoted among the criteria",
+            "source": "docs/ROADMAP.md area G",
+        },
+        {
+            "check": "CI's latest completed run is green",
+            "ok": (latest.get("conclusion") == "success") if latest else None,
+            "detail": (
+                f"{latest.get('conclusion')} on {str(latest.get('sha') or '')[:10]} "
+                f"({latest.get('event')}, {latest.get('created')})"
+            )
+            if latest
+            else "no cached CI status",
+            "source": ci["source"],
+        },
+        {
+            "check": "main sits on a revision with a green test run",
+            "ok": ci.get("main_green") if ci.get("present") else None,
+            "detail": f"main {main_sha}: test {main_test}" if ci.get("present") else "no cached CI status",
+            "source": ci["source"],
+        },
+        {
+            "check": "the promotion gate finds a green revision to promote",
+            "ok": (dry.get("exit") == 0) if dry else None,
+            "detail": _plain(dry.get("output") or "") if dry else "no cached dry run",
+            "source": f"{ci['source']} (scripts/promote_main.sh, dry run only)",
+        },
+        {
+            "check": "the licence files are present and shipped",
+            "ok": len(present) == len(licence_files) and all(f in py["artifacts"] for f in licence_files),
+            "detail": f"present: {', '.join(present) or 'none'}; licence {py['license']}; shipped: {shipped}",
+            "source": "LICENSING.md, pyproject.toml",
+        },
+        {
+            "check": "the engine package builds and passes its own checks",
+            "ok": bool(engine["passed"] and not engine["failed"]) if engine else None,
+            "detail": built,
+            "source": "data/results/engine_package.json",
+        },
+        {
+            "check": "that engine package was built from a committed revision",
+            "ok": (engine["dirty"] is False) if engine and engine["dirty"] is not None else None,
+            "detail": f"result manifest: dirty {engine['dirty']}, complete {engine['manifest_complete']}"
+            if engine
+            else "no engine package result",
+            "source": "data/results/engine_package.json result_manifest",
+        },
+    ]
+    return {
+        "definition": MEASURE_DEFINITIONS["release"],
+        "criteria": [
+            q
+            for q in (
+                _quote(plan, "no git tag and no PyPI package", "no git tag and no PyPI package"),
+                _quote(
+                    plan,
+                    "| S7 | Release checks follow the revision being promoted",
+                    "checks are required on the revision promoted",
+                    split=r";\s+",
+                ),
+                _quote(plan, "release readiness", "release readiness", split=r",\s+"),
+            )
+            if q
+        ],
+        "checks": checks,
+        "met": [c["check"] for c in checks if c["ok"] is True],
+        "missing": [c["check"] for c in checks if c["ok"] is False],
+        "unknown": [c["check"] for c in checks if c["ok"] is None],
+        "ci": ci,
     }
 
 
@@ -169,7 +1360,9 @@ class Api:
                 "entities": len(module.entities),
                 "rules": len(module.rules),
                 "parameters": len(module.parameters),
+                # means over stated confidences, null where none is stated; counts beside (item 12 S1)
                 "confidence": module.confidence_report(),
+                "confidence_counts": module.confidence_counts(),
                 "unknown": [
                     {"id": u.id, "locus": str(u.locus) if u.locus else None} for u in module.unknowns()
                 ],
@@ -181,8 +1374,9 @@ class Api:
                         "source": r.evidence.source,
                     }
                     for r in module.rules
-                    if r.confidence < 0.5
+                    if confidence_stated(r.confidence) and r.confidence < 0.5
                 ],
+                "unstated_rules": sum(1 for r in module.rules if not confidence_stated(r.confidence)),
             },
         }
 
@@ -771,7 +1965,7 @@ class Api:
                     "subject": line.subject,
                     "message": line.message,
                     "evidence": line.evidence,
-                    "confidence": line.confidence,
+                    "confidence": confidence_to_json(line.confidence),
                 }
                 for line in dbg.explain(sp)
             ]
@@ -1145,7 +2339,7 @@ class Api:
                     "status": status,
                     "reason": why,
                     "evidence": {"kind": r.evidence.kind.value, "source": r.evidence.source},
-                    "confidence": r.confidence,
+                    "confidence": confidence_to_json(r.confidence),  # null when the rule states none
                 }
             )
 
@@ -1239,7 +2433,7 @@ class Api:
                 "ontology_id": cell.ontology_id,
                 "expresses": list(cell.expresses),
                 "evidence": {"kind": cell.evidence.kind.value, "source": cell.evidence.source},
-                "confidence": cell.confidence,
+                "confidence": confidence_to_json(cell.confidence),
             },
             "cell_types": [c.id for c in types],
             "gated_on_cell_type": gates,
@@ -1305,6 +2499,39 @@ class Api:
         from genomeos import roadmap
 
         return roadmap.load(self.root)
+
+    def state(self) -> dict:
+        """The project's real state, computed from files at request time so it cannot go stale.
+
+        Four questions a reader of the Progress tab is actually asking, each answered by a file
+        rather than by a sentence somebody remembered to update: which milestones are reached and
+        why the held ones are held (docs/ROADMAP.md section 6), where the external review stands
+        (section 5 item 11), what the project claims and on what number (README's Status section
+        with the result files it rests on), and what is waiting on the owner. Since the second
+        external review (section 5 item 12) it also answers with three measures kept apart, each
+        with its definition: software delivered, biology independently validated, release
+        readiness; and lists the investigations closed on a negative, which none of them counts.
+        """
+        p = self.root / "docs" / "ROADMAP.md"
+        text = p.read_text() if p.exists() else ""
+        plan = text.splitlines()
+        milestones = _milestones(text)
+        ci = _ci_status(self.root)
+        software = _software(self.root, text, milestones, ci)
+        return {
+            "milestones": milestones,
+            "review": _review(text),
+            "claims": _claims(self.root),
+            "owed": _owed(self.root, text),
+            # the second review's three measures, never added together, and what was discontinued
+            "measures": {
+                "software": software,
+                "biology": _biology(self.root, plan),
+                "release": _release(self.root, plan, ci, software["engine_package"]),
+            },
+            "discontinued": _discontinued(self.root, plan),
+            "roadmap_modified": p.stat().st_mtime if p.exists() else None,
+        }
 
     def work(self) -> dict:
         """What is going on: the work board, running jobs, uncommitted files by area, the day's commits."""
@@ -1438,27 +2665,32 @@ class Api:
     def budget_wide(self) -> dict:
         """The 98%: every chromosome's composition budget (tiers, constraint) and the job's state."""
         from genomeos import jobs
-        from genomeos.attribution.budget import PHYLOP_THRESHOLD, TIERS
+        from genomeos.attribution.budget import AXES_TIERS, PHYLOP_THRESHOLD, read_axes
 
         rd = self.root / "data" / "results"
         cache = getattr(self, "_budget_cache", None)
         if cache is None:
             cache = self._budget_cache = {}
         rows = []
-        tiers = dict.fromkeys(TIERS, 0)
+        tiers = dict.fromkeys(AXES_TIERS, 0)
         unknown_bp = constrained = measured = genome = 0
 
         def order(q: Path) -> tuple[int, str]:
             c = q.stem.split("_chr")[-1]
             return (int(c), "") if c.isdigit() else (100, c)
 
-        for path in sorted(rd.glob("budget_chr*.json"), key=order):
-            key = (str(path), path.stat().st_mtime)
+        # every chromosome with a budget, read through the one reader under the R7 tier names
+        paths = {p.stem.split("_")[-1]: p for p in rd.glob("budget_chr*.json")}
+        paths.update({p.stem.split("_")[-1]: p for p in rd.glob("budget_axes_chr*.json")})
+        for path in sorted(paths.values(), key=order):
+            chrom = path.stem.split("_")[-1]
+            stored = rd / f"budget_{chrom}.json"
+            key = (str(path), path.stat().st_mtime, stored.stat().st_mtime if stored.exists() else None)
             row = cache.get(key)
             if row is None:
                 try:
-                    r = json.loads(path.read_text())
-                except (OSError, json.JSONDecodeError):
+                    r = read_axes(chrom, rd) or {}
+                except (OSError, ValueError):
                     continue
                 if not r.get("by_tier"):
                     continue
@@ -1799,7 +3031,7 @@ class Api:
                     "tissue": e.tissue,
                     "log2_fold_change": round(e.log2_fold_change, 4),
                     "direction": getattr(e.direction, "value", str(e.direction)),
-                    "confidence": round(e.confidence, 3),
+                    "certainty": e.certainty.to_dict(),
                 }
                 for e in effects
             ],
@@ -2260,6 +3492,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.roadmap())
             if u.path == "/api/work":
                 return self._json(self.api.work())
+            if u.path == "/api/state":
+                return self._json(self.api.state())
             if u.path == "/api/features":
                 return self._json(self.api.features())
             if u.path == "/api/predict":

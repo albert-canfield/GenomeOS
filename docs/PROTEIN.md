@@ -215,6 +215,273 @@ and land in the graph as nodes of their own. Ubiquitin cross-links are not
 in the compiled `modifications` section yet, which is why no ubiquitin class
 appears.
 
+## Phosphosite observation (2026-09-27)
+
+**What the field means:** `observed_in_cell_types_or_tissues` counts the
+distinct cell lines or tissues in whose public mass-spectrometry data a
+phosphosite was identified (Ochoa et al. 2020 reanalysis, 1% site-level FDR);
+it does **not** say what fraction of the protein is phosphorylated there
+(occupancy), whether the site is phosphorylated in a given cell, or that the
+phosphorylation does anything. A curated site with no entry is absent from
+that reference, which is not evidence that it is never phosphorylated.
+
+Area C recorded measured modification state as blocked: the layer above says
+only that a site *can* be modified. No open per-site, per-tissue occupancy
+table exists, and none is built here. Two partial routes were probed.
+
+**Route 1: the Ochoa et al. 2020 reference phosphoproteome.** Ochoa, Jarnuczak
+et al., "The functional landscape of the human phosphoproteome", Nat.
+Biotechnol. 38, 365-373 (2020), doi:10.1038/s41587-019-0344-3; author
+manuscript PMC7100915. 112 PRIDE datasets from 104 cell types or tissues,
+6,801 raw files reanalysed jointly with MaxQuant (PRIDE PXD012174); 119,809
+sites pass 1% site-level FDR, 116,258 of them on reviewed UniProt proteins.
+
+- Where. The article's Supplementary Tables 2 and 3 (Springer Nature
+  `41587_2019_344_MOESM4_ESM.xlsx`, 54,465,047 bytes, and `MOESM5`,
+  3,556,910 bytes; Content-Length checked 2026-09-27) and the authors' R
+  package funscoR, https://github.com/evocellnet/funscoR, whose `data/`
+  holds the same reference as R data files: `phosphoproteome.rda` (197,440
+  bytes), `feature_spectral_counts.rda` (367,201), `feature_ms_pride.rda`
+  (1,427,549).
+- Terms. The article is under exclusive licence to Springer Nature; the
+  PMC manuscript permits viewing and text and data mining for academic
+  research under Nature's conditions, and the supplementary spreadsheets
+  carry no licence of their own. The funscoR package declares
+  `License: LGPL` in its DESCRIPTION (no version, no LICENSE file), which
+  permits copying and redistribution of the package, data included. This
+  project takes the funscoR files, not the spreadsheets, and keeps only
+  per-site counts joined to its own curated sites, with the citation.
+  funscoR's `psp.rda` is parsed from PhosphoSitePlus and is **not** used:
+  PhosphoSitePlus terms are non-commercial.
+- One row. `feature_spectral_counts`: `acc` (UniProt accession), `residue`,
+  `position`, `Biological_samples`, `Spectral_Counts`; 116,258 rows,
+  `Biological_samples` 1 to 83 (median 3), `Spectral_Counts` median 87.
+  The paper's text names this feature "the number of different cell lines
+  or tissues in which the site had been identified", which is what the
+  field here is called. It is **not** a count of the 6,801 experiments: no
+  per-site experiment count is published, so "observed in N experiments"
+  cannot be delivered from this source.
+- Size. 2.0 MB for the three files; well under the 2 GB stop.
+
+**Route 2: CPTAC phosphoproteomics through cBioPortal.** The public API
+(https://www.cbioportal.org/api, the client in `genomeos/cancer/cbioportal.py`)
+lists 12 phosphoprotein profiles as `GENERIC_ASSAY` / `LIMIT-VALUE`
+(profile ids `brca_cptac_2020_phosphoproteome`,
+`luad_cptac_2020_phosphoproteome`, `lusc_cptac_2021_phosphoproteome`,
+`ucec_cptac_2020_phosphoproteome`, `gbm_cptac_2021_phosphoproteome`,
+`paad_cptac_2021_phosphoproteome`, `brain_cptac_2020_phosphoprotein`,
+`coad_cptac_2019_phosphoprotein_quantification`, and the CPTAC
+quantifications in `brca_tcga`, `ov_tcga` and their PanCan Atlas studies). Entities per profile, from `/api/generic-assay-meta`:
+38,751 (breast 2020), 41,188 (lung adenocarcinoma), 18,806 (breast, TCGA
+PanCan). Values are log2 abundance ratios to a pooled reference across
+tumours, so the only honest name is `relative_abundance_in_tumours`.
+Terms: the cBioPortal FAQ says data are under the ODC Open Database
+License unless a study says otherwise (attribution, share-alike on a
+derived database). The join is the obstacle: sites are named by gene symbol
+and a RefSeq protein position (`NP_000010.1_1_1_69_69`, `A2M_S710s`,
+`AAAS_pS462`), not by UniProt accession and residue, so each needs a RefSeq
+to UniProt residue mapping first. Route 1 is smaller and joins directly, so
+it is the one built; route 2 is recorded as reachable and usable, not built.
+
+**Registration (written before the join).**
+
+- Field: `observed_in_cell_types_or_tissues` (integer, 1 to 104) and
+  `spectral_count` (peptide-spectrum matches), per curated site; source
+  `Ochoa et al. 2020 / funscoR`. Never `occupancy`, `modified` or `active`.
+- Join: UniProt accession of the compiled definition and the site's
+  `start`, curated sites of class `phospho` only (the reference holds only
+  phosphosites), and the reference residue must equal the residue at that
+  position in the current UniProt sequence. A pair whose residue disagrees
+  (sequence changed since the 2017 proteome) is counted and dropped, not
+  joined.
+- Expectation: 45% to 70% of the 41,661 curated phospho sites gain an
+  observation, which is 19% to 30% of all 96,362 curated sites; the other
+  classes gain none by construction.
+- Checks that would show the join wrong: NPM1 S125 (P06748, the
+  constitutive CK2 site) must be observed; no joined site may sit on a
+  residue other than S, T or Y in the current sequence (TP53 M1 and every
+  disulfide cysteine must not appear); residue disagreements must stay under
+  2% of accession-position matches, or the numbering is off.
+
+**Result, against the registration.** `scripts/phosphosite_observation.py`
+(run with `uv run --with rdata`, the R data read in a temporary directory and
+deleted) writes `data/results/phosphosite_observation.json` (0.55 MB, the
+joined sites only); `ptm.observed_in(accession, position, observation)`
+returns one site's record with the meaning attached.
+
+| | |
+|---|---|
+| curated phospho sites | 41,661 of 96,362 |
+| accession and position found in the reference | 29,299 |
+| residue disagrees with the current sequence, dropped | 20 (0.07%) |
+| joined: `observed_in_cell_types_or_tissues` set | 29,279 on 6,222 proteins |
+| share of curated phospho sites | 70.3% (registered 45% to 70%) |
+| share of all curated sites | 30.4% (registered 19% to 30%) |
+| cell types or tissues per joined site | median 12; 2,238 in one; 16,699 in ten or more; max 83 |
+| reference sites not joined to a curated site | 86,979 |
+
+The coverage lands 0.3 points above the registered range, on the high side:
+the expectation was too low and is reported as missed, not moved. All three
+checks pass: NPM1 S125 is observed, TP53 M1 is not, no joined site sits on a
+residue other than S, T or Y, and residue disagreements are 0.07% against a
+2% bound. Curated sites of other classes that fall on a reference position
+(acetyl 212, glyco 81, ADP-ribosyl 41, nitro 9, sulfo 3, other 2, methyl 1)
+are counted and not joined: the same serine or threonine can carry either
+chemistry, and the reference says only that it was seen phosphorylated.
+
+Read with its limits. The reference and UniProt's curation are not
+independent: many UniProt phosphosites were annotated from the same
+large-scale studies Ochoa et al. reanalysed, so the 70% is partly
+agreement with itself, not an external confirmation rate. The 86,979
+reference sites without a curated counterpart are observations the curated
+layer lacks; they are not added as sites here. Occupancy stays blocked.
+
+## Relative abundance in tumours (2026-09-28)
+
+**What the field means:** `relative_abundance_in_tumours` gives, per CPTAC
+study on cBioPortal, the number of tumours with a value for a phosphosite and
+the median of the per-tumour log2 ratio of that site's abundance to a pooled
+reference of tumours from the same study. It is **not** occupancy (the
+fraction of the protein phosphorylated there), not an absolute level
+comparable across studies, and never per patient in the repository. A
+curated site with no entry is absent from these profiles, which is not
+evidence that it is never phosphorylated.
+
+This builds route 2 of the section above. The obstacle was the site names:
+gene symbol plus a position on a RefSeq protein, not UniProt accession and
+residue. `scripts/cptac_phospho.py map` builds that mapping;
+`ptm.parse_cptac_entity` and `ptm.transfer_position` are its two rules.
+
+**Mapping, before any join.**
+
+- Entities. Twelve phospho profiles, 430,832 entities. Four name their
+  RefSeq protein (lung adenocarcinoma 2020, glioblastoma 2021, pancreatic
+  2021, paediatric brain 2020); seven name the gene only (breast 2020,
+  endometrial 2020, colon 2019, the two TCGA breast and two TCGA ovarian
+  quantifications); the lung squamous 2021 profile holds 7,729 gene-level
+  aggregates whose ids end in `acetylprotein` and is excluded whole.
+- Single sites only. An entity counts only when it names one localised
+  S/T/Y site. Dropped at parse time: several sites in one entity (lung
+  5,919; glioblastoma 17,202; brain 464; breast 2020 5,911; TCGA breast
+  13,100 and PanCan 1,880; TCGA ovarian 456 and PanCan 31), site not
+  localised (lung 7,537; breast 2020 6,926), a second glioblastoma entity
+  for the same site (the `.1` suffix, 7,620), not a RefSeq protein (11
+  lung smORF or YP entities).
+- RefSeq to UniProt. 12,025 RefSeq protein accessions, versioned as CPTAC
+  used them. UniProt REST ID mapping (`RefSeq_Protein` to `UniProtKB`,
+  release 2026_03, CC BY 4.0): the reviewed entries among the project's
+  compiled definitions. A superseded version (`NP_x.1` when `.2` is
+  current) has no cross-reference, so the unversioned accession is asked
+  instead (3,893 proteins); the sequence compared is still the exact
+  version, fetched from NCBI E-utilities. Result: 7,521 identical to the
+  UniProt canonical sequence, 3,123 different, 1,074 with no UniProt
+  entry, 305 with no reviewed entry among the compiled definitions, 2 with
+  two compiled entries.
+- Position transfer. Identical sequences carry the position (87,207 site
+  entities); otherwise the 15-residue window around the site must occur
+  exactly once in the UniProt sequence (27,029 carried). The residue letter
+  must match at the RefSeq end (27 disagree, 0.02%) and at the UniProt end.
+  Dropped: window not found (lung 494, glioblastoma 401, pancreatic 925,
+  brain 63), window occurs more than once (12), RefSeq protein not mapped
+  to one compiled entry (lung 2,682, glioblastoma 4,747, pancreatic 4,769,
+  brain 426), several entities on one UniProt site in one profile (all
+  dropped as ambiguous: 51, 0, 161, 96).
+- Mapped, RefSeq-keyed: lung 24,491, glioblastoma 40,357, pancreatic
+  45,586, brain 3,494; 66,427 distinct UniProt sites on 8,791 proteins
+  (S 84%, T 14%, Y 2% of site entities).
+- Gene-keyed profiles. The position is on an unnamed RefSeq isoform. Taken
+  on the UniProt canonical of the one compiled entry for the gene symbol,
+  the residue letter disagrees for 31,424 of 219,179 site entities
+  (14.3%; 4.3% colon, 13.5% breast 2020, 14.6% endometrial, 16.2% to 17.6% TCGA
+  breast, 18.4% to 19.2% TCGA ovarian). That rate says many positions are on
+  another isoform, and a letter that matches by chance on a wrong isoform
+  cannot be told apart, so these profiles are counted and **not
+  committed**.
+
+**Registration (written after the mapping, before any curated site was
+joined or any value fetched; constants `ptm.CPTAC_REGISTRATION`).**
+
+- Join: UniProt accession + position + residue letter must equal a curated
+  site of class `phospho` (S, T or Y). Committed tier: RefSeq-keyed
+  profiles only; a gene-keyed tier would need a residue mismatch under 2%,
+  the same bound as the RefSeq tier, and at 14.3% it is counted only.
+- Expected coverage of the 41,661 curated phospho sites: **35% to 55%**
+  from the RefSeq-keyed profiles, 45% to 65% with the gene-keyed profiles
+  counted. Why: the Ochoa reference, 116,258 sites from 104 cell types or
+  tissues, reached 70.3%; these profiles give 66,427 mapped sites (109,474
+  with gene-keyed ones) from four tumour types, single localised sites
+  only, and tumour tissue lacks the cell-line studies much of UniProt's
+  curation came from.
+- Checks that would show the join wrong: EGFR Y1092 (P00533; legacy Y1068)
+  present in lung adenocarcinoma; NPM1 S125 (P06748) present; TP53 M1 absent;
+  no joined site off S, T or Y; RefSeq-end residue mismatches under 2%; the
+  median of the per-site, per-study median log2 ratios within ±0.5 (pooled
+  reference ratios centre near zero). AKT1 S473 is reported without an
+  expectation: its tryptic peptide is poorly seen in global
+  phosphoproteomes.
+- Field: `relative_abundance_in_tumours`, per site a list of (study,
+  tumours with a value, median log2 ratio). Never `occupancy`, `modified`
+  or `active`; no per-tumour value is written to the repository (values are
+  summarised in memory and never cached).
+- Licences. cBioPortal data are under the ODC Open Database License 1.0
+  unless a study says otherwise. Obligations and how the result meets
+  them: attribution (the result's `licence` field and this section name
+  CPTAC, cBioPortal and every profile used); share-alike (the per-site
+  summary is a derived database and the result file declares it is offered
+  under ODbL 1.0, separately from the code licences); keep open (it is a
+  plain JSON file in the public repository). UniProt CC BY 4.0 and NCBI
+  RefSeq are attributed the same way.
+
+**Result, against the registration, negatives first.**
+`scripts/cptac_phospho.py join` writes
+`data/results/phosphosite_tumour_abundance.json` (3.6 MB, per-site
+per-study summaries only, manifest complete); 133 MB fetched from
+cBioPortal (gzip), no AlphaGenome request. `ptm.relative_abundance_in_tumours(accession,
+position, result)` returns one site's list with the meaning attached.
+
+- **The pancreatic 2021 profile is not in log2-ratio units.** The median of
+  its per-site medians is 18.8 (lung 0.04, glioblastoma -0.02, brain -0.29):
+  those are log2 intensities, whatever the profile's name says. It is
+  excluded from the committed field. The registered pooled check (median of
+  the RefSeq-keyed site medians within ±0.5) **passed at 0.11 with the
+  pancreatic values inside it**, so that check was too weak to catch a
+  whole profile in the wrong units; the per-profile medians found it. The
+  gene-keyed TCGA breast PanCan profile sits at -0.52, just outside the
+  bound; it is not committed either way.
+- **Coverage missed high on both registered ranges.** RefSeq-keyed
+  profiles, as registered (pancreatic included): 55.3% of the 41,661
+  curated phospho sites counted per definition file (55.7% of 41,244
+  distinct accession-position sites; 59 accessions sit in more than one
+  definition file), against 35% to 55%. All profiles: 68.6% against 45% to
+  65%. The expectation was too low, as it was for the Ochoa join, and is
+  reported as missed, not moved. Committed after the units exclusion
+  (lung adenocarcinoma, glioblastoma, paediatric brain): 19,104 sites on
+  5,105 proteins, 45.9%.
+- Not reached: 22,140 distinct curated phospho sites have no committed
+  value. Mapped CPTAC sites that fall on a curated site of another class
+  (glyco 205, acetyl 162, ADP-ribosyl 65, sulfo 25, nitro 7, other 4, lipid
+  1, methyl 1) are counted and not joined.
+- Checks: EGFR Y1092 (legacy Y1068) is present in lung adenocarcinoma
+  (32 tumours, median log2 ratio -0.23) and glioblastoma; NPM1 S125 present
+  (brain, 217 tumours); TP53 M1 absent; no joined site off S, T or Y;
+  RefSeq-end residue mismatches 0.02% against 2%; committed median of
+  site medians -0.02. AKT1 S473 is in no profile, as the registration
+  allowed.
+
+| committed profile | curated sites with a value | tumours per site (median) |
+|---|---|---|
+| lung adenocarcinoma 2020 | 12,330 | 102 |
+| glioblastoma 2021 | 16,119 | 73 |
+| paediatric brain 2020 | 2,594 | 217 |
+
+Sites in all three: 1,745; in one only: 8,910. Read with its limits: a
+median log2 ratio near zero says the site sits near the pooled reference of
+that study, not that it is unphosphorylated; ratios from different studies
+share no reference and are not compared. The gene-keyed profiles (breast,
+endometrial, colon, TCGA breast and ovarian) stay uncommitted until their
+RefSeq isoforms are known; `mapping_drops_by_profile` in the result keeps
+every drop count per profile.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had

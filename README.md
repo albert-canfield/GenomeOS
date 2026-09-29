@@ -95,9 +95,23 @@ loads in half a second.
 
 ## Status (1.0, 2026-09-27)
 
-The whole genome is decoded end to end. Every human chromosome has been
-fetched and analysed, the proteome compiled and verified against the curators,
-and the structural model tested at genome scale. [docs/ROADMAP.md](docs/ROADMAP.md)
+What exists, measured separately, because these are different claims:
+
+- **Sequence**: every human chromosome (GRCh38) fetched and analysed; the
+  proteome compiled and verified against the curators.
+- **Annotation**: the attribution layer labels regions with a role or an
+  explicit UNKNOWN. A label is an annotation, not demonstrated function.
+- **Assay coverage**: of the 30,602,182 bases of the real unknown, 160,447
+  (0.52%) have been read by any assay this project holds.
+- **Software correctness**: the test suite checks that the code reproduces its
+  own rules and recorded figures. That is consistency, not prediction.
+- **Independent prediction**: one result so far — an AlphaGenome deletion
+  feature on held-out CRISPRi pairs, in the range of ENCODE-rE2G, in one
+  cell type ([docs/CRISPRI-RESULT.md](docs/CRISPRI-RESULT.md)).
+
+The genome is not decoded: an annotation is not a function, little of the
+unknown is measured, and less is predicted on evidence the model did not see.
+[docs/ROADMAP.md](docs/ROADMAP.md)
 holds the plan and the gaps; [docs/PROGRESS.md](docs/PROGRESS.md) records the
 evidence per task.
 

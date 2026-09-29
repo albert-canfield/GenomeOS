@@ -27,6 +27,7 @@ Updated as each task is completed (tests + lint green before moving on).
 | UI: Twin view + uncertainty | done | web UI gains a Twin tab (create, fork with variants/environment, run A vs B, diff, uncertainty) and uncertainty tables on Program and Ageing |
 | 4.2 segmentation clock | done | `data/demo/segmentation_clock.bio` (HES7 loop, FGF wavefront, period 5 h from Matsuda 2020) + `runtime/segmentation.py` clock-and-wavefront; segment count = frozen cells / (speed × period) within one segment; halving the clock rate halves the count |
 | 4.3 gastrulation | done | `data/demo/gastrulation.bio` tristable SOX2/TBXT/SOX17 switch read against a clamped NODAL gradient; endoderm → mesoderm → ectoderm in order; proportions within the stated (confidence 0.3) expectations; the module reports itself as low confidence because its mutual-repression rules are inferred |
+| 4.3 gastrulation, re-measured 2026-09-28 | order holds; proportions do not | The order endoderm → mesoderm → ectoderm is real. The proportions are not within expectations: 60 cells, 30 h give ectoderm 0.467, mesoderm 0.10 (6 cells), endoderm 0.433 against stated 0.45 / 0.35 / 0.20. The mesoderm check `abs(0.10 - 0.35) < 0.25` passed only because 0.35 - 0.10 is 0.24999999999999997 in floating point; `tests/test_gastrulation.py` now resolves float ties against the model and marks mesoderm `xfail(strict=True)`. The three expected values cite no source (`evidence: inferred "order of magnitude"`). |
 | 4.4 debugger | done | `runtime/debugger.py`: breakpoints (`TetR > 50`, `divisions >= 10`), step, `explain()` lists the terms driving a species with rule evidence and confidence, ageing events traced to their parameters |
 | 5a second organism | done | Ensembl GFF3 dialect supported; C. elegans WBcel235 chromosome III: >2,000 protein-coding genes, >97% of coding transcripts translate cleanly, `lin-12` found |
 | 5b minimal organism | done (whole organism) | `genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare`: one zygote → 2,183 cells → the 959-cell adult hermaphrodite plus Z2/Z3; every cell by name, every terminal fate (961/961) and every programmed death (131/131) as in Sulston 1983 / Sulston & Horvitz 1977; division timing on distilled per-lineage timers median 12 min from the reference; founders decided by mechanism (PAR, SKN-1, PIE-1, PAL-1, POP-1, Wnt from P2, Notch from P2 and MS); the earlier `genomeos organism` view now runs on the same Body runtime |
@@ -50,6 +51,8 @@ Updated as each task is completed (tests + lint green before moving on).
 | UI: class summary + highlight | done | chips with share of bases per block type and UNKNOWN class; click a chip or "Highlight all" in the block panel to mute everything else |
 | conceptual model: nodes / reader / writer / executor | recorded | docs/NODES-READER-WRITER.md maps it to TADs and CTCF (nodes), the epigenome (reader), replication/epigenetic/germline writers, runtime (executor); next design step: a `Domain` block above `Gene` |
 | molecules: RNA and proteins | started | `genomeos protein SYMBOL` and the Molecules tab: our translation of the canonical transcript checked against UniProt (APP: 770 aa, 100% identical to P05067), UniProt function, location and features (curated), AlphaFold model with per-residue pLDDT (predicted) drawn as a rotating backbone coloured by confidence; structures cached, nothing else stored |
+| UI: Progress tab read from files | done | `/api/state`: milestones and the external review R1–R9 parsed from docs/ROADMAP.md at request time, the claim panel's words from README's Status section and its figures from their own result files with each file's date and its own qualification, the work board, and what is waiting on the owner; tests/test_web.py fails if a result's figure is written into the server or the page |
+| UI: three status measures kept apart | done | `/api/state` gains `measures` and `discontinued` (roadmap §5 item 12, the second external review): **software delivered** (milestones through `roadmap.parse_milestones`, both external reviews' items by the state column of their follow-up rows, the engine package's checks, the latest CI run's pytest line), labelled software, not knowledge; **biology independently validated** by category (target, function, activity, context, origin, therapeutic target, label revision), each candidate classified from its own result file and plan row and shown only in its registered wording with its qualification, otherwise withheld; on 2026-09-28 one is counted, the CRISPRi result (held out and frozen before scoring, "in the range of ENCODE-rE2G", replicated in one cell type, HCT116 passes and is not replicated, on a reused benchmark), node containment is confirmed but not independent, clause 2 is not met, the therapeutic benchmark was built knowing its answers, and six categories read none; **release readiness** from the plan's own criteria, a cached CI status (`scripts/ci_status_cache.py`, its age shown) and the promotion gate's dry run; nine **discontinued investigations** quoted from their plan rows and counted by no measure, so R8 now reads reopened rather than done; tests/test_web_status.py |
 
 ## 2026-09-10 (evening 2) — flow trace, nodes, protein compiler
 
@@ -1067,3 +1070,146 @@ defect count at 0 and the preference question open in its place.
 docs/ROADMAP.md §5 items 3b, 4, 5 and 9; LOCI-BENCHMARK.md §22;
 BIOLANG-v0.4-ECONOMY.md §9.2; LESSONS.md; `data/results/loci_fourth.json`,
 `abundance_gate.json`, `therapeutic_benchmark.json`.
+
+## 2026-09-28 — an external review becomes the order of work, and the first five of its items are done overnight
+
+**What Albert owes, first.** (1) Whether to spend 705 AlphaGenome requests on the HCT116 arm of the
+CRISPRi result. It is now the only near-term route to an independent target benchmark: the one
+never-read screen tried overnight had 13 usable positives against a registered floor of 20.
+Recommended: yes. (2) A permission rule so `scripts/commit_own.sh --force` can run; two things wait on
+it, including the regenerated `engine_package.json`. (3) The licence of the engine-only test files
+shipped in the Apache-2.0 engine package (recommended: list them as Apache 2.0).
+
+**The review.** A read-only external review found the project's strength to be evidence that stays
+traceable, including evidence against it, and its gap predictive reliability. Its nine items are
+ROADMAP §5 item 11, with its acceptance tests and its order: R1–R5 before any increase in model
+complexity. The README no longer says "the whole genome is decoded"; it gives five separate
+measures.
+
+**Done overnight, each registered before it was measured:**
+- R1: every compiled rule carries its cell as an executable condition; a rule of unknown cell runs
+  nowhere. A chr21 run as HepG2 now uses 155 of its 5,176 rules.
+- R2 and R5: every CRISPRi record carries its partition, study, assay and power; no reported held-out
+  figure had seen its test set; increases and underpowered nulls are read as their own outcomes
+  (measured-layer agreement 0.76 → 0.81).
+- R3: the runtime names how it combines regulators and reports every input it would have read as a
+  silent zero. The audit: **none of the 440,589 compiled rules can be simulated as compiled.** The
+  annotation is not yet a model.
+- R4: the fixed 0.3 in BioForge and every confidence derived from effect size are gone; a probability
+  now exists only with its outcome, population and method, and none does yet.
+- R6: one strong reporter tile no longer makes an element active (126 elements now read "tiles
+  conflict"); the ENCODE reporter is described as integrated, not episomal.
+- R8: the joint annotation engine's pretest was negative (coupling lost to independent scoring), so it
+  is not built.
+- R9: all six headline results behind the README rebuild from a clean checkout with no value
+  different.
+
+**Negatives, found and kept.** The gastrulation model's target proportions had no source; against the
+one measured human gastrula it misses all three germ layers, and correcting a rule's sign to match
+its paper removed its mesoderm entirely, because the runtime averages activators. The simulator's
+clamp was a knockdown, not a knockout (fixed). A test passed on a floating-point rounding error.
+
+**Still open.** R7 (a compositional ontology) and the evidence explorer's unstated-versus-low
+confidence were running at the time of writing. Results held by the removal guard are rebuilt after
+2026-09-30.
+
+docs/ROADMAP.md §5 item 11; docs/CRISPRI-RESULT.md; docs/DESIGN-MINIMAL-CELL.md; docs/ATTRIBUTION.md.
+
+**Later the same night.** R7 closed the review: elements and regions state origin, role, activity,
+target and evidence separately, and no label reads missing constraint as missing function (the
+classifier had never read repeat coverage for 15,320 blocks; most regulatory blocks are mostly
+repeat). Every confidence derived from effect size is gone; the evidence explorer shows that 919,534
+of 986,941 facts state no confidence at all. The results that rest on the AlphaGenome sweep record
+that its model version was never requested; new requests name it. Moving the budget's readers to the
+new labels changed 0 of about 14 million numbers compared. The three decisions at the top of this
+entry are unchanged.
+
+## 2026-09-28 — clause 2 of milestone 1.3, tested to the end of what can be tested without new measurement
+
+The project's central question — whether the attribution layer says anything true about the
+non-coding 98% — was pushed as far as the evidence allows. Six registered runs in two days, each
+committed before its numbers existed, 0 AlphaGenome requests.
+
+**The finding, in one line.** Elements inside constrained-unknown blocks name a coding gene **9.18%**
+of the time against **44.04%** for elements outside them: about a fifth as often, not more often.
+
+**Every innocent explanation was tested and rejected, in order.**
+- *The control was unfair on length* → matched on length: −37.23 points.
+- *The blocks sit in gene-poor places* → matched on local gene density: −27.25; density closes about
+  11 of the 38.6 points.
+- *The comparison windows get more chances* → matched on the number of scored elements: −23.99, and
+  −18.57 when the counts are made exactly equal. The per-element estimator, which needs no matching
+  at all, gives −28.77.
+- *The model cannot see a gene from there* → measured, for the first time, where the model actually
+  reads: reach **is** far lower (2.23 coding starts against 7.22; 28% of block elements have none at
+  all). But standardising on it keeps seven tenths of the gap, and **the gap is present inside every
+  reach stratum and both element classes**. The failure is about the sequence, not the window.
+- *The tier labels mean something* → the neutral tier behaves identically to the real unknown
+  (−0.10, interval covering zero). The label does not predict whether a gene is named.
+
+**What measurement says: nothing yet, and that is now a number.** 823 of 882 blocks hold no measured
+element at all; three hold one CRISPRi ever tested against a coding gene; none moved a gene, which
+three nulls cannot establish. The registered arm returned *cannot decide*. **19 more comparable blocks
+would decide it** — about twenty times today's experimental reach into this sequence. And the assays
+are aimed away from it: these blocks carry a measured element 11% of the time against 26% for their
+matched windows.
+
+**So clause 2 stays not met, and the reason is no longer a mystery.** Either these blocks hold
+regulating elements the model failed to name, or they hold none while their windows do. Nothing the
+project holds can separate those, and the experiment that would is now specified rather than wished
+for.
+
+docs/ROADMAP.md milestone 1.3 notes; docs/ATTRIBUTION.md; `data/results/clause2_*.json`.
+
+**Correction, the same day.** A statistical review found this entry overstates five things, and
+the overstatement was the coordinator's, introduced in summarising the lanes. The full list is beneath
+milestone 1.3's notes in docs/ROADMAP.md. In short: the figure is target-naming frequency, not accuracy;
+"about the sequence, not the window" is withdrawn in favour of "the gap persists after adjustment for
+the tested variables"; **"19 more blocks would decide it" is withdrawn** — it was a reporting floor, not
+a power result, and the power arithmetic beside it borrowed its effect and variance from the model
+being tested; "823 hold no measured element at all" means none under this analysis's overlap rule;
+and the neutral tier shows no *detected* difference, which is not the same as none. **What stands:**
+target naming is substantially less frequent in these elements and the difference persists under
+several adjustments; the measurements held cannot tell biology from model limitation; what an
+experiment would need is not yet known.
+
+**The design audit, the same day (lane-design, `70801de`).** The experiment clause 2 waits on now has a
+size that is a range with its assumptions, simulated for the design that would actually be run and with
+the model's own numbers excluded by a test: never at the null; 300–5,000 compared blocks if the blocks
+regulate three quarters as often as their windows; 50–300 at half; 20–75 at a quarter. The largest lever
+is how many elements are tested per block. Entries at 20 or 30 are lower bounds, because the registered
+check on the approximation fired. The neutral contrast is **no difference detected**: no equivalence
+margin can be justified from outside the data. A sixth error was found and recorded: the 13.45% anchor
+counts 223 windows, not 223 independent elements. Clause 2 stays not met.
+
+## 2026-09-29 — the coherence pilot is discontinued by its own stop rule
+
+The second external review said the project's original objective — revise genomic labels jointly and
+show the revisions improve biological accuracy — was unfinished, and that milestone percentages never
+measured it. Item 13 built the test for it and fixed its stop rule before running.
+
+**The result, in its registered wording:** the pilot passed its synthetic gate (303 of 303 planted
+double faults found) and failed its biological gate, `beats_unchanged_only`. It improved on the compiled
+labels but passed **0 of 4** CRISPRi endpoints, because it did not beat plain distance to the gene, and
+**joint repair never beat repairing each block alone**. Of 261 committed corrections, 6 were validated,
+6 were wrong and 249 could not be tested. It is recorded as a discontinued investigation, apart from
+implemented capabilities, and nothing in phase C follows from it.
+
+**What the night established, as three separate measures.** Software delivered: the review's defects
+are fixed and every result writer is under the provenance contract, with 0 figures moved. Biology
+independently validated: one result, the CRISPRi one, in one cell type. Release readiness: no tag, no
+package, and main not yet on a green revision. The harness built for the pilot also measured the
+labels themselves: without the model, 93 of 440,377 predicted links are supported by a measurement, and
+only 98 target claims can be judged by any evidence held.
+
+**What would move it:** measurement the project does not hold. The experiment clause 2 needs cannot be
+powered within the blocks that exist at small effects, and IGVF's K562 tables, the one free independent
+benchmark in reach, are not yet released.
+
+**Correction, the same day.** The owner's review found the paragraph above says more than the pilot
+showed. What the pilot established is only this: **it did not improve prediction over simpler
+approaches.** It did not establish that better code cannot improve the biology, nor that new measurement
+necessarily would. The two facts it names stand as written, as reasons the next steps wait, not as a
+finding about where the project's limit lies.
+
+docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; the Progress tab's `/api/state`.

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """Stage 2's language surface: pool, cost and allocation (BIOLANG-v0.4-ECONOMY.md §5).
 
 Stage 2 was held for two years of project-days on open decision 2, which was resolved on 2026-09-19.

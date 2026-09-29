@@ -8,13 +8,22 @@ of millions of years. So a block's sequence class (from `genomeos unknown`) and 
 constraint (from Zoonomia and the 100-vertebrate elements) together support a guess
 that is far better than "no clue":
 
-    structural           gaps, centromeres, satellite arrays: sequence with a mechanical role
-    fossil               transposable-element remains without constraint
-    regulatory           ENCODE-backed element clusters; the target gene is the open question
-    constrained_unknown  under selection, not coding, not regulatory by the registry: the real unknown
-    neutral              unique sequence with no constraint and no element: best guess, nothing
+    structural             gaps, centromeres, satellite arrays: sequence with a mechanical role
+    repeat_unconstrained   interspersed-repeat blocks with under 5% of bases constrained
+    regulatory             ENCODE-backed element clusters; the target gene is the open question
+    constrained_unknown    under selection, not coding, not regulatory by the registry: the real unknown
+    unconstrained_unknown  unique or coding-candidate sequence with under 5% of bases constrained
 
-Every guess carries a confidence and the numbers it rests on. The tiers are a
+Review R7 (2026-09-28): constraint is evidence of selection only, and its absence is not evidence of
+no function. The tiers above are the names new writes use (`budget_axes_<chrom>`); the stored
+`budget_<chrom>` results and every consumer of them keep the legacy keys `fossil` and `neutral`
+(`TIERS`, `LEGACY_TIER`), and each new guess states its legacy tier beside the new one. Each guess
+also states `evidence_status` (the constraint reading: under_selection, selection_weak,
+selection_not_detected, selection_not_measured) and `origin` (the classifier's RepeatMasker reading,
+or what the sequence class itself states), so a regulatory block that is mostly LINE says both.
+
+Every guess carries an evidence-quality score (`confidence`, hand-set per rule, not a
+probability) and a certainty record with the numbers it rests on. The tiers are a
 vocabulary for the next steps (attribution of a target gene and a tissue), not a
 verdict; `constrained_unknown` is where the work is.
 """
@@ -32,17 +41,104 @@ from genomeos.attribution.constraint import (
     fetch_elements,
     phylop_over_blocks,
 )
+from genomeos.certainty import Certainty
 from genomeos.results import load_result, save_result
 
+#: the tier keys of the stored budget_<chrom> results, which every consumer joins on
 TIERS = ("structural", "fossil", "regulatory", "constrained_unknown", "neutral")
+#: the tier names new writes use (review R7): no tier reads missing constraint as no function
+AXES_TIERS = (
+    "structural",
+    "repeat_unconstrained",
+    "regulatory",
+    "constrained_unknown",
+    "unconstrained_unknown",
+)
+LEGACY_TIER = {"repeat_unconstrained": "fossil", "unconstrained_unknown": "neutral"}
+AXES_TIER = {v: k for k, v in LEGACY_TIER.items()}
 NEUTRAL_MAX = 0.03  # below this constrained fraction a block reads as unconstrained
 CONSTRAINED_MIN = 0.05  # from here on the block carries constraint worth a name
 STRUCTURAL = {"centromere", "satellite_array", "tandem_repeat"}
 REGULATORY = {"regulatory", "promoter_like"}
 
 
-def guess(cls: str, confidence: float, phylop: dict | None, elements: dict | None) -> dict:
-    """Class plus constraint to a tier, a label and a confidence."""
+SCORE_NAME = (
+    "evidence-quality score: the hand-set constant of the budget rule that fired, capped at 0.3 when"
+    " constraint is unmeasured; within one label it does not move with the constrained fraction; not"
+    " a probability"
+)
+NO_PROBABILITY = (
+    "no calibration record: no set of blocks with a known function outcome has been scored against"
+    " these tiers, so no probability of the tier is quoted"
+)
+CONSTRAINT_UNIT = "fraction of measured bases at Zoonomia phyloP >= 2.27 (241 mammals)"
+#: sequence classes whose origin the class itself states (as compile.CLASS_ORIGIN)
+CLASS_ORIGIN = {
+    "gap": "assembly_gap",
+    "centromere": "satellite",
+    "satellite_array": "satellite",
+    "tandem_repeat": "tandem_repeat",
+    "telomere": "tandem_repeat",
+}
+
+
+def selection(fraction: float | None) -> str:
+    """The R7 evidence_status of a constrained fraction: selection, never a mechanism or its absence."""
+    if fraction is None:
+        return "selection_not_measured"
+    if fraction >= CONSTRAINED_MIN:
+        return "under_selection"
+    return "selection_weak" if fraction >= NEUTRAL_MAX else "selection_not_detected"
+
+
+def block_origin(cls: str, features: dict | None) -> str:
+    """Origin as compile.region_axes states it: from the class when the class states it, else from the
+    classifier's RepeatMasker reading, else unknown."""
+    if cls in CLASS_ORIGIN:
+        return CLASS_ORIGIN[cls]
+    if cls.startswith("interspersed_repeat"):
+        top = cls.removeprefix("interspersed_repeat").lstrip("_")
+        return f"repeat_derived/{top}" if top else "repeat_derived"
+    return (features or {}).get("origin") or "unknown"
+
+
+def guess(
+    cls: str,
+    confidence: float,
+    phylop: dict | None,
+    elements: dict | None,
+    features: dict | None = None,
+) -> dict:
+    """Class plus constraint to a tier, a label, an evidence-quality score and a certainty record.
+
+    With the R7 axes (2026-09-28): `evidence_status` (constraint as selection only), `origin`
+    (from `features`, the classifier's output, when given) and the legacy tier the stored results use.
+
+    Review R4b (2026-09-28): `confidence` stays because compile.py emits it as the `confidence:` of
+    each region block, but it is a hand-set evidence-quality score per rule (census:
+    genomeos/attribution/confidence_census.py), never a probability. The record beside it states the
+    constrained fraction as the effect, in its unit, and that no probability exists.
+    """
+    g = _rule(cls, confidence, phylop, elements)
+    fa = phylop.get("fraction_above") if phylop else None
+    source = "curated: assembly gap" if cls == "gap" else f"inferred: sequence class {cls} plus constraint"
+    g["certainty"] = Certainty(
+        evidence_category=source if fa is not None or cls == "gap" else f"{source} not measured",
+        effect_estimate=fa,
+        effect_unit=CONSTRAINT_UNIT if fa is not None else "",
+        uncertainty_note="a block summary; no spread computed" if fa is not None else "constraint not read",
+        model_score=g["confidence"],
+        model_score_name=SCORE_NAME,
+        probability_unavailable=NO_PROBABILITY,
+    ).to_dict()
+    g["legacy_tier"] = LEGACY_TIER.get(g["tier"], g["tier"])
+    g["evidence_status"] = None if cls == "gap" else selection(fa)
+    g["origin"] = block_origin(cls, features)
+    return g
+
+
+def _rule(cls: str, confidence: float, phylop: dict | None, elements: dict | None) -> dict:
+    """Class plus constraint to a tier, a label and the rule's evidence-quality score."""
     fa = phylop.get("fraction_above") if phylop else None
     n_el = elements.get("n", 0) if elements else 0
     if cls == "gap":
@@ -63,16 +159,20 @@ def guess(cls: str, confidence: float, phylop: dict | None, elements: dict | Non
         if fa >= CONSTRAINED_MIN:
             return {
                 "tier": "constrained_unknown",
-                "label": "repeat-derived sequence under constraint: possibly exapted as a regulatory element",
+                "label": "repeat-derived sequence under selection; role unknown",
                 "confidence": 0.5,
             }
         if fa < NEUTRAL_MAX:
             return {
-                "tier": "fossil",
-                "label": "transposable-element fossil, unconstrained",
+                "tier": "repeat_unconstrained",
+                "label": "repeat-derived sequence; no sign of selection, which is not a sign of no function",
                 "confidence": 0.8,
             }
-        return {"tier": "fossil", "label": "transposable-element fossil, weak constraint", "confidence": 0.6}
+        return {
+            "tier": "repeat_unconstrained",
+            "label": "repeat-derived sequence; weak sign of selection",
+            "confidence": 0.6,
+        }
     if cls in REGULATORY:
         if fa >= CONSTRAINED_MIN:
             return {
@@ -82,19 +182,21 @@ def guess(cls: str, confidence: float, phylop: dict | None, elements: dict | Non
             }
         return {
             "tier": "regulatory",
-            "label": "regulatory elements by the registry, little constraint: lineage-specific or weak",
+            "label": (
+                "regulatory elements by the registry; selection weak or not detected; target gene unassigned"
+            ),
             "confidence": 0.5,
         }
     if cls == "long_orf":
         if fa >= CONSTRAINED_MIN:
             return {
                 "tier": "constrained_unknown",
-                "label": "long open reading frame under constraint: unannotated coding or a young pseudogene",
+                "label": "long open reading frame under selection; coding candidate, role unknown",
                 "confidence": 0.5,
             }
         return {
-            "tier": "neutral",
-            "label": "long open reading frame without constraint: a chance frame or a dead pseudogene",
+            "tier": "unconstrained_unknown",
+            "label": "long open reading frame; selection weak or not detected; role unknown",
             "confidence": 0.5,
         }
     if fa >= CONSTRAINED_MIN or (n_el >= 3 and fa >= NEUTRAL_MAX):
@@ -105,13 +207,13 @@ def guess(cls: str, confidence: float, phylop: dict | None, elements: dict | Non
         }
     if fa < NEUTRAL_MAX:
         return {
-            "tier": "neutral",
-            "label": "unconstrained unique sequence: no evidence of function, best guess neutral",
+            "tier": "unconstrained_unknown",
+            "label": "unique non-coding sequence; no sign of selection, which is not a sign of no function",
             "confidence": 0.6,
         }
     return {
-        "tier": "neutral",
-        "label": "weakly constrained unique sequence: mostly neutral",
+        "tier": "unconstrained_unknown",
+        "label": "unique non-coding sequence; weak sign of selection; role unknown",
         "confidence": 0.4,
     }
 
@@ -165,7 +267,7 @@ def build(
             el[i] = r
     rows = []
     for b, p, e in zip(blocks, ph, el, strict=True):
-        g = guess(b["class"], b.get("confidence", 0.0), p, e)
+        g = guess(b["class"], b.get("confidence", 0.0), p, e, b.get("features"))
         rows.append(
             {
                 "start": b["start"],
@@ -196,9 +298,9 @@ def build(
     return out
 
 
-def tallies(rows: list[dict], length: int | None) -> dict:
+def tallies(rows: list[dict], length: int | None, tiers: tuple[str, ...] = AXES_TIERS) -> dict:
     by_class: dict[str, dict] = {}
-    by_tier: dict[str, dict] = {t: {"blocks": 0, "bp": 0, "constrained_bp": 0} for t in TIERS}
+    by_tier: dict[str, dict] = {t: {"blocks": 0, "bp": 0, "constrained_bp": 0} for t in tiers}
     constrained_total = 0
     measured_bp = 0
     for r in rows:
@@ -209,7 +311,7 @@ def tallies(rows: list[dict], length: int | None) -> dict:
         bases = (r["phylop"] or {}).get("bases") or 0
         c["constrained_bp"] += above
         c["measured_bp"] += bases
-        t = by_tier[r["guess"]["tier"]]
+        t = by_tier.setdefault(r["guess"]["tier"], {"blocks": 0, "bp": 0, "constrained_bp": 0})
         t["blocks"] += 1
         t["bp"] += r["length"]
         t["constrained_bp"] += above
@@ -234,13 +336,14 @@ def tallies(rows: list[dict], length: int | None) -> dict:
     }
 
 
-def distil(results_dir: Path | None = None) -> dict:
-    """Every budget_chr*.json summed: the genome's composition budget."""
+def distil(results_dir: Path | None = None, name: str = "budget", tiers: tuple[str, ...] = TIERS) -> dict:
+    """Every <name>_chr*.json summed: the genome's composition budget. The default reads the stored
+    budget_<chrom> results with their legacy tiers; name="budget_axes", tiers=AXES_TIERS the R7 ones."""
     kw = {"results_dir": results_dir} if results_dir else {}
     chroms = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
     per: dict[str, dict] = {}
     by_class: dict[str, dict] = {}
-    by_tier: dict[str, dict] = {t: {"blocks": 0, "bp": 0, "constrained_bp": 0} for t in TIERS}
+    by_tier: dict[str, dict] = {t: {"blocks": 0, "bp": 0, "constrained_bp": 0} for t in tiers}
     genome = 0
     unknown_bp = 0
     measured = 0
@@ -248,7 +351,7 @@ def distil(results_dir: Path | None = None) -> dict:
     guessed = 0
     cost_mb = 0.0
     for c in chroms:
-        r = load_result(f"budget_{c}", **kw)
+        r = load_result(f"{name}_{c}", **kw)
         if not r:
             continue
         per[c] = {
@@ -268,8 +371,9 @@ def distil(results_dir: Path | None = None) -> dict:
             for f in ("blocks", "bp", "constrained_bp", "measured_bp"):
                 d[f] += v.get(f) or 0
         for t, v in r["by_tier"].items():
+            d = by_tier.setdefault(t, {"blocks": 0, "bp": 0, "constrained_bp": 0})
             for f in ("blocks", "bp", "constrained_bp"):
-                by_tier[t][f] += v.get(f) or 0
+                d[f] += v.get(f) or 0
     for d in by_class.values():
         d["constrained_fraction"] = (
             round(d["constrained_bp"] / d["measured_bp"], 4) if d["measured_bp"] else None
@@ -298,7 +402,235 @@ def distil(results_dir: Path | None = None) -> dict:
     }
 
 
+AXES_NAME = "budget_axes"
+
+#: R7 follow-up, consumers (registered 2026-09-28, before any consumer moves). Every reader of a
+#: chromosome's budget goes through one function, `read_axes(chrom)`, which returns the
+#: budget_axes_<chrom> record with `legacy_tier` beside each tier. A consumer whose own result joins
+#: on the old key reads `legacy_tier`, so its stored keys stay; a person reads the R7 names.
+CONSUMERS_REGISTERED = {
+    "date": "2026-09-28",
+    "reader": "genomeos.attribution.budget.read_axes(chrom[, results_dir]) and read_axes_genome_wide()",
+    "direct_readers": (
+        "attribution/organise.py blocks",
+        "attribution/compress.py tier_blocks",
+        "attribution/human_panel.py build",
+        "attribution/lexicon.py maps",
+        "attribution/variation.py build",
+        "attribution/unknown_scoring.py unknown_blocks",
+        "attribution/panel_background.py rebuild (chromosome length only)",
+        "attribution/element_types.py _block_tiers",
+        "attribution/compile.py compile_chromosome (region role:)",
+        "genome/duplications.py run_and_save",
+        "genome/epigenome.py summarise_chromosome (the budget its callers pass)",
+        "cli.py budget and epigenome",
+        "web/server.py budget_wide and static/index.html",
+        "jobs.py budget_genome_wide progress",
+        "scripts/epigenome.py",
+        "scripts/budget_genome_wide.py",
+        "scripts/variation_genome_wide.py",
+        "scripts/panel_leftover_classes.py",
+    ),
+    "indirect_readers": (
+        "read a tier through organise.blocks or lexicon's context map, never the budget file, and keep"
+        " its legacy key: syntax_tiling.py, measurability.py, motif_transfer.py, lexicon_axes.py,"
+        " scripts/unknown_coverage.py, scripts/syntax_blocks_matched.py,"
+        " scripts/constrained_unknown_targets.py;"
+        " organise.inputs names both budget files for their manifests"
+    ),
+    "left_on_budget_by_design": (
+        "budget.restate and scripts/budget_axes.py (the source of the axes record);"
+        " scripts/budget_axes_census.py and scripts/ontology_census.py (censuses of the stored labels)"
+    ),
+    "invariant": (
+        "no numeric figure moves: every tier count, base pair, fraction, score and every number a consumer"
+        " writes is identical before and after, because legacy_tier equals the stored tier on every block;"
+        " only tier names and labels change, and only where a person reads them (CLI, web, a compiled"
+        " region's role line)"
+    ),
+    "exempt": "run time in seconds, and a cost counter of bytes read from a result file",
+    "proof": (
+        "each consumer that writes a result is run before and after into scratch, never over a committed"
+        " result, and every numeric leaf is compared with tier keys mapped through LEGACY_TIER"
+    ),
+    "falsifier": (
+        "any numeric difference outside `exempt` is a failure of the move and is reported with its cause"
+    ),
+    "banned_in_person_facing_text": ("neutral", "fossil", "dead", "best guess"),
+}
+
+
+def _manifest(chrom: str, names: list[str], phylop: bool = True, results_dir: Path | None = None) -> dict:
+    from genomeos import manifest as mf
+    from genomeos.results import RESULTS_DIR
+
+    rd = results_dir or RESULTS_DIR
+    paths = [rd / f"{n}_{chrom}.json" for n in names] + [rd / f"rmsk_{chrom}.bed.gz"]
+    return {
+        "sources": [
+            {"accession": f"Zoonomia 241-mammal phyloP, {PHYLOP_241_URL}", "version": "as read by the budget"}
+            if phylop
+            else {"accession": "none: constraint not read", "version": "n/a"},
+            {"accession": f"UCSC hg38 {ELEMENTS_TRACK}", "version": "as fetched"},
+            {"accession": "UCSC rmsk track, hg38", "version": "rmsk_<chrom> as distilled"},
+        ],
+        "inputs": [mf.input_entry(p, partition=None) for p in paths if p.exists()],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "chrom": chrom,
+            "phylop_threshold": PHYLOP_THRESHOLD,
+            "constrained_min": CONSTRAINED_MIN,
+            "neutral_max": NEUTRAL_MAX,
+            "tiers": list(AXES_TIERS),
+            "legacy_tier": LEGACY_TIER,
+        },
+        "exclusions": ["gap blocks carry no constraint reading"],
+        "partitions": "n/a: a rule per block, no evaluation",
+    }
+
+
+#: fields of a stored budget_<chrom> row the restatement does not carry, filled back by read_axes
+STORED_ROW_FIELDS = ("class_evidence", "class_confidence", "elements")
+#: fields of a stored budget_<chrom> record the restatement does not carry
+STORED_TOP_FIELDS = ("composition_bp", "sources", "cost")
+
+
+def tier_name(tier: str | None) -> str | None:
+    """The R7 name of a tier, for a person to read: a legacy key maps to its new name, any other
+    tier (or None) is returned as it is."""
+    return AXES_TIER.get(tier, tier) if tier is not None else None
+
+
+def read_axes(chrom: str, results_dir: Path | None = None) -> dict | None:
+    """The one reader of a chromosome's budget (R7 follow-up, consumers, 2026-09-28).
+
+    Returns the `budget_axes_<chrom>` record: tiers under the R7 names, each guess with its label,
+    `evidence_status`, `origin` and `legacy_tier`, the stored budget's key, for a join that needs it.
+    The restatement drops measurements no tier rests on; where the stored `budget_<chrom>` exists they
+    are filled back from it (STORED_ROW_FIELDS, phyloP mean and max, the guess's certainty record,
+    STORED_TOP_FIELDS) after checking the two agree on every block: start, end, length, class,
+    constrained fraction, and legacy tier equal to the stored tier. Without an axes record the stored
+    budget is returned with its tiers renamed and `axes_source` saying so, labels as stored."""
+    kw = {"results_dir": results_dir} if results_dir else {}
+    axes = load_result(f"{AXES_NAME}_{chrom}", **kw)
+    stored = load_result(f"budget_{chrom}", **kw)
+    if not axes and not stored:
+        return None
+    if not axes:
+        out = dict(stored)
+        out["blocks"] = [
+            {**b, "guess": {**g, "tier": tier_name(g.get("tier")), "legacy_tier": g.get("tier")}}
+            if (g := b.get("guess"))
+            else b
+            for b in stored.get("blocks", [])
+        ]
+        out["by_tier"] = {tier_name(t): v for t, v in (stored.get("by_tier") or {}).items()}
+        out["axes_source"] = f"budget_{chrom} with tiers renamed; not restated, labels as stored"
+        return out
+    out = {k: stored[k] for k in STORED_TOP_FIELDS if stored and k in stored}
+    out.update(axes)
+    out["axes_source"] = f"{AXES_NAME}_{chrom}"
+    if not stored:
+        return out
+    old = {b["start"]: b for b in stored["blocks"]}
+    if len(old) != len(axes["blocks"]):
+        raise ValueError(f"{AXES_NAME}_{chrom} has {len(axes['blocks'])} blocks, budget_{chrom} {len(old)}")
+    rows = []
+    for b in axes["blocks"]:
+        s = old.get(b["start"])
+        sp, bp = (s or {}).get("phylop") or {}, b.get("phylop") or {}
+        if (
+            s is None
+            or (s["end"], s["length"], s["class"]) != (b["end"], b["length"], b["class"])
+            or sp.get("fraction_above") != bp.get("fraction_above")
+            or s["guess"]["tier"] != b["guess"]["legacy_tier"]
+        ):
+            raise ValueError(f"{AXES_NAME}_{chrom} and budget_{chrom} disagree at block {b['start']}")
+        row = {**{k: s[k] for k in STORED_ROW_FIELDS if k in s}, **b, "phylop": s.get("phylop")}
+        if "certainty" in s["guess"]:
+            row["guess"] = {**b["guess"], "certainty": s["guess"]["certainty"]}
+        rows.append(row)
+    out["blocks"] = rows
+    return out
+
+
+def read_axes_genome_wide(results_dir: Path | None = None) -> dict | None:
+    """The genome-wide sum under the R7 names (`budget_axes_genome_wide`)."""
+    kw = {"results_dir": results_dir} if results_dir else {}
+    return load_result(f"{AXES_NAME}_genome_wide", **kw)
+
+
 def run_and_save(chrom: str, **kw) -> dict:
+    """Build and save under the R7 name `budget_axes_<chrom>`; stored `budget_<chrom>` keeps its values."""
     out = build(chrom, **kw)
-    save_result(f"budget_{chrom}", out)
+    save_result(f"{AXES_NAME}_{chrom}", out, manifest=_manifest(chrom, ["unknown"], kw.get("phylop", True)))
+    return out
+
+
+def restate(chrom: str, results_dir: Path | None = None, rindex=None) -> dict:
+    """The stored budget re-read under R7 without a request: each block's stored constraint and
+    elements, the classifier's RepeatMasker origin (unknown.repeat_origin, read now for every block,
+    the regulatory ones included), and the relabelled guess. Rows keep what the guess rests on and
+    drop the per-row certainty record, whose only varying field is the constrained fraction kept here."""
+    from genomeos.genome.unknown import repeat_origin
+
+    kw = {"results_dir": results_dir} if results_dir else {}
+    budget = load_result(f"budget_{chrom}", **kw)
+    if not budget:
+        raise FileNotFoundError(f"no budget_{chrom} result")
+    feats = {
+        b["start"]: b.get("features") or {}
+        for b in (load_result(f"unknown_{chrom}", **kw) or {}).get("blocks", [])
+    }
+    if rindex is None:
+        from genomeos.genome.repeats import repeat_index
+
+        rindex = repeat_index(chrom)
+    rows = []
+    for b in sorted(budget["blocks"], key=lambda b: b["start"]):
+        f = dict(feats.get(b["start"]) or {})
+        if b["class"] != "gap" and rindex:
+            f.update(repeat_origin(rindex.coverage(b["start"], b["end"]), b["length"]))
+        g = guess(b["class"], b.get("class_confidence") or 0.0, b.get("phylop"), b.get("elements"), f)
+        ph = b.get("phylop") or {}
+        rows.append(
+            {
+                "start": b["start"],
+                "end": b["end"],
+                "length": b["length"],
+                "class": b["class"],
+                "phylop": {k: ph[k] for k in ("bases", "above", "fraction_above") if k in ph} or None,
+                "interspersed_coverage": f.get("interspersed_coverage"),
+                "guess": {
+                    k: g[k]
+                    for k in ("tier", "legacy_tier", "label", "evidence_status", "origin", "confidence")
+                },
+            }
+        )
+    length = budget.get("chromosome_length")
+    out = {
+        "chrom": chrom,
+        "review_item": "R7 follow-up: origin beside role, constraint as selection only",
+        "restated_from": f"budget_{chrom}",
+        "chromosome_length": length,
+        "threshold": budget.get("threshold"),
+        "unknown_bp": budget["unknown_bp"],
+        "certainty": {
+            "model_score_name": SCORE_NAME,
+            "probability_unavailable": NO_PROBABILITY,
+            "effect": f"phylop.fraction_above of each row, in {CONSTRAINT_UNIT}",
+        },
+        "blocks": rows,
+    }
+    out.update(tallies(rows, length))
+    return out
+
+
+def restate_and_save(chrom: str, results_dir: Path | None = None) -> dict:
+    out = restate(chrom, results_dir)
+    kw = {"results_dir": results_dir} if results_dir else {}
+    save_result(
+        f"{AXES_NAME}_{chrom}", out, manifest=_manifest(chrom, ["budget", "unknown"], True, results_dir), **kw
+    )
     return out

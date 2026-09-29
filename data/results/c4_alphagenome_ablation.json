@@ -1,0 +1,1799 @@
+{
+  "result": "c4_alphagenome_ablation",
+  "date": "2026-09-28",
+  "question": "with every AlphaGenome-derived input removed, which of the project's conclusions survive on experimental evidence alone",
+  "registration": {
+    "registered": "2026-09-28",
+    "classes": [
+      "survives",
+      "does_not_survive",
+      "was_never_model_dependent"
+    ],
+    "reasons": {
+      "about_the_model": "the statement's subject is a model output (its value, its gain or its agreement)",
+      "contradicted": "the same endpoint measured the same element and gene: a well-powered null or a significant change in the opposite direction",
+      "inconclusive": "the same endpoint measured it without deciding: an underpowered null, a missing effect, or an experimental arm below its own floor or with an interval across zero",
+      "never_measured": "no measurement of the same endpoint: the element and gene were never perturbed together (for a rule: not in the rule's cell), or the result has no experimental arm"
+    },
+    "ablated": [
+      "the all-element deletion sweep (results enhancer_targets_all_<chrom> and their local tables)",
+      "its per-element response cache (data/knowledge/alphagenome/elements, all_elements)",
+      "the sample target runs of the same model (constrained_targets_<chrom>, enhancer_targets_<chrom>)",
+      "the compiled predicted layer: every `element` block without `_measured` and every `rule` with `evidence: predicted` in data/knowledge/compiled/noncoding_<chrom>.bio",
+      "any value computed from these"
+    ],
+    "ablated_path_marks": [
+      "alphagenome",
+      "enhancer_targets",
+      "constrained_targets",
+      "knowledge/compiled/"
+    ],
+    "rule": {
+      "was_never_model_dependent": "no ablated input enters the stated value or selects the units it is computed on. A model file read only for a quantity the conclusion does not state (chromosome names and lengths; a column the stated figure does not use) does not count, and is named. For a per-element label, the label's value is classified; that the element carries a block at all because the model named a target is counted separately as placement",
+      "survives": "an ablated input enters it, and with every ablated input removed the same statement is established on experimental evidence alone. A predicted link (element, gene, direction): a CRISPRi pair on the same element under measured.RECIPROCAL_OVERLAP, on the same gene, significant in the stated direction (activates: significant_decrease; inhibits: significant_increase), in any cell and either benchmark file. A compiled rule: the same, and in the rule's own `when` cell (R1). A result: an experimental arm of the same statistic is in the record, computed without ablated input, with the model figure's sign and a 95% interval (the result's own headline interval) excluding zero; the surviving figure is the arm's, never the model's",
+      "does_not_survive": "otherwise, with one reason: about_the_model (the statement's subject is a model output (its value, its gain or its agreement)); contradicted (the same endpoint measured the same element and gene: a well-powered null or a significant change in the opposite direction); inconclusive (the same endpoint measured it without deciding: an underpowered null, a missing effect, or an experimental arm below its own floor or with an interval across zero); never_measured (no measurement of the same endpoint: the element and gene were never perturbed together (for a rule: not in the rule's cell), or the result has no experimental arm)",
+      "other_endpoints": "reporter activity, VISTA, saturation mutagenesis and GTEx association are other endpoints: they never make a link survive (S4); where they touch a link that does not survive they are counted beside it"
+    },
+    "families": [
+      "headline results: the six rebuilt in data/results/manifest_headlines.json",
+      "per-element labels: the five axes (and class, targets) of every element block of the 24 compiled programs, predicted and measured, and the region blocks",
+      "compiled rules: every rule of the 24 programs, by evidence kind, after R1"
+    ],
+    "headlines": {
+      "node_containment_audit": {
+        "conclusion": "the default node caller keeps an element's most-moved coding gene inside the element's own node 2.90 points above the published uniform control",
+        "model_input": "value: the most-moved coding gene of each element in the deletion archive (scripts/node_containment_audit.py stage 1 reads data/knowledge/alphagenome/all_elements)",
+        "arm": {
+          "result": "node_containment_measured",
+          "value": [
+            "measured",
+            "controls",
+            "uniform",
+            "excess_points"
+          ],
+          "interval": [
+            "measured",
+            "controls",
+            "uniform",
+            "bootstrap_chromosomes",
+            "ci95"
+          ],
+          "what": "the same statistic against the same control on CRISPRi Regulated=TRUE pairs"
+        },
+        "model_value": [
+          "modelled",
+          "controls",
+          "uniform",
+          "excess_points"
+        ]
+      },
+      "node_containment_measured": {
+        "conclusion": "on measured CRISPRi Regulated=TRUE pairs the node caller keeps the pair inside one node 5.89 points above the published uniform control",
+        "model_input": "bookkeeping: stage 2 reuses stage 1's per-chromosome rows for the chromosome name and length only (measured_arm reads r['chrom'] and r['length']); the statistic reads CRISPRi pairs, ENCODE cCREs and GENCODE",
+        "bookkeeping_only": true
+      },
+      "constrained_unknown_targets": {
+        "conclusion": "real-unknown blocks hold an element with a predicted coding mover less often than length-matched random windows (62.3% against 86.0%)",
+        "model_input": "value: the mover is the deletion model's",
+        "arm": {
+          "result": "clause2_measured_arm",
+          "reading": [
+            "primary_reading",
+            "outcome"
+          ],
+          "what": "the same block-against-window question with CRISPRi-measured regulation of a coding gene"
+        }
+      },
+      "therapeutic_benchmark": {
+        "conclusion": "9 of 9 targets recovered, verdicts correct, top mechanisms defensible",
+        "model_input": null
+      },
+      "unknown_coverage": {
+        "conclusion": "160,447 of 30,602,182 bp of the real unknown (0.52%) are read by any assay held",
+        "model_input": "a column the figure does not state: organise.blocks reads the target runs for attributed_elements and targets; the blocks come from the budget and the spans from the assay files",
+        "bookkeeping_only": true
+      },
+      "crispri_published": {
+        "conclusion": "the AlphaGenome deletion feature adds to ENCODE-rE2G on the published pair sets (training AUPRC 0.724 against 0.507; held-out DNase-only 0.476 to 0.639; K562 gain +0.136 [+0.081, +0.225])",
+        "model_input": "value: the deletion feature",
+        "subject_is_model_output": true
+      }
+    },
+    "link_values": {
+      "activity": [
+        "activates_target",
+        "represses_target"
+      ],
+      "target_relation": [
+        "nearest_tss_in_domain",
+        "predicted_deletion_target"
+      ],
+      "molecular_role": [
+        "silencer|insulator_like|competing_promoter|unknown"
+      ]
+    },
+    "about_model_values": {
+      "evidence_status": [
+        "conflicting",
+        "predicted_model"
+      ]
+    },
+    "overlap_rule": "measured.RECIPROCAL_OVERLAP = 0.5"
+  },
+  "alphagenome_requests": 0,
+  "per_element_response_cache_opened": false,
+  "headlines": {
+    "results": [
+      {
+        "result": "node_containment_audit",
+        "conclusion": "the default node caller keeps an element's most-moved coding gene inside the element's own node 2.90 points above the published uniform control",
+        "model_input_registered": "value: the most-moved coding gene of each element in the deletion archive (scripts/node_containment_audit.py stage 1 reads data/knowledge/alphagenome/all_elements)",
+        "model_inputs_in_manifest": 24,
+        "model_input_examples": [
+          "data/knowledge/alphagenome/all_elements/chr1.json",
+          "data/knowledge/alphagenome/all_elements/chr10.json",
+          "data/knowledge/alphagenome/all_elements/chr11.json"
+        ],
+        "carries_model_dependencies_block": true,
+        "arm": {
+          "result": "node_containment_measured",
+          "what": "the same statistic against the same control on CRISPRi Regulated=TRUE pairs",
+          "value": 5.893,
+          "interval": [
+            3.183,
+            8.458
+          ],
+          "model_value": 2.898
+        },
+        "cls": "survives",
+        "reason": null,
+        "why": "its experimental arm node_containment_measured gives 5.893 [3.183, 8.458]; the surviving figure is the arm's"
+      },
+      {
+        "result": "node_containment_measured",
+        "conclusion": "on measured CRISPRi Regulated=TRUE pairs the node caller keeps the pair inside one node 5.89 points above the published uniform control",
+        "model_input_registered": "bookkeeping: stage 2 reuses stage 1's per-chromosome rows for the chromosome name and length only (measured_arm reads r['chrom'] and r['length']); the statistic reads CRISPRi pairs, ENCODE cCREs and GENCODE",
+        "model_inputs_in_manifest": 24,
+        "model_input_examples": [
+          "data/knowledge/alphagenome/all_elements/chr1.json",
+          "data/knowledge/alphagenome/all_elements/chr10.json",
+          "data/knowledge/alphagenome/all_elements/chr11.json"
+        ],
+        "carries_model_dependencies_block": true,
+        "cls": "was_never_model_dependent",
+        "reason": null,
+        "why": "model file read for bookkeeping only: bookkeeping: stage 2 reuses stage 1's per-chromosome rows for the chromosome name and length only (measured_arm reads r['chrom'] and r['length']); the statistic reads CRISPRi pairs, ENCODE cCREs and GENCODE"
+      },
+      {
+        "result": "constrained_unknown_targets",
+        "conclusion": "real-unknown blocks hold an element with a predicted coding mover less often than length-matched random windows (62.3% against 86.0%)",
+        "model_input_registered": "value: the mover is the deletion model's",
+        "model_inputs_in_manifest": 120,
+        "model_input_examples": [
+          "data/knowledge/alphagenome/all_elements/chr1.json",
+          "data/knowledge/alphagenome/all_elements/chr10.json",
+          "data/knowledge/alphagenome/all_elements/chr11.json"
+        ],
+        "carries_model_dependencies_block": true,
+        "arm": {
+          "result": "clause2_measured_arm",
+          "what": "the same block-against-window question with CRISPRi-measured regulation of a coding gene",
+          "reading": "cannot_decide"
+        },
+        "cls": "does_not_survive",
+        "reason": "inconclusive",
+        "why": "its experimental arm (clause2_measured_arm) reads cannot_decide"
+      },
+      {
+        "result": "therapeutic_benchmark",
+        "conclusion": "9 of 9 targets recovered, verdicts correct, top mechanisms defensible",
+        "model_input_registered": null,
+        "model_inputs_in_manifest": 0,
+        "model_input_examples": [],
+        "carries_model_dependencies_block": false,
+        "cls": "was_never_model_dependent",
+        "reason": null,
+        "why": "no model input in its manifest"
+      },
+      {
+        "result": "unknown_coverage",
+        "conclusion": "160,447 of 30,602,182 bp of the real unknown (0.52%) are read by any assay held",
+        "model_input_registered": "a column the figure does not state: organise.blocks reads the target runs for attributed_elements and targets; the blocks come from the budget and the spans from the assay files",
+        "model_inputs_in_manifest": 96,
+        "model_input_examples": [
+          "data/knowledge/alphagenome/all_elements/chr1.json",
+          "data/knowledge/alphagenome/all_elements/chr10.json",
+          "data/knowledge/alphagenome/all_elements/chr11.json"
+        ],
+        "carries_model_dependencies_block": true,
+        "cls": "was_never_model_dependent",
+        "reason": null,
+        "why": "model file read for bookkeeping only: a column the figure does not state: organise.blocks reads the target runs for attributed_elements and targets; the blocks come from the budget and the spans from the assay files"
+      },
+      {
+        "result": "crispri_published",
+        "conclusion": "the AlphaGenome deletion feature adds to ENCODE-rE2G on the published pair sets (training AUPRC 0.724 against 0.507; held-out DNase-only 0.476 to 0.639; K562 gain +0.136 [+0.081, +0.225])",
+        "model_input_registered": "value: the deletion feature",
+        "model_inputs_in_manifest": 2,
+        "model_input_examples": [
+          "data/knowledge/alphagenome/all_elements",
+          "data/knowledge/alphagenome/elements"
+        ],
+        "carries_model_dependencies_block": true,
+        "cls": "does_not_survive",
+        "reason": "about_the_model",
+        "why": "its subject is the model's output"
+      }
+    ],
+    "by_class": {
+      "does_not_survive": 2,
+      "survives": 1,
+      "was_never_model_dependent": 3
+    }
+  },
+  "elements": {
+    "predicted_elements": 440377,
+    "link_by_class": [
+      {
+        "class": "does_not_survive",
+        "reason": "never_measured",
+        "n": 440249
+      },
+      {
+        "class": "survives",
+        "reason": null,
+        "n": 93
+      },
+      {
+        "class": "does_not_survive",
+        "reason": "contradicted",
+        "n": 28
+      },
+      {
+        "class": "does_not_survive",
+        "reason": "inconclusive",
+        "n": 7
+      }
+    ],
+    "link_by_detail": {
+      "element never screened": 438872,
+      "element screened, this gene not tested": 1377,
+      "survives": 93,
+      "well-powered null": 23,
+      "not_significant_underpowered": 7,
+      "significant_decrease": 4,
+      "significant_increase": 1
+    },
+    "other_endpoints_beside_links_that_do_not_survive": {
+      "contradicted": {
+        "no_other_endpoint": 27,
+        "lentimpra_active": 1,
+        "any_other_endpoint": 1
+      },
+      "inconclusive": {
+        "no_other_endpoint": 6,
+        "lentimpra_active": 1,
+        "any_other_endpoint": 1
+      },
+      "never_measured": {
+        "no_other_endpoint": 433815,
+        "any_other_endpoint": 6434,
+        "lentimpra_active": 3216,
+        "gtex_association_same_gene": 3202,
+        "vista_positive": 69,
+        "satmut_functional_base": 14
+      }
+    },
+    "axis_values_by_class": {
+      "predicted_blocks": {
+        "class": {
+          "was_never_model_dependent": 440377
+        },
+        "targets": {
+          "does_not_survive/contradicted": 28,
+          "does_not_survive/inconclusive": 7,
+          "does_not_survive/never_measured": 440249,
+          "survives": 93
+        },
+        "origin": {
+          "was_never_model_dependent": 440377
+        },
+        "molecular_role": {
+          "does_not_survive/contradicted": 8,
+          "does_not_survive/inconclusive": 3,
+          "does_not_survive/never_measured": 156914,
+          "was_never_model_dependent": 633404
+        },
+        "activity": {
+          "does_not_survive/contradicted": 28,
+          "does_not_survive/inconclusive": 7,
+          "does_not_survive/never_measured": 440249,
+          "survives": 93
+        },
+        "target_relation": {
+          "does_not_survive/contradicted": 50,
+          "does_not_survive/inconclusive": 12,
+          "does_not_survive/never_measured": 709094,
+          "survives": 161
+        },
+        "evidence_status": {
+          "does_not_survive/about_the_model": 440377,
+          "was_never_model_dependent": 880754
+        }
+      },
+      "measured_blocks": {
+        "class": {
+          "was_never_model_dependent": 19072
+        },
+        "origin": {
+          "was_never_model_dependent": 19072
+        },
+        "molecular_role": {
+          "was_never_model_dependent": 31720
+        },
+        "activity": {
+          "was_never_model_dependent": 19404
+        },
+        "target_relation": {
+          "was_never_model_dependent": 19072
+        },
+        "evidence_status": {
+          "does_not_survive/about_the_model": 14537,
+          "was_never_model_dependent": 20478
+        },
+        "targets": {
+          "was_never_model_dependent": 145
+        }
+      }
+    },
+    "axis_values": {
+      "predicted_blocks": {
+        "class": [
+          {
+            "value": "enhancer",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 440377
+          }
+        ],
+        "targets": [
+          {
+            "value": "gene",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 440249
+          },
+          {
+            "value": "gene",
+            "class": "survives",
+            "reason": null,
+            "n": 93
+          },
+          {
+            "value": "gene",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 28
+          },
+          {
+            "value": "gene",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 7
+          }
+        ],
+        "origin": [
+          {
+            "value": "unique",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 258308
+          },
+          {
+            "value": "partly_repeat_derived/SINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 41064
+          },
+          {
+            "value": "repeat_derived/LINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 32334
+          },
+          {
+            "value": "repeat_derived/SINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 29769
+          },
+          {
+            "value": "repeat_derived/LTR",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 27689
+          },
+          {
+            "value": "partly_repeat_derived/LINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 21432
+          },
+          {
+            "value": "partly_repeat_derived/DNA",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 11345
+          },
+          {
+            "value": "repeat_derived/DNA",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 11079
+          },
+          {
+            "value": "partly_repeat_derived/LTR",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 7140
+          },
+          {
+            "value": "repeat_derived/Retroposon",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 89
+          },
+          {
+            "value": "repeat_derived/RC",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 51
+          },
+          {
+            "value": "partly_repeat_derived/RC",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 43
+          },
+          {
+            "value": "partly_repeat_derived/Retroposon",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 34
+          }
+        ],
+        "molecular_role": [
+          {
+            "value": "enhancer_like",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 440377
+          },
+          {
+            "value": "insulator_like",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 193027
+          },
+          {
+            "value": "silencer|insulator_like|competing_promoter|unknown",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 156914
+          },
+          {
+            "value": "silencer|insulator_like|competing_promoter|unknown",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 8
+          },
+          {
+            "value": "silencer|insulator_like|competing_promoter|unknown",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 3
+          }
+        ],
+        "activity": [
+          {
+            "value": "activates_target",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 283335
+          },
+          {
+            "value": "represses_target",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 156914
+          },
+          {
+            "value": "activates_target",
+            "class": "survives",
+            "reason": null,
+            "n": 93
+          },
+          {
+            "value": "activates_target",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 20
+          },
+          {
+            "value": "represses_target",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 8
+          },
+          {
+            "value": "activates_target",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 4
+          },
+          {
+            "value": "represses_target",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 3
+          }
+        ],
+        "target_relation": [
+          {
+            "value": "predicted_deletion_target",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 440249
+          },
+          {
+            "value": "nearest_tss_in_domain",
+            "class": "does_not_survive",
+            "reason": "never_measured",
+            "n": 268845
+          },
+          {
+            "value": "predicted_deletion_target",
+            "class": "survives",
+            "reason": null,
+            "n": 93
+          },
+          {
+            "value": "nearest_tss_in_domain",
+            "class": "survives",
+            "reason": null,
+            "n": 68
+          },
+          {
+            "value": "predicted_deletion_target",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 28
+          },
+          {
+            "value": "nearest_tss_in_domain",
+            "class": "does_not_survive",
+            "reason": "contradicted",
+            "n": 22
+          },
+          {
+            "value": "predicted_deletion_target",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 7
+          },
+          {
+            "value": "nearest_tss_in_domain",
+            "class": "does_not_survive",
+            "reason": "inconclusive",
+            "n": 5
+          }
+        ],
+        "evidence_status": [
+          {
+            "value": "predicted_model",
+            "class": "does_not_survive",
+            "reason": "about_the_model",
+            "n": 440377
+          },
+          {
+            "value": "registry_biochemical",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 440377
+          },
+          {
+            "value": "selection_not_measured",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 440377
+          }
+        ]
+      },
+      "measured_blocks": {
+        "class": [
+          {
+            "value": "enhancer",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 19072
+          }
+        ],
+        "origin": [
+          {
+            "value": "unique",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 11034
+          },
+          {
+            "value": "partly_repeat_derived/SINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 2048
+          },
+          {
+            "value": "repeat_derived/LTR",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1637
+          },
+          {
+            "value": "repeat_derived/LINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1283
+          },
+          {
+            "value": "partly_repeat_derived/LINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1031
+          },
+          {
+            "value": "partly_repeat_derived/DNA",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 597
+          },
+          {
+            "value": "repeat_derived/SINE",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 592
+          },
+          {
+            "value": "repeat_derived/DNA",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 479
+          },
+          {
+            "value": "partly_repeat_derived/LTR",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 366
+          },
+          {
+            "value": "partly_repeat_derived/RC",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 3
+          },
+          {
+            "value": "partly_repeat_derived/Retroposon",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1
+          },
+          {
+            "value": "repeat_derived/Retroposon",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1
+          }
+        ],
+        "molecular_role": [
+          {
+            "value": "enhancer_like",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 19072
+          },
+          {
+            "value": "insulator_like",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 12605
+          },
+          {
+            "value": "silencer|insulator_like|competing_promoter|unknown",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 43
+          }
+        ],
+        "activity": [
+          {
+            "value": "inactive_in_reporter",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 14539
+          },
+          {
+            "value": "active_in_reporter",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 3296
+          },
+          {
+            "value": "no_effect_measured",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 976
+          },
+          {
+            "value": "unknown",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 243
+          },
+          {
+            "value": "activates_target",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 181
+          },
+          {
+            "value": "active_in_reporter|inactive_in_reporter",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 126
+          },
+          {
+            "value": "represses_target",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 43
+          }
+        ],
+        "target_relation": [
+          {
+            "value": "unassigned",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 17643
+          },
+          {
+            "value": "tested_no_effect",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1284
+          },
+          {
+            "value": "measured_perturbation_target",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 145
+          }
+        ],
+        "evidence_status": [
+          {
+            "value": "measured",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 19072
+          },
+          {
+            "value": "conflicting",
+            "class": "does_not_survive",
+            "reason": "about_the_model",
+            "n": 14537
+          },
+          {
+            "value": "measured_negative",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 1406
+          }
+        ],
+        "targets": [
+          {
+            "value": "gene",
+            "class": "was_never_model_dependent",
+            "reason": null,
+            "n": 145
+          }
+        ]
+      }
+    },
+    "region_blocks": {
+      "blocks": 26806,
+      "axis_values": 189336
+    },
+    "region_blocks_class": "was_never_model_dependent"
+  },
+  "rules": {
+    "total": 440589,
+    "by_class": [
+      {
+        "class": "does_not_survive",
+        "reason": "never_measured",
+        "n": 440338
+      },
+      {
+        "class": "was_never_model_dependent",
+        "reason": null,
+        "n": 212
+      },
+      {
+        "class": "survives",
+        "reason": null,
+        "n": 39
+      }
+    ],
+    "predicted_by_detail": {
+      "element never screened": 438872,
+      "element screened, this gene not tested in this cell": 1466,
+      "survives": 39
+    },
+    "experimental": {
+      "rules": 212,
+      "training": 169,
+      "heldout_marked": 43
+    }
+  },
+  "placement": {
+    "what": "measured regulatory links (CRISPRi significant decreases as element, gene, cell, split) and whether a model-compiled element met the overlap rule to carry them; for the rest, whether an ENCODE cCRE would, with no model involved",
+    "measured_links": 661,
+    "not_placed_no_registry_element_heldout": 128,
+    "not_placed_no_registry_element_training": 259,
+    "not_placed_registry_would_heldout": 19,
+    "not_placed_registry_would_training": 43,
+    "placed_heldout": 43,
+    "placed_training": 169
+  },
+  "crispri_invalid_pairs_not_read": 0,
+  "programs": 24,
+  "status": "internal development reading; every input has been read by this project before",
+  "seconds": 9.4,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository: the 24 compiled programs data/knowledge/compiled/noncoding_<chrom>.bio (generated, untracked)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM lentiMPRA",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GTEx v8 single-tissue cis-eQTL, distilled by genomeos/attribution/eqtl.py",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GENCODE v50 and ENCODE cCREs v3 (per chromosome)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: the headline results and their experimental arms",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Subcutaneous.tsv",
+        "sha256": "7e71e97c248caea71e7852bd36b6e4ef1892ae2fb80bf77bcd59662143da2b25",
+        "bytes": 1524862,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Visceral_Omentum.tsv",
+        "sha256": "95c763aa2d3697c6e7d7dedb18ec304019d80fff2c55beef7164332899835ecc",
+        "bytes": 1041488,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adrenal_Gland.tsv",
+        "sha256": "a9a98c26e59cef34cefda07e2c8aec5df0cfc3e1ef632f635a4ad1b07634ec7b",
+        "bytes": 425985,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Aorta.tsv",
+        "sha256": "78f1ed51d6103808e2ac8b374a4b8c7967adce7fa28617cc62aa10ab77493dc8",
+        "bytes": 981284,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Coronary.tsv",
+        "sha256": "68fe61a7162556c6a775ba9c493fe82103947e987f9053104cafe9dc7550ec26",
+        "bytes": 325834,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Tibial.tsv",
+        "sha256": "c3bf8c30972e32a6287ba2a3d5fe7c75d5bfc438b16fa987d93c9c4ec34c9356",
+        "bytes": 1438085,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Amygdala.tsv",
+        "sha256": "4e5ca3d45acbd822533b9d2d46bcd52ad25461ab819c16927a618ca1cb5c323f",
+        "bytes": 171980,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Anterior_cingulate_cortex_BA24.tsv",
+        "sha256": "cc1fa675de9336716749f1dba399249cf7576eb21cd509dc9494a0fcff3ea4e8",
+        "bytes": 325702,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Caudate_basal_ganglia.tsv",
+        "sha256": "3e6ceeaff34bd0b1426516abe357f502b65316a6aaf424ed52b8e00ab97e76f2",
+        "bytes": 471902,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellar_Hemisphere.tsv",
+        "sha256": "03bf9c4a26b250696b7d153d3331a49310799bb35e51ef2022e3d5b8f4fd1bc0",
+        "bytes": 641185,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellum.tsv",
+        "sha256": "5612521b498a4453b82492f5fde8eb664c98a0cf5be6306820a66e02f2b8ef14",
+        "bytes": 737242,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cortex.tsv",
+        "sha256": "6c09911f6dfe7b67f754815fcd8898c95667b39c2558d677f67250a692a19458",
+        "bytes": 477997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Frontal_Cortex_BA9.tsv",
+        "sha256": "114f5d3fff9f3a94dd9946b2b78b2df29e1fe1fc14f82d7fa5abe4cd3f59f97b",
+        "bytes": 383758,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hippocampus.tsv",
+        "sha256": "00aa835adc59b0c9b07ec72361ed16057d71dded6436a66d3295fd72f4102b8e",
+        "bytes": 266947,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hypothalamus.tsv",
+        "sha256": "fc12fe871efa8c70c521dd1aff1025dafc0936398a9176c68590741a61ac65fd",
+        "bytes": 283527,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Nucleus_accumbens_basal_ganglia.tsv",
+        "sha256": "86271aefe2a14d2ecb92249987db1bb1090686b4b3f2255e87aead8d766f3f6f",
+        "bytes": 532000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Putamen_basal_ganglia.tsv",
+        "sha256": "7dd51af07d37a2f3b8844be6e163b6f162755c7c775a15dbcf25344c6b91fceb",
+        "bytes": 366581,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Spinal_cord_cervical_c-1.tsv",
+        "sha256": "e1e48e849fdb7da737b37f473d95e15252e2e567269fcb9aaff97f6b00766d8d",
+        "bytes": 246873,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Substantia_nigra.tsv",
+        "sha256": "7c943728285f7e58e239f287a9a4c8fd6718b2f0121115c0355d8b28212dd40b",
+        "bytes": 153393,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Breast_Mammary_Tissue.tsv",
+        "sha256": "4ca8d79762774492011a72299faf8c7c6d63671533f522a901d5fdbb3ef13cf5",
+        "bytes": 816240,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_Cultured_fibroblasts.tsv",
+        "sha256": "ef687b3a868e6dacc0c73fbde086143a3d817214acfcc681bab63217e906651c",
+        "bytes": 1584825,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_EBV-transformed_lymphocytes.tsv",
+        "sha256": "0b823bcbfb19fa95f9555f23cc80ef544c8dcff98984955b852301aebed6e4ec",
+        "bytes": 276054,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Sigmoid.tsv",
+        "sha256": "a3aa863efc8e1ab78a4d41ddbbe1c1d86778f36eb0e2c4e6fdca28d0b03e7e41",
+        "bytes": 699780,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Transverse.tsv",
+        "sha256": "366f96a4dcc0abe387befe95e01f76c927d4b9d1be5f0e43c43aaec3945145b2",
+        "bytes": 773632,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Gastroesophageal_Junction.tsv",
+        "sha256": "18ebc97fc263c60f871ede4c9b83d8b7578820c8799a9f291f74f231bac6215a",
+        "bytes": 884756,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Mucosa.tsv",
+        "sha256": "86ca00d5b3a533f33cdad9725e6355a2f0ea6569f8e9a493a0a51460844c602a",
+        "bytes": 1322161,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Muscularis.tsv",
+        "sha256": "4a33d218d4e73177d113cede7855ad1e7c992bff0adf7e8c3672eb2fbe2d40e5",
+        "bytes": 1290276,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Atrial_Appendage.tsv",
+        "sha256": "b4f9bed9a2a0677c46ed84b0332f96e8fb921e1039f3942a0655a00c773e9daa",
+        "bytes": 862704,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Left_Ventricle.tsv",
+        "sha256": "8eae4bf8c11c8a074936cc2db779d66782a76e183ec5f02a1a7d6e60b92dc793",
+        "bytes": 757656,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Kidney_Cortex.tsv",
+        "sha256": "599734443cb68ee0836620a4b4a2c9aff9475d27cdcfbb4aa9c617e161c0e62d",
+        "bytes": 48661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Liver.tsv",
+        "sha256": "e9a66834e337e36ff04e4289fb96ef8e3be53acdc2aba936ceb2dbcb7677f2dd",
+        "bytes": 283674,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Lung.tsv",
+        "sha256": "359daad335e8bb1e7eba3db2389c92e218cae579119a0e0f66d1fd54105ae8ad",
+        "bytes": 1002366,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Minor_Salivary_Gland.tsv",
+        "sha256": "00979f8c71e4ca3db9ea6e923c5409488f196becf1e58c2ce5eec0e676410918",
+        "bytes": 221750,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Muscle_Skeletal.tsv",
+        "sha256": "9872bf62d2d11c632678215a1fea511f39c009e06a25a0efc85f6547a3d0bdf3",
+        "bytes": 1362211,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Nerve_Tibial.tsv",
+        "sha256": "2f950f34f8a7977a5d861a060ed4a8e8f20ffa9bd5e96bdcfd6da91648ed9aea",
+        "bytes": 1665423,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Ovary.tsv",
+        "sha256": "a50e733bd6cda9f8a75bd92d02b7b0c0e0937e7f6dfcd2984912f1ea194657f7",
+        "bytes": 241044,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pancreas.tsv",
+        "sha256": "ccdc43bdf0ffac86b49fa3c02a0d7885d2b04bbb4ba2a94e880ea89d5f572937",
+        "bytes": 628314,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pituitary.tsv",
+        "sha256": "7dcb775dc6cab29ce54d762bc497c50626a83ccc80fa241a0f43be39c37a7e94",
+        "bytes": 536244,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Prostate.tsv",
+        "sha256": "d6326e1447950dfee689b4092cd04e222063ff664687d30aa15944592134f70e",
+        "bytes": 372286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Not_Sun_Exposed_Suprapubic.tsv",
+        "sha256": "c20d3636b170cea87fee3ddc8497ffc9d24b58ccdd2813c21f1b2f89782a4042",
+        "bytes": 1622208,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Sun_Exposed_Lower_leg.tsv",
+        "sha256": "9aaf1745340ae5844d692b3524842185ddb0d68a75c19a3ab0e1ab4341f5c017",
+        "bytes": 1848227,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Small_Intestine_Terminal_Ileum.tsv",
+        "sha256": "a9a3bbe2cbd1828d4a743f00a434723716cd49fd3db07ac40a1e74e842d68780",
+        "bytes": 350856,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Spleen.tsv",
+        "sha256": "7e7ef5bb41ea8a9c401bc2503e1e18b01796e9464660096bad9aa80dbfe821a8",
+        "bytes": 528491,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Stomach.tsv",
+        "sha256": "09cfe463146d027c15ad1974bdc1002a3b4f823516152d6923cc1224534339a7",
+        "bytes": 496677,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Testis.tsv",
+        "sha256": "0d8bbe69c88732bcb49a89dedbd98ad2234a4eb124298a5afc7fb393cecf72d1",
+        "bytes": 1190074,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Thyroid.tsv",
+        "sha256": "413457100576634c78f98d4bb984df761e14ca6cb12f5a1dc4f8b42d8040f996",
+        "bytes": 1643720,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Uterus.tsv",
+        "sha256": "c1fbec57440bffe9b2867ffdd3e92aadda7c1cdb0f1b960216ca8a6f8d69589f",
+        "bytes": 140157,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Vagina.tsv",
+        "sha256": "0fae0e42ec83c251080c3f1fff5c9906ffba73f5175d2ae4b7fa2fc597bfe3b2",
+        "bytes": 141954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Whole_Blood.tsv",
+        "sha256": "1782965cd1d9b8eeb71875776c225ed1cca105b97552aa72b4e48e6c86f7a2c5",
+        "bytes": 1197811,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/results/clause2_measured_arm.json",
+        "sha256": "bf13186ee9e2d73deaef94ea07c53f1595f09c73050d222714ba9a8d8b265fd4",
+        "bytes": 87127,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_unknown_targets.json",
+        "sha256": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
+        "bytes": 158865,
+        "partition": null
+      },
+      {
+        "path": "data/results/crispri_published.json",
+        "sha256": "d84e06a761388f1bf21eae295b23258ec46b5fd73dcfa7c236625845c63b24f5",
+        "bytes": 34744,
+        "partition": null
+      },
+      {
+        "path": "data/results/manifest_headlines.json",
+        "sha256": "29921572f06fca01a0bb1d88a8bb5f26266b5f7d358c6549b1b43cf028cc158d",
+        "bytes": 13085,
+        "partition": null
+      },
+      {
+        "path": "data/results/node_containment_audit.json",
+        "sha256": "82712a0ab168080c079ccbf60130aa0bb6d5ae9c4de3419dda555dbe8a914ef9",
+        "bytes": 111747,
+        "partition": null
+      },
+      {
+        "path": "data/results/node_containment_measured.json",
+        "sha256": "c039ca9c325c2badf8fd94bd6f5f9dedf79fecb9b06bc816f4ee8b5c2faa4a61",
+        "bytes": 92606,
+        "partition": null
+      },
+      {
+        "path": "data/results/therapeutic_benchmark.json",
+        "sha256": "21a57eb92845bd4329d2981561b5f702172b98ca3de86ad897f1dc6e2316c11b",
+        "bytes": 31319,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_coverage.json",
+        "sha256": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402",
+        "bytes": 47701,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "reciprocal_overlap": 0.5,
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8,
+      "mpra_active_log2": 1.0,
+      "classification_rule": {
+        "was_never_model_dependent": "no ablated input enters the stated value or selects the units it is computed on. A model file read only for a quantity the conclusion does not state (chromosome names and lengths; a column the stated figure does not use) does not count, and is named. For a per-element label, the label's value is classified; that the element carries a block at all because the model named a target is counted separately as placement",
+        "survives": "an ablated input enters it, and with every ablated input removed the same statement is established on experimental evidence alone. A predicted link (element, gene, direction): a CRISPRi pair on the same element under measured.RECIPROCAL_OVERLAP, on the same gene, significant in the stated direction (activates: significant_decrease; inhibits: significant_increase), in any cell and either benchmark file. A compiled rule: the same, and in the rule's own `when` cell (R1). A result: an experimental arm of the same statistic is in the record, computed without ablated input, with the model figure's sign and a 95% interval (the result's own headline interval) excluding zero; the surviving figure is the arm's, never the model's",
+        "does_not_survive": "otherwise, with one reason: about_the_model (the statement's subject is a model output (its value, its gain or its agreement)); contradicted (the same endpoint measured the same element and gene: a well-powered null or a significant change in the opposite direction); inconclusive (the same endpoint measured it without deciding: an underpowered null, a missing effect, or an experimental arm below its own floor or with an interval across zero); never_measured (no measurement of the same endpoint: the element and gene were never perturbed together (for a rule: not in the rule's cell), or the result has no experimental arm)",
+        "other_endpoints": "reporter activity, VISTA, saturation mutagenesis and GTEx association are other endpoints: they never make a link survive (S4); where they touch a link that does not survive they are counted beside it"
+      },
+      "registered": "2026-09-28"
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are not read",
+      "the AlphaGenome per-element response cache is not opened; the model is not called"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562); read here as measurement, not fitted",
+      "heldout": "the CRISPRi benchmark's held-out file; read here as measurement, reported apart"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "cc824f4407cfa612123e9c74abbda177c430ba4b",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/c4_ablation.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

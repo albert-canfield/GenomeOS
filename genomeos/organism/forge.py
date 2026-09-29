@@ -19,7 +19,8 @@ import random
 import re
 from dataclasses import dataclass, field
 
-from genomeos.ir import Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
+from genomeos.certainty import Certainty
+from genomeos.ir import UNSTATED, Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
 from genomeos.runtime.body import Body, evaluate_assert
 
 FORGE_EVIDENCE = Evidence(EvidenceKind.PREDICTED, "BioForge search over the organism program (not validated)")
@@ -27,6 +28,70 @@ _ASSERT = re.compile(
     r"^(count|deaths|fate|type|lineage)\s*(\S+)?\s+at\s+([-0-9.]+)\s*(\w+)?\s*(in|=|>=|<=|>|<)\s*(.+)$"
 )
 MAX_COMBINATIONS = 300
+
+# Budget constraints (area H, registered 2026-09-27 before the code that honours them was written).
+# The unit is the perturbation: each knockout, each addition and each continuous knob moved off its
+# value in the program costs 1 unless the caller prices it (`Budget.costs`, e.g. bases or edits). The
+# budget is a hard limit on the answer, not a loss term: the answer never spends more than the limit,
+# and the result states what the spend bought and which evaluated candidates the limit excluded.
+BUDGET_UNIT = "perturbations"  # knockouts + additions + knobs moved; per-name costs override 1 each
+BUDGET_SPEC = (
+    "A design run with a budget returns an answer whose spend is <= the limit, for every design and "
+    "every limit; candidates over the limit are still run once at the program's own knob values so the "
+    "result can name what the limit excluded and whether an excluded candidate had a lower loss than "
+    "the answer. No budget keeps the previous behaviour byte for byte."
+)
+BUDGET_FALSIFIER = (
+    "Any shipped design, any limit in 0..3: the reported answer spends more than the limit, or a "
+    "candidate the limit excluded is missing from the excluded list, or an excluded candidate with "
+    "a lower loss than the answer is not flagged."
+)
+# the known case, from an existing fixture: data/organisms/celegans/designs.bio, design
+# two_intestinal_founders, cites Lin et al. 1995 ("without POP-1, MS takes the E fate"), and
+# tests/test_design.py pins POP-1 as its unbudgeted answer at loss 0.
+BUDGET_KNOWN_CASE = {
+    "design": "data/organisms/celegans/designs.bio two_intestinal_founders",
+    "source": "Lin et al. 1995, cited in the design block; answer pinned by tests/test_design.py",
+    "limit 1": "answer -POP-1, solved, spend 1",
+    "limit 0": "answer wild type, not solved, spend 0; -POP-1 listed as excluded with loss 0 < the answer's",
+}
+
+# Review item R4 (2026-09-28): the emitted experiment used to carry a fixed confidence of 0.3, a constant
+# a reader takes for a probability of being right. No calibration record exists for any outcome of a
+# design answer (docs/BIOFORGE-CONFIDENCE.md), so the answer now carries a `Certainty` whose probability
+# is None with the reason, and the experiment's numeric confidence is left unstated: 0.0 is what the
+# BioLang parser gives an `experiment` block with no `confidence:` key, so the emitted text and the
+# returned Experiment agree. It is the absence of a stated value, not a probability of zero, and since
+# item 12 S1 (2026-09-28) it is the parser's own UNSTATED rather than a plain 0.0, which
+# `confidence_stated` read as a judged zero while the emitted text, parsed, gave UNSTATED.
+UNSTATED_CONFIDENCE = UNSTATED
+EFFECT_UNIT = "normalised target distance removed (wild-type loss minus answer loss; 0 = no change)"
+MODEL_SCORE_NAME = "loss: normalised distance from every target holding; 0 = all hold; lower ranks first"
+UNCERTAINTY_NOTE = (
+    "not measured: one simulation per candidate at a fixed seed; the search's spread is not a measurement"
+)
+PROBABILITY_UNAVAILABLE = (
+    "no calibration record: no population of design answers with a published outcome and a negative case"
+    " exists, and the 2-4 designs with a published answer were authored from that answer"
+    " (docs/BIOFORGE-CONFIDENCE.md)"
+)
+
+
+def design_certainty(answer_loss: float, baseline_loss: float | None) -> Certainty:
+    """The certainty record of a design answer. The effect is how much target distance the perturbation
+    removed; nothing here turns it, or the loss, into a probability, so a larger effect cannot raise it."""
+    effect = None if baseline_loss is None else baseline_loss - answer_loss
+    return Certainty(
+        evidence_category=FORGE_EVIDENCE.kind.value,
+        effect_estimate=effect,
+        effect_unit=EFFECT_UNIT,
+        measurement_uncertainty=None,
+        uncertainty_note=UNCERTAINTY_NOTE,
+        model_score=answer_loss,
+        model_score_name=MODEL_SCORE_NAME,
+        probability=None,
+        probability_unavailable=PROBABILITY_UNAVAILABLE,
+    )
 
 
 @dataclass(slots=True)
@@ -60,6 +125,8 @@ class Knob:
 
     def set(self, m: Module, value: float) -> None:
         value = min(self.hi, max(self.lo, value))
+        # the two min(x, 0.3) below cap the IR's evidence-quality score of a value the search set: they
+        # only lower it and never read `value`, so no knob position raises it. Not a probability (R4).
         if self.kind == "timer":
             t = m.timer(self.name)
             t.duration = value
@@ -118,6 +185,7 @@ class DesignResult:
     until: float
     candidates: list[Candidate] = field(default_factory=list)
     evaluations: int = 0
+    baseline_loss: float | None = None  # loss of the unperturbed program at its own knob values
 
     @property
     def best(self) -> Candidate | None:
@@ -140,8 +208,15 @@ class DesignResult:
             asserts=list(self.design.targets) + list(self.design.keeps),
             expect=f"BioForge: {b.label()} reaches {'; '.join(self.design.targets)}",
             evidence=FORGE_EVIDENCE,
-            confidence=0.3,
+            confidence=UNSTATED_CONFIDENCE,  # was a fixed 0.3 until review item R4; see design_certainty
         )
+
+    def certainty(self) -> Certainty | None:
+        """Evidence, effect, uncertainty, score and probability of the answer, kept apart (review R4)."""
+        b = self.best
+        if b is None or not b.feasible:
+            return None
+        return design_certainty(b.loss, self.baseline_loss)
 
     def to_bio(self) -> str:
         ex = self.to_experiment()
@@ -157,7 +232,10 @@ class DesignResult:
         parts.append(f"  until: {self.until:g} min")
         parts.append(f'  expect: "{ex.expect}"')
         parts += [f"  assert: {a}" for a in ex.asserts]
-        parts.append(f'  evidence: predicted "{ex.evidence.source}"; confidence: {ex.confidence}')
+        parts.append(f'  evidence: predicted "{ex.evidence.source}"')
+        cert = self.certainty()
+        if cert is not None:
+            parts += ["  " + line for line in cert.comment_lines()]
         parts.append("}")
         return "\n".join(parts) + "\n"
 
@@ -181,6 +259,7 @@ class DesignResult:
                 for c in self.candidates
             ],
             "experiment": self.to_bio(),
+            "certainty": None if (c := self.certainty()) is None else c.to_dict(),
         }
 
     def format(self, top: int = 6) -> str:
@@ -211,6 +290,108 @@ class DesignResult:
         return "\n".join(out)
 
 
+# The budget lives below DesignResult on purpose: tests/test_forge_calibration.py pins lines 93, 97
+# and 170 of this file by number, so the budgeted types extend the classes above instead of editing them.
+# (Those pins were retired on 2026-09-28 with the literal on line 170, review item R4; the property that
+# replaces them is in tests/test_forge_certainty.py.)
+@dataclass(slots=True)
+class Budget:
+    """A hard limit on what a design may spend, in `unit`; each perturbation costs 1 unless priced.
+
+    Names priced in `costs` are factor names (a knockout or an addition of that factor) or knob paths
+    (`timer:NAME.duration`); a knockout and an addition of the same factor cost the same."""
+
+    limit: float
+    costs: dict[str, float] = field(default_factory=dict)
+    unit: str = BUDGET_UNIT
+
+    def __post_init__(self) -> None:
+        if self.limit < 0 or any(c < 0 for c in self.costs.values()):
+            raise ValueError("a budget limit and its costs are non-negative")
+
+    def cost(self, name: str) -> float:
+        return float(self.costs.get(name, 1.0))
+
+    def spend(self, knockouts: list[str], adds: list[str], moved: list[str]) -> float:
+        return sum(self.cost(n) for n in [*knockouts, *adds, *moved])
+
+    def to_dict(self) -> dict:
+        return {"limit": self.limit, "unit": self.unit, "costs": dict(self.costs)}
+
+
+@dataclass(slots=True)
+class BudgetedCandidate(Candidate):
+    spend: float = 0.0  # in the budget's unit
+    within_budget: bool = True
+    moved: list[str] = field(default_factory=list)  # knob paths off the program's own value
+
+
+@dataclass(slots=True)
+class BudgetedDesignResult(DesignResult):
+    """A design run under a budget: the answer is the best candidate that spends no more than the limit."""
+
+    budget: Budget = field(default_factory=lambda: Budget(0))
+
+    @property
+    def best(self) -> Candidate | None:
+        b = self.candidates[0] if self.candidates else None
+        return b if b is not None and b.within_budget else None  # never an answer over the budget
+
+    def budget_report(self) -> dict:
+        """What the spend bought, what the limit excluded, and whether the limit cost the target."""
+        b = self.best
+        excluded = [c for c in self.candidates if not c.within_budget]
+        better = [
+            c for c in excluded if c.feasible and (b is None or not b.feasible or c.loss < b.loss - 1e-12)
+        ]
+        return {
+            **self.budget.to_dict(),
+            "bought": None
+            if b is None
+            else {
+                "perturbation": b.label(),
+                "spend": b.spend,
+                "loss": b.loss,
+                "feasible": b.feasible,
+                "solved": self.solved,
+            },
+            "excluded": [
+                {"perturbation": c.label(), "spend": c.spend, "loss": c.loss, "feasible": c.feasible}
+                for c in excluded
+            ],
+            "excluded_better": [c.label() for c in better],
+            "limit_cost_the_target": bool(better),
+        }
+
+    def to_dict(self) -> dict:
+        out = DesignResult.to_dict(self)
+        for row, c in zip(out["candidates"], self.candidates, strict=True):
+            row.update(spend=c.spend, within_budget=c.within_budget, moved=list(c.moved))
+        out["budget"] = self.budget_report()
+        return out
+
+    def format(self, top: int = 6) -> str:
+        out = [DesignResult.format(self, top)]
+        rep = self.budget_report()
+        bought = rep["bought"]
+        out.append(
+            f"  budget  {rep['limit']:g} {rep['unit']}: bought "
+            + (f"{bought['perturbation']} for {bought['spend']:g}" if bought else "nothing")
+        )
+        ex = rep["excluded"]
+        out.append(
+            f"  budget  excluded {len(ex)} candidate(s) over the limit"
+            + (": " + ", ".join(f"{e['perturbation']} ({e['spend']:g})" for e in ex[:6]) if ex else "")
+        )
+        if rep["excluded_better"]:
+            out.append(
+                "  budget  the limit cost the target: "
+                + ", ".join(rep["excluded_better"][:6])
+                + " would have come closer"
+            )
+        return "\n".join(out)
+
+
 def _horizon(module: Module, design: Design) -> float:
     if design.until is not None:
         return design.until
@@ -226,11 +407,18 @@ def run_design(
     means: bool = True,
     iterations: int = 30,
     restarts: int = 1,
+    budget: Budget | None = None,
 ) -> DesignResult:
+    """Search the design's perturbations. With `budget`, the answer never spends more than
+    `budget.limit`; candidates over it are run once at the program's knob values and reported as
+    excluded (`BudgetedDesignResult.budget_report`). Without one, behaviour is unchanged."""
     until = _horizon(module, design)
     knobs = [Knob.parse(spec) for spec in design.vary]
     rng = random.Random(0 if seed is None else seed)
-    res = DesignResult(design, until)
+    res = (
+        DesignResult(design, until) if budget is None else BudgetedDesignResult(design, until, budget=budget)
+    )
+    original = {k.path: k.get(module) for k in knobs}
 
     def evaluate(knockouts: list[str], adds: list[str], values: dict[str, float]) -> Candidate:
         m = module
@@ -244,9 +432,33 @@ def run_design(
         keeps = [evaluate_assert(body, k) for k in design.keeps]
         loss = sum(distance(c, t) for c, t in zip(targets, design.targets, strict=True))
         feasible = all(c["ok"] for c in keeps)
-        return Candidate(
-            list(knockouts), list(adds), dict(values), loss, feasible, targets, keeps, body.summary()
-        )
+        args = (list(knockouts), list(adds), dict(values), loss, feasible, targets, keeps, body.summary())
+        if budget is None:
+            return Candidate(*args)
+        moved = [p for p, v in values.items() if abs(v - original[p]) > 1e-12]
+        spend = budget.spend(list(knockouts), list(adds), moved)
+        return BudgetedCandidate(*args, spend=spend, within_budget=spend <= budget.limit + 1e-12, moved=moved)
+
+    def better(a: Candidate, b: Candidate) -> bool:
+        """a replaces b in the knob search; under a budget, never by going over it."""
+        if budget is not None and not a.within_budget:
+            return False
+        return (a.feasible, -a.loss) > (b.feasible, -b.loss)
+
+    def draw(k: Knob) -> float:
+        return math.exp(rng.uniform(math.log(max(k.lo, 1e-9)), math.log(max(k.hi, 1e-9))))
+
+    def restart_values(knockouts: list[str], adds: list[str]) -> dict[str, float]:
+        left = math.inf if budget is None else budget.limit - budget.spend(knockouts, adds, [])
+        if sum(1.0 if budget is None else budget.cost(k.path) for k in knobs) <= left + 1e-12:
+            return {k.path: draw(k) for k in knobs}  # every knob affordable: the unbudgeted draw
+        # a restart under a budget moves only the knobs the remaining budget can pay for
+        values = dict(original)
+        for k in rng.sample(knobs, len(knobs)):
+            if budget.cost(k.path) <= left + 1e-12:
+                values[k.path] = draw(k)
+                left -= budget.cost(k.path)
+        return values
 
     options = [("ko", f) for f in design.knockout_any_of] + [("add", f) for f in design.add_any_of]
     combos: list[tuple[list[str], list[str]]] = [([], [])]
@@ -257,43 +469,46 @@ def run_design(
                 break
         if len(combos) >= MAX_COMBINATIONS:
             break
-    original = {k.path: k.get(module) for k in knobs}
     for knockouts, adds in combos:
         best = evaluate(knockouts, adds, original)
-        if knobs:  # log-space local search on the knobs, as in the network BioForge
+        if not knockouts and not adds and res.baseline_loss is None:
+            res.baseline_loss = best.loss  # the unperturbed program: the reference the effect is read against
+        if budget is not None and not best.within_budget:
+            res.candidates.append(best)  # over the limit before any knob moves: run once, report as excluded
+            continue
+        affordable = budget is None or any(
+            budget.cost(k.path) <= budget.limit - best.spend + 1e-12 for k in knobs
+        )  # no knob the remaining budget can pay for: every move would be refused, so none is run
+        if knobs and affordable:  # log-space local search on the knobs, as in the network BioForge
             for r in range(restarts):
-                current = (
-                    best
-                    if r == 0
-                    else evaluate(
-                        knockouts,
-                        adds,
-                        {
-                            k.path: math.exp(
-                                rng.uniform(math.log(max(k.lo, 1e-9)), math.log(max(k.hi, 1e-9)))
-                            )
-                            for k in knobs
-                        },
-                    )
-                )
+                current = best if r == 0 else evaluate(knockouts, adds, restart_values(knockouts, adds))
                 step = 0.5
                 for _ in range(iterations):
                     k = rng.choice(knobs)
                     values = dict(current.values)
                     values[k.path] = values[k.path] * math.exp(rng.gauss(0, step))
                     cand = evaluate(knockouts, adds, values)
-                    if (cand.feasible, -cand.loss) > (current.feasible, -current.loss):
+                    if better(cand, current):
                         current = cand
                     else:
                         step = max(0.05, step * 0.97)
-                if (current.feasible, -current.loss) > (best.feasible, -best.loss):
+                if better(current, best):
                     best = current
         res.candidates.append(best)
-    res.candidates.sort(key=lambda c: (not c.feasible, c.loss, c.perturbations, c.label()))
+    if budget is None:
+        res.candidates.sort(key=lambda c: (not c.feasible, c.loss, c.perturbations, c.label()))
+    else:
+        res.candidates.sort(
+            key=lambda c: (not c.within_budget, not c.feasible, c.loss, c.perturbations, c.label())
+        )
     return res
 
 
 def run_designs(
-    module: Module, names: list[str] | None = None, seed: int | None = None
+    module: Module, names: list[str] | None = None, seed: int | None = None, budget: Budget | None = None
 ) -> list[DesignResult]:
-    return [run_design(module, d, seed=seed) for d in module.designs if not names or d.name in names]
+    return [
+        run_design(module, d, seed=seed, budget=budget)
+        for d in module.designs
+        if not names or d.name in names
+    ]

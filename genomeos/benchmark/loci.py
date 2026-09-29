@@ -1607,8 +1607,21 @@ def read_coding(ch: Chromosome, expect: Expect) -> dict[str, Any]:
     return out
 
 
-def read_gene_input(ch: Chromosome, expect: Expect, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
-    """The whole input: every already-scored element in the locus window, grouped by the gene it moves."""
+def read_gene_input(
+    ch: Chromosome,
+    expect: Expect,
+    results_dir: Path = RESULTS_DIR,
+    responses: Any = None,
+    coding: set[str] | None = None,
+) -> dict[str, Any]:
+    """The whole input: every already-scored element in the locus window, grouped by the gene it moves.
+
+    Each element votes once, for its compact coding head. With `responses` (an
+    `attribution.targets.ElementResponses`) and the chromosome's `coding` symbols, a `window_reading`
+    is added beside the layer and does not replace it: each element credits |effect| to every coding
+    gene at the bar in its window. Elements the cache does not hold (stated intervals, VISTA and
+    lentiMPRA rows) keep their compact credit there and are counted.
+    """
     rows = _deletion_rows(ch.chrom, expect.window[0], expect.window[1], results_dir)
     by_gene: dict[str, dict[str, Any]] = {}
     for e in rows:
@@ -1621,7 +1634,13 @@ def read_gene_input(ch: Chromosome, expect: Expect, results_dir: Path = RESULTS_
         g["summed"] = round(g["summed"] + abs(p["log2_fold_change"]), 3)
     ranked = sorted(by_gene.values(), key=lambda g: -g["summed"])
     mine = [g for g in ranked if g["gene"] in expect.targets]
+    window = (
+        _gene_input_window(ch.chrom, rows, expect, responses, coding)
+        if responses is not None and coding is not None
+        else None
+    )
     return {
+        **({"window_reading": window} if window is not None else {}),
         "layer": "gene_input",
         "provenance": "derived",
         "window": list(expect.window),
@@ -1635,6 +1654,50 @@ def read_gene_input(ch: Chromosome, expect: Expect, results_dir: Path = RESULTS_
         ),
         "pending": None if rows else "no already-scored element anywhere in the locus window",
         "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene",
+    }
+
+
+def _gene_input_window(
+    chrom: str, rows: list[dict[str, Any]], expect: Expect, responses: Any, coding: set[str]
+) -> dict[str, Any]:
+    """`read_gene_input`'s ranking with every coding gene at the bar credited, not only the head."""
+    from genomeos.predict.enhancer_target import MIN_EFFECT
+
+    by_gene: dict[str, dict[str, Any]] = {}
+    not_cached = from_cache = 0
+
+    def credit(gene: str, signed: float) -> None:
+        g = by_gene.setdefault(gene, {"gene": gene, "elements": 0, "activating": 0, "summed": 0.0})
+        g["elements"] += 1
+        g["activating"] += int(signed < 0)
+        g["summed"] = round(g["summed"] + abs(signed), 3)
+
+    for e in rows:
+        got = responses.at_bar(chrom, e["id"], MIN_EFFECT, coding) if e.get("id") else None
+        if got is None:
+            not_cached += 1
+            p = e.get("predicted_coding") or {}
+            if p.get("gene"):
+                credit(
+                    p["gene"],
+                    -abs(p["log2_fold_change"]) if p["action"] == "activates" else abs(p["log2_fold_change"]),
+                )
+            continue
+        from_cache += 1
+        for gene, signed in got:
+            credit(gene, signed)
+    ranked = sorted(by_gene.values(), key=lambda g: -g["summed"])
+    return {
+        "elements_from_the_cache": from_cache,
+        "elements_not_cached": not_cached,
+        "genes_credited": len(ranked),
+        "genes": ranked[:8],
+        "target": ranked[0]["gene"] if ranked else None,
+        "hit": bool(ranked) and ranked[0]["gene"] in expect.targets,
+        "rank_of_first_published_target": next(
+            (i + 1 for i, g in enumerate(ranked) if g["gene"] in expect.targets), None
+        ),
+        "evidence": "predicted: the same deletions, |log2| summed over every coding gene at the bar",
     }
 
 

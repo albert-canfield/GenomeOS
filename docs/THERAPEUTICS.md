@@ -476,6 +476,598 @@ is recorded per row and pinned at two buried surface targets
 (`BURIED_SURFACE_TARGETS`), because teaching the score to read the alteration is
 a change to every case's numbers and is made deliberately or not at all.
 
+## The evidence tier, pre-registered 2026-09-27
+
+Recovering a target and preferring it are different results, and the benchmark
+measured only the first. What follows was written before the code and before
+any number was regenerated, so the movement below is a prediction that the
+regenerated result can contradict.
+
+**The defect in one sentence.** `surface_accessibility` reads curated
+localisation, so a gene this tumour carries at twelve copies and a gene named
+only for neighbouring a mutated one are scored from the same annotation and are
+worth the same — which is why ERBB2 reached by its amplification scores 0.494
+and ranks fourth behind KDR at 0.575, EGFR and PDGFRB, none of which is altered
+in that tumour. Across the nine cases there are twelve
+hypothesis-above-target rows: KRAS 4, PIK3CA 4, the ERBB2 copy-number case 3,
+IDH1 1. `assemble()` has no dimension for how the candidate was reached, and
+`classify()` already knows the difference it does not use.
+
+### The tier
+
+A new scored dimension, `alteration_evidence`, over three levels. The tier is
+read from the evidence about **this gene in this patient**, never from the name
+of the route that proposed it:
+
+| tier | value | what has to be true |
+| --- | --- | --- |
+| `observed_alteration` | 1.0 | this tumour's own DNA carries an alteration of this gene: a coding variant, a copy-number event or a rearrangement — the candidate has origins |
+| `patient_measurement` | 0.6 | no DNA event, but this patient's own tumour measures this gene: RNA-seq, proteomics or surface abundance |
+| `association_hypothesis` | 0.2 | nothing about this gene was measured in this patient; it is on the list because a database associates it with a gene that was |
+
+**Why that order, and not another.** The top and the middle are both
+measurements of this gene in this patient and differ in degree. DNA is above
+patient RNA because a somatic alteration is attributable to the tumour and is
+the thing approved indications are actually written on — ERBB2 amplification is
+trastuzumab's companion diagnostic — whereas the expression route establishes a
+ratio against a queried healthy-tissue panel, which is weaker in two named
+ways: the comparator is a panel and not this patient's own normal tissue, and
+raised transcript is not protein on the surface, a lack the pipeline already
+records for every gene it reaches this way. The bottom tier is different in
+kind: it is not a weak measurement of this gene but a measurement of a
+different gene, plus an association. 0.2 rather than 0.0 because an association
+with a disrupted driver is evidence of something, and the pipeline is entitled
+to propose it; it is not entitled to prefer it.
+
+**The trap this avoids.** `outranked_by_hypotheses` is currently implemented as
+"candidates with no `origins` record", and CD19 has no origins: it is reached
+from the patient's RNA, not from a DNA event. Penalising the absence of an
+origin would demote the one case that proves the expression route works. So the
+proxy is replaced by the thing it was a proxy for: the metric will count
+candidates above the target whose tier is `association_hypothesis`. In the CD19
+case that reclassifies FCRL5, the candidate above CD19, which the patient's own
+RNA measures exactly as it measures CD19 and which is therefore not a
+hypothesis at all.
+
+### How the tier enters the ranking
+
+Both a dimension and a sort key, with different jobs, because each alone is
+wrong in a way the other is not.
+
+*A dimension alone is not enough.* It is averaged with eleven others, so to
+close the 0.081 between ERBB2 and KDR reliably in every case it would need a
+weight large enough to make the other dimensions decorative for any
+hypothesis — a lexicographic preference smuggled in as a weight.
+
+*A sort key alone is not enough either.* The published score would read 0.494
+for the candidate shown first and 0.575 for the one shown fourth, and the
+number GenomeOS quotes would contradict the order it presents. The score has to
+change, because "twelve copies and a guess are worth the same" is a statement
+about the number.
+
+So: `alteration_evidence` enters `WEIGHTS` at **1.1** — not less than
+`surface_accessibility` at 1.0, because whether this tumour has the alteration
+is not a smaller question than whether the protein is reachable; below
+`tumour_selectivity` at 1.3 and `normal_tissue_safety` at 1.5, because those can
+rule a target out and this one only orders. And the final sort becomes
+tier-major over a **coarser** partition than the tier itself: measured in this
+patient (either of the top two tiers) before measured nowhere
+(`association_hypothesis`), then by score, then by gene. The coarse cut is the
+argued part. The difference between DNA and patient RNA is a difference of
+degree and belongs inside the score, where it can be traded against safety and
+selectivity. The difference between a measurement of this gene and no
+measurement of this gene is a difference in kind, and no quantity of curated
+annotation about an unmeasured gene should outrank a gene the tumour actually
+altered. That cut is also exactly why **CD19 must not fall**: CD19 is measured
+in this patient.
+
+### Expected movement, per case
+
+| case | route | rank before | rank after | score before |
+| --- | --- | --- | --- | --- |
+| EGFR L858R | point mutation | 1 | 1 | 0.500 |
+| ERBB2 mutated | point mutation | 1 | 1 | 0.494 |
+| BRAF V600E | point mutation | 1 | 1 | 0.427 |
+| KRAS G12C | point mutation | 5 | 1 | 0.369 |
+| PIK3CA H1047R | point mutation | 5 | 1 | 0.438 |
+| IDH1 R132H | point mutation | 2 | 1 | 0.345 |
+| ERBB2 amplified, 12 copies | copy number | 4 | **1** | 0.494 |
+| EML4-ALK | structural variant | 2 | 1 | 0.559 |
+| CD19 | expression | 2 | **2, and no lower** | 0.500 |
+
+Every score rises, because every candidate gains a dimension it did not have
+and no candidate's tier value is 0. The scores are not comparable across the
+two regimes and the after-numbers are reported in full rather than compared
+with the before-numbers as if they measured the same thing. What is comparable
+is the ordering, which is what the defect was about.
+
+`BURIED_SURFACE_TARGETS` is expected to go from **2 to 0**: the ERBB2
+copy-number case by rising to rank 1, and CD19 because the candidate above it
+is measured in this patient and was never a hypothesis. The constant will be
+lowered to whatever is actually achieved and never raised, and no test will be
+loosened to reach it. Nine of nine recovered, nine of nine verdicts and nine of
+nine defensible top mechanisms must all hold; ALK must stay
+`intracellular_only` at accessibility 0.0 with no preferred mechanism, because
+the tier says how a candidate was reached and not whether a binder can reach
+the protein.
+
+### The pinned fixtures, each re-baselined deliberately
+
+* `tests/test_therapeutic_benchmark.py::test_the_copy_number_route_is_scored_and_not_merely_unit_tested`
+  asserts `amp["rank"] > mutated["rank"]` — it pins today's wrong answer, and
+  it is the assertion this change exists to invert. It becomes: both ERBB2
+  cases rank 1, and the amplified case is preferred rather than merely
+  recovered.
+* `tests/test_cancer_alterations.py::test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own`
+  runs with `indirect=False`, so ERBB2 is rank 1 there before and after; the
+  fixture stands and gains an assertion on the tier.
+* `tests/test_cancer_alterations.py::test_a_gene_reached_by_its_own_alteration_is_not_proposed_again_as_a_hypothesis`
+  states in its docstring that both entries scored 0.494. That number is
+  history now: the prose says so, and the test gains the assertion that the two
+  entries would no longer tie.
+* `tests/test_therapeutics.py` pins overall scores only as inequalities and
+  caps (`<= 0.6` under the unknown-safety cap, `risky < safe`). Adding a
+  dimension every candidate scores at the same tier value cannot flip an
+  inequality between two candidates of the same tier, and the safety caps are
+  above the mean. Re-checked rather than assumed.
+* `genomeos/therapeutics/report.py` publishes a five-dimension excerpt of the
+  score in the machine report. `alteration_evidence` joins it, because a
+  dimension that decides the order cannot be the one the report omits.
+* The Therapeutic Design Dataset reads named components — selectivity, surface,
+  structure — and never the overall priority score, so `design_readiness` is
+  arithmetically unaffected; what can change is the order of
+  `target_specifications`, which follows the ranked candidate list.
+* `data/results/therapeutic_benchmark.json` is regenerated whole, and every
+  row's rank and score is reported before and after.
+
+### The falsifier fired on the first day, and on the clause it was written for
+
+The tier as pre-registered above — a dimension in `WEIGHTS` at 1.1, plus the
+coarse tier-major sort — was implemented and measured before anything was
+written into this section. It closed what it was aimed at: all twelve
+hypothesis-above-target rows went, and CD19 held at rank 2. It also made a
+pinned case **worse**, which is falsifier 1.
+
+`tests/test_cancer_alterations.py::test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own`
+asserts that in a tumour with twelve copies of ERBB2 and no ERBB2 mutation,
+ERBB2 ranks first. It did, at 0.494 against a mutated PIK3CA at 0.444. With the
+tier averaged into the mean it stopped: PIK3CA reached 0.528 and ERBB2 stopped
+at 0.500. The same inversion put the benchmark's copy-number case at rank 2
+rather than the pre-registered rank 1.
+
+**Two arithmetic causes, neither of them about evidence.**
+
+1. *The mean is over the dimensions that were available.* PIK3CA is scored on 7
+   dimensions, ERBB2 on 10. One new dimension worth 1.0 therefore lifts the
+   sparser candidate further — PIK3CA by 0.084, ERBB2 by 0.061 — so a dimension
+   meant to prefer the observed alteration preferred whichever candidate had
+   less known about it.
+2. *The poor-safety cap clips at a constant other candidates can walk past.*
+   ERBB2's normal-tissue safety is 0.06 — this is the real cardiotoxicity of
+   HER2 therapy, and the cap is right — so its raw 0.555 is clipped to 0.500.
+   PIK3CA's safety is 0.449, mediocre but above the 0.35 threshold, so nothing
+   clips its 0.528. A capped candidate can be overtaken by adding any dimension
+   at all, whatever the dimension says.
+
+Both are properties of `assemble()` that the new dimension exposed rather than
+introduced, and neither is a statement about evidence. Tuning the weight would
+not fix either: for any positive weight the sparser candidate gains more, and
+the cap binds regardless.
+
+### The amendment: a precondition is gated, not averaged
+
+`alteration_evidence` is scored and published per candidate, with its tier and
+its sentence, and is **kept out of the overall mean** — through
+`DIAGNOSTIC`, the mechanism this file already has for a dimension that
+describes the candidate's inputs rather than the target's priority. The ranking
+is where the tier acts: the coarse tier-major sort, unchanged from the
+pre-registration.
+
+The reason is not the regression; the regression is what made it visible. The
+mean answers one question — how good a target is this protein, on the
+dimensions we could measure — and the tier answers a different one: is there
+evidence that this tumour involves this gene at all. That is a precondition,
+and averaging a precondition into a mean lets a strong precondition compensate
+for weak biology, exactly as it lets weak biology compensate for a missing one.
+This file already treats one fact that way: safety can only ever cap a score,
+never raise it. Evidence of involvement now sits in the same family — it orders
+and it is published, and it does not pay into the average.
+
+**What this costs, stated rather than hidden.** A hypothesis can still carry a
+higher published number than the target above it: KDR at 0.575 is ranked below
+ERBB2 at 0.494. The list is tier-major and every row carries its tier, and the
+result note says so, but the number alone no longer implies the order. The
+alternative — averaging the tier in, so that the number matches the order — was
+implemented, measured and rejected, because it inverted a case that was
+previously right. A number that agrees with a wrong order is worth less than an
+order that is right and says what it sorted on.
+
+Every published score is therefore unchanged by this change, and no existing
+threshold, cap or fixture needed re-baselining. What changed is the order, which
+is what the defect was about, and the per-candidate record, which now names the
+tier.
+
+### The falsifier
+
+The tier is wrong if any of these is observed:
+
+1. **A case gets worse.** Any target's rank rises in number, or any of the
+   three scored questions falls below nine of nine. CD19 falling from rank 2 is
+   the specific version of this that the coarse sort cut exists to prevent, and
+   if it falls anyway the cut is mis-specified.
+2. **A target that is only ever a hypothesis.** A case whose approved target
+   carries no alteration and no patient measurement — reachable only as an
+   association with an altered driver — would be buried by a lexicographic
+   preference that can never be outvoted. That case would show the order must
+   be a weighting and not a tier, and it is the reason the tier is read from
+   evidence about the gene rather than from the route's name: supply that
+   patient's RNA and the same gene rises without the tier being edited.
+3. **The tier standing in for a measurement.** If `alteration_evidence` ever
+   rises for a candidate whose evidence did not change — a gene promoted
+   because of how it was proposed rather than what was measured about it — the
+   dimension has become a label for the route and is measuring nothing.
+
+### The result, 2026-09-27
+
+`data/results/therapeutic_benchmark.json` regenerated, network on, nine cases.
+**Every published score is identical to the run before this change**, because
+the tier is published and ordered on rather than averaged in. Everything that
+moved is a place:
+
+| case | route | rank | score | tier |
+| --- | --- | --- | --- | --- |
+| EGFR L858R | point mutation | 1 → 1 | 0.500 | observed alteration |
+| ERBB2 mutated | point mutation | 1 → 1 | 0.494 | observed alteration |
+| BRAF V600E | point mutation | 1 → 1 | 0.427 | observed alteration |
+| KRAS G12C | point mutation | **5 → 1** | 0.369 | observed alteration |
+| PIK3CA H1047R | point mutation | **5 → 1** | 0.438 | observed alteration |
+| IDH1 R132H | point mutation | **2 → 1** | 0.345 | observed alteration |
+| ERBB2 amplified, 12 copies | copy number | **4 → 1** | 0.494 | observed alteration |
+| EML4-ALK | structural variant | **2 → 1** | 0.559 | observed alteration |
+| CD19 | expression | 2 → 2 | 0.500 | patient measurement |
+
+All nine targets recovered, nine of nine verdicts correct, nine of nine top
+mechanisms defensible — and every target class, mechanism, compatibility,
+accessibility and peptide-route field in the result is byte-identical to the
+previous run, which is the check that this changed the order and nothing else.
+
+`outranked_by_hypotheses` reads **empty for all nine cases**, from twelve rows
+across four cases before (KRAS 4, PIK3CA 4, the ERBB2 copy-number case 3, IDH1
+1). `BURIED_SURFACE_TARGETS` goes from 2 to **0**, lowered to what was achieved
+and not to what was wanted.
+
+**CD19 did not move, which was the hard half.** It is reached from the
+patient's RNA and has no DNA origin, so the obvious rule — demote a candidate
+with no alteration — would have buried the target of four approved therapies
+while claiming to fix burial. The metric had that error inside it too: it was
+defined as "candidates with no `origins` record", under which the one candidate
+above CD19, FCRL5, counted as a hypothesis although this patient's RNA measures
+it exactly as it measures CD19. Both now read the tier, and FCRL5 sits in the
+same tier as CD19: above it on score, which is a ranking between two measured
+genes and a different question from this one.
+
+**What is left, named rather than closed.** The published number of a
+hypothesis can exceed that of the target ranked above it — KDR at 0.575 under
+ERBB2 at 0.494 — and the amplified and the mutated ERBB2 still produce the same
+0.494, so the amplification buys the place and not the number. Inside the top
+tier, nothing yet distinguishes twelve copies from a single missense, and
+nothing asks whether a candidate has any mechanism at all: in the
+ERBB2-amplified tumour the candidate that came second is PIK3CA, whose best
+mechanism is not merely weak but absent, its nearest being `adcp` with
+`surface_accessible` unanswered. A ranking that puts a gene no modelled
+modality can reach above one with an approved antibody is the next question,
+and it is not this one.
+
+## The mechanism gate and the magnitude tiebreak, pre-registered 2026-09-27
+
+Written before the code and before any number was regenerated, so that what
+follows is a prediction the run can contradict. It closes the two items the
+evidence tier left open above: nothing asked whether a candidate has any
+mechanism at all, and inside the top tier twelve copies of a gene and one
+missense read the same.
+
+**Neither is a weight, and that is settled rather than chosen.** `WEIGHTS` is
+unchanged and no dimension is added to the overall mean. The tier's own first
+shape was registered as a weighted dimension, implemented, measured, and it
+inverted the tumour it was built for: because the mean is taken over the
+dimensions that were available, a new dimension lifts the candidate with fewer
+of them further, and because the poor-safety cap clips at a constant, a capped
+candidate is overtaken by a candidate that gains anything at all. No positive
+weight escapes either. Both rules therefore act on the order — one a gate, one a
+tiebreak — in the same family as safety, which can only ever cap a score and
+never raise one.
+
+### Rule 1: the mechanism gate
+
+After the evidence tier and before the score, candidates are partitioned by
+whether any modelled modality reaches this candidate *with its hard
+requirements answered* — `best_mechanism`, not merely a mechanism that was not
+refused. Two classes: `established_mechanism` and `no_established_mechanism`.
+Inside a class nothing changes.
+
+Two classes and not three is the argued part. A mechanism whose requirement is
+unanswered has not been shown to apply; it has only failed to be ruled out,
+which is already this file's rule for which mechanism may head a list. So
+"provisional only" is not preferred over "nothing at all". The concrete reason
+is the EML4-ALK tumour: ALK offers no mechanism of any kind, while the mutated
+PIK3CA in the same sample carries `adcp` at 0.25 with `surface_accessible`
+unanswered. A three-level gate would rank an unanswered question above the
+fusion the tumour carries, which is the same defect in the other direction.
+
+The gate is subordinate to the tier by construction, never read before it. A
+candidate measured nowhere in this patient does not rise by having a reachable
+surface; that is exactly what the tier exists to prevent.
+
+`mechanism_reach` and its sentence are published per candidate, in the report,
+the dataset and the benchmark rows, so the list says what it sorted on.
+
+### Rule 2: the magnitude tiebreak
+
+Magnitude comes only from what this patient's tumour data measure, and an
+absent quantity is stated as absent rather than imputed. Three quantities:
+the copy count in the patient's copy-number table, read against the diploid 2;
+the variant allele fraction of the observed variant; and whether the observed
+position is a recorded hotspot. No default fraction, no count inferred from a
+discrete `amplification` call, and no hotspot inferred from a gene's driver
+frequency — each of those would be the guess this rule refuses.
+
+It orders only between candidates already equal on the tier, on the gate and on
+the published score, and it compares like with like in this order: both carry a
+count, so the larger count; else both carry a fraction, so the larger; else
+exactly one is a hotspot, so that one. Copies, fractions and a yes/no share no
+unit, and an exchange rate between them would be invented, so a pair with no
+quantity in common leaves the tie unbroken and the existing gene-name fallback
+stands. `alteration_magnitude` and its sentence are published per candidate
+whether or not the tiebreak ever fires.
+
+This is deliberately the weaker of the two rules. It gives the amplification a
+published amount — twelve copies against the diploid 2 — and an order among
+candidates the score cannot separate, and it does not attempt to say how many
+copies are worth one hotspot.
+
+### What must not move
+
+All nine benchmark cases keep their rank: every target at 1, CD19 at 2. All
+nine scores are unchanged to the published three decimals, and no case's
+`target_class`, mechanism, compatibility, accessibility, evidence tier or
+peptide route changes; neither rule touches scoring arithmetic. For all nine,
+`outranked_by_hypotheses` stays empty, `BURIED_SURFACE_TARGETS` stays 0,
+`AMPLIFIED_TARGET_RANK` stays 1 and `KNOWN_MECHANISM_DEFECTS` stays 0. No pin
+is raised.
+
+Predicted effects inside the nine cases: the gate makes ERBB2's first place in
+the amplified tumour follow from the rule rather than only from its score,
+since PIK3CA is `no_established_mechanism` there; ALK keeps first place in the
+fusion tumour because it and PIK3CA are in the same gate class and ALK scores
+higher; and CD19 may rise from 2 to 1 if FCRL5 turns out to have no established
+mechanism, which is an improvement the pin allows and does not require.
+
+### What would falsify it
+
+The gate is falsified by any of the nine ranks getting worse; by any published
+score changing; by the gate class disagreeing with `best_mechanism` for any
+candidate; or by the gate lifting a candidate of the unmeasured tier above a
+measured one, which would mean it was read before the tier.
+
+The tiebreak is falsified by any rank in the nine cases changing at all, since
+it fires only on an exact tie in the published score; by any magnitude quantity
+appearing that the patient's data do not contain; or by two quantities of
+different kinds being compared.
+
+Either falsifier firing is reported with the failure kept in the record and the
+rule amended, as the tier's first shape was on the day it was registered.
+
+### What the run measured
+
+Built the same evening and measured by a re-run in the small hours of
+2026-09-28. Neither falsifier fired. Every one of the nine rows is identical to
+the run before, field by field — rank, score, target class,
+evidence tier, mechanism, compatibility, accessibility, peptide route, verdict —
+which is the check that these two rules changed an order and nothing else, and
+in these nine cases they did not need to change one.
+
+The committed artifact is the previous run's file with the three new fields added
+to it, rather than the re-run's file wholesale, and it says so in
+`ordering_rules_measured`: rewriting it would have removed the run date and the
+nine per-case timings that the tier's own commit recorded, and every other field
+was identical anyway. The re-run took 1.0 to 1.1 seconds a case.
+
+The gate reads `established_mechanism` for EGFR, both ERBB2 cases and CD19, and
+`no_established_mechanism` for BRAF, KRAS, PIK3CA, IDH1 and ALK, which is the
+honest reading: the five small-molecule cases are the ones GenomeOS models no
+modality for, and saying so is the point of those cases. For all nine,
+`outranked_by_unreachable` is empty for all nine and is pinned at 0, because the candidates
+that could have outranked a target were already below it on the evidence tier.
+The gate closed no case here; it is a rule that now exists, with a countable
+metric, rather than a rule that fixed something.
+
+The magnitudes are as measured: twelve copies against the diploid 2 for both
+ERBB2 cases, a recorded hotspot for EGFR L858R, BRAF V600E, KRAS G12C, PIK3CA
+H1047R and IDH1 R132H, and three stated absences for EML4-ALK, whose fusion
+record carries no count, no allele fraction and no position to look a hotspot up
+at. No allele fraction appears anywhere, because these demo VCFs report none —
+which is the rule working: an absent quantity stays absent. The tiebreak
+therefore never fired in the nine cases, exactly as registered, and the unit
+tests carry its behaviour instead: twelve copies over four, a clonal fraction
+over a subclonal one, a hotspot over a position that is not one, and twelve
+copies against a hotspot missense left deliberately unordered, because a count
+and an annotation share no unit.
+
+## The gate-and-tiebreak case, pre-registered 2026-09-28
+
+Written and committed before the case was run. The two rules above were
+registered on 2026-09-27 and then measured: neither changed anything. The gate
+partitioned the nine candidates lists and `outranked_by_unreachable` came out
+empty everywhere, because a candidate no modality reaches was already below the
+target on the evidence tier; the tiebreak never fired at all, because no demo
+VCF in the benchmark reports an allele fraction and a fusion record carries no
+quantity. A rule with a metric and no case is a rule nobody has tested. This
+section registers the tenth case, chosen so that the gate *can* matter and so
+that the tiebreak *can* have a fraction to read.
+
+### The case, and why this one
+
+A HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC. It is
+picked from the cohort rather than imagined: in TCGA stomach adenocarcinoma
+(PanCancer Atlas, `stad_tcga_pan_can_atlas_2018`, 440 samples, read through the
+project's own cBioPortal client on 2026-09-28) ERBB2 is amplified in 58 tumours
+(13.2%) and MYC in 53 (12.0%), and 20 tumours carry both — 4.5% of the cohort
+and 34% of every ERBB2-amplified tumour in it. Among those 20 the median copy
+number from the log2 segment calls is 13.0 for ERBB2, 8.1 for MYC and 1.8 for
+TP53. TP53 is mutated in 213 of the 440 (48%), most often as R175H (12 tumours,
+median variant allele fraction 0.49 from the reported read counts).
+
+Those numbers, rounded, are the demo files: `ERBB2 13, GRB7 13, MIEN1 13,
+STARD3 13, MYC 8, TP53 2` copies, and `chr17:7675088 C>T` — TP53 R175H on
+GRCh38 — at `AF=0.49`. Every figure is a cohort summary; no patient's own
+record is committed. GRB7, MIEN1 and STARD3 are there because the 17q12
+amplicon carries them: all 58 ERBB2-amplified tumours in this cohort have GRB7
+and MIEN1 amplified too, and 54 have STARD3. They take ERBB2's copy number for
+a reason worth stating on its own — a copy call is a *segment* call, so genes
+on one amplicon are measured at one number, and the magnitude tiebreak can
+never separate co-amplified neighbours however many of them a list carries.
+
+What makes the case a test of the gate: MYC is amplified, so it sits in the top
+evidence tier with ERBB2 and the tier cannot separate them, and MYC is the gene
+oncology has spent forty years failing to drug — a nuclear transcription factor
+with no outward-facing part and no modelled modality. Two approved therapies
+are written on the other gene: trastuzumab, FDA-approved in 2010 for
+HER2-overexpressing metastatic gastric and gastroesophageal junction
+adenocarcinoma (ToGA), and fam-trastuzumab deruxtecan-nxki, FDA-approved in
+January 2021 for HER2-positive advanced gastric and GEJ adenocarcinoma after a
+prior trastuzumab regimen (DESTINY-Gastric01). What is out of scope stays out:
+the case scores a ranking on public cohort data and nothing else.
+
+Also new, and unrelated to the gate: this is the first VCF in the benchmark
+that reports an allele fraction, which is the quantity the magnitude tiebreak
+has never once had.
+
+### What is predicted
+
+1. ERBB2 is recovered as a surface target and ranks **first**, and
+   `outranked_by_unreachable` is **empty**, so the pin of 0 holds across ten
+   cases.
+2. MYC, the three amplicon passengers and the mutated TP53 are all in the top
+   evidence tier with ERBB2, so the tier cannot order them and the gate is the
+   only rule that can.
+3. The gate is *tested* only if one of those unreachable candidates scores
+   strictly above ERBB2. `rank_without_gate` — the pipeline's own key with the
+   gate removed, computed for every row and written only after this section was
+   committed — is what says so. If it reads 1 for this case, the gate again
+   closed nothing and the case has produced a **negative**, not a pass: it
+   would mean an undruggable amplification scores below an approved target for
+   reasons that have nothing to do with the gate, and the gate would still be
+   waiting for its case.
+4. The row publishes a variant allele fraction of **0.49**, the VCF's own
+   value, and not one imputed for it.
+5. The tiebreak is **not** predicted to fire. It acts only where tier, gate and
+   published score are all equal and the two candidates differ on a quantity
+   both carry, and neither half can be arranged by the choice of case: the
+   amplicon genes share one segment number, and an exact tie in the score
+   between the remaining pairs is not something a tumour can be chosen for.
+   `magnitude_tiebreaks` records every score-tied group in every case and what,
+   if anything, magnitude decided inside it, so that "did not fire" is
+   distinguishable from "had no opportunity".
+
+### The falsifiers, and the pass rule
+
+Falsified if ERBB2 is not first in this case; if any of the nine earlier rows
+changes in any field but `seconds`; or if the row's magnitude publishes a
+fraction other than 0.49, or none. The case passes if ERBB2 is recovered as a
+surface target at rank 1 with nothing unreachable above it, the nine are
+unchanged, and the allele fraction is published as measured. Prediction 3 is
+the one that cannot be made to pass by choosing well: it is a measurement of
+whether the gate has a case at all, and a negative there is the result.
+
+### What the run measured
+
+Negatives first.
+
+**The gate closed nothing, again, in the case chosen to make it matter.**
+`rank_without_gate` — the pipeline's own ranking key with the gate removed,
+computed for every row and written only after the registration was committed —
+equals `rank` in all ten cases. Prediction 3 named this as the outcome that
+would make the case a negative, and it is the one that happened.
+
+The case measured *why*, which is the part worth keeping. The six altered
+candidates rank ERBB2 0.494, STARD3 0.455, GRB7 0.365, TP53 0.353, MIEN1 0.275,
+MYC 0.246. MYC is in the top evidence tier, amplified at eight copies, and
+scores **last** — less than half the target. It never came near the target's
+place, so the gate had nothing to demote. And the reason generalises beyond MYC:
+the annotations that make a gene unreachable, no outward-facing part and no
+epitope, are the same annotations that make `surface_accessibility` and the
+mechanism dimensions score it low. An undruggable nuclear amplification cannot
+produce the configuration the gate was written for. It is not a hard case for
+the gate; it is a case the score already answers.
+
+The configuration that would need the gate is the opposite shape: a candidate
+curated as a *surface receptor* whose mechanisms are nonetheless all refused or
+unanswered, scoring above the target. The benchmark already contains one — ALK
+in the EML4-ALK tumour, unreachable at 0.559 against ERBB2's 0.494 — but it is
+alone in its tumour, and putting the two together means two independent drivers
+in one patient. That is rare on purpose. In MSK-IMPACT 2017, of the 42 tumours
+whose structural variants make a surface receptor the 3' partner (6 ALK, 12
+ROS1, 16 RET, 8 NTRK1), exactly one also carries an amplified ERBB2, one an
+amplified EGFR and one an amplified MET. A benchmark case built on one sample
+would be that sample's record rather than a cohort summary, which is why no
+second case was added and why this paragraph is the finding instead: **the
+defect the mechanism gate prevents is rare in real tumours, because strong
+drivers are largely mutually exclusive.** The gate remains cheap and correct;
+what it is not, on this evidence, is load-bearing.
+
+**The tiebreak had no opportunity at all in the new case**, and its opportunity
+set in this benchmark turns out to be empty by construction. It acts only where
+tier, gate and published score are all equal. The four score-tied groups across
+the ten cases — EGFR with PDGFRB at 0.500, three times, and ERBB2 with ERBB3 at
+0.493 — are every one of them pairs of *hypotheses*: candidates named for
+neighbouring something altered, with nothing measured about either of them in
+that patient. A candidate with no measurement carries no quantity by definition,
+so the tie is unbreakable by magnitude and falls to the gene name, exactly as
+registered. Ties among measured candidates did not occur at all. This is the
+sharper version of prediction 5: the tiebreak did not merely fail to fire, it
+has not yet been asked, and `magnitude_tiebreaks` now records every group so
+that the two stay distinguishable.
+
+**A registered prediction was falsified, and by the registration rather than by
+the pipeline.** Prediction 4 said the tenth row would publish a variant allele
+fraction of 0.49. It publishes none. The row publishes the *target's* magnitude;
+the target here is reached by its amplification and carries a copy count of 13;
+the 0.49 belongs to the mutated TP53, a different candidate in the same tumour.
+The prediction is kept as written and the amendment is additive:
+`quantities_in_this_tumour` publishes every candidate that carries a measured
+amount, so the fraction that reaches the ranking is visible where it actually
+sits. `tests/test_therapeutic_benchmark.py` pins both halves — the row's `vaf`
+is `None`, and the case's fractions are exactly `{"TP53": 0.49}` — so the
+correction cannot quietly become a claim that the prediction held.
+
+The regenerated `data/results/therapeutic_benchmark.json` is not in this commit.
+Every re-run rewrites eight machine-stamped lines — the date, the seven counts
+and the write stamp's `git_sha`, `dirty` and knowledge-store `sha256` — and
+`scripts/check_staged.py` refuses a commit that removes lines a recent commit
+added, which those are. The file in the working tree is HEAD's copy with the
+tenth row and the new fields merged into it additively, the nine rows' own
+timings kept, so the artifact is one `--force` away from landing and the
+numbers above are the run's.
+
+That is not the whole of it, as looking at what else holds the file showed.
+`therapeutic_benchmark` is one of the *headline* results:
+`tests/test_manifest_headlines.py` pins the commit it was last rebuilt at,
+requires its manifest to record a clean checkout, and pins
+`(targets_recovered, verdicts_correct, top_mechanism_defensible)` at `(9, 9, 9)`,
+and README quotes 9/9 in the same words. The tenth case therefore lands as one
+commit that rebuilds the result in a clean checkout and moves those pins and that
+sentence from nine to ten together — both files belonging to other lanes. The four
+tests written for the case are committed ahead of it and skip on the case's
+absence, so they assert the moment that commit lands; none of them is weakened.
+
+What passed. ERBB2 is recovered as a surface target at rank 1 with an
+established blocking antibody at compatibility 0.52 and accessibility 1.0;
+`outranked_by_unreachable` is empty and the pin of 0 holds across ten cases;
+nothing unmeasured outranks the target either. The nine earlier rows came out
+identical field by field apart from their per-case timings, so the tenth case
+changed no existing result, and a second run after the additive amendment
+reproduced every value of the first.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be

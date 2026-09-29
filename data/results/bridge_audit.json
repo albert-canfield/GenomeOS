@@ -1,0 +1,2255 @@
+{
+  "result": "bridge_audit",
+  "date": "2026-09-29",
+  "review_item": "R3",
+  "question": "In the 24 compiled programs, how many (element, gene, cell) mechanisms carry both a predicted rule and a measured rule that one run in that cell would integrate side by side, and how many (gene, cell) pairs have more than one active regulatory rule, so that no single-deletion observation identifies a strength under the mean rule?",
+  "registered_in": "06b7557 (amended b986238)",
+  "pooled": {
+    "active_regulatory_rules": 440589,
+    "mechanisms_with_predicted_and_measured": 39,
+    "mechanisms": 440550,
+    "gene_cell_pairs": 237613,
+    "gene_cell_pairs_with_several_mechanisms": 76469,
+    "mechanisms_on_those_genes": 279406,
+    "contexts": 6938
+  },
+  "unresolved_by_reason": {
+    "gene_parameter_missing": 161144,
+    "not_identifiable": 76469
+  },
+  "rate_tiers": {
+    "measured": "the gene's own measured T, carried to its human symbol through a 1:1 homology class",
+    "borrowed_median": "the genome median of the measured T, for a gene with no measurement. It fixes no absolute number: such a pair is simulable in RELATIVE units only, is counted separately and is never added to the measured count",
+    "unmeasured": "no rate and no borrowing: `gene_rate_unmeasured`, an explicit marker, never a number"
+  },
+  "rate_species": "Mus musculus, NIH 3T3 fibroblasts; every human simulation using them borrows a mouse constant",
+  "rate_expectation": "of the 161,144 mechanisms now `gene_parameter_missing`, the number that becomes simulable on MEASURED rates will be strictly greater than 0 and strictly less than 161,144, and is predicted to fall between 15,000 and 60,000: the source carries 4,338 measured transcription rates against roughly 20,000 protein-coding genes, and its genes are the abundant ones, which may be over- or under-represented among the targets of compiled non-coding elements. Gene-cell pairs simulable rise from 0 by the same order. If the count lands outside 15,000-60,000 the miss is reported",
+  "borrowed_median_transcription_rate": 1.76,
+  "genes_with_a_measured_rate": 3603,
+  "genes_with_a_human_measured_rate": 0,
+  "rate_row_provenance": "every rate row carries `source` (a key of MEASURED_RATE_SOURCES) and `species_cell`; the audit counts `pairs_on_a_human_measured_rate` and `pairs_on_a_borrowed_species_rate` per tier, and today the first is 0 by construction. Two sources are never averaged and never pooled",
+  "simulation_status": "assumption-dependent simulation, not measured human dynamics",
+  "transfer_label": "per gene: the quantity, its tier (measured | borrowed_median), its source key, the species and cell it was measured in, and the cell context it is used in; per run: the same list plus the runtime parameters taken from defaults",
+  "human_rate_survey_verdict": "NO usable human absolute transcription-rate source exists. Human metabolic labelling (TT-seq, TimeLapse-seq, SLAM-seq, single-cell new-RNA) reports half-lives and rates in library or CPM units; the one study found that reports a genuinely absolute rate per cell (copy/min per cell) is MOUSE embryonic stem cells and does not distribute it per gene; and the one published set of human genome-wide transcription rates is constructed from abundance times a mouse-derived count of mRNAs per cell times one global decay constant. The R3 rates therefore stay mouse NIH 3T3, the 138,543 pairs on an unmeasured gene stay unmeasured, and every rate keeps its borrowed flag",
+  "human_rate_survey_falsifier": "a dataset distributing PER GENE, for a human cell type, a transcription or synthesis rate in molecules per cell per unit time (or a stated conversion to it), with the per-cell calibration named -- a cell count, an RNA mass per cell, or a spike-in weight per cell. Producing one overturns this record. Ietswaart et al. 2024 (human K562 and mouse NIH 3T3 by one method) is the first place to look, and Shao et al. 2022's GSE168378 shows the calibration that would be needed",
+  "pooled_by_tier": {
+    "none": {
+      "superseded_rules": 13,
+      "simulable_mechanisms": 0,
+      "simulable_gene_cell_pairs": 0,
+      "simulable_compiled_rules": 0,
+      "genes_on_their_own_measured_rate": 0,
+      "genes_on_a_borrowed_median": 0,
+      "pairs_on_a_human_measured_rate": 0,
+      "pairs_on_a_borrowed_species_rate": 0,
+      "labelled_pairs": 0,
+      "labelled_pairs_measured": 0,
+      "labelled_pairs_borrowed_median": 0,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
+      "inhibitory_mechanisms_at_the_split": 0
+    },
+    "measured": {
+      "superseded_rules": 13,
+      "simulable_mechanisms": 22576,
+      "simulable_gene_cell_pairs": 22576,
+      "simulable_compiled_rules": 22580,
+      "genes_on_their_own_measured_rate": 22576,
+      "genes_on_a_borrowed_median": 0,
+      "pairs_on_a_human_measured_rate": 0,
+      "pairs_on_a_borrowed_species_rate": 22576,
+      "labelled_pairs": 22576,
+      "labelled_pairs_measured": 22576,
+      "labelled_pairs_borrowed_median": 0,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
+      "inhibitory_mechanisms_at_the_split": 5220
+    },
+    "borrowed": {
+      "superseded_rules": 13,
+      "simulable_mechanisms": 160392,
+      "simulable_gene_cell_pairs": 160392,
+      "simulable_compiled_rules": 160405,
+      "genes_on_their_own_measured_rate": 22576,
+      "genes_on_a_borrowed_median": 137816,
+      "pairs_on_a_human_measured_rate": 0,
+      "pairs_on_a_borrowed_species_rate": 22576,
+      "labelled_pairs": 160392,
+      "labelled_pairs_measured": 22576,
+      "labelled_pairs_borrowed_median": 137816,
+      "labelled_pairs_species_unstated": 0,
+      "labelled_pairs_on_a_human_rate": 0,
+      "inhibitory_mechanisms_at_the_split": 47144
+    }
+  },
+  "unresolved_by_tier": {
+    "none": {
+      "gene_parameter_missing": 161144,
+      "not_identifiable": 76469
+    },
+    "measured": {
+      "gene_rate_unmeasured": 138543,
+      "not_identifiable": 76469,
+      "rate_split_infeasible": 25
+    },
+    "borrowed": {
+      "not_identifiable": 76469,
+      "rate_split_infeasible": 752
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "counts": {
+        "active_regulatory_rules": 43700,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 43697,
+        "gene_cell_pairs": 24317,
+        "gene_cell_pairs_with_several_mechanisms": 7642,
+        "mechanisms_on_those_genes": 27022,
+        "contexts": 313
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 2217,
+          "simulable_gene_cell_pairs": 2217,
+          "simulable_compiled_rules": 2217,
+          "genes_on_their_own_measured_rate": 2217,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 2217,
+          "labelled_pairs": 2217,
+          "labelled_pairs_measured": 2217,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 546
+        },
+        "borrowed": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 16590,
+          "simulable_gene_cell_pairs": 16590,
+          "simulable_compiled_rules": 16591,
+          "genes_on_their_own_measured_rate": 2217,
+          "genes_on_a_borrowed_median": 14373,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 2217,
+          "labelled_pairs": 16590,
+          "labelled_pairs_measured": 2217,
+          "labelled_pairs_borrowed_median": 14373,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 4905
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 16675,
+          "not_identifiable": 7642
+        },
+        "measured": {
+          "gene_rate_unmeasured": 14454,
+          "not_identifiable": 7642,
+          "rate_split_infeasible": 4
+        },
+        "borrowed": {
+          "not_identifiable": 7642,
+          "rate_split_infeasible": 85
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 16675,
+        "not_identifiable": 7642
+      }
+    },
+    "chr2": {
+      "counts": {
+        "active_regulatory_rules": 32929,
+        "mechanisms_with_predicted_and_measured": 7,
+        "mechanisms": 32922,
+        "gene_cell_pairs": 16738,
+        "gene_cell_pairs_with_several_mechanisms": 5788,
+        "mechanisms_on_those_genes": 21972,
+        "contexts": 309
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 1530,
+          "simulable_gene_cell_pairs": 1530,
+          "simulable_compiled_rules": 1531,
+          "genes_on_their_own_measured_rate": 1530,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1530,
+          "labelled_pairs": 1530,
+          "labelled_pairs_measured": 1530,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 362
+        },
+        "borrowed": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 10920,
+          "simulable_gene_cell_pairs": 10920,
+          "simulable_compiled_rules": 10922,
+          "genes_on_their_own_measured_rate": 1530,
+          "genes_on_a_borrowed_median": 9390,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1530,
+          "labelled_pairs": 10920,
+          "labelled_pairs_measured": 1530,
+          "labelled_pairs_borrowed_median": 9390,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 3221
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 10950,
+          "not_identifiable": 5788
+        },
+        "measured": {
+          "gene_rate_unmeasured": 9418,
+          "not_identifiable": 5788,
+          "rate_split_infeasible": 2
+        },
+        "borrowed": {
+          "not_identifiable": 5788,
+          "rate_split_infeasible": 30
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 10950,
+        "not_identifiable": 5788
+      }
+    },
+    "chr3": {
+      "counts": {
+        "active_regulatory_rules": 27692,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 27690,
+        "gene_cell_pairs": 14220,
+        "gene_cell_pairs_with_several_mechanisms": 4789,
+        "mechanisms_on_those_genes": 18259,
+        "contexts": 304
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1431,
+          "simulable_gene_cell_pairs": 1431,
+          "simulable_compiled_rules": 1431,
+          "genes_on_their_own_measured_rate": 1431,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1431,
+          "labelled_pairs": 1431,
+          "labelled_pairs_measured": 1431,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 303
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 9384,
+          "simulable_gene_cell_pairs": 9384,
+          "simulable_compiled_rules": 9384,
+          "genes_on_their_own_measured_rate": 1431,
+          "genes_on_a_borrowed_median": 7953,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1431,
+          "labelled_pairs": 9384,
+          "labelled_pairs_measured": 1431,
+          "labelled_pairs_borrowed_median": 7953,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2702
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 9431,
+          "not_identifiable": 4789
+        },
+        "measured": {
+          "gene_rate_unmeasured": 7998,
+          "not_identifiable": 4789,
+          "rate_split_infeasible": 2
+        },
+        "borrowed": {
+          "not_identifiable": 4789,
+          "rate_split_infeasible": 47
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9431,
+        "not_identifiable": 4789
+      }
+    },
+    "chr4": {
+      "counts": {
+        "active_regulatory_rules": 20653,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 20650,
+        "gene_cell_pairs": 10363,
+        "gene_cell_pairs_with_several_mechanisms": 3699,
+        "mechanisms_on_those_genes": 13986,
+        "contexts": 306
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 881,
+          "simulable_gene_cell_pairs": 881,
+          "simulable_compiled_rules": 882,
+          "genes_on_their_own_measured_rate": 881,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 881,
+          "labelled_pairs": 881,
+          "labelled_pairs_measured": 881,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 198
+        },
+        "borrowed": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 6647,
+          "simulable_gene_cell_pairs": 6647,
+          "simulable_compiled_rules": 6649,
+          "genes_on_their_own_measured_rate": 881,
+          "genes_on_a_borrowed_median": 5766,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 881,
+          "labelled_pairs": 6647,
+          "labelled_pairs_measured": 881,
+          "labelled_pairs_borrowed_median": 5766,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1987
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 6664,
+          "not_identifiable": 3699
+        },
+        "measured": {
+          "gene_rate_unmeasured": 5782,
+          "not_identifiable": 3699,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 3699,
+          "rate_split_infeasible": 17
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6664,
+        "not_identifiable": 3699
+      }
+    },
+    "chr5": {
+      "counts": {
+        "active_regulatory_rules": 22779,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 22777,
+        "gene_cell_pairs": 11377,
+        "gene_cell_pairs_with_several_mechanisms": 3987,
+        "mechanisms_on_those_genes": 15387,
+        "contexts": 300
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1100,
+          "simulable_gene_cell_pairs": 1100,
+          "simulable_compiled_rules": 1100,
+          "genes_on_their_own_measured_rate": 1100,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1100,
+          "labelled_pairs": 1100,
+          "labelled_pairs_measured": 1100,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 256
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 7360,
+          "simulable_gene_cell_pairs": 7360,
+          "simulable_compiled_rules": 7360,
+          "genes_on_their_own_measured_rate": 1100,
+          "genes_on_a_borrowed_median": 6260,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1100,
+          "labelled_pairs": 7360,
+          "labelled_pairs_measured": 1100,
+          "labelled_pairs_borrowed_median": 6260,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2154
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 7390,
+          "not_identifiable": 3987
+        },
+        "measured": {
+          "gene_rate_unmeasured": 6290,
+          "not_identifiable": 3987
+        },
+        "borrowed": {
+          "not_identifiable": 3987,
+          "rate_split_infeasible": 30
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 7390,
+        "not_identifiable": 3987
+      }
+    },
+    "chr6": {
+      "counts": {
+        "active_regulatory_rules": 23780,
+        "mechanisms_with_predicted_and_measured": 5,
+        "mechanisms": 23775,
+        "gene_cell_pairs": 12619,
+        "gene_cell_pairs_with_several_mechanisms": 4147,
+        "mechanisms_on_those_genes": 15303,
+        "contexts": 308
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 975,
+          "simulable_gene_cell_pairs": 975,
+          "simulable_compiled_rules": 975,
+          "genes_on_their_own_measured_rate": 975,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 975,
+          "labelled_pairs": 975,
+          "labelled_pairs_measured": 975,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 235
+        },
+        "borrowed": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 8429,
+          "simulable_gene_cell_pairs": 8429,
+          "simulable_compiled_rules": 8431,
+          "genes_on_their_own_measured_rate": 975,
+          "genes_on_a_borrowed_median": 7454,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 975,
+          "labelled_pairs": 8429,
+          "labelled_pairs_measured": 975,
+          "labelled_pairs_borrowed_median": 7454,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2560
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 8472,
+          "not_identifiable": 4147
+        },
+        "measured": {
+          "gene_rate_unmeasured": 7497,
+          "not_identifiable": 4147
+        },
+        "borrowed": {
+          "not_identifiable": 4147,
+          "rate_split_infeasible": 43
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 8472,
+        "not_identifiable": 4147
+      }
+    },
+    "chr7": {
+      "counts": {
+        "active_regulatory_rules": 22604,
+        "mechanisms_with_predicted_and_measured": 4,
+        "mechanisms": 22600,
+        "gene_cell_pairs": 11732,
+        "gene_cell_pairs_with_several_mechanisms": 3892,
+        "mechanisms_on_those_genes": 14760,
+        "contexts": 307
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 1235,
+          "simulable_gene_cell_pairs": 1235,
+          "simulable_compiled_rules": 1236,
+          "genes_on_their_own_measured_rate": 1235,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1235,
+          "labelled_pairs": 1235,
+          "labelled_pairs_measured": 1235,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 297
+        },
+        "borrowed": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 7815,
+          "simulable_gene_cell_pairs": 7815,
+          "simulable_compiled_rules": 7817,
+          "genes_on_their_own_measured_rate": 1235,
+          "genes_on_a_borrowed_median": 6580,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1235,
+          "labelled_pairs": 7815,
+          "labelled_pairs_measured": 1235,
+          "labelled_pairs_borrowed_median": 6580,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2372
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 7840,
+          "not_identifiable": 3892
+        },
+        "measured": {
+          "gene_rate_unmeasured": 6603,
+          "not_identifiable": 3892,
+          "rate_split_infeasible": 2
+        },
+        "borrowed": {
+          "not_identifiable": 3892,
+          "rate_split_infeasible": 25
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 7840,
+        "not_identifiable": 3892
+      }
+    },
+    "chr8": {
+      "counts": {
+        "active_regulatory_rules": 18561,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 18560,
+        "gene_cell_pairs": 9412,
+        "gene_cell_pairs_with_several_mechanisms": 3291,
+        "mechanisms_on_those_genes": 12439,
+        "contexts": 304
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 579,
+          "simulable_gene_cell_pairs": 579,
+          "simulable_compiled_rules": 580,
+          "genes_on_their_own_measured_rate": 579,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 579,
+          "labelled_pairs": 579,
+          "labelled_pairs_measured": 579,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 132
+        },
+        "borrowed": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 6096,
+          "simulable_gene_cell_pairs": 6096,
+          "simulable_compiled_rules": 6097,
+          "genes_on_their_own_measured_rate": 579,
+          "genes_on_a_borrowed_median": 5517,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 579,
+          "labelled_pairs": 6096,
+          "labelled_pairs_measured": 579,
+          "labelled_pairs_borrowed_median": 5517,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1792
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 6121,
+          "not_identifiable": 3291
+        },
+        "measured": {
+          "gene_rate_unmeasured": 5542,
+          "not_identifiable": 3291
+        },
+        "borrowed": {
+          "not_identifiable": 3291,
+          "rate_split_infeasible": 25
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6121,
+        "not_identifiable": 3291
+      }
+    },
+    "chr9": {
+      "counts": {
+        "active_regulatory_rules": 19278,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 19277,
+        "gene_cell_pairs": 10014,
+        "gene_cell_pairs_with_several_mechanisms": 3353,
+        "mechanisms_on_those_genes": 12616,
+        "contexts": 297
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1128,
+          "simulable_gene_cell_pairs": 1128,
+          "simulable_compiled_rules": 1128,
+          "genes_on_their_own_measured_rate": 1128,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1128,
+          "labelled_pairs": 1128,
+          "labelled_pairs_measured": 1128,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 256
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 6636,
+          "simulable_gene_cell_pairs": 6636,
+          "simulable_compiled_rules": 6636,
+          "genes_on_their_own_measured_rate": 1128,
+          "genes_on_a_borrowed_median": 5508,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1128,
+          "labelled_pairs": 6636,
+          "labelled_pairs_measured": 1128,
+          "labelled_pairs_borrowed_median": 5508,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1956
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 6661,
+          "not_identifiable": 3353
+        },
+        "measured": {
+          "gene_rate_unmeasured": 5532,
+          "not_identifiable": 3353,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 3353,
+          "rate_split_infeasible": 25
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6661,
+        "not_identifiable": 3353
+      }
+    },
+    "chr10": {
+      "counts": {
+        "active_regulatory_rules": 21033,
+        "mechanisms_with_predicted_and_measured": 3,
+        "mechanisms": 21030,
+        "gene_cell_pairs": 10489,
+        "gene_cell_pairs_with_several_mechanisms": 3658,
+        "mechanisms_on_those_genes": 14199,
+        "contexts": 309
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 1098,
+          "simulable_gene_cell_pairs": 1098,
+          "simulable_compiled_rules": 1098,
+          "genes_on_their_own_measured_rate": 1098,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1098,
+          "labelled_pairs": 1098,
+          "labelled_pairs_measured": 1098,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 281
+        },
+        "borrowed": {
+          "superseded_rules": 2,
+          "simulable_mechanisms": 6804,
+          "simulable_gene_cell_pairs": 6804,
+          "simulable_compiled_rules": 6806,
+          "genes_on_their_own_measured_rate": 1098,
+          "genes_on_a_borrowed_median": 5706,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1098,
+          "labelled_pairs": 6804,
+          "labelled_pairs_measured": 1098,
+          "labelled_pairs_borrowed_median": 5706,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2004
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 6831,
+          "not_identifiable": 3658
+        },
+        "measured": {
+          "gene_rate_unmeasured": 5733,
+          "not_identifiable": 3658
+        },
+        "borrowed": {
+          "not_identifiable": 3658,
+          "rate_split_infeasible": 27
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6831,
+        "not_identifiable": 3658
+      }
+    },
+    "chr11": {
+      "counts": {
+        "active_regulatory_rules": 25768,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 25766,
+        "gene_cell_pairs": 13784,
+        "gene_cell_pairs_with_several_mechanisms": 4363,
+        "mechanisms_on_those_genes": 16345,
+        "contexts": 307
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1448,
+          "simulable_gene_cell_pairs": 1448,
+          "simulable_compiled_rules": 1448,
+          "genes_on_their_own_measured_rate": 1448,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1448,
+          "labelled_pairs": 1448,
+          "labelled_pairs_measured": 1448,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 340
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 9370,
+          "simulable_gene_cell_pairs": 9370,
+          "simulable_compiled_rules": 9370,
+          "genes_on_their_own_measured_rate": 1448,
+          "genes_on_a_borrowed_median": 7922,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1448,
+          "labelled_pairs": 9370,
+          "labelled_pairs_measured": 1448,
+          "labelled_pairs_borrowed_median": 7922,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2790
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 9421,
+          "not_identifiable": 4363
+        },
+        "measured": {
+          "gene_rate_unmeasured": 7972,
+          "not_identifiable": 4363,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 4363,
+          "rate_split_infeasible": 51
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9421,
+        "not_identifiable": 4363
+      }
+    },
+    "chr12": {
+      "counts": {
+        "active_regulatory_rules": 22823,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 22822,
+        "gene_cell_pairs": 12584,
+        "gene_cell_pairs_with_several_mechanisms": 4022,
+        "mechanisms_on_those_genes": 14260,
+        "contexts": 307
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1101,
+          "simulable_gene_cell_pairs": 1101,
+          "simulable_compiled_rules": 1101,
+          "genes_on_their_own_measured_rate": 1101,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1101,
+          "labelled_pairs": 1101,
+          "labelled_pairs_measured": 1101,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 279
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 8523,
+          "simulable_gene_cell_pairs": 8523,
+          "simulable_compiled_rules": 8523,
+          "genes_on_their_own_measured_rate": 1101,
+          "genes_on_a_borrowed_median": 7422,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1101,
+          "labelled_pairs": 8523,
+          "labelled_pairs_measured": 1101,
+          "labelled_pairs_borrowed_median": 7422,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2493
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 8562,
+          "not_identifiable": 4022
+        },
+        "measured": {
+          "gene_rate_unmeasured": 7460,
+          "not_identifiable": 4022,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 4022,
+          "rate_split_infeasible": 39
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 8562,
+        "not_identifiable": 4022
+      }
+    },
+    "chr13": {
+      "counts": {
+        "active_regulatory_rules": 9711,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9711,
+        "gene_cell_pairs": 4701,
+        "gene_cell_pairs_with_several_mechanisms": 1681,
+        "mechanisms_on_those_genes": 6691,
+        "contexts": 291
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 317,
+          "simulable_gene_cell_pairs": 317,
+          "simulable_compiled_rules": 317,
+          "genes_on_their_own_measured_rate": 317,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 317,
+          "labelled_pairs": 317,
+          "labelled_pairs_measured": 317,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 71
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 3012,
+          "simulable_gene_cell_pairs": 3012,
+          "simulable_compiled_rules": 3012,
+          "genes_on_their_own_measured_rate": 317,
+          "genes_on_a_borrowed_median": 2695,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 317,
+          "labelled_pairs": 3012,
+          "labelled_pairs_measured": 317,
+          "labelled_pairs_borrowed_median": 2695,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 912
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 3020,
+          "not_identifiable": 1681
+        },
+        "measured": {
+          "gene_rate_unmeasured": 2703,
+          "not_identifiable": 1681
+        },
+        "borrowed": {
+          "not_identifiable": 1681,
+          "rate_split_infeasible": 8
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 3020,
+        "not_identifiable": 1681
+      }
+    },
+    "chr14": {
+      "counts": {
+        "active_regulatory_rules": 13387,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 13386,
+        "gene_cell_pairs": 7303,
+        "gene_cell_pairs_with_several_mechanisms": 2352,
+        "mechanisms_on_those_genes": 8435,
+        "contexts": 296
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 713,
+          "simulable_gene_cell_pairs": 713,
+          "simulable_compiled_rules": 713,
+          "genes_on_their_own_measured_rate": 713,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 713,
+          "labelled_pairs": 713,
+          "labelled_pairs_measured": 713,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 152
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 4931,
+          "simulable_gene_cell_pairs": 4931,
+          "simulable_compiled_rules": 4931,
+          "genes_on_their_own_measured_rate": 713,
+          "genes_on_a_borrowed_median": 4218,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 713,
+          "labelled_pairs": 4931,
+          "labelled_pairs_measured": 713,
+          "labelled_pairs_borrowed_median": 4218,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1470
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 4951,
+          "not_identifiable": 2352
+        },
+        "measured": {
+          "gene_rate_unmeasured": 4238,
+          "not_identifiable": 2352
+        },
+        "borrowed": {
+          "not_identifiable": 2352,
+          "rate_split_infeasible": 20
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4951,
+        "not_identifiable": 2352
+      }
+    },
+    "chr15": {
+      "counts": {
+        "active_regulatory_rules": 14478,
+        "mechanisms_with_predicted_and_measured": 2,
+        "mechanisms": 14476,
+        "gene_cell_pairs": 7689,
+        "gene_cell_pairs_with_several_mechanisms": 2540,
+        "mechanisms_on_those_genes": 9327,
+        "contexts": 291
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 723,
+          "simulable_gene_cell_pairs": 723,
+          "simulable_compiled_rules": 723,
+          "genes_on_their_own_measured_rate": 723,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 723,
+          "labelled_pairs": 723,
+          "labelled_pairs_measured": 723,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 179
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 5136,
+          "simulable_gene_cell_pairs": 5136,
+          "simulable_compiled_rules": 5136,
+          "genes_on_their_own_measured_rate": 723,
+          "genes_on_a_borrowed_median": 4413,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 723,
+          "labelled_pairs": 5136,
+          "labelled_pairs_measured": 723,
+          "labelled_pairs_borrowed_median": 4413,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1511
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 5149,
+          "not_identifiable": 2540
+        },
+        "measured": {
+          "gene_rate_unmeasured": 4425,
+          "not_identifiable": 2540,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 2540,
+          "rate_split_infeasible": 13
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 5149,
+        "not_identifiable": 2540
+      }
+    },
+    "chr16": {
+      "counts": {
+        "active_regulatory_rules": 14807,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 14807,
+        "gene_cell_pairs": 8986,
+        "gene_cell_pairs_with_several_mechanisms": 2433,
+        "mechanisms_on_those_genes": 8254,
+        "contexts": 302
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 882,
+          "simulable_gene_cell_pairs": 882,
+          "simulable_compiled_rules": 882,
+          "genes_on_their_own_measured_rate": 882,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 882,
+          "labelled_pairs": 882,
+          "labelled_pairs_measured": 882,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 181
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 6507,
+          "simulable_gene_cell_pairs": 6507,
+          "simulable_compiled_rules": 6507,
+          "genes_on_their_own_measured_rate": 882,
+          "genes_on_a_borrowed_median": 5625,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 882,
+          "labelled_pairs": 6507,
+          "labelled_pairs_measured": 882,
+          "labelled_pairs_borrowed_median": 5625,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1820
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 6553,
+          "not_identifiable": 2433
+        },
+        "measured": {
+          "gene_rate_unmeasured": 5671,
+          "not_identifiable": 2433
+        },
+        "borrowed": {
+          "not_identifiable": 2433,
+          "rate_split_infeasible": 46
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 6553,
+        "not_identifiable": 2433
+      }
+    },
+    "chr17": {
+      "counts": {
+        "active_regulatory_rules": 21619,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 21619,
+        "gene_cell_pairs": 13066,
+        "gene_cell_pairs_with_several_mechanisms": 3774,
+        "mechanisms_on_those_genes": 12327,
+        "contexts": 309
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1432,
+          "simulable_gene_cell_pairs": 1432,
+          "simulable_compiled_rules": 1432,
+          "genes_on_their_own_measured_rate": 1432,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1432,
+          "labelled_pairs": 1432,
+          "labelled_pairs_measured": 1432,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 334
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 9240,
+          "simulable_gene_cell_pairs": 9240,
+          "simulable_compiled_rules": 9240,
+          "genes_on_their_own_measured_rate": 1432,
+          "genes_on_a_borrowed_median": 7808,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1432,
+          "labelled_pairs": 9240,
+          "labelled_pairs_measured": 1432,
+          "labelled_pairs_borrowed_median": 7808,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2637
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 9292,
+          "not_identifiable": 3774
+        },
+        "measured": {
+          "gene_rate_unmeasured": 7857,
+          "not_identifiable": 3774,
+          "rate_split_infeasible": 3
+        },
+        "borrowed": {
+          "not_identifiable": 3774,
+          "rate_split_infeasible": 52
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9292,
+        "not_identifiable": 3774
+      }
+    },
+    "chr18": {
+      "counts": {
+        "active_regulatory_rules": 9251,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9251,
+        "gene_cell_pairs": 4142,
+        "gene_cell_pairs_with_several_mechanisms": 1611,
+        "mechanisms_on_those_genes": 6720,
+        "contexts": 278
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 247,
+          "simulable_gene_cell_pairs": 247,
+          "simulable_compiled_rules": 247,
+          "genes_on_their_own_measured_rate": 247,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 247,
+          "labelled_pairs": 247,
+          "labelled_pairs_measured": 247,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 61
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 2524,
+          "simulable_gene_cell_pairs": 2524,
+          "simulable_compiled_rules": 2524,
+          "genes_on_their_own_measured_rate": 247,
+          "genes_on_a_borrowed_median": 2277,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 247,
+          "labelled_pairs": 2524,
+          "labelled_pairs_measured": 247,
+          "labelled_pairs_borrowed_median": 2277,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 760
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 2531,
+          "not_identifiable": 1611
+        },
+        "measured": {
+          "gene_rate_unmeasured": 2283,
+          "not_identifiable": 1611,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 1611,
+          "rate_split_infeasible": 7
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 2531,
+        "not_identifiable": 1611
+      }
+    },
+    "chr19": {
+      "counts": {
+        "active_regulatory_rules": 17282,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 17282,
+        "gene_cell_pairs": 12247,
+        "gene_cell_pairs_with_several_mechanisms": 2760,
+        "mechanisms_on_those_genes": 7795,
+        "contexts": 304
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1441,
+          "simulable_gene_cell_pairs": 1441,
+          "simulable_compiled_rules": 1441,
+          "genes_on_their_own_measured_rate": 1441,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1441,
+          "labelled_pairs": 1441,
+          "labelled_pairs_measured": 1441,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 303
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 9411,
+          "simulable_gene_cell_pairs": 9411,
+          "simulable_compiled_rules": 9411,
+          "genes_on_their_own_measured_rate": 1441,
+          "genes_on_a_borrowed_median": 7970,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 1441,
+          "labelled_pairs": 9411,
+          "labelled_pairs_measured": 1441,
+          "labelled_pairs_borrowed_median": 7970,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 2688
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 9487,
+          "not_identifiable": 2760
+        },
+        "measured": {
+          "gene_rate_unmeasured": 8044,
+          "not_identifiable": 2760,
+          "rate_split_infeasible": 2
+        },
+        "borrowed": {
+          "not_identifiable": 2760,
+          "rate_split_infeasible": 76
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 9487,
+        "not_identifiable": 2760
+      }
+    },
+    "chr20": {
+      "counts": {
+        "active_regulatory_rules": 12708,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 12707,
+        "gene_cell_pairs": 6820,
+        "gene_cell_pairs_with_several_mechanisms": 2192,
+        "mechanisms_on_those_genes": 8079,
+        "contexts": 302
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 619,
+          "simulable_gene_cell_pairs": 619,
+          "simulable_compiled_rules": 619,
+          "genes_on_their_own_measured_rate": 619,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 619,
+          "labelled_pairs": 619,
+          "labelled_pairs_measured": 619,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 133
+        },
+        "borrowed": {
+          "superseded_rules": 1,
+          "simulable_mechanisms": 4602,
+          "simulable_gene_cell_pairs": 4602,
+          "simulable_compiled_rules": 4603,
+          "genes_on_their_own_measured_rate": 619,
+          "genes_on_a_borrowed_median": 3983,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 619,
+          "labelled_pairs": 4602,
+          "labelled_pairs_measured": 619,
+          "labelled_pairs_borrowed_median": 3983,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1405
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 4628,
+          "not_identifiable": 2192
+        },
+        "measured": {
+          "gene_rate_unmeasured": 4007,
+          "not_identifiable": 2192,
+          "rate_split_infeasible": 2
+        },
+        "borrowed": {
+          "not_identifiable": 2192,
+          "rate_split_infeasible": 26
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4628,
+        "not_identifiable": 2192
+      }
+    },
+    "chr21": {
+      "counts": {
+        "active_regulatory_rules": 5176,
+        "mechanisms_with_predicted_and_measured": 1,
+        "mechanisms": 5175,
+        "gene_cell_pairs": 2524,
+        "gene_cell_pairs_with_several_mechanisms": 909,
+        "mechanisms_on_those_genes": 3560,
+        "contexts": 253
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 229,
+          "simulable_gene_cell_pairs": 229,
+          "simulable_compiled_rules": 229,
+          "genes_on_their_own_measured_rate": 229,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 229,
+          "labelled_pairs": 229,
+          "labelled_pairs_measured": 229,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 68
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 1609,
+          "simulable_gene_cell_pairs": 1609,
+          "simulable_compiled_rules": 1609,
+          "genes_on_their_own_measured_rate": 229,
+          "genes_on_a_borrowed_median": 1380,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 229,
+          "labelled_pairs": 1609,
+          "labelled_pairs_measured": 229,
+          "labelled_pairs_borrowed_median": 1380,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 519
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 1615,
+          "not_identifiable": 909
+        },
+        "measured": {
+          "gene_rate_unmeasured": 1385,
+          "not_identifiable": 909,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 909,
+          "rate_split_infeasible": 6
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 1615,
+        "not_identifiable": 909
+      }
+    },
+    "chr22": {
+      "counts": {
+        "active_regulatory_rules": 9613,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 9613,
+        "gene_cell_pairs": 5560,
+        "gene_cell_pairs_with_several_mechanisms": 1702,
+        "mechanisms_on_those_genes": 5755,
+        "contexts": 287
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 577,
+          "simulable_gene_cell_pairs": 577,
+          "simulable_compiled_rules": 577,
+          "genes_on_their_own_measured_rate": 577,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 577,
+          "labelled_pairs": 577,
+          "labelled_pairs_measured": 577,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 107
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 3825,
+          "simulable_gene_cell_pairs": 3825,
+          "simulable_compiled_rules": 3825,
+          "genes_on_their_own_measured_rate": 577,
+          "genes_on_a_borrowed_median": 3248,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 577,
+          "labelled_pairs": 3825,
+          "labelled_pairs_measured": 577,
+          "labelled_pairs_borrowed_median": 3248,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1132
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 3858,
+          "not_identifiable": 1702
+        },
+        "measured": {
+          "gene_rate_unmeasured": 3280,
+          "not_identifiable": 1702,
+          "rate_split_infeasible": 1
+        },
+        "borrowed": {
+          "not_identifiable": 1702,
+          "rate_split_infeasible": 33
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 3858,
+        "not_identifiable": 1702
+      }
+    },
+    "chrX": {
+      "counts": {
+        "active_regulatory_rules": 10832,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 10832,
+        "gene_cell_pairs": 6835,
+        "gene_cell_pairs_with_several_mechanisms": 1866,
+        "mechanisms_on_those_genes": 5863,
+        "contexts": 289
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 671,
+          "simulable_gene_cell_pairs": 671,
+          "simulable_compiled_rules": 671,
+          "genes_on_their_own_measured_rate": 671,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 671,
+          "labelled_pairs": 671,
+          "labelled_pairs_measured": 671,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 145
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 4949,
+          "simulable_gene_cell_pairs": 4949,
+          "simulable_compiled_rules": 4949,
+          "genes_on_their_own_measured_rate": 671,
+          "genes_on_a_borrowed_median": 4278,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 671,
+          "labelled_pairs": 4949,
+          "labelled_pairs_measured": 671,
+          "labelled_pairs_borrowed_median": 4278,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1335
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 4969,
+          "not_identifiable": 1866
+        },
+        "measured": {
+          "gene_rate_unmeasured": 4298,
+          "not_identifiable": 1866
+        },
+        "borrowed": {
+          "not_identifiable": 1866,
+          "rate_split_infeasible": 20
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 4969,
+        "not_identifiable": 1866
+      }
+    },
+    "chrY": {
+      "counts": {
+        "active_regulatory_rules": 125,
+        "mechanisms_with_predicted_and_measured": 0,
+        "mechanisms": 125,
+        "gene_cell_pairs": 91,
+        "gene_cell_pairs_with_several_mechanisms": 18,
+        "mechanisms_on_those_genes": 52,
+        "contexts": 65
+      },
+      "by_tier": {
+        "none": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 0,
+          "simulable_gene_cell_pairs": 0,
+          "simulable_compiled_rules": 0,
+          "genes_on_their_own_measured_rate": 0,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 0,
+          "labelled_pairs": 0,
+          "labelled_pairs_measured": 0,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 0
+        },
+        "measured": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 2,
+          "simulable_gene_cell_pairs": 2,
+          "simulable_compiled_rules": 2,
+          "genes_on_their_own_measured_rate": 2,
+          "genes_on_a_borrowed_median": 0,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 2,
+          "labelled_pairs": 2,
+          "labelled_pairs_measured": 2,
+          "labelled_pairs_borrowed_median": 0,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 1
+        },
+        "borrowed": {
+          "superseded_rules": 0,
+          "simulable_mechanisms": 72,
+          "simulable_gene_cell_pairs": 72,
+          "simulable_compiled_rules": 72,
+          "genes_on_their_own_measured_rate": 2,
+          "genes_on_a_borrowed_median": 70,
+          "pairs_on_a_human_measured_rate": 0,
+          "pairs_on_a_borrowed_species_rate": 2,
+          "labelled_pairs": 72,
+          "labelled_pairs_measured": 2,
+          "labelled_pairs_borrowed_median": 70,
+          "labelled_pairs_species_unstated": 0,
+          "labelled_pairs_on_a_human_rate": 0,
+          "inhibitory_mechanisms_at_the_split": 19
+        }
+      },
+      "unresolved_by_tier": {
+        "none": {
+          "gene_parameter_missing": 73,
+          "not_identifiable": 18
+        },
+        "measured": {
+          "gene_rate_unmeasured": 71,
+          "not_identifiable": 18
+        },
+        "borrowed": {
+          "not_identifiable": 18,
+          "rate_split_infeasible": 1
+        }
+      },
+      "unresolved": {
+        "gene_parameter_missing": 73,
+        "not_identifiable": 18
+      }
+    }
+  },
+  "reading": "a context is a cell_type a compiled rule is gated on; one rule can count once per program because each rule names one context. gene_parameter_missing counts mechanisms that pass every other check and fail only because the compiled genes are stubs",
+  "seconds": 559.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiled non-coding programs, scripts/compile_genome_programs.py",
+        "version": "as compiled from this revision's attribution/compile.py, pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/results/gene_rates.json",
+        "sha256": "0948028fe65f49e20043131e661b4f125b12c0880bcc3af216522ed1a3514bc8",
+        "bytes": 1169712,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: counts of rules and mechanisms, no interval is reported",
+    "parameters": {
+      "precedence": [
+        "experimental",
+        "curated",
+        "predicted",
+        "inferred",
+        "none"
+      ],
+      "citation_tolerance": 1e-06,
+      "experimental_summary": "one pair maps; several pairs are unresolved (the compiled strength is their maximum)",
+      "gene_rates_supplied": "three tiers side by side: none (the compiled genes are stubs), measured (data/results/gene_rates.json), borrowed (its median). Mus musculus, NIH 3T3 fibroblasts; every human simulation using them borrows a mouse constant",
+      "rate_tiers": {
+        "measured": "the gene's own measured T, carried to its human symbol through a 1:1 homology class",
+        "borrowed_median": "the genome median of the measured T, for a gene with no measurement. It fixes no absolute number: such a pair is simulable in RELATIVE units only, is counted separately and is never added to the measured count",
+        "unmeasured": "no rate and no borrowing: `gene_rate_unmeasured`, an explicit marker, never a number"
+      },
+      "rate_row_provenance": "every rate row carries `source` (a key of MEASURED_RATE_SOURCES) and `species_cell`; the audit counts `pairs_on_a_human_measured_rate` and `pairs_on_a_borrowed_species_rate` per tier, and today the first is 0 by construction. Two sources are never averaged and never pooled",
+      "human_rate_survey": "NO usable human absolute transcription-rate source exists. Human metabolic labelling (TT-seq, TimeLapse-seq, SLAM-seq, single-cell new-RNA) reports half-lives and rates in library or CPM units; the one study found that reports a genuinely absolute rate per cell (copy/min per cell) is MOUSE embryonic stem cells and does not distribute it per gene; and the one published set of human genome-wide transcription rates is constructed from abundance times a mouse-derived count of mRNAs per cell times one global decay constant. The R3 rates therefore stay mouse NIH 3T3, the 138,543 pairs on an unmeasured gene stay unmeasured, and every rate keeps its borrowed flag",
+      "rate_units": {
+        "transcription rate (vsr) [molecules/(cell*h)]": "becomes T, the gene's TOTAL transcription in the unperturbed cell: T = basal_rate + max_rate * A * R at the observed state. It does NOT become max_rate. max_rate is the ceiling of the regulated term, reached only when every activator saturates, and no measurement in this source observes that state",
+        "mRNA half-life [h]": "becomes the degradation constant delta_m = ln2 / t_half [1/h] (runtime/grn.py's mrna_half_life). It is NOT a transcription rate and NOT a max_rate: it says only how fast mRNA disappears, and on its own it sets no level",
+        "protein half-life [h]": "becomes delta_p = ln2 / t_half [1/h] (Protein.half_life_h). It is NOT a translation rate",
+        "translation rate constant (ksp) [molecules/(mRNA*h)]": "becomes k_tl (runtime/grn.py's translation_rate). It is NOT a transcription rate",
+        "mRNA copy number [molecules/cell]": "becomes nothing. It is held as the steady state a run should land on, for the acceptance check only, and is never supplied as a parameter",
+        "cell lifespan [d] (Sender & Milo)": "becomes nothing here; see MEASURED_RATE_SOURCES"
+      },
+      "declared_strength": 1.0,
+      "transfer_label": "per gene: the quantity, its tier (measured | borrowed_median), its source key, the species and cell it was measured in, and the cell context it is used in; per run: the same list plus the runtime parameters taken from defaults"
+    },
+    "exclusions": [],
+    "partitions": "n/a: the audit counts rules as compiled; held-out rules are counted with the rest",
+    "code": {
+      "git_sha": "1ef8990c33f911f92260544ac9f65b18dd2e4f8b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/joint_pretest.py",
+        "genomeos/attribution/syntax.py",
+        "genomeos/cli.py",
+        "genomeos/genome/signals.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/storage.py",
+        "scripts/abundance_gate.py",
+        "scripts/biolang_key_census.py",
+        "scripts/celegans_commitment.py",
+        "scripts/celegans_fate_credit.py",
+        "scripts/celegans_fate_read_choice.py",
+        "scripts/celegans_fate_reads.py",
+        "scripts/celegans_fates.py",
+        "scripts/celegans_terminality.py",
+        "scripts/compact_reference.py",
+        "scripts/crispri_hct116.py",
+        "scripts/phosphosite_observation.py",
+        "scripts/reader_depth_family.py",
+        "scripts/trio_q100_phase.py",
+        "scripts/trio_q100_population.py",
+        "scripts/variation_rerun_chain.py",
+        "tests/test_crispri_hct116.py",
+        "tests/test_results_writers_guard.py",
+        "tests/test_tf_atlas.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/correctness.py",
+        "genomeos/organism/provenance.py",
+        "tests/test_results_writers_guard.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/bridge_audit.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

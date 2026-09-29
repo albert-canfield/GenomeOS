@@ -298,11 +298,19 @@ def load_chromosome(chrom: str) -> list[dict]:
 
 
 def _block_tiers(chrom: str) -> list[tuple[int, int, str]]:
-    p = COST.add(RESULTS / f"budget_{chrom}.json")
-    if not p.exists():
+    from genomeos.attribution.budget import read_axes
+
+    # read_axes opens the axes record and the stored budget it fills measurements back from
+    COST.add(RESULTS / f"budget_axes_{chrom}.json")
+    COST.add(RESULTS / f"budget_{chrom}.json")
+    budget = read_axes(chrom, RESULTS)
+    if not budget:
         return []
-    blocks = json.loads(p.read_text())["blocks"]
-    return sorted((b["start"], b["end"], (b.get("guess") or {}).get("tier") or "unknown") for b in blocks)
+    blocks = budget["blocks"]
+    # element_types_<chrom> keeps the stored tier key
+    return sorted(
+        (b["start"], b["end"], (b.get("guess") or {}).get("legacy_tier") or "unknown") for b in blocks
+    )
 
 
 def _at(blocks: list[tuple[int, int, str]], pos: int) -> str | None:

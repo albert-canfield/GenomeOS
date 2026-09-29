@@ -20,12 +20,24 @@ rule Nodal activates SOX17 { strength: 1.0; threshold: 3.0; hill: 4; evidence: e
 # mutual repression among the three fates
 rule Tbxt inhibits SOX2   { strength: 1.0; threshold: 2.0; hill: 3; evidence: curated "Thomson et al. 2011, Cell 145:875"; confidence: 0.7 }
 rule Sox2 inhibits TBXT   { strength: 1.0; threshold: 4.0; hill: 3; evidence: curated "Thomson et al. 2011"; confidence: 0.7 }
-rule Sox17 inhibits TBXT  { strength: 1.0; threshold: 2.0; hill: 3; evidence: inferred "endoderm excludes mesoderm program"; confidence: 0.4 }
+rule Sox17 inhibits TBXT  { strength: 1.0; threshold: 2.0; hill: 3; evidence: experimental "Lolas et al. 2014, PNAS 111:4478, Fig. 3C (Sox17 overexpression lowers Brachyury)"; confidence: 0.4 }
 rule Sox17 inhibits SOX2  { strength: 1.0; threshold: 2.0; hill: 3; evidence: inferred "endoderm excludes ectoderm program"; confidence: 0.4 }
-rule Tbxt inhibits SOX17  { strength: 0.6; threshold: 4.0; hill: 3; evidence: inferred "mesoderm dampens endoderm"; confidence: 0.4 }
+# 2026-09-28 sign corrected (docs/DESIGN-MINIMAL-CELL.md, "The Tbxt-SOX17 sign, corrected"); was:
+# rule Tbxt inhibits SOX17  { strength: 0.6; threshold: 4.0; hill: 3; evidence: inferred "mesoderm dampens endoderm"; confidence: 0.4 }
+rule Tbxt activates SOX17 { strength: 0.6; threshold: 4.0; hill: 3; evidence: experimental "Lolas et al. 2014, PNAS 111:4478, Fig. 1A ChIP-seq and Fig. 3A knockdown"; confidence: 0.4 }
+# UNSOURCED numbers: Lolas 2014 supports the sign of the two Tbxt/Sox17 rules above and reports no
+# dose, strength, threshold or Hill coefficient; 1.0/2.0/3 and 0.6/4.0/3 are the values the inferred
+# rules carried, kept unchanged, not fitted.
 
 param translation_rate = 2 { evidence: inferred "dimensionless"; confidence: 0.3 }
 param mrna_half_life = 0.5 h { evidence: inferred "dimensionless"; confidence: 0.3 }
+# UNSOURCED: the three expected_* proportions below cite no measurement or paper;
+# they were written as an order-of-magnitude guess and are not a bar the model is
+# known to have to meet. Measured 2026-09-28 (60 cells, 30 h): ectoderm 0.467,
+# mesoderm 0.10, endoderm 0.433. The rule citations above support the interactions,
+# not their threshold values. tests/test_gastrulation.py marks mesoderm xfail.
+# After the Tbxt-SOX17 sign correction (2026-09-28, same fixture): ectoderm 0.633,
+# mesoderm 0.0, endoderm 0.367; the three-layer order test is now a strict xfail.
 param expected_ectoderm = 0.45 { evidence: inferred "order of magnitude; germ-layer proportions vary by stage"; confidence: 0.3 }
 param expected_mesoderm = 0.35 { evidence: inferred "order of magnitude"; confidence: 0.3 }
 param expected_endoderm = 0.20 { evidence: inferred "order of magnitude"; confidence: 0.3 }

@@ -1,0 +1,2154 @@
+{
+  "result": "clause2_measured_arm",
+  "date": "2026-09-28",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX",
+    "chrY",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22"
+  ],
+  "registration": {
+    "registered": "2026-09-28",
+    "registration_reused": "`scripts/clause2_matched_control.PRE_REGISTRATION` (e1dbcf3, and its dated section in docs/ATTRIBUTION.md) settles the target sets, the control draw, the covariate and its bins, the per-block estimator, the interval method, the reproduction gate and the pass rule for the model arm. None of it is redesigned here: this script imports those functions rather than restating them, and the model question is carried through the same draw so the gate is free. Its `second_route_not_run` entry registered a DESIGNED measured arm (284,001 unsynthesised oligos) and said nothing measured exists for it; that is still true and that experiment is still unrun. This lane runs the different arm it left open: the measurements the project already holds, over the same blocks and the same windows",
+    "targets": "unchanged from e1dbcf3: the real unknown, constrained_unknown blocks with the copies out (882 blocks, 531 carrying a scored element) from organise.blocks on all 24 chromosomes; the neutral tier as the secondary target set",
+    "control": "unchanged from e1dbcf3 and drawn by the same function with the same seed: windows of each block's exact length, placed uniformly inside the span of the chromosome's scored-element midpoints, rejected on overlap with any organiser block and rejected unless the count of GENCODE protein-coding TSSs within 524,288 bp of the window's midpoint falls in the block's own decile; 50 accepted windows per block, 20,000 tries. The unmatched draw (d717b28's, 4,000 tries, no density test) is reported beside it",
+    "measurement": "`genomeos.attribution.measured` and nothing else, read but never edited by this lane. A measurement is OF an element only at RECIPROCAL_OVERLAP = 0.5 both ways, the module's own rule. Four assays, each under its own name: CRISPRi (the ENCODE enhancer-gene benchmark, both files, R2's five outcomes kept apart and R5's split field carried); lentiMPRA (ENCODE4 ENCSR106SZM, R6's per-tile reading -- the per-cell label is the median of the matched tiles under REPORTER_LABEL_RULE, never the strongest tile, and a tile-conflicting cell is counted under its own name); VISTA (transgenic mouse e11.5, positive and negative alike); saturation mutagenesis (GSE126550), which is base-level and is counted and reported apart, never pooled into an element-level verdict",
+    "questions": {
+      "names_a_coding_gene": "the model arm, carried on the same windows so the gate costs no extra draw: does the block (or window) hold an element whose deletion names a protein-coding gene (`predicted_coding`)",
+      "eligible_for_an_assay": "`Layer.touched_by`: some assay's tested interval shares at least one base with the element. The weakest bar, and the one that says where the screens were pointed",
+      "measured_by_an_element_level_assay": "CRISPRi, lentiMPRA or VISTA measures this element at reciprocal overlap 0.5",
+      "measured_by_any_assay": "the three above or saturation mutagenesis",
+      "crispri_tested_against_a_coding_gene": "CRISPRi tested this element against at least one gene whose GENCODE symbol is protein-coding, in any cell, in either split. This and only this is the denominator of the primary: an element no screen ever pointed at is not a measured negative",
+      "measured_to_regulate_a_coding_gene": "of the elements CRISPRi tested against a coding gene, at least one coding gene moved significantly on silencing -- a significant DECREASE (the benchmark's own `Regulated`) or a significant INCREASE. Both signs count, because R2 established that the benchmark's `Regulated` is a decrease only and that a significant increase is a measured regulatory effect and not a null. The decrease-only form is reported beside it",
+      "measured_regulated_decrease_only": "the benchmark's own `Regulated`, restricted to coding genes",
+      "measured_null_well_powered_on_every_coding_gene": "CRISPRi tested the element against at least one coding gene, no coding gene moved significantly either way, and at least one coding gene's null carries power >= 0.8 at a 20% effect. This is the only measured outcome that can say 'this element regulates no coding gene'; an underpowered null cannot and is counted apart",
+      "measured_active_but_no_gene_named": "lentiMPRA calls the element active in at least one cell under REPORTER_LABEL_RULE, or VISTA calls it a positive enhancer. Registered as a SEPARATE question and never folded into the primary: both assays measure that the sequence drives transcription and neither names the gene it drives, so neither can answer a clause that asks for a gene"
+    },
+    "primary": "the real unknown against its density- and length-matched windows on `measured_to_regulate_a_coding_gene`, by e1dbcf3's estimator with e1dbcf3's denominator replaced by the measured one: the mean over blocks that hold at least one element CRISPRi tested against a coding gene AND have at least one accepted window holding one, of (block yes, 0 or 1) minus (share of that block's TESTED windows saying yes), in points",
+    "interval": "unchanged from e1dbcf3: 95% percentile bootstrap over blocks, 10,000 resamples, numpy default_rng(20260913), with a bootstrap over the chromosomes reported beside it and the pooled rates printed as d717b28 printed them",
+    "power_floor": "no interval is read below 20 compared blocks. That is `measured.MIN_FOR_A_COMPARISON`, the bar the measured layer already sets for a comparison of its own, adopted here unchanged rather than chosen",
+    "gate": "before any measured figure is read, the model question carried through the same matched draw must reproduce 0c8b82d's committed primary to the digit: -27.25 points, 95% -30.91 to -23.58 over blocks, 531 compared blocks, 44,081 windows drawn, 158 blocks yes, 12,876 window-yes of 22,228 carrying windows. If it does not, these are not the same windows and no measured figure is reported",
+    "secondary": [
+      "the same statistic on `measured_regulated_decrease_only`",
+      "the neutral tier under its own deciles, same statistic and interval",
+      "the same-instrument estimator: e1dbcf3's denominator left alone, every block carrying a scored element in, an unmeasured element counting as a no. Reported as DESCRIPTIVE ONLY and never as the primary, because a rate that counts absence of measurement as a negative is the error this project has had to withdraw three times",
+      "the coverage table at reciprocal overlap 0.25 and 0.75 beside 0.5 (`measured.OVERLAP_SENSITIVITY`), on the counts only, so the rule can be seen rather than trusted"
+    ],
+    "coverage_is_the_first_result": "reported before any difference and regardless of every outcome: of the 882 real-unknown blocks and the 531 that carry a scored element, how many carry an element that any assay is eligible to have measured, how many carry one it did measure, how many carry one CRISPRi tested against a coding gene, and how many carry one measured to move it. The same four counts for the matched windows and for the neutral tier",
+    "readings": {
+      "model_failed": "the blocks DO hold elements measured to regulate a coding gene, at a rate not below their matched windows: the primary's 95% interval over blocks reaches or lies above 0 with at least 20 compared blocks. Then the failure is the MODEL'S. The sequence regulates coding genes and the deletion model could not name the target, so clause 2's second part failed on the instrument and not on the sequence; the clause stays not met, and its stated reason changes from 'these blocks hold nothing that regulates a coding gene' to 'the deletion model cannot name a target for sequence like this'. The four descriptive controls keep their figures and lose their reading",
+      "wording_wrong": "the blocks hold NO element measured to regulate a coding gene while their matched windows do: the primary's 95% interval lies wholly below 0 with at least 20 compared blocks. Then the model was right about these blocks. What is wrong is clause 2's WORDING: a milestone cannot ask for a gene and a tissue from sequence that regulates no gene, and the clause is to be rewritten rather than re-tested. The blocks' constraint then wants an account that is not regulation of a coding gene",
+      "cannot_decide": "fewer than 20 real-unknown blocks hold an element CRISPRi tested against a coding gene, or fewer than that many also have a matched window holding one. This is the likely case and it is registered here as a FINISHED LANE and a real result, not a failure: no interval is reported, both readings above stay open, and the lane's output is the coverage that exists and the coverage that would be needed -- the real-unknown blocks with no measured element at all, the blocks short of the floor, and the number of blocks an assay would have to reach for 80% power against an effect the size of the model arm's own -27.25 points"
+    },
+    "coverage_needed_formula": "n_for_80_percent_power = ceil((z_0.975 + z_0.80)^2 * s^2 / d^2) with d = 0.2725, the model arm's committed matched difference, and s the standard deviation of THIS RUN'S per-block model-arm differences on the same target set, which the same draw produces. Fixed here before any count so the shortfall is not chosen after seeing it",
+    "what_this_arm_cannot_do": "CRISPRi is the only one of the four assays that names a gene, so it is the only one that can answer this clause, and it was pointed at candidate regulatory sequence near expressed genes in a handful of cell lines -- not at constrained unknown sequence. A block with no CRISPRi element is not evidence either way. lentiMPRA and VISTA can say the sequence does something and cannot say what to; saturation mutagenesis can say which bases matter inside an element and, by SATMUT_CANNOT_DISAGREE, can never say an element does nothing. None of that is a defect of this run; it is the size of the hole the lane is measuring",
+    "cost": "0 AlphaGenome requests. The per-element response cache is never opened; the all-element archive and one chromosome's measured layer are held at a time"
+  },
+  "measured_layer_counts": {
+    "chr1": {
+      "crispri": 1251,
+      "lentimpra": 5325,
+      "vista": 219,
+      "satmut": 3
+    },
+    "chr2": {
+      "crispri": 644,
+      "lentimpra": 4461,
+      "vista": 261,
+      "satmut": 2
+    },
+    "chr3": {
+      "crispri": 900,
+      "lentimpra": 3328,
+      "vista": 160,
+      "satmut": 0
+    },
+    "chr4": {
+      "crispri": 114,
+      "lentimpra": 2560,
+      "vista": 102,
+      "satmut": 0
+    },
+    "chr5": {
+      "crispri": 327,
+      "lentimpra": 2718,
+      "vista": 156,
+      "satmut": 1
+    },
+    "chr6": {
+      "crispri": 714,
+      "lentimpra": 3576,
+      "vista": 135,
+      "satmut": 2
+    },
+    "chr7": {
+      "crispri": 478,
+      "lentimpra": 2970,
+      "vista": 180,
+      "satmut": 1
+    },
+    "chr8": {
+      "crispri": 1223,
+      "lentimpra": 2483,
+      "vista": 100,
+      "satmut": 2
+    },
+    "chr9": {
+      "crispri": 110,
+      "lentimpra": 2255,
+      "vista": 109,
+      "satmut": 1
+    },
+    "chrX": {
+      "crispri": 966,
+      "lentimpra": 1425,
+      "vista": 37,
+      "satmut": 1
+    },
+    "chrY": {
+      "crispri": 0,
+      "lentimpra": 35,
+      "vista": 0,
+      "satmut": 0
+    },
+    "chr10": {
+      "crispri": 260,
+      "lentimpra": 2622,
+      "vista": 119,
+      "satmut": 3
+    },
+    "chr11": {
+      "crispri": 1894,
+      "lentimpra": 2570,
+      "vista": 93,
+      "satmut": 2
+    },
+    "chr12": {
+      "crispri": 762,
+      "lentimpra": 2395,
+      "vista": 79,
+      "satmut": 0
+    },
+    "chr13": {
+      "crispri": 11,
+      "lentimpra": 1245,
+      "vista": 60,
+      "satmut": 0
+    },
+    "chr14": {
+      "crispri": 147,
+      "lentimpra": 1599,
+      "vista": 96,
+      "satmut": 0
+    },
+    "chr15": {
+      "crispri": 67,
+      "lentimpra": 1675,
+      "vista": 67,
+      "satmut": 0
+    },
+    "chr16": {
+      "crispri": 539,
+      "lentimpra": 2032,
+      "vista": 163,
+      "satmut": 0
+    },
+    "chr17": {
+      "crispri": 830,
+      "lentimpra": 2383,
+      "vista": 77,
+      "satmut": 0
+    },
+    "chr18": {
+      "crispri": 253,
+      "lentimpra": 1183,
+      "vista": 91,
+      "satmut": 0
+    },
+    "chr19": {
+      "crispri": 2795,
+      "lentimpra": 1759,
+      "vista": 25,
+      "satmut": 1
+    },
+    "chr20": {
+      "crispri": 246,
+      "lentimpra": 1666,
+      "vista": 60,
+      "satmut": 1
+    },
+    "chr21": {
+      "crispri": 98,
+      "lentimpra": 630,
+      "vista": 20,
+      "satmut": 0
+    },
+    "chr22": {
+      "crispri": 105,
+      "lentimpra": 1091,
+      "vista": 33,
+      "satmut": 1
+    }
+  },
+  "coverage": {
+    "reciprocal_overlap": 0.5,
+    "real_unknown": {
+      "blocks": 882,
+      "blocks_carrying_a_scored_element": 531,
+      "scored_elements": 3280,
+      "blocks_with_no_measured_element": 823,
+      "crispri_coding_pairs_tested": 3,
+      "blocks_with": {
+        "eligible_for_an_assay": 89,
+        "measured_by_an_element_level_assay": 59,
+        "measured_by_any_assay": 59,
+        "crispri_tested_against_a_coding_gene": 3,
+        "measured_to_regulate_a_coding_gene": 0,
+        "measured_regulated_decrease_only": 0,
+        "measured_null_well_powered_on_every_coding_gene": 3,
+        "measured_active_but_no_gene_named": 8,
+        "crispri": 3,
+        "lentimpra": 57,
+        "vista": 1,
+        "satmut": 0,
+        "measured_increase_only": 0,
+        "measured_null_underpowered_only": 0,
+        "lentimpra_active": 7,
+        "reporter_tiles_conflict": 0,
+        "vista_positive": 1,
+        "vista_negative": 0
+      },
+      "elements_with": {
+        "eligible_for_an_assay": 151,
+        "measured_by_an_element_level_assay": 78,
+        "measured_by_any_assay": 78,
+        "crispri_tested_against_a_coding_gene": 3,
+        "measured_to_regulate_a_coding_gene": 0,
+        "measured_regulated_decrease_only": 0,
+        "measured_null_well_powered_on_every_coding_gene": 3,
+        "measured_active_but_no_gene_named": 9,
+        "crispri": 3,
+        "lentimpra": 75,
+        "vista": 1,
+        "satmut": 0,
+        "measured_increase_only": 0,
+        "measured_null_underpowered_only": 0,
+        "lentimpra_active": 8,
+        "reporter_tiles_conflict": 0,
+        "vista_positive": 1,
+        "vista_negative": 0
+      }
+    },
+    "neutral": {
+      "blocks": 2632,
+      "blocks_carrying_a_scored_element": 1181,
+      "scored_elements": 5706,
+      "blocks_with_no_measured_element": 2529,
+      "crispri_coding_pairs_tested": 3,
+      "blocks_with": {
+        "eligible_for_an_assay": 114,
+        "measured_by_an_element_level_assay": 103,
+        "measured_by_any_assay": 103,
+        "crispri_tested_against_a_coding_gene": 1,
+        "measured_to_regulate_a_coding_gene": 1,
+        "measured_regulated_decrease_only": 1,
+        "measured_null_well_powered_on_every_coding_gene": 0,
+        "measured_active_but_no_gene_named": 27,
+        "crispri": 1,
+        "lentimpra": 101,
+        "vista": 1,
+        "satmut": 0,
+        "measured_increase_only": 0,
+        "measured_null_underpowered_only": 0,
+        "lentimpra_active": 26,
+        "reporter_tiles_conflict": 0,
+        "vista_positive": 1,
+        "vista_negative": 0
+      },
+      "elements_with": {
+        "eligible_for_an_assay": 134,
+        "measured_by_an_element_level_assay": 114,
+        "measured_by_any_assay": 114,
+        "crispri_tested_against_a_coding_gene": 1,
+        "measured_to_regulate_a_coding_gene": 1,
+        "measured_regulated_decrease_only": 1,
+        "measured_null_well_powered_on_every_coding_gene": 0,
+        "measured_active_but_no_gene_named": 27,
+        "crispri": 1,
+        "lentimpra": 112,
+        "vista": 1,
+        "satmut": 0,
+        "measured_increase_only": 0,
+        "measured_null_underpowered_only": 0,
+        "lentimpra_active": 26,
+        "reporter_tiles_conflict": 0,
+        "vista_positive": 1,
+        "vista_negative": 0
+      }
+    },
+    "windows_matched_real_unknown": {
+      "windows_drawn": 44081,
+      "windows_carrying_a_scored_element": 31554,
+      "windows_with": {
+        "names_a_coding_gene": 18240,
+        "eligible_for_an_assay": 7812,
+        "measured_by_an_element_level_assay": 6794,
+        "measured_by_any_assay": 6794,
+        "crispri_tested_against_a_coding_gene": 223,
+        "measured_to_regulate_a_coding_gene": 30,
+        "measured_regulated_decrease_only": 23,
+        "measured_null_well_powered_on_every_coding_gene": 155,
+        "measured_active_but_no_gene_named": 1512
+      },
+      "blocks_with_at_least_one_such_window": {
+        "names_a_coding_gene": 875,
+        "eligible_for_an_assay": 817,
+        "measured_by_an_element_level_assay": 785,
+        "measured_by_any_assay": 785,
+        "crispri_tested_against_a_coding_gene": 134,
+        "measured_to_regulate_a_coding_gene": 27,
+        "measured_regulated_decrease_only": 20,
+        "measured_null_well_powered_on_every_coding_gene": 99,
+        "measured_active_but_no_gene_named": 478
+      }
+    },
+    "windows_unmatched_real_unknown": {
+      "windows_drawn": 44100,
+      "windows_carrying_a_scored_element": 31676,
+      "windows_with": {
+        "names_a_coding_gene": 21217,
+        "eligible_for_an_assay": 9951,
+        "measured_by_an_element_level_assay": 8928,
+        "measured_by_any_assay": 8928,
+        "crispri_tested_against_a_coding_gene": 429,
+        "measured_to_regulate_a_coding_gene": 50,
+        "measured_regulated_decrease_only": 30,
+        "measured_null_well_powered_on_every_coding_gene": 341,
+        "measured_active_but_no_gene_named": 2116
+      },
+      "blocks_with_at_least_one_such_window": {
+        "names_a_coding_gene": 882,
+        "eligible_for_an_assay": 819,
+        "measured_by_an_element_level_assay": 803,
+        "measured_by_any_assay": 803,
+        "crispri_tested_against_a_coding_gene": 251,
+        "measured_to_regulate_a_coding_gene": 46,
+        "measured_regulated_decrease_only": 28,
+        "measured_null_well_powered_on_every_coding_gene": 220,
+        "measured_active_but_no_gene_named": 537
+      }
+    },
+    "sensitivity_by_overlap": {
+      "0.25": {
+        "real_unknown": {
+          "blocks": 882,
+          "blocks_carrying_a_scored_element": 531,
+          "scored_elements": 3280,
+          "blocks_with_no_measured_element": 810,
+          "crispri_coding_pairs_tested": 3,
+          "blocks_with": {
+            "eligible_for_an_assay": 89,
+            "measured_by_an_element_level_assay": 72,
+            "measured_by_any_assay": 72,
+            "crispri_tested_against_a_coding_gene": 3,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 3,
+            "measured_active_but_no_gene_named": 15,
+            "crispri": 3,
+            "lentimpra": 61,
+            "vista": 12,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 7,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 8,
+            "vista_negative": 4
+          },
+          "elements_with": {
+            "eligible_for_an_assay": 151,
+            "measured_by_an_element_level_assay": 97,
+            "measured_by_any_assay": 97,
+            "crispri_tested_against_a_coding_gene": 3,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 3,
+            "measured_active_but_no_gene_named": 19,
+            "crispri": 3,
+            "lentimpra": 80,
+            "vista": 15,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 8,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 11,
+            "vista_negative": 4
+          }
+        },
+        "neutral": {
+          "blocks": 2632,
+          "blocks_carrying_a_scored_element": 1181,
+          "scored_elements": 5706,
+          "blocks_with_no_measured_element": 2520,
+          "crispri_coding_pairs_tested": 4,
+          "blocks_with": {
+            "eligible_for_an_assay": 114,
+            "measured_by_an_element_level_assay": 112,
+            "measured_by_any_assay": 112,
+            "crispri_tested_against_a_coding_gene": 2,
+            "measured_to_regulate_a_coding_gene": 1,
+            "measured_regulated_decrease_only": 1,
+            "measured_null_well_powered_on_every_coding_gene": 1,
+            "measured_active_but_no_gene_named": 30,
+            "crispri": 2,
+            "lentimpra": 107,
+            "vista": 3,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 27,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 3,
+            "vista_negative": 0
+          },
+          "elements_with": {
+            "eligible_for_an_assay": 134,
+            "measured_by_an_element_level_assay": 124,
+            "measured_by_any_assay": 124,
+            "crispri_tested_against_a_coding_gene": 2,
+            "measured_to_regulate_a_coding_gene": 1,
+            "measured_regulated_decrease_only": 1,
+            "measured_null_well_powered_on_every_coding_gene": 1,
+            "measured_active_but_no_gene_named": 30,
+            "crispri": 2,
+            "lentimpra": 119,
+            "vista": 3,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 27,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 3,
+            "vista_negative": 0
+          }
+        }
+      },
+      "0.75": {
+        "real_unknown": {
+          "blocks": 882,
+          "blocks_carrying_a_scored_element": 531,
+          "scored_elements": 3280,
+          "blocks_with_no_measured_element": 872,
+          "crispri_coding_pairs_tested": 0,
+          "blocks_with": {
+            "eligible_for_an_assay": 89,
+            "measured_by_an_element_level_assay": 10,
+            "measured_by_any_assay": 10,
+            "crispri_tested_against_a_coding_gene": 0,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 0,
+            "measured_active_but_no_gene_named": 1,
+            "crispri": 0,
+            "lentimpra": 10,
+            "vista": 0,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 1,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 0,
+            "vista_negative": 0
+          },
+          "elements_with": {
+            "eligible_for_an_assay": 151,
+            "measured_by_an_element_level_assay": 13,
+            "measured_by_any_assay": 13,
+            "crispri_tested_against_a_coding_gene": 0,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 0,
+            "measured_active_but_no_gene_named": 1,
+            "crispri": 0,
+            "lentimpra": 13,
+            "vista": 0,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 1,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 0,
+            "vista_negative": 0
+          }
+        },
+        "neutral": {
+          "blocks": 2632,
+          "blocks_carrying_a_scored_element": 1181,
+          "scored_elements": 5706,
+          "blocks_with_no_measured_element": 2617,
+          "crispri_coding_pairs_tested": 0,
+          "blocks_with": {
+            "eligible_for_an_assay": 114,
+            "measured_by_an_element_level_assay": 15,
+            "measured_by_any_assay": 15,
+            "crispri_tested_against_a_coding_gene": 0,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 0,
+            "measured_active_but_no_gene_named": 0,
+            "crispri": 0,
+            "lentimpra": 15,
+            "vista": 0,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 0,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 0,
+            "vista_negative": 0
+          },
+          "elements_with": {
+            "eligible_for_an_assay": 134,
+            "measured_by_an_element_level_assay": 16,
+            "measured_by_any_assay": 16,
+            "crispri_tested_against_a_coding_gene": 0,
+            "measured_to_regulate_a_coding_gene": 0,
+            "measured_regulated_decrease_only": 0,
+            "measured_null_well_powered_on_every_coding_gene": 0,
+            "measured_active_but_no_gene_named": 0,
+            "crispri": 0,
+            "lentimpra": 16,
+            "vista": 0,
+            "satmut": 0,
+            "measured_increase_only": 0,
+            "measured_null_underpowered_only": 0,
+            "lentimpra_active": 0,
+            "reporter_tiles_conflict": 0,
+            "vista_positive": 0,
+            "vista_negative": 0
+          }
+        }
+      }
+    }
+  },
+  "gate_reproduces_0c8b82d": {
+    "want": {
+      "matched_difference_points": -27.25,
+      "ci95_over_blocks": [
+        -30.91,
+        -23.58
+      ],
+      "n_blocks_compared": 531,
+      "blocks_carrying_an_element": 531,
+      "windows_drawn": 44081,
+      "pooled": {
+        "blocks_yes": 158,
+        "windows_yes": 12876,
+        "windows_carrying": 22228
+      }
+    },
+    "got": {
+      "matched_difference_points": -27.25,
+      "ci95_over_blocks": [
+        -30.91,
+        -23.58
+      ],
+      "n_blocks_compared": 531,
+      "blocks_carrying_an_element": 531,
+      "windows_drawn": 44081,
+      "pooled": {
+        "blocks_yes": 158,
+        "windows_yes": 12876,
+        "windows_carrying": 22228
+      }
+    },
+    "passed": true
+  },
+  "model_arm_on_these_windows": {
+    "question": "names_a_coding_gene",
+    "target_blocks": 882,
+    "blocks_carrying_an_element": 531,
+    "undrawable_blocks": 0,
+    "carrying_blocks_without_a_carrying_window": 0,
+    "n_blocks_compared": 531,
+    "windows_drawn": 44081,
+    "windows_carrying_an_element_compared": 22228,
+    "matched_difference_points": -27.25,
+    "ci95_over_blocks": [
+      -30.91,
+      -23.58
+    ],
+    "ci95_over_chromosomes": [
+      -30.35,
+      -24.4
+    ],
+    "block_rate": 0.2976,
+    "mean_window_rate_per_block": 0.5701,
+    "pooled": {
+      "blocks_yes": 158,
+      "windows_yes": 12876,
+      "windows_carrying": 22228,
+      "block_rate": 0.2976,
+      "window_rate": 0.5793,
+      "difference_in_points": -28.17
+    },
+    "balance": {
+      "covariate_block_mean": 4.113,
+      "covariate_window_mean": 4.051,
+      "elements_per_carrying_block": 6.177,
+      "elements_per_carrying_window": 13.27
+    }
+  },
+  "seconds": 527.2,
+  "primary": {
+    "question": "measured_to_regulate_a_coding_gene",
+    "denominator": "crispri_tested_against_a_coding_gene",
+    "target_blocks": 882,
+    "blocks_the_denominator_reaches": 3,
+    "blocks_reached_without_a_reached_window": 2,
+    "n_blocks_compared": 1,
+    "windows_the_denominator_reaches": 10,
+    "power_floor": 20,
+    "below_the_power_floor": true,
+    "matched_difference_points": null,
+    "why": "1 compared blocks is below the registered floor of 20: no interval is read"
+  },
+  "coverage_needed": {
+    "blocks_compared_now": 1,
+    "power_floor": 20,
+    "blocks_short_of_the_floor": 19,
+    "model_arm_sd_of_per_block_differences": 0.4324,
+    "effect_to_detect": 0.2725,
+    "n_for_80_percent_power": 20,
+    "blocks_short_of_80_percent_power": 19,
+    "share_of_the_882_real_unknown_blocks_needed": 0.0227
+  },
+  "primary_reading": {
+    "outcome": "cannot_decide",
+    "decides_clause_2": false,
+    "text": "fewer than 20 real-unknown blocks hold an element CRISPRi tested against a coding gene, or fewer than that many also have a matched window holding one. This is the likely case and it is registered here as a FINISHED LANE and a real result, not a failure: no interval is reported, both readings above stay open, and the lane's output is the coverage that exists and the coverage that would be needed -- the real-unknown blocks with no measured element at all, the blocks short of the floor, and the number of blocks an assay would have to reach for 80% power against an effect the size of the model arm's own -27.25 points"
+  },
+  "secondary": {
+    "decrease_only": {
+      "question": "measured_regulated_decrease_only",
+      "denominator": "crispri_tested_against_a_coding_gene",
+      "target_blocks": 882,
+      "blocks_the_denominator_reaches": 3,
+      "blocks_reached_without_a_reached_window": 2,
+      "n_blocks_compared": 1,
+      "windows_the_denominator_reaches": 10,
+      "power_floor": 20,
+      "below_the_power_floor": true,
+      "matched_difference_points": null,
+      "why": "1 compared blocks is below the registered floor of 20: no interval is read"
+    },
+    "neutral_primary": {
+      "question": "measured_to_regulate_a_coding_gene",
+      "denominator": "crispri_tested_against_a_coding_gene",
+      "target_blocks": 2632,
+      "blocks_the_denominator_reaches": 1,
+      "blocks_reached_without_a_reached_window": 1,
+      "n_blocks_compared": 0,
+      "windows_the_denominator_reaches": 0,
+      "power_floor": 20,
+      "below_the_power_floor": true,
+      "matched_difference_points": null,
+      "why": "no block of this set holds an element the denominator question reaches"
+    },
+    "unmatched_primary": {
+      "question": "measured_to_regulate_a_coding_gene",
+      "denominator": "crispri_tested_against_a_coding_gene",
+      "target_blocks": 882,
+      "blocks_the_denominator_reaches": 3,
+      "blocks_reached_without_a_reached_window": 0,
+      "n_blocks_compared": 3,
+      "windows_the_denominator_reaches": 3,
+      "power_floor": 20,
+      "below_the_power_floor": true,
+      "matched_difference_points": null,
+      "why": "3 compared blocks is below the registered floor of 20: no interval is read"
+    },
+    "same_instrument_descriptive_only": {
+      "measured_to_regulate_a_coding_gene": {
+        "question": "measured_to_regulate_a_coding_gene",
+        "target_blocks": 882,
+        "blocks_carrying_an_element": 531,
+        "undrawable_blocks": 0,
+        "carrying_blocks_without_a_carrying_window": 0,
+        "n_blocks_compared": 531,
+        "windows_drawn": 44081,
+        "windows_carrying_an_element_compared": 22228,
+        "matched_difference_points": -0.1,
+        "ci95_over_blocks": [
+          -0.14,
+          -0.06
+        ],
+        "ci95_over_chromosomes": [
+          -0.15,
+          -0.05
+        ],
+        "block_rate": 0.0,
+        "mean_window_rate_per_block": 0.001,
+        "pooled": {
+          "blocks_yes": 0,
+          "windows_yes": 24,
+          "windows_carrying": 22228,
+          "block_rate": 0.0,
+          "window_rate": 0.0011,
+          "difference_in_points": -0.11
+        },
+        "balance": {
+          "covariate_block_mean": 4.113,
+          "covariate_window_mean": 4.051,
+          "elements_per_carrying_block": 6.177,
+          "elements_per_carrying_window": 13.27
+        }
+      },
+      "measured_by_an_element_level_assay": {
+        "question": "measured_by_an_element_level_assay",
+        "target_blocks": 882,
+        "blocks_carrying_an_element": 531,
+        "undrawable_blocks": 0,
+        "carrying_blocks_without_a_carrying_window": 0,
+        "n_blocks_compared": 531,
+        "windows_drawn": 44081,
+        "windows_carrying_an_element_compared": 22228,
+        "matched_difference_points": -12.23,
+        "ci95_over_blocks": [
+          -14.81,
+          -9.57
+        ],
+        "ci95_over_chromosomes": [
+          -14.64,
+          -10.02
+        ],
+        "block_rate": 0.1111,
+        "mean_window_rate_per_block": 0.2334,
+        "pooled": {
+          "blocks_yes": 59,
+          "windows_yes": 5778,
+          "windows_carrying": 22228,
+          "block_rate": 0.1111,
+          "window_rate": 0.2599,
+          "difference_in_points": -14.88
+        },
+        "balance": {
+          "covariate_block_mean": 4.113,
+          "covariate_window_mean": 4.051,
+          "elements_per_carrying_block": 6.177,
+          "elements_per_carrying_window": 13.27
+        }
+      },
+      "measured_active_but_no_gene_named": {
+        "question": "measured_active_but_no_gene_named",
+        "target_blocks": 882,
+        "blocks_carrying_an_element": 531,
+        "undrawable_blocks": 0,
+        "carrying_blocks_without_a_carrying_window": 0,
+        "n_blocks_compared": 531,
+        "windows_drawn": 44081,
+        "windows_carrying_an_element_compared": 22228,
+        "matched_difference_points": -3.9,
+        "ci95_over_blocks": [
+          -4.97,
+          -2.71
+        ],
+        "ci95_over_chromosomes": [
+          -5.0,
+          -2.92
+        ],
+        "block_rate": 0.0151,
+        "mean_window_rate_per_block": 0.0541,
+        "pooled": {
+          "blocks_yes": 8,
+          "windows_yes": 1352,
+          "windows_carrying": 22228,
+          "block_rate": 0.0151,
+          "window_rate": 0.0608,
+          "difference_in_points": -4.58
+        },
+        "balance": {
+          "covariate_block_mean": 4.113,
+          "covariate_window_mean": 4.051,
+          "elements_per_carrying_block": 6.177,
+          "elements_per_carrying_window": 13.27
+        }
+      }
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (the all-element archive)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256",
+        "path": "data/knowledge/alphagenome/all_elements"
+      },
+      {
+        "accession": "GENCODE protein-coding genes (the TSS density covariate)",
+        "version": "the repository's default GENCODE GFF3, pinned by sha256"
+      },
+      {
+        "accession": "Zoonomia cactus241way phyloP, gnomAD Gnocchi, UCSC genomicSuperDups (the organiser's tiers, axes and copy flag)",
+        "version": "as pinned by the organiser's inputs"
+      },
+      {
+        "accession": "this repository, data/results/constrained_unknown_targets.json at d717b28",
+        "version": "git d717b28, the unmatched control the gate reproduces"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table (vista-data)",
+        "version": "main; pinned by sha256"
+      },
+      {
+        "accession": "this repository, data/results/clause2_matched_control.json at 0c8b82d",
+        "version": "git 0c8b82d, the matched primary the gate reproduces"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/budget_axes_chr1.json",
+        "sha256": "bbe15a3281883da171d426675a02f490941bf44e936f51ec211ee6f33817e41e",
+        "bytes": 1410873,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr1.json",
+        "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+        "bytes": 1500070,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr1.json",
+        "sha256": "a48412273d8b9b4fedee2d870b3a657ad290da21e50122c849f07af7e5d15166",
+        "bytes": 1402301,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr1.json",
+        "sha256": "c6a0ff4870a665a999f81cf14a6297c0443a94a376cf33b261f77258f4f1d622",
+        "bytes": 528568,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr2.json",
+        "sha256": "ee44180e8a8a3c49b3b48c24d2869fe340c31e818df8f74d7a52dbdc57888856",
+        "bytes": 1133348,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr2.json",
+        "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+        "bytes": 1204585,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr2.json",
+        "sha256": "d2e34e45756cea76ec7661479bee68dee786d69ad8773725fe556cc0a5d7cc2b",
+        "bytes": 1159471,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr2.json",
+        "sha256": "3538035cd41719535aea02820e24725cb4019448601483e616a844f252367b52",
+        "bytes": 429860,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr3.json",
+        "sha256": "3c68516f3219952cb8900758c858235aa0fb98b4c3023160a69f37b7e854192b",
+        "bytes": 759401,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr3.json",
+        "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+        "bytes": 806712,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr3.json",
+        "sha256": "3226b141288da1534b4d87d43b2af62b5c2bf5a680bfd5f87d816a34fb8f08be",
+        "bytes": 851491,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr3.json",
+        "sha256": "2bf519ba9d8b5f7be164e7f5220ec81c03245b33033a66809357cf8588d363d2",
+        "bytes": 276227,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr4.json",
+        "sha256": "67ca15d332a1ef621ccd7b3bc7d114244887c30de3bcbb460cb679a4e5cac7d2",
+        "bytes": 821190,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr4.json",
+        "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+        "bytes": 867246,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr4.json",
+        "sha256": "b7bb22de72321991a1a236fc96362386cafbd549eabe78240043ec8ae9e51878",
+        "bytes": 901104,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr4.json",
+        "sha256": "abef1504e80452f6ff5942a5006995404c9b635c3df9c62c35b21b2496713604",
+        "bytes": 302778,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr5.json",
+        "sha256": "2a949b0d92ca50e162868e2141d15c9326c104eb4ef83625bc6b48f9e1ffacf0",
+        "bytes": 798553,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr5.json",
+        "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+        "bytes": 845931,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr5.json",
+        "sha256": "afa63d7c2bb568abdd222893d254956ff649413f7cb279ef663e5492a999e4cc",
+        "bytes": 868598,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr5.json",
+        "sha256": "1974b4d3a270e8ebe633d19ad0dccf9ed97c58f92763cddad4b2d50d99d903ea",
+        "bytes": 288379,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr6.json",
+        "sha256": "02f204b9005c8967b72c1a9d87b7466c0c173019662b94bb849fce135c9ffe47",
+        "bytes": 817084,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr6.json",
+        "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+        "bytes": 867522,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr6.json",
+        "sha256": "2d564b14bf191563acba3dbfa7190c1989c663e014a782cb25d041b437524e6d",
+        "bytes": 896157,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr6.json",
+        "sha256": "dff8c192ce36e76456230376c7d4000559d8d86ee2642d178f9e52f477822779",
+        "bytes": 288812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr7.json",
+        "sha256": "ce717d1e3be2f44415340cd7c347f9a8f945c6652d4ba64aa4adda3b1b5a900e",
+        "bytes": 819440,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr7.json",
+        "sha256": "10f765e2fa58a4fb7d4931bc3344a2a29e6e3fe52db7e74b6d6c83fdb39d7ef0",
+        "bytes": 859998,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr7.json",
+        "sha256": "b55814d3d0b5e19af6972eeb934dc1646e715d589c9e31fe5540d90035da6a5d",
+        "bytes": 316217,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr8.json",
+        "sha256": "422cdf37f516eb923c2c5e7a6f6053222d7edbe97aba7bc48097d77c8eabbcf0",
+        "bytes": 691288,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr8.json",
+        "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+        "bytes": 731185,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr8.json",
+        "sha256": "807ae603b32b365661f3529ac0e9d8be10e801c8e00301c268daf1d870c26170",
+        "bytes": 750768,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr8.json",
+        "sha256": "369c874a82c1ffe373a8ba57b111f891c0b440d0ac72c8f1ad344bbde8303b97",
+        "bytes": 255757,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr9.json",
+        "sha256": "ff179fd23905d3dcd80328919baa4c8133404036eca2ac2a75adad1c75557658",
+        "bytes": 629119,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr9.json",
+        "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+        "bytes": 666533,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr9.json",
+        "sha256": "45df7529d90e827d9fab5baf8e3f919e913ef184b693eab77b773a02c2f35e2b",
+        "bytes": 682738,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr9.json",
+        "sha256": "bbf7adc9b99fc4c62fec7f59338a1d93bc006d7cdd86452b3dd409d9c42b0ea1",
+        "bytes": 255702,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chrX.json",
+        "sha256": "e8b4353c08dba5488b595c171839755fb63256e93c9c58e9df22dcf60a916cbd",
+        "bytes": 789566,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrX.json",
+        "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+        "bytes": 819979,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chrX.json",
+        "sha256": "e13ff8e98e81dd07ac6b4b68897d6977ee64ed6322398070d6defdb89f7539f6",
+        "bytes": 772326,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chrX.json",
+        "sha256": "ec0ce9a6cf3925616acd81741efc0ff31a69f9dbe882fe21e7d3a2a1877a0605",
+        "bytes": 314974,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chrY.json",
+        "sha256": "f1da714164c1552ef4a14eeb9384b2829fd69300e06109c19edcc5249488ec8b",
+        "bytes": 223696,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrY.json",
+        "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+        "bytes": 229765,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chrY.json",
+        "sha256": "a5b7b851deebdb0278518a1a5ce2124768863915d5466789c9fd9995328fe95e",
+        "bytes": 135737,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chrY.json",
+        "sha256": "4b9ec18d3f5f7be4bf6d62f4bb350ffef69162f4791d10f47c0d44ab0cc49d88",
+        "bytes": 113258,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr10.json",
+        "sha256": "67dacff94903be15cd1289d30655adda202b740fa97d4a112c66c89fed17953b",
+        "bytes": 694899,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr10.json",
+        "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+        "bytes": 739499,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr10.json",
+        "sha256": "19785e66eb1f544cb1fb8ad1d30e29e59f650dfe02f5b7909d9d07e77f7c6d95",
+        "bytes": 767517,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr10.json",
+        "sha256": "275f790e79d95092890ed921554d9f483e2d23645c2a1ce733b834877fbc9698",
+        "bytes": 260309,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr11.json",
+        "sha256": "8a7e9732a819c58dda4dd3e2ba2d6bf160e76570b111cf1975bb386092b5f37b",
+        "bytes": 849479,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr11.json",
+        "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+        "bytes": 897717,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr11.json",
+        "sha256": "d5f92b6b409a7a84b1b28c2f4af7a1b832eca51a60ca9f4983505e9071bb1bd8",
+        "bytes": 912203,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr11.json",
+        "sha256": "668d35634f0245de5a01e875d8ea788835247f6db4cfe1e10f8fda811d2cfef1",
+        "bytes": 315109,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr12.json",
+        "sha256": "9d75232cc25e8cda2f9e1b90fc2cb204d7e956b295b23db8b12af3c10f83f720",
+        "bytes": 681846,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr12.json",
+        "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+        "bytes": 723141,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr12.json",
+        "sha256": "da5b9430a856980755ac53b4574cdb6203d371b3c9ce3ca674b59e8be76eb1be",
+        "bytes": 776057,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr12.json",
+        "sha256": "18603e506503c5925311f0998419ed91646e6fd007733c978e8897121a30dbc6",
+        "bytes": 241500,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr13.json",
+        "sha256": "fee82bed10f6b311a4a7179955da6174e4a5114042adcfcf974a52c9cba7ca78",
+        "bytes": 453902,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr13.json",
+        "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+        "bytes": 479558,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr13.json",
+        "sha256": "01b6eece2b4c5f7045a61dbc0265ca5091350db6de592e731ea007d25de87050",
+        "bytes": 562830,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr13.json",
+        "sha256": "3408b18be0bbf3fe329774fdf5463769d1804ccdec9dc38af059f68ff659c2de",
+        "bytes": 168106,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr14.json",
+        "sha256": "14a6bf1b3185e139d6f9ea72f336a9795d0a235dc3da0960d512e45677e0556f",
+        "bytes": 551492,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr14.json",
+        "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+        "bytes": 584688,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr14.json",
+        "sha256": "c61758ab1fd2a77ec102ceaca507482d0c1d103902a87c2dec2ef9539f3ebe86",
+        "bytes": 608223,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr14.json",
+        "sha256": "5b84dbe9a6c5dc725266aba71be62104c15a5945cf366004083711fa841f404d",
+        "bytes": 211604,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr15.json",
+        "sha256": "1229865beee55ea8a733b6abf9668f5d6ce07be335dd6353d0e4664603fb5249",
+        "bytes": 400561,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr15.json",
+        "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+        "bytes": 423577,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr15.json",
+        "sha256": "f3dd7c46c300ae02d44b8a785586e5f4bff2ba1ecc764e673b68ffa9477c25f9",
+        "bytes": 483432,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr15.json",
+        "sha256": "e8442a2476b831305d0efb25359efc2048b01e831bcbd07651219efecde4d4d7",
+        "bytes": 175964,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr16.json",
+        "sha256": "17a2184e0240d127f2baec30bef35593846d9b90df8c6be07d19ff53a9f8ef90",
+        "bytes": 503231,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr16.json",
+        "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+        "bytes": 534109,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr16.json",
+        "sha256": "5720ba0d0a343c1b7983fba18cf385acc437c7b85fc8678bd696cb0f92cf0e54",
+        "bytes": 563247,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr16.json",
+        "sha256": "6830afb482da7be0940aec469e5eede11310734e43cca2b3f0ef1cd517a649ad",
+        "bytes": 206004,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr17.json",
+        "sha256": "2a1f433a8840c30ccf745dd05c1bb3a8728f90f99a8817452b8d788f67cc1413",
+        "bytes": 594575,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr17.json",
+        "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+        "bytes": 633946,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr17.json",
+        "sha256": "e1503b269e094315a22714e5be27064843111682f681a4373aea223bee746b10",
+        "bytes": 668316,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr17.json",
+        "sha256": "79291ca68d9175a57947c261a523f17d9ff630263a14013134ca09979766723f",
+        "bytes": 228049,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr18.json",
+        "sha256": "7674dfd12ba8b59214dde98b19802968409385022b6236cb8ba6b4c43d0651ac",
+        "bytes": 361413,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr18.json",
+        "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+        "bytes": 382016,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr18.json",
+        "sha256": "cc886fd465a12a6942c67942446e5fb7f1c920c4aac5d44f54c157faea489762",
+        "bytes": 481487,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr18.json",
+        "sha256": "d6695c82ccc770c8ee66c71d3e5cfcc3f566ebe5ea75918a80fa5577b8a35ce4",
+        "bytes": 129982,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr19.json",
+        "sha256": "dc751a44b4fa82d87666b78c3105fc449c07e409d19756d7d0477e0fc3979f4b",
+        "bytes": 622828,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr19.json",
+        "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+        "bytes": 657776,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr19.json",
+        "sha256": "caae3fcebcbdce76e2c47d3abf6486ceabbf9b2e8d4e534c1973cc37aafb94fd",
+        "bytes": 691162,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr19.json",
+        "sha256": "5389277300089a6fa5fc0aa88c468cd60dde6dd4170bfbd68b88726318c9c537",
+        "bytes": 224361,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr20.json",
+        "sha256": "8bb5d1c5a4bdfb091e29804a064b210a21bc3eadc9e218c62f05076a93c23f4b",
+        "bytes": 446278,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr20.json",
+        "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+        "bytes": 474640,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr20.json",
+        "sha256": "4ac435be54b70ba958e755bba265ecf9533f36b3f44845bdf9109e4bba27c6fc",
+        "bytes": 546743,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr20.json",
+        "sha256": "0ce18d4fe15b071594dbc0dd172ff730ecd2dce15c2eef6b94e0bd2c17a82e33",
+        "bytes": 164031,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr21.json",
+        "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+        "bytes": 263928,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr21.json",
+        "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+        "bytes": 348031,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr21.json",
+        "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+        "bytes": 118130,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr22.json",
+        "sha256": "256f84884d1f3f78f10b734d69616db8d357f95757780693855fbcb6e4d86b77",
+        "bytes": 372693,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr22.json",
+        "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+        "bytes": 394442,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr22.json",
+        "sha256": "488cb0217350c4ded89c59d4d7044ee12bd3f36e0cdf5589058e91dbb9aaef06",
+        "bytes": 447259,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr22.json",
+        "sha256": "852b3c0ba7d348cbcfa3d68e8c1e6848bc53c252d8a584d4cd72077f94191870",
+        "bytes": 157247,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "half_window_bp": 524288,
+      "deciles": 10,
+      "draws_per_block": 50,
+      "matched_tries": 20000,
+      "unmatched_tries": 4000,
+      "seed_per_chromosome": 20260913,
+      "bootstrap": 10000,
+      "chance_band_points": 5.0,
+      "falsifier_gap_points": -18.61,
+      "primary_question": "measured_to_regulate_a_coding_gene",
+      "reciprocal_overlap": 0.5,
+      "overlap_sensitivity": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "mpra_active_log2": 1.0,
+      "reporter_label_rule": "per cell, active when more than half of the matched tiles are at or above MPRA_ACTIVE, silent when more than half are below it, conflicting when exactly half are",
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8,
+      "min_blocks_for_a_comparison": 20,
+      "effect_to_detect": 0.2725,
+      "denominator_question": "crispri_tested_against_a_coding_gene"
+    },
+    "exclusions": [
+      "constrained_unknown blocks that are copies are out of the real unknown",
+      "an element belongs to the block or window holding its midpoint",
+      "windows overlapping any organiser block are rejected (primary); windows in another coding-TSS decile than their block are rejected; blocks with no accepted window are undrawable",
+      "blocks with no scored element, or no accepted window carrying one, leave the comparison",
+      "a measurement counts for an element only at reciprocal overlap >= 0.5, both ways",
+      "a CRISPRi gene counts only if its GENCODE symbol is protein-coding",
+      "saturation mutagenesis is base-level: counted, reported, never pooled into an element verdict",
+      "lentiMPRA and VISTA name no gene and never enter the primary",
+      "blocks no CRISPRi coding pair reaches leave the primary; they are the coverage result"
+    ],
+    "partitions": "n/a: arithmetic over model answers already on disk; nothing fitted, nothing held out",
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "4c3a22525b6e4e41f4003489fc87191e2a9f3f83",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/bridge_audit.py",
+        "scripts/build_gene_rates.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/gene_rates.json"
+      ],
+      "argv": [
+        "scripts/clause2_measured_arm.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "coverage_needed": "this field is kept as the record of what the run computed. It is NOT a power result for the measured experiment: `effect_to_detect` and `model_arm_sd_of_per_block_differences` are both model output, used to size an experiment whose endpoint is a measurement, and `blocks_short_of_the_floor` is 20 minus the 1 block compared -- the distance to `measured.MIN_FOR_A_COMPARISON`, a minimum-reporting rule. That the formula also returned 20 is a coincidence, not a confirmation. The power question is answered in `clause2_design_power`, from the measured endpoint",
+      "primary_reading.text": "the phrase 'the coverage that would be needed ... for 80% power against an effect the size of the model arm's own -27.25 points' names the mismatch in its own words: the effect is the model arm's. Read it as a provisional assumption, not as the size of the experiment",
+      "coverage.windows_matched_real_unknown.windows_with": "these are WINDOWS satisfying each predicate, not elements. The 223 and the 30 behind the 13.45% rate are windows carrying a CRISPRi-tested element; several windows of one block can carry the same element, so they are not 223 independent measurements. The element-level rates over the benchmark's own distinct tested elements are 12.15% (training, 479 of 3,941) and 14.56% (held-out, 247 of 1,697)",
+      "coverage.real_unknown.blocks_with_no_measured_element": "823 means: no assay measures any of the block's scored elements at reciprocal overlap 0.5. It does not mean no part of those blocks was ever measured. At overlap 0.25 the measured count is 72 blocks and at 0.75 it is 10, against 59 at the committed rule, so the count is a property of the rule as much as of the data",
+      "the_two_shares": "59 measured blocks is 6.7% of the 882 tier blocks and 11.1% of the 531 that carry a scored element. Both are correct and neither may be quoted without its denominator",
+      "sample_size_answer": "see `clause2_design_power.sample_size_range_by_ratio`: a RANGE of compared blocks per assumed effect, not a number"
+    }
+  }
+}

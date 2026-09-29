@@ -224,3 +224,46 @@ What is deliberately *not* done: the copy is generated rather than the tree bein
 split, so `genomeos/` remains one repository with one history. Splitting it is a
 release decision, not an engineering one, and the generated package is the proof
 that the decision is available whenever it is wanted.
+
+### 10.2 Its own test suite and its own version (2026-09-27)
+
+Milestone 2.0 asks for two test suites, and until today the packaged engine
+carried only its `.bio` self-tests; the sentence above that it could "ship
+without the application's pytest suite" was true of the build and short of the
+milestone. The decision taken on 2026-09-27 stands: BioLang stays a generated
+package, and 2.0's "GenomeOS depends on it" is read as **the engine is
+separately installable and independently tested.**
+
+`scripts/package_engine.py` now also copies **the engine's own pytest suite**:
+every file under `tests/` whose GenomeOS imports all fall inside the engine
+(`lang`, `ir`, `runtime`, `std`, `coords`, `version`, `bio`) and which loads
+nothing from `scripts/`. The files are found by reading their imports, not
+listed, so a new engine test joins the suite on its own. They get the same
+import rewrite as the source. The fixtures they read (`.bio` programs, the
+`.bnet` cell cycle, the SBML model and the generated grammar document) are
+found from the tests' path literals and from engine defaults, then followed
+through each `.bio` file's `import X.bio` lines. A `tests/conftest.py` lists
+them and stops the session if one is missing, so a fixture left behind cannot
+turn a test into a silent skip. The generated `pyproject.toml` declares
+`[dependency-groups] dev = ["pytest>=8"]`.
+
+The ninth check runs that suite in the same `-S` interpreter where `import
+genomeos` fails. The only additions to the path are pytest and its runtime
+dependencies, copied into a directory beside the build that holds nothing else.
+The check passes only if nothing fails or errors and every skip is an optional
+extra that is not installed.
+
+**Result, 2026-09-27: 24 test files and 157 tests. In isolation 154 pass and
+3 skip; the 3 are `test_compose.py`, which needs the optional `process-bigraph`
+extra.** The assessor's count of 27 files and 162 tests was close but did not
+match the repository. Two further files, `test_abundance_gate.py` and
+`test_burden_gate.py`, import only the engine but load gate scripts from
+`scripts/`, and `burden_gate.py` imports `genomeos.results`, so they stay with
+the application.
+
+The engine also has **its own version, 0.1.0**, written into the package's
+`version.py` and `pyproject.toml`, and `bio --version` in the package prints
+it. `genomeos/version.py` stays the application's (1.0.0). The number starts
+fresh rather than tracking the language spec (v0.4) because each compiled module
+already records the spec as `bioir_version`, and a package release has to be
+able to move for a runtime fix that changes no syntax.

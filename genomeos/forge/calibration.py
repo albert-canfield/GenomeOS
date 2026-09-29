@@ -6,13 +6,13 @@ which presumes the number beside the answer is a probability. This module establ
 number is, counts what could be checked against it, registers the comparison before running it,
 and records the verdict. The verdict is a refusal, and the refusal is the result.
 
-**What the number is.** `organism/forge.py:143` writes `confidence=0.3` as a literal onto the
+**What the number is.** `organism/forge.py:170` writes `confidence=0.3` as a literal onto the
 `Experiment` a design emits. It is not derived from `loss`, `feasible`, `evaluations`, the number
 of tied feasible candidates or the margin to the runner-up, all of which the search computes and
 then discards. Six further sites cap an existing confidence at the same constant
-(`organism/forge.py:66,70`, `forge/design.py:59,63,66`, and `attribution/budget.py:60` for an
+(`organism/forge.py:93,97`, `forge/design.py:59,63,66`, and `attribution/budget.py:60` for an
 unrelated quantity). A cap can only lower a number and is defensible as a ceiling; the literal at
-line 143 is different in kind, because it creates a number out of nothing and attaches it to a
+line 170 is different in kind, because it creates a number out of nothing and attaches it to a
 freshly predicted entity, where a reader is most likely to read it as a posterior. The design
 block's own stated confidence (0.5 and 0.6 in the shipped programs) is parsed, stored on the
 `Design`, and then ignored by `to_experiment()`.
@@ -54,16 +54,35 @@ from typing import Any
 # The constant, and every site that writes it. Read off the source on 2026-09-22.
 THE_CONSTANT = 0.3
 CONFIDENCE_SITES: dict[str, str] = {
-    "genomeos/organism/forge.py:143": "confidence=0.3 - CREATES the number on the emitted Experiment;"
+    "genomeos/organism/forge.py:170": "confidence=0.3 - CREATES the number on the emitted Experiment;"
     " the only one a user of `genomeos grow --design` reads",
-    "genomeos/organism/forge.py:66": "min(timer.confidence, 0.3) - ceiling on a knob the search moved",
-    "genomeos/organism/forge.py:70": "min(decision.confidence, 0.3) - ceiling",
+    "genomeos/organism/forge.py:93": "min(timer.confidence, 0.3) - ceiling on a knob the search moved",
+    "genomeos/organism/forge.py:97": "min(decision.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:59": "min(gene.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:63": "min(rule.confidence, 0.3) - ceiling",
     "genomeos/forge/design.py:66": "min(parameter.confidence, 0.3) - ceiling",
     "genomeos/attribution/budget.py:60": "min(confidence, 0.3) - the same literal for an unrelated"
     " quantity in another area, which is what a provenance marker looks like and what a probability"
     " does not",
+}
+# 2026-09-28, review item R4: the site that CREATED the number is gone. forge.py:170 no longer writes
+# 0.3; the emitted experiment carries a genomeos.certainty.Certainty with probability None and the
+# reason, and its numeric confidence is left unstated (0.0, what the parser gives a block with no
+# `confidence:` key). CONFIDENCE_SITES above is kept as the 2026-09-22 reading. The ceilings remain,
+# read now as caps on the IR's evidence-quality score that never read the value set, and are pinned by
+# pattern rather than by line number, because line pins only preserved the old constant.
+RETIRED_SITES: dict[str, str] = {
+    "genomeos/organism/forge.py:170": "confidence=0.3 on the emitted Experiment; replaced 2026-09-28 by"
+    " organism.forge.design_certainty (probability None, reason stated) and UNSTATED_CONFIDENCE",
+}
+CEILING_SITES: dict[str, int] = {  # file -> number of min(<x>.confidence, 0.3) ceilings it holds
+    "genomeos/organism/forge.py": 2,
+    "genomeos/forge/design.py": 3,
+}
+LEFT_FOR_R4B: dict[str, str] = {
+    "genomeos/attribution/budget.py:60": "round(min(confidence, 0.3), 2) - area I, a stored result's field",
+    "genomeos/attribution/human_panel.py:1321": "0.3 + min(0.3, gap * 3) - confidence rising with an"
+    " effect's size, the pattern review R4 names",
 }
 WHAT_IT_IS = (
     "a provenance marker, not a probability: one hand-set constant meaning 'this came from a search,"
@@ -108,7 +127,7 @@ PREREGISTRATION: dict[str, Any] = {
         " look like to be publishable"
     ),
     "the_quantity_under_test": (
-        "the confidence `organism/forge.py:143` attaches to the predicted Experiment a design emits,"
+        "the confidence `organism/forge.py:170` attaches to the predicted Experiment a design emits,"
         " as read by a user of `genomeos grow --design`"
     ),
     "what_is_compared": (
@@ -201,6 +220,20 @@ VERDICT_TEXT = (
     " because both populations were authored from the publications they are scored against. The"
     " honest statement is that the number has never been a probability: it is a provenance marker"
     " reading 'predicted, not validated', and it should be read and documented as one"
+)
+
+# Correction, 2026-09-28 (external review, R4). VERDICT and VERDICT_TEXT above are kept as written; their
+# reasoning is wrong. A constant predictor is calibrated on a population when the event frequency there
+# equals the constant: one reliability bin suffices (calibration-in-the-large), and the census above
+# performed exactly that check. What a constant lacks is discrimination (zero resolution, AUC 0.5).
+CORRECTED_VERDICT = "UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION"
+CORRECTION_TEXT = (
+    "A constant predictor can be calibrated to a population's event frequency while having no"
+    " discrimination; its constancy does not make calibration impossible. The problems are that 0.3"
+    " was never supported by any measurement, and that no evaluation population independent of the"
+    " answers exists for the population it is quoted for: the 2-4 designs with a published outcome were"
+    " authored from it and hold no negative case. Since 2026-09-28 the number is not emitted; a design"
+    " answer carries genomeos.certainty.Certainty with probability None and the reason."
 )
 
 WHAT_WOULD_CHANGE_IT: tuple[str, ...] = (

@@ -19,11 +19,13 @@ from pathlib import Path
 
 from genomeos.organism import commitment as cm
 from genomeos.organism import lateral
+from genomeos.organism import provenance as pv
 from genomeos.organism.atlas_levels import load_levels, load_strain_peaks
 from genomeos.organism.reference import ReferenceLineage
 from genomeos.organism.tf_atlas import CELLS_FILE, load_cells
+from genomeos.results import save_result
 
-RESULT = Path("data/results/celegans_commitment.json")
+RESULT = Path("data/results/celegans_commitment.json")  # written through save_result (item 12 S6)
 
 
 def _clean(x):
@@ -42,6 +44,7 @@ def main() -> None:
     ap.add_argument("--permutations", type=int, default=200)
     args = ap.parse_args()
     n = args.permutations
+    entries = pv.inputs(levels=True)
     ref = ReferenceLineage.load()
     atlas = load_cells()
     lifetimes = json.loads(CELLS_FILE.read_text())["lifetimes"]
@@ -68,7 +71,24 @@ def main() -> None:
         "lateral_inhibition_model": lateral.selection_statistics(runs=200),
     }
     out = _clean(out)
-    RESULT.write_text(json.dumps(out, indent=2, allow_nan=False) + "\n")
+    json.dumps(out, allow_nan=False)  # a NaN that _clean missed still stops the write, as before
+    manifest = pv.manifest(
+        entries,
+        {
+            "permutations": n,
+            "ratchet_and_programme_competence_permutations": 5 * n,
+            "sister_permutations": 10 * n,
+            "lateral_inhibition_runs": 200,
+            "end_of_imaging_frame": cm.END_OF_IMAGING_FRAME,
+            "bin_edges": list(cm.BIN_EDGES),
+        },
+        exclusions=[
+            "atlas cells not in the reference lineage or without a recorded lifetime",
+            "cells whose lifetime is not complete in the imaging (born at or before frame 0, alive at the "
+            "end of imaging, or born after the last bin edge)",
+        ],
+    )
+    save_result(RESULT.stem, out, manifest=manifest)
     print(
         json.dumps({k: v for k, v in out.items() if k in ("states", "programmes", "ratchet")}, default=str)[
             :3000

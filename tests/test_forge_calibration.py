@@ -9,18 +9,22 @@ breaks these tests rather than leaving docs/BIOFORGE-CONFIDENCE.md silently wron
 
 from __future__ import annotations
 
+import re
 from functools import lru_cache
 from pathlib import Path
 
 from genomeos.forge.calibration import (
+    CEILING_SITES,
     CENSUS,
-    CONFIDENCE_SITES,
+    CORRECTED_VERDICT,
+    CORRECTION_TEXT,
     PREREGISTRATION,
+    RETIRED_SITES,
     THE_CONSTANT,
     VERDICT,
 )
 from genomeos.lang import parse_file
-from genomeos.organism.forge import run_designs
+from genomeos.organism.forge import UNSTATED_CONFIDENCE, run_designs
 
 DESIGN_FILES = [Path(p) for p in CENSUS["design_block_files"]]
 
@@ -43,16 +47,13 @@ def _run() -> dict[str, tuple[int, int, float | None, float | None, float, bool]
     return out
 
 
-def test_the_emitted_confidence_is_single_valued() -> None:
-    """One distinct value means one reliability bin, which is why no curve exists at any n."""
+def test_the_emitted_confidence_is_no_longer_the_constant_and_states_no_probability() -> None:
+    """Review R4 retired the 0.3 on the emitted experiment. The old pin asserted it was still there;
+    this one asserts the replacement: no number is stated, and no probability is claimed."""
     per_design = _run()
     assert len(per_design) == CENSUS["design_blocks_in_data"] == 4
     confidences = {v[3] for v in per_design.values()}
-    assert confidences == {THE_CONSTANT}, (
-        f"the calibration refusal assumes a degenerate predictor; it now takes {confidences}."
-        " If the confidence has been made to vary, re-open area H's third item and re-read"
-        " docs/BIOFORGE-CONFIDENCE.md, whose verdict no longer follows"
-    )
+    assert confidences == {UNSTATED_CONFIDENCE} and THE_CONSTANT not in confidences
 
 
 def test_the_confidence_ignores_everything_the_search_computes() -> None:
@@ -61,13 +62,10 @@ def test_the_confidence_ignores_everything_the_search_computes() -> None:
     evaluations = {v[0] for v in per_design.values()}
     feasible = {v[1] for v in per_design.values()}
     assert len(evaluations) > 1 and len(feasible) > 1, "the inputs no longer vary; the pin is vacuous"
-    assert {v[3] for v in per_design.values()} == {THE_CONSTANT}
-    # the design's own stated confidence is parsed and then discarded by to_experiment()
+    assert {v[3] for v in per_design.values()} == {UNSTATED_CONFIDENCE}
+    # the design's own stated confidence is parsed and still not carried onto the answer
     stated = {v[4] for v in per_design.values()}
-    assert stated != {THE_CONSTANT} and len(stated) > 1, (
-        "the shipped designs state 0.5 and 0.6; if they no longer differ from the emitted 0.3 the"
-        " 'stated confidence is discarded' claim can no longer be demonstrated from the data"
-    )
+    assert stated != {UNSTATED_CONFIDENCE} and len(stated) > 1
 
 
 def test_every_outcome_is_positive_so_there_is_no_negative_case() -> None:
@@ -79,13 +77,16 @@ def test_every_outcome_is_positive_so_there_is_no_negative_case() -> None:
     )
 
 
-def test_the_constant_is_still_written_where_the_docs_say_it_is() -> None:
-    """Seven sites, one literal. The doc quotes these line numbers; they must stay true."""
+def test_the_retired_literal_is_gone_and_the_ceilings_are_where_the_docs_say() -> None:
+    """Pinned by pattern, not by line: the literal that created the number is gone, and the ceilings
+    that only lower an evidence-quality score are counted per file."""
     root = Path(__file__).resolve().parent.parent
-    for site in CONFIDENCE_SITES:
-        rel, _, lineno = site.rpartition(":")
-        line = (root / rel).read_text().splitlines()[int(lineno) - 1]
-        assert str(THE_CONSTANT) in line, f"{site} no longer writes {THE_CONSTANT}: {line.strip()!r}"
+    for site in RETIRED_SITES:
+        rel = site.rpartition(":")[0]
+        assert "confidence=0.3" not in (root / rel).read_text().replace(" ", "")
+    ceiling = re.compile(r"min\([\w.]*confidence, 0\.3\)")
+    for rel, n in CEILING_SITES.items():
+        assert len(ceiling.findall((root / rel).read_text())) == n, rel
 
 
 def test_the_registration_and_the_verdict_are_present_and_agree() -> None:
@@ -95,3 +96,18 @@ def test_the_registration_and_the_verdict_are_present_and_agree() -> None:
         assert PREREGISTRATION[key]
     assert PREREGISTRATION["the_population_clause"]["quoted_for"]
     assert CENSUS["fixtures_pairing_a_design_with_a_published_outcome"] == 0
+
+
+def test_a_constant_can_be_calibrated_and_still_not_discriminate() -> None:
+    """The review's correction, checked on numbers: a constant equal to the base rate has zero
+    calibration error and no discrimination, so constancy alone never made calibration impossible."""
+    outcomes = [1] * 3 + [0] * 7  # base rate 0.3
+    constant = [0.3] * len(outcomes)
+    calibration_error = abs(sum(constant) / len(constant) - sum(outcomes) / len(outcomes))
+    assert calibration_error < 1e-12
+    pos = [p for p, y in zip(constant, outcomes, strict=True) if y]
+    neg = [p for p, y in zip(constant, outcomes, strict=True) if not y]
+    auc = sum((a > b) + 0.5 * (a == b) for a in pos for b in neg) / (len(pos) * len(neg))
+    assert auc == 0.5
+    assert CORRECTED_VERDICT == "UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION"
+    assert "no discrimination" in CORRECTION_TEXT and "never supported" in CORRECTION_TEXT

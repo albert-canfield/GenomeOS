@@ -1124,6 +1124,12 @@ episomal activity out of chromatin, where phasing against the nucleosome — the
 one mechanism that would make helical phase matter most — is absent by
 construction.
 
+*R6 note (2026-09-28): the premise of this last sentence is wrong. The ENCODE4 lentiMPRA integrates
+its reporter by lentivirus (Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9), so the construct is chromatinised at its integration site and
+nucleosome phasing is not absent by construction. It is still outside the element's native locus and
+its native nucleosome context. This explanation for the arrangement null is therefore weaker than
+stated, and the null itself is unchanged.*
+
 The honest reading of area J after this section: comparison across species and
 people places and dates function; the presence of strict, family-collapsed motif
 sites predicts measured activity at genome scale; their arrangement, at this
@@ -1199,6 +1205,7 @@ transgenic mouse embryos; they add over composition, they add over conservation,
 and they beat a dinucleotide shuffle of the same element that preserves GC, CpG
 and every dinucleotide count. §17's positive is not a property of the episomal
 reporter. Conservation and counts also add to *each other* in both directions,
+(R6 note, 2026-09-28: the reporter is integrated by lentivirus, not episomal; Agarwal et al. 2025, Nature, https://www.nature.com/articles/s41586-024-08430-9.)
 which is §16's base-level finding (conservation plus a strict site beats either
 alone, enrichment 1.7) reappearing at the level of whole elements.
 
@@ -1334,6 +1341,7 @@ pre-registered on cases. The number to grow, again.
 
 - §17's count positive **transfers to a different assay**. It is not a property
   of the episomal reporter: the same feature set separates in-vivo VISTA
+  (R6 note, 2026-09-28: integrated lentiviral, not episomal.)
   verdicts, adds over composition, adds over conservation on elements *chosen*
   for conservation, and beats a dinucleotide shuffle. Area J now has one
   sequence-to-function statement that has survived being moved.

@@ -27,7 +27,7 @@ import math
 import random
 from dataclasses import dataclass, field
 
-from genomeos.ir import UNKNOWN, Action, Module, Regime, molecules_in, to_molar
+from genomeos.ir import UNKNOWN, Action, Module, Regime, confidence_stated, molecules_in, to_molar
 from genomeos.lang.located import layout, rule_sites
 
 from .uncertainty import KIND_WEIGHT
@@ -53,7 +53,7 @@ class LocatedResult:
     transit: list[dict] = field(default_factory=list)  # present on the route to a declared place
     ectopic: list[dict] = field(default_factory=list)  # present where nothing declared or leads on
     transports_used: dict[str, float] = field(default_factory=dict)  # total cargo moved per transport
-    confidence: dict[str, dict] = field(default_factory=dict)  # species -> {score, weakest}
+    confidence: dict[str, dict] = field(default_factory=dict)  # species -> {score, weakest, unstated}
     regime: dict = field(default_factory=dict)
 
     def final(self, species: str) -> float:
@@ -502,12 +502,18 @@ class LocatedRuntime:
                     )
                     chain += [(f"transport {t.id}", t) for t in mrna or []]
                 chain += [(f"transport {t.id}", t) for t in self._route(start, c, carries) or []]
-                scored = [(n, o.confidence * KIND_WEIGHT[o.evidence.kind]) for n, o in chain]
+                # a link that states no confidence is not a link judged at 0 (item 12 S1): it is left
+                # out of the minimum and named, so with one the score is an upper bound on the chain
+                unstated = [n for n, o in chain if not confidence_stated(o.confidence)]
+                scored = [
+                    (n, o.confidence * KIND_WEIGHT[o.evidence.kind]) for n, o in chain if n not in unstated
+                ]
                 if self._route(start, c, carries) is None:
                     scored.append((f"no open route to {c}", 0.0))
-                weakest = min(scored, key=lambda kv: kv[1])
+                weakest = min(scored, key=lambda kv: kv[1]) if scored else None
                 res.confidence[f"{p.id}@{c}"] = {
-                    "score": round(weakest[1], 3),
-                    "weakest": weakest[0],
-                    "chain": [n for n, _ in scored],
+                    "score": round(weakest[1], 3) if weakest else None,
+                    "weakest": weakest[0] if weakest else "",
+                    "chain": [n for n, _ in chain] + [n for n, _ in scored if n.startswith("no open route")],
+                    "unstated": unstated,
                 }

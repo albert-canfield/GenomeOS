@@ -161,7 +161,20 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
    two-valued state said "next" for items whose own body reported them closed. */
 .st.planned,.st.next{color:var(--muted);border-color:var(--line)}
 .pp-sec{margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.pp-claim{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12.5px;margin-bottom:6px}
+.pp-claim .fig{font-size:13.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+.pp-claim .src{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .pp-sec>summary{cursor:pointer;font-weight:600}
+/* the second review's three measures, side by side and never summed (roadmap §5 item 12) */
+.pp-measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:1100px){.pp-measures{grid-template-columns:1fr}}
+.pp-measure{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px}
+.pp-measure h4{margin:0 0 4px;font-size:13.5px}
+.pp-def{font-size:11.5px;color:var(--muted);margin-bottom:6px;line-height:1.45}
+.pp-measure .fig,.pp-bio .fig{margin-top:4px;font-variant-numeric:tabular-nums}
+.pp-measure .src,.pp-bio .src,.pp-disc .src{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.pp-quote{margin:4px 0 0;padding-left:8px;border-left:2px solid var(--line)}
+.pp-none{font-weight:600;color:var(--muted)}
 .pp-item{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
 .pp-item:first-of-type{border-top:0}
 .pp-item details summary{cursor:pointer;color:var(--muted);font-size:12px}
@@ -825,6 +838,22 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button data-pp="done" role="tab"><i class="ic">✅</i>Done <span class="muted" id="pp-done-n"></span></button>
     </div>
     <div id="pp-now">
+      <h3 class="pp-h">Three status measures, kept apart<span style="text-transform:none;letter-spacing:0;font-weight:400"> — the second external review (roadmap &sect;5 item 12): each carries its own definition, none of them is the objective, and they are never added together</span></h3>
+      <div id="pp-measures" class="pp-measures"></div>
+      <h3 class="pp-h">Biology independently validated, by category<span style="text-transform:none;letter-spacing:0;font-weight:400"> — each claim in its registered wording and with its qualification, or not at all</span></h3>
+      <div id="pp-bio" class="pp-bio"></div>
+      <h3 class="pp-h">Discontinued investigations<span style="text-transform:none;letter-spacing:0;font-weight:400"> — closed on a negative, kept apart from what is built, and counted by no measure</span></h3>
+      <div id="pp-disc" class="pp-disc"></div>
+      <div id="pp-state-kpi" class="kpi" style="margin-top:12px"></div>
+      <h3 class="pp-h">What is true today<span style="text-transform:none;letter-spacing:0;font-weight:400"> — the claims README separates, each figure read from the result file it rests on</span></h3>
+      <div id="pp-claims"></div>
+      <div id="pp-caveats"></div>
+      <div class="grid cols-2" style="margin-top:12px">
+        <div><h3 class="pp-h">Milestones (roadmap &sect;6)</h3><div id="pp-miles" class="scroll" style="max-height:420px"></div></div>
+        <div><h3 class="pp-h">External review R1&ndash;R9 (roadmap &sect;5 item 11)</h3><div id="pp-review" class="scroll" style="max-height:420px"></div></div>
+      </div>
+      <h3 class="pp-h">Waiting on the owner</h3>
+      <div id="pp-owed"></div>
       <h3 class="pp-h">Working now</h3>
       <div id="pp-board"></div>
       <div class="grid cols-2" style="margin-top:12px">
@@ -836,7 +865,6 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h3 class="pp-h" style="margin-top:18px">What happens next, in order (roadmap §5)</h3>
       <div id="pp-next" class="pp-areas"></div>
       <h3 class="pp-h" style="margin-top:18px">Planned, by roadmap area</h3>
-      <div id="pp-milestones" class="pp-chips"></div>
       <div id="pp-areas" class="pp-areas"></div>
       <div id="pp-waiting"></div>
     </div>
@@ -877,7 +905,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-mouse" class="scroll"></div>
     </div>
     <div class="card">
-      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a best guess: structural, fossil, regulatory, constrained unknown, neutral. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
+      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a tier: structural, repeat unconstrained, regulatory, constrained unknown, unconstrained unknown. Constraint is evidence of selection only: its absence is not evidence of no function. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
       <div id="j-budget" class="scroll"></div>
     </div>
     <div class="card">
@@ -885,7 +913,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-segments" class="scroll"></div>
     </div>
     <div class="card">
-      <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
+      <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence with no stated probability: each link shows its log2 fold change as the effect (until 2026-09-28 a confidence capped at 0.7 was shown).">?</span></h2>
       <div id="j-enhancers" class="scroll"></div>
     </div>
     <div class="card">
@@ -1140,9 +1168,12 @@ $('#p-compile').onclick = async () => {
   $('#p-msg').textContent = '';
   const rep = r.report, conf = rep.confidence;
   $('#p-report').innerHTML = `<div class="kpi"><div><b>${rep.entities}</b><span>entities</span></div><div><b>${rep.rules}</b><span>rules</span></div><div><b>${rep.parameters}</b><span>parameters</span></div><div><b>${rep.unknown.length}</b><span>UNKNOWN regions</span></div></div>
-    <table>${Object.entries(conf).map(([k, v]) => `<tr><td style="width:90px">${k}</td><td><div class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></div></td><td class="num" style="width:50px">${v.toFixed(2)}</td></tr>`).join('')}</table>
+    <table>${Object.entries(conf).map(([k, v]) => { const u = ((rep.confidence_counts || {})[k] || {}).unstated || 0; return v == null
+      ? `<tr><td style="width:90px">${k}</td><td class="muted">none stated (${u} unstated)</td><td class="num" style="width:50px">–</td></tr>`
+      : `<tr><td style="width:90px">${k}</td><td><div class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></div>${u ? ` <span class="muted">${u} unstated</span>` : ''}</td><td class="num" style="width:50px">${v.toFixed(2)}</td></tr>`; }).join('')}</table>
     ${rep.unknown.length ? `<div class="note">UNKNOWN: ${rep.unknown.map(u => `<span class="mono">${u.id}${u.locus ? ' @ ' + u.locus : ''}</span>`).join(', ')}</div>` : ''}
     ${rep.weak_rules.length ? `<div class="note">rules with confidence &lt; 0.5: ${rep.weak_rules.map(w => `<span class="mono">${w.id}</span> <span class="pill ${w.evidence}">${w.evidence}</span>`).join(' · ')}</div>` : ''}
+    ${rep.unstated_rules ? `<div class="note">rules that state no confidence: ${rep.unstated_rules} (not counted as weak)</div>` : ''}
     <div class="note ok">compiled to BioIR v${r.module.bioir_version}: <span class="mono">${r.module.name}</span></div>`;
 };
 $('#p-run').onclick = async () => {
@@ -1578,8 +1609,8 @@ async function loadBudgetWide() {
     const j = b.job || {};
     const startBtn = `<button class="ghost" id="j-budget-start" data-tip="Budget every chromosome in the background, smallest first; about 2.5 GB of range requests over the genome, nothing stored."><i class="ic">▶️</i>Start the job</button>`;
     if (!b.table.length) { el.innerHTML = `<span class="muted">not run yet (genomeos budget --chrom chr21, or start the budget_genome_wide job)</span> ${j.state === 'running' ? '' : startBtn}`; const s0 = $('#j-budget-start'); if (s0) s0.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); }; return; }
-    const col = {structural: 'var(--muted)', fossil: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', neutral: 'var(--line)'};
-    const names = {structural: 'structural', fossil: 'fossil', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', neutral: 'neutral'};
+    const col = {structural: 'var(--muted)', repeat_unconstrained: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', unconstrained_unknown: 'var(--line)'};
+    const names = {structural: 'structural', repeat_unconstrained: 'repeat, unconstrained', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', unconstrained_unknown: 'unconstrained unknown'};
     const pct = (x, d = 2) => x == null ? '-' : (x * 100).toFixed(d) + '%';
     const bar = (tiers, total) => `<div class="bar" style="display:flex;width:220px">${Object.entries(tiers).map(([k, v]) => `<i style="width:${(v / total * 100).toFixed(2)}%;background:${col[k]}" data-tip="${names[k]} ${(v / total * 100).toFixed(1)}%"></i>`).join('')}</div>`;
     const tot = Object.values(b.tiers).reduce((a, c) => a + c, 0) || 1;
@@ -1591,7 +1622,7 @@ async function loadBudgetWide() {
       <div style="font-size:12px;margin:6px 0">${Object.entries(b.tiers).map(([k, v]) => `<span class="chip"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col[k]};margin-right:4px;vertical-align:middle"></i>${names[k]} ${(v / tot * 100).toFixed(1)}%</span>`).join(' ')}</div>
       <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th>tiers</th><th class="num">constrained</th><th class="num" data-tip="blocks in the constrained-unknown tier">unknown blocks</th><th class="num" data-tip="MB of phyloP range requests">MB</th><th class="num">s</th></tr>` +
       b.table.map(r => { const t = Object.values(r.tiers).reduce((a, c) => a + c, 0) || 1; return `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${(r.unknown_bp / 1e6).toFixed(1)}</td><td>${bar(r.tiers, t)}</td><td class="num">${pct(r.constrained_fraction)}</td><td class="num">${r.constrained_unknown_blocks}</td><td class="num">${r.mb_fetched ?? ''}</td><td class="num">${r.seconds != null ? Math.round(r.seconds) : ''}</td></tr>`; }).join('') + `</table>
-      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier is a best guess with its confidence, not a verdict (docs/ATTRIBUTION.md)</div>`;
+      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier reads sequence class and constraint, not a verdict; constraint is evidence of selection only (docs/ATTRIBUTION.md)</div>`;
     const s = $('#j-budget-start'); if (s) s.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); };
   } catch (e) { $('#j-budget').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
@@ -1725,7 +1756,136 @@ document.querySelectorAll('.pp-tabs button').forEach(b => b.onclick = () => {
   $('#pp-done').hidden = b.dataset.pp !== 'done';
 });
 async function loadProjectProgress() {
-  await Promise.allSettled([loadWork(), loadRoadmap(), loadProgress()]);
+  await Promise.allSettled([loadState(), loadWork(), loadRoadmap(), loadProgress()]);
+}
+// The state panels: milestones, the external review, the claim panel and what the owner owes.
+// Every number below is printed exactly as /api/state read it out of its file — no rounding here,
+// no figure written into this page — and each one carries the file it came from and that file's date.
+function figureLine(f) {
+  if (!f) return '';
+  const bits = [];
+  if (f.percent != null) bits.push(`<b>${fmt(f.measured_bp)}</b> of <b>${fmt(f.total_bp)}</b> bases — <b>${f.percent}%</b>`);
+  if (f.blocks_measured != null) bits.push(`${fmt(f.blocks_measured)} of ${fmt(f.blocks)} blocks touched by any of ${(f.assays || []).join(', ')}`);
+  // the file's band field is not the claim's wording (docs/CRISPRI-RESULT.md keeps "in the range of"), so it is not printed here
+  if (f.held_out_gain != null) bits.push(`held-out gain <b>${f.held_out_gain}</b>${f.ci95 ? ` (95% ${f.ci95[0]} to ${f.ci95[1]})` : ''}`);
+  const rep = f.replication;
+  if (rep && rep.gain != null) bits.push(`second cell type ${escH(rep.cell_type)}: gain ${rep.gain}${rep.ci95 ? ` (95% ${rep.ci95[0]} to ${rep.ci95[1]})` : ''} on ${fmt(rep.covered_pairs)} pairs — <b>${rep.replicated ? 'replicated' : 'not replicated'}</b>`);
+  return bits.map(b => `<div class="fig">${b}</div>`).join('');
+}
+// The second review's three measures (roadmap §5 item 12) and the discontinued list. Each measure is
+// drawn with its definition beside it and from /api/state only; nothing here sums them, and a claim
+// is drawn only in its registered wording and only with its qualification.
+const ppList = xs => (xs || []).map(escH).join(', ');
+function ppCheck(c) {
+  const pill = c.ok === true ? '<span class="st done">met</span>' : c.ok === false ? '<span class="st blocked">missing</span>' : '<span class="st next">not known here</span>';
+  return `<div class="fig">${pill}${escH(c.check)} <div class="muted" style="font-size:11.5px">${escH(c.detail)}</div></div>`;
+}
+function ppFigures(f) {
+  const bits = Object.entries(f || {}).filter(([, v]) => v != null && v !== '').map(([k, v]) => {
+    const val = Array.isArray(v) ? `${v[0]} to ${v[v.length - 1]}` : typeof v === 'object' ? Object.entries(v).map(([a, b]) => `${escH(a)} ${escH(b)}`).join(', ') : escH(v);
+    return `${escH(k.replace(/_/g, ' '))} <b>${val}</b>`;
+  });
+  return bits.length ? `<div class="fig" style="font-size:12px">${bits.join(' · ')}</div>` : '';
+}
+function ppEntry(e) {
+  // the page's own copy of the server's rule: no wording without a qualification beside it
+  if (!e.wording || !(e.qualifications || []).length) {
+    return `<div class="pp-item"><span class="st blocked">withheld</span><b>${escH(e.name)}</b> <span class="muted">${escH(e.withheld_because || 'its qualification could not be read')}</span></div>`;
+  }
+  const cls = e.counted ? 'done' : e.class === 'not met' ? 'blocked' : 'partial';
+  return `<div class="pp-item">
+      <div><span class="st ${cls}">${escH(e.class)}</span><b>${escH(e.name)}</b>${e.date ? ` <span class="muted">${escH(e.date)}</span>` : ''}</div>
+      <div class="pp-quote">${mdInline(e.wording)} <span class="src">${escH(e.wording_source)}</span></div>
+      <div style="margin-top:4px"><b>qualification${e.qualifications.length > 1 ? 's' : ''}, as their sources state them</b>${e.qualifications.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</div>
+      ${e.reused_benchmark && e.reused_benchmark.flag ? `<div class="note" style="margin-top:4px"><b>reused benchmark:</b> ${escH(e.reused_benchmark.text)} <span class="src">${escH(e.reused_benchmark.source)}</span></div>` : ''}
+      ${ppFigures(e.figures)}
+      ${(e.why || []).length ? `<details><summary>why it is classed as “${escH(e.class)}”</summary>${e.why.map(w => `<div class="pp-quote">${escH(w.text)} <span class="src">${escH(w.source)}</span></div>`).join('')}</details>` : ''}
+    </div>`;
+}
+function ppMeasures(ms, disc) {
+  const sw = ms.software, bio = ms.biology, rel = ms.release, t = sw.tests, ep = sw.engine_package;
+  const none = bio.categories.filter(c => c.none).map(c => c.category);
+  const software = `<div class="pp-measure"><h4>Software delivered <span class="st">software, not knowledge</span></h4>
+      <div class="pp-def">${escH(sw.definition)}</div>
+      <div class="fig"><b>${sw.milestones.reached} of ${sw.milestones.total}</b> milestones reached${sw.milestones.held.length ? ` <span class="muted">held: ${ppList(sw.milestones.held)}</span>` : ''}</div>
+      ${sw.reviews.map(r => `<div class="fig"><b>${r.done} of ${r.total}</b> items done in ${escH(r.source.replace('docs/ROADMAP.md ', ''))}${r.reopened.length ? ` <span class="muted">reopened: ${ppList(r.reopened)}</span>` : ''}${r.closed.length ? ` <span class="muted">closed: ${ppList(r.closed)}</span>` : ''}${r.open.length ? ` <span class="muted">open: ${ppList(r.open)}</span>` : ''}</div>`).join('')}
+      ${ep ? `<div class="fig">engine package: <b>${ep.checks_passed} of ${ep.checks_total}</b> checks <span class="muted">(${escH(ep.date)}${ep.suite ? `; its suite: ${escH(ep.suite)}` : ''})</span></div>` : '<div class="fig muted">no engine package result</div>'}
+      ${t.present ? `<div class="fig">test suite, latest completed CI run: <span class="st ${t.conclusion === 'success' ? 'done' : 'blocked'}">${escH(t.conclusion)}</span>${escH(t.summary || 'no summary line')} <span class="muted">on ${escH(String(t.sha || '').slice(0, 10))}, ${escH(t.created)}${t.failed_tests.length ? `; failed: ${ppList(t.failed_tests)}` : ''}; read ${ago(t.age_seconds)}</span></div>` : `<div class="fig muted">test suite: no cached CI status (${escH(t.source)})</div>`}
+      <div class="muted" style="margin-top:6px;font-size:11.5px">not counted here: the ${disc.total} discontinued investigations listed below</div></div>`;
+  const biology = `<div class="pp-measure"><h4>Biology independently validated</h4>
+      <div class="pp-def">${escH(bio.definition)}</div>
+      <div class="fig"><b>${bio.counted}</b> result${bio.counted === 1 ? '' : 's'} counted, each with its qualification, of ${bio.candidates} classified</div>
+      <div class="fig"><span class="pp-none">none</span> in ${none.length} of ${bio.categories.length} categories: ${ppList(none)}</div>
+      ${bio.withheld.length ? `<div class="fig"><span class="st blocked">withheld</span>${ppList(bio.withheld)}</div>` : ''}
+      ${bio.categories_source ? `<div class="muted" style="margin-top:6px;font-size:11.5px">categories kept apart: “${escH(bio.categories_source.text)}” <span class="src">${escH(bio.categories_source.source)}</span></div>` : ''}</div>`;
+  const ci = rel.ci;
+  const release = `<div class="pp-measure"><h4>Release readiness</h4>
+      <div class="pp-def">${escH(rel.definition)}</div>
+      <div class="fig"><b>${rel.met.length}</b> met · <b>${rel.missing.length}</b> missing · <b>${rel.unknown.length}</b> not known here</div>
+      ${rel.checks.map(ppCheck).join('')}
+      <div class="muted" style="margin-top:6px;font-size:11.5px">${ci.present ? `CI status cached ${ago(ci.age_seconds)} (${escH(ci.written)}); ${ci.consecutive_failures} completed run${ci.consecutive_failures === 1 ? '' : 's'} in a row not green` : `no cached CI status`}; refresh with <span class="mono">${escH(ci.refresh)}</span></div>
+      ${rel.criteria.length ? `<details><summary>the plan's own release criteria (${rel.criteria.length})</summary>${rel.criteria.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</details>` : ''}</div>`;
+  return software + biology + release;
+}
+function ppBio(bio) {
+  return bio.categories.map(c => `<div class="pp-claim">
+      <div><b>${escH(c.category)}</b> <span class="muted">${escH(c.means)}</span> — ${c.none ? '<span class="pp-none">none</span>' : `<b>${c.validated.length}</b> counted`}</div>
+      ${c.measured_by ? `<div class="pp-quote muted">what counts: ${escH(c.measured_by.text)} <span class="src">${escH(c.measured_by.source)}</span></div>` : ''}
+      ${c.validated.map(ppEntry).join('')}
+      ${c.not_counted.length ? `<details${c.none ? ' open' : ''}><summary>shown, not counted (${c.not_counted.length})</summary>${c.not_counted.map(ppEntry).join('')}</details>` : ''}
+    </div>`).join('');
+}
+function ppDisc(d) {
+  return `<div class="muted" style="font-size:11.5px;margin-bottom:4px">${escH(d.definition)}</div>` + d.rows.map(r => `<div class="pp-claim">
+      <div><span class="st ${r.state === 'closed on a negative' ? 'blocked' : 'next'}">${escH(r.state)}</span>${r.reopened.length ? '<span class="st partial">question reopened</span>' : ''}<b>${escH(r.name)}</b>${r.review_item ? ` <span class="muted">(review item ${escH(r.review_item)}, not counted as done)</span>` : ''}</div>
+      ${r.closed.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}
+      ${r.result ? `<div class="fig" style="font-size:12px">result file: <b>${escH(r.result.verdict)}</b> <span class="src">${escH(r.result.source)} · ${escH(r.result.date || '')}</span></div>` : ''}
+      ${r.reopened.length ? `<div style="margin-top:4px"><b>reopened</b>${r.reopened.map(q => `<div class="pp-quote">${escH(q.text)} <span class="src">${escH(q.source)}</span></div>`).join('')}</div>` : ''}
+    </div>`).join('');
+}
+async function loadState() {
+  try {
+    const s = await api('/api/state');
+    const m = s.milestones, rv = s.review, o = s.owed;
+    $('#pp-measures').innerHTML = ppMeasures(s.measures, s.discontinued);
+    $('#pp-bio').innerHTML = ppBio(s.measures.biology);
+    $('#pp-disc').innerHTML = ppDisc(s.discontinued);
+    $('#pp-state-kpi').innerHTML = `<div><b>${o.count}</b><span>waiting on the owner</span></div>
+      <div><b>${s.claims.rows.length}</b><span>claims stated separately</span></div>`;
+    $('#pp-claims').innerHTML = s.claims.rows.map(c => `<div class="pp-claim">
+        <div><b>${escH(c.claim)}</b>${c.figure ? ` <span class="st done">${escH(c.figure.date || '')}</span>` : ''}${c.agrees_with_readme === false ? ' <span class="st blocked">README disagrees with its result file</span>' : ''}</div>
+        <div class="muted">${mdInline(c.text)}</div>
+        ${figureLine(c.figure)}
+        ${c.figure && c.figure.qualification ? `<div class="muted" style="margin-top:3px">qualification, as the file states it: ${escH(c.figure.qualification)}</div>` : ''}
+        ${c.figure ? `<div class="src">${escH(c.figure.source)}</div>` : ''}
+      </div>`).join('') + `<div class="muted" style="font-size:11px">words from ${escH(s.claims.source)} (Status ${escH(s.claims.version || '')}, ${escH(s.claims.date || '')}); this panel may not say more than it does</div>`;
+    $('#pp-caveats').innerHTML = (s.claims.caveats || []).map(c => `<details class="pp-sec"><summary>Qualification carried with a claim made elsewhere: ${escH(c.about)}</summary>
+        <div style="font-size:12.5px;margin-top:4px">${escH(c.verdict)}</div>
+        <div class="muted" style="font-size:12px">components: ${Object.entries(c.components || {}).map(([k, v]) => `${v} ${escH(k)}`).join(', ')} · selection premium: default ${c.selection_premium.default}, best rejected ${c.selection_premium.best_rejected}, worst ${c.selection_premium.worst_rejected}, spread ${c.selection_premium.spread_points} points</div>
+        <div class="src">${escH(c.source)} · ${escH(c.date || '')}</div></details>`).join('');
+    $('#pp-miles').innerHTML = m.rows.map(x => `<div class="pp-item">
+        <div><span class="st ${x.state}">${x.state === 'done' ? 'reached' : x.state === 'partial' ? 'held' : 'planned'}</span><b>${escH(x.milestone)}</b></div>
+        <div class="muted" style="margin-top:2px">${mdInline(x.goal)}</div>
+        ${x.reason ? `<div style="margin-top:3px"><b>held because</b> ${escH(x.reason)}</div>` : ''}
+        ${x.emphasised && x.emphasised.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">what the row itself emphasises (${x.emphasised.length})</summary>${x.emphasised.map(t => `<div style="margin-top:3px">${escH(t)}</div>`).join('')}</details>` : ''}
+      </div>`).join('') + `<div class="src">${escH(m.source)}</div>`;
+    $('#pp-review').innerHTML = rv.rows.map(r => `<div class="pp-item">
+        <div><span class="st ${r.state === 'done' ? 'done' : r.state === 'reopened' ? 'partial' : 'next'}">${escH(r.state)}</span><b>${escH(r.item)}</b> ${escH(r.title)}</div>
+        <div class="muted" style="margin-top:2px">acceptance: ${escH(r.acceptance)}</div>
+        ${r.follow_ups.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">${r.follow_ups.length} follow-up row${r.follow_ups.length > 1 ? 's' : ''}</summary>${r.follow_ups.map(f => `<div style="margin-top:3px">${mdInline(f.note)}</div>`).join('')}</details>` : ''}
+      </div>`).join('') + `<div class="src">${escH(rv.source)}</div>`;
+    const owed = [
+      ...o.data_jobs.map(j => ['data job (roadmap §4)', j.job, j.detail]),
+      ...o.steps.map(x => [x.where, x.text, '']),
+      ...o.board.map(b => [`${b.who} · ${b.state}`, b.task, b.asks.join(' ')]),
+    ];
+    $('#pp-owed').innerHTML = (owed.length
+        ? `<table><tr><th>where</th><th>what</th><th>what it asks</th></tr>${owed.map(r => `<tr><td class="mono" style="font-size:11px">${escH(r[0])}</td><td>${mdInline(r[1])}</td><td class="muted" style="font-size:12px">${mdInline(r[2])}</td></tr>`).join('')}</table>`
+        : '<div class="muted" style="font-size:12.5px">nothing in the plan or on the board is waiting on a decision</div>')
+      + (o.ledger ? `<details class="pp-sec"><summary class="muted" style="font-size:12px">night-shift ledger, untracked: ${o.ledger.open.length} lane${o.ledger.open.length === 1 ? '' : 's'} open${o.ledger.armed ? ', armed' : ''}</summary><div class="files" style="font-size:12px">${o.ledger.open.map(escH).join('<br>')}</div></details>` : '');
+  } catch (e) {
+    $('#pp-claims').innerHTML = `<span class="muted">${escH(e.message)}</span>`;
+  }
 }
 async function loadWork() {
   try {
@@ -1769,7 +1929,6 @@ function renderPlanned(r) {
       <h4><span class="pp-letter">${escH(s.number)}</span><span style="${s.state === 'done' ? 'text-decoration:line-through' : ''}">${mdInline(s.title)}</span> <span class="st ${s.progress || s.state}">${s.progress || s.state}</span></h4>
       <details><summary class="muted" style="cursor:pointer;font-size:12px">why, and what it decides</summary><div class="pp-md">${md(s.text)}</div></details>
     </div>`).join('') : '<div class="muted">roadmap §5 has no items</div>';
-  $('#pp-milestones').innerHTML = r.milestones.map(m => `<span class="pill" data-tip="${escH(m.goal)} — ${escH(m.proof)}"><span class="st ${m.state}" style="border:0;padding:0">${m.state === 'done' ? '✓' : m.state === 'partial' ? '◐' : '○'}</span>${escH(m.milestone)}</span>`).join('');
   $('#pp-areas').innerHTML = r.areas.map(a => {
     const open = a.next.filter(s => s.state !== 'done');
     const now = board.filter(e => e.area === a.letter);
@@ -1919,7 +2078,7 @@ async function loadCell() {
       <div><b>${t.expresses.length || '—'}</b><span>genes it says it expresses</span></div>`;
     $('#ce-id').innerHTML = `<b>${escH(t.id)}</b>${t.ontology_id ? ` · ${escH(t.ontology_id)}` : ''}`
       + (t.lineage.length ? ` · lineage ${t.lineage.map(escH).join(' ← ')}` : ' · no parent declared')
-      + ` · <span class="pill ${escH(t.evidence.kind)}">${escH(t.evidence.kind)}</span> ${escH(t.evidence.source)} (confidence ${t.confidence.toFixed(2)})`
+      + ` · <span class="pill ${escH(t.evidence.kind)}">${escH(t.evidence.kind)}</span> ${escH(t.evidence.source)} (confidence ${t.confidence == null ? 'unstated' : t.confidence.toFixed(2)})`
       + ` · in <span class="mono">${escH(d.path)}</span>, module <span class="mono">${escH(d.module)}</span>`
       + (d.gated_on_cell_type.length ? ` · rules gated on ${d.gated_on_cell_type.map(escH).join(', ')}` : '')
       + (d.genes_silenced.length ? ` · silenced: ${d.genes_silenced.map(escH).join(', ')}` : '');
@@ -1933,7 +2092,7 @@ async function loadCell() {
           <td class="num">${r.strength}</td><td class="num">${r.threshold}${escH(r.threshold_unit)}</td><td class="num">${r.hill}</td>
           <td class="mono">${escH(Object.entries(r.when).map(([k, v]) => `${k}=${v}`).join(', '))}</td>
           <td><span class="pill ${escH(r.evidence.kind)}">${escH(r.evidence.kind)}</span> <span class="muted">${escH(r.evidence.source)}</span></td>
-          <td class="num">${r.confidence.toFixed(2)}</td></tr>`).join('') + '</table>'
+          <td class="num">${r.confidence == null ? '<span class="muted" title="no confidence stated">–</span>' : r.confidence.toFixed(2)}</td></tr>`).join('') + '</table>'
       : '<div class="muted">This program states no rule, so there is nothing to list. Its cell types are used by decisions, timers and populations.</div>';
     drawCellGraph(d);
     $('#ce-chart').innerHTML = ''; $('#ce-clegend').innerHTML = '';
@@ -1981,7 +2140,7 @@ function drawCellGraph(d) {
       'stroke-dasharray': e.status === 'active' ? 'none' : '4 3', opacity: e.status === 'active' ? 0.95 : 0.35,
       'marker-end': `url(#ce-a-${e.action in colour ? e.action : 'produces'})`,
     });
-    path.appendChild(el('title', {}, `${e.source} ${e.action} ${e.target} — ${e.status}, strength ${e.strength}, confidence ${e.confidence.toFixed(2)}`));
+    path.appendChild(el('title', {}, `${e.source} ${e.action} ${e.target} — ${e.status}, strength ${e.strength}, confidence ${e.confidence == null ? 'unstated' : e.confidence.toFixed(2)}`));
     svg.appendChild(path);
   }
   for (const n of nodes) {
@@ -2035,8 +2194,10 @@ async function loadEvidence() {
     const r = await api('/api/evidence?' + evQuery({limit: 300}));
     const w = r.whole, s = r.summary;
     $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
-      <div><b>${w.mean_confidence.toFixed(2)}</b><span>mean confidence</span></div>
-      <div><b>${fmt(w.weak)}</b><span>weak (≤ ${r.weak_line})</span></div>
+      <div><b>${w.mean_confidence == null ? '–' : w.mean_confidence.toFixed(2)}</b><span>mean of stated confidences</span></div>
+      <div><b>${fmt(w.weak)}</b><span>stated weak (≤ ${r.weak_line})</span></div>
+      <div><b>${fmt(w.strong)}</b><span>stated strong</span></div>
+      <div><b>${fmt(w.unstated)}</b><span>no confidence stated</span></div>
       <div><b>${fmt(r.files.length)}</b><span>programs</span></div>
       <div><b>${fmt(w.by_evidence.experimental || 0)}</b><span>measured</span></div>
       <div><b>${fmt((w.by_evidence.inferred || 0) + (w.by_evidence.none || 0))}</b><span>inferred or unstated</span></div>`;
@@ -2047,15 +2208,15 @@ async function loadEvidence() {
       $('#ev-module').innerHTML += r.files.map(f => `<option value="${escH(f.path)}">${escH(f.path.replace(/^data\/|^genomeos\//, ''))}</option>`).join('');
     }
     const sel = evPicked.size || parseFloat($('#ev-max').value) < 1 || $('#ev-q').value.trim() || evFile;
-    $('#ev-sel').textContent = sel ? `${s.facts.toLocaleString()} facts selected, mean confidence ${s.mean_confidence.toFixed(2)}; ${s.weak.toLocaleString()} of them weak` : 'no filter: every fact in every program';
-    $('#ev-files').innerHTML = '<table><tr><th>program</th><th class="num">facts</th><th class="num">weak</th><th class="num">conf</th></tr>' +
-      r.files.slice().sort((a, b) => (a.mean_confidence || 0) - (b.mean_confidence || 0)).map(f => `<tr class="ev-file ${f.path === evFile ? 'on' : ''}" data-path="${escH(f.path)}">
+    $('#ev-sel').textContent = sel ? `${s.facts.toLocaleString()} facts selected: ${s.weak.toLocaleString()} stated weak, ${s.strong.toLocaleString()} stated strong, ${s.unstated.toLocaleString()} unstated; mean of stated ${s.mean_confidence == null ? '–' : s.mean_confidence.toFixed(2)}` : 'no filter: every fact in every program';
+    $('#ev-files').innerHTML = '<table><tr><th>program</th><th class="num">facts</th><th class="num">weak</th><th class="num">unstated</th><th class="num">conf</th></tr>' +
+      r.files.slice().sort((a, b) => (a.mean_confidence ?? 2) - (b.mean_confidence ?? 2)).map(f => `<tr class="ev-file ${f.path === evFile ? 'on' : ''}" data-path="${escH(f.path)}">
         <td>${escH(f.path.replace(/^data\/|^genomeos\//, ''))}${f.error ? ` <span class="pill none">unparsed</span>` : ''}</td>
-        <td class="num">${fmt(f.facts || 0)}</td><td class="num">${fmt(f.weak || 0)}</td>
-        <td class="num ev-conf ${evConfClass(f.mean_confidence || 0)}">${(f.mean_confidence || 0).toFixed(2)}</td></tr>`).join('') + '</table>';
+        <td class="num">${fmt(f.facts || 0)}</td><td class="num">${fmt(f.weak || 0)}</td><td class="num">${fmt(f.unstated || 0)}</td>
+        <td class="num ev-conf ${f.mean_confidence == null ? '' : evConfClass(f.mean_confidence)}">${f.mean_confidence == null ? '–' : f.mean_confidence.toFixed(2)}</td></tr>`).join('') + '</table>';
     $('#ev-files').querySelectorAll('tr.ev-file').forEach(tr => tr.onclick = () => { evFile = evFile === tr.dataset.path ? '' : tr.dataset.path; $('#ev-module').value = evFile; loadEvidence(); });
     $('#ev-rows').innerHTML = (r.rows.length ? '<table><tr><th class="num">conf</th><th>evidence</th><th>fact</th></tr>' + r.rows.map(x => `<tr>
-        <td class="num ev-conf ${evConfClass(x.confidence)}">${x.confidence.toFixed(2)}</td>
+        <td class="num ev-conf ${x.stated === false ? '' : evConfClass(x.confidence)}">${x.stated === false ? '<span class="muted" title="no confidence stated">–</span>' : x.confidence.toFixed(2)}</td>
         <td><span class="pill" style="color:${evVar(x.evidence)};border-color:${evVar(x.evidence)}">${x.evidence}</span><div class="muted" style="font-size:11px">${escH(x.block)}</div></td>
         <td><b>${escH(x.label)}</b>${x.source ? `<div class="muted" style="font-size:11.5px">${escH(x.source)}</div>` : ''}${x.note ? `<div class="muted" style="font-size:11.5px">${escH(x.note)}</div>` : ''}
           <div class="mono muted" style="font-size:10.5px">${escH(x.path)}${Object.keys(x.detail || {}).length ? ' · ' + escH(Object.entries(x.detail).slice(0, 4).map(([k, v]) => `${k}=${v}`).join(' ')) : ''}</div></td></tr>`).join('') + '</table>' : '<div class="muted">no fact matches</div>')

@@ -17,6 +17,10 @@ Classes, each with the evidence that produced it:
     user pattern classes   from a patterns file (regex, class, evidence)     as declared
     unclassified           none of the above dominated                       none
 
+Origin is a separate axis from the class (review R7). Whenever RepeatMasker was consulted, every
+block records its repeat coverage and an `origin` (repeat_derived/<class>, partly_repeat_derived/<class>
+or unique) before any rule names a class, so a regulatory block that is mostly LINE says both.
+
 The interspersed-repeat signal is learned, not assumed: every 16-mer of the
 chromosome is counted; positions whose 16-mer occurs many times belong to a
 repeated element. Named families come only from the pattern file (Alu core,
@@ -41,6 +45,7 @@ HIGH_COPY = 40  # a 16-mer seen this often in one chromosome is part of a repeat
 INTERSPERSED_FRACTION = 0.5  # human intergenic space is about half interspersed repeats
 ORF_MIN_AA, ORF_MAX_AA = 250, 2500  # a real coding remnant; longer frames without stops are repeats
 DEFAULT_PATTERNS = Path("data/patterns/known_motifs.tsv")
+REPEAT_DERIVED_MIN = 0.5  # interspersed share from which a block reads as repeat-derived (R7 origin axis)
 
 
 @dataclass(slots=True)
@@ -269,6 +274,33 @@ def composition(seq: str, counts: array | None, window: int = 5000) -> dict[str,
     return {k: round(v / n, 3) for k, v in kinds.items()} if n else {}
 
 
+def repeat_origin(repeats: dict[str, int] | None, n: int) -> dict[str, Any]:
+    """RepeatMasker coverage of a block as the R7 origin axis; `unknown` when it was not consulted.
+
+    `repeats` is bases per repeat class (RepeatIndex.coverage); an empty dict means consulted and none
+    found. The vocabulary is genomeos.lang.grammar.AXES["origin"]; the top class is the interspersed
+    class with the most bases."""
+    if repeats is None:
+        return {"origin": "unknown"}
+    from genomeos.genome.repeats import INTERSPERSED
+
+    frac = {k: v / n for k, v in repeats.items()} if n else {}
+    inter = {k: v for k, v in frac.items() if k in INTERSPERSED}
+    total = sum(inter.values())
+    top = max(inter, key=lambda k: inter[k]) if inter else ""
+    if total >= REPEAT_DERIVED_MIN:
+        origin = f"repeat_derived/{top}"
+    elif total > 0:
+        origin = f"partly_repeat_derived/{top}"
+    else:
+        origin = "unique"
+    return {
+        "repeat_coverage": {k: round(v, 3) for k, v in sorted(frac.items(), key=lambda kv: -kv[1])},
+        "interspersed_coverage": round(total, 3),
+        "origin": origin,
+    }
+
+
 def classify_block(
     seq: str,
     counts: array | None,
@@ -284,6 +316,9 @@ def classify_block(
     f["n_fraction"] = round(seq.count("N") / n, 3) if n else 0.0
     if f["n_fraction"] > 0.5:
         return "gap", "curated", 1.0, f, {}
+    # origin first (R7): read before any rule below names a class, so a regulatory block keeps it too
+    if repeats is not None:
+        f.update(repeat_origin(repeats, n))
     hits: dict[str, int] = {}
     cover: dict[str, float] = {}
     for p in patterns:
@@ -330,9 +365,7 @@ def classify_block(
         from genomeos.genome.repeats import INTERSPERSED
 
         rep_frac = {k: v / n for k, v in repeats.items()}
-        f["repeat_coverage"] = {k: round(v, 3) for k, v in sorted(rep_frac.items(), key=lambda kv: -kv[1])}
         inter = sum(v for k, v in rep_frac.items() if k in INTERSPERSED)
-        f["interspersed_coverage"] = round(inter, 3)
         sat = rep_frac.get("Satellite", 0)
         simple = rep_frac.get("Simple_repeat", 0) + rep_frac.get("Low_complexity", 0)
         if sat >= 0.5:

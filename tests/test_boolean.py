@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 2.4: Boolean network engine reproduces a published logical model."""
 
 from genomeos.ir import Action

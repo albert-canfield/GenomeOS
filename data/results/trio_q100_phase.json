@@ -1,0 +1,92 @@
+{
+ "child": "HG002",
+ "father": "HG003",
+ "mother": "HG004",
+ "chromosomes": [
+  "chr1",
+  "chr2",
+  "chr3",
+  "chr4",
+  "chr5",
+  "chr6",
+  "chr7",
+  "chr8",
+  "chr9",
+  "chr10",
+  "chr11",
+  "chr12",
+  "chr13",
+  "chr14",
+  "chr15",
+  "chr16",
+  "chr17",
+  "chr18",
+  "chr19",
+  "chr20",
+  "chr21",
+  "chr22"
+ ],
+ "window": 10,
+ "candidates": {
+  "total": 1430,
+  "outside_assembly": 19,
+  "nearby": 9,
+  "mother": 679,
+  "father": 703,
+  "absent": 20
+ },
+ "candidates_by_type": {
+  "snv": {
+   "mother": 564,
+   "father": 584,
+   "absent": 6,
+   "nearby": 1
+  },
+  "indel": {
+   "nearby": 8,
+   "father": 119,
+   "mother": 115,
+   "absent": 14
+  }
+ },
+ "candidates_in_benchmark_regions": {
+  "nearby": 9,
+  "mother": 210,
+  "father": 194,
+  "absent": 7
+ },
+ "candidates_homozygous_in_child": {},
+ "candidates_in_other_regions": {
+  "nist_de_novo_mosaic_exclusions": {
+   "mother": 457,
+   "father": 496,
+   "absent": 8
+  }
+ },
+ "control": {
+  "total": 1484060,
+  "outside_assembly": 1313,
+  "right_parent": 1481214,
+  "wrong_parent": 17
+ },
+ "control_classes": {
+  "hap2": 746022,
+  "hap1": 735209,
+  "nearby": 1187,
+  "absent": 287,
+  "both": 42
+ },
+ "control_found_on_one_haplotype": 0.99898,
+ "control_parent_agreement": 0.99999,
+ "candidates_paternal_share": 0.5087,
+ "date": "2026-09-27",
+ "source": {
+  "assembly": "T2T HG002 Q100 v1.1 (trio-binned, maternal and paternal haplotypes), dipcall against GRCh38 as released by NIST/GIAB in v5.0q (dipcall_output/, md5-checked)",
+  "haplotype_order": "defrabb passes paternal.fa as dipcall's first haplotype; checked on the file: every PASS chrX non-PAR call is .|1 and every chrY call 1|.",
+  "licence": "NIST data, not subject to copyright in the US (17 USC 105), provided AS IS; acknowledgement: National Institute of Standards and Technology, Genome in a Bottle",
+  "trio": "GIAB v4.2.1 benchmark calls and regions for HG002, HG003, HG004, alleles normalised"
+ },
+ "registration": "docs/DATA.md, section 'Phasing the trio candidates on the Q100 assembly (2026-09-27)'",
+ "evidence": "measured: two independent measurements of one person compared (read-based benchmark calls against a phased assembly); counts only",
+ "seconds": 27.6
+}

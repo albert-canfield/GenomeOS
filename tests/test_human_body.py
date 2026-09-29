@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """The human body as counted populations: the same Body runtime at population resolution."""
 
 from genomeos.ir import to_minutes

@@ -20,6 +20,7 @@ the right positions. Variants are read from the persons' own files, never copied
 
 from __future__ import annotations
 
+import json
 import time
 from pathlib import Path
 from typing import Any
@@ -218,3 +219,58 @@ def save_path(gene: str, people: list[str], root: Path = Path("data/results")) -
 
         return ROOT / private[0] / f"syntax_{gene.upper()}.json"
     return root / f"syntax_{gene.upper()}.json"
+
+
+def manifest(r: dict[str, Any]) -> dict[str, Any]:
+    """What a syntax result read (item 12 S6 follow-up): the gene models, the cCRE rows, each person's
+    calls on the chromosome; phyloP is read by HTTP ranges from UCSC and is pinned by its URL, not a hash."""
+    from genomeos import manifest as mf
+    from genomeos.genome.regulatory import RESULTS as CCRE_DIR
+
+    chrom, people = r["chrom"], set(r["people"])
+    inputs = [mf.input_entry(default_gencode({chrom}))]
+    ccres = CCRE_DIR / f"ccres_{chrom}.bed.gz"
+    if ccres.exists():
+        inputs.append(mf.input_entry(ccres))
+    calls = [p for n, p, _e in sources(chrom) if n in people]
+    inputs.append(mf.files_entry(f"{chrom} calls of {', '.join(sorted(people)) or 'nobody'}", calls))
+    return {
+        "sources": [
+            {
+                "accession": "Zoonomia phyloP, 241 placental mammals (UCSC hg38 cactus241way.phyloP.bw)",
+                "version": "cactus241way, read by HTTP range requests; not hashed (never downloaded whole)",
+                "url": PHYLOP_241_URL,
+            },
+            {"accession": "GENCODE comprehensive annotation (GFF3)", "version": "v50"},
+            {
+                "accession": "ENCODE cCRE registry (GRCh38-cCREs.bed)",
+                "version": "V3, as streamed into data/results",
+            },
+            {
+                "accession": "GIAB v4.2.1 benchmark calls (open-consent HG002, HG003, HG004)",
+                "version": "NISTv4.2.1",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {"gene": r["gene"], "flank": r["flank"], "phylop_threshold": r["threshold"]},
+        "exclusions": [],
+        "partitions": "n/a: one gene read in full; no evaluation split",
+    }
+
+
+def save(r: dict[str, Any], gene: str) -> Path:
+    """Keep a syntax result: through save_result as syntax_<GENE> when every person read is open consent
+    (item 12 S6 follow-up), otherwise under that person's own git-ignored directory, as before."""
+    from genomeos.results import save_result
+
+    private = [n for n in r["people"] if n not in OPEN_CONSENT]
+    if private:
+        from genomeos.genome.individuals import ROOT
+
+        p = ROOT / private[0] / f"syntax_{gene.upper()}.json"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(r, indent=1))
+        return p
+    return save_result(f"syntax_{gene.upper()}", r, manifest=manifest(r))

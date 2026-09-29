@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 4.1: a gradient-reading rule produces a French-flag pattern."""
 
 from genomeos.runtime.spatial import Field2D, french_flag, gradient_decay_length

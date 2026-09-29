@@ -1,0 +1,553 @@
+{
+  "result": "indep_igvf_probe",
+  "date": "2026-09-28",
+  "question": "Has IGVF released a processed element-gene table for a K562/HepG2/WTC11 CRISPRi screen the project has not read, that the stored sweep can score with 0 requests?",
+  "answer": "no. The 16 many-loci K562 sets are raw reads only; their analysis sets exist but are unreleased. The one other released K562 table is Ray 2025 DC-TAP, already read.",
+  "verdict": "NO BENCHMARK NOW: raw single-cell data only; processing is out of this machine's reach",
+  "requests": 0,
+  "many_loci_k562": {
+    "measurement_sets": {
+      "IGVFDS5637QJRP": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 35.2
+      },
+      "IGVFDS8708IDCC": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 28.4
+      },
+      "IGVFDS5440YEBR": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 32.1
+      },
+      "IGVFDS6162UVFJ": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 43.1
+      },
+      "IGVFDS0567GXFW": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 43.6
+      },
+      "IGVFDS5791LZOT": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 30.7
+      },
+      "IGVFDS5632GXBM": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 41.4
+      },
+      "IGVFDS2463TEJP": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 36.5
+      },
+      "IGVFDS1341HYXT": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 18.1
+      },
+      "IGVFDS8094NBFV": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 38.4
+      },
+      "IGVFDS0146NONB": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 48.5
+      },
+      "IGVFDS6790CUPS": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 45.1
+      },
+      "IGVFDS6013FBZQ": {
+        "analysis_set": "IGVFDS3481OUHP",
+        "raw_gb": 42.6
+      },
+      "IGVFDS6260UZSB": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 31.3
+      },
+      "IGVFDS1474DQOO": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 38.3
+      },
+      "IGVFDS8491ILFO": {
+        "analysis_set": "IGVFDS3624DGBH",
+        "raw_gb": 43.8
+      }
+    },
+    "raw_fastq_gb": 597.1,
+    "grna_aux_fastq_gb": 93.9,
+    "released": "2026-07-27",
+    "licence": "CC BY 4.0 (IGVF data)",
+    "pending_analysis_sets": {
+      "IGVFDS3624DGBH": "input of 15 of the 16 many-loci K562 sets; exists, HTTP 403 (not released)",
+      "IGVFDS3481OUHP": "input of IGVFDS6013FBZQ; exists, HTTP 403 (not released)",
+      "IGVFDS1588RHDM": "input of three further K562 sets (IGVFDS1915EGTT, IGVFDS2136PGKM, IGVFDS5321WVPQ, 2026-02-06) on the MHC library IGVFDS2205IYHG; HTTP 403 (not released)"
+    },
+    "guide_library": {
+      "accession": "IGVFFI9377CEMM",
+      "construct_library_set": "IGVFDS0835NMEN",
+      "lab": "Charles Gersbach, Duke (IGVF)",
+      "what": "guide RNA sequences: CRISPRi screen targeting 350 DHS genome-wide with transcriptome-wide Perturb-seq and growth readout (the library of the 16 K562 sets released 2026-07-27)",
+      "bytes": 39145,
+      "md5": "2c1975d5024d8b840343213bd8f42d79",
+      "released": "2026-07-27",
+      "licence": "CC BY 4.0 (IGVF data)",
+      "url": "https://api.data.igvf.org/tabular-files/IGVFFI9377CEMM/@@download/IGVFFI9377CEMM.tsv.gz"
+    },
+    "guide_library_coverage": {
+      "guides_by_type": {
+        "non-targeting": 199,
+        "targeting": 1587,
+        "positive control": 20
+      },
+      "targets": 342,
+      "chromosomes": 23,
+      "chromosome_list": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX"
+      ],
+      "counts": {
+        "distal": 279,
+        "distal, covered by the sweep": 161,
+        "promoter (within 1 kb of a GENCODE v50 TSS)": 63,
+        "distal, overlapping an ENCODE benchmark element": 9
+      },
+      "covered_share_of_distal": 0.577,
+      "element_gene_pairs_with_a_K562_value": 5676
+    },
+    "processing_estimate": {
+      "download_gb": 691.0,
+      "disk_free_gib": 19,
+      "tools": "IGVF CRISPR Perturb-seq pipeline (Nextflow): kallisto|bustools or Cell Ranger for gene and guide counts, guide assignment, then SCEPTRE or PerTurbo differential expression per element and gene",
+      "compute": "16 sets of about 37 GB each; per set a counting step of several CPU-hours and 32-64 GB RAM; the differential test over 5,676 cis pairs (or all genes) adds hours",
+      "reading": "691 GB of reads against 19 GiB free and a 2 GB cap: not feasible here, even one set at a time. Wait for IGVFDS3624DGBH to be released, then pre-register on its table."
+    }
+  },
+  "dctap": {
+    "accession": "IGVFFI0957PYTA",
+    "analysis_set": "IGVFDS7288SJVF",
+    "lab": "Jesse Engreitz, Stanford (IGVF)",
+    "what": "K562 Random DC-TAP-seq, 664 elements drawn at random from accessible peaks in 25 loci",
+    "content_type": "differential gene expression quantifications (formerly 'differential element quantifications' IGVFFI2436YUJO, revoked, and IGVFFI9586LSUT, archived)",
+    "bytes": 565943,
+    "md5": "758e116216267969281d1b4c5f0c4b1a",
+    "released": "2026-08-08",
+    "licence": "CC BY 4.0 (IGVF data)",
+    "url": "https://api.data.igvf.org/tabular-files/IGVFFI0957PYTA/@@download/IGVFFI0957PYTA.tsv.gz",
+    "overlap": {
+      "rows_by_type": {
+        "positive control": 194,
+        "targeting": 7281
+      },
+      "elements": 920,
+      "pairs_by_encode_dataset": {
+        "Nasser2021": 23,
+        "not in either ENCODE file": 5904,
+        "K562_DC_TAP": 1286,
+        "Morris": 8,
+        "Gasperini2019": 48,
+        "Xie": 7,
+        "WTC11_DC_TAP": 2,
+        "K562_DC_TAP+WTC11_DC_TAP": 3
+      },
+      "pairs_by_stratum": {
+        "in ENCODE, distal, power15 < 0.8": 137,
+        "in ENCODE, distal, power15 >= 0.8": 1240,
+        "not in ENCODE, distal, power15 < 0.8": 3847,
+        "not in ENCODE, distal, power15 >= 0.8": 1222,
+        "not in ENCODE, promoter, power15 < 0.8": 393,
+        "not in ENCODE, promoter, power15 >= 0.8": 442
+      }
+    }
+  },
+  "other_released_tables": [
+    {
+      "cell": "K562",
+      "analysis_set": "IGVFDS7132YVKO",
+      "file": "IGVFFI4093WUVB",
+      "lab": "Gersbach",
+      "why": "the MHC screen: read by lane-indep, NOT READABLE"
+    },
+    {
+      "cell": "K562",
+      "analysis_set": "IGVFDS7288SJVF",
+      "file": "IGVFFI0957PYTA",
+      "lab": "Engreitz",
+      "why": "Ray 2025 K562 DC-TAP, already in the ENCODE held-out file (see dctap)"
+    },
+    {
+      "cell": "WTC11",
+      "analysis_set": "IGVFDS0523KGZP",
+      "file": "IGVFFI9490RJAU (998 kB)",
+      "lab": "Gersbach",
+      "why": "no WTC11 track in the sweep"
+    },
+    {
+      "cell": "WTC11",
+      "analysis_set": "IGVFDS4617SJVM",
+      "file": "IGVFFI9246AJEK (15 kB)",
+      "lab": "Engreitz",
+      "why": "no WTC11 track in the sweep"
+    },
+    {
+      "cell": "WTC11",
+      "analysis_set": "IGVFDS3911MOCN",
+      "file": "differential element quantifications",
+      "lab": "Engreitz",
+      "why": "no WTC11 track; WTC11 DC-TAP is also in the ENCODE held-out file"
+    },
+    {
+      "cell": "WTC11",
+      "analysis_set": "IGVFDS7340YDHF, IGVFDS6332VCTO, IGVFDS4389OUWU, IGVFDS4003HZAB",
+      "file": "local/global differential expression per element",
+      "lab": "Hon",
+      "why": "no WTC11 track in the sweep (cell line and cardiomyocyte differentiations)"
+    },
+    {
+      "cell": "WTC11-derived",
+      "analysis_set": "IGVFDS3959LESA, IGVFDS2406AZOM, IGVFDS1172VSTV",
+      "file": "differential element quantifications",
+      "lab": "Gersbach, Engreitz",
+      "why": "neurons and endothelial cells from WTC11: no track"
+    },
+    {
+      "cell": "HCT116",
+      "analysis_set": "12 FlowFISH / TAP-seq sets",
+      "file": "differential element quantifications",
+      "lab": "Engreitz",
+      "why": "no HCT116 track: the 705-request item"
+    },
+    {
+      "cell": "HepG2",
+      "analysis_set": "IGVFDS6504OLWV",
+      "file": "guide quantifications only",
+      "lab": "Sherwood",
+      "why": "CRISPRi FACS on a phenotype, no element-gene table"
+    },
+    {
+      "cell": "GM12878, IMR-90",
+      "analysis_set": "none",
+      "file": "none",
+      "lab": "",
+      "why": "no released CRISPRi screen on the portal"
+    }
+  ],
+  "evidence": "portal metadata (IGVF API, 2026-09-28); label-blind counts only; no prediction joined to a label",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "IGVFFI0957PYTA",
+        "analysis_set": "IGVFDS7288SJVF",
+        "lab": "Jesse Engreitz, Stanford (IGVF)",
+        "what": "K562 Random DC-TAP-seq, 664 elements drawn at random from accessible peaks in 25 loci",
+        "content_type": "differential gene expression quantifications (formerly 'differential element quantifications' IGVFFI2436YUJO, revoked, and IGVFFI9586LSUT, archived)",
+        "bytes": 565943,
+        "md5": "758e116216267969281d1b4c5f0c4b1a",
+        "released": "2026-08-08",
+        "licence": "CC BY 4.0 (IGVF data)",
+        "url": "https://api.data.igvf.org/tabular-files/IGVFFI0957PYTA/@@download/IGVFFI0957PYTA.tsv.gz",
+        "version": "released 2026-08-08"
+      },
+      {
+        "accession": "IGVFFI9377CEMM",
+        "construct_library_set": "IGVFDS0835NMEN",
+        "lab": "Charles Gersbach, Duke (IGVF)",
+        "what": "guide RNA sequences: CRISPRi screen targeting 350 DHS genome-wide with transcriptome-wide Perturb-seq and growth readout (the library of the 16 K562 sets released 2026-07-27)",
+        "bytes": 39145,
+        "md5": "2c1975d5024d8b840343213bd8f42d79",
+        "released": "2026-07-27",
+        "licence": "CC BY 4.0 (IGVF data)",
+        "url": "https://api.data.igvf.org/tabular-files/IGVFFI9377CEMM/@@download/IGVFFI9377CEMM.tsv.gz",
+        "version": "released 2026-07-27"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark",
+        "version": "main (sha256 pinned)"
+      },
+      {
+        "accession": "GENCODE",
+        "version": "v50"
+      },
+      {
+        "accession": "AlphaGenome all-element deletion sweep",
+        "version": "stored, 2026-09-13..16"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/indep/IGVFFI0957PYTA.tsv.gz",
+        "sha256": "4d0b952a3bb45eaa6a975ba638fa53e21d1a5f53cb17fe2885b5ce9c2eb6e2d7",
+        "bytes": 565943,
+        "partition": "independent (label-blind overlap only)"
+      },
+      {
+        "path": "data/cache/indep/IGVFFI9377CEMM.tsv.gz",
+        "sha256": "9e29c843eb2ea3465077b824d1055fd48f4789adfcd6f16af2effa7ac8e8c6ac",
+        "bytes": 39145,
+        "partition": "independent (label-free guide library)"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training (overlap check only)"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout (overlap check only)"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+        "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+        "bytes": 77622737,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+        "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+        "bytes": 30030494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+        "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+        "bytes": 46496550,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+        "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+        "bytes": 41655248,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+        "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+        "bytes": 14622897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+        "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+        "bytes": 31260018,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+        "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+        "bytes": 27369934,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+        "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+        "bytes": 38935424,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+        "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+        "bytes": 55243170,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+        "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+        "bytes": 13518960,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+        "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+        "bytes": 50085176,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+        "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+        "bytes": 51646793,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+        "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+        "bytes": 22792705,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+        "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+        "bytes": 9769482,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+        "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+        "bytes": 24359126,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+        "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+        "bytes": 40830506,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+        "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+        "bytes": 25247071,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+        "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+        "bytes": 34546268,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+        "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+        "bytes": 35337035,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+        "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+        "bytes": 30518026,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+        "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+        "bytes": 31161454,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+        "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+        "bytes": 14376446,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "exclusions": [
+      {
+        "reason": "DC-TAP: effect, p-value and significance columns not read (label-blind)",
+        "pairs": 0
+      },
+      {
+        "reason": "library: non-targeting and positive-control guides, not elements",
+        "pairs": 0
+      },
+      {
+        "reason": "library: targets within 1 kb of a GENCODE v50 TSS, counted apart as promoters",
+        "pairs": 0
+      }
+    ],
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "promoter_window": 1000,
+      "power_floor": 0.8,
+      "min_positives": 20,
+      "min_coverage": 0.5
+    },
+    "partitions": {
+      "independent": "IGVF files read by no earlier script; no label column read, nothing scored",
+      "training": "ENCODE K562 training pairs, read only for overlap",
+      "heldout": "ENCODE held-out pairs, read only for overlap"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "194e8018ab82e2c953d3a27368638c2b4fc9e405",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/runtime/grn.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/indep_igvf_probe.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

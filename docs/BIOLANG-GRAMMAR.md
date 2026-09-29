@@ -12,7 +12,23 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 - Only `transcript` nests (inside `gene`). Repeatable keys: assert, cost, effect, keep, observe, source, target, vary.
 - Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
-  `>=n` `<=n` `>n` `<n`.
+  `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no
+  context, so a rule gated on it runs in no cell rather than in every cell.
+- Decisions, timers, competence windows, commitments and signals read `when` with
+  `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an
+  event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's
+  programs, compiled chromosomes or test programs uses them (data/results/when_census.json).
+  SUPERSEDED, no longer true: see the current-behaviour bullet two below.
+- Superseded the same day by the fix: rules and events now read `when` through `matches` as
+  well, one function for every block, so `absent`, `a|b` and the comparisons hold on a rule or
+  an event exactly as on a decision; the bullet above records the state the census measured.
+- Current behaviour: every block that has a `when` (decisions, timers, rules, events,
+  competence windows, commitments and signals) reads it with the one matcher,
+  `genomeos.ir.model.matches`, so `any`, `absent`, `a|b`, the comparisons and `unknown` mean
+  the same on each.
+- `!=` is refused: `k != v` is a parse error naming the clause. Write the values that do match
+  instead (`a|b`, `absent`, or a comparison); what `!=` would mean on a missing key is
+  undecided, and no program in the repo uses it.
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives
@@ -34,6 +50,7 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 | `basal` | `number` | basal transcription rate |
 | `produces` | `Id, Id` | proteins this gene produces (one `produces` rule each) |
 | `location` | `Id` | v0.4: the compartment where it is read |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
 
 May contain `transcript` blocks.
 
@@ -54,6 +71,7 @@ May contain `transcript` blocks.
 | `pathways` | `Id, Id` | Reactome pathway ids |
 | `interactions` | `Id, Id` | interaction partners |
 | `structures` | `Id, Id` | PDB ids or AF- AlphaFold ids |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
 
 ### `region`
 
@@ -62,7 +80,12 @@ May contain `transcript` blocks.
 | property | form | meaning |
 |---|---|---|
 | `locus` | `locus` |  |
-| `role` | `text | unknown` |  |
+| `role` | `text | unknown` | the budget's tier summary, kept verbatim (Module.unknowns counts `unknown`); the five axes below are the authoritative reading (R7) |
+| `origin` | `unique | repeat_derived | partly_repeat_derived | satellite | tandem_repeat | segmental_duplication | assembly_gap | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `molecular_role` | `promoter_like | enhancer_like | insulator_like | open_chromatin | silencer | competing_promoter | structural | coding_candidate | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `activity` | `activates_target | represses_target | no_effect_measured | active_in_reporter | inactive_in_reporter | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `target_relation` | `predicted_deletion_target | nearest_tss_in_domain | measured_perturbation_target | tested_no_effect | unassigned` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `evidence_status` | `curated_annotation | registry_biochemical | predicted_model | measured | measured_negative | conflicting | under_selection | selection_weak | selection_not_detected | selection_not_measured | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
 
 ### `element`
 
@@ -70,11 +93,16 @@ May contain `transcript` blocks.
 
 | property | form | meaning |
 |---|---|---|
-| `class` | `promoter | enhancer | insulator | open_chromatin` | regulatory element class |
+| `class` | `promoter | enhancer | insulator | open_chromatin | unknown` | a summary derived from the registry role (R7), never from the activity; the five axes below are the authoritative reading |
 | `locus` | `locus` |  |
 | `domain` | `Id` | the node (domain) it lies in |
 | `targets` | `Id, Id` | genes it reaches |
 | `basis` | `text` | how the targets were assigned |
+| `origin` | `unique | repeat_derived | partly_repeat_derived | satellite | tandem_repeat | segmental_duplication | assembly_gap | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `molecular_role` | `promoter_like | enhancer_like | insulator_like | open_chromatin | silencer | competing_promoter | structural | coding_candidate | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `activity` | `activates_target | represses_target | no_effect_measured | active_in_reporter | inactive_in_reporter | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `target_relation` | `predicted_deletion_target | nearest_tss_in_domain | measured_perturbation_target | tested_no_effect | unassigned` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
+| `evidence_status` | `curated_annotation | registry_biochemical | predicted_model | measured | measured_negative | conflicting | under_selection | selection_weak | selection_not_detected | selection_not_measured | unknown` | R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier |
 
 ### `rule`
 
@@ -112,6 +140,8 @@ May contain `transcript` blocks.
 | `rate` | `number /unit` | rate with unit |
 | `when` | `k = v, ...` | guards |
 | `effect` | `var op number [unit]` | repeatable; op in += -= *= = |
+| `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |
+| `partition` | `duplicate | contents | binomial` | v0.4 stage 4: what a division does to the contents; default duplicate (contents = binomial below the regime threshold, exact halves above) |
 
 ### `transcript`
 
@@ -277,6 +307,9 @@ May contain `transcript` blocks.
 | `locks` | `cell_type` | what can no longer change |
 | `inherit` | `daughters | no` | the lock passes to the daughters |
 | `release` | `never` | only never is implemented |
+| `maintain` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
+| `excludes` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
+| `hysteresis` | `-` | rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented |
 
 ### `order`
 
@@ -353,11 +386,16 @@ May contain `transcript` blocks.
 | `fates` | `first | last` | Body: one fate per decision point by precedence (default), or the last match (legacy) |
 | `allocation` | `competitive | proportional | priority | optimise` | shared capacities |
 | `seed` | `integer` |  |
+| `recheck` | `crossings | none` | a cell decides again when a read it names crosses a threshold |
 
 ## BioIR types
 
 Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON
 (`bioir_version` 0.4).
+
+A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated
+0.0 by `confidence_stated()`. BioIR JSON writes it as `null` (a stated 0.0 stays `0.0`) and marks
+the file `records_unstated_confidence: true`; a file without that mark predates the difference.
 
 - **Evidence**: `kind`, `source`, `organism`, `note`
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
@@ -373,7 +411,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`, `costs`
 - **CellType**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `name`, `parent`, `expresses`, `ontology_id`
 - **Effect**: `target`, `op`, `value`, `unit`
-- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `evidence`, `confidence`
+- **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `partition`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
 - **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`

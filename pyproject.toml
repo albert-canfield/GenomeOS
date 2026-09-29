@@ -21,6 +21,10 @@ dependencies = []
 genomeos = "genomeos.cli:main"
 bio = "genomeos.bio:main"
 
+# the BioLang engine looks here for `import <scheme>:NAME` sources it does not ship (genomeos/lang/parser.py)
+[project.entry-points."biolang_import_resolvers"]
+protein = "genomeos.lib.biolang:resolve_protein"
+
 [project.optional-dependencies]
 compose = [
     "process-bigraph>=1.8.4",

@@ -1,0 +1,576 @@
+{
+  "result": "evidence_compiled_genome_r4",
+  "date": "2026-09-28",
+  "chromosomes_compiled": [],
+  "programs_read": [
+    "chr1",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr2",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX",
+    "chrY"
+  ],
+  "chromosomes_not_compiled": {
+    "chr1": "not compiled by this run (--evidence-only)",
+    "chr2": "not compiled by this run (--evidence-only)",
+    "chr3": "not compiled by this run (--evidence-only)",
+    "chr4": "not compiled by this run (--evidence-only)",
+    "chr5": "not compiled by this run (--evidence-only)",
+    "chr6": "not compiled by this run (--evidence-only)",
+    "chr7": "not compiled by this run (--evidence-only)",
+    "chr8": "not compiled by this run (--evidence-only)",
+    "chr9": "not compiled by this run (--evidence-only)",
+    "chr10": "not compiled by this run (--evidence-only)",
+    "chr11": "not compiled by this run (--evidence-only)",
+    "chr12": "not compiled by this run (--evidence-only)",
+    "chr13": "not compiled by this run (--evidence-only)",
+    "chr14": "not compiled by this run (--evidence-only)",
+    "chr15": "not compiled by this run (--evidence-only)",
+    "chr16": "not compiled by this run (--evidence-only)",
+    "chr17": "not compiled by this run (--evidence-only)",
+    "chr18": "not compiled by this run (--evidence-only)",
+    "chr19": "not compiled by this run (--evidence-only)",
+    "chr20": "not compiled by this run (--evidence-only)",
+    "chr21": "not compiled by this run (--evidence-only)",
+    "chr22": "not compiled by this run (--evidence-only)",
+    "chrX": "not compiled by this run (--evidence-only)",
+    "chrY": "not compiled by this run (--evidence-only)"
+  },
+  "megabytes": 0.0,
+  "evidence": {
+    "weak_means": "a STATED confidence at or below 0.5; an unstated one (the parser's UNSTATED, since R4 every predicted fact) is counted apart. weak_before_r4_counting_unstated is the old count, which compared the unstated 0.0 with the line, kept beside it for comparison",
+    "per_chromosome": {
+      "chr6": {
+        "facts": 51919,
+        "stated": 2532,
+        "unstated": 49387,
+        "weak": 812,
+        "strong": 1720,
+        "weak_before_r4_counting_unstated": 50199,
+        "experimental": 1136,
+        "curated": 2227,
+        "predicted": 47538,
+        "inferred": 1018,
+        "none": 0
+      },
+      "chrY": {
+        "facts": 664,
+        "stated": 381,
+        "unstated": 283,
+        "weak": 35,
+        "strong": 346,
+        "weak_before_r4_counting_unstated": 318,
+        "experimental": 6,
+        "curated": 274,
+        "predicted": 250,
+        "inferred": 134,
+        "none": 0
+      },
+      "chr1": {
+        "facts": 95151,
+        "stated": 4568,
+        "unstated": 90583,
+        "weak": 1401,
+        "strong": 3167,
+        "weak_before_r4_counting_unstated": 91984,
+        "experimental": 2143,
+        "curated": 4138,
+        "predicted": 87362,
+        "inferred": 1508,
+        "none": 0
+      },
+      "chr17": {
+        "facts": 46875,
+        "stated": 2052,
+        "unstated": 44823,
+        "weak": 630,
+        "strong": 1422,
+        "weak_before_r4_counting_unstated": 45453,
+        "experimental": 1030,
+        "curated": 2070,
+        "predicted": 43216,
+        "inferred": 559,
+        "none": 0
+      },
+      "chr18": {
+        "facts": 20068,
+        "stated": 971,
+        "unstated": 19097,
+        "weak": 318,
+        "strong": 653,
+        "weak_before_r4_counting_unstated": 19415,
+        "experimental": 359,
+        "curated": 740,
+        "predicted": 18500,
+        "inferred": 469,
+        "none": 0
+      },
+      "chr19": {
+        "facts": 38277,
+        "stated": 2025,
+        "unstated": 36252,
+        "weak": 654,
+        "strong": 1371,
+        "weak_before_r4_counting_unstated": 36906,
+        "experimental": 959,
+        "curated": 2416,
+        "predicted": 34530,
+        "inferred": 372,
+        "none": 0
+      },
+      "chr3": {
+        "facts": 59859,
+        "stated": 2427,
+        "unstated": 57432,
+        "weak": 729,
+        "strong": 1698,
+        "weak_before_r4_counting_unstated": 58161,
+        "experimental": 1129,
+        "curated": 2211,
+        "predicted": 55364,
+        "inferred": 1155,
+        "none": 0
+      },
+      "chr4": {
+        "facts": 45013,
+        "stated": 2179,
+        "unstated": 42834,
+        "weak": 666,
+        "strong": 1513,
+        "weak_before_r4_counting_unstated": 43500,
+        "experimental": 781,
+        "curated": 1870,
+        "predicted": 41292,
+        "inferred": 1070,
+        "none": 0
+      },
+      "chr8": {
+        "facts": 40476,
+        "stated": 1967,
+        "unstated": 38509,
+        "weak": 623,
+        "strong": 1344,
+        "weak_before_r4_counting_unstated": 39132,
+        "experimental": 787,
+        "curated": 1650,
+        "predicted": 37104,
+        "inferred": 935,
+        "none": 0
+      },
+      "chr11": {
+        "facts": 55986,
+        "stated": 2639,
+        "unstated": 53347,
+        "weak": 694,
+        "strong": 1945,
+        "weak_before_r4_counting_unstated": 54041,
+        "experimental": 1186,
+        "curated": 2386,
+        "predicted": 51462,
+        "inferred": 952,
+        "none": 0
+      },
+      "chr12": {
+        "facts": 49397,
+        "stated": 2062,
+        "unstated": 47335,
+        "weak": 651,
+        "strong": 1411,
+        "weak_before_r4_counting_unstated": 47986,
+        "experimental": 897,
+        "curated": 2038,
+        "predicted": 45628,
+        "inferred": 834,
+        "none": 0
+      },
+      "chr14": {
+        "facts": 29230,
+        "stated": 1447,
+        "unstated": 27783,
+        "weak": 500,
+        "strong": 947,
+        "weak_before_r4_counting_unstated": 28283,
+        "experimental": 505,
+        "curated": 1378,
+        "predicted": 26770,
+        "inferred": 577,
+        "none": 0
+      },
+      "chr15": {
+        "facts": 31225,
+        "stated": 1269,
+        "unstated": 29956,
+        "weak": 353,
+        "strong": 916,
+        "weak_before_r4_counting_unstated": 30309,
+        "experimental": 585,
+        "curated": 1148,
+        "predicted": 28948,
+        "inferred": 544,
+        "none": 0
+      },
+      "chr16": {
+        "facts": 32356,
+        "stated": 1539,
+        "unstated": 30817,
+        "weak": 490,
+        "strong": 1049,
+        "weak_before_r4_counting_unstated": 31307,
+        "experimental": 677,
+        "curated": 1562,
+        "predicted": 29598,
+        "inferred": 519,
+        "none": 0
+      },
+      "chr7": {
+        "facts": 49314,
+        "stated": 2390,
+        "unstated": 46924,
+        "weak": 779,
+        "strong": 1611,
+        "weak_before_r4_counting_unstated": 47703,
+        "experimental": 990,
+        "curated": 2096,
+        "predicted": 45192,
+        "inferred": 1036,
+        "none": 0
+      },
+      "chr10": {
+        "facts": 45540,
+        "stated": 2123,
+        "unstated": 43417,
+        "weak": 686,
+        "strong": 1437,
+        "weak_before_r4_counting_unstated": 44103,
+        "experimental": 933,
+        "curated": 1748,
+        "predicted": 42046,
+        "inferred": 813,
+        "none": 0
+      },
+      "chr13": {
+        "facts": 21253,
+        "stated": 1113,
+        "unstated": 20140,
+        "weak": 363,
+        "strong": 750,
+        "weak_before_r4_counting_unstated": 20503,
+        "experimental": 342,
+        "curated": 918,
+        "predicted": 19422,
+        "inferred": 571,
+        "none": 0
+      },
+      "chr2": {
+        "facts": 71524,
+        "stated": 3352,
+        "unstated": 68172,
+        "weak": 1023,
+        "strong": 2329,
+        "weak_before_r4_counting_unstated": 69195,
+        "experimental": 1409,
+        "curated": 2859,
+        "predicted": 65834,
+        "inferred": 1422,
+        "none": 0
+      },
+      "chr20": {
+        "facts": 27694,
+        "stated": 1375,
+        "unstated": 26319,
+        "weak": 468,
+        "strong": 907,
+        "weak_before_r4_counting_unstated": 26787,
+        "experimental": 613,
+        "curated": 1216,
+        "predicted": 25404,
+        "inferred": 461,
+        "none": 0
+      },
+      "chr21": {
+        "facts": 11348,
+        "stated": 648,
+        "unstated": 10700,
+        "weak": 205,
+        "strong": 443,
+        "weak_before_r4_counting_unstated": 10905,
+        "experimental": 202,
+        "curated": 518,
+        "predicted": 10348,
+        "inferred": 280,
+        "none": 0
+      },
+      "chr22": {
+        "facts": 20912,
+        "stated": 1057,
+        "unstated": 19855,
+        "weak": 418,
+        "strong": 639,
+        "weak_before_r4_counting_unstated": 20273,
+        "experimental": 422,
+        "curated": 1002,
+        "predicted": 19224,
+        "inferred": 264,
+        "none": 0
+      },
+      "chr5": {
+        "facts": 49430,
+        "stated": 2215,
+        "unstated": 47215,
+        "weak": 663,
+        "strong": 1552,
+        "weak_before_r4_counting_unstated": 47878,
+        "experimental": 852,
+        "curated": 1979,
+        "predicted": 45544,
+        "inferred": 1055,
+        "none": 0
+      },
+      "chr9": {
+        "facts": 41706,
+        "stated": 1864,
+        "unstated": 39842,
+        "weak": 568,
+        "strong": 1296,
+        "weak_before_r4_counting_unstated": 40410,
+        "experimental": 784,
+        "curated": 1673,
+        "predicted": 38544,
+        "inferred": 705,
+        "none": 0
+      },
+      "chrX": {
+        "facts": 24879,
+        "stated": 1895,
+        "unstated": 22984,
+        "weak": 359,
+        "strong": 1536,
+        "weak_before_r4_counting_unstated": 23343,
+        "experimental": 557,
+        "curated": 1932,
+        "predicted": 21634,
+        "inferred": 756,
+        "none": 0
+      }
+    },
+    "pooled": {
+      "facts": 960096,
+      "stated": 46090,
+      "unstated": 914006,
+      "weak": 14088,
+      "strong": 32002,
+      "weak_before_r4_counting_unstated": 928094,
+      "experimental": 19284,
+      "curated": 42049,
+      "predicted": 880754,
+      "inferred": 18009,
+      "none": 0
+    }
+  },
+  "weak_share": 0.0147,
+  "unstated_share": 0.952,
+  "weak_share_of_the_stated": 0.3057,
+  "reading": "the compiled chromosomes are the project's weak half by construction: a region's role comes from its tier (inferred) and an element's target from a model (predicted), while the hand-written organism programs are curated. Reported so the Evidence explorer's totals cannot be read as if the whole project were as well evidenced as its demos",
+  "seconds": 41.9,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository, the compiled programs noncoding_<chrom>.bio",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: counts of stated facts, no interval is read",
+    "parameters": {
+      "weak_at_or_below": 0.5,
+      "compiled": true
+    },
+    "exclusions": [
+      "facts in programs outside the compiled tree"
+    ],
+    "partitions": "n/a: no evaluation partition",
+    "code": {
+      "git_sha": "2085279808462ef4cdf2297f4db260d9ef301341",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/compile_genome_programs.py",
+        "scripts/measured_layer.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/compile_genome_programs.py",
+        "--evidence-only",
+        "--result-name",
+        "evidence_compiled_genome_r4"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

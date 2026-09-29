@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """Stage 2's arithmetic: demand, capacity, and who gets cut (BIOLANG-v0.4-ECONOMY.md §5).
 
 The burden gate's falsifier is the test that matters here and it is the last one: the reduction must

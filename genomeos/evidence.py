@@ -6,6 +6,13 @@ every `.bio` program (the demos, the organism programs, the `bio.std` prelude) a
 per stated fact: which program declares it, what kind of block it is, the evidence kind
 (experimental, curated, predicted, inferred, none), its source and its confidence.
 
+A confidence is either stated or UNSTATED, and the two are never pooled. Since review R4
+(2026-09-28) the compiler states no confidence on a predicted element or rule, because the size of a
+predicted effect is not how sure anyone is, and the parser reads the missing key as 0.0. Counted as a
+number, every one of those facts became "weak" overnight (812,921 to 928,094 of 960,096) although
+nothing about them had been judged weak: they had stopped being judged at all. A row therefore
+carries `stated`, and every count splits into stated-weak, stated-strong and unstated.
+
 A program merges what it imports, so a fact would otherwise be counted once per importer. Each
 file is therefore credited only with the facts its imports do not already declare, which is what
 "this program states" means.
@@ -22,7 +29,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import Module
+from genomeos.ir import Module, confidence_stated
 from genomeos.lang import BioLangError, parse_file
 from genomeos.lang.parser import resolve_import
 
@@ -92,6 +99,7 @@ def _rows_of(module: Module, path: str) -> list[dict[str, Any]]:
 
     def add(block: str, obj: Any) -> None:
         ev = getattr(obj, "evidence", None)
+        raw = getattr(obj, "confidence", 0.0)
         rows.append(
             {
                 "module": module.name,
@@ -102,7 +110,10 @@ def _rows_of(module: Module, path: str) -> list[dict[str, Any]]:
                 "source": (ev.source if ev else "") or "",
                 "organism": (ev.organism if ev else "") or "",
                 "note": (ev.note if ev else "") or "",
-                "confidence": round(float(getattr(obj, "confidence", 0.0) or 0.0), 3),
+                # the number stays 0.0 when unstated, for the scripts that read it; `stated` says
+                # whether it is a judgement or an absence
+                "confidence": round(float(raw or 0.0), 3),
+                "stated": confidence_stated(raw),
                 "detail": _detail(block, obj),
             }
         )
@@ -128,7 +139,8 @@ def _rows_of(module: Module, path: str) -> list[dict[str, Any]]:
 
 
 def _identity(row: dict[str, Any]) -> tuple:
-    return (row["block"], row["label"], row["evidence"], row["source"], row["confidence"])
+    conf = row["confidence"] if row.get("stated", True) else None
+    return (row["block"], row["label"], row["evidence"], row["source"], conf)
 
 
 def _imports_of(path: Path) -> list[Path]:
@@ -192,7 +204,8 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
         by_block[r["block"]] = by_block.get(r["block"], 0) + 1
         if r["source"]:
             by_source[r["source"]] = by_source.get(r["source"], 0) + 1
-    conf = [r["confidence"] for r in rows]
+    stated = [r for r in rows if r.get("stated", True)]
+    conf = [r["confidence"] for r in stated]
     bands = {"0.0–0.3": 0, "0.3–0.5": 0, "0.5–0.7": 0, "0.7–0.9": 0, "0.9–1.0": 0}
     for c in conf:
         key = (
@@ -207,28 +220,47 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
             else "0.9–1.0"
         )
         bands[key] += 1
+    bands["unstated"] = len(rows) - len(stated)
     # The pooled mean is a mixture and must say so. 2026-09-17's calibration lane tested the
     # predicted band against four measured populations and found the stated level outside its own
     # 95% interval in 10 of 12 bands, with the four offsets pointing in OPPOSITE directions
     # (+0.472, -0.291, -0.137, +0.518). A level is a property of a population, so averaging a
     # curated 0.9, an inferred 0.4 and a predicted effect size into one number produces a figure
     # that is on no scale at all. The pooled mean is kept because callers read it, and the mean per
-    # kind is printed beside it so nobody has to take the mixture on trust.
+    # kind is printed beside it so nobody has to take the mixture on trust. Every mean is over the
+    # STATED confidences only: an unstated one is an absence, and averaging it in as 0.0 would drag
+    # the mean down by however many facts nobody judged. None when nothing was stated.
     by_kind: dict[str, list[float]] = {}
+    unstated_by_kind: dict[str, int] = {}
     for r in rows:
-        by_kind.setdefault(r["evidence"], []).append(r["confidence"])
+        if r.get("stated", True):
+            by_kind.setdefault(r["evidence"], []).append(r["confidence"])
+        else:
+            unstated_by_kind[r["evidence"]] = unstated_by_kind.get(r["evidence"], 0) + 1
+    kinds_seen = sorted(set(by_kind) | set(unstated_by_kind), key=lambda k: -by_evidence.get(k, 0))
+    weak = sum(1 for c in conf if c <= WEAK)
     return {
         "facts": len(rows),
-        "mean_confidence": round(sum(conf) / len(conf), 3) if conf else 0.0,
+        "stated": len(stated),
+        "unstated": len(rows) - len(stated),
+        "weak": weak,
+        "strong": len(stated) - weak,
+        "mean_confidence": round(sum(conf) / len(conf), 3) if conf else None,
         "mean_confidence_by_evidence": {
-            k: {"facts": len(v), "mean": round(sum(v) / len(v), 3)}
-            for k, v in sorted(by_kind.items(), key=lambda kv: -len(kv[1]))
+            k: {
+                "facts": len(by_kind.get(k, [])) + unstated_by_kind.get(k, 0),
+                "stated": len(by_kind.get(k, [])),
+                "unstated": unstated_by_kind.get(k, 0),
+                "mean": round(sum(by_kind[k]) / len(by_kind[k]), 3) if by_kind.get(k) else None,
+            }
+            for k in kinds_seen
         },
         "mean_confidence_is_a_mixture": (
             "the pooled mean averages curated, inferred and predicted confidences, which the"
-            " calibration lane showed are not on one scale: read it with the per-kind means beside it"
+            " calibration lane showed are not on one scale: read it with the per-kind means beside it;"
+            " every mean is over stated confidences only"
         ),
-        "weak": sum(1 for c in conf if c <= WEAK),
+        "weak_means": f"a STATED confidence at or below {WEAK}; an unstated one is counted apart",
         "unknown_evidence": by_evidence.get("none", 0),
         "by_evidence": dict(sorted(by_evidence.items(), key=lambda kv: -kv[1])),
         "by_block": dict(sorted(by_block.items(), key=lambda kv: -kv[1])),
@@ -251,13 +283,17 @@ def _cached(
             files.append({"path": rel, "module": "", "facts": 0, "error": str(e)})
             continue
         rows.extend(own)
+        st = [x["confidence"] for x in own if x.get("stated", True)]
+        weak = sum(1 for c in st if c <= WEAK)
         files.append(
             {
                 "path": rel,
                 "module": own[0]["module"] if own else Path(rel).stem,
                 "facts": len(own),
-                "weak": sum(1 for x in own if x["confidence"] <= WEAK),
-                "mean_confidence": round(sum(x["confidence"] for x in own) / len(own), 3) if own else 0.0,
+                "weak": weak,
+                "strong": len(st) - weak,
+                "unstated": len(own) - len(st),
+                "mean_confidence": round(sum(st) / len(st), 3) if st else None,
             }
         )
     return tuple(rows), tuple(files)
@@ -289,8 +325,8 @@ def collect(
     rows = list(all_rows)
     if kinds:
         rows = [r for r in rows if r["evidence"] in kinds]
-    if max_confidence is not None:
-        rows = [r for r in rows if r["confidence"] <= max_confidence + 1e-9]
+    if max_confidence is not None:  # a ceiling on a number the fact must have stated
+        rows = [r for r in rows if r.get("stated", True) and r["confidence"] <= max_confidence + 1e-9]
     if module:
         rows = [r for r in rows if r["module"] == module or r["path"] == module]
     if query:
@@ -304,10 +340,16 @@ def collect(
             or q in r["block"].lower()
             or q in str(r["detail"]).lower()
         ]
-    rows.sort(key=lambda r: (r["confidence"], r["path"], r["block"], r["label"]))
+    # weakest stated first; the unstated after them, since they carry no judgement to review
+    rows.sort(key=lambda r: (not r.get("stated", True), r["confidence"], r["path"], r["block"], r["label"]))
+    # A program that fails to parse states no facts, and neither does any program importing it. On
+    # 2026-09-27 one demo program with a syntax error took 21 facts out of the total (26,845 to
+    # 26,824) and nothing said so. The failures travel beside the rows so every caller can count them.
+    failed = [{"path": f["path"], "error": f["error"]} for f in files if f.get("error")]
     return {
         "rows": rows,
         "files": list(files),
+        "failed": failed,
         "summary": summarise(rows),
         "whole": summarise(list(all_rows)),
         "weak_line": WEAK,
@@ -316,14 +358,14 @@ def collect(
 
 
 def to_csv(rows: list[dict[str, Any]]) -> str:
-    """The review list: one line per fact, weakest first."""
+    """The review list: one line per fact, weakest stated first, "unstated" where none was stated."""
     out = io.StringIO()
     w = csv.writer(out)
     w.writerow(["confidence", "evidence", "block", "label", "source", "organism", "note", "program"])
     for r in rows:
         w.writerow(
             [
-                r["confidence"],
+                r["confidence"] if r.get("stated", True) else "unstated",
                 r["evidence"],
                 r["block"],
                 r["label"],

@@ -235,9 +235,10 @@ def _distil_ccres_chr21() -> dict:
 def _distil_celegans_lineage() -> dict:
     from genomeos.organism.reference import KNOWLEDGE, ReferenceLineage, distil, fetch_wormweb, parse_wormweb
 
-    data = distil(parse_wormweb(fetch_wormweb()))
-    KNOWLEDGE.parent.mkdir(parents=True, exist_ok=True)
-    KNOWLEDGE.write_text(json.dumps(data, separators=(",", ":")))
+    js = fetch_wormweb()
+    data = distil(parse_wormweb(js))
+    # item 12 S6 follow-up: the lineage table enters the registry through the contract, compact as before
+    save_result(KNOWLEDGE.stem, data, manifest=_lineage_manifest(js), compact=True)
     ref = ReferenceLineage.from_dict(data)
     org = DATA / "organisms" / "celegans"
     org.mkdir(parents=True, exist_ok=True)
@@ -250,6 +251,25 @@ def _distil_celegans_lineage() -> dict:
         "knowledge_file": str(KNOWLEDGE),
         "generated": [str(org / f) for f in ("timers.bio", "lineage_embryo.bio", "lineage_larva.bio")],
         "cycle_timers": len(ref.cycle_stats()),
+    }
+
+
+def _lineage_manifest(js: str) -> dict:
+    from genomeos.organism import provenance as pv
+    from genomeos.organism.reference import EMBRYONIC_FOUNDERS, HATCH_MIN, TISSUE_CELL_TYPE
+
+    return {
+        "sources": [pv.WORMWEB],
+        "inputs": [pv.bytes_entry(f"{pv.WORMWEB['url']} (fetched, not kept)", js.encode())],
+        "assembly": pv.ASSEMBLY,
+        "coordinates": pv.COORDINATES,
+        "parameters": {
+            "hatch_min": HATCH_MIN,
+            "embryonic_founders": list(EMBRYONIC_FOUNDERS),
+            "tissue_cell_types": len(TISSUE_CELL_TYPE),
+        },
+        "exclusions": [],
+        "partitions": pv.NO_SPLIT,
     }
 
 
@@ -273,10 +293,19 @@ def _distil_human_turnover() -> dict:
 
 def _distil_celegans_tf_atlas() -> dict:
     from genomeos.organism.reference import ReferenceLineage
-    from genomeos.organism.tf_atlas import distil, fetch, save_cells, summary, textbook_check, to_bio_reader
+    from genomeos.organism.tf_atlas import (
+        cells_manifest,
+        distil,
+        fetch,
+        save_cells,
+        summary,
+        textbook_check,
+        to_bio_reader,
+    )
 
-    table = distil(fetch())
-    save_cells(table)
+    archive = fetch()
+    table = distil(archive)
+    save_cells(table, manifest=cells_manifest(archive))
     ref = ReferenceLineage.load()
     checks = textbook_check(table, ref, load_result("celegans_packer2019"))
     org = DATA / "organisms" / "celegans"

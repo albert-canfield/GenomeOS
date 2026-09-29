@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 2.1: BioLang v0.2 — nested transcripts, cell types, events, imports."""
 
 import pytest

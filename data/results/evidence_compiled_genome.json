@@ -1,6 +1,6 @@
 {
   "result": "evidence_compiled_genome",
-  "date": "2026-09-17",
+  "date": "2026-09-28",
   "chromosomes_compiled": [
     "chr1",
     "chr10",
@@ -28,31 +28,13 @@
     "chrY"
   ],
   "chromosomes_not_compiled": {},
-  "megabytes": 236.3,
+  "megabytes": 299.2,
   "evidence": {
     "per_chromosome": {
-      "chr6": {
-        "facts": 51918,
-        "weak": 44151,
-        "experimental": 1135,
-        "curated": 2227,
-        "predicted": 47538,
-        "inferred": 1018,
-        "none": 0
-      },
-      "chrY": {
-        "facts": 664,
-        "weak": 252,
-        "experimental": 6,
-        "curated": 274,
-        "predicted": 250,
-        "inferred": 134,
-        "none": 0
-      },
       "chr1": {
-        "facts": 95150,
-        "weak": 79100,
-        "experimental": 2142,
+        "facts": 95151,
+        "weak": 91984,
+        "experimental": 2143,
         "curated": 4138,
         "predicted": 87362,
         "inferred": 1508,
@@ -60,7 +42,7 @@
       },
       "chr10": {
         "facts": 45540,
-        "weak": 39320,
+        "weak": 44103,
         "experimental": 933,
         "curated": 1748,
         "predicted": 42046,
@@ -69,7 +51,7 @@
       },
       "chr11": {
         "facts": 55986,
-        "weak": 46815,
+        "weak": 54041,
         "experimental": 1186,
         "curated": 2386,
         "predicted": 51462,
@@ -78,7 +60,7 @@
       },
       "chr12": {
         "facts": 49397,
-        "weak": 41971,
+        "weak": 47986,
         "experimental": 897,
         "curated": 2038,
         "predicted": 45628,
@@ -87,7 +69,7 @@
       },
       "chr13": {
         "facts": 21253,
-        "weak": 18566,
+        "weak": 20503,
         "experimental": 342,
         "curated": 918,
         "predicted": 19422,
@@ -96,7 +78,7 @@
       },
       "chr14": {
         "facts": 29230,
-        "weak": 24933,
+        "weak": 28283,
         "experimental": 505,
         "curated": 1378,
         "predicted": 26770,
@@ -105,7 +87,7 @@
       },
       "chr15": {
         "facts": 31225,
-        "weak": 27027,
+        "weak": 30309,
         "experimental": 585,
         "curated": 1148,
         "predicted": 28948,
@@ -114,7 +96,7 @@
       },
       "chr16": {
         "facts": 32356,
-        "weak": 26638,
+        "weak": 31307,
         "experimental": 677,
         "curated": 1562,
         "predicted": 29598,
@@ -123,7 +105,7 @@
       },
       "chr17": {
         "facts": 46875,
-        "weak": 38294,
+        "weak": 45453,
         "experimental": 1030,
         "curated": 2070,
         "predicted": 43216,
@@ -132,7 +114,7 @@
       },
       "chr18": {
         "facts": 20068,
-        "weak": 17695,
+        "weak": 19415,
         "experimental": 359,
         "curated": 740,
         "predicted": 18500,
@@ -141,7 +123,7 @@
       },
       "chr19": {
         "facts": 38277,
-        "weak": 28986,
+        "weak": 36906,
         "experimental": 959,
         "curated": 2416,
         "predicted": 34530,
@@ -150,7 +132,7 @@
       },
       "chr2": {
         "facts": 71524,
-        "weak": 61793,
+        "weak": 69195,
         "experimental": 1409,
         "curated": 2859,
         "predicted": 65834,
@@ -159,7 +141,7 @@
       },
       "chr20": {
         "facts": 27694,
-        "weak": 23303,
+        "weak": 26787,
         "experimental": 613,
         "curated": 1216,
         "predicted": 25404,
@@ -168,7 +150,7 @@
       },
       "chr21": {
         "facts": 11348,
-        "weak": 9782,
+        "weak": 10905,
         "experimental": 202,
         "curated": 518,
         "predicted": 10348,
@@ -177,7 +159,7 @@
       },
       "chr22": {
         "facts": 20912,
-        "weak": 17613,
+        "weak": 20273,
         "experimental": 422,
         "curated": 1002,
         "predicted": 19224,
@@ -186,7 +168,7 @@
       },
       "chr3": {
         "facts": 59859,
-        "weak": 52028,
+        "weak": 58161,
         "experimental": 1129,
         "curated": 2211,
         "predicted": 55364,
@@ -195,7 +177,7 @@
       },
       "chr4": {
         "facts": 45013,
-        "weak": 38876,
+        "weak": 43500,
         "experimental": 781,
         "curated": 1870,
         "predicted": 41292,
@@ -204,16 +186,25 @@
       },
       "chr5": {
         "facts": 49430,
-        "weak": 42854,
+        "weak": 47878,
         "experimental": 852,
         "curated": 1979,
         "predicted": 45544,
         "inferred": 1055,
         "none": 0
       },
+      "chr6": {
+        "facts": 51919,
+        "weak": 50199,
+        "experimental": 1136,
+        "curated": 2227,
+        "predicted": 47538,
+        "inferred": 1018,
+        "none": 0
+      },
       "chr7": {
         "facts": 49314,
-        "weak": 42348,
+        "weak": 47703,
         "experimental": 990,
         "curated": 2096,
         "predicted": 45192,
@@ -222,7 +213,7 @@
       },
       "chr8": {
         "facts": 40476,
-        "weak": 35075,
+        "weak": 39132,
         "experimental": 787,
         "curated": 1650,
         "predicted": 37104,
@@ -231,7 +222,7 @@
       },
       "chr9": {
         "facts": 41706,
-        "weak": 35865,
+        "weak": 40410,
         "experimental": 784,
         "curated": 1673,
         "predicted": 38544,
@@ -240,25 +231,57 @@
       },
       "chrX": {
         "facts": 24879,
-        "weak": 19636,
+        "weak": 23343,
         "experimental": 557,
         "curated": 1932,
         "predicted": 21634,
         "inferred": 756,
         "none": 0
+      },
+      "chrY": {
+        "facts": 664,
+        "weak": 318,
+        "experimental": 6,
+        "curated": 274,
+        "predicted": 250,
+        "inferred": 134,
+        "none": 0
       }
     },
     "pooled": {
-      "facts": 960094,
-      "weak": 812921,
-      "experimental": 19282,
+      "facts": 960096,
+      "weak": 928094,
+      "experimental": 19284,
       "curated": 42049,
       "predicted": 880754,
       "inferred": 18009,
       "none": 0
     }
   },
-  "weak_share": 0.8467,
+  "weak_share": 0.9667,
   "reading": "the compiled chromosomes are the project's weak half by construction: a region's role comes from its tier (inferred) and an element's target from a model (predicted), while the hand-written organism programs are curated. Reported so the Evidence explorer's totals cannot be read as if the whole project were as well evidenced as its demos",
-  "seconds": 43.7
+  "seconds": 48.8,
+  "result_manifest": {
+    "code": {
+      "git_sha": "1c8b77b84829f0ec4ccd89bdb3a70d240780eab3",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py"
+      ],
+      "argv": [
+        "scripts/compile_genome_programs.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": false,
+    "problems": [
+      "missing sources",
+      "missing inputs",
+      "missing assembly",
+      "missing coordinates",
+      "missing parameters",
+      "missing exclusions",
+      "missing partitions"
+    ]
+  }
 }

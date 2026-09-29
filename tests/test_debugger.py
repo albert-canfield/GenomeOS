@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 4.4: breakpoints on biological conditions and an evidence trace."""
 
 from genomeos.lang import parse_file

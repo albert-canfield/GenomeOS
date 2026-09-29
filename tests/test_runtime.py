@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from genomeos.lang import parse_file
 from genomeos.runtime import CellRuntime, Environment, NetworkRuntime
 

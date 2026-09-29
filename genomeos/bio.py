@@ -13,7 +13,7 @@
     # test: TetR final > 5          the last value of a species (`P@Compartment` in a located program)
     # test: TetR peaks >= 2         number of peaks over the run
     # test: rules >= 3              module facts: rules, entities, unknowns
-    # test: confidence >= 0.6       mean confidence over all rules
+    # test: confidence >= 0.6       mean confidence over the rules that state one
     # test: alive == 961             organism programs: cells (born), alive, deaths at the last stage;
                                     the program's own `assert:` lines are checked too
 
@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import UNKNOWN, Module
+from genomeos.ir import UNKNOWN, Module, confidence_stated
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
 from genomeos.lang.tools import (
@@ -189,8 +189,9 @@ def evaluate(
             got = len(module.parameters)
         elif subject == "unknown_parameters":
             got = sum(1 for p in module.parameters.values() if p.value is UNKNOWN)
-        elif subject == "confidence":
-            got = sum(r.confidence for r in module.rules) / len(module.rules) if module.rules else 0.0
+        elif subject == "confidence":  # stated confidences only; None (the test fails) if none is
+            stated = [r.confidence for r in module.rules if confidence_stated(r.confidence)]
+            got = sum(stated) / len(stated) if stated else None
         elif subject in body_subjects and body is not None:
             summ = body.summary()
             got = {"cells": summ["cells_born"], "alive": summ["alive"], "deaths": summ["deaths"]}[subject]
@@ -335,9 +336,10 @@ class Repl:
         self.say(f"  {len(m.entities)} entities, {len(m.rules)} rules, {len(m.events)} events{waiting}")
         if verbose:
             for kind, val in sorted(m.confidence_report().items()):
-                self.say(f"    {kind:<10} confidence {val:.2f}")
+                self.say(f"    {kind:<10} confidence " + ("none stated" if val is None else f"{val:.2f}"))
             for r in m.rules:
-                self.say(f"    {r.id}  [{r.evidence.kind.value}] {r.confidence}")
+                said = r.confidence if confidence_stated(r.confidence) else "unstated"
+                self.say(f"    {r.id}  [{r.evidence.kind.value}] {said}")
         return True
 
     def _run(self, argv: list[str]) -> bool:
@@ -468,7 +470,11 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("repl", help="interactive BioLang")
     p.set_defaults(fn=cmd_repl)
     args = ap.parse_args(argv)
-    return args.fn(args)
+    try:
+        return args.fn(args)
+    except BioLangError as e:  # a program that does not compile is the user's error, not a crash
+        print(f"bio: {e}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

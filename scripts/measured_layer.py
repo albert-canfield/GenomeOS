@@ -172,6 +172,25 @@ def read_chromosome(chrom: str, with_comparison: bool = True) -> dict[str, Any]:
     return out
 
 
+STATED_COUNTS = ("stated", "unstated", "weak", "strong", "weak_before_r4_counting_unstated")
+WEAK_MEANS = (
+    f"a STATED confidence at or below {WEAK}; an unstated one (the parser's UNSTATED, since R4 every "
+    "predicted fact) is counted apart. weak_before_r4_counting_unstated is the old count, which "
+    "compared the unstated 0.0 with the line, kept beside it for comparison"
+)
+
+
+def count_stated(tally: dict[str, int], row: dict[str, Any]) -> None:
+    """Add one evidence row to stated/unstated and stated-weak/stated-strong (evidence.py's `stated`)."""
+    stated = row.get("stated", True)
+    low = row["confidence"] <= WEAK
+    tally["stated"] += stated
+    tally["unstated"] += not stated
+    tally["weak"] += stated and low
+    tally["strong"] += stated and not low
+    tally["weak_before_r4_counting_unstated"] += low
+
+
 def read_evidence(root: Path = Path(".")) -> dict[str, Any]:
     """The Evidence explorer over the compiled programs, per chromosome and pooled.
 
@@ -184,16 +203,16 @@ def read_evidence(root: Path = Path(".")) -> dict[str, Any]:
     got = collect(root, compiled=True)
     rows = [r for r in got["rows"] if r["path"].startswith(str(COMPILED_DIR))]
     per: dict[str, dict[str, int]] = {}
+    pooled = {"facts": 0, **dict.fromkeys(STATED_COUNTS, 0), **dict.fromkeys(KINDS, 0)}
     for r in rows:
         chrom = Path(r["path"]).stem.replace("noncoding_", "")
-        d = per.setdefault(chrom, {"facts": 0, "weak": 0, **dict.fromkeys(KINDS, 0)})
-        d["facts"] += 1
-        d[r["evidence"]] = d.get(r["evidence"], 0) + 1
-        d["weak"] += r["confidence"] <= WEAK
-    pooled = {"facts": len(rows), "weak": sum(1 for r in rows if r["confidence"] <= WEAK)}
-    for k in KINDS:
-        pooled[k] = sum(1 for r in rows if r["evidence"] == k)
+        d = per.setdefault(chrom, {"facts": 0, **dict.fromkeys(STATED_COUNTS, 0), **dict.fromkeys(KINDS, 0)})
+        for tally in (d, pooled):
+            tally["facts"] += 1
+            tally[r["evidence"]] = tally.get(r["evidence"], 0) + 1
+            count_stated(tally, r)
     return {
+        "weak_means": WEAK_MEANS,
         "compiled_facts_read": len(rows),
         "programs_read": sorted(per),
         "per_chromosome": per,
@@ -233,6 +252,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="", help="comma separated; default every chromosome")
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument(
+        "--result-name", default="measured_layer_genome", help="the name to save under (R6 saves beside)"
+    )
     ap.add_argument("--no-comparison", action="store_true", help="skip the standardised comparisons")
     ap.add_argument("--write-programs", action="store_true", help="recompile the programs with the layer")
     ap.add_argument("--no-evidence", action="store_true", help="skip the 30 s read over the compiled tree")
@@ -352,7 +374,8 @@ def main(argv: list[str] | None = None) -> int:
         f"(n={pooled['agreement_denominator_predicted_gene_tested']})"
     )
     if not args.no_save:
-        p = save_result("measured_layer_genome", payload)
+        m = measured.result_manifest(list(per), comparison=not args.no_comparison)
+        p = save_result(args.result_name, payload, manifest=m)
         print(f"saved {p}")
     return 0
 

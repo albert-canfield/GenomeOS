@@ -71,6 +71,22 @@ def test_layers_from_results_and_absence(tmp_path):
     assert "case syntax; inside a segmental duplication" in text
     assert "read in K562; silent in none" in text and "origin: not read for this locus" in text
     assert text.count("{") == text.count("}")
+    # R4: a pre-R4 link's stored confidence (0.4 here) is not printed as a confidence
+    assert "[predicted: AlphaGenome, one run; probability unavailable]" in text and ", 0.4]" not in text
+
+
+def test_a_link_written_since_r4_decompiles_with_its_certainty(tmp_path):
+    import json
+
+    from genomeos.predict.enhancer_target import aggregate, predict_target
+
+    pc = predict_target(aggregate([("G1", "liver", -0.4)]))
+    (tmp_path / "enhancer_targets_chrT.json").write_text(
+        json.dumps({"elements": [{"id": "E1", "start": 100, "end": 300, "predicted_coding": pc}]})
+    )
+    (e,) = _elements("G1", "chrT", tmp_path)
+    assert e["confidence"] is None and e["certainty"]["probability"] is None
+    assert e["certainty"]["effect_estimate"] == -0.4
 
 
 def test_a_poised_cell_type_is_named_and_not_dropped(tmp_path):

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Task 4.2: segment count and period follow the clock-and-wavefront relation."""
 
 from pathlib import Path

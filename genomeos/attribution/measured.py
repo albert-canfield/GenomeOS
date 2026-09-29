@@ -13,7 +13,10 @@ Four assays, each kept under its own name:
   as not regulated is evidence, not an absence of evidence**: it is carried through to the program as
   an experimental fact, never dropped and never turned back into UNKNOWN.
 - **lentiMPRA** (ENCODE4 joint library ENCSR106SZM, K562 / HepG2 / WTC11): how much a 200 bp sequence
-  drives transcription from a reporter. Episomal, so it measures the sequence and not the locus.
+  drives transcription from a reporter integrated by lentivirus (Agarwal et al. 2025, Nature): integrated,
+  but outside the sequence's native locus, so it measures the sequence and not the locus. (Called
+  episomal here until R6, 2026-09-28; the assay is not episomal.) Several tiles can match one element:
+  every tile is kept and the label follows `REPORTER_LABEL_RULE`, never the strongest tile.
 - **VISTA** (LBNL, transgenic mouse e11.5): whether a sequence is an enhancer in a living embryo,
   positive or negative.
 - **saturation mutagenesis** (Kircher et al. 2019, GSE126550, read through `knowledge/satmut.py`):
@@ -90,7 +93,102 @@ CRISPRI_FILES = (
     "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
     "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
 )
+#: the benchmark's own split, one per file. A pair's split is the file it came from and nothing else.
+TRAINING, HELDOUT, ALL = "training", "heldout", "all"
+CRISPRI_SPLIT_OF = dict(zip(CRISPRI_FILES, (TRAINING, HELDOUT), strict=True))
+SPLITS = (TRAINING, HELDOUT, ALL)
+#: the power columns exactly as both headers name them (read 2026-09-28): the probability that the
+#: screen would have called an effect of 10, 15, 20, 25 or 50% on this pair. A negative with power
+#: near 1 is evidence of no effect; one with power near 0 is a screen that could not have seen one.
+POWER_COLUMNS = (
+    "PowerAtEffectSize10",
+    "PowerAtEffectSize15",
+    "PowerAtEffectSize20",
+    "PowerAtEffectSize25",
+    "PowerAtEffectSize50",
+)
+#: what `EffectSize` is, so a reader never has to guess the unit: the fractional change in the measured
+#: gene's expression when the element is silenced, so -0.2 is a 20% decrease and +0.1 a 10% increase
+EFFECT_UNIT = "fractional change in the measured gene's expression on silencing (EffectSize)"
+#: A pair's outcome, kept apart before anything is pooled (review item R2). The benchmark's `Regulated`
+#: means a significant DECREASE only, so a significant increase also carries Regulated FALSE; before
+#: 2026-09-28 such a gene was listed as "measured no effect". It is not a null and it is not a silencer.
+DECREASE = "significant_decrease"
+INCREASE = "significant_increase"
+NULL_INFORMATIVE = "not_significant_well_powered"
+NULL_INCONCLUSIVE = "not_significant_underpowered"
+MISSING = "missing"
+OUTCOMES = (DECREASE, INCREASE, NULL_INFORMATIVE, NULL_INCONCLUSIVE, MISSING)
+#: a non-significant pair is an informative negative when the screen had at least WELL_POWERED power
+#: to see a 20% effect. Fixed before any verdict was recomputed on it: PowerAtEffectSize25 cannot
+#: separate (every non-significant pair in both files is >= 0.8 there, which is the benchmark's own
+#: filter), and at 20% the training file holds 6,169 of 9,810 non-significant pairs above the bar,
+#: the figure genomeos-8a's brief quotes. The comparison is invalid only when the benchmark says so
+#: (ValidConnection), and those rows are counted, never read as outcomes.
+POWER_FOR_NEGATIVES = "PowerAtEffectSize20"
+WELL_POWERED = 0.8
+
+#: written into the evidence source of every compiled link found only in held-out pairs. The link is
+#: a real measurement and stays in the program, but no feature, fit or label may read it: the
+#: held-out file is the benchmark's test set (docs/ATTRIBUTION.md, the split audit of 2026-09-28).
+HELDOUT_MARK = "held-out split, evaluation only, never a feature"
+
+# --- R1, context in executable rules (external review of 2026-09-28), fixed before the build ---------
+#: the runtime context key a compiled rule's `when` names: the identity of the simulated cell. The
+#: network runtime gates every rule by `when` against the context it is run in (`Module.active_rules`)
+CONTEXT_KEY = "cell_type"
+#: the `when` value of a rule whose measurement or prediction recorded no cell. The runtime matches it
+#: to no cell at all, so a missing context stays explicit and never becomes a universal rule
+CONTEXT_UNKNOWN = "unknown"
+#: what one compiled experimental rule stands for: one (element, gene, cell) observation, never the
+#: strongest result across cells. Within one cell the training pairs still set the number, as before
+RULE_UNIT = ("element", "gene", "cell")
+#: the review's acceptance tests, as it words them, pinned in tests/test_rule_context.py
+R1_ACCEPTANCE = (
+    "a K562-specific rule is inactive in HepG2",
+    "conflicting results from two cell types survive compilation and round-trip serialisation",
+)
 MPRA_ACTIVE = mpra.ACTIVE  # log2(RNA/DNA) at or above which a reporter element counts as active
+
+# --- R6, assay observations kept before aggregation (external review of 2026-09-28), fixed before the build
+#: what one reporter observation is: one lentiMPRA tile (an ENCODE element interval) in one cell, kept
+#: in the row with its interval, strand, overlap with the compiled element and log2(RNA/DNA)
+REPORTER_UNIT = ("tile", "cell")
+#: the declared aggregation model. The label of a cell is read from the share of tiles on each side of
+#: MPRA_ACTIVE, never from one tile's value, so one strong tile among inactive ones cannot make the
+#: element active; a cell whose tiles split evenly is `TILES_CONFLICT`, neither active nor silent
+REPORTER_LABEL_RULE = (
+    "per cell, active when more than half of the matched tiles are at or above MPRA_ACTIVE, silent "
+    "when more than half are below it, conflicting when exactly half are"
+)
+#: the per-cell value a row reports as `activity`: descriptive, and not what the label is read from
+REPORTER_SUMMARY = "median of the matched tiles' log2(RNA/DNA) in that cell"
+#: the maximum survives only under this name, as a descriptive statistic that no verdict reads
+REPORTER_MAX_FIELD = "activity_max_descriptive"
+#: why no per-tile uncertainty is carried: the three ENCODE element files hold one value per interval,
+#: their p and q columns are -1 throughout and no replicate-level value is released in them
+REPORTER_UNCERTAINTY = (
+    "not available: the ENCODE element files (ENCFF802FUV, ENCFF475FKV, ENCFF769REH) carry one value "
+    "per interval, p and q are -1 throughout, and no replicate-level value is in them"
+)
+#: the lentiMPRA verdict when no cell is active and at least one cell's tiles split evenly: not an
+#: agreement and not a disagreement, and counted under its own name
+TILES_CONFLICT = "reporter_tiles_conflict"
+#: four assays, four outcomes, never pooled into one: what each assay's block measures
+OUTCOME_KIND = {
+    "crispri": "endogenous gene regulation: a gene's expression when the element is silenced in place",
+    "lentimpra": (
+        "reporter activity: a 200 bp copy driving an integrated lentiviral reporter, outside its "
+        "native locus (Agarwal et al. 2025, Nature)"
+    ),
+    "vista": "developmental activity: a transgenic reporter in the mouse embryo at e11.5",
+    "satmut": "base-level sensitivity: single substitutions of the element read out in a reporter",
+}
+#: the review's acceptance tests, pinned in tests/test_measured_aggregation.py
+R6_ACCEPTANCE = (
+    "one unusually strong reporter tile among inactive ones does not make the element active",
+    "conflicting tiles remain listed, each with its value, strand and overlap",
+)
 REACH = 200_000  # the longest measured interval any assay holds, for the bounded overlap scan
 
 # an endogenous perturbation or an in-vivo assay; a reporter measures the sequence, not the locus
@@ -162,9 +260,151 @@ class CrispriPair:
     significant: bool
     effect_size: float
     p_adjusted: float
+    split: str = TRAINING  # the evaluation partition, from the file: "training" or "heldout"
+    source_file: str = ""  # the benchmark file the row was read from, by name
+    assay: str = "CRISPRi"  # the assay, named on the record so a pooled list stays traceable
+    # the five power columns, None where a table lacks the column or leaves it empty
+    power_at_effect_size_10: float | None = None
+    power_at_effect_size_15: float | None = None
+    power_at_effect_size_20: float | None = None
+    power_at_effect_size_25: float | None = None
+    power_at_effect_size_50: float | None = None
+
+    @property
+    def outcome(self) -> str:
+        """One of OUTCOMES. A significant pair is a decrease or an increase by the sign of its effect;
+        a non-significant one is informative only if the screen could have seen a 20% effect."""
+        if self.effect_size != self.effect_size:  # NaN: the table gave no effect size
+            return MISSING
+        if self.significant:
+            return DECREASE if self.effect_size < 0 else INCREASE
+        power = self.power_at_effect_size_20
+        if power is None:
+            return NULL_INCONCLUSIVE  # a null whose power is unknown cannot reject anything
+        return NULL_INFORMATIVE if power >= WELL_POWERED else NULL_INCONCLUSIVE
+
+    @property
+    def study(self) -> str:
+        """The benchmark's own study identifier (its `Dataset` column)."""
+        return self.dataset
+
+    @property
+    def partition(self) -> str:
+        """The evaluation partition: "training" is development, "heldout" is evaluation only."""
+        return self.split
 
 
-def parse_crispri(lines: Any, chrom: str | None = None) -> tuple[list[CrispriPair], int]:
+def development_only(pairs: list[CrispriPair]) -> list[CrispriPair]:
+    """The pairs a feature, a fit, a candidate selection, a starting label or a search objective may
+    read. Raises if a held-out pair is among them, rather than filtering it silently: a caller that
+    passed one has a leak to fix, not a list to clean."""
+    held = [p for p in pairs if p.split != TRAINING]
+    if held:
+        raise ValueError(
+            f"{len(held)} held-out pairs passed to a development reader "
+            f"(first: {held[0].chrom}:{held[0].start}-{held[0].end} {held[0].gene} in {held[0].cell})"
+        )
+    return pairs
+
+
+#: the overlap check's thresholds, fixed before it was run: an interval pair at or above
+#: NEAR_IDENTICAL reciprocal overlap is the same element tested twice; any shared base is related
+NEAR_IDENTICAL = 0.9
+
+
+def split_overlap(pairs: list[CrispriPair]) -> dict[str, Any]:
+    """Where the evaluation partition touches the development one, beyond identical pairs.
+
+    Counted per held-out pair, each in the first category it meets, strictest first:
+
+    - `identical_pair`: the same interval and the same gene appears in training;
+    - `near_identical_same_gene`: a training interval at reciprocal overlap >= NEAR_IDENTICAL, same gene;
+    - `overlapping_same_gene`: a training interval sharing at least one base, same gene;
+    - `near_identical_other_gene`: the same element (>= NEAR_IDENTICAL) tested in training on another gene;
+    - `overlapping_other_gene`: a training interval sharing at least one base, another gene;
+    - `independent`: no training interval shares a base with it.
+
+    Each category is also split by the held-out pair's cell, because a K562 held-out pair on a
+    training element is a much closer relative than a WTC11 one.
+    """
+    train = sorted((p for p in pairs if p.split == TRAINING), key=lambda p: (p.chrom, p.start))
+    by_chrom: dict[str, list[CrispriPair]] = defaultdict(list)
+    for p in train:
+        by_chrom[p.chrom].append(p)
+    starts = {c: [p.start for p in v] for c, v in by_chrom.items()}
+    reach = max((p.end - p.start for p in train), default=0)
+    order = (
+        "identical_pair",
+        "near_identical_same_gene",
+        "overlapping_same_gene",
+        "near_identical_other_gene",
+        "overlapping_other_gene",
+        "independent",
+    )
+    counts = dict.fromkeys(order, 0)
+    by_cell: dict[str, dict[str, int]] = {}
+    held = [p for p in pairs if p.split == HELDOUT]
+    for h in held:
+        cand = by_chrom.get(h.chrom, [])
+        lo = bisect.bisect_left(starts.get(h.chrom, []), h.start - reach)
+        hi = bisect.bisect_right(starts.get(h.chrom, []), h.end)
+        near = [t for t in cand[lo:hi] if t.end > h.start and t.start < h.end]
+        same = [t for t in near if t.gene == h.gene]
+        other = [t for t in near if t.gene != h.gene]
+        if any(t.start == h.start and t.end == h.end for t in same):
+            kind = order[0]
+        elif any(reciprocal_overlap(h.start, h.end, t.start, t.end) >= NEAR_IDENTICAL for t in same):
+            kind = order[1]
+        elif same:
+            kind = order[2]
+        elif any(reciprocal_overlap(h.start, h.end, t.start, t.end) >= NEAR_IDENTICAL for t in other):
+            kind = order[3]
+        elif other:
+            kind = order[4]
+        else:
+            kind = order[5]
+        counts[kind] += 1
+        cell = by_cell.setdefault(h.cell, dict.fromkeys(order, 0))
+        cell[kind] += 1
+    return {
+        "heldout_pairs": len(held),
+        "training_pairs": len(train),
+        "near_identical_at": NEAR_IDENTICAL,
+        "counts": counts,
+        "by_heldout_cell": dict(sorted(by_cell.items())),
+        "heldout_related_to_training": len(held) - counts["independent"],
+    }
+
+
+def _effect(value: str | None) -> float:
+    """EffectSize, or NaN where the table leaves it empty: a missing effect is not a zero effect."""
+    if value in (None, "", "NA"):
+        return float("nan")
+    try:
+        return float(value)
+    except ValueError:
+        return float("nan")
+
+
+def _power(value: str | None) -> float | None:
+    """A power column's value; None for an absent, empty or NA cell, never a made-up zero."""
+    if value in (None, "", "NA"):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
+def is_heldout(source: str) -> bool:
+    """Whether a compiled evidence source names a held-out link. Any reader that turns compiled
+    `_measured` rules into features or labels must drop these."""
+    return HELDOUT_MARK in source
+
+
+def parse_crispri(
+    lines: Any, chrom: str | None = None, split: str = TRAINING, source_file: str = ""
+) -> tuple[list[CrispriPair], int]:
     """Valid pairs and the count the benchmark itself marks invalid (promoter or exon overlaps).
 
     The invalid ones are returned as a number rather than silently skipped: they are not measured
@@ -189,25 +429,41 @@ def parse_crispri(lines: Any, chrom: str | None = None) -> tuple[list[CrispriPai
                 reference=r.get("Reference", ""),
                 regulated=r.get("Regulated") == "TRUE",
                 significant=r.get("Significant") == "TRUE",
-                effect_size=float(r["EffectSize"] or 0.0),
+                effect_size=_effect(r.get("EffectSize")),
                 p_adjusted=float(r["pValueAdjusted"] or 1.0),
+                split=split,
+                source_file=source_file,
+                power_at_effect_size_10=_power(r.get("PowerAtEffectSize10")),
+                power_at_effect_size_15=_power(r.get("PowerAtEffectSize15")),
+                power_at_effect_size_20=_power(r.get("PowerAtEffectSize20")),
+                power_at_effect_size_25=_power(r.get("PowerAtEffectSize25")),
+                power_at_effect_size_50=_power(r.get("PowerAtEffectSize50")),
             )
         )
     return out, invalid
 
 
 def load_crispri(
-    chrom: str | None = None, knowledge: Path = CRISPRI_KNOWLEDGE
+    chrom: str | None = None, knowledge: Path = CRISPRI_KNOWLEDGE, split: str = ALL
 ) -> tuple[list[CrispriPair], int]:
-    """Both benchmark tables from the local cache. Nothing is fetched; a missing table is no pairs."""
+    """The benchmark tables from the local cache. Nothing is fetched; a missing table is no pairs.
+
+    `split` picks "training", "heldout" or "all". The default stays "all" because the split audit of
+    2026-09-28 found no caller that fits or builds a feature on these pairs; each pair carries its
+    `split`, so a caller that does must pass "training" or filter on it.
+    """
+    if split not in SPLITS:
+        raise ValueError(f"split must be one of {SPLITS}, not {split!r}")
     pairs: list[CrispriPair] = []
     invalid = 0
     for name in CRISPRI_FILES:
+        if split != ALL and CRISPRI_SPLIT_OF[name] != split:
+            continue
         p = knowledge / name
         if not p.exists():
             continue
         with gzip.open(p, "rt") as fh:
-            got, bad = parse_crispri(fh, chrom)
+            got, bad = parse_crispri(fh, chrom, CRISPRI_SPLIT_OF[name], name)
         pairs.extend(got)
         invalid += bad
     pairs.sort(key=lambda p: (p.start, p.end, p.gene, p.cell))
@@ -255,6 +511,9 @@ class SatmutElement:
     experiment: str  # the primary experiment of the locus, as satmut.loci chooses it
     repeats: int  # experiments of the same locus, this one included; the others are not counted twice
     bases: dict[int, dict]
+    # R6: the other experiments of the locus, (name, base table), read and listed beside the primary
+    # but never pooled into it; SORT1's group holds SORT1-flip, the element in the other orientation
+    repeat_bases: tuple[tuple[str, dict], ...] = ()
 
 
 @lru_cache(maxsize=2)
@@ -282,6 +541,9 @@ def _satmut_primaries(path: Path) -> tuple[SatmutElement, ...]:
                 experiment=lead,
                 repeats=len(group),
                 bases=table,
+                repeat_bases=tuple(
+                    (name, satmut_knowledge.base_table(experiments[name])) for name in group if name != lead
+                ),
             )
         )
     return tuple(sorted(out, key=lambda e: (e.chrom, e.start)))
@@ -290,6 +552,74 @@ def _satmut_primaries(path: Path) -> tuple[SatmutElement, ...]:
 def load_satmut(chrom: str, path: Path = satmut_knowledge.DATA_PATH) -> list[SatmutElement]:
     """The saturation-mutagenesis experiments of one chromosome from the local cache, without fetching."""
     return [e for e in _satmut_primaries(path) if e.chrom == chrom]
+
+
+# --- the manifest (R9) of every result built on this layer -------------------------------------------
+def result_manifest(chroms: list[str], results_dir: Path = RESULTS_DIR, **parameters: Any) -> dict[str, Any]:
+    """The provenance contract of a result read from this layer: the assay files by sha256 and the
+    compiled element runs it matched them to. Shared by `scripts/measured_layer.py` and
+    `scripts/confidence_calibration.py` so the two cannot drift apart (R6, 2026-09-28)."""
+    from genomeos import manifest as mf
+    from genomeos.attribution.targets import RUNS
+
+    inputs = []
+    for name in CRISPRI_FILES:
+        p = CRISPRI_KNOWLEDGE / name
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=CRISPRI_SPLIT_OF[name]))
+    for acc in mpra.FILES.values():
+        p = mpra.KNOWLEDGE / f"{acc}.bed.gz"
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    for p in (vista.locus_path(vista.KNOWLEDGE), satmut_knowledge.DATA_PATH):
+        if p.exists():
+            inputs.append(mf.input_entry(p, partition=None))
+    for chrom in chroms:
+        for run in RUNS:
+            p = results_dir / f"{run}_{chrom}.json"
+            if p.exists():
+                inputs.append(mf.input_entry(p, partition=None))
+    return {
+        "sources": [
+            {
+                "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+                "version": "main, as fetched; pinned by sha256",
+            },
+            {
+                "accession": f"ENCODE {mpra.LIBRARY} ({', '.join(mpra.FILES.values())})",
+                "version": "as fetched 2026-09-12; pinned by sha256",
+            },
+            {
+                "accession": "VISTA Enhancer Browser locus table (vista-data)",
+                "version": "main, as fetched; pinned by sha256",
+            },
+            {
+                "accession": "GEO GSE126550 (Kircher et al. 2019, kircherlab/MPRA_SaturationMutagenesis)",
+                "version": "as fetched; pinned by sha256",
+            },
+            {
+                "accession": "this repository, the compiled element runs " + ", ".join(RUNS),
+                "version": "pinned by sha256",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "reciprocal_overlap": RECIPROCAL_OVERLAP,
+            "mpra_active_log2": MPRA_ACTIVE,
+            "reporter_label_rule": REPORTER_LABEL_RULE,
+            "power_for_negatives": POWER_FOR_NEGATIVES,
+            "well_powered": WELL_POWERED,
+            "chromosomes": list(chroms),
+            **parameters,
+        },
+        "exclusions": ["CRISPRi pairs the benchmark marks as not a valid connection are counted, never read"],
+        "partitions": {
+            TRAINING: "the CRISPRi benchmark's training file (K562)",
+            HELDOUT: "the CRISPRi benchmark's held-out file, evaluation only",
+        },
+    }
 
 
 # --- the layer ------------------------------------------------------------------------------------
@@ -361,11 +691,34 @@ class Layer:
         if pairs:
             regulated = sorted({p.gene for p, _ in pairs if p.regulated})
             tested = sorted({p.gene for p, _ in pairs})
+            outcomes: dict[str, set[str]] = defaultdict(set)
+            for p, _ in pairs:
+                outcomes[p.outcome].add(p.gene)
+            # a gene takes the strongest outcome any of its pairs has: a decrease anywhere, else an
+            # increase anywhere, else an informative null, else an inconclusive one. A significant
+            # effect of either sign is therefore never listed as "no effect"
+            increased = sorted(outcomes[INCREASE] - set(regulated))
+            moved = set(regulated) | set(increased)
+            informative = sorted(outcomes[NULL_INFORMATIVE] - moved)
+            inconclusive = sorted(outcomes[NULL_INCONCLUSIVE] - moved - set(informative))
+            missing = sorted(set(tested) - moved - set(informative) - set(inconclusive))
             out["crispri"] = {
+                "outcome_kind": OUTCOME_KIND["crispri"],
                 "genes_tested": tested,
                 "genes_regulated": regulated,
-                "genes_not_regulated": [g for g in tested if g not in set(regulated)],
+                "genes_increased": increased,
+                "genes_no_effect_well_powered": informative,
+                "genes_no_effect_underpowered": inconclusive,
+                "genes_effect_missing": missing,
+                # the genes a training pair calls regulated: the only ones a compiled `targets:` names
+                "genes_regulated_training": sorted(
+                    {p.gene for p, _ in pairs if p.regulated and p.split == TRAINING}
+                ),
+                # a measured null, well powered or not: never a significant increase (R2)
+                "genes_not_regulated": sorted(set(informative) | set(inconclusive)),
                 "cells": sorted({p.cell for p, _ in pairs}),
+                # R1: each cell's own outcome per gene, so one cell's link never erases another's null
+                "outcomes_by_cell": outcomes_by_cell([p for p, _ in pairs]),
                 "overlap": round(max(f for _, f in pairs), 3),
                 "pairs": [
                     {
@@ -374,8 +727,12 @@ class Layer:
                         "dataset": p.dataset,
                         "regulated": p.regulated,
                         "effect_size": round(p.effect_size, 4),
+                        "outcome": p.outcome,
+                        "power_at_effect_size_20": p.power_at_effect_size_20,
                         "p_adjusted": p.p_adjusted,
                         "overlap": round(f, 3),
+                        "split": p.split,
+                        "source_file": p.source_file,
                     }
                     for p, f in sorted(pairs, key=lambda x: (x[0].gene, x[0].cell))
                 ],
@@ -387,18 +744,7 @@ class Layer:
         ]
         hits = [(e, f) for e, f in hits if f >= fraction]
         if hits:
-            best: dict[str, float] = {}
-            for e, _ in hits:
-                for cell, value in e.activity.items():
-                    best[cell] = max(best.get(cell, value), value)
-            out["lentimpra"] = {
-                "activity": {c: round(v, 4) for c, v in sorted(best.items())},
-                "cells_active": sorted(c for c, v in best.items() if v >= MPRA_ACTIVE),
-                "cells_silent": sorted(c for c, v in best.items() if v < MPRA_ACTIVE),
-                "max_activity": round(max(best.values()), 4) if best else None,
-                "overlap": round(max(f for _, f in hits), 3),
-                "elements": sorted({e.name for e, _ in hits}),
-            }
+            out["lentimpra"] = reporter_block(hits)
 
         vs = [
             (e, reciprocal_overlap(start, end, e.start, e.end)) for e in self.near("vista", start, end, reach)
@@ -406,6 +752,7 @@ class Layer:
         vs = [(e, f) for e, f in vs if f >= fraction]
         if vs:
             out["vista"] = {
+                "outcome_kind": OUTCOME_KIND["vista"],
                 "positive": sorted(e.id for e, _ in vs if e.status == "positive"),
                 "negative": sorted(e.id for e, _ in vs if e.status != "positive"),
                 "tissues": sorted({t for e, _ in vs for t in e.tissues}),
@@ -438,7 +785,33 @@ class Layer:
         functional = [b for b in inside.values() if b["functional"]]
         strong = [b for b in inside.values() if b["strong"]]
         n = len(inside)
+        # R6: every experiment of each matched locus over the element's own bases, primary and repeats,
+        # listed apart; the verdict stays on the primary and the disagreement is counted, not resolved
+        read: list[dict[str, Any]] = []
+        calls: dict[int, set[bool]] = defaultdict(set)
+        seen_by: dict[int, int] = defaultdict(int)
+        for e, _ in hits:
+            for role, name, table in [("primary", e.experiment, e.bases)] + [
+                ("repeat", name, t) for name, t in e.repeat_bases
+            ]:
+                own = {pos: b for pos, b in table.items() if start <= pos - 1 < end}
+                for pos, b in own.items():
+                    calls[pos].add(bool(b["functional"]))
+                    seen_by[pos] += 1
+                read.append(
+                    {
+                        "experiment": name,
+                        "role": role,
+                        "bases_measured": len(own),
+                        "bases_functional": sum(1 for b in own.values() if b["functional"]),
+                    }
+                )
         return {
+            "outcome_kind": OUTCOME_KIND["satmut"],
+            "experiments_read": read,
+            "bases_measured_by_more_than_one_experiment": sum(1 for v in seen_by.values() if v > 1),
+            "bases_where_experiments_disagree": sum(1 for v in calls.values() if len(v) > 1),
+            "verdict_read_from": "the primary experiment of each locus; repeats are listed, never pooled",
             "experiments": sorted(e.experiment for e, _ in hits),
             "repeat_experiments": sum(e.repeats - 1 for e, _ in hits),
             "bases_in_element": end - start,
@@ -455,8 +828,77 @@ class Layer:
         }
 
 
+# --- R6: reporter tiles, one label per cell from a declared rule ------------------------------------
+LABEL_ACTIVE, LABEL_SILENT, LABEL_CONFLICTING = "active", "silent", "conflicting"
+
+
+def reporter_label(values: list[float], threshold: float = MPRA_ACTIVE) -> str:
+    """One cell's label from its tiles under `REPORTER_LABEL_RULE`: the share of tiles on each side of
+    the threshold decides, never one tile's value."""
+    above = sum(1 for v in values if v >= threshold)
+    below = len(values) - above
+    return LABEL_ACTIVE if above > below else LABEL_SILENT if below > above else LABEL_CONFLICTING
+
+
+def _median(values: list[float]) -> float:
+    v = sorted(values)
+    n = len(v)
+    return v[n // 2] if n % 2 else (v[n // 2 - 1] + v[n // 2]) / 2
+
+
+def reporter_block(hits: list[tuple[mpra.Element, float]]) -> dict[str, Any]:
+    """The lentiMPRA block of one compiled element (R6, 2026-09-28): every matched tile kept, the
+    per-cell label from `REPORTER_LABEL_RULE`, the median as the reported value and the maximum only
+    under `REPORTER_MAX_FIELD`. Before R6 the per-cell value was the maximum over tiles and the label
+    was read from it, so one strong tile made the element active."""
+    tiles = sorted(hits, key=lambda x: (x[0].start, x[0].end))
+    per_cell: dict[str, list[float]] = defaultdict(list)
+    for e, _ in tiles:
+        for cell, value in e.activity.items():
+            per_cell[cell].append(value)
+    cells = sorted(per_cell)
+    label = {c: reporter_label(per_cell[c]) for c in cells}
+    top = {c: max(per_cell[c]) for c in cells}
+    return {
+        "outcome_kind": OUTCOME_KIND["lentimpra"],
+        "aggregation": {
+            "unit": list(REPORTER_UNIT),
+            "label_rule": REPORTER_LABEL_RULE,
+            "activity_is": REPORTER_SUMMARY,
+            "threshold_log2": MPRA_ACTIVE,
+            "uncertainty": REPORTER_UNCERTAINTY,
+        },
+        "activity": {c: round(_median(per_cell[c]), 4) for c in cells},
+        "label_by_cell": label,
+        "cells_active": [c for c in cells if label[c] == LABEL_ACTIVE],
+        "cells_silent": [c for c in cells if label[c] == LABEL_SILENT],
+        "cells_conflicting": [c for c in cells if label[c] == LABEL_CONFLICTING],
+        "tiles_by_cell": {c: len(per_cell[c]) for c in cells},
+        "tiles_active_by_cell": {c: sum(1 for v in per_cell[c] if v >= MPRA_ACTIVE) for c in cells},
+        REPORTER_MAX_FIELD: {c: round(v, 4) for c, v in top.items()},
+        "max_activity_descriptive": round(max(top.values()), 4) if top else None,
+        "overlap": round(max(f for _, f in tiles), 3),
+        "elements": sorted({e.name for e, _ in tiles}),
+        "tiles": [
+            {
+                "name": e.name,
+                "start": e.start,
+                "end": e.end,
+                "strand": dict(sorted(e.strand.items())),
+                "overlap": round(f, 3),
+                "activity": {c: round(v, 4) for c, v in sorted(e.activity.items())},
+            }
+            for e, f in tiles
+        ],
+    }
+
+
 # --- prediction against measurement ---------------------------------------------------------------
 AGREES, DISAGREES, NOT_TESTED = "agrees", "disagrees", "predicted_gene_not_tested"
+# two CRISPRi answers that are neither agreement nor disagreement (R2): the predicted gene rose
+# significantly, which is an effect but not the decrease `regulated` names and not evidence of a
+# silencer; or it showed no significant effect in a screen too weak to have seen one
+INCREASED, UNDERPOWERED = "predicted_gene_increased", "predicted_gene_null_underpowered"
 # the two outcomes a base-level assay has that an element-level one does not, neither of them a verdict
 # on the element: the first is measured-and-inert, the second is never-looked
 BASES_INERT = "bases_measured_none_functional"
@@ -482,8 +924,14 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
     if c:
         if predicted_gene in c["genes_regulated"]:
             out["crispri"] = AGREES
-        elif predicted_gene in c["genes_not_regulated"]:
-            out["crispri"] = DISAGREES
+        elif predicted_gene in c.get("genes_increased", ()):
+            out["crispri"] = INCREASED
+        elif "genes_no_effect_well_powered" not in c and predicted_gene in c["genes_not_regulated"]:
+            out["crispri"] = DISAGREES  # a row written before R2: every null counted as informative
+        elif predicted_gene in c.get("genes_no_effect_well_powered", ()):
+            out["crispri"] = DISAGREES  # only a well-powered null may reject the compiled claim
+        elif predicted_gene in c.get("genes_no_effect_underpowered", ()):
+            out["crispri"] = UNDERPOWERED
         else:
             out["crispri"] = NOT_TESTED
         out["crispri_detail"] = (
@@ -491,7 +939,18 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
         )
     m = measured.get("lentimpra")
     if m:
-        out["lentimpra"] = AGREES if m["cells_active"] else DISAGREES
+        # R6: a cell whose tiles split evenly is neither; with no active cell and one such, the
+        # verdict is TILES_CONFLICT, counted in neither `assays_agreeing` nor `assays_disagreeing`
+        if m["cells_active"]:
+            out["lentimpra"] = AGREES
+        elif m.get("cells_conflicting"):
+            out["lentimpra"] = TILES_CONFLICT
+            out["lentimpra_detail"] = (
+                "no cell active; in " + ", ".join(m["cells_conflicting"]) + " the matched tiles split "
+                "evenly about the threshold"
+            )
+        else:
+            out["lentimpra"] = DISAGREES
     v = measured.get("vista")
     if v:
         out["vista"] = AGREES if v["positive"] else DISAGREES
@@ -525,6 +984,9 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
         if out["assays_agreeing"]
         else DISAGREES
         if out["assays_disagreeing"]
+        # R6: a reporter whose tiles split is not an untested prediction, and is named as what it is
+        else TILES_CONFLICT
+        if out.get("lentimpra") == TILES_CONFLICT
         else NOT_TESTED
     )
     return out
@@ -533,8 +995,11 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
 def confidence_of(measured: dict[str, Any]) -> float:
     """The strongest assay present decides: a perturbation or an embryo outranks a reporter.
 
-    Saturation mutagenesis is a reporter assay - the element is read out episomally, one substitution
-    at a time - so it lands with lentiMPRA and not with CRISPRi, however fine its resolution.
+    Saturation mutagenesis is a reporter assay - the element is read out away from its locus, one
+    substitution at a time - so it lands with lentiMPRA and not with CRISPRi, however fine its
+    resolution. (Called episomal until R6, 2026-09-28; whether each Kircher et al. experiment was
+    plasmid or lentiviral was not checked, and the conclusion rests only on the reporter being outside
+    the locus.)
     """
     if measured.get("crispri") or measured.get("vista"):
         return PERTURBATION_CONFIDENCE
@@ -633,6 +1098,12 @@ def census(
     agree = {a: sum(1 for r in measured_rows if r["agreement"].get(a) == AGREES) for a in ASSAYS}
     disagree = {a: sum(1 for r in measured_rows if r["agreement"].get(a) == DISAGREES) for a in ASSAYS}
     not_tested = sum(1 for r in measured_rows if r["agreement"].get("crispri") == NOT_TESTED)
+    increased = sum(1 for r in measured_rows if r["agreement"].get("crispri") == INCREASED)
+    underpowered = sum(1 for r in measured_rows if r["agreement"].get("crispri") == UNDERPOWERED)
+    by_outcome = dict.fromkeys(OUTCOMES, 0)
+    for r in measured_rows:
+        for p in r["measured"].get("crispri", {}).get("pairs", []):
+            by_outcome[p.get("outcome", MISSING)] += 1
     regulated_pairs = sum(
         1 for r in measured_rows for p in r["measured"].get("crispri", {}).get("pairs", []) if p["regulated"]
     )
@@ -640,7 +1111,7 @@ def census(
         1
         for r in measured_rows
         for p in r["measured"].get("crispri", {}).get("pairs", [])
-        if not p["regulated"]
+        if p.get("outcome") in (NULL_INFORMATIVE, NULL_INCONCLUSIVE)
     )
     measured_genes = {
         g for r in measured_rows for g in r["measured"].get("crispri", {}).get("genes_regulated", [])
@@ -671,6 +1142,9 @@ def census(
         "agrees": agree,
         "disagrees": disagree,
         "crispri_predicted_gene_not_tested": not_tested,
+        "crispri_predicted_gene_increased": increased,
+        "crispri_predicted_gene_null_underpowered": underpowered,
+        "crispri_pairs_by_outcome": by_outcome,
         "agreement_rate_over_all_matched_elements": (
             round(agree["crispri"] / crispri_matched, 4) if crispri_matched else None
         ),
@@ -681,8 +1155,37 @@ def census(
         "agreement_denominator_predicted_gene_tested": tested,
         "crispri_pairs_regulated": regulated_pairs,
         "crispri_pairs_measured_as_not_regulated": negative_pairs,
+        # R6: the reporter's own counters, kept apart from agrees and disagrees
+        **reporter_counts(measured_rows),
         # the base-level assay, under its own name: its zero in `disagrees` is a property of the assay
         "satmut": satmut_counts(measured_rows, eligible),
+    }
+
+
+REPORTER_COUNT_KEYS = (
+    "lentimpra_tiles_conflict",
+    "lentimpra_elements_over_more_than_one_tile",
+    "lentimpra_cells_conflicting",
+    "lentimpra_cells_where_tiles_disagree",
+)
+
+
+def reporter_counts(measured_rows: list[dict[str, Any]]) -> dict[str, int]:
+    """R6: how many lentiMPRA verdicts are `TILES_CONFLICT`, how many elements match more than one tile,
+    and in how many cell readings the tiles fall on both sides of the threshold."""
+    blocks = [r["measured"]["lentimpra"] for r in measured_rows if "lentimpra" in r["measured"]]
+    return {
+        "lentimpra_tiles_conflict": sum(
+            1 for r in measured_rows if r["agreement"].get("lentimpra") == TILES_CONFLICT
+        ),
+        "lentimpra_elements_over_more_than_one_tile": sum(1 for b in blocks if len(b.get("tiles", ())) > 1),
+        "lentimpra_cells_conflicting": sum(len(b.get("cells_conflicting", ())) for b in blocks),
+        "lentimpra_cells_where_tiles_disagree": sum(
+            1
+            for b in blocks
+            for c, n in (b.get("tiles_by_cell") or {}).items()
+            if 0 < b["tiles_active_by_cell"][c] < n
+        ),
     }
 
 
@@ -709,6 +1212,11 @@ def satmut_counts(measured_rows: list[dict[str, Any]], eligible: dict[str, Any])
         "bases_measured": sum(s["bases_measured"] for s in sat),
         "bases_functional": sum(s["bases_functional"] for s in sat),
         "bases_strong": sum(s["bases_strong"] for s in sat),
+        # R6: repeat experiments read over the same bases, and where their functional calls differ
+        "bases_measured_by_more_than_one_experiment": sum(
+            s.get("bases_measured_by_more_than_one_experiment", 0) for s in sat
+        ),
+        "bases_where_experiments_disagree": sum(s.get("bases_where_experiments_disagree", 0) for s in sat),
         "experiments_matched": sorted({x for s in sat for x in s["experiments"]}),
         "why_it_can_never_disagree": SATMUT_CANNOT_DISAGREE,
     }
@@ -778,8 +1286,9 @@ def base_level_rows(elements: list[dict[str, Any]], layer: Layer) -> dict[str, A
 
 
 def regulated_pairs_blocks(measured_rows: list[dict[str, Any]]) -> int:
-    """One experimental rule per (element, gene) a screen measured as regulated, deduplicated."""
-    return sum(len(r["measured"].get("crispri", {}).get("genes_regulated", [])) for r in measured_rows)
+    """One experimental rule per (element, gene, cell) a screen measured as regulated (R1, 2026-09-28;
+    before it, one per element and gene)."""
+    return sum(len(rule_links(r)) for r in measured_rows)
 
 
 def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
@@ -800,9 +1309,12 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "experimental_element_blocks",
         "experimental_rule_blocks",
         "crispri_predicted_gene_not_tested",
+        "crispri_predicted_gene_increased",
+        "crispri_predicted_gene_null_underpowered",
         "crispri_pairs_regulated",
         "crispri_pairs_measured_as_not_regulated",
         "crispri_pairs_the_benchmark_calls_invalid",
+        *REPORTER_COUNT_KEYS,
     )
     satmut_keys = (
         "elements_measured_base_by_base",
@@ -813,12 +1325,17 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "bases_measured",
         "bases_functional",
         "bases_strong",
+        "bases_measured_by_more_than_one_experiment",
+        "bases_where_experiments_disagree",
     )
     satmut: dict[str, Any] = dict.fromkeys(satmut_keys, 0)
     experiments: set[str] = set()
+    by_outcome = dict.fromkeys(OUTCOMES, 0)
     for c in censuses:
         for k in keys:
             sums[k] += c.get(k) or 0
+        for k, v in (c.get("crispri_pairs_by_outcome") or {}).items():
+            by_outcome[k] = by_outcome.get(k, 0) + v
         s = c.get("satmut") or {}
         for k in satmut_keys:
             satmut[k] += s.get(k) or 0
@@ -857,6 +1374,7 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
             round(agree["crispri"] / tested, 4) if tested else None
         ),
         "agreement_denominator_predicted_gene_tested": tested,
+        "crispri_pairs_by_outcome": by_outcome,
         "satmut": {
             **satmut,
             "experiments_matched": sorted(experiments),
@@ -898,6 +1416,51 @@ def sensitivity(
     return out
 
 
+#: the order in which one cell's pairs on one gene settle into one outcome, strongest first, the same
+#: order `for_element` uses across cells
+OUTCOME_ORDER = (DECREASE, INCREASE, NULL_INFORMATIVE, NULL_INCONCLUSIVE, MISSING)
+OUTCOME_WORDS = {
+    DECREASE: "regulated",
+    INCREASE: "significantly increased",
+    NULL_INFORMATIVE: "measured no effect on",
+    NULL_INCONCLUSIVE: "no significant effect, underpowered, on",
+    MISSING: "no effect size for",
+}
+
+
+def outcomes_by_cell(pairs: list[CrispriPair]) -> dict[str, dict[str, str]]:
+    """{cell: {gene: outcome}}, each cell settled on its own pairs only (R1, 2026-09-28)."""
+    out: dict[str, dict[str, str]] = {}
+    for p in pairs:
+        genes = out.setdefault(p.cell, {})
+        o = DECREASE if p.regulated else p.outcome
+        if p.gene not in genes or OUTCOME_ORDER.index(o) < OUTCOME_ORDER.index(genes[p.gene]):
+            genes[p.gene] = o
+    return {cell: dict(sorted(genes.items())) for cell, genes in sorted(out.items())}
+
+
+def context_differences(c: dict[str, Any]) -> list[tuple[str, str, str]]:
+    """(cell, gene, outcome) for every cell whose own outcome on a gene is not the one the pooled lists
+    give that gene: the observations the per-gene lists would otherwise hide."""
+    by_cell = c.get("outcomes_by_cell") or {}
+    pooled: dict[str, str] = {}
+    for key, o in (
+        ("genes_effect_missing", MISSING),
+        ("genes_no_effect_underpowered", NULL_INCONCLUSIVE),
+        ("genes_no_effect_well_powered", NULL_INFORMATIVE),
+        ("genes_increased", INCREASE),
+        ("genes_regulated", DECREASE),
+    ):
+        for g in c.get(key, []):
+            pooled[g] = o
+    return [
+        (cell, gene, o)
+        for cell, genes in by_cell.items()
+        for gene, o in genes.items()
+        if gene in pooled and o != pooled[gene]
+    ]
+
+
 # --- the program ----------------------------------------------------------------------------------
 def basis_text(row: dict[str, Any]) -> str:
     """What the assays measured, in words, with every measured negative named."""
@@ -907,16 +1470,50 @@ def basis_text(row: dict[str, Any]) -> str:
         bits = [f"CRISPRi in {', '.join(c['cells'])} tested {len(c['genes_tested'])} genes"]
         if c["genes_regulated"]:
             bits.append("regulated " + ", ".join(c["genes_regulated"]))
-        if c["genes_not_regulated"]:
+        if c.get("genes_increased"):
+            bits.append(
+                "significantly increased " + ", ".join(c["genes_increased"]) + " (an effect, not a null)"
+            )
+        if "genes_no_effect_well_powered" in c:
+            if c["genes_no_effect_well_powered"]:
+                bits.append("measured no effect on " + ", ".join(c["genes_no_effect_well_powered"]))
+            if c["genes_no_effect_underpowered"]:
+                bits.append(
+                    "no significant effect, underpowered, on " + ", ".join(c["genes_no_effect_underpowered"])
+                )
+        elif c["genes_not_regulated"]:
             bits.append("measured no effect on " + ", ".join(c["genes_not_regulated"]))
+        differ = context_differences(c)
+        if differ:
+            bits.append(
+                "where the cells differ, "
+                + ", ".join(f"in {cell} {OUTCOME_WORDS[o]} {gene}" for cell, gene, o in differ)
+            )
+        held = [p for p in c["pairs"] if p.get("split", TRAINING) == HELDOUT]
+        if held:
+            bits.append(
+                f"{len(held)} of the {len(c['pairs'])} pairs are the benchmark's held-out split "
+                f"({', '.join(sorted({p['cell'] for p in held}))}), evaluation only"
+            )
         parts.append(", ".join(bits))
     m = row["measured"].get("lentimpra")
     if m:
         act = ", ".join(f"{k} {v:+.2f}" for k, v in m["activity"].items())
-        parts.append(
+        text = (
             f"lentiMPRA log2(RNA/DNA) {act}, active in {len(m['cells_active'])} of "
             f"{len(m['activity'])} cells at {MPRA_ACTIVE}"
         )
+        # R6: where more than one tile matched, every tile's value is named and the value above is
+        # their median; a cell whose tiles split evenly is named as conflicting
+        many = [c for c, n in (m.get("tiles_by_cell") or {}).items() if n > 1]
+        if many:
+            text += "; " + "; ".join(
+                f"{c} median of {m['tiles_by_cell'][c]} tiles "
+                + ", ".join(f"{t['activity'][c]:+.2f}" for t in m["tiles"] if c in t["activity"])
+                + f" ({m['label_by_cell'][c]})"
+                for c in many
+            )
+        parts.append(text)
     v = row["measured"].get("vista")
     if v:
         parts.append(
@@ -963,14 +1560,33 @@ def rule_lines(row: dict[str, Any]) -> list[tuple[str, str, float, str]]:
     activity, not a gene's, so it names no relation at all. Its experiments carry gene names given by
     their authors (SORT1, IRF4), which is curation and not a measured target.
     """
+    return [link[:4] for link in rule_links(row)]
+
+
+def rule_links(row: dict[str, Any]) -> list[tuple[str, str, float, str, str]]:
+    """`rule_lines` with the split of the pairs each link rests on: (gene, action, strength, cell, split).
+
+    A link with any regulated training pair takes its action and strength from the training pairs
+    only, so a held-out measurement never sets a compiled number. A link found only in held-out pairs
+    keeps split "heldout", and the compiler marks it with `HELDOUT_MARK`.
+
+    Since R1 (2026-09-28) a link is one (gene, cell): the split rule above applies within each cell,
+    and two cells that measured the same gene are two links, never the stronger of the two. The
+    returned cell is the one the compiler gates the rule on (`when: cell_type = <cell>`).
+    """
     c = row["measured"].get("crispri")
     if not c:
         return []
     out = []
-    for gene in c["genes_regulated"]:
-        hit = [p for p in c["pairs"] if p["gene"] == gene and p["regulated"]]
-        strongest = max(hit, key=lambda p: abs(p["effect_size"]))
+    linked = sorted({(p["gene"], p["cell"]) for p in c["pairs"] if p["regulated"]})
+    for gene, cell in linked:
+        hit = [p for p in c["pairs"] if p["gene"] == gene and p["cell"] == cell and p["regulated"]]
+        train = [p for p in hit if p.get("split", TRAINING) == TRAINING]
+        split = TRAINING if train else HELDOUT
+        strongest = max(train or hit, key=lambda p: abs(p["effect_size"]))
         # the screen silences the element: a gene that falls was being activated by it
         action = "activates" if strongest["effect_size"] < 0 else "inhibits"
-        out.append((gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"]))
+        out.append(
+            (gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"], split)
+        )
     return out

@@ -35,7 +35,7 @@ from genomeos.genome import bgzf  # noqa: E402
 from genomeos.genome.index import write_fai  # noqa: E402
 
 REFERENCE = Path("data/reference")
-MANIFEST = Path("data/results/reference_bgzf.json")
+MANIFEST = Path("data/results/reference_bgzf.json")  # written through save_result (item 12 S6)
 LEVEL = 9  # level 6 costs 2.3% more disk for half the time; the file is written once
 
 
@@ -95,14 +95,53 @@ def save_manifest(m: dict) -> None:
     the start. Writing that copy back would drop the other run's rows -- which
     is exactly how the first pass lost the variant-file section.
     """
-    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    from genomeos.manifest import KEY
+    from genomeos.results import save_result
+
     on_disk = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
     for key, value in m.items():
         if isinstance(value, dict) and isinstance(on_disk.get(key), dict):
             on_disk[key].update(value)
         else:
             on_disk[key] = value
-    MANIFEST.write_text(json.dumps(on_disk, indent=1, sort_keys=True) + "\n")
+    for stamped in ("result", "date", KEY):  # save_result writes these afresh
+        on_disk.pop(stamped, None)
+    save_result(MANIFEST.stem, on_disk, MANIFEST.parent, manifest=record_manifest(on_disk))
+
+
+def record_manifest(record: dict) -> dict:
+    """The record's own provenance: what each row proved equal, by the sha256 of the decompressed bytes
+    it records (the flat .fa and the plain .vcf are deleted after the proof, so the row is the pin)."""
+
+    def entry(path: str, row: dict) -> dict:
+        return {
+            "path": f"{path} (decompressed bytes; the flat or plain original was removed after the proof)",
+            "sha256": row.get("sha256"),
+            "bytes": row.get("uncompressed_bytes"),
+            "partition": None,
+        }
+
+    inputs = [entry(str(REFERENCE / f"{c}.fa"), r) for c, r in sorted(record.get("chromosomes", {}).items())]
+    inputs += [entry(str(REFERENCE / n), r) for n, r in sorted(record.get("variant_files", {}).items())]
+    return {
+        "sources": [
+            {
+                "accession": "UCSC hg38 chromosome FASTA (GRCh38), data/reference/<chrom>.fa and .fa.gz",
+                "version": "hg38",
+            },
+            {
+                "accession": "GIAB HG002 v4.2.1 benchmark, per-chromosome subsets "
+                "data/reference/HG002_<chrom>.vcf",
+                "version": "v4.2.1",
+            },
+        ],
+        "inputs": inputs,
+        "assembly": "GRCh38",
+        "coordinates": "n/a: whole files compared byte for byte; no interval is read",
+        "parameters": {"gzip_level": LEVEL},
+        "exclusions": ["a chromosome some process holds open is skipped (held_open)"],
+        "partitions": "n/a: a storage record, not an evaluation",
+    }
 
 
 def compact(chrom: str, dry_run: bool = False, keep: bool = False) -> dict | None:

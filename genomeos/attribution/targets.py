@@ -76,6 +76,31 @@ def runs_present(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[str, int]:
     return {name: len(run_elements(name, chrom, results_dir)) for name in RUNS}
 
 
+def genes_at_bar(record: dict[str, Any] | None, min_effect: float = 0.1) -> list[tuple[str, float]] | None:
+    """Every gene of one cached element that reaches `min_effect`, strongest first, as (gene, signed).
+
+    The size is `predict.enhancer_target.predict_target`'s own: the larger of the predicted fall and
+    the predicted rise over every track, ties to the fall. So the head of this list is the element's
+    compact `predicted` gene whenever it has one, and the list is empty exactly when the compact table
+    records none -- the window changes which and how many genes move, never whether one does. None
+    means the element was not cached, which is not the same as an empty list.
+    """
+    if record is None:
+        return None
+    out = []
+    for g in record.get("genes") or []:
+        drop, rise = g.get("max_drop_log2fc"), g.get("max_rise_log2fc")
+        if not g.get("gene") or drop is None:
+            continue
+        fall = -float(drop)
+        up = float(rise) if rise is not None else float("-inf")
+        size, signed = (fall, float(drop)) if fall >= up else (up, up)
+        if size >= min_effect:
+            out.append((g["gene"], round(signed, 4), size))
+    out.sort(key=lambda t: -t[2])
+    return [(name, signed) for name, signed, _ in out]
+
+
 @dataclass(frozen=True)
 class Response:
     """What the sweep predicted for one gene at one element, or why it did not say.
@@ -185,6 +210,16 @@ class ElementResponses:
     def value(self, chrom: str, element_id: str, gene: str, cell: str | None = None) -> float | None:
         """The signed change, or None. `response()` says which silence a None is."""
         return self.response(chrom, element_id, gene, cell).value
+
+    def at_bar(
+        self, chrom: str, element_id: str, min_effect: float = 0.1, genes: set[str] | None = None
+    ) -> list[tuple[str, float]] | None:
+        """The window's genes at the bar, strongest first (`genes_at_bar`), optionally only those in
+        `genes` (a coding set, say); None when the element is not cached."""
+        got = genes_at_bar(self.element(chrom, element_id), min_effect)
+        if got is None or genes is None:
+            return got
+        return [(g, v) for g, v in got if g in genes]
 
     def ranked(
         self, chrom: str, element_id: str, cell: str | None = None, by: str = "drop"

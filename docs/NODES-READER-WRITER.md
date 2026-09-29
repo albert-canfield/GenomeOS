@@ -2892,3 +2892,341 @@ the node control as 77.2% against 74.3% on eighteen chromosomes, which is a
 different reading of the same statistic on a different chromosome set and needs
 its own correction rather than this one. In their place the seventh and fourth
 citations are **docs/ROADMAP.md:4069**, milestone 1.3, and **docs/ATTRIBUTION.md:2607**.
+
+## The reader family normalised, to close milestone 1.1: the registration (2026-09-27, before the run)
+
+Milestone 1.1 reads "reader v1 (open nodes per cell type)" and is held at
+partial because three of the reader's per-biosample readings do not mean what
+their names say. The section "Is the rest of the reader's family assay depth
+too?" measured them and repaired one (`enhancers_active`); this section
+registers a repair for the other three before any of it is computed, and fixes
+in advance what each repair must achieve to be kept. Nothing is fetched and no
+model request is made: every input is already on disk, in the 312
+`reader_<biosample>_<chrom>.json` files (thirteen biosamples by twenty-four
+chromosomes), `reader_genome_wide.json`, the 24 `epigenome_chr*.json` files and
+the `dnase_*_chr*.bed.gz` peak files.
+
+### One finding before the registration: the flagship share is `genes_read_open`
+
+The comparison this file leads with at "Every chromosome" — K562 reads 14,828
+of 20,094 coding genes (74%) and HepG2 13,015 (65%) — was written on
+2026-09-11, before the poised and marked-promoter rules of 2026-09-14 existed.
+Under today's field names those two numbers are `genes_read_open` (promoter
+under a DNase peak, poised included), not `genes_read` (open and not poised, or
+rescued by its marks), which reads **12,775 (63.6%) against 11,641 (57.9%)**.
+The eleven-row table at "Eleven cell types, every chromosome" has the same
+column. So the published read shares rest on `genes_read_open`, and the
+depth-family sweep's "rho 0.53 for `read`" was measured on `genes_read`. Both
+fields are therefore registered below under the same treatment, and the
+published comparison is scored on each.
+
+### The common machinery: the log-depth residual
+
+For a reading y and its covariate x over the thirteen biosamples, fit
+y = a + b·ln(x) by least squares — the form that, in the depth lane, left the
+`enhancers_active` residual replicating at rho 0.9945 and its own rho against
+depth at 0.1374 — and take the residual e = y − ŷ. The normalised reading is
+the standardised residual z = e / s, with s = √(Σe² / (n − 2)): the number of
+standard errors the biosample sits above or below what its covariate predicts.
+A rate (reading per peak) is not used for any of the three: `genes_read` spans
+1.41 where DNase depth spans 6.81, so dividing by peaks would be almost pure
+inverse depth, which is the over-correction the enhancer rate already showed at
+rho −0.52.
+
+### The bars, identical for every reading
+
+A normalised reading is **kept** — named in the reader's `evidence.depth` as the
+between-biosample reading — only if all of these hold. Otherwise it still ships,
+beside the raw reading and labelled as failing, and no between-biosample claim
+is made on it.
+
+1. **Replication across disjoint halves.** Odd autosomes (chr1, chr3, … chr21)
+   and even autosomes (chr2, … chr22), chrX and chrY excluded for donor sex.
+   Within each half, sum the reading and the covariate over that half's
+   chromosomes, fit, take residuals. Spearman rho between the two halves'
+   residuals across the thirteen must be **≥ 0.5 with a one-sided permutation p
+   < 0.05** over 10,000 shuffles of one half's labels (seed 20260927). The depth
+   lane's bar, unchanged.
+2. **Depth removed: |rho| < 0.4 between the residual and its covariate.** The
+   depth lane's bar. It is registered in two forms because the in-sample form is
+   nearly automatic: a least-squares residual is uncorrelated with ln(x) by
+   construction, so a small in-sample Spearman proves little. The in-sample
+   value is reported; **the binding form is leave-one-out** — each biosample's
+   residual from a fit on the other twelve, standardised by that fit's s — and
+   its Spearman against the covariate must be inside |rho| < 0.4.
+3. **Not a second assay property.** For a DNase-derived reading, the full-genome
+   residual against mean DNase peak width (the depth lane's shape test): |rho| ≥
+   0.7 means what survives depth is peak-calling shape and the reading is not
+   kept. For `genes_poised`, which is called from H3K27me3 but also needs a
+   DNase-open promoter, the residual against DNase peak count: |rho| ≥ 0.7 means
+   the other assay carries it.
+
+### `nodes_open`: an absolute count, then its depth residual
+
+**Treatment.** `nodes_open_at_reference` = the number of nodes whose DNase
+peak density is at or above a single fixed density, the same for every
+biosample: **4.79 peaks per 100 kb**, the pooled median over all 260,026
+(node, biosample) calls on disk, computed once today from the node tables and
+frozen as a constant. The normalised reading is `nodes_open_depth_residual`,
+its log-depth residual against DNase peak count.
+
+**Why both steps, and neither alone.** The task offered an absolute density
+threshold or a depth residual; each alone fails for a reason already on
+record. An absolute threshold on its own is what `NODE_OPEN_BASIS` in
+`reader.py` already names as assay depth: a deeper experiment calls more peaks
+everywhere, so more nodes cross any fixed density. A depth residual on its own
+has nothing to work on: the median-split count is 10,001 ± 14 for every
+biosample, so its residual is a residual of a constant. The absolute threshold
+supplies the between-biosample variation the median split removed; the residual
+removes the depth the absolute threshold brings back. A third option was
+considered and rejected: a node open when its density is at or above that
+biosample's own genome-wide mean. That membership is depth-invariant under
+uniform scaling, but the count it gives measures how skewed the biosample's
+peaks are over its nodes, and a shallow experiment concentrates its calls at
+the strongest sites, so skew is itself depth; it is also self-referential, the
+class of definition that retired `nodes_open`.
+
+**What must not change.** `node_open_threshold` stays exactly the
+within-biosample median rank it is, with its 1.0 floor, and `nodes_open` stays
+in the row as the count of that rank. `attribution/candidates.py` uses the
+membership, which is depth-invariant and legitimate within a biosample, and
+`tests/test_node_open_threshold.py` pins it; both are left untouched.
+
+**An extra way to be wrong, specific to a threshold.** If any biosample has
+fewer than 5% or more than 95% of its nodes at or above 4.79, the count is
+floored or saturated for it and its residual is flagged as uninterpretable
+rather than ranked.
+
+**What it could move.** No between-biosample comparison is published on
+`nodes_open`: it was withdrawn on 2026-09-22. What it could move is milestone
+1.1 itself, whose clause is "open nodes per cell type". If this reading is kept,
+the layer has an open-node reading it can defend between cell types; if not,
+the clause is not met as a between-cell-type reading and 1.1 stays partial for
+that reason.
+
+### `genes_poised`: normalised against H3K27me3, not DNase
+
+**Treatment.** `genes_poised_mark_residual`, the log residual of `genes_poised`
+against the biosample's genome-wide **H3K27me3** peak count (summed from the
+`epigenome_chr*.json` files), not DNase: H3K27me3 is the mark that calls it and
+the one it tracks (rho 0.49, against 0.38 for DNase and 0.23 for H3K27ac).
+
+**An extra way to be wrong.** Testis is the known under-called H3K27me3
+experiment and sits at the low end of both axes, a leverage point on a
+thirteen-point fit. The bars are also computed without testis; if the kept/not
+verdict flips when testis is dropped, the verdict is reported as
+testis-dependent and the reading is not kept.
+
+**What it could move.** Two published sentences. The softened P3 paragraph
+keeps ovary's 398 poised genes as evidence for the mixture argument ("Ovary
+survives it"); if ovary's residual is not below zero, that sentence falls too.
+And testis was withdrawn from the poised claim as an assay defect; if its
+residual against its own mark is ordinary, the withdrawal was right and stays;
+if it is still the lowest, testis's low poised count is more than its mark.
+H1's 3,151, the most poised of the thirteen and the bivalent-promoter story in
+the module docstring, is the third comparison watched.
+
+### `genes_read` and `genes_read_open`: a depth-normalised counterpart beside the raw count
+
+**Treatment.** `genes_read_depth_residual` and
+`genes_read_open_depth_residual`, the log-depth residuals against DNase peak
+count. The raw counts and shares stay in the row unchanged.
+
+**What they could move.** Three published comparisons: the K562-against-HepG2
+share at "Every chromosome"; the order of the read column in the eleven-row
+table at "Eleven cell types, every chromosome"; and P3, "both tissues read more
+genes than the cultured median", which on a normalised reading holds only if
+testis and ovary both sit above the cultured biosamples' median residual.
+
+### The K562-against-HepG2 read share, registered to be reported first
+
+K562 reads 74% and HepG2 65% (`genes_read_open`; 63.6% against 57.9% on
+`genes_read`), beside a 2.9-fold difference in DNase peak count in the same
+direction. On each of the two fields: the comparison **survives** if K562's
+residual exceeds HepG2's in the full-genome fit and in both half-genome fits;
+it **reverses** if HepG2's exceeds K562's in all three; otherwise it is
+**unclaimable** and is withdrawn as a statement about the two cell types.
+Whichever it is, it is the first result reported, ahead of the bars.
+
+### What would let milestone 1.1 be marked done, fixed in advance
+
+1.1's proof clause is "reader v1 (open nodes per cell type)". It can be marked
+done if `nodes_open_depth_residual` is kept, because that is the open-node
+reading between cell types the clause names, and if `genes_read_depth_residual`
+is kept, because the read share is the reading the milestone's prose leans on.
+If the node reading fails, 1.1 stays partial with that as the named reason,
+whatever the other readings do. `genes_poised` failing does not hold 1.1 — the
+milestone does not name poised promoters — but it is reported beside the
+verdict.
+
+## The reader family normalised: scored (2026-09-27, seconds, 0 requests, nothing fetched)
+
+Scored against the registration above, committed as 63929e1 before
+`scripts/reader_depth_family.py --normalised` existed. Results:
+`data/results/reader_normalised.json` (registered) and
+`data/results/reader_rarefied.json` (a check that was not registered, added
+after the first result and reported as such). Every number comes from files
+already on disk; the reader re-run over K562's cached peaks reproduces its saved
+genome-wide counts exactly (12,775 read, 14,828 open, 10,414 nodes at the
+reference), so the annotation and node tables have not drifted since they were
+written.
+
+### First, as registered: the K562-against-HepG2 read share reverses on the residual — and survives at matched depth
+
+**By the registered rule it reverses, on both fields.** On `genes_read_open`,
+the field the published 74% and 65% are, K562 sits at z −1.67 and HepG2 at
++0.11; on the odd autosomes −1.70 against +0.13 and on the even −1.69 against
++0.15. On `genes_read`, −1.03 against −0.62, and −1.04 / −0.64 and −1.02 / −0.64
+in the halves. All three fits agree on both fields, which is the registered
+condition for "reverses".
+
+**That verdict rests on one point the fit has to extrapolate to, and a check
+that does not model depth disagrees with it.** K562 is alone at the top of the
+depth axis: 518,503 DNase peaks against 332,799 for the next biosample. Left out
+of its own fit its residual is −2.83 on `genes_read_open`, and a quadratic in
+ln(depth) — one more parameter, set almost entirely by K562 — puts it at +0.09
+against HepG2's −0.71. The form of the curve at the one unsupported point
+decides the sign. So a check that was not registered was run: every biosample's
+peak file is cut to the same number of peaks by keeping its strongest (a
+shallower experiment on the same cells would lose its weakest calls first) and
+the reader is re-run on the cached files.
+
+| depth-matched (peaks each) | biosamples | K562 `genes_read_open` | HepG2 | K562 `genes_read` | HepG2 |
+|---|---|---|---|---|---|
+| published, unmatched | 13 | 14,828 (73.8%) | 13,015 (64.8%) | 12,775 (63.6%) | 11,641 (57.9%) |
+| 176,634 (HepG2's depth) | 11 | 13,557 (67.5%) | 13,015 (64.8%) | 11,898 (59.2%) | 11,641 (57.9%) |
+| 76,119 (the shallowest, GM12878) | 13 | 12,030 (59.9%) | 10,842 (54.0%) | 11,183 (55.7%) | 10,802 (53.8%) |
+
+At matched depth K562 still reads more promoters than HepG2, on both fields and
+at both depths. The gap does not survive intact: at HepG2's own depth the
+published 9.0 points on `genes_read_open` become **2.7**, and the 5.6 points on
+`genes_read` become **1.3**. **About 70% of the flagship gap is DNase depth; the
+direction is not.** The sentence at "Every chromosome" is therefore softened,
+not withdrawn: K562 reads more of the coding genome than HepG2 by a few points,
+not by nine. And the residual's reversal is reported as what it is: a property
+of a log fit at an extrapolated point, which is why `normalise_family` now flags
+the top and bottom biosample of each covariate as `<name>_at_edge` and the
+evidence text sends an edge comparison to a depth-matched count.
+
+### Every reading, before and after, per biosample
+
+Sorted by DNase depth. z is the standardised residual of the log fit over the
+thirteen; ‡ marks a biosample at the edge of that reading's covariate. The
+H3K27me3 column is the covariate of `genes_poised`; every other z is against
+DNase peaks.
+
+| biosample | DNase peaks | `nodes_open` (median split) | `nodes_open_at_reference` | node z | H3K27me3 peaks | `genes_poised` | poised z | `genes_read` | read z | `genes_read_open` | open z |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| K562 | 518,503 | 10,002 | 10,414 (52.1%) | -1.90 ‡ | 133,535 | 2,135 | +0.21 ‡ | 12,775 | -1.03 ‡ | 14,828 | -1.67 ‡ |
+| cardiac muscle cell | 332,799 | 10,010 | 14,593 (73.0%) | +0.99 | 38,270 | 2,422 | +1.08 | 12,951 | -0.28 | 15,268 | +0.10 |
+| IMR-90 | 312,250 | 9,990 | 13,114 (65.6%) | +0.50 | 117,190 | 1,436 | -0.54 | 12,737 | -0.39 | 14,057 | -0.76 |
+| astrocyte | 294,713 | 9,988 | 14,447 (72.2%) | +1.22 | 41,943 | 1,348 | -0.20 | 12,639 | -0.40 | 13,885 | -0.73 |
+| hepatocyte | 267,741 | 9,994 | 14,117 (70.6%) | +1.31 | 8,540 | 1,414 | +0.57 | 14,135 | +1.07 | 15,489 | +0.97 |
+| ovary | 248,611 | 10,003 | 7,553 (37.8%) | -1.35 | 12,359 | 398 | -0.76 | 14,006 | +1.06 | 14,193 | +0.07 |
+| H1 | 232,709 | 10,014 | 8,919 (44.6%) | -0.60 | 38,481 | 3,151 | +1.92 | 12,042 | -0.63 | 15,129 | +1.09 |
+| SK-N-SH | 232,038 | 9,989 | 11,302 (56.5%) | +0.44 | 36,028 | 1,467 | +0.01 | 13,556 | +0.74 | 14,883 | +0.89 |
+| testis | 225,744 | 10,012 | 10,756 (53.8%) | +0.27 | 1,902 | 284 | -0.07 ‡ | 15,078 | +2.15 | 15,265 | +1.31 |
+| CD14-positive monocyte | 202,328 | 10,016 | 8,323 (41.6%) | -0.52 | 56,083 | 2,434 | +0.93 | 11,351 | -1.07 | 13,647 | +0.24 |
+| HepG2 | 176,634 | 10,011 | 9,268 (46.3%) | +0.22 | 115,860 | 1,553 | -0.40 | 11,641 | -0.62 | 13,015 | +0.11 |
+| keratinocyte | 83,639 | 9,990 | 3,992 (20.0%) | -0.25 | 46,799 | 304 | -1.45 | 10,964 | -0.25 | 8,432 | -1.55 |
+| GM12878 | 76,119 | 9,995 | 3,263 (16.3%) | -0.34 ‡ | 25,814 | 200 | -1.31 | 10,698 | -0.36 ‡ | 9,802 | -0.06 ‡ |
+
+The median-split column is shown to make the point it was withdrawn for: 9,988
+to 10,016 in every row, whatever the depth. The absolute count beside it runs
+from 16.3% to 73.0% of the 20,002 nodes, so no biosample is floored or
+saturated under the registered 5% and 95% limits.
+
+### The bars
+
+| normalised reading | raw rho vs covariate | bar 1: halves (rho, p) | bar 2: in-sample / leave-one-out rho | bar 3: second assay (rho) | kept |
+|---|---|---|---|---|---|
+| `nodes_open_depth_residual` | 0.7198 | **1.0000**, 0.0001 | 0.2198 / **0.2363** | peak width 0.0549 | yes |
+| `genes_poised_mark_residual` | 0.4945 | **0.9945**, 0.0001 | −0.0165 / **−0.0165** | DNase peaks 0.4341 | yes |
+| `genes_read_depth_residual` | 0.5330 | **0.9231**, 0.0002 | −0.0879 / **0.0440** | peak width 0.1154 | yes |
+| `genes_read_open_depth_residual` | 0.5934 | **0.9835**, 0.0001 | −0.2308 / **−0.1703** | peak width 0.4615 | yes |
+
+All four clear all three registered bars. `genes_poised` was also scored
+without testis, the under-called H3K27me3 experiment at 1,902 peaks: halves
+0.9930, leave-one-out −0.0070, DNase 0.4406, kept — the verdict is not
+testis-dependent. Two numbers under the kill line are still worth naming:
+`genes_poised`'s residual reads 0.43 against DNase depth, because a promoter must
+be DNase-open before it can be called poised, and `genes_read_open`'s reads 0.46
+against peak width.
+
+**What the unregistered depth-matched check says about each.** Spearman between
+the depth-matched count and the residual: at HepG2's depth (eleven biosamples),
+0.89 for `genes_read`, 0.74 for `genes_read_open` and 0.69 for the node count;
+at GM12878's depth (thirteen), 0.63, 0.69 and **0.11**. The node figure at the
+shallow depth is not a contradiction of the residual so much as a threshold
+sitting in the tail: cut to 76,119 peaks every biosample averages about 2.5
+peaks per 100 kb, half the 4.79 reference, and the thirteen counts collapse into
+3,263 to 3,684 (a span of 1.13). At a depth where the reference is inside the
+distribution the node residual and the matched count agree, and they agree on
+the pair that matters most here: HepG2 opens 9,268 nodes at the reference and
+K562 cut to the same depth 6,792. **The node reading's K562-against-HepG2
+reversal is the one matched depth confirms.**
+
+### Which published comparisons moved
+
+- **K562 against HepG2, read share: softened.** Direction survives at matched
+  depth, size falls from 9.0 to 2.7 points (`genes_read_open`) and 5.6 to 1.3
+  (`genes_read`). The residual's reversal is an edge artefact and is not the
+  reported result.
+- **The eleven-row read column at "Eleven cell types": re-ordered at both ends.**
+  On the residual, K562 falls from fifth to last and cardiac muscle cell from
+  second to sixth of the eleven; depth-matched, K562 sits sixth of thirteen.
+  Keratinocyte is last or second-last on every version, so its low share is not
+  only its shallow file. H1 is in the top two on both.
+- **P3, "both tissues read more genes than the cultured median": holds on
+  `genes_read`, fails on `genes_read_open`.** On `genes_read`, testis +2.15 and
+  ovary +1.06 against a cultured median of −0.39. On `genes_read_open` ovary is
+  +0.07 against a cultured median of +0.10, so the registered condition fails,
+  by a hair; the sentence quoted both fields and now holds on one.
+- **Ovary's 398 poised genes ("Ovary survives it"): stands.** Its residual
+  against its own H3K27me3 call is −0.76, below zero as registered.
+- **Testis's withdrawal from the poised claim: stands, and is now explained.**
+  Against its own mark testis reads −0.07, ordinary: its 284 poised genes are
+  what an H3K27me3 call of 1,902 peaks predicts.
+- **H1 as the most poised biosample: stands.** 3,151 raw and +1.92 normalised,
+  first on both.
+- **`nodes_open`: a between-biosample reading exists for the first time.** On
+  the residual hepatocyte (+1.31), astrocyte (+1.22) and cardiac muscle cell
+  (+0.99) open the most nodes for their depth, K562 (−1.90) and ovary (−1.35)
+  the fewest. No earlier comparison stood on this field, so none moved.
+
+### What changed in the code
+
+- `genomeos/genome/reader.py`: `NODE_OPEN_REFERENCE_DENSITY = 4.79`,
+  `NORMALISED_READINGS`, `log_fit`, `depth_residuals`, `loo_residuals` and
+  `normalise_family`. Each row of `read_chromosome` gains
+  `nodes_open_at_reference` beside `nodes_open` and `h3k27me3_peaks` beside
+  `genes_poised`; `evidence.depth` keeps its earlier text and adds the four
+  normalised readings and the edge caveat. `node_open_threshold` and
+  `NODE_OPEN_BASIS` are untouched, so `attribution/candidates.py` and
+  `tests/test_node_open_threshold.py` see the same within-biosample rank.
+- A residual belongs to a panel, not to a row, so the normalised readings are
+  not per-chromosome fields: `scripts/reader_genome_wide.py` carries the two
+  new raw fields into its `totals` and writes `normalised` beside them from
+  `normalise_family` at the next roll-up, and the table for the thirteen on
+  disk now is `data/results/reader_normalised.json`, whose `per_biosample`
+  block is `normalise_family`'s own output and is checked against the scoring
+  to 10⁻³.
+- `scripts/reader_depth_family.py` gains `--normalised` (the registered
+  scoring) and `--rarefied [N]` (the depth-matched check).
+- `tests/test_reader_normalised.py`: the fit and its standardisation, the
+  leave-one-out form not being orthogonal to depth, the edge flag, a panel with
+  a hole normalising nothing, the frozen reference density and the untouched
+  median rank, a synthetic deeper file that leaves `nodes_open` at half and
+  moves `nodes_open_at_reference`, and the two results side by side — the
+  residual's reversal and the matched-depth survival — so neither can be
+  quoted without the other.
+
+### What this does not settle
+
+The normalised readings remove DNase depth and, for `genes_poised`, H3K27me3
+depth. They do not remove what the depth lane already named as unmeasured
+here — FRiP, fragment length, library complexity — and a residual that
+replicates across halves is a stable property of the biosample, which is not
+the same as a property of the cell type. The depth-matched count is the better
+tool for a two-biosample comparison and the residual for a ranking over the
+panel; neither is shipped as the other.

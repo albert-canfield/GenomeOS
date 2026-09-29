@@ -16,6 +16,15 @@ different quantity. Nothing in this script chooses a cut.
 
 `--markdown` prints the documentation section from the saved result, so no figure in prose is typed
 beside a computed one.
+
+After review R4 (2026-09-28) the compiler states no confidence on a predicted fact, so the default run
+calibrates nothing and says so: it bins the model's own score (|log2 fold change|, unclipped) and
+prints the observed agreement per assay as a descriptive curve, probability None, saved as
+`model_score_curve_genome`. `--retired-formula` rebuilds the September tables from the formula the
+compiler no longer writes, for reading the old results only.
+
+    uv run python scripts/confidence_calibration.py                       # post-R4 score curve
+    uv run python scripts/confidence_calibration.py --retired-formula --result-name NAME
 """
 
 from __future__ import annotations
@@ -31,6 +40,56 @@ from genomeos.results import load_result, save_result
 
 CHROMS = [f"chr{c}" for c in [*range(1, 23), "X", "Y"]]
 RESULT = "confidence_calibration_genome"
+SCORE_RESULT = "model_score_curve_genome"
+
+
+def read_chromosome_scores(chrom: str) -> tuple[list[cc.Scored], dict[str, Any]]:
+    """One chromosome's compiled elements with the model score in place of the retired confidence."""
+    from genomeos.attribution.unknown_scoring import annotate
+
+    elements = attributed(chrom)
+    layer = measured.Layer.load(chrom)
+    rows = measured.rows(chrom, elements, layer)
+    cov = {r["id"]: r for r in annotate(chrom, elements)}
+    got = cc.scored_elements(chrom, elements, layer, rows, cov)
+    per = {
+        "compiled_elements_with_a_score": len(got),
+        "elements_in_any_assay_footprint": sum(1 for e in got if e.eligible),
+        "elements_measured": sum(1 for e in got if e.verdicts),
+        "score_median": round(sorted(e.score for e in got)[len(got) // 2], 4) if got else None,
+        "measured_by_assay": {a: sum(1 for e in got if a in e.verdicts) for a in measured.ASSAYS},
+    }
+    return got, per
+
+
+def main_scores(chroms: list[str], save: bool, name: str) -> int:
+    t0 = time.time()
+    population: list[cc.Scored] = []
+    per_chromosome: dict[str, Any] = {}
+    refused: dict[str, str] = {}
+    for chrom in chroms:
+        try:
+            got, per = read_chromosome_scores(chrom)
+        except (FileNotFoundError, KeyError, ValueError) as exc:
+            refused[chrom] = f"{type(exc).__name__}: {exc}"[:160]
+            print(f"{chrom}: not read ({refused[chrom]})", flush=True)
+            continue
+        population.extend(got)
+        per_chromosome[chrom] = per
+        print(
+            f"{chrom}: {per['compiled_elements_with_a_score']:,} scored, "
+            f"{per['elements_measured']:,} measured"
+        )
+    payload = cc.score_report(population, per_chromosome)
+    payload["chromosomes_not_read"] = refused
+    payload["seconds"] = round(time.time() - t0, 1)
+    print()
+    for assay in measured.ASSAYS:
+        print(cc.score_summary_line(payload, assay), flush=True)
+    if save:
+        m = measured.result_manifest(list(per_chromosome))
+        print(f"\nwrote {save_result(name, payload, manifest=m)}")
+    return 0
 
 
 def read_chromosome(chrom: str) -> tuple[list[cc.Element], dict[str, Any]]:
@@ -298,6 +357,14 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="", help="comma separated; default every chromosome")
     ap.add_argument("--no-save", action="store_true")
+    ap.add_argument(
+        "--result-name", default=RESULT, help="the name to save under (R6 saves beside, not over)"
+    )
+    ap.add_argument(
+        "--retired-formula",
+        action="store_true",
+        help="rebuild the September tables from the confidence formula the compiler no longer writes",
+    )
     ap.add_argument("--markdown", action="store_true", help="print the doc section from the saved result")
     args = ap.parse_args(argv)
 
@@ -310,6 +377,11 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     chroms = [c.strip() for c in args.chroms.split(",") if c.strip()] or CHROMS
+    if not args.retired_formula:
+        # the September name is held by the removal guard and by the results that cite it, so the
+        # post-R4 curve saves under its own name unless one is given
+        name = SCORE_RESULT if args.result_name == RESULT else args.result_name
+        return main_scores(chroms, not args.no_save, name)
     t0 = time.time()
     population: list[cc.Element] = []
     per_chromosome: dict[str, Any] = {}
@@ -338,7 +410,8 @@ def main(argv: list[str] | None = None) -> int:
         print(cc.summary_line(payload, assay), flush=True)
 
     if not args.no_save:
-        print(f"\nwrote {save_result(RESULT, payload)}")
+        m = measured.result_manifest(list(per_chromosome))
+        print(f"\nwrote {save_result(args.result_name, payload, manifest=m)}")
     return 0
 
 

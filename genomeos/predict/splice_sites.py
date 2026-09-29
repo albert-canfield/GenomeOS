@@ -164,11 +164,9 @@ class SpliceSites:
 
 def client_factory():
     """A live AlphaGenome client from the key in the environment or .env (raises without one)."""
-    from alphagenome.models import dna_client  # type: ignore[import-not-found]
-
-    from genomeos.predict.alphagenome_adapter import AlphaGenomeAdapter
+    from genomeos.predict.alphagenome_adapter import AlphaGenomeAdapter, create_client
 
     key = AlphaGenomeAdapter().api_key
     if not key:
         raise RuntimeError("ALPHAGENOME_API_KEY is not set")
-    return dna_client.create(key)
+    return create_client(key)  # requests ALPHAGENOME_MODEL_VERSION

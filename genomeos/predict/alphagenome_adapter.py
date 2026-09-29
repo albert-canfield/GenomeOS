@@ -5,18 +5,27 @@ needs ALPHAGENOME_API_KEY (free, non-commercial). Without a key the adapter
 still works with an injected `scorer` callable, which is how the tests run.
 
 Output is always BioIR: each predicted tissue effect becomes a Rule with
-evidence kind `predicted`, the model name as source, and confidence derived
-from the effect magnitude. Nothing here is ever labelled experimental.
+evidence kind `predicted`, the model name as source, and no confidence: since
+review R4 (R4f, 2026-09-28) an effect carries its log2 fold change in its unit
+and a `genomeos.certainty.Certainty` record (model score = |log2 fold change|,
+named; probability None with its reason). The size of a predicted effect is not
+how sure anyone is, so nothing here converts it into a certainty. Nothing here
+is ever labelled experimental.
 """
 
 from __future__ import annotations
 
+import datetime
+import hashlib
+import importlib.metadata
 import importlib.util
 import os
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from genomeos.certainty import Certainty
 from genomeos.ir import Action, Entity, Evidence, EvidenceKind, Module, Rule
+from genomeos.ir.model import UNSTATED
 
 MODEL_NAME = "AlphaGenome (google-deepmind/alphagenome 0.9)"
 KEY_VAR = "ALPHAGENOME_API_KEY"
@@ -27,7 +36,17 @@ HOW_TO_ENABLE = (
 )
 LICENCE_NOTE = (
     "AlphaGenome is free for non-commercial use under Google DeepMind's terms; its predictions enter "
-    "GenomeOS only as `predicted` evidence capped at confidence 0.7, and nothing in the core depends on it"
+    "GenomeOS only as `predicted` evidence, each effect with its unit and no probability, and nothing in the"
+    " core depends on it"
+)
+EFFECT_UNIT = (
+    "log2 fold change of the gene's predicted RNA-seq expression, alternate allele over reference"
+    " (AlphaGenome RNA_SEQ variant scorer, one track)"
+)
+MODEL_SCORE_NAME = "|log2 fold change| on that track: the magnitude effects are sorted by, not a probability"
+NO_PROBABILITY = (
+    "no calibration record: no predicted variant effect has been scored against a measured outcome"
+    " population by a stated method, so no probability that this variant moves this gene is quoted"
 )
 
 # What the key enables. Every feature is always listed; without the key it is loaded but disabled.
@@ -76,9 +95,71 @@ class PredictedEffect:
         return Action.ACTIVATE if self.log2_fold_change > 0 else Action.INHIBIT
 
     @property
-    def confidence(self) -> float:
-        """Magnitude-based confidence, capped at 0.7 because it is a prediction."""
-        return min(0.7, 0.2 + abs(self.log2_fold_change) * 0.25)
+    def certainty(self) -> Certainty:
+        """What the effect rests on (R4f): the effect in its unit, the score named, no probability.
+        Only the effect and the score depend on the magnitude; nothing converts either into a
+        certainty. It replaces `confidence = min(0.7, 0.2 + 0.25 |log2FC|)`."""
+        return Certainty(
+            evidence_category=f"predicted: {MODEL_NAME}, one model run",
+            effect_estimate=self.log2_fold_change,
+            effect_unit=EFFECT_UNIT,
+            uncertainty_note="one deterministic model run; no spread computed",
+            model_score=abs(self.log2_fold_change),
+            model_score_name=MODEL_SCORE_NAME,
+            probability_unavailable=NO_PROBABILITY,
+        )
+
+
+API_SERVICE = {
+    "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+    "address": "dns:///gdmscience.googleapis.com:443",
+}
+UNREQUESTED = (
+    "unrequested: dna_client.create was given no model_version, so the server chose; alphagenome 0.9.0 "
+    "documents ALL_FOLDS as its default, and no response says which model answered"
+)
+
+
+#: The model version every AlphaGenome client in this project asks for (coordinator decision, ROADMAP
+#: section 5 item 11, R9 model-dependency row, 2026-09-28). The name of a member of the installed
+#: client's `alphagenome.models.dna_model.ModelVersion` enum (0.9.0: ALL_FOLDS, FOLD_0..FOLD_3), passed
+#: as `dna_client.create(api_key, model_version=...)`. ALL_FOLDS is the distilled all-folds model the
+#: 0.9.0 client names as its default; asking for it by name makes each request carry it instead of an
+#: empty field. Answers made before 2026-09-28 asked for nothing and are labelled "unrequested", since
+#: the server's choice then is not guaranteed to be the model that answers a named request.
+ALPHAGENOME_MODEL_VERSION = "ALL_FOLDS"
+
+
+def create_client(api_key: str | None, **kwargs: object) -> object:
+    """A live AlphaGenome client that requests ALPHAGENOME_MODEL_VERSION; every place that makes a
+    client goes through here. `kwargs` pass on to `dna_client.create` (timeout, address)."""
+    from alphagenome.models import dna_client  # type: ignore[import-not-found]
+
+    version = dna_client.ModelVersion[ALPHAGENOME_MODEL_VERSION]
+    return dna_client.create(api_key, model_version=version, **kwargs)
+
+
+def run_metadata(client: object | None = None, date: str | None = None) -> dict:
+    """What a live request is made with, kept beside each cached answer (review R9 follow-up): the client
+    package and its installed version, the model version the client asks for (None when it asks for
+    none, which is how every run before 2026-09-28 asked), the service and the date. Reads the installed
+    package and the client object only; makes no request."""
+    try:
+        version = importlib.metadata.version("alphagenome")
+    except importlib.metadata.PackageNotFoundError:
+        version = None
+    requested = getattr(client, "_model_version", None)  # DnaClient keeps the requested ModelVersion's name
+    if client is None:  # no client: the version create_client asks for (a client made with none says None)
+        requested = ALPHAGENOME_MODEL_VERSION
+    return {
+        "client": "alphagenome",
+        "client_version": version,
+        "model_version": requested,
+        "model_version_note": None if requested else UNREQUESTED,
+        "api": dict(API_SERVICE),
+        "scorer": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+        "date": date or datetime.datetime.now(datetime.UTC).date().isoformat(),
+    }
 
 
 def _dotenv_key(name: str, path: str = ".env") -> str | None:
@@ -132,8 +213,9 @@ class AlphaGenomeAdapter:
         from alphagenome.models import dna_client, variant_scorers  # type: ignore[import-not-found]
 
         if self._client is None:
-            self._client = dna_client.create(self.api_key)
+            self._client = create_client(self.api_key)
         client = self._client
+        model = run_metadata(client)
 
         def score(chrom: str, pos: int, ref: str, alt: str) -> list[tuple[str, str, float]]:
             variant = genome.Variant(chromosome=chrom, position=pos, reference_bases=ref, alternate_bases=alt)
@@ -149,6 +231,13 @@ class AlphaGenomeAdapter:
                 for g, n in zip(gtex, names, strict=False):
                     tissues.append(str(g) if g and str(g) not in ("nan", "") else str(n))
                 self.last_scan = {"genes": len(genes), "tracks": len(tissues), "max_abs_log2fc": 0.0}
+                # the track table this answer was read on, as a checksum: no request, the response's own
+                model["tracks"] = len(tissues)
+                model["tracks_sha256"] = hashlib.sha256(
+                    "\n".join(
+                        f"{i}\t{n}\t{t}" for i, n, t in zip(adata.var.index, names, tissues, strict=False)
+                    ).encode()
+                ).hexdigest()
                 for gi, gene in enumerate(genes):
                     for ti, tissue in enumerate(tissues):
                         val = float(adata.X[gi, ti])
@@ -158,6 +247,7 @@ class AlphaGenomeAdapter:
                             out.append((str(gene), str(tissue), val))
             return out
 
+        score.model = model  # type: ignore[attr-defined]  # read by enhancer_target.score_element
         return score
 
     def predict(
@@ -200,9 +290,11 @@ class AlphaGenomeAdapter:
                     strength=min(1.0, abs(e.log2_fold_change)),
                     when={"tissue": e.tissue},
                     evidence=Evidence(
-                        EvidenceKind.PREDICTED, MODEL_NAME, note=f"log2FC={e.log2_fold_change:+.3f}"
+                        EvidenceKind.PREDICTED,
+                        MODEL_NAME,
+                        note=f"log2FC={e.log2_fold_change:+.3f}, probability unavailable",
                     ),
-                    confidence=e.confidence,
+                    confidence=UNSTATED,  # R4f: an effect's size is not a confidence; none is stated
                 )
             )
         return m

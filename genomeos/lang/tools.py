@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import UNKNOWN, Module
+from genomeos.ir import UNKNOWN, Module, confidence_stated
 from genomeos.lang import parse_file
 
 
@@ -33,6 +33,38 @@ def spark(values: list[float], width: int = 60) -> str:
     return "".join(bars[min(7, int((v - lo) / (hi - lo) * 7.999))] for v in sample)
 
 
+WEAK = 0.5  # a rule that STATES a confidence below this is listed for review
+
+
+def confidence_lines(module: Module, means: bool = True, weak: bool = True) -> list[str]:
+    """The check report's confidence lines: the mean by kind over stated confidences only, and the
+    rules that state one below WEAK. A rule that states none is counted apart, never as weak, and a
+    kind where nothing is stated says so instead of showing 0.00 (item 12 S1, 2026-09-28)."""
+    lines = []
+    if means:
+        counts = module.confidence_counts()
+        lines.append("  mean confidence by kind:")
+        for kind, val in sorted(module.confidence_report().items()):
+            c = counts[kind]
+            if val is None:
+                lines.append(f"    {kind:<10} {'':<20} none stated ({c['unstated']} unstated)")
+                continue
+            tail = f"  ({c['unstated']} of {c['stated'] + c['unstated']} unstated)" if c["unstated"] else ""
+            lines.append(f"    {kind:<10} {'█' * int(val * 20):<20} {val:.2f}{tail}")
+    if weak:
+        weak_rules = [r for r in module.rules if confidence_stated(r.confidence) and r.confidence < WEAK]
+        if weak_rules:
+            lines.append(f"  rules with confidence < {WEAK}: {len(weak_rules)}")
+            lines += [
+                f"    {r.id}  ({r.evidence.kind.value}: {r.evidence.source or 'no source'})"
+                for r in weak_rules
+            ]
+        unstated = sum(1 for r in module.rules if not confidence_stated(r.confidence))
+        if unstated:
+            lines.append(f"  rules that state no confidence: {unstated} (not counted as weak)")
+    return lines
+
+
 def check_module(module: Module, context: dict[str, str] | None = None) -> str:
     """The compile report as text: counts, active rules in a context, confidence by kind, weak rules."""
     lines = [f"module {module.name}"]
@@ -49,9 +81,7 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
             f"silenced: {silenced or 'none'}"
         )
         lines += [f"    {r.id}" for r in active]
-    lines.append("  mean confidence by kind:")
-    for kind, val in sorted(module.confidence_report().items()):
-        lines.append(f"    {kind:<10} {'█' * int(val * 20):<20} {val:.2f}")
+    lines += confidence_lines(module, weak=False)
     unknown_params = [p.name for p in module.parameters.values() if p.value is UNKNOWN]
     if unknown_params:
         lines.append(
@@ -62,10 +92,7 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
     if unknowns:
         lines.append(f"  UNKNOWN regions: {len(unknowns)}")
         lines += [f"    {u.id}  {u.locus}" for u in unknowns]
-    weak = [r for r in module.rules if r.confidence < 0.5]
-    if weak:
-        lines.append(f"  rules with confidence < 0.5: {len(weak)}")
-        lines += [f"    {r.id}  ({r.evidence.kind.value}: {r.evidence.source or 'no source'})" for r in weak]
+    lines += confidence_lines(module, means=False)
     if module.located:
         from genomeos.lang.located import layout
 
@@ -234,7 +261,13 @@ def run_located(
     for s in vm.species:
         xs = res.levels[s]
         conf = res.confidence.get(s)
-        tail = f"  conf={conf['score']:.2f} (weakest: {conf['weakest']})" if conf else ""
+        tail = ""
+        if conf and conf["score"] is None:
+            tail = f"  conf=unstated ({len(conf['unstated'])} links state none)"
+        elif conf:
+            tail = f"  conf={conf['score']:.2f} (weakest: {conf['weakest']})"
+            if conf["unstated"]:
+                tail += f", at most: {len(conf['unstated'])} links state none"
         lines.append(f"  {s:<32} {spark(xs, 30)}  final={xs[-1]:10.3f}{tail}")
     for label, rows in (("stranded", res.stranded), ("ectopic", res.ectopic)):
         lines.append(f"  {label}: {len(rows)}")

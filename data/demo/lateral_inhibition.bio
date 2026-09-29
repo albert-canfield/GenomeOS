@@ -21,7 +21,9 @@ organism AcVu {
   evidence: experimental "Kimble & Hirsh 1979, Dev Biol 70:396; Seydoux & Greenwald 1989, Cell 57:1237"
   confidence: 0.8
 }
-stage AcVu_decision { from: 0 min; to: 40 h }
+# the window is this program's own: the asserts read the outcome at 40 h. No source held here times
+# the AC/VU decision, so the stage says so rather than borrowing the lineage papers' authority.
+stage AcVu_decision { from: 0 min; to: 40 h; evidence: none modelling window, the time the asserts read, not a measured stage boundary }
 cell_type AnchorCell { parent: PostMitotic; evidence: curated "Cell Ontology"; confidence: 0.7 }
 cell_type VentralUterine { parent: PostMitotic; evidence: curated "Cell Ontology"; confidence: 0.7 }
 

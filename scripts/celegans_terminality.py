@@ -13,7 +13,6 @@ distilled under data/results/ and data/knowledge/.
 
 from __future__ import annotations
 
-import json
 import sys
 from collections import defaultdict
 from datetime import date
@@ -22,12 +21,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism import provenance as pv  # noqa: E402
 from genomeos.organism import terminality as tg  # noqa: E402
 from genomeos.organism.atlas_levels import load_levels  # noqa: E402
 from genomeos.organism.reference import ReferenceLineage  # noqa: E402
 from genomeos.organism.tf_atlas import load_cells  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 
-OUT = Path("data/results/celegans_terminality.json")
+OUT = Path("data/results/celegans_terminality.json")  # written through save_result (item 12 S6)
 
 
 def build_features(ref: ReferenceLineage, labels: dict[str, str]) -> dict[str, dict[str, set[str]]]:
@@ -40,6 +41,7 @@ def build_features(ref: ReferenceLineage, labels: dict[str, str]) -> dict[str, d
 
 
 def main() -> int:
+    entries = pv.inputs(levels=True)
     ref = ReferenceLineage.load()
     labels = tg.universe(ref)
     gen = tg.depths(ref, labels)
@@ -379,9 +381,25 @@ def main() -> int:
         "verdict": verdict,
         "model_requests": 0,
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(result, indent=1) + "\n")
-    print(f"wrote {OUT}", flush=True)
+    manifest = pv.manifest(
+        entries,
+        {
+            "registered_universe": {"terminal": 555, "dividing": 771, "cells": 1326},
+            "shuffle_null_draws": null.get("draws"),
+            "shuffle_null_seed": 0,
+        },
+        exclusions=[
+            "cell type, cell name, tracked lifetime, own cycle length and atlas coverage, as features "
+            "(result.circularity_audit says why each would carry the answer)",
+        ],
+        partitions={
+            "held_out_by_founder_sublineage": "the T3cv and factor held-out scores take each sublineage's "
+            "threshold or rule from the other seven only",
+            "in_sample": "the T4 and in-sample scores",
+        },
+    )
+    path = save_result(OUT.stem, result, manifest=manifest)
+    print(f"wrote {path}", flush=True)
     return 0
 
 

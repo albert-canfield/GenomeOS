@@ -28,6 +28,7 @@ BLOCKS: dict[str, dict] = {
             "basal": ("number", "basal transcription rate"),
             "produces": ("Id, Id", "proteins this gene produces (one `produces` rule each)"),
             "location": ("Id", "v0.4: the compartment where it is read"),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
         },
         "nested": "transcript",
     },
@@ -49,16 +50,28 @@ BLOCKS: dict[str, dict] = {
             "pathways": ("Id, Id", "Reactome pathway ids"),
             "interactions": ("Id, Id", "interaction partners"),
             "structures": ("Id, Id", "PDB ids or AF- AlphaFold ids"),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
         },
     },
     "region": {
         "header": "region <Id> { ... }",
-        "props": {"locus": ("locus", ""), "role": ("text | unknown", "")},
+        "props": {
+            "locus": ("locus", ""),
+            "role": (
+                "text | unknown",
+                "the budget's tier summary, kept verbatim (Module.unknowns counts `unknown`); the five "
+                "axes below are the authoritative reading (R7)",
+            ),
+        },
     },
     "element": {
         "header": "element <Id> { ... }",
         "props": {
-            "class": ("promoter | enhancer | insulator | open_chromatin", "regulatory element class"),
+            "class": (
+                "promoter | enhancer | insulator | open_chromatin | unknown",
+                "a summary derived from the registry role (R7), never from the activity; the five axes "
+                "below are the authoritative reading",
+            ),
             "locus": ("locus", ""),
             "domain": ("Id", "the node (domain) it lies in"),
             "targets": ("Id, Id", "genes it reaches"),
@@ -103,6 +116,12 @@ BLOCKS: dict[str, dict] = {
             "rate": ("number /unit", "rate with unit"),
             "when": ("k = v, ...", "guards"),
             "effect": ("var op number [unit]", "repeatable; op in += -= *= ="),
+            "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
+            "partition": (
+                "duplicate | contents | binomial",
+                "v0.4 stage 4: what a division does to the contents; default duplicate "
+                "(contents = binomial below the regime threshold, exact halves above)",
+            ),
         },
     },
     "organism": {
@@ -235,6 +254,9 @@ BLOCKS: dict[str, dict] = {
             "locks": ("cell_type", "what can no longer change"),
             "inherit": ("daughters | no", "the lock passes to the daughters"),
             "release": ("never", "only never is implemented"),
+            "maintain": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
+            "excludes": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
+            "hysteresis": ("-", "rejected: specified in BIOLANG-v0.4-ECONOMY.md §7.2a, not implemented"),
         },
     },
     "design": {
@@ -313,9 +335,79 @@ BLOCKS: dict[str, dict] = {
             ),
             "allocation": ("competitive | proportional | priority | optimise", "shared capacities"),
             "seed": ("integer", ""),
+            "recheck": ("crossings | none", "a cell decides again when a read it names crosses a threshold"),
         },
     },
 }
+#: Review R7 (2026-09-28): five axes an `element` or `region` may state, each on its own key, so that
+#: where a sequence came from, what it is biochemically, what it was seen or predicted to do, how it
+#: relates to a gene and what the claim rests on are never folded into one label. A value may carry a
+#: qualifier after `/` (`repeat_derived/LINE`). In a property, `,` joins values that all hold (roles
+#: overlap: a CTCF-bound enhancer-like element is both) and `|` joins alternatives of which one holds
+#: and none is chosen (`silencer|insulator_like|competing_promoter|unknown`). `unknown` is a value on
+#: every axis. No axis has a value meaning "no function": constraint is evidence of selection, and its
+#: absence proves nothing, so it lives on `evidence_status`, never on `molecular_role`.
+AXES: dict[str, dict[str, str]] = {
+    "origin": {
+        "unique": "no interspersed repeat over the interval",
+        "repeat_derived": "at least half the interval is interspersed repeat (RepeatMasker); /CLASS",
+        "partly_repeat_derived": "some but under half of the interval is interspersed repeat; /CLASS",
+        "satellite": "satellite or centromeric array",
+        "tandem_repeat": "simple or tandem repeat array",
+        "segmental_duplication": "at least half the interval is a curated segmental duplication",
+        "assembly_gap": "no sequence to attribute",
+        "unknown": "origin not read",
+    },
+    "molecular_role": {
+        "promoter_like": "promoter-like biochemical signature (ENCODE PLS, or a CpG island)",
+        "enhancer_like": "enhancer-like biochemical signature (ENCODE pELS or dELS)",
+        "insulator_like": "CTCF signature (CTCF-only, or a CTCF-bound cCRE)",
+        "open_chromatin": "open chromatin with a promoter mark (ENCODE DNase-H3K4me3)",
+        "silencer": "a repressive element; never inferred from a direction of effect alone",
+        "competing_promoter": "represses a gene by competing for its regulators",
+        "structural": "a mechanical role (centromere, satellite array)",
+        "coding_candidate": "a long open reading frame that may code",
+        "unknown": "no role read",
+    },
+    "activity": {
+        "activates_target": "removing it lowers its target's expression (predicted or measured)",
+        "represses_target": "removing it raises its target's expression (predicted or measured)",
+        "no_effect_measured": "a well-powered perturbation measured no effect on the genes tested",
+        "active_in_reporter": "a reporter assay read it active in at least one cell or tissue",
+        "inactive_in_reporter": "a reporter assay read it inactive everywhere it was tested",
+        "unknown": "no activity read",
+    },
+    "target_relation": {
+        "predicted_deletion_target": "a model deletion names the gene",
+        "nearest_tss_in_domain": "the gene is the nearest TSS in its domain",
+        "measured_perturbation_target": "silencing it in place changed the gene (training split)",
+        "tested_no_effect": "genes were tested in place and none changed",
+        "unassigned": "no gene assigned",
+    },
+    "evidence_status": {
+        "curated_annotation": "an annotation (RepeatMasker, the assembly) states the origin",
+        "registry_biochemical": "the ENCODE cCRE registry states the biochemical signature",
+        "predicted_model": "a model prediction states the activity or target",
+        "measured": "an assay measured it",
+        "measured_negative": "an assay measured the absence of an effect",
+        "conflicting": "a measurement disagrees with the prediction",
+        "under_selection": "constrained across mammals (>= 5% of bases at phyloP >= 2.27)",
+        "selection_weak": "some constraint (3% to 5% of bases)",
+        "selection_not_detected": (
+            "under 3% of bases constrained: no sign of selection, not a sign of no function"
+        ),
+        "selection_not_measured": "constraint not read over this interval",
+        "unknown": "nothing stated",
+    },
+}
+#: the five axes as `element` and `region` properties, after each block's own keys
+AXIS_PROPS: dict[str, tuple[str, str]] = {
+    axis: (" | ".join(vals), "R7 axis; `,` values all hold, `|` unresolved alternatives, `/` a qualifier")
+    for axis, vals in AXES.items()
+}
+for _kind in ("region", "element"):
+    BLOCKS[_kind]["props"].update(AXIS_PROPS)
+
 COMMON = {
     "evidence": ('kind "source" [note]', "kind in experimental, curated, predicted, inferred, none"),
     "confidence": ("0..1", ""),
@@ -386,7 +478,23 @@ def render() -> str:
         + ".",
         "- Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.",
         "- `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison",
-        "  `>=n` `<=n` `>n` `<n`.",
+        "  `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no",
+        "  context, so a rule gated on it runs in no cell rather than in every cell.",
+        "- Decisions, timers, competence windows, commitments and signals read `when` with",
+        "  `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an",
+        "  event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's",
+        "  programs, compiled chromosomes or test programs uses them (data/results/when_census.json).",
+        "  SUPERSEDED, no longer true: see the current-behaviour bullet two below.",
+        "- Superseded the same day by the fix: rules and events now read `when` through `matches` as",
+        "  well, one function for every block, so `absent`, `a|b` and the comparisons hold on a rule or",
+        "  an event exactly as on a decision; the bullet above records the state the census measured.",
+        "- Current behaviour: every block that has a `when` (decisions, timers, rules, events,",
+        "  competence windows, commitments and signals) reads it with the one matcher,",
+        "  `genomeos.ir.model.matches`, so `any`, `absent`, `a|b`, the comparisons and `unknown` mean",
+        "  the same on each.",
+        "- `!=` is refused: `k != v` is a parse error naming the clause. Write the values that do match",
+        "  instead (`a|b`, `absent`, or a comparison); what `!=` would mean on a missing key is",
+        "  undecided, and no program in the repo uses it.",
         "- Every block accepts " + " and ".join(f"`{k}: {v[0]}`" for k, v in COMMON.items()) + ".",
         "",
         "## Directives",
@@ -414,6 +522,10 @@ def render() -> str:
         "",
         "Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON",
         f"(`bioir_version` {VERSION}).",
+        "",
+        "A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated",
+        "0.0 by `confidence_stated()`. BioIR JSON writes it as `null` (a stated 0.0 stays `0.0`) and marks",
+        f"the file `{ir.RECORDS_UNSTATED}: true`; a file without that mark predates the difference.",
         "",
     ]
     for name in IR_TYPES:

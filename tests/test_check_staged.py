@@ -167,3 +167,39 @@ def test_old_removals_pass_and_the_window_decides(repo: Path, tmp_path: Path) ->
 
     assert refused.returncode == 2
     assert passed.returncode == 0, passed.stdout
+
+
+def test_an_import_of_an_untracked_module_is_refused(repo: Path, tmp_path: Path) -> None:
+    """38087a1: a test committed without the module it imports passes in the shared tree only."""
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "tests/test_new.py", "from genomeos.certainty import Certainty\n")
+
+    done = run_check(repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "genomeos.certainty" in done.stdout
+    assert "genomeos/certainty.py" in done.stdout
+
+
+def test_force_does_not_pass_a_missing_module(repo: Path, tmp_path: Path) -> None:
+    """The fix is to stage the module, so the flag that waves a revert through does not apply."""
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "tests/test_new.py", "import genomeos.certainty\n")
+
+    done = run_check(repo, index, "--force")
+
+    assert done.returncode == 2, done.stdout
+
+
+def test_an_import_staged_with_its_module_passes(repo: Path, tmp_path: Path) -> None:
+    """Module and importer in one commit, including a package's __init__ and a nested name."""
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "genomeos/__init__.py", "")
+    stage_blob(repo, index, "genomeos/certainty.py", "class Certainty: ...\n")
+    stage_blob(repo, index, "genomeos/lang/__init__.py", "")
+    body = "from genomeos.certainty import Certainty\nfrom genomeos import lang\nimport genomeos.lang\n"
+    stage_blob(repo, index, "tests/test_new.py", body)
+
+    done = run_check(repo, index)
+
+    assert done.returncode == 0, done.stdout

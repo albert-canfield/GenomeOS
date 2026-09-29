@@ -111,20 +111,23 @@ def test_elements_over_blocks_clips_and_counts():
 def test_guess_tiers():
     assert guess("gap", 1.0, None, None)["tier"] == "structural"
     assert guess("centromere", 0.5, {"fraction_above": 0.0}, None)["tier"] == "structural"
-    assert guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.01}, None)["tier"] == "fossil"
+    g = guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.01}, None)
+    assert g["tier"] == "repeat_unconstrained" and g["legacy_tier"] == "fossil"
     g = guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.12}, None)
-    assert g["tier"] == "constrained_unknown" and "exapted" in g["label"]
+    assert g["tier"] == "constrained_unknown" and "under selection" in g["label"]
     assert guess("regulatory", 0.7, {"fraction_above": 0.08}, None)["tier"] == "regulatory"
-    assert guess("unique_intergenic", 0.3, {"fraction_above": 0.01}, {"n": 0})["tier"] == "neutral"
+    assert (
+        guess("unique_intergenic", 0.3, {"fraction_above": 0.01}, {"n": 0})["tier"] == "unconstrained_unknown"
+    )
     assert (
         guess("unique_intergenic", 0.3, {"fraction_above": 0.07}, {"n": 0})["tier"] == "constrained_unknown"
     )
     assert guess("unclassified", 0.0, {"fraction_above": 0.035}, {"n": 4})["tier"] == "constrained_unknown"
-    assert guess("long_orf", 0.4, {"fraction_above": 0.0}, None)["tier"] == "neutral"
+    assert guess("long_orf", 0.4, {"fraction_above": 0.0}, None)["legacy_tier"] == "neutral"
     unmeasured = guess("unique_intergenic", 0.3, None, None)
     assert unmeasured["confidence"] <= 0.3 and "not measured" in unmeasured["label"]
     assert all(
-        guess(c, 0.5, {"fraction_above": 0.5}, None)["tier"] in TIERS
+        guess(c, 0.5, {"fraction_above": 0.5}, None)["legacy_tier"] in TIERS
         for c in ("regulatory", "mixed_intergenic", "gap")
     )
 
@@ -323,7 +326,9 @@ def test_compile_chromosome_to_biolang(tmp_path):
     assert len(m.unknowns()) == 1 and len(m.rules) == 2
     assert {e.kind for e in m.entities.values()} == {"region", "regulatory_element", "gene", "domain"}
     e1 = m.entities["EH38E0000001"]
-    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1" and e1.confidence == 0.7  # capped
+    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1"
+    # R4 (2026-09-28): no confidence from the effect's size; tests/test_compile_certainty.py has the property
+    assert e1.confidence == 0.0 and "+0.9 log2 fold change" in e1.evidence.note
     out = write_program("chrT", tmp_path / "prog" / "noncoding_chrT.bio", tmp_path)
     assert out.exists() and out.read_text() == text
 

@@ -32,6 +32,8 @@ Common keys on any block: evidence, confidence.
 
 from __future__ import annotations
 
+import difflib
+import functools
 import math
 import re
 from collections.abc import Callable
@@ -43,12 +45,14 @@ from genomeos.ir import (
     COST_UNITS,
     DECISION_ACTIONS,
     MOLAR_UNITS,
+    PARTITION_MODES,
     REGIME_ALLOCATIONS,
     REGIME_FATES,
     REGIME_RECHECKS,
     REGIME_TREATMENTS,
     REGIME_UPDATES,
     UNKNOWN,
+    UNSTATED,
     VOLUME_UNITS,
     Action,
     Allocation,
@@ -273,7 +277,16 @@ def _parse_when(value: str) -> dict[str, str]:
         if not v:
             raise BioLangError(f"bad when clause: {clause!r}")
         key, val = k.strip(), v.strip()
-        if key[-1:] in (">", "<", "!"):  # `X >= 3` is the same clause as `X = >=3`, not a key called "X >"
+        if key[-1:] == "!" or val.startswith("!="):
+            # no matcher implements `!=`, and implementing it means deciding what a missing key
+            # means, which no program needs; before this refusal the clause silently matched only
+            # the literal string "!=v" (data/results/when_census.json: 0 of 456,157 clauses used it)
+            raise BioLangError(
+                f"when clause {clause.strip()!r}: `!=` is not supported. Name the values that do "
+                "match instead: alternatives `k = a|b`, `k = absent`, or a comparison `>=n` `<=n` "
+                "`>n` `<n`"
+            )
+        if key[-1:] in (">", "<"):  # `X >= 3` is the same clause as `X = >=3`, not a key called "X >"
             key, val = key[:-1].strip(), key[-1] + "=" + val
         if (".exposure" in key or ".mean" in key) and not _READ.match(key):
             raise BioLangError(
@@ -337,9 +350,62 @@ def _arrows(value: str, line_no: int) -> dict[str, str]:
     return out
 
 
+def _ontology(p: dict[str, str], line_no: int) -> dict[str, list[list[str]]]:
+    """The five R7 axes a block states, as {axis: [[alternative, ...], ...]}.
+
+    `,` separates values that all hold and `|` alternatives of which one holds and none is chosen;
+    a value may carry a qualifier after `/`. A value outside `grammar.AXES` is refused, so a typo
+    cannot become a new role."""
+    from genomeos.lang import grammar
+
+    out: dict[str, list[list[str]]] = {}
+    for axis, vocabulary in grammar.AXES.items():
+        if axis not in p:
+            continue
+        groups = [[v.strip() for v in item.split("|") if v.strip()] for item in _list(p[axis])]
+        for group in groups:
+            for v in group:
+                if v.split("/", 1)[0] not in vocabulary:
+                    raise BioLangError(
+                        f"line {line_no}: {axis} has no value {v!r}. It accepts: {', '.join(vocabulary)}"
+                    )
+        out[axis] = [g for g in groups if g]
+    return out
+
+
+@functools.cache
+def _accepted(kind: str) -> tuple[str, ...]:
+    """The keys a block of this kind reads: the grammar table's properties plus the common keys.
+
+    The table in `genomeos.lang.grammar` is the one docs/BIOLANG-GRAMMAR.md is generated from, so a
+    key is accepted exactly when the written grammar names it. Imported here, not at the top,
+    because the grammar module imports this one.
+    """
+    from genomeos.lang import grammar
+
+    return tuple(grammar.BLOCKS[kind].get("props", {})) + tuple(grammar.COMMON)
+
+
+def _check_keys(b: Block) -> None:
+    """Refuse a key the block does not read. Until 2026-09-27 such a key was stored and ignored, so
+    `basal_rate: 1.0` compiled to a gene with no basal rate and the engine's smoke run passed on an
+    all-zero line (data/results/biolang_key_census.json has what the check found when it arrived)."""
+    allowed = _accepted(b.kind)
+    for key in b.props:
+        if key in allowed:
+            continue
+        close = difflib.get_close_matches(key, allowed, n=1)
+        hint = f" (did you mean {close[0]!r}?)" if close else ""
+        raise BioLangError(
+            f"line {b.line}: {b.kind} {b.header!r} has no key {key!r}{hint}. "
+            f"A {b.kind} accepts: {', '.join(allowed)}"
+        )
+
+
 def _common(b: Block) -> tuple[Evidence, float]:
     ev = _parse_evidence(b.props["evidence"]) if "evidence" in b.props else Evidence()
-    conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else 0.0
+    # a missing confidence is UNSTATED: 0.0 to every calculation, but distinguishable from a stated 0.0
+    conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else UNSTATED
     if not 0.0 <= conf <= 1.0:
         raise BioLangError(f"line {b.line}: confidence must be within 0..1")
     return ev, conf
@@ -349,6 +415,7 @@ def _common(b: Block) -> tuple[Evidence, float]:
 
 
 def _compile_block(b: Block, module: Module) -> None:
+    _check_keys(b)
     ev, conf = _common(b)
     p = b.props
     if b.kind == "gene":
@@ -378,9 +445,17 @@ def _compile_block(b: Block, module: Module) -> None:
         for child in b.children:
             if child.kind != "transcript":
                 raise BioLangError(f"line {child.line}: only transcript blocks may nest inside a gene")
+            _check_keys(child)
             cev, cconf = _common(child)
+            # a transcript without its own evidence line carries its gene's; `cev or ev` never did,
+            # because an Evidence is always truthy, so such a transcript counted as evidence `none`
             tx = Transcript(
-                id=child.header, kind="transcript", gene_id=g.id, evidence=cev or ev, confidence=cconf or conf
+                id=child.header,
+                kind="transcript",
+                gene_id=g.id,
+                evidence=cev if "evidence" in child.props else ev,
+                # the same for its confidence: `cconf or conf` replaced a stated 0.0 with the gene's
+                confidence=cconf if "confidence" in child.props else conf,
             )
             if "exons" in child.props:
                 tx.exons = [Locus.parse(x) for x in _list(child.props["exons"])]
@@ -434,6 +509,8 @@ def _compile_block(b: Block, module: Module) -> None:
             confidence=conf,
             role=UNKNOWN if role.lower() == "unknown" else role,
         )
+        if axes := _ontology(p, b.line):
+            r.attrs["ontology"] = axes
         if "locus" in p:
             r.locus = Locus.parse(p["locus"])
         module.add(r)
@@ -445,6 +522,8 @@ def _compile_block(b: Block, module: Module) -> None:
             confidence=conf,
             cls=p.get("class", "unknown"),
         )
+        if axes := _ontology(p, b.line):
+            el.attrs["ontology"] = axes
         if "locus" in p:
             el.locus = Locus.parse(p["locus"])
         if "domain" in p:
@@ -479,6 +558,14 @@ def _compile_block(b: Block, module: Module) -> None:
             e.when = _parse_when(p["when"])
         if "cost" in p:
             e.costs = _costs(p["cost"], b.line)
+        if "partition" in p:
+            mode = p["partition"].strip()
+            if mode not in PARTITION_MODES:
+                raise BioLangError(
+                    f"line {b.line}: event {b.header!r} has partition {mode!r}; "
+                    f"expected one of {', '.join(PARTITION_MODES)}"
+                )
+            e.partition = mode
         for eff in p.get("effect", "").split(" ; "):
             eff = eff.strip()
             if not eff:
@@ -1045,6 +1132,35 @@ def _check_references(module: Module) -> None:
 # the application registers sources (the packaged proteome as `protein:TP53`). The engine imports nothing.
 IMPORT_RESOLVERS: dict[str, Callable[[str], str]] = {}
 
+# An installed application can also offer a resolver without being imported by name: an entry point in
+# this group, named for its scheme, pointing at a `str -> str` function. GenomeOS declares `protein`
+# here, so `bio` finds the proteome wherever GenomeOS is installed and nowhere else. The engine ships no
+# resolver of its own: with none installed, `import protein:X` stops with the error below rather than
+# returning an empty module or reaching for the network.
+RESOLVER_GROUP = "biolang_import_resolvers"
+
+# schemes the engine knows by name, so their error says what is missing rather than only that it is
+KNOWN_SCHEMES = {
+    "protein": "`import protein:SYMBOL` reads a protein block from a proteome, and the engine ships none;"
+    " an application has to supply one (GenomeOS does, from its packaged human proteome)",
+}
+
+
+def import_resolver(scheme: str) -> Callable[[str], str] | None:
+    """The resolver for `scheme`: one registered in IMPORT_RESOLVERS, else one an installed package
+    declares under RESOLVER_GROUP (loaded once and then registered), else None."""
+    if scheme in IMPORT_RESOLVERS:
+        return IMPORT_RESOLVERS[scheme]
+    try:
+        from importlib.metadata import entry_points
+
+        found = [e for e in entry_points(group=RESOLVER_GROUP) if e.name == scheme]
+    except Exception:  # noqa: BLE001  (no metadata to read is the same as no resolver declared)
+        found = []
+    if not found:
+        return None
+    return IMPORT_RESOLVERS.setdefault(scheme, found[0].load())
+
 
 def resolve_import(name: str, base_dir: Path | None) -> Path:
     """`bio.std.ageing` -> genomeos/std/ageing.bio; `a.b` -> <base>/a/b.bio; or a literal path."""
@@ -1075,20 +1191,19 @@ def parse(
     done = set() if _done is None else _done  # files already merged into this program (diamond imports)
     for imp in imports:
         scheme, _, rest = imp.partition(":")
-        if rest and scheme in IMPORT_RESOLVERS:
+        resolver = import_resolver(scheme) if rest else None
+        if resolver is not None:
             key = imp
             if key in done:
                 continue
             done.add(key)
-            module.merge(
-                parse(
-                    IMPORT_RESOLVERS[scheme](rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done
-                )
-            )
+            module.merge(parse(resolver(rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done))
             continue
         if rest and scheme.isalpha() and scheme.islower() and "/" not in scheme and not imp.endswith(".bio"):
+            why = f": {KNOWN_SCHEMES[scheme]}" if scheme in KNOWN_SCHEMES else ""
             raise BioLangError(
-                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)})"
+                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)}){why};"
+                f" register one in IMPORT_RESOLVERS or declare it as a {RESOLVER_GROUP!r} entry point"
             )
         path = resolve_import(imp, base_dir)
         key = str(path.resolve())

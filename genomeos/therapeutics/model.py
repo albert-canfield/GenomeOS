@@ -813,6 +813,26 @@ class TherapeuticTargetCandidate:
     target_class: TargetClass = "unknown"
     class_reason: str = ""
     origins: list[VariantOrigin] = field(default_factory=list)
+    #: Which tier of evidence about this gene in this patient reached it here:
+    #: an observed alteration, this patient's own measurement of the gene, or a
+    #: database association with a gene that was altered. Set when the candidate
+    #: is scored, and read by the ranking, which puts the third tier last before
+    #: it looks at any score.
+    evidence_tier: str = ""
+    evidence_tier_reason: str = ""
+    #: Whether any modelled modality reaches this candidate with its hard
+    #: requirements answered, or none does. The ranking reads it after the
+    #: evidence tier and before the score; it is a gate and never a dimension of
+    #: the weighted mean. Registered 2026-09-27.
+    mechanism_reach: str = ""
+    mechanism_reach_reason: str = ""
+    #: How much this tumour altered the gene, from this patient's measurements
+    #: only — copy count, variant allele fraction, hotspot status — with an absent
+    #: quantity absent rather than imputed. It breaks ties between candidates the
+    #: tier, the gate and the published score cannot separate. Registered
+    #: 2026-09-27.
+    alteration_magnitude: dict[str, Any] = field(default_factory=dict)
+    alteration_magnitude_reason: str = ""
     localization: Localisation = field(default_factory=Localisation)
     tumour: TumourState = field(default_factory=TumourState)
     normal_tissue: NormalTissueProfile = field(default_factory=NormalTissueProfile)
@@ -858,6 +878,10 @@ class TherapeuticTargetCandidate:
             "target_class": self.target_class,
             "class_reason": self.class_reason,
             "why_interesting": self.why_interesting,
+            "mechanism_reach": self.mechanism_reach,
+            "mechanism_reach_reason": self.mechanism_reach_reason,
+            "alteration_magnitude": self.alteration_magnitude,
+            "alteration_magnitude_reason": self.alteration_magnitude_reason,
             "origin_variants": [o.to_dict() for o in self.origins],
             "localization": self.localization.to_dict(),
             "tumour": self.tumour.to_dict(),

@@ -132,9 +132,10 @@ WHAT_AGREEMENT_MEANS: dict[str, dict[str, Any]] = {
         "is_the_compiled_claim": False,
         "level_interpretable": False,
         "why": (
-            "episomal: it measures the sequence and not the locus, and it never sees the predicted "
-            "gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has "
-            "no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
+            "an integrated lentiviral reporter outside the native locus (Agarwal et al. 2025; called "
+            "episomal before R6): it measures the sequence and not the locus, and it never sees the "
+            "predicted gene. A silence is a weak contradiction, and the base rate of 'active in a "
+            "reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
         ),
     },
     "vista": {
@@ -836,3 +837,332 @@ def summary_line(got: dict[str, Any], assay: str) -> str:
         f"{assay}: {a['elements_in_the_footprint']} in the footprint, {a['elements_measured']} "
         f"measured; " + "; ".join(bits)
     )
+
+
+# =====================================================================================================
+# After review R4 (2026-09-28): the compiler states no confidence on a predicted element or rule, so
+# there is no stated number left to calibrate. What this lane measures from here on is below.
+# =====================================================================================================
+WHAT_IS_CALIBRATED_AFTER_R4 = {
+    "predicted_elements_and_rules": (
+        "nothing. Since R4 `attribution/compile.py` writes no `confidence:` on a predicted element or "
+        "rule, so there is no stated level to hold against an outcome. `stated_confidence` above "
+        "recomputes the retired formula and is kept only so the September results it produced can be "
+        "rebuilt and read; no new result is built on it"
+    ),
+    "the_model_score": (
+        "described, not calibrated. The AlphaGenome target run's score (|log2 fold change| on deleting "
+        "the element, unclipped and unrounded) is binned and the observed agreement per assay is "
+        "printed with a Wilson interval: a curve of outcome against score, whose ORDERING may be read "
+        "and whose level may not. No band's rate is attached to an element as its probability, so the "
+        "probability of every compiled prediction stays None"
+    ),
+    "measured_blocks": (
+        "nothing. A `_measured` block's confidence is a hand-set rank of its assay kind (perturbation "
+        "above reporter, attribution/measured.py), one constant per kind: a calibration curve through "
+        "one point per assay is a base rate, and the constant is labelled hand-set where it is written"
+    ),
+    "why_not_calibrate_the_score_into_a_probability": (
+        "the September tables already showed the level does not transfer between populations (the "
+        "offsets had opposite signs), CRISPRi, the only assay asking the compiled claim's own question, "
+        "has 120 tested pairs and no judged verdict, and the measured slice is a selected 4% of the "
+        "compiled genome. A probability fitted on it would be a number with no population it holds for"
+    ),
+}
+MODEL_SCORE_DEFINITION = (
+    "|log2 fold change| of the target gene's predicted RNA-seq on deleting the element (AlphaGenome "
+    "gene scorer, one run), neither clipped nor rounded. The stored `confidence` beside it is the same "
+    "magnitude capped at 0.7 and rounded (predict/enhancer_target.py CONFIDENCE_CAP), so it is read only "
+    "where no fold change was kept. A magnitude the run ranked by, not a probability"
+)
+# The inherited bands stop at 1.01 because they were drawn for a probability; a log2 magnitude is
+# unbounded, so one open band holds everything above them. Fixed here before any rate was computed.
+SCORE_BANDS = (*CONFIDENCE_BANDS, (CONFIDENCE_BANDS[-1][1], float("inf")))
+SCORE_BAND_NAMES = tuple(f"{lo:g}-{'inf' if hi == float('inf') else f'{hi:g}'}" for lo, hi in SCORE_BANDS)
+SCORE_BAND_EDGES = dict(zip(SCORE_BAND_NAMES, SCORE_BANDS, strict=True))
+# the same number the September split used, now read on the score: the retired formula clipped the
+# score to [0.05, 0.7] and rounded it to two places before this cut, so 'stated >= 0.5' and
+# 'score >= 0.5' select the same elements except those scoring in [0.495, 0.5), which rounding lifted
+HIGH_SCORE = HIGH_CONFIDENCE
+
+
+def model_score(element: dict[str, Any]) -> float | None:
+    """The model's score for this element's predicted link, as the run wrote it; None with no target."""
+    pc = element.get("predicted_coding") or {}
+    if not pc.get("gene"):
+        return None
+    # the fold change first: the stored `confidence` beside it is NOT the raw magnitude, it is
+    # predict/enhancer_target.py's round(min(CONFIDENCE_CAP, |lfc|), 3), capped at 0.7, so reading it
+    # would put the retired clip back under a new name
+    raw = pc.get("log2_fold_change")
+    if raw is None:
+        raw = pc.get("confidence")
+    return None if raw is None else abs(float(raw))
+
+
+def score_band_of(s: float) -> str:
+    for name, (lo, hi) in SCORE_BAND_EDGES.items():
+        if lo <= s < hi:
+            return name
+    return SCORE_BAND_NAMES[-1]
+
+
+@dataclass(slots=True)
+class Scored:
+    """One compiled element: the model score of its predicted link, covariates and assay verdicts."""
+
+    id: str
+    chrom: str
+    score: float
+    length: float
+    gc: float | None
+    nearest_coding_tss: float | None
+    eligible: frozenset[str] = frozenset()
+    verdicts: dict[str, str] = field(default_factory=dict)
+
+    @property
+    def band(self) -> str:
+        return score_band_of(self.score)
+
+    @property
+    def covariates_present(self) -> bool:
+        return self.gc is not None and self.nearest_coding_tss is not None
+
+
+def scored_elements(
+    chrom: str,
+    attributed: list[dict[str, Any]],
+    layer: measured.Layer,
+    measured_rows: list[dict[str, Any]],
+    covariates: dict[str, dict[str, Any]],
+) -> list[Scored]:
+    """`elements_of` with the model score in place of the retired stated confidence."""
+    by_id = {e["id"]: e for e in attributed}
+    out: list[Scored] = []
+    for old in elements_of(chrom, attributed, layer, measured_rows, covariates):
+        s = model_score(by_id[old.id])
+        if s is None:
+            continue
+        out.append(
+            Scored(
+                id=old.id,
+                chrom=old.chrom,
+                score=s,
+                length=old.length,
+                gc=old.gc,
+                nearest_coding_tss=old.nearest_coding_tss,
+                eligible=old.eligible,
+                verdicts=old.verdicts,
+            )
+        )
+    return out
+
+
+def score_table(population: list[Scored], assay: str, narrow: bool) -> dict[str, Any]:
+    """Outcome against score, per band: compiled, eligible, measured, observed rate and interval.
+
+    No stated level exists, so there is no gap, no 'inside the interval' and no calibration error: a
+    rate beside a score is a description of the measured slice, not a probability for an element.
+    """
+    scored = _labels(population, assay, narrow)
+    by_band: dict[str, list[Scored]] = defaultdict(list)
+    compiled_by_band: dict[str, list[Scored]] = defaultdict(list)
+    for r in scored:
+        by_band[r.band].append(r)
+    for r in population:
+        compiled_by_band[r.band].append(r)
+    rows = []
+    for name in SCORE_BAND_NAMES:
+        lo, hi = SCORE_BAND_EDGES[name]
+        here, all_here = by_band.get(name, []), compiled_by_band.get(name, [])
+        n = len(here)
+        k = sum(1 for r in here if r.verdicts[assay] == AGREES)
+        w_lo, w_hi = wilson(k, n) if n else (None, None)
+        rows.append(
+            {
+                "band": name,
+                "score_range": [lo, None if hi == float("inf") else hi],
+                "compiled_elements_in_the_band": len(all_here),
+                "in_this_assays_footprint": sum(1 for r in all_here if assay in r.eligible),
+                "measured_by_this_assay": n,
+                "median_score": round(median(r.score for r in here), 4) if n else None,
+                "agrees": k,
+                "observed": round(k / n, 4) if n else None,
+                "ci95": [round(w_lo, 4), round(w_hi, 4)] if n else None,
+                "judged": n >= MIN_FOR_A_BAND,
+                **_medians(here),
+            }
+        )
+    n_total = sum(r["measured_by_this_assay"] for r in rows)
+    k_total = sum(r["agrees"] for r in rows)
+    return {
+        "denominator_name": "where_the_predicted_gene_was_tested" if narrow else "over_all_matched_elements",
+        "elements": n_total,
+        "agrees": k_total,
+        "observed_overall": round(k_total / n_total, 4) if n_total else None,
+        "median_score_overall": round(median(r.score for r in scored), 4) if scored else None,
+        "bands_populated": sum(1 for r in rows if r["measured_by_this_assay"]),
+        "bands_judged": sum(1 for r in rows if r["judged"]),
+        "min_for_a_band": MIN_FOR_A_BAND,
+        "rows": rows,
+    }
+
+
+def ordering(tbl: dict[str, Any]) -> dict[str, Any]:
+    """Does the observed rate rise with the score? The September ordering rule, with no level read."""
+    judged = [r for r in tbl["rows"] if r["judged"]]
+    if len(judged) < MIN_BANDS_FOR_A_VERDICT:
+        return {
+            "pattern": "refused",
+            "bands_judged": len(judged),
+            "min_bands_for_a_verdict": MIN_BANDS_FOR_A_VERDICT,
+            "reading": "fewer judged bands than the bar fixed before any rate: printed, not read",
+        }
+    bottom, top = judged[0], judged[-1]
+    monotone = top["observed"] > bottom["observed"]
+    disjoint = bottom["ci95"][1] < top["ci95"][0]
+    return {
+        "pattern": "ordered" if monotone and disjoint else "uninformative",
+        "bands_judged": len(judged),
+        "lowest_judged_band": bottom["band"],
+        "lowest_observed": bottom["observed"],
+        "highest_judged_band": top["band"],
+        "highest_observed": top["observed"],
+        "ordering": (
+            "rises with the score"
+            if monotone and disjoint
+            else "the point estimates rise but the intervals overlap"
+            if monotone
+            else "does not rise"
+        ),
+        "probability": None,
+    }
+
+
+def score_carries_information(population: list[Scored], assay: str, narrow: bool) -> dict[str, Any]:
+    """High against low score, with length, GC and distance to a coding TSS held fixed."""
+
+    def row(e: Scored) -> dict[str, Any]:
+        return {
+            "id": e.id,
+            "length": e.length,
+            "gc": e.gc,
+            "nearest_coding_tss": e.nearest_coding_tss,
+            "score": e.score,
+            "agrees": e.verdicts.get(assay) == AGREES,
+        }
+
+    scored = [e for e in _labels(population, assay, narrow) if e.covariates_present]
+    high = [row(e) for e in scored if e.score >= HIGH_SCORE]
+    low = [row(e) for e in scored if e.score < HIGH_SCORE]
+    out: dict[str, Any] = {
+        "split": (
+            f"model score at or above {HIGH_SCORE} against below it: the September cut, which moves "
+            "only elements scoring in [0.495, 0.5), there lifted to 0.5 by rounding"
+        ),
+        "targets_high_score": len(high),
+        "controls_low_score": len(low),
+        "imbalance": imbalance(high, low, STRATA),
+    }
+    if len(high) < MIN_FOR_A_COMPARISON or len(low) < MIN_FOR_A_COMPARISON:
+        out["comparison_refused"] = f"{len(high)} high and {len(low)} low, below {MIN_FOR_A_COMPARISON}"
+    else:
+        out["standardised"] = standardised(high, low, STRATA, hit="agrees")
+    return out
+
+
+def score_report(population: list[Scored], per_chromosome: dict[str, Any]) -> dict[str, Any]:
+    """The post-R4 result: what is calibrated (nothing), and the model score's outcome curve per assay."""
+    per_assay: dict[str, Any] = {}
+    for assay in ASSAYS:
+        matched = [e for e in population if assay in e.verdicts]
+        narrow_rows = _labels(population, assay, True)
+        rep: dict[str, Any] = {
+            "assay": assay,
+            "what_agreement_means": WHAT_AGREEMENT_MEANS[assay],
+            "elements_in_the_footprint": sum(1 for e in population if assay in e.eligible),
+            "elements_measured": len(matched),
+            "elements_where_the_predicted_gene_was_tested": len(narrow_rows),
+        }
+        if assay in measured.BASE_LEVEL:
+            rep["refused"] = f"the assay cannot disagree: {measured.SATMUT_CANNOT_DISAGREE}"
+            per_assay[assay] = rep
+            continue
+        for narrow in (True, False):
+            key = "where_the_predicted_gene_was_tested" if narrow else "over_all_matched_elements"
+            if not narrow and len(narrow_rows) == len(matched):
+                rep[key] = {"identical_to": "where_the_predicted_gene_was_tested"}
+                continue
+            tbl = score_table(population, assay, narrow)
+            rep[key] = {
+                "table": tbl,
+                "ordering": ordering(tbl),
+                "carries_information": score_carries_information(population, assay, narrow),
+            }
+        per_assay[assay] = rep
+    headline: dict[str, Any] = {}
+    for assay, rep in per_assay.items():
+        for key in ("where_the_predicted_gene_was_tested", "over_all_matched_elements"):
+            block = rep.get(key) or {}
+            if "table" not in block:
+                continue
+            std = (block["carries_information"].get("standardised") or {}).get("matched") or {}
+            headline[f"{assay}:{key}"] = {
+                "elements": block["table"]["elements"],
+                "observed_overall": block["table"]["observed_overall"],
+                "median_score_overall": block["table"]["median_score_overall"],
+                "bands_judged": block["table"]["bands_judged"],
+                "pattern": block["ordering"]["pattern"],
+                "ordering": block["ordering"].get("ordering"),
+                "standardised_difference": std.get("difference"),
+                "standardised_p": std.get("p_one_sided"),
+            }
+    return {
+        "question": (
+            "after R4 the compiler states no confidence on a predicted fact. What is left to calibrate, "
+            "and what does the model's own score say about outcomes on the measured slice?"
+        ),
+        "what_is_calibrated": WHAT_IS_CALIBRATED_AFTER_R4,
+        "predicted_facts_with_a_stated_confidence_to_calibrate": 0,
+        "probability": None,
+        "probability_reason": (
+            "no calibration record: no probability is fitted, because the level measured on one "
+            "population did not transfer to another and the measured slice is selected"
+        ),
+        "model_score": MODEL_SCORE_DEFINITION,
+        "bands": {
+            "edges": [[lo, None if hi == float("inf") else hi] for lo, hi in SCORE_BANDS],
+            "half_open": "[lo, hi)",
+            "where_they_come_from": (
+                "target_calibration.CONFIDENCE_BANDS unchanged, plus one open band above 1.01 because a "
+                "log2 magnitude is unbounded; fixed before any rate was computed"
+            ),
+            "min_for_a_band": MIN_FOR_A_BAND,
+            "min_bands_for_a_verdict": MIN_BANDS_FOR_A_VERDICT,
+        },
+        "why_pooling_is_refused": WHY_POOLING_IS_REFUSED,
+        "two_denominators": TWO_DENOMINATORS,
+        "per_chromosome": per_chromosome,
+        "compiled_elements_with_a_score": len(population),
+        "per_assay": per_assay,
+        "the_answer": headline,
+        "scope": SCOPE,
+    }
+
+
+def score_summary_line(got: dict[str, Any], assay: str) -> str:
+    a = got["per_assay"][assay]
+    if "refused" in a:
+        return f"{assay}: {a['elements_measured']} measured, no curve (cannot disagree)"
+    bits = []
+    for key in ("where_the_predicted_gene_was_tested", "over_all_matched_elements"):
+        block = a.get(key) or {}
+        if "identical_to" in block:
+            bits.append(f"{key}: identical to the narrow denominator")
+            continue
+        t, o = block["table"], block["ordering"]
+        bits.append(
+            f"{key}: n={t['elements']}, observed {t['observed_overall']}, median score "
+            f"{t['median_score_overall']}, {t['bands_judged']} bands judged, {o['pattern']}"
+        )
+    return f"{assay}: {a['elements_measured']} measured; " + "; ".join(bits)

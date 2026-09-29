@@ -1,0 +1,636 @@
+{
+  "result": "budget_axes_census",
+  "date": "2026-09-28",
+  "review_item": "R7 follow-up (classifier order, budget role strings)",
+  "consumers": [
+    {
+      "output": "classify_block (class, evidence, confidence, features, hits)",
+      "reader": "genome/unknown.py investigate -> unknown_<chrom>.json; cli.py `genomeos unknown`; scripts/unknown_genome_wide.py",
+      "reads": "all five; by_class tallies the class"
+    },
+    {
+      "output": "unknown_<chrom> blocks[].class",
+      "reader": "attribution/budget.py build (the tier rule), attribution/compress.py, attribution/lexicon.py, attribution/unknown_scoring.py, genome/blocks.py, web/server.py (unknown panel)",
+      "reads": "class only; none reads a class value for origin except compile.py"
+    },
+    {
+      "output": "unknown_<chrom> blocks[].features (repeat_coverage, interspersed_coverage)",
+      "reader": "attribution/compile.py region_axes (origin axis; falls back to rmsk_<chrom> when the features lack interspersed_coverage, which is every regulatory block); genome/blocks.py (f_* columns of classified blocks)",
+      "reads": "interspersed_coverage and repeat_coverage"
+    },
+    {
+      "output": "budget guess.tier",
+      "reader": "attribution/organise.py (imports TIERS), compress.py, human_panel.py, lexicon.py, lexicon_axes.py contexts unknown_fossil/unknown_neutral, variation.py, syntax_tiling.py, element_types.py, unknown_scoring.py, measurability.py, panel_background.py, compile.py (region role head), cli.py `genomeos budget`, web/server.py budget_wide and index.html colours, scripts/epigenome.py, scripts/unknown_coverage.py, scripts/syntax_blocks_matched.py",
+      "reads": "the tier string as a join key; every one reads budget_<chrom>.json"
+    },
+    {
+      "output": "budget guess.label",
+      "reader": "attribution/compile.py _region only (region `role: <tier>, <label>`); tests/test_attribution.py, tests/test_attribution_certainty.py, tests/test_ontology.py fixture",
+      "reads": "the label text, emitted verbatim"
+    },
+    {
+      "output": "budget guess.confidence and certainty",
+      "reader": "budget.tallies guessed_fraction, organise.py, compile.py region `confidence:`, confidence_census.py",
+      "reads": "the hand-set score"
+    },
+    {
+      "output": "the loci benchmark",
+      "reader": "genomeos/benchmark/loci.py, loci_miss.py and scripts/loci_*.py",
+      "reads": "neither unknown_<chrom> nor budget_<chrom>; no figure of it can move"
+    }
+  ],
+  "blocks": 26806,
+  "blocks_by_class_and_repeat_coverage_read": {
+    "regulatory | not read": 15252,
+    "interspersed_repeat_LINE | read": 4802,
+    "unclassified | read": 2375,
+    "interspersed_repeat_SINE | read": 1504,
+    "interspersed_repeat_LTR | read": 946,
+    "unique_intergenic | read": 898,
+    "promoter_like | read": 279,
+    "mixed_intergenic | read": 138,
+    "gap | not read": 118,
+    "interspersed_repeat | read": 113,
+    "satellite_array | read": 88,
+    "long_orf | read": 86,
+    "interspersed_repeat_DNA | read": 86,
+    "unclassified | not read": 60,
+    "centromere | read": 25,
+    "interspersed_repeat_Retroposon | read": 21,
+    "tandem_repeat | read": 7,
+    "promoter_like | not read": 5,
+    "long_orf | not read": 3
+  },
+  "unread_blocks_by_class_and_rmsk_origin": {
+    "regulatory | repeat_derived": 8709,
+    "regulatory | partly_repeat_derived": 6275,
+    "regulatory | unique": 268,
+    "unclassified | unique": 60,
+    "promoter_like | unique": 5,
+    "long_orf | unique": 3
+  },
+  "regulatory_or_promoter_like_mostly_repeat_unread": 8709,
+  "budget_tier_label": {
+    "regulatory | regulatory elements by the registry, little constraint: lineage-specific or weak": 13774,
+    "fossil | transposable-element fossil, unconstrained": 6867,
+    "neutral | unconstrained unique sequence: no evidence of function, best guess neutral": 2546,
+    "regulatory | regulatory elements under constraint; target gene unassigned": 1745,
+    "constrained_unknown | constrained non-coding sequence, function unknown": 908,
+    "fossil | transposable-element fossil, weak constraint": 435,
+    "constrained_unknown | repeat-derived sequence under constraint: possibly exapted as a regulatory element": 165,
+    "structural | assembly gap: no sequence to attribute": 118,
+    "structural | satellite array: repeat array with a mechanical role, not read as genes": 88,
+    "neutral | long open reading frame without constraint: a chance frame or a dead pseudogene": 71,
+    "structural | centromere: repeat array with a mechanical role, not read as genes": 25,
+    "neutral | weakly constrained unique sequence: mostly neutral": 15,
+    "regulatory | regulatory; constraint not measured": 12,
+    "constrained_unknown | long orf; constraint not measured": 9,
+    "constrained_unknown | long open reading frame under constraint: unannotated coding or a young pseudogene": 9,
+    "structural | tandem repeat: repeat array with a mechanical role, not read as genes": 7,
+    "regulatory | promoter like; constraint not measured": 5,
+    "constrained_unknown | interspersed repeat LINE; constraint not measured": 4,
+    "constrained_unknown | unclassified; constraint not measured": 2,
+    "constrained_unknown | interspersed repeat LTR; constraint not measured": 1
+  },
+  "budget_label_by_selection": {
+    "regulatory elements by the registry, little constraint: lineage-specific or weak | selection_not_detected": 11683,
+    "transposable-element fossil, unconstrained | selection_not_detected": 6867,
+    "unconstrained unique sequence: no evidence of function, best guess neutral | selection_not_detected": 2546,
+    "regulatory elements by the registry, little constraint: lineage-specific or weak | selection_weak": 2091,
+    "regulatory elements under constraint; target gene unassigned | under_selection": 1745,
+    "constrained non-coding sequence, function unknown | under_selection": 491,
+    "transposable-element fossil, weak constraint | selection_weak": 435,
+    "constrained non-coding sequence, function unknown | selection_weak": 417,
+    "repeat-derived sequence under constraint: possibly exapted as a regulatory element | under_selection": 165,
+    "assembly gap: no sequence to attribute | n/a": 118,
+    "satellite array: repeat array with a mechanical role, not read as genes | selection_not_detected": 88,
+    "long open reading frame without constraint: a chance frame or a dead pseudogene | selection_not_detected": 67,
+    "centromere: repeat array with a mechanical role, not read as genes | selection_not_detected": 25,
+    "weakly constrained unique sequence: mostly neutral | selection_weak": 15,
+    "regulatory; constraint not measured | selection_not_measured": 12,
+    "long orf; constraint not measured | selection_not_measured": 9,
+    "long open reading frame under constraint: unannotated coding or a young pseudogene | under_selection": 9,
+    "tandem repeat: repeat array with a mechanical role, not read as genes | selection_not_detected": 7,
+    "promoter like; constraint not measured | selection_not_measured": 5,
+    "interspersed repeat LINE; constraint not measured | selection_not_measured": 4,
+    "long open reading frame without constraint: a chance frame or a dead pseudogene | selection_weak": 4,
+    "unclassified; constraint not measured | selection_not_measured": 2,
+    "interspersed repeat LTR; constraint not measured | selection_not_measured": 1
+  },
+  "budget_blocks_by_constraint_reading": {
+    "little constraint read as weak function": 13774,
+    "absence of constraint read as a dead fossil": 6867,
+    "constraint read as selection": 2653,
+    "absence of constraint read as neutral": 2546,
+    "weak constraint read as a fossil": 435,
+    "constraint read as a regulatory mechanism (hedged)": 165,
+    "no constraint reading (sequence class)": 120,
+    "no constraint reading": 118,
+    "absence of constraint read as dead": 71,
+    "constraint not measured": 33,
+    "weak constraint read as neutral": 15,
+    "constraint read as coding (two alternatives)": 9
+  },
+  "budget_bp_by_tier": {
+    "structural": 229707851,
+    "fossil": 328523829,
+    "constrained_unknown": 32025494,
+    "regulatory": 345170726,
+    "neutral": 73328371
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository, stored budget_<chrom> and unknown_<chrom>",
+        "version": "sha256"
+      },
+      {
+        "accession": "UCSC rmsk track, hg38",
+        "version": "rmsk_<chrom> as distilled"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/budget_chr1.json",
+        "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+        "bytes": 1500070,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr1.json",
+        "sha256": "0ea17e176558ab21774c662f0b5ca9fc2e00b1ad9cd8a5790d3ced356271e08d",
+        "bytes": 1881224,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr1.bed.gz",
+        "sha256": "130ad2956b572a714db85e437aed8fb86d4bb1e61b7ef6acf89305656b0bb30a",
+        "bytes": 5018492,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr2.json",
+        "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+        "bytes": 1204585,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr2.json",
+        "sha256": "f7f017173e7cde20c71ef2689daac34c892464a2abfb17e423dd2b0720980af3",
+        "bytes": 1554678,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr2.bed.gz",
+        "sha256": "560b3ad8e201ba13c1887d7c027a82400e42f9827475c558c275f8401c036cd4",
+        "bytes": 4839992,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr3.json",
+        "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+        "bytes": 806712,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr3.json",
+        "sha256": "81cc631c96fa20521c17e703415a5e5ef3e27f961e97bbc75cee3334708de650",
+        "bytes": 1050744,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr3.bed.gz",
+        "sha256": "c766fca328a074b93331026b71fa57a5431cfa2b63ee1066025a37e6e2c5109d",
+        "bytes": 4046282,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr4.json",
+        "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+        "bytes": 867246,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr4.json",
+        "sha256": "3d456b9e39466f653b521b8f5f05bc384f5827a6a4a05a42d1ddf3cc0a5ace69",
+        "bytes": 1181485,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr4.bed.gz",
+        "sha256": "dbb0abe212a9a6a395a98d6998a1e3bd65955d93396bd6ce26f7e8e01572274e",
+        "bytes": 3702406,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr5.json",
+        "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+        "bytes": 845931,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr5.json",
+        "sha256": "9c44e9f30da60dfc3f2874ebb7b91bdfd496871d106371c2c38c4b08405b4787",
+        "bytes": 1125896,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr5.bed.gz",
+        "sha256": "89ad6b94b43aa407d6b203cbe44805383a5618b32a6358b20c2f29e1919ce18b",
+        "bytes": 3573930,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr6.json",
+        "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+        "bytes": 867522,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr6.json",
+        "sha256": "aa4f650e774506accb93ef8056d5e183ef6cfec3c9e630d77e02fc47e4885d38",
+        "bytes": 1111527,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr6.bed.gz",
+        "sha256": "53064945d25d56e3812effcc30bb1ccfc1d82b35f4167f29eb2e9f00f9c59f5e",
+        "bytes": 3359277,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr7.json",
+        "sha256": "048216b53d9bc8ca3cf8cd0d69bf2bf3fe7646344e9896f4921bd55ffd81bc1c",
+        "bytes": 1118734,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr7.bed.gz",
+        "sha256": "893e60028fd60a6164f894113c48fcc30eb911e647980f88d0aa237b77284cd7",
+        "bytes": 3224881,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr8.json",
+        "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+        "bytes": 731185,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr8.json",
+        "sha256": "c76fb6328a608d5f5ebc35d924b7e65dfe0aa5fe733665d5f392a110fc4cdbcd",
+        "bytes": 950316,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr8.bed.gz",
+        "sha256": "9b85cc574890919a11f41a1a720ed29a38a08c7fd19728afb9bdf970b16c4ded",
+        "bytes": 2932525,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr9.json",
+        "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+        "bytes": 666533,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr9.json",
+        "sha256": "b0fa3ccb02523ec0a9201d550bd48a7d6ab0e7cbc9ac2a38aed8f16aac3875b0",
+        "bytes": 851731,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr9.bed.gz",
+        "sha256": "ddbd1ad428fbf12aebb559f7c58593e977c88a50884c1836a10ad46848a0a0de",
+        "bytes": 2555414,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr10.json",
+        "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+        "bytes": 739499,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr10.json",
+        "sha256": "0d9544dccec3520775856ad13cb13a004d0a5fe5393b3be0b4eddccdc6219746",
+        "bytes": 938916,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr10.bed.gz",
+        "sha256": "ef58eefc10b0a50d1dc8d591ee4d5a537d1eee929e57fa7159fcb661e99594c2",
+        "bytes": 2724814,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr11.json",
+        "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+        "bytes": 897717,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr11.json",
+        "sha256": "6ada5268ecc4a1fa4e9481a9ed23eb1dfcec091b2972e4c091c19152d19d31b4",
+        "bytes": 1134973,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr11.bed.gz",
+        "sha256": "d8da3468cbc2830169172c2f6143f62f7ceca2fd9767e2cdd7c4a4e7dbe784ac",
+        "bytes": 2774350,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr12.json",
+        "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+        "bytes": 723141,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr12.json",
+        "sha256": "369e0d7b7f26b0136b032a5057bc4db2c94f3e921a8d13ef875356b02a543dc5",
+        "bytes": 922395,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr12.bed.gz",
+        "sha256": "2c94f594b2bd667133c1fd01f075018a72a130f73a7561f9c07243f9caf9fc14",
+        "bytes": 2871469,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr13.json",
+        "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+        "bytes": 479558,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr13.json",
+        "sha256": "612afe71ea57227bc7e97ccd57bbb238636c0ec35d177ebcb0705b93f083b2b1",
+        "bytes": 645168,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr13.bed.gz",
+        "sha256": "9611f30315222c3c6f2bd3f5dfca3f21ee907a4b247f5e2a6a9bc7c3a0e61fda",
+        "bytes": 1875578,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr14.json",
+        "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+        "bytes": 584688,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr14.json",
+        "sha256": "9fea6e91ddbd1ce8e452323ce12b0a8584ffed1535f38cdf20aa7e8a8e1b43eb",
+        "bytes": 729374,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr14.bed.gz",
+        "sha256": "11716c79cd03a1760b3cbb885c749e38be7b152b34aadb33e9489392653e97d9",
+        "bytes": 1850291,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr15.json",
+        "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+        "bytes": 423577,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr15.json",
+        "sha256": "06fcfb203e459e1e653898713830a7a89cbe8b8b0e338040ddd19406f048fd6e",
+        "bytes": 527266,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr15.bed.gz",
+        "sha256": "183512a0d0e33e208959bb598e86a2019f042e12fa16b0c3cc6d2302da8e0ea2",
+        "bytes": 1767689,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr16.json",
+        "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+        "bytes": 534109,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr16.json",
+        "sha256": "50ab821f598dfc9c655f98d09c3d48446098fa5cd3225bbbe59845217e530340",
+        "bytes": 664294,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr16.bed.gz",
+        "sha256": "245667a1a1720abafe0a9046bc78db41da21e6134cde3ac477db4803a67031a3",
+        "bytes": 1929823,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr17.json",
+        "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+        "bytes": 633946,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr17.json",
+        "sha256": "e8e434e8c71cbf201d8431770517e2d8203437fbe538831efa1f84905402f3fb",
+        "bytes": 757592,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr17.bed.gz",
+        "sha256": "97d568ffc601eef77b398ab2f7c92896bddba2a8c7528795adeb3bddfcb1ef61",
+        "bytes": 1881051,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr18.json",
+        "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+        "bytes": 382016,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr18.json",
+        "sha256": "9a45151a4f5b6fe21f3ae5f06470f4d15684d64b6dab66afcc5a9bb4b5f31d04",
+        "bytes": 505023,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr18.bed.gz",
+        "sha256": "f5b39387c6436a659a33b764225e65f23152b703e21352e5315ba7e5f6ac370d",
+        "bytes": 1472333,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr19.json",
+        "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+        "bytes": 657776,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr19.json",
+        "sha256": "1e090944853279c9a3fe871072b4206dfd89269ef141aa3e056a3097cd88d858",
+        "bytes": 787075,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr19.bed.gz",
+        "sha256": "ead8cbcf54cc4daf267ae03a7bbdf3960b7f2e43d5bed6f0a46bd3e16cc09113",
+        "bytes": 1454121,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr20.json",
+        "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+        "bytes": 474640,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr20.json",
+        "sha256": "5d58fabefffc8053751ce0fa3338a8df0185f9ed3c741dc7dbcd6d4f94810251",
+        "bytes": 590017,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr20.bed.gz",
+        "sha256": "89ad074ad73163f03cd86141c56d718d1664f91301f63296068ef82bcb959b63",
+        "bytes": 1435638,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr21.json",
+        "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+        "bytes": 355767,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr21.bed.gz",
+        "sha256": "f4d3ca63604c892470f0bfe842d780f382c5bb618402c8a48c2a63470ac63aaf",
+        "bytes": 744112,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr22.json",
+        "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+        "bytes": 394442,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr22.json",
+        "sha256": "9d46f67b821f2767940453155aa091f55bc2852fb435afe67fd6ff10cad74d0c",
+        "bytes": 461165,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chr22.bed.gz",
+        "sha256": "d0ad98843321b34730fe7997d1cf3e1a2182c9a9c12ffe56edd3a3072f5c56e0",
+        "bytes": 876493,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrX.json",
+        "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+        "bytes": 819979,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrX.json",
+        "sha256": "985082ee4a87c253e98cbb4250d39584889b42337f3581a319c3a2b405c9830e",
+        "bytes": 1179588,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrX.bed.gz",
+        "sha256": "7f2838afbefa3e089c38fc48871ac77e908cfd5eafa23a5b8fe2485f25349e38",
+        "bytes": 3039693,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrY.json",
+        "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+        "bytes": 229765,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chrY.json",
+        "sha256": "b6e6fc010c5c14e9913f256962b0627f01129ac183cca726d2e03d82363b6223",
+        "bytes": 319837,
+        "partition": null
+      },
+      {
+        "path": "data/results/rmsk_chrY.bed.gz",
+        "sha256": "3975ed929c4cab77dc8156daf6afe8beee3e7259d54a0d9b32c54b549593b680",
+        "bytes": 471020,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "repeat_derived_min_interspersed_fraction": 0.5,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [],
+    "partitions": "n/a: a census of labels, no evaluation",
+    "code": {
+      "git_sha": "d193afecc7b2f1fef96e68f1c54ebb2445b8ecbd",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/budget_axes_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

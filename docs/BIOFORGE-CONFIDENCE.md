@@ -10,9 +10,24 @@ is a single hand-set constant, and a constant has one reliability bin at every s
 calibration curve over it can exist at any n. That conclusion is read off the source rather than
 off the data, which makes it the rare small-n result that does not depend on n.
 
+> **Correction, 2026-09-28 (external review, roadmap section 5 item 11, R4).** The paragraph above is
+> wrong in its reasoning, and the text is kept so the error stays readable. A constant predictor *can*
+> be calibrated: a predictor that always says *c* is calibrated on a population exactly when the
+> event's frequency in that population is *c*. That check needs one reliability bin, not two
+> (calibration-in-the-large), and §4(c) below in fact performs it (4 of 4, interval [0.3976, 1.0000],
+> excludes 0.3). What a constant cannot have is **discrimination**: it gives every answer the same
+> number, so its resolution is zero and it cannot tell a right design answer from a wrong one,
+> calibrated or not. Constancy therefore does not make calibration mathematically impossible. The
+> problems are the two the review names: **the value 0.3 was never supported** by any measurement,
+> and **no evaluation population exists** on which it could be checked for the population it is quoted
+> for (every design answer), because the 2 to 4 designs with a published outcome were authored from
+> that outcome and hold no negative case. The corrected verdict is
+> `UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION`, recorded beside the original in
+> `genomeos/forge/calibration.py`.
+
 ## 1. What the confidence is
 
-`genomeos/organism/forge.py:143` writes
+`genomeos/organism/forge.py:170` writes
 
 ```python
 # fmt: off
@@ -20,15 +35,27 @@ confidence=0.3,
 ```
 
 as a literal onto the `Experiment` that a `design` block emits. Six further sites cap an existing
-confidence at the same value — `organism/forge.py:66,70`, `forge/design.py:59,63,66`, and
+confidence at the same value — `organism/forge.py:93,97`, `forge/design.py:59,63,66`, and
 `attribution/budget.py:60` for an entirely unrelated quantity in another area. That last one is
 the tell: a number that means the same thing for a design search over a worm embryo and for a
 phyloP budget over chromosome 21 is not a probability about either. It is a provenance marker
 reading *predicted, not validated*.
 
 The caps are defensible. `min(x, 0.3)` can only lower a number, so it cannot inflate a claim. The
-literal at line 143 is different in kind, because it creates a number from nothing and attaches it
+literal at line 170 is different in kind, because it creates a number from nothing and attaches it
 to a freshly predicted entity, which is where a reader is most likely to take it for a posterior.
+
+> **2026-09-28, review R4 (commit 16a0434).** The literal is gone. A design answer now carries a
+> `genomeos.certainty.Certainty` with the five quantities apart: evidence category (`predicted`),
+> effect estimate (wild-type loss minus the answer's loss, in normalised target distance), measurement
+> uncertainty (unavailable: one run per candidate), model score (the answer's loss) and probability,
+> which is `None` with the reason stated. A `Probability` cannot be built without a `Calibration`
+> naming its outcome, calibration population and evaluation method. The emitted `experiment` block has
+> no `confidence:` key; its `Experiment.confidence` is 0.0, the value the parser gives a block with no
+> key, meaning "not stated", not a probability of zero. The two ceilings in `organism/forge.py` and the
+> three in `forge/design.py` stay: they cap the IR's evidence-quality score, never read the value the
+> search set, and so cannot rise with an effect. `attribution/budget.py:60` and the magnitude-derived
+> confidences in `attribution/human_panel.py` belong to area I and are left for R4b.
 
 **The search computes better quantities and discards all of them.** `run_design` knows each
 candidate's `loss`, whether it is `feasible`, how many `evaluations` it took, how many rival
@@ -100,8 +127,12 @@ rate was compared with 0.3 or any interval computed. Full text in
 ## 4. The result: uncheckable by construction, on four counts before n
 
 **(a) The predictor is degenerate.** One distinct value over every design, and by inspection of
-line 143 over every design that could ever be written. A reliability diagram needs two populated
+line 170 over every design that could ever be written. A reliability diagram needs two populated
 bins. This is fatal at every sample size and is the whole answer to the item as posed.
+
+> **Correction, 2026-09-28 (R4).** Not fatal to calibration: one bin is enough to check a constant
+> against a base rate, which (c) does. It is fatal to *discrimination*, and it makes the constant
+> useless for ranking answers even if it were calibrated. The fatal obstructions are (b) and (d).
 
 **(b) The outcome is degenerate too.** All four designs solve, at loss exactly 0.0. The label
 column is constant. A 2×2 with both margins collapsed supports no estimate.
@@ -134,6 +165,11 @@ model first.
 
 **Verdict: `UNCHECKABLE_BY_CONSTRUCTION`.** The number has never been a probability. It should be
 read, and documented, as a provenance marker.
+
+> **Correction, 2026-09-28 (R4).** Read the verdict as `UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION`:
+> the constant could in principle be calibrated to a population's event frequency and would still not
+> discriminate; what stops it here is that 0.3 was never supported and no population independent of
+> the answers exists to evaluate it on. The number is no longer emitted.
 
 ## 5. What would change it, smallest obstruction last
 

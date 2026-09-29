@@ -1,0 +1,2412 @@
+{
+  "result": "clause2_reach_control",
+  "date": "2026-09-28",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX",
+    "chrY",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22"
+  ],
+  "registration": {
+    "registered": "2026-09-28",
+    "lane": "lane-tssreach",
+    "why_now": "lane-elemcount (da5764e/faeb0da) closed the matched-control route and named two descriptive controls it did not run, calling reach the sharper. They are the last cheap things that could explain the per-element gap without measurement, so they are registered and run before anything is concluded about what clause 2's failure means. Nothing here restates, weakens or re-opens any existing claim: clause 2 stays not met on the ground d717b28, 0c8b82d and faeb0da put it on, whatever these two describe",
+    "chosen_after_the_earlier_runs": "both controls were chosen after seeing faeb0da, which is admissible because that run only named them as unmeasured descriptions of the same elements. The quantities, their cut points, the estimators, the intervals, the standardisation rule, the thresholds and every reading below are fixed and committed here before either is computed on any chromosome, and both arms of both comparisons are read from the draw that produced the number they are meant to explain",
+    "targets": "the real unknown: constrained_unknown blocks with the copies out, from organise.blocks on all 24 chromosomes (882 blocks, 531 carrying a scored element, 3,280 elements); the neutral tier as the secondary target set. An element belongs to the block or window holding its midpoint, as before",
+    "control": "d717b28's unmatched draw, unchanged and reproduced to the digit by the gate below: windows of the block's exact length placed uniformly inside the span of the chromosome's scored-element midpoints, rejected on overlap with any organiser block, 50 per block, 4,000 tries at most, one random number per try, seed 20260913 per chromosome. No matching of any kind is added, because the quantity to be described is the same in every window the -34.86 was computed on. The coding-TSS-density-matched draw of 0c8b82d (20,000 tries) is run once as a registered sensitivity",
+    "quantity_b_reach": "per element, on its midpoint m = (start + end) // 2, all three computed before any window is drawn and never recomputed: (1) reach_count, the number of GENCODE protein-coding TSSs in [m - 524288, m + 524288), half-open -- 524288 being half of the input length the scorer itself uses, read from the scorer and not assumed: AlphaGenomeAdapter._live_scorer resizes the variant's reference interval to dna_client.SEQUENCE_LENGTH_1MB = 1048576 bp before every deletion score, and every element in the archive was read in that window; (2) reach_distance, |m - nearest coding TSS| in bp, uncapped; (3) genes_in_window, the number of protein-coding genes whose annotated span intersects the same window, registered as the sensitivity that is closer to what the RNA-seq gene scorer actually enumerated, since a gene whose body reaches the window but whose TSS does not is still scored. TSSs are placed as unknown_scoring.annotate places them (start, or end - 1 on the minus strand), the same list 0c8b82d used",
+    "quantity_a_class": "per element, its ENCODE SCREEN cCRE class from data/results/ccres_<chrom>.bed.gz field 5 (PLS, pELS, dELS, CTCF-only, DNase-H3K4me3), joined by element id; an id absent from the registry file is counted as 'unclassified' and reported, never dropped",
+    "comparison": "elements inside real-unknown blocks against the elements of that block's own accepted windows, for every block that carries an element and has at least one accepted window carrying one -- the 531 blocks the -28.77 was computed on, by faeb0da's own `compared` rule",
+    "estimators": {
+      "reach_difference": "primary for (b): the per-block difference in mean reach_count, the mean over compared blocks of (mean reach_count of the block's own elements) minus (mean reach_count of the elements of its accepted carrying windows), in coding TSSs. The same statistic is reported for log10(1 + reach_distance) and for genes_in_window, and the pooled means, medians and reach_count = 0 shares are reported beside them",
+      "reach_standardised_rate": "the statistic that decides between the readings for (b): the per-element rate of names_a_coding_gene, directly standardised on reach. Elements of both arms are placed in the fixed strata of reach_count 0, 1, 2, 3-4, 5-6, 7-9, 10-14, 15-24, 25+ -- cut points fixed here, not read from the data. A stratum enters the standardisation when it holds at least 30 elements in each arm; the block elements in every excluded stratum are reported with their share and their own rate, never silently dropped. The standardised difference is (block rate over the included strata) minus (sum over included strata of the block's share of those elements times the window rate in that stratum), in points. It answers: if the block's elements had been placed in windows of the same reach, how much of the gap would be left",
+      "class_standardised_rate": "the same direct standardisation for (a), on the six classes instead of the reach strata, with the same minimum cell and the same reporting of excluded classes; and the per-class per-element rate in each arm, so it can be seen whether the gap lives between classes or inside them. The per-block difference in the promoter-like share (PLS + pELS + DNase-H3K4me3) is reported as the composition statistic",
+      "joint": "class x reach stratum standardised jointly, same minimum cell, as a sensitivity: the two descriptions together"
+    },
+    "interval": "95% percentile bootstrap over the compared blocks, 10,000 resamples, numpy default_rng(20260913), and a bootstrap over the 24 chromosomes (resampled with replacement, blocks pooled) beside it -- mc.summarise's two bootstraps, unchanged. For a standardised difference the resample is over blocks: the block stratum weights and the block rates are recomputed on each resample and the window per-stratum rates are held at their pooled values, because the window arm is the reference population being standardised to and has 100 times the elements",
+    "gate": "before any reach or class figure is read, the draw in this script must reproduce d717b28's pooled counts for both target sets to the digit (real unknown 44,100 windows drawn, 31,676 carrying, 21,217 naming a coding gene, 531 and 158 blocks; neutral 131,600 / 88,317 / 57,212, 1,181 and 340) and the unstandardised per-element pooled rates must come back as faeb0da wrote them (3,280 block elements, 301 naming, 456,573 window elements, 201,072 naming). If either fails, no reach or class figure is reported",
+    "thresholds": "the half-the-gap convention of e1dbcf3 and da5764e, on the pooled per-element scale this run works on: a description explains the gap when standardising on it leaves the pooled difference above -17.43 points, i.e. closes more than half of the -34.86 points, and does not when the standardised difference stays at or below -17.43. 'Far fewer' for reach is fixed here as either the pooled mean reach_count inside the blocks being below half the window mean, or the share of block elements with reach_count = 0 exceeding the window share by more than 10 points. 'Comparable' is fixed as the per-block reach difference's 95% interval lying wholly inside +/-1.0 coding TSS of 0 and the two reach_count = 0 shares differing by less than 2 points",
+    "readings": {
+      "reach_short_and_explains": "reach is far lower inside the blocks by the threshold above and standardising on it closes more than half the gap: the instrument was asked to name a gene it could not see, and the -28.77 (pooled -34.86) is partly an artefact of reach. What clause 2's failure means changes: it stops being a statement about the blocks' sequence and becomes a statement about where the blocks sit relative to coding genes, which is what the organiser selected them for. The clause still does not pass -- the standardised difference is the number to quote, and it is still negative -- but the reading 'these elements name genes far less often than sequence like them' must be replaced by 'these elements sit where the model can see fewer genes'",
+      "reach_short_but_gap_survives": "reach is far lower inside the blocks yet standardising on it keeps more than half the gap: the reach imbalance is real and must be stated, but it is not the explanation. The number to quote becomes the reach-standardised difference and the failure stays about the sequence",
+      "reach_comparable": "reach is comparable by the threshold above: the model could see as many coding genes from inside the blocks as from their windows, the instrument was not asked to do the impossible, and clause 2's failure is about the sequence, not the window. Nothing about the clause's status changes and the -28.77 stands as it was written",
+      "reach_comparable_but_gap_closes": "reach is comparable and yet standardising on it closes more than half the gap: that combination is incoherent on its face and is to be reported as a likely implementation error in this script, not as a finding about clause 2, until it is traced",
+      "class_explains": "the class-standardised difference closes more than half the gap: the blocks hold a different mix of cCRE classes and the per-element gap is largely composition. The classes and their per-class rates become the number to quote",
+      "class_does_not_explain": "the class-standardised difference keeps at least half the gap: inside every class with enough elements the block elements still name a coding gene far less often, so class composition is a real difference between the two element sets and not the cause of the gap"
+    },
+    "what_this_cannot_do": "neither control can make clause 2 pass. Both are descriptions of the same elements, and the best either can do is move the -34.86 toward 0, which replaces 'below chance' with 'explained by where the blocks sit' -- not with 'attributed'. The clause's third part, scored against measurement, is untouched by every outcome here, and no measured arm is run",
+    "cost": "0 AlphaGenome requests; the per-element response cache is never opened; one chromosome's archive in memory at a time. No matching is added, so no window's contents are evaluated on a rejected try: lane-elemcount's 3,811 s chr2 cost came from exactly that and does not arise here"
+  },
+  "scorer_input_window_bp": 1048576,
+  "gate_reproduces_d717b28_and_faeb0da": {
+    "passed": true,
+    "real_unknown": {
+      "got": {
+        "windows_drawn": 44100,
+        "windows_carrying_an_element": 31676,
+        "blocks_carrying_an_element": 531,
+        "names_a_coding_gene": {
+          "blocks_yes": 158,
+          "windows_yes": 21217
+        },
+        "moves_a_gene": {
+          "blocks_yes": 331,
+          "windows_yes": 27254
+        }
+      },
+      "want": {
+        "windows_drawn": 44100,
+        "windows_carrying_an_element": 31676,
+        "blocks_carrying_an_element": 531,
+        "names_a_coding_gene": {
+          "blocks_yes": 158,
+          "windows_yes": 21217
+        },
+        "moves_a_gene": {
+          "blocks_yes": 331,
+          "windows_yes": 27254
+        }
+      },
+      "same": true
+    },
+    "neutral": {
+      "got": {
+        "windows_drawn": 131600,
+        "windows_carrying_an_element": 88317,
+        "blocks_carrying_an_element": 1181,
+        "names_a_coding_gene": {
+          "blocks_yes": 340,
+          "windows_yes": 57212
+        },
+        "moves_a_gene": {
+          "blocks_yes": 768,
+          "windows_yes": 74466
+        }
+      },
+      "want": {
+        "windows_drawn": 131600,
+        "windows_carrying_an_element": 88317,
+        "blocks_carrying_an_element": 1181,
+        "names_a_coding_gene": {
+          "blocks_yes": 340,
+          "windows_yes": 57212
+        },
+        "moves_a_gene": {
+          "blocks_yes": 768,
+          "windows_yes": 74466
+        }
+      },
+      "same": true
+    },
+    "per_element_rates": {
+      "got": {
+        "block_elements": 3280,
+        "block_elements_yes": 301,
+        "window_elements": 456573,
+        "window_elements_yes": 201072
+      },
+      "want": {
+        "block_elements": 3280,
+        "block_elements_yes": 301,
+        "window_elements": 456573,
+        "window_elements_yes": 201072
+      },
+      "same": true
+    }
+  },
+  "pooled": {
+    "n_blocks_compared": 531,
+    "block": {
+      "elements": 3280,
+      "names_a_coding_gene": 301,
+      "rate": 0.0918,
+      "mean_reach": 2.229,
+      "mean_log10_distance": 5.381,
+      "mean_genes_in_window": 2.55,
+      "zero_reach_share": 0.2808,
+      "promoter_like_share": 0.0341,
+      "class_shares": {
+        "pELS": 0.0341,
+        "dELS": 0.9659
+      },
+      "reach_stratum_shares": {
+        "0": 0.2808,
+        "1": 0.2845,
+        "10-14": 0.0152,
+        "15-24": 0.0058,
+        "2": 0.1384,
+        "25+": 0.0027,
+        "3-4": 0.154,
+        "5-6": 0.0735,
+        "7-9": 0.0451
+      }
+    },
+    "window": {
+      "elements": 456573,
+      "names_a_coding_gene": 201072,
+      "rate": 0.4404,
+      "mean_reach": 7.219,
+      "mean_log10_distance": 4.855,
+      "mean_genes_in_window": 7.779,
+      "zero_reach_share": 0.062,
+      "promoter_like_share": 0.128,
+      "class_shares": {
+        "pELS": 0.128,
+        "dELS": 0.872
+      },
+      "reach_stratum_shares": {
+        "0": 0.062,
+        "1": 0.1074,
+        "10-14": 0.1191,
+        "15-24": 0.0744,
+        "2": 0.097,
+        "25+": 0.0387,
+        "3-4": 0.1798,
+        "5-6": 0.1629,
+        "7-9": 0.1587
+      }
+    },
+    "difference_in_points": -34.86,
+    "reach_ratio_block_over_window": 0.309,
+    "zero_reach_share_difference_in_points": 21.88
+  },
+  "reach": {
+    "per_block_difference_in_coding_tss": {
+      "mean": -4.3857,
+      "ci95_over_blocks": [
+        -4.9454,
+        -3.8072
+      ],
+      "ci95_over_chromosomes": [
+        -5.37,
+        -3.6481
+      ],
+      "n_blocks": 531
+    },
+    "per_block_difference_in_log10_distance": {
+      "mean": 0.349,
+      "ci95_over_blocks": [
+        0.2808,
+        0.415
+      ],
+      "ci95_over_chromosomes": [
+        0.2726,
+        0.4228
+      ],
+      "n_blocks": 531
+    },
+    "per_block_difference_in_genes_in_window": {
+      "mean": -4.5442,
+      "ci95_over_blocks": [
+        -5.109,
+        -3.9556
+      ],
+      "ci95_over_chromosomes": [
+        -5.5323,
+        -3.7926
+      ],
+      "n_blocks": 531
+    },
+    "standardised": {
+      "book": "by_stratum",
+      "min_cell": 30,
+      "cells_included": [
+        "0",
+        "1",
+        "10-14",
+        "2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "cells_excluded": {
+        "15-24": {
+          "block_elements": 19,
+          "block_yes": 12,
+          "window_elements": 33990
+        },
+        "25+": {
+          "block_elements": 9,
+          "block_yes": 7,
+          "window_elements": 17652
+        }
+      },
+      "block_elements_standardised": 3252,
+      "block_elements_total": 3280,
+      "per_cell": {
+        "0": {
+          "block_elements": 921,
+          "block_rate": 0.0098,
+          "window_elements": 28290,
+          "window_rate": 0.1937,
+          "difference_in_points": -18.39,
+          "block_share": 0.2832,
+          "window_share": 0.062
+        },
+        "1": {
+          "block_elements": 933,
+          "block_rate": 0.0482,
+          "window_elements": 49044,
+          "window_rate": 0.307,
+          "difference_in_points": -25.87,
+          "block_share": 0.2869,
+          "window_share": 0.1074
+        },
+        "10-14": {
+          "block_elements": 50,
+          "block_rate": 0.38,
+          "window_elements": 54387,
+          "window_rate": 0.5248,
+          "difference_in_points": -14.48,
+          "block_share": 0.0154,
+          "window_share": 0.1191
+        },
+        "2": {
+          "block_elements": 454,
+          "block_rate": 0.1806,
+          "window_elements": 44270,
+          "window_rate": 0.3919,
+          "difference_in_points": -21.13,
+          "block_share": 0.1396,
+          "window_share": 0.097
+        },
+        "3-4": {
+          "block_elements": 505,
+          "block_rate": 0.097,
+          "window_elements": 82087,
+          "window_rate": 0.4432,
+          "difference_in_points": -34.62,
+          "block_share": 0.1553,
+          "window_share": 0.1798
+        },
+        "5-6": {
+          "block_elements": 241,
+          "block_rate": 0.2158,
+          "window_elements": 74387,
+          "window_rate": 0.4698,
+          "difference_in_points": -25.41,
+          "block_share": 0.0741,
+          "window_share": 0.1629
+        },
+        "7-9": {
+          "block_elements": 148,
+          "block_rate": 0.1757,
+          "window_elements": 72466,
+          "window_rate": 0.4823,
+          "difference_in_points": -30.66,
+          "block_share": 0.0455,
+          "window_share": 0.1587
+        }
+      },
+      "block_rate": 0.0867,
+      "window_rate_standardised_to_the_blocks": 0.3313,
+      "window_rate_crude": 0.4404,
+      "standardised_difference_points": -24.46,
+      "ci95_over_blocks": [
+        -26.36,
+        -22.47
+      ],
+      "ci95_over_chromosomes": [
+        -26.65,
+        -22.33
+      ],
+      "n_blocks": 531,
+      "closes_more_than_half_the_gap": false,
+      "share_of_the_pooled_gap_closed": 0.298
+    }
+  },
+  "reach_reading": {
+    "outcome": "reach_short_but_gap_survives",
+    "reach_is_far_lower_inside_the_blocks": true,
+    "reach_is_comparable": false,
+    "neither_threshold_met": false,
+    "standardising_on_reach_closes_more_than_half": false,
+    "standardised_difference_points": -24.46,
+    "clause_2": "stays not met; no outcome here can make it pass",
+    "text": "reach is far lower inside the blocks yet standardising on it keeps more than half the gap: the reach imbalance is real and must be stated, but it is not the explanation. The number to quote becomes the reach-standardised difference and the failure stays about the sequence"
+  },
+  "classes": {
+    "per_block_difference_in_promoter_like_share": {
+      "mean": -0.0298,
+      "ci95_over_blocks": [
+        -0.0545,
+        -0.0042
+      ],
+      "ci95_over_chromosomes": [
+        -0.0547,
+        -0.005
+      ],
+      "n_blocks": 531
+    },
+    "standardised": {
+      "book": "by_class",
+      "min_cell": 30,
+      "cells_included": [
+        "dELS",
+        "pELS"
+      ],
+      "cells_excluded": {},
+      "block_elements_standardised": 3280,
+      "block_elements_total": 3280,
+      "per_cell": {
+        "dELS": {
+          "block_elements": 3168,
+          "block_rate": 0.0846,
+          "window_elements": 398123,
+          "window_rate": 0.4227,
+          "difference_in_points": -33.81,
+          "block_share": 0.9659,
+          "window_share": 0.872
+        },
+        "pELS": {
+          "block_elements": 112,
+          "block_rate": 0.2946,
+          "window_elements": 58450,
+          "window_rate": 0.5607,
+          "difference_in_points": -26.61,
+          "block_share": 0.0341,
+          "window_share": 0.128
+        }
+      },
+      "block_rate": 0.0918,
+      "window_rate_standardised_to_the_blocks": 0.4274,
+      "window_rate_crude": 0.4404,
+      "standardised_difference_points": -33.57,
+      "ci95_over_blocks": [
+        -35.4,
+        -31.49
+      ],
+      "ci95_over_chromosomes": [
+        -35.76,
+        -31.06
+      ],
+      "n_blocks": 531,
+      "closes_more_than_half_the_gap": false,
+      "share_of_the_pooled_gap_closed": 0.037
+    },
+    "reading": "the class-standardised difference keeps at least half the gap: inside every class with enough elements the block elements still name a coding gene far less often, so class composition is a real difference between the two element sets and not the cause of the gap"
+  },
+  "sensitivities": {
+    "class_and_reach_jointly": {
+      "book": "by_joint",
+      "min_cell": 30,
+      "cells_included": [
+        "dELS|0",
+        "dELS|1",
+        "dELS|10-14",
+        "dELS|2",
+        "dELS|3-4",
+        "dELS|5-6",
+        "dELS|7-9"
+      ],
+      "cells_excluded": {
+        "dELS|15-24": {
+          "block_elements": 8,
+          "block_yes": 8,
+          "window_elements": 26968
+        },
+        "dELS|25+": {
+          "block_elements": 7,
+          "block_yes": 5,
+          "window_elements": 12014
+        },
+        "pELS|0": {
+          "block_elements": 8,
+          "block_yes": 0,
+          "window_elements": 1850
+        },
+        "pELS|1": {
+          "block_elements": 20,
+          "block_yes": 4,
+          "window_elements": 4014
+        },
+        "pELS|10-14": {
+          "block_elements": 3,
+          "block_yes": 0,
+          "window_elements": 9218
+        },
+        "pELS|15-24": {
+          "block_elements": 11,
+          "block_yes": 4,
+          "window_elements": 7022
+        },
+        "pELS|2": {
+          "block_elements": 16,
+          "block_yes": 7,
+          "window_elements": 3725
+        },
+        "pELS|25+": {
+          "block_elements": 2,
+          "block_yes": 2,
+          "window_elements": 5638
+        },
+        "pELS|3-4": {
+          "block_elements": 23,
+          "block_yes": 2,
+          "window_elements": 8102
+        },
+        "pELS|5-6": {
+          "block_elements": 18,
+          "block_yes": 8,
+          "window_elements": 8864
+        },
+        "pELS|7-9": {
+          "block_elements": 11,
+          "block_yes": 6,
+          "window_elements": 10017
+        }
+      },
+      "block_elements_standardised": 3153,
+      "block_elements_total": 3280,
+      "per_cell": {
+        "dELS|0": {
+          "block_elements": 913,
+          "block_rate": 0.0099,
+          "window_elements": 26440,
+          "window_rate": 0.1907,
+          "difference_in_points": -18.08,
+          "block_share": 0.2896,
+          "window_share": 0.0579
+        },
+        "dELS|1": {
+          "block_elements": 913,
+          "block_rate": 0.0449,
+          "window_elements": 45030,
+          "window_rate": 0.2966,
+          "difference_in_points": -25.17,
+          "block_share": 0.2896,
+          "window_share": 0.0986
+        },
+        "dELS|10-14": {
+          "block_elements": 47,
+          "block_rate": 0.4043,
+          "window_elements": 45169,
+          "window_rate": 0.5077,
+          "difference_in_points": -10.34,
+          "block_share": 0.0149,
+          "window_share": 0.0989
+        },
+        "dELS|2": {
+          "block_elements": 438,
+          "block_rate": 0.1712,
+          "window_elements": 40545,
+          "window_rate": 0.3843,
+          "difference_in_points": -21.31,
+          "block_share": 0.1389,
+          "window_share": 0.0888
+        },
+        "dELS|3-4": {
+          "block_elements": 482,
+          "block_rate": 0.0975,
+          "window_elements": 73985,
+          "window_rate": 0.4319,
+          "difference_in_points": -33.43,
+          "block_share": 0.1529,
+          "window_share": 0.162
+        },
+        "dELS|5-6": {
+          "block_elements": 223,
+          "block_rate": 0.1973,
+          "window_elements": 65523,
+          "window_rate": 0.4585,
+          "difference_in_points": -26.12,
+          "block_share": 0.0707,
+          "window_share": 0.1435
+        },
+        "dELS|7-9": {
+          "block_elements": 137,
+          "block_rate": 0.146,
+          "window_elements": 62449,
+          "window_rate": 0.4688,
+          "difference_in_points": -32.28,
+          "block_share": 0.0435,
+          "window_share": 0.1368
+        }
+      },
+      "block_rate": 0.0809,
+      "window_rate_standardised_to_the_blocks": 0.3209,
+      "window_rate_crude": 0.4404,
+      "standardised_difference_points": -24.0,
+      "ci95_over_blocks": [
+        -25.86,
+        -22.06
+      ],
+      "ci95_over_chromosomes": [
+        -26.17,
+        -21.84
+      ],
+      "n_blocks": 531,
+      "closes_more_than_half_the_gap": false,
+      "share_of_the_pooled_gap_closed": 0.312
+    },
+    "reach_on_density_matched_windows": {
+      "pooled": {
+        "n_blocks_compared": 531,
+        "block": {
+          "elements": 3280,
+          "names_a_coding_gene": 301,
+          "rate": 0.0918,
+          "mean_reach": 2.229,
+          "mean_log10_distance": 5.381,
+          "mean_genes_in_window": 2.55,
+          "zero_reach_share": 0.2808,
+          "promoter_like_share": 0.0341,
+          "class_shares": {
+            "pELS": 0.0341,
+            "dELS": 0.9659
+          },
+          "reach_stratum_shares": {
+            "0": 0.2808,
+            "1": 0.2845,
+            "10-14": 0.0152,
+            "15-24": 0.0058,
+            "2": 0.1384,
+            "25+": 0.0027,
+            "3-4": 0.154,
+            "5-6": 0.0735,
+            "7-9": 0.0451
+          }
+        },
+        "window": {
+          "elements": 338842,
+          "names_a_coding_gene": 125041,
+          "rate": 0.369,
+          "mean_reach": 3.279,
+          "mean_log10_distance": 5.144,
+          "mean_genes_in_window": 3.805,
+          "zero_reach_share": 0.1749,
+          "promoter_like_share": 0.0975,
+          "class_shares": {
+            "pELS": 0.0975,
+            "dELS": 0.9025
+          },
+          "reach_stratum_shares": {
+            "0": 0.1749,
+            "1": 0.2437,
+            "10-14": 0.0399,
+            "15-24": 0.0121,
+            "2": 0.1448,
+            "25+": 0.0041,
+            "3-4": 0.1703,
+            "5-6": 0.126,
+            "7-9": 0.0843
+          }
+        },
+        "difference_in_points": -27.72,
+        "reach_ratio_block_over_window": 0.68,
+        "zero_reach_share_difference_in_points": 10.59
+      },
+      "per_block_difference_in_coding_tss": {
+        "mean": -0.1424,
+        "ci95_over_blocks": [
+          -0.3083,
+          0.0467
+        ],
+        "ci95_over_chromosomes": [
+          -0.3743,
+          0.071
+        ],
+        "n_blocks": 531
+      },
+      "standardised": {
+        "book": "by_stratum",
+        "min_cell": 30,
+        "cells_included": [
+          "0",
+          "1",
+          "10-14",
+          "2",
+          "3-4",
+          "5-6",
+          "7-9"
+        ],
+        "cells_excluded": {
+          "15-24": {
+            "block_elements": 19,
+            "block_yes": 12,
+            "window_elements": 4110
+          },
+          "25+": {
+            "block_elements": 9,
+            "block_yes": 7,
+            "window_elements": 1374
+          }
+        },
+        "block_elements_standardised": 3252,
+        "block_elements_total": 3280,
+        "per_cell": {
+          "0": {
+            "block_elements": 921,
+            "block_rate": 0.0098,
+            "window_elements": 59264,
+            "window_rate": 0.1731,
+            "difference_in_points": -16.33,
+            "block_share": 0.2832,
+            "window_share": 0.1749
+          },
+          "1": {
+            "block_elements": 933,
+            "block_rate": 0.0482,
+            "window_elements": 82586,
+            "window_rate": 0.3188,
+            "difference_in_points": -27.06,
+            "block_share": 0.2869,
+            "window_share": 0.2437
+          },
+          "10-14": {
+            "block_elements": 50,
+            "block_rate": 0.38,
+            "window_elements": 13512,
+            "window_rate": 0.5699,
+            "difference_in_points": -18.99,
+            "block_share": 0.0154,
+            "window_share": 0.0399
+          },
+          "2": {
+            "block_elements": 454,
+            "block_rate": 0.1806,
+            "window_elements": 49058,
+            "window_rate": 0.3788,
+            "difference_in_points": -19.82,
+            "block_share": 0.1396,
+            "window_share": 0.1448
+          },
+          "3-4": {
+            "block_elements": 505,
+            "block_rate": 0.097,
+            "window_elements": 57696,
+            "window_rate": 0.4206,
+            "difference_in_points": -32.36,
+            "block_share": 0.1553,
+            "window_share": 0.1703
+          },
+          "5-6": {
+            "block_elements": 241,
+            "block_rate": 0.2158,
+            "window_elements": 42685,
+            "window_rate": 0.4737,
+            "difference_in_points": -25.8,
+            "block_share": 0.0741,
+            "window_share": 0.126
+          },
+          "7-9": {
+            "block_elements": 148,
+            "block_rate": 0.1757,
+            "window_elements": 28557,
+            "window_rate": 0.5064,
+            "difference_in_points": -33.08,
+            "block_share": 0.0455,
+            "window_share": 0.0843
+          }
+        },
+        "block_rate": 0.0867,
+        "window_rate_standardised_to_the_blocks": 0.3256,
+        "window_rate_crude": 0.369,
+        "standardised_difference_points": -23.89,
+        "ci95_over_blocks": [
+          -25.81,
+          -21.88
+        ],
+        "ci95_over_chromosomes": [
+          -26.09,
+          -21.76
+        ],
+        "n_blocks": 531,
+        "closes_more_than_half_the_gap": false,
+        "share_of_the_pooled_gap_closed": 0.315
+      }
+    },
+    "neutral_tier": {
+      "pooled": {
+        "n_blocks_compared": 1181,
+        "block": {
+          "elements": 5706,
+          "names_a_coding_gene": 609,
+          "rate": 0.1067,
+          "mean_reach": 2.42,
+          "mean_log10_distance": 5.444,
+          "mean_genes_in_window": 2.653,
+          "zero_reach_share": 0.4399,
+          "promoter_like_share": 0.0549,
+          "class_shares": {
+            "pELS": 0.0549,
+            "dELS": 0.9451
+          },
+          "reach_stratum_shares": {
+            "0": 0.4399,
+            "1": 0.2341,
+            "10-14": 0.023,
+            "15-24": 0.0209,
+            "2": 0.0992,
+            "25+": 0.0156,
+            "3-4": 0.0896,
+            "5-6": 0.0477,
+            "7-9": 0.0301
+          }
+        },
+        "window": {
+          "elements": 904382,
+          "names_a_coding_gene": 404088,
+          "rate": 0.4468,
+          "mean_reach": 6.641,
+          "mean_log10_distance": 4.877,
+          "mean_genes_in_window": 7.198,
+          "zero_reach_share": 0.0587,
+          "promoter_like_share": 0.1222,
+          "class_shares": {
+            "pELS": 0.1222,
+            "dELS": 0.8778
+          },
+          "reach_stratum_shares": {
+            "0": 0.0587,
+            "1": 0.1185,
+            "10-14": 0.1085,
+            "15-24": 0.0614,
+            "2": 0.0945,
+            "25+": 0.0293,
+            "3-4": 0.1914,
+            "5-6": 0.1736,
+            "7-9": 0.1641
+          }
+        },
+        "difference_in_points": -34.01,
+        "reach_ratio_block_over_window": 0.364,
+        "zero_reach_share_difference_in_points": 38.12
+      },
+      "per_block_difference_in_coding_tss": {
+        "mean": -2.4101,
+        "ci95_over_blocks": [
+          -2.8701,
+          -1.9339
+        ],
+        "ci95_over_chromosomes": [
+          -3.0378,
+          -1.6974
+        ],
+        "n_blocks": 1181
+      },
+      "standardised": {
+        "book": "by_stratum",
+        "min_cell": 30,
+        "cells_included": [
+          "0",
+          "1",
+          "10-14",
+          "15-24",
+          "2",
+          "25+",
+          "3-4",
+          "5-6",
+          "7-9"
+        ],
+        "cells_excluded": {},
+        "block_elements_standardised": 5706,
+        "block_elements_total": 5706,
+        "per_cell": {
+          "0": {
+            "block_elements": 2510,
+            "block_rate": 0.006,
+            "window_elements": 53055,
+            "window_rate": 0.192,
+            "difference_in_points": -18.61,
+            "block_share": 0.4399,
+            "window_share": 0.0587
+          },
+          "1": {
+            "block_elements": 1336,
+            "block_rate": 0.116,
+            "window_elements": 107165,
+            "window_rate": 0.3402,
+            "difference_in_points": -22.42,
+            "block_share": 0.2341,
+            "window_share": 0.1185
+          },
+          "10-14": {
+            "block_elements": 131,
+            "block_rate": 0.3435,
+            "window_elements": 98096,
+            "window_rate": 0.5354,
+            "difference_in_points": -19.19,
+            "block_share": 0.023,
+            "window_share": 0.1085
+          },
+          "15-24": {
+            "block_elements": 119,
+            "block_rate": 0.5042,
+            "window_elements": 55556,
+            "window_rate": 0.5202,
+            "difference_in_points": -1.6,
+            "block_share": 0.0209,
+            "window_share": 0.0614
+          },
+          "2": {
+            "block_elements": 566,
+            "block_rate": 0.1148,
+            "window_elements": 85469,
+            "window_rate": 0.3817,
+            "difference_in_points": -26.69,
+            "block_share": 0.0992,
+            "window_share": 0.0945
+          },
+          "25+": {
+            "block_elements": 89,
+            "block_rate": 0.6292,
+            "window_elements": 26467,
+            "window_rate": 0.6215,
+            "difference_in_points": 0.77,
+            "block_share": 0.0156,
+            "window_share": 0.0293
+          },
+          "3-4": {
+            "block_elements": 511,
+            "block_rate": 0.1663,
+            "window_elements": 173129,
+            "window_rate": 0.4482,
+            "difference_in_points": -28.18,
+            "block_share": 0.0896,
+            "window_share": 0.1914
+          },
+          "5-6": {
+            "block_elements": 272,
+            "block_rate": 0.2279,
+            "window_elements": 157006,
+            "window_rate": 0.469,
+            "difference_in_points": -24.1,
+            "block_share": 0.0477,
+            "window_share": 0.1736
+          },
+          "7-9": {
+            "block_elements": 172,
+            "block_rate": 0.3837,
+            "window_elements": 148439,
+            "window_rate": 0.5101,
+            "difference_in_points": -12.64,
+            "block_share": 0.0301,
+            "window_share": 0.1641
+          }
+        },
+        "block_rate": 0.1067,
+        "window_rate_standardised_to_the_blocks": 0.3127,
+        "window_rate_crude": 0.4468,
+        "standardised_difference_points": -20.6,
+        "ci95_over_blocks": [
+          -21.93,
+          -19.17
+        ],
+        "ci95_over_chromosomes": [
+          -22.41,
+          -18.63
+        ],
+        "n_blocks": 1181,
+        "closes_more_than_half_the_gap": false,
+        "share_of_the_pooled_gap_closed": 0.409
+      }
+    },
+    "moves_a_gene": {
+      "standardised_on_reach": {
+        "book": "by_stratum",
+        "min_cell": 30,
+        "cells_included": [
+          "0",
+          "1",
+          "10-14",
+          "2",
+          "3-4",
+          "5-6",
+          "7-9"
+        ],
+        "cells_excluded": {
+          "15-24": {
+            "block_elements": 19,
+            "block_yes": 18,
+            "window_elements": 33990
+          },
+          "25+": {
+            "block_elements": 9,
+            "block_yes": 7,
+            "window_elements": 17652
+          }
+        },
+        "block_elements_standardised": 3252,
+        "block_elements_total": 3280,
+        "per_cell": {
+          "0": {
+            "block_elements": 921,
+            "block_rate": 0.2041,
+            "window_elements": 28290,
+            "window_rate": 0.5057,
+            "difference_in_points": -30.16,
+            "block_share": 0.2832,
+            "window_share": 0.062
+          },
+          "1": {
+            "block_elements": 933,
+            "block_rate": 0.1844,
+            "window_elements": 49044,
+            "window_rate": 0.5905,
+            "difference_in_points": -40.62,
+            "block_share": 0.2869,
+            "window_share": 0.1074
+          },
+          "10-14": {
+            "block_elements": 50,
+            "block_rate": 0.72,
+            "window_elements": 54387,
+            "window_rate": 0.6769,
+            "difference_in_points": 4.31,
+            "block_share": 0.0154,
+            "window_share": 0.1191
+          },
+          "2": {
+            "block_elements": 454,
+            "block_rate": 0.3282,
+            "window_elements": 44270,
+            "window_rate": 0.5969,
+            "difference_in_points": -26.87,
+            "block_share": 0.1396,
+            "window_share": 0.097
+          },
+          "3-4": {
+            "block_elements": 505,
+            "block_rate": 0.2356,
+            "window_elements": 82087,
+            "window_rate": 0.6481,
+            "difference_in_points": -41.24,
+            "block_share": 0.1553,
+            "window_share": 0.1798
+          },
+          "5-6": {
+            "block_elements": 241,
+            "block_rate": 0.3071,
+            "window_elements": 74387,
+            "window_rate": 0.6502,
+            "difference_in_points": -34.32,
+            "block_share": 0.0741,
+            "window_share": 0.1629
+          },
+          "7-9": {
+            "block_elements": 148,
+            "block_rate": 0.3311,
+            "window_elements": 72466,
+            "window_rate": 0.656,
+            "difference_in_points": -32.5,
+            "block_share": 0.0455,
+            "window_share": 0.1587
+          }
+        },
+        "block_rate": 0.242,
+        "window_rate_standardised_to_the_blocks": 0.5851,
+        "window_rate_crude": 0.6377,
+        "standardised_difference_points": -34.31,
+        "ci95_over_blocks": [
+          -37.59,
+          -30.72
+        ],
+        "ci95_over_chromosomes": [
+          -37.66,
+          -30.5
+        ],
+        "n_blocks": 531,
+        "closes_more_than_half_the_gap": false,
+        "share_of_the_pooled_gap_closed": 0.016
+      },
+      "standardised_on_class": {
+        "book": "by_class",
+        "min_cell": 30,
+        "cells_included": [
+          "dELS",
+          "pELS"
+        ],
+        "cells_excluded": {},
+        "block_elements_standardised": 3280,
+        "block_elements_total": 3280,
+        "per_cell": {
+          "dELS": {
+            "block_elements": 3168,
+            "block_rate": 0.233,
+            "window_elements": 398123,
+            "window_rate": 0.6084,
+            "difference_in_points": -37.55,
+            "block_share": 0.9659,
+            "window_share": 0.872
+          },
+          "pELS": {
+            "block_elements": 112,
+            "block_rate": 0.6607,
+            "window_elements": 58450,
+            "window_rate": 0.8371,
+            "difference_in_points": -17.64,
+            "block_share": 0.0341,
+            "window_share": 0.128
+          }
+        },
+        "block_rate": 0.2476,
+        "window_rate_standardised_to_the_blocks": 0.6162,
+        "window_rate_crude": 0.6377,
+        "standardised_difference_points": -36.87,
+        "ci95_over_blocks": [
+          -40.1,
+          -33.32
+        ],
+        "ci95_over_chromosomes": [
+          -40.7,
+          -32.64
+        ],
+        "n_blocks": 531,
+        "closes_more_than_half_the_gap": false,
+        "share_of_the_pooled_gap_closed": -0.058
+      }
+    }
+  },
+  "seconds": 280.4,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (the all-element archive)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256",
+        "path": "data/knowledge/alphagenome/all_elements"
+      },
+      {
+        "accession": "GENCODE protein-coding genes (the TSS density covariate)",
+        "version": "the repository's default GENCODE GFF3, pinned by sha256"
+      },
+      {
+        "accession": "Zoonomia cactus241way phyloP, gnomAD Gnocchi, UCSC genomicSuperDups (the organiser's tiers, axes and copy flag)",
+        "version": "as pinned by the organiser's inputs"
+      },
+      {
+        "accession": "this repository, data/results/constrained_unknown_targets.json at d717b28",
+        "version": "git d717b28, the unmatched control the gate reproduces"
+      },
+      {
+        "accession": "ENCODE SCREEN cCRE registry classes, data/results/ccres_<chrom>.bed.gz",
+        "version": "ENCODE cCREs v3 as distilled into this repository"
+      },
+      {
+        "accession": "this repository, data/results/clause2_element_count_control.json at faeb0da",
+        "version": "git faeb0da, the per-element gap these two controls describe"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/budget_axes_chr1.json",
+        "sha256": "bbe15a3281883da171d426675a02f490941bf44e936f51ec211ee6f33817e41e",
+        "bytes": 1410873,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr1.json",
+        "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+        "bytes": 1500070,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr1.json",
+        "sha256": "a48412273d8b9b4fedee2d870b3a657ad290da21e50122c849f07af7e5d15166",
+        "bytes": 1402301,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr1.json",
+        "sha256": "c6a0ff4870a665a999f81cf14a6297c0443a94a376cf33b261f77258f4f1d622",
+        "bytes": 528568,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr2.json",
+        "sha256": "ee44180e8a8a3c49b3b48c24d2869fe340c31e818df8f74d7a52dbdc57888856",
+        "bytes": 1133348,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr2.json",
+        "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+        "bytes": 1204585,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr2.json",
+        "sha256": "d2e34e45756cea76ec7661479bee68dee786d69ad8773725fe556cc0a5d7cc2b",
+        "bytes": 1159471,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr2.json",
+        "sha256": "3538035cd41719535aea02820e24725cb4019448601483e616a844f252367b52",
+        "bytes": 429860,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr3.json",
+        "sha256": "3c68516f3219952cb8900758c858235aa0fb98b4c3023160a69f37b7e854192b",
+        "bytes": 759401,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr3.json",
+        "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+        "bytes": 806712,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr3.json",
+        "sha256": "3226b141288da1534b4d87d43b2af62b5c2bf5a680bfd5f87d816a34fb8f08be",
+        "bytes": 851491,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr3.json",
+        "sha256": "2bf519ba9d8b5f7be164e7f5220ec81c03245b33033a66809357cf8588d363d2",
+        "bytes": 276227,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr4.json",
+        "sha256": "67ca15d332a1ef621ccd7b3bc7d114244887c30de3bcbb460cb679a4e5cac7d2",
+        "bytes": 821190,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr4.json",
+        "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+        "bytes": 867246,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr4.json",
+        "sha256": "b7bb22de72321991a1a236fc96362386cafbd549eabe78240043ec8ae9e51878",
+        "bytes": 901104,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr4.json",
+        "sha256": "abef1504e80452f6ff5942a5006995404c9b635c3df9c62c35b21b2496713604",
+        "bytes": 302778,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr5.json",
+        "sha256": "2a949b0d92ca50e162868e2141d15c9326c104eb4ef83625bc6b48f9e1ffacf0",
+        "bytes": 798553,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr5.json",
+        "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+        "bytes": 845931,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr5.json",
+        "sha256": "afa63d7c2bb568abdd222893d254956ff649413f7cb279ef663e5492a999e4cc",
+        "bytes": 868598,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr5.json",
+        "sha256": "1974b4d3a270e8ebe633d19ad0dccf9ed97c58f92763cddad4b2d50d99d903ea",
+        "bytes": 288379,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr6.json",
+        "sha256": "02f204b9005c8967b72c1a9d87b7466c0c173019662b94bb849fce135c9ffe47",
+        "bytes": 817084,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr6.json",
+        "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+        "bytes": 867522,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr6.json",
+        "sha256": "2d564b14bf191563acba3dbfa7190c1989c663e014a782cb25d041b437524e6d",
+        "bytes": 896157,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr6.json",
+        "sha256": "dff8c192ce36e76456230376c7d4000559d8d86ee2642d178f9e52f477822779",
+        "bytes": 288812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr7.json",
+        "sha256": "ce717d1e3be2f44415340cd7c347f9a8f945c6652d4ba64aa4adda3b1b5a900e",
+        "bytes": 819440,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr7.json",
+        "sha256": "10f765e2fa58a4fb7d4931bc3344a2a29e6e3fe52db7e74b6d6c83fdb39d7ef0",
+        "bytes": 859998,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr7.json",
+        "sha256": "b55814d3d0b5e19af6972eeb934dc1646e715d589c9e31fe5540d90035da6a5d",
+        "bytes": 316217,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr8.json",
+        "sha256": "422cdf37f516eb923c2c5e7a6f6053222d7edbe97aba7bc48097d77c8eabbcf0",
+        "bytes": 691288,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr8.json",
+        "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+        "bytes": 731185,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr8.json",
+        "sha256": "807ae603b32b365661f3529ac0e9d8be10e801c8e00301c268daf1d870c26170",
+        "bytes": 750768,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr8.json",
+        "sha256": "369c874a82c1ffe373a8ba57b111f891c0b440d0ac72c8f1ad344bbde8303b97",
+        "bytes": 255757,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr9.json",
+        "sha256": "ff179fd23905d3dcd80328919baa4c8133404036eca2ac2a75adad1c75557658",
+        "bytes": 629119,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr9.json",
+        "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+        "bytes": 666533,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr9.json",
+        "sha256": "45df7529d90e827d9fab5baf8e3f919e913ef184b693eab77b773a02c2f35e2b",
+        "bytes": 682738,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr9.json",
+        "sha256": "bbf7adc9b99fc4c62fec7f59338a1d93bc006d7cdd86452b3dd409d9c42b0ea1",
+        "bytes": 255702,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chrX.json",
+        "sha256": "e8b4353c08dba5488b595c171839755fb63256e93c9c58e9df22dcf60a916cbd",
+        "bytes": 789566,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrX.json",
+        "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+        "bytes": 819979,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chrX.json",
+        "sha256": "e13ff8e98e81dd07ac6b4b68897d6977ee64ed6322398070d6defdb89f7539f6",
+        "bytes": 772326,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chrX.json",
+        "sha256": "ec0ce9a6cf3925616acd81741efc0ff31a69f9dbe882fe21e7d3a2a1877a0605",
+        "bytes": 314974,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chrY.json",
+        "sha256": "f1da714164c1552ef4a14eeb9384b2829fd69300e06109c19edcc5249488ec8b",
+        "bytes": 223696,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chrY.json",
+        "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+        "bytes": 229765,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chrY.json",
+        "sha256": "a5b7b851deebdb0278518a1a5ce2124768863915d5466789c9fd9995328fe95e",
+        "bytes": 135737,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chrY.json",
+        "sha256": "4b9ec18d3f5f7be4bf6d62f4bb350ffef69162f4791d10f47c0d44ab0cc49d88",
+        "bytes": 113258,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr10.json",
+        "sha256": "67dacff94903be15cd1289d30655adda202b740fa97d4a112c66c89fed17953b",
+        "bytes": 694899,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr10.json",
+        "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+        "bytes": 739499,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr10.json",
+        "sha256": "19785e66eb1f544cb1fb8ad1d30e29e59f650dfe02f5b7909d9d07e77f7c6d95",
+        "bytes": 767517,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr10.json",
+        "sha256": "275f790e79d95092890ed921554d9f483e2d23645c2a1ce733b834877fbc9698",
+        "bytes": 260309,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr11.json",
+        "sha256": "8a7e9732a819c58dda4dd3e2ba2d6bf160e76570b111cf1975bb386092b5f37b",
+        "bytes": 849479,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr11.json",
+        "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+        "bytes": 897717,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr11.json",
+        "sha256": "d5f92b6b409a7a84b1b28c2f4af7a1b832eca51a60ca9f4983505e9071bb1bd8",
+        "bytes": 912203,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr11.json",
+        "sha256": "668d35634f0245de5a01e875d8ea788835247f6db4cfe1e10f8fda811d2cfef1",
+        "bytes": 315109,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr12.json",
+        "sha256": "9d75232cc25e8cda2f9e1b90fc2cb204d7e956b295b23db8b12af3c10f83f720",
+        "bytes": 681846,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr12.json",
+        "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+        "bytes": 723141,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr12.json",
+        "sha256": "da5b9430a856980755ac53b4574cdb6203d371b3c9ce3ca674b59e8be76eb1be",
+        "bytes": 776057,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr12.json",
+        "sha256": "18603e506503c5925311f0998419ed91646e6fd007733c978e8897121a30dbc6",
+        "bytes": 241500,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr13.json",
+        "sha256": "fee82bed10f6b311a4a7179955da6174e4a5114042adcfcf974a52c9cba7ca78",
+        "bytes": 453902,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr13.json",
+        "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+        "bytes": 479558,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr13.json",
+        "sha256": "01b6eece2b4c5f7045a61dbc0265ca5091350db6de592e731ea007d25de87050",
+        "bytes": 562830,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr13.json",
+        "sha256": "3408b18be0bbf3fe329774fdf5463769d1804ccdec9dc38af059f68ff659c2de",
+        "bytes": 168106,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr14.json",
+        "sha256": "14a6bf1b3185e139d6f9ea72f336a9795d0a235dc3da0960d512e45677e0556f",
+        "bytes": 551492,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr14.json",
+        "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+        "bytes": 584688,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr14.json",
+        "sha256": "c61758ab1fd2a77ec102ceaca507482d0c1d103902a87c2dec2ef9539f3ebe86",
+        "bytes": 608223,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr14.json",
+        "sha256": "5b84dbe9a6c5dc725266aba71be62104c15a5945cf366004083711fa841f404d",
+        "bytes": 211604,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr15.json",
+        "sha256": "1229865beee55ea8a733b6abf9668f5d6ce07be335dd6353d0e4664603fb5249",
+        "bytes": 400561,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr15.json",
+        "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+        "bytes": 423577,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr15.json",
+        "sha256": "f3dd7c46c300ae02d44b8a785586e5f4bff2ba1ecc764e673b68ffa9477c25f9",
+        "bytes": 483432,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr15.json",
+        "sha256": "e8442a2476b831305d0efb25359efc2048b01e831bcbd07651219efecde4d4d7",
+        "bytes": 175964,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr16.json",
+        "sha256": "17a2184e0240d127f2baec30bef35593846d9b90df8c6be07d19ff53a9f8ef90",
+        "bytes": 503231,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr16.json",
+        "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+        "bytes": 534109,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr16.json",
+        "sha256": "5720ba0d0a343c1b7983fba18cf385acc437c7b85fc8678bd696cb0f92cf0e54",
+        "bytes": 563247,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr16.json",
+        "sha256": "6830afb482da7be0940aec469e5eede11310734e43cca2b3f0ef1cd517a649ad",
+        "bytes": 206004,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr17.json",
+        "sha256": "2a1f433a8840c30ccf745dd05c1bb3a8728f90f99a8817452b8d788f67cc1413",
+        "bytes": 594575,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr17.json",
+        "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+        "bytes": 633946,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr17.json",
+        "sha256": "e1503b269e094315a22714e5be27064843111682f681a4373aea223bee746b10",
+        "bytes": 668316,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr17.json",
+        "sha256": "79291ca68d9175a57947c261a523f17d9ff630263a14013134ca09979766723f",
+        "bytes": 228049,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr18.json",
+        "sha256": "7674dfd12ba8b59214dde98b19802968409385022b6236cb8ba6b4c43d0651ac",
+        "bytes": 361413,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr18.json",
+        "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+        "bytes": 382016,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr18.json",
+        "sha256": "cc886fd465a12a6942c67942446e5fb7f1c920c4aac5d44f54c157faea489762",
+        "bytes": 481487,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr18.json",
+        "sha256": "d6695c82ccc770c8ee66c71d3e5cfcc3f566ebe5ea75918a80fa5577b8a35ce4",
+        "bytes": 129982,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr19.json",
+        "sha256": "dc751a44b4fa82d87666b78c3105fc449c07e409d19756d7d0477e0fc3979f4b",
+        "bytes": 622828,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr19.json",
+        "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+        "bytes": 657776,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr19.json",
+        "sha256": "caae3fcebcbdce76e2c47d3abf6486ceabbf9b2e8d4e534c1973cc37aafb94fd",
+        "bytes": 691162,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr19.json",
+        "sha256": "5389277300089a6fa5fc0aa88c468cd60dde6dd4170bfbd68b88726318c9c537",
+        "bytes": 224361,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr20.json",
+        "sha256": "8bb5d1c5a4bdfb091e29804a064b210a21bc3eadc9e218c62f05076a93c23f4b",
+        "bytes": 446278,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr20.json",
+        "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+        "bytes": 474640,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr20.json",
+        "sha256": "4ac435be54b70ba958e755bba265ecf9533f36b3f44845bdf9109e4bba27c6fc",
+        "bytes": 546743,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr20.json",
+        "sha256": "0ce18d4fe15b071594dbc0dd172ff730ecd2dce15c2eef6b94e0bd2c17a82e33",
+        "bytes": 164031,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr21.json",
+        "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+        "bytes": 263928,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr21.json",
+        "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+        "bytes": 348031,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr21.json",
+        "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+        "bytes": 118130,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr22.json",
+        "sha256": "256f84884d1f3f78f10b734d69616db8d357f95757780693855fbcb6e4d86b77",
+        "bytes": 372693,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr22.json",
+        "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+        "bytes": 394442,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr22.json",
+        "sha256": "488cb0217350c4ded89c59d4d7044ee12bd3f36e0cdf5589058e91dbb9aaef06",
+        "bytes": 447259,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr22.json",
+        "sha256": "852b3c0ba7d348cbcfa3d68e8c1e6848bc53c252d8a584d4cd72077f94191870",
+        "bytes": 157247,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "scorer_input_window_bp": 1048576,
+      "half_window_bp": 524288,
+      "draws_per_block": 50,
+      "unmatched_tries": 4000,
+      "matched_tries": 20000,
+      "seed_per_chromosome": 20260913,
+      "bootstrap": 10000,
+      "deciles": 10,
+      "min_cell_elements": 30,
+      "reach_strata": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          10,
+          14
+        ],
+        [
+          15,
+          24
+        ],
+        [
+          25,
+          null
+        ]
+      ],
+      "primary_question": "names_a_coding_gene",
+      "pooled_gap_points": -34.86,
+      "half_pooled_gap_points": -17.43,
+      "matched_on": "nothing: d717b28's unmatched draw, described"
+    },
+    "exclusions": [
+      "constrained_unknown blocks that are copies are out of the real unknown",
+      "an element belongs to the block or window holding its midpoint",
+      "windows overlapping any organiser block are rejected, as d717b28",
+      "blocks with no scored element, or no accepted window carrying one, leave the comparison",
+      "a stratum or class holding fewer than 30 elements in either arm is out of the standardisation and is reported with its counts"
+    ],
+    "partitions": "n/a: arithmetic over model answers already on disk; nothing fitted, nothing held out",
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "f6b86bb4cf6ff59fbd98017b410c7f6f8902f758",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/bridge.py",
+        "scripts/bridge_audit.py",
+        "scripts/build_gene_rates.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/gene_rates.json"
+      ],
+      "argv": [
+        "scripts/clause2_reach_control.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  },
+  "corrections_after_the_statistical_review_2026_09_28": {
+    "added": "2026-09-28",
+    "by": "lane-design",
+    "preamble": "Added by lane-design on 2026-09-28. Every key and value already in this file is unchanged; this entry is additive and names the field or the string it corrects. The corrections follow a statistical review of milestone 1.3 clause 2's notes, whose full text is in docs/ROADMAP.md beneath milestone 1.3 and in the dated lane-design sections of docs/ATTRIBUTION.md.",
+    "additive": true,
+    "corrects": {
+      "reach_reading.text": "'the failure stays about the sequence' is withdrawn. What the run shows is that the gap persists after standardising on the tested covariates, reach and class. That the tested covariates do not explain it is not evidence of what does: unmeasured context, selection effects, model limitations and remaining geometric differences are all still open. The defensible sentence is: the gap persists after adjustment for the tested reach and class variables",
+      "classes.reading": "same correction: class composition not explaining the gap does not identify what does"
+    }
+  }
+}

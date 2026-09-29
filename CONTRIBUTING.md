@@ -16,14 +16,96 @@ files carry the `SPDX-License-Identifier` of the part they belong to.
 
 ## Branches
 
-- `main` holds tested, working code only. It is protected: nothing lands there
-  unless CI (lint + tests + self-testing programs) is green.
-- `dev` is where all work happens. Every push to `dev` runs CI.
+- `main` holds tested, working code only. It moves to a `dev` sha whose
+  latest CI `test` run is green, through `scripts/promote_main.sh` (below,
+  "Release checks"). Its branch rule names the same check as required, but
+  the rule does not bind admins until the owner says so.
+- `dev` is where all work happens. A push to `dev` runs the pre-push hook,
+  not CI; CI runs on the tip of `dev` once a day.
 - **Pull requests to `main` are opened by Albert, by hand, when he decides a
   state of `dev` is worth promoting.** Nobody else, and no script or session,
   opens, updates or merges a pull request. `scripts/promote.sh` exists for
-  Albert's manual use only. An open pull request makes every push to `dev`
-  run CI twice, so keep them short-lived.
+  Albert's manual use only. While a pull request is open, every push to `dev`
+  runs CI once, so keep them short-lived.
+
+## Release checks (2026-09-28)
+
+Item S7 of the second external review. What enforces what, before this date:
+
+| Where | What ran | What it bound |
+| --- | --- | --- |
+| push to `dev` | pre-push hook: `scripts/check.sh` on the pushed sha in a clean worktree | only a clone that installed it; `GENOMEOS_SKIP_CHECK=1` or `--no-verify` skips it; it runs with this machine's data caches and `.venv` (`UV_NO_SYNC=1`), not a fresh install |
+| pull request into `main` | CI on `opened`, `reopened`, `ready_for_review` | a later push to the pull request was never tested |
+| daily, 06:00 UTC | CI on the tip of `dev` | nothing: red every day from 2026-09-22 to 2026-09-28 and no promotion waited on it |
+| promotion to `main` | the pre-push hook (it checks pushes to `main` too); branch rule requiring `test` | the rule has `enforce_admins` off and sessions push as the owner's admin account |
+
+Three findings behind the table. The scheduled run was testing `dev`, not
+`main`: the repository's default branch is `dev` (repository settings, read
+2026-09-28), and every scheduled run since 2026-09-16 recorded the sha that
+was the tip of `dev` at the time, including 2026-09-22 (`cfa6d98`, when
+`main` was `8767d2d`) and 2026-09-28 (`db04d1f`, when `main` was
+`45a5aa6`). This checkout's `origin/HEAD` still points at `origin/main`,
+because a clone sets it once; `git remote show origin` reports `dev`. The daily run
+has been red for seven days on one test,
+`tests/test_cancer_alterations.py::test_a_five_prime_partner_keeps_its_own_ectodomain`,
+which reads caches git ignores (`data/knowledge/vep/`,
+`data/knowledge/proteins/`) and lacks the `needs_caches` skip its neighbours
+carry. In a clean worktree without those caches it fails here the same way
+("no compiled protein definition for ALK") while its neighbour skips; the
+pre-push hook links this machine's caches into its worktree, so it let the
+same shas through. Neither of the last two moves of `main` had a green `test`
+on its sha when it landed: `36f36d6` (2026-09-22) had no run yet and its
+five later runs were red, and `45a5aa6` (2026-09-27) has never had one.
+
+After this date:
+
+- **Pull requests**: `synchronize` is a trigger, so every push to an open
+  pull request into `main` runs CI; `concurrency` cancels the run a newer
+  push supersedes.
+- **Daily**: still the tip of `dev`, now asserted. The first step of `test`
+  fails a scheduled run that is not on `refs/heads/dev`, so a change of
+  default branch is reported instead of silently testing another branch.
+  The checkout stays at `github.sha` rather than `ref: dev`: a run records
+  `github.sha` as the sha it tested, and the gate and the branch rule both
+  read that record. Checking out `dev` by name could test a newer sha than
+  the one recorded (a push between trigger and checkout), or, if the default
+  branch changed, test `dev` under `main`'s sha. `main` is not checked daily:
+  it moves only by promotion, so a daily run would retest an unchanged sha.
+- **Push to `main`**: CI runs on the promoted sha where it lands, once per
+  promotion. It is a record, not a gate: it runs after `main` has moved, whatever
+  route the sha took.
+- **Promotion** is the gate. `main` moves only to a sha that is on
+  `origin/dev`, contains `origin/main` (a fast-forward), and whose most
+  recent completed `test` check run by GitHub Actions concluded `success`
+  (not `skipped` or `neutral`, which the branch rule would accept).
+  `scripts/promote_main.sh` checks exactly that and is a dry run unless
+  given `--push`:
+
+  ```
+  scripts/promote_main.sh --latest-green     # the newest green sha between main and dev, dry run
+  gh workflow run ci.yml --ref dev           # none green: test dev's tip now, then look again
+  scripts/promote_main.sh --push SHA         # the coordinator, on the owner's go, once a day at most
+  ```
+
+  The push still goes through the pre-push hook, so the promoted sha is
+  checked locally as well; the hook stays, as one check of two.
+- **Recommended branch rule for `main`** (the owner's setting; no session
+  changes it): keep `test` from GitHub Actions as the required check and
+  force pushes and deletions blocked, and turn on "Do not allow bypassing
+  the above settings". GitHub then refuses, for everyone, a push of a sha
+  without a passing `test`, and accepts a direct push of one that passed on
+  `dev` ("After all required status checks pass, any commits must either be
+  pushed to another branch and then merged or pushed directly to the
+  protected branch", GitHub, *About protected branches*). Do not turn on
+  "Require a pull request before merging": it forbids the fast-forward. The
+  cost: while `dev` is red, `main` cannot move; `origin/dev` already keeps
+  the day's work on GitHub.
+- **When each change applies.** GitHub runs a workflow as it stands in the
+  event's commit. Schedules read the default branch, which is `dev`, so the
+  daily assertion applies from the first scheduled run after this reaches
+  `origin/dev`; `synchronize` applies to a pull request whose head contains
+  it; the push-to-`main` run first fires on the promotion that carries this
+  commit to `main`.
 
 ## The cycle: finish, check, commit, push
 

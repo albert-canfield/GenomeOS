@@ -8,7 +8,8 @@ hg38 table is 643 MB compressed, 71 million rows; it is streamed once per person
 bucket, only the rows for that person's missense variants are kept, and the kept rows stay under the
 person's own git-ignored directory (`alphamissense.json`), never under data/results.
 
-The scores enter as `predicted` evidence (confidence the score itself, capped at 0.7), with the model's
+The scores enter as `predicted` evidence with the model's own score named and no probability (R4f,
+2026-09-28: the score capped at 0.7 is no longer written as a confidence), with the model's
 own classes (likely_pathogenic ≥ 0.564, likely_benign ≤ 0.34, ambiguous between); a variant absent from
 the table (an indel, a non-canonical transcript, a stop) stays unscored and says so. AlphaMissense is
 released under CC BY-NC-SA 4.0: research and personal use, not commercial.
@@ -24,9 +25,18 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from genomeos.certainty import Certainty
+
 URL = "https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg38.tsv.gz"
 EVIDENCE = "predicted: AlphaMissense (DeepMind 2023, CC BY-NC-SA 4.0) pathogenicity per missense variant"
-CONFIDENCE_CAP = 0.7
+SCORE_NAME = (
+    "AlphaMissense pathogenicity score (0..1), the model's own output on this transcript, whose classes"
+    " cut at 0.34 and 0.564: a ranking score, not a probability"
+)
+NO_PROBABILITY = (
+    "no calibration record for this use: the class cut-offs were set by the model's authors on ClinVar"
+    " labels, which calibrates no score as the probability that this variant is pathogenic in this person"
+)
 CLASS_ORDER = {"likely_pathogenic": 0, "ambiguous": 1, "likely_benign": 2, None: 3}
 Key = tuple[str, int, str, str]
 
@@ -103,6 +113,18 @@ def pick(entries: list[dict[str, Any]], transcript: str | None) -> dict[str, Any
     return {**best, "on_transcript": "highest of the table's"}
 
 
+def score_certainty(score: float) -> Certainty:
+    """What a missense prediction rests on (R4f): the model's score named, no effect size (the score is
+    not a change in anything measurable), no probability. Only the score depends on the variant."""
+    return Certainty(
+        evidence_category=EVIDENCE,
+        uncertainty_note="one model output; no spread reported per variant",
+        model_score=float(score),
+        model_score_name=SCORE_NAME,
+        probability_unavailable=NO_PROBABILITY,
+    )
+
+
 def annotate(missense: list[dict[str, Any]], scores: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
     """Each missense row gains `predicted` (score, class, transcript); the rows are re-ranked by effect."""
     for m in missense:
@@ -112,7 +134,7 @@ def annotate(missense: list[dict[str, Any]], scores: dict[str, list[dict[str, An
             {
                 "score": chosen["score"],
                 "class": chosen["class"],
-                "confidence": round(min(CONFIDENCE_CAP, chosen["score"]), 3),
+                "certainty": score_certainty(chosen["score"]).to_dict(),
                 "transcript": chosen["transcript"],
                 "protein_variant": chosen["protein_variant"],
                 "on_transcript": chosen["on_transcript"],
