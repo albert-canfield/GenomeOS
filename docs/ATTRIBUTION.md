@@ -11221,6 +11221,98 @@ The re-judge is run once, with the same claims and sources as S4, and written as
 `data/results/attribution_correctness_v2.json`. `attribution_correctness.json` stays as it is, beside
 it. If any count other than the 59 moves, the lane stops and reports it.
 
+### The re-judge under v2, beside v1 (2026-09-29, later)
+
+**S4's original reading stands as the historical v1 result.** `attribution_correctness.json` is
+unchanged. In the same run, v1 was judged again and matched that file key by key, in order, leaving
+out only what records the run (`result`, `date`, `seconds`, the manifest). The v2 result is
+`attribution_correctness_v2.json`, judged once from commit 172572c in a clean worktree, with a clean
+stamp. Its manifest records `judge_rule: v2`. No model request was made.
+
+**Why v2 corrects future judging.** In Albert's words, the v1 rule "falls back to another cell when
+the claimed cell lacks measurements. That cannot establish that a cell-specific direction is wrong."
+The same holds the other way: agreement in another cell cannot establish that the direction is right.
+So v2 treats both alike. All 59 verdicts decided only in another cell become "not assessed in this
+context", the 54 correct ones as well as the 5 wrong ones. What the other cells show is kept beside
+each claim as a separate finding.
+
+**The counts, side by side** (`side_by_side` in the result):
+
+| Axis | Claims | v1 judged | v1 established / refuted | v2 judged | v2 established / refuted | Not assessed in this context (v2) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Origin | 470,077 | 0 | 0 / 0 | 0 | 0 / 0 | 0 |
+| Molecular role | 659,403 | 0 | 0 / 0 | 0 | 0 / 0 | 0 |
+| Activity | 440,377 | 98 | 93 / 5 | 39 | 39 / 0 | 59 |
+| Target | 440,377 | 98 | 98 / 0 | 98 | 98 / 0 | 0 |
+| Context | 440,377 | 39 | 39 / 0 | 39 | 39 / 0 | 0 |
+
+Unresolved and observation-model-inadequate are 0 on every axis under both rules. Details on activity:
+
+- **Other not-judged reasons:** every one keeps its count under both rules. That is 1,377 outside the
+  claim's scope, 23 until the target responds, 3,194 only suggest, 18,747 only cannot judge, and
+  416,938 no observation.
+- **`refutable`:** v1 never computed it on activity. Under v2 it is 39, the directions decided in the
+  stated cell.
+- **Counts that move only with the 59:**
+  - `decided_by_kind` goes from 97 decreases and 1 increase to 39 decreases.
+  - Verdicts decided with a held-out-file pair go from 14 to 1.
+- **Check:** every count change is accounted for by the 59 moved claims (`unexplained_count_changes` is
+  empty).
+
+**The 59 are the ones registered.**
+
+- Under v1, all 59 were decided only in another cell: 54 established, 5 refuted.
+- Under v2, each keeps its other-cell observations as a cross-cell finding: 54 agree with the claimed
+  direction and 5 disagree.
+- The 5 that disagree are the four repression claims the trace followed, plus the CCND1 comparison.
+- 48 of the 59 other-cell observations are in K562.
+- None of the 39 directions judged in the stated cell carries a cross-cell finding.
+- Under v2, no repression claim is judged at all.
+
+These are the counts registered before the run. The 39 / 59 split had already been seen in the
+repression trace, so agreement with the registration is expected, not evidence for the rule. Albert's
+reasoning justifies the rule; the registration only makes the re-judge traceable.
+
+**ID1 is a separate finding.** Under v2, ID1's `represses_target` claim in Whole_Blood (EH38E3426791) is
+not assessed in this context. Gasperini2019's K562 decrease of ID1 is kept beside it as a cross-cell
+finding that disagrees. Apart from the verdict, the repression trace found that the model's cached K562
+prediction disagrees with the K562 experiment ("model on K562: by_cell[K562] +0.1433; measured
+EffectSize -0.1582"). That does not directly refute the compiled whole-blood claim.
+
+**Other judging paths, audited and not changed.** Albert's decision covers direction only.
+
+- **`_target`: a finding only, for the owner to decide separately.** It establishes a target from a
+  response in any cell. So 59 of S4's 98 established targets were decided only from another cell. Only
+  the other 39 had a response in the stated cell (`refutable`). A target is never refuted from another
+  cell. If target were judged only in the stated cell, those 59 would move. Nothing on the target axis
+  was changed here.
+- **`_context`:** decides all 39 of its verdicts in the stated cell.
+- **`_reporter`:** falls back to other cells when the stated cell has no reporter.
+- **`_no_effect`:** pools every cell when the claim states none.
+- S4 states no reporter or `no_effect_measured` claim, so 0 verdicts would move on either path.
+- **Origin and molecular role:** no cell is read.
+
+**Beside S4, derived from the committed counts and not rerun.** The prior-only test's and the pilot
+gate's results were not regenerated. Their S4-beside blocks would move only on the unchanged labels'
+activity counts:
+
+- **Prior-only test, Gasperini2019:** from 41 of 43 to 24 of 24 (19 move).
+- **Pilot gate, Gasperini2019:** from 27 of 28 to 12 of 12 (16 move).
+- **Pilot gate, Schraivogel2020:** from 3 of 3 to none judged (3 move).
+- **Pilot gate, Xie:** 1 of 1, unchanged.
+
+The pilot's and the prior's own labellings state no activity claim. Their scripts pin v1, so their
+committed files still reproduce.
+
+**What it may be called:** an internal development benchmark reading of the same S4 claims under the
+v2 direction rule, beside the v1 reading.
+
+**What it may not be called:**
+
+- a validation, fresh or external;
+- evidence that the 59 directions are right or wrong: they are not assessed in the cell they name;
+- a correction of S4's committed result, which stands as the v1 result.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
