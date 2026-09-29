@@ -323,3 +323,41 @@ def test_gate2_labellings_carry_their_reads_and_a_leak_is_never_swallowed():
         ho.check_provenance(bad, "crispri:Gasperini2019")
     assert "crispri_heldout_file" not in pb.READS_ALWAYS
     assert set(pb.VALIDATION).isdisjoint(pb.DEVELOPMENT)
+
+
+def test_a_merge_is_counted_against_each_block_s_own_starting_label():
+    from genomeos.attribution import holdout as ho
+    from genomeos.attribution import measured as ms
+    from genomeos.attribution import pilot_bio as pb
+
+    blocks = pb.Blocks("chrT", ["A", "B"], [100, 700], [500, 1100], 400)
+    peaks = pl.Peaks({"K562": [(0, 1500)], "HepG2": []})
+    fx = pb.Fixed(
+        {"chrT": blocks},
+        {"chrT": peaks},
+        {"chrT": {"GA": 30_000, "GB": 60_000}},
+        {"chrT": {"A": ("GA", 1.0, "K562"), "B": ("GB", 1.0, "K562")}},
+    )
+    hood = pl.Hood(
+        "chrT",
+        [blocks.root(0), blocks.root(1)],
+        [],
+        pl.Priors("chrT", fx.tss["chrT"], fx.links["chrT"], peaks),
+    )
+    st0 = hood.s0()
+    merged, _ = hood.step(st0, hood.energy(st0), ("merge", "A", "B"))
+    res = pl.Outcome(True, st0, 0.0, merged, 0.0)
+    change = pl.changes(hood, st0, merged)[0]
+    assert change["kind"] == "merge"
+    units = [(ho.Unit("crispri:Toy", "chrT", 800, 900, outcome=ms.DECREASE, gene="GA", cell="K562"), 1.0)]
+
+    def idx(s, e):
+        return [(u, y) for u, y in units if u.end > s and u.start < e]
+
+    got = pb._delta_units(change, hood, res, units, idx)
+    assert [(u.gene, d) for u, _, d in got] == [("GA", 1)]  # B's portion now targets GA
+    pb.MERGE_COUNT_AS_RUN[0] = True
+    try:
+        assert pb._delta_units(change, hood, res, units, idx) == []  # the run's counter missed it
+    finally:
+        pb.MERGE_COUNT_AS_RUN[0] = False

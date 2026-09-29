@@ -602,26 +602,36 @@ def _delta_units(
                 if q["ctx"] == ctx and (element_unit or pair_on_target):
                     out.append((u, y, sign))
         return out
-    # a split or a merge: each resulting part against the block's starting label
+    # a split or a merge: each resulting part, over each block it covers, against that block's own
+    # starting label. Correction, 2026-09-29 (lane-pilot), after gate 2's registered run: the run's
+    # counter compared a merged part with its first block's starting label only, so the second block's
+    # change was never counted; `MERGE_COUNT_AS_RUN` keeps that behaviour for the run's own figures
     start = res.start
     root = change["root"]
-    was = start.labels[root]
     for p in best.parts[root]:
-        s, e = hood.iv[p]
         lab = best.labels[p]
-        for u, y in idx(s, e):
-            q = unit_query(u, "")
-            if q["gene"]:
-                if lab.target != was.target:
-                    if u.gene == lab.target:
-                        out.append((u, y, 1))
-                    elif u.gene == was.target:
-                        out.append((u, y, -1))
-            elif q["ctx"] is not None:
-                now_on, was_on = q["ctx"] in lab.active, q["ctx"] in was.active
-                if now_on != was_on:
-                    out.append((u, y, 1 if now_on else -1))
+        portions = hood.portions(p)
+        if MERGE_COUNT_AS_RUN[0]:
+            portions = [(root, hood.iv[p], 1.0)]
+        for r, (s, e), _ in portions:
+            was = start.labels[r]
+            for u, y in idx(s, e):
+                q = unit_query(u, "")
+                if q["gene"]:
+                    if lab.target != was.target:
+                        if u.gene == lab.target:
+                            out.append((u, y, 1))
+                        elif u.gene == was.target:
+                            out.append((u, y, -1))
+                elif q["ctx"] is not None:
+                    now_on, was_on = q["ctx"] in lab.active, q["ctx"] in was.active
+                    if now_on != was_on:
+                        out.append((u, y, 1 if now_on else -1))
     return out
+
+
+#: True reproduces gate 2's registered run exactly (a merge counted against its first block only)
+MERGE_COUNT_AS_RUN = [False]
 
 
 def validate(solved: dict[str, Solved], held: list[ho.Unit], endpoint: str) -> dict[str, Any]:
