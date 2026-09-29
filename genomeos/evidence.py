@@ -360,6 +360,10 @@ def collect(
         if failed
         else {}
     )
+    # 2026-09-29, review's correction to the comment above: a clean read states it too, as
+    # `complete: true` with an empty `parse_errors` and a count of 0, so no caller has to take a
+    # missing field for "complete". A clean payload gains exactly these three keys and nothing else.
+    report = report or {"parse_errors": [], "parse_error_count": 0, "complete": True}
     return {
         "rows": rows,
         "files": list(files),

@@ -8,7 +8,14 @@ broken program, and the only new things are the failures (path and message), the
 existed; its empty `failed` list already says that nothing failed.
 """
 
+# 2026-09-29, review's correction to the docstring above: a clean read now states `complete: true`,
+# `parse_errors: []` and `parse_error_count: 0`, because a missing field must not stand for
+# "complete". The two tests that pinned the old absence are kept as strict expected failures, and the
+# tests at the end pin the new statement and the Evidence tab's notice.
+
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -75,6 +82,7 @@ def _collect(root: Path, **kw):
     return evidence.collect(root, **kw)
 
 
+@pytest.mark.xfail(strict=True, reason="2026-09-29: a clean read now states complete: true")
 def test_a_clean_run_adds_nothing_and_names_no_failure(programs):
     out = _collect(programs)
 
@@ -144,6 +152,7 @@ def test_the_api_passes_the_report_through_also_for_the_csv(programs):
     assert set(sheet) == {"csv", "matched"} | REPORT_KEYS
 
 
+@pytest.mark.xfail(strict=True, reason="2026-09-29: a clean read now states complete: true")
 def test_the_api_of_a_clean_run_adds_nothing(programs):
     api = Api(programs)
 
@@ -193,3 +202,96 @@ def test_the_cli_csv_says_incomplete_and_writes_the_same_file(programs, monkeypa
     assert (programs / "broken.csv").read_bytes() == (programs / "clean.csv").read_bytes()
     assert "incomplete: 1 program(s) failed to parse" in broken.out
     assert broken.out.splitlines()[0] == clean.out.splitlines()[0].replace("clean.csv", "broken.csv")
+
+
+# --- 2026-09-29, review: a clean read says it is complete, and the Evidence tab shows a failure -------
+
+PAGE = Path(__file__).resolve().parent.parent / "genomeos" / "web" / "static" / "index.html"
+
+
+def test_a_clean_read_states_it_is_complete_under_every_filter(programs):
+    filters = (
+        {},
+        {"kinds": {"curated"}},
+        {"max_confidence": 0.5},
+        {"query": "no fact says this"},
+        {"module": "data/demo/base.bio"},
+    )
+    for kw in filters:
+        out = _collect(programs, **kw)
+        assert set(out) == KEYS_BEFORE | REPORT_KEYS, kw
+        assert out["complete"] is True and out["parse_errors"] == [] and out["parse_error_count"] == 0, kw
+
+
+def test_the_api_states_a_clean_read_complete_also_for_the_csv(programs):
+    api = Api(programs)
+
+    page, sheet = api.evidence(), api.evidence(csv=True)
+
+    assert set(sheet) == {"csv", "matched"} | REPORT_KEYS
+    for out in (page, sheet):
+        assert out["complete"] is True and out["parse_errors"] == [] and out["parse_error_count"] == 0
+
+
+def _notice_js() -> str:
+    """The page's own notice function and the two helpers it calls, cut from index.html."""
+    page = PAGE.read_text()
+    lines = page.splitlines()
+    helpers = [next(x for x in lines if x.startswith(p)) for p in ("const escH = ", "const fmt = ")]
+    start = page.index("function evIncomplete(r) {")
+    return "\n".join([*helpers, page[start : page.index("\n}\n", start) + 2]])
+
+
+def _render(payload: dict) -> str:
+    """What the Evidence tab puts above its counts and rows for this /api/evidence payload."""
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node is not installed")
+    script = (
+        _notice_js()
+        + "\nprocess.stdout.write(evIncomplete(JSON.parse(require('fs').readFileSync(0, 'utf8'))));"
+    )
+    done = subprocess.run([node, "-e", script], input=json.dumps(payload), capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr
+    return done.stdout
+
+
+def test_the_evidence_tab_shows_a_broken_program_above_the_rows(programs):
+    (programs / "data" / "demo" / "broken.bio").write_text(BROKEN)
+    evidence._cached.cache_clear()
+    served = json.loads(_bytes(Api(programs).evidence()))
+
+    html = _render(served)
+
+    assert "Incomplete: 1 program(s) failed to parse" in html
+    assert "data/demo/broken.bio" in html and "unterminated block" in html
+
+
+def test_the_evidence_tab_shows_no_notice_on_a_clean_read(programs):
+    served = json.loads(_bytes(Api(programs).evidence()))
+
+    assert _render(served) == ""
+
+
+def test_the_notice_escapes_what_the_parser_says():
+    payload = {
+        "complete": False,
+        "parse_error_count": 1,
+        "parse_errors": [{"path": "data/demo/x.bio", "message": "line 1: <script>"}],
+    }
+
+    html = _render(payload)
+
+    assert "&lt;script&gt;" in html and "<script>" not in html
+
+
+def test_the_notice_sits_above_the_counts_and_rows_and_is_set_on_every_load():
+    page = PAGE.read_text()
+
+    assert (
+        page.index('<div id="ev-incomplete">')
+        < page.index('<div id="ev-whole"')
+        < page.index('<div id="ev-rows"')
+    )
+    load = page[page.index("async function loadEvidence()") : page.index("$('#ev-max').oninput")]
+    assert "$('#ev-incomplete').innerHTML = evIncomplete(r);" in load

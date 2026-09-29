@@ -468,6 +468,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   <div class="card" style="margin-bottom:16px">
     <h2><i class="ic">🧾</i>Evidence explorer<span class="help" data-tip="Every BioLang program (demos, organism programs, the bio.std prelude) read into one row per stated fact. A program is credited only with the facts it declares itself, not those it imports. Confidence at or below 0.5 counts as weak.">?</span>
       <span class="muted" id="ev-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="ev-incomplete"></div>
     <div id="ev-whole" class="kpi"></div>
     <div id="ev-bands"></div>
   </div>
@@ -2193,6 +2194,19 @@ $('#ce-open').onclick = async () => {
   document.querySelector('nav button[data-tab="program"]').click();
 };
 
+// ---- evidence explorer: the incomplete-data notice. A program that fails to parse states no facts,
+// and neither does any program importing it, so every count on this tab leaves them out (ROADMAP
+// item 9). /api/evidence says so with `complete: false` and one `parse_errors` entry per program; the
+// notice repeats both, above the counts and the rows, and is empty when every program parsed.
+function evIncomplete(r) {
+  const errs = r.parse_errors || [];
+  if (r.complete !== false && !errs.length) return '';
+  const n = r.parse_error_count ?? errs.length;
+  return `<div class="ev-incomplete" role="alert" style="border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 12px;margin:4px 0 12px;font-size:13px">`
+    + `<b>Incomplete: ${fmt(n)} program(s) failed to parse</b>; every count and row on this tab leaves out their facts.`
+    + `<ul style="margin:6px 0 0;padding-left:18px">${errs.map(e => `<li><span class="mono">${escH(e.path)}</span>: ${escH(e.message)}</li>`).join('')}</ul></div>`;
+}
+
 async function loadEvidence() {
   try {
     const slow = $('#ev-compiled') && $('#ev-compiled').checked;
@@ -2200,6 +2214,7 @@ async function loadEvidence() {
       ? 'reading the compiled chromosomes too — about twenty seconds…'
       : 'reading the programs…';
     const r = await api('/api/evidence?' + evQuery({limit: 300}));
+    $('#ev-incomplete').innerHTML = evIncomplete(r);
     const w = r.whole, s = r.summary;
     $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
       <div><b>${w.mean_confidence == null ? '–' : w.mean_confidence.toFixed(2)}</b><span>mean of stated confidences</span></div>
@@ -2248,6 +2263,7 @@ $('#ev-csv').onclick = async () => {
   a.click();
   URL.revokeObjectURL(a.href);
   $('#ev-status').textContent = `${fmt(r.matched)} facts exported`;
+  if (r.complete === false) $('#ev-status').textContent += `; incomplete: ${fmt(r.parse_error_count)} program(s) failed to parse`;
 };
 // ---- evidence explorer: set-valued CRISPRi evidence from the discovery review, read-only. Every
 // sentence a row shows is a string from /api/evidence/discovery, so the server's tests pin the page's words

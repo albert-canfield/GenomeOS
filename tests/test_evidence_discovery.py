@@ -466,6 +466,17 @@ EVIDENCE_BEFORE = {
     ),
     "/api/evidence?csv=1": "ef89dc25e92d597110dda74c619bcaae92420e027aeff736ec28aff533caf528",
 }
+# 2026-09-29: `complete: true`, `parse_errors: []` and `parse_error_count: 0` added intentionally to
+# every clean /api/evidence payload (ROADMAP item 9: a read says whether every program parsed, and a
+# missing field is not a synonym for complete). The digests above are kept as recorded at f4c391e;
+# these are of the same three payloads, which differ from them only by those three added keys.
+EVIDENCE_BEFORE = {
+    "/api/evidence": "8b3c00761010e429a9f418eaffe94cb3f7b0a86c49b2d9baa1d8d9b6a7db645c",
+    "/api/evidence?kinds=predicted,inferred&max_confidence=0.5&limit=10": (
+        "4108fb4ba1b48292eda5da96ce934cc68e45d2f629b5bf798164156700b43f69"
+    ),
+    "/api/evidence?csv=1": "abef5feeaa2627b6bd386376a6fc830d6d05ec55e24c26e3ba815d0967e756be",
+}
 
 
 def _canonical(payload: dict) -> str:
