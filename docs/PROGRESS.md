@@ -1243,6 +1243,15 @@ the loss arising before the contrast. C (`e7f4c3e`): its matched-control design 
 says the policy's larger supported count comes "only" from ambiguous wide intervals; 27 of the 115 added
 supported observations are unique, so "mostly" is right.
 
+*Correction, the same day (the external reviewer's reading, checked by recomputing the census's
+transitions in memory, nothing written): the sentence above treats net differences as additions. **116
+observations are newly supported under the policy, 37 unique and 79 ambiguous; one previously supported
+observation becomes split in direction; so support rises by a net 115**, and unique-element support by
+a net 27 (93 to 120; 83 of the 92 that stay supported remain unique). Both census counts are C4's any-cell
+attachment and direction agreement (a predicted link stores no claim cell; the match is on gene), not
+supported or refuted in the stated context under the v3 judge; and "unique" means one candidate among the
+registry elements the overlap rule admits, not an experimentally resolved single cause.*
+
 **The three measures, apart.** Software delivered: the judge's versioned rules, the guard's closed gaps,
 the protected promotion path, three audit harnesses and the census, with the 2026-09-30 rebuild's inputs
 and acceptance checks written down (`b317fa2`). Biology independently validated: unchanged, one CRISPRi
