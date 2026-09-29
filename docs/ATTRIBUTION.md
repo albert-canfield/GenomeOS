@@ -10628,6 +10628,204 @@ The URLs and quotes for each row are in `STUDIES`. The sources are:
 - the ten small sources behind Fulco 2019's 429 borrowed pairs;
 - the script that applied the held-out filter. It was reproduced here, not found.
 
+## The pilot's prior-only lead, step 2 registered: tested once on Gasperini2019 on the 17 chromosomes where no pilot labelling was ever scored, and decomposed on identical pairs into distance, distance plus H3K27ac, and the full prior (item 13 follow-up, 2026-09-29, lane-prior)
+
+Registered before any score of any labelling of this test was computed. The constants are in
+`scripts/prior_only_test.py` (`registration()`), and the text here is the same.
+
+**Status.** An internal development result on withheld sources, never a validation.
+
+**Compute.** No model request, and the per-element response cache is not opened.
+
+### The lead, frozen
+
+The registered lead is the pilot's own figure:
+
+- prior-only minus distance to TSS on Gasperini2019;
+- on the seven validation chromosomes;
+- **+0.1927 [+0.1335, +0.2491]**, 0.6601 against 0.4674 (197c560).
+
+The run first recomputes that figure on those chromosomes. **If it does not come back to the fourth
+decimal, the run is void and only the discrepancy is reported.** A mismatch would mean the prior, its
+inputs or the harness changed after the lead was read.
+
+Xie's half of the lead (+0.0858) is not tested: step 1 found Xie inadmissible.
+
+### Where it is tested
+
+**Fresh: the pilot's 17 development chromosomes.** No labelling of the pilot, the prior-only one
+included, was ever scored there. The pass rule is read here and nowhere else.
+
+**Primary endpoint: Gasperini2019 decrease.** It is the one admissible endpoint that clears the
+harness's floors there: 210 positives, 2,256 negatives, 329 loci.
+
+**Seen: the seven validation chromosomes.** They are reported beside and carry no weight. They hold:
+
+- the reproduction check;
+- the decomposition of the frozen lead on Gasperini2019;
+- Schraivogel2020, whose every unit lies on chr8 and chr11.
+
+### The labellings
+
+**Three prior labellings on identical pairs.** Each is built by `pilot_bio.solve(mode="prior")` over the
+ENCODE cCREs the held-out units overlap, and read by `pilot_bio.labels_from`.
+
+- They share their blocks, their units and their abstentions (None outside every cCRE).
+- They differ by one term at a time. What differs is which inputs are present; no weight of `pilot.W`
+  is changed.
+- A pair's score is sigmoid(t + 3) × sigmoid(a), the largest over the blocks the unit overlaps:
+  - d runs from the block's midpoint to the benchmark's TSS of the pair's gene;
+  - t = −ln(1 + d / 5,000) is the distance term;
+  - a is the activity logit in the pair's cell.
+
+The three are:
+
+- **(a) Distance alone, `prior_distance`.** There are no compiled links and no H3K27ac peaks, so a = −1
+  for every block and the score is monotone in d.
+- **(b) The activity-and-distance baseline, `prior_distance_activity`.** Distance plus H3K27ac:
+  a = −1, plus 2 with a K562 ENCODE H3K27ac replicated peak over the block, or −1 without. It has no
+  compiled target.
+  - It reads H3K27ac only. The pilot's prior reads no DNase except through the cCRE registry that
+    defines its blocks.
+  - **It is not ABC.** ABC multiplies activity by contact and normalises over every candidate element
+    of the gene, with activity the geometric mean of DNase and H3K27ac. The project holds no
+    experimental DNase-seq signal, only AlphaGenome's predicted DNase. So a true ABC-form score cannot
+    be computed faithfully here, and it is left out.
+- **(c) The prior-only labelling exactly as the pilot defined it, `prior_only`.** It is (b) plus the
+  compiled target:
+  - t gains 1 + min(strength, 1) where the block's compiled link names the pair's gene;
+  - a gains 0.5 where that link's model cell is the pair's cell.
+
+**Two baselines.** Both are C4's own:
+
+- **distance to TSS:** minus the distance from the unit's midpoint to the benchmark's TSS;
+- **the unchanged compiled labels.**
+
+### The metric
+
+**C4's harness, unchanged.**
+
+- **Endpoint and score:** average precision of the CRISPRi significant decrease against the
+  well-powered nulls.
+- **Abstentions:** ranked below every stated score, with coverage beside.
+- **Paired differences:** each comes from `holdout.compare`, which scores both labellings on the same
+  units and the same 1,000 locus resamples (seed 20260928), with its 95% interval.
+
+**The six comparisons:**
+
+| comparison | what it asks |
+| --- | --- |
+| (c) − distance | the frozen lead: **the pass rule** |
+| (b) − (a) | activity, on identical pairs |
+| (c) − (b) | the compiled target, on identical pairs |
+| (a) − distance | the pilot's machinery: its distance form over cCRE blocks and its abstentions |
+| (b) − distance | the activity-and-distance baseline against distance |
+| (c) − unchanged | the prior against the compiled labels |
+
+### The pass rule, the falsifier and the readings
+
+**Pass rule.** The lead replicates if, on the fresh partition, (c) − distance has a 95% locus-bootstrap
+interval above zero on Gasperini2019 decrease, at a coverage of at least 0.80 of its units.
+
+**Decomposition.** Each part is reported whatever the pass:
+
+- activity carries the gain when (b) − (a) lies above zero;
+- the compiled target adds to it when (c) − (b) lies above zero;
+- the machinery carries it when (a) − distance lies above zero.
+
+**Falsifier.** A replication is not an activity-and-distance reading:
+
+- (i) if (b) − (a) does not lie above zero;
+- (ii) if (c) − (b) lies above zero while (b) − distance does not. The gain is then the compiled
+  target's, an AlphaGenome-derived term.
+- (iii) if (a) − distance lies above zero while (b) − (a) does not. The gain is then cCRE coverage and
+  the distance form.
+
+The run is void if the reproduction check fails. Any LeakError is fatal and never caught.
+
+**Readings.**
+
+- **`replicated_activity`.** An internal development result on withheld sources:
+  - on chromosomes where it was never scored, the frozen prior predicts Gasperini2019's CRISPRi
+    decreases better than distance to TSS;
+  - on identical pairs, H3K27ac activity adds to distance.
+
+  The project's prior reproduces the known activity-and-distance relationship on CRISPRi decreases whose
+  positives were not chosen by chromatin, among candidates that were. Not a new finding; not a
+  validation of the attribution layer.
+- **`replicated_not_activity`.** The lead replicates, but a clause of the falsifier fires. No
+  activity-and-distance claim may be made, and what carries the gain is named from the decomposition.
+- **`not_replicated`.** The lead stays a descriptive observation of the validation chromosomes and may
+  not be used.
+- **`reversed`.** The lead was specific to the chromosomes it was read on.
+- **`no_admissible_endpoint`.** The lead cannot be tested with what the project holds.
+- **`void_reproduction`.** Only the discrepancy is reported.
+
+### What a pass would mean, and what it would not
+
+**What a pass would mean.** The project's prior reproduces the known relationship: an element carrying
+H3K27ac near a gene's TSS is a CRISPRi hit for that gene more often than its distance alone predicts.
+
+- Its weights were registered before any score.
+- The data are K562 CRISPRi decreases whose positives were not chosen by chromatin.
+- The chromosomes are ones where this prior was never scored.
+- The tested candidates were chosen on chromatin: DNase peaks, and for Gasperini2019 also H3K27ac, p300,
+  GATA1 and Pol II ChIP. **The statement holds for chromatin-selected candidates only.**
+
+**What a pass would not mean:**
+
+- **A new finding.** The relationship is published on these screens (Fulco 2019, Nasser 2021, Gschwind
+  2026), and this project read it on 2026-09-16 (next section).
+- **A validation** of the attribution layer, of the compiled labels, or of the coherence pilot. The
+  pilot stays discontinued.
+- **A reproduction of ABC.**
+- **An external, independent or fresh validation.**
+- **Anything about** unselected elements, about cells other than K562, or about the held-out file's
+  studies.
+
+### What had already been seen when this was registered
+
+Correction 2 of the coordinator's review: excluding a selected endpoint handles selection, not
+independence. Everything below is development evidence.
+
+1. **`crispri_benchmark` and `crispri_contact`** (138824f and 5a31c39, 2026-09-16) read "activity over
+   distance" against distance on the pooled training file (Gasperini2019, Nasser2021 and Schraivogel2020,
+   K562). **Average precision was 0.519 against 0.441** (9,237 pairs, 451 positives).
+2. **The held-out file** has been read by at least ten scored results (`crispri_split_audit`, 0af7e1b).
+3. **C4** (lane-c4, b7e4bf0, 2026-09-28) scored distance, the unchanged labels and rest on every CRISPRi
+   endpoint on all chromosomes.
+   - Gasperini2019 decrease: distance 0.493 [0.439, 0.560], and the unchanged labels 0.425 at coverage
+     0.55.
+   - Schraivogel2020: distance 0.390, the unchanged labels 0.162.
+4. **The pilot's gate 2** (lane-pilot, 197c560) scored the prior-only labelling, the pilot, the
+   independent-block variant, the unchanged labels and distance on the validation chromosomes.
+   Prior-only minus distance was:
+   - +0.1927 on Gasperini2019;
+   - +0.0858 on Xie;
+   - −0.0345 on Morris;
+   - +0.0165 [−0.4385, +0.1934] on Schraivogel2020.
+
+   Nothing was scored on the development chromosomes.
+5. **This lane, before registering** (step 1, d19ccac), read the benchmark's chromatin category of every
+   positive and pair per study. Gasperini2019 has 355 of 360 positives in an H3K27ac category, against
+   4,911 of 5,299 pairs. It also read unit counts per partition. It computed no score.
+6. **The literature.** ABC was built on Fulco 2019's screens, and ENCODE-rE2G was trained on the
+   training file.
+
+### S4 beside, and the budget
+
+**S4 is descriptive and in no rule.**
+
+- **What is judged:**
+  - (c)'s labels on the blocks it solved on the fresh partition, as target and context claims
+    (`pilot_bio.claims_of`);
+  - the unchanged labels' claims on the same blocks.
+- **How:** each is judged by `correctness.judge` with `sources=[crispri:Gasperini2019]`.
+- **What is reported:** target accuracy, context accuracy and coverage, apart.
+- (a) and (b) name no target, so they state no claim.
+
+**Budget.** One process and at most 0.5 CPU-hour.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
