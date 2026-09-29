@@ -31,6 +31,8 @@ files carry the `SPDX-License-Identifier` of the part they belong to.
   opens, updates or merges a pull request. `scripts/promote.sh` exists for
   Albert's manual use only. While a pull request is open, every push to `dev`
   runs CI once, so keep them short-lived.
+  *(2026-09-29: `scripts/promote.sh` is retired; it refuses and points to
+  `scripts/promote_main.sh`.)*
 
 ## Release checks (2026-09-28)
 
@@ -89,6 +91,9 @@ After this date:
   scripts/promote_main.sh --latest-green     # the newest green sha between main and dev, dry run
   gh workflow run ci.yml --ref dev           # none green: test dev's tip now, then look again
   scripts/promote_main.sh --push SHA         # the coordinator, on the owner's go, once a day at most
+  # 2026-09-29: --push is retired and refuses; the line above stays until its clean-up. Instead:
+  scripts/promote_main.sh --prepare SHA      # on the owner's go: pushes branch promote-<first 7 of SHA> at SHA, nothing else
+  scripts/promote_main.sh --verify SHA       # after the owner merges: main has SHA's file tree and SHA as an ancestor
   ```
 
   The push still goes through the pre-push hook, so the promoted sha is
@@ -105,6 +110,29 @@ After this date:
   `promote-9a59faf`), whose checks run on the pull request and which the
   owner merges; the coordinator then verifies `main`'s file tree and
   ancestry against the chosen sha.*
+
+  *2026-09-29, later, beside both: the gate now reads the event of the
+  `test` run it relies on and reports two different things. "CI pre-check
+  passed": that run concluded `success`. "Eligible for protected
+  promotion": that run was also triggered by `pull_request` or `push`. A
+  green `workflow_dispatch` or `schedule` run on `dev` is a pre-check only;
+  it does not make the sha eligible, and eligibility comes from the pull
+  request's own run. GitHub's documentation ("Troubleshooting required
+  status checks", section "Checks from some workflow jobs are not
+  evaluated") evaluates checks for pull requests and rulesets only from
+  runs triggered by `push`, `pull_request`, `pull_request_review`,
+  `pull_request_target`, `deployment` or `deployment_status`; that the same
+  rule decided the refused direct push of `9a59faf` is an inference, not
+  established. `--push` is retired and refuses. `--prepare SHA` makes the
+  same checks, then pushes one branch, `promote-<first 7 of SHA>`, at
+  exactly that sha (refusing if the branch exists at another sha), and
+  prints the compare URL for the owner to open and merge the pull request,
+  and the `--verify` command for after the merge. It never opens a pull
+  request, never merges and never touches `main`. `--verify SHA` checks
+  that `origin/main` has SHA's file tree and has SHA as an ancestor. The
+  tests in `tests/test_promote_main.py` check the script's decisions and
+  git operations against a local remote; GitHub's enforcement is not
+  simulated.*
 - **Recommended branch rule for `main`** (the owner's setting; no session
   changes it): keep `test` from GitHub Actions as the required check and
   force pushes and deletions blocked, and turn on "Do not allow bypassing
