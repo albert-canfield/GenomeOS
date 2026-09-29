@@ -2128,6 +2128,22 @@ class Api:
             "truncated": len(rows) > limit,
         }
 
+    def evidence_discovery(self) -> dict:
+        """Set-valued CRISPRi evidence from A's discovery-only review, read-only.
+
+        One record per observation from the committed `data/results/discovery_review.json`, served with
+        the file's path and sha256; genomeos.evidence_discovery refuses to serve when the file disagrees
+        with itself. It adds access to evidence and computes no new verdict.
+        """
+        from genomeos import evidence_discovery as evd
+
+        try:
+            return evd.view(self.root)
+        except evd.MissingError as e:
+            raise ApiError(str(e), 404) from None
+        except evd.RefusedError as e:
+            raise ApiError(f"the discovery view refuses to serve: {e}", 500) from None
+
     def decompile(self, symbol: str, chrom: str) -> dict:
         """One gene read back as a program: every layer this project holds, and the ones it does not.
 
@@ -3480,6 +3496,8 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "compiled", "") == "1",
                     )
                 )
+            if u.path == "/api/evidence/discovery":
+                return self._json(self.api.evidence_discovery())
             if u.path == "/api/decompile":
                 return self._json(self.api.decompile(self._q(qs, "symbol", ""), self._q(qs, "chrom", "")))
             if u.path == "/api/cells":
