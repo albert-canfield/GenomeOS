@@ -11744,6 +11744,105 @@ under the current rule as showing that placement carries no signal about real li
 result above is unchanged; a sensitivity restricted to well-powered nulls would be additional
 development analysis.*
 
+## Audit B, cached context contrast, checkpoint 1: no-go, insufficient coverage for this registered complete-case design (the external reviewer's audit B, 2026-09-29, lane-contrast)
+
+**The question.** Can the per-element cached AlphaGenome deletion answer support one added feature: the
+same-cell signed deletion minus the median other-cell signed deletion, per element, with a frozen
+aggregation? This checkpoint asks only whether it can. It scores no labelling, makes no model request,
+reads 4DN contacts from their local cache only, and downloads nothing. The rules, including the go rule,
+were committed in `7870427` before any count (`scripts/context_contrast_feasibility.py`). The result is
+`data/results/context_contrast_feasibility.json`, stamped `d237824`, clean.
+
+**What the cache holds.** The sweep's scorer was built with `threshold=0.0`
+(`scripts/enhancer_targets_all.py`, `worker_scorer`), not the adapter's default of 0.05. So every
+gene-track value except an exact 0.0 is emitted, and values below 0.05 are stored. Of the 4,840 answers
+overlapping an admissible pair, 4,810 store a `by_cell` value with |v| <= 0.05, as do 6,895 of the 6,928
+pair-to-answer matches (0.9952). The statement beside the repression trace that `by_cell` keeps "the last
+track above the scorer's 0.05 recording threshold" is corrected here for the sweep's answers: the
+threshold was 0.0. Its finding stands: `by_cell[cell]` is the value of the **last** emitted track carrying
+that cell name, signed and rounded to four places. It is not a replicate aggregate and not the largest,
+and the track's identity is not stored. The track table, every other track of a cell name, and the
+per-track values are not on disk. A track that returned exactly 0.0 is dropped, so its gene's `n_tracks`
+falls below 371. Two genes of one name share a row, so `n_tracks` rises above 371. Only four cells are
+kept: K562, the same cell for both admissible studies, and HepG2, GM12878 and IMR-90, so k is at most 3.
+A missing cell is never read as zero, and the other cells are a context, not negative controls.
+`n_tracks = 371` is a consistency check: every value was emitted, so no exact-zero track can have moved a
+cell's value to an earlier track of that name. It does not prove independently which track `by_cell`
+holds, or that one model version answered every element. All 4,840 answers are unrequested versions.
+
+**Completeness on lane-prior's admissible endpoints (decrease endpoint).** Independent loci are counted
+on the parent universe (each set's own units), frozen before any filtering. The recount after filtering
+splits connected components (329 became 351 on the primary endpoint), so it is descriptive only. At every
+k from 1 to 3 the counts are identical, because a reliable row holds all four cells.
+
+| Endpoint set | Units (parent loci) | An answer overlaps | Gene listed, same-cell value | Reliable contrast, k = 1, 2, 3 | Complete with activity and distance (coverage) | Independent loci of the complete pairs (filtered recount) | With K562 contact |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Gasperini2019, fresh (primary) | 2,466 (329) | 2,319 | 1,376 | 1,368 | 1,368 (55.47%) | 282 (351) | 1,366 |
+| Gasperini2019, seen | 2,787 (201) | 2,660 | 1,556 | 1,547 | 1,547 (55.51%) | 173 (217) | 1,547 |
+| Schraivogel2020, seen | 1,299 (12) | 1,088 | 706 | 699 | 699 (53.81%) | 11 (18) | 699 |
+
+All three sets together hold 6,552 pairs in 529 independent loci. The 3,614 complete pairs fall in 454 of
+them, and 8 loci hold both studies. The two studies share no Reference and so are not provenance
+siblings. Every unit is K562 and comes from the benchmark's training file. The activity columns (DHS.RPM,
+H3K27ac.RPM) and the TSS are present for every pair. Cached K562 contact covers 99.64% of primary pairs,
+with 0 cache misses and no matrix opened.
+
+**Where the coverage is lost.** 1,368 of the 1,376 primary pairs that hold a same-cell value also hold a
+reliable contrast, so most of the loss predates the contrast. It lies in the deletion answer itself:
+- 894 pairs whose gene lies beyond the scorer's reach from every overlapping answer;
+- 147 pairs that no cached answer overlaps;
+- 49 pairs whose gene is in reach but not listed.
+Only 8 are lost to the reliability conditions: 6 rows with exact-zero tracks and 2 merged rows.
+
+**Duplication.** The registered bars were not reached, so the feature is not a duplicate by the rule.
+- **D1.** The compiled target's description explains 0.7565 of the contrast's variance, against the bar
+  of 0.80. That variance sits in the tail the compiled target names. It names 215 of the 3,614 pairs, and
+  81 of the 82 K562-activating links have a negative contrast.
+- **D2.** The Spearman correlation with the same-cell value is 0.6356, against 0.95.
+- **Resolution.** 8.99% of contrasts lie inside the rounding bound of 1e-4. The median |contrast| is
+  0.0011.
+
+**Reading: `no_go_completeness`.** G1 (semantics) and G3 (not a duplicate) pass. G2 fails: the complete
+pairs clear the floors (190 positives, 1,178 negatives) but cover 55.47% of the primary endpoint's units,
+against the registered 80%. This is insufficient coverage for this registered complete-case design. It
+does not say that a context contrast cannot help. As registered, no score registration is written, and
+the lane stops here.
+
+**A possibility only, not registered and not launched.** A baseline with the feature optional, using the
+baseline's own score wherever the contrast is missing, could keep the baseline's coverage. Nothing here
+tests it.
+
+**Prior exposure. Every dataset read is development evidence.**
+- `crispri_benchmark`, `crispri_contact` (`138824f`, `bda8a83`, `5a31c39`)
+- `crispri_published` (`42d7b1b`, `a39073d`)
+- `target_calibration` (`bdc2364`)
+- `crispri_direction`, `crispri_direction_both` (`5c842ca`, `d492834`)
+- `c4_holdout_scores`, `c4_alphagenome_ablation` (`b7e4bf0`)
+- `pilot_biological_gate` (`197c560`)
+- `prior_only_test` (`a48e9e8`)
+- `repression_trace` (`641909e`)
+- S4 v1, v2 and v3 (`ab62d99`, `4567219`, `d1e09ae`)
+
+Before writing its rules, this lane probed chr21's archive and the 3,209 loose answer files for their
+threshold and track counts, with no pair joined.
+
+**Hashes.**
+- **Folds** (sha256 of the sorted pair identities, no outcome):
+  - primary `48f6895a…`, its complete pairs `5051f01d…`;
+  - Gasperini2019 seen `d9515f04…`;
+  - Schraivogel2020 seen `d642ec7d…`.
+- **Sources:** training file `9eddfe18…`, the 3,209 loose answers `d07d978b…`, K562 contact cache
+  `8b48075b…`. The 23 archives and 24 compiled programs are pinned one by one in the manifest.
+
+**Cost.** Two runs of one process each:
+- the provisional run on `7870427`, stamped `0183ef5`;
+- the final run on `d237824`, which added only the parent-universe loci, the loss steps and these
+  notes. Its gate, semantics and duplication numbers are identical to the provisional run's.
+
+Each run took about 50 s wall and 50 s CPU. The streaming reader peaked at 1.30 GB resident at most,
+against about 5.4 GB for a whole-archive reader; 23 archives were streamed and 3,209 loose files read. There were 0
+downloads, 0 model requests and 0 network requests.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

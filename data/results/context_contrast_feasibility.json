@@ -1,0 +1,1222 @@
+{
+  "result": "context_contrast_feasibility",
+  "date": "2026-09-29",
+  "question": "can the per-element cached AlphaGenome deletion answer support one added feature, the same-cell signed deletion minus the median other-cell signed deletion, on lane-prior's admissible CRISPRi decrease endpoints, without duplicating the compiled target or the same-cell deletion",
+  "status": "feasibility checkpoint: no labelling scored",
+  "may_be_called": "a feasibility count on development evidence",
+  "may_not_be_called": [
+    "a score",
+    "a test of the feature",
+    "a validation",
+    "an external, independent or fresh validation",
+    "evidence of biological accuracy beyond the sources held here",
+    "a test of regulation when the endpoint is reporter activity, in-vivo activity, base sensitivity or association (activity is not regulation; association is not perturbation)",
+    "a comparison between sources or endpoints (different units, prevalences and assays)",
+    "out of sample for anything tuned on the CRISPRi benchmark, whose held-out file is a reused benchmark",
+    "a verdict on what the evidence can predict when `rest` scores low: `rest` is an unfitted rule, so a low score says that rule transfers poorly"
+  ],
+  "registration": {
+    "written": "2026-09-29",
+    "same_cell": "K562",
+    "other_cells": [
+      "HepG2",
+      "GM12878",
+      "IMR-90"
+    ],
+    "ks": [
+      1,
+      2,
+      3
+    ],
+    "full_tracks": 371,
+    "endpoint_sets": [
+      {
+        "source": "crispri:Gasperini2019",
+        "partition": "fresh",
+        "chromosomes": [
+          "chr2",
+          "chr3",
+          "chr4",
+          "chr5",
+          "chr7",
+          "chr12",
+          "chr13",
+          "chr14",
+          "chr15",
+          "chr16",
+          "chr17",
+          "chr18",
+          "chr20",
+          "chr21",
+          "chr22",
+          "chrX",
+          "chrY"
+        ],
+        "role": "primary"
+      },
+      {
+        "source": "crispri:Gasperini2019",
+        "partition": "seen",
+        "chromosomes": [
+          "chr1",
+          "chr6",
+          "chr8",
+          "chr9",
+          "chr10",
+          "chr11",
+          "chr19"
+        ],
+        "role": "beside"
+      },
+      {
+        "source": "crispri:Schraivogel2020",
+        "partition": "seen",
+        "chromosomes": [
+          "chr1",
+          "chr6",
+          "chr8",
+          "chr9",
+          "chr10",
+          "chr11",
+          "chr19"
+        ],
+        "role": "beside"
+      }
+    ],
+    "admissibility": "lane-prior, prior_only_test.STUDIES (a48e9e8), read and not changed",
+    "reliable_rule": "a pair's same-cell value is reliable when the gene's row (i) comes from an uncensored answer, one that stores at least one by_cell value with |v| <= 0.05 and so was not written at the 0.05 threshold; (ii) has n_tracks equal to the sweep's full track count (371), so no track of the gene returned exactly 0.0 and was dropped and no two genes of one name share the row, which makes each by_cell value the last track of that name in the model's order, one fixed track per cell; and (iii) holds a K562 value. Rows short of the full count may hold a cell's earlier track in place of its last one, or no value; they are counted, never repaired",
+    "contrast_rule": "per element and gene: contrast = by_cell['K562'] - median(by_cell[c] for c in HepG2, GM12878, IMR-90 that the row holds), defined only when K562 is held and at least k other cells are; the median of two is their mean. A missing cell is missing: it is never read as zero, and no consensus of the others stands in for it. The other cells are a context, not negative controls: the feature claims no cell's value is null",
+    "pair_rule": "a pair's element is the cached answer sharing at least one base with the pair's element whose row for the pair's gene (matched by the benchmark's symbol, else its Ensembl id) is reliable; among several, the one sharing the most bases with the pair's element, then the lower start, then the lower id. Loose per-element files take precedence over the chromosome archive, as enhancer_target.load_cached reads them. A pair with no such answer abstains, with the reason of its best-overlapping matched row",
+    "contact_rule": "K562 in-situ Hi-C (4DNFITUOMFUQ, 5,000 bp, the file's own balancing), the contact between the pair's midpoint bin and its TSS bin (the benchmark's startTSS), read through hic_contact.ContactSource from data/knowledge/hic_contact only; no matrix is opened, a miss is counted",
+    "activity_rule": "the benchmark's own DHS.RPM and H3K27ac.RPM columns of the pair's row (K562), present when both are non-empty and not NA; the input of crispri.py's 'activity + distance (+ deletion)' models",
+    "duplication_rule": "the contrast is nearly a function of an existing feature, and the checkpoint a no-go, if on the reliable complete pairs (k = 3) of the three admissible endpoint sets pooled: (D1) a least-squares fit of the contrast on the compiled target's description of the pair (not named; or named, by action x whether the link's model cell is K562, each with an intercept and a slope on strength) explains at least 0.80 of its variance; or (D2) its Spearman correlation with the same-cell value, which the deletion baseline already carries, is at least 0.95 in absolute value",
+    "go_rule": "a clear go needs all three: (G1, semantics) at least 0.99 of the answers the pairs match are uncensored, and fewer than 0.50 of the reliable complete pairs carry a contrast inside the rounding bound (|c| <= 0.0001); (G2, completeness) on the primary endpoint (Gasperini2019, fresh partition), the reliable complete pairs at k = 3 with activity and distance present clear the harness's floors (20 positives, 20 negatives, 10 loci) and cover at least 0.80 of the endpoint's units; (G3, duplication) neither D1 nor D2 fires. Contact coverage decides only whether comparison (b) would be on the same pairs or beside, never the reading. Anything short of a clear go ends the lane here",
+    "readings": {
+      "go": "the cache supports the feature on the admissible endpoints: register before any score",
+      "no_go_semantics": "the cache cannot give a faithful signed same-cell value and other-cell median",
+      "no_go_duplicate": "the contrast is nearly a function of a feature the comparison already holds",
+      "no_go_completeness": "too few admissible pairs carry a reliable contrast for a test without coverage loss"
+    },
+    "seen_before": [
+      {
+        "what": "activity + distance (+ deletion, from 2026-09-22 read from this per-element cache) on the pooled K562 training file, which holds Gasperini2019 and Schraivogel2020; the same with measured K562 contact",
+        "result": "crispri_benchmark, crispri_contact",
+        "commit": "138824f, bda8a83, 5a31c39"
+      },
+      {
+        "what": "hold-one-chromosome-out on all 10,356 training pairs with the same-cell deletion drop",
+        "result": "crispri_published",
+        "commit": "42d7b1b, a39073d"
+      },
+      {
+        "what": "a calibrated probability fitted on the covered K562 training pairs from the K562 drop",
+        "result": "target_calibration",
+        "commit": "bdc2364"
+      },
+      {
+        "what": "the signed K562 by_cell value against the measured sign (held-out arm)",
+        "result": "crispri_direction, crispri_direction_both",
+        "commit": "5c842ca, d492834"
+      },
+      {
+        "what": "distance, unchanged labels and rest on every CRISPRi endpoint, and the AlphaGenome ablation",
+        "result": "c4_holdout_scores, c4_alphagenome_ablation",
+        "commit": "b7e4bf0"
+      },
+      {
+        "what": "the pilot's labellings on the seven validation chromosomes (the prior-only lead)",
+        "result": "pilot_biological_gate",
+        "commit": "197c560"
+      },
+      {
+        "what": "the prior-only test and its decomposition on both partitions of Gasperini2019 and the seen partition of Schraivogel2020 (compiled target +0.1825 [+0.1298, +0.2280]; H3K27ac over distance +0.0098 [-0.0188, +0.0349])",
+        "result": "prior_only_test",
+        "commit": "a48e9e8"
+      },
+      {
+        "what": "the repression trace, which read by_cell and found one value kept per cell name",
+        "result": "repression_trace",
+        "commit": "641909e"
+      },
+      {
+        "what": "S4 judged on these screens under rules v1, v2 and v3",
+        "result": "attribution_correctness, _v2, _v3",
+        "commit": "ab62d99, 4567219, d1e09ae"
+      },
+      {
+        "what": "this lane, before writing the rules above: chr21's archive and the 3,209 loose answer files read for their recording threshold and track counts, no pair joined, nothing scored",
+        "result": "none (a probe)",
+        "commit": "n/a"
+      }
+    ],
+    "budget": "one process, cached inputs, at most one cache reader at a time; no model request, no download"
+  },
+  "semantics": {
+    "writer": "scripts/enhancer_targets_all.py worker_scorer builds the scorer with alphagenome_adapter._live_scorer(threshold=0.0); the scorer emits (gene, track name, value) for every gene-track value with abs(value) > threshold, the track name being the track's GTEx tissue or, when it has none, its biosample name",
+    "aggregation": "enhancer_target.aggregate keeps per gene: n_tracks (the values emitted), their mean, the largest drop and the largest rise with the track names they sat on, and by_cell[name] for each of K562, HepG2, GM12878 and IMR-90: the value of the LAST emitted track carrying that name, rounded to four places, signed. Not a replicate aggregate, not the largest, and the track's identity is not stored. Genes are keyed by the model's gene name, so two genes of one name share one row",
+    "what_is_not_on_disk": "the track table (how many tracks carry each cell name and in which order), every other track of a cell name, the per-track values, and the gene's Ensembl id",
+    "docs_statement_checked": "docs/ATTRIBUTION.md ('Found but not fixed: by_cell keeps one value per cell name') says the kept value is the last track above the scorer's 0.05 recording threshold. That is the adapter's default; the sweep passed 0.0. Which one the matched answers were written at is measured below (an answer that stores any by_cell value with |v| <= 0.05 was not written at 0.05)",
+    "answers_overlapping_a_pair": 4840,
+    "answers_uncensored": 4810,
+    "answers_from": {
+      "archive": 4834,
+      "loose": 6
+    },
+    "answers_by_model_version": {
+      "unrequested": 4840
+    },
+    "answers_by_track_count_top5": [
+      [
+        371,
+        4575
+      ],
+      [
+        370,
+        144
+      ],
+      [
+        742,
+        36
+      ],
+      [
+        369,
+        25
+      ],
+      [
+        368,
+        12
+      ]
+    ],
+    "matched_answers": 6928,
+    "matched_answers_uncensored": 6895,
+    "matched_answers_uncensored_share": 0.9952,
+    "pairs_by_status_of_the_best_overlapping_matched_row": {
+      "reliable": 3614,
+      "row_dropped_exact_zero_tracks": 22,
+      "row_merges_two_genes": 2
+    },
+    "pairs_matched_by": {
+      "symbol": 3638
+    },
+    "stream_self_check": {
+      "archive": "chr21",
+      "entries": 12158,
+      "stream_equals_json_load": true
+    }
+  },
+  "cache_reads": {
+    "chr1": {
+      "archive_answers": 88302,
+      "loose_answers": 261,
+      "kept_from_archive": 600,
+      "kept_loose": 0
+    },
+    "chr2": {
+      "archive_answers": 79873,
+      "loose_answers": 381,
+      "kept_from_archive": 303,
+      "kept_loose": 0
+    },
+    "chr3": {
+      "archive_answers": 62649,
+      "loose_answers": 260,
+      "kept_from_archive": 171,
+      "kept_loose": 0
+    },
+    "chr4": {
+      "archive_answers": 46215,
+      "loose_answers": 160,
+      "kept_from_archive": 100,
+      "kept_loose": 0
+    },
+    "chr5": {
+      "archive_answers": 53254,
+      "loose_answers": 241,
+      "kept_from_archive": 261,
+      "kept_loose": 0
+    },
+    "chr6": {
+      "archive_answers": 57066,
+      "loose_answers": 100,
+      "kept_from_archive": 442,
+      "kept_loose": 0
+    },
+    "chr7": {
+      "archive_answers": 49454,
+      "loose_answers": 320,
+      "kept_from_archive": 206,
+      "kept_loose": 0
+    },
+    "chr8": {
+      "archive_answers": 45411,
+      "loose_answers": 281,
+      "kept_from_archive": 517,
+      "kept_loose": 0
+    },
+    "chr9": {
+      "archive_answers": 41740,
+      "loose_answers": 140,
+      "kept_from_archive": 115,
+      "kept_loose": 0
+    },
+    "chr10": {
+      "archive_answers": 47527,
+      "loose_answers": 181,
+      "kept_from_archive": 143,
+      "kept_loose": 6
+    },
+    "chr11": {
+      "archive_answers": 48467,
+      "loose_answers": 21,
+      "kept_from_archive": 654,
+      "kept_loose": 0
+    },
+    "chr12": {
+      "archive_answers": 46647,
+      "loose_answers": 40,
+      "kept_from_archive": 162,
+      "kept_loose": 0
+    },
+    "chr13": {
+      "archive_answers": 25688,
+      "loose_answers": 140,
+      "kept_from_archive": 16,
+      "kept_loose": 0
+    },
+    "chr14": {
+      "archive_answers": 31875,
+      "loose_answers": 120,
+      "kept_from_archive": 126,
+      "kept_loose": 0
+    },
+    "chr15": {
+      "archive_answers": 31119,
+      "loose_answers": 20,
+      "kept_from_archive": 70,
+      "kept_loose": 0
+    },
+    "chr16": {
+      "archive_answers": 32464,
+      "loose_answers": 302,
+      "kept_from_archive": 92,
+      "kept_loose": 0
+    },
+    "chr17": {
+      "archive_answers": 41463,
+      "loose_answers": 80,
+      "kept_from_archive": 224,
+      "kept_loose": 0
+    },
+    "chr18": {
+      "archive_answers": 22054,
+      "loose_answers": 61,
+      "kept_from_archive": 62,
+      "kept_loose": 0
+    },
+    "chr19": {
+      "archive_answers": 29399,
+      "loose_answers": 40,
+      "kept_from_archive": 242,
+      "kept_loose": 0
+    },
+    "chr20": {
+      "archive_answers": 27005,
+      "loose_answers": 20,
+      "kept_from_archive": 120,
+      "kept_loose": 0
+    },
+    "chr21": {
+      "archive_answers": 12158,
+      "loose_answers": 0,
+      "kept_from_archive": 34,
+      "kept_loose": 0
+    },
+    "chr22": {
+      "archive_answers": 19739,
+      "loose_answers": 20,
+      "kept_from_archive": 65,
+      "kept_loose": 0
+    },
+    "chrX": {
+      "archive_answers": 22930,
+      "loose_answers": 20,
+      "kept_from_archive": 109,
+      "kept_loose": 0
+    }
+  },
+  "completeness": {
+    "crispri:Gasperini2019 fresh": {
+      "source": "crispri:Gasperini2019",
+      "partition": "fresh",
+      "role": "primary",
+      "chromosomes": [
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr7",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "fold_sha256": "48f6895a5bb53692d7bf54a67dde7ae357c434eafeca4974fa3c6ce330f92734",
+      "units": 2466,
+      "loci": 329,
+      "units_by_split": {
+        "training": 2466
+      },
+      "units_by_cell": {
+        "K562": 2466
+      },
+      "with_an_overlapping_answer": 2319,
+      "gene_listed_in_an_overlapping_answer": 1376,
+      "same_cell_value_any_row": 1376,
+      "same_cell_and_at_least_k_others_any_row": {
+        "1": 1376,
+        "2": 1376,
+        "3": 1376
+      },
+      "reliable_same_cell_value": 1368,
+      "reliable_and_at_least_k_others": {
+        "1": 1368,
+        "2": 1368,
+        "3": 1368
+      },
+      "abstention_reasons": {
+        "reliable": 1368,
+        "gene_not_listed_out_of_reach": 894,
+        "no_cached_answer_overlaps": 147,
+        "row_dropped_exact_zero_tracks": 6,
+        "gene_not_listed_in_reach": 49,
+        "row_merges_two_genes": 2
+      },
+      "activity_present": 2466,
+      "distance_present": 2466,
+      "contact_present": 2457,
+      "contact_observed_zero": 243,
+      "compiled_target_names_the_gene": 121,
+      "reliable_k3_with_activity_and_distance": {
+        "units": 1368,
+        "positives": 190,
+        "negatives": 1178,
+        "clears_floors": true,
+        "fold_sha256": "5051f01dc9ace392d195b84ade45ed68c6190e5a62caf7184e1241e1a3139fca",
+        "independent_loci_parent_universe": 282,
+        "loci_recomputed_after_filtering_descriptive": 351
+      },
+      "reliable_k3_with_activity_distance_and_contact": {
+        "units": 1366,
+        "positives": 190,
+        "negatives": 1176,
+        "clears_floors": true,
+        "independent_loci_parent_universe": 282,
+        "loci_recomputed_after_filtering_descriptive": 351
+      },
+      "coverage_reliable_k3_full": 0.5547,
+      "coverage_reliable_k3_full_contact": 0.5539,
+      "coverage_same_cell_any_row": 0.558,
+      "coverage_contact": 0.9964,
+      "where_coverage_is_lost": [
+        {
+          "step": "the endpoint's units",
+          "pairs": 2466
+        },
+        {
+          "step": "a cached answer overlaps the pair's element",
+          "pairs": 2319,
+          "lost": {
+            "no_cached_answer_overlaps": 147
+          }
+        },
+        {
+          "step": "an overlapping answer lists the pair's gene, with a same-cell value",
+          "pairs": 1376,
+          "lost": {
+            "gene_not_listed_out_of_reach": 894,
+            "gene_not_listed_in_reach": 49
+          }
+        },
+        {
+          "step": "a reliable contrast at k = 3, with activity and distance present",
+          "pairs": 1368,
+          "lost": {
+            "row_dropped_exact_zero_tracks": 6,
+            "row_merges_two_genes": 2
+          }
+        }
+      ]
+    },
+    "crispri:Gasperini2019 seen": {
+      "source": "crispri:Gasperini2019",
+      "partition": "seen",
+      "role": "beside",
+      "chromosomes": [
+        "chr1",
+        "chr6",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr19"
+      ],
+      "fold_sha256": "d9515f04b3dcdcc6d5e0d3698ac895149a05a6411072b6fe9652b27662f5d31d",
+      "units": 2787,
+      "loci": 201,
+      "units_by_split": {
+        "training": 2787
+      },
+      "units_by_cell": {
+        "K562": 2787
+      },
+      "with_an_overlapping_answer": 2660,
+      "gene_listed_in_an_overlapping_answer": 1556,
+      "same_cell_value_any_row": 1556,
+      "same_cell_and_at_least_k_others_any_row": {
+        "1": 1556,
+        "2": 1556,
+        "3": 1556
+      },
+      "reliable_same_cell_value": 1547,
+      "reliable_and_at_least_k_others": {
+        "1": 1547,
+        "2": 1547,
+        "3": 1547
+      },
+      "abstention_reasons": {
+        "reliable": 1547,
+        "no_cached_answer_overlaps": 127,
+        "gene_not_listed_out_of_reach": 1023,
+        "gene_not_listed_in_reach": 81,
+        "row_dropped_exact_zero_tracks": 9
+      },
+      "activity_present": 2787,
+      "distance_present": 2787,
+      "contact_present": 2787,
+      "contact_observed_zero": 228,
+      "compiled_target_names_the_gene": 85,
+      "reliable_k3_with_activity_and_distance": {
+        "units": 1547,
+        "positives": 136,
+        "negatives": 1411,
+        "clears_floors": true,
+        "fold_sha256": "92b7b4092f40e9b53f2d36f3072c179426b2d84c1322116f58b464da1933f85c",
+        "independent_loci_parent_universe": 173,
+        "loci_recomputed_after_filtering_descriptive": 217
+      },
+      "reliable_k3_with_activity_distance_and_contact": {
+        "units": 1547,
+        "positives": 136,
+        "negatives": 1411,
+        "clears_floors": true,
+        "independent_loci_parent_universe": 173,
+        "loci_recomputed_after_filtering_descriptive": 217
+      },
+      "coverage_reliable_k3_full": 0.5551,
+      "coverage_reliable_k3_full_contact": 0.5551,
+      "coverage_same_cell_any_row": 0.5583,
+      "coverage_contact": 1.0,
+      "where_coverage_is_lost": [
+        {
+          "step": "the endpoint's units",
+          "pairs": 2787
+        },
+        {
+          "step": "a cached answer overlaps the pair's element",
+          "pairs": 2660,
+          "lost": {
+            "no_cached_answer_overlaps": 127
+          }
+        },
+        {
+          "step": "an overlapping answer lists the pair's gene, with a same-cell value",
+          "pairs": 1556,
+          "lost": {
+            "gene_not_listed_out_of_reach": 1023,
+            "gene_not_listed_in_reach": 81
+          }
+        },
+        {
+          "step": "a reliable contrast at k = 3, with activity and distance present",
+          "pairs": 1547,
+          "lost": {
+            "row_dropped_exact_zero_tracks": 9
+          }
+        }
+      ]
+    },
+    "crispri:Schraivogel2020 seen": {
+      "source": "crispri:Schraivogel2020",
+      "partition": "seen",
+      "role": "beside",
+      "chromosomes": [
+        "chr1",
+        "chr6",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr19"
+      ],
+      "fold_sha256": "d642ec7dbd279f30eb32401ee96a9e1e01469775c2125e21d8aac2a54b9cb31b",
+      "units": 1299,
+      "loci": 12,
+      "units_by_split": {
+        "training": 1299
+      },
+      "units_by_cell": {
+        "K562": 1299
+      },
+      "with_an_overlapping_answer": 1088,
+      "gene_listed_in_an_overlapping_answer": 706,
+      "same_cell_value_any_row": 706,
+      "same_cell_and_at_least_k_others_any_row": {
+        "1": 706,
+        "2": 706,
+        "3": 706
+      },
+      "reliable_same_cell_value": 699,
+      "reliable_and_at_least_k_others": {
+        "1": 699,
+        "2": 699,
+        "3": 699
+      },
+      "abstention_reasons": {
+        "gene_not_listed_in_reach": 1,
+        "gene_not_listed_out_of_reach": 381,
+        "no_cached_answer_overlaps": 211,
+        "reliable": 699,
+        "row_dropped_exact_zero_tracks": 7
+      },
+      "activity_present": 1299,
+      "distance_present": 1299,
+      "contact_present": 1299,
+      "contact_observed_zero": 180,
+      "compiled_target_names_the_gene": 9,
+      "reliable_k3_with_activity_and_distance": {
+        "units": 699,
+        "positives": 22,
+        "negatives": 677,
+        "clears_floors": true,
+        "fold_sha256": "6cf63053bc5d3a94a599e172b1a0eb180cf475c6ebd781be1f5b6f61c8426910",
+        "independent_loci_parent_universe": 11,
+        "loci_recomputed_after_filtering_descriptive": 18
+      },
+      "reliable_k3_with_activity_distance_and_contact": {
+        "units": 699,
+        "positives": 22,
+        "negatives": 677,
+        "clears_floors": true,
+        "independent_loci_parent_universe": 11,
+        "loci_recomputed_after_filtering_descriptive": 18
+      },
+      "coverage_reliable_k3_full": 0.5381,
+      "coverage_reliable_k3_full_contact": 0.5381,
+      "coverage_same_cell_any_row": 0.5435,
+      "coverage_contact": 1.0,
+      "where_coverage_is_lost": [
+        {
+          "step": "the endpoint's units",
+          "pairs": 1299
+        },
+        {
+          "step": "a cached answer overlaps the pair's element",
+          "pairs": 1088,
+          "lost": {
+            "no_cached_answer_overlaps": 211
+          }
+        },
+        {
+          "step": "an overlapping answer lists the pair's gene, with a same-cell value",
+          "pairs": 706,
+          "lost": {
+            "gene_not_listed_in_reach": 1,
+            "gene_not_listed_out_of_reach": 381
+          }
+        },
+        {
+          "step": "a reliable contrast at k = 3, with activity and distance present",
+          "pairs": 699,
+          "lost": {
+            "row_dropped_exact_zero_tracks": 7
+          }
+        }
+      ]
+    }
+  },
+  "provenance_and_loci": {
+    "references": {
+      "crispri:Gasperini2019": [
+        "Gasperini et al., 2019"
+      ],
+      "crispri:Schraivogel2020": [
+        "Schraivogel et al., 2020"
+      ]
+    },
+    "siblings": {
+      "crispri:Gasperini2019": [],
+      "crispri:Schraivogel2020": []
+    },
+    "pairs_all_sets": 6552,
+    "independent_loci_all_sets": 529,
+    "pairs_reliable_k3_all_sets": 3614,
+    "locus_rule": "a locus is a connected component of a source's units, joined when their interval midpoints fall in the same 1,000,000 bp bin of a chromosome or, for pair endpoints, when they name the same gene; each resample draws as many loci as the source has, with replacement",
+    "descriptive_recomputed_after_filtering": {
+      "loci_reliable_k3_all_sets": 571,
+      "loci_holding_both_studies_among_reliable_k3_pairs": 11
+    },
+    "independent_loci_all_sets_parent_universe": 529,
+    "independent_loci_reliable_k3_all_sets": 454,
+    "loci_holding_both_studies": 8,
+    "loci_holding_both_studies_with_a_reliable_k3_pair": 8,
+    "locus_note": "loci are frozen on the parent universe (every unit of the endpoint set, or of all three sets) before any filtering, and a filtered set's independent-locus count is the number of parent loci it falls in. Recomputing connected components after filtering splits them (on the primary endpoint 329 parent loci became 351), which is not new independent evidence; that recount is kept as descriptive only. clears_floors is left as registered"
+  },
+  "duplication": {
+    "pairs": 3614,
+    "d1_r2_on_compiled_target": 0.7565,
+    "d1_fires": false,
+    "r2_within_named_pairs_beside": 0.7337,
+    "named_pairs": 215,
+    "named_share": 0.0595,
+    "named_by_class": {
+      "activates, model cell K562": 82,
+      "activates, model cell other": 113,
+      "inhibits, model cell other": 19,
+      "inhibits, model cell K562": 1
+    },
+    "d2_spearman_contrast_same_cell": 0.6356,
+    "d2_fires": false,
+    "spearman_other_median_same_cell": 0.4932,
+    "contrast_quantiles_1_10_25_50_75_90_99": [
+      -0.54498,
+      -0.0126,
+      -0.002,
+      -0.0004,
+      0.0004,
+      0.0017,
+      0.0232
+    ],
+    "median_abs_contrast": 0.0011,
+    "median_abs_same_cell": 0.0017,
+    "share_within_rounding": 0.0899,
+    "share_contrast_exactly_zero": 0.031,
+    "k562_activating_links_with_negative_contrast": "81 of 82",
+    "duplicate": false
+  },
+  "verdict": {
+    "g1_semantics": true,
+    "g2_completeness": false,
+    "g3_not_duplicate": true,
+    "contact_on_the_same_pairs": false,
+    "failed": [
+      "no_go_completeness"
+    ],
+    "reading": "no_go_completeness",
+    "reading_text": "too few admissible pairs carry a reliable contrast for a test without coverage loss",
+    "clear_go": false
+  },
+  "reading_notes": {
+    "scope": "a no-go of this registered complete-case design on coverage. It does not say that a context contrast cannot help",
+    "reliable_rule_reading": "n_tracks = 371 is a consistency check: every value of the gene was emitted, so an exact-zero track cannot have moved a cell's by_cell value to an earlier track of that name. It is not independent proof of which track by_cell holds, nor that one model version answered every element (no answer read records a requested version)",
+    "possible_future_design": "a baseline with the feature optional (the baseline's own score wherever the contrast is missing) could keep the baseline's coverage. A possibility only: not registered, not launched, and nothing here tests it",
+    "coverage_wording": "insufficient coverage for this registered complete-case design: 1,368 of 2,466 primary pairs (55.47%) carry a reliable complete contrast, against the registered 80%. 1,368 of the 1,376 pairs that hold a same-cell value also hold a reliable contrast, so most of the loss predates the contrast: 894 gene not listed out of reach, 147 no cached answer overlaps, 49 gene not listed in reach",
+    "where_coverage_is_lost_primary": [
+      2466,
+      2319,
+      1376,
+      1368
+    ],
+    "d1_margin": "D1 did not fire: the compiled target's description explains 0.7565 of the contrast's variance against the registered 0.80. The variance sits in the tail the compiled target names (215 of 3,614 pairs; 81 of 82 K562-activating links have a negative contrast), and the Spearman correlation with the same-cell value is 0.6356 (D2 bar 0.95)",
+    "answers_by_model_version": {
+      "unrequested": 4840
+    }
+  },
+  "contact_cache_misses_not_fetched": 0,
+  "contact_matrices_opened": 0,
+  "every_dataset_read_is_development_evidence": true,
+  "alphagenome_requests": 0,
+  "downloads": 0,
+  "compute": {
+    "wall_seconds": 50.0,
+    "cpu_seconds": 49.6,
+    "peak_rss_mb": 1281.0,
+    "cache_archives_streamed": 23,
+    "loose_answer_files_read": 3209,
+    "measured_with": "time.time, time.process_time and getrusage, this process; the archives are streamed a chunk at a time by one reader, and chr21 is also loaded whole once for the self-check"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al., Nature 2026)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "AlphaGenome per-element deletion answers (local cache)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "4DN in-situ Hi-C 4DNFITUOMFUQ (K562), cached answers only",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: data/knowledge/compiled/noncoding_<chrom>.bio",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+        "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+        "bytes": 77622737,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+        "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+        "bytes": 51646793,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+        "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+        "bytes": 40830506,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+        "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+        "bytes": 25247071,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+        "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+        "bytes": 34546268,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+        "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+        "bytes": 35337035,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+        "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+        "bytes": 30518026,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+        "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+        "bytes": 31161454,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+        "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+        "bytes": 30030494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+        "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+        "bytes": 46496550,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+        "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+        "bytes": 41655248,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+        "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+        "bytes": 14622897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+        "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+        "bytes": 31260018,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+        "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+        "bytes": 27369934,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+        "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+        "bytes": 38935424,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+        "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+        "bytes": 55243170,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+        "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+        "bytes": 13518960,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+        "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+        "bytes": 50085176,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+        "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+        "bytes": 22792705,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+        "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+        "bytes": 9769482,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+        "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+        "bytes": 24359126,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+        "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+        "bytes": 14376446,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/<chrom>/*.json",
+        "sha256": "d07d978b291ea5c44415105fec4edb4101d1c86906f5a0b0d6ae772c9baefac2",
+        "bytes": 16283047,
+        "files": 3209,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/hic_contact/K562_4DNFITUOMFUQ_5000.json",
+        "sha256": "8b48075bd9e4464c683d43d86bff2eb392799e857dd906efa74dcd8fc84a36d3",
+        "bytes": 1598811,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "checkpoint": "2026-09-29",
+      "same_cell": "K562",
+      "other_cells": [
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "ks": [
+        1,
+        2,
+        3
+      ],
+      "full_tracks": 371,
+      "low": 0.05,
+      "rounding": 0.0001,
+      "half_window": 524288,
+      "useful_coverage": 0.8,
+      "duplicate_r2": 0.8,
+      "duplicate_spearman": 0.95,
+      "uncensored_share": 0.99,
+      "resolution_share": 0.5,
+      "fresh_chromosomes": [
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr7",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "seen_chromosomes": [
+        "chr1",
+        "chr6",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr19"
+      ],
+      "floors": {
+        "positives": 20,
+        "negatives": 20,
+        "loci": 10
+      }
+    },
+    "exclusions": [
+      "every study of the CRISPRi held-out file and Nasser2021: inadmissible under lane-prior's rule (a48e9e8); the held-out file is parsed by the harness's loader and no unit of it is used",
+      "Schraivogel2020 on the fresh partition: it has no unit there",
+      "CRISPRi increases, underpowered nulls and missing effects: outside the decrease endpoint",
+      "no labelling scored; the only outcome read is the floor check on the complete pairs",
+      "no AlphaGenome request; 4DN contacts read from the local cache only, misses counted and not fetched"
+    ],
+    "partitions": {
+      "fresh": "the 17 development chromosomes of the pilot (chr2, chr3, chr4, chr5, chr7, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr20, chr21, chr22, chrX, chrY): no labelling of the pilot, the prior-only one included, was ever scored here. The pass rule is read here and nowhere else",
+      "seen": "the pilot's 7 validation chromosomes (chr1, chr6, chr8, chr9, chr10, chr11, chr19): the lead was read here (197c560). Reported beside, for the reproduction check and the decomposition of the frozen lead, and carrying no weight",
+      "training": "the CRISPRi benchmark's training file (K562), which holds both admissible studies",
+      "heldout": "the benchmark's held-out file: parsed by the loader, no unit used"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        },
+        "answers_by_model_version": {
+          "unrequested": 4840
+        },
+        "mixed": null
+      }
+    ],
+    "code": {
+      "git_sha": "d2378244451cefd4ecb056fad5a8e3c2870f3b39",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/context_contrast_feasibility.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
