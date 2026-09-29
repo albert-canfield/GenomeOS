@@ -121,3 +121,57 @@ for _test in (
     test_a_protein_whose_mrna_is_clamped_at_zero_only_decays,
 ):
     _test.pytestmark = [m for m in _test.pytestmark if m.name != "xfail"]  # type: ignore[attr-defined]
+
+
+# ---- the declared dynamics against the independently calculated decay curve (2026-09-29) ----------
+#
+# What an mRNA clamp at zero promises is that the mRNA is zero; it does not remove the protein already
+# made. With the only production path gone, dP/dt = -k P with k = ln 2 / the declared protein half-life,
+# so P(t) = P0 exp(-k t) from the moment the clamp starts. The expected values below are that formula,
+# computed here without the runtime; the tolerance is RK4's own leading truncation error on this
+# equation, a relative n z^5 / 120 after n steps of z = k dt, doubled. Before 2026-09-28 (51c10b8) the
+# runtime failed this by eight orders of magnitude at 5 h: the clamped mRNA was transcribed inside the
+# stages, and the protein settled at k_tl r dt / (2k) instead of decaying (the ring's 1.87 at dt 0.02,
+# 0.96 at dt 0.01), a steady leak proportional to the step, not a property of the model.
+
+DECAY = """
+module net.clamp.decay
+gene g { max: 20; basal: 0.0; produces: P }
+protein P {}
+param mrna_half_life = 0.693 h {}
+param protein_half_life = 0.139 h {}
+param translation_rate = 5 {}
+"""
+
+
+def _decay_cases() -> list[tuple[str, str, str, float]]:
+    return [(DECAY, "g.mRNA", "P", 5.0), (RING, "a.mRNA", "A", 60.0)]
+
+
+@pytest.mark.parametrize("dt", [0.005, 0.01, 0.02])
+@pytest.mark.parametrize(("source", "mrna", "protein", "hours"), _decay_cases(), ids=["decay", "ring"])
+def test_a_zero_mrna_clamp_leaves_its_protein_on_the_declared_exponential_decay(
+    source: str, mrna: str, protein: str, hours: float, dt: float
+) -> None:
+    k = math.log(2) / 0.139  # the declared protein_half_life, the only decay either module states
+    # t0: the module's own state after 20 h unclamped (144 protein half-lives), so P0 is what the gene
+    # made and the mRNA is non-zero when the clamp starts
+    before = NetworkRuntime(parse(source), seed=0).run(hours=20.0, dt=dt, record_every=10**9).final()
+    p0 = before[protein]
+    assert p0 > 1.0 and before[mrna] > 1.0
+
+    vm = NetworkRuntime(parse(source), seed=0)
+    seen = _watched(vm)
+    traj = vm.run(hours=hours, dt=dt, initial=dict(before), record_every=1, clamp={mrna: 0.0})
+
+    # production is k_tl * mRNA at each stage the integrator evaluates, and the mRNA is zero at all of them
+    assert all(st[mrna] == 0.0 for st in seen)
+    z = k * dt
+    for n, (t, got) in enumerate(zip(traj.times, traj.levels[protein], strict=True)):
+        expected = p0 * math.exp(-k * t)
+        assert abs(got / expected - 1) <= 2 * n * z**5 / 120, (t, got, expected)
+    # not removed at once: one step after t0 the protein is still P0 exp(-k dt), and after one declared
+    # half-life it is half of P0
+    assert traj.levels[protein][1] > 0.9 * p0
+    half = round(0.139 / dt)
+    assert traj.levels[protein][half] == pytest.approx(p0 * math.exp(-k * half * dt), rel=1e-4)
