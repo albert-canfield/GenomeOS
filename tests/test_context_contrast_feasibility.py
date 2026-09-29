@@ -212,3 +212,80 @@ def test_contact_is_read_from_the_cache_only(tmp_path):
     assert src.contact("K562", "chr1", 1_000, 90_000) is None
     assert src.misses == 1 and src._open == {"K562": None}
     assert not list(tmp_path.iterdir())
+
+
+# --- added with the reviewer's reading (2026-09-29): wording and locus accounting, the gate unchanged ------
+def test_loci_are_counted_on_the_parent_universe_not_recomputed_after_filtering():
+    a = unit(start=100, end=200, gene="X", gene_id="EX")
+    b = unit(start=5_000_100, end=5_000_200, gene="Y", gene_id="EY")
+    c = unit(start=300, end=400, gene="Y", gene_id="EY")  # joins a (same bin) and b (same gene)
+    parent = dict(zip([a, b, c], ho.loci([a, b, c]), strict=True))
+    fl = ccf.parent_loci(ccf.floors([a, b]), [a, b], parent)
+    assert fl["independent_loci_parent_universe"] == 1
+    assert fl["loci_recomputed_after_filtering_descriptive"] == 2
+    assert "loci" not in fl and fl["clears_floors"] is False
+
+
+def test_the_notes_never_say_the_feature_cannot_help():
+    assert "does not say that a context contrast cannot help" in ccf.READING_NOTES["scope"]
+    assert "not registered, not launched" in ccf.READING_NOTES["possible_future_design"]
+    assert "consistency check" in ccf.READING_NOTES["reliable_rule_reading"]
+    assert "not independent proof" in ccf.READING_NOTES["reliable_rule_reading"]
+
+
+def test_the_loss_steps_and_the_coverage_wording_follow_the_records():
+    us = [unit(start=100 + 10 * i, end=105 + 10 * i, gene=f"G{i}", gene_id=f"E{i}") for i in range(4)]
+    base = {
+        "activity": True,
+        "distance": True,
+        "contact": True,
+        "contact_zero": False,
+        "compiled": {"named": False},
+    }
+    recs = [
+        {**base, "unit": us[0], "reason": "no_cached_answer_overlaps", "any_k": -1, "answers_overlapping": 0},
+        {
+            **base,
+            "unit": us[1],
+            "reason": "gene_not_listed_out_of_reach",
+            "any_k": -1,
+            "answers_overlapping": 1,
+        },
+        {
+            **base,
+            "unit": us[2],
+            "reason": "row_dropped_exact_zero_tracks",
+            "any_k": 3,
+            "answers_overlapping": 1,
+            "answers_matched": 1,
+        },
+        {
+            **base,
+            "unit": us[3],
+            "reason": "reliable",
+            "any_k": 3,
+            "answers_overlapping": 1,
+            "answers_matched": 1,
+            "contrast": {1: -0.1, 2: -0.1, 3: -0.1},
+        },
+    ]
+    src, part, chroms, role = ccf.PRIMARY
+    summary = ccf.with_parent_loci(ccf.set_summary(src, part, chroms, role, us, recs), us, recs)
+    assert [x["pairs"] for x in summary["where_coverage_is_lost"]] == [4, 3, 2, 1]
+    full = summary["reliable_k3_with_activity_and_distance"]
+    assert full["independent_loci_parent_universe"] == 1 and "loci" not in full
+    sets = {f"{src} {part}": summary}
+    dup = {
+        "d1_r2_on_compiled_target": 0.5,
+        "named_pairs": 0,
+        "pairs": 1,
+        "d2_spearman_contrast_same_cell": 0.1,
+        "k562_activating_links_with_negative_contrast": "none",
+    }
+    verdict = {"clear_go": False, "failed": ["no_go_completeness"]}
+    notes = ccf.reading_notes(sets, dup, verdict, {"answers_by_model_version": {"unrequested": 3}})
+    assert notes["coverage_wording"].startswith(
+        "insufficient coverage for this registered complete-case design"
+    )
+    assert "1 of the 2 pairs that hold a same-cell value" in notes["coverage_wording"]
+    assert notes["where_coverage_is_lost_primary"] == [4, 3, 2, 1]

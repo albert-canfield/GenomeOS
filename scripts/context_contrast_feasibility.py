@@ -221,6 +221,30 @@ SEEN_BEFORE = (
 )
 BUDGET = "one process, cached inputs, at most one cache reader at a time; no model request, no download"
 
+# ==================================================================================================
+# Added 2026-09-29 after the provisional run (code 7870427, stamped 0183ef5), at the external reviewer's
+# reading relayed by the coordinator. Wording and locus accounting only: the gate, the rules above and
+# the reading are unchanged, and no other design is launched.
+# ==================================================================================================
+LOCI_NOTE = (
+    "loci are frozen on the parent universe (every unit of the endpoint set, or of all three sets) before "
+    "any filtering, and a filtered set's independent-locus count is the number of parent loci it falls "
+    "in. Recomputing connected components after filtering splits them (on the primary endpoint 329 parent "
+    "loci became 351), which is not new independent evidence; that recount is kept as descriptive only. "
+    "clears_floors is left as registered"
+)
+READING_NOTES = {
+    "scope": "a no-go of this registered complete-case design on coverage. It does not say that a "
+    "context contrast cannot help",
+    "reliable_rule_reading": f"n_tracks = {FULL_TRACKS} is a consistency check: every value of the gene "
+    "was emitted, so an exact-zero track cannot have moved a cell's by_cell value to an earlier track of "
+    "that name. It is not independent proof of which track by_cell holds, nor that one model version "
+    "answered every element (no answer read records a requested version)",
+    "possible_future_design": "a baseline with the feature optional (the baseline's own score wherever the "
+    "contrast is missing) could keep the baseline's coverage. A possibility only: not registered, not "
+    "launched, and nothing here tests it",
+}
+
 
 # --- the cache, streamed ---------------------------------------------------------------------------
 _WS = " \t\n\r,"
@@ -461,6 +485,61 @@ def floors(units: list[ho.Unit]) -> dict[str, Any]:
         and len(units) - pos >= ho.MIN_NEGATIVES
         and n_loci >= ho.MIN_LOCI,
     }
+
+
+def parent_loci(fl: dict[str, Any], units: list[ho.Unit], parent: dict[ho.Unit, int]) -> dict[str, Any]:
+    """A floor check with LOCI_NOTE applied: the independent-locus count is the number of parent-universe
+    loci the units fall in; the count `floors` recomputes on the filtered units is kept as descriptive.
+    `clears_floors` is left exactly as registered."""
+    out = {k: v for k, v in fl.items() if k != "loci"}
+    out["independent_loci_parent_universe"] = len({parent[u] for u in units})
+    out["loci_recomputed_after_filtering_descriptive"] = fl["loci"]
+    return out
+
+
+def with_parent_loci(
+    summary: dict[str, Any], us: list[ho.Unit], recs: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """LOCI_NOTE and the loss steps applied to one endpoint set's summary after `set_summary` built it:
+    the floor dicts count independent loci on the set's own units, and `where_coverage_is_lost` lists
+    the pairs left after each step. Nothing the gate reads changes."""
+    parent = dict(zip(us, ho.loci(us), strict=True))
+    full_recs = [
+        r
+        for r in recs
+        if r["reason"] == "reliable" and r["contrast"][3] is not None and r["activity"] and r["distance"]
+    ]
+    full = [r["unit"] for r in full_recs]
+    full_c = [r["unit"] for r in full_recs if r["contact"]]
+    key = "reliable_k3_with_activity_and_distance"
+    fold = summary[key]["fold_sha256"]
+    summary[key] = {**parent_loci(summary[key], full, parent), "fold_sha256": fold}
+    key_c = "reliable_k3_with_activity_distance_and_contact"
+    summary[key_c] = parent_loci(summary[key_c], full_c, parent)
+    reasons = Counter(r["reason"] for r in recs)
+    summary["where_coverage_is_lost"] = [
+        {"step": "the endpoint's units", "pairs": len(us)},
+        {
+            "step": "a cached answer overlaps the pair's element",
+            "pairs": len(us) - reasons["no_cached_answer_overlaps"],
+            "lost": {"no_cached_answer_overlaps": reasons["no_cached_answer_overlaps"]},
+        },
+        {
+            "step": "an overlapping answer lists the pair's gene, with a same-cell value",
+            "pairs": summary["same_cell_value_any_row"],
+            "lost": {k: v for k, v in reasons.items() if k.startswith("gene_not_listed")},
+        },
+        {
+            "step": "a reliable contrast at k = 3, with activity and distance present",
+            "pairs": len(full),
+            "lost": {
+                k: v
+                for k, v in reasons.items()
+                if k not in ("reliable", "no_cached_answer_overlaps") and not k.startswith("gene_not_listed")
+            },
+        },
+    ]
+    return summary
 
 
 def unit_key(u: ho.Unit) -> str:
@@ -739,6 +818,8 @@ def summarise(
         key: set_summary(src, part, chroms, role, sets[key], records[key])
         for (src, part, chroms, role), key in zip(ENDPOINT_SETS, records, strict=True)
     }
+    for key in records:  # LOCI_NOTE, added after the provisional run
+        with_parent_loci(out_sets[key], sets[key], records[key])
     complete = [
         r["unit"]
         for r in all_recs
@@ -760,6 +841,24 @@ def summarise(
         "loci_holding_both_studies": sum(len(v) > 1 for v in by_locus.values()),
         "locus_rule": ho.LOCUS_RULE,
     }
+    # LOCI_NOTE, added after the provisional run: the counts above that were recomputed on the filtered
+    # pairs move to a descriptive entry, and the independent-locus counts are taken on the parent universe
+    parent = dict(zip(all_units, ho.loci(all_units), strict=True))
+    by_parent: dict[int, set[str]] = defaultdict(set)
+    for u in all_units:
+        by_parent[parent[u]].add(u.source)
+    complete_parents = {parent[u] for u in complete}
+    provenance["descriptive_recomputed_after_filtering"] = {
+        "loci_reliable_k3_all_sets": provenance.pop("independent_loci_reliable_k3_all_sets"),
+        "loci_holding_both_studies_among_reliable_k3_pairs": provenance.pop("loci_holding_both_studies"),
+    }
+    provenance["independent_loci_all_sets_parent_universe"] = len(by_parent)
+    provenance["independent_loci_reliable_k3_all_sets"] = len(complete_parents)
+    provenance["loci_holding_both_studies"] = sum(len(v) > 1 for v in by_parent.values())
+    provenance["loci_holding_both_studies_with_a_reliable_k3_pair"] = sum(
+        len({u.source for u in complete if parent[u] == c}) > 1 for c in complete_parents
+    )
+    provenance["locus_note"] = LOCI_NOTE
     dup = duplication(all_recs)
     return {
         "semantics": semantics,
@@ -768,7 +867,41 @@ def summarise(
         "provenance_and_loci": provenance,
         "duplication": dup,
         "verdict": assess(semantics, out_sets, dup),
+        "reading_notes": reading_notes(out_sets, dup, assess(semantics, out_sets, dup), semantics),
     }
+
+
+def reading_notes(
+    sets: dict[str, dict[str, Any]], dup: dict[str, Any], verdict: dict[str, Any], semantics: dict[str, Any]
+) -> dict[str, Any]:
+    """READING_NOTES with this run's numbers. Beside the verdict; the gate is not read from here."""
+    p = sets[f"{PRIMARY[0]} {PRIMARY[1]}"]
+    full = p["reliable_k3_with_activity_and_distance"]["units"]
+    steps = {x["step"]: x for x in p["where_coverage_is_lost"]}
+    covered = p["same_cell_value_any_row"]
+    lost_before = {k: v for x in p["where_coverage_is_lost"][1:3] for k, v in x.get("lost", {}).items() if v}
+    out = dict(READING_NOTES)
+    if not verdict["clear_go"] and "no_go_completeness" in verdict["failed"]:
+        out["coverage_wording"] = (
+            f"insufficient coverage for this registered complete-case design: {full:,} of {p['units']:,} "
+            f"primary pairs ({p['coverage_reliable_k3_full']:.2%}) carry a reliable complete contrast, "
+            f"against the registered {USEFUL_COVERAGE:.0%}. {full:,} of the {covered:,} pairs that hold a "
+            "same-cell value also hold a reliable contrast, so most of the loss predates the contrast: "
+            + ", ".join(
+                f"{v:,} {k.replace('_', ' ')}" for k, v in sorted(lost_before.items(), key=lambda kv: -kv[1])
+            )
+        )
+    out["where_coverage_is_lost_primary"] = [steps[k]["pairs"] for k in steps]
+    out["d1_margin"] = (
+        f"D1 did not fire: the compiled target's description explains {dup['d1_r2_on_compiled_target']} of "
+        f"the contrast's variance against the registered {DUPLICATE_R2:.2f}. The variance sits in the tail "
+        f"the compiled target names ({dup['named_pairs']:,} of {dup['pairs']:,} pairs; "
+        f"{dup['k562_activating_links_with_negative_contrast']} K562-activating links have a negative "
+        f"contrast), and the Spearman correlation with the same-cell value is "
+        f"{dup['d2_spearman_contrast_same_cell']} (D2 bar {DUPLICATE_SPEARMAN:.2f})"
+    )
+    out["answers_by_model_version"] = semantics["answers_by_model_version"]
+    return out
 
 
 def manifest(parameters: dict[str, Any], reads: dict[str, Any], versions: dict[str, int]) -> dict[str, Any]:
