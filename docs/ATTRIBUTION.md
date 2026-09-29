@@ -11889,6 +11889,176 @@ counted by observation.
 - Evidence about any element beyond the tested interval, gene and context: a wide positive
   perturbation is evidence for its tested interval, not for every cCRE it overlaps.
 
+## A's adoption review, discovery only: audit A's policy would attach 184 more observations as set-valued evidence, 136 of them ambiguous; the shifted screen passes pooled at 2.42 times and fails in one stratum, so the registered reading is that discovery merits a separately reviewed proposal only in the passing strata (item 13 C4 follow-up, 2026-09-29, lane-discover)
+
+This section sits beside the placement census and edits nothing above it. It informs one decision
+only, Decision 1 (discovery): whether CRISPRi evidence may be discoverable as a set-valued attachment
+beside C4's current rule. `scripts/discovery_review.py`, `data/results/discovery_review.json`,
+`tests/test_discovery_review.py`.
+
+**Status.** This is internal development evidence: bounded, read-only with respect to production,
+recorded apart, one pass.
+
+- Every outcome it reads was read before: `b7e4bf0`, `dd8c49c`, `6c0d39f`, `0183ef5`, `1253d69`,
+  `32af2cb`, `a55f540`, `4567219`, `d1e09ae`, and the coordinator's uncommitted in-memory stated-cell
+  reading.
+- It proposes no implementation and changes no matcher. It proposes no broader verdict eligibility:
+  the only eligible verdict stays the one under the current rule.
+
+### Registered before any count (2026-09-29, `a9ab0db`)
+
+- **Universe.** All 14,734 screened observations under both rules, each keeping its observation id.
+  The census's `observe` and both rules are imported unchanged.
+- **Changed set.** Every observation whose candidate set, attached links or resolution differs between
+  the rules, each in one change class.
+- **Continuous reporting** for every changed observation:
+  - the fraction of the tested interval covered by the union of its admitted registry candidates
+    (overlapping candidates counted once);
+  - the fraction of each candidate covered;
+  - the number of admitted registry candidates.
+
+  Distributions only, with no width boundary in base pairs.
+- **Descriptions**, which authorise nothing: stated-cell agreement (from `correctness.compiled_claims`),
+  direction relative to the claim, nulls and increases apart, and study and cell breakdowns.
+- **Newly ambiguous.** A unique assignment that becomes ambiguous keeps its historical verdict under
+  the current rule and is marked unresolved under the new rule.
+- **The screen**, per study and cell stratum and pooled: the fraction of all observations whose
+  attached links differ between the rules, against the same fraction with every tested interval moved
+  20 kb each way (the mean of the two). It passes at 1.5 times.
+  - It is a diagnostic screen for discovery, not an estimate of false attribution.
+  - Moving an interval can change its distance to the gene and the local density of registry elements
+    and predicted links.
+- **Readings, fixed in advance.** A separately reviewed proposal is merited when both discovery
+  conditions hold, the pooled screen passes and every stratum where it is defined passes. It is merited
+  only in the passing strata when a defined stratum fails. It is not merited when a condition or the
+  pooled screen fails.
+
+### The result: run once at `a9ab0db`, stamp clean
+
+**The census reproduced.** Both rules' observation tables and the verdict transitions equal
+`placement_census.json` as committed.
+
+**Discovery conditions: both hold.**
+
+1. Nothing is lost: 0 candidate sets and 0 attached links. The denominators are unchanged: 14,734
+   observations and 440,377 predicted links under both rules.
+2. Each of the 6,188 changed observations appears once, with its full admitted-candidate set and its
+   coverage fractions.
+
+**The changed set: 6,188 of 14,734 observations**
+
+| change class | observations |
+|---|---|
+| newly attached | 180 |
+| attached links added | 4 |
+| candidates added, attached links unchanged | 9 |
+| candidates added, unattached under both rules | 5,995 |
+| lost | 0 |
+
+**The evidence discovery would add: 184 observations**, the first two classes. 48 are unique among all
+admitted registry candidates and 136 are ambiguous, so unresolved under the new rule.
+
+| | observations | union coverage of the tested interval, median (10th to 90th percentile) | candidates wholly inside the tested interval | candidates, median (max) |
+|---|---|---|---|---|
+| discovered, unique | 48 | 0.42 (0.33 to 0.53) | 39 of 48 | 1 |
+| discovered, ambiguous | 136 | 0.67 (0.51 to 0.80) | 334 of 377 | 2 (12) |
+| all changed | 6,188 | 0.64 (0.37 to 0.87) | 9,640 of 12,365 | 2 (12) |
+
+- **Unique only among the admitted candidates.** In the median unique discovered observation, 58% of the
+  tested interval lies in no admitted registry candidate and stays unresolved. Only 4 of the 48 are
+  wholly covered.
+- **Multiplicity across the changed set:** 1,903 observations have one candidate, 3,001 two, 886 three
+  and 398 four to twelve.
+
+**The screen: attached links differ, real against the mean of +20 kb and -20 kb**
+
+| study, cell | observations | real | shifted (+, -) | enrichment | screen |
+|---|---|---|---|---|---|
+| all observations | 14,734 | 184 | 75, 77 | 2.42 | passes |
+| Gasperini2019, K562 | 5,299 | 116 | 43, 44 | 2.67 | passes |
+| Xie, K562 | 441 | 16 | 6, 4 | 3.2 | passes |
+| Nasser2021, K562 | 3,751 | 16 | 10, 10 | 1.6 | passes |
+| HCT116, HCT116 | 396 | 8 | 1, 3 | 4.0 | passes |
+| Morris, K562 | 184 | 8 | 2, 4 | 2.67 | passes |
+| Klann, K562 | 33 | 7 | 4, 1 | 2.8 | passes |
+| Schraivogel2020, K562 | 1,306 | 5 | 2, 2 | 2.5 | passes |
+| Reilly, K562 | 8 | 1 | 1, 0 | 2.0 | passes |
+| WTC11_DC_TAP, WTC11 | 1,921 | 3 | 2, 5 | 0.86 | fails |
+| Nasser2021, GM12878 | 68 | 4 | 0, 0 | none | undefined, shifted count zero |
+| K562_DC_TAP, K562 | 1,252 | 0 | 4, 4 | none | nothing discovered |
+| Nasser2021, Jurkat | 75 | 0 | 0, 0 | none | nothing discovered |
+
+- **Beside it, without a threshold:**
+  - attachment under the policy at all: 308 against a shifted mean of 94, 3.28 times;
+  - membership of the changed set: 6,188 against 4,161, 1.49 times. Most candidate-only changes occur
+    nearly as often 20 kb away.
+- **Small counts.** Seven of the eight passing strata rest on 16 or fewer real observations. The screen
+  is a point ratio with no interval.
+
+**Decision 1, the registered reading: discovery merits a separately reviewed proposal only in the
+passing strata.** Both discovery conditions hold and the pooled screen passes, but a stratum where the
+screen is defined fails.
+
+- The failing stratum is WTC11_DC_TAP in WTC11.
+- Nasser2021 in GM12878 is undefined.
+- K562_DC_TAP and Nasser2021 in Jurkat discover nothing.
+
+**Newly ambiguous: 13 previously unique assignments.** Each keeps its historical verdict under the
+current rule and is unresolved under the new rule.
+
+| observation | historical verdict (current rule) | new rule |
+|---|---|---|
+| training, chr11:316244-316608, IFITM1, K562 | supported | unresolved |
+| training, chr19:4870060-4870560, PLIN3, K562 | supported | unresolved |
+| held-out, chr12:7960577-7961076, SLC2A3, WTC11 | supported | unresolved |
+| training, chr19:12789831-12790351, JUNB, K562 | supported | unresolved |
+| training, chr11:18384099-18384599, LDHA, K562 | refuted, well-powered null | unresolved |
+| training, chr12:33588022-33588689, SYT10, K562 | supported | unresolved |
+| training, chr22:41667145-41667809, SNU13, K562 | refuted, well-powered null | unresolved |
+| training, chr12:54304241-54304761, NFE2, K562 | supported | unresolved |
+| held-out, chr11:69587442-69588111, CCND1, HCT116 | unassessed, underpowered | unresolved |
+| held-out, chr11:69636212-69636869, CCND1, HCT116 | supported | unresolved |
+| training, chr6:139445368-139445868, CITED2, K562 | supported | unresolved |
+| training, chr2:230659153-230659653, CAB39, K562 | supported | unresolved |
+| training, chr1:231053506-231054137, FAM89A, K562 | supported | unresolved |
+
+**The stated-cell record: the coordinator's in-memory reading, reproduced exactly.** It reads C4's
+any-cell attachment, not v3 stated-context support.
+
+- Of the 37 newly supported unique observations, 24 match the stated cell (all K562) and 13 are other
+  cell only; none lacks a stated cell.
+- Of the 79 newly supported ambiguous observations, 39 have a stated-cell match among their attached
+  links and 40 are other cell only.
+- Check: under the current rule, 39 of the 93 supported match the stated cell and 54 do not. This
+  equals v2's direction split: 39 supported in context and 54 elsewhere only.
+
+**The 184 described.** These are descriptions only and authorise nothing.
+
+- **Direction.** 118 agree with the claim's direction: 116 decreases on activating links and 2
+  increases on inhibiting links, 2 of the 118 already supported under the current rule. 11 are opposite
+  and 18 split direction. 27 well-powered nulls and 10 underpowered nulls are counted apart.
+- **Stated cell.** 74 match the stated cell: 64 agree, 1 is opposite and 9 split. 110 are other cell
+  only: 54 agree, 10 are opposite, 9 split, 27 are well-powered nulls and 10 underpowered.
+- **Cell.** K562 169 (73 matching the stated cell), HCT116 8 (1), GM12878 4 (0), WTC11 3 (0).
+- **Study.** Gasperini2019 116, Nasser2021 20, Xie 16, Morris 8, HCT116 8, Klann 7, Schraivogel2020 5,
+  WTC11_DC_TAP 3, Reilly 1.
+
+**Cost.** 10.5 s wall, 10.4 s CPU and 1,059 MB peak memory, run once at `a9ab0db`. 0 downloads,
+0 model requests and 0 paid services. The result holds all 6,188 rows (7.2 MB).
+
+**What it may be called.** An internal development review of discovery under audit A's policy,
+informing Decision 1 only.
+
+**What it may not be called:**
+
+- An implementation proposal. A proposal, if one follows, is separate and separately reviewed.
+- 184 validations, or support in the stated context. 136 of the 184 are ambiguous, and the counts are
+  C4's any-cell attachment.
+- An estimate of false attribution. The shifted screen is a diagnostic for discovery.
+- Evidence resolved to one element. "Unique" means one among all admitted registry candidates; the
+  unregistered sequence inside a perturbation remains unresolved.
+- Independent evidence: every outcome here was read before.
+
 ## Audit B, cached context contrast, checkpoint 1: no-go, insufficient coverage for this registered complete-case design (the external reviewer's audit B, 2026-09-29, lane-contrast)
 
 **The question.** Can the per-element cached AlphaGenome deletion answer support one added feature: the
