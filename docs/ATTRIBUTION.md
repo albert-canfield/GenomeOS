@@ -10996,6 +10996,145 @@ That is why step 1 excluded it.
   make the compiled target the hypothesis, on an endpoint neither the pilot nor this lane has read.
 - **The coherence pilot stays a discontinued investigation.**
 
+## The four repressions S4 judged wrong, traced: no sign error; three are judged in a cell where the model itself predicts the fall the screen measured, and ID1 is contradicted in the measured cell (item 12 S4 follow-up, 2026-09-29, lane-repress)
+
+This is an internal development trace of five existing claims. It is not a validation, and it changes no
+label and no verdict. The cause classes were registered in `scripts/repression_trace.py` before any trace
+code was written. The lane had already read the rows by then, and the registration says so. Class (f)
+and the rule that picks the primary class were written after that reading. Result:
+`data/results/repression_trace.json`. No model request was made; the per-element response cache was
+read, never asked.
+
+S4's registered reading stands as written: **every judged repression claim is wrong in direction.** The
+trace adds where each direction came from and why it disagrees.
+
+### Where each direction came from
+
+Each compiled direction comes from one element's cached AlphaGenome deletion answer. The steps are:
+
+- The answer holds the gene's largest drop and largest rise over 371 tracks.
+- `enhancer_target.predict_target` keeps the larger of the two.
+- That track's name becomes the rule's `when: cell_type`.
+- `compile.py` writes `inhibits` for a rise, and S4 reads `inhibits` as `represses_target`.
+
+For all five claims the model moves the named gene both ways on different tracks. Benchmark line numbers
+are in the decompressed table, with the header as line 1. Compiled line numbers are in the local,
+untracked programs, which the manifest pins by sha256.
+
+| Gene | Compiled rule | Largest rise | Largest drop | Wins by | Deciding row | Model on the measured cell | Classes | Primary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CD83 | chr6:53657, inhibits, K562 | +0.3049 K562 | -0.2954 OCI-LY7 | 0.0095 | held-out 67, Nasser2021, GM12878, -0.249, adj. p 3.4e-40 | GM12878 -0.0968, same sign | b, f | **b** |
+| HEMGN | chr9:144732, inhibits, Brain_Cerebellar_Hemisphere | +0.1380 cerebellar hemisphere | -0.0962 K562 | 0.0418 | training 9323, Gasperini2019, K562, -0.223, 5.9e-11 | K562 -0.0948 and -0.0962, same sign | b, d, f | **b** |
+| ID1 | chr20:73387, inhibits, Whole_Blood | +0.8119 whole blood | -0.7408 left lobe of liver | 0.0711 | training 6322, Gasperini2019, K562, -0.158, 1.8e-14 | K562 +0.1433, **opposite sign** | b, c, d, f | **c** |
+| BEX4 | chrX:105892, inhibits, hair_follicular_keratinocyte | +0.1397 hair follicular keratinocyte | -0.1229 K562 | 0.0168 | training 10306, Gasperini2019, K562, -0.294, 6e-82 | K562 -0.1208 and -0.1229, same sign | b, d, f | **b** |
+| CCND1 (comparison) | chr11:215344, activates, CD8_positive__alpha_beta_memory_T_cell | +0.1086 K562 | -0.1634 CD8 memory T cell | 0.0548 (the drop) | held-out 104, HCT116, +0.129, 1.0e-4 | no HCT116 value cached | b, f; c unknown | **b** |
+
+### The classes
+
+- **(a) Sign or convention error: absent in all five.** Every step carries the sign the step before it
+  implies. The model's value is the alternate allele over the reference, and the alternate is the
+  deletion. A rise means `represses`, which is written `inhibits` and read `represses_target`. On the
+  screen side, a significant EffectSize below 0 is a significant decrease, the benchmark's `Regulated`
+  agrees in all four, and `crispri_decrease` refutes `represses_target`. A convention flipped on one
+  side would have turned the three same-sign cells in the table into disagreements.
+- **(b) Cell mismatch: present in all five.** It is primary for CD83, HEMGN, BEX4 and CCND1. In each, the
+  claim names the model's most extreme track, and the screen measured another cell. For CD83, HEMGN and
+  BEX4, the model's own value for the measured cell has the screen's sign.
+- **(c) Genuine contradiction: present only for ID1, and primary there.** In K562 the cached model value
+  (+0.1433) and the screen (-0.158) disagree, so the disagreement survives aligning the cells. The cache
+  keeps one K562 value for ID1, and any other K562 track is not seen.
+- **(d) Indirect or ambiguous: present for HEMGN, BEX4 and ID1, and never primary.** The named gene itself
+  fell in every case, so another gene cannot be what disagrees.
+  - HEMGN: ANP32B also fell in the same screen (-0.214).
+  - BEX4: TCEAL8 also fell in the same screen (-0.074).
+  - ID1: the model's any-gene prediction is MIR3193 (-0.859 in HepG2), and the run's verdict is "another
+    gene in the same domain". The element lies 1.3 kb from MIR3193 and 1.8 kb past ID1's annotated end.
+- **(e) Judge inconsistency: absent as a defect.** `correctness.verdict_of` reproduces each verdict and its
+  deciding observation. The next subsection explains what `refutable` means.
+- **(f) Direction split across tracks: present in all five.** The rise beat the drop by 0.0095 to 0.0711
+  in the four repressions. In CCND1 the drop beat the rise by 0.0548.
+
+### What `refutable` means, and whether `incorrect` should be reachable when it is false
+
+**Where the field is set:**
+
+- `Verdict.refutable` is commented "target and context: the stated cell was screened on the gene".
+- `_target` sets it when the gene has an establishing or refuting observation in the stated cell.
+- `_context` sets it on every decided verdict.
+- `_direction` never sets it, so every activity verdict carries the default `false`.
+
+On the activity axis, `false` means "not computed". It does not mean "could not have been refuted". The
+registered quantities report the field only beside target and context. The per-verdict records and the
+per-axis tallies still carry the default on every axis.
+
+**Where `incorrect` can occur with the field false:**
+
+- **Target and context: never.** Neither can give `incorrect` with `refutable` false.
+- **Activity: yes, by the registered rule.** The direction is judged "in the stated cell when it
+  responded there, otherwise in every cell it responded in".
+
+**What the committed S4 activity verdicts show:**
+
+- All 5 wrong directions were decided only in another cell.
+- All 39 decided in the stated cell are correct.
+- The other 54 correct ones were also decided in another cell.
+
+**What another rule would give (descriptive only):**
+
+- If direction were refuted only in the stated cell, as a target is, the 5 would move to not judged and
+  activity would read 93 of 93.
+- If direction were judged only in the stated cell, activity would read 39 of 39, with 59 moved to not
+  judged.
+
+This is a tension between the S4 table, whose CRISPRi cells speak of "the cell screened", and the
+activity rule. The judge follows its registration exactly. Changing the rule is a registration question
+for the coordinator, not a bug fix, and no verdict was changed here.
+
+### The comparison case
+
+**Where it is.** The CCND1 claim that HCT116 refutes is in `attribution_correctness.json`, not in
+`pilot_biological_gate.json`. The pilot's result names neither CCND1 nor HCT116, and its sources do not
+include `crispri:HCT116`.
+
+**What it shares with the four.** It shares (b) and (f), in mirror image: the drop won on a T-cell track,
+and the screen measured a rise in HCT116. Whether the model agrees in HCT116 is unknown, because the cache
+keeps no HCT116 value.
+
+### Fixed, and found but not fixed
+
+**Nothing is fixed.** No bug was found on the path from the model's answer to the label, or from the raw
+row to the verdict.
+
+**Found but not fixed: `by_cell` keeps one value per cell name.** `enhancer_target.aggregate` keeps one
+`by_cell` value per cell name: the last track above the scorer's 0.05 recording threshold. In three cases
+the largest drop or rise sits on another track with the same cell name:
+
+- HEMGN: K562 -0.0948 is kept, against -0.0962 on another K562 track.
+- BEX4: K562 -0.1208 is kept, against -0.1229.
+- CCND1: K562 +0.1036 is kept, against +0.1086.
+
+This changes no class here, and no S4 verdict reads `by_cell`. `crispri_direction` and `closure` do read
+it as a cell's value. Which track a cell should keep is a decision, and the cached answers cannot change
+without new model requests.
+
+### What remains unknown
+
+- The model's value for CCND1 on an HCT116 track.
+- Whether another K562 track for ID1, or another GM12878 track for CD83, carries the other sign.
+- How many of the 156,925 predicted repressions (of 440,377 predicted rules) share class (f). The run
+  tables keep only the winning direction.
+- Why the model's ID1 prediction swings from -0.74 in liver to +0.81 in whole blood at this element.
+
+**What it may be called:** an internal development trace of five existing claims, showing where each
+claimed direction came from and which registered class explains its disagreement with the observation
+that decided it.
+
+**What it may not be called:**
+
+- a validation of the labels, the model or the judge;
+- a rate, because the five claims were chosen for being judged wrong;
+- evidence about claims S4 did not judge.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
