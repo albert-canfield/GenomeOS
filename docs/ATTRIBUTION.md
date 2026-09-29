@@ -11736,6 +11736,14 @@ outcome-blind policy passes its three registered stops on development evidence.
   (`CrispriIndex.of`), so it carries the same width blind spot; that is not measured here. Adopting the
   policy anywhere would be its own registered change.
 
+*2026-09-29, added afterwards beside this section (the external reviewer's reading, checked by the
+coordinator): "null" here means every screened pair that is not a significant decrease, so the 14,073
+include 4,113 underpowered observations and 159 increases beside the 9,801 well-powered nulls. Read it
+as a non-decrease comparator, not as evidence of no regulation, and do not read the equal placement rates
+under the current rule as showing that placement carries no signal about real links. The registered
+result above is unchanged; a sensitivity restricted to well-powered nulls would be additional
+development analysis.*
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
