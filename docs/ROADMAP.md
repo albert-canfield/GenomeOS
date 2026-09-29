@@ -4428,6 +4428,59 @@ entire sweep. What is next, in order of what it decides:
    | ↳ S5 | **Done 2026-09-29 (lane-s5, `0ea0a90` registered, `83013e6` label and pre-run amendment, `a54ea12` result, `74e6a2f` audit)** | `attribution/bridge.py`, `runtime/grn.py`, `scripts/s5_rate_ranges.py`, `scripts/bridge_audit.py` | Every output built on a transferred rate says **assumption-dependent simulation, not measured human dynamics** and names, per gene and per trajectory, its source, the species and cell it was measured in, its tier and the context it runs in; a run left on the default half-life names it (mixed units). **22,576 of 22,576 pairs labelled**; labelled = simulable in every tier, no count moved. Ranges read from measured spreads: replicate disagreement 2^±1.12; K562 over NIH 3T3 half-life 0.077–0.639 (2,262 genes); the rate bracketed by rate-carries-over against copy-number-carries-over; the combination rule applies to no simulable pair. Runtime equals the closed form at 13,000 of 13,000 sampled points. **Stable over the range: direction and fold for all (they are the input); level, effect size and response time for none; on/off for 16,101 (71.3%, all on); switch for 16,295 (all "not a switch"); both for 14,683 of 22,580 rules; rank order for 0.85% of level comparisons.** Stable is not validated. One registered expectation failed (10 rank comparisons under R3). The one human context is **K562** (4 of 7 measurement kinds, 347 simulable pairs, 199 with a K562 half-life); a validated kinetics test there lacks a readout that is not an input, a time course after an acute perturbation, and an absolute rate or copies per cell. Outside the lane: `runtime/abundance_gate.py` uses a borrowed mouse protein half-life the label does not cover | K562 time course after acute perturbation; absolute K562 calibration | done |
    | S8 | The next experiment's information value | — | a representative arm (how common a function is) and a disagreement-selected arm (which model is right) kept apart, selection probabilities recorded; independent loci, assay feasibility and distinguishable hypotheses before volume; HCT116 stays inconclusive, and re-reading held-out data is not fresh validation | wave 3 |
 
+    **The 2026-09-30 rebuild: input list and acceptance checks** (prepared 2026-09-29 by the
+    coordinator from a read-only inventory, spot-checked; nothing run). The removal guard
+    (`scripts/check_staged.py`, `--since 2.days` on committer dates: exactly 48 hours, per path) held
+    each item below; each clears at the time given, BST on 2026-09-30. One lane after 04:22, one commit
+    per item. **Expected values are regression expectations, not targets: any figure outside an item's
+    acceptance stops the lane for explanation.**
+
+    1. **Two results under their own names** (clears 00:24). `scripts/measured_layer.py --write-programs`,
+       then `scripts/confidence_calibration.py --retired-formula` (since `8d57243` a bare run writes
+       `model_score_curve_genome`). Accept: `measured_layer_genome` equals `measured_layer_genome_r6` except
+       `evidence` (weak 928,094 → 14,088, unstated 914,006), date, seconds and manifest; lentiMPRA 3,231
+       agree, 14,512 disagree, 126 conflicts; CRISPRi 97 and 23; `programs_written` 25 entries; calibration
+       n 17,743, observed 0.1821, ECE 0.0963. Not yet confirmed that `--retired-formula` reproduces `_r6`
+       exactly; the `_r6` files stay until it does. No test pins either file.
+    2. **The chr21 program** `data/organisms/human/noncoding_chr21.bio` (clears 03:04; path clear 04:22),
+       written by the same run. Accept: 5,175 rule lines change (5,174 `confidence:` lines from `25f81c6`
+       and the held ICOSLG rule at L79999 from `36fa298`), 1 basis line (SUMO3 at L80225, `36fa298`), and
+       the header (7 lines out, 1 in: L32 and L39–43 from `96bc5e5` go with L33, `d2ab0ae`'s correction);
+       0 role or axis lines change; `# test: rules == 5176` holds. Never copy
+       `data/knowledge/compiled/noncoding_chr21.bio` over it (older than `690a71c`, pre-R7 role text). Tests:
+       `test_measured_layer.py::test_the_committed_chromosome_program_states_experimental_facts`, `bio test`.
+    3. **`attribution/compile.py`'s overridden lines** (clears 03:27): L60–67 (the first `MODEL_SCORE_NAME`
+       and its correction) and L377–381 (`score = pc.get("confidence")` and the lines overriding it) become
+       one definition each. The header at L609 still says "capped at 0.7" and a recompile alone does not
+       change it, so it is rewritten here. Accept: compiled outputs identical except that header;
+       `test_compile_certainty.py`, `test_r4f_certainty.py` green.
+    4. **`attribution/variation.py`'s two "best guess" strings** (L73, L104–105; clears 00:58). Wording
+       only. Accept: `variation.build` shows 0 numeric differences.
+    5. **The grammar bullet pair** (`lang/grammar.py` L483–490, regenerated into
+       `docs/BIOLANG-GRAMMAR.md` L17–24; clears 02:06): keep the "Current behaviour" bullet and "matches no".
+       Tests: `test_grammar.py::test_grammar_document_is_current`,
+       `test_rule_context.py::test_the_grammar_says_what_unknown_means_in_a_when_clause`,
+       `test_engine_package.py`. Held by the same guard; not confirmed it was on the original list.
+    6. **Two strict xfails** in `tests/test_crispri_split.py` (L122–126, L137–141; clears 01:01), kept
+       "until the removal window lets it be rewritten". Accept: rewritten to assert the corrected behaviour
+       and passing; no assertion loosened.
+    7. **The tenth therapeutic case into the headline result** (clears 00:59; `manifest_headlines.json`
+       03:54). No usable copy remains, so it is a fresh run at a clean revision
+       (`scripts/manifest_rebuild.py data/results/therapeutic_benchmark.json --where DIR`; public network
+       sources, no paid requests). In the same commit: `tests/test_manifest_headlines.py:43` (9, 9, 9) →
+       (10, 10, 10), `manifest_headlines.json` `rebuilt_at`, README.md:122 "9/9", docs/THERAPEUTICS.md:1057.
+       Accept: rows 1–9 identical except `seconds`; 10, 10, 10; surface 5 of 5; copy number 2; ERBB2 rank 1
+       at 0.494; MYC 0.246 at 8 copies; `gate_moved_the_target` and `magnitude_tiebreak_changed_order` empty;
+       the allele-fraction list `["ERBB2"]`; the four tests at `test_therapeutic_benchmark.py` L432–518,
+       skipped until the case is present, run and pass.
+    8. **Not in this rebuild, each its own lane:** regenerating `unknown_<chrom>` (24 runs) with
+       `compile.py` reading the classifier's origin (origin text on exactly 11 blocks; 0 numeric
+       differences; clears 02:59); the R7 legacy-key rename (no guard hold, a schema change); and checking
+       whether `measured_layer_genome_r4` and `evidence_compiled_genome_r4` (`37172b6`) were held too.
+
+    Around the whole rebuild: `scripts/check.sh` green before and after; CI on the exact revision; a
+    promotion only on the owner's specific authorisation, through a pull request.
+
    Delivery: wave 1 first; then one bounded pilot on cached evidence, ordinary CPUs and local regulatory
    neighbourhoods, chromosomes as validation partitions, supported connections kept across neighbourhood
    boundaries; genome-wide deployment only after the pilot shows improvement.
