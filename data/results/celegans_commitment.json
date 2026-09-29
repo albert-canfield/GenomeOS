@@ -1,6 +1,6 @@
 {
   "result": "celegans_commitment",
-  "date": "2026-09-14",
+  "date": "2026-09-29",
   "source": "Ma et al. 2021 atlas (Zenodo 4737593, CC BY 4.0) x WormWeb lineage (Sulston 1983)",
   "cells_with_complete_lifetimes": 755,
   "states": {
@@ -214,14 +214,14 @@
       "stratum": "factor x sublineage",
       "composition": {
         "bits": 0.3445,
-        "null_median_bits": 0.2664,
-        "excess_bits": 0.0781,
+        "null_median_bits": 0.2671,
+        "excess_bits": 0.0774,
         "p": 0.005
       },
       "dominant_tissue": {
         "bits": 0.3932,
-        "null_median_bits": 0.3177,
-        "excess_bits": 0.0755,
+        "null_median_bits": 0.319,
+        "excess_bits": 0.0743,
         "p": 0.005
       },
       "permutations": 200
@@ -232,15 +232,15 @@
       "stratum": "factor x sublineage x generation",
       "composition": {
         "bits": 0.2391,
-        "null_median_bits": 0.1985,
-        "excess_bits": 0.0405,
+        "null_median_bits": 0.1979,
+        "excess_bits": 0.0412,
         "p": 0.005
       },
       "dominant_tissue": {
         "bits": 0.2084,
-        "null_median_bits": 0.1973,
-        "excess_bits": 0.0111,
-        "p": 0.1393
+        "null_median_bits": 0.1968,
+        "excess_bits": 0.0116,
+        "p": 0.1642
       },
       "permutations": 200
     },
@@ -358,5 +358,77 @@
     "diverged": 198,
     "first_cell_wins": 101,
     "first_cell_win_share": 0.51
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "WormWeb C. elegans cell lineage, json-celllineage.js (Sulston et al. 1983; Sulston and Horvitz 1977)",
+        "version": "as fetched and distilled into data/results/celegans_lineage_cells.json (first 0a8aa05, 2026-09-11); the page carries no release number, so the distilled file's sha256 pins it",
+        "url": "http://wormweb.org/js/json-celllineage.js",
+        "licence": "CC BY"
+      },
+      {
+        "accession": "Zenodo 4737593 (Ma et al. 2021, Nat Methods 18:893), Time_series_expression_dataset.zip",
+        "version": "Zenodo record 4737593",
+        "url": "https://zenodo.org/api/records/4737593/files/Time_series_expression_dataset.zip/content",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/celegans_lineage_cells.json",
+        "sha256": "93635ad98a08e4641c9f8719d63cc3420ecee6fd161c0d8fab897720fb6d4ab6",
+        "bytes": 305885,
+        "partition": null
+      },
+      {
+        "path": "data/results/celegans_tf_atlas_cells.json",
+        "sha256": "1d3495a0e1cbd84f9e684bc5548a21c6e8604d4c71741a140ab16f7b7c7c42ad",
+        "bytes": 766499,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/celegans/atlas_levels.json",
+        "sha256": "30a7b4826739248ec341b5b79e45540ae051fbedb6d47a30044730bdffdb67d7",
+        "bytes": 10268697,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: a cell lineage and per-cell factor presence; nothing is placed on a genome",
+    "coordinates": "n/a: cells are named by their lineage path, not by a genomic interval",
+    "parameters": {
+      "permutations": 200,
+      "ratchet_and_programme_competence_permutations": 1000,
+      "sister_permutations": 2000,
+      "lateral_inhibition_runs": 200,
+      "end_of_imaging_frame": 318,
+      "bin_edges": [
+        0,
+        40,
+        80,
+        120,
+        160,
+        200
+      ],
+      "atlas_presence_fraction_of_max": 0.2,
+      "atlas_minutes_per_frame": 1.25
+    },
+    "exclusions": [
+      "atlas cells not in the reference lineage or without a recorded lifetime",
+      "cells whose lifetime is not complete in the imaging (born at or before frame 0, alive at the end of imaging, or born after the last bin edge)"
+    ],
+    "partitions": "n/a: no evaluation split; every cell is read",
+    "code": {
+      "git_sha": "b587bb126e7575851e2167ba2be789651606a799",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/celegans_commitment.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
   }
 }

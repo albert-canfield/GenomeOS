@@ -163,15 +163,31 @@ def test_fate_rules_read_what_the_runtime_integrates():
     assert reads and all(k.endswith("(lineage)") for k in reads)  # every read names its window
 
     r = json.loads(READS_RESULT.read_text())
-    # a terminal cell decides once, at birth, so its own window is empty when it decides: the `cell`
-    # reads are zero for every one of the 555, and rules written on them fire for nothing
+    rows = {(x["read"], x["threshold"]): x for x in r["threshold_plateau"]}
+    # in the lookup-only worm a terminal cell decides once, at birth, so its own window is empty when it
+    # decides: `exposure(cell)` is zero for every one of the 555
     assert r["decision_points_per_terminal_cell"] == {"1": 555}
     assert r["terminal_cells_whose_cell_window_is_empty_when_they_decide"] == 555
-    for name in ("exposure(cell) >= 1", "mean(cell) >= 0.01"):
-        assert r["arms"][name]["in_sample"]["decided_by_factors"] < 10
+    # Until 9d42485 a rule on a `cell` read therefore fired for nothing (5 cells, the sheath-glia rule).
+    # Since then (§7.5, `recheck: crossings`) a cell decides again when a read it waits on reaches its
+    # threshold, so a rule on `exposure(cell) >= 1` fires a minute after birth, and under `commitment
+    # terminal_fate` it can only re-assert the type the lookup wrote: without the crossings it fires on
+    # under 10 cells, and in no arm do the crossings change a single fate (lane-repro, 2026-09-29)
+    cell = r["arms"]["exposure(cell) >= 1"]["in_sample"]
+    assert cell["decided_by_factors_without_the_crossing_re_decisions"] < 10 < cell["decided_by_factors"]
+    for a in r["arms"].values():
+        i = a["in_sample"]
+        assert i["fates_correct"] == i["fates_correct_without_the_crossing_re_decisions"]
+        assert i["decided_by_factors"] >= i["decided_by_factors_without_the_crossing_re_decisions"]
+    # and since 9d42485 a mean over a window of no length is the value in force, so `mean(cell)` read at
+    # birth is the instantaneous read: on the cited rules its plateau rows are the instantaneous row
+    inst = rows[("instantaneous (F = present)", None)]
+    for t in (0.01, 0.1, 0.2):
+        assert [rows[("mean(cell)", t)][k] for k in ("decided", "right", "wrong")] == [
+            inst[k] for k in ("decided", "right", "wrong")
+        ]
     # the ordering the precomputed read showed survives a real runtime: on the cited rules alone, with
     # no fitting anywhere, the instantaneous read makes far more errors than the integrated one
-    rows = {(x["read"], x["threshold"]): x for x in r["threshold_plateau"]}
     assert rows[("instantaneous (F = present)", None)]["wrong"] > rows[("exposure(lineage)", 15)]["wrong"]
     # and the threshold is a plateau, not a fitted knob
     assert {rows[("exposure(lineage)", t)]["wrong"] for t in (1, 15, 30, 45, 60)} == {
