@@ -4565,15 +4565,20 @@ def cmd_evidence(args: argparse.Namespace) -> int:
     # program importing it) are missing from every count below, so say how many and exit non-zero.
     for f in failed:
         print(f"genomeos evidence: ERROR {f['path']} did not parse: {f['error']}", file=sys.stderr)
+    # the result says it is incomplete in words, on both streams, not only by the exit code
+    incomplete = f"incomplete: {len(failed)} program(s) failed to parse"
     if failed:
         print(
             f"genomeos evidence: ERROR {len(failed)} program(s) failed to parse; "
             "their facts are missing from the totals",
             file=sys.stderr,
         )
+        print(f"genomeos evidence: {incomplete}", file=sys.stderr)
     if args.csv:
         Path(args.csv).write_text(evidence.to_csv(rows))
         print(f"{len(rows):,} facts written to {args.csv}, weakest first")
+        if failed:
+            print(f"{incomplete}; the file leaves out their facts")
         return 1 if failed else 0
     s = out["summary"]
     unparsed = f", {len(failed)} FAILED TO PARSE (facts missing)" if failed else ""
@@ -4586,6 +4591,8 @@ def cmd_evidence(args: argparse.Namespace) -> int:
         f"{whole['strong']:,} above (mean {'-' if mean is None else mean}); "
         f"{whole['unstated']:,} state none"
     )
+    if failed:
+        print(f"{incomplete}; every count here leaves out their facts")
     print("evidence: " + ", ".join(f"{k} {v:,}" for k, v in whole["by_evidence"].items()))
     if kinds or args.max_confidence is not None or args.query or args.module:
         print(

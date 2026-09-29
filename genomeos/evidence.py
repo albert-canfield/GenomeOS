@@ -346,10 +346,25 @@ def collect(
     # 2026-09-27 one demo program with a syntax error took 21 facts out of the total (26,845 to
     # 26,824) and nothing said so. The failures travel beside the rows so every caller can count them.
     failed = [{"path": f["path"], "error": f["error"]} for f in files if f.get("error")]
+    # When any program failed, the report ROADMAP item 9 asked for rides beside the rows: each
+    # failure's path and message, their count and `complete: false`, so a partial count never passes
+    # for the whole, whatever the filter selected. A clean read adds nothing, so every payload of
+    # programs that parse stays byte for byte what it was (the discovery view's tests pin
+    # /api/evidence by digest); there `failed`, empty, already says nothing failed.
+    report = (
+        {
+            "parse_errors": [{"path": f["path"], "message": f["error"]} for f in failed],
+            "parse_error_count": len(failed),
+            "complete": False,
+        }
+        if failed
+        else {}
+    )
     return {
         "rows": rows,
         "files": list(files),
         "failed": failed,
+        **report,
         "summary": summarise(rows),
         "whole": summarise(list(all_rows)),
         "weak_line": WEAK,

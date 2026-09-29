@@ -2120,7 +2120,8 @@ class Api:
         out = ev.collect(self.root, picked, ceiling, query, module, compiled=bool(compiled))
         rows = out["rows"]
         if csv:
-            return {"csv": ev.to_csv(rows), "matched": len(rows)}
+            report = {k: out[k] for k in ("parse_errors", "parse_error_count", "complete") if k in out}
+            return {"csv": ev.to_csv(rows), "matched": len(rows), **report}
         return {
             **out,
             "rows": rows[:limit],
