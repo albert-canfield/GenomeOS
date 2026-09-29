@@ -11109,6 +11109,11 @@ row to the verdict.
 `by_cell` value per cell name: the last track above the scorer's 0.05 recording threshold. In three cases
 the largest drop or rise sits on another track with the same cell name:
 
+*2026-09-29, added afterwards beside the paragraph above: audit B (`612eb87`) found the sweep stored
+values at threshold 0.0, not 0.05, so values below 0.05 are kept and only exact-zero tracks are dropped;
+"above the scorer's 0.05 recording threshold" is corrected in audit B's section below. The finding that
+`by_cell` keeps one value per cell name, the last emitted, stands.*
+
 - HEMGN: K562 -0.0948 is kept, against -0.0962 on another K562 track.
 - BEX4: K562 -0.1208 is kept, against -0.1229.
 - CCND1: K562 +0.1036 is kept, against +0.1086.
