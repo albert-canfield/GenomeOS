@@ -10323,6 +10323,29 @@ Three things are recorded for whoever reopens it. None of them is a result:
 3. On these sources the debugger commits almost nothing that a withheld screen can test (0 of 24 CRISPRi
    corrections tested).
 
+### Correction, the merge count recounted as registered (2026-09-29, lane-pilot, later)
+
+Negative 8's counting defect is fixed in `6bbf1d6`. `scripts/pilot_metric_recount.py` re-solved every
+held-out source exactly as the registered run did, in a clean worktree at that commit (stamp not
+dirty). With the run's counter it reproduced the run's counts exactly for all ten sources, and only then
+counted each merged block against its own starting label, as registered. The result is
+`data/results/pilot_metric_recount.json`. Nothing was scored again, so no score, pass or reading changed.
+
+| count | as run (kept above) | as registered |
+| --- | --- | --- |
+| committed corrections | 261 | 261 |
+| validated | 4 | **6** |
+| errors | 4 | **6** |
+| neutral | 0 | 0 |
+| untested | 253 | **249** |
+| validated per CPU-hour (0.0507 h) | 78.85 | **118.34** |
+| errors per CPU-hour | 78.85 | **118.34** |
+
+The two added validated corrections and the two added errors are GTEx merges: among the GTEx run's
+merges, 3 are now validated, 3 errors and 3 untested. Every other run's counts are unchanged. **Still no
+committed correction is validated or refuted by any held-out CRISPRi screen.** The stop rule's firing
+does not depend on this count: it fired on the scores.
+
 ## Rebuilt through its committed entry point: all 25,003 values of clause2_design_power_calibrated reproduce, and a second checkout rebuilds it from its manifest with 0 differences (item 12 S2 follow-up, 2026-09-29, lane-rule)
 
 cab70d9 wrote `data/results/clause2_design_power_calibrated.json` through a scratch driver outside the
