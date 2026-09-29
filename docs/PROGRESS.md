@@ -1213,3 +1213,45 @@ necessarily would. The two facts it names stand as written, as reasons the next 
 finding about where the project's limit lies.
 
 docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; the Progress tab's `/api/state`.
+
+## 2026-09-29 (later) — the judge reads only the stated cell, main is protected and promoted, and three audits stop at their gates
+
+**The judge, versioned twice, the earlier results kept beside.** The owner ruled that a cell-specific
+claim is judged only in the cell it names. Under v2 (`4567219`) direction and under v3 (`d1e09ae`) target
+are decided only there, in both directions, and every other-cell response is kept beside the verdict as
+evidence elsewhere. On S4's claims: target 39 supported in context, 0 refuted, 59 unassessed in context,
+98 supported somewhere; direction 39 supported in context, 59 unassessed. **Each 39 of 39 describes only
+the small subset assessable in the stated cell, mostly K562, and none is general accuracy.** The four
+repressions S4 judged wrong were traced (`641909e`): no sign error; three are cell mismatches in which the
+model agrees with the screen in the measured cell, and ID1's cached K562 prediction disagrees with the
+K562 screen, which does not by itself refute the whole-blood claim.
+
+**Main.** The owner bound admins on main's rule, and the checkout guard now refuses every main-targeting
+push form. The gate's direct push was then refused by GitHub: a manually triggered green run does not
+count toward required checks, which GitHub documents for pull requests and rulesets (`0d4a6a7`). The
+owner merged PR #11; main is `7ff4e37`, whose file tree is identical to `9a59faf`'s. The versioned judge is
+not in it; `promote-b138063` holds the next candidate, its manual pre-check green, awaiting the owner.
+
+**Three audits, proposed by the external reviewer, each ended at its first checkpoint.** A (`6c0d39f`):
+no coordinate bug; of the 387 CRISPRi decrease links C4 said had no registry element, 365 overlap one (362
+failing the overlap rule on width, 3 partly) and 21 are absent from both element sets. Its census
+(`32af2cb`), counting by observation: 93 supported under the current rule, all unique-element; 208 under
+the registered policy, 120 of them unique and 88 ambiguous, most additions from intervals over 700 bp;
+nothing adopted. B (`612eb87`): insufficient coverage for its registered complete-case design (55.47%),
+the loss arising before the contrast. C (`e7f4c3e`): its matched-control design is infeasible on EN-TEx
+(one locus left), not a finding that EN-TEx lacks usable evidence. **Correction:** the subject of `1b2e8c2`
+says the policy's larger supported count comes "only" from ambiguous wide intervals; 27 of the 115 added
+supported observations are unique, so "mostly" is right.
+
+**The three measures, apart.** Software delivered: the judge's versioned rules, the guard's closed gaps,
+the protected promotion path, three audit harnesses and the census, with the 2026-09-30 rebuild's inputs
+and acceptance checks written down (`b317fa2`). Biology independently validated: unchanged, one CRISPRi
+result in one cell type; nothing today is a validation, and every figure above is internal development
+evidence on outcomes read before. Release readiness: main is on a verified revision for the first time
+since `45a5aa6`; no tag, no package.
+
+**What would move the biology, as data:** an endpoint nobody here has read (IGVF's K562 tables, not yet
+released) for any registered comparison; a measured arm per block for clause 2. Until then the authorised
+work is the 2026-09-30 rebuild, which clears from 04:22 BST.
+
+docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; docs/DATA.md.
