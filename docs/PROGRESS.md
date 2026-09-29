@@ -1181,3 +1181,29 @@ is how many elements are tested per block. Entries at 20 or 30 are lower bounds,
 check on the approximation fired. The neutral contrast is **no difference detected**: no equivalence
 margin can be justified from outside the data. A sixth error was found and recorded: the 13.45% anchor
 counts 223 windows, not 223 independent elements. Clause 2 stays not met.
+
+## 2026-09-29 — the coherence pilot is discontinued by its own stop rule
+
+The second external review said the project's original objective — revise genomic labels jointly and
+show the revisions improve biological accuracy — was unfinished, and that milestone percentages never
+measured it. Item 13 built the test for it and fixed its stop rule before running.
+
+**The result, in its registered wording:** the pilot passed its synthetic gate (303 of 303 planted
+double faults found) and failed its biological gate, `beats_unchanged_only`. It improved on the compiled
+labels but passed **0 of 4** CRISPRi endpoints, because it did not beat plain distance to the gene, and
+**joint repair never beat repairing each block alone**. Of 261 committed corrections, 6 were validated,
+6 were wrong and 249 could not be tested. It is recorded as a discontinued investigation, apart from
+implemented capabilities, and nothing in phase C follows from it.
+
+**What the night established, as three separate measures.** Software delivered: the review's defects
+are fixed and every result writer is under the provenance contract, with 0 figures moved. Biology
+independently validated: one result, the CRISPRi one, in one cell type. Release readiness: no tag, no
+package, and main not yet on a green revision. The harness built for the pilot also measured the
+labels themselves: without the model, 93 of 440,377 predicted links are supported by a measurement, and
+only 98 target claims can be judged by any evidence held.
+
+**What would move it:** measurement the project does not hold. The experiment clause 2 needs cannot be
+powered within the blocks that exist at small effects, and IGVF's K562 tables, the one free independent
+benchmark in reach, are not yet released.
+
+docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; the Progress tab's `/api/state`.
