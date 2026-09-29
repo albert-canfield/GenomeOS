@@ -17,6 +17,14 @@
 # Actions recorded on that sha is anything but success: failure, cancelled, skipped, or none at
 # all. It reads the same check that main's branch rule names as required, so what it lets through
 # is what the rule would let through for someone the rule binds.
+#
+# 2026-09-29, beside the original: the sentence above is false. With enforce_admins on, `--push 9a59faf`
+# passed every check here and GitHub refused it (GH006, "Required status check \"test\" is expected"),
+# although GitHub Actions had recorded a successful `test` check run on that exact sha: a manually
+# triggered (workflow_dispatch) run on dev. A successful manually triggered check is not enough to
+# establish that GitHub will accept the push, so passing this gate is necessary, not sufficient. Every
+# earlier promotion went through as an admin, whom the rule did not bind. Promotion now goes through a
+# pull request from a branch frozen at the chosen sha, merged by the owner.
 set -euo pipefail
 
 usage() { sed -n '6,7p' "$0" | sed 's/^# //' >&2; }

@@ -20,6 +20,10 @@ files carry the `SPDX-License-Identifier` of the part they belong to.
   latest CI `test` run is green, through `scripts/promote_main.sh` (below,
   "Release checks"). Its branch rule names the same check as required, but
   the rule does not bind admins until the owner says so.
+  *(2026-09-29: the rule binds admins now; the owner turned on
+  `enforce_admins`. With it on, a direct push of a sha whose only green
+  `test` run was manually triggered was refused, so `main` moves through a
+  pull request from a branch frozen at the chosen sha; see "Release checks".)*
 - `dev` is where all work happens. A push to `dev` runs the pre-push hook,
   not CI; CI runs on the tip of `dev` once a day.
 - **Pull requests to `main` are opened by Albert, by hand, when he decides a
@@ -89,6 +93,18 @@ After this date:
 
   The push still goes through the pre-push hook, so the promoted sha is
   checked locally as well; the hook stays, as one check of two.
+
+  *2026-09-29, beside the above: passing this gate does not establish that
+  GitHub will accept the push. With `enforce_admins` on, `--push 9a59faf`
+  passed every check here and GitHub refused it ("Required status check
+  \"test\" is expected"), although a successful `test` check run by GitHub
+  Actions existed on that exact sha, from a manually triggered run on `dev`.
+  A successful manually triggered check is insufficient to establish GitHub
+  eligibility. Until the gate reads what GitHub accepts, a promotion is a
+  pull request from a branch frozen at the chosen sha (e.g.
+  `promote-9a59faf`), whose checks run on the pull request and which the
+  owner merges; the coordinator then verifies `main`'s file tree and
+  ancestry against the chosen sha.*
 - **Recommended branch rule for `main`** (the owner's setting; no session
   changes it): keep `test` from GitHub Actions as the required check and
   force pushes and deletions blocked, and turn on "Do not allow bypassing
