@@ -11135,6 +11135,92 @@ that decided it.
 - a rate, because the five claims were chosen for being judged wrong;
 - evidence about claims S4 did not judge.
 
+## The direction rule, versioned: S4's v1 result stays as history, and v2 judges a direction only in the cell the claim states (item 12 S4 follow-up, 2026-09-29, lane-judge2)
+
+This section sits beside S4 and the repression trace and edits neither. S4's committed result
+(`data/results/attribution_correctness.json`) was judged under the rule S4 registered. That rule is kept
+unchanged as **v1**. A second rule, **v2**, is used for every judging call from this registration on.
+
+### Registered before any claim was re-judged (2026-09-29)
+
+The decision is Albert's, 2026-09-29, quoted in full (`correctness.RULE_DECISION`):
+
+> "Judge rule: preserve the historical result, correct future judging. The current rule falls back to
+> another cell when the claimed cell lacks measurements. That cannot establish that a cell-specific
+> direction is wrong. Registration makes the analysis traceable; it does not make that interpretation
+> valid. Introduce a versioned rule: judge direction in the stated cell; otherwise return 'not assessed
+> in this context.' Keep cross-cell disagreement as a separate finding. Apply this symmetrically: the
+> trace says 54 correct and five incorrect verdicts came from other cells. All 59 should become
+> unassessed under the revised rule—not just the five errors. Preserve the original results beside the
+> correction. ID1 remains a separate, useful finding: its cached K562 prediction disagrees with the K562
+> experiment. That does not directly refute the compiled whole-blood claim."
+
+**The v2 rule, word for word** (`correctness.DIRECTION_RULE["v2"]`):
+
+> v2 (from 2026-09-29): the direction (activates_target, represses_target) is judged only in the cell
+> the claim states, and only by the named gene's significant changes there: a change the claimed way
+> establishes it, a change the other way refutes it, and both in the stated cell is
+> `observation_model_inadequate`. When the claim states no cell, or the named gene responded in some cell
+> but has no significant change in the stated cell, the claim is not judged, with the reason
+> `not_assessed_in_this_context`, whatever the gene did in any other cell: agreement in another cell no
+> longer establishes a direction, just as disagreement in another cell no longer refutes one. Each
+> significant change of the named gene in another cell is kept on the verdict as a separate cross-cell
+> finding (`cross_cell`), marked `agrees` or `disagrees` with the claimed direction; it never decides the
+> verdict. A claim whose gene responded in no cell keeps v1's reason, since no cell decides it under
+> either rule. Reporter values and no_effect_measured, and the target, context, origin and
+> molecular-role axes, are judged exactly as under v1
+
+**`refutable` under v2** (`correctness.REFUTABLE_RULE["v2"]`):
+
+> v2: on a direction claim, true when the stated cell was screened on the named gene with an outcome
+> that can establish or refute the direction (a significant change there; the table lets no null decide
+> a direction), false otherwise; target and context keep v1's definition; where the field is not
+> computed (origin, molecular role, and the activity values that are not a direction) v2 writes null,
+> never false
+
+**Which rule judged a result** (`correctness.RULE_RECORD`):
+
+> a result judged under v2 names its rule: `judge_rule` in its manifest parameters and `rule` in its
+> body. A result that names no rule was judged under v1, the only rule before 2026-09-29; the scripts
+> that reproduce such results pin RULE_V1 and add nothing to their output, so their committed files
+> still reproduce (scripts/s4_correctness_run.py without `--rule v2`, scripts/prior_only_test.py,
+> scripts/pilot_biological_gate.py, scripts/repression_trace.py)
+
+**What was seen before registering** (`correctness.SEEN_BEFORE_V2`). The 39 / 59 split was already known:
+
+> seen before this registration, and used to write EXPECTED_V2: the repression trace
+> (data/results/repression_trace.json, commits 54c47f1..641909e) had already counted the committed S4
+> activity verdicts by where they were decided: 39 in the stated cell, all established; 54 established
+> and 5 refuted only in another cell. It had also computed that judging direction only in the stated
+> cell would give 39 judged, 39 established, with 59 moved to not judged. The 39 / 59 split and the S4
+> counts expected below were therefore known before this rule was registered. Also read before
+> registration: the committed S4-beside blocks of prior_only_test.json and pilot_biological_gate.json
+> (their activity, target-refutable and context counts), from which the expected moves there are
+> derived. The registration makes the re-judge traceable; it does not make the interpretation valid
+
+**The counts expected under v2** (`correctness.EXPECTED_V2`):
+
+> on the committed S4 claims and sources: activity is judged on 39 of 440,377 claims, all 39
+> established (0 refuted, 0 unresolved, 0 observation-model-inadequate); the 59 verdicts v1 decided only
+> in another cell (54 established, 5 refuted) are not judged, reason not_assessed_in_this_context, each
+> with its other-cell observations kept as a cross-cell finding, 54 agreeing and 5 disagreeing with the
+> claimed direction; every other activity reason keeps its v1 count (1,377 outside the claim's scope, 23
+> until the target responds, 3,194 only suggest, 18,747 only cannot judge, 416,938 no observation);
+> activity refutable is 39; no count moves on target (98 of 98), context (39 of 39), origin or molecular
+> role (0 judged). ID1's represses_target claim in Whole_Blood (EH38E3426791) is not assessed in this
+> context, with Gasperini2019's K562 decrease of ID1 kept as a disagreeing cross-cell finding. How many
+> of the 39 judged verdicts also carry a cross-cell finding was not counted before registration. Beside
+> S4, derived and not rerun: in the prior-only test's unchanged_on_the_same_blocks (Gasperini2019)
+> activity would go from 41 of 43 to 24 of 24, 19 moving (17 established, 2 refuted); in the pilot
+> gate's unchanged_on_same_blocks from 27 of 28 to 12 of 12 on Gasperini2019 (16 moving: 15
+> established, 1 refuted), from 3 of 3 to 0 of 0 on Schraivogel2020 (3 moving, all established) and 1 of
+> 1 unchanged on Xie; the pilot's and the prior's own labellings state no activity claim, so none of
+> their counts move
+
+The re-judge is run once, with the same claims and sources as S4, and written as a new result,
+`data/results/attribution_correctness_v2.json`. `attribution_correctness.json` stays as it is, beside
+it. If any count other than the 59 moves, the lane stops and reports it.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
