@@ -632,7 +632,7 @@ def rerun(case: dict[str, Any], evidence: Any) -> dict[str, Any]:
         co.ACTIVITY: co.Claim(case["element"], chrom, start, end, co.ACTIVITY, case["value"], g, cell),
         co.CONTEXT: co.Claim(case["element"], chrom, start, end, co.CONTEXT, cell, g, cell),
     }
-    out = {a: co.verdict_of(c, obs).to_dict() for a, c in claims.items()}
+    out = {a: co.verdict_of(c, obs, co.RULE_V1).to_dict() for a, c in claims.items()}  # S4's rule, pinned
     out["observations_touching"] = sorted(
         {(o.kind, o.source, o.gene, o.cell) for o in co.touching(claims[co.ACTIVITY], obs)}
     )

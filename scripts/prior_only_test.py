@@ -843,6 +843,8 @@ def s4_beside(
     units: dict[str, tuple[ho.Unit, ...]],
     refs: dict[str, frozenset[str]],
 ) -> dict[str, Any]:
+    v1 = cx.RULE_V1  # the rule this committed result was judged by, pinned (correctness.RULE_RECORD)
+
     def brief(rep: Any) -> dict[str, Any]:
         d = rep.to_dict()
         return {
@@ -861,12 +863,12 @@ def s4_beside(
         out[name] = {"claims_stated": len(claims)}
         if claims:
             out[name].update(
-                brief(cx.judge(claims, labels[name], units=units, sources=[src], references=refs))
+                brief(cx.judge(claims, labels[name], units=units, sources=[src], references=refs, rule=v1))
             )
     same = pb.unchanged_claims_on(solved[PRIOR], unchanged_claims)
     out["unchanged_on_the_same_blocks"] = {"claims_stated": len(same)}
     if same:
-        rep = cx.judge(same, cx.unchanged_labels(), units=units, sources=[src], references=refs)
+        rep = cx.judge(same, cx.unchanged_labels(), units=units, sources=[src], references=refs, rule=v1)
         out["unchanged_on_the_same_blocks"].update(brief(rep))
     return out
 

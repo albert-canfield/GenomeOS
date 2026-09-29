@@ -31,6 +31,12 @@ when the labelling read its source. The pilot (item 12 S3, lane-pilot) calls
 
 An internal development benchmark only (`holdout.STATUS`): every source here has been read by this
 project before, and no count this module returns is a fresh or external validation.
+
+Since 2026-09-29 the direction rule is versioned (`DIRECTION_RULE`, registered before any claim was
+judged under it). v1 is S4's rule, unchanged, and reproduces S4's committed result; v2, the default,
+judges a direction only in the cell the claim states and otherwise does not assess it
+(`NOT_ASSESSED`), keeping every other cell's response beside the verdict as a cross-cell finding.
+`verdict_of` and `judge` take `rule`; a script that reproduces a v1 result passes `RULE_V1`.
 """
 
 from __future__ import annotations
@@ -38,7 +44,7 @@ from __future__ import annotations
 import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -719,7 +725,13 @@ class Verdict:
     detail: str = ""
     explanations: tuple[str, ...] = ()
     deciding: tuple[Observation, ...] = ()
-    refutable: bool = False  # target and context: the stated cell was screened on the gene
+    #: target and context: the stated cell was screened on the gene; under v2 a direction claim too, and
+    #: None where the field is not computed (REFUTABLE_RULE)
+    refutable: bool | None = False
+    #: v2, direction claims only: the named gene's responses in other cells, each with AGREES or
+    #: DISAGREES; a finding beside the verdict, never a deciding observation (DIRECTION_RULE)
+    cross_cell: tuple[tuple[Observation, str], ...] | None = None
+    rule: str = RULE_V1
 
     def to_dict(self) -> dict[str, Any]:
         c = self.claim
@@ -738,6 +750,10 @@ class Verdict:
             "deciding": [o.to_dict() for o in self.deciding],
             "refutable": self.refutable,
         }
+        if self.rule != RULE_V1:  # a v1 verdict is written exactly as S4 wrote it
+            d["rule"] = self.rule
+            if self.cross_cell is not None:
+                d["cross_cell"] = [{**o.to_dict(), "finding": f} for o, f in self.cross_cell]
         return d
 
     @classmethod
@@ -765,8 +781,21 @@ class Verdict:
             d.get("detail", ""),
             tuple(d.get("explanations", ())),
             tuple(Observation(**o) for o in d.get("deciding", ())),
-            bool(d.get("refutable", False)),
+            None if d.get("refutable", False) is None else bool(d.get("refutable", False)),
+            _cross_cell_from(d["cross_cell"]) if "cross_cell" in d else None,
+            d.get("rule", RULE_V1),
         )
+
+
+def _cross_cell_from(rows: list[dict[str, Any]]) -> tuple[tuple[Observation, str], ...]:
+    out = []
+    for r in rows:
+        r = dict(r)
+        finding = r.pop("finding")
+        if finding not in (AGREES, DISAGREES):
+            raise ValueError(f"unknown cross-cell finding {finding!r}")
+        out.append((Observation(**r), finding))
+    return tuple(out)
 
 
 def _decided(
@@ -883,6 +912,48 @@ def _direction(claim: Claim, obs: list[Observation]) -> Verdict:
     return _fallback(claim, obs)
 
 
+#: v2 adds one reason, first because it applies only where some cell decided the claim under v1
+REASONS_V2 = (NOT_ASSESSED, *REASONS)
+#: a tally label only: a claim whose other cells both agree and disagree with its direction
+BOTH_WAYS = "both_ways"
+
+
+def _cross_cell(claim: Claim, elsewhere: list[Observation]) -> tuple[tuple[Observation, str], ...]:
+    """v2: each response of the named gene outside the stated cell, read on the claimed direction."""
+    out = []
+    for o in elsewhere:
+        r = reading(o.kind, ACTIVITY, claim.value)
+        if r in (ESTABLISHES, REFUTES):
+            out.append((o, AGREES if r == ESTABLISHES else DISAGREES))
+    return tuple(out)
+
+
+def _direction_v2(claim: Claim, obs: list[Observation]) -> Verdict:
+    """DIRECTION_RULE[v2]: only the stated cell decides; every other cell is a cross-cell finding."""
+    v = claim.value
+    responds = _on_gene(obs, claim.gene, ESTABLISHES)
+    if not responds:  # no cell decides under either rule: v1's reasons, unchanged
+        return replace(_direction(claim, obs), cross_cell=())
+    here = _in(responds, claim.cell)
+    cross = _cross_cell(claim, [o for o in responds if o not in here])
+    est = [o for o in here if reading(o.kind, ACTIVITY, v) == ESTABLISHES]
+    ref = [o for o in here if reading(o.kind, ACTIVITY, v) == REFUTES]
+    if est and ref:
+        found = _decided(
+            claim, MODEL_INADEQUATE, est + ref, "significant in both directions in the stated cell"
+        )
+    elif est:
+        found = _decided(claim, CORRECT, est)
+    elif ref:
+        found = _decided(claim, INCORRECT, ref, "the gene moved the other way in the stated cell")
+    elif cross:
+        why = "the gene responded only in other cells" if stated(claim.cell) else "the claim states no cell"
+        found = _not_judged(claim, NOT_ASSESSED, why)
+    else:  # responses that decide no direction anywhere: v1's reasons, unchanged
+        return replace(_direction(claim, obs), cross_cell=())
+    return replace(found, refutable=bool(est or ref), cross_cell=cross)
+
+
 def _no_effect(claim: Claim, obs: list[Observation]) -> Verdict:
     pool = [o for o in obs if o.kind in PAIR_KINDS and (not claim.gene or o.gene == claim.gene)]
     pool = _in(pool, claim.cell) if stated(claim.cell) else pool
@@ -944,20 +1015,33 @@ def _valued(claim: Claim, obs: list[Observation]) -> Verdict:
     return _fallback(claim, obs)
 
 
-def verdict_of(claim: Claim, observations: Iterable[Observation]) -> Verdict:
-    """One claim against the observations of its element, under `TABLE` and `AXIS_RULE`."""
+def _refutable_computed(claim: Claim) -> bool:
+    return claim.axis in (TARGET, CONTEXT) or (claim.axis == ACTIVITY and claim.value in DIRECTION)
+
+
+def verdict_of(claim: Claim, observations: Iterable[Observation], rule: str = DEFAULT_RULE) -> Verdict:
+    """One claim against the observations of its element, under `TABLE`, `AXIS_RULE` and the direction
+    rule `rule` (DIRECTION_RULE; v2 unless a caller pins RULE_V1)."""
+    if rule not in RULES:
+        raise ValueError(f"unknown rule {rule!r} ({', '.join(RULES)})")
+    v = _verdict(claim, list(observations), rule)
+    if rule == RULE_V1:
+        return v
+    return replace(v, rule=rule, refutable=v.refutable if _refutable_computed(claim) else None)
+
+
+def _verdict(claim: Claim, obs: list[Observation], rule: str) -> Verdict:
     if claim.axis not in AXES:
         raise ValueError(f"{claim.axis!r} is not a judged axis ({', '.join(AXES)})")
     if claim.value in NOT_A_CLAIM or "|" in claim.value:
         raise ValueError(f"{claim.value!r} is not a claim: unknown and unchosen alternatives are counted")
-    obs = list(observations)
     if claim.axis == TARGET:
         return _target(claim, obs)
     if claim.axis == CONTEXT:
         return _context(claim, obs)
     if claim.axis == ACTIVITY:
         if claim.value in DIRECTION:
-            return _direction(claim, obs)
+            return _direction(claim, obs) if rule == RULE_V1 else _direction_v2(claim, obs)
         if claim.value == "no_effect_measured":
             return _no_effect(claim, obs)
         if claim.value in REPORTER:
@@ -1083,17 +1167,28 @@ class AxisTally:
     by_block: Counter = field(default_factory=Counter)
     refutable: int = 0
     decided_with_heldout_file_pair: int = 0
+    rule: str = RULE_V1
+    #: v2: claims with a cross-cell finding, by (verdict, or the reason when not judged) and by what the
+    #: other cells say together (AGREES, DISAGREES or BOTH_WAYS)
+    cross_cell: Counter = field(default_factory=Counter)
+
+    def reasons(self) -> tuple[str, ...]:
+        return REASONS if self.rule == RULE_V1 else REASONS_V2
 
     def add(self, v: Verdict, touched: set[str]) -> None:
         self.claims += 1
         self.verdicts[v.verdict] += 1
         self.by_block[v.claim.block] += 1
-        self.refutable += v.refutable
+        self.refutable += bool(v.refutable)
         for k in touched:
             self.touched_by_kind[k] += 1
+        if v.cross_cell:
+            said = {f for _, f in v.cross_cell}
+            together = said.pop() if len(said) == 1 else BOTH_WAYS
+            self.cross_cell[(v.reason if v.verdict == NOT_JUDGED else v.verdict, together)] += 1
         if v.verdict == NOT_JUDGED:
             self.not_judged_by_reason[v.reason] += 1
-            if v.reason in (OUTSIDE_SCOPE, CONDITION_UNMET) and v.detail:
+            if v.reason in (OUTSIDE_SCOPE, CONDITION_UNMET, NOT_ASSESSED) and v.detail:
                 self.not_judged_detail[v.detail] += 1
         else:
             for k in {o.kind for o in v.deciding}:
@@ -1105,7 +1200,7 @@ class AxisTally:
 
     def accuracy(self, axis: str) -> Share:
         beside = {UNRESOLVED: self.verdicts[UNRESOLVED], MODEL_INADEQUATE: self.verdicts[MODEL_INADEQUATE]}
-        if axis in (TARGET, CONTEXT):
+        if axis in (TARGET, CONTEXT) or (axis == ACTIVITY and self.rule != RULE_V1):
             beside["refutable"] = self.refutable
         return Share(
             self.verdicts[CORRECT],
@@ -1121,14 +1216,17 @@ class AxisTally:
             self.claims,
             f"{axis} claims an observation the table allows establishes, refutes or cannot read",
             f"{axis} claims stated with one definite value",
-            {NOT_JUDGED: self.verdicts[NOT_JUDGED], **{r: self.not_judged_by_reason[r] for r in REASONS}},
+            {
+                NOT_JUDGED: self.verdicts[NOT_JUDGED],
+                **{r: self.not_judged_by_reason[r] for r in self.reasons()},
+            },
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        d = {
             "claims": self.claims,
             "verdicts": {v: self.verdicts[v] for v in VERDICTS},
-            "not_judged_by_reason": {r: self.not_judged_by_reason[r] for r in REASONS},
+            "not_judged_by_reason": {r: self.not_judged_by_reason[r] for r in self.reasons()},
             "not_judged_detail": dict(sorted(self.not_judged_detail.items())),
             "decided_by_kind": dict(sorted(self.decided_by_kind.items())),
             "touched_by_kind": dict(sorted(self.touched_by_kind.items())),
@@ -1136,9 +1234,22 @@ class AxisTally:
             "refutable": self.refutable,
             "decided_with_heldout_file_pair": self.decided_with_heldout_file_pair,
         }
+        if self.rule != RULE_V1:  # a v1 tally is written exactly as S4 wrote it
+            nested: dict[str, dict[str, int]] = defaultdict(dict)
+            for (label, together), n in sorted(self.cross_cell.items()):
+                nested[label][together] = n
+            d["cross_cell_findings"] = dict(nested)
+        return d
 
     @classmethod
-    def from_dict(cls, t: dict[str, Any]) -> AxisTally:
+    def from_dict(cls, t: dict[str, Any], rule: str = RULE_V1) -> AxisTally:
+        cross = Counter(
+            {
+                (label, together): n
+                for label, by in t.get("cross_cell_findings", {}).items()
+                for together, n in by.items()
+            }
+        )
         return cls(
             claims=t["claims"],
             verdicts=Counter(t["verdicts"]),
@@ -1149,6 +1260,8 @@ class AxisTally:
             by_block=Counter(t["by_block"]),
             refutable=t["refutable"],
             decided_with_heldout_file_pair=t["decided_with_heldout_file_pair"],
+            rule=rule,
+            cross_cell=cross,
         )
 
 
@@ -1163,6 +1276,9 @@ class Report:
     axes: dict[str, AxisTally]
     judged: list[Verdict]
     not_claims: dict[str, dict[str, int]] = field(default_factory=dict)
+    rule: str = RULE_V1
+    #: v2: the claims not assessed in this context, kept with their cross-cell findings
+    not_assessed: list[Verdict] = field(default_factory=list)
 
     def quantities(self) -> dict[str, dict[str, Share]]:
         """The three quantities, each per axis, never combined (NO_SUM)."""
@@ -1179,7 +1295,7 @@ class Report:
         def shares(block: dict[str, dict[str, Share]]) -> dict[str, Any]:
             return {q: {a: s.to_dict() for a, s in v.items()} for q, v in block.items()}
 
-        return {
+        d = {
             "labelling": self.labelling,
             "reads": self.reads,
             "built_without": self.built_without,
@@ -1191,17 +1307,23 @@ class Report:
             "not_claims": self.not_claims,
             "judged": [v.to_dict() for v in self.judged],
         }
+        if self.rule == RULE_V1:  # a v1 report is written exactly as S4 wrote it
+            return d
+        return {"rule": self.rule, **d, "not_assessed": [v.to_dict() for v in self.not_assessed]}
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> Report:
+        rule = d.get("rule", RULE_V1)  # a report that names no rule was judged under v1 (RULE_RECORD)
         return cls(
             d["labelling"],
             list(d["reads"]),
             d["built_without"],
             list(d["sources"]),
-            {a: AxisTally.from_dict(t) for a, t in d["axes"].items()},
+            {a: AxisTally.from_dict(t, rule) for a, t in d["axes"].items()},
             [Verdict.from_dict(v) for v in d["judged"]],
             d.get("not_claims", {}),
+            rule,
+            [Verdict.from_dict(v) for v in d.get("not_assessed", ())],
         )
 
 
@@ -1215,6 +1337,7 @@ def judge(
     extra: Iterable[Observation] = (),
     references: dict[str, frozenset[str]] | None = None,
     not_claims: dict[str, Counter] | None = None,
+    rule: str = DEFAULT_RULE,
 ) -> Report:
     """Judge a labelling's claims against held-out sources, under holdout's split discipline.
 
@@ -1223,7 +1346,10 @@ def judge(
     `holdout.check_provenance` first, and its LeakError propagates: a labelling built from
     `holdout.evidence(without=S)` is judged with `sources=[S]`. An `extra` observation whose source the
     labelling read is refused with the same error. `not_claims` (counts of what the labelling states
-    that is not a claim) is read after the claims are consumed, so a generator may fill it."""
+    that is not a claim) is read after the claims are consumed, so a generator may fill it. `rule` is the
+    direction rule (DIRECTION_RULE): v2 unless the caller pins RULE_V1 to reproduce a v1 result."""
+    if rule not in RULES:
+        raise ValueError(f"unknown rule {rule!r} ({', '.join(RULES)})")
     units = units if units is not None else ho.all_units()
     srcs = list(sources) if sources is not None else ho.sources(units)
     for s in srcs:
@@ -1237,14 +1363,17 @@ def judge(
         if o.source in labels.reads:
             raise ho.LeakError(f"{labels.name} read {o.source!r}, so it cannot be judged by it")
     ev = Evidence(units, srcs, extra)
-    tallies = {a: AxisTally() for a in AXES}
+    tallies = {a: AxisTally(rule=rule) for a in AXES}
     judged: list[Verdict] = []
+    not_assessed: list[Verdict] = []
     for c in claims:
         obs = ev.at(c.chrom, c.start, c.end)
-        v = verdict_of(c, obs)
+        v = verdict_of(c, obs, rule)
         tallies[c.axis].add(v, {o.kind for o in touching(c, obs)})
         if v.verdict != NOT_JUDGED:
             judged.append(v)
+        elif v.reason == NOT_ASSESSED:
+            not_assessed.append(v)
     return Report(
         labels.name,
         sorted(labels.reads),
@@ -1253,6 +1382,8 @@ def judge(
         tallies,
         judged,
         {a: dict(sorted(n.items())) for a, n in (not_claims or {}).items()},
+        rule,
+        not_assessed,
     )
 
 
@@ -1392,4 +1523,22 @@ def registration() -> dict[str, Any]:
         "unchanged_reads": sorted(UNCHANGED_READS),
         "table": table_rows(),
         "holdout_registration": ho.REGISTERED,
+    }
+
+
+def rule_registration() -> dict[str, Any]:
+    """The versioned direction rule (registered 2026-09-29), as a result judged under v2 states it."""
+    return {
+        "registered": RULE_REGISTERED,
+        "rules": list(RULES),
+        "default": DEFAULT_RULE,
+        "decision": RULE_DECISION,
+        "direction_rule": DIRECTION_RULE,
+        "refutable": REFUTABLE_RULE,
+        "not_assessed_reason": NOT_ASSESSED,
+        "cross_cell_findings": [AGREES, DISAGREES],
+        "not_judged_reasons_in_order": {RULE_V1: list(REASONS), RULE_V2: list(REASONS_V2)},
+        "rule_record": RULE_RECORD,
+        "seen_before_registration": SEEN_BEFORE_V2,
+        "expected": EXPECTED_V2,
     }

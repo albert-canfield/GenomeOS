@@ -194,13 +194,17 @@ def main() -> None:
         for k in pb.METRIC_KEYS:
             totals[k] += val_joint[k]
         # S4 beside: the pilot's committed labels and the unchanged labels on the same blocks
-        s4_pilot = cx.judge(pb.claims_of(solved["joint"]), pilot, units=units, sources=[src], references=refs)
+        # judged under v1, the rule this committed result was judged by, pinned (correctness.RULE_RECORD)
+        s4_pilot = cx.judge(
+            pb.claims_of(solved["joint"]), pilot, units=units, sources=[src], references=refs, rule=cx.RULE_V1
+        )
         s4_unch = cx.judge(
             pb.unchanged_claims_on(solved["joint"], unchanged_claims),
             cx.unchanged_labels(),
             units=units,
             sources=[src],
             references=refs,
+            rule=cx.RULE_V1,
         )
         # returned neighbourhoods: the first disputed ones of each status, in genome order
         picked: dict[str, int] = defaultdict(int)

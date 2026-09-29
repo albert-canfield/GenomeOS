@@ -120,7 +120,8 @@ def test_response_elsewhere_and_null_in_the_stated_cell_is_one_context_error_not
     seen = [obs("crispri_decrease", cell="HepG2"), obs("crispri_null_well_powered", cell="K562")]
     t = co.verdict_of(claim(co.TARGET, "G1", cell="K562"), seen)
     c = co.verdict_of(claim(co.CONTEXT, "K562", gene="G1", cell="K562"), seen)
-    a = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), seen)
+    # S4's direction rule as registered, v1 (versioned since 2026-09-29; v2 has its own tests)
+    a = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), seen, rule=co.RULE_V1)
     assert (t.verdict, c.verdict, a.verdict) == (co.CORRECT, co.INCORRECT, co.CORRECT)
     assert t.refutable and c.refutable
 
@@ -157,16 +158,17 @@ def test_a_claim_with_no_stated_cell_can_be_established_and_never_refuted():
 
 
 def test_direction_and_reasons():
+    v1 = co.RULE_V1  # S4's direction rule as registered (versioned since 2026-09-29; v2 has its own tests)
     opposite = [obs("crispri_increase")]
     assert co.verdict_of(claim(co.TARGET, "G1", cell="K562"), opposite).verdict == co.CORRECT
-    a = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), opposite)
+    a = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), opposite, rule=v1)
     assert a.verdict == co.INCORRECT and co.OBSERVATION_MODEL_INADEQUATE in a.explanations
     split = [obs("crispri_decrease", cell="K562"), obs("crispri_increase", cell="HepG2")]
-    v = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="WTC11"), split)
+    v = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="WTC11"), split, rule=v1)
     assert v.verdict == co.UNRESOLVED and co.OBSERVATION_MODEL_INADEQUATE in v.explanations
     # in the stated cell, the stated cell decides
     assert (
-        co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), split).verdict
+        co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), split, rule=v1).verdict
         == co.CORRECT
     )
     other_gene = [obs("crispri_decrease", gene="G2")]
