@@ -11463,6 +11463,109 @@ The re-judge is run once, with the same claims and sources as S4, and written as
 any count other than the 59 target verdicts moves between v2 and v3, the lane stops and reports it
 before explaining it.
 
+### The re-judge under v3, beside v1 and v2 (2026-09-29, later)
+
+**S4's reading stands as the v1 result, and the v2 re-judge as the v2 result.**
+`attribution_correctness.json` and `attribution_correctness_v2.json` are unchanged, byte for byte. In the
+same run, v1 was judged again and matched its file key by key, leaving out only what records the run.
+v2 was judged again and matched its file's judged body and side-by-side counts. The v3 result is
+`attribution_correctness_v3.json`, judged once from commit b7cb814 in a clean worktree, with a clean
+stamp. Its manifest records `judge_rule: v3`. No model request was made.
+
+**The owner's decision** (quoted in full in the registration above): judge the compiled target claim
+only in its stated cell, for positive and negative verdicts alike, and keep the 59 other-cell
+relationships as supporting evidence elsewhere.
+
+**The counts in the owner's terms, side by side** (`in_context_side_by_side` in the result). Under v1
+and v2 a verdict decided with another cell is counted apart.
+
+| Claims | Rule | Supported in context | Refuted in context | Decided with another cell | Unassessed in context | Supported somewhere |
+| --- | --- | --- | --- | --- | --- | --- |
+| Target | v1 | 39 | 0 | 59, all established | 0 | 98 |
+| Target | v2 | 39 | 0 | 59, all established | 0 | 98 |
+| Target | v3 | 39 | 0 | 0 | 59 | 98 |
+| Direction | v1 | 39 | 0 | 59: 54 established, 5 refuted | 0 | 93 |
+| Direction | v2 | 39 | 0 | 0 | 59 | 93 |
+| Direction | v3 | 39 | 0 | 0 | 59 | 93 |
+| Context | v1, v2, v3 | 39 | 0 | 0 | not a term of this axis | not a term of this axis |
+
+**Beside every figure in this table, and every 39 of 39 in this section** (`correctness.IN_CONTEXT_CAUTION`):
+
+> these counts describe only the small subset of claims assessable in the stated context, where a screen
+> tested the named gene in the cell the claim names (mostly K562); an N of N here, such as 39 of 39, is
+> not general accuracy, of the labelling or of any axis
+
+Unresolved and observation-model-inadequate are 0 on every axis under all three rules. Origin and
+molecular role judge nothing under any rule.
+
+**Target, in detail.**
+
+- **Other not-judged reasons:** every one keeps its v1 and v2 count. That is 1,400 outside the claim's
+  scope (1,377 element screened but gene not tested, 23 well-powered null only in another context), 0
+  until the target responds, 3,194 only suggest, 18,747 only cannot judge, and 416,938 no observation.
+- **`refutable`:** 39 under all three rules.
+- **Counts that move only with the 59:**
+  - `decided_by_kind` goes from 97 decreases and 1 increase to 39 decreases.
+  - Verdicts decided with a held-out-file pair go from 14 to 1.
+- **Check:** the moved claims account for every count change, between v2 and v3 and between v1 and v3
+  (`unexplained_count_changes` is empty in both).
+
+**The 59 are the ones registered.**
+
+- Between v2 and v3, exactly 59 claims move. All are targets that v2 established only from another cell.
+  All become not assessed in this context, with the detail "the gene responded only in other cells".
+- Each keeps its other-cell responses beside it as cross-cell findings that agree: supporting evidence
+  elsewhere.
+- The registration left one count open. It is 0: none of the 59, and none of the 39, carries a
+  disagreeing cross-cell finding (a well-powered null in another cell). The 39 carry no cross-cell
+  finding at all.
+- Between v1 and v3, 118 claims move: these 59 targets and v2's 59 directions.
+
+Every count matches the registration. The 39 / 59 split had already been seen, so agreement is expected,
+not evidence for the rule. Albert's decision justifies the rule; the registration only makes the
+re-judge traceable.
+
+**The direction correction is resolved.** v3 carries v2's direction rule unchanged. Every direction
+count under v3 equals v2's.
+
+**Left to the owner as findings, and not changed here.**
+
+- **One null on both axes.** A gene can respond in another cell and have a well-powered null, but no
+  response, in the stated cell. That null now refutes the target in context and, under the unchanged
+  context rule, the context claim. The two stay on their own axes and are never combined. This happens 0
+  times on S4's claims.
+- **Context's own cross-cell condition.** The context axis is judged only where the gene responds in some
+  cell. So another cell's response is still the precondition that lets a stated-cell null refute a
+  context claim.
+
+**Beside S4, derived from the committed counts and not rerun.** The prior-only test and the pilot gate
+were not regenerated, and their scripts pin v1. Neither gate's registered verdict reads an S4 block. On
+the target axis their S4-beside blocks would move as follows:
+
+- **Prior-only test, Gasperini2019:**
+  - unchanged labels: from 43 of 43 to 24 supported and 0 refuted in context, 19 unassessed;
+  - the prior's own labelling: from 53 of 59 to 40 supported and 6 refuted in context, 13 unassessed.
+- **Pilot gate, Gasperini2019:**
+  - unchanged labels: from 28 of 28 to 12 supported and 0 refuted in context, 16 unassessed;
+  - the pilot's own labelling: from 36 of 44 to 28 supported and 8 refuted in context, 8 unassessed.
+- **Pilot gate, Schraivogel2020:** unchanged labels from 3 of 3 to none judged, 3 unassessed; the pilot's
+  3 of 4 does not move.
+- **Pilot gate, Xie:** 1 of 1 for both, unchanged. No target is judged on any other source.
+
+Their activity counts move as the v2 section derived. The caution above applies to every one of these
+figures: each N of N describes the small subset assessable in the stated context.
+
+**What it may be called:** an internal development benchmark reading of the same S4 claims under v3, in
+the owner's terms, beside the v1 and v2 readings.
+
+**What it may not be called:**
+
+- general accuracy: every N of N here, the 39 of 39 on target and on direction among them, describes the
+  small subset assessable in the stated context;
+- a validation, fresh or external;
+- evidence that the 59 targets are right or wrong in the cell they name: they are not assessed there;
+- a correction of S4's result or of the v2 re-judge, which stand as the v1 and v2 results.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
