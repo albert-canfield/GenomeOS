@@ -1,0 +1,3684 @@
+{
+  "result": "repression_trace",
+  "date": "2026-09-29",
+  "question": "for each represses_target claim S4 judged incorrect (four) and the one activates_target claim it judged incorrect (CCND1), where did the claimed direction come from, and why does it disagree with the observation that decided the verdict",
+  "status": "an internal development trace of existing claims, not a validation",
+  "may_be_called": "an internal development trace of five existing claims: where each claimed direction came from and which registered class explains its disagreement with the observation that decided it",
+  "may_not_be_called": [
+    "a validation of the labels, the model or the judge",
+    "a rate: five claims are traced, chosen because S4 judged them wrong, and no share of anything is estimated from them",
+    "evidence about claims S4 did not judge"
+  ],
+  "registration": {
+    "registered": "2026-09-29",
+    "status": "an internal development trace of existing claims, not a validation",
+    "written_after": "The brief asked for the classes before any tracing. This lane had already read the five compiled rules, their rows in the whole-chromosome run, the five cached model answers and the matching raw CRISPRi rows when it wrote them down, so this registration is not blind to the data. Classes (a) to (e) are the brief's five, with its definitions. Class (f) and the primary-class rule were written after that first reading, and are marked as such.",
+    "question": "for each represses_target claim S4 judged incorrect (four) and the one activates_target claim it judged incorrect (CCND1), where did the claimed direction come from, and why does it disagree with the observation that decided the verdict",
+    "cases": [
+      {
+        "element": "EH38E2447945",
+        "locus": "chr6:14095446-14095736",
+        "value": "represses_target",
+        "gene": "CD83",
+        "cell": "K562",
+        "deciding": {
+          "source": "crispri:Nasser2021",
+          "gene": "CD83",
+          "cell": "GM12878",
+          "split": "heldout"
+        }
+      },
+      {
+        "element": "EH38E3896696",
+        "locus": "chr9:97960870-97961216",
+        "value": "represses_target",
+        "gene": "HEMGN",
+        "cell": "Brain_Cerebellar_Hemisphere",
+        "deciding": {
+          "source": "crispri:Gasperini2019",
+          "gene": "HEMGN",
+          "cell": "K562",
+          "split": "training"
+        }
+      },
+      {
+        "element": "EH38E3426791",
+        "locus": "chr20:31608511-31608860",
+        "value": "represses_target",
+        "gene": "ID1",
+        "cell": "Whole_Blood",
+        "deciding": {
+          "source": "crispri:Gasperini2019",
+          "gene": "ID1",
+          "cell": "K562",
+          "split": "training"
+        }
+      },
+      {
+        "element": "EH38E3940111",
+        "locus": "chrX:103233290-103233585",
+        "value": "represses_target",
+        "gene": "BEX4",
+        "cell": "hair_follicular_keratinocyte",
+        "deciding": {
+          "source": "crispri:Gasperini2019",
+          "gene": "BEX4",
+          "cell": "K562",
+          "split": "training"
+        }
+      }
+    ],
+    "comparison": {
+      "element": "EH38E1548926",
+      "locus": "chr11:69588295-69588640",
+      "value": "activates_target",
+      "gene": "CCND1",
+      "cell": "CD8_positive__alpha_beta_memory_T_cell",
+      "deciding": {
+        "source": "crispri:HCT116",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout"
+      }
+    },
+    "classes": {
+      "a": {
+        "name": "sign or convention error",
+        "definition": "a sign flipped, or a convention misread, somewhere between the source and the label, or between the raw measurement and the observation. On the label side the steps are: the model's log2 fold change (alternate over reference, where the alternate allele is the deletion), the choice between the gene's largest drop and its largest rise (enhancer_target.predict_target), the rule verb the compiler writes (activates or inhibits), and the claim value S4 reads from the verb. On the measurement side the steps are: the benchmark's EffectSize and Significant columns, the pair's outcome (measured.CrispriPair.outcome), the observation kind (correctness.CRISPRI_KIND) and the S4 table's reading of that kind on the claim's value",
+        "decided_by": "step by step: present when a step's stored sign or direction is not the one the previous step's value implies under that step's own stated convention. The label side is recomputed from the cached answer with predict_target and the compiler's verb rule, and compared with the stored run row, the compiled rule line and the S4 claim. The measurement side is recomputed from the raw benchmark row and compared with the observation S4 recorded",
+        "added_after_first_reading": false
+      },
+      "b": {
+        "name": "cell mismatch",
+        "definition": "the claim's stated cell and the deciding observation's cell differ, so by the S4 table the observation may not bear on the claim at all. The table's CRISPRi activity and context cells speak of 'the cell screened'",
+        "decided_by": "present when no deciding observation's cell equals the claim's cell after S4's own normalisation (correctness.norm_cell)",
+        "added_after_first_reading": false
+      },
+      "c": {
+        "name": "genuine contradiction",
+        "definition": "the same reading in the same cell has the opposite direction: the model's own value for the named gene on the measured cell's track has the opposite sign to the measured effect",
+        "decided_by": "the cached answer's value for the gene on the measured cell's track: `by_cell`, and the largest drop or rise where the track it came from is named for that cell. Present when a value for that cell is opposite in sign to the measurement. Absent when every such value has the measurement's sign. Unknown when the cache holds no value for that cell. The cache keeps one `by_cell` value per cell name, so where a cell has several tracks the others are not seen, and this is stated beside each case",
+        "added_after_first_reading": false
+      },
+      "d": {
+        "name": "indirect or ambiguous",
+        "definition": "another gene may carry the effect: another gene in the window, a shared promoter or a multi-target element",
+        "decided_by": "present when any of: the model's any-gene prediction names a different gene from its coding prediction; the run's compact verdict says 'another gene in the same domain'; or the same screen changed another gene significantly on silencing this element (a multi-target element). Each of the three is reported separately, and the annotated genes nearest the element are listed as description only",
+        "added_after_first_reading": false
+      },
+      "e": {
+        "name": "judge inconsistency",
+        "definition": "the verdict `incorrect` alongside `refutable: false`: the judge gave a verdict its own registered rules (correctness.TABLE, correctness.AXIS_RULE) do not give, or its rules contradict each other on this claim",
+        "decided_by": "correctness.verdict_of re-run on the claim with the observations S4 held for the element must give the committed verdict and the committed deciding observations. What `refutable` means is read from correctness.py and stated. Separately, the committed S4 result is counted per axis by verdict and by `refutable`, to show where `incorrect` can occur with `refutable` false",
+        "added_after_first_reading": false
+      },
+      "f": {
+        "name": "direction split across tracks",
+        "definition": "the model moves the named gene both ways on different tracks, and the label takes the direction and the cell of the single most extreme track (enhancer_target.predict_target: the larger of the largest drop and the largest rise over every track wins)",
+        "decided_by": "present when the cached answer records both a drop and a rise for the named gene (max_drop_log2fc < 0 < max_rise_log2fc). The live scorer records only values beyond 0.05, so both being non-zero means both passed that recording threshold. The winning margin is reported",
+        "added_after_first_reading": true
+      }
+    },
+    "primary_rule": "written after the first reading. The primary class is the first that applies, in this order: (a) when present, because a flipped sign explains any disagreement; (e) when present; (c) when present, because the disagreement then survives aligning the cells; (b) when present and (c) is absent or unknown, because the claim and the observation are then in different cells and the model's own reading of the measured cell does not contradict the measurement, or cannot be read. (d) and (f) are recorded beside and are never primary: S4 matches the deciding observation to the named gene, so another gene cannot be what disagrees, and (f) says where a direction came from, not why a measurement disagrees with it",
+    "no_change": "no label and no verdict is changed by this trace. A bug, if one is found, is fixed with a test that fails before the fix. When the fix would move a committed result's figures, the before-and-after counts are written and the result is not regenerated: that is the coordinator's call",
+    "may_be_called": "an internal development trace of five existing claims: where each claimed direction came from and which registered class explains its disagreement with the observation that decided it",
+    "may_not_be_called": [
+      "a validation of the labels, the model or the judge",
+      "a rate: five claims are traced, chosen because S4 judged them wrong, and no share of anything is estimated from them",
+      "evidence about claims S4 did not judge"
+    ]
+  },
+  "conventions": {
+    "model": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'",
+    "deletion": "enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element",
+    "direction": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'",
+    "verb": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)",
+    "claim": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb",
+    "crispri": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+  },
+  "summary": [
+    {
+      "element": "EH38E2447945",
+      "gene": "CD83",
+      "claim": "represses_target in K562",
+      "deciding": "Nasser2021, GM12878, heldout",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "absent",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "one_line": "CD83: the model's largest rise (+0.3049, K562) and largest drop (-0.2954, OCI-LY7) disagree, and the rise won by 0.0095, so the rule says represses in K562. The screen silenced the element in GM12878 and CD83 fell (EffectSize -0.2488, adjusted p 3.4e-40). The model on GM12878: by_cell[GM12878] -0.0968; measured EffectSize -0.2488; one value kept, other tracks named for this cell are not seen. Primary class (b) cell mismatch"
+    },
+    {
+      "element": "EH38E3896696",
+      "gene": "HEMGN",
+      "claim": "represses_target in Brain_Cerebellar_Hemisphere",
+      "deciding": "Gasperini2019, K562, training",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "one_line": "HEMGN: the model's largest rise (+0.1380, Brain_Cerebellar_Hemisphere) and largest drop (-0.0962, K562) disagree, and the rise won by 0.0418, so the rule says represses in Brain_Cerebellar_Hemisphere. The screen silenced the element in K562 and HEMGN fell (EffectSize -0.2232, adjusted p 5.9e-11). The model on K562: by_cell[K562] -0.0948, max_drop_log2fc -0.0962; measured EffectSize -0.2232. Primary class (b) cell mismatch"
+    },
+    {
+      "element": "EH38E3426791",
+      "gene": "ID1",
+      "claim": "represses_target in Whole_Blood",
+      "deciding": "Gasperini2019, K562, training",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "present",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "c",
+      "one_line": "ID1: the model's largest rise (+0.8119, Whole_Blood) and largest drop (-0.7408, left lobe of liver) disagree, and the rise won by 0.0711, so the rule says represses in Whole_Blood. The screen silenced the element in K562 and ID1 fell (EffectSize -0.1582, adjusted p 1.8e-14). The model on K562: by_cell[K562] +0.1433; measured EffectSize -0.1582; one value kept, other tracks named for this cell are not seen. Primary class (c) genuine contradiction"
+    },
+    {
+      "element": "EH38E3940111",
+      "gene": "BEX4",
+      "claim": "represses_target in hair_follicular_keratinocyte",
+      "deciding": "Gasperini2019, K562, training",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "one_line": "BEX4: the model's largest rise (+0.1397, hair follicular keratinocyte) and largest drop (-0.1229, K562) disagree, and the rise won by 0.0168, so the rule says represses in hair_follicular_keratinocyte. The screen silenced the element in K562 and BEX4 fell (EffectSize -0.2939, adjusted p 6e-82). The model on K562: by_cell[K562] -0.1208, max_drop_log2fc -0.1229; measured EffectSize -0.2939. Primary class (b) cell mismatch"
+    },
+    {
+      "element": "EH38E1548926",
+      "gene": "CCND1",
+      "claim": "activates_target in CD8_positive__alpha_beta_memory_T_cell",
+      "deciding": "HCT116, HCT116, heldout",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "unknown",
+        "d": "absent",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "one_line": "CCND1: the model's largest rise (+0.1086, K562) and largest drop (-0.1634, CD8-positive, alpha-beta memory T cell) disagree, and the drop won by 0.0548, so the rule says activates in CD8_positive__alpha_beta_memory_T_cell. The screen silenced the element in HCT116 and CCND1 rose (EffectSize +0.1288, adjusted p 0.0001). The model on HCT116: the cache keeps no value for CCND1 on a track named for this cell. Primary class (b) cell mismatch"
+    }
+  ],
+  "four": [
+    {
+      "element": "EH38E2447945",
+      "locus": "chr6:14095446-14095736",
+      "gene": "CD83",
+      "claim": {
+        "value": "represses_target",
+        "cell": "K562"
+      },
+      "committed_s4_verdict": {
+        "element": "EH38E2447945",
+        "locus": "chr6:14095446-14095736",
+        "block": "element",
+        "axis": "activity",
+        "value": "represses_target",
+        "gene": "CD83",
+        "cell": "K562",
+        "verdict": "incorrect",
+        "reason": "",
+        "detail": "the gene moved the other way",
+        "explanations": [
+          "the claim is wrong",
+          "the observation model is inadequate",
+          "the effect is indirect, through another gene"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_decrease",
+            "source": "crispri:Nasser2021",
+            "gene": "CD83",
+            "cell": "GM12878",
+            "split": "heldout"
+          }
+        ],
+        "refutable": false
+      },
+      "one_line": "CD83: the model's largest rise (+0.3049, K562) and largest drop (-0.2954, OCI-LY7) disagree, and the rise won by 0.0095, so the rule says represses in K562. The screen silenced the element in GM12878 and CD83 fell (EffectSize -0.2488, adjusted p 3.4e-40). The model on GM12878: by_cell[GM12878] -0.0968; measured EffectSize -0.2488; one value kept, other tracks named for this cell are not seen. Primary class (b) cell mismatch",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "absent",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "why": {
+        "a": "every step on both sides carries the sign the one before implies",
+        "b": "the claim names K562; the deciding observation is in GM12878",
+        "c": "model on GM12878: by_cell[GM12878] -0.0968; measured EffectSize -0.2488; one value kept, other tracks named for this cell are not seen",
+        "d": "any-gene prediction CD83; compact verdict 'agrees with nearest TSS in domain'; other genes changed significantly in the same screen: none",
+        "e": "verdict_of reproduces the committed verdict and deciding observation; the activity rule as registered lets a response in another cell decide, and refutable is not computed on activity",
+        "f": "largest drop -0.2954 (OCI-LY7), largest rise +0.3049 (K562); the rise wins by 0.0095"
+      },
+      "indirect_parts": {
+        "any_gene_prediction_differs": false,
+        "verdict_another_gene_in_domain": false,
+        "multi_target_in_same_screen": false
+      },
+      "label_side": {
+        "source_run": "all",
+        "run_row": {
+          "id": "EH38E2447945",
+          "start": 14095446,
+          "end": 14095736,
+          "predicted": {
+            "gene": "CD83",
+            "action": "represses",
+            "log2_fold_change": 0.3049,
+            "tissue": "K562",
+            "strength": "strong",
+            "confidence": 0.305,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_coding": {
+            "gene": "CD83",
+            "action": "represses",
+            "log2_fold_change": 0.3049,
+            "tissue": "K562",
+            "strength": "strong",
+            "confidence": 0.305,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_by_cell": {
+            "HepG2": 0.1331,
+            "IMR-90": -0.0075,
+            "K562": 0.3049,
+            "GM12878": -0.0968
+          },
+          "predicted_coding_by_cell": {
+            "HepG2": 0.1331,
+            "IMR-90": -0.0075,
+            "K562": 0.3049,
+            "GM12878": -0.0968
+          },
+          "verdict_coding": "agrees with nearest TSS in domain",
+          "inferred": {
+            "gene": "CD83",
+            "distance": 21664,
+            "basis": "nearest TSS in domain",
+            "confidence": 0.4
+          },
+          "model_version": null
+        },
+        "cached_gene_row": {
+          "gene": "CD83",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0157,
+          "max_drop_log2fc": -0.2954,
+          "max_drop_tissue": "OCI-LY7",
+          "max_rise_log2fc": 0.3049,
+          "max_rise_tissue": "K562",
+          "by_cell": {
+            "HepG2": 0.1331,
+            "IMR-90": -0.0075,
+            "K562": 0.3049,
+            "GM12878": -0.0968
+          }
+        },
+        "cached_tracks": 371,
+        "cached_genes_in_window": 20,
+        "any_gene_prediction_recomputed": {
+          "gene": "CD83",
+          "action": "represses",
+          "log2_fold_change": 0.3049,
+          "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+          "tissue": "K562",
+          "strength": "strong",
+          "certainty": {
+            "evidence_category": "predicted: AlphaGenome deletion, one model run",
+            "effect_estimate": 0.3049,
+            "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+            "measurement_uncertainty": null,
+            "uncertainty_note": "one deterministic model run; no spread computed",
+            "model_score": 0.3049,
+            "model_score_name": "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude this run ranks candidate genes by, not a probability",
+            "probability": null,
+            "probability_unavailable": "no calibration record: the effect size of one model run is not a probability that deleting the element moves this gene, and none has been fitted against a measured outcome (review R4)"
+          },
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "compiled": {
+          "program": "data/knowledge/compiled/noncoding_chr6.bio",
+          "element_block": [
+            [
+              53644,
+              "element EH38E2447945 {"
+            ],
+            [
+              53645,
+              "  class: enhancer"
+            ],
+            [
+              53646,
+              "  locus: chr6:14095446-14095736"
+            ],
+            [
+              53647,
+              "  domain: chr6_D96"
+            ],
+            [
+              53648,
+              "  targets: CD83"
+            ],
+            [
+              53649,
+              "  basis: predicted, deleting the element moves CD83 by +0.30 log2 in K562 (strong), agrees with nearest TSS in domain"
+            ],
+            [
+              53650,
+              "  evidence: predicted \"AlphaGenome RNA-seq gene scorer, expression change on deletion\" effect +0.305 log2 fold change on deletion, probability unavailable"
+            ],
+            [
+              53651,
+              "  origin: unique"
+            ],
+            [
+              53652,
+              "  molecular_role: enhancer_like, insulator_like, silencer|insulator_like|competing_promoter|unknown"
+            ],
+            [
+              53653,
+              "  activity: represses_target"
+            ],
+            [
+              53654,
+              "  target_relation: predicted_deletion_target, nearest_tss_in_domain"
+            ],
+            [
+              53655,
+              "  evidence_status: registry_biochemical, predicted_model, selection_not_measured"
+            ],
+            [
+              53656,
+              "}"
+            ]
+          ],
+          "rule": [
+            53657,
+            "rule EH38E2447945 inhibits CD83 { strength: 0.305; when: cell_type = K562; evidence: predicted \"AlphaGenome deletion, K562\" effect +0.305 log2 fold change on deletion, probability unavailable }"
+          ],
+          "measured_rules": [
+            [
+              352784,
+              "rule EH38E2447945_measured activates CD83 { strength: 0.249; when: cell_type = GM12878; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in GM12878, held-out split, evaluation only, never a feature\"; confidence: 0.90 }"
+            ]
+          ]
+        },
+        "steps": [
+          {
+            "step": "L1 cached model answer",
+            "where": "data/knowledge/alphagenome/elements/chr6.json.gz [EH38E2447945] genes[CD83]",
+            "stored": {
+              "n_tracks": 371,
+              "mean_log2fc": 0.0157,
+              "max_drop_log2fc": -0.2954,
+              "max_drop_tissue": "OCI-LY7",
+              "max_rise_log2fc": 0.3049,
+              "max_rise_tissue": "K562",
+              "by_cell": {
+                "HepG2": 0.1331,
+                "IMR-90": -0.0075,
+                "K562": 0.3049,
+                "GM12878": -0.0968
+              }
+            },
+            "implies": "represses: the larger of the largest drop (-0.2954, OCI-LY7) and the largest rise (+0.3049, K562)",
+            "consistent": true,
+            "convention": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'; enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element"
+          },
+          {
+            "step": "L2 run row (predicted_coding)",
+            "where": "enhancer_targets_all_chr6 -> all run table, element EH38E2447945",
+            "stored": {
+              "gene": "CD83",
+              "action": "represses",
+              "log2_fold_change": 0.3049,
+              "tissue": "K562",
+              "strength": "strong"
+            },
+            "recomputed": {
+              "gene": "CD83",
+              "action": "represses",
+              "log2_fold_change": 0.3049,
+              "tissue": "K562"
+            },
+            "consistent": true,
+            "convention": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'"
+          },
+          {
+            "step": "L3 compiled rule",
+            "where": "data/knowledge/compiled/noncoding_chr6.bio:53657",
+            "stored": {
+              "verb": "inhibits",
+              "gene": "CD83",
+              "cell": "K562",
+              "evidence": "predicted",
+              "effect": 0.305
+            },
+            "consistent": true,
+            "convention": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)"
+          },
+          {
+            "step": "L4 S4 claim",
+            "where": "correctness.compiled_claims",
+            "stored": {
+              "value": "represses_target",
+              "gene": "CD83",
+              "cell": "K562"
+            },
+            "consistent": true,
+            "convention": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb"
+          }
+        ],
+        "genes_near": {
+          "near_bp": 5000,
+          "within_near_bp": [
+            {
+              "gene": "ENSG00000294664",
+              "type": "lncRNA",
+              "start": 14094398,
+              "end": 14094753,
+              "strand": "+",
+              "gap_bp": 693
+            }
+          ],
+          "named_gene": {
+            "gene": "CD83",
+            "type": "protein_coding",
+            "start": 14117255,
+            "end": 14203465,
+            "strand": "+",
+            "tss": 14117255,
+            "element_to_tss_bp": -21664,
+            "gap_bp": 21519
+          }
+        }
+      },
+      "measurement_side": {
+        "deciding_row": {
+          "file": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+          "split": "heldout",
+          "line": 67,
+          "row": {
+            "chrom": "chr6",
+            "chromStart": "14095336",
+            "chromEnd": "14095836",
+            "name": "CD83|chr6:14095567-14096067:.",
+            "measuredGeneSymbol": "CD83",
+            "measuredGeneEnsemblId": "ENSG00000112149",
+            "EffectSize": "-0.24885",
+            "Significant": "TRUE",
+            "pValueAdjusted": "3.35229276080193e-40",
+            "Regulated": "TRUE",
+            "PowerAtEffectSize20": "0",
+            "ValidConnection": "TRUE",
+            "CellType": "GM12878",
+            "Dataset": "Nasser2021",
+            "Reference": "Nasser et al., 2021 from"
+          },
+          "outcome": "significant_decrease",
+          "invalid": false
+        },
+        "effect_size": -0.24885,
+        "significant": true,
+        "p_adjusted": 3.35229276080193e-40,
+        "cell": "GM12878",
+        "steps": [
+          {
+            "step": "M1 raw benchmark row",
+            "where": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz line 67 (name CD83|chr6:14095567-14096067:.)",
+            "stored": {
+              "chrom": "chr6",
+              "chromStart": "14095336",
+              "chromEnd": "14095836",
+              "name": "CD83|chr6:14095567-14096067:.",
+              "measuredGeneSymbol": "CD83",
+              "measuredGeneEnsemblId": "ENSG00000112149",
+              "EffectSize": "-0.24885",
+              "Significant": "TRUE",
+              "pValueAdjusted": "3.35229276080193e-40",
+              "Regulated": "TRUE",
+              "PowerAtEffectSize20": "0",
+              "ValidConnection": "TRUE",
+              "CellType": "GM12878",
+              "Dataset": "Nasser2021",
+              "Reference": "Nasser et al., 2021 from"
+            },
+            "consistent": true,
+            "convention": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+          },
+          {
+            "step": "M2 pair outcome",
+            "where": "measured.parse_crispri -> CrispriPair.outcome",
+            "stored": "significant_decrease",
+            "consistent": true,
+            "convention": "significant and EffectSize < 0 is a decrease, > 0 an increase; Regulated TRUE only for a significant decrease"
+          },
+          {
+            "step": "M3 observation kind",
+            "where": "correctness.CRISPRI_KIND",
+            "stored": "crispri_decrease",
+            "consistent": true,
+            "convention": "one kind per outcome"
+          },
+          {
+            "step": "M4 S4 table reading on the claim",
+            "where": "correctness.TABLE[crispri_decrease][activity]",
+            "stored": "refutes",
+            "consistent": true,
+            "convention": "crispri_decrease refutes represses_target; crispri_increase refutes activates_target"
+          }
+        ],
+        "other_genes_same_screen": [],
+        "all_rows_at_element": [
+          {
+            "file": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+            "line": 67,
+            "gene": "CD83",
+            "cell": "GM12878",
+            "dataset": "Nasser2021",
+            "effect_size": "-0.24885",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          }
+        ]
+      },
+      "s4_rerun": {
+        "target": {
+          "element": "EH38E2447945",
+          "locus": "chr6:14095446-14095736",
+          "block": "element",
+          "axis": "target",
+          "value": "CD83",
+          "gene": "CD83",
+          "cell": "K562",
+          "verdict": "correct",
+          "reason": "",
+          "detail": "",
+          "explanations": [
+            "the claim holds",
+            "the observation model is inadequate"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Nasser2021",
+              "gene": "CD83",
+              "cell": "GM12878",
+              "split": "heldout"
+            }
+          ],
+          "refutable": false
+        },
+        "activity": {
+          "element": "EH38E2447945",
+          "locus": "chr6:14095446-14095736",
+          "block": "element",
+          "axis": "activity",
+          "value": "represses_target",
+          "gene": "CD83",
+          "cell": "K562",
+          "verdict": "incorrect",
+          "reason": "",
+          "detail": "the gene moved the other way",
+          "explanations": [
+            "the claim is wrong",
+            "the observation model is inadequate",
+            "the effect is indirect, through another gene"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Nasser2021",
+              "gene": "CD83",
+              "cell": "GM12878",
+              "split": "heldout"
+            }
+          ],
+          "refutable": false
+        },
+        "context": {
+          "element": "EH38E2447945",
+          "locus": "chr6:14095446-14095736",
+          "block": "element",
+          "axis": "context",
+          "value": "K562",
+          "gene": "CD83",
+          "cell": "K562",
+          "verdict": "not_judged",
+          "reason": "judging_observations_outside_the_claims_scope",
+          "detail": "responds only in other cells; the stated cell is untested",
+          "explanations": [],
+          "deciding": [],
+          "refutable": false
+        },
+        "observations_touching": [
+          [
+            "crispri_decrease",
+            "crispri:Nasser2021",
+            "CD83",
+            "GM12878"
+          ]
+        ]
+      }
+    },
+    {
+      "element": "EH38E3896696",
+      "locus": "chr9:97960870-97961216",
+      "gene": "HEMGN",
+      "claim": {
+        "value": "represses_target",
+        "cell": "Brain_Cerebellar_Hemisphere"
+      },
+      "committed_s4_verdict": {
+        "element": "EH38E3896696",
+        "locus": "chr9:97960870-97961216",
+        "block": "element",
+        "axis": "activity",
+        "value": "represses_target",
+        "gene": "HEMGN",
+        "cell": "Brain_Cerebellar_Hemisphere",
+        "verdict": "incorrect",
+        "reason": "",
+        "detail": "the gene moved the other way",
+        "explanations": [
+          "the claim is wrong",
+          "the observation model is inadequate",
+          "the effect is indirect, through another gene"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_decrease",
+            "source": "crispri:Gasperini2019",
+            "gene": "HEMGN",
+            "cell": "K562",
+            "split": "training"
+          }
+        ],
+        "refutable": false
+      },
+      "one_line": "HEMGN: the model's largest rise (+0.1380, Brain_Cerebellar_Hemisphere) and largest drop (-0.0962, K562) disagree, and the rise won by 0.0418, so the rule says represses in Brain_Cerebellar_Hemisphere. The screen silenced the element in K562 and HEMGN fell (EffectSize -0.2232, adjusted p 5.9e-11). The model on K562: by_cell[K562] -0.0948, max_drop_log2fc -0.0962; measured EffectSize -0.2232. Primary class (b) cell mismatch",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "why": {
+        "a": "every step on both sides carries the sign the one before implies",
+        "b": "the claim names Brain_Cerebellar_Hemisphere; the deciding observation is in K562",
+        "c": "model on K562: by_cell[K562] -0.0948, max_drop_log2fc -0.0962; measured EffectSize -0.2232",
+        "d": "any-gene prediction HEMGN; compact verdict 'agrees with nearest TSS in domain'; other genes changed significantly in the same screen: [('ANP32B', -0.213971635422309)]",
+        "e": "verdict_of reproduces the committed verdict and deciding observation; the activity rule as registered lets a response in another cell decide, and refutable is not computed on activity",
+        "f": "largest drop -0.0962 (K562), largest rise +0.1380 (Brain_Cerebellar_Hemisphere); the rise wins by 0.0418"
+      },
+      "indirect_parts": {
+        "any_gene_prediction_differs": false,
+        "verdict_another_gene_in_domain": false,
+        "multi_target_in_same_screen": true
+      },
+      "label_side": {
+        "source_run": "all",
+        "run_row": {
+          "id": "EH38E3896696",
+          "start": 97960870,
+          "end": 97961216,
+          "predicted": {
+            "gene": "HEMGN",
+            "action": "represses",
+            "log2_fold_change": 0.138,
+            "tissue": "Brain_Cerebellar_Hemisphere",
+            "strength": "weak",
+            "confidence": 0.138,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_coding": {
+            "gene": "HEMGN",
+            "action": "represses",
+            "log2_fold_change": 0.138,
+            "tissue": "Brain_Cerebellar_Hemisphere",
+            "strength": "weak",
+            "confidence": 0.138,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_by_cell": {
+            "HepG2": 0.0284,
+            "IMR-90": 0.0062,
+            "K562": -0.0948,
+            "GM12878": 0.0414
+          },
+          "predicted_coding_by_cell": {
+            "HepG2": 0.0284,
+            "IMR-90": 0.0062,
+            "K562": -0.0948,
+            "GM12878": 0.0414
+          },
+          "verdict_coding": "agrees with nearest TSS in domain",
+          "inferred": {
+            "gene": "HEMGN",
+            "distance": 16188,
+            "basis": "nearest TSS in domain",
+            "confidence": 0.4
+          },
+          "model_version": null
+        },
+        "cached_gene_row": {
+          "gene": "HEMGN",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0234,
+          "max_drop_log2fc": -0.0962,
+          "max_drop_tissue": "K562",
+          "max_rise_log2fc": 0.138,
+          "max_rise_tissue": "Brain_Cerebellar_Hemisphere",
+          "by_cell": {
+            "HepG2": 0.0284,
+            "IMR-90": 0.0062,
+            "K562": -0.0948,
+            "GM12878": 0.0414
+          }
+        },
+        "cached_tracks": 371,
+        "cached_genes_in_window": 26,
+        "any_gene_prediction_recomputed": {
+          "gene": "HEMGN",
+          "action": "represses",
+          "log2_fold_change": 0.138,
+          "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+          "tissue": "Brain_Cerebellar_Hemisphere",
+          "strength": "weak",
+          "certainty": {
+            "evidence_category": "predicted: AlphaGenome deletion, one model run",
+            "effect_estimate": 0.138,
+            "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+            "measurement_uncertainty": null,
+            "uncertainty_note": "one deterministic model run; no spread computed",
+            "model_score": 0.138,
+            "model_score_name": "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude this run ranks candidate genes by, not a probability",
+            "probability": null,
+            "probability_unavailable": "no calibration record: the effect size of one model run is not a probability that deleting the element moves this gene, and none has been fitted against a measured outcome (review R4)"
+          },
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "compiled": {
+          "program": "data/knowledge/compiled/noncoding_chr9.bio",
+          "element_block": [
+            [
+              144719,
+              "element EH38E3896696 {"
+            ],
+            [
+              144720,
+              "  class: enhancer"
+            ],
+            [
+              144721,
+              "  locus: chr9:97960870-97961216"
+            ],
+            [
+              144722,
+              "  domain: chr9_D511"
+            ],
+            [
+              144723,
+              "  targets: HEMGN"
+            ],
+            [
+              144724,
+              "  basis: predicted, deleting the element moves HEMGN by +0.14 log2 in Brain_Cerebellar_Hemisphere (weak), agrees with nearest TSS in domain"
+            ],
+            [
+              144725,
+              "  evidence: predicted \"AlphaGenome RNA-seq gene scorer, expression change on deletion\" effect +0.138 log2 fold change on deletion, probability unavailable"
+            ],
+            [
+              144726,
+              "  origin: partly_repeat_derived/SINE"
+            ],
+            [
+              144727,
+              "  molecular_role: enhancer_like, insulator_like, silencer|insulator_like|competing_promoter|unknown"
+            ],
+            [
+              144728,
+              "  activity: represses_target"
+            ],
+            [
+              144729,
+              "  target_relation: predicted_deletion_target, nearest_tss_in_domain"
+            ],
+            [
+              144730,
+              "  evidence_status: registry_biochemical, predicted_model, selection_not_measured"
+            ],
+            [
+              144731,
+              "}"
+            ]
+          ],
+          "rule": [
+            144732,
+            "rule EH38E3896696 inhibits HEMGN { strength: 0.138; when: cell_type = Brain_Cerebellar_Hemisphere; evidence: predicted \"AlphaGenome deletion, Brain_Cerebellar_Hemisphere\" effect +0.138 log2 fold change on deletion, probability unavailable }"
+          ],
+          "measured_rules": [
+            [
+              288305,
+              "rule EH38E3896696_measured activates ANP32B { strength: 0.214; when: cell_type = K562; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562\"; confidence: 0.90 }"
+            ],
+            [
+              288306,
+              "rule EH38E3896696_measured activates HEMGN { strength: 0.223; when: cell_type = K562; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562\"; confidence: 0.90 }"
+            ]
+          ]
+        },
+        "steps": [
+          {
+            "step": "L1 cached model answer",
+            "where": "data/knowledge/alphagenome/elements/chr9.json.gz [EH38E3896696] genes[HEMGN]",
+            "stored": {
+              "n_tracks": 371,
+              "mean_log2fc": 0.0234,
+              "max_drop_log2fc": -0.0962,
+              "max_drop_tissue": "K562",
+              "max_rise_log2fc": 0.138,
+              "max_rise_tissue": "Brain_Cerebellar_Hemisphere",
+              "by_cell": {
+                "HepG2": 0.0284,
+                "IMR-90": 0.0062,
+                "K562": -0.0948,
+                "GM12878": 0.0414
+              }
+            },
+            "implies": "represses: the larger of the largest drop (-0.0962, K562) and the largest rise (+0.1380, Brain_Cerebellar_Hemisphere)",
+            "consistent": true,
+            "convention": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'; enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element"
+          },
+          {
+            "step": "L2 run row (predicted_coding)",
+            "where": "enhancer_targets_all_chr9 -> all run table, element EH38E3896696",
+            "stored": {
+              "gene": "HEMGN",
+              "action": "represses",
+              "log2_fold_change": 0.138,
+              "tissue": "Brain_Cerebellar_Hemisphere",
+              "strength": "weak"
+            },
+            "recomputed": {
+              "gene": "HEMGN",
+              "action": "represses",
+              "log2_fold_change": 0.138,
+              "tissue": "Brain_Cerebellar_Hemisphere"
+            },
+            "consistent": true,
+            "convention": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'"
+          },
+          {
+            "step": "L3 compiled rule",
+            "where": "data/knowledge/compiled/noncoding_chr9.bio:144732",
+            "stored": {
+              "verb": "inhibits",
+              "gene": "HEMGN",
+              "cell": "Brain_Cerebellar_Hemisphere",
+              "evidence": "predicted",
+              "effect": 0.138
+            },
+            "consistent": true,
+            "convention": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)"
+          },
+          {
+            "step": "L4 S4 claim",
+            "where": "correctness.compiled_claims",
+            "stored": {
+              "value": "represses_target",
+              "gene": "HEMGN",
+              "cell": "Brain_Cerebellar_Hemisphere"
+            },
+            "consistent": true,
+            "convention": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb"
+          }
+        ],
+        "genes_near": {
+          "near_bp": 5000,
+          "within_near_bp": [],
+          "named_gene": {
+            "gene": "HEMGN",
+            "type": "protein_coding",
+            "start": 97926790,
+            "end": 97944856,
+            "strand": "-",
+            "tss": 97944855,
+            "element_to_tss_bp": 16188,
+            "gap_bp": 16014
+          }
+        }
+      },
+      "measurement_side": {
+        "deciding_row": {
+          "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+          "split": "training",
+          "line": 9323,
+          "row": {
+            "chrom": "chr9",
+            "chromStart": "97960769",
+            "chromEnd": "97961269",
+            "name": "HEMGN|chr9:100723051-100723551:.",
+            "measuredGeneSymbol": "HEMGN",
+            "measuredGeneEnsemblId": "ENSG00000136929",
+            "EffectSize": "-0.22320622631327",
+            "Significant": "TRUE",
+            "pValueAdjusted": "5.90101254502644e-11",
+            "Regulated": "TRUE",
+            "PowerAtEffectSize20": "0.7",
+            "ValidConnection": "TRUE",
+            "CellType": "K562",
+            "Dataset": "Gasperini2019",
+            "Reference": "Gasperini et al., 2019"
+          },
+          "outcome": "significant_decrease",
+          "invalid": false
+        },
+        "effect_size": -0.22320622631327,
+        "significant": true,
+        "p_adjusted": 5.90101254502644e-11,
+        "cell": "K562",
+        "steps": [
+          {
+            "step": "M1 raw benchmark row",
+            "where": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz line 9323 (name HEMGN|chr9:100723051-100723551:.)",
+            "stored": {
+              "chrom": "chr9",
+              "chromStart": "97960769",
+              "chromEnd": "97961269",
+              "name": "HEMGN|chr9:100723051-100723551:.",
+              "measuredGeneSymbol": "HEMGN",
+              "measuredGeneEnsemblId": "ENSG00000136929",
+              "EffectSize": "-0.22320622631327",
+              "Significant": "TRUE",
+              "pValueAdjusted": "5.90101254502644e-11",
+              "Regulated": "TRUE",
+              "PowerAtEffectSize20": "0.7",
+              "ValidConnection": "TRUE",
+              "CellType": "K562",
+              "Dataset": "Gasperini2019",
+              "Reference": "Gasperini et al., 2019"
+            },
+            "consistent": true,
+            "convention": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+          },
+          {
+            "step": "M2 pair outcome",
+            "where": "measured.parse_crispri -> CrispriPair.outcome",
+            "stored": "significant_decrease",
+            "consistent": true,
+            "convention": "significant and EffectSize < 0 is a decrease, > 0 an increase; Regulated TRUE only for a significant decrease"
+          },
+          {
+            "step": "M3 observation kind",
+            "where": "correctness.CRISPRI_KIND",
+            "stored": "crispri_decrease",
+            "consistent": true,
+            "convention": "one kind per outcome"
+          },
+          {
+            "step": "M4 S4 table reading on the claim",
+            "where": "correctness.TABLE[crispri_decrease][activity]",
+            "stored": "refutes",
+            "consistent": true,
+            "convention": "crispri_decrease refutes represses_target; crispri_increase refutes activates_target"
+          }
+        ],
+        "other_genes_same_screen": [
+          {
+            "gene": "ANP32B",
+            "line": 9312,
+            "effect_size": -0.213971635422309,
+            "p_adjusted": 2.39330927754975e-11,
+            "outcome": "significant_decrease"
+          },
+          {
+            "gene": "NANS",
+            "line": 9320,
+            "effect_size": -0.0907048459774647,
+            "p_adjusted": 0.197104460380076,
+            "outcome": "not_significant_well_powered"
+          }
+        ],
+        "all_rows_at_element": [
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 9312,
+            "gene": "ANP32B",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.213971635422309",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 9320,
+            "gene": "NANS",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.0907048459774647",
+            "significant": "FALSE",
+            "outcome": "not_significant_well_powered",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 9323,
+            "gene": "HEMGN",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.22320622631327",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          }
+        ]
+      },
+      "s4_rerun": {
+        "target": {
+          "element": "EH38E3896696",
+          "locus": "chr9:97960870-97961216",
+          "block": "element",
+          "axis": "target",
+          "value": "HEMGN",
+          "gene": "HEMGN",
+          "cell": "Brain_Cerebellar_Hemisphere",
+          "verdict": "correct",
+          "reason": "",
+          "detail": "",
+          "explanations": [
+            "the claim holds",
+            "the observation model is inadequate"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "HEMGN",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "activity": {
+          "element": "EH38E3896696",
+          "locus": "chr9:97960870-97961216",
+          "block": "element",
+          "axis": "activity",
+          "value": "represses_target",
+          "gene": "HEMGN",
+          "cell": "Brain_Cerebellar_Hemisphere",
+          "verdict": "incorrect",
+          "reason": "",
+          "detail": "the gene moved the other way",
+          "explanations": [
+            "the claim is wrong",
+            "the observation model is inadequate",
+            "the effect is indirect, through another gene"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "HEMGN",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "context": {
+          "element": "EH38E3896696",
+          "locus": "chr9:97960870-97961216",
+          "block": "element",
+          "axis": "context",
+          "value": "Brain_Cerebellar_Hemisphere",
+          "gene": "HEMGN",
+          "cell": "Brain_Cerebellar_Hemisphere",
+          "verdict": "not_judged",
+          "reason": "judging_observations_outside_the_claims_scope",
+          "detail": "responds only in other cells; the stated cell is untested",
+          "explanations": [],
+          "deciding": [],
+          "refutable": false
+        },
+        "observations_touching": [
+          [
+            "crispri_decrease",
+            "crispri:Gasperini2019",
+            "HEMGN",
+            "K562"
+          ]
+        ]
+      }
+    },
+    {
+      "element": "EH38E3426791",
+      "locus": "chr20:31608511-31608860",
+      "gene": "ID1",
+      "claim": {
+        "value": "represses_target",
+        "cell": "Whole_Blood"
+      },
+      "committed_s4_verdict": {
+        "element": "EH38E3426791",
+        "locus": "chr20:31608511-31608860",
+        "block": "element",
+        "axis": "activity",
+        "value": "represses_target",
+        "gene": "ID1",
+        "cell": "Whole_Blood",
+        "verdict": "incorrect",
+        "reason": "",
+        "detail": "the gene moved the other way",
+        "explanations": [
+          "the claim is wrong",
+          "the observation model is inadequate",
+          "the effect is indirect, through another gene"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_decrease",
+            "source": "crispri:Gasperini2019",
+            "gene": "ID1",
+            "cell": "K562",
+            "split": "training"
+          }
+        ],
+        "refutable": false
+      },
+      "one_line": "ID1: the model's largest rise (+0.8119, Whole_Blood) and largest drop (-0.7408, left lobe of liver) disagree, and the rise won by 0.0711, so the rule says represses in Whole_Blood. The screen silenced the element in K562 and ID1 fell (EffectSize -0.1582, adjusted p 1.8e-14). The model on K562: by_cell[K562] +0.1433; measured EffectSize -0.1582; one value kept, other tracks named for this cell are not seen. Primary class (c) genuine contradiction",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "present",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "c",
+      "why": {
+        "a": "every step on both sides carries the sign the one before implies",
+        "b": "the claim names Whole_Blood; the deciding observation is in K562",
+        "c": "model on K562: by_cell[K562] +0.1433; measured EffectSize -0.1582; one value kept, other tracks named for this cell are not seen",
+        "d": "any-gene prediction MIR3193; compact verdict 'another gene in the same domain'; other genes changed significantly in the same screen: none",
+        "e": "verdict_of reproduces the committed verdict and deciding observation; the activity rule as registered lets a response in another cell decide, and refutable is not computed on activity",
+        "f": "largest drop -0.7408 (left lobe of liver), largest rise +0.8119 (Whole_Blood); the rise wins by 0.0711"
+      },
+      "indirect_parts": {
+        "any_gene_prediction_differs": true,
+        "verdict_another_gene_in_domain": true,
+        "multi_target_in_same_screen": false
+      },
+      "label_side": {
+        "source_run": "all",
+        "run_row": {
+          "id": "EH38E3426791",
+          "start": 31608511,
+          "end": 31608860,
+          "predicted": {
+            "gene": "MIR3193",
+            "action": "activates",
+            "log2_fold_change": -0.859,
+            "tissue": "HepG2",
+            "strength": "strong",
+            "confidence": 0.7,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_coding": {
+            "gene": "ID1",
+            "action": "represses",
+            "log2_fold_change": 0.8119,
+            "tissue": "Whole_Blood",
+            "strength": "strong",
+            "confidence": 0.7,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_by_cell": {
+            "HepG2": -0.859,
+            "IMR-90": -0.0352,
+            "K562": 0.4036,
+            "GM12878": 0.1511
+          },
+          "predicted_coding_by_cell": {
+            "HepG2": -0.4972,
+            "IMR-90": -0.0555,
+            "K562": 0.1433,
+            "GM12878": 0.5155
+          },
+          "verdict_coding": "another gene in the same domain",
+          "inferred": {
+            "gene": "COX4I2",
+            "distance": 28895,
+            "basis": "nearest TSS in domain",
+            "confidence": 0.4
+          },
+          "model_version": null
+        },
+        "cached_gene_row": {
+          "gene": "ID1",
+          "n_tracks": 371,
+          "mean_log2fc": 0.0126,
+          "max_drop_log2fc": -0.7408,
+          "max_drop_tissue": "left lobe of liver",
+          "max_rise_log2fc": 0.8119,
+          "max_rise_tissue": "Whole_Blood",
+          "by_cell": {
+            "HepG2": -0.4972,
+            "IMR-90": -0.0555,
+            "K562": 0.1433,
+            "GM12878": 0.5155
+          }
+        },
+        "cached_tracks": 371,
+        "cached_genes_in_window": 49,
+        "any_gene_prediction_recomputed": {
+          "gene": "MIR3193",
+          "action": "activates",
+          "log2_fold_change": -0.859,
+          "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+          "tissue": "HepG2",
+          "strength": "strong",
+          "certainty": {
+            "evidence_category": "predicted: AlphaGenome deletion, one model run",
+            "effect_estimate": -0.859,
+            "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+            "measurement_uncertainty": null,
+            "uncertainty_note": "one deterministic model run; no spread computed",
+            "model_score": 0.859,
+            "model_score_name": "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude this run ranks candidate genes by, not a probability",
+            "probability": null,
+            "probability_unavailable": "no calibration record: the effect size of one model run is not a probability that deleting the element moves this gene, and none has been fitted against a measured outcome (review R4)"
+          },
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "compiled": {
+          "program": "data/knowledge/compiled/noncoding_chr20.bio",
+          "element_block": [
+            [
+              73374,
+              "element EH38E3426791 {"
+            ],
+            [
+              73375,
+              "  class: enhancer"
+            ],
+            [
+              73376,
+              "  locus: chr20:31608511-31608860"
+            ],
+            [
+              73377,
+              "  domain: chr20_D237"
+            ],
+            [
+              73378,
+              "  targets: ID1"
+            ],
+            [
+              73379,
+              "  basis: predicted, deleting the element moves ID1 by +0.81 log2 in Whole_Blood (strong), another gene in the same domain"
+            ],
+            [
+              73380,
+              "  evidence: predicted \"AlphaGenome RNA-seq gene scorer, expression change on deletion\" effect +0.812 log2 fold change on deletion, probability unavailable"
+            ],
+            [
+              73381,
+              "  origin: unique"
+            ],
+            [
+              73382,
+              "  molecular_role: enhancer_like, insulator_like, silencer|insulator_like|competing_promoter|unknown"
+            ],
+            [
+              73383,
+              "  activity: represses_target"
+            ],
+            [
+              73384,
+              "  target_relation: predicted_deletion_target"
+            ],
+            [
+              73385,
+              "  evidence_status: registry_biochemical, predicted_model, selection_not_measured"
+            ],
+            [
+              73386,
+              "}"
+            ]
+          ],
+          "rule": [
+            73387,
+            "rule EH38E3426791 inhibits ID1 { strength: 0.812; when: cell_type = Whole_Blood; evidence: predicted \"AlphaGenome deletion, Whole_Blood\" effect +0.812 log2 fold change on deletion, probability unavailable }"
+          ],
+          "measured_rules": [
+            [
+              190299,
+              "rule EH38E3426791_measured activates ID1 { strength: 0.158; when: cell_type = K562; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562\"; confidence: 0.90 }"
+            ]
+          ]
+        },
+        "steps": [
+          {
+            "step": "L1 cached model answer",
+            "where": "data/knowledge/alphagenome/elements/chr20.json.gz [EH38E3426791] genes[ID1]",
+            "stored": {
+              "n_tracks": 371,
+              "mean_log2fc": 0.0126,
+              "max_drop_log2fc": -0.7408,
+              "max_drop_tissue": "left lobe of liver",
+              "max_rise_log2fc": 0.8119,
+              "max_rise_tissue": "Whole_Blood",
+              "by_cell": {
+                "HepG2": -0.4972,
+                "IMR-90": -0.0555,
+                "K562": 0.1433,
+                "GM12878": 0.5155
+              }
+            },
+            "implies": "represses: the larger of the largest drop (-0.7408, left lobe of liver) and the largest rise (+0.8119, Whole_Blood)",
+            "consistent": true,
+            "convention": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'; enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element"
+          },
+          {
+            "step": "L2 run row (predicted_coding)",
+            "where": "enhancer_targets_all_chr20 -> all run table, element EH38E3426791",
+            "stored": {
+              "gene": "ID1",
+              "action": "represses",
+              "log2_fold_change": 0.8119,
+              "tissue": "Whole_Blood",
+              "strength": "strong"
+            },
+            "recomputed": {
+              "gene": "ID1",
+              "action": "represses",
+              "log2_fold_change": 0.8119,
+              "tissue": "Whole_Blood"
+            },
+            "consistent": true,
+            "convention": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'"
+          },
+          {
+            "step": "L3 compiled rule",
+            "where": "data/knowledge/compiled/noncoding_chr20.bio:73387",
+            "stored": {
+              "verb": "inhibits",
+              "gene": "ID1",
+              "cell": "Whole_Blood",
+              "evidence": "predicted",
+              "effect": 0.812
+            },
+            "consistent": true,
+            "convention": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)"
+          },
+          {
+            "step": "L4 S4 claim",
+            "where": "correctness.compiled_claims",
+            "stored": {
+              "value": "represses_target",
+              "gene": "ID1",
+              "cell": "Whole_Blood"
+            },
+            "consistent": true,
+            "convention": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb"
+          }
+        ],
+        "genes_near": {
+          "near_bp": 5000,
+          "within_near_bp": [
+            {
+              "gene": "MIR3193",
+              "type": "miRNA",
+              "start": 31607185,
+              "end": 31607240,
+              "strand": "+",
+              "gap_bp": 1271
+            },
+            {
+              "gene": "ID1",
+              "type": "protein_coding",
+              "start": 31573009,
+              "end": 31606730,
+              "strand": "+",
+              "gap_bp": 1781
+            },
+            {
+              "gene": "ENSG00000289875",
+              "type": "lncRNA",
+              "start": 31603561,
+              "end": 31605232,
+              "strand": "-",
+              "gap_bp": 3279
+            },
+            {
+              "gene": "ENSG00000309072",
+              "type": "lncRNA",
+              "start": 31604405,
+              "end": 31605066,
+              "strand": "+",
+              "gap_bp": 3445
+            }
+          ],
+          "named_gene": {
+            "gene": "ID1",
+            "type": "protein_coding",
+            "start": 31573009,
+            "end": 31606730,
+            "strand": "+",
+            "tss": 31573009,
+            "element_to_tss_bp": 35676,
+            "gap_bp": 1781
+          }
+        }
+      },
+      "measurement_side": {
+        "deciding_row": {
+          "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+          "split": "training",
+          "line": 6322,
+          "row": {
+            "chrom": "chr20",
+            "chromStart": "31608520",
+            "chromEnd": "31609020",
+            "name": "ID1|chr20:30196323-30196823:.",
+            "measuredGeneSymbol": "ID1",
+            "measuredGeneEnsemblId": "ENSG00000125968",
+            "EffectSize": "-0.158249932905106",
+            "Significant": "TRUE",
+            "pValueAdjusted": "1.76199243831164e-14",
+            "Regulated": "TRUE",
+            "PowerAtEffectSize20": "0.85",
+            "ValidConnection": "TRUE",
+            "CellType": "K562",
+            "Dataset": "Gasperini2019",
+            "Reference": "Gasperini et al., 2019"
+          },
+          "outcome": "significant_decrease",
+          "invalid": false
+        },
+        "effect_size": -0.158249932905106,
+        "significant": true,
+        "p_adjusted": 1.76199243831164e-14,
+        "cell": "K562",
+        "steps": [
+          {
+            "step": "M1 raw benchmark row",
+            "where": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz line 6322 (name ID1|chr20:30196323-30196823:.)",
+            "stored": {
+              "chrom": "chr20",
+              "chromStart": "31608520",
+              "chromEnd": "31609020",
+              "name": "ID1|chr20:30196323-30196823:.",
+              "measuredGeneSymbol": "ID1",
+              "measuredGeneEnsemblId": "ENSG00000125968",
+              "EffectSize": "-0.158249932905106",
+              "Significant": "TRUE",
+              "pValueAdjusted": "1.76199243831164e-14",
+              "Regulated": "TRUE",
+              "PowerAtEffectSize20": "0.85",
+              "ValidConnection": "TRUE",
+              "CellType": "K562",
+              "Dataset": "Gasperini2019",
+              "Reference": "Gasperini et al., 2019"
+            },
+            "consistent": true,
+            "convention": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+          },
+          {
+            "step": "M2 pair outcome",
+            "where": "measured.parse_crispri -> CrispriPair.outcome",
+            "stored": "significant_decrease",
+            "consistent": true,
+            "convention": "significant and EffectSize < 0 is a decrease, > 0 an increase; Regulated TRUE only for a significant decrease"
+          },
+          {
+            "step": "M3 observation kind",
+            "where": "correctness.CRISPRI_KIND",
+            "stored": "crispri_decrease",
+            "consistent": true,
+            "convention": "one kind per outcome"
+          },
+          {
+            "step": "M4 S4 table reading on the claim",
+            "where": "correctness.TABLE[crispri_decrease][activity]",
+            "stored": "refutes",
+            "consistent": true,
+            "convention": "crispri_decrease refutes represses_target; crispri_increase refutes activates_target"
+          }
+        ],
+        "other_genes_same_screen": [
+          {
+            "gene": "HM13",
+            "line": 6321,
+            "effect_size": 0.00749847232894707,
+            "p_adjusted": 0.999918430877266,
+            "outcome": "not_significant_well_powered"
+          },
+          {
+            "gene": "PDRG1",
+            "line": 6324,
+            "effect_size": -0.0359142849148046,
+            "p_adjusted": 0.631977038517634,
+            "outcome": "not_significant_well_powered"
+          },
+          {
+            "gene": "TPX2",
+            "line": 6325,
+            "effect_size": -0.0258537255960578,
+            "p_adjusted": 0.999918430877266,
+            "outcome": "not_significant_well_powered"
+          }
+        ],
+        "all_rows_at_element": [
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 6321,
+            "gene": "HM13",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "0.00749847232894707",
+            "significant": "FALSE",
+            "outcome": "not_significant_well_powered",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 6322,
+            "gene": "ID1",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.158249932905106",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 6324,
+            "gene": "PDRG1",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.0359142849148046",
+            "significant": "FALSE",
+            "outcome": "not_significant_well_powered",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 6325,
+            "gene": "TPX2",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.0258537255960578",
+            "significant": "FALSE",
+            "outcome": "not_significant_well_powered",
+            "valid": true
+          }
+        ]
+      },
+      "s4_rerun": {
+        "target": {
+          "element": "EH38E3426791",
+          "locus": "chr20:31608511-31608860",
+          "block": "element",
+          "axis": "target",
+          "value": "ID1",
+          "gene": "ID1",
+          "cell": "Whole_Blood",
+          "verdict": "correct",
+          "reason": "",
+          "detail": "",
+          "explanations": [
+            "the claim holds",
+            "the observation model is inadequate"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "ID1",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "activity": {
+          "element": "EH38E3426791",
+          "locus": "chr20:31608511-31608860",
+          "block": "element",
+          "axis": "activity",
+          "value": "represses_target",
+          "gene": "ID1",
+          "cell": "Whole_Blood",
+          "verdict": "incorrect",
+          "reason": "",
+          "detail": "the gene moved the other way",
+          "explanations": [
+            "the claim is wrong",
+            "the observation model is inadequate",
+            "the effect is indirect, through another gene"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "ID1",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "context": {
+          "element": "EH38E3426791",
+          "locus": "chr20:31608511-31608860",
+          "block": "element",
+          "axis": "context",
+          "value": "Whole_Blood",
+          "gene": "ID1",
+          "cell": "Whole_Blood",
+          "verdict": "not_judged",
+          "reason": "judging_observations_outside_the_claims_scope",
+          "detail": "responds only in other cells; the stated cell is untested",
+          "explanations": [],
+          "deciding": [],
+          "refutable": false
+        },
+        "observations_touching": [
+          [
+            "crispri_decrease",
+            "crispri:Gasperini2019",
+            "ID1",
+            "K562"
+          ],
+          [
+            "lentimpra_inactive",
+            "lentimpra:HepG2",
+            "",
+            "HepG2"
+          ],
+          [
+            "lentimpra_inactive",
+            "lentimpra:K562",
+            "",
+            "K562"
+          ],
+          [
+            "lentimpra_inactive",
+            "lentimpra:WTC11",
+            "",
+            "WTC11"
+          ]
+        ]
+      }
+    },
+    {
+      "element": "EH38E3940111",
+      "locus": "chrX:103233290-103233585",
+      "gene": "BEX4",
+      "claim": {
+        "value": "represses_target",
+        "cell": "hair_follicular_keratinocyte"
+      },
+      "committed_s4_verdict": {
+        "element": "EH38E3940111",
+        "locus": "chrX:103233290-103233585",
+        "block": "element",
+        "axis": "activity",
+        "value": "represses_target",
+        "gene": "BEX4",
+        "cell": "hair_follicular_keratinocyte",
+        "verdict": "incorrect",
+        "reason": "",
+        "detail": "the gene moved the other way",
+        "explanations": [
+          "the claim is wrong",
+          "the observation model is inadequate",
+          "the effect is indirect, through another gene"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_decrease",
+            "source": "crispri:Gasperini2019",
+            "gene": "BEX4",
+            "cell": "K562",
+            "split": "training"
+          }
+        ],
+        "refutable": false
+      },
+      "one_line": "BEX4: the model's largest rise (+0.1397, hair follicular keratinocyte) and largest drop (-0.1229, K562) disagree, and the rise won by 0.0168, so the rule says represses in hair_follicular_keratinocyte. The screen silenced the element in K562 and BEX4 fell (EffectSize -0.2939, adjusted p 6e-82). The model on K562: by_cell[K562] -0.1208, max_drop_log2fc -0.1229; measured EffectSize -0.2939. Primary class (b) cell mismatch",
+      "classes": {
+        "a": "absent",
+        "b": "present",
+        "c": "absent",
+        "d": "present",
+        "e": "absent",
+        "f": "present"
+      },
+      "primary": "b",
+      "why": {
+        "a": "every step on both sides carries the sign the one before implies",
+        "b": "the claim names hair_follicular_keratinocyte; the deciding observation is in K562",
+        "c": "model on K562: by_cell[K562] -0.1208, max_drop_log2fc -0.1229; measured EffectSize -0.2939",
+        "d": "any-gene prediction BEX4; compact verdict 'agrees with nearest TSS in domain'; other genes changed significantly in the same screen: [('TCEAL8', -0.0735821238217822)]",
+        "e": "verdict_of reproduces the committed verdict and deciding observation; the activity rule as registered lets a response in another cell decide, and refutable is not computed on activity",
+        "f": "largest drop -0.1229 (K562), largest rise +0.1397 (hair follicular keratinocyte); the rise wins by 0.0168"
+      },
+      "indirect_parts": {
+        "any_gene_prediction_differs": false,
+        "verdict_another_gene_in_domain": false,
+        "multi_target_in_same_screen": true
+      },
+      "label_side": {
+        "source_run": "all",
+        "run_row": {
+          "id": "EH38E3940111",
+          "start": 103233290,
+          "end": 103233585,
+          "predicted": {
+            "gene": "BEX4",
+            "action": "represses",
+            "log2_fold_change": 0.1397,
+            "tissue": "hair follicular keratinocyte",
+            "strength": "weak",
+            "confidence": 0.14,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_coding": {
+            "gene": "BEX4",
+            "action": "represses",
+            "log2_fold_change": 0.1397,
+            "tissue": "hair follicular keratinocyte",
+            "strength": "weak",
+            "confidence": 0.14,
+            "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+          },
+          "predicted_by_cell": {
+            "HepG2": -0.0535,
+            "IMR-90": 0.0222,
+            "K562": -0.1208,
+            "GM12878": 0.0266
+          },
+          "predicted_coding_by_cell": {
+            "HepG2": -0.0535,
+            "IMR-90": 0.0222,
+            "K562": -0.1208,
+            "GM12878": 0.0266
+          },
+          "verdict_coding": "agrees with nearest TSS in domain",
+          "inferred": {
+            "gene": "BEX4",
+            "distance": 18370,
+            "basis": "nearest TSS in domain",
+            "confidence": 0.4
+          },
+          "model_version": null
+        },
+        "cached_gene_row": {
+          "gene": "BEX4",
+          "n_tracks": 371,
+          "mean_log2fc": 0.011,
+          "max_drop_log2fc": -0.1229,
+          "max_drop_tissue": "K562",
+          "max_rise_log2fc": 0.1397,
+          "max_rise_tissue": "hair follicular keratinocyte",
+          "by_cell": {
+            "HepG2": -0.0535,
+            "IMR-90": 0.0222,
+            "K562": -0.1208,
+            "GM12878": 0.0266
+          }
+        },
+        "cached_tracks": 371,
+        "cached_genes_in_window": 47,
+        "any_gene_prediction_recomputed": {
+          "gene": "BEX4",
+          "action": "represses",
+          "log2_fold_change": 0.1397,
+          "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+          "tissue": "hair follicular keratinocyte",
+          "strength": "weak",
+          "certainty": {
+            "evidence_category": "predicted: AlphaGenome deletion, one model run",
+            "effect_estimate": 0.1397,
+            "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+            "measurement_uncertainty": null,
+            "uncertainty_note": "one deterministic model run; no spread computed",
+            "model_score": 0.1397,
+            "model_score_name": "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude this run ranks candidate genes by, not a probability",
+            "probability": null,
+            "probability_unavailable": "no calibration record: the effect size of one model run is not a probability that deleting the element moves this gene, and none has been fitted against a measured outcome (review R4)"
+          },
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "compiled": {
+          "program": "data/knowledge/compiled/noncoding_chrX.bio",
+          "element_block": [
+            [
+              105879,
+              "element EH38E3940111 {"
+            ],
+            [
+              105880,
+              "  class: enhancer"
+            ],
+            [
+              105881,
+              "  locus: chrX:103233290-103233585"
+            ],
+            [
+              105882,
+              "  domain: chrX_D505"
+            ],
+            [
+              105883,
+              "  targets: BEX4"
+            ],
+            [
+              105884,
+              "  basis: predicted, deleting the element moves BEX4 by +0.14 log2 in hair follicular keratinocyte (weak), agrees with nearest TSS in domain"
+            ],
+            [
+              105885,
+              "  evidence: predicted \"AlphaGenome RNA-seq gene scorer, expression change on deletion\" effect +0.14 log2 fold change on deletion, probability unavailable"
+            ],
+            [
+              105886,
+              "  origin: unique"
+            ],
+            [
+              105887,
+              "  molecular_role: enhancer_like, silencer|insulator_like|competing_promoter|unknown"
+            ],
+            [
+              105888,
+              "  activity: represses_target"
+            ],
+            [
+              105889,
+              "  target_relation: predicted_deletion_target, nearest_tss_in_domain"
+            ],
+            [
+              105890,
+              "  evidence_status: registry_biochemical, predicted_model, selection_not_measured"
+            ],
+            [
+              105891,
+              "}"
+            ]
+          ],
+          "rule": [
+            105892,
+            "rule EH38E3940111 inhibits BEX4 { strength: 0.14; when: cell_type = hair_follicular_keratinocyte; evidence: predicted \"AlphaGenome deletion, hair follicular keratinocyte\" effect +0.14 log2 fold change on deletion, probability unavailable }"
+          ],
+          "measured_rules": [
+            [
+              172732,
+              "rule EH38E3940111_measured activates BEX4 { strength: 0.294; when: cell_type = K562; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562\"; confidence: 0.90 }"
+            ],
+            [
+              172733,
+              "rule EH38E3940111_measured activates TCEAL8 { strength: 0.074; when: cell_type = K562; evidence: experimental \"CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025), silenced in K562\"; confidence: 0.90 }"
+            ]
+          ]
+        },
+        "steps": [
+          {
+            "step": "L1 cached model answer",
+            "where": "data/knowledge/alphagenome/elements/chrX.json.gz [EH38E3940111] genes[BEX4]",
+            "stored": {
+              "n_tracks": 371,
+              "mean_log2fc": 0.011,
+              "max_drop_log2fc": -0.1229,
+              "max_drop_tissue": "K562",
+              "max_rise_log2fc": 0.1397,
+              "max_rise_tissue": "hair follicular keratinocyte",
+              "by_cell": {
+                "HepG2": -0.0535,
+                "IMR-90": 0.0222,
+                "K562": -0.1208,
+                "GM12878": 0.0266
+              }
+            },
+            "implies": "represses: the larger of the largest drop (-0.1229, K562) and the largest rise (+0.1397, hair follicular keratinocyte)",
+            "consistent": true,
+            "convention": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'; enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element"
+          },
+          {
+            "step": "L2 run row (predicted_coding)",
+            "where": "enhancer_targets_all_chrX -> all run table, element EH38E3940111",
+            "stored": {
+              "gene": "BEX4",
+              "action": "represses",
+              "log2_fold_change": 0.1397,
+              "tissue": "hair follicular keratinocyte",
+              "strength": "weak"
+            },
+            "recomputed": {
+              "gene": "BEX4",
+              "action": "represses",
+              "log2_fold_change": 0.1397,
+              "tissue": "hair follicular keratinocyte"
+            },
+            "consistent": true,
+            "convention": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'"
+          },
+          {
+            "step": "L3 compiled rule",
+            "where": "data/knowledge/compiled/noncoding_chrX.bio:105892",
+            "stored": {
+              "verb": "inhibits",
+              "gene": "BEX4",
+              "cell": "hair_follicular_keratinocyte",
+              "evidence": "predicted",
+              "effect": 0.14
+            },
+            "consistent": true,
+            "convention": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)"
+          },
+          {
+            "step": "L4 S4 claim",
+            "where": "correctness.compiled_claims",
+            "stored": {
+              "value": "represses_target",
+              "gene": "BEX4",
+              "cell": "hair_follicular_keratinocyte"
+            },
+            "consistent": true,
+            "convention": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb"
+          }
+        ],
+        "genes_near": {
+          "near_bp": 5000,
+          "within_near_bp": [],
+          "named_gene": {
+            "gene": "BEX4",
+            "type": "protein_coding",
+            "start": 103215067,
+            "end": 103217931,
+            "strand": "+",
+            "tss": 103215067,
+            "element_to_tss_bp": 18370,
+            "gap_bp": 15359
+          }
+        }
+      },
+      "measurement_side": {
+        "deciding_row": {
+          "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+          "split": "training",
+          "line": 10306,
+          "row": {
+            "chrom": "chrX",
+            "chromStart": "103233173",
+            "chromEnd": "103233673",
+            "name": "BEX4|chrX:102488101-102488601:.",
+            "measuredGeneSymbol": "BEX4",
+            "measuredGeneEnsemblId": "ENSG00000102409",
+            "EffectSize": "-0.293879526689202",
+            "Significant": "TRUE",
+            "pValueAdjusted": "5.96235091506541e-82",
+            "Regulated": "TRUE",
+            "PowerAtEffectSize20": "0.95",
+            "ValidConnection": "TRUE",
+            "CellType": "K562",
+            "Dataset": "Gasperini2019",
+            "Reference": "Gasperini et al., 2019"
+          },
+          "outcome": "significant_decrease",
+          "invalid": false
+        },
+        "effect_size": -0.293879526689202,
+        "significant": true,
+        "p_adjusted": 5.96235091506541e-82,
+        "cell": "K562",
+        "steps": [
+          {
+            "step": "M1 raw benchmark row",
+            "where": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz line 10306 (name BEX4|chrX:102488101-102488601:.)",
+            "stored": {
+              "chrom": "chrX",
+              "chromStart": "103233173",
+              "chromEnd": "103233673",
+              "name": "BEX4|chrX:102488101-102488601:.",
+              "measuredGeneSymbol": "BEX4",
+              "measuredGeneEnsemblId": "ENSG00000102409",
+              "EffectSize": "-0.293879526689202",
+              "Significant": "TRUE",
+              "pValueAdjusted": "5.96235091506541e-82",
+              "Regulated": "TRUE",
+              "PowerAtEffectSize20": "0.95",
+              "ValidConnection": "TRUE",
+              "CellType": "K562",
+              "Dataset": "Gasperini2019",
+              "Reference": "Gasperini et al., 2019"
+            },
+            "consistent": true,
+            "convention": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+          },
+          {
+            "step": "M2 pair outcome",
+            "where": "measured.parse_crispri -> CrispriPair.outcome",
+            "stored": "significant_decrease",
+            "consistent": true,
+            "convention": "significant and EffectSize < 0 is a decrease, > 0 an increase; Regulated TRUE only for a significant decrease"
+          },
+          {
+            "step": "M3 observation kind",
+            "where": "correctness.CRISPRI_KIND",
+            "stored": "crispri_decrease",
+            "consistent": true,
+            "convention": "one kind per outcome"
+          },
+          {
+            "step": "M4 S4 table reading on the claim",
+            "where": "correctness.TABLE[crispri_decrease][activity]",
+            "stored": "refutes",
+            "consistent": true,
+            "convention": "crispri_decrease refutes represses_target; crispri_increase refutes activates_target"
+          }
+        ],
+        "other_genes_same_screen": [
+          {
+            "gene": "MORF4L2",
+            "line": 10303,
+            "effect_size": -0.0019901834245497,
+            "p_adjusted": 0.999918430877266,
+            "outcome": "not_significant_well_powered"
+          },
+          {
+            "gene": "TCEAL8",
+            "line": 10308,
+            "effect_size": -0.0735821238217822,
+            "p_adjusted": 0.00012534029901495,
+            "outcome": "significant_decrease"
+          }
+        ],
+        "all_rows_at_element": [
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 10303,
+            "gene": "MORF4L2",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.0019901834245497",
+            "significant": "FALSE",
+            "outcome": "not_significant_well_powered",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 10306,
+            "gene": "BEX4",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.293879526689202",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          },
+          {
+            "file": "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "line": 10308,
+            "gene": "TCEAL8",
+            "cell": "K562",
+            "dataset": "Gasperini2019",
+            "effect_size": "-0.0735821238217822",
+            "significant": "TRUE",
+            "outcome": "significant_decrease",
+            "valid": true
+          }
+        ]
+      },
+      "s4_rerun": {
+        "target": {
+          "element": "EH38E3940111",
+          "locus": "chrX:103233290-103233585",
+          "block": "element",
+          "axis": "target",
+          "value": "BEX4",
+          "gene": "BEX4",
+          "cell": "hair_follicular_keratinocyte",
+          "verdict": "correct",
+          "reason": "",
+          "detail": "",
+          "explanations": [
+            "the claim holds",
+            "the observation model is inadequate"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "BEX4",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "activity": {
+          "element": "EH38E3940111",
+          "locus": "chrX:103233290-103233585",
+          "block": "element",
+          "axis": "activity",
+          "value": "represses_target",
+          "gene": "BEX4",
+          "cell": "hair_follicular_keratinocyte",
+          "verdict": "incorrect",
+          "reason": "",
+          "detail": "the gene moved the other way",
+          "explanations": [
+            "the claim is wrong",
+            "the observation model is inadequate",
+            "the effect is indirect, through another gene"
+          ],
+          "deciding": [
+            {
+              "kind": "crispri_decrease",
+              "source": "crispri:Gasperini2019",
+              "gene": "BEX4",
+              "cell": "K562",
+              "split": "training"
+            }
+          ],
+          "refutable": false
+        },
+        "context": {
+          "element": "EH38E3940111",
+          "locus": "chrX:103233290-103233585",
+          "block": "element",
+          "axis": "context",
+          "value": "hair_follicular_keratinocyte",
+          "gene": "BEX4",
+          "cell": "hair_follicular_keratinocyte",
+          "verdict": "not_judged",
+          "reason": "judging_observations_outside_the_claims_scope",
+          "detail": "responds only in other cells; the stated cell is untested",
+          "explanations": [],
+          "deciding": [],
+          "refutable": false
+        },
+        "observations_touching": [
+          [
+            "crispri_decrease",
+            "crispri:Gasperini2019",
+            "BEX4",
+            "K562"
+          ]
+        ]
+      }
+    }
+  ],
+  "comparison": {
+    "element": "EH38E1548926",
+    "locus": "chr11:69588295-69588640",
+    "gene": "CCND1",
+    "claim": {
+      "value": "activates_target",
+      "cell": "CD8_positive__alpha_beta_memory_T_cell"
+    },
+    "committed_s4_verdict": {
+      "element": "EH38E1548926",
+      "locus": "chr11:69588295-69588640",
+      "block": "element",
+      "axis": "activity",
+      "value": "activates_target",
+      "gene": "CCND1",
+      "cell": "CD8_positive__alpha_beta_memory_T_cell",
+      "verdict": "incorrect",
+      "reason": "",
+      "detail": "the gene moved the other way",
+      "explanations": [
+        "the claim is wrong",
+        "the observation model is inadequate",
+        "the effect is indirect, through another gene"
+      ],
+      "deciding": [
+        {
+          "kind": "crispri_increase",
+          "source": "crispri:HCT116",
+          "gene": "CCND1",
+          "cell": "HCT116",
+          "split": "heldout"
+        }
+      ],
+      "refutable": false
+    },
+    "one_line": "CCND1: the model's largest rise (+0.1086, K562) and largest drop (-0.1634, CD8-positive, alpha-beta memory T cell) disagree, and the drop won by 0.0548, so the rule says activates in CD8_positive__alpha_beta_memory_T_cell. The screen silenced the element in HCT116 and CCND1 rose (EffectSize +0.1288, adjusted p 0.0001). The model on HCT116: the cache keeps no value for CCND1 on a track named for this cell. Primary class (b) cell mismatch",
+    "classes": {
+      "a": "absent",
+      "b": "present",
+      "c": "unknown",
+      "d": "absent",
+      "e": "absent",
+      "f": "present"
+    },
+    "primary": "b",
+    "why": {
+      "a": "every step on both sides carries the sign the one before implies",
+      "b": "the claim names CD8_positive__alpha_beta_memory_T_cell; the deciding observation is in HCT116",
+      "c": "model on HCT116: the cache keeps no value for CCND1 on a track named for this cell",
+      "d": "any-gene prediction CCND1; compact verdict 'agrees with nearest TSS in domain'; other genes changed significantly in the same screen: none",
+      "e": "verdict_of reproduces the committed verdict and deciding observation; the activity rule as registered lets a response in another cell decide, and refutable is not computed on activity",
+      "f": "largest drop -0.1634 (CD8-positive, alpha-beta memory T cell), largest rise +0.1086 (K562); the drop wins by 0.0548"
+    },
+    "indirect_parts": {
+      "any_gene_prediction_differs": false,
+      "verdict_another_gene_in_domain": false,
+      "multi_target_in_same_screen": false
+    },
+    "label_side": {
+      "source_run": "all",
+      "run_row": {
+        "id": "EH38E1548926",
+        "start": 69588295,
+        "end": 69588640,
+        "predicted": {
+          "gene": "CCND1",
+          "action": "activates",
+          "log2_fold_change": -0.1634,
+          "tissue": "CD8-positive, alpha-beta memory T cell",
+          "strength": "weak",
+          "confidence": 0.163,
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "predicted_coding": {
+          "gene": "CCND1",
+          "action": "activates",
+          "log2_fold_change": -0.1634,
+          "tissue": "CD8-positive, alpha-beta memory T cell",
+          "strength": "weak",
+          "confidence": 0.163,
+          "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+        },
+        "predicted_by_cell": {
+          "HepG2": 0.0335,
+          "IMR-90": -0.0229,
+          "K562": 0.1036,
+          "GM12878": -0.0373
+        },
+        "predicted_coding_by_cell": {
+          "HepG2": 0.0335,
+          "IMR-90": -0.0229,
+          "K562": 0.1036,
+          "GM12878": -0.0373
+        },
+        "verdict_coding": "agrees with nearest TSS in domain",
+        "inferred": {
+          "gene": "CCND1",
+          "distance": 52602,
+          "basis": "nearest TSS in domain",
+          "confidence": 0.4
+        },
+        "model_version": null
+      },
+      "cached_gene_row": {
+        "gene": "CCND1",
+        "n_tracks": 371,
+        "mean_log2fc": -0.005,
+        "max_drop_log2fc": -0.1634,
+        "max_drop_tissue": "CD8-positive, alpha-beta memory T cell",
+        "max_rise_log2fc": 0.1086,
+        "max_rise_tissue": "K562",
+        "by_cell": {
+          "HepG2": 0.0335,
+          "IMR-90": -0.0229,
+          "K562": 0.1036,
+          "GM12878": -0.0373
+        }
+      },
+      "cached_tracks": 371,
+      "cached_genes_in_window": 28,
+      "any_gene_prediction_recomputed": {
+        "gene": "CCND1",
+        "action": "activates",
+        "log2_fold_change": -0.1634,
+        "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+        "tissue": "CD8-positive, alpha-beta memory T cell",
+        "strength": "weak",
+        "certainty": {
+          "evidence_category": "predicted: AlphaGenome deletion, one model run",
+          "effect_estimate": -0.1634,
+          "effect_unit": "log2 fold change of the gene's predicted RNA-seq expression on deleting the element (AlphaGenome gene scorer, the track where it moves most)",
+          "measurement_uncertainty": null,
+          "uncertainty_note": "one deterministic model run; no spread computed",
+          "model_score": 0.1634,
+          "model_score_name": "|log2 fold change| on that track, neither clipped nor rounded beyond four places: the magnitude this run ranks candidate genes by, not a probability",
+          "probability": null,
+          "probability_unavailable": "no calibration record: the effect size of one model run is not a probability that deleting the element moves this gene, and none has been fitted against a measured outcome (review R4)"
+        },
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "compiled": {
+        "program": "data/knowledge/compiled/noncoding_chr11.bio",
+        "element_block": [
+          [
+            215331,
+            "element EH38E1548926 {"
+          ],
+          [
+            215332,
+            "  class: enhancer"
+          ],
+          [
+            215333,
+            "  locus: chr11:69588295-69588640"
+          ],
+          [
+            215334,
+            "  domain: chr11_D449"
+          ],
+          [
+            215335,
+            "  targets: CCND1"
+          ],
+          [
+            215336,
+            "  basis: predicted, deleting the element moves CCND1 by -0.16 log2 in CD8-positive, alpha-beta memory T cell (weak), agrees with nearest TSS in domain"
+          ],
+          [
+            215337,
+            "  evidence: predicted \"AlphaGenome RNA-seq gene scorer, expression change on deletion\" effect -0.163 log2 fold change on deletion, probability unavailable"
+          ],
+          [
+            215338,
+            "  origin: unique"
+          ],
+          [
+            215339,
+            "  molecular_role: enhancer_like, insulator_like"
+          ],
+          [
+            215340,
+            "  activity: activates_target"
+          ],
+          [
+            215341,
+            "  target_relation: predicted_deletion_target, nearest_tss_in_domain"
+          ],
+          [
+            215342,
+            "  evidence_status: registry_biochemical, predicted_model, selection_not_measured"
+          ],
+          [
+            215343,
+            "}"
+          ]
+        ],
+        "rule": [
+          215344,
+          "rule EH38E1548926 activates CCND1 { strength: 0.163; when: cell_type = CD8_positive__alpha_beta_memory_T_cell; evidence: predicted \"AlphaGenome deletion, CD8-positive, alpha-beta memory T cell\" effect -0.163 log2 fold change on deletion, probability unavailable }"
+        ],
+        "measured_rules": []
+      },
+      "steps": [
+        {
+          "step": "L1 cached model answer",
+          "where": "data/knowledge/alphagenome/elements/chr11.json.gz [EH38E1548926] genes[CCND1]",
+          "stored": {
+            "n_tracks": 371,
+            "mean_log2fc": -0.005,
+            "max_drop_log2fc": -0.1634,
+            "max_drop_tissue": "CD8-positive, alpha-beta memory T cell",
+            "max_rise_log2fc": 0.1086,
+            "max_rise_tissue": "K562",
+            "by_cell": {
+              "HepG2": 0.0335,
+              "IMR-90": -0.0229,
+              "K562": 0.1036,
+              "GM12878": -0.0373
+            }
+          },
+          "implies": "activates: the larger of the largest drop (-0.1634, CD8-positive, alpha-beta memory T cell) and the largest rise (+0.1086, K562)",
+          "consistent": true,
+          "convention": "AlphaGenome RECOMMENDED_VARIANT_SCORERS['RNA_SEQ'] is GeneMaskLFCScorer, whose docstring reads 'the log fold change of gene expression level between ALT and REF alleles'; genomeos.predict.alphagenome_adapter.EFFECT_UNIT says 'alternate allele over reference'; enhancer_target.score_element passes the reference as the anchor base plus the element and the alternate as the anchor base alone, so the alternate allele is the deletion and a positive log2 fold change is a rise on deleting the element"
+        },
+        {
+          "step": "L2 run row (predicted_coding)",
+          "where": "enhancer_targets_all_chr11 -> all run table, element EH38E1548926",
+          "stored": {
+            "gene": "CCND1",
+            "action": "activates",
+            "log2_fold_change": -0.1634,
+            "tissue": "CD8-positive, alpha-beta memory T cell",
+            "strength": "weak"
+          },
+          "recomputed": {
+            "gene": "CCND1",
+            "action": "activates",
+            "log2_fold_change": -0.1634,
+            "tissue": "CD8-positive, alpha-beta memory T cell"
+          },
+          "consistent": true,
+          "convention": "enhancer_target.predict_target: 'Loss of expression on deletion means the element activates the gene; a rise means it represses it. The larger of the two wins; ties go to activation'"
+        },
+        {
+          "step": "L3 compiled rule",
+          "where": "data/knowledge/compiled/noncoding_chr11.bio:215344",
+          "stored": {
+            "verb": "activates",
+            "gene": "CCND1",
+            "cell": "CD8_positive__alpha_beta_memory_T_cell",
+            "evidence": "predicted",
+            "effect": -0.163
+          },
+          "consistent": true,
+          "convention": "attribution/compile.py writes `activates` when the prediction's action is activates and `inhibits` otherwise, with `when: cell_type` = compile.context(the prediction's tissue)"
+        },
+        {
+          "step": "L4 S4 claim",
+          "where": "correctness.compiled_claims",
+          "stored": {
+            "value": "activates_target",
+            "gene": "CCND1",
+            "cell": "CD8_positive__alpha_beta_memory_T_cell"
+          },
+          "consistent": true,
+          "convention": "correctness.compiled_claims reads `activates_target` from the verb activates and `represses_target` from any other verb"
+        }
+      ],
+      "genes_near": {
+        "near_bp": 5000,
+        "within_near_bp": [],
+        "named_gene": {
+          "gene": "CCND1",
+          "type": "protein_coding",
+          "start": 69641069,
+          "end": 69654474,
+          "strand": "+",
+          "tss": 69641069,
+          "element_to_tss_bp": -52602,
+          "gap_bp": 52429
+        }
+      }
+    },
+    "measurement_side": {
+      "deciding_row": {
+        "file": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "split": "heldout",
+        "line": 104,
+        "row": {
+          "chrom": "chr11",
+          "chromStart": "69588222",
+          "chromEnd": "69588807",
+          "name": "CCND1|chr11:69402990-69403575",
+          "measuredGeneSymbol": "CCND1",
+          "measuredGeneEnsemblId": "ENSG00000110092",
+          "EffectSize": "0.128846954747277",
+          "Significant": "TRUE",
+          "pValueAdjusted": "0.0001017282211178",
+          "Regulated": "FALSE",
+          "PowerAtEffectSize20": "0",
+          "ValidConnection": "TRUE",
+          "CellType": "HCT116",
+          "Dataset": "HCT116",
+          "Reference": "Guckelberger et al., 2024"
+        },
+        "outcome": "significant_increase",
+        "invalid": false
+      },
+      "effect_size": 0.128846954747277,
+      "significant": true,
+      "p_adjusted": 0.0001017282211178,
+      "cell": "HCT116",
+      "steps": [
+        {
+          "step": "M1 raw benchmark row",
+          "where": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz line 104 (name CCND1|chr11:69402990-69403575)",
+          "stored": {
+            "chrom": "chr11",
+            "chromStart": "69588222",
+            "chromEnd": "69588807",
+            "name": "CCND1|chr11:69402990-69403575",
+            "measuredGeneSymbol": "CCND1",
+            "measuredGeneEnsemblId": "ENSG00000110092",
+            "EffectSize": "0.128846954747277",
+            "Significant": "TRUE",
+            "pValueAdjusted": "0.0001017282211178",
+            "Regulated": "FALSE",
+            "PowerAtEffectSize20": "0",
+            "ValidConnection": "TRUE",
+            "CellType": "HCT116",
+            "Dataset": "HCT116",
+            "Reference": "Guckelberger et al., 2024"
+          },
+          "consistent": true,
+          "convention": "measured.EFFECT_UNIT: EffectSize is the fractional change in the measured gene on silencing, so -0.2 is a 20% decrease; CrispriPair.outcome is a significant decrease when Significant is TRUE and EffectSize < 0; the benchmark's Regulated means a significant decrease only"
+        },
+        {
+          "step": "M2 pair outcome",
+          "where": "measured.parse_crispri -> CrispriPair.outcome",
+          "stored": "significant_increase",
+          "consistent": true,
+          "convention": "significant and EffectSize < 0 is a decrease, > 0 an increase; Regulated TRUE only for a significant decrease"
+        },
+        {
+          "step": "M3 observation kind",
+          "where": "correctness.CRISPRI_KIND",
+          "stored": "crispri_increase",
+          "consistent": true,
+          "convention": "one kind per outcome"
+        },
+        {
+          "step": "M4 S4 table reading on the claim",
+          "where": "correctness.TABLE[crispri_increase][activity]",
+          "stored": "refutes",
+          "consistent": true,
+          "convention": "crispri_decrease refutes represses_target; crispri_increase refutes activates_target"
+        }
+      ],
+      "other_genes_same_screen": [],
+      "all_rows_at_element": [
+        {
+          "file": "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+          "line": 104,
+          "gene": "CCND1",
+          "cell": "HCT116",
+          "dataset": "HCT116",
+          "effect_size": "0.128846954747277",
+          "significant": "TRUE",
+          "outcome": "significant_increase",
+          "valid": true
+        }
+      ]
+    },
+    "s4_rerun": {
+      "target": {
+        "element": "EH38E1548926",
+        "locus": "chr11:69588295-69588640",
+        "block": "element",
+        "axis": "target",
+        "value": "CCND1",
+        "gene": "CCND1",
+        "cell": "CD8_positive__alpha_beta_memory_T_cell",
+        "verdict": "correct",
+        "reason": "",
+        "detail": "",
+        "explanations": [
+          "the claim holds",
+          "the observation model is inadequate"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_increase",
+            "source": "crispri:HCT116",
+            "gene": "CCND1",
+            "cell": "HCT116",
+            "split": "heldout"
+          }
+        ],
+        "refutable": false
+      },
+      "activity": {
+        "element": "EH38E1548926",
+        "locus": "chr11:69588295-69588640",
+        "block": "element",
+        "axis": "activity",
+        "value": "activates_target",
+        "gene": "CCND1",
+        "cell": "CD8_positive__alpha_beta_memory_T_cell",
+        "verdict": "incorrect",
+        "reason": "",
+        "detail": "the gene moved the other way",
+        "explanations": [
+          "the claim is wrong",
+          "the observation model is inadequate",
+          "the effect is indirect, through another gene"
+        ],
+        "deciding": [
+          {
+            "kind": "crispri_increase",
+            "source": "crispri:HCT116",
+            "gene": "CCND1",
+            "cell": "HCT116",
+            "split": "heldout"
+          }
+        ],
+        "refutable": false
+      },
+      "context": {
+        "element": "EH38E1548926",
+        "locus": "chr11:69588295-69588640",
+        "block": "element",
+        "axis": "context",
+        "value": "CD8_positive__alpha_beta_memory_T_cell",
+        "gene": "CCND1",
+        "cell": "CD8_positive__alpha_beta_memory_T_cell",
+        "verdict": "not_judged",
+        "reason": "judging_observations_outside_the_claims_scope",
+        "detail": "responds only in other cells; the stated cell is untested",
+        "explanations": [],
+        "deciding": [],
+        "refutable": false
+      },
+      "observations_touching": [
+        [
+          "crispri_increase",
+          "crispri:HCT116",
+          "CCND1",
+          "HCT116"
+        ],
+        [
+          "lentimpra_inactive",
+          "lentimpra:HepG2",
+          "",
+          "HepG2"
+        ],
+        [
+          "lentimpra_inactive",
+          "lentimpra:K562",
+          "",
+          "K562"
+        ],
+        [
+          "lentimpra_inactive",
+          "lentimpra:WTC11",
+          "",
+          "WTC11"
+        ]
+      ]
+    }
+  },
+  "comparison_shares_a_cause_with_the_four": {
+    "a": false,
+    "b": true,
+    "c": false,
+    "d": false,
+    "e": false,
+    "f": true
+  },
+  "judge": {
+    "refutable_means": "correctness.Verdict.refutable, commented 'target and context: the stated cell was screened on the gene'. AXIS_RULE[target] ends: '`refutable` counts the claims whose stated cell was screened on the named gene with an outcome that can establish or refute'. _target sets it to whether an establishing or refuting observation of the gene exists in the stated cell; _context sets it True on every decided verdict and to whether a refuting null exists there when not judged; _direction never sets it, so every activity verdict carries the default False. On the activity axis the field is not computed: false there means 'not computed', not 'could not have been refuted'. The registered quantities report it only beside target and context (AxisTally.accuracy); the per-verdict records and the per-axis tallies carry the default on every axis",
+    "incorrect_reachable_with_refutable_false": {
+      "target": "no: _target returns incorrect only with a well-powered null in the stated cell, and then passes refutable True",
+      "context": "no: _context passes refutable True on every decided verdict",
+      "activity": "yes, by the registered rule: AXIS_RULE[activity] judges the direction 'in the stated cell when it responded there and otherwise in every cell it responded in', so a response in another cell can refute it, and refutable is never computed on this axis"
+    },
+    "committed_s4_counts_by_axis": {
+      "activity": {
+        "correct, refutable false": 93,
+        "incorrect, refutable false": 5
+      },
+      "context": {
+        "correct, refutable true": 39
+      },
+      "target": {
+        "correct, refutable false": 59,
+        "correct, refutable true": 39
+      }
+    },
+    "activity_verdicts_decided_in_the_stated_cell": {
+      "correct": 39
+    },
+    "activity_verdicts_decided_only_in_another_cell": {
+      "correct": 54,
+      "incorrect": 5
+    },
+    "tension": "the S4 table's CRISPRi activity cells read 'for the gene that fell, in the cell screened' and 'for the gene that rose, in the cell screened', and the target rule refutes only in the stated cell; the activity rule applies a response in another cell to a claim about the stated cell. The judge follows its registration exactly; whether the direction should be judged only in the stated cell is a registration question, not a bug fix, and is left to the coordinator",
+    "if_direction_were_refuted_only_in_the_stated_cell": {
+      "as_the_target_rule_refutes": "the incorrect activity verdicts decided only in another cell would become not judged; the correct ones would stay",
+      "incorrect_that_would_move": 5,
+      "correct_that_would_move": 0
+    },
+    "if_direction_were_judged_only_in_the_stated_cell": {
+      "judged_would_be": 39,
+      "correct_would_be": 39,
+      "incorrect_would_be": 0,
+      "moved_to_not_judged": 59
+    }
+  },
+  "where_the_comparison_is": {
+    "found_in": "data/results/attribution_correctness.json",
+    "pilot_biological_gate_mentions": {
+      "CCND1": 0,
+      "HCT116": 0
+    },
+    "pilot_sources": [
+      "crispri:Gasperini2019",
+      "crispri:Morris",
+      "crispri:Schraivogel2020",
+      "crispri:Xie",
+      "gtex",
+      "lentimpra:HepG2",
+      "lentimpra:K562",
+      "lentimpra:WTC11",
+      "satmut",
+      "vista"
+    ],
+    "reading": "the CCND1 activates_target claim judged wrong by an HCT116 pair of the held-out file is in the S4 result, not in the pilot's result: the pilot's sources do not include crispri:HCT116 and its result names neither CCND1 nor HCT116"
+  },
+  "predicted_rules_by_verb": {
+    "activates": 283452,
+    "inhibits": 156925
+  },
+  "bugs_fixed": [],
+  "other_findings": {
+    "by_cell_keeps_one_track_per_cell_name": {
+      "reading": "enhancer_target.aggregate writes by_cell[name] = value for every track above the scorer's 0.05 recording threshold, so where several tracks carry one cell's name the last one read is kept and the others are dropped. The cases below show a largest drop or rise on a track named for a cell that differs from that cell's by_cell value, so at least two tracks carry the name. It changes no class here (both values have one sign in each case), and no S4 verdict reads by_cell. Readers that take by_cell as 'the cell's track' (crispri_direction, closure) read one of several. Not fixed: which track or combination a cell should keep is a decision, and the cached answers cannot be changed without new model requests",
+      "evidence": [
+        {
+          "gene": "HEMGN",
+          "cell": "K562",
+          "max_drop_log2fc": -0.0962,
+          "by_cell": -0.0948
+        },
+        {
+          "gene": "BEX4",
+          "cell": "K562",
+          "max_drop_log2fc": -0.1229,
+          "by_cell": -0.1208
+        },
+        {
+          "gene": "CCND1",
+          "cell": "K562",
+          "max_rise_log2fc": 0.1086,
+          "by_cell": 0.1036
+        }
+      ]
+    }
+  },
+  "unknown": [
+    "the model's value for CCND1 on an HCT116 track: the cache keeps only K562, HepG2, GM12878 and IMR-90",
+    "the model's other tracks for a cell where only one by_cell value is kept (CD83 in GM12878, ID1 in K562): another K562 track for ID1 could carry the other sign",
+    "how many of the 156,925 predicted repressions share class (f): the run tables keep only the winning direction, and reading the losing one needs every chromosome's response cache",
+    "why the model's ID1 prediction swings from -0.74 (liver) to +0.81 (whole blood) at an element 1.3 kb from MIR3193 and 1.8 kb past ID1's annotated end"
+  ],
+  "labels_or_verdicts_changed": 0,
+  "alphagenome_requests": 0,
+  "per_element_response_cache_opened": true,
+  "seconds": 14.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this repository: data/results/attribution_correctness.json (S4, ab62d99)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: the enhancer_targets_all run tables and the per-element response cache (data/knowledge/alphagenome/elements), local and untracked",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM lentiMPRA (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GTEx v8 single-tissue cis-eQTL, distilled by genomeos/attribution/eqtl.py",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GENCODE v50 (per chromosome)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: the 24 compiled programs data/knowledge/compiled/noncoding_<chrom>.bio (generated, untracked)",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/attribution_correctness.json",
+        "sha256": "9c485dfdaa166c63b8477909deae067facf9dbaece40bd79c41cafe9f5954163",
+        "bytes": 321296,
+        "partition": null
+      },
+      {
+        "path": "data/results/pilot_biological_gate.json",
+        "sha256": "8b6752ba1f6c26fd3136a03221085b02fb8762ee0ee00986585b8e22f16e4842",
+        "bytes": 1085778,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+        "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+        "bytes": 46496550,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+        "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+        "bytes": 22792705,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+        "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+        "bytes": 31161454,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+        "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+        "bytes": 14376446,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Subcutaneous.tsv",
+        "sha256": "7e71e97c248caea71e7852bd36b6e4ef1892ae2fb80bf77bcd59662143da2b25",
+        "bytes": 1524862,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adipose_Visceral_Omentum.tsv",
+        "sha256": "95c763aa2d3697c6e7d7dedb18ec304019d80fff2c55beef7164332899835ecc",
+        "bytes": 1041488,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Adrenal_Gland.tsv",
+        "sha256": "a9a98c26e59cef34cefda07e2c8aec5df0cfc3e1ef632f635a4ad1b07634ec7b",
+        "bytes": 425985,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Aorta.tsv",
+        "sha256": "78f1ed51d6103808e2ac8b374a4b8c7967adce7fa28617cc62aa10ab77493dc8",
+        "bytes": 981284,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Coronary.tsv",
+        "sha256": "68fe61a7162556c6a775ba9c493fe82103947e987f9053104cafe9dc7550ec26",
+        "bytes": 325834,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Artery_Tibial.tsv",
+        "sha256": "c3bf8c30972e32a6287ba2a3d5fe7c75d5bfc438b16fa987d93c9c4ec34c9356",
+        "bytes": 1438085,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Amygdala.tsv",
+        "sha256": "4e5ca3d45acbd822533b9d2d46bcd52ad25461ab819c16927a618ca1cb5c323f",
+        "bytes": 171980,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Anterior_cingulate_cortex_BA24.tsv",
+        "sha256": "cc1fa675de9336716749f1dba399249cf7576eb21cd509dc9494a0fcff3ea4e8",
+        "bytes": 325702,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Caudate_basal_ganglia.tsv",
+        "sha256": "3e6ceeaff34bd0b1426516abe357f502b65316a6aaf424ed52b8e00ab97e76f2",
+        "bytes": 471902,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellar_Hemisphere.tsv",
+        "sha256": "03bf9c4a26b250696b7d153d3331a49310799bb35e51ef2022e3d5b8f4fd1bc0",
+        "bytes": 641185,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cerebellum.tsv",
+        "sha256": "5612521b498a4453b82492f5fde8eb664c98a0cf5be6306820a66e02f2b8ef14",
+        "bytes": 737242,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Cortex.tsv",
+        "sha256": "6c09911f6dfe7b67f754815fcd8898c95667b39c2558d677f67250a692a19458",
+        "bytes": 477997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Frontal_Cortex_BA9.tsv",
+        "sha256": "114f5d3fff9f3a94dd9946b2b78b2df29e1fe1fc14f82d7fa5abe4cd3f59f97b",
+        "bytes": 383758,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hippocampus.tsv",
+        "sha256": "00aa835adc59b0c9b07ec72361ed16057d71dded6436a66d3295fd72f4102b8e",
+        "bytes": 266947,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Hypothalamus.tsv",
+        "sha256": "fc12fe871efa8c70c521dd1aff1025dafc0936398a9176c68590741a61ac65fd",
+        "bytes": 283527,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Nucleus_accumbens_basal_ganglia.tsv",
+        "sha256": "86271aefe2a14d2ecb92249987db1bb1090686b4b3f2255e87aead8d766f3f6f",
+        "bytes": 532000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Putamen_basal_ganglia.tsv",
+        "sha256": "7dd51af07d37a2f3b8844be6e163b6f162755c7c775a15dbcf25344c6b91fceb",
+        "bytes": 366581,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Spinal_cord_cervical_c-1.tsv",
+        "sha256": "e1e48e849fdb7da737b37f473d95e15252e2e567269fcb9aaff97f6b00766d8d",
+        "bytes": 246873,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Brain_Substantia_nigra.tsv",
+        "sha256": "7c943728285f7e58e239f287a9a4c8fd6718b2f0121115c0355d8b28212dd40b",
+        "bytes": 153393,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Breast_Mammary_Tissue.tsv",
+        "sha256": "4ca8d79762774492011a72299faf8c7c6d63671533f522a901d5fdbb3ef13cf5",
+        "bytes": 816240,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_Cultured_fibroblasts.tsv",
+        "sha256": "ef687b3a868e6dacc0c73fbde086143a3d817214acfcc681bab63217e906651c",
+        "bytes": 1584825,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Cells_EBV-transformed_lymphocytes.tsv",
+        "sha256": "0b823bcbfb19fa95f9555f23cc80ef544c8dcff98984955b852301aebed6e4ec",
+        "bytes": 276054,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Sigmoid.tsv",
+        "sha256": "a3aa863efc8e1ab78a4d41ddbbe1c1d86778f36eb0e2c4e6fdca28d0b03e7e41",
+        "bytes": 699780,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Colon_Transverse.tsv",
+        "sha256": "366f96a4dcc0abe387befe95e01f76c927d4b9d1be5f0e43c43aaec3945145b2",
+        "bytes": 773632,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Gastroesophageal_Junction.tsv",
+        "sha256": "18ebc97fc263c60f871ede4c9b83d8b7578820c8799a9f291f74f231bac6215a",
+        "bytes": 884756,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Mucosa.tsv",
+        "sha256": "86ca00d5b3a533f33cdad9725e6355a2f0ea6569f8e9a493a0a51460844c602a",
+        "bytes": 1322161,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Esophagus_Muscularis.tsv",
+        "sha256": "4a33d218d4e73177d113cede7855ad1e7c992bff0adf7e8c3672eb2fbe2d40e5",
+        "bytes": 1290276,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Atrial_Appendage.tsv",
+        "sha256": "b4f9bed9a2a0677c46ed84b0332f96e8fb921e1039f3942a0655a00c773e9daa",
+        "bytes": 862704,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Heart_Left_Ventricle.tsv",
+        "sha256": "8eae4bf8c11c8a074936cc2db779d66782a76e183ec5f02a1a7d6e60b92dc793",
+        "bytes": 757656,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Kidney_Cortex.tsv",
+        "sha256": "599734443cb68ee0836620a4b4a2c9aff9475d27cdcfbb4aa9c617e161c0e62d",
+        "bytes": 48661,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Liver.tsv",
+        "sha256": "e9a66834e337e36ff04e4289fb96ef8e3be53acdc2aba936ceb2dbcb7677f2dd",
+        "bytes": 283674,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Lung.tsv",
+        "sha256": "359daad335e8bb1e7eba3db2389c92e218cae579119a0e0f66d1fd54105ae8ad",
+        "bytes": 1002366,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Minor_Salivary_Gland.tsv",
+        "sha256": "00979f8c71e4ca3db9ea6e923c5409488f196becf1e58c2ce5eec0e676410918",
+        "bytes": 221750,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Muscle_Skeletal.tsv",
+        "sha256": "9872bf62d2d11c632678215a1fea511f39c009e06a25a0efc85f6547a3d0bdf3",
+        "bytes": 1362211,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Nerve_Tibial.tsv",
+        "sha256": "2f950f34f8a7977a5d861a060ed4a8e8f20ffa9bd5e96bdcfd6da91648ed9aea",
+        "bytes": 1665423,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Ovary.tsv",
+        "sha256": "a50e733bd6cda9f8a75bd92d02b7b0c0e0937e7f6dfcd2984912f1ea194657f7",
+        "bytes": 241044,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pancreas.tsv",
+        "sha256": "ccdc43bdf0ffac86b49fa3c02a0d7885d2b04bbb4ba2a94e880ea89d5f572937",
+        "bytes": 628314,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Pituitary.tsv",
+        "sha256": "7dcb775dc6cab29ce54d762bc497c50626a83ccc80fa241a0f43be39c37a7e94",
+        "bytes": 536244,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Prostate.tsv",
+        "sha256": "d6326e1447950dfee689b4092cd04e222063ff664687d30aa15944592134f70e",
+        "bytes": 372286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Not_Sun_Exposed_Suprapubic.tsv",
+        "sha256": "c20d3636b170cea87fee3ddc8497ffc9d24b58ccdd2813c21f1b2f89782a4042",
+        "bytes": 1622208,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Skin_Sun_Exposed_Lower_leg.tsv",
+        "sha256": "9aaf1745340ae5844d692b3524842185ddb0d68a75c19a3ab0e1ab4341f5c017",
+        "bytes": 1848227,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Small_Intestine_Terminal_Ileum.tsv",
+        "sha256": "a9a3bbe2cbd1828d4a743f00a434723716cd49fd3db07ac40a1e74e842d68780",
+        "bytes": 350856,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Spleen.tsv",
+        "sha256": "7e7ef5bb41ea8a9c401bc2503e1e18b01796e9464660096bad9aa80dbfe821a8",
+        "bytes": 528491,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Stomach.tsv",
+        "sha256": "09cfe463146d027c15ad1974bdc1002a3b4f823516152d6923cc1224534339a7",
+        "bytes": 496677,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Testis.tsv",
+        "sha256": "0d8bbe69c88732bcb49a89dedbd98ad2234a4eb124298a5afc7fb393cecf72d1",
+        "bytes": 1190074,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Thyroid.tsv",
+        "sha256": "413457100576634c78f98d4bb984df761e14ca6cb12f5a1dc4f8b42d8040f996",
+        "bytes": 1643720,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Uterus.tsv",
+        "sha256": "c1fbec57440bffe9b2867ffdd3e92aadda7c1cdb0f1b960216ca8a6f8d69589f",
+        "bytes": 140157,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Vagina.tsv",
+        "sha256": "0fae0e42ec83c251080c3f1fff5c9906ffba73f5175d2ae4b7fa2fc597bfe3b2",
+        "bytes": 141954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex/hits_Whole_Blood.tsv",
+        "sha256": "1782965cd1d9b8eeb71875776c225ed1cca105b97552aa72b4e48e6c86f7a2c5",
+        "bytes": 1197811,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "registration": {
+        "registered": "2026-09-29",
+        "status": "an internal development trace of existing claims, not a validation",
+        "written_after": "The brief asked for the classes before any tracing. This lane had already read the five compiled rules, their rows in the whole-chromosome run, the five cached model answers and the matching raw CRISPRi rows when it wrote them down, so this registration is not blind to the data. Classes (a) to (e) are the brief's five, with its definitions. Class (f) and the primary-class rule were written after that first reading, and are marked as such.",
+        "question": "for each represses_target claim S4 judged incorrect (four) and the one activates_target claim it judged incorrect (CCND1), where did the claimed direction come from, and why does it disagree with the observation that decided the verdict",
+        "cases": [
+          {
+            "element": "EH38E2447945",
+            "locus": "chr6:14095446-14095736",
+            "value": "represses_target",
+            "gene": "CD83",
+            "cell": "K562",
+            "deciding": {
+              "source": "crispri:Nasser2021",
+              "gene": "CD83",
+              "cell": "GM12878",
+              "split": "heldout"
+            }
+          },
+          {
+            "element": "EH38E3896696",
+            "locus": "chr9:97960870-97961216",
+            "value": "represses_target",
+            "gene": "HEMGN",
+            "cell": "Brain_Cerebellar_Hemisphere",
+            "deciding": {
+              "source": "crispri:Gasperini2019",
+              "gene": "HEMGN",
+              "cell": "K562",
+              "split": "training"
+            }
+          },
+          {
+            "element": "EH38E3426791",
+            "locus": "chr20:31608511-31608860",
+            "value": "represses_target",
+            "gene": "ID1",
+            "cell": "Whole_Blood",
+            "deciding": {
+              "source": "crispri:Gasperini2019",
+              "gene": "ID1",
+              "cell": "K562",
+              "split": "training"
+            }
+          },
+          {
+            "element": "EH38E3940111",
+            "locus": "chrX:103233290-103233585",
+            "value": "represses_target",
+            "gene": "BEX4",
+            "cell": "hair_follicular_keratinocyte",
+            "deciding": {
+              "source": "crispri:Gasperini2019",
+              "gene": "BEX4",
+              "cell": "K562",
+              "split": "training"
+            }
+          }
+        ],
+        "comparison": {
+          "element": "EH38E1548926",
+          "locus": "chr11:69588295-69588640",
+          "value": "activates_target",
+          "gene": "CCND1",
+          "cell": "CD8_positive__alpha_beta_memory_T_cell",
+          "deciding": {
+            "source": "crispri:HCT116",
+            "gene": "CCND1",
+            "cell": "HCT116",
+            "split": "heldout"
+          }
+        },
+        "classes": {
+          "a": {
+            "name": "sign or convention error",
+            "definition": "a sign flipped, or a convention misread, somewhere between the source and the label, or between the raw measurement and the observation. On the label side the steps are: the model's log2 fold change (alternate over reference, where the alternate allele is the deletion), the choice between the gene's largest drop and its largest rise (enhancer_target.predict_target), the rule verb the compiler writes (activates or inhibits), and the claim value S4 reads from the verb. On the measurement side the steps are: the benchmark's EffectSize and Significant columns, the pair's outcome (measured.CrispriPair.outcome), the observation kind (correctness.CRISPRI_KIND) and the S4 table's reading of that kind on the claim's value",
+            "decided_by": "step by step: present when a step's stored sign or direction is not the one the previous step's value implies under that step's own stated convention. The label side is recomputed from the cached answer with predict_target and the compiler's verb rule, and compared with the stored run row, the compiled rule line and the S4 claim. The measurement side is recomputed from the raw benchmark row and compared with the observation S4 recorded",
+            "added_after_first_reading": false
+          },
+          "b": {
+            "name": "cell mismatch",
+            "definition": "the claim's stated cell and the deciding observation's cell differ, so by the S4 table the observation may not bear on the claim at all. The table's CRISPRi activity and context cells speak of 'the cell screened'",
+            "decided_by": "present when no deciding observation's cell equals the claim's cell after S4's own normalisation (correctness.norm_cell)",
+            "added_after_first_reading": false
+          },
+          "c": {
+            "name": "genuine contradiction",
+            "definition": "the same reading in the same cell has the opposite direction: the model's own value for the named gene on the measured cell's track has the opposite sign to the measured effect",
+            "decided_by": "the cached answer's value for the gene on the measured cell's track: `by_cell`, and the largest drop or rise where the track it came from is named for that cell. Present when a value for that cell is opposite in sign to the measurement. Absent when every such value has the measurement's sign. Unknown when the cache holds no value for that cell. The cache keeps one `by_cell` value per cell name, so where a cell has several tracks the others are not seen, and this is stated beside each case",
+            "added_after_first_reading": false
+          },
+          "d": {
+            "name": "indirect or ambiguous",
+            "definition": "another gene may carry the effect: another gene in the window, a shared promoter or a multi-target element",
+            "decided_by": "present when any of: the model's any-gene prediction names a different gene from its coding prediction; the run's compact verdict says 'another gene in the same domain'; or the same screen changed another gene significantly on silencing this element (a multi-target element). Each of the three is reported separately, and the annotated genes nearest the element are listed as description only",
+            "added_after_first_reading": false
+          },
+          "e": {
+            "name": "judge inconsistency",
+            "definition": "the verdict `incorrect` alongside `refutable: false`: the judge gave a verdict its own registered rules (correctness.TABLE, correctness.AXIS_RULE) do not give, or its rules contradict each other on this claim",
+            "decided_by": "correctness.verdict_of re-run on the claim with the observations S4 held for the element must give the committed verdict and the committed deciding observations. What `refutable` means is read from correctness.py and stated. Separately, the committed S4 result is counted per axis by verdict and by `refutable`, to show where `incorrect` can occur with `refutable` false",
+            "added_after_first_reading": false
+          },
+          "f": {
+            "name": "direction split across tracks",
+            "definition": "the model moves the named gene both ways on different tracks, and the label takes the direction and the cell of the single most extreme track (enhancer_target.predict_target: the larger of the largest drop and the largest rise over every track wins)",
+            "decided_by": "present when the cached answer records both a drop and a rise for the named gene (max_drop_log2fc < 0 < max_rise_log2fc). The live scorer records only values beyond 0.05, so both being non-zero means both passed that recording threshold. The winning margin is reported",
+            "added_after_first_reading": true
+          }
+        },
+        "primary_rule": "written after the first reading. The primary class is the first that applies, in this order: (a) when present, because a flipped sign explains any disagreement; (e) when present; (c) when present, because the disagreement then survives aligning the cells; (b) when present and (c) is absent or unknown, because the claim and the observation are then in different cells and the model's own reading of the measured cell does not contradict the measurement, or cannot be read. (d) and (f) are recorded beside and are never primary: S4 matches the deciding observation to the named gene, so another gene cannot be what disagrees, and (f) says where a direction came from, not why a measurement disagrees with it",
+        "no_change": "no label and no verdict is changed by this trace. A bug, if one is found, is fixed with a test that fails before the fix. When the fix would move a committed result's figures, the before-and-after counts are written and the result is not regenerated: that is the coordinator's call",
+        "may_be_called": "an internal development trace of five existing claims: where each claimed direction came from and which registered class explains its disagreement with the observation that decided it",
+        "may_not_be_called": [
+          "a validation of the labels, the model or the judge",
+          "a rate: five claims are traced, chosen because S4 judged them wrong, and no share of anything is estimated from them",
+          "evidence about claims S4 did not judge"
+        ]
+      },
+      "run": "enhancer_targets_all"
+    },
+    "exclusions": [
+      "no model request: the per-element response cache is read, never asked",
+      "no label and no verdict is changed, and attribution_correctness.json is not regenerated",
+      "the cache keeps one `by_cell` value per cell name and only the largest drop and rise over every track, so the model's other tracks for a cell are not seen",
+      "HCT116 has no `by_cell` value in the cache (only K562, HepG2, GM12878 and IMR-90 are kept)",
+      "the measured twins (`*_measured` blocks and experimental rules) are the evidence and are not read as labels",
+      "`unknown`, `unassigned` and unchosen `|` alternatives are counted as not claims, never judged",
+      "CRISPRi pairs the benchmark marks as not a valid connection are not read",
+      "observation kinds holdout does not load (contact, conservation, allelic readouts, the model, annotation and registry) are in the table and judge nothing in this run",
+      "the AlphaGenome per-element response cache is not opened; the model is not called"
+    ],
+    "partitions": {
+      "training": "the three Gasperini2019 K562 rows traced (HEMGN, ID1, BEX4) come from the benchmark's training file",
+      "heldout": "two rows of the held-out file (Nasser2021 CD83 in GM12878, HCT116 CCND1) are read only to trace verdicts S4 already decided with them; nothing is fitted, selected or relabelled from them"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "3cc59bfd61bf35bd3ab560da2837bf5469ee032d",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/repression_trace.json"
+      ],
+      "argv": [
+        "scripts/repression_trace.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
