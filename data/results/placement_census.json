@@ -1,0 +1,1798 @@
+{
+  "result": "placement_census",
+  "date": "2026-09-29",
+  "question": "C4's CRISPRi evidence attachment under the current reciprocal rule and audit A's registered policy, with each screened observation counted once as a set-valued observation",
+  "status": "internal development evidence: a bounded, read-only census recorded apart, one pass. Every outcome read here was read before (prior_exposure). It replaces no headline result, changes no matcher, regenerates nothing and recommends nothing",
+  "registration": {
+    "registered": "2026-09-29",
+    "approved_as": "a bounded, read-only census, recorded apart, that stops after one pass (the external reviewer, relayed by the coordinator genomeos-9f)",
+    "rules": {
+      "reciprocal_half": "C4's rule, unchanged: measured.measures, the overlap at least 0.5 of BOTH widths (ablation.CrispriIndex.of)",
+      "min_side_half": "audit A's registered policy (dd8c49c), unchanged: the overlap at least 0.5 of the SMALLER width (placement_audit.policy_rule). Applied here only"
+    },
+    "rules_note": "the current rule implies the policy (half of both widths is at least half of the smaller), so every attachment under the current rule is one under the policy; this is checked on every observation, not assumed",
+    "observation": "one row of the CRISPRi benchmark (both files, ValidConnection TRUE, measured.parse_crispri): its tested interval, measured gene, cell and file. Its id is split|chrom:start-end|gene|cell, checked unique; its outcome is measured's (decrease, increase, well-powered null, underpowered null, missing)",
+    "predicted_link": "one predicted element block of the 24 compiled programs (not `_measured`), with its first target and its action, exactly as ablation.program_census reads it",
+    "candidate_set": "the ENCODE cCRE v3 registry elements that meet the rule with the tested interval. Every compiled predicted element is a registry element with the registry's id and coordinates (checked), so the attached links are a subset of the candidate set",
+    "attached_links": "the predicted links whose element meets the rule with the tested interval and whose target is the measured gene, in any cell: C4's element-label attachment (ablation.link_class with cell None)",
+    "set_valued_rule": "one observation is one count. An observation attached to several links, or whose candidate set holds several elements, is one ambiguous observation, never several validations. Counts of observations and counts of element-level attachments (observation-link pairs, and C4's per-link census) are reported apart, and every supported count of the census is a count of observations",
+    "resolution": {
+      "unique_element": "exactly one registry element meets the rule with the tested interval, and it carries a predicted link to the measured gene: a unique-element assignment",
+      "ambiguous_one_link": "one predicted link to the measured gene is attached, but more than one registry element meets the rule with the tested interval, so the response could be explained by an element the link does not name: an ambiguous candidate set",
+      "ambiguous_several_links": "more than one predicted link to the measured gene is attached: an ambiguous candidate set, one observation over several links",
+      "unattached": "no predicted link to the measured gene meets the rule with the tested interval: the observation assesses no predicted link"
+    },
+    "verdict": {
+      "supported": "attached, and a significant change in the direction every attached link predicts (activates: a decrease; inhibits: an increase)",
+      "refuted_well_powered_null": "attached, and a well-powered null (PowerAtEffectSize20 >= 0.8, measured.outcome)",
+      "refuted_opposite_sign": "attached, and a significant change opposite to the direction every attached link predicts",
+      "split_direction": "attached to links of both directions, and a significant change: it supports some and contradicts others, counted as neither",
+      "unassessed_underpowered": "attached, and an underpowered null",
+      "unassessed_missing": "attached, and no effect size in the table",
+      "unattached": "no attached link (RESOLUTION_MEANING)"
+    },
+    "per_rule": [
+      "observations by verdict, and by verdict and resolution: supported, refuted (well-powered null and opposite sign apart), split direction, unassessed (underpowered and missing apart), unattached",
+      "observations by outcome and verdict, so decreases, increases, well-powered nulls and underpowered nulls are each read apart",
+      "element-level attachments apart: observation-link pairs, links with an attached observation, and C4's per-link census (ablation.link_class) with the distinct observations behind its supported links and how many of those links rest only on ambiguous observations",
+      "the same observation table per stratum: study (the Dataset column), cell, split, tested width (<= 700 bp, > 700 bp, and a zero-width class) and finer width bins (zero_width, 1_to_74, 75_to_350, 351_to_500, 501_to_700, 701_to_1000, 1001_to_2000, over_2000)"
+    ],
+    "difference": [
+      "observations newly attached under the policy, by resolution, verdict, width, study and cell",
+      "new observation-link attachments, and how many come from tested intervals over 700 bp",
+      "observations attached under both rules whose candidate set or attached links grew, and resolution transitions",
+      "the verdict transition table (current to policy) and C4's per-link class transition table"
+    ],
+    "denominator": "unchanged under both rules and checked: the same 440,377 predicted links (C4's committed count) and the same screened observations (every valid benchmark row); every table sums to its denominator",
+    "gates": [
+      "C4's committed per-link census (link_by_class and link_by_detail) reproduces exactly under the current rule, both through ablation.CrispriIndex.of and through this census's own index",
+      "audit A's committed placements reproduce: observations with a compiled element meeting the rule, and with one only in the registry, under both rules; and the policy's multi-element placements"
+    ],
+    "cost": "wall time, CPU time and peak memory of the run",
+    "out_of_scope": [
+      "C4's rule family (R1, the rule's own cell) and its headline family: not censused",
+      "any other endpoint (lentiMPRA, VISTA, saturation mutagenesis, GTEx): not read",
+      "any recommendation to adopt the policy: the census stops after one pass, changes no matcher and regenerates nothing; adopting a matching change waits until the evidence-resolution implications are reviewed"
+    ]
+  },
+  "alphagenome_requests": 0,
+  "downloads": 0,
+  "per_element_response_cache_opened": false,
+  "c4_reproduced": {
+    "equal_to_committed": true,
+    "through": [
+      "ablation.CrispriIndex.of",
+      "this census"
+    ]
+  },
+  "denominators": {
+    "predicted_links": 440377,
+    "c4_committed_predicted_links": 440377,
+    "screened_observations": 14734,
+    "invalid_rows_not_read": 0,
+    "same_under_both_rules": true
+  },
+  "rules": {
+    "reciprocal_half": {
+      "rule": "C4's rule, unchanged: measured.measures, the overlap at least 0.5 of BOTH widths (ablation.CrispriIndex.of)",
+      "observations": {
+        "observations": 14734,
+        "attached": 128,
+        "unattached": 14606,
+        "by_resolution": {
+          "unique_element": 128,
+          "ambiguous_one_link": 0,
+          "ambiguous_several_links": 0,
+          "unattached": 14606
+        },
+        "by_verdict": {
+          "supported": 93,
+          "refuted_well_powered_null": 23,
+          "refuted_opposite_sign": 5,
+          "split_direction": 0,
+          "unassessed_underpowered": 7,
+          "unassessed_missing": 0,
+          "unattached": 14606
+        },
+        "summary": {
+          "supported": 93,
+          "refuted": 28,
+          "split_direction": 0,
+          "unassessed_attached": 7,
+          "unattached": 14606
+        },
+        "by_verdict_and_resolution": {
+          "supported": {
+            "unique_element": 93
+          },
+          "refuted_well_powered_null": {
+            "unique_element": 23
+          },
+          "refuted_opposite_sign": {
+            "unique_element": 5
+          },
+          "unassessed_underpowered": {
+            "unique_element": 7
+          },
+          "unattached": {
+            "unattached": 14606
+          }
+        },
+        "by_outcome_and_verdict": {
+          "significant_decrease": {
+            "refuted_opposite_sign": 4,
+            "supported": 93,
+            "unattached": 564
+          },
+          "significant_increase": {
+            "refuted_opposite_sign": 1,
+            "unattached": 158
+          },
+          "not_significant_well_powered": {
+            "refuted_well_powered_null": 23,
+            "unattached": 9778
+          },
+          "not_significant_underpowered": {
+            "unassessed_underpowered": 7,
+            "unattached": 4106
+          }
+        }
+      },
+      "element_level": {
+        "attachments": {
+          "observation_link_pairs": 128,
+          "links_with_an_attached_observation": 128,
+          "supported_links": 93,
+          "distinct_observations_behind_supported_links": 93,
+          "supported_links_with_a_unique_element_observation": 93,
+          "supported_links_resting_only_on_ambiguous_observations": 0,
+          "supported_links_by_supporting_observations": {
+            "1": 93
+          }
+        },
+        "c4_per_link_census": {
+          "predicted_links": 440377,
+          "by_class": [
+            {
+              "class": "does_not_survive",
+              "reason": "never_measured",
+              "n": 440249
+            },
+            {
+              "class": "survives",
+              "reason": null,
+              "n": 93
+            },
+            {
+              "class": "does_not_survive",
+              "reason": "contradicted",
+              "n": 28
+            },
+            {
+              "class": "does_not_survive",
+              "reason": "inconclusive",
+              "n": 7
+            }
+          ],
+          "by_detail": {
+            "element never screened": 438872,
+            "element screened, this gene not tested": 1377,
+            "survives": 93,
+            "well-powered null": 23,
+            "not_significant_underpowered": 7,
+            "significant_decrease": 4,
+            "significant_increase": 1
+          }
+        }
+      },
+      "strata": {
+        "study": {
+          "Gasperini2019": {
+            "observations": 5299,
+            "attached": 89,
+            "resolution_unique_element": 89,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 68,
+            "refuted_well_powered_null": 18,
+            "refuted_opposite_sign": 3,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 5210,
+            "increases_attached": 0
+          },
+          "HCT116": {
+            "observations": 396,
+            "attached": 6,
+            "resolution_unique_element": 6,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 1,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 4,
+            "unassessed_missing": 0,
+            "unattached": 390,
+            "increases_attached": 1
+          },
+          "K562_DC_TAP": {
+            "observations": 1252,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 1,
+            "refuted_well_powered_null": 3,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1248,
+            "increases_attached": 0
+          },
+          "Klann": {
+            "observations": 33,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 33,
+            "increases_attached": 0
+          },
+          "Morris": {
+            "observations": 184,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 184,
+            "increases_attached": 0
+          },
+          "Nasser2021": {
+            "observations": 3894,
+            "attached": 19,
+            "resolution_unique_element": 19,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 15,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 3,
+            "unassessed_missing": 0,
+            "unattached": 3875,
+            "increases_attached": 0
+          },
+          "Reilly": {
+            "observations": 8,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 8,
+            "increases_attached": 0
+          },
+          "Schraivogel2020": {
+            "observations": 1306,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 1,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1302,
+            "increases_attached": 0
+          },
+          "WTC11_DC_TAP": {
+            "observations": 1921,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 1,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1917,
+            "increases_attached": 0
+          },
+          "Xie": {
+            "observations": 441,
+            "attached": 2,
+            "resolution_unique_element": 2,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 2,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 439,
+            "increases_attached": 0
+          }
+        },
+        "cell": {
+          "GM12878": {
+            "observations": 68,
+            "attached": 3,
+            "resolution_unique_element": 3,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 2,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 65,
+            "increases_attached": 0
+          },
+          "HCT116": {
+            "observations": 396,
+            "attached": 6,
+            "resolution_unique_element": 6,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 1,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 4,
+            "unassessed_missing": 0,
+            "unattached": 390,
+            "increases_attached": 1
+          },
+          "Jurkat": {
+            "observations": 75,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 1,
+            "unassessed_missing": 0,
+            "unattached": 71,
+            "increases_attached": 0
+          },
+          "K562": {
+            "observations": 12274,
+            "attached": 111,
+            "resolution_unique_element": 111,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 84,
+            "refuted_well_powered_null": 22,
+            "refuted_opposite_sign": 3,
+            "split_direction": 0,
+            "unassessed_underpowered": 2,
+            "unassessed_missing": 0,
+            "unattached": 12163,
+            "increases_attached": 0
+          },
+          "WTC11": {
+            "observations": 1921,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 1,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1917,
+            "increases_attached": 0
+          }
+        },
+        "split": {
+          "heldout": {
+            "observations": 4378,
+            "attached": 23,
+            "resolution_unique_element": 23,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 12,
+            "refuted_well_powered_null": 4,
+            "refuted_opposite_sign": 2,
+            "split_direction": 0,
+            "unassessed_underpowered": 5,
+            "unassessed_missing": 0,
+            "unattached": 4355,
+            "increases_attached": 1
+          },
+          "training": {
+            "observations": 10356,
+            "attached": 105,
+            "resolution_unique_element": 105,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 81,
+            "refuted_well_powered_null": 19,
+            "refuted_opposite_sign": 3,
+            "split_direction": 0,
+            "unassessed_underpowered": 2,
+            "unassessed_missing": 0,
+            "unattached": 10251,
+            "increases_attached": 0
+          }
+        },
+        "width": {
+          "gt_700": {
+            "observations": 3551,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 3551,
+            "increases_attached": 0
+          },
+          "le_700": {
+            "observations": 11182,
+            "attached": 128,
+            "resolution_unique_element": 128,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 93,
+            "refuted_well_powered_null": 23,
+            "refuted_opposite_sign": 5,
+            "split_direction": 0,
+            "unassessed_underpowered": 7,
+            "unassessed_missing": 0,
+            "unattached": 11054,
+            "increases_attached": 1
+          },
+          "zero_width": {
+            "observations": 1,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1,
+            "increases_attached": 0
+          }
+        },
+        "width_fine": {
+          "1001_to_2000": {
+            "observations": 1269,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1269,
+            "increases_attached": 0
+          },
+          "1_to_74": {
+            "observations": 35,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 35,
+            "increases_attached": 0
+          },
+          "351_to_500": {
+            "observations": 7735,
+            "attached": 96,
+            "resolution_unique_element": 96,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 68,
+            "refuted_well_powered_null": 20,
+            "refuted_opposite_sign": 4,
+            "split_direction": 0,
+            "unassessed_underpowered": 4,
+            "unassessed_missing": 0,
+            "unattached": 7639,
+            "increases_attached": 0
+          },
+          "501_to_700": {
+            "observations": 2893,
+            "attached": 30,
+            "resolution_unique_element": 30,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 23,
+            "refuted_well_powered_null": 3,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 3,
+            "unassessed_missing": 0,
+            "unattached": 2863,
+            "increases_attached": 1
+          },
+          "701_to_1000": {
+            "observations": 2118,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 2118,
+            "increases_attached": 0
+          },
+          "75_to_350": {
+            "observations": 519,
+            "attached": 2,
+            "resolution_unique_element": 2,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 2,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 517,
+            "increases_attached": 0
+          },
+          "over_2000": {
+            "observations": 164,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 164,
+            "increases_attached": 0
+          },
+          "zero_width": {
+            "observations": 1,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1,
+            "increases_attached": 0
+          }
+        }
+      },
+      "audit_a_reproduced": {
+        "placed_compiled": 4825,
+        "registry_only": 3244
+      }
+    },
+    "min_side_half": {
+      "rule": "audit A's registered policy (dd8c49c), unchanged: the overlap at least 0.5 of the SMALLER width (placement_audit.policy_rule). Applied here only",
+      "observations": {
+        "observations": 14734,
+        "attached": 308,
+        "unattached": 14426,
+        "by_resolution": {
+          "unique_element": 163,
+          "ambiguous_one_link": 86,
+          "ambiguous_several_links": 59,
+          "unattached": 14426
+        },
+        "by_verdict": {
+          "supported": 208,
+          "refuted_well_powered_null": 50,
+          "refuted_opposite_sign": 16,
+          "split_direction": 18,
+          "unassessed_underpowered": 16,
+          "unassessed_missing": 0,
+          "unattached": 14426
+        },
+        "summary": {
+          "supported": 208,
+          "refuted": 66,
+          "split_direction": 18,
+          "unassessed_attached": 16,
+          "unattached": 14426
+        },
+        "by_verdict_and_resolution": {
+          "supported": {
+            "unique_element": 120,
+            "ambiguous_one_link": 60,
+            "ambiguous_several_links": 28
+          },
+          "refuted_well_powered_null": {
+            "unique_element": 26,
+            "ambiguous_one_link": 16,
+            "ambiguous_several_links": 8
+          },
+          "refuted_opposite_sign": {
+            "unique_element": 9,
+            "ambiguous_one_link": 6,
+            "ambiguous_several_links": 1
+          },
+          "split_direction": {
+            "ambiguous_several_links": 18
+          },
+          "unassessed_underpowered": {
+            "unique_element": 8,
+            "ambiguous_one_link": 4,
+            "ambiguous_several_links": 4
+          },
+          "unattached": {
+            "unattached": 14426
+          }
+        },
+        "by_outcome_and_verdict": {
+          "significant_decrease": {
+            "refuted_opposite_sign": 15,
+            "split_direction": 18,
+            "supported": 206,
+            "unattached": 422
+          },
+          "significant_increase": {
+            "refuted_opposite_sign": 1,
+            "supported": 2,
+            "unattached": 156
+          },
+          "not_significant_well_powered": {
+            "refuted_well_powered_null": 50,
+            "unattached": 9751
+          },
+          "not_significant_underpowered": {
+            "unassessed_underpowered": 16,
+            "unattached": 4097
+          }
+        }
+      },
+      "element_level": {
+        "attachments": {
+          "observation_link_pairs": 384,
+          "links_with_an_attached_observation": 380,
+          "supported_links": 261,
+          "distinct_observations_behind_supported_links": 226,
+          "supported_links_with_a_unique_element_observation": 120,
+          "supported_links_resting_only_on_ambiguous_observations": 141,
+          "supported_links_by_supporting_observations": {
+            "1": 259,
+            "2": 2
+          }
+        },
+        "c4_per_link_census": {
+          "predicted_links": 440377,
+          "by_class": [
+            {
+              "class": "does_not_survive",
+              "reason": "never_measured",
+              "n": 439997
+            },
+            {
+              "class": "survives",
+              "reason": null,
+              "n": 261
+            },
+            {
+              "class": "does_not_survive",
+              "reason": "contradicted",
+              "n": 100
+            },
+            {
+              "class": "does_not_survive",
+              "reason": "inconclusive",
+              "n": 19
+            }
+          ],
+          "by_detail": {
+            "element never screened": 437052,
+            "element screened, this gene not tested": 2945,
+            "survives": 261,
+            "well-powered null": 64,
+            "significant_decrease": 35,
+            "not_significant_underpowered": 19,
+            "significant_increase": 1
+          }
+        }
+      },
+      "strata": {
+        "study": {
+          "Gasperini2019": {
+            "observations": 5299,
+            "attached": 204,
+            "resolution_unique_element": 119,
+            "resolution_ambiguous_one_link": 52,
+            "resolution_ambiguous_several_links": 33,
+            "supported": 146,
+            "refuted_well_powered_null": 42,
+            "refuted_opposite_sign": 9,
+            "split_direction": 7,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 5095,
+            "increases_attached": 1
+          },
+          "HCT116": {
+            "observations": 396,
+            "attached": 13,
+            "resolution_unique_element": 5,
+            "resolution_ambiguous_one_link": 5,
+            "resolution_ambiguous_several_links": 3,
+            "supported": 4,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 2,
+            "split_direction": 0,
+            "unassessed_underpowered": 7,
+            "unassessed_missing": 0,
+            "unattached": 383,
+            "increases_attached": 1
+          },
+          "K562_DC_TAP": {
+            "observations": 1252,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 1,
+            "refuted_well_powered_null": 3,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1248,
+            "increases_attached": 0
+          },
+          "Klann": {
+            "observations": 33,
+            "attached": 7,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 3,
+            "resolution_ambiguous_several_links": 4,
+            "supported": 2,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 4,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 26,
+            "increases_attached": 0
+          },
+          "Morris": {
+            "observations": 184,
+            "attached": 8,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 4,
+            "resolution_ambiguous_several_links": 4,
+            "supported": 6,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 2,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 176,
+            "increases_attached": 0
+          },
+          "Nasser2021": {
+            "observations": 3894,
+            "attached": 37,
+            "resolution_unique_element": 21,
+            "resolution_ambiguous_one_link": 9,
+            "resolution_ambiguous_several_links": 7,
+            "supported": 24,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 3,
+            "unassessed_underpowered": 9,
+            "unassessed_missing": 0,
+            "unattached": 3857,
+            "increases_attached": 0
+          },
+          "Reilly": {
+            "observations": 8,
+            "attached": 1,
+            "resolution_unique_element": 1,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 1,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 7,
+            "increases_attached": 0
+          },
+          "Schraivogel2020": {
+            "observations": 1306,
+            "attached": 9,
+            "resolution_unique_element": 5,
+            "resolution_ambiguous_one_link": 4,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 5,
+            "refuted_well_powered_null": 2,
+            "refuted_opposite_sign": 2,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1297,
+            "increases_attached": 1
+          },
+          "WTC11_DC_TAP": {
+            "observations": 1921,
+            "attached": 7,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 3,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 5,
+            "refuted_well_powered_null": 2,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1914,
+            "increases_attached": 0
+          },
+          "Xie": {
+            "observations": 441,
+            "attached": 18,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 6,
+            "resolution_ambiguous_several_links": 8,
+            "supported": 14,
+            "refuted_well_powered_null": 1,
+            "refuted_opposite_sign": 1,
+            "split_direction": 2,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 423,
+            "increases_attached": 0
+          }
+        },
+        "cell": {
+          "GM12878": {
+            "observations": 68,
+            "attached": 7,
+            "resolution_unique_element": 3,
+            "resolution_ambiguous_one_link": 2,
+            "resolution_ambiguous_several_links": 2,
+            "supported": 5,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 1,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 61,
+            "increases_attached": 0
+          },
+          "HCT116": {
+            "observations": 396,
+            "attached": 13,
+            "resolution_unique_element": 5,
+            "resolution_ambiguous_one_link": 5,
+            "resolution_ambiguous_several_links": 3,
+            "supported": 4,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 2,
+            "split_direction": 0,
+            "unassessed_underpowered": 7,
+            "unassessed_missing": 0,
+            "unattached": 383,
+            "increases_attached": 1
+          },
+          "Jurkat": {
+            "observations": 75,
+            "attached": 4,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 1,
+            "unassessed_missing": 0,
+            "unattached": 71,
+            "increases_attached": 0
+          },
+          "K562": {
+            "observations": 12274,
+            "attached": 277,
+            "resolution_unique_element": 147,
+            "resolution_ambiguous_one_link": 76,
+            "resolution_ambiguous_several_links": 54,
+            "supported": 191,
+            "refuted_well_powered_null": 48,
+            "refuted_opposite_sign": 13,
+            "split_direction": 17,
+            "unassessed_underpowered": 8,
+            "unassessed_missing": 0,
+            "unattached": 11997,
+            "increases_attached": 2
+          },
+          "WTC11": {
+            "observations": 1921,
+            "attached": 7,
+            "resolution_unique_element": 4,
+            "resolution_ambiguous_one_link": 3,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 5,
+            "refuted_well_powered_null": 2,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1914,
+            "increases_attached": 0
+          }
+        },
+        "split": {
+          "heldout": {
+            "observations": 4378,
+            "attached": 69,
+            "resolution_unique_element": 25,
+            "resolution_ambiguous_one_link": 23,
+            "resolution_ambiguous_several_links": 21,
+            "supported": 41,
+            "refuted_well_powered_null": 6,
+            "refuted_opposite_sign": 5,
+            "split_direction": 9,
+            "unassessed_underpowered": 8,
+            "unassessed_missing": 0,
+            "unattached": 4309,
+            "increases_attached": 1
+          },
+          "training": {
+            "observations": 10356,
+            "attached": 239,
+            "resolution_unique_element": 138,
+            "resolution_ambiguous_one_link": 63,
+            "resolution_ambiguous_several_links": 38,
+            "supported": 167,
+            "refuted_well_powered_null": 44,
+            "refuted_opposite_sign": 11,
+            "split_direction": 9,
+            "unassessed_underpowered": 8,
+            "unassessed_missing": 0,
+            "unattached": 10117,
+            "increases_attached": 2
+          }
+        },
+        "width": {
+          "gt_700": {
+            "observations": 3551,
+            "attached": 152,
+            "resolution_unique_element": 26,
+            "resolution_ambiguous_one_link": 72,
+            "resolution_ambiguous_several_links": 54,
+            "supported": 95,
+            "refuted_well_powered_null": 25,
+            "refuted_opposite_sign": 8,
+            "split_direction": 17,
+            "unassessed_underpowered": 7,
+            "unassessed_missing": 0,
+            "unattached": 3399,
+            "increases_attached": 2
+          },
+          "le_700": {
+            "observations": 11182,
+            "attached": 156,
+            "resolution_unique_element": 137,
+            "resolution_ambiguous_one_link": 14,
+            "resolution_ambiguous_several_links": 5,
+            "supported": 113,
+            "refuted_well_powered_null": 25,
+            "refuted_opposite_sign": 8,
+            "split_direction": 1,
+            "unassessed_underpowered": 9,
+            "unassessed_missing": 0,
+            "unattached": 11026,
+            "increases_attached": 1
+          },
+          "zero_width": {
+            "observations": 1,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1,
+            "increases_attached": 0
+          }
+        },
+        "width_fine": {
+          "1001_to_2000": {
+            "observations": 1269,
+            "attached": 68,
+            "resolution_unique_element": 3,
+            "resolution_ambiguous_one_link": 35,
+            "resolution_ambiguous_several_links": 30,
+            "supported": 45,
+            "refuted_well_powered_null": 9,
+            "refuted_opposite_sign": 3,
+            "split_direction": 8,
+            "unassessed_underpowered": 3,
+            "unassessed_missing": 0,
+            "unattached": 1201,
+            "increases_attached": 1
+          },
+          "1_to_74": {
+            "observations": 35,
+            "attached": 2,
+            "resolution_unique_element": 2,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 2,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 33,
+            "increases_attached": 0
+          },
+          "351_to_500": {
+            "observations": 7735,
+            "attached": 112,
+            "resolution_unique_element": 103,
+            "resolution_ambiguous_one_link": 8,
+            "resolution_ambiguous_several_links": 1,
+            "supported": 80,
+            "refuted_well_powered_null": 22,
+            "refuted_opposite_sign": 6,
+            "split_direction": 0,
+            "unassessed_underpowered": 4,
+            "unassessed_missing": 0,
+            "unattached": 7623,
+            "increases_attached": 0
+          },
+          "501_to_700": {
+            "observations": 2893,
+            "attached": 37,
+            "resolution_unique_element": 27,
+            "resolution_ambiguous_one_link": 6,
+            "resolution_ambiguous_several_links": 4,
+            "supported": 28,
+            "refuted_well_powered_null": 3,
+            "refuted_opposite_sign": 1,
+            "split_direction": 1,
+            "unassessed_underpowered": 4,
+            "unassessed_missing": 0,
+            "unattached": 2856,
+            "increases_attached": 1
+          },
+          "701_to_1000": {
+            "observations": 2118,
+            "attached": 75,
+            "resolution_unique_element": 23,
+            "resolution_ambiguous_one_link": 35,
+            "resolution_ambiguous_several_links": 17,
+            "supported": 49,
+            "refuted_well_powered_null": 13,
+            "refuted_opposite_sign": 5,
+            "split_direction": 6,
+            "unassessed_underpowered": 2,
+            "unassessed_missing": 0,
+            "unattached": 2043,
+            "increases_attached": 1
+          },
+          "75_to_350": {
+            "observations": 519,
+            "attached": 5,
+            "resolution_unique_element": 5,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 3,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 1,
+            "split_direction": 0,
+            "unassessed_underpowered": 1,
+            "unassessed_missing": 0,
+            "unattached": 514,
+            "increases_attached": 0
+          },
+          "over_2000": {
+            "observations": 164,
+            "attached": 9,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 2,
+            "resolution_ambiguous_several_links": 7,
+            "supported": 1,
+            "refuted_well_powered_null": 3,
+            "refuted_opposite_sign": 0,
+            "split_direction": 3,
+            "unassessed_underpowered": 2,
+            "unassessed_missing": 0,
+            "unattached": 155,
+            "increases_attached": 0
+          },
+          "zero_width": {
+            "observations": 1,
+            "attached": 0,
+            "resolution_unique_element": 0,
+            "resolution_ambiguous_one_link": 0,
+            "resolution_ambiguous_several_links": 0,
+            "supported": 0,
+            "refuted_well_powered_null": 0,
+            "refuted_opposite_sign": 0,
+            "split_direction": 0,
+            "unassessed_underpowered": 0,
+            "unassessed_missing": 0,
+            "unattached": 1,
+            "increases_attached": 0
+          }
+        }
+      },
+      "audit_a_reproduced": {
+        "placed_compiled": 8203,
+        "registry_only": 5294,
+        "carried_by_more_than_one_compiled_element": 1724
+      }
+    }
+  },
+  "difference_policy_minus_current": {
+    "attachments_lost_under_the_policy": {
+      "candidate_sets": 0,
+      "attached_links": 0
+    },
+    "newly_attached_observations": {
+      "n": 180,
+      "by_resolution": {
+        "unique_element": 48,
+        "ambiguous_one_link": 77,
+        "ambiguous_several_links": 55
+      },
+      "unique": 48,
+      "ambiguous": 132,
+      "by_width": {
+        "gt_700": 152,
+        "le_700": 28
+      },
+      "by_width_fine": {
+        "1001_to_2000": 68,
+        "1_to_74": 2,
+        "351_to_500": 16,
+        "501_to_700": 7,
+        "701_to_1000": 75,
+        "75_to_350": 3,
+        "over_2000": 9
+      },
+      "by_verdict": {
+        "refuted_opposite_sign": 11,
+        "refuted_well_powered_null": 27,
+        "split_direction": 17,
+        "supported": 116,
+        "unassessed_underpowered": 9
+      },
+      "by_outcome": {
+        "not_significant_underpowered": 9,
+        "not_significant_well_powered": 27,
+        "significant_decrease": 142,
+        "significant_increase": 2
+      },
+      "by_study": {
+        "Gasperini2019": 115,
+        "HCT116": 7,
+        "Klann": 7,
+        "Morris": 8,
+        "Nasser2021": 18,
+        "Reilly": 1,
+        "Schraivogel2020": 5,
+        "WTC11_DC_TAP": 3,
+        "Xie": 16
+      },
+      "by_cell": {
+        "GM12878": 4,
+        "HCT116": 7,
+        "K562": 166,
+        "WTC11": 3
+      },
+      "by_split": {
+        "heldout": 46,
+        "training": 134
+      }
+    },
+    "newly_supported_observations": {
+      "n": 116,
+      "by_resolution": {
+        "ambiguous_one_link": 53,
+        "ambiguous_several_links": 26,
+        "unique_element": 37
+      },
+      "by_width": {
+        "gt_700": 95,
+        "le_700": 21
+      },
+      "by_study": {
+        "Gasperini2019": 78,
+        "HCT116": 3,
+        "Klann": 2,
+        "Morris": 6,
+        "Nasser2021": 10,
+        "Reilly": 1,
+        "Schraivogel2020": 2,
+        "WTC11_DC_TAP": 2,
+        "Xie": 12
+      }
+    },
+    "new_observation_link_attachments": {
+      "n": 256,
+      "from_tested_intervals_over_700_bp": 223,
+      "on_newly_attached_observations": 252,
+      "by_width_fine": {
+        "1001_to_2000": 108,
+        "1_to_74": 2,
+        "351_to_500": 17,
+        "501_to_700": 11,
+        "701_to_1000": 93,
+        "75_to_350": 3,
+        "over_2000": 22
+      }
+    },
+    "attached_under_both_rules": {
+      "n": 128,
+      "candidate_set_or_attached_links_grew": 13,
+      "resolution_transitions": {
+        "unique_element->ambiguous_one_link": 9,
+        "unique_element->ambiguous_several_links": 4,
+        "unique_element->unique_element": 115
+      },
+      "verdict_changed": 1
+    },
+    "verdict_transitions": {
+      "refuted_opposite_sign->refuted_opposite_sign": 5,
+      "refuted_well_powered_null->refuted_well_powered_null": 23,
+      "supported->split_direction": 1,
+      "supported->supported": 92,
+      "unassessed_underpowered->unassessed_underpowered": 7,
+      "unattached->refuted_opposite_sign": 11,
+      "unattached->refuted_well_powered_null": 27,
+      "unattached->split_direction": 17,
+      "unattached->supported": 116,
+      "unattached->unassessed_underpowered": 9,
+      "unattached->unattached": 14426
+    },
+    "link_class_transitions": {
+      "does_not_survive/inconclusive->survives/None": 1,
+      "does_not_survive/never_measured->does_not_survive/contradicted": 72,
+      "does_not_survive/never_measured->does_not_survive/inconclusive": 13,
+      "does_not_survive/never_measured->survives/None": 167
+    },
+    "links_whose_class_changed": 253
+  },
+  "prior_exposure": [
+    {
+      "commit": "138824f",
+      "read": "the CRISPRi benchmark files against the all-element deletion (2026-09-16)"
+    },
+    {
+      "commit": "ecc3452",
+      "read": "every screened pair against the compiled elements under the reciprocal rule: the measured layer's eligibility (2026-09-17)"
+    },
+    {
+      "commit": "f48b909",
+      "read": "the Regulated pairs, for node_containment_measured (2026-09-28)"
+    },
+    {
+      "commit": "a39073d",
+      "read": "every pair's outcome, for crispri_published (2026-09-28)"
+    },
+    {
+      "commit": "b7e4bf0",
+      "read": "C4's placement of the 661 decrease links: 212 / 62 / 387 (2026-09-28)"
+    },
+    {
+      "commit": "cc824f4",
+      "read": "the pairs as a held-out source of the coherence programme (2026-09-28)"
+    },
+    {
+      "commit": "b7cb814",
+      "read": "the pairs as a held-out source of the correctness judge v1 to v3 (2026-09-29)"
+    },
+    {
+      "commit": "dd8c49c",
+      "read": "audit A's registration of the policy (2026-09-29)"
+    },
+    {
+      "commit": "6c0d39f",
+      "read": "audit A's result: every screened pair placed under both rules, positives and the non-decrease comparator apart, with the policy's multi-element placements (2026-09-29)"
+    },
+    {
+      "commit": "0183ef5",
+      "read": "audit A's per-width table of links, placements and rescues (2026-09-29)"
+    },
+    {
+      "commit": "44d95d3",
+      "read": "audit A's checkpoint (2026-09-29)"
+    },
+    {
+      "commit": "8f87bf6",
+      "read": "the reviewer's correction beside audit A (2026-09-29)"
+    }
+  ],
+  "cost": {
+    "wall_seconds": 4.9,
+    "cpu_seconds": 4.9,
+    "peak_memory_mb": 958.8,
+    "downloads": 0,
+    "requests": 0
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched 2026-09-16; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs v3, https://downloads.wenglab.org/V3/GRCh38-cCREs.bed",
+        "version": "per-chromosome subsets as distilled; pinned by sha256"
+      },
+      {
+        "accession": "this repository: the 24 compiled programs data/knowledge/compiled/noncoding_<chrom>.bio (generated, untracked)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: data/results/c4_alphagenome_ablation.json",
+        "version": "b7e4bf0"
+      },
+      {
+        "accession": "this repository: data/results/placement_audit.json",
+        "version": "6c0d39f"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/results/c4_alphagenome_ablation.json",
+        "sha256": "3bf80a891d4b17077425bb5285081f78bd729f78cfbab943e55a0ed5693a6a24",
+        "bytes": 68222,
+        "partition": null
+      },
+      {
+        "path": "data/results/placement_audit.json",
+        "sha256": "ad2aff63037c2538df208297749e3a49a9b502fd10282b78a6594d6fcc00bbb7",
+        "bytes": 62587,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "current_rule_reciprocal_overlap": 0.5,
+      "policy": "min_side_half",
+      "policy_threshold": 0.5,
+      "width_edge_bp": 700,
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8,
+      "registered": "2026-09-29"
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are not read (none in these files)",
+      "the per-element response cache is not opened; the model is not called; nothing is downloaded",
+      "no other endpoint is read; C4's rule and headline families are not censused"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562); read as measurement, nothing fitted",
+      "heldout": "the CRISPRi benchmark's held-out file; read as measurement, reported apart as a stratum"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "1253d697ddfc045846c7e337f4a9e293614132f0",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/placement_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

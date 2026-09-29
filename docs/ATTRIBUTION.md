@@ -11744,6 +11744,146 @@ under the current rule as showing that placement carries no signal about real li
 result above is unchanged; a sensitivity restricted to well-powered nulls would be additional
 development analysis.*
 
+## The placement census: C4's CRISPRi attachment under both interval rules, counted by observation; the policy attaches 180 more observations, 132 of them ambiguous and 152 from tested intervals over 700 bp (item 13 C4 follow-up, 2026-09-29, lane-census)
+
+This section sits beside C4 and audit A and edits neither. The census counts C4's CRISPRi evidence
+attachment twice: once under the current reciprocal 0.5 rule, and once under the one policy audit A
+registered (an overlap of at least half of the smaller interval). Each screened observation is counted
+once, as a set-valued observation. `scripts/placement_census.py`, `data/results/placement_census.json`,
+`tests/test_placement_census.py`.
+
+**Status.** This is internal development evidence: a bounded, read-only census, recorded apart, that
+stops after one pass.
+
+- Every outcome it reads was read before: `b7e4bf0` (C4), audit A's `dd8c49c`, `6c0d39f`, `0183ef5`,
+  `44d95d3` and `8f87bf6`, and the commits audit A lists (`138824f`, `ecc3452`, `f48b909`, `a39073d`,
+  `cc824f4`, `b7cb814`).
+- It replaces no headline result, changes no matcher and regenerates nothing. C4's census stays
+  93 / 28 / 7 / 440,249.
+- The policy lives only in the script. It does not propose adopting it: a matching change waits until
+  the evidence-resolution implications are reviewed.
+
+### Registered before any count (2026-09-29, `1253d69`)
+
+- **Two rules.** The current rule is `measured.measures`, as `ablation.CrispriIndex.of` applies it. The
+  policy is `placement_audit.policy_rule`, unchanged. The current rule implies the policy; that was
+  checked on every observation, not assumed.
+- **An observation** is one benchmark row: its tested interval, gene, cell and file, with a unique id.
+  - Its **candidate set** is the cCRE registry elements that meet the rule with its tested interval.
+  - Its **attached links** are the predicted links whose element meets the rule and whose target is the
+    measured gene, in any cell. This is C4's element-label attachment.
+  - It is a **unique-element assignment** when its candidate set holds one element. It is
+    **ambiguous** otherwise: with one attached link, or with several.
+- **Verdicts:**
+  - supported: a significant change in the direction every attached link predicts;
+  - refuted: a well-powered null, or the opposite sign;
+  - split direction: links of both directions, so counted as neither;
+  - unassessed: underpowered, or missing;
+  - unattached.
+- **One observation is one count.** It is never several validations. Observation-link pairs and C4's
+  per-link census are reported apart.
+- **Strata:** study, cell, split and tested width (up to 700 bp, over 700 bp, zero width, and finer bins).
+- **Gates:**
+  - C4's committed per-link census, reproduced exactly;
+  - audit A's committed placements under both rules, reproduced.
+
+### The result: run once at `1253d69`, stamp clean
+
+**Observations, N = 14,734 under both rules**
+
+| | current rule (C4) | policy |
+|---|---|---|
+| attached | 128 | 308 |
+| of which unique-element / ambiguous, one link / ambiguous, several links | 128 / 0 / 0 | 163 / 86 / 59 |
+| **supported** | **93** | **208** |
+| of which unique / ambiguous, one link / ambiguous, several links | 93 / 0 / 0 | 120 / 60 / 28 |
+| refuted, well-powered null | 23 | 50 |
+| refuted, opposite sign (decreases on inhibiting links + increases on activating links) | 5 (4 + 1) | 16 (15 + 1) |
+| split direction | 0 | 18 |
+| unassessed, underpowered | 7 | 16 |
+| unassessed, missing | 0 | 0 |
+| not attached | 14,606 | 14,426 |
+
+- **Increases.** Under the current rule 1 is attached (refuted, opposite sign) and 158 are not. Under
+  the policy 3 are attached (2 support inhibiting links, 1 is refuted) and 156 are not.
+- **Every attachment the current rule makes is a unique-element assignment**: 128 observations on 128
+  links, one to one.
+
+**Element-level attachments, apart from the observation counts**
+
+- **Current rule.** 128 observation-link pairs on 128 links. C4's per-link census reproduces exactly:
+  93 supported, 28 contradicted, 7 inconclusive and 440,249 never measured, of 440,377.
+- **Policy.** 384 pairs on 380 links. The per-link census reads:
+  - 261 supported;
+  - 100 contradicted (64 by a well-powered null, 35 by a decrease on an inhibiting link, 1 by an
+    increase);
+  - 19 inconclusive;
+  - 439,997 never measured.
+- **The 261 supported links are not 261 validations.** They rest on 226 distinct observations: the 208
+  supported and the 18 split-direction ones. 141 of the 261 rest only on ambiguous observations.
+
+**The difference, policy minus current rule**
+
+- **180 observations are newly attached.**
+  - 48 are unique-element assignments and 132 are ambiguous (77 with one link, 55 with several).
+  - 152 come from tested intervals over 700 bp and 28 from intervals up to 700 bp.
+  - Their verdicts: 116 supported, 27 refuted by a well-powered null, 11 refuted by the opposite sign,
+    17 split direction and 9 underpowered.
+  - Of the 116 newly supported, 37 are unique and 95 come from intervals over 700 bp.
+- **256 observation-link attachments are new**, and 223 of them come from intervals over 700 bp.
+- **Of the 128 observations attached under both rules:**
+  - 13 gained candidates (9 became ambiguous with one link, 4 with several);
+  - one changed verdict, from supported to split direction.
+- No attachment is lost.
+- **Per link:**
+  - 167 move from never measured to supported, 72 to contradicted and 13 to inconclusive;
+  - 1 moves from inconclusive to supported.
+
+**Strata**
+
+- **Width.**
+  - Under the current rule no interval over 700 bp attaches (0 of 3,551).
+  - Under the policy, 152 of the 308 attached are over 700 bp. Only 26 of those are unique; 72 are
+    ambiguous with one link and 54 with several.
+  - Up to 700 bp, 137 of 156 are unique.
+  - Supported: 95 over 700 bp and 113 up to 700 bp.
+- **Study.**
+  - Gasperini2019 goes from 89 to 204 attached (119 unique) and from 68 to 146 supported. It holds 115
+    of the 180 newly attached observations and 78 of the 116 newly supported.
+  - Klann (0 to 7) and Morris (0 to 8) attach only ambiguously.
+  - Xie goes from 2 to 18, 4 of them unique. K562_DC_TAP is unchanged at 4.
+- **Cell.** K562 goes from 111 to 277 attached; the four other cells together from 17 to 31.
+- **Split.** Training goes from 105 to 239 attached, held-out from 23 to 69.
+
+**Denominator and gates**
+
+- The denominators are 440,377 predicted links and 14,734 screened observations under both rules; every
+  table sums to its denominator, and 0 invalid rows exist.
+- C4's committed per-link census reproduced exactly twice: through `CrispriIndex.of`, and through the
+  census's own index, which attaches the same observations to every link.
+- Audit A's placements reproduced:
+  - current rule: 4,825 in a compiled element and 3,244 only in the registry;
+  - policy: 8,203, 5,294, and 1,724 carried by more than one compiled element.
+- Nothing here uses audit A's non-decrease comparator: nulls are split by power, and increases are kept
+  apart.
+
+**Cost.** 4.9 s wall, 4.9 s CPU and 959 MB peak memory, run once in a clean worktree at `1253d69`.
+Preparation was one outcome-blind read of rows, studies, cells and widths (under a second), plus test
+runs on synthetic intervals. 0 downloads, 0 model requests and 0 paid services.
+
+**What it may be called.** An internal development census of C4's attachment under two interval rules,
+counted by observation.
+
+**What it may not be called:**
+
+- 208 or 261 validated links. 88 of the 208 supported observations are ambiguous, and 141 of the 261
+  supported links rest only on ambiguous observations.
+- Independent evidence: every outcome here was read before.
+- A change to C4, or a case for adopting the policy. C4's census is unchanged, no matcher changed, and
+  adopting a matching change waits for review of the evidence-resolution implications.
+- Evidence about any element beyond the tested interval, gene and context: a wide positive
+  perturbation is evidence for its tested interval, not for every cCRE it overlaps.
+
 ## Audit B, cached context contrast, checkpoint 1: no-go, insufficient coverage for this registered complete-case design (the external reviewer's audit B, 2026-09-29, lane-contrast)
 
 **The question.** Can the per-element cached AlphaGenome deletion answer support one added feature: the
