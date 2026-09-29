@@ -39,6 +39,13 @@
 # same rule decided the refused direct push of 9a59faf is an inference, not established. A green
 # `workflow_dispatch` or `schedule` run on dev is therefore a pre-check only; eligibility comes from
 # the pull request's own run.
+# 2026-09-29, later still (lane-gate, the reviewer's correction): the paragraph above overclaims.
+# A `pull_request` or `push` run makes the event a qualifying CI event only; protected promotion
+# eligibility is not established by it: the exact revision, the required checks and the protection
+# rules decide, and GitHub's decision is authoritative. The same holds for the pull request's own
+# run. The wording "eligible for protected promotion" in the output and in its test was committed
+# in 3a893fc and is held by the checkout guard until 2026-10-01 22:39 BST; a line printed after it
+# says this. Reword both after that.
 #
 # --push is retired, and refused before the arguments are read: sessions never push to main. Its case
 # in the argument loop, the first usage() definition, usage lines 6-7 and the push block at the end
@@ -206,10 +213,12 @@ echo "promote_main: $remote/main $(git rev-parse --short "$main_sha") -> $short,
 case "$event" in
   pull_request | push)
     echo "promote_main: eligible for protected promotion: the \`test\` run relied on was triggered by $event (GitHub's documentation evaluates checks for pull requests and rulesets from runs of this event)"
+    echo "promote_main: that is a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
     ;;
   *)
     echo "promote_main: CI pre-check passed: the \`test\` run relied on was triggered by $event, a pre-check only; it does not make the sha eligible for protected promotion"
     echo "promote_main: eligibility comes from the pull request's own run. GitHub's documentation evaluates checks for pull requests and rulesets only from runs triggered by push, pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the same rule refused the direct push of 9a59faf is an inference, not established"
+    echo "promote_main: the pull request's own run would be a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
     ;;
 esac
 if [ "$mode" = dry ]; then

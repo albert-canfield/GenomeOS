@@ -279,6 +279,29 @@ def test_a_green_manual_or_scheduled_run_is_a_pre_check_only(repo, event):
 
 
 @pytest.mark.parametrize("event", ["pull_request", "push"])
+def test_a_pull_request_or_push_run_is_a_qualifying_ci_event_only(repo, event):
+    """The reviewer's correction: the event qualifies; it does not establish eligibility."""
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    lines = r.stdout.splitlines()
+    held = next(i for i, line in enumerate(lines) if "was triggered by " + event in line)
+    assert lines[held + 1] == (
+        "promote_main: that is a qualifying CI event only; protected promotion eligibility is not "
+        "established: the exact revision, the required checks and the protection rules decide, and "
+        "GitHub's decision is authoritative"
+    ), "the qualification follows the held line directly"
+
+
+def test_the_pull_request_s_own_run_is_named_a_qualifying_ci_event_only(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "the pull request's own run would be a qualifying CI event only" in r.stdout
+    assert "GitHub's decision is authoritative" in r.stdout
+
+
+@pytest.mark.parametrize("event", ["pull_request", "push"])
 def test_a_green_pull_request_or_push_run_is_eligible(repo, event):
     repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
     r = repo.run(repo.c)

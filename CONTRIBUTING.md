@@ -133,6 +133,17 @@ After this date:
   tests in `tests/test_promote_main.py` check the script's decisions and
   git operations against a local remote; GitHub's enforcement is not
   simulated.*
+
+  *2026-09-29, later still, beside the note above (the reviewer's
+  correction): a `pull_request` or `push` run is a qualifying CI event;
+  protected promotion eligibility not established. The exact revision, the
+  required checks and the protection rules decide, and GitHub's decision
+  is authoritative; the same holds for the pull request's own run. The
+  gate's output still says "eligible for protected promotion" on that
+  branch, followed by a line saying it is a qualifying CI event only; the
+  wording is held by the checkout guard until 2026-10-01 22:39 BST and is
+  reworded after that. Direct pushes to `main` stay refused, and promotion
+  stays the owner's: the owner opens and merges the pull request.*
 - **Recommended branch rule for `main`** (the owner's setting; no session
   changes it): keep `test` from GitHub Actions as the required check and
   force pushes and deletions blocked, and turn on "Do not allow bypassing
