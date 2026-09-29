@@ -10826,6 +10826,176 @@ independence. Everything below is development evidence.
 
 **Budget.** One process and at most 0.5 CPU-hour.
 
+## The result: the prior's lead over distance replicates where it was never scored (+0.163 [+0.096, +0.222] on Gasperini2019), but H3K27ac does not carry it; the compiled target does, so no activity-and-distance claim may be made (item 13 follow-up, 2026-09-29, lane-prior, later)
+
+**How it was run.**
+
+- **Once**, as registered in the section above (ab837b9).
+- **Where:** a clean worktree at that commit. The revision stamp is not dirty.
+- **Files:** the script is `scripts/prior_only_test.py` and the result is
+  `data/results/prior_only_test.json`.
+- **Compute:** 8.9 CPU seconds and a peak of 1,248 MB (`ru_maxrss`). **0 AlphaGenome requests**, and the
+  per-element response cache was never opened.
+
+**What it may be called.** An internal development result on withheld sources, never a validation.
+
+**Registered reading: `replicated_not_activity`.** In the registered wording: "the lead replicates where
+it was never scored, but a clause of the falsifier fires: activity is not what carries it, and no
+activity-and-distance claim may be made. What carries it is named from the decomposition."
+
+**The frozen lead reproduced first, to the fourth decimal.** On the validation chromosomes, prior-only
+minus distance is **+0.1927 [+0.1335, +0.2491]**, 0.6601 against 0.4674. That is the pilot's 197c560
+figure, so the run is not void.
+
+### Negatives, first
+
+Every figure below is Gasperini2019 decrease on the 17 fresh chromosomes unless it says otherwise:
+
+- 210 positives, 2,256 negatives, 329 loci.
+- All three prior labellings state a score for 2,347 of 2,466 units (coverage 0.9517) and abstain on
+  the same 119.
+
+1. **Activity carries nothing measurable on identical pairs.** Distance plus H3K27ac minus distance
+   alone, (b) − (a), is **+0.0098 [−0.0188, +0.0349]**. On the seen chromosomes it is +0.0159
+   [−0.0069, +0.0427].
+2. **The activity-and-distance baseline does not beat distance to TSS.** (b) − distance is −0.0194
+   [−0.0604, +0.0185]. On the seen chromosomes it is +0.0084 [−0.0175, +0.0420].
+3. **The pilot's machinery alone is slightly worse than distance to TSS.** (a) − distance is
+   **−0.0292 [−0.0580, −0.0062]**, entirely below zero. Two things cost it:
+   - it measures from the block's midpoint rather than the unit's;
+   - it abstains on 119 units that lie outside every cCRE.
+
+   On the seen chromosomes it is −0.0075 [−0.0206, +0.0070].
+4. **Falsifier clauses (i) and (ii) fire, and (iii) does not.**
+   - (i): activity does not carry the gain.
+   - (ii): the compiled target does, and the activity-and-distance baseline is not above distance.
+
+   So the registered activity-and-distance reading, "reproduces the known activity-and-distance
+   relationship", **may not be made.**
+5. **Schraivogel2020 says nothing.** It is admissible but lies on the seen chromosomes only: 23
+   positives, 1,276 negatives, 12 loci. Every interval includes zero:
+   - (c) − distance: +0.0165 [−0.4385, +0.1934];
+   - (b) − (a): −0.0309 [−0.4027, +0.1096];
+   - (c) − (b): +0.0387 [−0.0784, +0.0796].
+6. **S4, beside and in no rule: coverage is about 5%.**
+
+   | claims judged (`correctness.judge`, `sources=[crispri:Gasperini2019]`) | target: established of judged | target coverage | context: established of judged | context coverage |
+   | --- | --- | --- | --- | --- |
+   | the prior-only labelling (c) on its fresh blocks | 53 of 59 (6 refuted) | 59 of 1,122 | 40 of 40 | 40 of 991 |
+   | the unchanged labels on the same blocks | 43 of 43 | 43 of 823 | 24 of 24 | 24 of 823 |
+
+   - The prior restates each compiled target in every cell it calls active. That makes some claims
+     refutable in K562, and 6 are refuted there. Gate 2 saw the same.
+   - (a) and (b) name no target and state no claim.
+7. **Half of the lead was never tested.** Xie is inadmissible (step 1).
+
+### What holds, in the registered wording
+
+The lead replicates on the chromosomes where the prior was never scored, at coverage 0.95 (≥ 0.80).
+
+| Gasperini2019 decrease, fresh chromosomes | average precision [95% locus bootstrap] | coverage |
+| --- | --- | --- |
+| (c) prior-only, as the pilot defined it | **0.6815 [0.6141, 0.7487]** | 0.9517 |
+| (b) distance plus H3K27ac | 0.4990 [0.4221, 0.5913] | 0.9517 |
+| (a) distance alone, in the prior's form | 0.4892 [0.4126, 0.5823] | 0.9517 |
+| distance to TSS (C4) | 0.5184 [0.4383, 0.6066] | 1.0 |
+| unchanged compiled labels (C4) | 0.4562 [0.3911, 0.5226] | 0.5365 |
+
+The paired differences (`holdout.compare`):
+
+| comparison | fresh (primary) | seen (the frozen lead, beside) |
+| --- | --- | --- |
+| (c) − distance: **the pass rule** | **+0.1631 [+0.0956, +0.2223]** | +0.1927 [+0.1335, +0.2491] |
+| (b) − (a): activity | +0.0098 [−0.0188, +0.0349] | +0.0159 [−0.0069, +0.0427] |
+| (c) − (b): the compiled target | **+0.1825 [+0.1298, +0.2280]** | +0.1843 [+0.1225, +0.2361] |
+| (a) − distance: machinery | −0.0292 [−0.0580, −0.0062] | −0.0075 [−0.0206, +0.0070] |
+| (b) − distance | −0.0194 [−0.0604, +0.0185] | +0.0084 [−0.0175, +0.0420] |
+| (c) − unchanged | +0.2253 [+0.1585, +0.2909] | +0.2705 [+0.1871, +0.3505] |
+
+**The decomposition names what carries the lead: the compiled-link terms.**
+
+- **The terms:** the compiled target's log-weight bonus, and the +0.5 activity where the link's model
+  cell is the pair's cell. Both are AlphaGenome-derived.
+- **The data:** the same on both partitions.
+- **Why the compiled labels alone score low:** alone they score below distance, at 0.54 coverage.
+  The gain comes from putting them together with distance inside the prior.
+
+### What it may and may not be called
+
+**It may be called** an internal development result on withheld sources:
+
+- on chromosomes where it was never scored, the pilot's frozen prior predicts Gasperini2019's CRISPRi
+  decreases better than distance to TSS;
+- but activity is not what carries it, and no activity-and-distance claim may be made;
+- the decomposition names the compiled target, an AlphaGenome-derived term.
+
+**It may not be called any of these:**
+
+- **A reproduction of the activity-and-distance relationship.** The registration's hoped-for reading
+  failed.
+- **ABC**, or a test of ABC.
+- **Evidence that H3K27ac does not matter.** The prior reads binary peak overlap on candidates that
+  were chosen partly by H3K27ac (Gasperini's pilot library used ENCSR000AKP, the prior's own K562
+  experiment). In this sample 4,911 of 5,299 pairs lie in an H3K27ac category. One possible reason
+  activity added nothing is that range restriction, and it was not tested. The project's earlier
+  "activity over distance" (0.519 against 0.441, 2026-09-16) used a quantitative signal on the pooled
+  training file.
+- **A finding about the compiled target or AlphaGenome.** It was not the registered hypothesis, only
+  what the decomposition names. The project has scored AlphaGenome deletion against these screens
+  before (`crispri_benchmark`, `crispri_published`), and so has the AlphaGenome preprint.
+- **A validation of any kind**, or anything about Xie, Morris or cells other than K562.
+
+### Added after the run: the coordinator's audit of how the screens chose their elements
+
+The coordinator's audit of six K562 screens arrived after the registration (ab837b9) and after the
+run. It is recorded here, dated and labelled as added later. Nothing in the registration or the result
+was changed for it.
+
+**Where it agrees with step 1's record (d19ccac), which read the same sources:**
+
+- **Gasperini 2019 used H3K27ac to select elements in both libraries.**
+  - Pilot library: DHS intersected with H3K27ac, p300, GATA1 and Pol II.
+  - At-scale library: a classifier over 170 K562 ChIP tracks.
+- **Schraivogel 2020 selected through the GenoSTAN active-enhancer state.** That state is presumed to
+  include H3K27ac, but this is not verified from S1 Appendix.
+- **Fulco 2019 (most of Nasser2021) selected on DNase only.**
+- **Fulco 2016 is tiling. Klann 2017 selected on DNase only.**
+- **Nasser2021 has a minority slice of 429 pairs** from ten smaller sources whose selection is
+  unverified.
+
+**Two additions, stated as limits:**
+
+1. **Xie did not use H3K27ac, but half its set was chosen for strong p300.** p300 binding correlates
+   with H3K27ac, so Xie's tested universe is H3K27ac-enriched through p300.
+   - Xie stays inadmissible for the reason step 1 gives.
+2. **Every tested universe except Fulco 2016's tiling is gated on DNase.** An activity term that reads
+   DNase faces that selection on every CRISPRi endpoint, and excluding datasets cannot remove it.
+   - The prior's activity term reads H3K27ac, not DNase. But its blocks are ENCODE cCREs, which are
+     DNase-anchored.
+   - Its coverage and its abstentions therefore read the same gate. On Gasperini2019 it abstains on
+     only 119 of 2,466 units, and its machinery term, (a) − distance, is slightly below distance.
+   - **This is a limit of the test, not something it handled.**
+
+**Where the audit's summary does not cover this test's endpoints.** "No screen defined its positives
+with a chromatin mark" holds for the six K562 screens audited. It does not hold for two things:
+
+- the benchmark's held-out file, whose positives the benchmark itself filtered on H3K27ac (step 1,
+  reproduced row for row);
+- Guckelberger 2024 (HCT116), whose own enhancer call required "an H3K27ac level above the median of
+  all tested elements".
+
+For the held-out file, then, the issue is a label chosen by chromatin, not only a selected universe.
+That is why step 1 excluded it.
+
+### What follows
+
+- **The pilot's lead is accounted for.** On Gasperini2019 it is the compiled target combined with
+  distance, not H3K27ac, and it holds on chromosomes the pilot never scored.
+- **Its Xie half stays untested,** because Xie is inadmissible.
+- **Any use of the compiled target's contribution needs its own registration.** That registration would
+  make the compiled target the hypothesis, on an endpoint neither the pilot nor this lane has read.
+- **The coherence pilot stays a discontinued investigation.**
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
