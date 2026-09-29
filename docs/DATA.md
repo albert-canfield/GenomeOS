@@ -1002,6 +1002,126 @@ UDACHA 17 MB. No single download reached 1 GB; the script ran four times
 while it settled, streaming each time. 0 AlphaGenome requests: the targets
 come from the cached archive.
 
+## EN-TEx allele coordination: the feasibility audit (audit C, checkpoint 1, 2026-09-29)
+
+**The question.** Could EN-TEx support a test of whether a frozen nominated
+target's expression leans to the same haplotype as its element's
+accessibility more often than distance-, expression- and depth-matched
+alternative genes do? That would test coordination, not causality. This is a
+new question with its own rationale, not a continuation of the coherence
+pilot (stopped at `197c560`). `scripts/entex_feasibility.py` (code
+`4f40089`) writes `data/results/entex_feasibility.json`, stamped clean at
+`612eb87`. It used depth and counts only, and no signed allelic outcome was
+opened.
+
+**Outcome discipline.** The two AS tables were streamed once through one
+parsing function, `depth_only`. It keeps the identifier columns and sums
+`hap1_count` and `hap2_count` on the line that parses them, keeping only
+the sum. It reduces `imbalance_significance` (EN-TEx's 0/1 call) to an
+unsigned flag. It never indexes `hap1_allele_ratio` or `p_betabinom`. Only
+its output reaches the git-ignored cache (`data/cache/entex/depth_only.tsv.gz`,
+sha256 `ce3a9364…6082`). Tests show that swapping the two haplotype columns
+changes neither the parser's output nor the cache bytes. The unsigned flag
+is reported as per-side marginals only. The joint count (both sides
+imbalanced) was never formed, and no flag was computed for an alternative
+gene. The result's `outcome_exposure_record` lists every file and column read.
+
+**Sources (sha256).** `cCREs_default_AS.tsv` `679d916c…ba28` (745,298,142 bytes,
+5,330,335 rows) and `genes_default_AS.tsv` `0e3f290f…6daeb` (97,973,665 bytes,
+793,882 rows) are the same bytes the C5 probe hashed on 2026-09-28. The
+other files are `phased_block.tar.gz` `270fc041…588b`,
+`individual1_SV.vcf` `134c23fa…9eda`, `individual4_SV.vcf` `f9f4d811…f31f`
+and the ENCODE exclusion list v2 `c92e763a…8cf2`.
+
+| Checkpoint item | Finding |
+| --- | --- |
+| 1. Same donor and tissue, ATAC and RNA | 39 donor-tissues (ENC-001 5, ENC-002 9, ENC-003 11, ENC-004 14) over 22 tissues. Only 3 tissues are in all four donors (gastrocnemius medialis, sigmoid and transverse colon). 45 donor-tissues have ATAC and 89 have RNA. C5's "any chromatin assay" reach is not this number. |
+| 2. Phase | All 181,025 ATAC element-target rows have the element and the target's exon span inside one published phased block. The blocks are arm-scale: 24 blocks over 1 Mb cover 2.806 to 2.808 Gb of each donor's autosomes. Switch errors inside a block are not reported and were not assessed. ENC-00k is matched to individual k by number only. |
+| 3. Total depth per row | ATAC at the element: median 16 (IQR 12 to 29; the catalogue lists from 9). RNA at the gene: median 92 (IQR 32 to 282; from 8). The element side binds: 22,228 rows reach 47 ATAC reads, against 120,225 that reach 47 RNA reads. |
+| 4. Balanced rows (EN-TEx's call, per side) | After exclusions, at any depth: element side 169,526 of 172,947 (98.0%) and gene side 162,342 (93.9%). At 47 reads: 13,780 and 13,240 of 14,538 (94.8% and 91.1%). |
+| 5. Exclusions (floor 0; a row can have several) | Deletion under a target exon 2,811 and under the element 153, from EN-TEx's SV calls. These exist for ENC-001 and ENC-004 only, and hold DEL, INS and INV with no DUP. MHC 1,528; imprinted 1,473, predicted 914, other non-null imprinting statuses 310; exclusion list 1,129 (exon) and 387 (element). No IG or TR target remained. Rows fall from 181,025 to 172,947. |
+| 6. Matched alternatives | Rows with at least 1, 3 and 5 alternatives matched within 2-fold on distance, GTEx v8 expression and RNA depth, on the element's block: 8,149, 60 and 5 at floor 0; 509, 2 and 0 at 47 reads. |
+
+**Power sensitivity, total depth only (ATAC element side).** The
+independent-locus count is taken on the parent universe. Target TSSs are
+clustered by single linkage at 1 Mb over every element-target row formed,
+before any filter. That gives 566 clusters over 10,243 target genes. A
+filtered set counts the parent clusters it touches, and that count is only
+descriptive. The first run recomputed the clusters after each filter, which
+split connected components (566 became 781 at 47 reads) without adding
+independent evidence. The review caught this, and the clusters are now
+frozen. A second development run tried looser matchings. Those were
+withdrawn unread, and nothing was relaxed after the counts were seen.
+
+| Floor (reads, both sides) | Rows with depth | After phase and exclusions: rows / targets / clusters | With 3 matched alternatives: rows / targets / clusters / donors |
+| --- | --- | --- | --- |
+| listed (8 to 9) | 181,025 | 172,947 / 9,904 / 558 | 60 / 25 / 22 / 4 |
+| 10 | 169,927 | 162,325 / 9,666 / 555 | 52 / 25 / 22 / 4 |
+| 20 | 63,765 | 60,943 / 7,038 / 527 | 10 / 5 / 5 / 3 |
+| 47 (tells 0.70 from 0.50) | 15,230 | 14,538 / 3,543 / 465 | 2 / 1 / 1 / 1 |
+| 85 (0.65) | 4,294 | 4,093 / 1,628 / 371 | 0 |
+| 194 (0.60) | 341 | 322 / 207 / 145 | 0 |
+| 783 (0.55) | 0 | 0 | 0 |
+
+With H3K27ac read at the element instead (secondary), 3 clusters remain at 47
+reads.
+
+**Checkpoint 1: no-go.** The rule was fixed in the script before the first
+run. At 47 reads on both sides, after phase, exclusions and three matched
+alternatives, it asked for 194 independent loci (the units a one-sample
+binomial test needs to tell an agreement rate of 0.60 from 0.50) and for 3
+donors with 30 loci each. One locus remains, in one donor (ENC-003). This is
+the infeasibility of this matched-control design on EN-TEx, not a finding
+that EN-TEx lacks usable allelic evidence. The step that binds is per-row
+matching, and it is recorded here, not relaxed. A different control or a
+measurement-error design is possible in principle. It would need its own
+rationale and registration, and none is started.
+
+**Exposure.** No EN-TEx allelic table or derivative is named in any tracked
+file outside the C5 probe, its result and the docs. Of EN-TEx's 691
+experiment accessions, two are in the project: ENCSR136ZQZ (testis H3K27ac)
+and ENCSR611DJQ (testis H3K4me3), both from ENC-001. They are pinned in
+`data/results/epigenome_manifest.json` as total-signal peaks and fold
+change. The nominations (AlphaGenome deletion targets) do not read that
+layer. The testis and ovary DNase files there are named only by file
+accession, so whether they are EN-TEx's was not established.
+
+AlphaGenome is the other route. The nominations come from AlphaGenome
+deletion scores. A peer session saved a copy of AlphaGenome's track metadata
+(2,841 tracks, `5157dcca…abf7`), read here without a model request. It holds
+246 ENCODE tissue tracks named as an EN-TEx tissue (128 histone ChIP, 75
+RNA-seq, 25 DNase, 18 ATAC) and 29 GTEx RNA tracks for EN-TEx tissues. The
+metadata names no experiment or donor, so whether any of these tracks was
+built from an EN-TEx donor cannot be established here. Whether the cCRE
+registry V3 drew on EN-TEx experiments was not checked either: every query
+to the ENCODE portal on 2026-09-29 timed out or answered 504.
+
+**Independence: unresolved.** EN-TEx's four donors are GTEx donors. GTEx v8
+eQTLs enter the attribution layer (`eqtl_targets`), and GTEx RNA-seq tracks
+are among AlphaGenome's outputs. So a result on EN-TEx cannot be called an
+independent validation of anything fitted on GTEx or by AlphaGenome.
+
+**The later endpoint (proposal only, not registered).** The endpoint would
+measure excess haplotype agreement for frozen nominated targets over
+distance-, expression- and depth-matched alternative genes, clustered by
+locus, with donor-specific sensitivity. It tests coordination, not
+causality. A heterozygous SNV alone predicts neither an effect nor its
+direction, and balanced RNA does not refute a target. It would need its own
+rationale and a registration before any outcome is opened. At this
+checkpoint the matched design has one locus, so it is not proposed for
+registration as it stands.
+
+**Cost.** The cache build took 67.7 s wall, 14.9 s CPU and 119 MB peak, and
+streamed 843,271,807 bytes in 2 requests. The committed run took 75.3 s
+wall, 74.6 s CPU and 2.15 GB peak, with 0 bytes downloaded. All six runs
+together took 497 s wall and 429 s CPU. The script made 6 requests for
+965,991,460 bytes. By hand while designing, 10 requests fetched 2,145,198
+bytes. The script's own design-time record says 8 requests and gives the
+phased-block archive as 5,388 bytes. Those figures are corrected here:
+correcting them in the script would have meant rewriting committed lines.
+The total is about 968 MB, under the 3 GB bound. 0 AlphaGenome requests;
+nothing paid or controlled-access.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether

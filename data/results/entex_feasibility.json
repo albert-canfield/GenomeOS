@@ -1,0 +1,2787 @@
+{
+  "result": "entex_feasibility",
+  "date": "2026-09-29",
+  "question": "Checkpoint 1 of audit C: can EN-TEx support an allele-coordination test of frozen nominated targets against matched alternative genes? Depth and counts only; no signed allelic outcome opened.",
+  "donor_names": "the AS tables name donors ENC-001..ENC-004 and the phased-block and SV files individual 1..4; they are matched by number, which was not checked against the ENCODE portal (it answered 504 on 2026-09-29)",
+  "not_a_continuation": "a new question with its own rationale; the coherence pilot stopped at 197c560 and its phase C does not follow",
+  "go_rule": {
+    "floor_both_sides": 47,
+    "independent_loci": 194,
+    "donors": 3,
+    "loci_per_donor": 30,
+    "min_alternatives": 3,
+    "fixed": "in scripts/entex_feasibility.py before the first run",
+    "locus_clusters": "frozen on the parent universe before any filter (review, relayed 2026-09-29): the first run recomputed single-linkage clusters on each filtered set, which split connected components (566 in the parent universe became 781 at a depth of 47) without adding independent evidence",
+    "development_runs": "run 1 recomputed clusters per filtered set; run 2 tried a greedy pairwise-1-Mb count and two looser matchings, withdrawn unread at the reviewer's direction (no relaxing of matching or thresholds after seeing counts); the committed run is the rule as fixed before run 1, with the clusters frozen and two EN-TEx tissue spellings mapped to GTEx",
+    "what_it_is": "a necessary condition: loci are counted from depth, and the rows that will carry an imbalance on both sides are a subset not counted here"
+  },
+  "decision": {
+    "go": false,
+    "checks": {
+      "independent loci (parent clusters touched) >= 194": false,
+      "donors with >= 30 loci >= 3": false,
+      "no EN-TEx allelic table or derivative read outside the C5 probe and this lane": true
+    },
+    "parent_clusters_touched": 1,
+    "donors_meeting_the_per_donor_floor": []
+  },
+  "reading": "a go means the matched-control design fixed before the first run would have the rows, loci and donors a registration needs; a no-go means that design is infeasible on EN-TEx, not that EN-TEx lacks usable allelic evidence. A different control or measurement-error design would need its own rationale and registration; none is started here.",
+  "outcome_discipline": {
+    "columns_read": [
+      "chr",
+      "start",
+      "end",
+      "region_id",
+      "experiment_accession",
+      "donor",
+      "tissue",
+      "assay"
+    ],
+    "columns_summed_never_kept": [
+      "hap1_count",
+      "hap2_count"
+    ],
+    "columns_reduced_to_an_unsigned_flag": [
+      "imbalance_significance"
+    ],
+    "columns_never_indexed": [
+      "hap1_allele_ratio",
+      "p_betabinom"
+    ],
+    "how": "depth_only is the only function that sees a raw line; its output is invariant to swapping hap1 and hap2 and to the ratio and p-value fields (tests); the raw tables were streamed and hashed, never written; the cache holds only depth_only's output; the unsigned flag is reported as per-side marginals, never jointly and never for alternative genes"
+  },
+  "outcome_exposure_record": {
+    "signed_allelic_outcome_opened": false,
+    "files": [
+      {
+        "file": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "sha256": "679d916cf78008b0f6c279a30ef7131d8e6a5645c7bb5e6051a7906c0500ba28",
+        "bytes": 745298142,
+        "columns_read": [
+          "chr",
+          "start",
+          "end",
+          "region_id",
+          "experiment_accession",
+          "donor",
+          "tissue",
+          "assay"
+        ],
+        "columns_summed_on_the_parsing_line_never_kept": [
+          "hap1_count",
+          "hap2_count"
+        ],
+        "columns_reduced_to_an_unsigned_flag": [
+          "imbalance_significance"
+        ],
+        "columns_never_indexed": [
+          "hap1_allele_ratio",
+          "p_betabinom"
+        ],
+        "how": "streamed once through depth_only on 2026-09-29, hashed as it passed, never written to disk; the C5 probe streamed the same bytes (same sha256) on 2026-09-28 for identifier columns only"
+      },
+      {
+        "file": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "sha256": "0e3f290facc7963353075df78d2c0e0ac46a0e1f935b30e91b98fbc796c6daeb",
+        "bytes": 97973665,
+        "columns_read": [
+          "chr",
+          "start",
+          "end",
+          "region_id",
+          "experiment_accession",
+          "donor",
+          "tissue",
+          "assay"
+        ],
+        "columns_summed_on_the_parsing_line_never_kept": [
+          "hap1_count",
+          "hap2_count"
+        ],
+        "columns_reduced_to_an_unsigned_flag": [
+          "imbalance_significance"
+        ],
+        "columns_never_indexed": [
+          "hap1_allele_ratio",
+          "p_betabinom"
+        ],
+        "how": "streamed once through depth_only on 2026-09-29, hashed as it passed, never written to disk; the C5 probe streamed the same bytes (same sha256) on 2026-09-28 for identifier columns only"
+      },
+      {
+        "file": "the first 1 MiB of each AS table, by HTTP range, while designing",
+        "how": "a script printed the header and the distinct values of assay, tissue and imbalance_significance ('0', '1'); no row, count, ratio or p-value was printed; both files were deleted"
+      },
+      {
+        "file": "http://entex.encodeproject.org/data/phased_block.tar.gz",
+        "columns_read": [
+          "chrom",
+          "start",
+          "end",
+          "hap1 parental origin",
+          "hap2 parental origin"
+        ],
+        "outcome": "none: phase blocks"
+      },
+      {
+        "file": "http://entex.encodeproject.org/data/individual1_SV.vcf",
+        "columns_read": [
+          "CHROM",
+          "POS",
+          "REF (length)",
+          "INFO SVTYPE and END",
+          "FORMAT GT"
+        ],
+        "outcome": "none: the donor's structural-variant genotypes, used to exclude copy-number changes; while designing, the first 20 kB of individual1_SV.vcf was read for its header and three records (GT:DR:DV) were displayed"
+      },
+      {
+        "file": "http://entex.encodeproject.org/data/individual4_SV.vcf",
+        "columns_read": [
+          "CHROM",
+          "POS",
+          "REF (length)",
+          "INFO SVTYPE and END",
+          "FORMAT GT"
+        ],
+        "outcome": "none: the donor's structural-variant genotypes, used to exclude copy-number changes; while designing, the first 20 kB of individual1_SV.vcf was read for its header and three records (GT:DR:DV) were displayed"
+      },
+      {
+        "file": "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz",
+        "columns_read": [
+          "chrom",
+          "start",
+          "end"
+        ],
+        "outcome": "none"
+      },
+      {
+        "file": "https://www.geneimprint.com/site/genes-by-species.Homo+sapiens",
+        "columns_read": [
+          "gene symbol",
+          "status"
+        ],
+        "outcome": "none"
+      },
+      {
+        "file": "https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+        "columns_read": [
+          "Name",
+          "the EN-TEx tissues' median TPM"
+        ],
+        "outcome": "none"
+      },
+      {
+        "file": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "columns_read": [
+          "biosample_name",
+          "biosample_type",
+          "data_source",
+          "output",
+          "gtex_tissue"
+        ],
+        "outcome": "none: track descriptions"
+      },
+      {
+        "file": "data/knowledge/alphagenome/all_elements",
+        "columns_read": [
+          "start",
+          "end",
+          "id",
+          "predicted_coding.gene",
+          "predicted_coding.strength"
+        ],
+        "outcome": "none: the frozen nominations"
+      },
+      {
+        "file": "data/reference/gencode_v50_chr*.gff3.gz",
+        "columns_read": [
+          "genes and exons"
+        ],
+        "outcome": "none"
+      }
+    ],
+    "not_opened": [
+      "every other file in the EN-TEx data directory, among them the per-SNV allelic tables (hetSNVs_*_AS.tsv), imprinted_genes_in_ENTEx_ASE.tsv, AS_allhets_alt_allele_ratio_eqtl_intersect.tsv and AS_ratios_and_eQTL_effect.tsv"
+    ],
+    "unsigned_quantities_reported": "EN-TEx's 0/1 imbalance call, as per-side marginals of the rows left after exclusions and of the final rows at each depth floor (the after-exclusion marginals were added after the first run); the joint of the two sides was never formed and no flag was computed for an alternative gene"
+  },
+  "depth_cache": {
+    "built": "2026-09-29T14:27:28",
+    "tables": {
+      "ccre": {
+        "url": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "sha256": "679d916cf78008b0f6c279a30ef7131d8e6a5645c7bb5e6051a7906c0500ba28",
+        "bytes": 745298142,
+        "rows": 5330335,
+        "rows_kept": 1789793,
+        "rows_by_assay": {
+          "HM-ChIP-seq_H3K27ac": 1181650,
+          "TF-ChIP-seq_CTCF": 1075083,
+          "HM-ChIP-seq_H3K4me3": 864495,
+          "ATAC-seq": 608143,
+          "HM-ChIP-seq_H3K4me1": 497010,
+          "TF-ChIP-seq_POLR2AphosphoS5": 362527,
+          "TF-ChIP-seq_POLR2A": 351813,
+          "HM-ChIP-seq_H3K27me3": 193870,
+          "HM-ChIP-seq_H3K36me3": 85979,
+          "TF-ChIP-seq_EP300": 73082,
+          "HM-ChIP-seq_H3K9me3": 36683
+        },
+        "min_total_depth_by_assay": {
+          "HM-ChIP-seq_H3K27ac": 9,
+          "ATAC-seq": 9
+        },
+        "streamed_not_stored": true
+      },
+      "gene": {
+        "url": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "sha256": "0e3f290facc7963353075df78d2c0e0ac46a0e1f935b30e91b98fbc796c6daeb",
+        "bytes": 97973665,
+        "rows": 793882,
+        "rows_kept": 793882,
+        "rows_by_assay": {
+          "RNA-seq": 793882
+        },
+        "min_total_depth_by_assay": {
+          "RNA-seq": 8
+        },
+        "streamed_not_stored": true
+      }
+    },
+    "cache": {
+      "path": "data/cache/entex/depth_only.tsv.gz",
+      "sha256": "ce3a9364348e42d6a2a072e3cb0e22d9482b30e3dd25e68f0fd30c6b561d6082",
+      "bytes": 40024422,
+      "columns": [
+        "table",
+        "chr",
+        "start",
+        "end",
+        "region_id",
+        "experiment_accession",
+        "donor",
+        "tissue",
+        "assay",
+        "total_depth",
+        "imbalanced_unsigned"
+      ],
+      "assays_kept": {
+        "ccre": [
+          "ATAC-seq",
+          "HM-ChIP-seq_H3K27ac"
+        ],
+        "gene": [
+          "RNA-seq"
+        ]
+      }
+    },
+    "build_cost": {
+      "wall_seconds": 67.7,
+      "cpu_seconds": 14.9,
+      "peak_memory_bytes": 118964224,
+      "download_bytes": 843271807,
+      "requests": 2
+    }
+  },
+  "samples_with_atac_and_rna": {
+    "donor_tissues_with_atac": 45,
+    "donor_tissues_with_rna": 89,
+    "donor_tissues_with_atac_and_rna": 39,
+    "donor_tissues_with_h3k27ac_and_rna": 72,
+    "distinct_tissues_with_atac_and_rna": 22,
+    "tissues_with_atac_and_rna_in_how_many_donors": {
+      "1": 13,
+      "2": 4,
+      "3": 2,
+      "4": 3
+    },
+    "by_donor": {
+      "ENC-001": {
+        "tissues_with_atac": 6,
+        "tissues_with_rna": 21,
+        "tissues_with_atac_and_rna": [
+          "adrenal_gland",
+          "gastrocnemius_medialis",
+          "sigmoid_colon",
+          "testis",
+          "transverse_colon"
+        ]
+      },
+      "ENC-002": {
+        "tissues_with_atac": 12,
+        "tissues_with_rna": 20,
+        "tissues_with_atac_and_rna": [
+          "adrenal_gland",
+          "esophagus_muscularis_mucosa",
+          "gastrocnemius_medialis",
+          "prostate_gland",
+          "sigmoid_colon",
+          "stomach",
+          "thoracic_aorta",
+          "thyroid_gland",
+          "transverse_colon"
+        ]
+      },
+      "ENC-003": {
+        "tissues_with_atac": 12,
+        "tissues_with_rna": 25,
+        "tissues_with_atac_and_rna": [
+          "Peyers_patch",
+          "body_of_pancreas",
+          "breast_epithelium",
+          "gastrocnemius_medialis",
+          "gastroesophageal_sphincter",
+          "heart_left_ventricle",
+          "ovary",
+          "right_lobe_of_liver",
+          "sigmoid_colon",
+          "thyroid_gland",
+          "transverse_colon"
+        ]
+      },
+      "ENC-004": {
+        "tissues_with_atac": 15,
+        "tissues_with_rna": 23,
+        "tissues_with_atac_and_rna": [
+          "adrenal_gland",
+          "body_of_pancreas",
+          "breast_epithelium",
+          "esophagus_squamous_epithelium",
+          "gastrocnemius_medialis",
+          "gastroesophageal_sphincter",
+          "heart_left_ventricle",
+          "omental_fat_pad",
+          "right_atrium_auricular_region",
+          "sigmoid_colon",
+          "spleen",
+          "thyroid_gland",
+          "tibial_nerve",
+          "transverse_colon"
+        ]
+      }
+    },
+    "donor_tissues_with_two_or_more_atac_experiments": 0,
+    "donor_tissues_with_two_or_more_rna_experiments": 1
+  },
+  "atac": {
+    "independent_locus_count": {
+      "parent_universe_clusters": 566,
+      "target_genes_in_the_parent_universe": 10243,
+      "definition": "single-linkage clusters of target TSSs at 1 Mb over every element-target row formed (same donor and tissue, any listed depth), frozen before any filter; the counts under by_floor are the parent clusters a filtered set touches, descriptive only"
+    },
+    "element_region_overlap": {
+      "distinct_regions": 130643,
+      "regions_overlapping_an_element": 109979,
+      "regions_overlapping_two_or_more_elements": 9179
+    },
+    "rows_not_formed": {
+      "target_has_no_rna_row_in_this_sample": 88281
+    },
+    "target_types": {
+      "protein_coding": 180985,
+      "lncRNA": 40
+    },
+    "depth_quartiles_all_rows": {
+      "element_side": {
+        "min": 9.0,
+        "q1": 12.0,
+        "median": 16.0,
+        "q3": 29.0,
+        "max": 1076.0
+      },
+      "gene_side_rna": {
+        "min": 8.0,
+        "q1": 32.0,
+        "median": 92.0,
+        "q3": 282.0,
+        "max": 100850.0
+      }
+    },
+    "rows_at_or_above_a_depth": {
+      "0": {
+        "element_side": 181025,
+        "gene_side_rna": 181025,
+        "both": 181025
+      },
+      "10": {
+        "element_side": 173035,
+        "gene_side_rna": 177761,
+        "both": 169927
+      },
+      "20": {
+        "element_side": 74073,
+        "gene_side_rna": 154347,
+        "both": 63765
+      },
+      "47": {
+        "element_side": 22228,
+        "gene_side_rna": 120225,
+        "both": 15230
+      },
+      "85": {
+        "element_side": 7811,
+        "gene_side_rna": 94302,
+        "both": 4294
+      },
+      "194": {
+        "element_side": 1060,
+        "gene_side_rna": 59178,
+        "both": 341
+      },
+      "783": {
+        "element_side": 2,
+        "gene_side_rna": 16923,
+        "both": 0
+      }
+    },
+    "by_floor": [
+      {
+        "floor": 0,
+        "depth": {
+          "rows": 181025,
+          "element_gene_pairs": 49095,
+          "target_gene_loci": 10243,
+          "parent_clusters_touched": 566,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 490,
+            "ENC-002": 521,
+            "ENC-003": 512,
+            "ENC-004": 522
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 181025
+        },
+        "phase_same_block": {
+          "rows": 181025,
+          "element_gene_pairs": 49095,
+          "target_gene_loci": 10243,
+          "parent_clusters_touched": 566,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 490,
+            "ENC-002": 521,
+            "ENC-003": 512,
+            "ENC-004": 522
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 181025,
+          "element_gene_pairs": 49095,
+          "target_gene_loci": 10243,
+          "parent_clusters_touched": 566,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 490,
+            "ENC-002": 521,
+            "ENC-003": 512,
+            "ENC-004": 522
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 2811,
+          "MHC (HLA region)": 1528,
+          "imprinting: Imprinted": 1473,
+          "mapping: an exon of the target on the ENCODE exclusion list": 1129,
+          "imprinting: Predicted": 914,
+          "mapping: element on the ENCODE exclusion list": 387,
+          "imprinting: Conflicting Data": 202,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 153,
+          "imprinting: Provisional Data": 55,
+          "imprinting: Tissue Dependent": 53
+        },
+        "after_exclusions": {
+          "rows": 172947,
+          "element_gene_pairs": 47256,
+          "target_gene_loci": 9904,
+          "parent_clusters_touched": 558,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 484,
+            "ENC-002": 514,
+            "ENC-003": 506,
+            "ENC-004": 513
+          }
+        },
+        "rows_without_a_gtex_expression_value": 709,
+        "rows_by_matched_alternatives": {
+          ">=1": 8149,
+          ">=3": 60,
+          ">=5": 5
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 5.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 60,
+          "element_gene_pairs": 54,
+          "target_gene_loci": 25,
+          "parent_clusters_touched": 22,
+          "donors": 4,
+          "donor_tissues": 21,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 5,
+            "ENC-002": 5,
+            "ENC-003": 10,
+            "ENC-004": 10
+          }
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 172947,
+            "element_side_balanced": 169526,
+            "gene_side_balanced": 162342
+          },
+          "with_3_matched_alternatives": {
+            "rows": 60,
+            "element_side_balanced": 59,
+            "gene_side_balanced": 59
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 10,
+        "depth": {
+          "rows": 169927,
+          "element_gene_pairs": 46599,
+          "target_gene_loci": 10000,
+          "parent_clusters_touched": 563,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 489,
+            "ENC-002": 520,
+            "ENC-003": 509,
+            "ENC-004": 519
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 169927
+        },
+        "phase_same_block": {
+          "rows": 169927,
+          "element_gene_pairs": 46599,
+          "target_gene_loci": 10000,
+          "parent_clusters_touched": 563,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 489,
+            "ENC-002": 520,
+            "ENC-003": 509,
+            "ENC-004": 519
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 169927,
+          "element_gene_pairs": 46599,
+          "target_gene_loci": 10000,
+          "parent_clusters_touched": 563,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 489,
+            "ENC-002": 520,
+            "ENC-003": 509,
+            "ENC-004": 519
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 2660,
+          "MHC (HLA region)": 1431,
+          "imprinting: Imprinted": 1389,
+          "mapping: an exon of the target on the ENCODE exclusion list": 1058,
+          "imprinting: Predicted": 853,
+          "mapping: element on the ENCODE exclusion list": 354,
+          "imprinting: Conflicting Data": 199,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 144,
+          "imprinting: Provisional Data": 50,
+          "imprinting: Tissue Dependent": 45
+        },
+        "after_exclusions": {
+          "rows": 162325,
+          "element_gene_pairs": 44847,
+          "target_gene_loci": 9666,
+          "parent_clusters_touched": 555,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 483,
+            "ENC-002": 513,
+            "ENC-003": 503,
+            "ENC-004": 510
+          }
+        },
+        "rows_without_a_gtex_expression_value": 660,
+        "rows_by_matched_alternatives": {
+          ">=1": 7572,
+          ">=3": 52,
+          ">=5": 4
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 5.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 52,
+          "element_gene_pairs": 48,
+          "target_gene_loci": 25,
+          "parent_clusters_touched": 22,
+          "donors": 4,
+          "donor_tissues": 20,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 4,
+            "ENC-002": 5,
+            "ENC-003": 10,
+            "ENC-004": 10
+          }
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 162325,
+            "element_side_balanced": 159060,
+            "gene_side_balanced": 152244
+          },
+          "with_3_matched_alternatives": {
+            "rows": 52,
+            "element_side_balanced": 51,
+            "gene_side_balanced": 51
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 20,
+        "depth": {
+          "rows": 63765,
+          "element_gene_pairs": 22763,
+          "target_gene_loci": 7285,
+          "parent_clusters_touched": 533,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 436,
+            "ENC-002": 478,
+            "ENC-003": 465,
+            "ENC-004": 448
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 63765
+        },
+        "phase_same_block": {
+          "rows": 63765,
+          "element_gene_pairs": 22763,
+          "target_gene_loci": 7285,
+          "parent_clusters_touched": 533,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 436,
+            "ENC-002": 478,
+            "ENC-003": 465,
+            "ENC-004": 448
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 63765,
+          "element_gene_pairs": 22763,
+          "target_gene_loci": 7285,
+          "parent_clusters_touched": 533,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 436,
+            "ENC-002": 478,
+            "ENC-003": 465,
+            "ENC-004": 448
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 955,
+          "MHC (HLA region)": 641,
+          "imprinting: Imprinted": 472,
+          "mapping: an exon of the target on the ENCODE exclusion list": 358,
+          "imprinting: Predicted": 251,
+          "mapping: element on the ENCODE exclusion list": 134,
+          "imprinting: Conflicting Data": 101,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 63,
+          "imprinting: Tissue Dependent": 21,
+          "imprinting: Provisional Data": 13
+        },
+        "after_exclusions": {
+          "rows": 60943,
+          "element_gene_pairs": 21920,
+          "target_gene_loci": 7038,
+          "parent_clusters_touched": 527,
+          "donors": 4,
+          "donor_tissues": 39,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 432,
+            "ENC-002": 469,
+            "ENC-003": 463,
+            "ENC-004": 442
+          }
+        },
+        "rows_without_a_gtex_expression_value": 216,
+        "rows_by_matched_alternatives": {
+          ">=1": 2559,
+          ">=3": 10,
+          ">=5": 1
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 5.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 10,
+          "element_gene_pairs": 9,
+          "target_gene_loci": 5,
+          "parent_clusters_touched": 5,
+          "donors": 3,
+          "donor_tissues": 4,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 1,
+            "ENC-003": 3,
+            "ENC-004": 1
+          }
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 60943,
+            "element_side_balanced": 58875,
+            "gene_side_balanced": 56445
+          },
+          "with_3_matched_alternatives": {
+            "rows": 10,
+            "element_side_balanced": 9,
+            "gene_side_balanced": 10
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 47,
+        "depth": {
+          "rows": 15230,
+          "element_gene_pairs": 7549,
+          "target_gene_loci": 3666,
+          "parent_clusters_touched": 471,
+          "donors": 4,
+          "donor_tissues": 38,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 341,
+            "ENC-002": 403,
+            "ENC-003": 381,
+            "ENC-004": 304
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 15230
+        },
+        "phase_same_block": {
+          "rows": 15230,
+          "element_gene_pairs": 7549,
+          "target_gene_loci": 3666,
+          "parent_clusters_touched": 471,
+          "donors": 4,
+          "donor_tissues": 38,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 341,
+            "ENC-002": 403,
+            "ENC-003": 381,
+            "ENC-004": 304
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 15230,
+          "element_gene_pairs": 7549,
+          "target_gene_loci": 3666,
+          "parent_clusters_touched": 471,
+          "donors": 4,
+          "donor_tissues": 38,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 341,
+            "ENC-002": 403,
+            "ENC-003": 381,
+            "ENC-004": 304
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 214,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 199,
+          "imprinting: Imprinted": 117,
+          "mapping: an exon of the target on the ENCODE exclusion list": 76,
+          "imprinting: Predicted": 55,
+          "mapping: element on the ENCODE exclusion list": 30,
+          "imprinting: Conflicting Data": 18,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 11,
+          "imprinting: Tissue Dependent": 7,
+          "imprinting: Provisional Data": 4
+        },
+        "after_exclusions": {
+          "rows": 14538,
+          "element_gene_pairs": 7268,
+          "target_gene_loci": 3543,
+          "parent_clusters_touched": 465,
+          "donors": 4,
+          "donor_tissues": 38,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 332,
+            "ENC-002": 398,
+            "ENC-003": 377,
+            "ENC-004": 289
+          }
+        },
+        "rows_without_a_gtex_expression_value": 32,
+        "rows_by_matched_alternatives": {
+          ">=1": 509,
+          ">=3": 2,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 3.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 2,
+          "element_gene_pairs": 2,
+          "target_gene_loci": 1,
+          "parent_clusters_touched": 1,
+          "donors": 1,
+          "donor_tissues": 1,
+          "parent_clusters_touched_by_donor": {
+            "ENC-003": 1
+          }
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 14538,
+            "element_side_balanced": 13780,
+            "gene_side_balanced": 13240
+          },
+          "with_3_matched_alternatives": {
+            "rows": 2,
+            "element_side_balanced": 1,
+            "gene_side_balanced": 2
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 85,
+        "depth": {
+          "rows": 4294,
+          "element_gene_pairs": 2618,
+          "target_gene_loci": 1683,
+          "parent_clusters_touched": 374,
+          "donors": 4,
+          "donor_tissues": 31,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 200,
+            "ENC-002": 310,
+            "ENC-003": 275,
+            "ENC-004": 149
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 4294
+        },
+        "phase_same_block": {
+          "rows": 4294,
+          "element_gene_pairs": 2618,
+          "target_gene_loci": 1683,
+          "parent_clusters_touched": 374,
+          "donors": 4,
+          "donor_tissues": 31,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 200,
+            "ENC-002": 310,
+            "ENC-003": 275,
+            "ENC-004": 149
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 4294,
+          "element_gene_pairs": 2618,
+          "target_gene_loci": 1683,
+          "parent_clusters_touched": 374,
+          "donors": 4,
+          "donor_tissues": 31,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 200,
+            "ENC-002": 310,
+            "ENC-003": 275,
+            "ENC-004": 149
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 82,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 44,
+          "imprinting: Imprinted": 39,
+          "mapping: an exon of the target on the ENCODE exclusion list": 21,
+          "imprinting: Predicted": 12,
+          "mapping: element on the ENCODE exclusion list": 8,
+          "imprinting: Conflicting Data": 2,
+          "imprinting: Provisional Data": 2
+        },
+        "after_exclusions": {
+          "rows": 4093,
+          "element_gene_pairs": 2528,
+          "target_gene_loci": 1628,
+          "parent_clusters_touched": 371,
+          "donors": 4,
+          "donor_tissues": 31,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 194,
+            "ENC-002": 306,
+            "ENC-003": 272,
+            "ENC-004": 144
+          }
+        },
+        "rows_without_a_gtex_expression_value": 4,
+        "rows_by_matched_alternatives": {
+          ">=1": 114,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 2.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 4093,
+            "element_side_balanced": 3839,
+            "gene_side_balanced": 3647
+          },
+          "with_3_matched_alternatives": {
+            "rows": 0,
+            "element_side_balanced": 0,
+            "gene_side_balanced": 0
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 194,
+        "depth": {
+          "rows": 341,
+          "element_gene_pairs": 252,
+          "target_gene_loci": 214,
+          "parent_clusters_touched": 148,
+          "donors": 4,
+          "donor_tissues": 15,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 23,
+            "ENC-002": 85,
+            "ENC-003": 80,
+            "ENC-004": 17
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 341
+        },
+        "phase_same_block": {
+          "rows": 341,
+          "element_gene_pairs": 252,
+          "target_gene_loci": 214,
+          "parent_clusters_touched": 148,
+          "donors": 4,
+          "donor_tissues": 15,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 23,
+            "ENC-002": 85,
+            "ENC-003": 80,
+            "ENC-004": 17
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 341,
+          "element_gene_pairs": 252,
+          "target_gene_loci": 214,
+          "parent_clusters_touched": 148,
+          "donors": 4,
+          "donor_tissues": 15,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 23,
+            "ENC-002": 85,
+            "ENC-003": 80,
+            "ENC-004": 17
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 10,
+          "imprinting: Imprinted": 4,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 3,
+          "mapping: an exon of the target on the ENCODE exclusion list": 2
+        },
+        "after_exclusions": {
+          "rows": 322,
+          "element_gene_pairs": 242,
+          "target_gene_loci": 207,
+          "parent_clusters_touched": 145,
+          "donors": 4,
+          "donor_tissues": 15,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 21,
+            "ENC-002": 83,
+            "ENC-003": 80,
+            "ENC-004": 16
+          }
+        },
+        "rows_without_a_gtex_expression_value": 0,
+        "rows_by_matched_alternatives": {
+          ">=1": 2,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 1.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 322,
+            "element_side_balanced": 301,
+            "gene_side_balanced": 272
+          },
+          "with_3_matched_alternatives": {
+            "rows": 0,
+            "element_side_balanced": 0,
+            "gene_side_balanced": 0
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      },
+      {
+        "floor": 783,
+        "depth": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "phase_orientation_of_depth_rows": {},
+        "phase_same_block": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "exclusion_reasons_among_same_block_rows": {},
+        "after_exclusions": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "rows_without_a_gtex_expression_value": 0,
+        "rows_by_matched_alternatives": {
+          ">=1": 0,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": null,
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        },
+        "balanced_marginals": {
+          "after_exclusions": {
+            "rows": 0,
+            "element_side_balanced": 0,
+            "gene_side_balanced": 0
+          },
+          "with_3_matched_alternatives": {
+            "rows": 0,
+            "element_side_balanced": 0,
+            "gene_side_balanced": 0
+          },
+          "joint": "not formed: rows imbalanced on both sides, set against the product of these marginals, would be an unsigned coordination statistic and would pre-empt the endpoint"
+        }
+      }
+    ]
+  },
+  "h3k27ac_secondary": {
+    "independent_locus_count": {
+      "parent_universe_clusters": 544,
+      "target_genes_in_the_parent_universe": 10934,
+      "definition": "single-linkage clusters of target TSSs at 1 Mb over every element-target row formed (same donor and tissue, any listed depth), frozen before any filter; the counts under by_floor are the parent clusters a filtered set touches, descriptive only"
+    },
+    "element_region_overlap": {
+      "distinct_regions": 146914,
+      "regions_overlapping_an_element": 125720,
+      "regions_overlapping_two_or_more_elements": 10049
+    },
+    "rows_not_formed": {
+      "target_has_no_rna_row_in_this_sample": 161829
+    },
+    "target_types": {
+      "protein_coding": 429329,
+      "lncRNA": 117
+    },
+    "depth_quartiles_all_rows": {
+      "element_side": {
+        "min": 9.0,
+        "q1": 13.0,
+        "median": 20.0,
+        "q3": 36.0,
+        "max": 2626.0
+      },
+      "gene_side_rna": {
+        "min": 8.0,
+        "q1": 34.0,
+        "median": 98.0,
+        "q3": 285.0,
+        "max": 100850.0
+      }
+    },
+    "rows_at_or_above_a_depth": {
+      "0": {
+        "element_side": 429446,
+        "gene_side_rna": 429446,
+        "both": 429446
+      },
+      "10": {
+        "element_side": 424377,
+        "gene_side_rna": 424088,
+        "both": 419129
+      },
+      "20": {
+        "element_side": 216964,
+        "gene_side_rna": 372556,
+        "both": 189133
+      },
+      "47": {
+        "element_side": 75616,
+        "gene_side_rna": 292656,
+        "both": 52936
+      },
+      "85": {
+        "element_side": 29103,
+        "gene_side_rna": 230402,
+        "both": 16763
+      },
+      "194": {
+        "element_side": 4806,
+        "gene_side_rna": 143281,
+        "both": 1952
+      },
+      "783": {
+        "element_side": 65,
+        "gene_side_rna": 37907,
+        "both": 13
+      }
+    },
+    "by_floor": [
+      {
+        "floor": 0,
+        "depth": {
+          "rows": 429446,
+          "element_gene_pairs": 61594,
+          "target_gene_loci": 10934,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 497,
+            "ENC-002": 501,
+            "ENC-003": 492,
+            "ENC-004": 496
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 429446
+        },
+        "phase_same_block": {
+          "rows": 429446,
+          "element_gene_pairs": 61594,
+          "target_gene_loci": 10934,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 497,
+            "ENC-002": 501,
+            "ENC-003": 492,
+            "ENC-004": 496
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 429446,
+          "element_gene_pairs": 61594,
+          "target_gene_loci": 10934,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 497,
+            "ENC-002": 501,
+            "ENC-003": 492,
+            "ENC-004": 496
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 6450,
+          "MHC (HLA region)": 4061,
+          "imprinting: Imprinted": 2990,
+          "mapping: an exon of the target on the ENCODE exclusion list": 2592,
+          "imprinting: Predicted": 1679,
+          "mapping: element on the ENCODE exclusion list": 976,
+          "imprinting: Conflicting Data": 557,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 430,
+          "imprinting: Tissue Dependent": 117,
+          "imprinting: Provisional Data": 57
+        },
+        "after_exclusions": {
+          "rows": 411148,
+          "element_gene_pairs": 59391,
+          "target_gene_loci": 10569,
+          "parent_clusters_touched": 537,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 488,
+            "ENC-002": 496,
+            "ENC-003": 489,
+            "ENC-004": 488
+          }
+        },
+        "rows_without_a_gtex_expression_value": 1783,
+        "rows_by_matched_alternatives": {
+          ">=1": 17524,
+          ">=3": 159,
+          ">=5": 12
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 8.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 159,
+          "element_gene_pairs": 110,
+          "target_gene_loci": 50,
+          "parent_clusters_touched": 41,
+          "donors": 4,
+          "donor_tissues": 48,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 16,
+            "ENC-002": 13,
+            "ENC-003": 15,
+            "ENC-004": 15
+          }
+        }
+      },
+      {
+        "floor": 10,
+        "depth": {
+          "rows": 419129,
+          "element_gene_pairs": 60335,
+          "target_gene_loci": 10816,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 494,
+            "ENC-002": 499,
+            "ENC-003": 489,
+            "ENC-004": 495
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 419129
+        },
+        "phase_same_block": {
+          "rows": 419129,
+          "element_gene_pairs": 60335,
+          "target_gene_loci": 10816,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 494,
+            "ENC-002": 499,
+            "ENC-003": 489,
+            "ENC-004": 495
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 419129,
+          "element_gene_pairs": 60335,
+          "target_gene_loci": 10816,
+          "parent_clusters_touched": 544,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 494,
+            "ENC-002": 499,
+            "ENC-003": 489,
+            "ENC-004": 495
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 6300,
+          "MHC (HLA region)": 3986,
+          "imprinting: Imprinted": 2923,
+          "mapping: an exon of the target on the ENCODE exclusion list": 2513,
+          "imprinting: Predicted": 1632,
+          "mapping: element on the ENCODE exclusion list": 935,
+          "imprinting: Conflicting Data": 545,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 417,
+          "imprinting: Tissue Dependent": 114,
+          "imprinting: Provisional Data": 55
+        },
+        "after_exclusions": {
+          "rows": 401267,
+          "element_gene_pairs": 58179,
+          "target_gene_loci": 10458,
+          "parent_clusters_touched": 537,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 485,
+            "ENC-002": 495,
+            "ENC-003": 486,
+            "ENC-004": 487
+          }
+        },
+        "rows_without_a_gtex_expression_value": 1710,
+        "rows_by_matched_alternatives": {
+          ">=1": 17076,
+          ">=3": 155,
+          ">=5": 12
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 8.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 155,
+          "element_gene_pairs": 108,
+          "target_gene_loci": 49,
+          "parent_clusters_touched": 40,
+          "donors": 4,
+          "donor_tissues": 46,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 15,
+            "ENC-002": 12,
+            "ENC-003": 15,
+            "ENC-004": 14
+          }
+        }
+      },
+      {
+        "floor": 20,
+        "depth": {
+          "rows": 189133,
+          "element_gene_pairs": 36636,
+          "target_gene_loci": 8627,
+          "parent_clusters_touched": 511,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 464,
+            "ENC-002": 451,
+            "ENC-003": 447,
+            "ENC-004": 452
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 189133
+        },
+        "phase_same_block": {
+          "rows": 189133,
+          "element_gene_pairs": 36636,
+          "target_gene_loci": 8627,
+          "parent_clusters_touched": 511,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 464,
+            "ENC-002": 451,
+            "ENC-003": 447,
+            "ENC-004": 452
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 189133,
+          "element_gene_pairs": 36636,
+          "target_gene_loci": 8627,
+          "parent_clusters_touched": 511,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 464,
+            "ENC-002": 451,
+            "ENC-003": 447,
+            "ENC-004": 452
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 2998,
+          "MHC (HLA region)": 2190,
+          "mapping: an exon of the target on the ENCODE exclusion list": 1214,
+          "imprinting: Imprinted": 1198,
+          "imprinting: Predicted": 683,
+          "mapping: element on the ENCODE exclusion list": 458,
+          "imprinting: Conflicting Data": 300,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 162,
+          "imprinting: Tissue Dependent": 60,
+          "imprinting: Provisional Data": 24
+        },
+        "after_exclusions": {
+          "rows": 180548,
+          "element_gene_pairs": 35286,
+          "target_gene_loci": 8346,
+          "parent_clusters_touched": 504,
+          "donors": 4,
+          "donor_tissues": 72,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 458,
+            "ENC-002": 446,
+            "ENC-003": 443,
+            "ENC-004": 446
+          }
+        },
+        "rows_without_a_gtex_expression_value": 651,
+        "rows_by_matched_alternatives": {
+          ">=1": 6448,
+          ">=3": 44,
+          ">=5": 4
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 8.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 44,
+          "element_gene_pairs": 39,
+          "target_gene_loci": 19,
+          "parent_clusters_touched": 16,
+          "donors": 4,
+          "donor_tissues": 17,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 6,
+            "ENC-002": 2,
+            "ENC-003": 8,
+            "ENC-004": 4
+          }
+        }
+      },
+      {
+        "floor": 47,
+        "depth": {
+          "rows": 52936,
+          "element_gene_pairs": 14773,
+          "target_gene_loci": 5310,
+          "parent_clusters_touched": 465,
+          "donors": 4,
+          "donor_tissues": 71,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 416,
+            "ENC-002": 399,
+            "ENC-003": 382,
+            "ENC-004": 373
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 52936
+        },
+        "phase_same_block": {
+          "rows": 52936,
+          "element_gene_pairs": 14773,
+          "target_gene_loci": 5310,
+          "parent_clusters_touched": 465,
+          "donors": 4,
+          "donor_tissues": 71,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 416,
+            "ENC-002": 399,
+            "ENC-003": 382,
+            "ENC-004": 373
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 52936,
+          "element_gene_pairs": 14773,
+          "target_gene_loci": 5310,
+          "parent_clusters_touched": 465,
+          "donors": 4,
+          "donor_tissues": 71,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 416,
+            "ENC-002": 399,
+            "ENC-003": 382,
+            "ENC-004": 373
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 949,
+          "MHC (HLA region)": 895,
+          "mapping: an exon of the target on the ENCODE exclusion list": 294,
+          "imprinting: Imprinted": 285,
+          "mapping: element on the ENCODE exclusion list": 123,
+          "imprinting: Predicted": 123,
+          "imprinting: Conflicting Data": 120,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 34,
+          "imprinting: Tissue Dependent": 23,
+          "imprinting: Provisional Data": 15
+        },
+        "after_exclusions": {
+          "rows": 50274,
+          "element_gene_pairs": 14178,
+          "target_gene_loci": 5122,
+          "parent_clusters_touched": 459,
+          "donors": 4,
+          "donor_tissues": 70,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 409,
+            "ENC-002": 392,
+            "ENC-003": 381,
+            "ENC-004": 364
+          }
+        },
+        "rows_without_a_gtex_expression_value": 145,
+        "rows_by_matched_alternatives": {
+          ">=1": 1237,
+          ">=3": 11,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 4.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 11,
+          "element_gene_pairs": 9,
+          "target_gene_loci": 3,
+          "parent_clusters_touched": 3,
+          "donors": 3,
+          "donor_tissues": 4,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 1,
+            "ENC-003": 2,
+            "ENC-004": 1
+          }
+        }
+      },
+      {
+        "floor": 85,
+        "depth": {
+          "rows": 16763,
+          "element_gene_pairs": 6099,
+          "target_gene_loci": 2924,
+          "parent_clusters_touched": 419,
+          "donors": 4,
+          "donor_tissues": 68,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 365,
+            "ENC-002": 325,
+            "ENC-003": 297,
+            "ENC-004": 283
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 16763
+        },
+        "phase_same_block": {
+          "rows": 16763,
+          "element_gene_pairs": 6099,
+          "target_gene_loci": 2924,
+          "parent_clusters_touched": 419,
+          "donors": 4,
+          "donor_tissues": 68,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 365,
+            "ENC-002": 325,
+            "ENC-003": 297,
+            "ENC-004": 283
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 16763,
+          "element_gene_pairs": 6099,
+          "target_gene_loci": 2924,
+          "parent_clusters_touched": 419,
+          "donors": 4,
+          "donor_tissues": 68,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 365,
+            "ENC-002": 325,
+            "ENC-003": 297,
+            "ENC-004": 283
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 479,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 298,
+          "mapping: an exon of the target on the ENCODE exclusion list": 80,
+          "imprinting: Imprinted": 73,
+          "imprinting: Conflicting Data": 49,
+          "mapping: element on the ENCODE exclusion list": 27,
+          "imprinting: Predicted": 24,
+          "imprinting: Tissue Dependent": 11,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps the element": 10,
+          "imprinting: Provisional Data": 10
+        },
+        "after_exclusions": {
+          "rows": 15764,
+          "element_gene_pairs": 5823,
+          "target_gene_loci": 2811,
+          "parent_clusters_touched": 410,
+          "donors": 4,
+          "donor_tissues": 67,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 353,
+            "ENC-002": 322,
+            "ENC-003": 295,
+            "ENC-004": 274
+          }
+        },
+        "rows_without_a_gtex_expression_value": 46,
+        "rows_by_matched_alternatives": {
+          ">=1": 230,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 2.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        }
+      },
+      {
+        "floor": 194,
+        "depth": {
+          "rows": 1952,
+          "element_gene_pairs": 1037,
+          "target_gene_loci": 677,
+          "parent_clusters_touched": 261,
+          "donors": 4,
+          "donor_tissues": 62,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 207,
+            "ENC-002": 129,
+            "ENC-003": 128,
+            "ENC-004": 96
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 1952
+        },
+        "phase_same_block": {
+          "rows": 1952,
+          "element_gene_pairs": 1037,
+          "target_gene_loci": 677,
+          "parent_clusters_touched": 261,
+          "donors": 4,
+          "donor_tissues": 62,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 207,
+            "ENC-002": 129,
+            "ENC-003": 128,
+            "ENC-004": 96
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 1952,
+          "element_gene_pairs": 1037,
+          "target_gene_loci": 677,
+          "parent_clusters_touched": 261,
+          "donors": 4,
+          "donor_tissues": 62,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 207,
+            "ENC-002": 129,
+            "ENC-003": 128,
+            "ENC-004": 96
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 195,
+          "copy number: a DEL/DUP/CNV call in this donor overlaps an exon of the target": 33,
+          "imprinting: Conflicting Data": 9,
+          "imprinting: Imprinted": 8,
+          "mapping: an exon of the target on the ENCODE exclusion list": 5,
+          "imprinting: Tissue Dependent": 2,
+          "imprinting: Predicted": 1,
+          "mapping: element on the ENCODE exclusion list": 1,
+          "imprinting: Provisional Data": 1
+        },
+        "after_exclusions": {
+          "rows": 1709,
+          "element_gene_pairs": 979,
+          "target_gene_loci": 645,
+          "parent_clusters_touched": 255,
+          "donors": 4,
+          "donor_tissues": 41,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 201,
+            "ENC-002": 127,
+            "ENC-003": 128,
+            "ENC-004": 93
+          }
+        },
+        "rows_without_a_gtex_expression_value": 3,
+        "rows_by_matched_alternatives": {
+          ">=1": 17,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 2.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        }
+      },
+      {
+        "floor": 783,
+        "depth": {
+          "rows": 13,
+          "element_gene_pairs": 5,
+          "target_gene_loci": 4,
+          "parent_clusters_touched": 4,
+          "donors": 3,
+          "donor_tissues": 10,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 4,
+            "ENC-002": 1,
+            "ENC-003": 1
+          }
+        },
+        "phase_orientation_of_depth_rows": {
+          "same_block": 13
+        },
+        "phase_same_block": {
+          "rows": 13,
+          "element_gene_pairs": 5,
+          "target_gene_loci": 4,
+          "parent_clusters_touched": 4,
+          "donors": 3,
+          "donor_tissues": 10,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 4,
+            "ENC-002": 1,
+            "ENC-003": 1
+          }
+        },
+        "phase_same_block_or_parental_origin": {
+          "rows": 13,
+          "element_gene_pairs": 5,
+          "target_gene_loci": 4,
+          "parent_clusters_touched": 4,
+          "donors": 3,
+          "donor_tissues": 10,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 4,
+            "ENC-002": 1,
+            "ENC-003": 1
+          }
+        },
+        "exclusion_reasons_among_same_block_rows": {
+          "MHC (HLA region)": 10
+        },
+        "after_exclusions": {
+          "rows": 3,
+          "element_gene_pairs": 3,
+          "target_gene_loci": 3,
+          "parent_clusters_touched": 3,
+          "donors": 1,
+          "donor_tissues": 1,
+          "parent_clusters_touched_by_donor": {
+            "ENC-001": 3
+          }
+        },
+        "rows_without_a_gtex_expression_value": 0,
+        "rows_by_matched_alternatives": {
+          ">=1": 0,
+          ">=3": 0,
+          ">=5": 0
+        },
+        "matched_alternatives_per_row": {
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 0.0,
+          "max": 0.0
+        },
+        "with_3_matched_alternatives": {
+          "rows": 0,
+          "element_gene_pairs": 0,
+          "target_gene_loci": 0,
+          "parent_clusters_touched": 0,
+          "donors": 0,
+          "donor_tissues": 0,
+          "parent_clusters_touched_by_donor": {}
+        }
+      }
+    ]
+  },
+  "phase_lookups_distinct_donor_element_and_donor_gene": {
+    "element_one": 110935,
+    "gene_one": 49159
+  },
+  "phase_blocks": {
+    "ind1": {
+      "blocks": 69,
+      "autosomal_blocks": 51,
+      "autosomal_blocks_over_1mb": 24,
+      "autosomal_bases_in_blocks_over_1mb": 2808013072,
+      "blocks_with_known_parental_origin": 11
+    },
+    "ind2": {
+      "blocks": 190,
+      "autosomal_blocks": 90,
+      "autosomal_blocks_over_1mb": 24,
+      "autosomal_bases_in_blocks_over_1mb": 2807186242,
+      "blocks_with_known_parental_origin": 11
+    },
+    "ind3": {
+      "blocks": 120,
+      "autosomal_blocks": 95,
+      "autosomal_blocks_over_1mb": 24,
+      "autosomal_bases_in_blocks_over_1mb": 2806979428,
+      "blocks_with_known_parental_origin": 10
+    },
+    "ind4": {
+      "blocks": 146,
+      "autosomal_blocks": 113,
+      "autosomal_blocks_over_1mb": 24,
+      "autosomal_bases_in_blocks_over_1mb": 2806120011,
+      "blocks_with_known_parental_origin": 11
+    }
+  },
+  "copy_number_calls": {
+    "donors_with_published_sv_calls": [
+      "ENC-001",
+      "ENC-004"
+    ],
+    "donors_without": [
+      "ENC-002",
+      "ENC-003"
+    ],
+    "sv_types_by_donor": {
+      "ENC-001": {
+        "INS": 14593,
+        "DEL": 13747,
+        "INV": 146
+      },
+      "ENC-004": {
+        "INS": 15492,
+        "DEL": 14224,
+        "INV": 134
+      }
+    },
+    "copy_number_intervals_by_donor": {
+      "ENC-001": 13747,
+      "ENC-004": 14224
+    }
+  },
+  "exclusion_list_intervals": 636,
+  "imprinting_statuses_excluded": [
+    "Imprinted",
+    "Predicted",
+    "Tissue Dependent",
+    "Provisional Data",
+    "Conflicting Data"
+  ],
+  "tissues_without_a_gtex_match": [],
+  "exposure": {
+    "tracked_files_naming_entex": [
+      "data/results/c5_paired_variation_probe.json",
+      "docs/DATA.md",
+      "docs/ROADMAP.md",
+      "scripts/c5_paired_variation_probe.py",
+      "scripts/entex_feasibility.py",
+      "tests/test_entex_feasibility.py"
+    ],
+    "tracked_files_naming_an_entex_allelic_release": [
+      "data/results/c5_paired_variation_probe.json",
+      "docs/DATA.md",
+      "scripts/c5_paired_variation_probe.py",
+      "scripts/entex_feasibility.py",
+      "tests/test_entex_feasibility.py"
+    ],
+    "of_which_outside_the_c5_probe_this_lane_and_docs": [],
+    "entex_experiment_accessions_known": 691,
+    "entex_experiments_named_in_tracked_files": {
+      "ENCSR136ZQZ": {
+        "table": "ccre",
+        "assay": "HM-ChIP-seq_H3K27ac",
+        "donor": "ENC-001",
+        "tissue": "testis",
+        "files": [
+          "data/results/epigenome_manifest.json"
+        ]
+      },
+      "ENCSR611DJQ": {
+        "table": "ccre",
+        "assay": "HM-ChIP-seq_H3K4me3",
+        "donor": "ENC-001",
+        "tissue": "testis",
+        "files": [
+          "data/results/epigenome_manifest.json"
+        ]
+      }
+    },
+    "alphagenome_track_metadata": {
+      "available": true,
+      "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+      "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+      "tracks": 2841,
+      "encode_tissue_tracks": 765,
+      "encode_tissue_tracks_named_as_an_entex_tissue": {
+        "chip_histone": 128,
+        "rna_seq": 75,
+        "dnase": 25,
+        "atac": 18
+      },
+      "entex_tissue_names_among_them": [
+        "adrenal_gland",
+        "ascending_aorta",
+        "body_of_pancreas",
+        "breast_epithelium",
+        "coronary_artery",
+        "esophagus_muscularis_mucosa",
+        "esophagus_squamous_epithelium",
+        "gastrocnemius_medialis",
+        "gastroesophageal_sphincter",
+        "heart_left_ventricle",
+        "lower_leg_skin",
+        "omental_fat_pad",
+        "ovary",
+        "prostate_gland",
+        "right_atrium_auricular_region",
+        "right_lobe_of_liver",
+        "sigmoid_colon",
+        "spleen",
+        "stomach",
+        "subcutaneous_adipose_tissue",
+        "suprapubic_skin",
+        "testis",
+        "thoracic_aorta",
+        "thyroid_gland",
+        "tibial_artery",
+        "tibial_nerve",
+        "transverse_colon",
+        "upper_lobe_of_left_lung",
+        "uterus",
+        "vagina"
+      ],
+      "gtex_rna_tracks": 54,
+      "gtex_rna_tracks_for_an_entex_tissue": 30,
+      "what_it_cannot_say": "the metadata names a biosample, an ontology term and a data source per track, never an ENCODE experiment or donor accession, so whether a track was built from an EN-TEx donor cannot be read from it"
+    }
+  },
+  "independence": "unresolved. EN-TEx's four donors are GTEx donors; GTEx v8 eQTLs enter the attribution layer (eqtl_targets) and GTEx RNA-seq tracks are among AlphaGenome's outputs. Whether the four donors are in GTEx v8's eQTL cohort, and whether their samples trained AlphaGenome, is not established here, so a result on EN-TEx is not an independent validation of anything fitted on GTEx or by AlphaGenome.",
+  "power_units_needed": {
+    "one_sample_binomial_units_to_tell_rate_from_0_50": {
+      "0.55": 783,
+      "0.6": 194,
+      "0.65": 85,
+      "0.7": 47
+    },
+    "note": "units are independent loci; matched alternatives add variance (a factor near 1 + 1/k for k alternatives) and the fraction of rows imbalanced on both sides is not used, so these are optimistic"
+  },
+  "design_time_requests": [
+    {
+      "what": "EN-TEx data directory listing",
+      "url": "http://entex.encodeproject.org/data/",
+      "bytes": 16353
+    },
+    {
+      "what": "the first 1 MiB of each AS table by HTTP range, to read the imbalance_significance vocabulary ('0', '1'); no row was printed and both files were deleted",
+      "url": "http://entex.encodeproject.org/data/{cCREs,genes}_default_AS.tsv",
+      "bytes": 2097152
+    },
+    {
+      "what": "phased_block.tar.gz, to read its layout",
+      "url": "http://entex.encodeproject.org/data/phased_block.tar.gz",
+      "bytes": 5388
+    },
+    {
+      "what": "the first 20 kB of individual1_SV.vcf, header only",
+      "url": "http://entex.encodeproject.org/data/individual1_SV.vcf",
+      "bytes": 20001
+    },
+    {
+      "what": "ENCODE exclusion list v2, reachability",
+      "url": "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz",
+      "bytes": 5867
+    },
+    {
+      "what": "ENCODE portal: the EN-TEx donors and their external ids (HumanDonor search), two attempts; both answered 504 Gateway Time-out after 60 s",
+      "url": "https://www.encodeproject.org/search/?type=HumanDonor&internal_tags=ENTEx",
+      "bytes": 0
+    },
+    {
+      "what": "ENCODE portal home page, reachability (no answer)",
+      "url": "https://www.encodeproject.org/",
+      "bytes": 0
+    }
+  ],
+  "alphagenome_requests": 0,
+  "cost": {
+    "this_run": {
+      "wall_seconds": 75.3,
+      "cpu_seconds": 74.6,
+      "peak_memory_bytes": 2147663872,
+      "download_bytes": 0,
+      "requests": 0
+    },
+    "depth_cache_build": {
+      "wall_seconds": 67.7,
+      "cpu_seconds": 14.9,
+      "peak_memory_bytes": 118964224,
+      "download_bytes": 843271807,
+      "requests": 2
+    },
+    "all_in": {
+      "runs": 6,
+      "wall_seconds": 497.0,
+      "cpu_seconds": 429.4,
+      "peak_memory_bytes": 2147663872,
+      "download_bytes_by_the_script": 965991460,
+      "requests_by_the_script": 6,
+      "download_bytes_by_hand_while_designing": 2144761,
+      "requests_by_hand_while_designing": 8,
+      "downloads": [
+        {
+          "kind": "download",
+          "url": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+          "bytes": 745298142,
+          "at": "2026-09-29T14:27:20"
+        },
+        {
+          "kind": "download",
+          "url": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+          "bytes": 97973665,
+          "at": "2026-09-29T14:27:28"
+        },
+        {
+          "kind": "download",
+          "url": "http://entex.encodeproject.org/data/phased_block.tar.gz",
+          "bytes": 5429,
+          "at": "2026-09-29T14:28:42"
+        },
+        {
+          "kind": "download",
+          "url": "http://entex.encodeproject.org/data/individual1_SV.vcf",
+          "bytes": 56222341,
+          "at": "2026-09-29T14:28:46"
+        },
+        {
+          "kind": "download",
+          "url": "http://entex.encodeproject.org/data/individual4_SV.vcf",
+          "bytes": 66486016,
+          "at": "2026-09-29T14:28:52"
+        },
+        {
+          "kind": "download",
+          "url": "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz",
+          "bytes": 5867,
+          "at": "2026-09-29T14:28:53"
+        }
+      ],
+      "run_log": [
+        {
+          "kind": "run",
+          "stage": "cache",
+          "at": "2026-09-29T14:27:28",
+          "wall_seconds": 67.7,
+          "cpu_seconds": 15.0,
+          "peak_memory_bytes": 118964224,
+          "download_bytes": 843271807,
+          "requests": 2
+        },
+        {
+          "kind": "run",
+          "stage": "census",
+          "at": "2026-09-29T14:29:38",
+          "wall_seconds": 84.4,
+          "cpu_seconds": 73.2,
+          "peak_memory_bytes": 1995669504,
+          "download_bytes": 122719653,
+          "requests": 4
+        },
+        {
+          "kind": "run",
+          "stage": "census",
+          "at": "2026-09-29T14:34:45",
+          "wall_seconds": 119.8,
+          "cpu_seconds": 118.2,
+          "peak_memory_bytes": 1921417216,
+          "download_bytes": 0,
+          "requests": 0
+        },
+        {
+          "kind": "run",
+          "stage": "census",
+          "at": "2026-09-29T14:39:39",
+          "wall_seconds": 75.6,
+          "cpu_seconds": 74.8,
+          "peak_memory_bytes": 2109718528,
+          "download_bytes": 0,
+          "requests": 0
+        },
+        {
+          "kind": "run",
+          "stage": "census",
+          "at": "2026-09-29T14:41:21",
+          "wall_seconds": 74.2,
+          "cpu_seconds": 73.6,
+          "peak_memory_bytes": 2146779136,
+          "download_bytes": 0,
+          "requests": 0
+        },
+        {
+          "stage": "this run",
+          "wall_seconds": 75.3,
+          "cpu_seconds": 74.6,
+          "peak_memory_bytes": 2147663872,
+          "download_bytes": 0,
+          "requests": 0
+        }
+      ]
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EN-TEx AS catalogue, phased blocks and SV calls (Rozowsky et al. 2023, Cell)",
+        "version": "cCREs_default_AS.tsv and genes_default_AS.tsv 2021-12-10; phased_block.tar.gz 2021-12-10; individual1_SV.vcf and individual4_SV.vcf 2022-09-27",
+        "url": "http://entex.encodeproject.org/data/"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (all-element archive)",
+        "version": "AlphaGenome as served during the 2026-09 all-element sweep (unpinned); pinned here by sha256",
+        "path": "data/knowledge/alphagenome/all_elements"
+      },
+      {
+        "accession": "GENCODE human gene annotation",
+        "version": "release 50 (GRCh38.p14)"
+      },
+      {
+        "accession": "ENCODE exclusion list v2 (Amemiya et al. 2019), hg38",
+        "version": "v2",
+        "url": "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz"
+      },
+      {
+        "accession": "geneimprint.com human imprinted genes (symbols only, as a filter)",
+        "version": "as cached 2026-09-28",
+        "url": "https://www.geneimprint.com/site/genes-by-species.Homo+sapiens"
+      },
+      {
+        "accession": "GTEx v8 gene median TPM (the EN-TEx tissues' columns, for the expression match)",
+        "version": "2017-06-05 v8 RNASeQC 1.1.9"
+      },
+      {
+        "accession": "AlphaGenome track metadata (output_metadata), a peer session's saved copy, for the exposure check only",
+        "version": "saved 2026-09-27; not re-fetched (a model-service call)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "http://entex.encodeproject.org/data/cCREs_default_AS.tsv",
+        "sha256": "679d916cf78008b0f6c279a30ef7131d8e6a5645c7bb5e6051a7906c0500ba28",
+        "bytes": 745298142,
+        "rows": 5330335,
+        "partition": null,
+        "streamed": true
+      },
+      {
+        "path": "http://entex.encodeproject.org/data/genes_default_AS.tsv",
+        "sha256": "0e3f290facc7963353075df78d2c0e0ac46a0e1f935b30e91b98fbc796c6daeb",
+        "bytes": 97973665,
+        "rows": 793882,
+        "partition": null,
+        "streamed": true
+      },
+      {
+        "path": "data/cache/entex/depth_only.tsv.gz",
+        "sha256": "ce3a9364348e42d6a2a072e3cb0e22d9482b30e3dd25e68f0fd30c6b561d6082",
+        "bytes": 40024422,
+        "partition": null,
+        "derived_from": "the two AS tables, through depth_only"
+      },
+      {
+        "path": "data/cache/entex/phased_block.tar.gz",
+        "sha256": "270fc041a3c0d4c64c038857b56b4cd292d4af7f9e995249520449962f1b588b",
+        "bytes": 5429,
+        "partition": null,
+        "url": "http://entex.encodeproject.org/data/phased_block.tar.gz"
+      },
+      {
+        "path": "data/cache/entex/individual1_SV.vcf",
+        "sha256": "134c23fabe8639fbbc3661e85a109755d52c4813bcab7fc662fb7c44c4f39eda",
+        "bytes": 56222341,
+        "partition": null,
+        "url": "http://entex.encodeproject.org/data/individual1_SV.vcf"
+      },
+      {
+        "path": "data/cache/entex/individual4_SV.vcf",
+        "sha256": "f9f4d81189f63894432a51301855661ba6fe43087cb38a9c87f9cae0e533f31f",
+        "bytes": 66486016,
+        "partition": null,
+        "url": "http://entex.encodeproject.org/data/individual4_SV.vcf"
+      },
+      {
+        "path": "data/cache/entex/hg38-blacklist.v2.bed.gz",
+        "sha256": "c92e763af17271446194991e71917ac220593a5a3d40a06667be24178ef08cf2",
+        "bytes": 5867,
+        "partition": null,
+        "url": "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz"
+      },
+      {
+        "path": "data/cache/c5/geneimprint_human.html",
+        "sha256": "0a818ddabc54130f0a7d12c1a1184284d08307c91575f016b6d7f1045bbf84b4",
+        "bytes": 100523,
+        "partition": null,
+        "url": "https://www.geneimprint.com/site/genes-by-species.Homo+sapiens"
+      },
+      {
+        "path": "data/cache/c5/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+        "sha256": "ee7201ff2f280b0de5657d4b08e9a240362d9757efed7f7bd5dba35a5f8617b8",
+        "bytes": 6952331,
+        "partition": null,
+        "url": "https://storage.googleapis.com/adult-gtex/bulk-gex/v8/rna-seq/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz"
+      },
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "floors": [
+        0,
+        10,
+        20,
+        47,
+        85,
+        194,
+        783
+      ],
+      "element_assay": "ATAC-seq",
+      "secondary_element_assay": "HM-ChIP-seq_H3K27ac",
+      "gene_assay": "RNA-seq",
+      "locus_gap_bp": 1000000,
+      "locus_definition": "single-linkage clusters of target TSSs at locus_gap_bp, frozen on the parent universe (every ATAC element-target row formed); filtered sets count the clusters they touch",
+      "min_alternatives": 3,
+      "distance_floor_bp": 1000,
+      "distance_log2_tolerance": 1.0,
+      "expression_log2_tolerance": 1.0,
+      "depth_log2_tolerance": 1.0,
+      "go_floor": 47,
+      "go_loci": 194,
+      "go_donors": 3,
+      "go_donor_loci": 30,
+      "donor_individual": {
+        "ENC-001": "ind1",
+        "ENC-002": "ind2",
+        "ENC-003": "ind3",
+        "ENC-004": "ind4"
+      },
+      "tissue_to_gtex": {
+        "adrenal_gland": "Adrenal Gland",
+        "body_of_pancreas": "Pancreas",
+        "breast_epithelium": "Breast - Mammary Tissue",
+        "coronary_artery": "Artery - Coronary",
+        "esophagus_muscularis_mucosa": "Esophagus - Muscularis",
+        "esophagus_squamous_epithelium": "Esophagus - Mucosa",
+        "gastrocnemius_medialis": "Muscle - Skeletal",
+        "gastroesophageal_sphincter": "Esophagus - Gastroesophageal Junction",
+        "heart_left_ventricle": "Heart - Left Ventricle",
+        "lower_leg_skin": "Skin - Sun Exposed (Lower leg)",
+        "omental_fat_pad": "Adipose - Visceral (Omentum)",
+        "ovary": "Ovary",
+        "peyer's_patch": "Small Intestine - Terminal Ileum",
+        "peyers_patch": "Small Intestine - Terminal Ileum",
+        "ascending_aorta": "Artery - Aorta",
+        "prostate_gland": "Prostate",
+        "right_atrium_auricular_region": "Heart - Atrial Appendage",
+        "right_lobe_of_liver": "Liver",
+        "sigmoid_colon": "Colon - Sigmoid",
+        "spleen": "Spleen",
+        "stomach": "Stomach",
+        "subcutaneous_adipose_tissue": "Adipose - Subcutaneous",
+        "suprapubic_skin": "Skin - Not Sun Exposed (Suprapubic)",
+        "testis": "Testis",
+        "thoracic_aorta": "Artery - Aorta",
+        "thyroid_gland": "Thyroid",
+        "tibial_artery": "Artery - Tibial",
+        "tibial_nerve": "Nerve - Tibial",
+        "transverse_colon": "Colon - Transverse",
+        "upper_lobe_of_left_lung": "Lung",
+        "uterus": "Uterus",
+        "vagina": "Vagina"
+      },
+      "element_overlap": "at least one base (EN-TEx V2 regions to archive V3 elements); depth summed over the overlapping regions and over experiments of the same donor and tissue",
+      "phase": "element and target gene span (first to last exon) inside one published phased block"
+    },
+    "exclusions": [
+      "chrX and chrY (X inactivation; one X in the male donors)",
+      "target genes geneimprint lists as Imprinted, Predicted, Tissue Dependent, Provisional Data, Conflicting Data",
+      "immunoglobulin and T-cell receptor genes (GENCODE IG_* and TR_*) and the MHC, chr6:28,510,120-33,480,577",
+      "an element or target exon on the ENCODE exclusion list v2",
+      "an element or target exon under a DEL, DUP or CNV call with a non-reference genotype in that donor (ENC-001 and ENC-004 only: EN-TEx publishes no SV calls for ENC-002 and ENC-003)",
+      "rows whose element and target do not lie in one phased block of that donor",
+      "every signed allelic quantity: hap1_count and hap2_count only as their sum; hap1_allele_ratio and p_betabinom never indexed"
+    ],
+    "partitions": "n/a: a feasibility census; no evaluation partition is scored and no outcome is opened",
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "612eb874e083e292781f4d54028b4d2f04af2789",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/entex_feasibility.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
