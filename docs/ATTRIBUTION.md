@@ -10481,6 +10481,153 @@ breaks it. A rule whose lines scale with the experiment's own window rate would 
 anchor. It is not registered here. The committed rule stays the record, the revised one sits beside it
 dated 2026-09-29, and clause 2 stays not met.
 
+## The pilot's prior-only lead, step 1: the benchmark's held-out file kept a positive only if its element carried H3K27ac, so only Gasperini2019 and Schraivogel2020 may test a prior that reads H3K27ac (item 13 follow-up, 2026-09-29, lane-prior)
+
+**Why this step exists.** Gate 2 of the coherence pilot left one descriptive lead. Its prior-only
+labelling reads no holdable source: the pilot's distance power law, the compiled target and H3K27ac.
+On the seven validation chromosomes it scored above distance to TSS:
+
+- Gasperini2019: +0.193 [+0.134, +0.249];
+- Xie: +0.086 [+0.022, +0.181].
+
+The pilot recorded a caveat itself: the held-out file, which holds Xie, chose its positives on
+chromatin. Before any score is read, this step asks of every CRISPRi study in C4's harness whether its
+tested elements or its positives were chosen using chromatin at the element.
+
+**Files.**
+
+- The record is `STUDIES` and `BENCHMARK_EVIDENCE` in `scripts/prior_only_test.py`. Every quote there
+  is verbatim, with its URL.
+- The local counts come from `uv run python scripts/prior_only_test.py --admissibility`. That command
+  counts the benchmark's own annotation and scores no labelling.
+- No score of any labelling was computed for this step.
+
+### The rule
+
+**What the prior reads at an element:**
+
+- H3K27ac, in its activity term (ENCODE replicated peaks; for K562, ENCFF532MMV of ENCSR000AKP);
+- DNase, but only through the ENCODE cCRE registry, which defines its blocks and so where it
+  abstains.
+
+**The three classes:**
+
+- **Inadmissible.** The endpoint's positives were selected or filtered using H3K27ac at the element.
+  The prior would then read the rule that made a pair positive, and a gain over distance could not be
+  told apart from the selection.
+- **Admissible, with the selection stated.** The tested elements, positives and negatives alike, were
+  chosen on chromatin before the outcome was measured.
+  - A selection that does not depend on the outcome cannot make H3K27ac predict the outcome by
+    construction.
+  - It does restrict the population, so a result holds for chromatin-selected candidates only.
+- **Admissible.** Neither of the above holds.
+
+Only the decrease endpoint is considered. The prior states a link and no direction.
+
+### What the benchmark did (Gschwind et al., Nature 2026)
+
+**Held-out file: its positives were filtered on H3K27ac. Its negatives were not.**
+
+- Supplementary Methods 22.1: "To obtain a clean set of positives likely to represent real enhancer
+  interactions, we applied filters based on effect size and chromatin state at the tested element."
+- Supplementary Methods 22.1.4: "we removed positives with elements in the CTCF element, H3K27me3
+  element, or no H3K27ac categories."
+- Methods: "Positives lacking H3K27ac signal (CTCF, H3K27me3 or no H3K27ac categories) were removed to
+  focus on enhancer-mediated regulation."
+- Negatives were filtered by power only.
+
+**The rule was reproduced here exactly.**
+
+- **The unfiltered file:** the paper's repository also holds the held-out file before this filter
+  (`EPCrisprBenchmark.combined_heldout.annotated.tsv.gz` in EngreitzLab/ENCODE-rE2G-Paper, 4,437 rows,
+  sha256 `2390273590c5…ddd`). It was read in a scratch copy and not added to the project.
+- **One rule turns it into the project's held-out file, 4,378 rows of 4,378, with no exception:** keep
+  every negative, and keep a positive only if its `elementChromatinCategory` is `H3K27ac` or
+  `High H3K27ac` and its `EffectSize` is at most -0.05.
+- **All 59 removed rows are positives.** 25 lie outside the H3K27ac categories, and 34 lie inside them
+  with a smaller effect. None was relabelled a negative.
+- **Morris lost 1 positive and Xie 2.** All three lie on validation chromosomes.
+
+**Training file: no chromatin filter.**
+
+- Methods: "Datasets were filtered to retain element–gene pairs with distances of 1 kb–1 Mb from TSS,
+  excluding elements overlapping GENCODE v.29-annotated promoters or target gene bodies. Negative pairs
+  required ≥80% power to detect a 15% decrease in expression."
+- A copy "with same filters applied as for the filtered held-out dataset" exists in the paper's
+  repository and was used for one comparison figure. The project holds the unfiltered file.
+- The local check agrees. The project's training file keeps positives outside the H3K27ac categories
+  (Gasperini2019: 3 CTCF, 2 no H3K27ac; Nasser2021: 2 CTCF), which the held-out rule would have removed.
+
+**Both files: the elements are DNase peaks.** In the benchmark's re-analysis they are "the top 150,000
+K562 DNase-seq peaks" for Gasperini2019, and the ABC pipeline's K562 DNase candidates for Xie, Klann and
+Morris. This touches positives and negatives alike.
+
+### Each study
+
+| source | file | tested elements chosen by | positives | class | decrease endpoint in the harness |
+| --- | --- | --- | --- | --- | --- |
+| Gasperini2019 | training | DNase peaks intersected with **H3K27ac**, p300, GATA1 and Pol II ChIP (pilot library); DNase peaks ranked by a classifier over 170 ChIP tracks (at scale); 948 DNase peaks chosen for epigenomic diversity | readout only | **admissible, selection stated** | 360 / 5,253 genome-wide; 210 / 2,466 on the development chromosomes |
+| Schraivogel2020 | training | DNase hotspots overlapping GenoSTAN active-enhancer states (histone marks, p300, DNase; H3K27ac among them not confirmed by a quote) | readout only | **admissible, selection stated** | 23 / 1,299, all on chr8 and chr11 (validation) |
+| Nasser2021 | both (one harness source) | K562: every DHS within 450 kb of 30 genes (Fulco 2019), tiling (Fulco 2016), DHS (Klann 2017); GM12878 and Jurkat: accessible regions, ABC-selected elements | held-out part filtered on H3K27ac | inadmissible | unscorable: 111 positives, 0 well-powered negatives |
+| HCT116 | held-out | DNase peaks around five genes | **H3K27ac above the median** in the study's own enhancer call, and the benchmark's filter | inadmissible | unscorable: 34 positives, 0 negatives |
+| K562_DC_TAP | held-out | DNase peaks chosen at random | benchmark's filter | inadmissible | 12 positives, below the floor |
+| WTC11_DC_TAP | held-out | DNase peaks chosen at random | benchmark's filter | inadmissible | 15 decreases, below the floor |
+| Klann | held-out | every K562 DNase peak | benchmark's filter | inadmissible | unscorable: 21 positives, 0 negatives |
+| Morris | held-out | fine-mapped variants in cCREs from DNase, **H3K27ac** and ATAC peaks | benchmark's filter | inadmissible | 35 / 167 genome-wide; 14 on the development chromosomes |
+| Reilly | held-out | mostly tiling; every DHS at GATA1 | benchmark's filter | inadmissible | 8 positives |
+| Xie | held-out | DNase peaks with H3K4me1, half chosen for p300 | benchmark's filter | inadmissible | 42 / 435 genome-wide; 16 on the development chromosomes |
+
+The URLs and quotes for each row are in `STUDIES`. The sources are:
+
+- Gasperini: PMC6690346;
+- Schraivogel: PMC7610614;
+- Fulco 2019: PMC6886585;
+- Nasser: PMC9153265;
+- Guckelberger: bioRxiv 10.1101/2024.07.12.603288;
+- Ray: bioRxiv 10.1101/2025.09.16.676677;
+- Klann 2021: bioRxiv 10.1101/2021.03.08.434470;
+- Morris: PMC10518238;
+- Reilly: PMC8925018;
+- Xie: PMC6904118.
+
+### What follows from it
+
+- **Inadmissible: every study of the held-out file.** Its positives are the benchmark's held-out
+  positives, kept only with H3K27ac at the element. **This covers Xie and Morris, and so half of the
+  pilot's lead.** Nasser2021 is inadmissible as the harness pools it, and unscorable anyway.
+  - Restoring the 59 removed positives from the unfiltered file would not rescue Morris or Xie. All
+    three of their removed positives lie on validation chromosomes, where the prior was already
+    scored.
+  - On the development chromosomes they have 14 and 16 positives, below the harness's floor of 20.
+- **Admissible, with the selection stated: Gasperini2019 and Schraivogel2020.** Their positives
+  are the screens' readout alone. Their tested candidates were chosen on chromatin.
+  - Gasperini2019's pilot library intersected DNase peaks with ENCSR000AKP. That is the same K562
+    H3K27ac experiment whose replicated peaks the prior reads.
+  - A result on Gasperini2019 therefore holds for chromatin-selected candidates only. It says nothing
+    about unselected elements.
+- **Where each admissible endpoint can be scored.**
+  - Schraivogel2020 has every unit on chr8 and chr11. Both are validation chromosomes, where the pilot
+    already scored the prior-only labelling.
+  - Gasperini2019 is the only admissible endpoint with units where the prior was never scored: 210
+    positives, 2,256 negatives and 329 loci on the 17 development chromosomes.
+
+### What this lane read before registering, and what it could not read
+
+**Read, and so already seen when the test is registered:**
+
+- The benchmark's chromatin category of every positive and every pair, per study, on all chromosomes.
+  - This shows H3K27ac's association with the outcome on every study. For Gasperini2019, 355 of 360
+    positives lie in an H3K27ac category, against 4,911 of 5,299 pairs.
+  - Schraivogel2020's 23 positives all lie in an H3K27ac category, against 912 of 1,306 pairs.
+- Unit counts per partition.
+- No score of any labelling.
+
+**Not read:**
+
+- the GenoSTAN mark list (S1 Appendix of Zacher et al. 2017);
+- the ten small sources behind Fulco 2019's 429 borrowed pairs;
+- the script that applied the held-out filter. It was reproduced here, not found.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
