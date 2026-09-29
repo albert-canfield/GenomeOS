@@ -37,6 +37,12 @@ judged under it). v1 is S4's rule, unchanged, and reproduces S4's committed resu
 judges a direction only in the cell the claim states and otherwise does not assess it
 (`NOT_ASSESSED`), keeping every other cell's response beside the verdict as a cross-cell finding.
 `verdict_of` and `judge` take `rule`; a script that reproduces a v1 result passes `RULE_V1`.
+
+The same day the target rule was versioned too (`TARGET_RULE`, registered before any claim was judged
+under it). v3, the default from then on, is v2 with the target claim judged only in the cell it states,
+for supported and refuted verdicts alike, every other cell kept beside the verdict as a cross-cell
+finding; a v3 report adds `in_context`, its target and direction counts in the owner's terms, with
+`IN_CONTEXT_CAUTION` beside them. A script that reproduces a v2 result passes `RULE_V2`.
 """
 
 from __future__ import annotations
@@ -799,6 +805,21 @@ EXPECTED_V3 = (
     "EXPECTED_V2 derived; the pilot's and the prior's own labellings state no activity claim"
 )
 
+# --- v3 in force (the code, 2026-09-29, lane-judge3). The rules a call may name, and the one it uses
+# when it names none. The v2 block above keeps the values it registered, and v2's rule record
+# (`rule_registration`) states them as registered; v3's is `rule_registration_v3`.
+RULES = (RULE_V1, RULE_V2, RULE_V3)
+DEFAULT_RULE = RULE_V3
+#: the owner's terms (IN_CONTEXT_TERMS) a judged verdict is counted under, by its verdict
+IN_CONTEXT_OF = {
+    CORRECT: "supported_in_context",
+    INCORRECT: "refuted_in_context",
+    UNRESOLVED: "unresolved_in_context",
+    MODEL_INADEQUATE: "observation_model_inadequate_in_context",
+}
+#: a judged verdict decided with an observation outside the stated cell (v1 only; never under v3)
+DECIDED_WITH_ANOTHER_CELL = "decided_with_another_cell"
+
 
 # --- claims and observations ------------------------------------------------------------------------
 @dataclass(frozen=True, slots=True)
@@ -1093,6 +1114,31 @@ def _direction_v2(claim: Claim, obs: list[Observation]) -> Verdict:
     return replace(found, refutable=bool(est or ref), cross_cell=cross)
 
 
+def _target_v3(claim: Claim, obs: list[Observation]) -> Verdict:
+    """TARGET_RULE[v3]: only the stated cell decides, whether the verdict supports or refutes; every
+    other cell's response (agrees) and well-powered null (disagrees) is a cross-cell finding."""
+    gene, cell = claim.value, claim.cell
+    est = _on_gene(obs, gene, ESTABLISHES)
+    ref = _on_gene(obs, gene, REFUTES)
+    est_here, ref_here = _in(est, cell), _in(ref, cell)
+    here = est_here + ref_here
+    cross = tuple(
+        (o, AGREES if o in est else DISAGREES) for o in obs if (o in est or o in ref) and o not in here
+    )
+    if est_here and ref_here:
+        found = _decided(claim, UNRESOLVED, here, "response and null in the stated cell")
+    elif est_here:
+        found = _decided(claim, CORRECT, est_here)
+    elif ref_here:
+        found = _decided(claim, INCORRECT, ref_here, "well-powered null in the stated cell")
+    elif est:
+        why = "the gene responded only in other cells" if stated(cell) else "the claim states no cell"
+        found = _not_judged(claim, NOT_ASSESSED, why)
+    else:  # no cell decides it under any rule: v1's reason and detail, unchanged
+        return replace(_target(claim, obs), cross_cell=())
+    return replace(found, refutable=bool(here), cross_cell=cross)
+
+
 def _no_effect(claim: Claim, obs: list[Observation]) -> Verdict:
     pool = [o for o in obs if o.kind in PAIR_KINDS and (not claim.gene or o.gene == claim.gene)]
     pool = _in(pool, claim.cell) if stated(claim.cell) else pool
@@ -1160,7 +1206,7 @@ def _refutable_computed(claim: Claim) -> bool:
 
 def verdict_of(claim: Claim, observations: Iterable[Observation], rule: str = DEFAULT_RULE) -> Verdict:
     """One claim against the observations of its element, under `TABLE`, `AXIS_RULE` and the direction
-    rule `rule` (DIRECTION_RULE; v2 unless a caller pins RULE_V1)."""
+    rule and target rule `rule` (DIRECTION_RULE, TARGET_RULE; v3 unless a caller pins RULE_V1 or RULE_V2)."""
     if rule not in RULES:
         raise ValueError(f"unknown rule {rule!r} ({', '.join(RULES)})")
     v = _verdict(claim, list(observations), rule)
@@ -1174,6 +1220,8 @@ def _verdict(claim: Claim, obs: list[Observation], rule: str) -> Verdict:
         raise ValueError(f"{claim.axis!r} is not a judged axis ({', '.join(AXES)})")
     if claim.value in NOT_A_CLAIM or "|" in claim.value:
         raise ValueError(f"{claim.value!r} is not a claim: unknown and unchosen alternatives are counted")
+    if claim.axis == TARGET and rule == RULE_V3:
+        return _target_v3(claim, obs)
     if claim.axis == TARGET:
         return _target(claim, obs)
     if claim.axis == CONTEXT:
@@ -1426,6 +1474,16 @@ class Report:
     def also_reported(self) -> dict[str, dict[str, Share]]:
         return {q: {a: self.axes[a].accuracy(a) for a in axes} for q, axes in ALSO_REPORTED.items()}
 
+    def in_context(self) -> dict[str, Any]:
+        """v3: the target and direction counts in the owner's terms (IN_CONTEXT_TERMS), per axis, with
+        IN_CONTEXT_CAUTION beside them. Counts of claims, never a rate."""
+        rows = in_context_counts((*self.judged, *self.not_assessed))
+        return {
+            "scope": IN_CONTEXT_SCOPE,
+            "caution": IN_CONTEXT_CAUTION,
+            **{axis: {k: rows[axis][k] for k in IN_CONTEXT_TERMS} for axis in (TARGET, ACTIVITY)},
+        }
+
     def _share(self, quantity: str, axis: str) -> Share:
         t = self.axes[axis]
         return t.coverage(axis) if quantity == "coverage" else t.accuracy(axis)
@@ -1448,6 +1506,15 @@ class Report:
         }
         if self.rule == RULE_V1:  # a v1 report is written exactly as S4 wrote it
             return d
+        if self.rule == RULE_V3:  # the owner's terms first, and the caution beside every N of N
+            for block, quantity, axis in CAUTIONED:
+                d[block][quantity][axis]["caution"] = IN_CONTEXT_CAUTION
+            return {
+                "rule": self.rule,
+                "in_context": self.in_context(),
+                **d,
+                "not_assessed": [v.to_dict() for v in self.not_assessed],
+            }
         return {"rule": self.rule, **d, "not_assessed": [v.to_dict() for v in self.not_assessed]}
 
     @classmethod
@@ -1486,7 +1553,8 @@ def judge(
     `holdout.evidence(without=S)` is judged with `sources=[S]`. An `extra` observation whose source the
     labelling read is refused with the same error. `not_claims` (counts of what the labelling states
     that is not a claim) is read after the claims are consumed, so a generator may fill it. `rule` is the
-    direction rule (DIRECTION_RULE): v2 unless the caller pins RULE_V1 to reproduce a v1 result."""
+    direction rule and the target rule (DIRECTION_RULE, TARGET_RULE): v3 unless the caller pins RULE_V1
+    or RULE_V2 to reproduce a v1 or v2 result."""
     if rule not in RULES:
         raise ValueError(f"unknown rule {rule!r} ({', '.join(RULES)})")
     units = units if units is not None else ho.all_units()
@@ -1669,8 +1737,8 @@ def rule_registration() -> dict[str, Any]:
     """The versioned direction rule (registered 2026-09-29), as a result judged under v2 states it."""
     return {
         "registered": RULE_REGISTERED,
-        "rules": list(RULES),
-        "default": DEFAULT_RULE,
+        "rules": [RULE_V1, RULE_V2],  # as v2 registered them; from v3 on, rule_registration_v3
+        "default": RULE_V2,
         "decision": RULE_DECISION,
         "direction_rule": DIRECTION_RULE,
         "refutable": REFUTABLE_RULE,
@@ -1680,4 +1748,63 @@ def rule_registration() -> dict[str, Any]:
         "rule_record": RULE_RECORD,
         "seen_before_registration": SEEN_BEFORE_V2,
         "expected": EXPECTED_V2,
+    }
+
+
+#: the established-over-decided shares S4's quantities print on the axes v3 judges in the stated cell,
+#: each written with IN_CONTEXT_CAUTION beside it in a v3 report: (block, quantity, axis)
+CAUTIONED = (
+    ("quantities", "target_accuracy", TARGET),
+    ("quantities", "role_accuracy", ACTIVITY),
+    ("also_reported", "context_accuracy", CONTEXT),
+)
+
+
+def in_context_counts(verdicts: Iterable[Verdict]) -> dict[str, Counter]:
+    """The owner's terms over target and direction verdicts, under any rule (IN_CONTEXT_TERMS).
+
+    A judged verdict is counted in context only when every observation that decided it is in the stated
+    cell; one decided with another cell is counted under DECIDED_WITH_ANOTHER_CELL (v1 has them, v2 and
+    v3 none on these claims). A claim is supported somewhere when it is correct, or carries a cross-cell
+    finding that agrees; supported elsewhere only is that less supported in context. Give it every judged
+    and every not-assessed verdict: under v2 and v3 no other verdict carries a cross-cell finding."""
+    rows: dict[str, Counter] = {TARGET: Counter(), ACTIVITY: Counter()}
+    for v in verdicts:
+        c = v.claim
+        if not (c.axis == TARGET or (c.axis == ACTIVITY and c.value in DIRECTION)):
+            continue
+        r = rows[c.axis]
+        if v.verdict in JUDGED:
+            here = stated(c.cell) and all(norm_cell(o.cell) == norm_cell(c.cell) for o in v.deciding)
+            r[IN_CONTEXT_OF[v.verdict] if here else DECIDED_WITH_ANOTHER_CELL] += 1
+        elif v.reason == NOT_ASSESSED:
+            r["unassessed_in_context"] += 1
+        if v.verdict == CORRECT or any(f == AGREES for _, f in v.cross_cell or ()):
+            r["supported_somewhere"] += 1
+    for r in rows.values():
+        r["supported_elsewhere_only"] = r["supported_somewhere"] - r["supported_in_context"]
+    return rows
+
+
+def rule_registration_v3() -> dict[str, Any]:
+    """The versioned target rule (registered 2026-09-29), as a result judged under v3 states it."""
+    return {
+        "registered": RULE_REGISTERED,
+        "rules": [RULE_V1, RULE_V2, RULE_V3],
+        "default": RULE_V3,
+        "decision": RULE_DECISION_V3,
+        "direction_decision": RULE_DECISION,
+        "target_rule": TARGET_RULE,
+        "direction_rule": DIRECTION_RULE,
+        "refutable": REFUTABLE_RULE,
+        "target_v1_condition": TARGET_V1_CONDITION,
+        "not_assessed_reason": NOT_ASSESSED,
+        "cross_cell_findings": [AGREES, DISAGREES],
+        "not_judged_reasons_in_order": {r: list(REASONS if r == RULE_V1 else REASONS_V2) for r in RULES},
+        "in_context_scope": IN_CONTEXT_SCOPE,
+        "in_context_terms": IN_CONTEXT_TERMS,
+        "in_context_caution": IN_CONTEXT_CAUTION,
+        "rule_record": RULE_RECORD_V3,
+        "seen_before_registration": SEEN_BEFORE_V3,
+        "expected": EXPECTED_V3,
     }

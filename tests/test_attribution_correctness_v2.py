@@ -47,14 +47,15 @@ def both(c: co.Claim, seen: list[co.Observation]) -> tuple[co.Verdict, co.Verdic
 
 
 # --- the rule ----------------------------------------------------------------------------------------
-def test_v2_is_the_default_and_an_unknown_rule_is_refused():
-    assert co.DEFAULT_RULE == co.RULE_V2 and co.RULES == (co.RULE_V1, co.RULE_V2)
+def test_v2_stays_selectable_and_an_unknown_rule_is_refused():
+    # v2 was the default from its registration until v3's (tests/test_attribution_correctness_v3.py)
+    assert co.RULES[:2] == (co.RULE_V1, co.RULE_V2) and co.DEFAULT_RULE != co.RULE_V2
     c = claim(co.ACTIVITY, "activates_target", cell="placenta")
-    assert co.verdict_of(c, [obs("crispri_decrease")]).rule == co.RULE_V2
+    assert co.verdict_of(c, [obs("crispri_decrease")], co.RULE_V2).rule == co.RULE_V2
     with pytest.raises(ValueError):
-        co.verdict_of(c, [], rule="v3")
+        co.verdict_of(c, [], rule="v4")
     with pytest.raises(ValueError):
-        co.judge([], ho.Labels("x", lambda u, e: None, frozenset()), units={}, sources=[], rule="v3")
+        co.judge([], ho.Labels("x", lambda u, e: None, frozenset()), units={}, sources=[], rule="v4")
 
 
 def test_agreement_in_another_cell_no_longer_establishes_and_disagreement_no_longer_refutes():
@@ -165,7 +166,7 @@ def test_a_v1_verdict_and_report_are_written_exactly_as_s4_wrote_them():
 
 def test_the_cross_cell_finding_survives_serialisation():
     c = claim(co.ACTIVITY, "represses_target", cell="Whole_Blood")
-    v = co.verdict_of(c, [obs("crispri_decrease", "K562")])
+    v = co.verdict_of(c, [obs("crispri_decrease", "K562")], co.RULE_V2)
     d = json.loads(json.dumps(v.to_dict()))
     assert d["rule"] == co.RULE_V2 and d["reason"] == co.NOT_ASSESSED
     assert d["cross_cell"] == [{**obs("crispri_decrease", "K562").to_dict(), "finding": co.DISAGREES}]
@@ -194,7 +195,7 @@ def test_judge_keeps_the_not_assessed_claims_and_their_findings(tmp_path):
     ]
     labels = ho.Labels("synthetic", lambda u, e: None, frozenset({ho.MODEL}))
     r1 = co.judge(claims, labels, units=units, sources=["crispri:A"], rule=co.RULE_V1)
-    r2 = co.judge(claims, labels, units=units, sources=["crispri:A"])
+    r2 = co.judge(claims, labels, units=units, sources=["crispri:A"], rule=co.RULE_V2)
     assert [v.verdict for v in r1.judged] == [co.INCORRECT, co.CORRECT] and "rule" not in r1.to_dict()
     assert [v.claim.axis for v in r2.judged] == [co.TARGET]
     assert [v.reason for v in r2.not_assessed] == [co.NOT_ASSESSED]

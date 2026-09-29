@@ -4,6 +4,7 @@ source, with target accuracy, role accuracy and coverage reported apart, per axi
 
     uv run python scripts/s4_correctness_run.py              # v1, S4's result as committed
     uv run python scripts/s4_correctness_run.py --rule v2    # the same claims and sources under v2
+    uv run python scripts/s4_correctness_run.py --rule v3    # the same claims and sources under v3
 
 Registered 2026-09-29 before it was run (genomeos/attribution/correctness.py, docs/ATTRIBUTION.md "S4
 registered"). An internal development benchmark only. No model request; the per-element response cache
@@ -16,6 +17,15 @@ under v2 and writes a new result, data/results/attribution_correctness_v2.json, 
 which it reads and never writes: it reruns v1 in the same process, refuses to write if v1 does not
 reproduce the committed file, and reports every count under both rules side by side, with each claim
 whose verdict moved.
+
+The target rule is versioned too (correctness.TARGET_RULE, docs/ATTRIBUTION.md "The target rule,
+versioned"). `--rule v3` judges the same claims with the same sources under v1, v2 and v3, refuses to
+write unless v1 reproduces attribution_correctness.json key by key and v2 reproduces the judged body
+and side-by-side counts of attribution_correctness_v2.json, and writes a new result,
+data/results/attribution_correctness_v3.json, beside both, which it reads and never writes. It reports
+every count under the three rules side by side, the target and direction counts in the owner's terms
+(correctness.IN_CONTEXT_TERMS) with the caution beside them, and each claim whose verdict moved
+between v2 and v3.
 
 `--compiled DIR` and `--chroms` exist so the pipeline can be exercised on a synthetic program; the
 registered run uses neither.
@@ -38,6 +48,7 @@ from genomeos.results import RESULTS_DIR, save_result
 
 NAME = "attribution_correctness"
 NAMES = {co.RULE_V1: NAME, co.RULE_V2: f"{NAME}_v2"}
+NAME_V3 = f"{NAME}_v3"  # the v3 re-judge, beside the v1 and v2 results
 REPRESSION_TRACE = RESULTS_DIR / "repression_trace.json"
 #: what records the run rather than the result, so a rerun of v1 may differ there
 RUN_KEYS = ("result", "date", "seconds", "result_manifest")
@@ -168,6 +179,8 @@ def main(argv: list[str] | None = None) -> None:
     )
     ap.add_argument("--results", type=Path, default=RESULTS_DIR, help=argparse.SUPPRESS)
     a = ap.parse_args(argv)
+    if a.rule == co.RULE_V3:
+        return main_v3(a)
     if a.rule == co.RULE_V2:
         return main_v2(a)
     t0 = time.time()
@@ -380,6 +393,207 @@ def main_v2(a: argparse.Namespace) -> None:
     }
     also = (committed_path, REPRESSION_TRACE) if registered else ()
     p = save_result(NAMES[co.RULE_V2], payload, a.results, manifest=manifest(programs_of(a), params, also))
+    print("saved", p, round(time.time() - t0, 1), "s", flush=True)
+
+
+# --- v3 ----------------------------------------------------------------------------------------------
+#: the keys of a report that record what was judged; the v3 run compares them with the committed v2 file
+JUDGED_KEYS = ("rule", "quantities", "also_reported", "axes", "not_claims", "judged", "not_assessed")
+V3_MAY_BE_CALLED = (
+    "an internal development benchmark reading of the same S4 claims under v3, in the owner's terms "
+    "(correctness.IN_CONTEXT_TERMS): per axis, the claims supported and refuted in the stated context, the "
+    "claims unassessed in context, and the claims supported somewhere, each a count of claims with "
+    "correctness.IN_CONTEXT_CAUTION beside it, beside the v1 and v2 readings"
+)
+V3_MAY_NOT_BE_CALLED = (
+    *co.MAY_NOT_BE_CALLED,
+    "general accuracy: every N of N here, 39 of 39 on target and on direction among them, describes the "
+    "small subset assessable in the stated context",
+    "evidence that the targets unassessed in context are right or wrong in the cell they name",
+    "a correction of S4's committed result or of the v2 re-judge, which stand as the v1 and v2 results",
+)
+
+
+def moved_between(ra: co.Report, rb: co.Report, units: dict) -> list[tuple[co.Verdict, co.Verdict]]:
+    """`moved_claims` between the rules of any two reports: every claim either judged or did not assess,
+    judged again under both rules with the observations `judge` gave it; a claim moves when its verdict,
+    reason, detail or deciding observations differ."""
+    ev = co.Evidence(units, rb.sources)
+    claims = {v.claim for v in (*ra.judged, *ra.not_assessed, *rb.judged, *rb.not_assessed)}
+    out = []
+    for c in sorted(
+        claims, key=lambda c: (c.chrom, c.start, c.end, c.element, c.axis, c.value, c.gene, c.cell)
+    ):
+        obs = ev.at(c.chrom, c.start, c.end)
+        a, b = co.verdict_of(c, obs, ra.rule), co.verdict_of(c, obs, rb.rule)
+        if _pair(a) != _pair(b):
+            out.append((a, b))
+    return out
+
+
+def unexplained_between(
+    ra: co.Report, rb: co.Report, moved: list[tuple[co.Verdict, co.Verdict]]
+) -> list[str]:
+    """`unexplained` between the rules of any two reports: the first tally minus the moved claims' first
+    verdicts plus their second must equal the second tally, count by count. Activity `refutable` is
+    skipped only against v1, which never computed it (REFUTABLE_RULE)."""
+    out = []
+    for axis in co.AXES:
+        ma, mb = co.AxisTally(rule=ra.rule), co.AxisTally(rule=rb.rule)
+        for a, b in moved:
+            if a.claim.axis == axis:
+                ma.add(a, set())
+                mb.add(b, set())
+        ta, tb = _flat(ra.axes[axis].to_dict()), _flat(rb.axes[axis].to_dict())
+        fa, fb = _flat(ma.to_dict()), _flat(mb.to_dict())
+        for k in sorted(set(ta) | set(tb)):
+            if axis == co.ACTIVITY and k == "refutable" and co.RULE_V1 in (ra.rule, rb.rule):
+                continue
+            want = ta.get(k, 0) - fa.get(k, 0) + fb.get(k, 0)
+            if tb.get(k, 0) != want:
+                out.append(
+                    f"{axis}.{k}: {ra.rule} {ta.get(k, 0)}, {rb.rule} {tb.get(k, 0)}, "
+                    f"moved claims account for {want}"
+                )
+    return out
+
+
+def side_by_side_v3(reps: dict[str, co.Report]) -> dict[str, Any]:
+    """Every axis's counts under each rule, as `side_by_side` writes them for two."""
+    out: dict[str, Any] = {}
+    for axis in co.AXES:
+        out[axis] = {}
+        for rule, rep in reps.items():
+            t = rep.axes[axis]
+            out[axis][rule] = {
+                "claims": t.claims,
+                "judged": t.judged(),
+                **{v: t.verdicts[v] for v in co.VERDICTS},
+                "not_judged_by_reason": {r: t.not_judged_by_reason[r] for r in co.REASONS_V2},
+                "refutable": t.refutable if (axis != co.ACTIVITY or rule != co.RULE_V1) else None,
+            }
+    return out
+
+
+def in_context_side_by_side(reps: dict[str, co.Report]) -> dict[str, Any]:
+    """The target and direction counts in the owner's terms under each rule, from the verdicts
+    (correctness.in_context_counts); under v1 a verdict decided with another cell is counted apart."""
+    keys = (*co.IN_CONTEXT_TERMS, co.DECIDED_WITH_ANOTHER_CELL)
+    out: dict[str, Any] = {"scope": co.IN_CONTEXT_SCOPE, "caution": co.IN_CONTEXT_CAUTION}
+    for rule, rep in reps.items():
+        rows = co.in_context_counts((*rep.judged, *rep.not_assessed))
+        out[rule] = {axis: {k: rows[axis][k] for k in keys} for axis in (co.TARGET, co.ACTIVITY)}
+    return out
+
+
+def _moved_block(moved: list[tuple[co.Verdict, co.Verdict]], ra: str, rb: str, loose: list[str]) -> dict:
+    return {
+        "from": ra,
+        "to": rb,
+        "claims": len(moved),
+        "by_axis": dict(Counter(a_.claim.axis for a_, _ in moved)),
+        f"{ra}_verdicts": dict(Counter(a_.verdict for a_, _ in moved)),
+        f"{ra}_decided_in": dict(Counter(_decided_in(a_) for a_, _ in moved)),
+        f"{rb}_verdicts": dict(
+            Counter(f"{b.verdict}:{b.reason}" if b.reason else b.verdict for _, b in moved)
+        ),
+        f"{rb}_cross_cell": dict(
+            Counter("/".join(sorted({f for _, f in b.cross_cell or ()})) or "none" for _, b in moved)
+        ),
+        "unexplained_count_changes": loose,
+    }
+
+
+def main_v3(a: argparse.Namespace) -> None:
+    t0 = time.time()
+    units = ho.all_units()
+    refs = ho.crispri_references()
+    rep3 = judged_under(co.RULE_V3, a, units, refs)
+    body = rep3.to_dict()
+    show(body)
+    t1 = time.time()
+    rep1 = judged_under(co.RULE_V1, a, units, refs)
+    rep2 = judged_under(co.RULE_V2, a, units, refs)
+    registered = a.compiled == ho.COMPILED_DIR and not a.chroms
+    paths = {co.RULE_V1: a.results / f"{NAME}.json", co.RULE_V2: a.results / f"{NAMES[co.RULE_V2]}.json"}
+    reproduces: dict[str, bool | None] = {co.RULE_V1: None, co.RULE_V2: None}
+    if registered:
+        drop = set(RUN_KEYS)
+        committed1 = json.loads(paths[co.RULE_V1].read_text())
+        rerun1 = json.loads(json.dumps(v1_payload(rep1, units, t1), default=str))
+        reproduces[co.RULE_V1] = _text(committed1, drop) == _text(rerun1, drop)
+        committed2 = json.loads(paths[co.RULE_V2].read_text())
+        body2 = json.loads(json.dumps(rep2.to_dict(), default=str))
+        reproduces[co.RULE_V2] = (
+            all(body2[k] == committed2[k] for k in JUDGED_KEYS)
+            and json.loads(json.dumps(side_by_side(rep1, rep2))) == committed2["side_by_side"]
+        )
+        if not all(reproduces.values()):
+            raise SystemExit(
+                f"an earlier rule does not reproduce its committed file {reproduces}: nothing written"
+            )
+    moved = moved_between(rep2, rep3, units)
+    loose = unexplained_between(rep2, rep3, moved)
+    moved13 = moved_between(rep1, rep3, units)
+    loose13 = unexplained_between(rep1, rep3, moved13)
+    print("moved v2->v3", len(moved), "unexplained", loose, "| v1->v3", len(moved13), loose13, flush=True)
+    if a.dry:
+        return
+    params = {**v1_params(a), "judge_rule": co.RULE_V3, "rule_registration": co.rule_registration_v3()}
+    reps = {co.RULE_V1: rep1, co.RULE_V2: rep2, co.RULE_V3: rep3}
+    payload = {
+        "question": "the same claims and sources as S4, judged under v3, where the target claim is judged "
+        "only in its stated cell as the direction is under v2: which counts move from the v2 result, and are "
+        "the moves exactly the targets v1 and v2 established only from another cell",
+        "rule": co.RULE_V3,
+        "status": co.STATUS,
+        "reuse": co.REUSE,
+        "may_be_called": V3_MAY_BE_CALLED,
+        "may_not_be_called": list(V3_MAY_NOT_BE_CALLED),
+        "in_context_caution": co.IN_CONTEXT_CAUTION,
+        "rule_registration": co.rule_registration_v3(),
+        "expected_before_the_run": co.EXPECTED_V3,
+        "seen_before_registration": co.SEEN_BEFORE_V3,
+        "earlier_results": {
+            co.RULE_V1: {
+                "path": str(paths[co.RULE_V1]),
+                "rule": co.RULE_V1,
+                "kept": "unchanged, beside this result; S4's original reading stands as the v1 result",
+                "rerun_reproduces_it": reproduces[co.RULE_V1],
+                "compared": "the whole file, key by key, in order",
+                "compared_without": list(RUN_KEYS),
+            },
+            co.RULE_V2: {
+                "path": str(paths[co.RULE_V2]),
+                "rule": co.RULE_V2,
+                "kept": "unchanged, beside this result; the v2 re-judge stands as the v2 result",
+                "rerun_reproduces_it": reproduces[co.RULE_V2],
+                "compared": [*JUDGED_KEYS, "side_by_side"],
+            },
+        },
+        "side_by_side": side_by_side_v3(reps),
+        "in_context_side_by_side": in_context_side_by_side(reps),
+        "moved": {
+            **_moved_block(moved, co.RULE_V2, co.RULE_V3, loose),
+            "each": [
+                {
+                    "claim": _claim_dict(a_.claim),
+                    co.RULE_V2: {**a_.to_dict(), "decided_in": _decided_in(a_)},
+                    co.RULE_V3: b.to_dict(),
+                }
+                for a_, b in moved
+            ],
+        },
+        "moved_from_v1": _moved_block(moved13, co.RULE_V1, co.RULE_V3, loose13),
+        "registration": co.registration(),
+        "units_per_source": {s: len(units[s]) for s in ho.sources(units)},
+        **body,
+        "alphagenome_requests": 0,
+        "per_element_response_cache_opened": False,
+        "seconds": round(time.time() - t0, 1),
+    }
+    also = tuple(paths.values()) if registered else ()
+    p = save_result(NAME_V3, payload, a.results, manifest=manifest(programs_of(a), params, also))
     print("saved", p, round(time.time() - t0, 1), "s", flush=True)
 
 

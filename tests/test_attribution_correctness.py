@@ -118,7 +118,8 @@ def test_only_cells_that_judge_decide_among_mixed_observations():
 # --- the axis rules -----------------------------------------------------------------------------
 def test_response_elsewhere_and_null_in_the_stated_cell_is_one_context_error_not_two():
     seen = [obs("crispri_decrease", cell="HepG2"), obs("crispri_null_well_powered", cell="K562")]
-    t = co.verdict_of(claim(co.TARGET, "G1", cell="K562"), seen)
+    # S4's target rule as registered, v1 (versioned since 2026-09-29; v3 has its own tests)
+    t = co.verdict_of(claim(co.TARGET, "G1", cell="K562"), seen, rule=co.RULE_V1)
     c = co.verdict_of(claim(co.CONTEXT, "K562", gene="G1", cell="K562"), seen)
     # S4's direction rule as registered, v1 (versioned since 2026-09-29; v2 has its own tests)
     a = co.verdict_of(claim(co.ACTIVITY, "activates_target", gene="G1", cell="K562"), seen, rule=co.RULE_V1)
@@ -154,7 +155,8 @@ def test_a_claim_with_no_stated_cell_can_be_established_and_never_refuted():
     null = [obs("crispri_null_well_powered", cell="K562")]
     assert co.verdict_of(claim(co.TARGET, "G1", cell="unknown"), null).verdict == co.NOT_JUDGED
     resp = [obs("crispri_decrease", cell="K562")]
-    assert co.verdict_of(claim(co.TARGET, "G1", cell="unknown"), resp).verdict == co.CORRECT
+    # S4's target rule as registered, v1 (versioned since 2026-09-29; v3 has its own tests)
+    assert co.verdict_of(claim(co.TARGET, "G1", cell="unknown"), resp, rule=co.RULE_V1).verdict == co.CORRECT
 
 
 def test_direction_and_reasons():
