@@ -10140,6 +10140,189 @@ correction's validation or an S4 judgement.
 
 None of this changes a rule above.
 
+## The result: the pilot beats the unchanged labels but neither distance to TSS nor its own blocks revised alone on the CRISPRi decrease endpoints, and on Gasperini2019 the coupling makes it worse; the stop rule fires and the pilot is a discontinued investigation (item 12 S3, item 13, 2026-09-29, lane-pilot, later)
+
+**How it was run.**
+- **Once**, as registered in the section above.
+- **Where:** a clean worktree at `a89bf5c`; the revision stamp is not dirty.
+- **Files:** the script is `scripts/pilot_biological_gate.py` and the result is
+  `data/results/pilot_biological_gate.json`.
+- **Compute:**
+  - the pilot's own work took **0.0507 CPU-hours** (182.6 CPU seconds, inside the registered budget of 2
+    CPU-hours);
+  - the harness's scoring took 45.6 s and loading 4.8 s, for 243 CPU seconds in all;
+  - peak memory was 1.83 GB;
+  - no model request was made, and the per-element response cache was never opened.
+
+**What it may be called.** An internal development result on withheld sources, never a validation.
+
+**Registered reading: `beats_unchanged_only`.** In the registered wording, "a failure: the revision
+improves on the compiled labels but not on distance to TSS; the pilot stops as a discontinued
+investigation". **The stop rule of item 13 fires.** The coherence pilot is recorded as a discontinued
+investigation, apart from implemented capabilities.
+
+### Negatives, first
+
+1. **No primary endpoint passes.** The pass needed 2 of 4 endpoints above all three baselines.
+2. **The coupling never helps, and on Gasperini2019 it hurts.** The pilot minus the independent-block
+   variant, in average precision on the validation chromosomes:
+
+   | endpoint | pilot minus independent-block |
+   | --- | --- |
+   | Gasperini2019 | **-0.065 [-0.125, -0.012]** |
+   | Morris | +0.028 [-0.014, +0.085] |
+   | Schraivogel2020 | +0.009 [-0.015, +0.109] |
+   | Xie | +0.021 [-0.047, +0.130] |
+
+   The Gasperini2019 interval lies entirely below zero. That alone breaks the rule's second condition,
+   and means the same revision one block at a time predicts that screen better than the joint debugger.
+3. **Against distance to TSS, the pilot is above zero on one endpoint of four.**
+
+   | endpoint | pilot minus distance |
+   | --- | --- |
+   | Xie | +0.105 [+0.015, +0.261] |
+   | Gasperini2019 | +0.087 [-0.002, +0.169] |
+   | Morris | +0.003 [-0.174, +0.173] |
+   | Schraivogel2020 | -0.016 [-0.440, +0.171] |
+
+4. **What beats distance is not the debugger but its priors.** The prior-only labelling reads no
+   holdable source: distance, the compiled target and H3K27ac only.
+   - It is above distance on Gasperini2019 (+0.193 [+0.134, +0.249]) and Xie (+0.086 [+0.022, +0.181]).
+   - On Gasperini2019 it is above the pilot itself, by 0.106 [+0.041, +0.168].
+   - On the other three primary endpoints, the pilot minus prior-only interval includes zero.
+
+   Two things limit this.
+   - The priors include H3K27ac. The CRISPRi benchmark's held-out file, where Morris and Xie live,
+     selected its positives on chromatin at the element (noted 2026-09-27 above). On Xie, therefore,
+     the prior partly reads the rule that made a pair positive.
+   - The prior-only gain is descriptive and not in the rule. It is not a finding of this pilot: it
+     would need its own registration before any use.
+5. **Validated corrections per compute-hour: 78.85, and errors per compute-hour: 78.85.**
+   - Of 261 committed corrections, **4 are validated, 4 are errors, 0 are neutral, and 253 (97%) are
+     untested**.
+   - The 261 count each held-out run. The three lentiMPRA runs share one view, so they repeat the same
+     58.
+   - All 8 tested corrections are from the GTEx run:
+     - 3 validated and 3 errors are target changes;
+     - 1 validated and 1 error are merges.
+
+     The validated target changes read a GTEx "not associated" as evidence, which the harness says is
+     weaker than a well-powered null.
+   - **No committed correction was validated or refuted by any held-out CRISPRi screen.** Morris and Xie
+     had 0 committed corrections, Gasperini2019 22 and Schraivogel2020 2, all untested.
+6. **Abstentions dominate.**
+   - 1,834 changes were not committed, and 416 observation groups were marked inadequate.
+   - Over all ten runs, neighbourhoods were: 46,737 undisputed, 2,117 abstained, 129 resolved,
+     154 excused and 72 kept.
+   - Most disputes are a single reporter tile against the activity H3K27ac implies. A flip within one
+     nat survives, so these abstain.
+7. **Merges without evidence, a defect of the model found after the run.**
+   - 109 of the 261 committed corrections are merges (19 of Gasperini2019's 22).
+   - Of the 20 resolved neighbourhoods returned as examples, 6 were resolved by a merge alone that
+     explains no observation.
+   - The mechanism: the prior prefers any gene within about 100 kb to "no target" (`no_target` = -3.0),
+     so the starting labels are not prior-optimal. A merge is the one repair that can hand a block a
+     gene that no observation names.
+8. **A counting defect in the metric, found after the run.**
+   - `validate` compared a merge's label with its first block's starting label only, so the second
+     block's change was never counted. The registered definition (each block against its own starting
+     label) was not implemented for merges.
+   - The registered run's figures above are kept. A recount with the definition as registered follows in
+     its own commit.
+   - A second defect cannot matter here: the falsifier's "prior-only above the unchanged labels" arm reads
+     a comparison the run did not make, so it is always false. It matters only for a pass, and nothing
+     passed.
+9. **S4 (beside, not in the rule): coverage is tiny.**
+   - **Gasperini2019.** The pilot's target claims on its solved blocks: 36 of 44 judged are established
+     (coverage 44 of 2,558). The unchanged labels' claims on the same blocks: 28 of 28 (coverage 28 of
+     1,652).
+
+     The pilot states each target in every cell it thinks the block is active in, so its claims become
+     refutable in K562, and 8 are refuted there. The unchanged labels state the model's cell.
+
+     Context claims: the pilot 28 of 28 (coverage 28 of 2,149), the unchanged labels 12 of 12 (12 of
+     1,652).
+   - **Schraivogel2020.** Target claims: the pilot 3 of 4 (coverage 4 of 1,051), the unchanged labels 3
+     of 3 (3 of 862).
+   - **Xie.** Target claims: 1 of 1 each.
+   - **Every other held-out source** (Morris, lentiMPRA, VISTA, saturation mutagenesis, GTEx) judges
+     none.
+   - **Role accuracy.** The pilot states no role or direction. The unchanged labels' direction on
+     Gasperini2019's blocks is 27 of 28.
+
+   This is an internal development result at tiny coverage.
+10. **Secondary endpoints.**
+    - The pilot, the independent-block variant and the prior-only labelling agree within 0.002 on every
+      lentiMPRA endpoint.
+    - Against the unchanged labels, the pilot is below on WTC11 activity (-0.027 [-0.045, -0.008]). At
+      the unchanged labels' coverage, it is also below on VISTA (-0.041 [-0.075, -0.008]).
+    - On GTEx, the coupling lowers the score: the pilot minus the independent-block variant is -0.005
+      [-0.008, -0.002], and the pilot minus prior-only is -0.0065 [-0.0097, -0.0030].
+
+### The primary endpoints
+
+Average precision on the validation chromosomes is given with its 95% locus-bootstrap interval; the
+coverage is in brackets.
+
+| held-out source (positives / units, loci) | pilot | independent-block | prior-only | unchanged | distance |
+| --- | --- | --- | --- | --- | --- |
+| Gasperini2019 decrease (150 / 2,787, 201) | 0.554 [0.463, 0.677] (0.97) | 0.619 [0.527, 0.727] (0.97) | 0.660 [0.574, 0.757] (0.97) | 0.390 [0.304, 0.494] (0.57) | 0.467 [0.387, 0.581] (1.0) |
+| Morris decrease (21 / 92, 33) | 0.866 [0.695, 0.974] (0.99) | 0.838 [0.648, 0.962] | 0.828 [0.625, 0.960] | 0.435 [0.255, 0.610] (0.87) | 0.863 [0.718, 0.965] |
+| Schraivogel2020 decrease (23 / 1,299, 12) | 0.375 [0.098, 0.526] (0.85) | 0.366 [0.078, 0.530] | 0.407 [0.078, 0.574] | 0.162 [0.018, 0.316] (0.45) | 0.390 [0.203, 0.672] |
+| Xie decrease (26 / 174, 22) | 0.745 [0.566, 0.924] (0.99) | 0.725 [0.541, 0.873] | 0.726 [0.539, 0.874] | 0.469 [0.312, 0.669] (0.83) | 0.641 [0.412, 0.809] |
+
+**What holds, in the registered wording** (an internal development result on withheld sources):
+
+- The pilot's revised labels predict these screens better than the unchanged compiled labels:
+  - Gasperini2019: +0.165 [+0.074, +0.266];
+  - Morris: +0.431 [+0.269, +0.587];
+  - Xie: +0.277 [+0.087, +0.443];
+  - Schraivogel2020: +0.213 [-0.052, +0.394], an interval across zero.
+- The gain is not coverage alone. At the unchanged labels' own coverage the pilot is still above them:
+  - Gasperini2019: +0.111 [+0.026, +0.209];
+  - Morris: +0.272 [+0.119, +0.412];
+  - Xie: +0.269 [+0.086, +0.434].
+- As item 13's instruction to this lane said, beating the unchanged labels alone is not success.
+
+### What the pilot returned, three neighbourhoods of the run
+
+1. **Schraivogel2020 held out, chr8, EH38E3844209 and EH38E3844210** (compiled target CALB1).
+   - **The evidence:** a Gasperini2019 CRISPRi decrease of LINC00534 over the region.
+   - **The smallest conflicting set:** that decrease and "EH38E3844210 targets CALB1".
+   - **The one family** holds two survivors:
+     - merge both blocks under LINC00534 (energy 1.029);
+     - retarget EH38E3844210 from CALB1 to LINC00534 (1.158).
+
+     The data support the LINC00534 relationship but cannot say whether one block or both supply it.
+   - **The pilot abstains.** Its next measurement is a CRISPRi pair of EH38E3844209 alone against CALB1
+     in K562 (cost 4, 0.997 bits), which separates the two survivors.
+2. **Gasperini2019 held out, chr1, EH38E2780707.**
+   - **The dispute:** one K562 reporter tile is inactive, against the K562 activity its H3K27ac peak
+     implies. The smallest conflicting set is that tile and "EH38E2780707 is active in K562".
+   - **The survivors:**
+     - keep the labels (10.30);
+     - inactive in K562 (11.00);
+     - also active in WTC11 (11.14).
+   - **The pilot abstains.** The next measurement is a K562 reporter tile over the block (cost 1, 0.69
+     bits). This is the commonest dispute of the run.
+3. **Gasperini2019 held out, chr1, EH38E2840923,** "resolved" by merging it under MEF2D (energy -2.94 to
+   -4.29). The merge explains no observation. It is the defect in negative 7, returned as a committed
+   correction.
+
+### What follows
+
+The coherence pilot stops, as item 13's stop rule requires. It is recorded as a discontinued
+investigation, apart from implemented capabilities. Phase C (C6, C5's build, S8's experiment design)
+does not follow from it.
+
+Three things are recorded for whoever reopens it. None of them is a result:
+
+1. The prior-only labelling's lead over distance on Gasperini2019 and Xie is a separate observation. It
+   needs its own registration, with the H3K27ac selection of the held-out file's positives in mind.
+2. The merge defect and the metric's merge count are defects of this pilot's code.
+3. On these sources the debugger commits almost nothing that a withheld screen can test (0 of 24 CRISPRi
+   corrections tested).
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
