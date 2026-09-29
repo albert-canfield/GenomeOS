@@ -11313,6 +11313,156 @@ v2 direction rule, beside the v1 reading.
 - evidence that the 59 directions are right or wrong: they are not assessed in the cell they name;
 - a correction of S4's committed result, which stands as the v1 result.
 
+## The target rule, versioned: v3 judges a target claim only in the cell it states, for supported and refuted verdicts alike, and keeps every other cell beside it (item 12 S4 follow-up, 2026-09-29, lane-judge3)
+
+This section sits beside S4, the repression trace and the versioned direction rule, and edits none of
+them. S4's result (`attribution_correctness.json`, v1) and the v2 re-judge
+(`attribution_correctness_v2.json`) stay as they are. A third rule, **v3**, is v2 with the target claim
+judged only in its stated cell. It becomes the rule a call uses when it names none once the code that
+implements it is committed; v1 and v2 stay selectable.
+
+### Registered before any claim was re-judged under v3 (2026-09-29)
+
+The decision is Albert's, 2026-09-29, quoted in full (`correctness.RULE_DECISION_V3`):
+
+> "Target axis: judge the compiled target claim only in its stated cell. Preserve the 59 other-cell
+> relationships as supporting evidence elsewhere. Report 39 supported in context, 59 unassessed in
+> context, 98 supported somewhere. Version the change and preserve earlier results. Apply the context
+> restriction to both positive and negative verdicts." And: "Avoid presenting either 39/39 figure as
+> general accuracy: it describes the small subset assessable in the stated context."
+
+**The v3 target rule, word for word** (`correctness.TARGET_RULE["v3"]`):
+
+> v3 (from 2026-09-29): a target claim is judged only in the cell the claim states, and only by the named
+> gene's observations there that the table lets establish or refute a target: a significant change of the
+> gene on silencing the element in the stated cell supports the claim in context (`correct`), a
+> well-powered null of the gene in the stated cell refutes it in context (`incorrect`), and both in the
+> stated cell is `unresolved`. What the gene did in any other cell neither establishes the target, nor
+> refutes it, nor is a condition for either: a response in another cell no longer establishes a target,
+> and no longer keeps a null in the stated cell from refuting one. When the claim states no cell, or the
+> stated cell holds no such observation of the gene but another cell holds a response, the claim is not
+> judged, with the reason `not_assessed_in_this_context`. On every target verdict the stated cell decides,
+> and on every one not assessed in this context, each response and each well-powered null of the gene in
+> another cell is kept beside the verdict as a cross-cell finding (`cross_cell`): a response `agrees`
+> (supporting evidence elsewhere) and a null `disagrees` (contrary evidence elsewhere); it never decides
+> the verdict. A claim the stated cell does not decide and whose gene responded in no cell keeps v1's
+> reason and detail, with no cross-cell finding (a null only in another cell stays
+> `well_powered_null_only_in_another_context`), since no cell decides it under any rule. `refutable` keeps
+> v1's definition on target. Direction claims are judged by DIRECTION_RULE[v2] unchanged, and context,
+> reporter values, no_effect_measured, origin and molecular role exactly as under v1 and v2
+
+**The v1 condition on a refutation, and what v3 does with it** (`correctness.TARGET_V1_CONDITION`):
+
+> The v1 target rule reads another cell on the negative side too: a well-powered null in the stated cell
+> refutes the target only when the gene responds in no cell, and when the gene responds in another cell
+> the target is established and the null is read on context instead. S4's registration gives the reason:
+> 'A response in another cell with a null in the stated cell leaves the target established and refutes the
+> context', with, on context, 'so one failure is never counted on both axes' (docs/ATTRIBUTION.md, S4
+> registered, How each axis is judged; S4's test
+> test_response_elsewhere_and_null_in_the_stated_cell_is_one_context_error_not_two). The reason is
+> bookkeeping between the target and context axes. It is not a condition on what a null can show: S4's
+> only such condition is the null's power (PowerAtEffectSize20 >= 0.8, R2), a property of the stated-cell
+> observation itself, which v3 keeps; S4 names no requirement that the perturbation be shown to work, in
+> the stated cell or elsewhere. The bookkeeping reason cannot be met within the stated cell alone: judged
+> only there, the target claim asks what the context claim asks, of the same observation, and telling a
+> target failure from a context failure needs another cell. v3 therefore does not keep it on the target
+> axis, as the owner's decision requires for negative verdicts: a well-powered null in the stated cell
+> refutes the target in context whatever other cells show. Where the gene responded in another cell and
+> has a null and no response in the stated cell, that null now refutes the target in context and, under
+> the unchanged context rule, the context claim; the two stay on their own axes and are never combined
+> (NO_SUM). On S4's claims the case occurs 0 times (target refutable 39, all 39 established in the stated
+> cell; context refuted 0). The context axis's own condition, judged only where the gene responds in some
+> cell, is not changed by v3 and is left to the owner as a finding
+
+The brief for this lane described the v1 condition the other way round: a refutation allowed only when
+the gene responded somewhere, with `not_judged_until_the_target_responds` otherwise. That is the context
+axis's condition, and the direction rule's, not the target's. `_target` never returns that reason.
+
+**The owner's terms** (`correctness.IN_CONTEXT_SCOPE`, `correctness.IN_CONTEXT_TERMS`). They are computed
+on:
+
+> target claims, and direction claims (activates_target, represses_target) on the activity axis: the two
+> claim kinds v3 judges only in the stated cell. Counts of claims, per axis, never combined across axes
+> and never a rate
+
+| Term | What it counts |
+| --- | --- |
+| `supported_in_context` | claims the stated cell supports: verdict correct, decided only by observations in the stated cell |
+| `refuted_in_context` | claims the stated cell refutes: verdict incorrect, decided only by observations in the stated cell |
+| `unresolved_in_context` | claims the stated cell both supports and refutes |
+| `observation_model_inadequate_in_context` | direction claims whose gene moved both ways in the stated cell |
+| `unassessed_in_context` | claims not judged, with the reason not_assessed_in_this_context: the stated cell holds nothing that decides them and another cell holds a response of the gene |
+| `supported_elsewhere_only` | claims not supported in context that carry at least one cross-cell finding that agrees: a response of the gene in another cell (on direction, the claimed way) |
+| `supported_somewhere` | supported in context plus supported elsewhere only: the claims with supporting evidence in some cell |
+
+**Beside every such count, and beside every 39 of 39** (`correctness.IN_CONTEXT_CAUTION`):
+
+> these counts describe only the small subset of claims assessable in the stated context, where a screen
+> tested the named gene in the cell the claim names (mostly K562); an N of N here, such as 39 of 39, is
+> not general accuracy, of the labelling or of any axis
+
+**Which rule judged a result** (`correctness.RULE_RECORD_V3`):
+
+> a result judged under v3 names its rule (`judge_rule: v3` in its manifest parameters, `rule: v3` in its
+> body) and carries `in_context`, the target and direction counts in the owner's terms, with
+> IN_CONTEXT_CAUTION beside them and beside each established-over-decided share S4's quantities print on
+> target, activity and context. From the code that implements v3 on, v3 is the rule a call uses when it
+> names none; v1 and v2 stay selectable and unchanged, and v2's rule record keeps the rules and the
+> default it registered. scripts/s4_correctness_run.py without --rule pins v1 and with --rule v2 pins v2;
+> --rule v3 judges the same claims and sources under all three rules, refuses to write unless v1
+> reproduces attribution_correctness.json key by key and v2 reproduces the judged body and side-by-side
+> counts of attribution_correctness_v2.json, and writes attribution_correctness_v3.json beside both, which
+> it reads and never writes
+
+**What was seen before registering** (`correctness.SEEN_BEFORE_V3`). The 39 / 59 split was already known:
+
+> seen before this registration, and used to write EXPECTED_V3: the v2 re-judge's audit of the other
+> judging paths (docs/ATTRIBUTION.md, 'The re-judge under v2, beside v1', commit 8f3689e) had counted S4's
+> 98 established targets by where they were decided: 39 in the stated cell, the 39 refutable, and 59 only
+> from another cell; the owner's decision quotes the 39 / 59 / 98 it expects. The split and the counts
+> expected below were therefore known before this rule was registered. Also read before registration: the
+> target, context and activity tallies of the committed attribution_correctness.json and
+> attribution_correctness_v2.json, including v2's cross-cell findings on activity (54 agreeing, 5
+> disagreeing), and the committed S4-beside blocks of prior_only_test.json and pilot_biological_gate.json
+> (their target, target-refutable, context and activity counts, and the judged verdicts they list), from
+> which the moves expected there are derived. No claim had been judged under v3. The registration makes
+> the re-judge traceable; it does not make the interpretation valid
+
+**The counts expected under v3** (`correctness.EXPECTED_V3`):
+
+> on the committed S4 claims and sources, target: 39 supported in context, 0 refuted in context, 0
+> unresolved, 0 observation-model-inadequate; 59 unassessed in context (reason
+> not_assessed_in_this_context, detail 'the gene responded only in other cells'), each keeping its
+> other-cell responses as cross-cell findings that agree; 98 supported somewhere (39 in context, 59
+> elsewhere only). Every other target count keeps its v1 and v2 value: 1,400 outside the claim's scope
+> (1,377 element screened but gene not tested, 23 well-powered null only in another context), 0 until the
+> target responds, 3,194 only suggest, 18,747 only cannot judge, 416,938 no observation; refutable 39.
+> Moving with the 59: decided_by_kind from 97 decreases and 1 increase to 39 decreases, and verdicts
+> decided with a held-out-file pair from 14 to 1. How many of the 39 or the 59 also carry a disagreeing
+> cross-cell finding (a well-powered null in another cell) was not counted before registration. Activity
+> (direction) is exactly as under v2: 39 supported in context, 0 refuted in context, 59 unassessed in
+> context (54 with an agreeing and 5 with a disagreeing cross-cell finding), 93 supported somewhere (39 in
+> context, 54 elsewhere only). Context stays 39 established, 0 refuted; origin and molecular role 0
+> judged. Between v2 and v3 exactly the 59 target verdicts move; between v1 and v3, those 59 and v2's 59
+> directions. The 39 of 39 on target and on direction describe the small subset assessable in the stated
+> context and are not general accuracy. Beside S4, derived from the committed counts and not rerun
+> (neither result is regenerated, and neither gate's registered verdict reads an S4 block): in the
+> prior-only test on Gasperini2019, unchanged_on_the_same_blocks target from 43 of 43 to 24 supported and
+> 0 refuted in context, 19 unassessed in context, 43 supported somewhere, and the prior's own labelling
+> from 53 of 59 to 40 supported and 6 refuted in context, 13 unassessed in context, 53 supported
+> somewhere; in the pilot gate on Gasperini2019, unchanged_on_same_blocks from 28 of 28 to 12 supported
+> and 0 refuted in context, 16 unassessed in context, 28 supported somewhere, and the pilot's own
+> labelling from 36 of 44 to 28 supported and 8 refuted in context, 8 unassessed in context, 36 supported
+> somewhere; on Schraivogel2020, unchanged_on_same_blocks from 3 of 3 to none judged, 3 unassessed in
+> context, 3 supported somewhere, and the pilot's 3 of 4 unchanged; on Xie, 1 of 1 unchanged for both; no
+> target is judged on any other source. Their activity counts move as EXPECTED_V2 derived; the pilot's and
+> the prior's own labellings state no activity claim
+
+The re-judge is run once, with the same claims and sources as S4, and written as a new result,
+`data/results/attribution_correctness_v3.json`. The v1 and v2 files stay byte-identical beside it. If
+any count other than the 59 target verdicts moves between v2 and v3, the lane stops and reports it
+before explaining it.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
