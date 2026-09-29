@@ -648,3 +648,51 @@ def test_deciding_needs_both_poles():
     got = _scored(one_pole)
     assert got["rule_may_read_here"] and not got["decides_clause_2"]
     assert got["model_failed_at_ratio_1"] == 0.9 and got["wording_wrong_at_ratio_0"] == 0.3
+
+
+def _reading_rule():
+    p = dp.RESULTS_DIR / f"{dp.RESULT_READING_RULE}.json"
+    if not p.exists():
+        pytest.skip("the reading-rule result is not in this checkout")
+    return __import__("json").loads(p.read_text())
+
+
+def test_the_reading_rule_result_is_gated_on_cab70d9_and_run_from_a_clean_commit():
+    got = _reading_rule()
+    assert got["gate_against_cab70d9"]["passed"] is True
+    code = got["result_manifest"]["code"]
+    assert code["dirty"] is False and code["argv"] == ["scripts/clause2_design_power.py", "--reading-rule"]
+
+
+def test_the_committed_rule_misreads_both_near_null_and_half_rates_at_every_cap():
+    rows = _reading_rule()["summary"]["reading_probabilities_at_every_cap"]["rows"]
+    assert len(rows) == 24
+    assert min(r["committed_c17eedc"]["0.75"][0] for r in rows) > 0.5  # model_failed at three quarters
+    assert min(r["committed_c17eedc"]["0.5"][1] for r in rows) > 0.5  # "no element" at half the rate
+
+
+def test_the_revised_rule_reads_only_where_both_bounds_hold_and_decides_nowhere():
+    got = _reading_rule()
+    for s in got["by_design_and_size"]:
+        ok = s["model_failed_error"]["meets_the_bound"] and s["wording_wrong_error"]["meets_the_bound"]
+        assert s["rule_may_read_here"] == ok
+        if not ok:
+            assert all(v["cannot_decide"] == 1.0 for v in s["revised_rule"].values())
+    summary = got["summary"]
+    assert summary["cells_that_decide_clause_2"] == []
+    assert summary["shared_control_cells_where_the_rule_may_read"] == 0
+    assert summary["revised_model_failed_at_ratio_1_best"]["probability"] < 0.8
+    assert summary["revised_wording_wrong_at_ratio_0_best"]["probability"] < 0.8
+
+
+def test_no_threshold_on_the_estimator_or_the_block_rate_reaches_either_pole():
+    s = _reading_rule()["summary"]
+    for which in ("best_rule_on_the_estimator", "best_rule_on_the_block_rate_alone"):
+        assert s[which]["model_failed_margin_075"]["probability"] < 0.8
+        assert s[which]["wording_wrong_margin_01"]["probability"] < 0.8
+
+
+def test_the_expectations_are_scored_and_the_first_one_failed():
+    scored = _reading_rule()["expected_before_running_scored"]
+    assert len(scored) == 5
+    assert [e["held"] for e in scored] == [False, True, True, True, True]

@@ -10346,6 +10346,118 @@ their recorded sha256, ran the recorded argv (exit 0) and compared field by fiel
 **0 differences**. The bytes differ only in the date, the timing and the code stamp, which the rebuild
 ignores. The finding of cab70d9 is unchanged; what changed is that its record can now be rerun.
 
+## The result: the committed reading rule calls a three-quarters rate the model's failure in 50% to 82% of experiments and half the rate "no element" in 57% to 98%; the revised rule holds its error rates in 75 of 210 cells, decides in none, and no rule on this estimator reaches 0.8 at either pole (item 12 S2 follow-up, 2026-09-29, lane-rule, later)
+
+The rule registered in `1cb7559` was scored once, through `python scripts/clause2_design_power.py
+--reading-rule` in a clean worktree at `1ef8990` (2,092 s, **0 AlphaGenome requests**), and written to
+`data/results/clause2_reading_rule.json` with a complete manifest (dirty false). The gate passed first:
+recomputed through the same redraw, the reference calibration, the eligible populations (531, 347, 284,
+187) and the registered lines all equal cab70d9's. The model is cab70d9's: 24 designs, every size up to
+each cap, six true ratios, 2,000 experiments per cell, seed 2026092913. Both rules read the same
+simulated experiments. Every probability below holds under cab70d9's calibrated assumptions and is
+never a guarantee.
+
+### Negatives first
+
+- **No design decides clause 2.** In 0 of 210 (design, size) cells does the revised rule reach 0.8 at
+  both poles. At its best it reads model_failed at a true ratio of 1 with probability **0.376** (1
+  element, 3 own windows, all 531 blocks). It reads wording_wrong at a true ratio of 0 with
+  **0.328** (6 elements, 10 own windows, all 187 blocks).
+- **A threshold on the committed estimator does not reach 0.8 either.** The Neyman-Pearson threshold,
+  read from the simulated experiments themselves and so slightly optimistic, reaches at most
+  **0.556** for model_failed against a three-quarters rate and **0.269** for wording_wrong against a
+  tenth. A rule that knew the windows' rate exactly and thresholded the blocks' own rate reaches at most
+  0.528 and 0.478. Within the eligible blocks, at the registered error rates, no rule of either kind
+  decides the clause.
+- **The first registered expectation failed.** It predicted both bounds in every own-window cell from
+  50 blocks up; they hold in 63 of 81. With 10 windows per block the committed interval lies wholly
+  below the one-tenth line in 6% to 13% of experiments at a true tenth, against a nominal 2.5%. When
+  positives are rare, the percentile interval over blocks is anti-conservative in its lower tail. With
+  shared controls no cell meets both bounds: model_failed errors reach 0.286 and wording_wrong errors
+  0.166.
+- **The bounds do not survive the anchor's own uncertainty.** The lines are in points, and points move
+  with the anchor. With the lines held at the reference and the truth drawn at the clustered interval's
+  ends:
+  - at 7.88% the rule reads model_failed at a three-quarters rate in 12% to 21% of experiments;
+  - at 19.80% it reads wording_wrong at a tenth in 80% to 99.6%, and at a quarter in 21% to 65%;
+  - with no false positives in truth, wording_wrong at a tenth rises to 23% to 48%.
+
+  Of the two checked designs that meet both bounds under the reference, 1 element with 3 windows keeps
+  them in 7 of 12 feasible variants and 6 elements with 3 windows in 4. Only chromosome ICC 0 keeps
+  both.
+
+### The committed rule (c17eedc), simulated at every design's cap
+
+| True ratio | model_failed, range over 24 designs | wording_wrong | cannot_decide |
+| --- | --- | --- | --- |
+| 1.0 | 0.907 - 0.977 | 0.024 - 0.093 | 0 |
+| 0.75 | **0.503 - 0.822** | 0.178 - 0.496 | 0 |
+| 0.5 | 0.021 - 0.431 | **0.569 - 0.980** | 0 |
+| 0.25 | 0 - 0.113 | 0.887 - 1.000 | 0 |
+| 0.1 | 0 - 0.030 | 0.970 - 1.000 | 0 |
+| 0 | 0 - 0.006 | 0.994 - 1.000 | 0 |
+
+Above the floor it never says cannot_decide. At a three-quarters rate it reads the model's failure in at
+least half the experiments; this seed reproduces cab70d9's 53% to 82% as 50% to 82%. At half the
+windows' rate it reads that the blocks hold **no** regulating element in 57% to 98%. At a true ratio of 1
+it reads "no element" in up to 9.3%.
+
+### The revised rule (1cb7559), on the same experiments
+
+model_failed / wording_wrong / cannot_decide, at two designs where the rule may read, every eligible block
+tested; the committed rule's model_failed / wording_wrong at the first design beside them:
+
+| True ratio | 1 element, 3 own windows, 531 blocks | 6 elements, 10 own windows, 187 blocks | committed, 1 element, 3 windows |
+| --- | --- | --- | --- |
+| 1.0 | 0.376 / 0 / 0.624 | 0.296 / 0 / 0.704 | 0.975 / 0.025 |
+| 0.75 | 0.0245 / 0 / 0.9755 | 0.026 / 0 / 0.974 | 0.583 / 0.417 |
+| 0.5 | 0 / 0 / 1 | 0 / 0 / 1 | 0.042 / 0.958 |
+| 0.25 | 0 / 0.004 / 0.996 | 0 / 0.001 / 0.999 | 0 / 1 |
+| 0.1 | 0 / 0.0555 / 0.9445 | 0 / 0.052 / 0.948 | 0 / 1 |
+| 0 | 0 / 0.276 / 0.724 | 0 / 0.3275 / 0.6725 | 0 / 1 |
+
+**Where it may read:** 75 of 210 cells, every one with own windows (75 of 105), none with shared
+controls. Of the 30 own-window cells that fail, 26 have 10 windows per block and fail the wording_wrong
+bound. The other four have 20 or 30 blocks: 1 element with 1 window at 20 and 30 (model_failed at a
+three-quarters rate, 13% and 7%), and 2 and 6 elements with 3 windows at 20 (wording_wrong at a tenth,
+6.5% and 6.3%). Those cells read cannot_decide whatever their interval. In the cells where the rule may
+read, the largest error is 1.7% to 6.0% for wording_wrong (always at a tenth) and 1.4% to 5.9% for
+model_failed (always at three quarters). That is inside the tolerance of 0.05 plus 2 Monte Carlo
+standard errors, not at the nominal 2.5%.
+
+### What the arm can honestly report instead
+
+No rule decides at the feasible sizes. What the arm can honestly report, in this order:
+
+1. its coverage, as c17eedc registered;
+2. its estimate and interval in points: the difference between the blocks' and the windows' positive
+   shares, which needs no calibration;
+3. only under cab70d9's assumptions, and labelled so: the registered ratios the interval excludes, and
+   the revised reading where the interval clears a line, with the probabilities above beside it.
+
+It does not report model_failed from an interval that only reaches 0, and it does not report "no
+element" from an interval that is only below 0.
+
+Descriptively, and not as registered readings, weaker claims the estimator could carry at 0.8 are:
+
+- "no less than half the windows' rate": 0.986 at best (2 elements, 10 windows, 347 blocks);
+- "less than half": 0.999.
+
+"Less than a quarter" stays below 0.8 at 0.768. These are Neyman-Pearson bounds: optimistic, and as
+dependent on the calibration as the lines are. Applied to the committed measured arm (3 blocks), both
+rules read cannot_decide.
+
+### What this settles and what it does not
+
+Under the calibrated assumptions, the revised rule removes both of the committed rule's misreadings. A
+near-null difference is no longer read as the model's failure, and a half rate is no longer read as
+"no element". The price is that the rule rarely decides. It also shows that within the eligible blocks
+no rule on this estimator decides clause 2 at the registered error rates. The rule makes the arm decide
+nothing, and its error control holds only if the anchor is right: the anchor's own clustered interval
+breaks it. A rule whose lines scale with the experiment's own window rate would not move with the
+anchor. It is not registered here. The committed rule stays the record, the revised one sits beside it
+dated 2026-09-29, and clause 2 stays not met.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
