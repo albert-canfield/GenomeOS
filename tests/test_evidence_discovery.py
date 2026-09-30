@@ -277,6 +277,16 @@ def test_fixed_wording_is_verbatim(view):
     )
 
 
+# CI checks out a single commit (actions/checkout's default depth), so a historical sha cannot resolve
+# there. The assertion runs wherever the history is present; only a shallow checkout skips it (added
+# 2026-09-30 after CI run 36668568971 failed on this test and nothing else).
+@pytest.mark.skipif(
+    subprocess.run(
+        ["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT, capture_output=True, text=True
+    ).stdout.strip()
+    == "true",
+    reason="a shallow checkout (CI) holds no history in which to resolve b7e4bf0",
+)
 def test_the_rule_version_names_a_commit_in_this_repository():
     assert subprocess.run(["git", "cat-file", "-e", "b7e4bf0^{commit}"], cwd=ROOT).returncode == 0
 
