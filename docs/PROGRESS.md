@@ -1264,3 +1264,29 @@ released) for any registered comparison; a measured arm per block for clause 2. 
 work is the 2026-09-30 rebuild, which clears from 04:22 BST.
 
 docs/ROADMAP.md items 12 and 13; docs/ATTRIBUTION.md; docs/DATA.md.
+
+## 2026-09-30 night — the rebuild is done, three engineering items closed or bounded, and CI is green again
+
+**Rebuilt and verified (the 2026-09-30 rebuild, `1a11a7b` … `aa7f92c`).** All seven items of the checklist
+(`b317fa2`) ran with no guard refusal and no override, each figure checked against its result file: the
+held results stand under their own names and equal their earlier copies except where the checklist said
+they would differ; the chr21 program's confidence lines were reconciled by definition before comparison;
+the overridden compiler lines are gone with one header line changing per program; the tenth therapeutic
+case is in the headline result, 10 / 10 / 10, the nine earlier rows unchanged apart from timings. The
+departures from the checklist are recorded beside it (`6d2e531`).
+
+**Engineering, bounded.** The clamp item was already fixed on 2026-09-28; a test now compares the runtime
+with the independently calculated exponential decay (`fbb5840`). Evidence reads report parse failures and
+say `complete: false`, a clean read says `complete: true`, and the Evidence tab warns (`91b085c`,
+`854c2a4`). The promotion gate reports the event of the run it relies on, refuses a direct push, and calls
+a pull-request run a qualifying CI event only (`3a893fc`, `03497e7`); it stays open, because its older
+wording is held by the guard until 2026-10-01 22:39. The discovery view's history test failed in CI's
+shallow checkout and now skips only there (`c55bb9f`); CI passes on `c55bb9f` (a manually triggered
+pre-check, not promotion eligibility).
+
+**Still running:** the first increment of the cellular control and response map (the β-globin locus in
+K562, chosen for traceability; architecture review in `304a1c8`), not yet committed.
+
+**The three measures, apart.** Software delivered: the rebuild, the evidence completeness report, the
+honest gate, the CI fix. Biology independently validated: unchanged. Release readiness: main unchanged
+at `7ff4e37`; the next snapshot needs the owner's decision.
