@@ -1,6 +1,6 @@
 {
   "result": "measured_layer_genome",
-  "date": "2026-09-28",
+  "date": "2026-09-30",
   "rule": {
     "name": "reciprocal overlap",
     "value": 0.5,
@@ -291,13 +291,13 @@
         ],
         "agrees": {
           "crispri": 7,
-          "lentimpra": 392,
+          "lentimpra": 369,
           "vista": 9,
           "satmut": 2
         },
         "disagrees": {
           "crispri": 1,
-          "lentimpra": 1630,
+          "lentimpra": 1631,
           "vista": 3,
           "satmut": 0
         },
@@ -317,6 +317,10 @@
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 19,
         "crispri_pairs_measured_as_not_regulated": 349,
+        "lentimpra_tiles_conflict": 22,
+        "lentimpra_elements_over_more_than_one_tile": 137,
+        "lentimpra_cells_conflicting": 37,
+        "lentimpra_cells_where_tiles_disagree": 43,
         "satmut": {
           "elements_measured_base_by_base": 2,
           "elements_with_a_functional_base": 2,
@@ -326,6 +330,8 @@
           "bases_measured": 699,
           "bases_functional": 393,
           "bases_strong": 325,
+          "bases_measured_by_more_than_one_experiment": 349,
+          "bases_where_experiments_disagree": 84,
           "experiments_matched": [
             "IRF6",
             "SORT1.2"
@@ -486,9 +492,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 1630,
-          "controls": 405,
-          "targets_matched": 1580,
+          "targets": 1631,
+          "controls": 382,
+          "targets_matched": 1581,
           "dropped_for_want_of_a_control": 50,
           "strata": {
             "length": [
@@ -508,18 +514,18 @@
             ]
           },
           "raw": {
-            "a": 0.5515,
-            "b": 0.7086,
-            "difference": -0.1571,
+            "a": 0.5518,
+            "b": 0.7016,
+            "difference": -0.1498,
             "p_one_sided": 1.0,
-            "upper_95": -0.1148
+            "upper_95": -0.1062
           },
           "matched": {
-            "a": 0.5532,
-            "b": 0.6994,
-            "difference": -0.1462,
+            "a": 0.5534,
+            "b": 0.6871,
+            "difference": -0.1337,
             "p_one_sided": 1.0,
-            "upper_95": -0.1182
+            "upper_95": -0.1055
           },
           "imbalance": {
             "length": {
@@ -528,14 +534,14 @@
               "ratio": 0.971
             },
             "gc": {
-              "target_median": 0.5058,
-              "control_median": 0.533,
+              "target_median": 0.5057,
+              "control_median": 0.5328,
               "ratio": 0.949
             },
             "nearest_coding_tss": {
-              "target_median": 24651.5,
-              "control_median": 23893.0,
-              "ratio": 1.032
+              "target_median": 24653.0,
+              "control_median": 24080.0,
+              "ratio": 1.024
             }
           }
         },
@@ -634,7 +640,7 @@
         ],
         "agrees": {
           "crispri": 8,
-          "lentimpra": 215,
+          "lentimpra": 203,
           "vista": 5,
           "satmut": 1
         },
@@ -660,6 +666,10 @@
         "agreement_denominator_predicted_gene_tested": 9,
         "crispri_pairs_regulated": 12,
         "crispri_pairs_measured_as_not_regulated": 158,
+        "lentimpra_tiles_conflict": 12,
+        "lentimpra_elements_over_more_than_one_tile": 68,
+        "lentimpra_cells_conflicting": 16,
+        "lentimpra_cells_where_tiles_disagree": 16,
         "satmut": {
           "elements_measured_base_by_base": 1,
           "elements_with_a_functional_base": 1,
@@ -669,6 +679,8 @@
           "bases_measured": 350,
           "bases_functional": 48,
           "bases_strong": 27,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [
             "UC88"
           ],
@@ -801,7 +813,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 1125,
-          "controls": 223,
+          "controls": 211,
           "targets_matched": 1029,
           "dropped_for_want_of_a_control": 96,
           "strata": {
@@ -823,17 +835,17 @@
           },
           "raw": {
             "a": 0.4818,
-            "b": 0.5426,
-            "difference": -0.0608,
-            "p_one_sided": 0.952019,
-            "upper_95": -0.0007
+            "b": 0.5403,
+            "difference": -0.0585,
+            "p_one_sided": 0.941112,
+            "upper_95": 0.003
           },
           "matched": {
             "a": 0.4917,
-            "b": 0.5736,
-            "difference": -0.0818,
-            "p_one_sided": 0.999905,
-            "upper_95": -0.0458
+            "b": 0.5671,
+            "difference": -0.0754,
+            "p_one_sided": 0.999705,
+            "upper_95": -0.0393
           },
           "imbalance": {
             "length": {
@@ -843,13 +855,13 @@
             },
             "gc": {
               "target_median": 0.4797,
-              "control_median": 0.4871,
-              "ratio": 0.985
+              "control_median": 0.4848,
+              "ratio": 0.989
             },
             "nearest_coding_tss": {
               "target_median": 36440.0,
-              "control_median": 47457.0,
-              "ratio": 0.768
+              "control_median": 46329.0,
+              "ratio": 0.787
             }
           }
         },
@@ -945,7 +957,7 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 205,
+          "lentimpra": 201,
           "vista": 1,
           "satmut": 0
         },
@@ -971,6 +983,10 @@
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 10,
         "crispri_pairs_measured_as_not_regulated": 260,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 55,
+        "lentimpra_cells_conflicting": 12,
+        "lentimpra_cells_where_tiles_disagree": 12,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -980,6 +996,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -1081,7 +1099,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 853,
-          "controls": 209,
+          "controls": 205,
           "targets_matched": 800,
           "dropped_for_want_of_a_control": 53,
           "strata": {
@@ -1103,17 +1121,17 @@
           },
           "raw": {
             "a": 0.4619,
-            "b": 0.6411,
-            "difference": -0.1792,
+            "b": 0.639,
+            "difference": -0.1771,
             "p_one_sided": 0.999999,
-            "upper_95": -0.1179
+            "upper_95": -0.1152
           },
           "matched": {
             "a": 0.4637,
-            "b": 0.6325,
-            "difference": -0.1688,
+            "b": 0.6303,
+            "difference": -0.1666,
             "p_one_sided": 1.0,
-            "upper_95": -0.1284
+            "upper_95": -0.1262
           },
           "imbalance": {
             "length": {
@@ -1123,13 +1141,13 @@
             },
             "gc": {
               "target_median": 0.4776,
-              "control_median": 0.4971,
-              "ratio": 0.961
+              "control_median": 0.4963,
+              "ratio": 0.962
             },
             "nearest_coding_tss": {
               "target_median": 36958.0,
-              "control_median": 37854.0,
-              "ratio": 0.976
+              "control_median": 38378.0,
+              "ratio": 0.963
             }
           }
         },
@@ -1224,7 +1242,7 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 120,
+          "lentimpra": 112,
           "vista": 2,
           "satmut": 0
         },
@@ -1250,6 +1268,10 @@
         "agreement_denominator_predicted_gene_tested": 5,
         "crispri_pairs_regulated": 7,
         "crispri_pairs_measured_as_not_regulated": 18,
+        "lentimpra_tiles_conflict": 8,
+        "lentimpra_elements_over_more_than_one_tile": 47,
+        "lentimpra_cells_conflicting": 10,
+        "lentimpra_cells_where_tiles_disagree": 12,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -1259,6 +1281,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -1360,7 +1384,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 645,
-          "controls": 122,
+          "controls": 114,
           "targets_matched": 568,
           "dropped_for_want_of_a_control": 77,
           "strata": {
@@ -1382,17 +1406,17 @@
           },
           "raw": {
             "a": 0.4713,
-            "b": 0.6803,
-            "difference": -0.209,
-            "p_one_sided": 0.999996,
-            "upper_95": -0.1324
+            "b": 0.693,
+            "difference": -0.2217,
+            "p_one_sided": 0.999998,
+            "upper_95": -0.1436
           },
           "matched": {
             "a": 0.4718,
-            "b": 0.6824,
-            "difference": -0.2106,
+            "b": 0.6969,
+            "difference": -0.225,
             "p_one_sided": 1.0,
-            "upper_95": -0.1635
+            "upper_95": -0.1782
           },
           "imbalance": {
             "length": {
@@ -1402,13 +1426,13 @@
             },
             "gc": {
               "target_median": 0.4539,
-              "control_median": 0.4955,
-              "ratio": 0.916
+              "control_median": 0.4931,
+              "ratio": 0.92
             },
             "nearest_coding_tss": {
               "target_median": 44045.0,
-              "control_median": 49875.0,
-              "ratio": 0.883
+              "control_median": 45105.5,
+              "ratio": 0.976
             }
           }
         },
@@ -1503,7 +1527,7 @@
         ],
         "agrees": {
           "crispri": 3,
-          "lentimpra": 142,
+          "lentimpra": 139,
           "vista": 4,
           "satmut": 0
         },
@@ -1529,6 +1553,10 @@
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 7,
         "crispri_pairs_measured_as_not_regulated": 52,
+        "lentimpra_tiles_conflict": 3,
+        "lentimpra_elements_over_more_than_one_tile": 37,
+        "lentimpra_cells_conflicting": 10,
+        "lentimpra_cells_where_tiles_disagree": 10,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -1538,6 +1566,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -1639,7 +1669,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 678,
-          "controls": 147,
+          "controls": 145,
           "targets_matched": 632,
           "dropped_for_want_of_a_control": 46,
           "strata": {
@@ -1661,17 +1691,17 @@
           },
           "raw": {
             "a": 0.4808,
-            "b": 0.6122,
-            "difference": -0.1314,
-            "p_one_sided": 0.998417,
-            "upper_95": -0.0582
+            "b": 0.6207,
+            "difference": -0.1399,
+            "p_one_sided": 0.999137,
+            "upper_95": -0.0664
           },
           "matched": {
             "a": 0.4763,
-            "b": 0.601,
-            "difference": -0.1247,
-            "p_one_sided": 0.999996,
-            "upper_95": -0.0789
+            "b": 0.607,
+            "difference": -0.1308,
+            "p_one_sided": 0.999999,
+            "upper_95": -0.0851
           },
           "imbalance": {
             "length": {
@@ -1686,8 +1716,8 @@
             },
             "nearest_coding_tss": {
               "target_median": 35871.0,
-              "control_median": 35890.0,
-              "ratio": 0.999
+              "control_median": 35593.0,
+              "ratio": 1.008
             }
           }
         },
@@ -1786,13 +1816,13 @@
         ],
         "agrees": {
           "crispri": 7,
-          "lentimpra": 165,
+          "lentimpra": 159,
           "vista": 6,
           "satmut": 1
         },
         "disagrees": {
           "crispri": 3,
-          "lentimpra": 897,
+          "lentimpra": 898,
           "vista": 0,
           "satmut": 0
         },
@@ -1812,6 +1842,10 @@
         "agreement_denominator_predicted_gene_tested": 10,
         "crispri_pairs_regulated": 11,
         "crispri_pairs_measured_as_not_regulated": 166,
+        "lentimpra_tiles_conflict": 5,
+        "lentimpra_elements_over_more_than_one_tile": 44,
+        "lentimpra_cells_conflicting": 8,
+        "lentimpra_cells_where_tiles_disagree": 9,
         "satmut": {
           "elements_measured_base_by_base": 1,
           "elements_with_a_functional_base": 1,
@@ -1821,6 +1855,8 @@
           "bases_measured": 350,
           "bases_functional": 305,
           "bases_strong": 235,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [
             "IRF4"
           ],
@@ -1952,9 +1988,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 899,
-          "controls": 177,
-          "targets_matched": 827,
+          "targets": 900,
+          "controls": 171,
+          "targets_matched": 828,
           "dropped_for_want_of_a_control": 72,
           "strata": {
             "length": [
@@ -1974,18 +2010,18 @@
             ]
           },
           "raw": {
-            "a": 0.4683,
-            "b": 0.6328,
-            "difference": -0.1645,
-            "p_one_sided": 0.999981,
-            "upper_95": -0.0989
+            "a": 0.4689,
+            "b": 0.6316,
+            "difference": -0.1627,
+            "p_one_sided": 0.999971,
+            "upper_95": -0.0961
           },
           "matched": {
-            "a": 0.4704,
-            "b": 0.6408,
-            "difference": -0.1704,
+            "a": 0.471,
+            "b": 0.6388,
+            "difference": -0.1678,
             "p_one_sided": 1.0,
-            "upper_95": -0.1308
+            "upper_95": -0.1282
           },
           "imbalance": {
             "length": {
@@ -1999,9 +2035,9 @@
               "ratio": 0.964
             },
             "nearest_coding_tss": {
-              "target_median": 33458.0,
+              "target_median": 33353.0,
               "control_median": 38754.0,
-              "ratio": 0.863
+              "ratio": 0.861
             }
           }
         },
@@ -2097,7 +2133,7 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 160,
+          "lentimpra": 153,
           "vista": 4,
           "satmut": 0
         },
@@ -2123,6 +2159,10 @@
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 8,
         "crispri_pairs_measured_as_not_regulated": 149,
+        "lentimpra_tiles_conflict": 7,
+        "lentimpra_elements_over_more_than_one_tile": 54,
+        "lentimpra_cells_conflicting": 13,
+        "lentimpra_cells_where_tiles_disagree": 13,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -2132,6 +2172,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -2233,9 +2275,9 @@
         },
         "disagrees_vs_agrees": {
           "targets": 783,
-          "controls": 166,
-          "targets_matched": 734,
-          "dropped_for_want_of_a_control": 49,
+          "controls": 159,
+          "targets_matched": 729,
+          "dropped_for_want_of_a_control": 54,
           "strata": {
             "length": [
               200.0,
@@ -2255,17 +2297,17 @@
           },
           "raw": {
             "a": 0.4738,
-            "b": 0.6205,
-            "difference": -0.1467,
-            "p_one_sided": 0.999783,
-            "upper_95": -0.0781
+            "b": 0.6164,
+            "difference": -0.1425,
+            "p_one_sided": 0.999602,
+            "upper_95": -0.0726
           },
           "matched": {
-            "a": 0.4728,
-            "b": 0.6045,
-            "difference": -0.1317,
+            "a": 0.476,
+            "b": 0.6043,
+            "difference": -0.1283,
             "p_one_sided": 1.0,
-            "upper_95": -0.0893
+            "upper_95": -0.0858
           },
           "imbalance": {
             "length": {
@@ -2275,13 +2317,13 @@
             },
             "gc": {
               "target_median": 0.4886,
-              "control_median": 0.5174,
-              "ratio": 0.944
+              "control_median": 0.5163,
+              "ratio": 0.946
             },
             "nearest_coding_tss": {
               "target_median": 38285.0,
-              "control_median": 31775.0,
-              "ratio": 1.205
+              "control_median": 31908.0,
+              "ratio": 1.2
             }
           }
         },
@@ -2376,7 +2418,7 @@
         ],
         "agrees": {
           "crispri": 2,
-          "lentimpra": 125,
+          "lentimpra": 121,
           "vista": 6,
           "satmut": 0
         },
@@ -2402,6 +2444,10 @@
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 9,
         "crispri_pairs_measured_as_not_regulated": 190,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 32,
+        "lentimpra_cells_conflicting": 7,
+        "lentimpra_cells_where_tiles_disagree": 7,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -2411,6 +2457,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -2555,7 +2603,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 565,
-          "controls": 132,
+          "controls": 128,
           "targets_matched": 524,
           "dropped_for_want_of_a_control": 41,
           "strata": {
@@ -2577,17 +2625,17 @@
           },
           "raw": {
             "a": 0.4885,
-            "b": 0.5909,
-            "difference": -0.1024,
-            "p_one_sided": 0.984137,
-            "upper_95": -0.024
+            "b": 0.6016,
+            "difference": -0.1131,
+            "p_one_sided": 0.990615,
+            "upper_95": -0.0339
           },
           "matched": {
             "a": 0.4847,
-            "b": 0.5757,
-            "difference": -0.091,
-            "p_one_sided": 0.998478,
-            "upper_95": -0.0405
+            "b": 0.5908,
+            "difference": -0.1061,
+            "p_one_sided": 0.999733,
+            "upper_95": -0.0557
           },
           "imbalance": {
             "length": {
@@ -2597,13 +2645,13 @@
             },
             "gc": {
               "target_median": 0.4841,
-              "control_median": 0.5002,
-              "ratio": 0.968
+              "control_median": 0.4983,
+              "ratio": 0.971
             },
             "nearest_coding_tss": {
               "target_median": 38641.0,
-              "control_median": 39339.0,
-              "ratio": 0.982
+              "control_median": 40781.5,
+              "ratio": 0.948
             }
           }
         },
@@ -2697,7 +2745,7 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 146,
+          "lentimpra": 141,
           "vista": 1,
           "satmut": 0
         },
@@ -2723,6 +2771,10 @@
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 6,
         "crispri_pairs_measured_as_not_regulated": 17,
+        "lentimpra_tiles_conflict": 5,
+        "lentimpra_elements_over_more_than_one_tile": 47,
+        "lentimpra_cells_conflicting": 8,
+        "lentimpra_cells_where_tiles_disagree": 8,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -2732,6 +2784,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -2862,7 +2916,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 621,
-          "controls": 148,
+          "controls": 143,
           "targets_matched": 571,
           "dropped_for_want_of_a_control": 50,
           "strata": {
@@ -2884,17 +2938,17 @@
           },
           "raw": {
             "a": 0.4863,
-            "b": 0.5608,
-            "difference": -0.0745,
-            "p_one_sided": 0.949375,
-            "upper_95": 0.0003
+            "b": 0.5664,
+            "difference": -0.0801,
+            "p_one_sided": 0.959093,
+            "upper_95": -0.0044
           },
           "matched": {
             "a": 0.4869,
-            "b": 0.5387,
-            "difference": -0.0518,
-            "p_one_sided": 0.960379,
-            "upper_95": -0.0033
+            "b": 0.5463,
+            "difference": -0.0594,
+            "p_one_sided": 0.977864,
+            "upper_95": -0.0108
           },
           "imbalance": {
             "length": {
@@ -2904,13 +2958,13 @@
             },
             "gc": {
               "target_median": 0.5058,
-              "control_median": 0.523,
-              "ratio": 0.967
+              "control_median": 0.5245,
+              "ratio": 0.964
             },
             "nearest_coding_tss": {
               "target_median": 27870.0,
-              "control_median": 26622.5,
-              "ratio": 1.047
+              "control_median": 26375.0,
+              "ratio": 1.057
             }
           }
         },
@@ -3007,7 +3061,7 @@
         ],
         "agrees": {
           "crispri": 8,
-          "lentimpra": 146,
+          "lentimpra": 142,
           "vista": 4,
           "satmut": 0
         },
@@ -3033,6 +3087,10 @@
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 10,
         "crispri_pairs_measured_as_not_regulated": 52,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 41,
+        "lentimpra_cells_conflicting": 8,
+        "lentimpra_cells_where_tiles_disagree": 8,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3042,6 +3100,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -3172,7 +3232,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 736,
-          "controls": 156,
+          "controls": 152,
           "targets_matched": 695,
           "dropped_for_want_of_a_control": 41,
           "strata": {
@@ -3194,33 +3254,33 @@
           },
           "raw": {
             "a": 0.4715,
-            "b": 0.5833,
-            "difference": -0.1119,
-            "p_one_sided": 0.994896,
-            "upper_95": -0.0402
+            "b": 0.5855,
+            "difference": -0.1141,
+            "p_one_sided": 0.99524,
+            "upper_95": -0.0417
           },
           "matched": {
             "a": 0.4734,
-            "b": 0.5619,
-            "difference": -0.0885,
-            "p_one_sided": 0.999541,
-            "upper_95": -0.0446
+            "b": 0.5616,
+            "difference": -0.0883,
+            "p_one_sided": 0.999527,
+            "upper_95": -0.0443
           },
           "imbalance": {
             "length": {
               "target_median": 334.5,
-              "control_median": 344.5,
-              "ratio": 0.971
+              "control_median": 344.0,
+              "ratio": 0.972
             },
             "gc": {
               "target_median": 0.4871,
-              "control_median": 0.4993,
-              "ratio": 0.976
+              "control_median": 0.4986,
+              "ratio": 0.977
             },
             "nearest_coding_tss": {
               "target_median": 33946.5,
-              "control_median": 29360.0,
-              "ratio": 1.156
+              "control_median": 29256.5,
+              "ratio": 1.16
             }
           }
         },
@@ -3327,7 +3387,7 @@
         ],
         "agrees": {
           "crispri": 13,
-          "lentimpra": 171,
+          "lentimpra": 169,
           "vista": 3,
           "satmut": 0
         },
@@ -3353,6 +3413,10 @@
         "agreement_denominator_predicted_gene_tested": 16,
         "crispri_pairs_regulated": 37,
         "crispri_pairs_measured_as_not_regulated": 589,
+        "lentimpra_tiles_conflict": 2,
+        "lentimpra_elements_over_more_than_one_tile": 59,
+        "lentimpra_cells_conflicting": 6,
+        "lentimpra_cells_where_tiles_disagree": 6,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3362,6 +3426,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -3463,7 +3529,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 808,
-          "controls": 184,
+          "controls": 182,
           "targets_matched": 767,
           "dropped_for_want_of_a_control": 41,
           "strata": {
@@ -3485,17 +3551,17 @@
           },
           "raw": {
             "a": 0.5248,
-            "b": 0.625,
-            "difference": -0.1002,
-            "p_one_sided": 0.994133,
-            "upper_95": -0.0348
+            "b": 0.6209,
+            "difference": -0.0961,
+            "p_one_sided": 0.99184,
+            "upper_95": -0.0303
           },
           "matched": {
             "a": 0.5332,
-            "b": 0.636,
-            "difference": -0.1028,
-            "p_one_sided": 0.99998,
-            "upper_95": -0.0616
+            "b": 0.6324,
+            "difference": -0.0991,
+            "p_one_sided": 0.999962,
+            "upper_95": -0.0579
           },
           "imbalance": {
             "length": {
@@ -3605,7 +3671,7 @@
         ],
         "agrees": {
           "crispri": 5,
-          "lentimpra": 129,
+          "lentimpra": 125,
           "vista": 5,
           "satmut": 0
         },
@@ -3631,6 +3697,10 @@
         "agreement_denominator_predicted_gene_tested": 5,
         "crispri_pairs_regulated": 9,
         "crispri_pairs_measured_as_not_regulated": 238,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 39,
+        "lentimpra_cells_conflicting": 7,
+        "lentimpra_cells_where_tiles_disagree": 8,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3640,6 +3710,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -3741,7 +3813,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 696,
-          "controls": 135,
+          "controls": 131,
           "targets_matched": 649,
           "dropped_for_want_of_a_control": 47,
           "strata": {
@@ -3763,17 +3835,17 @@
           },
           "raw": {
             "a": 0.5043,
-            "b": 0.6296,
-            "difference": -0.1253,
-            "p_one_sided": 0.996961,
-            "upper_95": -0.0502
+            "b": 0.626,
+            "difference": -0.1216,
+            "p_one_sided": 0.995675,
+            "upper_95": -0.0454
           },
           "matched": {
             "a": 0.5069,
-            "b": 0.6163,
-            "difference": -0.1093,
-            "p_one_sided": 0.999968,
-            "upper_95": -0.0643
+            "b": 0.6167,
+            "difference": -0.1098,
+            "p_one_sided": 0.99997,
+            "upper_95": -0.0647
           },
           "imbalance": {
             "length": {
@@ -3788,8 +3860,8 @@
             },
             "nearest_coding_tss": {
               "target_median": 30154.0,
-              "control_median": 29726.0,
-              "ratio": 1.014
+              "control_median": 30260.0,
+              "ratio": 0.996
             }
           }
         },
@@ -3902,6 +3974,10 @@
         "agreement_denominator_predicted_gene_tested": 0,
         "crispri_pairs_regulated": 0,
         "crispri_pairs_measured_as_not_regulated": 0,
+        "lentimpra_tiles_conflict": 0,
+        "lentimpra_elements_over_more_than_one_tile": 15,
+        "lentimpra_cells_conflicting": 0,
+        "lentimpra_cells_where_tiles_disagree": 0,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -3911,6 +3987,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -4150,7 +4228,7 @@
         ],
         "agrees": {
           "crispri": 2,
-          "lentimpra": 100,
+          "lentimpra": 96,
           "vista": 3,
           "satmut": 0
         },
@@ -4176,6 +4254,10 @@
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
         "crispri_pairs_measured_as_not_regulated": 38,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 23,
+        "lentimpra_cells_conflicting": 6,
+        "lentimpra_cells_where_tiles_disagree": 7,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4185,6 +4267,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -4286,7 +4370,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 387,
-          "controls": 105,
+          "controls": 101,
           "targets_matched": 342,
           "dropped_for_want_of_a_control": 45,
           "strata": {
@@ -4308,17 +4392,17 @@
           },
           "raw": {
             "a": 0.4367,
-            "b": 0.6,
-            "difference": -0.1633,
-            "p_one_sided": 0.998742,
-            "upper_95": -0.0744
+            "b": 0.5842,
+            "difference": -0.1475,
+            "p_one_sided": 0.996255,
+            "upper_95": -0.0568
           },
           "matched": {
             "a": 0.4327,
-            "b": 0.5829,
-            "difference": -0.1501,
-            "p_one_sided": 0.999964,
-            "upper_95": -0.088
+            "b": 0.5455,
+            "difference": -0.1127,
+            "p_one_sided": 0.9985,
+            "upper_95": -0.0502
           },
           "imbalance": {
             "length": {
@@ -4333,8 +4417,8 @@
             },
             "nearest_coding_tss": {
               "target_median": 29174.0,
-              "control_median": 26939.0,
-              "ratio": 1.083
+              "control_median": 27324.0,
+              "ratio": 1.068
             }
           }
         },
@@ -4426,7 +4510,7 @@
         ],
         "agrees": {
           "crispri": 3,
-          "lentimpra": 95,
+          "lentimpra": 89,
           "vista": 3,
           "satmut": 0
         },
@@ -4452,6 +4536,10 @@
         "agreement_denominator_predicted_gene_tested": 3,
         "crispri_pairs_regulated": 4,
         "crispri_pairs_measured_as_not_regulated": 20,
+        "lentimpra_tiles_conflict": 6,
+        "lentimpra_elements_over_more_than_one_tile": 30,
+        "lentimpra_cells_conflicting": 8,
+        "lentimpra_cells_where_tiles_disagree": 8,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4461,6 +4549,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -4562,7 +4652,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 472,
-          "controls": 99,
+          "controls": 93,
           "targets_matched": 440,
           "dropped_for_want_of_a_control": 32,
           "strata": {
@@ -4584,17 +4674,17 @@
           },
           "raw": {
             "a": 0.4831,
-            "b": 0.6061,
-            "difference": -0.123,
-            "p_one_sided": 0.988347,
-            "upper_95": -0.0338
+            "b": 0.6022,
+            "difference": -0.1191,
+            "p_one_sided": 0.983716,
+            "upper_95": -0.0274
           },
           "matched": {
             "a": 0.4841,
-            "b": 0.6609,
-            "difference": -0.1768,
+            "b": 0.6592,
+            "difference": -0.1751,
             "p_one_sided": 1.0,
-            "upper_95": -0.1228
+            "upper_95": -0.1211
           },
           "imbalance": {
             "length": {
@@ -4604,13 +4694,13 @@
             },
             "gc": {
               "target_median": 0.5029,
-              "control_median": 0.5115,
-              "ratio": 0.983
+              "control_median": 0.5087,
+              "ratio": 0.989
             },
             "nearest_coding_tss": {
               "target_median": 32965.5,
-              "control_median": 32749.0,
-              "ratio": 1.007
+              "control_median": 30486.0,
+              "ratio": 1.081
             }
           }
         },
@@ -4704,7 +4794,7 @@
         ],
         "agrees": {
           "crispri": 5,
-          "lentimpra": 132,
+          "lentimpra": 124,
           "vista": 2,
           "satmut": 0
         },
@@ -4730,6 +4820,10 @@
         "agreement_denominator_predicted_gene_tested": 7,
         "crispri_pairs_regulated": 8,
         "crispri_pairs_measured_as_not_regulated": 209,
+        "lentimpra_tiles_conflict": 8,
+        "lentimpra_elements_over_more_than_one_tile": 36,
+        "lentimpra_cells_conflicting": 12,
+        "lentimpra_cells_where_tiles_disagree": 12,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -4739,6 +4833,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -4840,7 +4936,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 496,
-          "controls": 139,
+          "controls": 131,
           "targets_matched": 472,
           "dropped_for_want_of_a_control": 24,
           "strata": {
@@ -4862,17 +4958,17 @@
           },
           "raw": {
             "a": 0.5302,
-            "b": 0.5827,
-            "difference": -0.0525,
-            "p_one_sided": 0.865692,
-            "upper_95": 0.0256
+            "b": 0.5725,
+            "difference": -0.0423,
+            "p_one_sided": 0.807397,
+            "upper_95": 0.0378
           },
           "matched": {
             "a": 0.5318,
-            "b": 0.5773,
-            "difference": -0.0455,
-            "p_one_sided": 0.920347,
-            "upper_95": 0.0077
+            "b": 0.5668,
+            "difference": -0.035,
+            "p_one_sided": 0.860159,
+            "upper_95": 0.0183
           },
           "imbalance": {
             "length": {
@@ -4882,13 +4978,13 @@
             },
             "gc": {
               "target_median": 0.5216,
-              "control_median": 0.5436,
-              "ratio": 0.96
+              "control_median": 0.5486,
+              "ratio": 0.951
             },
             "nearest_coding_tss": {
               "target_median": 19775.0,
-              "control_median": 16630.0,
-              "ratio": 1.189
+              "control_median": 17479.0,
+              "ratio": 1.131
             }
           }
         },
@@ -4985,7 +5081,7 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 181,
+          "lentimpra": 176,
           "vista": 1,
           "satmut": 0
         },
@@ -5011,6 +5107,10 @@
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 11,
         "crispri_pairs_measured_as_not_regulated": 339,
+        "lentimpra_tiles_conflict": 5,
+        "lentimpra_elements_over_more_than_one_tile": 61,
+        "lentimpra_cells_conflicting": 9,
+        "lentimpra_cells_where_tiles_disagree": 9,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -5020,6 +5120,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -5121,7 +5223,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 768,
-          "controls": 185,
+          "controls": 180,
           "targets_matched": 708,
           "dropped_for_want_of_a_control": 60,
           "strata": {
@@ -5143,17 +5245,17 @@
           },
           "raw": {
             "a": 0.5195,
-            "b": 0.6649,
-            "difference": -0.1453,
-            "p_one_sided": 0.999899,
-            "upper_95": -0.081
+            "b": 0.6667,
+            "difference": -0.1471,
+            "p_one_sided": 0.999903,
+            "upper_95": -0.0822
           },
           "matched": {
             "a": 0.5226,
-            "b": 0.6973,
-            "difference": -0.1747,
+            "b": 0.696,
+            "difference": -0.1734,
             "p_one_sided": 1.0,
-            "upper_95": -0.1327
+            "upper_95": -0.1314
           },
           "imbalance": {
             "length": {
@@ -5163,13 +5265,13 @@
             },
             "gc": {
               "target_median": 0.5277,
-              "control_median": 0.5371,
-              "ratio": 0.982
+              "control_median": 0.5367,
+              "ratio": 0.983
             },
             "nearest_coding_tss": {
               "target_median": 18207.0,
-              "control_median": 22069.0,
-              "ratio": 0.825
+              "control_median": 22452.0,
+              "ratio": 0.811
             }
           }
         },
@@ -5258,7 +5360,7 @@
         ],
         "agrees": {
           "crispri": 1,
-          "lentimpra": 62,
+          "lentimpra": 61,
           "vista": 5,
           "satmut": 0
         },
@@ -5284,6 +5386,10 @@
         "agreement_denominator_predicted_gene_tested": 1,
         "crispri_pairs_regulated": 1,
         "crispri_pairs_measured_as_not_regulated": 42,
+        "lentimpra_tiles_conflict": 1,
+        "lentimpra_elements_over_more_than_one_tile": 12,
+        "lentimpra_cells_conflicting": 1,
+        "lentimpra_cells_where_tiles_disagree": 1,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -5293,6 +5399,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -5394,7 +5502,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 272,
-          "controls": 67,
+          "controls": 66,
           "targets_matched": 240,
           "dropped_for_want_of_a_control": 32,
           "strata": {
@@ -5416,17 +5524,17 @@
           },
           "raw": {
             "a": 0.4632,
-            "b": 0.5373,
-            "difference": -0.0741,
-            "p_one_sided": 0.861989,
-            "upper_95": 0.0378
+            "b": 0.5455,
+            "difference": -0.0822,
+            "p_one_sided": 0.88552,
+            "upper_95": 0.0302
           },
           "matched": {
             "a": 0.4625,
-            "b": 0.5462,
-            "difference": -0.0837,
-            "p_one_sided": 0.967215,
-            "upper_95": -0.0089
+            "b": 0.5597,
+            "difference": -0.0972,
+            "p_one_sided": 0.983867,
+            "upper_95": -0.0225
           },
           "imbalance": {
             "length": {
@@ -5436,13 +5544,13 @@
             },
             "gc": {
               "target_median": 0.4692,
-              "control_median": 0.484,
-              "ratio": 0.969
+              "control_median": 0.4853,
+              "ratio": 0.967
             },
             "nearest_coding_tss": {
               "target_median": 55202.5,
-              "control_median": 50309.0,
-              "ratio": 1.097
+              "control_median": 50287.0,
+              "ratio": 1.098
             }
           }
         },
@@ -5545,7 +5653,7 @@
         ],
         "agrees": {
           "crispri": 5,
-          "lentimpra": 238,
+          "lentimpra": 228,
           "vista": 1,
           "satmut": 0
         },
@@ -5571,6 +5679,10 @@
         "agreement_denominator_predicted_gene_tested": 7,
         "crispri_pairs_regulated": 17,
         "crispri_pairs_measured_as_not_regulated": 1256,
+        "lentimpra_tiles_conflict": 10,
+        "lentimpra_elements_over_more_than_one_tile": 54,
+        "lentimpra_cells_conflicting": 18,
+        "lentimpra_cells_where_tiles_disagree": 18,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -5580,6 +5692,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -5681,9 +5795,9 @@
         },
         "disagrees_vs_agrees": {
           "targets": 541,
-          "controls": 244,
-          "targets_matched": 530,
-          "dropped_for_want_of_a_control": 11,
+          "controls": 234,
+          "targets_matched": 524,
+          "dropped_for_want_of_a_control": 17,
           "strata": {
             "length": [
               200.0,
@@ -5703,17 +5817,17 @@
           },
           "raw": {
             "a": 0.6007,
-            "b": 0.6885,
-            "difference": -0.0878,
-            "p_one_sided": 0.992114,
-            "upper_95": -0.028
+            "b": 0.688,
+            "difference": -0.0873,
+            "p_one_sided": 0.991023,
+            "upper_95": -0.0266
           },
           "matched": {
-            "a": 0.6,
-            "b": 0.658,
-            "difference": -0.058,
-            "p_one_sided": 0.974817,
-            "upper_95": -0.0092
+            "a": 0.6031,
+            "b": 0.6614,
+            "difference": -0.0584,
+            "p_one_sided": 0.975137,
+            "upper_95": -0.0094
           },
           "imbalance": {
             "length": {
@@ -5723,13 +5837,13 @@
             },
             "gc": {
               "target_median": 0.5644,
-              "control_median": 0.6099,
-              "ratio": 0.925
+              "control_median": 0.6105,
+              "ratio": 0.924
             },
             "nearest_coding_tss": {
               "target_median": 11246.0,
-              "control_median": 10943.0,
-              "ratio": 1.028
+              "control_median": 10761.5,
+              "ratio": 1.045
             }
           }
         },
@@ -5821,13 +5935,13 @@
         ],
         "agrees": {
           "crispri": 4,
-          "lentimpra": 97,
+          "lentimpra": 92,
           "vista": 2,
           "satmut": 0
         },
         "disagrees": {
           "crispri": 4,
-          "lentimpra": 472,
+          "lentimpra": 473,
           "vista": 2,
           "satmut": 0
         },
@@ -5847,6 +5961,10 @@
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 6,
         "crispri_pairs_measured_as_not_regulated": 103,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 38,
+        "lentimpra_cells_conflicting": 7,
+        "lentimpra_cells_where_tiles_disagree": 8,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -5856,6 +5974,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -5956,9 +6076,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 476,
-          "controls": 101,
-          "targets_matched": 433,
+          "targets": 477,
+          "controls": 96,
+          "targets_matched": 434,
           "dropped_for_want_of_a_control": 43,
           "strata": {
             "length": [
@@ -5978,34 +6098,34 @@
             ]
           },
           "raw": {
-            "a": 0.5231,
-            "b": 0.6832,
-            "difference": -0.1601,
-            "p_one_sided": 0.99903,
-            "upper_95": -0.0751
+            "a": 0.5241,
+            "b": 0.6979,
+            "difference": -0.1738,
+            "p_one_sided": 0.999571,
+            "upper_95": -0.088
           },
           "matched": {
-            "a": 0.5219,
-            "b": 0.6907,
-            "difference": -0.1687,
+            "a": 0.523,
+            "b": 0.6995,
+            "difference": -0.1764,
             "p_one_sided": 1.0,
-            "upper_95": -0.1149
+            "upper_95": -0.1229
           },
           "imbalance": {
             "length": {
               "target_median": 336.0,
-              "control_median": 347.0,
-              "ratio": 0.968
+              "control_median": 346.0,
+              "ratio": 0.971
             },
             "gc": {
-              "target_median": 0.5167,
-              "control_median": 0.5387,
+              "target_median": 0.5168,
+              "control_median": 0.5388,
               "ratio": 0.959
             },
             "nearest_coding_tss": {
-              "target_median": 27354.5,
-              "control_median": 26207.0,
-              "ratio": 1.044
+              "target_median": 27603.0,
+              "control_median": 26207.5,
+              "ratio": 1.053
             }
           }
         },
@@ -6095,7 +6215,7 @@
         ],
         "agrees": {
           "crispri": 2,
-          "lentimpra": 42,
+          "lentimpra": 41,
           "vista": 0,
           "satmut": 0
         },
@@ -6121,6 +6241,10 @@
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
         "crispri_pairs_measured_as_not_regulated": 31,
+        "lentimpra_tiles_conflict": 1,
+        "lentimpra_elements_over_more_than_one_tile": 12,
+        "lentimpra_cells_conflicting": 4,
+        "lentimpra_cells_where_tiles_disagree": 4,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6130,6 +6254,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -6231,7 +6357,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 146,
-          "controls": 44,
+          "controls": 43,
           "targets_matched": 131,
           "dropped_for_want_of_a_control": 15,
           "strata": {
@@ -6253,33 +6379,33 @@
           },
           "raw": {
             "a": 0.4384,
-            "b": 0.6136,
-            "difference": -0.1753,
-            "p_one_sided": 0.981416,
-            "upper_95": -0.0369
+            "b": 0.6047,
+            "difference": -0.1663,
+            "p_one_sided": 0.974628,
+            "upper_95": -0.0263
           },
           "matched": {
             "a": 0.458,
-            "b": 0.7128,
-            "difference": -0.2548,
-            "p_one_sided": 0.999993,
-            "upper_95": -0.1581
+            "b": 0.7084,
+            "difference": -0.2504,
+            "p_one_sided": 0.999989,
+            "upper_95": -0.1535
           },
           "imbalance": {
             "length": {
               "target_median": 337.0,
-              "control_median": 341.5,
-              "ratio": 0.987
+              "control_median": 342.0,
+              "ratio": 0.985
             },
             "gc": {
               "target_median": 0.4993,
-              "control_median": 0.5445,
-              "ratio": 0.917
+              "control_median": 0.5476,
+              "ratio": 0.912
             },
             "nearest_coding_tss": {
               "target_median": 31487.0,
-              "control_median": 32207.0,
-              "ratio": 0.978
+              "control_median": 34370.0,
+              "ratio": 0.916
             }
           }
         },
@@ -6368,7 +6494,7 @@
         ],
         "agrees": {
           "crispri": 0,
-          "lentimpra": 102,
+          "lentimpra": 99,
           "vista": 1,
           "satmut": 0
         },
@@ -6394,6 +6520,10 @@
         "agreement_denominator_predicted_gene_tested": 1,
         "crispri_pairs_regulated": 1,
         "crispri_pairs_measured_as_not_regulated": 28,
+        "lentimpra_tiles_conflict": 3,
+        "lentimpra_elements_over_more_than_one_tile": 30,
+        "lentimpra_cells_conflicting": 7,
+        "lentimpra_cells_where_tiles_disagree": 7,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6403,6 +6533,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -6504,7 +6636,7 @@
         },
         "disagrees_vs_agrees": {
           "targets": 310,
-          "controls": 103,
+          "controls": 100,
           "targets_matched": 283,
           "dropped_for_want_of_a_control": 27,
           "strata": {
@@ -6526,33 +6658,33 @@
           },
           "raw": {
             "a": 0.5194,
-            "b": 0.5922,
-            "difference": -0.0729,
-            "p_one_sided": 0.902948,
-            "upper_95": 0.0194
+            "b": 0.61,
+            "difference": -0.0906,
+            "p_one_sided": 0.945902,
+            "upper_95": 0.0022
           },
           "matched": {
             "a": 0.5336,
-            "b": 0.5804,
-            "difference": -0.0468,
-            "p_one_sided": 0.869225,
-            "upper_95": 0.0218
+            "b": 0.5896,
+            "difference": -0.056,
+            "p_one_sided": 0.910614,
+            "upper_95": 0.0125
           },
           "imbalance": {
             "length": {
               "target_median": 332.5,
-              "control_median": 341.0,
-              "ratio": 0.975
+              "control_median": 342.0,
+              "ratio": 0.972
             },
             "gc": {
               "target_median": 0.5489,
-              "control_median": 0.5676,
-              "ratio": 0.967
+              "control_median": 0.5666,
+              "ratio": 0.969
             },
             "nearest_coding_tss": {
               "target_median": 18350.5,
-              "control_median": 13786.0,
-              "ratio": 1.331
+              "control_median": 13715.0,
+              "ratio": 1.338
             }
           }
         },
@@ -6649,13 +6781,13 @@
         ],
         "agrees": {
           "crispri": 2,
-          "lentimpra": 134,
+          "lentimpra": 129,
           "vista": 0,
           "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
-          "lentimpra": 341,
+          "lentimpra": 342,
           "vista": 0,
           "satmut": 0
         },
@@ -6675,6 +6807,10 @@
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 15,
         "crispri_pairs_measured_as_not_regulated": 261,
+        "lentimpra_tiles_conflict": 4,
+        "lentimpra_elements_over_more_than_one_tile": 35,
+        "lentimpra_cells_conflicting": 10,
+        "lentimpra_cells_where_tiles_disagree": 11,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6684,6 +6820,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -6784,9 +6922,9 @@
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 341,
-          "controls": 136,
-          "targets_matched": 317,
+          "targets": 342,
+          "controls": 131,
+          "targets_matched": 318,
           "dropped_for_want_of_a_control": 24,
           "strata": {
             "length": [
@@ -6806,18 +6944,18 @@
             ]
           },
           "raw": {
-            "a": 0.5513,
-            "b": 0.6838,
-            "difference": -0.1325,
-            "p_one_sided": 0.997055,
-            "upper_95": -0.0534
+            "a": 0.5526,
+            "b": 0.6947,
+            "difference": -0.142,
+            "p_one_sided": 0.998331,
+            "upper_95": -0.0624
           },
           "matched": {
-            "a": 0.5615,
-            "b": 0.6975,
-            "difference": -0.1359,
-            "p_one_sided": 0.999828,
-            "upper_95": -0.0735
+            "a": 0.5629,
+            "b": 0.7078,
+            "difference": -0.1449,
+            "p_one_sided": 0.999938,
+            "upper_95": -0.0828
           },
           "imbalance": {
             "length": {
@@ -6827,13 +6965,13 @@
             },
             "gc": {
               "target_median": 0.4829,
-              "control_median": 0.4961,
-              "ratio": 0.973
+              "control_median": 0.4928,
+              "ratio": 0.98
             },
             "nearest_coding_tss": {
-              "target_median": 27408.0,
-              "control_median": 31734.5,
-              "ratio": 0.864
+              "target_median": 27154.0,
+              "control_median": 31587.0,
+              "ratio": 0.86
             }
           }
         },
@@ -6946,6 +7084,10 @@
         "agreement_denominator_predicted_gene_tested": 0,
         "crispri_pairs_regulated": 0,
         "crispri_pairs_measured_as_not_regulated": 0,
+        "lentimpra_tiles_conflict": 0,
+        "lentimpra_elements_over_more_than_one_tile": 0,
+        "lentimpra_cells_conflicting": 0,
+        "lentimpra_cells_where_tiles_disagree": 0,
         "satmut": {
           "elements_measured_base_by_base": 0,
           "elements_with_a_functional_base": 0,
@@ -6955,6 +7097,8 @@
           "bases_measured": 0,
           "bases_functional": 0,
           "bases_strong": 0,
+          "bases_measured_by_more_than_one_experiment": 0,
+          "bases_where_experiments_disagree": 0,
           "experiments_matched": [],
           "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
         }
@@ -7166,6 +7310,10 @@
     "crispri_pairs_regulated": 212,
     "crispri_pairs_measured_as_not_regulated": 4565,
     "crispri_pairs_the_benchmark_calls_invalid": 0,
+    "lentimpra_tiles_conflict": 126,
+    "lentimpra_elements_over_more_than_one_tile": 1006,
+    "lentimpra_cells_conflicting": 224,
+    "lentimpra_cells_where_tiles_disagree": 237,
     "eligibility": {
       "rule": "an assay's tested interval shares at least one base with the element",
       "compiled_elements": 440377,
@@ -7195,13 +7343,13 @@
     },
     "agrees": {
       "crispri": 97,
-      "lentimpra": 3361,
+      "lentimpra": 3231,
       "vista": 69,
       "satmut": 4
     },
     "disagrees": {
       "crispri": 23,
-      "lentimpra": 14508,
+      "lentimpra": 14512,
       "vista": 29,
       "satmut": 0
     },
@@ -7225,6 +7373,8 @@
       "bases_measured": 1399,
       "bases_functional": 746,
       "bases_strong": 587,
+      "bases_measured_by_more_than_one_experiment": 349,
+      "bases_where_experiments_disagree": 84,
       "experiments_matched": [
         "IRF4",
         "IRF6",
@@ -7235,6 +7385,7 @@
     }
   },
   "evidence": {
+    "weak_means": "a STATED confidence at or below 0.5; an unstated one (the parser's UNSTATED, since R4 every predicted fact) is counted apart. weak_before_r4_counting_unstated is the old count, which compared the unstated 0.0 with the line, kept beside it for comparison",
     "compiled_facts_read": 960096,
     "programs_read": [
       "chr1",
@@ -7265,7 +7416,11 @@
     "per_chromosome": {
       "chr6": {
         "facts": 51919,
-        "weak": 44151,
+        "stated": 2532,
+        "unstated": 49387,
+        "weak": 812,
+        "strong": 1720,
+        "weak_before_r4_counting_unstated": 50199,
         "experimental": 1136,
         "curated": 2227,
         "predicted": 47538,
@@ -7274,7 +7429,11 @@
       },
       "chrY": {
         "facts": 664,
-        "weak": 252,
+        "stated": 381,
+        "unstated": 283,
+        "weak": 35,
+        "strong": 346,
+        "weak_before_r4_counting_unstated": 318,
         "experimental": 6,
         "curated": 274,
         "predicted": 250,
@@ -7283,79 +7442,24 @@
       },
       "chr1": {
         "facts": 95151,
-        "weak": 79100,
+        "stated": 4568,
+        "unstated": 90583,
+        "weak": 1401,
+        "strong": 3167,
+        "weak_before_r4_counting_unstated": 91984,
         "experimental": 2143,
         "curated": 4138,
         "predicted": 87362,
         "inferred": 1508,
         "none": 0
       },
-      "chr10": {
-        "facts": 45540,
-        "weak": 39320,
-        "experimental": 933,
-        "curated": 1748,
-        "predicted": 42046,
-        "inferred": 813,
-        "none": 0
-      },
-      "chr11": {
-        "facts": 55986,
-        "weak": 46815,
-        "experimental": 1186,
-        "curated": 2386,
-        "predicted": 51462,
-        "inferred": 952,
-        "none": 0
-      },
-      "chr12": {
-        "facts": 49397,
-        "weak": 41971,
-        "experimental": 897,
-        "curated": 2038,
-        "predicted": 45628,
-        "inferred": 834,
-        "none": 0
-      },
-      "chr13": {
-        "facts": 21253,
-        "weak": 18566,
-        "experimental": 342,
-        "curated": 918,
-        "predicted": 19422,
-        "inferred": 571,
-        "none": 0
-      },
-      "chr14": {
-        "facts": 29230,
-        "weak": 24933,
-        "experimental": 505,
-        "curated": 1378,
-        "predicted": 26770,
-        "inferred": 577,
-        "none": 0
-      },
-      "chr15": {
-        "facts": 31225,
-        "weak": 27027,
-        "experimental": 585,
-        "curated": 1148,
-        "predicted": 28948,
-        "inferred": 544,
-        "none": 0
-      },
-      "chr16": {
-        "facts": 32356,
-        "weak": 26638,
-        "experimental": 677,
-        "curated": 1562,
-        "predicted": 29598,
-        "inferred": 519,
-        "none": 0
-      },
       "chr17": {
         "facts": 46875,
-        "weak": 38294,
+        "stated": 2052,
+        "unstated": 44823,
+        "weak": 630,
+        "strong": 1422,
+        "weak_before_r4_counting_unstated": 45453,
         "experimental": 1030,
         "curated": 2070,
         "predicted": 43216,
@@ -7364,7 +7468,11 @@
       },
       "chr18": {
         "facts": 20068,
-        "weak": 17695,
+        "stated": 971,
+        "unstated": 19097,
+        "weak": 318,
+        "strong": 653,
+        "weak_before_r4_counting_unstated": 19415,
         "experimental": 359,
         "curated": 740,
         "predicted": 18500,
@@ -7373,52 +7481,24 @@
       },
       "chr19": {
         "facts": 38277,
-        "weak": 28986,
+        "stated": 2025,
+        "unstated": 36252,
+        "weak": 654,
+        "strong": 1371,
+        "weak_before_r4_counting_unstated": 36906,
         "experimental": 959,
         "curated": 2416,
         "predicted": 34530,
         "inferred": 372,
         "none": 0
       },
-      "chr2": {
-        "facts": 71524,
-        "weak": 61793,
-        "experimental": 1409,
-        "curated": 2859,
-        "predicted": 65834,
-        "inferred": 1422,
-        "none": 0
-      },
-      "chr20": {
-        "facts": 27694,
-        "weak": 23303,
-        "experimental": 613,
-        "curated": 1216,
-        "predicted": 25404,
-        "inferred": 461,
-        "none": 0
-      },
-      "chr21": {
-        "facts": 11348,
-        "weak": 9782,
-        "experimental": 202,
-        "curated": 518,
-        "predicted": 10348,
-        "inferred": 280,
-        "none": 0
-      },
-      "chr22": {
-        "facts": 20912,
-        "weak": 17613,
-        "experimental": 422,
-        "curated": 1002,
-        "predicted": 19224,
-        "inferred": 264,
-        "none": 0
-      },
       "chr3": {
         "facts": 59859,
-        "weak": 52028,
+        "stated": 2427,
+        "unstated": 57432,
+        "weak": 729,
+        "strong": 1698,
+        "weak_before_r4_counting_unstated": 58161,
         "experimental": 1129,
         "curated": 2211,
         "predicted": 55364,
@@ -7427,43 +7507,206 @@
       },
       "chr4": {
         "facts": 45013,
-        "weak": 38876,
+        "stated": 2179,
+        "unstated": 42834,
+        "weak": 666,
+        "strong": 1513,
+        "weak_before_r4_counting_unstated": 43500,
         "experimental": 781,
         "curated": 1870,
         "predicted": 41292,
         "inferred": 1070,
         "none": 0
       },
-      "chr5": {
-        "facts": 49430,
-        "weak": 42854,
-        "experimental": 852,
-        "curated": 1979,
-        "predicted": 45544,
-        "inferred": 1055,
-        "none": 0
-      },
-      "chr7": {
-        "facts": 49314,
-        "weak": 42348,
-        "experimental": 990,
-        "curated": 2096,
-        "predicted": 45192,
-        "inferred": 1036,
-        "none": 0
-      },
       "chr8": {
         "facts": 40476,
-        "weak": 35075,
+        "stated": 1967,
+        "unstated": 38509,
+        "weak": 623,
+        "strong": 1344,
+        "weak_before_r4_counting_unstated": 39132,
         "experimental": 787,
         "curated": 1650,
         "predicted": 37104,
         "inferred": 935,
         "none": 0
       },
+      "chr11": {
+        "facts": 55986,
+        "stated": 2639,
+        "unstated": 53347,
+        "weak": 694,
+        "strong": 1945,
+        "weak_before_r4_counting_unstated": 54041,
+        "experimental": 1186,
+        "curated": 2386,
+        "predicted": 51462,
+        "inferred": 952,
+        "none": 0
+      },
+      "chr12": {
+        "facts": 49397,
+        "stated": 2062,
+        "unstated": 47335,
+        "weak": 651,
+        "strong": 1411,
+        "weak_before_r4_counting_unstated": 47986,
+        "experimental": 897,
+        "curated": 2038,
+        "predicted": 45628,
+        "inferred": 834,
+        "none": 0
+      },
+      "chr14": {
+        "facts": 29230,
+        "stated": 1447,
+        "unstated": 27783,
+        "weak": 500,
+        "strong": 947,
+        "weak_before_r4_counting_unstated": 28283,
+        "experimental": 505,
+        "curated": 1378,
+        "predicted": 26770,
+        "inferred": 577,
+        "none": 0
+      },
+      "chr15": {
+        "facts": 31225,
+        "stated": 1269,
+        "unstated": 29956,
+        "weak": 353,
+        "strong": 916,
+        "weak_before_r4_counting_unstated": 30309,
+        "experimental": 585,
+        "curated": 1148,
+        "predicted": 28948,
+        "inferred": 544,
+        "none": 0
+      },
+      "chr16": {
+        "facts": 32356,
+        "stated": 1539,
+        "unstated": 30817,
+        "weak": 490,
+        "strong": 1049,
+        "weak_before_r4_counting_unstated": 31307,
+        "experimental": 677,
+        "curated": 1562,
+        "predicted": 29598,
+        "inferred": 519,
+        "none": 0
+      },
+      "chr7": {
+        "facts": 49314,
+        "stated": 2390,
+        "unstated": 46924,
+        "weak": 779,
+        "strong": 1611,
+        "weak_before_r4_counting_unstated": 47703,
+        "experimental": 990,
+        "curated": 2096,
+        "predicted": 45192,
+        "inferred": 1036,
+        "none": 0
+      },
+      "chr10": {
+        "facts": 45540,
+        "stated": 2123,
+        "unstated": 43417,
+        "weak": 686,
+        "strong": 1437,
+        "weak_before_r4_counting_unstated": 44103,
+        "experimental": 933,
+        "curated": 1748,
+        "predicted": 42046,
+        "inferred": 813,
+        "none": 0
+      },
+      "chr13": {
+        "facts": 21253,
+        "stated": 1113,
+        "unstated": 20140,
+        "weak": 363,
+        "strong": 750,
+        "weak_before_r4_counting_unstated": 20503,
+        "experimental": 342,
+        "curated": 918,
+        "predicted": 19422,
+        "inferred": 571,
+        "none": 0
+      },
+      "chr2": {
+        "facts": 71524,
+        "stated": 3352,
+        "unstated": 68172,
+        "weak": 1023,
+        "strong": 2329,
+        "weak_before_r4_counting_unstated": 69195,
+        "experimental": 1409,
+        "curated": 2859,
+        "predicted": 65834,
+        "inferred": 1422,
+        "none": 0
+      },
+      "chr20": {
+        "facts": 27694,
+        "stated": 1375,
+        "unstated": 26319,
+        "weak": 468,
+        "strong": 907,
+        "weak_before_r4_counting_unstated": 26787,
+        "experimental": 613,
+        "curated": 1216,
+        "predicted": 25404,
+        "inferred": 461,
+        "none": 0
+      },
+      "chr21": {
+        "facts": 11348,
+        "stated": 648,
+        "unstated": 10700,
+        "weak": 205,
+        "strong": 443,
+        "weak_before_r4_counting_unstated": 10905,
+        "experimental": 202,
+        "curated": 518,
+        "predicted": 10348,
+        "inferred": 280,
+        "none": 0
+      },
+      "chr22": {
+        "facts": 20912,
+        "stated": 1057,
+        "unstated": 19855,
+        "weak": 418,
+        "strong": 639,
+        "weak_before_r4_counting_unstated": 20273,
+        "experimental": 422,
+        "curated": 1002,
+        "predicted": 19224,
+        "inferred": 264,
+        "none": 0
+      },
+      "chr5": {
+        "facts": 49430,
+        "stated": 2215,
+        "unstated": 47215,
+        "weak": 663,
+        "strong": 1552,
+        "weak_before_r4_counting_unstated": 47878,
+        "experimental": 852,
+        "curated": 1979,
+        "predicted": 45544,
+        "inferred": 1055,
+        "none": 0
+      },
       "chr9": {
         "facts": 41706,
-        "weak": 35865,
+        "stated": 1864,
+        "unstated": 39842,
+        "weak": 568,
+        "strong": 1296,
+        "weak_before_r4_counting_unstated": 40410,
         "experimental": 784,
         "curated": 1673,
         "predicted": 38544,
@@ -7472,7 +7715,11 @@
       },
       "chrX": {
         "facts": 24879,
-        "weak": 19636,
+        "stated": 1895,
+        "unstated": 22984,
+        "weak": 359,
+        "strong": 1536,
+        "weak_before_r4_counting_unstated": 23343,
         "experimental": 557,
         "curated": 1932,
         "predicted": 21634,
@@ -7482,7 +7729,11 @@
     },
     "pooled": {
       "facts": 960096,
-      "weak": 812921,
+      "stated": 46090,
+      "unstated": 914006,
+      "weak": 14088,
+      "strong": 32002,
+      "weak_before_r4_counting_unstated": 928094,
       "experimental": 19284,
       "curated": 42049,
       "predicted": 880754,
@@ -7520,29 +7771,564 @@
     "chrY": "data/knowledge/compiled/noncoding_chrY.bio"
   },
   "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself. Saturation mutagenesis is thinner still by three orders of magnitude - 21 elements exist in the whole assay - and it measures bases, so it enters the census under its own counters and can never enter the disagreements",
-  "seconds": 120.1,
+  "seconds": 124.9,
   "result_manifest": {
-    "code": {
-      "git_sha": "850e9f9c05e708ce5f9ddac0e7c191f919ea6951",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/attribution/measured.py"
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table (vista-data)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019, kircherlab/MPRA_SaturationMutagenesis)",
+        "version": "as fetched; pinned by sha256"
+      },
+      {
+        "accession": "this repository, the compiled element runs enhancer_targets_all, constrained_targets, enhancer_targets",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "reciprocal_overlap": 0.5,
+      "mpra_active_log2": 1.0,
+      "reporter_label_rule": "per cell, active when more than half of the matched tiles are at or above MPRA_ACTIVE, silent when more than half are below it, conflicting when exactly half are",
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
       ],
+      "comparison": true
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are counted, never read"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562)",
+      "heldout": "the CRISPRi benchmark's held-out file, evaluation only"
+    },
+    "code": {
+      "git_sha": "e801b6b0ac2c858e7e6c3bbc54d86e549066a177",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/measured_layer.py",
         "--write-programs"
       ],
       "python": "3.14.3"
     },
-    "complete": false,
-    "problems": [
-      "missing sources",
-      "missing inputs",
-      "missing assembly",
-      "missing coordinates",
-      "missing parameters",
-      "missing exclusions",
-      "missing partitions"
-    ]
+    "complete": true
   }
 }
