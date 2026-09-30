@@ -4508,6 +4508,28 @@ entire sweep. What is next, in order of what it decides:
     the old manifest recorded; `manifest_headlines.json` also moved `value` and `quoted_as` to ten. Not
     done: CI on `aa7f92c`; the `_r6` files; item 8.
 
+    **Reconciliation, 2026-09-30 08:30 (the reviewer's questions, answered from existing records).** Item 7
+    is an **updated result, not a reproduction**, with complete provenance. Its manifest is complete (clean
+    stamp at `5ab1b95`) and names 24 inputs against the old 22: two added, the tenth case's hand-written
+    `data/demo/benchmark/erbb2_myc_gastroesophageal.vcf` and `.cnv`; one changed, the local store
+    `data/knowledge/therapeutics` (sha256 `12bf0ffff535…`, 48,840,306 bytes, 977 files → `fbda4e49b635…`,
+    48,853,641 bytes, 984 files). The change is additions only, proved by hashing today's store without the
+    seven files written on 2026-09-28 09:26 (Open Targets and HPA records for STARD3, GRB7, MIEN1, MYC, the
+    tenth case's genes): it gives exactly the old digest. Both input sets are available on this machine (the
+    store is git-ignored, so on no other). Cases 1–9: no scientific value changed; three fields were added
+    (`magnitude_tiebreaks`, `quantities_in_this_tumour`, `rank_without_gate`, written by `64f0afe`'s code)
+    and `seconds` changed. The 10 / 10 / 10 counts ten benchmark cases (target gene recovered, modality
+    verdict correct, top mechanism defensible), not ten validated therapies. **CI:** the same `pytest -q` runs
+    in both places. CI collected 2,706 tests, as did the rebuild's clean-worktree pre-push run (2,695 passed,
+    6 skipped, 5 xfailed); the local 2,721 included 15 tests of the then-uncommitted
+    `tests/test_response_map.py`. CI skips 91 more than a clean local run: 90 need git-ignored local data or a
+    key (reference sequences 25 + 2, HG002 VCFs 21, VEP caches 12, benchmark and compiled files, JASPAR, the
+    worm's inputs) and 1 is the history test, skipped only in a shallow checkout; nothing is deselected. What
+    that skip gives up in CI is the check that the rule version the discovery view prints, `b7e4bf0`,
+    resolves to a commit here; the check still runs in every full checkout and in the pre-push hook, whose
+    temporary worktree shares the full history. A fixture repository could test the lookup but not that
+    fact about this repository's history, so none was added.
+
    Delivery: wave 1 first; then one bounded pilot on cached evidence, ordinary CPUs and local regulatory
    neighbourhoods, chromosomes as validation partitions, supported connections kept across neighbourhood
    boundaries; genome-wide deployment only after the pilot shows improvement.
