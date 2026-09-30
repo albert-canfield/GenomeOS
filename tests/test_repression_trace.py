@@ -153,14 +153,15 @@ def test_the_judge_counts_and_what_refutable_means() -> None:
 
 
 def test_the_judge_refutes_a_direction_from_another_cell_and_never_a_target() -> None:
-    """The asymmetry the trace found, as the registered rules give it (no change is made)."""
+    """The asymmetry the trace found, as the registered rules give it (no change is made). S4's rule is v1,
+    pinned since the direction rule was versioned on 2026-09-29."""
     from genomeos.attribution import correctness as co
 
     def claim(axis: str, value: str) -> co.Claim:
         return co.Claim("E1", "chr1", 100, 400, axis, value, "G1", "placenta")
 
     rose_elsewhere = [co.Observation("crispri_decrease", "crispri:X", "G1", "K562", "training")]
-    a = co.verdict_of(claim(co.ACTIVITY, "represses_target"), rose_elsewhere)
+    a = co.verdict_of(claim(co.ACTIVITY, "represses_target"), rose_elsewhere, rule=co.RULE_V1)
     assert (a.verdict, a.refutable) == (co.INCORRECT, False)
     null_elsewhere = [co.Observation("crispri_null_well_powered", "crispri:X", "G1", "K562", "training")]
     t = co.verdict_of(claim(co.TARGET, "G1"), null_elsewhere)

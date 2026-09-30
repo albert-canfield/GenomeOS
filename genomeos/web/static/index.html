@@ -468,6 +468,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   <div class="card" style="margin-bottom:16px">
     <h2><i class="ic">🧾</i>Evidence explorer<span class="help" data-tip="Every BioLang program (demos, organism programs, the bio.std prelude) read into one row per stated fact. A program is credited only with the facts it declares itself, not those it imports. Confidence at or below 0.5 counts as weak.">?</span>
       <span class="muted" id="ev-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="ev-incomplete"></div>
     <div id="ev-whole" class="kpi"></div>
     <div id="ev-bands"></div>
   </div>
@@ -493,6 +494,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h2><i class="ic">🔎</i>Facts, weakest first</h2>
       <div id="ev-rows" class="scroll" style="max-height:640px"></div>
     </div>
+  </div>
+  <div class="card" id="evd" style="margin-top:16px">
+    <h2><i class="ic">🧪</i>Set-valued CRISPRi evidence: the discovery review<span class="help" data-tip="Read-only. A's discovery-only review (data/results/discovery_review.json, pinned by sha256) shown as one record per screened observation: the admitted registry candidates with how much of the tested interval they cover, the attached claims with their stated cells, the historical C4 verdict and the status under the new rule. Every number is the file's; nothing is scored here.">?</span>
+      <span class="muted" id="evd-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="evd-head" style="font-size:12.5px"></div>
+    <div id="evd-a" style="margin-top:12px"></div>
+    <div id="evd-b" style="margin-top:12px"></div>
+    <div id="evd-c" style="margin-top:12px"></div>
   </div>
 </section>
 
@@ -2185,6 +2194,19 @@ $('#ce-open').onclick = async () => {
   document.querySelector('nav button[data-tab="program"]').click();
 };
 
+// ---- evidence explorer: the incomplete-data notice. A program that fails to parse states no facts,
+// and neither does any program importing it, so every count on this tab leaves them out (ROADMAP
+// item 9). /api/evidence says so with `complete: false` and one `parse_errors` entry per program; the
+// notice repeats both, above the counts and the rows, and is empty when every program parsed.
+function evIncomplete(r) {
+  const errs = r.parse_errors || [];
+  if (r.complete !== false && !errs.length) return '';
+  const n = r.parse_error_count ?? errs.length;
+  return `<div class="ev-incomplete" role="alert" style="border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 12px;margin:4px 0 12px;font-size:13px">`
+    + `<b>Incomplete: ${fmt(n)} program(s) failed to parse</b>; every count and row on this tab leaves out their facts.`
+    + `<ul style="margin:6px 0 0;padding-left:18px">${errs.map(e => `<li><span class="mono">${escH(e.path)}</span>: ${escH(e.message)}</li>`).join('')}</ul></div>`;
+}
+
 async function loadEvidence() {
   try {
     const slow = $('#ev-compiled') && $('#ev-compiled').checked;
@@ -2192,6 +2214,7 @@ async function loadEvidence() {
       ? 'reading the compiled chromosomes too — about twenty seconds…'
       : 'reading the programs…';
     const r = await api('/api/evidence?' + evQuery({limit: 300}));
+    $('#ev-incomplete').innerHTML = evIncomplete(r);
     const w = r.whole, s = r.summary;
     $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
       <div><b>${w.mean_confidence == null ? '–' : w.mean_confidence.toFixed(2)}</b><span>mean of stated confidences</span></div>
@@ -2240,7 +2263,55 @@ $('#ev-csv').onclick = async () => {
   a.click();
   URL.revokeObjectURL(a.href);
   $('#ev-status').textContent = `${fmt(r.matched)} facts exported`;
+  if (r.complete === false) $('#ev-status').textContent += `; incomplete: ${fmt(r.parse_error_count)} program(s) failed to parse`;
 };
+// ---- evidence explorer: set-valued CRISPRi evidence from the discovery review, read-only. Every
+// sentence a row shows is a string from /api/evidence/discovery, so the server's tests pin the page's words
+let evdLoaded = false;
+const evdSmall = (t, muted) => `<div class="${muted ? 'muted' : ''}" style="font-size:12px">${escH(t)}</div>`;
+function evdRow(rec, mark) {
+  const d = rec.display;
+  return `<tr data-id="${escH(rec.id)}">
+    <td><div class="mono" style="font-size:11px">${escH(rec.id)}</div>${evdSmall(d.observation)}${mark ? `<span class="pill">${escH(mark)}</span>` : ''}</td>
+    <td>${evdSmall(d.coverage)}${evdSmall(d.candidates, true)}</td>
+    <td>${evdSmall(d.links)}${d.claims.map(c => evdSmall(c, true)).join('')}<div style="font-size:12px"><b>${escH(d.context)}</b></div></td>
+    <td>${evdSmall(d.verdict)}${evdSmall(d.verdict_note, true)}</td>
+    <td>${evdSmall(d.status)}${evdSmall(d.direction, true)}</td></tr>`;
+}
+function evdTable(v, ids, marks) {
+  return `<div class="scroll" style="max-height:560px"><table><tr><th>observation</th><th>admitted registry candidates and union coverage, new rule</th>`
+    + `<th>attached links and their context<div class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">${escH(v.notes.context)}</div></th>`
+    + `<th>historical verdict</th><th>new rule</th></tr>`
+    + ids.map(i => evdRow(v.records[i], (marks || {})[i])).join('') + '</table></div>';
+}
+const evdCounts = c => Object.entries(c.counts).map(([k, n]) => `${escH(k)} ${fmt(n)}`).join(' · ') + ` (${escH(c.unit)})`;
+async function loadDiscovery() {
+  if (evdLoaded) return;
+  try {
+    $('#evd-status').textContent = 'reading the discovery review…';
+    const v = await api('/api/evidence/discovery');
+    const a = v.sections.discovery, b = v.sections.resolution_change, c = v.sections.other_strata;
+    $('#evd-head').innerHTML = `<div><b>${escH(v.header)}</b></div>
+      <div class="muted mono" style="font-size:11px">${escH(v.source.path)} · sha256 ${escH(v.source.sha256)}</div>
+      ${evdSmall(v.source.status, true)}${evdSmall(`${v.rules.current} · ${v.rules.new}`, true)}${evdSmall(v.notes.unique, true)}`;
+    $('#evd-a').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">${escH(a.title)}</h3>
+      ${evdSmall(a.display.rows)}${evdSmall(a.display.denominator)}${evdSmall(a.display.links)}${evdSmall(a.display.screen, true)}
+      <div style="font-size:12px;margin:4px 0">row context: ${evdCounts(a.context_counts)} · <span class="muted">${escH(v.notes.context)}</span></div>
+      ${evdTable(v, a.ids)}`;
+    const marks = Object.fromEntries(b.also_in_discovery.map(i => [i, 'also in the discovery table']));
+    $('#evd-b').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">${escH(b.title)}</h3>${evdSmall(b.display.rows)}
+      <div style="font-size:12px;margin:4px 0">row context: ${evdCounts(b.context_counts)} · <span class="muted">${escH(v.notes.context)}</span></div>
+      ${evdTable(v, b.ids, marks)}`;
+    $('#evd-c').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">${escH(c.title)}</h3>`
+      + c.groups.map(g => `<div style="font-size:12.5px;margin-top:6px"><b>${escH(g.label)}</b>${g.strata.map(s => evdSmall(s.display, true)).join('') || evdSmall('none', true)}</div>`).join('')
+      + `<div style="margin-top:6px">${evdSmall(c.pooled.display)}${evdSmall(`registered reading: ${c.reading} (${c.meaning})`)}</div>
+      <div style="font-size:12.5px"><b>${escH(c.note)}</b></div>`;
+    $('#evd-status').textContent = `${fmt(Object.keys(v.records).length)} observations, each shown once`;
+    evdLoaded = true;
+  } catch (e) { $('#evd-status').textContent = e.message; }
+}
+document.querySelector('nav button[data-tab="evidence"]').addEventListener('click', () => setTimeout(loadDiscovery));
+if ($('#evidence').classList.contains('active')) setTimeout(loadDiscovery);  // a deep link opened the tab before this was defined
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;

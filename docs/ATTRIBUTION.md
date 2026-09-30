@@ -11109,6 +11109,11 @@ row to the verdict.
 `by_cell` value per cell name: the last track above the scorer's 0.05 recording threshold. In three cases
 the largest drop or rise sits on another track with the same cell name:
 
+*2026-09-29, added afterwards beside the paragraph above: audit B (`612eb87`) found the sweep stored
+values at threshold 0.0, not 0.05, so values below 0.05 are kept and only exact-zero tracks are dropped;
+"above the scorer's 0.05 recording threshold" is corrected in audit B's section below. The finding that
+`by_cell` keeps one value per cell name, the last emitted, stands.*
+
 - HEMGN: K562 -0.0948 is kept, against -0.0962 on another K562 track.
 - BEX4: K562 -0.1208 is kept, against -0.1229.
 - CCND1: K562 +0.1036 is kept, against +0.1086.
@@ -11134,6 +11139,1024 @@ that decided it.
 - a validation of the labels, the model or the judge;
 - a rate, because the five claims were chosen for being judged wrong;
 - evidence about claims S4 did not judge.
+
+## The direction rule, versioned: S4's v1 result stays as history, and v2 judges a direction only in the cell the claim states (item 12 S4 follow-up, 2026-09-29, lane-judge2)
+
+This section sits beside S4 and the repression trace and edits neither. S4's committed result
+(`data/results/attribution_correctness.json`) was judged under the rule S4 registered. That rule is kept
+unchanged as **v1**. A second rule, **v2**, is used for every judging call from this registration on.
+
+### Registered before any claim was re-judged (2026-09-29)
+
+The decision is Albert's, 2026-09-29, quoted in full (`correctness.RULE_DECISION`):
+
+> "Judge rule: preserve the historical result, correct future judging. The current rule falls back to
+> another cell when the claimed cell lacks measurements. That cannot establish that a cell-specific
+> direction is wrong. Registration makes the analysis traceable; it does not make that interpretation
+> valid. Introduce a versioned rule: judge direction in the stated cell; otherwise return 'not assessed
+> in this context.' Keep cross-cell disagreement as a separate finding. Apply this symmetrically: the
+> trace says 54 correct and five incorrect verdicts came from other cells. All 59 should become
+> unassessed under the revised rule—not just the five errors. Preserve the original results beside the
+> correction. ID1 remains a separate, useful finding: its cached K562 prediction disagrees with the K562
+> experiment. That does not directly refute the compiled whole-blood claim."
+
+**The v2 rule, word for word** (`correctness.DIRECTION_RULE["v2"]`):
+
+> v2 (from 2026-09-29): the direction (activates_target, represses_target) is judged only in the cell
+> the claim states, and only by the named gene's significant changes there: a change the claimed way
+> establishes it, a change the other way refutes it, and both in the stated cell is
+> `observation_model_inadequate`. When the claim states no cell, or the named gene responded in some cell
+> but has no significant change in the stated cell, the claim is not judged, with the reason
+> `not_assessed_in_this_context`, whatever the gene did in any other cell: agreement in another cell no
+> longer establishes a direction, just as disagreement in another cell no longer refutes one. Each
+> significant change of the named gene in another cell is kept on the verdict as a separate cross-cell
+> finding (`cross_cell`), marked `agrees` or `disagrees` with the claimed direction; it never decides the
+> verdict. A claim whose gene responded in no cell keeps v1's reason, since no cell decides it under
+> either rule. Reporter values and no_effect_measured, and the target, context, origin and
+> molecular-role axes, are judged exactly as under v1
+
+**`refutable` under v2** (`correctness.REFUTABLE_RULE["v2"]`):
+
+> v2: on a direction claim, true when the stated cell was screened on the named gene with an outcome
+> that can establish or refute the direction (a significant change there; the table lets no null decide
+> a direction), false otherwise; target and context keep v1's definition; where the field is not
+> computed (origin, molecular role, and the activity values that are not a direction) v2 writes null,
+> never false
+
+**Which rule judged a result** (`correctness.RULE_RECORD`):
+
+> a result judged under v2 names its rule: `judge_rule` in its manifest parameters and `rule` in its
+> body. A result that names no rule was judged under v1, the only rule before 2026-09-29; the scripts
+> that reproduce such results pin RULE_V1 and add nothing to their output, so their committed files
+> still reproduce (scripts/s4_correctness_run.py without `--rule v2`, scripts/prior_only_test.py,
+> scripts/pilot_biological_gate.py, scripts/repression_trace.py)
+
+**What was seen before registering** (`correctness.SEEN_BEFORE_V2`). The 39 / 59 split was already known:
+
+> seen before this registration, and used to write EXPECTED_V2: the repression trace
+> (data/results/repression_trace.json, commits 54c47f1..641909e) had already counted the committed S4
+> activity verdicts by where they were decided: 39 in the stated cell, all established; 54 established
+> and 5 refuted only in another cell. It had also computed that judging direction only in the stated
+> cell would give 39 judged, 39 established, with 59 moved to not judged. The 39 / 59 split and the S4
+> counts expected below were therefore known before this rule was registered. Also read before
+> registration: the committed S4-beside blocks of prior_only_test.json and pilot_biological_gate.json
+> (their activity, target-refutable and context counts), from which the expected moves there are
+> derived. The registration makes the re-judge traceable; it does not make the interpretation valid
+
+**The counts expected under v2** (`correctness.EXPECTED_V2`):
+
+> on the committed S4 claims and sources: activity is judged on 39 of 440,377 claims, all 39
+> established (0 refuted, 0 unresolved, 0 observation-model-inadequate); the 59 verdicts v1 decided only
+> in another cell (54 established, 5 refuted) are not judged, reason not_assessed_in_this_context, each
+> with its other-cell observations kept as a cross-cell finding, 54 agreeing and 5 disagreeing with the
+> claimed direction; every other activity reason keeps its v1 count (1,377 outside the claim's scope, 23
+> until the target responds, 3,194 only suggest, 18,747 only cannot judge, 416,938 no observation);
+> activity refutable is 39; no count moves on target (98 of 98), context (39 of 39), origin or molecular
+> role (0 judged). ID1's represses_target claim in Whole_Blood (EH38E3426791) is not assessed in this
+> context, with Gasperini2019's K562 decrease of ID1 kept as a disagreeing cross-cell finding. How many
+> of the 39 judged verdicts also carry a cross-cell finding was not counted before registration. Beside
+> S4, derived and not rerun: in the prior-only test's unchanged_on_the_same_blocks (Gasperini2019)
+> activity would go from 41 of 43 to 24 of 24, 19 moving (17 established, 2 refuted); in the pilot
+> gate's unchanged_on_same_blocks from 27 of 28 to 12 of 12 on Gasperini2019 (16 moving: 15
+> established, 1 refuted), from 3 of 3 to 0 of 0 on Schraivogel2020 (3 moving, all established) and 1 of
+> 1 unchanged on Xie; the pilot's and the prior's own labellings state no activity claim, so none of
+> their counts move
+
+The re-judge is run once, with the same claims and sources as S4, and written as a new result,
+`data/results/attribution_correctness_v2.json`. `attribution_correctness.json` stays as it is, beside
+it. If any count other than the 59 moves, the lane stops and reports it.
+
+### The re-judge under v2, beside v1 (2026-09-29, later)
+
+**S4's original reading stands as the historical v1 result.** `attribution_correctness.json` is
+unchanged. In the same run, v1 was judged again and matched that file key by key, in order, leaving
+out only what records the run (`result`, `date`, `seconds`, the manifest). The v2 result is
+`attribution_correctness_v2.json`, judged once from commit 172572c in a clean worktree, with a clean
+stamp. Its manifest records `judge_rule: v2`. No model request was made.
+
+**Why v2 corrects future judging.** In Albert's words, the v1 rule "falls back to another cell when
+the claimed cell lacks measurements. That cannot establish that a cell-specific direction is wrong."
+The same holds the other way: agreement in another cell cannot establish that the direction is right.
+So v2 treats both alike. All 59 verdicts decided only in another cell become "not assessed in this
+context", the 54 correct ones as well as the 5 wrong ones. What the other cells show is kept beside
+each claim as a separate finding.
+
+**The counts, side by side** (`side_by_side` in the result):
+
+| Axis | Claims | v1 judged | v1 established / refuted | v2 judged | v2 established / refuted | Not assessed in this context (v2) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Origin | 470,077 | 0 | 0 / 0 | 0 | 0 / 0 | 0 |
+| Molecular role | 659,403 | 0 | 0 / 0 | 0 | 0 / 0 | 0 |
+| Activity | 440,377 | 98 | 93 / 5 | 39 | 39 / 0 | 59 |
+| Target | 440,377 | 98 | 98 / 0 | 98 | 98 / 0 | 0 |
+| Context | 440,377 | 39 | 39 / 0 | 39 | 39 / 0 | 0 |
+
+Unresolved and observation-model-inadequate are 0 on every axis under both rules. Details on activity:
+
+- **Other not-judged reasons:** every one keeps its count under both rules. That is 1,377 outside the
+  claim's scope, 23 until the target responds, 3,194 only suggest, 18,747 only cannot judge, and
+  416,938 no observation.
+- **`refutable`:** v1 never computed it on activity. Under v2 it is 39, the directions decided in the
+  stated cell.
+- **Counts that move only with the 59:**
+  - `decided_by_kind` goes from 97 decreases and 1 increase to 39 decreases.
+  - Verdicts decided with a held-out-file pair go from 14 to 1.
+- **Check:** every count change is accounted for by the 59 moved claims (`unexplained_count_changes` is
+  empty).
+
+**The 59 are the ones registered.**
+
+- Under v1, all 59 were decided only in another cell: 54 established, 5 refuted.
+- Under v2, each keeps its other-cell observations as a cross-cell finding: 54 agree with the claimed
+  direction and 5 disagree.
+- The 5 that disagree are the four repression claims the trace followed, plus the CCND1 comparison.
+- 48 of the 59 other-cell observations are in K562.
+- None of the 39 directions judged in the stated cell carries a cross-cell finding.
+- Under v2, no repression claim is judged at all.
+
+These are the counts registered before the run. The 39 / 59 split had already been seen in the
+repression trace, so agreement with the registration is expected, not evidence for the rule. Albert's
+reasoning justifies the rule; the registration only makes the re-judge traceable.
+
+**ID1 is a separate finding.** Under v2, ID1's `represses_target` claim in Whole_Blood (EH38E3426791) is
+not assessed in this context. Gasperini2019's K562 decrease of ID1 is kept beside it as a cross-cell
+finding that disagrees. Apart from the verdict, the repression trace found that the model's cached K562
+prediction disagrees with the K562 experiment ("model on K562: by_cell[K562] +0.1433; measured
+EffectSize -0.1582"). That does not directly refute the compiled whole-blood claim.
+
+**Other judging paths, audited and not changed.** Albert's decision covers direction only.
+
+- **`_target`: a finding only, for the owner to decide separately.** It establishes a target from a
+  response in any cell. So 59 of S4's 98 established targets were decided only from another cell. Only
+  the other 39 had a response in the stated cell (`refutable`). A target is never refuted from another
+  cell. If target were judged only in the stated cell, those 59 would move. Nothing on the target axis
+  was changed here.
+- **`_context`:** decides all 39 of its verdicts in the stated cell.
+- **`_reporter`:** falls back to other cells when the stated cell has no reporter.
+- **`_no_effect`:** pools every cell when the claim states none.
+- S4 states no reporter or `no_effect_measured` claim, so 0 verdicts would move on either path.
+- **Origin and molecular role:** no cell is read.
+
+**Beside S4, derived from the committed counts and not rerun.** The prior-only test's and the pilot
+gate's results were not regenerated. Their S4-beside blocks would move only on the unchanged labels'
+activity counts:
+
+- **Prior-only test, Gasperini2019:** from 41 of 43 to 24 of 24 (19 move).
+- **Pilot gate, Gasperini2019:** from 27 of 28 to 12 of 12 (16 move).
+- **Pilot gate, Schraivogel2020:** from 3 of 3 to none judged (3 move).
+- **Pilot gate, Xie:** 1 of 1, unchanged.
+
+The pilot's and the prior's own labellings state no activity claim. Their scripts pin v1, so their
+committed files still reproduce.
+
+**What it may be called:** an internal development benchmark reading of the same S4 claims under the
+v2 direction rule, beside the v1 reading.
+
+**What it may not be called:**
+
+- a validation, fresh or external;
+- evidence that the 59 directions are right or wrong: they are not assessed in the cell they name;
+- a correction of S4's committed result, which stands as the v1 result.
+
+## The target rule, versioned: v3 judges a target claim only in the cell it states, for supported and refuted verdicts alike, and keeps every other cell beside it (item 12 S4 follow-up, 2026-09-29, lane-judge3)
+
+This section sits beside S4, the repression trace and the versioned direction rule, and edits none of
+them. S4's result (`attribution_correctness.json`, v1) and the v2 re-judge
+(`attribution_correctness_v2.json`) stay as they are. A third rule, **v3**, is v2 with the target claim
+judged only in its stated cell. It becomes the rule a call uses when it names none once the code that
+implements it is committed; v1 and v2 stay selectable.
+
+### Registered before any claim was re-judged under v3 (2026-09-29)
+
+The decision is Albert's, 2026-09-29, quoted in full (`correctness.RULE_DECISION_V3`):
+
+> "Target axis: judge the compiled target claim only in its stated cell. Preserve the 59 other-cell
+> relationships as supporting evidence elsewhere. Report 39 supported in context, 59 unassessed in
+> context, 98 supported somewhere. Version the change and preserve earlier results. Apply the context
+> restriction to both positive and negative verdicts." And: "Avoid presenting either 39/39 figure as
+> general accuracy: it describes the small subset assessable in the stated context."
+
+**The v3 target rule, word for word** (`correctness.TARGET_RULE["v3"]`):
+
+> v3 (from 2026-09-29): a target claim is judged only in the cell the claim states, and only by the named
+> gene's observations there that the table lets establish or refute a target: a significant change of the
+> gene on silencing the element in the stated cell supports the claim in context (`correct`), a
+> well-powered null of the gene in the stated cell refutes it in context (`incorrect`), and both in the
+> stated cell is `unresolved`. What the gene did in any other cell neither establishes the target, nor
+> refutes it, nor is a condition for either: a response in another cell no longer establishes a target,
+> and no longer keeps a null in the stated cell from refuting one. When the claim states no cell, or the
+> stated cell holds no such observation of the gene but another cell holds a response, the claim is not
+> judged, with the reason `not_assessed_in_this_context`. On every target verdict the stated cell decides,
+> and on every one not assessed in this context, each response and each well-powered null of the gene in
+> another cell is kept beside the verdict as a cross-cell finding (`cross_cell`): a response `agrees`
+> (supporting evidence elsewhere) and a null `disagrees` (contrary evidence elsewhere); it never decides
+> the verdict. A claim the stated cell does not decide and whose gene responded in no cell keeps v1's
+> reason and detail, with no cross-cell finding (a null only in another cell stays
+> `well_powered_null_only_in_another_context`), since no cell decides it under any rule. `refutable` keeps
+> v1's definition on target. Direction claims are judged by DIRECTION_RULE[v2] unchanged, and context,
+> reporter values, no_effect_measured, origin and molecular role exactly as under v1 and v2
+
+**The v1 condition on a refutation, and what v3 does with it** (`correctness.TARGET_V1_CONDITION`):
+
+> The v1 target rule reads another cell on the negative side too: a well-powered null in the stated cell
+> refutes the target only when the gene responds in no cell, and when the gene responds in another cell
+> the target is established and the null is read on context instead. S4's registration gives the reason:
+> 'A response in another cell with a null in the stated cell leaves the target established and refutes the
+> context', with, on context, 'so one failure is never counted on both axes' (docs/ATTRIBUTION.md, S4
+> registered, How each axis is judged; S4's test
+> test_response_elsewhere_and_null_in_the_stated_cell_is_one_context_error_not_two). The reason is
+> bookkeeping between the target and context axes. It is not a condition on what a null can show: S4's
+> only such condition is the null's power (PowerAtEffectSize20 >= 0.8, R2), a property of the stated-cell
+> observation itself, which v3 keeps; S4 names no requirement that the perturbation be shown to work, in
+> the stated cell or elsewhere. The bookkeeping reason cannot be met within the stated cell alone: judged
+> only there, the target claim asks what the context claim asks, of the same observation, and telling a
+> target failure from a context failure needs another cell. v3 therefore does not keep it on the target
+> axis, as the owner's decision requires for negative verdicts: a well-powered null in the stated cell
+> refutes the target in context whatever other cells show. Where the gene responded in another cell and
+> has a null and no response in the stated cell, that null now refutes the target in context and, under
+> the unchanged context rule, the context claim; the two stay on their own axes and are never combined
+> (NO_SUM). On S4's claims the case occurs 0 times (target refutable 39, all 39 established in the stated
+> cell; context refuted 0). The context axis's own condition, judged only where the gene responds in some
+> cell, is not changed by v3 and is left to the owner as a finding
+
+The brief for this lane described the v1 condition the other way round: a refutation allowed only when
+the gene responded somewhere, with `not_judged_until_the_target_responds` otherwise. That is the context
+axis's condition, and the direction rule's, not the target's. `_target` never returns that reason.
+
+**The owner's terms** (`correctness.IN_CONTEXT_SCOPE`, `correctness.IN_CONTEXT_TERMS`). They are computed
+on:
+
+> target claims, and direction claims (activates_target, represses_target) on the activity axis: the two
+> claim kinds v3 judges only in the stated cell. Counts of claims, per axis, never combined across axes
+> and never a rate
+
+| Term | What it counts |
+| --- | --- |
+| `supported_in_context` | claims the stated cell supports: verdict correct, decided only by observations in the stated cell |
+| `refuted_in_context` | claims the stated cell refutes: verdict incorrect, decided only by observations in the stated cell |
+| `unresolved_in_context` | claims the stated cell both supports and refutes |
+| `observation_model_inadequate_in_context` | direction claims whose gene moved both ways in the stated cell |
+| `unassessed_in_context` | claims not judged, with the reason not_assessed_in_this_context: the stated cell holds nothing that decides them and another cell holds a response of the gene |
+| `supported_elsewhere_only` | claims not supported in context that carry at least one cross-cell finding that agrees: a response of the gene in another cell (on direction, the claimed way) |
+| `supported_somewhere` | supported in context plus supported elsewhere only: the claims with supporting evidence in some cell |
+
+**Beside every such count, and beside every 39 of 39** (`correctness.IN_CONTEXT_CAUTION`):
+
+> these counts describe only the small subset of claims assessable in the stated context, where a screen
+> tested the named gene in the cell the claim names (mostly K562); an N of N here, such as 39 of 39, is
+> not general accuracy, of the labelling or of any axis
+
+**Which rule judged a result** (`correctness.RULE_RECORD_V3`):
+
+> a result judged under v3 names its rule (`judge_rule: v3` in its manifest parameters, `rule: v3` in its
+> body) and carries `in_context`, the target and direction counts in the owner's terms, with
+> IN_CONTEXT_CAUTION beside them and beside each established-over-decided share S4's quantities print on
+> target, activity and context. From the code that implements v3 on, v3 is the rule a call uses when it
+> names none; v1 and v2 stay selectable and unchanged, and v2's rule record keeps the rules and the
+> default it registered. scripts/s4_correctness_run.py without --rule pins v1 and with --rule v2 pins v2;
+> --rule v3 judges the same claims and sources under all three rules, refuses to write unless v1
+> reproduces attribution_correctness.json key by key and v2 reproduces the judged body and side-by-side
+> counts of attribution_correctness_v2.json, and writes attribution_correctness_v3.json beside both, which
+> it reads and never writes
+
+**What was seen before registering** (`correctness.SEEN_BEFORE_V3`). The 39 / 59 split was already known:
+
+> seen before this registration, and used to write EXPECTED_V3: the v2 re-judge's audit of the other
+> judging paths (docs/ATTRIBUTION.md, 'The re-judge under v2, beside v1', commit 8f3689e) had counted S4's
+> 98 established targets by where they were decided: 39 in the stated cell, the 39 refutable, and 59 only
+> from another cell; the owner's decision quotes the 39 / 59 / 98 it expects. The split and the counts
+> expected below were therefore known before this rule was registered. Also read before registration: the
+> target, context and activity tallies of the committed attribution_correctness.json and
+> attribution_correctness_v2.json, including v2's cross-cell findings on activity (54 agreeing, 5
+> disagreeing), and the committed S4-beside blocks of prior_only_test.json and pilot_biological_gate.json
+> (their target, target-refutable, context and activity counts, and the judged verdicts they list), from
+> which the moves expected there are derived. No claim had been judged under v3. The registration makes
+> the re-judge traceable; it does not make the interpretation valid
+
+**The counts expected under v3** (`correctness.EXPECTED_V3`):
+
+> on the committed S4 claims and sources, target: 39 supported in context, 0 refuted in context, 0
+> unresolved, 0 observation-model-inadequate; 59 unassessed in context (reason
+> not_assessed_in_this_context, detail 'the gene responded only in other cells'), each keeping its
+> other-cell responses as cross-cell findings that agree; 98 supported somewhere (39 in context, 59
+> elsewhere only). Every other target count keeps its v1 and v2 value: 1,400 outside the claim's scope
+> (1,377 element screened but gene not tested, 23 well-powered null only in another context), 0 until the
+> target responds, 3,194 only suggest, 18,747 only cannot judge, 416,938 no observation; refutable 39.
+> Moving with the 59: decided_by_kind from 97 decreases and 1 increase to 39 decreases, and verdicts
+> decided with a held-out-file pair from 14 to 1. How many of the 39 or the 59 also carry a disagreeing
+> cross-cell finding (a well-powered null in another cell) was not counted before registration. Activity
+> (direction) is exactly as under v2: 39 supported in context, 0 refuted in context, 59 unassessed in
+> context (54 with an agreeing and 5 with a disagreeing cross-cell finding), 93 supported somewhere (39 in
+> context, 54 elsewhere only). Context stays 39 established, 0 refuted; origin and molecular role 0
+> judged. Between v2 and v3 exactly the 59 target verdicts move; between v1 and v3, those 59 and v2's 59
+> directions. The 39 of 39 on target and on direction describe the small subset assessable in the stated
+> context and are not general accuracy. Beside S4, derived from the committed counts and not rerun
+> (neither result is regenerated, and neither gate's registered verdict reads an S4 block): in the
+> prior-only test on Gasperini2019, unchanged_on_the_same_blocks target from 43 of 43 to 24 supported and
+> 0 refuted in context, 19 unassessed in context, 43 supported somewhere, and the prior's own labelling
+> from 53 of 59 to 40 supported and 6 refuted in context, 13 unassessed in context, 53 supported
+> somewhere; in the pilot gate on Gasperini2019, unchanged_on_same_blocks from 28 of 28 to 12 supported
+> and 0 refuted in context, 16 unassessed in context, 28 supported somewhere, and the pilot's own
+> labelling from 36 of 44 to 28 supported and 8 refuted in context, 8 unassessed in context, 36 supported
+> somewhere; on Schraivogel2020, unchanged_on_same_blocks from 3 of 3 to none judged, 3 unassessed in
+> context, 3 supported somewhere, and the pilot's 3 of 4 unchanged; on Xie, 1 of 1 unchanged for both; no
+> target is judged on any other source. Their activity counts move as EXPECTED_V2 derived; the pilot's and
+> the prior's own labellings state no activity claim
+
+The re-judge is run once, with the same claims and sources as S4, and written as a new result,
+`data/results/attribution_correctness_v3.json`. The v1 and v2 files stay byte-identical beside it. If
+any count other than the 59 target verdicts moves between v2 and v3, the lane stops and reports it
+before explaining it.
+
+### The re-judge under v3, beside v1 and v2 (2026-09-29, later)
+
+**S4's reading stands as the v1 result, and the v2 re-judge as the v2 result.**
+`attribution_correctness.json` and `attribution_correctness_v2.json` are unchanged, byte for byte. In the
+same run, v1 was judged again and matched its file key by key, leaving out only what records the run.
+v2 was judged again and matched its file's judged body and side-by-side counts. The v3 result is
+`attribution_correctness_v3.json`, judged once from commit b7cb814 in a clean worktree, with a clean
+stamp. Its manifest records `judge_rule: v3`. No model request was made.
+
+**The owner's decision** (quoted in full in the registration above): judge the compiled target claim
+only in its stated cell, for positive and negative verdicts alike, and keep the 59 other-cell
+relationships as supporting evidence elsewhere.
+
+**The counts in the owner's terms, side by side** (`in_context_side_by_side` in the result). Under v1
+and v2 a verdict decided with another cell is counted apart.
+
+| Claims | Rule | Supported in context | Refuted in context | Decided with another cell | Unassessed in context | Supported somewhere |
+| --- | --- | --- | --- | --- | --- | --- |
+| Target | v1 | 39 | 0 | 59, all established | 0 | 98 |
+| Target | v2 | 39 | 0 | 59, all established | 0 | 98 |
+| Target | v3 | 39 | 0 | 0 | 59 | 98 |
+| Direction | v1 | 39 | 0 | 59: 54 established, 5 refuted | 0 | 93 |
+| Direction | v2 | 39 | 0 | 0 | 59 | 93 |
+| Direction | v3 | 39 | 0 | 0 | 59 | 93 |
+| Context | v1, v2, v3 | 39 | 0 | 0 | not a term of this axis | not a term of this axis |
+
+**Beside every figure in this table, and every 39 of 39 in this section** (`correctness.IN_CONTEXT_CAUTION`):
+
+> these counts describe only the small subset of claims assessable in the stated context, where a screen
+> tested the named gene in the cell the claim names (mostly K562); an N of N here, such as 39 of 39, is
+> not general accuracy, of the labelling or of any axis
+
+Unresolved and observation-model-inadequate are 0 on every axis under all three rules. Origin and
+molecular role judge nothing under any rule.
+
+**Target, in detail.**
+
+- **Other not-judged reasons:** every one keeps its v1 and v2 count. That is 1,400 outside the claim's
+  scope (1,377 element screened but gene not tested, 23 well-powered null only in another context), 0
+  until the target responds, 3,194 only suggest, 18,747 only cannot judge, and 416,938 no observation.
+- **`refutable`:** 39 under all three rules.
+- **Counts that move only with the 59:**
+  - `decided_by_kind` goes from 97 decreases and 1 increase to 39 decreases.
+  - Verdicts decided with a held-out-file pair go from 14 to 1.
+- **Check:** the moved claims account for every count change, between v2 and v3 and between v1 and v3
+  (`unexplained_count_changes` is empty in both).
+
+**The 59 are the ones registered.**
+
+- Between v2 and v3, exactly 59 claims move. All are targets that v2 established only from another cell.
+  All become not assessed in this context, with the detail "the gene responded only in other cells".
+- Each keeps its other-cell responses beside it as cross-cell findings that agree: supporting evidence
+  elsewhere.
+- The registration left one count open. It is 0: none of the 59, and none of the 39, carries a
+  disagreeing cross-cell finding (a well-powered null in another cell). The 39 carry no cross-cell
+  finding at all.
+- Between v1 and v3, 118 claims move: these 59 targets and v2's 59 directions.
+
+Every count matches the registration. The 39 / 59 split had already been seen, so agreement is expected,
+not evidence for the rule. Albert's decision justifies the rule; the registration only makes the
+re-judge traceable.
+
+**The direction correction is resolved.** v3 carries v2's direction rule unchanged. Every direction
+count under v3 equals v2's.
+
+**Left to the owner as findings, and not changed here.**
+
+- **One null on both axes.** A gene can respond in another cell and have a well-powered null, but no
+  response, in the stated cell. That null now refutes the target in context and, under the unchanged
+  context rule, the context claim. The two stay on their own axes and are never combined. This happens 0
+  times on S4's claims.
+- **Context's own cross-cell condition.** The context axis is judged only where the gene responds in some
+  cell. So another cell's response is still the precondition that lets a stated-cell null refute a
+  context claim.
+
+**Beside S4, derived from the committed counts and not rerun.** The prior-only test and the pilot gate
+were not regenerated, and their scripts pin v1. Neither gate's registered verdict reads an S4 block. On
+the target axis their S4-beside blocks would move as follows:
+
+- **Prior-only test, Gasperini2019:**
+  - unchanged labels: from 43 of 43 to 24 supported and 0 refuted in context, 19 unassessed;
+  - the prior's own labelling: from 53 of 59 to 40 supported and 6 refuted in context, 13 unassessed.
+- **Pilot gate, Gasperini2019:**
+  - unchanged labels: from 28 of 28 to 12 supported and 0 refuted in context, 16 unassessed;
+  - the pilot's own labelling: from 36 of 44 to 28 supported and 8 refuted in context, 8 unassessed.
+- **Pilot gate, Schraivogel2020:** unchanged labels from 3 of 3 to none judged, 3 unassessed; the pilot's
+  3 of 4 does not move.
+- **Pilot gate, Xie:** 1 of 1 for both, unchanged. No target is judged on any other source.
+
+Their activity counts move as the v2 section derived. The caution above applies to every one of these
+figures: each N of N describes the small subset assessable in the stated context.
+
+**What it may be called:** an internal development benchmark reading of the same S4 claims under v3, in
+the owner's terms, beside the v1 and v2 readings.
+
+**What it may not be called:**
+
+- general accuracy: every N of N here, the 39 of 39 on target and on direction among them, describes the
+  small subset assessable in the stated context;
+- a validation, fresh or external;
+- evidence that the 59 targets are right or wrong in the cell they name: they are not assessed there;
+- a correction of S4's result or of the v2 re-judge, which stand as the v1 and v2 results.
+
+## Audit A, candidate coverage: 365 of the 387 decrease links C4 counted without a registry element have one sharing their bases, 362 of them failing only the reciprocal rule's width requirement, and 21 are absent from both element sets (item 13 C4 follow-up, 2026-09-29, lane-place)
+
+This section sits beside C4 and edits nothing in it. C4 (`b7e4bf0`) sorted the 661 measured CRISPRi
+decrease links with `ablation.placement`: 212 meet the overlap rule in a compiled predicted element,
+62 more would meet it in an ENCODE cCRE, and 387 meet it in neither. The 449 not placed are placement
+failures, not 449 proven absent enhancers. This audit asks why each link fails, one cause at a time,
+over every screened pair. Decreases and nulls are reported apart at every step, and the ranking and
+the intervals stay frozen. `scripts/placement_audit.py`, `data/results/placement_audit.json`,
+`tests/test_placement_audit.py`.
+
+**Status.** This is internal development evidence and a bounded audit. It is not a biological result.
+Every outcome it reads was read before: `138824f`, `ecc3452`, `f48b909`, `a39073d`, `b7e4bf0`,
+`cc824f4` and `b7cb814` (`prior_exposure` in the result). No resplit restores independence.
+
+### Registered before any per-outcome count (2026-09-29, `dd8c49c`)
+
+- **The cascade.** Every link, keyed as C4 keys it (chrom, start, end, gene, cell, split), gets the
+  first cause that holds:
+  1. placed in a compiled element;
+  2. a registry element meets the rule (candidate exclusion, split by whether the whole-chromosome
+     sweep scored that element and named a target);
+  3. a zero-width source row;
+  4. a registry element holds at least half of the smaller interval, but the tested interval is
+     outside 75 to 700 bp, so no 150 to 350 bp registry element can ever meet the reciprocal rule;
+  5. the same, with a reachable width;
+  6. a partial boundary overlap;
+  7. no registry element shares a base.
+- **The one policy**, fixed from the conventions alone: an element carries a tested interval when
+  their overlap is at least half of the smaller of the two widths. The threshold is the measured
+  layer's own 0.5. Nothing is padded, moved or merged.
+- **Three stops.** The policy is reported as denominator or overlap inflation if any of these holds:
+  - (a) its rescue of positives minus its rescue of nulls has a gene-clustered bootstrap 95% interval
+    whose lower bound is at or below zero;
+  - (b) that excess does not beat the same excess on the same links with every tested interval moved
+    20 kb either way;
+  - (c) the excess vanishes within the 75 to 700 bp intervals.
+- The only outcome figures seen before the registration were C4's 212, 62 and 387.
+
+### Each input's build and convention
+
+The audit reproduces C4's placement exactly before it reads anything else.
+
+| Input | sha256 | Declared | Found |
+|---|---|---|---|
+| CRISPRi training file | `9eddfe18…d79405` | GRCh38, BED 0-based half-open | see below |
+| CRISPRi held-out file | `7783534a…5ffd38` | the same | see below |
+| cCRE registry, 24 files | `95e79f14…20c4a6` (combined) | ENCODE cCREs v3 GRCh38, BED 0-based half-open | 1,063,878 elements, 150 to 350 bp |
+| Compiled programs, 24 files | `20d2806e…ead0facf` (combined) | the registry's coordinates by id | all 440,377 predicted elements are registry ids at the registry's exact coordinates (0 moved, 0 missing) |
+
+What the CRISPRi files show, read without outcomes:
+
+- **Build.** The GRCh38 columns touch a registry element at 91.2% of the 5,638 distinct tested
+  intervals. The same intervals moved 20 kb touch one at 41.6% and 41.9%. The name field's source
+  coordinates, where they differ (3,749 lifted-over intervals), touch one at 37.2%, the chance level of
+  another build.
+- **TSS.** The benchmark's TSS sits within 1 kb of GENCODE v50's for 2,147 of 2,334 genes, with a median
+  difference of 29.5 bp.
+- **Liftover** kept the width of all but 66 rows.
+- **One base.** Moving every tested start or end by one base changes the cause of 1 to 3 positives and
+  23 to 25 nulls. The DC_TAP rows are 499 bp wide, a one-base end convention of the source.
+- **One source defect.** The held-out Nasser2021 PTGER4 row is chr5:40490507-40490507, with zero width
+  in its source name too.
+
+### The attrition (current rule, training / held-out)
+
+Positives are the 661 decrease links. Nulls are the 14,073 other links: 9,801 well-powered nulls,
+4,113 underpowered nulls and 159 significant increases. The result keeps each null kind apart.
+
+| Cause | Positives | Nulls |
+|---|---|---|
+| placed in a compiled element | 212 (169 / 43) | 4,613 (3,002 / 1,611) |
+| registry would: candidate exclusion | 62 (43 / 19) | 3,182 (2,236 / 946) |
+| of which: registry element not scored by the sweep | 11 | 467 |
+| of which: scored, no target named | 22 | 1,565 |
+| of which: scored, only a non-coding target named | 29 | 1,150 |
+| zero-width source row | 1 (0 / 1) | 0 |
+| rule and width: no registry element can reach the reciprocal rule at this width | 290 (183 / 107) | 3,174 (2,513 / 661) |
+| rule and width: reachable width, these widths fail it | 72 (60 / 12) | 1,892 (1,240 / 652) |
+| partial boundary overlap | 3 (1 / 2) | 111 (90 / 21) |
+| no registry element shares a base | 21 (15 / 6) | 1,101 (804 / 297) |
+
+**Reading.**
+
+- **No convention bug.** There is no build, liftover or 0/1-based error. All three sets are GRCh38 BED
+  half-open, and the compiled set is the registry's.
+- **C4's label is inaccurate.** `not_placed_no_registry_element` is wrong for 365 of its 387 links: a
+  registry element shares bases with each of them. 362 fail only because the reciprocal rule asks two
+  intervals to be within a factor of two in width. Under that rule, a tested interval wider than 700 bp
+  cannot be placed anywhere, whatever DNA it holds, and 290 of the 661 positives are that wide.
+- **Placement is width, not DNA.** The current rule places positives and nulls at the same rate:
+  32.1% against 32.8%, a difference of −0.7 points [−4.8, +3.4].
+- **Genuine absence is small.** 21 positives have no registry element sharing a base, so none in
+  either set. One more is the zero-width source row.
+- **The 62 are the model's element selection or the sweep's scope.** No compiled element was dropped
+  or moved.
+
+### The registered policy, scored (`0183ef5`, clean stamp)
+
+No registered stop fires.
+
+| | Current rule | Policy |
+|---|---|---|
+| positives placed in a compiled element | 212 / 661 (32.1%) | 497 / 661 (75.2%) |
+| nulls placed in a compiled element | 4,613 / 14,073 (32.8%) | 7,706 / 14,073 (54.8%) |
+| placed or registry would, positives / nulls | 41.5% / 55.4% | 96.2% / 91.4% |
+| placed and carried by more than one compiled element, positives / nulls | 0 / 0 | 131 (26.4%) / 1,593 (20.7%) |
+| chance placement: intervals moved +20 kb and −20 kb, positives | 3.2%, 4.4% | 21.3%, 21.5% |
+| chance placement: the same, nulls | 5.7%, 5.7% | 18.8%, 18.3% |
+
+- **Rescue.** Among the links the current rule leaves unplaced, the policy rescues 285 of 449
+  positives (63.5%) and 3,093 of 9,460 nulls (32.7%).
+- **Stop (a).** The excess is +0.308 [+0.258, +0.356].
+- **Stop (b).** The excess on moved intervals is +0.049 and +0.046, and the excess minus the moved
+  excess is +0.26 [+0.214, +0.305].
+- **Stop (c).** Within 75 to 700 bp the policy rescues 46 of 150 positives against 1,031 of 6,172 nulls,
+  an excess of +0.140 [+0.068, +0.215].
+
+**Errors and where the gain sits.** The following table was added after the first run and is outside
+the registration.
+
+- 235 of the 285 rescued positives, and 2,061 of the 3,093 rescued nulls, are tested intervals wider
+  than 700 bp.
+- In that class about half of the policy's placements are ambiguous: 117 of 235 positives and 1,081 of
+  2,061 nulls. At reachable widths it is 14 of 258 and 512 of 5,644.
+- About 28% of the policy's positive placements (21.3 / 75.2) would also occur 20 kb away, against
+  about 12% under the current rule.
+
+**Matched baseline: distance to TSS on the same links.**
+
+| Links | AUROC | AP | Prevalence |
+|---|---|---|---|
+| all 14,734 | 0.877 | 0.403 | 4.5% |
+| placed under the current rule (4,825) | 0.880 | 0.455 | 4.4% |
+| placed under the policy (8,203) | 0.876 | 0.471 | 6.1% |
+| rescued by the policy (3,378) | 0.873 | 0.508 | 8.4% |
+
+The policy's placed set is no easier or harder for distance by AUROC. Its AP rises with prevalence, so
+any score on it must be read against 0.471 on the same links, not against the current rule's figure.
+
+**Independent loci.**
+
+- Positives: 661 links on 415 genes and 594 tested intervals.
+- Nulls: 14,073 links on 2,105 genes and 5,318 intervals.
+- The intervals are gene-clustered bootstraps, 2,000 draws.
+- Fold hashes: training `a679e35a…`, held-out `0cc6255d…` (the result's `folds`).
+
+**Cost, all in.**
+
+- The run: 9.5 s wall, 9.4 s CPU and 1.14 GB peak memory. Most of the memory is the whole-chromosome
+  element tables, read for membership only.
+- A first run, discarded because another session's untracked script made its stamp dirty, cost the
+  same.
+- Preparation was a handful of outcome-blind reads of widths and name fields, each a few seconds, plus
+  three test runs of about 10 s.
+- 0 downloads, 0 model requests and 0 paid services.
+
+**What it may be called.** An internal development audit of C4's placement. It finds that the
+reciprocal rule's width requirement, not absence, is why 362 of the 387 links fail, and that one
+outcome-blind policy passes its three registered stops on development evidence.
+
+**What it may not be called:**
+
+- 449 absent enhancers, or 387 links with no registry element;
+- a validation, or independent evidence: every outcome here was read before;
+- evidence that a policy placement names the right element: a quarter of them are ambiguous, and about
+  half are in the wide class;
+- a change to C4. The policy is applied nowhere. C4's survival census uses the same reciprocal rule
+  (`CrispriIndex.of`), so it carries the same width blind spot; that is not measured here. Adopting the
+  policy anywhere would be its own registered change.
+
+*2026-09-29, added afterwards beside this section (the external reviewer's reading, checked by the
+coordinator): "null" here means every screened pair that is not a significant decrease, so the 14,073
+include 4,113 underpowered observations and 159 increases beside the 9,801 well-powered nulls. Read it
+as a non-decrease comparator, not as evidence of no regulation, and do not read the equal placement rates
+under the current rule as showing that placement carries no signal about real links. The registered
+result above is unchanged; a sensitivity restricted to well-powered nulls would be additional
+development analysis.*
+
+## The placement census: C4's CRISPRi attachment under both interval rules, counted by observation; the policy attaches 180 more observations, 132 of them ambiguous and 152 from tested intervals over 700 bp (item 13 C4 follow-up, 2026-09-29, lane-census)
+
+This section sits beside C4 and audit A and edits neither. The census counts C4's CRISPRi evidence
+attachment twice: once under the current reciprocal 0.5 rule, and once under the one policy audit A
+registered (an overlap of at least half of the smaller interval). Each screened observation is counted
+once, as a set-valued observation. `scripts/placement_census.py`, `data/results/placement_census.json`,
+`tests/test_placement_census.py`.
+
+**Status.** This is internal development evidence: a bounded, read-only census, recorded apart, that
+stops after one pass.
+
+- Every outcome it reads was read before: `b7e4bf0` (C4), audit A's `dd8c49c`, `6c0d39f`, `0183ef5`,
+  `44d95d3` and `8f87bf6`, and the commits audit A lists (`138824f`, `ecc3452`, `f48b909`, `a39073d`,
+  `cc824f4`, `b7cb814`).
+- It replaces no headline result, changes no matcher and regenerates nothing. C4's census stays
+  93 / 28 / 7 / 440,249.
+- The policy lives only in the script. It does not propose adopting it: a matching change waits until
+  the evidence-resolution implications are reviewed.
+
+### Registered before any count (2026-09-29, `1253d69`)
+
+- **Two rules.** The current rule is `measured.measures`, as `ablation.CrispriIndex.of` applies it. The
+  policy is `placement_audit.policy_rule`, unchanged. The current rule implies the policy; that was
+  checked on every observation, not assumed.
+- **An observation** is one benchmark row: its tested interval, gene, cell and file, with a unique id.
+  - Its **candidate set** is the cCRE registry elements that meet the rule with its tested interval.
+  - Its **attached links** are the predicted links whose element meets the rule and whose target is the
+    measured gene, in any cell. This is C4's element-label attachment.
+  - It is a **unique-element assignment** when its candidate set holds one element. It is
+    **ambiguous** otherwise: with one attached link, or with several.
+- **Verdicts:**
+  - supported: a significant change in the direction every attached link predicts;
+  - refuted: a well-powered null, or the opposite sign;
+  - split direction: links of both directions, so counted as neither;
+  - unassessed: underpowered, or missing;
+  - unattached.
+- **One observation is one count.** It is never several validations. Observation-link pairs and C4's
+  per-link census are reported apart.
+- **Strata:** study, cell, split and tested width (up to 700 bp, over 700 bp, zero width, and finer bins).
+- **Gates:**
+  - C4's committed per-link census, reproduced exactly;
+  - audit A's committed placements under both rules, reproduced.
+
+### The result: run once at `1253d69`, stamp clean
+
+**Observations, N = 14,734 under both rules**
+
+| | current rule (C4) | policy |
+|---|---|---|
+| attached | 128 | 308 |
+| of which unique-element / ambiguous, one link / ambiguous, several links | 128 / 0 / 0 | 163 / 86 / 59 |
+| **supported** | **93** | **208** |
+| of which unique / ambiguous, one link / ambiguous, several links | 93 / 0 / 0 | 120 / 60 / 28 |
+| refuted, well-powered null | 23 | 50 |
+| refuted, opposite sign (decreases on inhibiting links + increases on activating links) | 5 (4 + 1) | 16 (15 + 1) |
+| split direction | 0 | 18 |
+| unassessed, underpowered | 7 | 16 |
+| unassessed, missing | 0 | 0 |
+| not attached | 14,606 | 14,426 |
+
+- **Increases.** Under the current rule 1 is attached (refuted, opposite sign) and 158 are not. Under
+  the policy 3 are attached (2 support inhibiting links, 1 is refuted) and 156 are not.
+- **Every attachment the current rule makes is a unique-element assignment**: 128 observations on 128
+  links, one to one.
+
+**Element-level attachments, apart from the observation counts**
+
+- **Current rule.** 128 observation-link pairs on 128 links. C4's per-link census reproduces exactly:
+  93 supported, 28 contradicted, 7 inconclusive and 440,249 never measured, of 440,377.
+- **Policy.** 384 pairs on 380 links. The per-link census reads:
+  - 261 supported;
+  - 100 contradicted (64 by a well-powered null, 35 by a decrease on an inhibiting link, 1 by an
+    increase);
+  - 19 inconclusive;
+  - 439,997 never measured.
+- **The 261 supported links are not 261 validations.** They rest on 226 distinct observations: the 208
+  supported and the 18 split-direction ones. 141 of the 261 rest only on ambiguous observations.
+
+**The difference, policy minus current rule**
+
+- **180 observations are newly attached.**
+  - 48 are unique-element assignments and 132 are ambiguous (77 with one link, 55 with several).
+  - 152 come from tested intervals over 700 bp and 28 from intervals up to 700 bp.
+  - Their verdicts: 116 supported, 27 refuted by a well-powered null, 11 refuted by the opposite sign,
+    17 split direction and 9 underpowered.
+  - Of the 116 newly supported, 37 are unique and 95 come from intervals over 700 bp.
+- **256 observation-link attachments are new**, and 223 of them come from intervals over 700 bp.
+- **Of the 128 observations attached under both rules:**
+  - 13 gained candidates (9 became ambiguous with one link, 4 with several);
+  - one changed verdict, from supported to split direction.
+- No attachment is lost.
+- **Per link:**
+  - 167 move from never measured to supported, 72 to contradicted and 13 to inconclusive;
+  - 1 moves from inconclusive to supported.
+
+**Strata**
+
+- **Width.**
+  - Under the current rule no interval over 700 bp attaches (0 of 3,551).
+  - Under the policy, 152 of the 308 attached are over 700 bp. Only 26 of those are unique; 72 are
+    ambiguous with one link and 54 with several.
+  - Up to 700 bp, 137 of 156 are unique.
+  - Supported: 95 over 700 bp and 113 up to 700 bp.
+- **Study.**
+  - Gasperini2019 goes from 89 to 204 attached (119 unique) and from 68 to 146 supported. It holds 115
+    of the 180 newly attached observations and 78 of the 116 newly supported.
+  - Klann (0 to 7) and Morris (0 to 8) attach only ambiguously.
+  - Xie goes from 2 to 18, 4 of them unique. K562_DC_TAP is unchanged at 4.
+- **Cell.** K562 goes from 111 to 277 attached; the four other cells together from 17 to 31.
+- **Split.** Training goes from 105 to 239 attached, held-out from 23 to 69.
+
+**Denominator and gates**
+
+- The denominators are 440,377 predicted links and 14,734 screened observations under both rules; every
+  table sums to its denominator, and 0 invalid rows exist.
+- C4's committed per-link census reproduced exactly twice: through `CrispriIndex.of`, and through the
+  census's own index, which attaches the same observations to every link.
+- Audit A's placements reproduced:
+  - current rule: 4,825 in a compiled element and 3,244 only in the registry;
+  - policy: 8,203, 5,294, and 1,724 carried by more than one compiled element.
+- Nothing here uses audit A's non-decrease comparator: nulls are split by power, and increases are kept
+  apart.
+
+**Cost.** 4.9 s wall, 4.9 s CPU and 959 MB peak memory, run once in a clean worktree at `1253d69`.
+Preparation was one outcome-blind read of rows, studies, cells and widths (under a second), plus test
+runs on synthetic intervals. 0 downloads, 0 model requests and 0 paid services.
+
+**What it may be called.** An internal development census of C4's attachment under two interval rules,
+counted by observation.
+
+**What it may not be called:**
+
+- 208 or 261 validated links. 88 of the 208 supported observations are ambiguous, and 141 of the 261
+  supported links rest only on ambiguous observations.
+- Independent evidence: every outcome here was read before.
+- A change to C4, or a case for adopting the policy. C4's census is unchanged, no matcher changed, and
+  adopting a matching change waits for review of the evidence-resolution implications.
+- Evidence about any element beyond the tested interval, gene and context: a wide positive
+  perturbation is evidence for its tested interval, not for every cCRE it overlaps.
+
+## A's adoption review, discovery only: audit A's policy would attach 184 more observations as set-valued evidence, 136 of them ambiguous; the shifted screen passes pooled at 2.42 times and fails in one stratum, so the registered reading is that discovery merits a separately reviewed proposal only in the passing strata (item 13 C4 follow-up, 2026-09-29, lane-discover)
+
+This section sits beside the placement census and edits nothing above it. It informs one decision
+only, Decision 1 (discovery): whether CRISPRi evidence may be discoverable as a set-valued attachment
+beside C4's current rule. `scripts/discovery_review.py`, `data/results/discovery_review.json`,
+`tests/test_discovery_review.py`.
+
+**Status.** This is internal development evidence: bounded, read-only with respect to production,
+recorded apart, one pass.
+
+- Every outcome it reads was read before: `b7e4bf0`, `dd8c49c`, `6c0d39f`, `0183ef5`, `1253d69`,
+  `32af2cb`, `a55f540`, `4567219`, `d1e09ae`, and the coordinator's uncommitted in-memory stated-cell
+  reading.
+- It proposes no implementation and changes no matcher. It proposes no broader verdict eligibility:
+  the only eligible verdict stays the one under the current rule.
+
+### Registered before any count (2026-09-29, `a9ab0db`)
+
+- **Universe.** All 14,734 screened observations under both rules, each keeping its observation id.
+  The census's `observe` and both rules are imported unchanged.
+- **Changed set.** Every observation whose candidate set, attached links or resolution differs between
+  the rules, each in one change class.
+- **Continuous reporting** for every changed observation:
+  - the fraction of the tested interval covered by the union of its admitted registry candidates
+    (overlapping candidates counted once);
+  - the fraction of each candidate covered;
+  - the number of admitted registry candidates.
+
+  Distributions only, with no width boundary in base pairs.
+- **Descriptions**, which authorise nothing: stated-cell agreement (from `correctness.compiled_claims`),
+  direction relative to the claim, nulls and increases apart, and study and cell breakdowns.
+- **Newly ambiguous.** A unique assignment that becomes ambiguous keeps its historical verdict under
+  the current rule and is marked unresolved under the new rule.
+- **The screen**, per study and cell stratum and pooled: the fraction of all observations whose
+  attached links differ between the rules, against the same fraction with every tested interval moved
+  20 kb each way (the mean of the two). It passes at 1.5 times.
+  - It is a diagnostic screen for discovery, not an estimate of false attribution.
+  - Moving an interval can change its distance to the gene and the local density of registry elements
+    and predicted links.
+- **Readings, fixed in advance.** A separately reviewed proposal is merited when both discovery
+  conditions hold, the pooled screen passes and every stratum where it is defined passes. It is merited
+  only in the passing strata when a defined stratum fails. It is not merited when a condition or the
+  pooled screen fails.
+
+### The result: run once at `a9ab0db`, stamp clean
+
+**The census reproduced.** Both rules' observation tables and the verdict transitions equal
+`placement_census.json` as committed.
+
+**Discovery conditions: both hold.**
+
+1. Nothing is lost: 0 candidate sets and 0 attached links. The denominators are unchanged: 14,734
+   observations and 440,377 predicted links under both rules.
+2. Each of the 6,188 changed observations appears once, with its full admitted-candidate set and its
+   coverage fractions.
+
+**The changed set: 6,188 of 14,734 observations**
+
+| change class | observations |
+|---|---|
+| newly attached | 180 |
+| attached links added | 4 |
+| candidates added, attached links unchanged | 9 |
+| candidates added, unattached under both rules | 5,995 |
+| lost | 0 |
+
+**The evidence discovery would add: 184 observations**, the first two classes. 48 are unique among all
+admitted registry candidates and 136 are ambiguous, so unresolved under the new rule.
+
+| | observations | union coverage of the tested interval, median (10th to 90th percentile) | candidates wholly inside the tested interval | candidates, median (max) |
+|---|---|---|---|---|
+| discovered, unique | 48 | 0.42 (0.33 to 0.53) | 39 of 48 | 1 |
+| discovered, ambiguous | 136 | 0.67 (0.51 to 0.80) | 334 of 377 | 2 (12) |
+| all changed | 6,188 | 0.64 (0.37 to 0.87) | 9,640 of 12,365 | 2 (12) |
+
+- **Unique only among the admitted candidates.** In the median unique discovered observation, 58% of the
+  tested interval lies in no admitted registry candidate and stays unresolved. Only 4 of the 48 are
+  wholly covered.
+- **Multiplicity across the changed set:** 1,903 observations have one candidate, 3,001 two, 886 three
+  and 398 four to twelve.
+
+**The screen: attached links differ, real against the mean of +20 kb and -20 kb**
+
+| study, cell | observations | real | shifted (+, -) | enrichment | screen |
+|---|---|---|---|---|---|
+| all observations | 14,734 | 184 | 75, 77 | 2.42 | passes |
+| Gasperini2019, K562 | 5,299 | 116 | 43, 44 | 2.67 | passes |
+| Xie, K562 | 441 | 16 | 6, 4 | 3.2 | passes |
+| Nasser2021, K562 | 3,751 | 16 | 10, 10 | 1.6 | passes |
+| HCT116, HCT116 | 396 | 8 | 1, 3 | 4.0 | passes |
+| Morris, K562 | 184 | 8 | 2, 4 | 2.67 | passes |
+| Klann, K562 | 33 | 7 | 4, 1 | 2.8 | passes |
+| Schraivogel2020, K562 | 1,306 | 5 | 2, 2 | 2.5 | passes |
+| Reilly, K562 | 8 | 1 | 1, 0 | 2.0 | passes |
+| WTC11_DC_TAP, WTC11 | 1,921 | 3 | 2, 5 | 0.86 | fails |
+| Nasser2021, GM12878 | 68 | 4 | 0, 0 | none | undefined, shifted count zero |
+| K562_DC_TAP, K562 | 1,252 | 0 | 4, 4 | none | nothing discovered |
+| Nasser2021, Jurkat | 75 | 0 | 0, 0 | none | nothing discovered |
+
+- **Beside it, without a threshold:**
+  - attachment under the policy at all: 308 against a shifted mean of 94, 3.28 times;
+  - membership of the changed set: 6,188 against 4,161, 1.49 times. Most candidate-only changes occur
+    nearly as often 20 kb away.
+- **Small counts.** Seven of the eight passing strata rest on 16 or fewer real observations. The screen
+  is a point ratio with no interval.
+
+**Decision 1, the registered reading: discovery merits a separately reviewed proposal only in the
+passing strata.** Both discovery conditions hold and the pooled screen passes, but a stratum where the
+screen is defined fails.
+
+- The failing stratum is WTC11_DC_TAP in WTC11.
+- Nasser2021 in GM12878 is undefined.
+- K562_DC_TAP and Nasser2021 in Jurkat discover nothing.
+
+**Newly ambiguous: 13 previously unique assignments.** Each keeps its historical verdict under the
+current rule and is unresolved under the new rule.
+
+| observation | historical verdict (current rule) | new rule |
+|---|---|---|
+| training, chr11:316244-316608, IFITM1, K562 | supported | unresolved |
+| training, chr19:4870060-4870560, PLIN3, K562 | supported | unresolved |
+| held-out, chr12:7960577-7961076, SLC2A3, WTC11 | supported | unresolved |
+| training, chr19:12789831-12790351, JUNB, K562 | supported | unresolved |
+| training, chr11:18384099-18384599, LDHA, K562 | refuted, well-powered null | unresolved |
+| training, chr12:33588022-33588689, SYT10, K562 | supported | unresolved |
+| training, chr22:41667145-41667809, SNU13, K562 | refuted, well-powered null | unresolved |
+| training, chr12:54304241-54304761, NFE2, K562 | supported | unresolved |
+| held-out, chr11:69587442-69588111, CCND1, HCT116 | unassessed, underpowered | unresolved |
+| held-out, chr11:69636212-69636869, CCND1, HCT116 | supported | unresolved |
+| training, chr6:139445368-139445868, CITED2, K562 | supported | unresolved |
+| training, chr2:230659153-230659653, CAB39, K562 | supported | unresolved |
+| training, chr1:231053506-231054137, FAM89A, K562 | supported | unresolved |
+
+**The stated-cell record: the coordinator's in-memory reading, reproduced exactly.** It reads C4's
+any-cell attachment, not v3 stated-context support.
+
+- Of the 37 newly supported unique observations, 24 match the stated cell (all K562) and 13 are other
+  cell only; none lacks a stated cell.
+- Of the 79 newly supported ambiguous observations, 39 have a stated-cell match among their attached
+  links and 40 are other cell only.
+- Check: under the current rule, 39 of the 93 supported match the stated cell and 54 do not. This
+  equals v2's direction split: 39 supported in context and 54 elsewhere only.
+
+**The 184 described.** These are descriptions only and authorise nothing.
+
+- **Direction.** 118 agree with the claim's direction: 116 decreases on activating links and 2
+  increases on inhibiting links, 2 of the 118 already supported under the current rule. 11 are opposite
+  and 18 split direction. 27 well-powered nulls and 10 underpowered nulls are counted apart.
+- **Stated cell.** 74 match the stated cell: 64 agree, 1 is opposite and 9 split. 110 are other cell
+  only: 54 agree, 10 are opposite, 9 split, 27 are well-powered nulls and 10 underpowered.
+- **Cell.** K562 169 (73 matching the stated cell), HCT116 8 (1), GM12878 4 (0), WTC11 3 (0).
+- **Study.** Gasperini2019 116, Nasser2021 20, Xie 16, Morris 8, HCT116 8, Klann 7, Schraivogel2020 5,
+  WTC11_DC_TAP 3, Reilly 1.
+
+**Cost.** 10.5 s wall, 10.4 s CPU and 1,059 MB peak memory, run once at `a9ab0db`. 0 downloads,
+0 model requests and 0 paid services. The result holds all 6,188 rows (7.2 MB).
+
+**What it may be called.** An internal development review of discovery under audit A's policy,
+informing Decision 1 only.
+
+**What it may not be called:**
+
+- An implementation proposal. A proposal, if one follows, is separate and separately reviewed.
+- 184 validations, or support in the stated context. 136 of the 184 are ambiguous, and the counts are
+  C4's any-cell attachment.
+- An estimate of false attribution. The shifted screen is a diagnostic for discovery.
+- Evidence resolved to one element. "Unique" means one among all admitted registry candidates; the
+  unregistered sequence inside a perturbation remains unresolved.
+- Independent evidence: every outcome here was read before.
+
+## Audit B, cached context contrast, checkpoint 1: no-go, insufficient coverage for this registered complete-case design (the external reviewer's audit B, 2026-09-29, lane-contrast)
+
+**The question.** Can the per-element cached AlphaGenome deletion answer support one added feature: the
+same-cell signed deletion minus the median other-cell signed deletion, per element, with a frozen
+aggregation? This checkpoint asks only whether it can. It scores no labelling, makes no model request,
+reads 4DN contacts from their local cache only, and downloads nothing. The rules, including the go rule,
+were committed in `7870427` before any count (`scripts/context_contrast_feasibility.py`). The result is
+`data/results/context_contrast_feasibility.json`, stamped `d237824`, clean.
+
+**What the cache holds.** The sweep's scorer was built with `threshold=0.0`
+(`scripts/enhancer_targets_all.py`, `worker_scorer`), not the adapter's default of 0.05. So every
+gene-track value except an exact 0.0 is emitted, and values below 0.05 are stored. Of the 4,840 answers
+overlapping an admissible pair, 4,810 store a `by_cell` value with |v| <= 0.05, as do 6,895 of the 6,928
+pair-to-answer matches (0.9952). The statement beside the repression trace that `by_cell` keeps "the last
+track above the scorer's 0.05 recording threshold" is corrected here for the sweep's answers: the
+threshold was 0.0. Its finding stands: `by_cell[cell]` is the value of the **last** emitted track carrying
+that cell name, signed and rounded to four places. It is not a replicate aggregate and not the largest,
+and the track's identity is not stored. The track table, every other track of a cell name, and the
+per-track values are not on disk. A track that returned exactly 0.0 is dropped, so its gene's `n_tracks`
+falls below 371. Two genes of one name share a row, so `n_tracks` rises above 371. Only four cells are
+kept: K562, the same cell for both admissible studies, and HepG2, GM12878 and IMR-90, so k is at most 3.
+A missing cell is never read as zero, and the other cells are a context, not negative controls.
+`n_tracks = 371` is a consistency check: every value was emitted, so no exact-zero track can have moved a
+cell's value to an earlier track of that name. It does not prove independently which track `by_cell`
+holds, or that one model version answered every element. All 4,840 answers are unrequested versions.
+
+**Completeness on lane-prior's admissible endpoints (decrease endpoint).** Independent loci are counted
+on the parent universe (each set's own units), frozen before any filtering. The recount after filtering
+splits connected components (329 became 351 on the primary endpoint), so it is descriptive only. At every
+k from 1 to 3 the counts are identical, because a reliable row holds all four cells.
+
+| Endpoint set | Units (parent loci) | An answer overlaps | Gene listed, same-cell value | Reliable contrast, k = 1, 2, 3 | Complete with activity and distance (coverage) | Independent loci of the complete pairs (filtered recount) | With K562 contact |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Gasperini2019, fresh (primary) | 2,466 (329) | 2,319 | 1,376 | 1,368 | 1,368 (55.47%) | 282 (351) | 1,366 |
+| Gasperini2019, seen | 2,787 (201) | 2,660 | 1,556 | 1,547 | 1,547 (55.51%) | 173 (217) | 1,547 |
+| Schraivogel2020, seen | 1,299 (12) | 1,088 | 706 | 699 | 699 (53.81%) | 11 (18) | 699 |
+
+All three sets together hold 6,552 pairs in 529 independent loci. The 3,614 complete pairs fall in 454 of
+them, and 8 loci hold both studies. The two studies share no Reference and so are not provenance
+siblings. Every unit is K562 and comes from the benchmark's training file. The activity columns (DHS.RPM,
+H3K27ac.RPM) and the TSS are present for every pair. Cached K562 contact covers 99.64% of primary pairs,
+with 0 cache misses and no matrix opened.
+
+**Where the coverage is lost.** 1,368 of the 1,376 primary pairs that hold a same-cell value also hold a
+reliable contrast, so most of the loss predates the contrast. It lies in the deletion answer itself:
+- 894 pairs whose gene lies beyond the scorer's reach from every overlapping answer;
+- 147 pairs that no cached answer overlaps;
+- 49 pairs whose gene is in reach but not listed.
+Only 8 are lost to the reliability conditions: 6 rows with exact-zero tracks and 2 merged rows.
+
+**Duplication.** The registered bars were not reached, so the feature is not a duplicate by the rule.
+- **D1.** The compiled target's description explains 0.7565 of the contrast's variance, against the bar
+  of 0.80. That variance sits in the tail the compiled target names. It names 215 of the 3,614 pairs, and
+  81 of the 82 K562-activating links have a negative contrast.
+- **D2.** The Spearman correlation with the same-cell value is 0.6356, against 0.95.
+- **Resolution.** 8.99% of contrasts lie inside the rounding bound of 1e-4. The median |contrast| is
+  0.0011.
+
+**Reading: `no_go_completeness`.** G1 (semantics) and G3 (not a duplicate) pass. G2 fails: the complete
+pairs clear the floors (190 positives, 1,178 negatives) but cover 55.47% of the primary endpoint's units,
+against the registered 80%. This is insufficient coverage for this registered complete-case design. It
+does not say that a context contrast cannot help. As registered, no score registration is written, and
+the lane stops here.
+
+**A possibility only, not registered and not launched.** A baseline with the feature optional, using the
+baseline's own score wherever the contrast is missing, could keep the baseline's coverage. Nothing here
+tests it.
+
+**Prior exposure. Every dataset read is development evidence.**
+- `crispri_benchmark`, `crispri_contact` (`138824f`, `bda8a83`, `5a31c39`)
+- `crispri_published` (`42d7b1b`, `a39073d`)
+- `target_calibration` (`bdc2364`)
+- `crispri_direction`, `crispri_direction_both` (`5c842ca`, `d492834`)
+- `c4_holdout_scores`, `c4_alphagenome_ablation` (`b7e4bf0`)
+- `pilot_biological_gate` (`197c560`)
+- `prior_only_test` (`a48e9e8`)
+- `repression_trace` (`641909e`)
+- S4 v1, v2 and v3 (`ab62d99`, `4567219`, `d1e09ae`)
+
+Before writing its rules, this lane probed chr21's archive and the 3,209 loose answer files for their
+threshold and track counts, with no pair joined.
+
+**Hashes.**
+- **Folds** (sha256 of the sorted pair identities, no outcome):
+  - primary `48f6895a…`, its complete pairs `5051f01d…`;
+  - Gasperini2019 seen `d9515f04…`;
+  - Schraivogel2020 seen `d642ec7d…`.
+- **Sources:** training file `9eddfe18…`, the 3,209 loose answers `d07d978b…`, K562 contact cache
+  `8b48075b…`. The 23 archives and 24 compiled programs are pinned one by one in the manifest.
+
+**Cost.** Two runs of one process each:
+- the provisional run on `7870427`, stamped `0183ef5`;
+- the final run on `d237824`, which added only the parent-universe loci, the loss steps and these
+  notes. Its gate, semantics and duplication numbers are identical to the provisional run's.
+
+Each run took about 50 s wall and 50 s CPU. The streaming reader peaked at 1.30 GB resident at most,
+against about 5.4 GB for a whole-archive reader; 23 archives were streamed and 3,209 loose files read. There were 0
+downloads, 0 model requests and 0 network requests.
 
 ## What comes next, in order
 

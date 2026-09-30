@@ -14,14 +14,6 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
   `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no
   context, so a rule gated on it runs in no cell rather than in every cell.
-- Decisions, timers, competence windows, commitments and signals read `when` with
-  `genomeos.ir.model.matches`; rules and events still compare by equality, so on a rule or an
-  event `absent`, `a|b` and the comparisons never match. No rule or event clause in the repo's
-  programs, compiled chromosomes or test programs uses them (data/results/when_census.json).
-  SUPERSEDED, no longer true: see the current-behaviour bullet two below.
-- Superseded the same day by the fix: rules and events now read `when` through `matches` as
-  well, one function for every block, so `absent`, `a|b` and the comparisons hold on a rule or
-  an event exactly as on a decision; the bullet above records the state the census measured.
 - Current behaviour: every block that has a `when` (decisions, timers, rules, events,
   competence windows, commitments and signals) reads it with the one matcher,
   `genomeos.ir.model.matches`, so `any`, `absent`, `a|b`, the comparisons and `unknown` mean

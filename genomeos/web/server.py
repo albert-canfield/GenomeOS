@@ -2120,13 +2120,48 @@ class Api:
         out = ev.collect(self.root, picked, ceiling, query, module, compiled=bool(compiled))
         rows = out["rows"]
         if csv:
-            return {"csv": ev.to_csv(rows), "matched": len(rows)}
+            report = {k: out[k] for k in ("parse_errors", "parse_error_count", "complete") if k in out}
+            return {"csv": ev.to_csv(rows), "matched": len(rows), **report}
         return {
             **out,
             "rows": rows[:limit],
             "matched": len(rows),
             "truncated": len(rows) > limit,
         }
+
+    def evidence_discovery(self) -> dict:
+        """Set-valued CRISPRi evidence from A's discovery-only review, read-only.
+
+        One record per observation from the committed `data/results/discovery_review.json`, served with
+        the file's path and sha256; genomeos.evidence_discovery refuses to serve when the file disagrees
+        with itself. It adds access to evidence and computes no new verdict.
+        """
+        from genomeos import evidence_discovery as evd
+
+        try:
+            return evd.view(self.root)
+        except evd.MissingError as e:
+            raise ApiError(str(e), 404) from None
+        except evd.RefusedError as e:
+            raise ApiError(f"the discovery view refuses to serve: {e}", 500) from None
+
+    def evidence_response_map(self, example: str = "globin_k562") -> dict:
+        """The cellular control and response map of one example, read-only, by reference.
+
+        genomeos.response_map assembles assertions that each name their source file, record key and
+        sha256, with the chains, stop points and a static dynamics table; it refuses to serve a payload
+        that breaks one of its rules. It adds access to evidence and computes no new verdict.
+        """
+        from genomeos import response_map as rm
+
+        if example not in rm.EXAMPLES:
+            raise ApiError(f"unknown example {example!r}; known: {', '.join(rm.EXAMPLES)}")
+        try:
+            return rm.view(self.root, example)
+        except rm.MissingError as e:
+            raise ApiError(str(e), 404) from None
+        except rm.RefusedError as e:
+            raise ApiError(f"the response map refuses to serve: {e}", 500) from None
 
     def decompile(self, symbol: str, chrom: str) -> dict:
         """One gene read back as a program: every layer this project holds, and the ones it does not.
@@ -3480,6 +3515,10 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "compiled", "") == "1",
                     )
                 )
+            if u.path == "/api/evidence/discovery":
+                return self._json(self.api.evidence_discovery())
+            if u.path == "/api/evidence/response-map":
+                return self._json(self.api.evidence_response_map(self._q(qs, "example", "globin_k562")))
             if u.path == "/api/decompile":
                 return self._json(self.api.decompile(self._q(qs, "symbol", ""), self._q(qs, "chrom", "")))
             if u.path == "/api/cells":

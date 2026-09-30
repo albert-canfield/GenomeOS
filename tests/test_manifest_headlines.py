@@ -40,7 +40,7 @@ def test_the_quoted_figures_are_the_ones_on_disk():
     ctl = load("constrained_unknown_targets")["matched_random_control"]["real_unknown"]["moves_a_gene"]
     assert (ctl["block_rate"], ctl["random_window_rate"]) == (0.6234, 0.8604)
     tb = load("therapeutic_benchmark")
-    assert (tb["targets_recovered"], tb["verdicts_correct"], tb["top_mechanism_defensible"]) == (9, 9, 9)
+    assert (tb["targets_recovered"], tb["verdicts_correct"], tb["top_mechanism_defensible"]) == (10, 10, 10)
     ru = load("unknown_coverage")["real_unknown"]
     assert (ru["measured_bp"], ru["bp"]) == (160_447, 30_602_182)
 

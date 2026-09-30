@@ -5,6 +5,10 @@
 #
 # Usage: scripts/promote_main.sh [--dry-run | --push] [--remote NAME] SHA
 #        scripts/promote_main.sh [--dry-run | --push] [--remote NAME] --latest-green
+# Usage: scripts/promote_main.sh [--dry-run | --prepare] [--remote NAME] SHA
+#        scripts/promote_main.sh [--dry-run] [--remote NAME] --latest-green
+#        scripts/promote_main.sh --verify [--remote NAME] SHA
+# (2026-09-29: the three lines above replace the two before them, whose --push is retired and refused.)
 #
 # A dry run is the default: it makes every check and prints the push it would make. --push makes
 # it, and is for the coordinator on the owner's go, at most once a day (CONTRIBUTING.md, "Release
@@ -17,9 +21,47 @@
 # Actions recorded on that sha is anything but success: failure, cancelled, skipped, or none at
 # all. It reads the same check that main's branch rule names as required, so what it lets through
 # is what the rule would let through for someone the rule binds.
+#
+# 2026-09-29, beside the original: the sentence above is false. With enforce_admins on, `--push 9a59faf`
+# passed every check here and GitHub refused it (GH006, "Required status check \"test\" is expected"),
+# although GitHub Actions had recorded a successful `test` check run on that exact sha: a manually
+# triggered (workflow_dispatch) run on dev. A successful manually triggered check is not enough to
+# establish that GitHub will accept the push, so passing this gate is necessary, not sufficient. Every
+# earlier promotion went through as an admin, whom the rule did not bind. Promotion now goes through a
+# pull request from a branch frozen at the chosen sha, merged by the owner.
+#
+# 2026-09-29, later, beside both notes above (lane-gate): the gate now reads the event of the `test`
+# run it relies on and keeps two findings apart. "CI pre-check passed": that run concluded success.
+# "Eligible for protected promotion": that run was also triggered by `pull_request` or `push`. GitHub's
+# documentation ("Troubleshooting required status checks", section "Checks from some workflow jobs are
+# not evaluated") evaluates checks for pull requests and rulesets only from runs triggered by push,
+# pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the
+# same rule decided the refused direct push of 9a59faf is an inference, not established. A green
+# `workflow_dispatch` or `schedule` run on dev is therefore a pre-check only; eligibility comes from
+# the pull request's own run.
+# 2026-09-29, later still (lane-gate, the reviewer's correction): the paragraph above overclaims.
+# A `pull_request` or `push` run makes the event a qualifying CI event only; protected promotion
+# eligibility is not established by it: the exact revision, the required checks and the protection
+# rules decide, and GitHub's decision is authoritative. The same holds for the pull request's own
+# run. The wording "eligible for protected promotion" in the output and in its test was committed
+# in 3a893fc and is held by the checkout guard until 2026-10-01 22:39 BST; a line printed after it
+# says this. Reword both after that.
+#
+# --push is retired, and refused before the arguments are read: sessions never push to main. Its case
+# in the argument loop, the first usage() definition, usage lines 6-7 and the push block at the end
+# stay, unreachable or unused, only because they fall inside the checkout guard's two-day window for
+# b50c873; they can be removed after 2026-09-30 23:03. In its place, --prepare SHA makes the same
+# checks, then pushes one branch, promote-<first 7 characters of SHA>, at exactly that sha (refusing if
+# the branch already exists at another sha), and prints the compare URL for the owner to open and
+# merge the pull request, and the --verify command for after the merge. It never opens a pull request,
+# never merges and never touches main. --verify SHA fetches main and checks that its file tree is
+# SHA's and that SHA is its ancestor; it asks nothing of GitHub's API.
 set -euo pipefail
 
 usage() { sed -n '6,7p' "$0" | sed 's/^# //' >&2; }
+# 2026-09-29: this definition replaces the one above, which prints the retired --push usage;
+# bash keeps the last definition.
+usage() { sed -n '8,10p' "$0" | sed 's/^# //' >&2; }
 refuse() {
   echo "promote_main: refused: $*" >&2
   exit 1
@@ -29,15 +71,33 @@ mode=dry
 remote=origin
 target=""
 latest=0
+# 2026-09-29: --push is refused here, before the loop below can read it; and one mode flag at most
+nmodes=0
+for arg in "$@"; do
+  case "$arg" in
+    --push)
+      echo "promote_main: --push is retired: GitHub refused a direct push under the bound rule; use --prepare SHA and open a pull request" >&2
+      exit 2
+      ;;
+    --dry-run | --prepare | --verify) nmodes=$((nmodes + 1)) ;;
+  esac
+done
+if [ "$nmodes" -gt 1 ]; then
+  echo "promote_main: one of --dry-run, --prepare, --verify" >&2
+  exit 2
+fi
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) mode=dry ;;
+    # unreachable since 2026-09-29 (refused above); remove after 2026-09-30 23:03
     --push) mode=push ;;
     --remote)
       [ $# -ge 2 ] || { usage; exit 2; }
       remote="$2"
       shift
       ;;
+    --prepare) mode=prepare ;;
+    --verify) mode=verify ;;
     --latest-green) latest=1 ;;
     -h | --help)
       usage
@@ -59,6 +119,29 @@ if [ -z "$target" ] && [ "$latest" = 0 ]; then usage; exit 2; fi
 if [ -n "$target" ] && [ "$latest" = 1 ]; then
   echo "promote_main: a sha or --latest-green, not both" >&2
   exit 2
+fi
+if [ "$mode" != dry ] && [ "$latest" = 1 ]; then
+  echo "promote_main: --$mode takes the sha the owner named, not --latest-green" >&2
+  exit 2
+fi
+
+if [ "$mode" = verify ]; then
+  # after the owner's merge: main carries exactly the chosen sha's files, and the sha itself
+  git fetch -q "$remote" main || refuse "cannot fetch main from $remote"
+  main_sha=$(git rev-parse --verify "refs/remotes/$remote/main^{commit}")
+  sha=$(git rev-parse --verify --quiet "$target^{commit}") || refuse "$target is not a commit in this clone"
+  short=$(git rev-parse --short "$sha")
+  main_short=$(git rev-parse --short "$main_sha")
+  if [ "$(git rev-parse "$main_sha^{tree}")" != "$(git rev-parse "$sha^{tree}")" ]; then
+    echo "promote_main: not verified: $remote/main ($main_short) does not have $short's file tree" >&2
+    exit 1
+  fi
+  if ! git merge-base --is-ancestor "$sha" "$main_sha"; then
+    echo "promote_main: not verified: $short is not an ancestor of $remote/main ($main_short)" >&2
+    exit 1
+  fi
+  echo "promote_main: verified: $remote/main ($main_short) has $short's file tree, and $short is its ancestor"
+  exit 0
 fi
 
 # remote-tracking refs only; the working tree and the shared index are not touched
@@ -112,12 +195,60 @@ read -r conclusion completed url count <<<"$verdict"
 [ "$conclusion" != "none" ] || refuse "$short has no completed \`test\` run; ask for one with: gh workflow run ci.yml --ref dev (it tests dev's tip at that moment)"
 [ "$conclusion" = "success" ] || refuse "the latest \`test\` run on $short ($completed, $count on record) concluded $conclusion: $url"
 
+# 2026-09-29: the event that triggered that same run (same selection as above, joined on its check suite)
+wruns=$(gh api "repos/$repo/actions/runs?head_sha=$sha&per_page=100") ||
+  refuse "cannot read the workflow runs of $short from $repo"
+event=$(CHECKS="$checks" python3 -c '
+import json, os, sys
+runs = [r for r in json.loads(os.environ["CHECKS"]).get("check_runs", [])
+        if (r.get("app") or {}).get("slug") == "github-actions" and r.get("status") == "completed"]
+runs.sort(key=lambda r: r.get("completed_at") or "")
+suite = (runs[-1].get("check_suite") or {}).get("id")
+events = {w.get("check_suite_id"): w.get("event") for w in json.load(sys.stdin).get("workflow_runs", [])}
+print((suite is not None and events.get(suite)) or "unknown")
+' <<<"$wruns") || refuse "cannot read the workflow runs of $short: GitHub's answer did not parse"
+
 ahead=$(git rev-list --count "$main_sha..$sha")
 echo "promote_main: $remote/main $(git rev-parse --short "$main_sha") -> $short, $ahead commits; test green at $completed ($url)"
+case "$event" in
+  pull_request | push)
+    echo "promote_main: eligible for protected promotion: the \`test\` run relied on was triggered by $event (GitHub's documentation evaluates checks for pull requests and rulesets from runs of this event)"
+    echo "promote_main: that is a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
+    ;;
+  *)
+    echo "promote_main: CI pre-check passed: the \`test\` run relied on was triggered by $event, a pre-check only; it does not make the sha eligible for protected promotion"
+    echo "promote_main: eligibility comes from the pull request's own run. GitHub's documentation evaluates checks for pull requests and rulesets only from runs triggered by push, pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the same rule refused the direct push of 9a59faf is an inference, not established"
+    echo "promote_main: the pull request's own run would be a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
+    ;;
+esac
 if [ "$mode" = dry ]; then
   echo "promote_main: dry run; would run: git push $remote $sha:refs/heads/main"
+  echo "promote_main: that push is no longer made: --push is retired (2026-09-29). Instead, on the owner's go, scripts/promote_main.sh --prepare $sha pushes branch promote-${sha:0:7} at that sha and nothing else, for a pull request the owner opens and merges"
   exit 0
 fi
+if [ "$mode" = prepare ]; then
+  # one branch frozen at the chosen sha; never a pull request, never a merge, never main
+  branch="promote-${sha:0:7}"
+  at_remote() { git ls-remote "$remote" "refs/heads/$branch" | awk -v ref="refs/heads/$branch" '$2 == ref { print $1 }'; }
+  existing=$(at_remote) || refuse "cannot read the branches of $remote"
+  if [ -z "$existing" ]; then
+    git push -q "$remote" "$sha:refs/heads/$branch" || refuse "the push of $branch to $remote failed"
+  elif [ "$existing" = "$sha" ]; then
+    echo "promote_main: $remote already has $branch at $short; nothing pushed"
+  else
+    refuse "$remote already has $branch at ${existing:0:7}, not at $short; nothing pushed"
+  fi
+  [ "$(at_remote)" = "$sha" ] || refuse "$remote's $branch is not at $short"
+  echo "promote_main: $remote/$branch is at $short; main was not touched and no pull request was opened"
+  echo "promote_main: for the owner, to open and merge the pull request: https://github.com/$repo/compare/main...$branch?expand=1"
+  echo "promote_main: after the merge: scripts/promote_main.sh --verify $sha   (main's file tree is $short's, and $short is an ancestor of main)"
+  exit 0
+fi
+
+# Unreachable since 2026-09-29: every mode has exited above, and --push is refused before the
+# arguments are read. The four lines after this refusal stay only because they fall inside the
+# checkout guard's window for b50c873; remove them, and this refusal, after 2026-09-30 23:03.
+refuse "no mode pushes to main"
 git push "$remote" "$sha:refs/heads/main"
 git fetch -q "$remote" main
 [ "$(git rev-parse "refs/remotes/$remote/main")" = "$sha" ] || refuse "pushed, but $remote/main is not at $short"

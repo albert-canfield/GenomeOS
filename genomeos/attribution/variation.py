@@ -70,7 +70,7 @@ EVIDENCE = {
         f"curated: gnomAD Gnocchi, Z per kb from 76,156 genomes, constrained at >= {GNOCCHI_THRESHOLD}"
         f" (top decile), strong at >= {GNOCCHI_STRONG}"
     ),
-    "case": "inferred: the two axes read together; a best guess with its certainty record, never a verdict",
+    "case": "inferred: the two axes read together; a reading with its certainty record, never a verdict",
 }
 
 
@@ -102,7 +102,7 @@ def stats_dict(s: IntervalStats | None) -> dict | None:
 
 CASE_EVIDENCE = (
     "inferred: two block summaries read together, the Zoonomia mammalian and the gnomAD Gnocchi human"
-    " constrained fractions, each against a fixed bar; a best guess, never a verdict"
+    " constrained fractions, each against a fixed bar; a reading of the two, never a verdict"
 )
 CASE_NO_PROBABILITY = (
     "no calibration record: no set of blocks with a known syntax, tolerant, recent or relaxed outcome has"

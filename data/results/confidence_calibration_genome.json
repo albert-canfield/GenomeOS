@@ -1,6 +1,6 @@
 {
   "result": "confidence_calibration_genome",
-  "date": "2026-09-28",
+  "date": "2026-09-30",
   "question": "GenomeOS states a confidence on every fact. Is it a probability? For the compiled facts a measurement touches, the observed agreement rate is binned by the stated confidence and reported per assay, with an interval",
   "claim_under_test": "the compiled element block and its rule say that deleting this element moves this gene, and the number beside them is read by every reader of the Evidence explorer as the probability that it does. The question here is whether that reading survives contact with a measurement",
   "stated_confidence_formula": "round(min(PREDICTED_CAP, max(0.05, |log2 fold change|)), 2), as attribution/compile.py writes it on the element block and on the rule beside it; PREDICTED_CAP = 0.7, so no compiled element can state more than that however large the predicted effect",
@@ -1120,25 +1120,364 @@
         "question": "out of its chromosome, does a 200 bp copy of this sequence drive a reporter?",
         "is_the_compiled_claim": false,
         "level_interpretable": false,
-        "why": "episomal: it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
+        "why": "an integrated lentiviral reporter outside the native locus (Agarwal et al. 2025; called episomal before R6): it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only"
       },
       "elements_in_the_footprint": 21133,
       "elements_measured": 17869,
-      "elements_where_the_predicted_gene_was_tested": 17869,
-      "denominators_coincide": true,
+      "elements_where_the_predicted_gene_was_tested": 17743,
+      "denominators_coincide": false,
       "two_denominators": "over_all_matched_elements is a mixture of 'the prediction was wrong' and 'the screen never asked about that gene', so it is bounded above by the screen's own choice of genes and cannot be calibrated against a confidence; it is carried beside the narrow rate so that the narrow rate - computed over a subset the prediction itself selected - can never stand alone. For lentiMPRA and VISTA the two coincide by construction, since every matched element is tested, and the result says so rather than printing one number and letting it look like a choice",
       "where_the_predicted_gene_was_tested": {
         "table": {
           "denominator": "the predicted gene was tested by this assay",
           "denominator_name": "where_the_predicted_gene_was_tested",
+          "elements": 17743,
+          "agrees": 3231,
+          "observed_overall": 0.1821,
+          "mean_stated_confidence_overall": 0.2784,
+          "bands_populated": 3,
+          "bands_judged": 3,
+          "min_for_a_band": 30,
+          "expected_calibration_error": 0.0963,
+          "rows": [
+            {
+              "band": "0-0.02",
+              "stated_range": [
+                0.0,
+                0.02
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.02-0.05",
+              "stated_range": [
+                0.02,
+                0.05
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.05-0.1",
+              "stated_range": [
+                0.05,
+                0.1
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.1-0.25",
+              "stated_range": [
+                0.1,
+                0.25
+              ],
+              "compiled_elements_in_the_band": 292661,
+              "in_this_assays_footprint": 12621,
+              "measured_by_this_assay": 10566,
+              "coverage_of_the_band": 0.0361,
+              "share_of_the_eligible_raised": 0.8372,
+              "mean_stated_confidence": 0.1584,
+              "agrees": 1557,
+              "observed": 0.1474,
+              "ci95": [
+                0.1407,
+                0.1542
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.011,
+              "judged": true,
+              "median_length": 334.0,
+              "median_gc": 0.4957,
+              "median_nearest_coding_tss": 37648.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.25-0.5",
+              "stated_range": [
+                0.25,
+                0.5
+              ],
+              "compiled_elements_in_the_band": 98278,
+              "in_this_assays_footprint": 5377,
+              "measured_by_this_assay": 4530,
+              "coverage_of_the_band": 0.04609,
+              "share_of_the_eligible_raised": 0.8425,
+              "mean_stated_confidence": 0.3422,
+              "agrees": 894,
+              "observed": 0.1974,
+              "ci95": [
+                0.186,
+                0.2092
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.1448,
+              "judged": true,
+              "median_length": 341.5,
+              "median_gc": 0.5026,
+              "median_nearest_coding_tss": 23874.5,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.5-0.75",
+              "stated_range": [
+                0.5,
+                0.75
+              ],
+              "compiled_elements_in_the_band": 49438,
+              "in_this_assays_footprint": 3135,
+              "measured_by_this_assay": 2647,
+              "coverage_of_the_band": 0.05354,
+              "share_of_the_eligible_raised": 0.8443,
+              "mean_stated_confidence": 0.6484,
+              "agrees": 780,
+              "observed": 0.2947,
+              "ci95": [
+                0.2776,
+                0.3123
+              ],
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.3538,
+              "judged": true,
+              "median_length": 344.0,
+              "median_gc": 0.5171,
+              "median_nearest_coding_tss": 14804.0,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.75-0.9",
+              "stated_range": [
+                0.75,
+                0.9
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            },
+            {
+              "band": "0.9-1",
+              "stated_range": [
+                0.9,
+                1.0
+              ],
+              "compiled_elements_in_the_band": 0,
+              "in_this_assays_footprint": 0,
+              "measured_by_this_assay": 0,
+              "coverage_of_the_band": null,
+              "share_of_the_eligible_raised": null,
+              "mean_stated_confidence": null,
+              "agrees": 0,
+              "observed": null,
+              "ci95": null,
+              "stated_inside_the_interval": null,
+              "gap_observed_minus_stated": null,
+              "judged": false,
+              "median_length": null,
+              "median_gc": null,
+              "median_nearest_coding_tss": null,
+              "elements_without_covariates": 0
+            }
+          ]
+        },
+        "verdict": {
+          "bands_judged": 3,
+          "min_bands_for_a_verdict": 3,
+          "level_interpretable": false,
+          "described_not_judged": {
+            "bands_populated": 3,
+            "gap_per_populated_band": {
+              "0.1-0.25": -0.011,
+              "0.25-0.5": -0.1448,
+              "0.5-0.75": -0.3538
+            },
+            "median_gap_over_populated_bands": -0.1448
+          },
+          "lowest_judged_band": "0.1-0.25",
+          "lowest_observed": 0.1474,
+          "highest_judged_band": "0.5-0.75",
+          "highest_observed": 0.2947,
+          "point_estimates_rise": true,
+          "intervals_disjoint": true,
+          "ordering": "rises with the stated confidence",
+          "bands_where_the_stated_confidence_is_inside_the_interval": 0,
+          "share_consistent": 0.0,
+          "min_share_consistent": 0.7,
+          "median_signed_offset_observed_minus_stated": -0.1448,
+          "offset_range": [
+            -0.3538,
+            -0.011
+          ],
+          "pattern": "level_withheld_ordering_only",
+          "pattern_text": "the assay's agreement is not the compiled claim's own event, so the ordering may be read and the level may not: a rate of 0.19 against a stated 0.25 is not a miscalibration when the rate being measured is 'a 200 bp sequence drives a reporter' and the claim is 'deleting the element in its own chromosome moves this gene'. The level verdict is withheld rather than computed and ignored"
+        },
+        "carries_information": {
+          "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
+          "denominator_name": "where_the_predicted_gene_was_tested",
+          "input_presence": {
+            "a stated confidence on the compiled fact": {
+              "key": "stated_confidence",
+              "targets_with_the_input": 17743,
+              "targets": 17743,
+              "controls_with_the_input": 422508,
+              "controls": 422508,
+              "universal": true,
+              "kind": "free",
+              "reading": "free: the input covers every row in both arms, so a stratum on it cannot bite and a null result is arithmetic rather than evidence"
+            },
+            "a verdict from lentimpra over this element": {
+              "key": "assay_verdict",
+              "targets_with_the_input": 17743,
+              "targets": 17743,
+              "controls_with_the_input": 0,
+              "controls": 422508,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 17743/17743, controls 0/422508"
+            }
+          },
+          "targets_high_confidence": 2647,
+          "controls_low_confidence": 15096,
+          "imbalance": {
+            "length": {
+              "target_median": 344.0,
+              "control_median": 337.0,
+              "ratio": 1.021
+            },
+            "gc": {
+              "target_median": 0.5171,
+              "control_median": 0.4971,
+              "ratio": 1.04
+            },
+            "nearest_coding_tss": {
+              "target_median": 14804.0,
+              "control_median": 32571.5,
+              "ratio": 0.455
+            }
+          },
+          "standardised": {
+            "targets": 2647,
+            "controls": 15096,
+            "targets_matched": 2647,
+            "dropped_for_want_of_a_control": 0,
+            "strata": {
+              "length": [
+                200.0,
+                400.0
+              ],
+              "gc": [
+                0.35,
+                0.45,
+                0.55
+              ],
+              "nearest_coding_tss": [
+                1000,
+                5000,
+                20000,
+                100000
+              ]
+            },
+            "raw": {
+              "a": 0.2947,
+              "b": 0.1624,
+              "difference": 0.1323,
+              "p_one_sided": 0.0,
+              "upper_95": 0.1477
+            },
+            "matched": {
+              "a": 0.2947,
+              "b": 0.1671,
+              "difference": 0.1275,
+              "p_one_sided": 0.0,
+              "upper_95": 0.1464
+            },
+            "imbalance": {
+              "length": {
+                "target_median": 344.0,
+                "control_median": 337.0,
+                "ratio": 1.021
+              },
+              "gc": {
+                "target_median": 0.5171,
+                "control_median": 0.4971,
+                "ratio": 1.04
+              },
+              "nearest_coding_tss": {
+                "target_median": 14804.0,
+                "control_median": 32571.5,
+                "ratio": 0.455
+              }
+            }
+          }
+        }
+      },
+      "over_all_matched_elements": {
+        "table": {
+          "denominator": "every element this assay measured, whether or not it asked about the predicted gene",
+          "denominator_name": "over_all_matched_elements",
           "elements": 17869,
-          "agrees": 3361,
-          "observed_overall": 0.1881,
+          "agrees": 3231,
+          "observed_overall": 0.1808,
           "mean_stated_confidence_overall": 0.2786,
           "bands_populated": 3,
           "bands_judged": 3,
           "min_for_a_band": 30,
-          "expected_calibration_error": 0.0905,
+          "expected_calibration_error": 0.0978,
           "rows": [
             {
               "band": "0-0.02",
@@ -1221,14 +1560,14 @@
               "coverage_of_the_band": 0.03631,
               "share_of_the_eligible_raised": 0.842,
               "mean_stated_confidence": 0.1584,
-              "agrees": 1618,
-              "observed": 0.1523,
+              "agrees": 1557,
+              "observed": 0.1465,
               "ci95": [
-                0.1455,
-                0.1592
+                0.1399,
+                0.1534
               ],
-              "stated_inside_the_interval": true,
-              "gap_observed_minus_stated": -0.0061,
+              "stated_inside_the_interval": false,
+              "gap_observed_minus_stated": -0.0119,
               "judged": true,
               "median_length": 334.0,
               "median_gc": 0.4957,
@@ -1247,14 +1586,14 @@
               "coverage_of_the_band": 0.0465,
               "share_of_the_eligible_raised": 0.8499,
               "mean_stated_confidence": 0.3421,
-              "agrees": 937,
-              "observed": 0.205,
+              "agrees": 894,
+              "observed": 0.1956,
               "ci95": [
-                0.1936,
-                0.217
+                0.1844,
+                0.2074
               ],
               "stated_inside_the_interval": false,
-              "gap_observed_minus_stated": -0.1371,
+              "gap_observed_minus_stated": -0.1465,
               "judged": true,
               "median_length": 342.0,
               "median_gc": 0.5029,
@@ -1273,14 +1612,14 @@
               "coverage_of_the_band": 0.05405,
               "share_of_the_eligible_raised": 0.8523,
               "mean_stated_confidence": 0.6483,
-              "agrees": 806,
-              "observed": 0.3016,
+              "agrees": 780,
+              "observed": 0.2919,
               "ci95": [
-                0.2845,
-                0.3193
+                0.275,
+                0.3094
               ],
               "stated_inside_the_interval": false,
-              "gap_observed_minus_stated": -0.3467,
+              "gap_observed_minus_stated": -0.3564,
               "judged": true,
               "median_length": 344.0,
               "median_gc": 0.5171,
@@ -1342,33 +1681,33 @@
           "described_not_judged": {
             "bands_populated": 3,
             "gap_per_populated_band": {
-              "0.1-0.25": -0.0061,
-              "0.25-0.5": -0.1371,
-              "0.5-0.75": -0.3467
+              "0.1-0.25": -0.0119,
+              "0.25-0.5": -0.1465,
+              "0.5-0.75": -0.3564
             },
-            "median_gap_over_populated_bands": -0.1371
+            "median_gap_over_populated_bands": -0.1465
           },
           "lowest_judged_band": "0.1-0.25",
-          "lowest_observed": 0.1523,
+          "lowest_observed": 0.1465,
           "highest_judged_band": "0.5-0.75",
-          "highest_observed": 0.3016,
+          "highest_observed": 0.2919,
           "point_estimates_rise": true,
           "intervals_disjoint": true,
           "ordering": "rises with the stated confidence",
-          "bands_where_the_stated_confidence_is_inside_the_interval": 1,
-          "share_consistent": 0.3333,
+          "bands_where_the_stated_confidence_is_inside_the_interval": 0,
+          "share_consistent": 0.0,
           "min_share_consistent": 0.7,
-          "median_signed_offset_observed_minus_stated": -0.1371,
+          "median_signed_offset_observed_minus_stated": -0.1465,
           "offset_range": [
-            -0.3467,
-            -0.0061
+            -0.3564,
+            -0.0119
           ],
           "pattern": "level_withheld_ordering_only",
           "pattern_text": "the assay's agreement is not the compiled claim's own event, so the ordering may be read and the level may not: a rate of 0.19 against a stated 0.25 is not a miscalibration when the rate being measured is 'a 200 bp sequence drives a reporter' and the claim is 'deleting the element in its own chromosome moves this gene'. The level verdict is withheld rather than computed and ignored"
         },
         "carries_information": {
           "split": "stated confidence at or above 0.5 against below it, which is the line genomeos/evidence.py already draws as WEAK and the Program tab already prints; it was not chosen here",
-          "denominator_name": "where_the_predicted_gene_was_tested",
+          "denominator_name": "over_all_matched_elements",
           "input_presence": {
             "a stated confidence on the compiled fact": {
               "key": "stated_confidence",
@@ -1433,18 +1772,18 @@
               ]
             },
             "raw": {
-              "a": 0.3016,
-              "b": 0.1681,
-              "difference": 0.1335,
+              "a": 0.2919,
+              "b": 0.1613,
+              "difference": 0.1306,
               "p_one_sided": 0.0,
-              "upper_95": 0.149
+              "upper_95": 0.1459
             },
             "matched": {
-              "a": 0.3016,
-              "b": 0.1724,
-              "difference": 0.1293,
+              "a": 0.2919,
+              "b": 0.166,
+              "difference": 0.1259,
               "p_one_sided": 0.0,
-              "upper_95": 0.1482
+              "upper_95": 0.1446
             },
             "imbalance": {
               "length": {
@@ -1465,10 +1804,6 @@
             }
           }
         }
-      },
-      "over_all_matched_elements": {
-        "identical_to": "where_the_predicted_gene_was_tested",
-        "why": "every element this assay measured was tested by it, so the wide and the narrow denominator are the same rows. The key is kept so the narrow rate is never the only rate on the page"
       }
     },
     "vista": {
@@ -1891,20 +2226,37 @@
         "standardised_p": 0.034782
       },
       "lentimpra:where_the_predicted_gene_was_tested": {
-        "elements": 17869,
-        "observed_overall": 0.1881,
-        "mean_stated_confidence_overall": 0.2786,
-        "expected_calibration_error": 0.0905,
+        "elements": 17743,
+        "observed_overall": 0.1821,
+        "mean_stated_confidence_overall": 0.2784,
+        "expected_calibration_error": 0.0963,
         "pattern": "level_withheld_ordering_only",
         "ordering": "rises with the stated confidence",
         "level_interpretable": false,
-        "median_gap_over_populated_bands": -0.1371,
+        "median_gap_over_populated_bands": -0.1448,
         "gap_per_populated_band": {
-          "0.1-0.25": -0.0061,
-          "0.25-0.5": -0.1371,
-          "0.5-0.75": -0.3467
+          "0.1-0.25": -0.011,
+          "0.25-0.5": -0.1448,
+          "0.5-0.75": -0.3538
         },
-        "standardised_difference": 0.1293,
+        "standardised_difference": 0.1275,
+        "standardised_p": 0.0
+      },
+      "lentimpra:over_all_matched_elements": {
+        "elements": 17869,
+        "observed_overall": 0.1808,
+        "mean_stated_confidence_overall": 0.2786,
+        "expected_calibration_error": 0.0978,
+        "pattern": "level_withheld_ordering_only",
+        "ordering": "rises with the stated confidence",
+        "level_interpretable": false,
+        "median_gap_over_populated_bands": -0.1465,
+        "gap_per_populated_band": {
+          "0.1-0.25": -0.0119,
+          "0.25-0.5": -0.1465,
+          "0.5-0.75": -0.3564
+        },
+        "standardised_difference": 0.1259,
         "standardised_p": 0.0
       },
       "vista:where_the_predicted_gene_was_tested": {
@@ -1929,15 +2281,16 @@
         "why": "4 matched elements, and the assay cannot disagree: zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only. A reliability table needs an event that can come out false, and this one cannot, so no table is computed. The group is described in `the_measured_slice` with the rest"
       }
     },
-    "tables": 4,
+    "tables": 5,
     "entries_with_no_table_at_all": [
       "satmut"
     ],
-    "bands_populated_across_every_table": 12,
-    "bands_where_the_stated_level_is_inside_its_own_interval": 2,
-    "bands_where_it_is_not": 10,
+    "bands_populated_across_every_table": 15,
+    "bands_where_the_stated_level_is_inside_its_own_interval": 1,
+    "bands_where_it_is_not": 14,
     "tables_where_the_rate_rises_with_the_confidence": [
-      "lentimpra:where_the_predicted_gene_was_tested"
+      "lentimpra:where_the_predicted_gene_was_tested",
+      "lentimpra:over_all_matched_elements"
     ],
     "tables_where_it_does_not": [
       "crispri:over_all_matched_elements"
@@ -1951,7 +2304,8 @@
     "offsets_by_table": {
       "crispri:where_the_predicted_gene_was_tested": 0.5432,
       "crispri:over_all_matched_elements": -0.2913,
-      "lentimpra:where_the_predicted_gene_was_tested": -0.1371,
+      "lentimpra:where_the_predicted_gene_was_tested": -0.1448,
+      "lentimpra:over_all_matched_elements": -0.1465,
       "vista:where_the_predicted_gene_was_tested": 0.5179
     }
   },
@@ -1959,28 +2313,565 @@
   "scope": "This is a reliability table over MEASURED compiled elements, and that is not a random sample of the compiled genome. 4.33% of compiled elements are measured at all (19,072 of 440,377) and only 5.98% were ever eligible, because an assay's footprint had to reach them. The measured slice is longer, more GC-rich and closer to a coding TSS than the rest - the assays chose candidate regulatory sequence, which is the same property the deletion scores highly - so the bands' rates are conditional on an element having been chosen for an assay. The table says how often the project's confidence is borne out ON MEASURED ELEMENTS. It says nothing directly about the 414,053 elements no assay ever covered, and the imbalance between the two arms is printed in the result rather than described here, so the size of the extrapolation is a number",
   "falsifies_transfer": "The transfer from measured elements to the compiled genome fails if any of these is observed. (a) A screen that tiles a region without choosing candidate sequence - an unbiased tiling rather than a cCRE list - finds the top band's rate far below what it is here, which is what selection on testability looks like from outside. (b) The agreement rate moves with the measured slice's own covariates once they are held fixed: if the standardised difference between the high and low confidence arms collapses toward zero when length, GC and distance to a coding TSS are matched, then the band was reading the covariate and not the confidence, and on unmeasured elements the covariate distribution is different. (c) A new assay extends the footprint into elements that look unlike the measured ones - far from a promoter, AT-rich, short - and the bands do not hold there. (d) The prevalence shift target_calibration already found: a population whose base rate of agreement differs from this one's needs its own intercept, so a band quoted without its population's rate beside it has stopped being a measurement of anything",
   "chromosomes_not_read": {},
-  "seconds": 72.6,
+  "seconds": 68.6,
   "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE ENCSR106SZM (ENCFF802FUV, ENCFF475FKV, ENCFF769REH)",
+        "version": "as fetched 2026-09-12; pinned by sha256"
+      },
+      {
+        "accession": "VISTA Enhancer Browser locus table (vista-data)",
+        "version": "main, as fetched; pinned by sha256"
+      },
+      {
+        "accession": "GEO GSE126550 (Kircher et al. 2019, kircherlab/MPRA_SaturationMutagenesis)",
+        "version": "as fetched; pinned by sha256"
+      },
+      {
+        "accession": "this repository, the compiled element runs enhancer_targets_all, constrained_targets, enhancer_targets",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "reciprocal_overlap": 0.5,
+      "mpra_active_log2": 1.0,
+      "reporter_label_rule": "per cell, active when more than half of the matched tiles are at or above MPRA_ACTIVE, silent when more than half are below it, conflicting when exactly half are",
+      "power_for_negatives": "PowerAtEffectSize20",
+      "well_powered": 0.8,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are counted, never read"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562)",
+      "heldout": "the CRISPRi benchmark's held-out file, evaluation only"
+    },
     "code": {
-      "git_sha": "850e9f9c05e708ce5f9ddac0e7c191f919ea6951",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/attribution/measured.py"
+      "git_sha": "e801b6b0ac2c858e7e6c3bbc54d86e549066a177",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/measured_layer_genome.json"
       ],
       "argv": [
-        "scripts/confidence_calibration.py"
+        "scripts/confidence_calibration.py",
+        "--retired-formula"
       ],
       "python": "3.14.3"
     },
-    "complete": false,
-    "problems": [
-      "missing sources",
-      "missing inputs",
-      "missing assembly",
-      "missing coordinates",
-      "missing parameters",
-      "missing exclusions",
-      "missing partitions"
-    ]
+    "complete": true
   }
 }

@@ -1,0 +1,1751 @@
+{
+  "result": "placement_audit",
+  "date": "2026-09-29",
+  "question": "why measured CRISPRi links fail placement in C4, cause by cause, over every screened pair",
+  "status": "internal development evidence: every outcome read here was read by earlier lanes (prior_exposure); no resplit restores independence. A bounded audit, not a biological result",
+  "registration": {
+    "registered": "2026-09-29",
+    "policy": {
+      "name": "min_side_half",
+      "rule": "an element carries a tested interval when their overlap is at least half of the smaller of the two widths: overlap >= 0.5 * min(tested width, element width). Everything else in C4's cascade is unchanged: compiled predicted elements first, the ENCODE cCRE v3 registry second, the same intervals, the same links, no padding, no ranking, no second threshold",
+      "rationale_from_conventions": [
+        "measured.RECIPROCAL_OVERLAP = 0.5 asks the overlap to be half of BOTH widths, so it can pair two intervals only when their widths are within a factor of two",
+        "the registry's intervals are 150 to 350 bp by its construction (ENCODE cCREs v3), and the compiled predicted elements are registry elements with the registry's coordinates",
+        "the benchmark's tested intervals are set by each screen's design: most are 500 bp, the widest 4,181 bp and the narrowest 52 bp (read from the files without outcomes)",
+        "so under the reciprocal rule a tested interval wider than 700 bp or narrower than 75 bp cannot be carried by any registry element wherever it lies: a property of the two width conventions, not of the DNA",
+        "the fraction of the smaller interval is the one of the two fractions that does not depend on which source's width convention is the wider; at equal widths it is the reciprocal rule, and it never admits a graze of a few bases",
+        "the benchmark's own comparison and this project's eligibility rule (measured.ELIGIBILITY_RULE) accept any shared base; this policy is stricter than both"
+      ],
+      "what_it_is_not": "not a wider interval: no interval is padded, moved or merged; not tuned: one threshold, the measured layer's, chosen before any per-outcome count"
+    },
+    "policy_threshold": 0.5,
+    "stop_rule": {
+      "unit": "a link as C4 keys it: (chrom, start, end, gene, cell, split); positive when any record of the key is a significant decrease, null otherwise",
+      "rescue": "among links the current rule leaves unplaced in the compiled programs, the fraction the policy places there; computed for positives and for nulls",
+      "excess": "rescue of positives minus rescue of nulls, with a gene-clustered bootstrap 95% interval (2000 draws, seed 20260929)",
+      "stop_a_nulls_as_fast": "stop when the excess interval's lower bound is <= 0: the policy gains nulls as fast as positives",
+      "stop_b_not_positional": "stop when the interval of (excess - the same excess on the same links with every tested interval shifted by +20000 and -20000 bp, the mean of the two) has lower bound <= 0: the gain is explained by interval width and local element density, not by where the tested DNA lies",
+      "stop_c_wide_intervals": "stop when the excess interval within tested intervals of 75 to 700 bp (where the reciprocal rule can be met at all) has lower bound <= 0: the gain rests on the intervals the reciprocal rule cannot reach, i.e. on wide intervals",
+      "on_stop": "the policy is reported as denominator or overlap inflation, beside the current rule, and nothing is built on it",
+      "errors": "a placement is ambiguous when more than one element of the set carries the tested interval (the rule cannot say which element the measurement is of); chance placements are the placements of the shifted intervals. Both are reported for positives and nulls under both rules"
+    },
+    "shift_bp": 20000,
+    "bootstrap": {
+      "draws": 2000,
+      "seed": 20260929,
+      "cluster": "measured gene"
+    },
+    "baseline": "distance to TSS: the benchmark's distanceToTSS column, score = -distance, AUROC and average precision of decreases against every other pair, on the same links under each rule",
+    "causes": {
+      "placed_compiled": "a compiled predicted element meets the rule",
+      "registry_would": "no compiled element meets the rule, a registry element does: candidate exclusion",
+      "coordinate_zero_width": "the tested interval holds no base (end <= start): a coordinate defect in the source row",
+      "rule_width_unreachable": "a registry element holds at least half of the smaller interval, but the tested interval is wider than twice the widest registry element or narrower than half the narrowest, so no registry element can meet the reciprocal rule wherever it lies: the rule and the width conventions",
+      "rule_width_mismatch": "a registry element holds at least half of the smaller interval and the widths could meet the reciprocal rule, but these do not: the rule and the width conventions",
+      "boundary_partial_overlap": "a registry element shares bases with the tested interval, less than half of the smaller: a boundary offset",
+      "absent_from_registry": "no registry element shares a base with the tested interval: absent from both element sets"
+    },
+    "cause_order": [
+      "placed_compiled",
+      "registry_would",
+      "coordinate_zero_width",
+      "rule_width_unreachable",
+      "rule_width_mismatch",
+      "boundary_partial_overlap",
+      "absent_from_registry"
+    ],
+    "candidate_exclusion_order": [
+      "compiled_under_other_coordinates",
+      "coding_target_not_compiled",
+      "scored_noncoding_target_only",
+      "scored_no_target_named",
+      "not_scored_by_the_sweep"
+    ],
+    "current_rule": "measured.measures: reciprocal overlap >= 0.5 (both fractions)"
+  },
+  "alphagenome_requests": 0,
+  "downloads": 0,
+  "per_element_response_cache_opened": false,
+  "c4_reproduced": {
+    "placement": {
+      "measured_links": 661,
+      "not_placed_no_registry_element_heldout": 128,
+      "not_placed_no_registry_element_training": 259,
+      "not_placed_registry_would_heldout": 19,
+      "not_placed_registry_would_training": 43,
+      "placed_heldout": 43,
+      "placed_training": 169
+    },
+    "equal_to_committed": true,
+    "cascade_on_decreases": {
+      "placed": 212,
+      "registry_would": 62,
+      "neither": 387
+    }
+  },
+  "folds": {
+    "training": "a679e35acd37604fb74e73ba0b7d3bb552d600a06c16e52d0a11211d10b936aa",
+    "heldout": "0cc6255dc280647ca70dc364ec5f50b1bbaa8f9ea89e35a3539ea1e0175862bc",
+    "what": "sha256 over each split's sorted link keys and positive flag"
+  },
+  "conventions": {
+    "crispri": {
+      "sha256": {
+        "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38"
+      },
+      "declared_build": "GRCh38 (the file names; chrom/chromStart/chromEnd are the perturbed element, the name column keeps each source study's own coordinates)",
+      "declared_convention": "BED: 0-based, half-open (chromStart/chromEnd; the TSS as a one-base startTSS/endTSS interval)",
+      "found": {
+        "per_dataset_rows": {
+          "Gasperini2019": {
+            "name_coords_differ": 5226,
+            "name_coords_equal": 73,
+            "odd_width": 1341,
+            "rows": 5299,
+            "tss_one_base": 5299,
+            "width_changed": 17,
+            "width_kept": 5282,
+            "width_min": 498,
+            "width_median": 500,
+            "width_max": 3530,
+            "wider_than_700": 2065,
+            "narrower_than_75": 0
+          },
+          "HCT116": {
+            "name_coords_differ": 396,
+            "odd_width": 115,
+            "rows": 396,
+            "tss_not_one_base": 396,
+            "width_changed": 1,
+            "width_kept": 395,
+            "width_min": 500,
+            "width_median": 625,
+            "width_max": 2820,
+            "wider_than_700": 163,
+            "narrower_than_75": 0
+          },
+          "K562_DC_TAP": {
+            "name_coords_equal": 1252,
+            "odd_width": 1215,
+            "rows": 1252,
+            "tss_not_one_base": 13,
+            "tss_one_base": 1239,
+            "width_kept": 1252,
+            "width_min": 499,
+            "width_median": 499,
+            "width_max": 1414,
+            "wider_than_700": 37,
+            "narrower_than_75": 0
+          },
+          "Klann": {
+            "name_coords_equal": 33,
+            "odd_width": 9,
+            "rows": 33,
+            "tss_one_base": 33,
+            "width_kept": 33,
+            "width_min": 500,
+            "width_median": 933,
+            "width_max": 1600,
+            "wider_than_700": 22,
+            "narrower_than_75": 0
+          },
+          "Morris": {
+            "name_coords_equal": 184,
+            "odd_width": 65,
+            "rows": 184,
+            "tss_one_base": 184,
+            "width_kept": 184,
+            "width_min": 500,
+            "width_median": 788,
+            "width_max": 2743,
+            "wider_than_700": 110,
+            "narrower_than_75": 0
+          },
+          "Nasser2021": {
+            "name_coords_differ": 3894,
+            "odd_width": 60,
+            "rows": 3894,
+            "tss_not_one_base": 81,
+            "tss_one_base": 3813,
+            "width_changed": 48,
+            "width_kept": 3846,
+            "width_min": 0,
+            "width_median": 520,
+            "width_max": 4181,
+            "wider_than_700": 524,
+            "narrower_than_75": 9
+          },
+          "Reilly": {
+            "name_coords_equal": 8,
+            "odd_width": 0,
+            "rows": 8,
+            "tss_one_base": 8,
+            "width_kept": 8,
+            "width_min": 200,
+            "width_median": 600,
+            "width_max": 1400,
+            "wider_than_700": 3,
+            "narrower_than_75": 0
+          },
+          "Schraivogel2020": {
+            "name_coords_equal": 1306,
+            "odd_width": 625,
+            "rows": 1306,
+            "tss_one_base": 1306,
+            "width_kept": 1306,
+            "width_min": 52,
+            "width_median": 393,
+            "width_max": 2320,
+            "wider_than_700": 196,
+            "narrower_than_75": 27
+          },
+          "WTC11_DC_TAP": {
+            "name_coords_equal": 1921,
+            "odd_width": 1866,
+            "rows": 1921,
+            "tss_not_one_base": 10,
+            "tss_one_base": 1911,
+            "width_kept": 1921,
+            "width_min": 499,
+            "width_median": 499,
+            "width_max": 2894,
+            "wider_than_700": 121,
+            "narrower_than_75": 0
+          },
+          "Xie": {
+            "name_coords_equal": 441,
+            "odd_width": 195,
+            "rows": 441,
+            "tss_one_base": 441,
+            "width_kept": 441,
+            "width_min": 500,
+            "width_median": 891,
+            "width_max": 2697,
+            "wider_than_700": 310,
+            "narrower_than_75": 0
+          }
+        },
+        "zero_width_rows": [
+          {
+            "chrom": "chr5",
+            "start": 40490507,
+            "end": 40490507,
+            "name": "PTGER4|chr5:40490609-40490609:.",
+            "dataset": "Nasser2021"
+          }
+        ],
+        "distinct_tested_intervals": 5638,
+        "registry_touching_rate": {
+          "as_read_grch38_columns": 0.912,
+          "shifted_plus_20000": 0.4156,
+          "shifted_minus_20000": 0.4189,
+          "name_field_coordinates_where_they_differ": 0.3721,
+          "name_field_intervals": 3749
+        }
+      },
+      "tss_against_gencode_v50": {
+        "genes": 2338,
+        "in_gencode_v50": 2334,
+        "exact": 233,
+        "within_1bp": 576,
+        "within_1kb": 2147,
+        "median_abs_difference_bp": 29.5
+      }
+    },
+    "registry": {
+      "sha256_of_24_files": "95e79f144044ae06d92a1f0a9ce1b293f61c7b54e2e4066a13563071b020c4a6",
+      "declared_build": "GRCh38 (each file's header: ENCODE cCREs v3 from downloads.wenglab.org/V3/GRCh38-cCREs.bed)",
+      "declared_convention": "BED: 0-based, half-open, written unchanged by genome/regulatory.save_ccres",
+      "elements": 1063878,
+      "by_class": {
+        "CTCF-only": 35839,
+        "DNase-H3K4me3": 25921,
+        "PLS": 40891,
+        "dELS": 789200,
+        "pELS": 172027
+      },
+      "width_min": 150,
+      "width_max": 350,
+      "chromosomes": 24
+    },
+    "compiled": {
+      "sha256_of_24_programs": "20d2806e55d2fde649f160bc2ee0608fb6ad186df88e46fbd3aa4265ead0facf",
+      "declared_build": "GRCh38 (the registry's coordinates, carried by id)",
+      "declared_convention": "locus chrom:start-end, the registry's 0-based half-open numbers unchanged",
+      "found": {
+        "compiled_predicted_elements": 440377,
+        "same_id_same_coordinates_in_registry": 440377,
+        "same_id_other_coordinates": 0,
+        "id_not_in_registry": 0,
+        "width_min": 150,
+        "width_max": 350
+      }
+    }
+  },
+  "off_by_one_sensitivity_current_rule": {
+    "start_minus_1": {
+      "positive": 3,
+      "null": 24
+    },
+    "start_plus_1": {
+      "positive": 1,
+      "null": 25
+    },
+    "end_plus_1": {
+      "positive": 2,
+      "null": 23
+    }
+  },
+  "current_rule": {
+    "attrition": {
+      "positive": {
+        "training": {
+          "absent_from_registry": 15,
+          "boundary_partial_overlap": 1,
+          "placed_compiled": 169,
+          "registry_would/not_scored_by_the_sweep": 6,
+          "registry_would/scored_no_target_named": 16,
+          "registry_would/scored_noncoding_target_only": 21,
+          "rule_width_mismatch": 60,
+          "rule_width_unreachable": 183,
+          "total": 471
+        },
+        "all": {
+          "absent_from_registry": 21,
+          "boundary_partial_overlap": 3,
+          "coordinate_zero_width": 1,
+          "placed_compiled": 212,
+          "registry_would/not_scored_by_the_sweep": 11,
+          "registry_would/scored_no_target_named": 22,
+          "registry_would/scored_noncoding_target_only": 29,
+          "rule_width_mismatch": 72,
+          "rule_width_unreachable": 290,
+          "total": 661
+        },
+        "heldout": {
+          "absent_from_registry": 6,
+          "boundary_partial_overlap": 2,
+          "coordinate_zero_width": 1,
+          "placed_compiled": 43,
+          "registry_would/not_scored_by_the_sweep": 5,
+          "registry_would/scored_no_target_named": 6,
+          "registry_would/scored_noncoding_target_only": 8,
+          "rule_width_mismatch": 12,
+          "rule_width_unreachable": 107,
+          "total": 190
+        }
+      },
+      "null": {
+        "heldout": {
+          "absent_from_registry": 297,
+          "boundary_partial_overlap": 21,
+          "placed_compiled": 1611,
+          "registry_would/not_scored_by_the_sweep": 225,
+          "registry_would/scored_no_target_named": 425,
+          "registry_would/scored_noncoding_target_only": 296,
+          "rule_width_mismatch": 652,
+          "rule_width_unreachable": 661,
+          "total": 4188
+        },
+        "all": {
+          "absent_from_registry": 1101,
+          "boundary_partial_overlap": 111,
+          "placed_compiled": 4613,
+          "registry_would/not_scored_by_the_sweep": 467,
+          "registry_would/scored_no_target_named": 1565,
+          "registry_would/scored_noncoding_target_only": 1150,
+          "rule_width_mismatch": 1892,
+          "rule_width_unreachable": 3174,
+          "total": 14073
+        },
+        "training": {
+          "absent_from_registry": 804,
+          "boundary_partial_overlap": 90,
+          "placed_compiled": 3002,
+          "registry_would/not_scored_by_the_sweep": 242,
+          "registry_would/scored_no_target_named": 1140,
+          "registry_would/scored_noncoding_target_only": 854,
+          "rule_width_mismatch": 1240,
+          "rule_width_unreachable": 2513,
+          "total": 9885
+        }
+      },
+      "not_significant_well_powered": {
+        "heldout": {
+          "absent_from_registry": 260,
+          "boundary_partial_overlap": 13,
+          "placed_compiled": 1516,
+          "registry_would/not_scored_by_the_sweep": 211,
+          "registry_would/scored_no_target_named": 330,
+          "registry_would/scored_noncoding_target_only": 243,
+          "rule_width_mismatch": 576,
+          "rule_width_unreachable": 483,
+          "total": 3632
+        },
+        "all": {
+          "absent_from_registry": 643,
+          "boundary_partial_overlap": 74,
+          "placed_compiled": 3130,
+          "registry_would/not_scored_by_the_sweep": 284,
+          "registry_would/scored_no_target_named": 1090,
+          "registry_would/scored_noncoding_target_only": 856,
+          "rule_width_mismatch": 1192,
+          "rule_width_unreachable": 2532,
+          "total": 9801
+        },
+        "training": {
+          "absent_from_registry": 383,
+          "boundary_partial_overlap": 61,
+          "placed_compiled": 1614,
+          "registry_would/not_scored_by_the_sweep": 73,
+          "registry_would/scored_no_target_named": 760,
+          "registry_would/scored_noncoding_target_only": 613,
+          "rule_width_mismatch": 616,
+          "rule_width_unreachable": 2049,
+          "total": 6169
+        }
+      },
+      "not_significant_underpowered": {
+        "heldout": {
+          "absent_from_registry": 34,
+          "boundary_partial_overlap": 8,
+          "placed_compiled": 72,
+          "registry_would/not_scored_by_the_sweep": 13,
+          "registry_would/scored_no_target_named": 90,
+          "registry_would/scored_noncoding_target_only": 45,
+          "rule_width_mismatch": 57,
+          "rule_width_unreachable": 153,
+          "total": 472
+        },
+        "all": {
+          "absent_from_registry": 450,
+          "boundary_partial_overlap": 37,
+          "placed_compiled": 1435,
+          "registry_would/not_scored_by_the_sweep": 181,
+          "registry_would/scored_no_target_named": 459,
+          "registry_would/scored_noncoding_target_only": 283,
+          "rule_width_mismatch": 665,
+          "rule_width_unreachable": 603,
+          "total": 4113
+        },
+        "training": {
+          "absent_from_registry": 416,
+          "boundary_partial_overlap": 29,
+          "placed_compiled": 1363,
+          "registry_would/not_scored_by_the_sweep": 168,
+          "registry_would/scored_no_target_named": 369,
+          "registry_would/scored_noncoding_target_only": 238,
+          "rule_width_mismatch": 608,
+          "rule_width_unreachable": 450,
+          "total": 3641
+        }
+      },
+      "significant_increase": {
+        "heldout": {
+          "absent_from_registry": 3,
+          "placed_compiled": 23,
+          "registry_would/not_scored_by_the_sweep": 1,
+          "registry_would/scored_no_target_named": 5,
+          "registry_would/scored_noncoding_target_only": 8,
+          "rule_width_mismatch": 19,
+          "rule_width_unreachable": 25,
+          "total": 84
+        },
+        "all": {
+          "absent_from_registry": 8,
+          "placed_compiled": 48,
+          "registry_would/not_scored_by_the_sweep": 2,
+          "registry_would/scored_no_target_named": 16,
+          "registry_would/scored_noncoding_target_only": 11,
+          "rule_width_mismatch": 35,
+          "rule_width_unreachable": 39,
+          "total": 159
+        },
+        "training": {
+          "absent_from_registry": 5,
+          "placed_compiled": 25,
+          "registry_would/not_scored_by_the_sweep": 1,
+          "registry_would/scored_no_target_named": 11,
+          "registry_would/scored_noncoding_target_only": 3,
+          "rule_width_mismatch": 16,
+          "rule_width_unreachable": 14,
+          "total": 75
+        }
+      }
+    },
+    "coverage": {
+      "positive": {
+        "links": 661,
+        "placed_compiled": 212,
+        "registry_would": 62,
+        "coverage_compiled": 0.3207,
+        "coverage_compiled_or_registry": 0.4145,
+        "abstention": 0.6793
+      },
+      "null": {
+        "links": 14073,
+        "placed_compiled": 4613,
+        "registry_would": 3182,
+        "coverage_compiled": 0.3278,
+        "coverage_compiled_or_registry": 0.5539,
+        "abstention": 0.6722
+      }
+    },
+    "coverage_difference_positive_minus_null": -0.0071,
+    "coverage_difference_ci95": [
+      -0.0476,
+      0.0343
+    ],
+    "ambiguity": {
+      "positive": {
+        "placed": 212,
+        "carried_by_more_than_one_element": 0
+      },
+      "null": {
+        "placed": 4613,
+        "carried_by_more_than_one_element": 0
+      }
+    },
+    "failures_by_compiled_status": [
+      {
+        "group": "null",
+        "cause": "absent_from_registry",
+        "compiled": "none",
+        "n": 1101
+      },
+      {
+        "group": "null",
+        "cause": "boundary_partial_overlap",
+        "compiled": "none",
+        "n": 62
+      },
+      {
+        "group": "null",
+        "cause": "boundary_partial_overlap",
+        "compiled": "partial",
+        "n": 49
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_mismatch",
+        "compiled": "min_side",
+        "n": 984
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_mismatch",
+        "compiled": "none",
+        "n": 840
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_mismatch",
+        "compiled": "partial",
+        "n": 68
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_unreachable",
+        "compiled": "min_side",
+        "n": 2062
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_unreachable",
+        "compiled": "none",
+        "n": 1103
+      },
+      {
+        "group": "null",
+        "cause": "rule_width_unreachable",
+        "compiled": "partial",
+        "n": 9
+      },
+      {
+        "group": "positive",
+        "cause": "absent_from_registry",
+        "compiled": "none",
+        "n": 21
+      },
+      {
+        "group": "positive",
+        "cause": "boundary_partial_overlap",
+        "compiled": "none",
+        "n": 1
+      },
+      {
+        "group": "positive",
+        "cause": "boundary_partial_overlap",
+        "compiled": "partial",
+        "n": 2
+      },
+      {
+        "group": "positive",
+        "cause": "coordinate_zero_width",
+        "compiled": "none",
+        "n": 1
+      },
+      {
+        "group": "positive",
+        "cause": "rule_width_mismatch",
+        "compiled": "min_side",
+        "n": 46
+      },
+      {
+        "group": "positive",
+        "cause": "rule_width_mismatch",
+        "compiled": "none",
+        "n": 25
+      },
+      {
+        "group": "positive",
+        "cause": "rule_width_mismatch",
+        "compiled": "partial",
+        "n": 1
+      },
+      {
+        "group": "positive",
+        "cause": "rule_width_unreachable",
+        "compiled": "min_side",
+        "n": 239
+      },
+      {
+        "group": "positive",
+        "cause": "rule_width_unreachable",
+        "compiled": "none",
+        "n": 51
+      }
+    ],
+    "registry_elements_touched_by_a_tested_interval": {
+      "positive": {
+        "compiled": 640,
+        "not_scored_by_the_sweep": 22,
+        "scored_no_target_named": 266,
+        "scored_noncoding_target_only": 177
+      },
+      "null": {
+        "compiled": 3614,
+        "not_scored_by_the_sweep": 316,
+        "scored_no_target_named": 2724,
+        "scored_noncoding_target_only": 1741
+      }
+    },
+    "cause_families": {
+      "positive": {
+        "placed": 212,
+        "candidate_exclusion": 62,
+        "coordinate_defect": 1,
+        "rule_and_width_conventions": 362,
+        "boundary_offset": 3,
+        "absent_from_both_sets": 21
+      },
+      "null": {
+        "placed": 4613,
+        "candidate_exclusion": 3182,
+        "coordinate_defect": 0,
+        "rule_and_width_conventions": 5066,
+        "boundary_offset": 111,
+        "absent_from_both_sets": 1101
+      }
+    },
+    "by_tested_width_descriptive": {
+      "positive": {
+        "narrower_than_half_the_narrowest": {
+          "links": 9,
+          "placed_current_rule": 0,
+          "unplaced_current_rule": 9,
+          "placed_second_rule": 0,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        },
+        "reachable_width": {
+          "links": 362,
+          "placed_current_rule": 212,
+          "unplaced_current_rule": 150,
+          "placed_second_rule": 212,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        },
+        "wider_than_twice_the_widest": {
+          "links": 290,
+          "placed_current_rule": 0,
+          "unplaced_current_rule": 290,
+          "placed_second_rule": 0,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        }
+      },
+      "null": {
+        "narrower_than_half_the_narrowest": {
+          "links": 27,
+          "placed_current_rule": 0,
+          "unplaced_current_rule": 27,
+          "placed_second_rule": 0,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        },
+        "reachable_width": {
+          "links": 10785,
+          "placed_current_rule": 4613,
+          "unplaced_current_rule": 6172,
+          "placed_second_rule": 4613,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        },
+        "wider_than_twice_the_widest": {
+          "links": 3261,
+          "placed_current_rule": 0,
+          "unplaced_current_rule": 3261,
+          "placed_second_rule": 0,
+          "rescued": 0,
+          "ambiguous_second_rule": 0
+        }
+      }
+    },
+    "baseline_distance_to_tss": {
+      "all_links": {
+        "links": 14734,
+        "without_distance": 0,
+        "positives": 661,
+        "prevalence": 0.0449,
+        "auroc": 0.8768,
+        "average_precision": 0.4032,
+        "median_distance_positive": 32075.0,
+        "median_distance_null": 387984.0
+      },
+      "placed_current_rule": {
+        "links": 4825,
+        "without_distance": 0,
+        "positives": 212,
+        "prevalence": 0.0439,
+        "auroc": 0.8801,
+        "average_precision": 0.4551,
+        "median_distance_positive": 29324.0,
+        "median_distance_null": 358649.0
+      },
+      "not_placed_current_rule": {
+        "links": 9909,
+        "without_distance": 0,
+        "positives": 449,
+        "prevalence": 0.0453,
+        "auroc": 0.8761,
+        "average_precision": 0.384,
+        "median_distance_positive": 32835.0,
+        "median_distance_null": 404396.5
+      }
+    }
+  },
+  "policy": {
+    "scored": true,
+    "attrition": {
+      "positive": {
+        "training": {
+          "absent_from_registry": 15,
+          "boundary_partial_overlap": 1,
+          "placed_compiled": 359,
+          "registry_would/not_scored_by_the_sweep": 8,
+          "registry_would/scored_no_target_named": 44,
+          "registry_would/scored_noncoding_target_only": 44,
+          "total": 471
+        },
+        "all": {
+          "absent_from_registry": 21,
+          "boundary_partial_overlap": 3,
+          "coordinate_zero_width": 1,
+          "placed_compiled": 497,
+          "registry_would/not_scored_by_the_sweep": 13,
+          "registry_would/scored_no_target_named": 65,
+          "registry_would/scored_noncoding_target_only": 61,
+          "total": 661
+        },
+        "heldout": {
+          "absent_from_registry": 6,
+          "boundary_partial_overlap": 2,
+          "coordinate_zero_width": 1,
+          "placed_compiled": 138,
+          "registry_would/not_scored_by_the_sweep": 5,
+          "registry_would/scored_no_target_named": 21,
+          "registry_would/scored_noncoding_target_only": 17,
+          "total": 190
+        }
+      },
+      "null": {
+        "heldout": {
+          "absent_from_registry": 297,
+          "boundary_partial_overlap": 21,
+          "placed_compiled": 2498,
+          "registry_would/not_scored_by_the_sweep": 266,
+          "registry_would/scored_no_target_named": 650,
+          "registry_would/scored_noncoding_target_only": 456,
+          "total": 4188
+        },
+        "all": {
+          "absent_from_registry": 1101,
+          "boundary_partial_overlap": 111,
+          "placed_compiled": 7706,
+          "registry_would/not_scored_by_the_sweep": 603,
+          "registry_would/scored_no_target_named": 2460,
+          "registry_would/scored_noncoding_target_only": 2092,
+          "total": 14073
+        },
+        "training": {
+          "absent_from_registry": 804,
+          "boundary_partial_overlap": 90,
+          "placed_compiled": 5208,
+          "registry_would/not_scored_by_the_sweep": 337,
+          "registry_would/scored_no_target_named": 1810,
+          "registry_would/scored_noncoding_target_only": 1636,
+          "total": 9885
+        }
+      },
+      "not_significant_well_powered": {
+        "heldout": {
+          "absent_from_registry": 260,
+          "boundary_partial_overlap": 13,
+          "placed_compiled": 2280,
+          "registry_would/not_scored_by_the_sweep": 247,
+          "registry_would/scored_no_target_named": 476,
+          "registry_would/scored_noncoding_target_only": 356,
+          "total": 3632
+        },
+        "all": {
+          "absent_from_registry": 643,
+          "boundary_partial_overlap": 74,
+          "placed_compiled": 5425,
+          "registry_would/not_scored_by_the_sweep": 344,
+          "registry_would/scored_no_target_named": 1714,
+          "registry_would/scored_noncoding_target_only": 1601,
+          "total": 9801
+        },
+        "training": {
+          "absent_from_registry": 383,
+          "boundary_partial_overlap": 61,
+          "placed_compiled": 3145,
+          "registry_would/not_scored_by_the_sweep": 97,
+          "registry_would/scored_no_target_named": 1238,
+          "registry_would/scored_noncoding_target_only": 1245,
+          "total": 6169
+        }
+      },
+      "not_significant_underpowered": {
+        "heldout": {
+          "absent_from_registry": 34,
+          "boundary_partial_overlap": 8,
+          "placed_compiled": 164,
+          "registry_would/not_scored_by_the_sweep": 14,
+          "registry_would/scored_no_target_named": 166,
+          "registry_would/scored_noncoding_target_only": 86,
+          "total": 472
+        },
+        "all": {
+          "absent_from_registry": 450,
+          "boundary_partial_overlap": 37,
+          "placed_compiled": 2184,
+          "registry_would/not_scored_by_the_sweep": 251,
+          "registry_would/scored_no_target_named": 720,
+          "registry_would/scored_noncoding_target_only": 471,
+          "total": 4113
+        },
+        "training": {
+          "absent_from_registry": 416,
+          "boundary_partial_overlap": 29,
+          "placed_compiled": 2020,
+          "registry_would/not_scored_by_the_sweep": 237,
+          "registry_would/scored_no_target_named": 554,
+          "registry_would/scored_noncoding_target_only": 385,
+          "total": 3641
+        }
+      },
+      "significant_increase": {
+        "heldout": {
+          "absent_from_registry": 3,
+          "placed_compiled": 54,
+          "registry_would/not_scored_by_the_sweep": 5,
+          "registry_would/scored_no_target_named": 8,
+          "registry_would/scored_noncoding_target_only": 14,
+          "total": 84
+        },
+        "all": {
+          "absent_from_registry": 8,
+          "placed_compiled": 97,
+          "registry_would/not_scored_by_the_sweep": 8,
+          "registry_would/scored_no_target_named": 26,
+          "registry_would/scored_noncoding_target_only": 20,
+          "total": 159
+        },
+        "training": {
+          "absent_from_registry": 5,
+          "placed_compiled": 43,
+          "registry_would/not_scored_by_the_sweep": 3,
+          "registry_would/scored_no_target_named": 18,
+          "registry_would/scored_noncoding_target_only": 6,
+          "total": 75
+        }
+      }
+    },
+    "coverage": {
+      "positive": {
+        "links": 661,
+        "placed_compiled": 497,
+        "registry_would": 139,
+        "coverage_compiled": 0.7519,
+        "coverage_compiled_or_registry": 0.9622,
+        "abstention": 0.2481
+      },
+      "null": {
+        "links": 14073,
+        "placed_compiled": 7706,
+        "registry_would": 5155,
+        "coverage_compiled": 0.5476,
+        "coverage_compiled_or_registry": 0.9139,
+        "abstention": 0.4524
+      }
+    },
+    "ambiguity": {
+      "positive": {
+        "placed": 497,
+        "carried_by_more_than_one_element": 131
+      },
+      "null": {
+        "placed": 7706,
+        "carried_by_more_than_one_element": 1593
+      }
+    },
+    "rescue": {
+      "positives_unplaced_by_current_rule": 449,
+      "positives_rescued": 285,
+      "rescue_positive": 0.6347,
+      "nulls_unplaced_by_current_rule": 9460,
+      "nulls_rescued": 3093,
+      "rescue_null": 0.327,
+      "excess": 0.3078,
+      "excess_ci95": [
+        0.258,
+        0.3561
+      ],
+      "shifted_excess": {
+        "+20000": 0.0488,
+        "-20000": 0.0457
+      },
+      "excess_minus_shifted": 0.2605,
+      "excess_minus_shifted_ci95": [
+        0.2138,
+        0.3047
+      ],
+      "within_75_to_700_bp": {
+        "positives_unplaced_by_current_rule": 150,
+        "positives_rescued": 46,
+        "rescue_positive": 0.3067,
+        "nulls_unplaced_by_current_rule": 6172,
+        "nulls_rescued": 1031,
+        "rescue_null": 0.167,
+        "excess": 0.1396,
+        "excess_ci95": [
+          0.0676,
+          0.2147
+        ]
+      },
+      "by_tested_width_descriptive": {
+        "positive": {
+          "narrower_than_half_the_narrowest": {
+            "links": 9,
+            "placed_current_rule": 0,
+            "unplaced_current_rule": 9,
+            "placed_second_rule": 4,
+            "rescued": 4,
+            "ambiguous_second_rule": 0
+          },
+          "reachable_width": {
+            "links": 362,
+            "placed_current_rule": 212,
+            "unplaced_current_rule": 150,
+            "placed_second_rule": 258,
+            "rescued": 46,
+            "ambiguous_second_rule": 14
+          },
+          "wider_than_twice_the_widest": {
+            "links": 290,
+            "placed_current_rule": 0,
+            "unplaced_current_rule": 290,
+            "placed_second_rule": 235,
+            "rescued": 235,
+            "ambiguous_second_rule": 117
+          }
+        },
+        "null": {
+          "narrower_than_half_the_narrowest": {
+            "links": 27,
+            "placed_current_rule": 0,
+            "unplaced_current_rule": 27,
+            "placed_second_rule": 1,
+            "rescued": 1,
+            "ambiguous_second_rule": 0
+          },
+          "reachable_width": {
+            "links": 10785,
+            "placed_current_rule": 4613,
+            "unplaced_current_rule": 6172,
+            "placed_second_rule": 5644,
+            "rescued": 1031,
+            "ambiguous_second_rule": 512
+          },
+          "wider_than_twice_the_widest": {
+            "links": 3261,
+            "placed_current_rule": 0,
+            "unplaced_current_rule": 3261,
+            "placed_second_rule": 2061,
+            "rescued": 2061,
+            "ambiguous_second_rule": 1081
+          }
+        }
+      }
+    },
+    "shifted_controls": {
+      "+20000": {
+        "current_rule": {
+          "positive": {
+            "links": 661,
+            "placed_compiled": 21,
+            "registry_would": 21,
+            "coverage_compiled": 0.0318,
+            "coverage_compiled_or_registry": 0.0635,
+            "abstention": 0.9682
+          },
+          "null": {
+            "links": 14073,
+            "placed_compiled": 805,
+            "registry_would": 759,
+            "coverage_compiled": 0.0572,
+            "coverage_compiled_or_registry": 0.1111,
+            "abstention": 0.9428
+          }
+        },
+        "policy": {
+          "positive": {
+            "links": 661,
+            "placed_compiled": 141,
+            "registry_would": 118,
+            "coverage_compiled": 0.2133,
+            "coverage_compiled_or_registry": 0.3918,
+            "abstention": 0.7867
+          },
+          "null": {
+            "links": 14073,
+            "placed_compiled": 2645,
+            "registry_would": 2683,
+            "coverage_compiled": 0.1879,
+            "coverage_compiled_or_registry": 0.3786,
+            "abstention": 0.8121
+          }
+        },
+        "policy_ambiguity": {
+          "positive": {
+            "placed": 141,
+            "carried_by_more_than_one_element": 46
+          },
+          "null": {
+            "placed": 2645,
+            "carried_by_more_than_one_element": 595
+          }
+        }
+      },
+      "-20000": {
+        "current_rule": {
+          "positive": {
+            "links": 661,
+            "placed_compiled": 29,
+            "registry_would": 22,
+            "coverage_compiled": 0.0439,
+            "coverage_compiled_or_registry": 0.0772,
+            "abstention": 0.9561
+          },
+          "null": {
+            "links": 14073,
+            "placed_compiled": 807,
+            "registry_would": 652,
+            "coverage_compiled": 0.0573,
+            "coverage_compiled_or_registry": 0.1037,
+            "abstention": 0.9427
+          }
+        },
+        "policy": {
+          "positive": {
+            "links": 661,
+            "placed_compiled": 142,
+            "registry_would": 114,
+            "coverage_compiled": 0.2148,
+            "coverage_compiled_or_registry": 0.3873,
+            "abstention": 0.7852
+          },
+          "null": {
+            "links": 14073,
+            "placed_compiled": 2573,
+            "registry_would": 2494,
+            "coverage_compiled": 0.1828,
+            "coverage_compiled_or_registry": 0.3601,
+            "abstention": 0.8172
+          }
+        },
+        "policy_ambiguity": {
+          "positive": {
+            "placed": 142,
+            "carried_by_more_than_one_element": 41
+          },
+          "null": {
+            "placed": 2573,
+            "carried_by_more_than_one_element": 661
+          }
+        }
+      }
+    },
+    "baseline_distance_to_tss": {
+      "placed_policy": {
+        "links": 8203,
+        "without_distance": 0,
+        "positives": 497,
+        "prevalence": 0.0606,
+        "auroc": 0.8757,
+        "average_precision": 0.4714,
+        "median_distance_positive": 32075.0,
+        "median_distance_null": 365327.5
+      },
+      "rescued_by_policy": {
+        "links": 3378,
+        "without_distance": 0,
+        "positives": 285,
+        "prevalence": 0.0844,
+        "auroc": 0.8729,
+        "average_precision": 0.508,
+        "median_distance_positive": 32835.0,
+        "median_distance_null": 372830.0
+      }
+    },
+    "stop": {
+      "a_nulls_as_fast": false,
+      "b_not_positional": false,
+      "c_wide_intervals": false
+    },
+    "stopped": false
+  },
+  "independent_loci": {
+    "positive": {
+      "links": 661,
+      "distinct_genes": 415,
+      "distinct_tested_intervals": 594
+    },
+    "null": {
+      "links": 14073,
+      "distinct_genes": 2105,
+      "distinct_tested_intervals": 5318
+    }
+  },
+  "positive_links_with_another_outcome_too": 0,
+  "prior_exposure": [
+    {
+      "commit": "138824f",
+      "read": "the CRISPRi benchmark files against the all-element deletion (2026-09-16)"
+    },
+    {
+      "commit": "ecc3452",
+      "read": "every screened pair against the compiled elements under the reciprocal rule: the measured layer's eligibility (2026-09-17)"
+    },
+    {
+      "commit": "f48b909",
+      "read": "the Regulated pairs, for node_containment_measured (2026-09-28)"
+    },
+    {
+      "commit": "a39073d",
+      "read": "every pair's outcome, for crispri_published (2026-09-28)"
+    },
+    {
+      "commit": "b7e4bf0",
+      "read": "C4's placement of the 661 decrease links: 212 / 62 / 387 (2026-09-28)"
+    },
+    {
+      "commit": "cc824f4",
+      "read": "the pairs as a held-out source of the coherence programme (2026-09-28)"
+    },
+    {
+      "commit": "b7cb814",
+      "read": "the pairs as a held-out source of the correctness judge v1 to v3 (2026-09-29)"
+    }
+  ],
+  "cost": {
+    "wall_seconds": 8.5,
+    "cpu_seconds": 8.3,
+    "peak_memory_mb": 1086.4,
+    "downloads": 0,
+    "requests": 0
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark (Gschwind et al. 2025)",
+        "version": "main, as fetched 2026-09-16; pinned by sha256"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs v3, https://downloads.wenglab.org/V3/GRCh38-cCREs.bed",
+        "version": "per-chromosome subsets as distilled; pinned by sha256"
+      },
+      {
+        "accession": "this repository: the 24 compiled programs data/knowledge/compiled/noncoding_<chrom>.bio (generated, untracked)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: the whole-chromosome deletion run's element tables (generated, untracked), read for membership only",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "GENCODE v50",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "this repository: data/results/c4_alphagenome_ablation.json",
+        "version": "b7e4bf0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      },
+      {
+        "path": "data/results/ccres_chr1.bed.gz",
+        "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+        "bytes": 1092197,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr2.bed.gz",
+        "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+        "bytes": 992268,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr3.bed.gz",
+        "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+        "bytes": 782800,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr4.bed.gz",
+        "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+        "bytes": 591199,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr5.bed.gz",
+        "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+        "bytes": 667998,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr6.bed.gz",
+        "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+        "bytes": 708503,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr7.bed.gz",
+        "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+        "bytes": 624219,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr8.bed.gz",
+        "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+        "bytes": 572895,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr9.bed.gz",
+        "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+        "bytes": 513553,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr10.bed.gz",
+        "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+        "bytes": 586862,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr11.bed.gz",
+        "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+        "bytes": 603871,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr12.bed.gz",
+        "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+        "bytes": 583682,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr13.bed.gz",
+        "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+        "bytes": 323960,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr14.bed.gz",
+        "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+        "bytes": 396902,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr15.bed.gz",
+        "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+        "bytes": 382991,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr16.bed.gz",
+        "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+        "bytes": 401936,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr17.bed.gz",
+        "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+        "bytes": 505715,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr18.bed.gz",
+        "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+        "bytes": 277669,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr19.bed.gz",
+        "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+        "bytes": 371935,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr20.bed.gz",
+        "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+        "bytes": 332264,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr22.bed.gz",
+        "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+        "bytes": 240224,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrX.bed.gz",
+        "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+        "bytes": 298355,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chrY.bed.gz",
+        "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+        "bytes": 12318,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements (membership only)",
+        "sha256": "d8be757572cbaef70d78447644245d84063b4e198910b8aed0ea25d7ec525d9b",
+        "bytes": 622783785,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "data/results/c4_alphagenome_ablation.json",
+        "sha256": "3bf80a891d4b17077425bb5285081f78bd729f78cfbab943e55a0ed5693a6a24",
+        "bytes": 68222,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "current_rule_reciprocal_overlap": 0.5,
+      "policy": "min_side_half",
+      "policy_threshold": 0.5,
+      "shift_bp": 20000,
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20260929,
+      "registered": "2026-09-29"
+    },
+    "exclusions": [
+      "CRISPRi pairs the benchmark marks as not a valid connection are not read (none in these files)",
+      "the per-element response cache is not opened; the model is not called; nothing is downloaded",
+      "no effect value of the deletion run is read, only whether an element was scored and named a gene"
+    ],
+    "partitions": {
+      "training": "the CRISPRi benchmark's training file (K562); read as measurement, nothing fitted",
+      "heldout": "the CRISPRi benchmark's held-out file; read as measurement, reported apart"
+    },
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "0183ef57434a5a1c189c024597ead1181ec70c68",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/placement_audit.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

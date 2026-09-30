@@ -1060,6 +1060,17 @@ sentence from nine to ten together — both files belonging to other lanes. The 
 tests written for the case are committed ahead of it and skip on the case's
 absence, so they assert the moment that commit lands; none of them is weakened.
 
+Landed on 2026-09-30, in the rebuild the removal window allowed (ROADMAP item 12).
+The result is a fresh run at 5ab1b95 in a clean worktree, public services on and
+no model requests, repeated in a fresh environment from the committed `uv.lock`
+with no difference. It reads 10/10 targets recovered, 10/10 verdicts correct and
+10/10 defensible top mechanisms, 5 of 5 surface targets, 2 copy-number cases. The
+nine earlier rows equal the committed nine-case file in every field they shared
+apart from `seconds`, and gain the three fields the tenth case's code writes for
+every row (`rank_without_gate`, `magnitude_tiebreaks`,
+`quantities_in_this_tumour`). The pins and README moved from nine to ten in the
+same commit, and the four tests that skipped on the case's absence run and pass.
+
 What passed. ERBB2 is recovered as a surface target at rank 1 with an
 established blocking antibody at compatibility 0.52 and accessibility 1.0;
 `outranked_by_unreachable` is empty and the pin of 0 holds across ten cases;

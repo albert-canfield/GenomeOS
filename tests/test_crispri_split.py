@@ -119,26 +119,24 @@ def test_the_layer_keeps_every_link_and_names_the_training_ones(knowledge):
     assert {p["split"] for p in c["pairs"] if p["gene"] == "DDD"} == {measured.HELDOUT}
 
 
-# Superseded by R1 (2026-09-28, docs/ATTRIBUTION.md): this pins one rule per element and gene, and
-# AAA is now two rules, K562 (training, 0.2) and WTC11 (held-out, 0.8, marked). The invariant it
-# guards - a held-out pair never sets a training rule's number - is re-pinned per cell in
-# tests/test_rule_context.py. Kept, strict, until the removal window lets it be rewritten.
-@pytest.mark.xfail(strict=True, reason="R1: one rule per (element, gene, cell), not per (element, gene)")
+# Since R1 (2026-09-28, docs/ATTRIBUTION.md) a link is one (element, gene, cell): AAA is two rules,
+# K562 (training, 0.2) and WTC11 (held-out, 0.8, marked), and the invariant - a held-out pair never
+# sets a training rule's number - holds within each cell (also pinned in tests/test_rule_context.py).
 def test_a_held_out_measurement_never_sets_a_compiled_number(knowledge):
-    links = {g: rest for g, *rest in measured.rule_links(compiled_row(knowledge))}
-    assert links["AAA"] == ["activates", 0.2, "K562", measured.TRAINING]  # not WTC11's -0.8
-    assert links["DDD"] == ["activates", 0.5, "GM12878", measured.HELDOUT]
+    assert measured.rule_links(compiled_row(knowledge)) == [
+        ("AAA", "activates", 0.2, "K562", measured.TRAINING),  # not WTC11's -0.8
+        ("AAA", "activates", 0.8, "WTC11", measured.HELDOUT),  # its own cell's rule, never K562's
+        ("DDD", "activates", 0.5, "GM12878", measured.HELDOUT),
+    ]
     assert measured.rule_lines(compiled_row(knowledge)) == [
         ("AAA", "activates", 0.2, "K562"),
+        ("AAA", "activates", 0.8, "WTC11"),
         ("DDD", "activates", 0.5, "GM12878"),
     ]
 
 
-# Superseded by R1 (2026-09-28, docs/ATTRIBUTION.md): this pins one rule per element and gene, and
-# AAA is now two rules, K562 (training, 0.2) and WTC11 (held-out, 0.8, marked). The invariant it
-# guards - a held-out pair never sets a training rule's number - is re-pinned per cell in
-# tests/test_rule_context.py. Kept, strict, until the removal window lets it be rewritten.
-@pytest.mark.xfail(strict=True, reason="R1: one rule per (element, gene, cell), not per (element, gene)")
+# R1: one rule per (element, gene, cell). A held-out link still never reaches `targets:`, and every
+# rule resting only on held-out pairs carries the mark, in whichever cell it is gated on.
 def test_the_compiled_block_keeps_held_out_links_out_of_targets_and_marks_their_rules(knowledge):
     r = compiled_row(knowledge)
     ident_of = {g: cp.ident(g) for g in ("AAA", "DDD")}
@@ -157,10 +155,19 @@ def test_the_compiled_block_keeps_held_out_links_out_of_targets_and_marks_their_
     element = module.entities["E1_measured"]
     targets = [line for line in block if line.strip().startswith("targets:")]
     assert targets == [f"  targets: {ident_of['AAA']}"]  # DDD is held-out only
-    rules = {r_.target: r_ for r_ in module.rules if r_.source == "E1_measured"}
-    assert set(rules) == {ident_of["AAA"], ident_of["DDD"]}  # the rule count does not move
-    assert measured.is_heldout(rules[ident_of["DDD"]].evidence.source)
-    assert not measured.is_heldout(rules[ident_of["AAA"]].evidence.source)
+    own = [r_ for r_ in module.rules if r_.source == "E1_measured"]
+    rules = {(r_.target, r_.when.get("cell_type")): r_ for r_ in own}
+    assert len(own) == len(rules) == 3  # one rule per gene and cell, none dropped for being held out
+    aaa_k562, aaa_wtc11, ddd = (
+        (ident_of["AAA"], "K562"),
+        (ident_of["AAA"], "WTC11"),
+        (ident_of["DDD"], "GM12878"),
+    )
+    assert set(rules) == {aaa_k562, aaa_wtc11, ddd}
+    assert measured.is_heldout(rules[ddd].evidence.source)
+    assert measured.is_heldout(rules[aaa_wtc11].evidence.source)
+    assert not measured.is_heldout(rules[aaa_k562].evidence.source)
+    assert rules[aaa_k562].strength == 0.2  # the training rule's number is its own, not WTC11's 0.8
     assert element.evidence.kind == "experimental"
     assert "held-out split" in [line for line in block if "basis:" in line][0]
 

@@ -5,6 +5,12 @@ Every run here is a dry run or a refusal: nothing in this file lets the script p
 remote it could reach is a bare repository under the test's temporary directory. What is checked
 is the decision: which shas the gate lets through and which it refuses, read from the check runs
 a stand-in `gh` reports.
+
+2026-09-29, beside the above: the `--prepare` tests do let the script push, one branch named
+`promote-<first 7 of the sha>`, to that bare repository and nowhere else. These tests check the
+script's decisions and git operations against a local remote. GitHub's enforcement of main's branch
+rule is not simulated, and nothing here shows what GitHub would accept: the stand-in `gh` reports
+the check runs and events a test gives it, and decides nothing.
 """
 
 from __future__ import annotations
@@ -42,12 +48,21 @@ elif args[:1] == ["api"] and "/check-runs" in args[1]:
             "completed_at": c["completed_at"],
             "html_url": "https://example.invalid/" + c["conclusion"],
             "app": {"slug": c.get("app", "github-actions")},
+            "check_suite": {"id": c.get("suite")},
         }
         for c in state["checks"].get(sha, [])
     ]
     print(json.dumps({"total_count": len(runs), "check_runs": runs}))
 elif args[:1] == ["api"] and "/actions/workflows/ci.yml/runs" in args[1]:
     print(json.dumps({"workflow_runs": [{"head_sha": s} for s in state["runs"]]}))
+elif args[:1] == ["api"] and "/actions/runs?head_sha=" in args[1]:
+    sha = args[1].split("head_sha=")[1].split("&")[0]
+    runs = [
+        {"head_sha": sha, "check_suite_id": c["suite"], "event": c["event"]}
+        for c in state["checks"].get(sha, [])
+        if c.get("event")
+    ]
+    print(json.dumps({"total_count": len(runs), "workflow_runs": runs}))
 else:
     sys.exit("fake gh: unexpected call " + " ".join(args))
 """
@@ -111,16 +126,34 @@ class Repo:
         entry = {"conclusion": conclusion, "completed_at": when, "app": app}
         self.state["checks"].setdefault(sha, []).append(entry)
 
+    def check_event(self, sha: str, conclusion: str, when: str, event: str | None) -> None:
+        """A `test` check run whose workflow run was triggered by `event`; None: no workflow run found."""
+        self.check(sha, conclusion, when)
+        self.state["checks"][sha][-1]["event"] = event
+
     def remote_main(self) -> str:
         return _git(self.bare, "rev-parse", "refs/heads/main")
+
+    def remote_refs(self) -> dict[str, str]:
+        out = _git(self.bare, "for-each-ref", "--format=%(refname) %(objectname)")
+        return dict(line.split() for line in out.splitlines())
 
     def run(self, *args: str) -> subprocess.CompletedProcess:
         # the only remote this script can reach in a test is the bare repository made above
         assert Path(_git(self.work, "remote", "get-url", "origin")) == self.bare
         state = self.tmp / "gh_state.json"
+        # 2026-09-29: each check run gets its own check suite, and each suite a workflow run whose
+        # event is `schedule` unless the test said otherwise (check_event)
+        entries = [e for es in self.state["checks"].values() for e in es]
+        for entry in entries:
+            if "suite" not in entry:
+                entry["suite"] = 1 + max((e.get("suite", 0) for e in entries), default=0)
+            entry.setdefault("event", "schedule")
         state.write_text(json.dumps(self.state))
         env = {**os.environ, "PATH": self.path, "FAKE_GH_STATE": str(state)}
         env.pop("PROMOTE_REPO", None)
+        # 2026-09-29: --prepare pushes to the bare repository; no hook of this machine runs on it
+        env.update(GIT_CONFIG_COUNT="1", GIT_CONFIG_KEY_0="core.hooksPath", GIT_CONFIG_VALUE_0="/dev/null")
         return subprocess.run(
             ["bash", str(SCRIPT), *args], cwd=self.work, env=env, capture_output=True, text=True
         )
@@ -215,3 +248,208 @@ def test_usage_errors_exit_2_before_any_check(repo, args):
     r = repo.run(*args)
     assert r.returncode == 2
     assert not (repo.tmp / "gh_state.json.log").exists(), "nothing was asked of GitHub"
+
+
+# 2026-09-29: the event of the run the gate relies on, --prepare, --verify, and the retired scripts.
+# Every sentence below is about the script's own decisions against a local remote; none of them is
+# about what GitHub's branch rule would do.
+
+PROMOTE_SH = SCRIPT.parent / "promote.sh"
+
+
+def _gh_calls(repo) -> str:
+    log = repo.tmp / "gh_state.json.log"
+    return log.read_text() if log.exists() else ""
+
+
+@pytest.mark.parametrize("event", ["workflow_dispatch", "schedule"])
+def test_a_green_manual_or_scheduled_run_is_a_pre_check_only(repo, event):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
+    before = repo.remote_refs()
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert f"triggered by {event}" in r.stdout
+    assert "CI pre-check passed" in r.stdout
+    assert "a pre-check only; it does not make the sha eligible" in r.stdout
+    assert "eligible for protected promotion:" not in r.stdout
+    assert "is an inference, not established" in r.stdout
+    assert f"actions/runs?head_sha={repo.c}" in _gh_calls(repo)
+    assert "that push is no longer made" in r.stdout
+    assert repo.remote_refs() == before, "a dry run moves nothing"
+
+
+@pytest.mark.parametrize("event", ["pull_request", "push"])
+def test_a_pull_request_or_push_run_is_a_qualifying_ci_event_only(repo, event):
+    """The reviewer's correction: the event qualifies; it does not establish eligibility."""
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    lines = r.stdout.splitlines()
+    held = next(i for i, line in enumerate(lines) if "was triggered by " + event in line)
+    assert lines[held + 1] == (
+        "promote_main: that is a qualifying CI event only; protected promotion eligibility is not "
+        "established: the exact revision, the required checks and the protection rules decide, and "
+        "GitHub's decision is authoritative"
+    ), "the qualification follows the held line directly"
+
+
+def test_the_pull_request_s_own_run_is_named_a_qualifying_ci_event_only(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "the pull request's own run would be a qualifying CI event only" in r.stdout
+    assert "GitHub's decision is authoritative" in r.stdout
+
+
+@pytest.mark.parametrize("event", ["pull_request", "push"])
+def test_a_green_pull_request_or_push_run_is_eligible(repo, event):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert f"eligible for protected promotion: the `test` run relied on was triggered by {event}" in r.stdout
+    assert "pre-check only" not in r.stdout
+
+
+def test_the_event_is_that_of_the_run_the_gate_relies_on(repo):
+    """An earlier green pull_request run does not lend its event to a later green manual run."""
+    repo.check_event(repo.c, "success", "2026-09-27T10:00:00Z", "pull_request")
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "triggered by workflow_dispatch" in r.stdout and "pre-check only" in r.stdout
+
+
+def test_a_run_whose_workflow_run_is_not_found_is_a_pre_check_only(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", None)
+    r = repo.run(repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "triggered by unknown" in r.stdout and "pre-check only" in r.stdout
+
+
+def test_push_is_refused_before_anything_is_read_or_moved(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "pull_request")
+    before = repo.remote_refs()
+    for args in (["--push", repo.c], [repo.c, "--push"], ["--dry-run", "--push", repo.c]):
+        r = repo.run(*args)
+        assert r.returncode == 2
+        assert "--push is retired" in r.stderr and "--prepare SHA" in r.stderr
+    assert _gh_calls(repo) == "", "nothing was asked of GitHub"
+    assert repo.remote_refs() == before
+
+
+def test_prepare_pushes_only_the_frozen_branch(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    before = repo.remote_refs()
+    r = repo.run("--prepare", repo.c)
+    assert r.returncode == 0, r.stderr
+    branch = f"refs/heads/promote-{repo.c[:7]}"
+    assert repo.remote_refs() == {**before, branch: repo.c}, "one new branch, at exactly that sha"
+    assert repo.remote_main() == repo.a
+    assert f"https://github.com/owner/repo/compare/main...promote-{repo.c[:7]}?expand=1" in r.stdout
+    assert f"scripts/promote_main.sh --verify {repo.c}" in r.stdout
+    assert "pre-check only" in r.stdout
+    reads = ("repo view", "api repos/owner/repo/commits/", "api repos/owner/repo/actions/runs?")
+    assert all(line.startswith(reads) for line in _gh_calls(repo).splitlines()), "only reads of GitHub"
+    # again: the branch is already there at that sha, so nothing more is pushed
+    r = repo.run("--prepare", repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "nothing pushed" in r.stdout
+    assert repo.remote_refs() == {**before, branch: repo.c}
+
+
+def test_prepare_refuses_a_branch_that_exists_at_another_sha(repo):
+    repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    branch = f"refs/heads/promote-{repo.c[:7]}"
+    _git(repo.work, "push", "-q", "origin", f"{repo.b}:{branch}")
+    before = repo.remote_refs()
+    r = repo.run("--prepare", repo.c)
+    assert r.returncode == 1
+    assert f"already has promote-{repo.c[:7]} at {repo.b[:7]}" in r.stderr
+    assert repo.remote_refs() == before, "neither the branch nor main moved"
+
+
+def test_prepare_makes_the_same_checks_first(repo):
+    repo.check_event(repo.c, "failure", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    repo.check_event(repo.s, "success", "2026-09-28T10:00:00Z", "workflow_dispatch")
+    before = repo.remote_refs()
+    r = repo.run("--prepare", repo.c)
+    assert r.returncode == 1 and "concluded failure" in r.stderr
+    r = repo.run("--prepare", repo.s)
+    assert r.returncode == 1 and "is not on origin/dev" in r.stderr
+    assert repo.remote_refs() == before
+
+
+def _merge_on_main(repo, *parents: str) -> str:
+    """Stand in for the owner's merge: a commit with the chosen sha's tree, pushed to main."""
+    args = ["commit-tree", f"{repo.c}^{{tree}}", "-m", "merge"]
+    for parent in parents:
+        args += ["-p", parent]
+    merge = _git(repo.work, *args)
+    _git(repo.work, "push", "-q", "origin", f"{merge}:refs/heads/main")
+    return merge
+
+
+def test_verify_accepts_main_with_the_sha_s_tree_and_the_sha_as_ancestor(repo):
+    _merge_on_main(repo, repo.a, repo.c)
+    r = repo.run("--verify", repo.c)
+    assert r.returncode == 0, r.stderr
+    assert "verified" in r.stdout
+    assert _gh_calls(repo) == "", "--verify reads git only"
+
+
+def test_verify_refuses_main_before_the_merge(repo):
+    r = repo.run("--verify", repo.c)
+    assert r.returncode == 1 and "does not have" in r.stderr and "file tree" in r.stderr
+
+
+def test_verify_refuses_the_same_tree_without_the_sha_as_ancestor(repo):
+    """A squash merge carries the files but not the sha."""
+    _merge_on_main(repo, repo.a)
+    r = repo.run("--verify", repo.c)
+    assert r.returncode == 1 and "is not an ancestor" in r.stderr
+
+
+def test_verify_refuses_the_sha_as_ancestor_with_another_tree(repo):
+    _git(repo.work, "push", "-q", "origin", f"{repo.c}:refs/heads/main")
+    r = repo.run("--verify", repo.b)
+    assert r.returncode == 1 and "does not have" in r.stderr
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["--prepare", "--latest-green"],
+        ["--verify", "--latest-green"],
+        ["--prepare", "--verify", "HEAD"],
+        ["--dry-run", "--prepare", "HEAD"],
+        ["--prepare"],
+        ["--verify"],
+    ],
+)
+def test_new_usage_errors_exit_2_before_any_check(repo, args):
+    before = repo.remote_refs()
+    r = repo.run(*args)
+    assert r.returncode == 2
+    assert _gh_calls(repo) == "", "nothing was asked of GitHub"
+    assert repo.remote_refs() == before
+
+
+def test_help_prints_the_new_usage_only(repo):
+    r = repo.run("--help")
+    assert r.returncode == 0
+    assert "--prepare" in r.stderr and "--verify" in r.stderr and "--push" not in r.stderr
+
+
+def test_promote_sh_is_retired_and_runs_nothing(tmp_path):
+    bindir = tmp_path / "bin"
+    bindir.mkdir()
+    log = tmp_path / "calls.log"
+    for tool in ("git", "gh", "uv"):
+        stub = bindir / tool
+        stub.write_text(f'#!/bin/sh\necho "{tool} $*" >> "{log}"\n')
+        stub.chmod(0o755)
+    env = {**os.environ, "PATH": f"{bindir}{os.pathsep}{os.environ['PATH']}"}
+    r = subprocess.run(["bash", str(PROMOTE_SH)], cwd=tmp_path, env=env, capture_output=True, text=True)
+    assert r.returncode != 0
+    assert "retired" in r.stderr and "scripts/promote_main.sh" in r.stderr
+    assert not log.exists(), "no git, gh or uv call"

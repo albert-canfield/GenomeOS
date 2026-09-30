@@ -93,19 +93,19 @@
     {
       "result": "therapeutic_benchmark",
       "figure": "targets recovered, verdicts correct, mechanisms defensible",
-      "quoted_as": "9/9",
+      "quoted_as": "10/10",
       "quoted_in": "README status section; docs/THERAPEUTICS.md",
       "value": {
-        "targets_recovered": 9,
-        "verdicts_correct": 9,
-        "top_mechanism_defensible": 9,
-        "cases": 9
+        "targets_recovered": 10,
+        "verdicts_correct": 10,
+        "top_mechanism_defensible": 10,
+        "cases": 10
       },
       "writer": "scripts/therapeutic_benchmark.py",
       "argv": [
         "scripts/therapeutic_benchmark.py"
       ],
-      "rebuilt_at": "65d2d23fd303b9e342c96f6029b04b6253d75023",
+      "rebuilt_at": "5ab1b956b60123c29e95d90f0184d7a5694aaedb",
       "dirty": false,
       "manifest_complete": true,
       "values_compared": 324,
@@ -114,7 +114,15 @@
       "second_rerun_differences": [],
       "alphagenome_requests": 0,
       "difference_explained": "the first rerun (42e786f) differed from the committed file in one key, ordering_rules_measured, added by hand in 2805552 and written by no run. 65d2d23 makes the script write that exact wording; the rerun at 65d2d23 equals the committed file in every value (date and timings aside)",
-      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
+      "rebuild_2026_09_30": {
+        "why": "the tenth case (registered eb18c40, run 64f0afe) had no usable copy of its result, so the result is a fresh run: item 7 of the 2026-09-30 rebuild (docs/ROADMAP.md item 12, b317fa2)",
+        "how": "scripts/therapeutic_benchmark.py run twice at 5ab1b95 in clean git worktrees with data/reference, data/knowledge and data/cache linked, first with the checkout's environment, then with a fresh one from the committed uv.lock (uv sync --frozen --offline); public services on, no model requests; the second run's file is the committed one",
+        "second_rerun_differences": [],
+        "alphagenome_requests": 0,
+        "against_the_committed_nine_case_file": "rows 1-9 equal in all 288 fields they share with it (32 each) except seconds, and each gains rank_without_gate, magnitude_tiebreaks and quantities_in_this_tumour, which the tenth case's code writes for every row; the tenth row, its two inputs, two sources and six top-level keys are added; of the shared inputs only data/knowledge/therapeutics has different bytes",
+        "earlier_pass_fields": "values_compared, differences, status, difference_explained and committed_file describe the 2026-09-28 pass at 65d2d23"
+      }
     },
     {
       "result": "unknown_coverage",

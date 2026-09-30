@@ -119,8 +119,12 @@ evidence per task.
 perturbations as tests, BioForge taking experiments as input, and the Evidence
 explorer. `bio test` runs 41 programs at 220/220 checks in CI, including ten
 worm mutants and nine blood mutants. 1.1 (human mechanism), 1.2 (therapeutics
-benchmark, now 9/9 targets recovered by all four routes) and 1.3 (the 98%) are
+benchmark, now 10/10 targets recovered by all four routes) and 1.3 (the 98%) are
 each partly met and the roadmap says for each exactly which clause is not.
+*(2026-09-30: the 10/10 counts ten benchmark tumour cases, the tenth hand-written from cohort medians.
+Three quantities are scored apart: the target gene is recovered, the modality verdict is correct, and the
+top-ranked mechanism is defensible. It is not ten independently validated therapies; see
+docs/THERAPEUTICS.md.)*
 
 **The number that frames everything else.** The non-coding space this project
 exists to explain is 30,602,182 bases, and **160,447 of them — 0.52% — have
