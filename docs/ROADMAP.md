@@ -4487,6 +4487,27 @@ entire sweep. What is next, in order of what it decides:
     Around the whole rebuild: `scripts/check.sh` green before and after; CI on the exact revision; a
     promotion only on the owner's specific authorisation, through a pull request.
 
+    **Result, 2026-09-30 05:12 BST (lane-rebuild; `1a11a7b`, `d13e50b`, `e801b6b`, `e9f8526`, `1163e4d`,
+    `5ab1b95`, `aa7f92c`; checked by the coordinator against the result files).** Items 1–7 done, no guard
+    refusal, no override; `check.sh` green before (2,704 passed) and after (2,710; bio 221/221).
+    Rebuilt and verified: (1) `measured_layer_genome` equals `_r6` except evidence (weak 14,088 stated at or
+    below the line, 914,006 unstated counted apart, the old 928,094 kept beside), date, seconds, name and
+    code block; lentiMPRA 3,231 / 14,512 / 126, CRISPRi 97 / 23, 25 programs; `--retired-formula`
+    reproduces `_r6`: n 17,743, observed 0.1821, ECE 0.0963; clean stamps; the `_r6` files kept. (2) The
+    chr21 program's 5,825 `confidence:` matches reconcile as 5,174 predicted rules + 1 measured + ICOSLG +
+    446 region fields + 200 measured fields + 3 header comments; 5,175 rule lines, 1 basis line and the
+    header change, no role or axis line; `rules == 5176`. (3) one model-score name and one score line;
+    every recompiled program changes by exactly one header line. (4) the variation strings: 0 numeric
+    differences over 14,288 leaves. (5) the grammar pair, not refused. (6) the two strict xfails rewritten,
+    no assertion loosened. (7) the tenth therapeutic case: 10 / 10 / 10, rows 1–9 identical in all 288 shared
+    fields except `seconds`, the four tests pass; README and the pins moved in the same commit.
+    Legitimate changes, explained: items committed in the order 3, 5, 2, 1, 4, 6, 7 so the chr21 header was
+    written once in item 3's wording; the chr21 generation date changes; item 7 was run by its writer at a
+    clean revision because `manifest_rebuild.py` checks out `65d2d23`, before the tenth case, so rows 1–9
+    gain the three fields `64f0afe`'s code writes, and the local therapeutics store differs from the bytes
+    the old manifest recorded; `manifest_headlines.json` also moved `value` and `quoted_as` to ten. Not
+    done: CI on `aa7f92c`; the `_r6` files; item 8.
+
    Delivery: wave 1 first; then one bounded pilot on cached evidence, ordinary CPUs and local regulatory
    neighbourhoods, chromosomes as validation partitions, supported connections kept across neighbourhood
    boundaries; genome-wide deployment only after the pilot shows improvement.
