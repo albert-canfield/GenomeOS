@@ -1,7 +1,736 @@
 {
   "result": "therapeutic_benchmark",
+  "date": "2026-09-30",
+  "cases": 10,
+  "targets_recovered": 10,
+  "verdicts_correct": 10,
+  "top_mechanism_defensible": 10,
+  "cases_by_driver_call": {
+    "point mutation": 6,
+    "copy number": 2,
+    "structural variant": 1,
+    "expression": 1
+  },
+  "surface_cases": 5,
+  "surface_cases_recovered": 5,
+  "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
+  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target, and all four routes into the candidate list are now scored: six point mutations, one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case so that the route is the only thing that differs), one structural variant (EML4-ALK) and one expression call (CD19, which carries no alteration of any kind). The ALK case is the one where the curated databases and the patient disagree: ALK is a single-pass surface receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the approved drugs are small molecules. It passes by refusing a surface route rather than by leaving the question open. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target with nothing measured about them in this patient. Until 2026-09-27 the pipeline could recover a target without preferring it, and the three scored questions could not tell those apart: ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, scored 0.494 and ranked fourth behind KDR, EGFR and PDGFRB, none of them altered in that tumour, because surface_accessibility reads curated localisation and no dimension read the alteration. A dimension now does: alteration_evidence, on three tiers - an alteration observed in this tumour (1.0), this patient's own measurement of the gene (0.6), a database association with a gene that was altered (0.2) - and the ranking puts the third tier below the other two before it looks at a score. evidence_tier and alteration_evidence are reported per row. The tier is read from the evidence about the gene and never from the route that proposed it, which is what keeps CD19, reached from the patient's RNA with no alteration of any kind, from being demoted by a rule aimed at hypotheses; for the same reason the count above no longer means 'candidates with no origins record', a proxy under which CD19's own route read as burial. Scores before and after this change are not comparable, because every candidate gained a dimension; the ordering is what the change was about.",
+  "ordering_rules": "Two rules on the order, registered before the code on 2026-09-27 and neither a term in the weighted mean. mechanism_reach partitions candidates by whether any modelled modality reaches them with its hard requirements answered; it is read after the evidence tier and never before it, and provisional-only sits with nothing-at-all because a mechanism whose requirement is unanswered has not been shown to apply. outranked_by_unreachable counts candidates ranked above the target that no modality reaches. alteration_magnitude publishes how much this patient's own data say the gene was altered - copy count against the diploid 2, variant allele fraction, hotspot status - with an absent quantity stated as absent and never imputed, and it breaks ties only between candidates already equal on tier, gate and published score, comparing like with like because a count and an annotation share no unit.",
+  "ordering_rules_measured": "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a re-run on 2026-09-28, hours after the rules were registered. Every other field of every row came out identical to the 2026-09-27 run recorded here - rank, score, target class, evidence tier, mechanism, compatibility, accessibility, peptide route, verdict - which is the check that the two rules changed an order and nothing else. That run's date and per-case wall-clock timings are left as they are rather than overwritten, so that adding these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds per case.",
+  "gate_and_tiebreak_case": "The tenth case, pre-registered 2026-09-28 before it was run, and the first chosen for a rule rather than for a route: a HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC. The mechanism gate and the magnitude tiebreak were registered on 2026-09-27 and neither did anything in the nine cases - no candidate outside every modelled modality ever outranked a target, and no demo VCF reported an allele fraction, so the tiebreak had no quantity to compare. This tumour was chosen from TCGA stomach adenocarcinoma (PanCancer Atlas, 440 samples), where ERBB2 is amplified in 58 tumours, MYC in 53, and 20 carry both: 34% of every ERBB2-amplified tumour in the cohort. The copy numbers are that subgroup's medians (ERBB2 13, MYC 8, TP53 2), the 17q12 passengers GRB7, MIEN1 and STARD3 take ERBB2's number because a copy call is a segment call, and the TP53 R175H hotspot carries the cohort's median allele fraction for that change, 0.49. Registered predictions: ERBB2 first with outranked_by_unreachable empty; the gate tested only if an unreachable candidate scores above ERBB2, which rank_without_gate says per row; a published allele fraction of 0.49 and not an imputed one; and the tiebreak not predicted to fire, since one amplicon is measured at one number and an exact tie in the score cannot be arranged by the choice of case. rank_without_gate and magnitude_tiebreaks are computed for every row, the nine included, and were written only after the registration was committed.",
+  "gate_and_tiebreak_case_measured": "Negatives first. The gate closed nothing again: rank_without_gate equals rank in all ten cases, so removing the gate from the ranking key would change no target's place, and gate_moved_the_target is empty. The case was chosen to make the gate matter and it measured why it does not, which is the useful part. MYC, amplified at 8 copies in the top evidence tier, scores 0.246 - the lowest of the six altered candidates, against the target's 0.494 - so it never threatened the target's place and the gate had nothing to demote. The reason is structural rather than particular to MYC: the annotations that make a gene unreachable, no outward-facing part and no epitope, are the same annotations that make it score low, so an undruggable nuclear amplification cannot produce the configuration the gate was written for. The configuration needs a candidate curated as a surface receptor whose mechanisms are nonetheless all refused or unanswered - the EML4-ALK shape, where ALK scores 0.559 against ERBB2's 0.494 - and that means two independent drivers in one tumour. In MSK-IMPACT 2017, of the 42 tumours whose structural variants make a surface receptor the 3' partner (6 ALK, 12 ROS1, 16 RET, 8 NTRK1), one also carries an amplified ERBB2, one an amplified EGFR and one an amplified MET: the defect the gate prevents is rare in real tumours because strong drivers are largely mutually exclusive, and a benchmark case built on a single sample would be that sample's record rather than a cohort summary. The second negative: the magnitude tiebreak had no opportunity in the new case at all - no two candidates there are equal on tier, gate and published score - and the four score-tied groups in the other cases are all pairs with no quantity between them. magnitude_tiebreak_changed_order is empty. Third, a registered prediction was falsified, and by the registration rather than by the pipeline: the tenth row was predicted to publish a variant allele fraction of 0.49 and publishes none, because a row publishes the target's own magnitude and the target is reached by its amplification, while the fraction the VCF reports belongs to the mutated TP53 in the same tumour. The prediction is kept as it was written and the amendment is additive: quantities_in_this_tumour publishes every candidate that carries a measured amount, so the 0.49 that reaches the ranking is visible where it actually sits. What did pass: ERBB2 is recovered as a surface target at rank 1 with an established blocking antibody, outranked_by_unreachable is empty and the pin of 0 holds across ten cases, and the nine earlier rows came out identical field by field apart from their per-case timings.",
+  "gate_moved_the_target": [],
+  "magnitude_tiebreak_groups": 4,
+  "magnitude_tiebreak_changed_order": [],
+  "cases_where_a_candidate_carries_an_allele_fraction": [
+    "ERBB2"
+  ],
+  "rows": [
+    {
+      "case": "EGFR L858R, lung adenocarcinoma",
+      "gene": "EGFR",
+      "driver_call": "point mutation",
+      "approved": "osimertinib (small molecule); cetuximab and panitumumab are approved antibodies against EGFR in colorectal carcinoma",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "a single-pass receptor with a large extracellular domain and an approved antibody, so a surface route must be found",
+      "candidates": [
+        "EGFR"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "EGFR",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "established_mechanism",
+          "score": 0.5
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.61",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.606,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "ERBB2-amplified breast carcinoma",
+      "gene": "ERBB2",
+      "driver_call": "point mutation",
+      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the canonical surface target in oncology; if any case must work, it is this one",
+      "candidates": [
+        "ERBB2"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "ERBB2",
+          "copies": 12.0,
+          "vaf": null,
+          "hotspot": false,
+          "gate": "established_mechanism",
+          "score": 0.494
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+      "alteration_magnitude": {
+        "copies": 12.0,
+        "copies_above_diploid": 10.0,
+        "vaf": null,
+        "hotspot": false,
+        "quantities": [
+          "copies",
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "BRAF V600E, melanoma",
+      "gene": "BRAF",
+      "driver_call": "point mutation",
+      "approved": "vemurafenib, dabrafenib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "a cytoplasmic kinase; the approved drug is a small molecule, a class GenomeOS does not model",
+      "candidates": [
+        "BRAF",
+        "HSP90AA1",
+        "HSP90AB1"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "BRAF",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.427
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "neoantigen_hla",
+      "score": 0.427,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is blocking_antibody at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 0.36,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "blocking_antibody",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "KRAS G12C, lung adenocarcinoma",
+      "gene": "KRAS",
+      "driver_call": "point mutation",
+      "approved": "sotorasib, adagrasib (covalent small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "membrane-anchored on the inner leaflet, so no outward-facing epitope; the mutant peptide route is the one GenomeOS can reason about",
+      "candidates": [
+        "KRAS",
+        "KIT",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [
+        {
+          "tied_on_score": [
+            "EGFR",
+            "PDGFRB"
+          ],
+          "score": 0.5,
+          "gate": "established_mechanism",
+          "decided_by_magnitude": [],
+          "changed_the_order": false
+        }
+      ],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "KRAS",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.369
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "neoantigen_hla",
+      "score": 0.369,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "PIK3CA H1047R, breast carcinoma",
+      "gene": "PIK3CA",
+      "driver_call": "point mutation",
+      "approved": "alpelisib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "intracellular lipid kinase",
+      "candidates": [
+        "PIK3CA",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "ERBB3"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [
+        {
+          "tied_on_score": [
+            "EGFR",
+            "PDGFRB"
+          ],
+          "score": 0.5,
+          "gate": "established_mechanism",
+          "decided_by_magnitude": [],
+          "changed_the_order": false
+        },
+        {
+          "tied_on_score": [
+            "ERBB2",
+            "ERBB3"
+          ],
+          "score": 0.493,
+          "gate": "established_mechanism",
+          "decided_by_magnitude": [],
+          "changed_the_order": false
+        }
+      ],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "PIK3CA",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.438
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "neoantigen_hla",
+      "score": 0.438,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is adcp at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 0.36,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": "adcp",
+      "requirements_unanswered": [
+        "surface_accessible"
+      ],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "IDH1 R132H, glioma and AML",
+      "gene": "IDH1",
+      "driver_call": "point mutation",
+      "approved": "ivosidenib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "cytosolic enzyme; a neomorphic mutation whose product is a metabolite, which GenomeOS does not model at all",
+      "candidates": [
+        "IDH1",
+        "EGFR"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "IDH1",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.345
+        }
+      ],
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.345,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": true,
+        "quantities": [
+          "hotspot"
+        ]
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call",
+      "gene": "ERBB2",
+      "driver_call": "copy number",
+      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the amplification is the approved therapy's companion diagnostic, so a pipeline that needs a coding change to see ERBB2 would miss every patient trastuzumab is actually given to",
+      "candidates": [
+        "ERBB2",
+        "PIK3CA",
+        "KDR",
+        "EGFR",
+        "PDGFRB",
+        "ERBB3"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [
+        {
+          "tied_on_score": [
+            "EGFR",
+            "PDGFRB"
+          ],
+          "score": 0.5,
+          "gate": "established_mechanism",
+          "decided_by_magnitude": [],
+          "changed_the_order": false
+        }
+      ],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "ERBB2",
+          "copies": 12.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "established_mechanism",
+          "score": 0.494
+        },
+        {
+          "gene": "PIK3CA",
+          "copies": null,
+          "vaf": null,
+          "hotspot": false,
+          "gate": "no_established_mechanism",
+          "score": 0.444
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+      "alteration_magnitude": {
+        "copies": 12.0,
+        "copies_above_diploid": 10.0,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": [
+          "copies"
+        ]
+      },
+      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic",
+      "gene": "ALK",
+      "driver_call": "structural variant",
+      "approved": "crizotinib, alectinib, brigatinib, lorlatinib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "every curated compartment calls ALK a single-pass surface receptor, so the trap is to offer an antibody against it; as the 3' partner of the fusion it keeps none of its outward-facing part, and the drugs that work are small molecules acting inside the cell",
+      "candidates": [
+        "ALK",
+        "PIK3CA",
+        "ACVR2A",
+        "TGFB1",
+        "TGFBR2",
+        "PTN"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "PIK3CA",
+          "copies": null,
+          "vaf": null,
+          "hotspot": false,
+          "gate": "no_established_mechanism",
+          "score": 0.444
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "intracellular_only",
+      "score": 0.559,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "no_established_mechanism",
+      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, mutation_rationale not established: no protein-altering alteration in this gene, so there is no mutation-specific rationale)",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": []
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "best_mechanism_established": false,
+      "nearest_provisional_mechanism": null,
+      "requirements_unanswered": [],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA",
+      "gene": "CD19",
+      "driver_call": "expression",
+      "approved": "tafasitamab (Fc-engineered antibody); blinatumomab (CD19xCD3 engager); tisagenlecleucel and axicabtagene ciloleucel (CAR-T); loncastuximab tesirine (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the tumour's only DNA driver is TP53; CD19 carries no alteration at all, so a pipeline that starts from alterations cannot propose the target of the two best-known cell therapies. Every approved CD19 drug is antibody-like, which is the one modality class GenomeOS models, so this case tests the route and not only the recovery",
+      "candidates": [
+        "FCRL5",
+        "CD19",
+        "TP53",
+        "HSP90AA1",
+        "HMGB1"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 2,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "TP53",
+          "copies": null,
+          "vaf": null,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.324
+        }
+      ],
+      "seconds": 1.0,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "evidence_tier": "patient_measurement",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "adcc reaches this target with every hard requirement answered, at compatibility 0.66",
+      "alteration_magnitude": {
+        "copies": null,
+        "copies_above_diploid": null,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": []
+      },
+      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 0.6,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "adcc",
+      "best_compatibility": 0.655,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC",
+      "gene": "ERBB2",
+      "driver_call": "copy number",
+      "approved": "trastuzumab (antibody), FDA label for HER2-overexpressing metastatic gastric and gastroesophageal junction adenocarcinoma, approved 2010 on ToGA; fam-trastuzumab deruxtecan-nxki (antibody-drug conjugate), FDA approval for HER2-positive advanced gastric and GEJ adenocarcinoma after a prior trastuzumab regimen, January 2021 on DESTINY-Gastric01",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the tumour carries an approved antibody target and, in the same tumour and the same evidence tier, an amplified MYC: a transcription factor with no outward-facing part and no modelled modality, and the gene oncology has spent forty years failing to drug. If a pipeline ranks the undruggable amplification above the one the label is written on, the list cannot be acted on, and the gate is the rule that has to stop it",
+      "candidates": [
+        "ERBB2",
+        "STARD3",
+        "GRB7",
+        "TP53",
+        "MIEN1",
+        "MYC",
+        "HSP90AA1",
+        "HMGB1"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "outranked_by_hypotheses": [],
+      "outranked_by_unreachable": [],
+      "rank_without_gate": 1,
+      "magnitude_tiebreaks": [],
+      "quantities_in_this_tumour": [
+        {
+          "gene": "ERBB2",
+          "copies": 13.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "established_mechanism",
+          "score": 0.494
+        },
+        {
+          "gene": "STARD3",
+          "copies": 13.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "established_mechanism",
+          "score": 0.455
+        },
+        {
+          "gene": "GRB7",
+          "copies": 13.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "no_established_mechanism",
+          "score": 0.365
+        },
+        {
+          "gene": "TP53",
+          "copies": 2.0,
+          "vaf": 0.49,
+          "hotspot": true,
+          "gate": "no_established_mechanism",
+          "score": 0.353
+        },
+        {
+          "gene": "MIEN1",
+          "copies": 13.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "no_established_mechanism",
+          "score": 0.275
+        },
+        {
+          "gene": "MYC",
+          "copies": 8.0,
+          "vaf": null,
+          "hotspot": null,
+          "gate": "no_established_mechanism",
+          "score": 0.246
+        }
+      ],
+      "seconds": 0.9,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "evidence_tier": "observed_alteration",
+      "mechanism_reach": "established_mechanism",
+      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+      "alteration_magnitude": {
+        "copies": 13.0,
+        "copies_above_diploid": 11.0,
+        "vaf": null,
+        "hotspot": null,
+        "quantities": [
+          "copies"
+        ]
+      },
+      "alteration_magnitude_reason": "13 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+      "alteration_evidence": 1.0,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "best_mechanism_established": true,
+      "nearest_provisional_mechanism": "adc",
+      "requirements_unanswered": [
+        "internalisation"
+      ],
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    }
+  ],
   "result_manifest": {
     "sources": [
+      {
+        "accession": "the tenth benchmark tumour (data/demo/benchmark/erbb2_myc_gastroesophageal.vcf and .cnv): hand-written, its copy numbers and its allele fraction the medians of a cBioPortal cohort and no patient's own record",
+        "version": "this repository at the recorded commit"
+      },
+      {
+        "accession": "cBioPortal stad_tcga_pan_can_atlas_2018 (TCGA PanCancer Atlas, stomach adenocarcinoma): the frequencies and medians the tenth case is built from",
+        "version": "public REST API as read 2026-09-28; cohort summaries only, no sample-level record"
+      },
       {
         "accession": "cBioPortal msk_impact_2017 (Zehir et al. 2017)",
         "version": "public REST API as read 2026-09-10; pinned by the result files' sha256"
@@ -120,6 +849,20 @@
         "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA"
       },
       {
+        "path": "data/demo/benchmark/erbb2_myc_gastroesophageal.vcf",
+        "sha256": "dcc1cec5deeba045dd0410eec20fd97d052d850a87c10b1f39c211b771c69485",
+        "bytes": 503,
+        "partition": null,
+        "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC"
+      },
+      {
+        "path": "data/demo/benchmark/erbb2_myc_gastroesophageal.cnv",
+        "sha256": "eb45d731793686b3096786244f98b930b533ba4f8857802cf331c5e8c15fb38f",
+        "bytes": 61,
+        "partition": null,
+        "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC"
+      },
+      {
         "path": "data/results/cancer_msk_impact_2017.json",
         "sha256": "1609f9235141e06094939edf6640ce5d246d79c30f67f24e26f47b2fa228874e",
         "bytes": 165474,
@@ -133,10 +876,10 @@
       },
       {
         "path": "data/knowledge/therapeutics",
-        "sha256": "12bf0ffff5350034e27206d0e970274fb82e40d2bfbc31c74778ab7b38c0cc2c",
-        "bytes": 48840306,
+        "sha256": "fbda4e49b635827f546487c9431a3b60a18b2d6d63c5804a4da1642712e6439b",
+        "bytes": 48853641,
         "partition": null,
-        "files": 977
+        "files": 984
       },
       {
         "path": "data/knowledge/proteins",
@@ -187,470 +930,24 @@
       "network": true,
       "top_genes": 8,
       "indirect": true,
-      "cases": 9
+      "cases": 10
     },
     "exclusions": [
       "small-molecule routes are not modelled: those cases pass by not claiming a surface route"
     ],
     "partitions": "n/a: a retrospective benchmark of nine known targets; nothing is fitted to them",
+    "partitions_note": "the tenth case, registered 2026-09-28, is on the same terms: it was chosen from a public cohort, registered with its predictions, and nothing is fitted to it",
     "code": {
-      "git_sha": "65d2d23fd303b9e342c96f6029b04b6253d75023",
+      "git_sha": "5ab1b956b60123c29e95d90f0184d7a5694aaedb",
       "dirty": false,
       "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/therapeutic_benchmark.py"
       ],
       "python": "3.14.3"
     },
     "complete": true
-  },
-  "date": "2026-09-27",
-  "cases": 9,
-  "targets_recovered": 9,
-  "verdicts_correct": 9,
-  "top_mechanism_defensible": 9,
-  "cases_by_driver_call": {
-    "point mutation": 6,
-    "copy number": 1,
-    "structural variant": 1,
-    "expression": 1
-  },
-  "surface_cases": 4,
-  "surface_cases_recovered": 4,
-  "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
-  "note": "Two questions scored apart: whether the target's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately: a mechanism is a concern if it is an agonist against an activating driver, if it needs an extracellular epitope the protein has no established outward-facing part for, or if it heads the list with a hard requirement unanswered rather than answered. A row with no preferred mechanism names the open requirement in requirements_unanswered rather than falling silent. cases_by_driver_call says which measurement reaches each target, and all four routes into the candidate list are now scored: six point mutations, one copy-number call (ERBB2 amplified and not mutated, the same target as the point-mutation case so that the route is the only thing that differs), one structural variant (EML4-ALK) and one expression call (CD19, which carries no alteration of any kind). The ALK case is the one where the curated databases and the patient disagree: ALK is a single-pass surface receptor in every compartment annotation and, as the fusion's 3' partner, keeps neither its signal peptide nor its ectodomain, so the product is a cytoplasmic kinase and the approved drugs are small molecules. It passes by refusing a surface route rather than by leaving the question open. outranked_by_hypotheses is recorded per row and is the question the copy-number case made askable: candidates ranked above the target with nothing measured about them in this patient. Until 2026-09-27 the pipeline could recover a target without preferring it, and the three scored questions could not tell those apart: ERBB2 at twelve copies, whose amplification is trastuzumab's companion diagnostic, scored 0.494 and ranked fourth behind KDR, EGFR and PDGFRB, none of them altered in that tumour, because surface_accessibility reads curated localisation and no dimension read the alteration. A dimension now does: alteration_evidence, on three tiers - an alteration observed in this tumour (1.0), this patient's own measurement of the gene (0.6), a database association with a gene that was altered (0.2) - and the ranking puts the third tier below the other two before it looks at a score. evidence_tier and alteration_evidence are reported per row. The tier is read from the evidence about the gene and never from the route that proposed it, which is what keeps CD19, reached from the patient's RNA with no alteration of any kind, from being demoted by a rule aimed at hypotheses; for the same reason the count above no longer means 'candidates with no origins record', a proxy under which CD19's own route read as burial. Scores before and after this change are not comparable, because every candidate gained a dimension; the ordering is what the change was about.",
-  "ordering_rules": "Two rules on the order, registered before the code on 2026-09-27 and neither a term in the weighted mean. mechanism_reach partitions candidates by whether any modelled modality reaches them with its hard requirements answered; it is read after the evidence tier and never before it, and provisional-only sits with nothing-at-all because a mechanism whose requirement is unanswered has not been shown to apply. outranked_by_unreachable counts candidates ranked above the target that no modality reaches. alteration_magnitude publishes how much this patient's own data say the gene was altered - copy count against the diploid 2, variant allele fraction, hotspot status - with an absent quantity stated as absent and never imputed, and it breaks ties only between candidates already equal on tier, gate and published score, comparing like with like because a count and an annotation share no unit.",
-  "ordering_rules_measured": "mechanism_reach, alteration_magnitude and outranked_by_unreachable were measured by a re-run on 2026-09-28, hours after the rules were registered. Every other field of every row came out identical to the 2026-09-27 run recorded here - rank, score, target class, evidence tier, mechanism, compatibility, accessibility, peptide route, verdict - which is the check that the two rules changed an order and nothing else. That run's date and per-case wall-clock timings are left as they are rather than overwritten, so that adding these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds per case.",
-  "rows": [
-    {
-      "case": "EGFR L858R, lung adenocarcinoma",
-      "gene": "EGFR",
-      "driver_call": "point mutation",
-      "approved": "osimertinib (small molecule); cetuximab and panitumumab are approved antibodies against EGFR in colorectal carcinoma",
-      "approved_modality": "antibody",
-      "expected": "surface",
-      "why": "a single-pass receptor with a large extracellular domain and an approved antibody, so a surface route must be found",
-      "candidates": [
-        "EGFR"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "direct_surface",
-      "score": 0.5,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "established_mechanism",
-      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.61",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": true,
-        "quantities": [
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 1.0,
-      "best_mechanism": "blocking_antibody",
-      "best_compatibility": 0.606,
-      "best_mechanism_established": true,
-      "nearest_provisional_mechanism": "adc",
-      "requirements_unanswered": [
-        "internalisation"
-      ],
-      "peptide_route": true,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "recovered as a surface target",
-      "pass": true
-    },
-    {
-      "case": "ERBB2-amplified breast carcinoma",
-      "gene": "ERBB2",
-      "driver_call": "point mutation",
-      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
-      "approved_modality": "antibody",
-      "expected": "surface",
-      "why": "the canonical surface target in oncology; if any case must work, it is this one",
-      "candidates": [
-        "ERBB2"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "direct_surface",
-      "score": 0.494,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "established_mechanism",
-      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
-      "alteration_magnitude": {
-        "copies": 12.0,
-        "copies_above_diploid": 10.0,
-        "vaf": null,
-        "hotspot": false,
-        "quantities": [
-          "copies",
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 1.0,
-      "best_mechanism": "blocking_antibody",
-      "best_compatibility": 0.521,
-      "best_mechanism_established": true,
-      "nearest_provisional_mechanism": "adc",
-      "requirements_unanswered": [
-        "internalisation"
-      ],
-      "peptide_route": false,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "recovered as a surface target",
-      "pass": true
-    },
-    {
-      "case": "BRAF V600E, melanoma",
-      "gene": "BRAF",
-      "driver_call": "point mutation",
-      "approved": "vemurafenib, dabrafenib (small molecules)",
-      "approved_modality": "small_molecule",
-      "expected": "out_of_scope_expected",
-      "why": "a cytoplasmic kinase; the approved drug is a small molecule, a class GenomeOS does not model",
-      "candidates": [
-        "BRAF",
-        "HSP90AA1",
-        "HSP90AB1"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "neoantigen_hla",
-      "score": 0.427,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "no_established_mechanism",
-      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is blocking_antibody at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": true,
-        "quantities": [
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 0.36,
-      "best_mechanism": null,
-      "best_compatibility": null,
-      "best_mechanism_established": false,
-      "nearest_provisional_mechanism": "blocking_antibody",
-      "requirements_unanswered": [
-        "surface_accessible"
-      ],
-      "peptide_route": true,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "correctly not a surface target; approved drug is out of scope",
-      "pass": true
-    },
-    {
-      "case": "KRAS G12C, lung adenocarcinoma",
-      "gene": "KRAS",
-      "driver_call": "point mutation",
-      "approved": "sotorasib, adagrasib (covalent small molecules)",
-      "approved_modality": "small_molecule",
-      "expected": "out_of_scope_expected",
-      "why": "membrane-anchored on the inner leaflet, so no outward-facing epitope; the mutant peptide route is the one GenomeOS can reason about",
-      "candidates": [
-        "KRAS",
-        "KIT",
-        "EGFR",
-        "PDGFRB",
-        "ERBB2"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "neoantigen_hla",
-      "score": 0.369,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "no_established_mechanism",
-      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": true,
-        "quantities": [
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 0.0,
-      "best_mechanism": null,
-      "best_compatibility": null,
-      "best_mechanism_established": false,
-      "nearest_provisional_mechanism": null,
-      "requirements_unanswered": [],
-      "peptide_route": true,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "correctly not a surface target; approved drug is out of scope",
-      "pass": true
-    },
-    {
-      "case": "PIK3CA H1047R, breast carcinoma",
-      "gene": "PIK3CA",
-      "driver_call": "point mutation",
-      "approved": "alpelisib (small molecule)",
-      "approved_modality": "small_molecule",
-      "expected": "out_of_scope_expected",
-      "why": "intracellular lipid kinase",
-      "candidates": [
-        "PIK3CA",
-        "EGFR",
-        "PDGFRB",
-        "ERBB2",
-        "ERBB3"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "neoantigen_hla",
-      "score": 0.438,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "no_established_mechanism",
-      "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is adcp at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": true,
-        "quantities": [
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 0.36,
-      "best_mechanism": null,
-      "best_compatibility": null,
-      "best_mechanism_established": false,
-      "nearest_provisional_mechanism": "adcp",
-      "requirements_unanswered": [
-        "surface_accessible"
-      ],
-      "peptide_route": true,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "correctly not a surface target; approved drug is out of scope",
-      "pass": true
-    },
-    {
-      "case": "IDH1 R132H, glioma and AML",
-      "gene": "IDH1",
-      "driver_call": "point mutation",
-      "approved": "ivosidenib (small molecule)",
-      "approved_modality": "small_molecule",
-      "expected": "out_of_scope_expected",
-      "why": "cytosolic enzyme; a neomorphic mutation whose product is a metabolite, which GenomeOS does not model at all",
-      "candidates": [
-        "IDH1",
-        "EGFR"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "neoantigen_hla",
-      "score": 0.345,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "no_established_mechanism",
-      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": true,
-        "quantities": [
-          "hotspot"
-        ]
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 0.0,
-      "best_mechanism": null,
-      "best_compatibility": null,
-      "best_mechanism_established": false,
-      "nearest_provisional_mechanism": null,
-      "requirements_unanswered": [],
-      "peptide_route": true,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "correctly not a surface target; approved drug is out of scope",
-      "pass": true
-    },
-    {
-      "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call",
-      "gene": "ERBB2",
-      "driver_call": "copy number",
-      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
-      "approved_modality": "antibody",
-      "expected": "surface",
-      "why": "the amplification is the approved therapy's companion diagnostic, so a pipeline that needs a coding change to see ERBB2 would miss every patient trastuzumab is actually given to",
-      "candidates": [
-        "ERBB2",
-        "PIK3CA",
-        "KDR",
-        "EGFR",
-        "PDGFRB",
-        "ERBB3"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "direct_surface",
-      "score": 0.494,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "established_mechanism",
-      "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
-      "alteration_magnitude": {
-        "copies": 12.0,
-        "copies_above_diploid": 10.0,
-        "vaf": null,
-        "hotspot": null,
-        "quantities": [
-          "copies"
-        ]
-      },
-      "alteration_magnitude_reason": "12 copies against the diploid 2 in this patient's table; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 1.0,
-      "best_mechanism": "blocking_antibody",
-      "best_compatibility": 0.521,
-      "best_mechanism_established": true,
-      "nearest_provisional_mechanism": "adc",
-      "requirements_unanswered": [
-        "internalisation"
-      ],
-      "peptide_route": false,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "recovered as a surface target",
-      "pass": true
-    },
-    {
-      "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic",
-      "gene": "ALK",
-      "driver_call": "structural variant",
-      "approved": "crizotinib, alectinib, brigatinib, lorlatinib (small molecules)",
-      "approved_modality": "small_molecule",
-      "expected": "out_of_scope_expected",
-      "why": "every curated compartment calls ALK a single-pass surface receptor, so the trap is to offer an antibody against it; as the 3' partner of the fusion it keeps none of its outward-facing part, and the drugs that work are small molecules acting inside the cell",
-      "candidates": [
-        "ALK",
-        "PIK3CA",
-        "ACVR2A",
-        "TGFB1",
-        "TGFBR2",
-        "PTN"
-      ],
-      "recovered": true,
-      "rank": 1,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.4,
-      "target_class": "intracellular_only",
-      "score": 0.559,
-      "evidence_tier": "observed_alteration",
-      "mechanism_reach": "no_established_mechanism",
-      "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, mutation_rationale not established: no protein-altering alteration in this gene, so there is no mutation-specific rationale)",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": null,
-        "quantities": []
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 1.0,
-      "surface_accessibility": 0.0,
-      "best_mechanism": null,
-      "best_compatibility": null,
-      "best_mechanism_established": false,
-      "nearest_provisional_mechanism": null,
-      "requirements_unanswered": [],
-      "peptide_route": false,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "correctly not a surface target; approved drug is out of scope",
-      "pass": true
-    },
-    {
-      "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA",
-      "gene": "CD19",
-      "driver_call": "expression",
-      "approved": "tafasitamab (Fc-engineered antibody); blinatumomab (CD19xCD3 engager); tisagenlecleucel and axicabtagene ciloleucel (CAR-T); loncastuximab tesirine (antibody-drug conjugate)",
-      "approved_modality": "antibody",
-      "expected": "surface",
-      "why": "the tumour's only DNA driver is TP53; CD19 carries no alteration at all, so a pipeline that starts from alterations cannot propose the target of the two best-known cell therapies. Every approved CD19 drug is antibody-like, which is the one modality class GenomeOS models, so this case tests the route and not only the recovery",
-      "candidates": [
-        "FCRL5",
-        "CD19",
-        "TP53",
-        "HSP90AA1",
-        "HMGB1"
-      ],
-      "recovered": true,
-      "rank": 2,
-      "outranked_by_hypotheses": [],
-      "outranked_by_unreachable": [],
-      "seconds": 1.5,
-      "target_class": "direct_surface",
-      "score": 0.5,
-      "evidence_tier": "patient_measurement",
-      "mechanism_reach": "established_mechanism",
-      "mechanism_reach_reason": "adcc reaches this target with every hard requirement answered, at compatibility 0.66",
-      "alteration_magnitude": {
-        "copies": null,
-        "copies_above_diploid": null,
-        "vaf": null,
-        "hotspot": null,
-        "quantities": []
-      },
-      "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
-      "alteration_evidence": 0.6,
-      "surface_accessibility": 1.0,
-      "best_mechanism": "adcc",
-      "best_compatibility": 0.655,
-      "best_mechanism_established": true,
-      "nearest_provisional_mechanism": "adc",
-      "requirements_unanswered": [
-        "internalisation"
-      ],
-      "peptide_route": false,
-      "mechanism_concerns": [],
-      "mechanism_sane": true,
-      "verdict": "recovered as a surface target",
-      "pass": true
-    }
-  ]
+  }
 }
