@@ -57,17 +57,11 @@ EFFECT_UNIT = (
     "log2 fold change of the target gene's predicted RNA-seq expression on deleting the element"
     " (AlphaGenome gene scorer, one track)"
 )
-MODEL_SCORE_NAME = (
-    "the target run's `confidence` field, equal to |log2 fold change|: the magnitude the run ranked"
-    " by, not a probability"
-)
-#: corrected the same day: the sentence above is wrong, the stored field is not |log2 fold change|
-#: (predict/enhancer_target.py stores round(min(0.7, |lfc|), 3), which differs on 39,540 of 43,681
-#: chr1 links). Kept above only because the removal guard holds lines committed in the last two days.
-MODEL_SCORE_NAME = (
-    "the target run's stored `confidence` field, |log2 fold change| capped at 0.7 and rounded to three"
-    " places: a stored ranking field that no compiled rule states as its confidence, not a probability"
-)
+#: the score every predicted link's certainty record names, and the header's record with it: the
+#: target run's own name for `enhancer_target.link_score`, |log2 fold change| unclipped (R4f). The
+#: run's stored `confidence` field is not it: that is round(min(0.7, |lfc|), 3), which differs on
+#: 39,540 of chr1's 43,681 links, and no compiled rule states it.
+MODEL_SCORE_NAME = LINK_SCORE_NAME
 NO_PROBABILITY = (
     "no calibration record: no compiled prediction has been scored against a measured outcome"
     " population by a stated method, so no probability that deleting this element moves this gene is"
@@ -372,13 +366,9 @@ def element_certainty(pc: dict[str, Any]) -> Certainty:
     """What a predicted element-to-gene link rests on, R4 (2026-09-28): effect in its unit, the run's
     ranking score named, no probability. Nothing here converts the effect into a certainty."""
     # R4f (2026-09-28): the score is `enhancer_target.link_score`, the link's certainty record else
-    # |log2 fold change| unclipped, named by the target run's own MODEL_SCORE_NAME. Reading
+    # |log2 fold change| unclipped, named by the target run's own name (MODEL_SCORE_NAME). Reading
     # `confidence` alone gave a link written since R4e (which carries none) a model score of None.
-    # The first `score` line and the module-level name are kept only because the removal guard
-    # holds lines committed in the last two days; both are overridden here.
-    score = pc.get("confidence")
     score = link_score(pc)
-    MODEL_SCORE_NAME = LINK_SCORE_NAME  # noqa: N806  (the run's name for its score, not the header's)
     return Certainty(
         evidence_category="predicted: AlphaGenome deletion, one model run",
         effect_estimate=float(pc["log2_fold_change"]),
