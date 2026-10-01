@@ -1,0 +1,628 @@
+{
+  "result": "cell2_eligibility",
+  "date": "2026-10-01",
+  "status": "step 1 only: a blinded eligibility count of independent loci among the measured positives of each held-out cell type. No gain, no model, no request",
+  "lane": "lane-cell2",
+  "question": "can any second held-out cell type support a stratified test of the CRISPRi deletion result, judged by independent loci among its measured positives rather than by pair counts",
+  "blinding": "labels, coordinates, measured genes and cell types only, through genomeos.attribution.crispri.load; no prediction, deletion value, model score or AUPRC was read or computed",
+  "code_cleanliness": {
+    "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+    "dirty": true,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [
+      "genomeos/attribution/experiment_value.py",
+      "genomeos/attribution/re2g.py",
+      "scripts/re2g_k562_only_range.py",
+      "tests/test_experiment_value.py"
+    ],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+    "modules_the_counting_path_imports": [
+      "genomeos/manifest.py",
+      "genomeos/results.py",
+      "genomeos/attribution/cell2.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/measured.py"
+    ],
+    "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path imports only the modules listed, so a foreign file outside that list cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+  },
+  "counts": {
+    "convention": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "convention_is_operational": "an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "span_bp": 1000000,
+    "blinded_fields": [
+      "cell",
+      "chrom",
+      "start",
+      "end",
+      "gene",
+      "regulated"
+    ],
+    "primary_cell_type": "K562",
+    "candidate_second_cell_types": [
+      "GM12878",
+      "HCT116",
+      "Jurkat",
+      "WTC11"
+    ],
+    "per_cell_type": {
+      "GM12878": {
+        "population": "the 68 valid held-out pairs of GM12878",
+        "pairs": 68,
+        "positives": 16,
+        "independent_loci": 8,
+        "distinct_measured_genes_among_positives": 8,
+        "distinct_elements_among_positives": 16,
+        "chromosomes_among_positives": 7,
+        "deletion_value_available": true,
+        "candidate_second_cell_type": true,
+        "locus_shapes": {
+          "loci": 8,
+          "span_mb": {
+            "min": 0.0,
+            "median": 0.00135,
+            "max": 0.0592
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 1.0,
+            "max": 6.0
+          },
+          "positives_per_locus_counts": {
+            "1": 5,
+            "2": 1,
+            "3": 1,
+            "6": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 6,
+          "largest_locus_share_of_positives": 0.375,
+          "largest_locus_span_mb": 0.047
+        }
+      },
+      "HCT116": {
+        "population": "the 396 valid held-out pairs of HCT116",
+        "pairs": 396,
+        "positives": 34,
+        "independent_loci": 5,
+        "distinct_measured_genes_among_positives": 5,
+        "distinct_elements_among_positives": 34,
+        "chromosomes_among_positives": 5,
+        "deletion_value_available": false,
+        "candidate_second_cell_type": true,
+        "locus_shapes": {
+          "loci": 5,
+          "span_mb": {
+            "min": 0.0356,
+            "median": 0.2465,
+            "max": 2.4961
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 4.0,
+            "median": 7.0,
+            "max": 10.0
+          },
+          "positives_per_locus_counts": {
+            "4": 1,
+            "5": 1,
+            "7": 1,
+            "8": 1,
+            "10": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 10,
+          "largest_locus_share_of_positives": 0.2941,
+          "largest_locus_span_mb": 0.1729
+        }
+      },
+      "Jurkat": {
+        "population": "the 75 valid held-out pairs of Jurkat",
+        "pairs": 75,
+        "positives": 7,
+        "independent_loci": 4,
+        "distinct_measured_genes_among_positives": 5,
+        "distinct_elements_among_positives": 6,
+        "chromosomes_among_positives": 3,
+        "deletion_value_available": false,
+        "candidate_second_cell_type": true,
+        "locus_shapes": {
+          "loci": 4,
+          "span_mb": {
+            "min": 0.0005,
+            "median": 0.0074,
+            "max": 0.2039
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 1.5,
+            "max": 3.0
+          },
+          "positives_per_locus_counts": {
+            "1": 2,
+            "2": 1,
+            "3": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 3,
+          "largest_locus_share_of_positives": 0.4286,
+          "largest_locus_span_mb": 0.0143
+        }
+      },
+      "K562": {
+        "population": "the 1918 valid held-out pairs of K562",
+        "pairs": 1918,
+        "positives": 118,
+        "independent_loci": 75,
+        "distinct_measured_genes_among_positives": 93,
+        "distinct_elements_among_positives": 105,
+        "chromosomes_among_positives": 19,
+        "deletion_value_available": true,
+        "candidate_second_cell_type": false,
+        "locus_shapes": {
+          "loci": 75,
+          "span_mb": {
+            "min": 0.0005,
+            "median": 0.0012,
+            "max": 0.9167
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 1.0,
+            "max": 9.0
+          },
+          "positives_per_locus_counts": {
+            "1": 50,
+            "2": 17,
+            "3": 4,
+            "4": 2,
+            "5": 1,
+            "9": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 9,
+          "largest_locus_share_of_positives": 0.0763,
+          "largest_locus_span_mb": 0.1037
+        }
+      },
+      "WTC11": {
+        "population": "the 1921 valid held-out pairs of WTC11",
+        "pairs": 1921,
+        "positives": 15,
+        "independent_loci": 9,
+        "distinct_measured_genes_among_positives": 11,
+        "distinct_elements_among_positives": 14,
+        "chromosomes_among_positives": 8,
+        "deletion_value_available": false,
+        "candidate_second_cell_type": true,
+        "locus_shapes": {
+          "loci": 9,
+          "span_mb": {
+            "min": 0.0005,
+            "median": 0.0038,
+            "max": 0.3048
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 2.0,
+            "max": 3.0
+          },
+          "positives_per_locus_counts": {
+            "1": 4,
+            "2": 4,
+            "3": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 3,
+          "largest_locus_share_of_positives": 0.2,
+          "largest_locus_span_mb": 0.0971
+        }
+      }
+    },
+    "pooled_over_candidates": {
+      "population": "the measured positives of the held-out cell types other than K562: GM12878, HCT116, Jurkat, WTC11",
+      "pairs": 2460,
+      "positives": 72,
+      "independent_loci_genome_wide": 22,
+      "independent_loci_summed_per_cell_type": 26,
+      "locus_shapes_genome_wide": {
+        "loci": 22,
+        "span_mb": {
+          "min": 0.0,
+          "median": 0.03535,
+          "max": 2.5008
+        },
+        "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+        "positives_per_locus": {
+          "min": 1.0,
+          "median": 2.0,
+          "max": 10.0
+        },
+        "positives_per_locus_counts": {
+          "1": 8,
+          "2": 5,
+          "3": 2,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 2,
+          "10": 1
+        },
+        "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+        "largest_locus_positives": 10,
+        "largest_locus_share_of_positives": 0.1389,
+        "largest_locus_span_mb": 0.1729
+      },
+      "which_is_read_against_the_floor": "independent_loci_genome_wide",
+      "why": "a locus measured in two cell types is one place in the genome, not two, so the genome-wide grouping is the conservative count; the summed count is reported beside it and is never the one the floor is read against"
+    },
+    "pooled_over_candidates_with_a_deletion_value": {
+      "population": "the measured positives of the candidate held-out cell types that have a deletion value at all, that is those in the lines the deletion table was scored in: GM12878",
+      "cell_types": [
+        "GM12878"
+      ],
+      "pairs": 68,
+      "positives": 16,
+      "independent_loci_genome_wide": 8,
+      "locus_shapes_genome_wide": {
+        "loci": 8,
+        "span_mb": {
+          "min": 0.0,
+          "median": 0.00135,
+          "max": 0.0592
+        },
+        "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+        "positives_per_locus": {
+          "min": 1.0,
+          "median": 1.0,
+          "max": 6.0
+        },
+        "positives_per_locus_counts": {
+          "1": 5,
+          "2": 1,
+          "3": 1,
+          "6": 1
+        },
+        "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+        "largest_locus_positives": 6,
+        "largest_locus_share_of_positives": 0.375,
+        "largest_locus_span_mb": 0.047
+      },
+      "read_against_the_floor": false,
+      "why_it_is_reported": "a candidate without a deletion value cannot carry a deletion gain, so loci contributed by such cells are places where the quantity in question cannot be measured. This figure is reported beside the registered floor verdict and does not change it"
+    },
+    "floor": 20
+  },
+  "verdict": {
+    "floor": 20,
+    "floor_set_before_the_count": true,
+    "pooled_independent_loci_genome_wide": 22,
+    "population": "the measured positives of the held-out cell types other than K562: GM12878, HCT116, Jurkat, WTC11",
+    "cell_types_pooled": [
+      "GM12878",
+      "HCT116",
+      "Jurkat",
+      "WTC11"
+    ],
+    "primary_cell_type_excluded": "K562",
+    "primary_cell_type_is_in_the_pool": false,
+    "population_note": "the pooled count is over the candidate second cell types only; K562, which the committed result already covers, is excluded from it, so the figure is about a second cell type and not about the benchmark as a whole",
+    "positives_pooled": 72,
+    "what_carries_the_count": {
+      "largest_locus_positives": 10,
+      "largest_locus_share_of_positives": 0.1389,
+      "largest_locus_span_mb": 0.1729,
+      "positives_per_locus": {
+        "min": 1.0,
+        "median": 2.0,
+        "max": 10.0
+      },
+      "positives_per_locus_counts": {
+        "1": 8,
+        "2": 5,
+        "3": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,
+        "10": 1
+      },
+      "span_mb": {
+        "min": 0.0,
+        "median": 0.03535,
+        "max": 2.5008
+      },
+      "note": "reported beside the verdict so a reader can see whether one chained locus carries the margin over the floor; it does not move the floor or the convention"
+    },
+    "meets_floor": true,
+    "decision": "eligible to draft a registration"
+  },
+  "cost_quoted": {
+    "source": "data/results/crispri_published.json second_cell_type.cost, quoted not re-derived",
+    "per_cell_type": {
+      "HCT116": {
+        "tracks": "RNA-seq x3, EFO:0002824",
+        "pairs": 396,
+        "regulated": 34,
+        "covered": 363,
+        "requests_frozen_feature": 705
+      },
+      "WTC11": {
+        "tracks": "RNA-seq x3, EFO:0009747",
+        "pairs": 1921,
+        "regulated": 15,
+        "covered": 1616,
+        "requests_frozen_feature": 614
+      },
+      "Jurkat": {
+        "tracks": "RNA-seq x1, CLO:0007045",
+        "pairs": 75,
+        "regulated": 7,
+        "covered": 64,
+        "requests_frozen_feature": 111
+      }
+    },
+    "budget_in_that_result": 20,
+    "why_that_result_did_not_run": "HCT116 needs more deletion requests than the lane's budget; costed and handed to the coordinator",
+    "total_requests_for_all_three": 1430
+  },
+  "alphagenome_requests": 0,
+  "registration_draft": {
+    "status": "draft only, not registered and not run; the coordinator reviews before anything else",
+    "question": "does the deletion feature's contribution to the CRISPRi element-to-gene benchmark hold outside K562, in a second held-out cell type measured on its own positives",
+    "stratum": "cell type: each candidate second cell type is its own stratum, scored and reported alone, never pooled with K562 into one number",
+    "unit_of_independence": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "unit_of_independence_is_operational": "an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "preset_floor": {
+      "pooled_independent_loci": 20,
+      "verdict_of_step_1": {
+        "floor": 20,
+        "floor_set_before_the_count": true,
+        "pooled_independent_loci_genome_wide": 22,
+        "population": "the measured positives of the held-out cell types other than K562: GM12878, HCT116, Jurkat, WTC11",
+        "cell_types_pooled": [
+          "GM12878",
+          "HCT116",
+          "Jurkat",
+          "WTC11"
+        ],
+        "primary_cell_type_excluded": "K562",
+        "primary_cell_type_is_in_the_pool": false,
+        "population_note": "the pooled count is over the candidate second cell types only; K562, which the committed result already covers, is excluded from it, so the figure is about a second cell type and not about the benchmark as a whole",
+        "positives_pooled": 72,
+        "what_carries_the_count": {
+          "largest_locus_positives": 10,
+          "largest_locus_share_of_positives": 0.1389,
+          "largest_locus_span_mb": 0.1729,
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 2.0,
+            "max": 10.0
+          },
+          "positives_per_locus_counts": {
+            "1": 8,
+            "2": 5,
+            "3": 2,
+            "4": 1,
+            "5": 1,
+            "6": 1,
+            "7": 1,
+            "8": 2,
+            "10": 1
+          },
+          "span_mb": {
+            "min": 0.0,
+            "median": 0.03535,
+            "max": 2.5008
+          },
+          "note": "reported beside the verdict so a reader can see whether one chained locus carries the margin over the floor; it does not move the floor or the convention"
+        },
+        "meets_floor": true,
+        "decision": "eligible to draft a registration"
+      },
+      "note": "the floor was committed in genomeos/attribution/cell2.py before this count was taken"
+    },
+    "cell_types_that_could_carry_a_deletion_gain_at_all": [
+      "GM12878"
+    ],
+    "cell_types_that_could_not": [
+      "HCT116",
+      "Jurkat",
+      "WTC11"
+    ],
+    "loci_where_a_gain_could_be_measured_at_all": {
+      "population": "the measured positives of the candidate held-out cell types that have a deletion value at all, that is those in the lines the deletion table was scored in: GM12878",
+      "cell_types": [
+        "GM12878"
+      ],
+      "pairs": 68,
+      "positives": 16,
+      "independent_loci_genome_wide": 8,
+      "locus_shapes_genome_wide": {
+        "loci": 8,
+        "span_mb": {
+          "min": 0.0,
+          "median": 0.00135,
+          "max": 0.0592
+        },
+        "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+        "positives_per_locus": {
+          "min": 1.0,
+          "median": 1.0,
+          "max": 6.0
+        },
+        "positives_per_locus_counts": {
+          "1": 5,
+          "2": 1,
+          "3": 1,
+          "6": 1
+        },
+        "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+        "largest_locus_positives": 6,
+        "largest_locus_share_of_positives": 0.375,
+        "largest_locus_span_mb": 0.047
+      },
+      "read_against_the_floor": false,
+      "why_it_is_reported": "a candidate without a deletion value cannot carry a deletion gain, so loci contributed by such cells are places where the quantity in question cannot be measured. This figure is reported beside the registered floor verdict and does not change it"
+    },
+    "the_constraint_this_puts_on_the_draft": "the pooled count the floor is read against is carried mostly by cell types that have no deletion value, where no deletion gain can be measured. Only the cell types listed under cell_types_that_could_carry_a_deletion_gain_at_all can be a stratum of this test as the feature stands, and their own locus count is the one that limits it",
+    "cost_table_does_not_cover_every_candidate": "the quoted second_cell_type.cost covers HCT116, WTC11 and Jurkat only. It carries no figure for a candidate outside those three, so no request count for such a candidate is stated here: this lane quotes the committed figures and derives none",
+    "availability_rule": "a cell type outside crispri.MODEL_CELLS has no deletion value, so no deletion gain is measured there: crispri.gain_where_available refuses a number rather than report the difference between two model forms as a measurement (crispri.UNAVAILABLE_GAIN)",
+    "falsifier": "the claim is that the deletion feature adds to the frozen baseline in a second cell type's own positives. It is falsified if, in every candidate stratum that has enough independent loci, the measured gain's 95% interval over loci includes zero or lies below it. A gain that holds only when the strata are pooled with K562, or only in a stratum whose largest locus holds most of its positives, does not count as support",
+    "outcomes": {
+      "interval_above_zero_in_a_stratum": "the feature's contribution is reproduced outside K562 in that cell type's own positives, on the loci named in this count",
+      "interval_includes_zero": "no contribution is demonstrated in that cell type at this number of loci; the stratum is reported as uninformative, not as evidence of no effect",
+      "interval_below_zero": "the feature costs performance outside K562, which contradicts the single-cell-type reading and must be reported as such"
+    },
+    "model_requests_needed_per_cell_type": {
+      "source": "data/results/crispri_published.json second_cell_type.cost, quoted not re-derived",
+      "per_cell_type": {
+        "HCT116": {
+          "tracks": "RNA-seq x3, EFO:0002824",
+          "pairs": 396,
+          "regulated": 34,
+          "covered": 363,
+          "requests_frozen_feature": 705
+        },
+        "WTC11": {
+          "tracks": "RNA-seq x3, EFO:0009747",
+          "pairs": 1921,
+          "regulated": 15,
+          "covered": 1616,
+          "requests_frozen_feature": 614
+        },
+        "Jurkat": {
+          "tracks": "RNA-seq x1, CLO:0007045",
+          "pairs": 75,
+          "regulated": 7,
+          "covered": 64,
+          "requests_frozen_feature": 111
+        }
+      },
+      "budget_in_that_result": 20,
+      "why_that_result_did_not_run": "HCT116 needs more deletion requests than the lane's budget; costed and handed to the coordinator",
+      "total_requests_for_all_three": 1430
+    },
+    "authorisation": "the request count goes to Albert for authorisation; this lane made no request and holds none",
+    "what_this_lane_did_not_do": [
+      "computed no gain and fitted no model",
+      "read no prediction, deletion value, model score or AUPRC",
+      "made no model request"
+    ]
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison resources/crispr_data, EPCrisprBenchmark heldout_5_cell_types (Gschwind et al.)",
+        "version": "main branch, unpinned upstream; fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "data/results/crispri_published.json, second_cell_type.cost",
+        "version": "the committed result of 2026-09-27; quoted, not re-derived"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "pairs": 4378,
+        "role": "labels, coordinates, measured genes and cell types only"
+      },
+      {
+        "path": "data/results/crispri_published.json",
+        "sha256": "d84e06a761388f1bf21eae295b23258ec46b5fd73dcfa7c236625845c63b24f5",
+        "bytes": 34744,
+        "partition": null,
+        "role": "second_cell_type.cost: the request counts quoted in the draft"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "independent_locus_span_bp": 1000000,
+      "pooled_locus_floor": 20,
+      "primary_cell": "K562",
+      "blinded_fields": [
+        "cell",
+        "chrom",
+        "start",
+        "end",
+        "gene",
+        "regulated"
+      ],
+      "model_cells": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "alphagenome_requests": 0,
+      "performance_metrics_computed": 0,
+      "gains_computed": 0
+    },
+    "exclusions": [
+      "pairs the benchmark marks ValidConnection=FALSE are dropped by crispri.parse, as in every other use of this table",
+      "K562 is not a candidate second cell type: the committed result already covers it; its counts are reported for comparison only",
+      "no training pair is read: the question is about the held-out cell types"
+    ],
+    "partitions": {
+      "heldout": "the 4,378 valid held-out pairs across five cell types; the only pairs read here"
+    },
+    "code_cleanliness": {
+      "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/experiment_value.py",
+        "genomeos/attribution/re2g.py",
+        "scripts/re2g_k562_only_range.py",
+        "tests/test_experiment_value.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "modules_the_counting_path_imports": [
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/measured.py"
+      ],
+      "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path imports only the modules listed, so a foreign file outside that list cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/experiment_value.py",
+        "genomeos/attribution/re2g.py",
+        "scripts/re2g_k562_only_range.py",
+        "tests/test_experiment_value.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/experiment_value.py",
+        "scripts/re2g_k562_only_range.py",
+        "tests/test_experiment_value.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/cell2_eligibility.json"
+      ],
+      "argv": [
+        "scripts/cell2_eligibility.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
