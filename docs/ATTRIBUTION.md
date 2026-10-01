@@ -13084,6 +13084,44 @@ does not meet it now.
 
 **Nothing was implemented and no outcome was scored.** The proposal is recorded for the owner's review.
 
+### The paired-enhancer no-go accepted, with three corrections to the section above (2026-10-01, the owner)
+
+The owner accepted the no-go **for the proposed comparison with the project's current predictions**, on the
+two grounds that hold: the comparison mixes a growth readout with expression predictions, and the project has
+no frozen paired-response model. N1, the wiring diagnostic and the generalisation proposal stay closed. Three
+statements in the section above are corrected here rather than rewritten, and the corrections govern.
+
+**1. "No public dataset exists" is too broad.** What is supported is **no suitable dataset was identified in
+this survey**. The survey covered Lin 2022, Hsiung 2024, Xie 2017, Gasperini 2019, Pacalin 2024 and three
+mouse deletion series, by literature and repository metadata over about 90 minutes. That is its scope. It is
+not a proof of absence, and the search is not reopened now.
+
+**2. Not predicting MYC is not a reason to exclude a benchmark, and must not be used as one.** The section
+above lists it as a second "verified blocker". That framing is withdrawn. With a suitable expression
+measurement, a disagreement between the project's predicted target and the experimentally implicated gene
+would be **a prediction failure the benchmark exposes**, which is the kind of result a test should be able to
+return. **Choosing only experiments whose implicated gene the model already predicts would bias validation.**
+The verified fact stands and is useful on its own terms: of the project's elements overlapping e1 to e7, none
+predicts MYC. What it does **not** do is disqualify the dataset. The disqualifying reasons are the readout
+mismatch and the absent paired model.
+
+**3. Absent RNA-seq libraries do not establish absent expression measurement.** The section above says the
+series "contains no RNA measurement at all". What was checked is the deposit's library strategies: of its 58
+samples, 16 are ATAC-seq, 22 ChIP-seq and 20 other, with no RNA-seq library. A published expression
+measurement could still exist outside those libraries, for example qPCR in a supplementary table, and the
+paper's supplementary material could not be retrieved. The accurate statement is **no expression measurement
+was found in the deposit's libraries, and the supplementary material was not accessible**.
+
+**One further distinction.** Pacalin et al. 2024 was not simply unsuitable: it combines activation at one
+element with repression at another, which is **a different intervention from paired silencing**, with
+different requirements for comparability. It was not assessed against those requirements, and its cell
+contexts lie outside the four the project's predictions carry.
+
+**The lesson carried forward.** The next research proposal states first what the project predicts, what the
+experiment measures, and how the two can be compared; then verifies coverage and controls; and only then
+builds analysis code. **Eligibility never depends on whether the model already predicts the experimentally
+implicated gene.**
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
