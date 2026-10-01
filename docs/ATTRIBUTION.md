@@ -12688,6 +12688,201 @@ is read:
 
 A new design on this deposit would not be blind: the labels for these 56 factors have been read.
 
+## The wiring diagnostic, feasibility: no matching scheme meets its pre-set thresholds, because most regulated links have no other measured gene of their element at a matched distance, so no rewired assignment is scored (2026-10-01, lane-wiring)
+
+The external reviewer's advice, relayed by the owner: "On an already-examined benchmark, test whether
+existing element-to-gene assignments outperform suitably matched rewired assignments. Hold scores and
+evaluation rules fixed. If distance, coverage and connectivity cannot be controlled adequately, report
+that and stop." It "remains development evidence, not independent validation." The owner then added five
+requirements: enough links must actually change; real and rewired assignments must be balanced on
+distance, activity, the target gene's expression, coverage and links per gene; scoring must stay fixed;
+the uncertainty must allow for shared genes and loci; and the reading must stay bounded. Thresholds for
+the first two were to be set before any diagnostic was computed, and a failure to meet them is the no-go.
+
+**The outcome is the no-go.** None of the four matching schemes meets its thresholds for the primary
+rewiring. No registration is written, no model is fitted on a rewired assignment, and no performance
+figure of any rewired assignment exists. AlphaGenome requests: 0. Money: none.
+
+### The order of events
+
+1. **31e624e:** the matching, the diagnostics, the thresholds (`wiring.THRESHOLDS`, `wiring.SCHEMES`,
+   `wiring.REGULATED_FLOOR`) and the tests were committed before any diagnostic was computed on the real
+   pairs. A test makes the feasibility path fail if it fits a model or computes a metric.
+2. The first run of `scripts/wiring_feasibility.py` at 31e624e found no adequate scheme.
+3. **f58a2a3:** a block of descriptive counts (`explanatory_counts`) was added to say why. It is judged by
+   no threshold. The result `data/results/wiring_feasibility.json` was then rewritten at f58a2a3 (clean
+   stamp, 75 s), with the same decision and the same diagnostics, since the draws are seeded.
+
+### What a rewiring was allowed to change
+
+The benchmark is the K562 CRISPRi training set already examined above ("The result: the CRISPRi gain
+survives coverage…"): 10,356 pairs, 471 regulated, hold-one-chromosome-out. There, `activity + distance`
+scores AUPRC 0.5068 and `activity + distance + deletion` scores 0.7241. Those two figures were known
+before this lane began. The lane recomputed only the real 0.7241, once, while timing a fit, and it
+matched; nothing else was scored.
+
+A rewiring changes one thing: which gene's cached deletion block (`top_target`, `deletion_drop`) is
+attached to a pair. The pairs, their labels, their own distance and activity features, the split and the
+estimator never change. A pair with no admissible alternative keeps its real block in every rewiring and
+is counted, never dropped. A test checks this on synthetic inputs: the evaluated pairs and their labels
+are identical in the real assignment and in every rewiring, and only the block of a moved pair differs.
+
+The links a rewiring may touch are the **population**: covered pairs whose gene the sweep's cache
+answered. Of the 10,356 pairs:
+
+- 1,119 are uncovered;
+- 3,410 are covered but carry no cached value for their gene;
+- **5,827 form the population, 423 of them regulated** (471 regulated in all, 451 covered).
+
+Links exchange values only with one another, so coverage is held exactly.
+
+Three rewirings were defined, each for its own question. Each is a permutation inside strata, so every
+gene's in-degree and every element's number of links is kept exactly:
+
+| rewiring | stratum | the value attached comes from | question |
+|---|---|---|---|
+| **element_kept (primary)** | the element, and a distance bin | the same element's cached value on another gene it was measured against | does the gene the value is assigned to matter? |
+| gene_kept | the gene, its activity decile, and a distance bin | the same gene's cached value from another element | does the element the value comes from matter? |
+| strata (reference floor) | activity decile and distance bin | any other element's link | does the value carry anything beyond distance and activity? |
+
+The distance bins have width `width_log10` in log10 distance to TSS, with a random offset per rewiring.
+Four schemes were fixed in order, and only the first adequate one could have been registered:
+
+- **S1:** width 0.20;
+- **S2:** width 0.20, matching only within the same K562 expression quartile;
+- **S3:** width 0.30;
+- **S4:** width 0.30, with expression quartiles.
+
+**The expression covariate.** It is the mean raw pseudobulk value over the 585 non-targeting rows of
+Replogle et al.'s K562 file (Figshare+ 20029387). That file was already cached for N1, and its md5 was
+checked against Figshare before reading. Genes are matched by the benchmark's own Ensembl IDs; no symbol
+had two. Of the population's 1,557 genes, 1,489 have a value. Where a gene has no value, its expression
+is unknown, and that is counted.
+
+### The thresholds, fixed before any diagnostic (31e624e)
+
+Balance is measured on moved links, pooled over 20 seeded draws, attached gene against real gene, within
+each label class. Labels split the counts and are never used to choose a match.
+
+| requirement | check | bound |
+|---|---|---|
+| enough links move | links with at least one admissible alternative, all and regulated | ≥ 0.50 |
+| | links moved per rewiring (mean over draws), all and regulated | ≥ 0.50 |
+| | regulated links moved per rewiring (training; held-out K562) | ≥ 100; ≥ 30 |
+| distinct alternatives | movable links with two or more distinct alternatives, all and regulated | ≥ 0.50 |
+| balance | standardised mean difference of distance, activity, expression and links per gene, each class | \|SMD\| ≤ 0.10 |
+| | Kolmogorov–Smirnov D of distance and of expression, each class | ≤ 0.10 |
+| expression coverage | moved links whose real and attached genes both have a value | ≥ 0.80 |
+| | gap in the share without a value, attached minus real | ≤ 0.05 |
+| exact | permutation; same stratum; different gene (or element); within the bin; population only; gene in-degree | all hold |
+
+### The primary rewiring on the training pairs
+
+The 5,827 population links, 423 regulated. The regulated-class balance figures are given. In the
+non-regulated class, every |SMD| is at most 0.007 and every KS at most 0.003. Every exact check held in
+every draw. Values outside a bound are in bold.
+
+| | S1 (0.20) | S2 (0.20, expression) | S3 (0.30) | S4 (0.30, expression) |
+|---|---|---|---|---|
+| movable share, all | 0.513 | **0.173** | 0.574 | **0.228** |
+| movable share, regulated | **0.142** (60 of 423) | **0.035** | **0.158** | **0.047** |
+| moved per rewiring, all | **0.385** | **0.100** | **0.448** | **0.137** |
+| moved per rewiring, regulated | **0.088** | **0.014** | **0.111** | **0.021** |
+| regulated links moved per rewiring | **37.0** | **5.7** | **47.0** | **8.8** |
+| two or more alternatives, all | 0.629 | **0.297** | 0.690 | **0.307** |
+| two or more alternatives, regulated | **0.267** | **0.067** | **0.373** | **0.150** |
+| distance SMD / KS, regulated | 0.024 / 0.078 | −0.026 / **0.228** | 0.009 / 0.079 | −0.058 / **0.189** |
+| activity SMD, regulated | 0 (same element) | 0 | 0 | 0 |
+| expression SMD / KS, regulated | −0.015 / **0.119** | **0.528** / **0.326** | −0.002 / **0.127** | **0.407** / **0.232** |
+| expression known share, regulated | **0.738** | **0.754** | **0.727** | 0.863 |
+| links per gene SMD, regulated | 0.075 | −0.032 | 0.083 | −0.075 |
+
+**Distance and links per gene can be balanced; enough movement cannot.** Under S1 and S3, distance,
+activity and links per gene are within their bounds. Expression comes close on the mean but not on the
+distribution or the coverage. What fails in every scheme is movement: at most 47 of the 423 regulated
+links change per rewiring, against a floor of 100. Matching on expression makes it worse: 6 to 9 move,
+and the few that do are unbalanced on expression itself.
+
+**How concentrated the alternatives are (S1).**
+
+- Movable links by number of distinct alternative genes:
+  - one: 1,109;
+  - two: 745;
+  - three: 544;
+  - four: 278;
+  - five or more: 312.
+- In total there are 7,138 distinct link-and-alternative assignments over 737 alternative genes. The
+  most-used tenth of those genes supplies 76.6% of them.
+- Of the 60 movable regulated links, 52 have only one or two alternatives.
+- A moved regulated link receives the same alternative in 91% of the draws in which it moves (the
+  modal-source share).
+
+So even where a regulated link can move, its rewired value is nearly fixed rather than drawn from a
+spread of alternatives.
+
+### Why: the benchmark's regulated links are mostly their element's only or nearest measured gene
+
+These are descriptive counts, added after the decision (f58a2a3).
+
+- Of the 423 regulated population links, **188 are the only link of their element that carries a cached
+  value**, so no gene of the same element can stand in for them.
+- **360 are the nearest such gene of their element.**
+- For the 235 that have another gene in their element, the nearest other gene lies a median of 0.58
+  log10 units away (a factor of 3.8). The quartiles are 0.19 and 1.19. Only 25.5% are within 0.2, and
+  28.5% within 0.3.
+
+By dataset, the 423 are:
+
+| dataset | regulated | movable at S1 | movable at S3 |
+|---|---|---|---|
+| Gasperini 2019 | 326 | 36 | 41 |
+| Nasser 2021 | 75 | 15 | 17 |
+| Schraivogel 2020 | 22 | 9 | 9 |
+
+A regulated pair here is typically an element and its closest measured gene. The element's other
+measured genes, where any carry a cached value, are much farther away. A rewiring that keeps the element
+and holds distance therefore has almost nothing to exchange for the links that decide the AUPRC.
+
+### The secondary sets and rewirings
+
+- **Held-out K562, primary rewiring** (1,918 pairs; 1,152 in the population, 103 regulated): no scheme
+  is adequate. The regulated movable share is 0.039 to 0.117, and at most 8.1 regulated links move per
+  rewiring, against a floor of 30.
+- **gene_kept** fails the movement checks in every scheme. The regulated movable share is 0.140 to
+  0.161, and 43 to 52 regulated links move per rewiring.
+- **strata** moves nearly every link (regulated moved share 0.87 to 1.00). It is unbalanced on links per
+  gene in the regulated class in every scheme (|SMD| 0.47 to 0.51). Without expression classes it is also
+  unbalanced on expression (|SMD| 0.26 to 0.27; known share 0.76). It holds neither the element nor the
+  gene, so it was never a candidate for the primary.
+
+### What this result allows, and what it does not
+
+- **Allowed:** "On the K562 CRISPRi training pairs, a rewiring that keeps each element and reassigns its
+  cached deletion value to another measured gene at a matched distance cannot be drawn adequately: at
+  most 47 of the 423 regulated links can change per rewiring (floor 100), and those that do have one or
+  two alternatives. The wiring diagnostic was therefore not run on this benchmark."
+- **Not allowed:** any statement that the assignments do or do not carry information beyond matched
+  alternatives. No rewired assignment was scored, so this result says nothing about the wiring either
+  way. The CRISPRi result's registered wording above is unchanged.
+- The no-go is a property of this benchmark's design and of the sweep's cache coverage. It is not a
+  finding about the model. Loosening the matching now, after these diagnostics, is not allowed under the
+  owner's rule. Neither is any null metric on this benchmark under a scheme chosen after them.
+
+### What could make the diagnostic possible (none taken)
+
+1. A benchmark in which each tested element is measured against several expressed genes at comparable
+   distances. Of the screens here, Gasperini 2019 comes closest, but even there only 36 of its 326
+   regulated links can move under S1.
+2. Cached values for the 3,410 covered pairs that have none. That needs new model requests, which this
+   lane may not make, and it would raise the number of links that can move, not the distance gaps.
+3. A different question that this benchmark can answer. One example is a within-element contrast
+   restricted to elements measured against several genes at matched distances. That is a new, smaller
+   design, and it would need its own registration, with thresholds set before its diagnostics.
+
+Code: `genomeos/attribution/wiring.py`, `scripts/wiring_feasibility.py`, `tests/test_wiring.py` (18 tests,
+synthetic inputs only). Result: `data/results/wiring_feasibility.json`, with a complete manifest. It is
+one cell type, an already-examined benchmark, and development evidence only.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
