@@ -52,6 +52,7 @@ import math
 import random
 import urllib.request
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -71,7 +72,13 @@ EVIDENCE = (
 MODEL_CELLS = ("K562", "HepG2", "GM12878", "IMR-90")  # the lines the deletion table was scored in
 MIN_DISTANCE = 1_000  # a TSS closer than this counts as 1 kb, so contact stays finite
 REACH = 10_000  # the longest element in the deletion table, for the overlap search
-BOOTSTRAPS = 200
+BOOTSTRAPS = 2000  # chromosome resamples per interval; see MIN_RESAMPLES for why 200 was too few
+
+#: The fewest resamples an interval may be read from. At 200 draws the 2.5% percentile is the 5th value,
+#: so each tail rests on a handful of draws and the bound moves by more than it should between seeds. The
+#: committed results of 2026-09-27 and earlier were computed at 200 and say `resamples: 200`; their
+#: intervals are coarser than their digits suggest, and `met_minimum` records whether a new one clears this.
+MIN_RESAMPLES = 1000
 FEATURES = {
     "distance": ("log_distance",),
     "activity + distance": ("log_distance", "log_activity", "activity_over_distance"),
@@ -626,6 +633,23 @@ def metrics(scores: list[float], labels: list[bool]) -> dict[str, Any]:
     }
 
 
+def _interval_provenance(clusters: int, requested: int, kept: int) -> dict[str, Any]:
+    """How a bootstrap interval was made, so a reader is not left to assume it.
+
+    `clusters` is the number of resampling units (chromosomes), which bounds how fine any interval can be.
+    `dropped` counts draws thrown away for holding one class only; a large share means the interval rests
+    on far fewer draws than were asked for. `met_minimum` says whether the kept draws reach
+    `MIN_RESAMPLES`, and is False rather than absent when they do not.
+    """
+    return {
+        "resamples": kept,
+        "clusters": clusters,
+        "draws_requested": requested,
+        "draws_dropped": requested - kept,
+        "met_minimum": kept >= MIN_RESAMPLES,
+    }
+
+
 def gain_interval(
     a: list[float], b: list[float], pairs: list[Pair], seed: int = 0, n: int = BOOTSTRAPS
 ) -> dict[str, Any]:
@@ -648,10 +672,33 @@ def gain_interval(
             - (average_precision([b[i] for i in idx], lab) or 0)
         )
     diffs.sort()
+    made = _interval_provenance(len(chroms), n, len(diffs))
     if not diffs:
-        return {"gain": round(point, 4), "ci95": None, "resamples": 0}
+        return {"gain": round(point, 4), "ci95": None, **made}
     lo, hi = diffs[int(0.025 * len(diffs))], diffs[min(len(diffs) - 1, int(0.975 * len(diffs)))]
-    return {"gain": round(point, 4), "ci95": [round(lo, 4), round(hi, 4)], "resamples": len(diffs)}
+    return {"gain": round(point, 4), "ci95": [round(lo, 4), round(hi, 4)], **made}
+
+
+#: Why a gain is refused rather than reported. A stratum whose deletion feature was never available
+#: cannot have a measured deletion gain: the "with deletion" model carries no deletion value there, so any
+#: difference it shows is an artefact of the model form, not a measurement. The committed
+#: `crispri_published.json` of 2026-09-27 reports numbers for three such strata (HCT116 +0.0004,
+#: Jurkat +0.0038, WTC11 -0.0049, each with an interval); they must be read as unavailable, not as gains.
+UNAVAILABLE_GAIN = (
+    "the deletion feature is not available in this stratum, so no deletion gain is measured here: the "
+    "difference between the two models would be an artefact of the model form, not a measurement"
+)
+
+
+def gain_unavailable(reason: str = UNAVAILABLE_GAIN) -> dict[str, Any]:
+    """The only thing a stratum without the feature may report: no number, and why."""
+    return {"gain": None, "ci95": None, "resamples": 0, "unavailable": reason}
+
+
+def gain_where_available(available: bool, gain: Callable[[], dict[str, Any]]) -> dict[str, Any]:
+    """`gain()` when the feature is available, otherwise a refusal. The caller cannot report a number by
+    accident: the gain is not computed at all where it would not mean anything."""
+    return gain() if available else gain_unavailable()
 
 
 def one_call_per_element(pairs: list[Pair], threshold: float) -> dict[str, Any]:
@@ -1178,7 +1225,11 @@ def weighted_gain(
         round(diffs[int(0.025 * len(diffs))], 4),
         round(diffs[min(len(diffs) - 1, int(0.975 * len(diffs)))], 4),
     ]
-    return {"gain": round(point, 4), "ci95": ci if diffs else None, "resamples": len(diffs)}
+    return {
+        "gain": round(point, 4),
+        "ci95": ci if diffs else None,
+        **_interval_provenance(len(chroms), n, len(diffs)),
+    }
 
 
 def band(value: float, published: tuple[float, float, float]) -> str:
@@ -1335,17 +1386,21 @@ def score_published(
         rows = [heldout[i] for i in idx]
         if not any(p.regulated for p in rows):
             continue
+        available = cell in MODEL_CELLS
         per_cell[cell] = {
             "models": {
                 name: bench_metrics([v[i] for i in idx], rows, weighted=True) for name, v in s.items()
             },
-            "deletion_gain": weighted_gain(
-                [s["activity + distance + deletion"][i] for i in idx],
-                [s["activity + distance"][i] for i in idx],
-                rows,
-                weighted=True,
+            "deletion_gain": gain_where_available(
+                available,
+                lambda idx=idx, rows=rows: weighted_gain(
+                    [s["activity + distance + deletion"][i] for i in idx],
+                    [s["activity + distance"][i] for i in idx],
+                    rows,
+                    weighted=True,
+                ),
             ),
-            "deletion_available": cell in MODEL_CELLS,
+            "deletion_available": available,
         }
     heldout_block = {
         "models": pooled,

@@ -13321,6 +13321,53 @@ interval scores one; the evidence interface exposes no rule parameter and keeps 
 rule name is refused across disjoint, zero-width and identical intervals. 63 tests pass across this file, the
 CRISPRi suite and the correctness suite.
 
+## A gain is refused where the deletion feature was never available, and an interval now says how it was made (2026-10-01, coordinator)
+
+Found by a peer session's audit, checked here against the files before anything was changed. Two defects in
+the CRISPRi headline machinery, both real.
+
+**1. Three strata report a deletion gain where no deletion value exists.** `crispri.score_published` computed
+`deletion_gain` for every held-out cell type and recorded `deletion_available` beside it as a separate flag.
+For a cell outside `MODEL_CELLS` no deletion value was ever read, so the "with deletion" model carries no
+deletion feature there and any difference it shows is an artefact of the model form. The committed
+`data/results/crispri_published.json` of 2026-09-27 therefore carries, under
+`heldout_published_pairs.per_cell_type_weighted`:
+
+| stratum | `deletion_available` | reported gain | reported 95% interval |
+|---|---|---|---|
+| HCT116 | false | +0.0004 | [-0.0002, +0.004] |
+| Jurkat | false | +0.0038 | [0.0, +0.0059] |
+| WTC11 | false | -0.0049 | [-0.0174, 0.0] |
+
+**All three must be read as "no deletion gain is measured in this stratum", not as gains**, and two of the
+three have intervals that could be quoted as a small positive effect. This breaks the project's own rule that
+a value never looked at is not a measured one. The peer named WTC11; the file has three.
+
+**The fix.** `gain_where_available()` does not compute the gain at all where the feature is missing; it
+returns `gain: None`, `ci95: None` and `UNAVAILABLE_GAIN`, which says the difference would be an artefact
+rather than a measurement. The per-cell block passes its availability through it, so a number cannot leak by
+being blanked after the fact.
+
+**2. Every interval rested on 200 chromosome resamples, and said nothing about how it was made.** At 200
+draws the 2.5% percentile is the fifth value, so each tail rests on a handful of draws and moves between
+seeds by more than the four decimals imply. Both estimators now report `clusters` (the resampling units, which
+bound how fine any interval can be), `draws_requested`, `draws_dropped` (draws thrown away for holding one
+class) and `met_minimum` against a stated `MIN_RESAMPLES = 1000`. `BOOTSTRAPS` rises from 200 to 2000 for new
+runs. **Nothing recomputes an existing file**, so no committed interval changes; the committed ones say
+`resamples: 200` and are coarser than their digits suggest, which `met_minimum` would now record as false.
+
+**What was deliberately not done.** The committed result is **not rewritten**: it stands as history, with the
+correction above beside it. Rebuilding it under a new name would produce new intervals for every stratum and a
+quotable change to the headline, which is the owner's decision and not a reporting fix. **No figure in it is
+restated as corrected here** beyond the three gains that must be read as unavailable.
+
+**Tests.** `tests/test_crispri_gain_reporting.py`, 8: an unavailable stratum reports no number; the gain is
+not even computed there, checked by a spy, so nothing can leak; an available stratum keeps its number; the
+reason names the artefact rather than calling it zero; an interval reports its clusters and its requested,
+kept and dropped draws; one below the minimum says so; the default clears the stated minimum; and both
+estimators carry the provenance. Restoring the old behaviour fails two of them. 38 pass across this file and
+the two CRISPRi suites.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
