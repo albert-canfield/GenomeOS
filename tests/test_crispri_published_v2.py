@@ -229,6 +229,24 @@ def test_the_closure_names_nothing_outside_the_repository() -> None:
         assert f.endswith(".py")
 
 
+def test_a_class_imported_from_a_module_is_not_mistaken_for_a_file() -> None:
+    """`from genomeos.genome import Genome` names a class; `Genome.py` is not a file in this tree."""
+    files = v2.import_closure()
+    for not_a_file in ("genomeos/genome/Genome.py", "genomeos/genome/Annotation.py"):
+        assert not_a_file not in files
+    assert "genomeos/genome/genome.py" in files
+    assert len({f.lower() for f in files}) == len(files)
+
+
+def test_the_closure_keeps_the_case_the_directory_keeps(tmp_path: Path) -> None:
+    """On a case-insensitive filesystem a bare `is_file` would put `pkg/Thing.py` on the closure."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "__init__.py").write_text("")
+    (tmp_path / "pkg" / "thing.py").write_text("class Thing:\n    pass\n")
+    (tmp_path / "entry.py").write_text("from pkg.thing import Thing\nfrom pkg import Thing as T2\n")
+    assert v2.import_closure("entry.py", tmp_path) == ["entry.py", "pkg/__init__.py", "pkg/thing.py"]
+
+
 def test_the_closure_is_computed_not_listed(tmp_path: Path) -> None:
     """A tree of three modules it has never seen: the closure must follow them, and stop at the leaf."""
     (tmp_path / "pkg").mkdir()

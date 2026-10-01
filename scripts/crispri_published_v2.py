@@ -85,15 +85,34 @@ def _module_files(module: str, root: Path) -> list[str]:
     `__init__.py` of every package above it. Empty for a module that is not in this repository."""
     parts = module.split(".")
     found: list[str] = [
-        pkg.relative_to(root).as_posix()
+        "/".join([*parts[:i], "__init__.py"])
         for i in range(1, len(parts))
-        if (pkg := root.joinpath(*parts[:i], "__init__.py")).is_file()
+        if _is_file_exactly(root, [*parts[:i], "__init__.py"])
     ]
-    for candidate in (root.joinpath(*parts[:-1], f"{parts[-1]}.py"), root.joinpath(*parts, "__init__.py")):
-        if candidate.is_file():
-            found.append(candidate.relative_to(root).as_posix())
+    for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
+        if _is_file_exactly(root, candidate):
+            found.append("/".join(candidate))
             break
     return found
+
+
+def _is_file_exactly(root: Path, parts: list[str]) -> bool:
+    """A file at `parts` below `root`, spelled as the directories spell it.
+
+    The case matters here. `Path.is_file` on a case-insensitive filesystem answers yes for
+    `genomeos/genome/Genome.py` when only `genome.py` is there, so `from genomeos.genome import
+    Genome` — a class, not a module — would otherwise put a file that does not exist on the closure,
+    and the closure would differ between this machine and a case-sensitive one.
+    """
+    node = root
+    for part in parts:
+        try:
+            if part not in {p.name for p in node.iterdir()}:
+                return False
+        except OSError:
+            return False
+        node = node / part
+    return node.is_file()
 
 
 def _imported_modules(path: Path, root: Path) -> list[str]:
