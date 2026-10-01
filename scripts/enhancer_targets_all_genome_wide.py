@@ -639,6 +639,60 @@ def with_history(out: dict, previous: dict | None) -> dict:
     return {**out, "history": history}
 
 
+#: The dated audit that superseded the archive control for node containment. Its figures are read from
+#: this file and reported as its results; nothing here recomputes them.
+NODE_AUDIT = Path("data/results/node_containment_audit.json")
+
+
+def node_audit_lines(path: Path = NODE_AUDIT) -> list[str]:
+    """The node-containment figures as the 2026-09-27 audit measured them, read from its result file.
+
+    Returns the lines to print, or a line saying the audit is unreadable. Every number is the audit's,
+    labelled with its date and file, so a later fold cannot present them as newly computed here. The
+    comparator for the headline excess is named, the interval says what it describes and over what, the
+    four-baseline range is kept apart from the headline, and the qualifier that this is internal
+    benchmark evidence on the model's own reading travels with them.
+    """
+    try:
+        audit = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return [f"  node containment: {path} could not be read; no audited figure is quoted"]
+    modelled = audit.get("modelled") or {}
+    controls = modelled.get("controls") or {}
+    uniform = controls.get("uniform") or {}
+    boot = uniform.get("bootstrap_chromosomes") or {}
+    ci = boot.get("ci95") or []
+    sign = uniform.get("sign_test") or {}
+    excesses = [c["excess_points"] for c in controls.values() if c.get("excess_points") is not None]
+    date, pairs = audit.get("date"), modelled.get("pairs")
+    head = (
+        f"  node containment, as measured by the {date} audit ({path}), not recomputed here: "
+        f"{uniform.get('excess_points'):+.2f} percentage points on the share of elements whose coding "
+        f"target lies inside the element's own CTCF node, against uniform random boundary placement "
+        f"(the audit's published control: as many uniform positions as the caller has edges, with no "
+        f"50 kb merge), over {pairs:,} modelled pairs"
+    )
+    lines = [head]
+    if ci and boot.get("resamples"):
+        lines.append(
+            f"    95% CI {ci[0]:+.2f} to {ci[1]:+.2f}: the interval of that excess against that "
+            f"control, from {boot['resamples']:,} bootstrap resamples over the "
+            f"{sign.get('of')} {boot.get('unit')}s"
+        )
+    if sign.get("ahead") is not None:
+        lines.append(f"    ahead on {sign['ahead']} of {sign.get('of')} chromosomes")
+    if len(excesses) > 1:
+        lines.append(
+            f"    separately, the {len(excesses)} defensible baselines span {min(excesses):+.2f} to "
+            f"{max(excesses):+.2f} points; the headline is one of them, not their summary"
+        )
+    lines.append(
+        "    internal benchmark evidence, on the model's own reading rather than observed "
+        "enhancer-gene pairs; not independent validation"
+    )
+    return lines
+
+
 def main() -> int:
     out = aggregate()
     path = Path("data/results/enhancer_targets_all_genome_wide.json")
@@ -687,9 +741,11 @@ def main() -> int:
         f"{out['complete_chromosomes']} chromosomes complete: {g['scored']:,} elements, "
         f"{g['fraction_with_target']} name a gene (87% at matched random windows), "
         f"nearest TSS {g['coding_target_agrees_with_nearest']}, "
-        f"inside the node {g['coding_target_inside_domain']} (random boundaries 0.791, +2.6 points); "
+        f"inside the node {g['coding_target_inside_domain']}; "
         f"{out['requests_total']:,} requests so far"
     )
+    for line in node_audit_lines():
+        print(line)
     nc = out["controls"]["coding_target_inside_domain"].get("measured_on_this_set")
     if nc and nc["chromosomes"]:
         print(

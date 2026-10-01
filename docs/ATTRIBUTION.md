@@ -13122,6 +13122,45 @@ experiment measures, and how the two can be compared; then verifies coverage and
 builds analysis code. **Eligibility never depends on whether the model already predicts the experimentally
 implicated gene.**
 
+## The superseded node-containment control is out of the genome-wide script's report (2026-10-01, coordinator)
+
+A demonstrated defect, recorded in docs/ROADMAP.md: `scripts/enhancer_targets_all_genome_wide.py` printed
+"inside the node 0.817 (random boundaries 0.791, +2.6 points)" on every run. Those two figures come from the
+113,399-element deletion archive and were being shown beside a 440,377-element measurement as though they
+were its control. The audit of 2026-09-27 (docs/NODES-READER-WRITER.md,
+`data/results/node_containment_audit.json`) superseded them. A reporting fix only: no biological rerun, no
+rescoring, no change to any stored measurement.
+
+**What changed.** The stale parenthetical is gone from the printed headline. In its place,
+`node_audit_lines()` reads the audit's own result file and reports its figures as that dated audit's:
+
+- the headline excess, **+2.90 percentage points** on the share of elements whose coding target lies inside
+  the element's own CTCF node, named against its comparator, **uniform random boundary placement** (the
+  audit's published control: as many uniform positions as the caller has edges, with no 50 kb merge), over
+  440,377 modelled pairs;
+- the interval, **95% CI +2.03 to +3.81**, stated as the interval of that excess against that control, from
+  2,000 bootstrap resamples **over the 24 chromosomes**, not over the 440,377 pairs;
+- ahead on **19 of 24** chromosomes;
+- separately, the **four defensible baselines span +1.21 to +6.58** points, with the headline named as one
+  of them and not their summary;
+- the qualifier that this is **internal benchmark evidence**, on the model's own reading rather than
+  observed enhancer-gene pairs, and not independent validation.
+
+Every number is read from the audit file at run time and printed with the audit's date and path and the
+words "not recomputed here", so a later fold cannot drift from the audit or present its figures as newly
+computed. If the file cannot be read, the report quotes no figure and says so.
+
+**The superseded entry stays** in the script's `CONTROLS`, because it records what was superseded, and its
+`superseded_by` note already says it must not be read against the 440,377-element measurement. A test now
+fails if it ever sits there without that note.
+
+**Tests.** 23 in `tests/test_enhancer_targets_all_genome_wide.py`, 15 as before and 8 new, which check the
+removal and the meanings: that 0.791 and its +2.6 points appear nowhere in the reporting; that the figures
+equal the audit file's; that the output carries the audit's date, path and "not recomputed here"; that the
+comparator is named and the interval says what it is over; that the baseline range is kept separate; that
+the internal-evidence qualifier travels with the figures; and that an unreadable audit quotes nothing. The
+removal test was confirmed to fail when the old parenthetical was put back and to pass again once reverted.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
