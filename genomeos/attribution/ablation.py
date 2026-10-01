@@ -169,7 +169,15 @@ class CrispriIndex:
         self.reach = max((p.end - p.start for p in pairs), default=0)
 
     def of(self, chrom: str, start: int, end: int) -> list[ms.CrispriPair]:
-        """Pairs whose element is this element under the measured layer's overlap rule."""
+        """Pairs whose element is this element under the measured layer's production overlap rule.
+
+        The rule is deliberately not selectable here. This is the evidence interface: a pair it returns
+        becomes evidence about this element. A broader overlap rule finds candidate overlaps and does not
+        establish which element produced the measured response, so returning one observation independently
+        for several elements would make it decisive evidence for each. `measured.MIN_SIDE_HALF` is available
+        as a predicate for a discovery pass, which would need observation ids, the whole candidate set and
+        the rule's provenance; that interface is not built here.
+        """
         items = self.by.get(chrom)
         if not items:
             return []

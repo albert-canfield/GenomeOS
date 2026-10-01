@@ -13265,6 +13265,62 @@ before any such work begins:
 
 Whether a mean, or any summary, is the right biological predictor remains a separate and open question.
 
+## A reusable discovery-overlap primitive, with the evidence interface left alone (2026-10-01, coordinator)
+
+A demonstrated software limitation, already measured: the production rule attaches a tested interval to an
+element only when their overlap is at least half of **both** widths (`measured.RECIPROCAL_OVERLAP`), so it can
+pair two intervals only when their widths are within a factor of two. Audit A registered one other rule before
+scoring it (dd8c49c, `min_side_half`: the overlap at least half of the **smaller** width), and it lived only in
+the census script, so the library had no way to apply it even for exploration.
+
+**What this delivers: a named predicate, not a policy.** `genomeos/attribution/measured.py` names both rules
+in `ATTACHMENT_RULES` (`RECIPROCAL_HALF`, `MIN_SIDE_HALF`), with `attaches(rule, ...)` to apply one by name and
+`min_side_overlap()` beside `reciprocal_overlap()`. **An overlap under the broader rule is a candidate, not a
+finding.** It does not establish which element produced a measured response.
+
+**The evidence interface is deliberately untouched.** `ablation.CrispriIndex.of()` takes **no** rule argument
+and still applies the production rule only. Exposing the broader rule there would return one observation
+independently for several elements and make it decisive evidence for each. A discovery pass needs observation
+ids, the whole candidate set and the rule's provenance; **that interface is not built here**, and this task
+does not build it.
+
+**Rule names are checked before any interval is examined.** An earlier draft of this change validated the name
+only on the path that computed an overlap, so an unknown name could be answered with a plain "no overlap" when
+the chromosome was absent or the candidate slice empty. The claim that unknown names were always refused was
+therefore false as written. `attaches()` now looks the name up first and raises before touching coordinates,
+and the empty cases are tested.
+
+**What the implication test does and does not establish.** Half of both widths is at least half of the smaller
+width, so the broader rule accepts every interval pair the production rule accepts. That is **overlap
+inclusion only**, checked as a property over 20,000 random interval pairs. It is **not** preservation of unique
+attribution, and not of verdict eligibility: a broader rule can retain every observation while resolving each
+to several elements instead of one, which lowers resolution rather than adding evidence.
+
+**The counts belong to the historical census, and were not reproduced.** The placement census of 2026-09-29
+(`data/results/placement_census.json`) measured 180 observations newly overlapping under the policy, taking the
+count from 128 of 14,734 to 308. **Those figures are that census's measurement. Reproducing them was not
+performed here**, and the delivered acceptance scope is narrowed accordingly: what is verified is the
+predicates' definitions, the overlap-inclusion property, the width asymmetry (a 300 bp element and a 1 kb
+tested interval overlap under the policy and can never overlap under the production rule), that the policy uses
+the measured layer's own 0.5 with no second threshold, that the evidence interface exposes no rule, and that an
+unknown name is refused whatever the intervals. No biological rerun was needed or done.
+
+**What the census's resolution figures do not say.** Of the 180, the census resolved 48 to a unique element,
+77 to one link and 55 to several elements. **"One link" is not a uniquely identified element**: several
+candidate elements can share one target link, so element attribution stays unresolved there too. On any
+reading, most of the 180 are unresolved as to which element produced the response.
+
+**Nothing was adopted, re-scored or re-judged.** No matcher was switched, no headline moved, no judge changed,
+no committed result touched, and no model request made. Adopting `min_side_half` for attribution is a separate
+decision with its own registration, and it needs the discovery interface first.
+
+**Tests.** `tests/test_measured_rules.py`, 10: the default predicate is the production rule; the policy
+overlaps the wide interval the production rule cannot; the overlap-inclusion property over 20,000 random
+pairs; the policy uses the measured layer's own threshold; empty and disjoint intervals score zero; a swallowed
+interval scores one; the evidence interface exposes no rule parameter and keeps its behaviour; and an unknown
+rule name is refused across disjoint, zero-width and identical intervals. 63 tests pass across this file, the
+CRISPRi suite and the correctness suite.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
