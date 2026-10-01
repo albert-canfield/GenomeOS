@@ -7,6 +7,7 @@ so the rules are checked before any outcome exists.
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
 
@@ -543,6 +544,10 @@ def test_h5ad_reader_checks_md5_and_reads_only_named_datasets(tmp_path):
         n1.H5adPseudobulk(paths["normalized"], paths["raw"], expected={**expected, "raw": {"md5": "0" * 32}})
 
 
+@pytest.mark.skip(
+    reason="amendment 1: scripts/n1_run.py now refuses and points to scripts/n1_run_v2.py; "
+    "test_the_original_run_script_refuses_and_points_to_v2 checks that"
+)
 def test_the_run_script_needs_an_authorisation_and_runs_once(tmp_path):
     import importlib.util
 
@@ -568,3 +573,189 @@ def test_the_run_script_needs_an_authorisation_and_runs_once(tmp_path):
     assert (results / "n1_result.json").exists()
     with pytest.raises(SystemExit, match="applied once"):
         run_script.execute(*args, "synthetic test", results, expected)
+
+
+def load_script(name: str):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        name, Path(__file__).resolve().parents[1] / f"scripts/{name}.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_original_run_script_refuses_and_points_to_v2(tmp_path):
+    # amendment 1 supersedes the run of f9a9130: the original runner refuses before reading anything
+    run_script = load_script("n1_run")
+    with pytest.raises(SystemExit, match="n1_run_v2.py"):
+        run_script.execute(tmp_path / "absent.h5ad", tmp_path / "absent_raw.h5ad", "synthetic test", tmp_path)
+
+
+# --- amendment 1 -------------------------------------------------------------------------------------------
+
+
+def brute_auroc(scores, labels):
+    pos = [s for s, x in zip(scores, labels, strict=True) if x]
+    neg = [s for s, x in zip(scores, labels, strict=True) if not x]
+    wins = sum(1.0 if a > b else 0.5 if a == b else 0.0 for a in pos for b in neg)
+    return wins / (len(pos) * len(neg))
+
+
+def test_auroc_v2_counts_ties_half_and_a_constant_score_gives_half():
+    assert n1.auroc_v2([0.0, 0.0, 0.0], [True, False, False]) == (0.5, None)
+    assert n1.auroc_v2([0.9, 0.9], [True, False]) == (0.5, None)
+    assert n1.auroc_v2([0.1, 0.2], [False, False]) == (None, "no_responders")
+    assert n1.auroc_v2([0.1, 0.2], [True, True]) == (None, "all_responders")
+    for k in range(40):  # deterministic cases with many ties, against pair counting
+        scores = [((j * 7 + k) % 4) * 0.3 for j in range(15)]
+        labels = [((j * 5 + k) % 3) == 0 for j in range(15)]
+        assert n1.auroc_v2(scores, labels)[0] == pytest.approx(brute_auroc(scores, labels))
+        old = n1.auroc(scores, labels)[0]
+        if old is not None:  # where the original was defined, the two agree
+            assert old == pytest.approx(n1.auroc_v2(scores, labels)[0])
+
+
+def test_stratified_auroc_compares_within_expression_strata():
+    # the score tracks expression and so do the responders: unstratified it looks informative, within
+    # strata it is constant, so the stratified AUROC is 0.5
+    strata = [0] * 10 + [1] * 10
+    scores = [0.0] * 10 + [1.0] * 10
+    labels = [j == 0 for j in range(10)] + [j < 5 for j in range(10)]
+    assert n1.auroc_v2(scores, labels)[0] == pytest.approx(62 / 84)
+    assert n1.stratified_auroc(scores, labels, strata) == (0.5, None, 2)
+    # strata weighted by their responder x non-responder pairs: 9 pairs at 1.0 and 25 at 0.0
+    scores = [1.0] + [0.0] * 9 + [0.0] * 5 + [1.0] * 5
+    value, _, used = n1.stratified_auroc(scores, labels, strata)
+    assert used == 2 and value == pytest.approx(9 / 34)
+    # a stratum with one class contributes nothing; none with both is undefined, never dropped silently
+    assert n1.stratified_auroc([0.1, 0.2, 0.3, 0.4], [True, True, False, False], [0, 0, 1, 1]) == (
+        None,
+        "no_stratum_with_both_classes",
+        0,
+    )
+
+
+def test_run_v2_stops_before_the_knockdown_rule():
+    world, plan = make_world()
+    reader = FakeReader(world)
+    out = n1.run_v2(plan, reader)
+    assert out["status"] == "eligibility_unsupported" and out["gate"]["passed"]
+    assert reader.calls == ["identities", "control_rows"]  # no candidate row is read
+    world, plan = make_world(low_stratum_hits=4)
+    out = n1.run_v2(plan, FakeReader(world))
+    assert out["status"] == "gate_failed"
+
+
+def interleaved_world():
+    """make_world with control expression permuted, so each decile holds genes from every index range."""
+    world, plan = make_world()
+    for i in plan["control_rows"]:
+        world["raw"][i] = [0.01 * (((j * 37) % N_GENES) + 1) for j in range(N_GENES)]
+    return world, plan
+
+
+def test_the_analysis_after_the_stop_once_a_documented_amendment_supports_it(monkeypatch):
+    monkeypatch.setattr(n1, "ELIGIBILITY_SUPPORTED", True)
+    world, plan = interleaved_world()
+    plan["candidates"][0]["scores"]["proximity"] = {}  # a constant predictor: 0.5, not undefined
+    reader = FakeReader(world)
+    out = n1.run_v2(plan, reader)
+    assert reader.calls == ["identities", "control_rows", "knockdown_fields", "response_rows"]
+    assert out["status"] == "analysed"
+    f0 = next(f for f in out["factors"] if f["factor"] == "F0")
+    assert f0["auroc_proximity"] == 0.5 and f0["difference"] is not None and f0["strata_used"] > 1
+    a = out["analysis"]
+    assert a["coverage"]["defined"] == 40 and a["coverage"]["undefined_reasons"] == {}
+    assert a["criteria"]["point_gain"]["met"] and a["criteria"]["lower_bound"]["met"]
+    assert a["secondary_unstratified"]["factors"] == 40
+
+
+def test_freeze_problems_refuse_any_difference(tmp_path):
+    files = {}
+    for name in ("original.json", "module.py", "runner.py"):
+        files[name] = tmp_path / name
+        files[name].write_text(name)
+    amendment = {
+        "amends": {"sha256": n1.sha256_file(files["original.json"])},
+        "frozen_code": {
+            "module": {"sha256": n1.sha256_file(files["module.py"])},
+            "runner": {"sha256": n1.sha256_file(files["runner.py"])},
+        },
+        "constants": json.loads(json.dumps(n1.CONSTANTS_V2)),
+    }
+    args = (files["original.json"], files["module.py"], files["runner.py"])
+    assert n1.freeze_problems(amendment, *args) == []
+    files["module.py"].write_text("edited")
+    assert [p.split(":")[0] for p in n1.freeze_problems(amendment, *args)] == ["analysis module"]
+    files["module.py"].write_text("module.py")
+    amendment["constants"] = {**amendment["constants"], "responds_t": 2.5}
+    assert n1.freeze_problems(amendment, *args) == [
+        "constants: CONSTANTS_V2 differ from the registered constants"
+    ]
+
+
+def test_the_v2_run_script_checks_the_freeze_first_then_runs_once(tmp_path):
+    from genomeos.results import save_result
+
+    run_v2 = load_script("n1_run_v2")
+    world, plan = make_world()
+    paths = write_pair(tmp_path, world)
+    expected = {k: {"md5": n1.file_digests(p)[0]} for k, p in paths.items()}
+    args = (paths["normalized"], paths["raw"])
+
+    def results_with(constants: dict) -> Path:
+        d = tmp_path / f"results{len(list(tmp_path.glob('results*')))}"
+        d.mkdir()
+        with pytest.warns(UserWarning):
+            save_result("n1_registration", {"plan": plan}, d)
+            amendment = {
+                "amends": {"sha256": n1.sha256_file(d / "n1_registration.json")},
+                "frozen_code": {
+                    "module": {"sha256": n1.sha256_file(run_v2.MODULE)},
+                    "runner": {"sha256": n1.sha256_file(run_v2.RUNNER)},
+                },
+                "constants": constants,
+            }
+            save_result(n1.AMENDMENT, amendment, d)
+        return d
+
+    bad = results_with({**json.loads(json.dumps(n1.CONSTANTS_V2)), "kd_max_fold": 0.5})
+    wrong_md5 = {k: {"md5": "0" * 32} for k in expected}
+    with pytest.raises(SystemExit, match="differ from the freeze"):  # refused before any file is opened
+        run_v2.execute(*args, "synthetic test", bad, wrong_md5)
+    good = results_with(json.loads(json.dumps(n1.CONSTANTS_V2)))
+    with pytest.raises(SystemExit, match="authorisation"):
+        run_v2.execute(*args, " ", good, expected)
+    out = run_v2.execute(*args, "synthetic test", good, expected)
+    assert out["status"] == "eligibility_unsupported" and set(out["files_sha256"]) == {"normalized", "raw"}
+    assert not any("obs/fold_expr" in d for d in out["datasets_read"])
+    with pytest.raises(SystemExit, match="applied once"):
+        run_v2.execute(*args, "synthetic test", good, expected)
+
+
+def test_reader_v2_decodes_only_the_selected_columns(tmp_path, monkeypatch):
+    h5py = pytest.importorskip("h5py")
+    world, plan = make_world()
+    paths = write_pair(tmp_path, world)
+    expected = {k: {"md5": n1.file_digests(p)[0]} for k, p in paths.items()}
+    reader = n1.H5adPseudobulkV2(paths["normalized"], paths["raw"], expected=expected)
+    seen = []
+    original = h5py.Dataset.__getitem__
+
+    def spy(self, args, *a, **k):
+        if self.name == "/X":
+            seen.append(args)
+        return original(self, args, *a, **k)
+
+    monkeypatch.setattr(h5py.Dataset, "__getitem__", spy)
+    cols = [150, 3, 77, 12]  # unsorted on purpose: values come back in the order asked
+    rows = plan["control_rows"][:5]
+    got = reader.control_rows(rows, cols)
+    assert seen and all(
+        isinstance(a, tuple) and isinstance(a[0], int) and len(a[1]) == len(cols) for a in seen
+    )
+    assert got["x"][0] == pytest.approx([world["x"][rows[0]][c] for c in cols], rel=1e-6, abs=1e-7)
+    assert got["raw_x"][4] == pytest.approx([world["raw"][rows[4]][c] for c in cols], rel=1e-6)
+    assert "normalized:X[5 rows x 4 columns]" in reader.datasets_read

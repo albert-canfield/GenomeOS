@@ -816,3 +816,305 @@ class H5adPseudobulk:
 
     def response_rows(self, rows: list[int], cols: list[int]) -> dict[int, list[float]]:
         return self._rows("normalized", rows, cols)
+
+
+# =========================================================================================================
+# Amendment 1 (2026-10-01, lane-n1), additive: everything above is the code the registration of f9a9130
+# froze (b359867) and is unchanged. data/results/n1_registration_amendment_1.json states each change and why.
+#
+# N1 is an exploratory comparison against an operational response label (|T| >= 3). T = X * sqrt(n) is a
+# proposed statistic, not a calibrated test, and passing the gate does not validate per-gene biological
+# responses. The knockdown fields' units are not documented for this file, so the knockdown rule is
+# unsupported and `run_v2` stops before applying it (ELIGIBILITY_SUPPORTED). The functions after that stop
+# are frozen and tested so that a later, documented amendment changes one constant, not the analysis.
+# =========================================================================================================
+
+AMENDMENT = "n1_registration_amendment_1"
+ELIGIBILITY_SUPPORTED = (
+    False  # item 2: control_expr's units are undocumented, so the knockdown rule is unsupported
+)
+
+CONSTANTS_V2 = {
+    **CONSTANTS,
+    "amendment": 1,
+    "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+    "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+    "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+    "eligibility_supported": ELIGIBILITY_SUPPORTED,
+    "reader": "H5adPseudobulkV2: X decoded at the selected columns only",
+}
+
+
+def auroc_v2(scores: Sequence[float], labels: Sequence[bool]) -> tuple[float | None, str | None]:
+    """AUROC as the Mann-Whitney probability that a responder outscores a non-responder, ties counting half
+    (the standard definition; a constant score gives 0.5). Undefined only when a class is empty."""
+    pos = sum(1 for x in labels if x)
+    neg = len(labels) - pos
+    if pos == 0:
+        return None, "no_responders"
+    if neg == 0:
+        return None, "all_responders"
+    order = sorted(range(len(scores)), key=lambda i: scores[i])
+    ranks = [0.0] * len(scores)
+    i = 0
+    while i < len(order):
+        j = i
+        while j + 1 < len(order) and scores[order[j + 1]] == scores[order[i]]:
+            j += 1
+        mid = (i + j) / 2 + 1
+        for q in range(i, j + 1):
+            ranks[order[q]] = mid
+        i = j + 1
+    rank_sum = sum(r for r, x in zip(ranks, labels, strict=True) if x)
+    return (rank_sum - pos * (pos + 1) / 2) / (pos * neg), None
+
+
+def stratified_auroc(
+    scores: Sequence[float], labels: Sequence[bool], strata: Sequence[int]
+) -> tuple[float | None, str | None, int]:
+    """Item 4: AUROC with responders compared only to non-responders of the same control-expression decile.
+
+    Each stratum holding both classes contributes its auroc_v2, weighted by its responder x non-responder
+    pairs, so the result is the probability over within-stratum pairs. A stratum with one class contributes
+    nothing. Undefined with no responders, with all responders, or when no stratum holds both classes.
+    Returns (value, reason, strata used)."""
+    pos = sum(1 for x in labels if x)
+    if pos == 0:
+        return None, "no_responders", 0
+    if pos == len(labels):
+        return None, "all_responders", 0
+    groups: dict[int, list[int]] = defaultdict(list)
+    for j, s in enumerate(strata):
+        groups[s].append(j)
+    num = den = 0.0
+    used = 0
+    for s in sorted(groups):
+        idx = groups[s]
+        lab = [labels[j] for j in idx]
+        p = sum(lab)
+        pairs = p * (len(lab) - p)
+        if pairs == 0:
+            continue
+        a, _ = auroc_v2([scores[j] for j in idx], lab)
+        num += a * pairs
+        den += pairs
+        used += 1
+    if den == 0:
+        return None, "no_stratum_with_both_classes", 0
+    return num / den, None, used
+
+
+def control_expression(raw_x: Sequence[Sequence[float]], control_n: Sequence[float]) -> list[float]:
+    """The gate's per-gene control expression: the cell-weighted mean of raw X over the usable rows."""
+    usable = [i for i, n in enumerate(control_n) if _finite(n) and n >= 1]
+    total = sum(control_n[i] for i in usable)
+    k = len(raw_x[0]) if raw_x else 0
+    return [sum(raw_x[i][j] * control_n[i] for i in usable) / total for j in range(k)]
+
+
+def factor_result_v2(
+    candidate: dict[str, Any], genes: Sequence[str], t: Sequence[float], strata: Sequence[int]
+) -> dict[str, Any]:
+    """One factor under amendment 1: the primary AUROC is stratified by control-expression decile and the
+    unstratified auroc_v2 is reported beside it. Both arms share the labels and strata, so an undefined
+    factor has one reason for both."""
+    excl = set(candidate["excluded_genes"])
+    keep = [j for j, g in enumerate(genes) if g not in excl and math.isfinite(t[j])]
+    labels = [abs(t[j]) >= RESPONDS_T for j in keep]
+    st = [strata[j] for j in keep]
+    att = [candidate["scores"]["attribution"].get(genes[j], 0.0) for j in keep]
+    prox = [candidate["scores"]["proximity"].get(genes[j], 0.0) for j in keep]
+    a_att, why, used = stratified_auroc(att, labels, st)
+    a_prox, _, _ = stratified_auroc(prox, labels, st)
+    u_att, _ = auroc_v2(att, labels)
+    u_prox, _ = auroc_v2(prox, labels)
+    defined = a_att is not None and a_prox is not None
+    return {
+        "factor": candidate["factor"],
+        "cluster": candidate["cluster"],
+        "genes": len(keep),
+        "genes_nonfinite_response": sum(
+            1 for j, g in enumerate(genes) if g not in excl and not math.isfinite(t[j])
+        ),
+        "responders": sum(labels),
+        "strata_used": used,
+        "auroc_attribution": a_att,
+        "auroc_proximity": a_prox,
+        "difference": a_att - a_prox if defined else None,
+        "undefined_reason": None if defined else why,
+        "unstratified": {
+            "attribution": u_att,
+            "proximity": u_prox,
+            "difference": u_att - u_prox if u_att is not None and u_prox is not None else None,
+        },
+    }
+
+
+def paired_analysis_v2(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    """The comparison of amendment 1: the registered estimate, floor, cluster bootstrap and two separate
+    criteria (`paired_analysis`, unchanged) over the factors whose stratified difference is defined; the
+    coverage counts every factor by its one reason; the unstratified mean is reported, with no criterion."""
+    defined = [r for r in results if r["difference"] is not None]
+    out = paired_analysis(defined)
+    why = Counter(r["undefined_reason"] for r in results if r["difference"] is None)
+    out["coverage"] = {
+        "factors_analysed": len(results),
+        "defined": len(defined),
+        "undefined": len(results) - len(defined),
+        "undefined_reasons": dict(sorted(why.items())),
+        "floor": FLOOR_FACTORS,
+    }
+    u = [r["unstratified"]["difference"] for r in defined if r["unstratified"]["difference"] is not None]
+    out["secondary_unstratified"] = {"estimate": sum(u) / len(u) if u else None, "factors": len(u)}
+    return out
+
+
+def run_v2(plan: dict[str, Any], reader: Reader) -> dict[str, Any]:
+    """Amendment 1's run: identities, then the gate, then a stop before the knockdown rule while it is
+    unsupported. No candidate row is read. The analysis after the stop is `_analyse_v2`."""
+    reads: list[dict[str, Any]] = []
+
+    def stop(status: str, **extra: Any) -> dict[str, Any]:
+        return {"status": status, "amendment": 1, "reads": reads, **extra}
+
+    ident = reader.identities()
+    reads.append({"step": "identities", "datasets": ["obs index", "var gene_id"], "files": sorted(ident)})
+    norm = ident["normalized"]
+    if identity_digest(norm["obs_index"], norm["var_gene_id"]) != plan["identity_digest"]:
+        return stop("identity_mismatch", note="the normalized file's rows or genes differ from registration")
+    if ident["raw"]["obs_index"] != norm["obs_index"] or ident["raw"]["var_gene_id"] != norm["var_gene_id"]:
+        return stop(
+            "identity_mismatch", note="the raw file's rows or genes differ from the normalized file's"
+        )
+    col_of = {g: j for j, g in enumerate(norm["var_gene_id"])}
+    universe = list(plan["universe"])
+    cols = [col_of[g] for g in universe]
+    control = list(plan["control_rows"])
+    c = reader.control_rows(control, cols)
+    reads.append(
+        {"step": "calibration gate", "rows": len(control), "row_kind": "non-targeting", "genes": len(cols)}
+    )
+    gate = calibration_gate(c["x"], c["n"], c["raw_x"])
+    if not gate["passed"]:
+        return stop("gate_failed", gate=gate, note="the run stops; no factor row is read")
+    drop = set(gate["genes_uncalibrated"])
+    keep = [j for j in range(len(universe)) if j not in drop]
+    genes = [universe[j] for j in keep]
+    expr = control_expression(c["raw_x"], c["n"])
+    strata = expression_strata([expr[j] for j in keep])
+    if not ELIGIBILITY_SUPPORTED:
+        return stop(
+            "eligibility_unsupported",
+            gate=gate,
+            note="the knockdown rule rests on undocumented units of control_expr and fold_expr (amendment 1, "
+            "item 2); the run stops before reading any candidate row",
+        )
+    return _analyse_v2(plan, reader, reads, gate, genes, [col_of[g] for g in genes], strata)
+
+
+def _analyse_v2(
+    plan: dict[str, Any],
+    reader: Reader,
+    reads: list[dict[str, Any]],
+    gate: dict[str, Any],
+    genes: list[str],
+    gcols: list[int],
+    strata: list[int],
+) -> dict[str, Any]:
+    """After the gate, only once a documented amendment sets ELIGIBILITY_SUPPORTED: the registered knockdown
+    rules, the multi-row rule, factor_result_v2 and paired_analysis_v2."""
+    cands = list(plan["candidates"])
+    cand_rows = sorted({r["index"] for cand in cands for r in cand["rows"]})
+    kd = reader.knockdown_fields(cand_rows)
+    reads.append({"step": "knockdown eligibility", "rows": len(cand_rows), "row_kind": "candidate factor"})
+    row_status = {i: knockdown_status(kd[i]) for i in cand_rows}
+    mismatched = sorted(i for i, s in row_status.items() if s["reason"] == "semantics_mismatch")
+    ledger, eligible = [], []
+    for cand in cands:
+        rs = [{"index": r["index"], "label": r["label"], **row_status[r["index"]]} for r in cand["rows"]]
+        ok = [r for r in rs if r["eligible"]]
+        ledger.append({"factor": cand["factor"], "rows": rs, "knockdown_eligible": bool(ok)})
+        if ok:
+            eligible.append((cand, [r["index"] for r in ok]))
+    base = {"amendment": 1, "reads": reads, "gate": gate, "eligibility": ledger}
+    if mismatched:
+        return {"status": "semantics_check_failed", **base, "rows_mismatched": mismatched}
+    if len(eligible) < FLOOR_FACTORS:
+        return {
+            "status": "insufficient_coverage",
+            **base,
+            "note": f"{len(eligible)} knockdown-eligible factors",
+        }
+    resp_rows = sorted({i for _, idx in eligible for i in idx})
+    x = reader.response_rows(resp_rows, gcols)
+    reads.append(
+        {"step": "responses", "rows": len(resp_rows), "row_kind": "eligible factor", "genes": len(gcols)}
+    )
+    results = []
+    for cand, idx in eligible:
+        t = pooled_t([(x[i], kd[i]["num_cells_filtered"]) for i in idx])
+        results.append({**factor_result_v2(cand, genes, t, strata), "rows_pooled": len(idx)})
+    analysis = paired_analysis_v2(results)
+    return {
+        "status": analysis["status"],
+        **base,
+        "factors": results,
+        "analysis": analysis,
+        "genes_analysed": len(genes),
+    }
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with Path(path).open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def freeze_problems(
+    amendment: dict[str, Any], original_path: Path, module_path: Path, runner_path: Path
+) -> list[str]:
+    """Item 5: what differs from the freeze, checked before any measurement is opened; empty when nothing.
+
+    The original registration's bytes, this module's and the v2 runner's sha256, and CONSTANTS_V2, against
+    the amendment registration."""
+    frozen = amendment.get("frozen_code", {})
+    checks = [
+        ("original registration", original_path, amendment.get("amends", {}).get("sha256")),
+        ("analysis module", module_path, frozen.get("module", {}).get("sha256")),
+        ("v2 runner", runner_path, frozen.get("runner", {}).get("sha256")),
+    ]
+    problems = [
+        f"{what}: sha256 {sha256_file(p)} is not the registered {want}"
+        for what, p, want in checks
+        if sha256_file(p) != want
+    ]
+    if json.loads(json.dumps(CONSTANTS_V2)) != amendment.get("constants"):
+        problems.append("constants: CONSTANTS_V2 differ from the registered constants")
+    return problems
+
+
+class H5adPseudobulkV2(H5adPseudobulk):
+    """Item 5: as H5adPseudobulk, but X is decoded at the selected columns only, one row at a time
+    (`X[i, sorted columns]`); whole rows are never decoded. The operating system may still read surrounding
+    bytes from disk."""
+
+    def _rows(self, kind: str, rows: list[int], cols: list[int]) -> dict[int, list[float]]:
+        import h5py
+
+        order = sorted(range(len(cols)), key=lambda q: cols[q])
+        scols = [cols[q] for q in order]
+        if len(set(scols)) != len(scols):
+            raise ValueError("a column is selected twice")
+        self.datasets_read.append(f"{kind}:X[{len(rows)} rows x {len(cols)} columns]")
+        out: dict[int, list[float]] = {}
+        with h5py.File(self.paths[kind], "r") as h:
+            ds = h["X"]
+            for i in sorted(rows):
+                vals = ds[i, scols]
+                row = [0.0] * len(cols)
+                for p, q in enumerate(order):
+                    row[q] = float(vals[p])
+                out[i] = row
+        return out
