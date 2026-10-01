@@ -381,3 +381,176 @@ def delta_where_available(cell: str, delta: Callable[[], dict[str, Any]]) -> dic
     reason, never a number -- the same rule `crispri.gain_where_available` applies to the deletion gain.
     """
     return crispri.gain_where_available(cell not in FEATURE_UNAVAILABLE, delta)
+
+
+# --- applying the registered rule -------------------------------------------------------------------
+# Everything above was committed before any comparator score was read. What follows implements the rule
+# already registered above; it does not restate or alter it.
+
+#: The columns the join needs from an ENCODE rE2G `element gene links` BED, by header name. The file
+#: carries a `#chr`-prefixed header line, nineteen columns, with the model's own features between the
+#: identity and the score; only the identity and the score are read.
+PREDICTION_COLUMNS = ("#chr", "start", "end", "TargetGene", "CellType", "Score")
+
+
+def _overlaps(a_start: int, a_end: int, b_start: int, b_end: int) -> bool:
+    """The pipeline's own overlap test, which is what JOIN_RULE['overlap'] names.
+
+    `combineSingleExptPred` puts both sides' raw BED numbers into `IRanges(start, end)` and calls
+    `findOverlaps`, so the comparison is inclusive on both ends: the intervals meet when neither starts
+    after the other finishes. Reproduced here rather than replaced by a half-open test, because the
+    difference is one base at each boundary and the point is to join as the benchmark joined.
+    """
+    return a_start <= b_end and b_start <= a_end
+
+
+def join_predictions(
+    pairs: list[crispri.Pair],
+    path: Any,
+    cell: str,
+    aggregate: str = "sum",
+) -> tuple[dict[int, float], int]:
+    """Scores for the pairs of one cell type, from one rE2G prediction file, by the registered rule.
+
+    Returns the mapping of index in `pairs` to aggregated score and the number of overlapping prediction
+    rows it was built from. The mapping holds only the pairs that joined: a pair absent from it took no
+    prediction and is the caller's to fill with 0, the benchmark's own fill rule. `aggregate` is "sum"
+    (the pipeline's documented default, and what the gate is judged on) or "max" (the registered
+    sensitivity).
+    """
+    import gzip
+
+    if aggregate not in ("sum", "max"):
+        raise ValueError(f"aggregate must be sum or max, not {aggregate!r}")
+    # (chrom, gene) -> the pairs of this cell type there, so each prediction row costs one dict lookup
+    index: dict[tuple[str, str], list[int]] = {}
+    for i, p in enumerate(pairs):
+        if p.cell == cell:
+            index.setdefault((p.chrom, p.gene), []).append(i)
+    out: dict[int, float] = {}
+    hits = 0
+    with gzip.open(path, "rt") as fh:
+        header = fh.readline().rstrip("\n").split("\t")
+        col = {name: header.index(name) for name in PREDICTION_COLUMNS}
+        c_chr, c_start, c_end = col["#chr"], col["start"], col["end"]
+        c_gene, c_score = col["TargetGene"], col["Score"]
+        width = len(header)
+        for line in fh:
+            row = line.rstrip("\n").split("\t")
+            if len(row) != width:
+                continue
+            candidates = index.get((row[c_chr], row[c_gene]))
+            if not candidates:
+                continue
+            start, end = int(row[c_start]), int(row[c_end])
+            score = float(row[c_score])
+            for i in candidates:
+                p = pairs[i]
+                if not _overlaps(p.start, p.end, start, end):
+                    continue
+                hits += 1
+                if i not in out:
+                    out[i] = score
+                elif aggregate == "sum":
+                    out[i] += score
+                else:
+                    out[i] = max(out[i], score)
+    return out, hits
+
+
+# --- the second registration: like-for-like, written before anything was computed -------------------
+
+#: A separate, like-for-like paired comparison, registered in full before any figure of it was computed.
+#: The first comparison's activity term reads H3K27ac, which the benchmark's own positive selection is
+#: total on, while the comparator's published held-out model reads DNase only. This one matches OUR
+#: feature set to the comparator's input instead -- `dnase + distance + deletion` against ENCODE-rE2G --
+#: so that the shared input is DNase in both and the selection-correlated input is in neither. Nothing
+#: of the comparator is refitted, reweighted or adjusted: the like-for-like is achieved by changing our
+#: features, never theirs.
+SECOND_REGISTRATION = {
+    "claim": (
+        "On the Gschwind et al. 2026 held-out CRISPR benchmark, the frozen 'dnase + distance + "
+        "deletion' model ranks regulated pairs differently from ENCODE-rE2G when both are scored on "
+        "the identical pairs and both read DNase rather than H3K27ac"
+    ),
+    "why_it_exists": (
+        "all 190 held-out positives carry H3K27ac at the tested element and 1,438 non-regulated pairs "
+        "do not, so an H3K27ac-reading model is handed a separation by the benchmark's positive "
+        "selection that ENCODE-rE2G's DNase-only held-out model cannot use. This comparison removes "
+        "H3K27ac from our side. It is the comparison that may be cited about ENCODE-rE2G; the H3K27ac "
+        "one is reported with its qualifiers and never cited alone"
+    ),
+    "models": {
+        "ours": "crispri.DNASE_FEATURES['dnase + distance + deletion'] (log_distance, log_dnase, "
+        "dnase_over_distance, top_target, deletion_drop), weights fitted on the covered training pairs "
+        "and frozen before the held-out pairs are scored",
+        "baseline_for_decomposition": "crispri.DNASE_FEATURES['dnase + distance']",
+        "comparator": "the same reconstructed ENCODE-rE2G per-pair scores as the first comparison, "
+        "unchanged: same five portal files, same join rule, same fill convention. Nothing of the "
+        "comparator is refitted, reweighted or adjusted",
+    },
+    "endpoint": ENDPOINT,
+    "population": (
+        "primary and only registered population: the 1,918 held-out K562 pairs, where the deletion "
+        "feature is that cell line's own. The pooled population is reported as descriptive context, "
+        "with the same unavailable-feature refusal for HCT116, Jurkat and WTC11"
+    ),
+    "gate": "the same gate, already passed: the comparator scores reproduce the published pooled "
+    f"weighted AUPRC {GATE_TARGET:.4f} within {GATE_TOLERANCE}. The comparator is not re-derived, so "
+    "the gate is not re-run; its verdict carries over because the scores are identical",
+    "statistic": STATISTIC,
+    "reading": {
+        "lower_bound_above_zero": READS_BETTER,
+        "interval_covers_zero": NO_DIFFERENCE,
+        "upper_bound_below_zero": READS_WORSE,
+        "no_other_wording": "the same three strings, chosen by `reading()` and nothing else",
+    },
+    "prior_exposure": {
+        "stated_because_it_is_real": (
+            "unpaired figures for this variant already exist in the committed "
+            "crispri_published.json post_hoc_positive_filter.dnase_only_diagnostic and have been seen, "
+            "so this registration is NOT blind. It is a pre-specification of a paired statistic that "
+            "does not exist yet, not a first look at the variant"
+        ),
+        "heldout_pooled_weighted_already_seen": {
+            "dnase + distance": 0.4757,
+            "dnase + distance + deletion": 0.6393,
+            "deletion_gain": {"gain": 0.1636, "ci95": [0.1015, 0.2368], "resamples": 200},
+            "against_encode_re2g": "the file already carries the phrase 'above the published "
+            "interval', unpaired, against the published 0.5562",
+        },
+        "heldout_k562_already_seen": {
+            "note": "the coordinator's brief said no K562 figure exists for this variant; one does, and "
+            "understating the exposure would be wrong. It is not the registered quantity: it covers "
+            "1,744 covered pairs rather than all 1,918, is unweighted, and uses the average-precision "
+            "estimator rather than the benchmark's",
+            "pairs": 1744,
+            "positives": 114,
+            "dnase + distance": 0.5021,
+            "dnase + distance + deletion": 0.6813,
+            "deletion_gain_gain": 0.1792,
+        },
+        "what_does_not_exist": (
+            "no paired delta against ENCODE-rE2G for this variant, in any population; and no weighted "
+            "benchmark-estimator figure on all 1,918 K562 pairs. Those are what this registration fixes"
+        ),
+        "the_old_figures_are_exposure_not_findings": (
+            "the 200-resample intervals above are the old coarse ones. Everything reported under this "
+            f"registration is recomputed at {DRAWS} draws; the figures above are never quoted as "
+            "results of it"
+        ),
+    },
+    "falsifier": (
+        "if the K562 interval covers 0 or lies below it, README may not say the deletion model ranks "
+        "better than ENCODE-rE2G at all, because this is the like-for-like comparison and the H3K27ac "
+        "one may not be cited alone"
+    ),
+    "independence_and_exposure": INDEPENDENCE,
+    "also_true_of_this_comparison": (
+        "DNase remains a shared input, read for both models from the benchmark's own table for ours and "
+        "from the ENCODE portal predictions for theirs; the reconstruction still falls "
+        f"{GATE_TOLERANCE} or less short of the published figure, and the actual shortfall is reported "
+        "with the result; and this is still a reused benchmark and a comparison of two frozen models, "
+        "not fresh validation"
+    ),
+}

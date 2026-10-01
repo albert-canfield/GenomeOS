@@ -288,3 +288,142 @@ def test_the_blocker_does_not_claim_the_k562_only_file_must_fail_the_gate():
     text = re2g.BLOCKER["the_pooled_gate_needs_all_five_cell_types"]
     assert "missed by far more than" not in text
     assert "whatever either model does" not in text
+
+
+# --- the join, on synthetic prediction files ---------------------------------------------------------
+
+
+def _prediction_file(tmp_path, rows: list[tuple[str, int, int, str, str, float]]):
+    """A minimal ENCODE rE2G `element gene links` file: the real header, only the read columns filled."""
+    import gzip
+
+    header = [
+        "#chr",
+        "start",
+        "end",
+        "name",
+        "class",
+        "TargetGene",
+        "TargetGeneEnsemblID",
+        "TargetGeneTSS",
+        "isSelfPromoter",
+        "CellType",
+        "distanceToTSS.Feature",
+        "normalizedDNase_prom.Feature",
+        "3DContact.Feature",
+        "ABC.Score.Feature",
+        "numCandidateEnhGene.Feature",
+        "numTSSEnhGene.Feature",
+        "sumNearbyEnhancers.Feature",
+        "ubiquitousExpressedGene.Feature",
+        "Score",
+    ]
+    path = tmp_path / "pred.bed.gz"
+    with gzip.open(path, "wt") as fh:
+        fh.write("\t".join(header) + "\n")
+        for chrom, start, end, gene, cell, score in rows:
+            row = [""] * len(header)
+            row[0], row[1], row[2] = chrom, str(start), str(end)
+            row[5], row[9], row[18] = gene, cell, str(score)
+            fh.write("\t".join(row) + "\n")
+    return path
+
+
+def test_the_overlap_test_is_the_pipelines_inclusive_one():
+    assert re2g._overlaps(100, 200, 200, 300) is True  # touching at one base
+    assert re2g._overlaps(100, 200, 201, 300) is False
+    assert re2g._overlaps(100, 200, 50, 100) is True
+    assert re2g._overlaps(100, 200, 50, 99) is False
+    assert re2g._overlaps(100, 200, 120, 130) is True  # contained
+
+
+def test_a_pair_joins_only_its_own_gene_and_its_own_cell_type(tmp_path):
+    pairs = [pair("chr1", 1000, True)]
+    pairs[0].gene = "GENE"
+    rows = [
+        ("chr1", 1000, 1500, "GENE", "K562", 0.9),
+        ("chr1", 1000, 1500, "OTHER", "K562", 0.8),  # wrong gene
+        ("chr2", 1000, 1500, "GENE", "K562", 0.7),  # wrong chromosome
+    ]
+    got, hits = re2g.join_predictions(pairs, _prediction_file(tmp_path, rows), "K562")
+    assert got == {0: 0.9}
+    assert hits == 1
+
+
+def test_a_pair_of_another_cell_type_is_not_served_by_this_file(tmp_path):
+    pairs = [pair("chr1", 1000, True)]
+    pairs[0].gene = "GENE"
+    pairs[0].cell = "WTC11"
+    rows = [("chr1", 1000, 1500, "GENE", "K562", 0.9)]
+    got, hits = re2g.join_predictions(pairs, _prediction_file(tmp_path, rows), "K562")
+    assert got == {} and hits == 0
+
+
+def test_several_overlapping_predictions_are_summed_by_default_and_maxed_on_request(tmp_path):
+    pairs = [pair("chr1", 1000, True)]
+    pairs[0].gene = "GENE"
+    rows = [
+        ("chr1", 1000, 1100, "GENE", "K562", 0.3),
+        ("chr1", 1200, 1400, "GENE", "K562", 0.4),
+    ]
+    path = _prediction_file(tmp_path, rows)
+    summed, hits = re2g.join_predictions(pairs, path, "K562", aggregate="sum")
+    assert summed[0] == pytest.approx(0.7)
+    assert hits == 2
+    maxed, _ = re2g.join_predictions(pairs, path, "K562", aggregate="max")
+    assert maxed[0] == pytest.approx(0.4)
+
+
+def test_an_unpredicted_pair_is_absent_from_the_mapping_so_the_caller_fills_it_with_zero(tmp_path):
+    pairs = [pair("chr1", 1000, True), pair("chr1", 90000, False)]
+    for p in pairs:
+        p.gene = "GENE"
+    rows = [("chr1", 1000, 1500, "GENE", "K562", 0.9)]
+    got, _ = re2g.join_predictions(pairs, _prediction_file(tmp_path, rows), "K562")
+    assert 0 in got and 1 not in got
+
+
+def test_an_unknown_aggregate_function_is_refused_rather_than_guessed(tmp_path):
+    pairs = [pair("chr1", 1000, True)]
+    path = _prediction_file(tmp_path, [("chr1", 1000, 1500, "GENE", "K562", 0.9)])
+    with pytest.raises(ValueError, match="sum or max"):
+        re2g.join_predictions(pairs, path, "K562", aggregate="mean")
+
+
+# --- the second registration ------------------------------------------------------------------------
+
+
+def test_the_second_registration_states_its_prior_exposure_rather_than_claiming_blindness():
+    second = re2g.SECOND_REGISTRATION
+    exposure = second["prior_exposure"]
+    assert "NOT blind" in exposure["stated_because_it_is_real"]
+    seen = exposure["heldout_pooled_weighted_already_seen"]
+    assert seen["dnase + distance"] == 0.4757
+    assert seen["dnase + distance + deletion"] == 0.6393
+    assert exposure["heldout_k562_already_seen"]["pairs"] == 1744
+
+
+def test_the_second_registration_reuses_the_three_registered_readings_unchanged():
+    reading = re2g.SECOND_REGISTRATION["reading"]
+    assert reading["lower_bound_above_zero"] == re2g.READS_BETTER
+    assert reading["interval_covers_zero"] == re2g.NO_DIFFERENCE
+    assert reading["upper_bound_below_zero"] == re2g.READS_WORSE
+
+
+def test_the_second_registration_changes_our_features_and_never_the_comparators():
+    models = re2g.SECOND_REGISTRATION["models"]
+    assert "DNASE_FEATURES" in models["ours"]
+    assert "unchanged" in models["comparator"]
+    assert (
+        "never theirs" in re2g.SECOND_REGISTRATION["why_it_exists"]
+        or "Nothing of the comparator" in (models["comparator"])
+    )
+
+
+def test_the_second_registration_names_the_k562_pairs_as_its_only_registered_population():
+    assert "1,918 held-out K562 pairs" in re2g.SECOND_REGISTRATION["population"]
+    assert "descriptive" in re2g.SECOND_REGISTRATION["population"]
+
+
+def test_the_second_registrations_falsifier_forbids_citing_the_h3k27ac_comparison_alone():
+    assert "may not be cited alone" in re2g.SECOND_REGISTRATION["falsifier"]
