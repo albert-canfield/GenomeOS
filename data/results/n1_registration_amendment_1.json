@@ -1,0 +1,277 @@
+{
+  "result": "n1_registration_amendment_1",
+  "date": "2026-10-01",
+  "status": "amendment registered before any measurement; not run",
+  "lane": "lane-n1",
+  "amends": {
+    "result": "n1_registration",
+    "commit": "f9a9130",
+    "code_commit": "b359867",
+    "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883",
+    "unchanged": "the original registration and its code stay as committed; this amendment adds"
+  },
+  "framing": "N1 is an exploratory comparison of two prediction arms against an operational response label, |T| >= 3. T = X * sqrt(num_cells_filtered) is a proposed statistic, not a calibrated test. Passing the gate does not validate per-gene biological responses.",
+  "changes": [
+    {
+      "item": 1,
+      "title": "AUROC of a constant predictor",
+      "was": "auroc() returned (None, 'no_score_variation') when an arm's scores did not vary, so such a factor left the paired estimate as undefined",
+      "now": "auroc_v2: the Mann-Whitney probability that a responder outscores a non-responder, ties counting half; a constant score gives 0.5; undefined only when a class is empty",
+      "code": "auroc_v2, used by stratified_auroc and factor_result_v2",
+      "tests": [
+        "test_auroc_v2_counts_ties_half_and_a_constant_score_gives_half",
+        "test_the_analysis_after_the_stop_once_a_documented_amendment_supports_it"
+      ]
+    },
+    {
+      "item": 2,
+      "title": "Knockdown units",
+      "finding": "unsupported",
+      "was": "eligibility required num_cells_filtered * control_expr >= 10, read as expected target UMIs with a Poisson argument, and checked pct_expr = fold_expr - 1 as the fields' meaning",
+      "now": "the knockdown rule is marked unsupported: no producer documentation or public 2022 code defines control_expr, fold_expr or pct_expr, or the units of control_expr. num_cells_filtered * control_expr is not established as an expected UMI count, so the Poisson reading is withdrawn, and pct_expr = fold_expr - 1 would show algebraic consistency only. ELIGIBILITY_SUPPORTED = False and run_v2 stops before reading any candidate row. No threshold replaces the rule.",
+      "evidence": [
+        {
+          "source": "Replogle et al. 2022, STAR Methods, 'Leverage scores for quantifying perturbation penetrance and variability'",
+          "link": "https://europepmc.org/article/PMC/PMC9380471",
+          "quote": "Knockdown was computed as the ratio of mean (unnormalized) expression of the target gene within perturbed cells vs. that in cells with non-targeting sgRNAs.",
+          "establishes": "knockdown as a ratio of mean unnormalized expression, perturbed over non-targeting",
+          "does_not_establish": "that fold_expr or control_expr hold these quantities; whether 'unnormalized' means raw or depth-adjusted counts; all or core controls; pooled or per gemgroup; filtered or unfiltered cells"
+        },
+        {
+          "source": "Replogle et al. 2022, STAR Methods, 'Filtering and internal normalization of gene expression measurements'",
+          "link": "https://europepmc.org/article/PMC/PMC9380471",
+          "quote": "We first computed scale factors to adjust for variable sequencing depths across gemgroups: we examined all core control cells (which make up ~4% of all cells), computed factors that equalized the mean UMI counts within these cells across gemgroups, and then applied these factors to all cells in the gemgroup to produce adjusted UMI counts.",
+          "establishes": "depth-adjusted (non-integer) UMI counts exist in the pipeline, besides raw counts from reads downsampled per gemgroup",
+          "does_not_establish": "which of them the knockdown fields use"
+        },
+        {
+          "source": "Replogle et al. 2022, Figure S3 legend",
+          "link": "https://europepmc.org/article/PMC/PMC9380471",
+          "quote": "The fractional change in expression is defined as the expression in the targeted cells minus the expression in non-targeting cells, relative to the expression in the non-targeting cell population (-1 implies 100% knockdown).",
+          "establishes": "a fractional change, (perturbed - control) / control, used in the paper's figures",
+          "does_not_establish": "that pct_expr is this quantity; pct_expr = fold_expr - 1 would be algebraic consistency only, not meaning or units"
+        },
+        {
+          "source": "Figshare+ 20029387 description",
+          "link": "https://doi.org/10.25452/figshare.plus.20029387.v1",
+          "quote": "In the anndata format, the .var annotation details genes while the .obs annotation details single-cells/pseudobulk populations.",
+          "establishes": "nothing about individual .obs fields: no field is defined",
+          "does_not_establish": "any field's meaning or units"
+        },
+        {
+          "source": "Norman et al. 2019 producer code (the predecessor codebase the 2022 paper cites), GI_generate_populations.ipynb, cell 27",
+          "link": "https://github.com/thomasmaxwellnorman/Perturbseq_GI/blob/3b25109aeb9c0c2026bd70abd50304a0ad4e5395/GI_generate_populations.ipynb",
+          "quote": "'control_first_expr': lambda meta, expr: expr.loc[meta['first_id'], 'mean'] ... mean_pop.cells['fold_first_expr'] = mean_pop.cells['first_expr']/mean_pop.cells['control_first_expr']",
+          "establishes": "in the 2019 CRISPRa data, a control expression taken as the control population's per-gene 'mean' and a fold as the perturbed mean over it, with fields named in the same pattern",
+          "does_not_establish": "the 2022 computation: that code is not public, the 2022 pipeline added per-gemgroup depth adjustment, and pct_expr has no 2019 counterpart"
+        },
+        {
+          "source": "Norman et al. 2019 producer code, perturbseq/cell_population.py",
+          "link": "https://github.com/thomasmaxwellnorman/Perturbseq_GI/blob/3b25109aeb9c0c2026bd70abd50304a0ad4e5395/perturbseq/cell_population.py",
+          "quote": "def metaapply(self, function_dict, axis=1, normalized=False, **kwargs): if not normalized: df = self.matrix ... gene_list['mean'] = matrix.mean()",
+          "establishes": "in 2019, both the perturbed and the control means come from the unnormalized matrix, pooled over all control cells",
+          "does_not_establish": "the same for the 2022 file"
+        }
+      ],
+      "what_would_resolve_it": [
+        "the 2022 producer code, or a statement by the authors defining the three fields and their units",
+        "a separately reviewed amendment deriving knockdown from documented quantities (for example the raw pseudobulk's target column against its non-targeting rows), with a threshold that documentation supports"
+      ],
+      "tests": [
+        "test_run_v2_stops_before_the_knockdown_rule"
+      ]
+    },
+    {
+      "item": 3,
+      "title": "The gate's claim, narrowed",
+      "framing": "N1 is an exploratory comparison of two prediction arms against an operational response label, |T| >= 3. T = X * sqrt(num_cells_filtered) is a proposed statistic, not a calibrated test. Passing the gate does not validate per-gene biological responses.",
+      "what_the_gate_cannot_establish": [
+        "that cells are independent",
+        "the uncertainty in the control mean and sd that define each z-score",
+        "calibration across cell counts: the gate sees only the non-targeting rows' own counts",
+        "calibration of pooled rows",
+        "the variance of perturbed cells"
+      ],
+      "correction": "The registration of f9a9130 gave as a reason for using all 585 non-targeting rows that the 514 core controls define the normalization's control mean and sd and would flatter the null. The 585 include those 514, so using them does not avoid that role; it only adds the 71 guides outside the core set."
+    },
+    {
+      "item": 4,
+      "title": "Expression matching",
+      "departure": "The proposal (docs/ROADMAP.md, N1 row of 2026-10-01) listed control-based expression matching among what step 2 freezes. The registration of f9a9130 used control-expression deciles only in the gate, not in the AUROC comparison, so the matching was not implemented there.",
+      "now": "the primary per-factor AUROC compares responders only with non-responders of the same control-expression decile (the gate's deciles over the calibrated universe genes), each stratum weighted by its responder x non-responder pairs (stratified_auroc). The unstratified auroc_v2 is reported beside it with no criterion. The estimate, floor, bootstrap and the two criteria are those of f9a9130, applied to the stratified differences.",
+      "runs_under_this_amendment": false,
+      "why_not_run": "run_v2 stops before eligibility (item 2); the comparison is frozen and tested so that a documented amendment changes one constant, not the analysis",
+      "tests": [
+        "test_stratified_auroc_compares_within_expression_strata",
+        "test_the_analysis_after_the_stop_once_a_documented_amendment_supports_it"
+      ]
+    },
+    {
+      "item": 5,
+      "title": "Execution matches the freeze",
+      "now": [
+        "scripts/n1_run_v2.py checks, before opening any measurement, the sha256 of the original registration, of the analysis module and of itself, and CONSTANTS_V2, against this amendment, and refuses on any difference (freeze_problems)",
+        "H5adPseudobulkV2 decodes X at the selected columns only, one row at a time (X[i, sorted columns]); the operating system may still read surrounding bytes from disk",
+        "scripts/n1_run.py refuses with a pointer to scripts/n1_run_v2.py (one added statement)"
+      ],
+      "correction": "the registration of f9a9130 said the gate reads X 'universe genes only'; its reader (H5adPseudobulk) decoded whole rows of 8,248 genes and kept the 860, so that description was inaccurate for it",
+      "tests": [
+        "test_freeze_problems_refuse_any_difference",
+        "test_the_v2_run_script_checks_the_freeze_first_then_runs_once",
+        "test_reader_v2_decodes_only_the_selected_columns",
+        "test_the_original_run_script_refuses_and_points_to_v2"
+      ]
+    }
+  ],
+  "unchanged": [
+    "the shared universe (860 genes), the candidates (56 factors, 59 rows, 39 units) and the ledger",
+    "both arms' scores; their positive counts differ by design (for example CGGBP1, 40 attribution and 598 proximity genes) and are not equalised",
+    "the operational label |T| >= 3, the gate's rows and pass rule, the multi-row rule, aliases, families, the floor of 30, the cluster bootstrap and the two separate criteria"
+  ],
+  "run_v2": {
+    "needs": "the owner's separate authorisation, given to scripts/n1_run_v2.py --authorisation",
+    "reads_in_order": [
+      "the freeze check: no data file is opened",
+      "both files' md5 against Figshare, and their sha256",
+      "both files' identities: obs/gene_transcript and var/gene_id",
+      "the gate: normalized and raw X at the 585 non-targeting rows, decoded at the 860 universe columns only, and obs/num_cells_filtered at those rows"
+    ],
+    "then": "stops with status eligibility_unsupported; no candidate row, knockdown field or response is read",
+    "result": "data/results/n1_result_amendment_1.json, written once"
+  },
+  "frozen_code": {
+    "module": {
+      "path": "genomeos/attribution/n1_perturb_response.py",
+      "sha256": "0ea47ad96b4f179eafa60702be27b73c1135913fd8523cf0d1a06b6c048b0048",
+      "last_commit": "5d1710a"
+    },
+    "runner": {
+      "path": "scripts/n1_run_v2.py",
+      "sha256": "b33ff4f3e07552e4b1a8e407b58460493da79db2538a5009e54b2845b2500667",
+      "last_commit": "5d1710a"
+    },
+    "original_runner": {
+      "path": "scripts/n1_run.py",
+      "sha256": "962a8f8c941924a5d7539a914819e356f61d44fc1835f21e124dc34db1c375cf",
+      "last_commit": "5d1710a"
+    },
+    "tests": {
+      "path": "tests/test_n1_perturb_response.py",
+      "sha256": "5008cd0fde4c5f1bc3e44f3142cf30beee0151450b9066e584f753fcd331bf60",
+      "last_commit": "5d1710a"
+    },
+    "register_amendment": {
+      "path": "scripts/n1_register_amendment_1.py",
+      "sha256": "d2458cbb76d1d9105d61740c8918c0fa3eafa5da1fdae8813157928fdda2cafe",
+      "last_commit": "5d1710a"
+    }
+  },
+  "constants": {
+    "responds_t": 3.0,
+    "nominal_rate": 0.0026997960632601913,
+    "gate_max_ratio": 1.5,
+    "gate_strata": 10,
+    "gate_min_expected": 20.0,
+    "kd_max_fold": 0.4,
+    "kd_min_expected_umi": 10.0,
+    "min_cells": 25,
+    "min_positives": 10,
+    "neighbour_bp": 10000,
+    "floor_factors": 30,
+    "min_gain": 0.02,
+    "min_clusters": 10,
+    "bootstrap_b": 10000,
+    "bootstrap_seed": 20261001,
+    "lower_index": 250,
+    "upper_index": 9749,
+    "semantics_rel_tol": 0.0001,
+    "amendment": 1,
+    "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+    "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+    "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+    "eligibility_supported": false,
+    "reader": "H5adPseudobulkV2: X decoded at the selected columns only"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GenomeOS n1_registration (the registration amended)",
+        "version": "f9a9130"
+      },
+      {
+        "accession": "Replogle et al. 2022, Cell, STAR Methods and Figure S3 (documentation only)",
+        "version": "doi 10.1016/j.cell.2022.05.013, PMC9380471"
+      },
+      {
+        "accession": "Figshare+ 20029387 description (documentation only)",
+        "version": "v1"
+      },
+      {
+        "accession": "Perturbseq_GI (Norman et al. 2019) producer code",
+        "version": "3b25109"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/n1_registration.json",
+        "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883",
+        "bytes": 1084039,
+        "partition": null
+      },
+      {
+        "path": "genomeos/attribution/n1_perturb_response.py",
+        "sha256": "0ea47ad96b4f179eafa60702be27b73c1135913fd8523cf0d1a06b6c048b0048",
+        "bytes": 51027,
+        "partition": null
+      },
+      {
+        "path": "scripts/n1_run_v2.py",
+        "sha256": "b33ff4f3e07552e4b1a8e407b58460493da79db2538a5009e54b2845b2500667",
+        "bytes": 5072,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: an amendment; no coordinate is read",
+    "coordinates": "n/a: an amendment; no coordinate is read",
+    "parameters": {
+      "responds_t": 3.0,
+      "nominal_rate": 0.0026997960632601913,
+      "gate_max_ratio": 1.5,
+      "gate_strata": 10,
+      "gate_min_expected": 20.0,
+      "kd_max_fold": 0.4,
+      "kd_min_expected_umi": 10.0,
+      "min_cells": 25,
+      "min_positives": 10,
+      "neighbour_bp": 10000,
+      "floor_factors": 30,
+      "min_gain": 0.02,
+      "min_clusters": 10,
+      "bootstrap_b": 10000,
+      "bootstrap_seed": 20261001,
+      "lower_index": 250,
+      "upper_index": 9749,
+      "semantics_rel_tol": 0.0001,
+      "amendment": 1,
+      "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+      "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+      "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+      "eligibility_supported": false,
+      "reader": "H5adPseudobulkV2: X decoded at the selected columns only"
+    },
+    "exclusions": [],
+    "partitions": "n/a: an amendment registered before any measurement; nothing is evaluated",
+    "code": {
+      "git_sha": "5d1710a672b06c33372a61fd40a03a5cf8cfd3d9",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/n1_register_amendment_1.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
