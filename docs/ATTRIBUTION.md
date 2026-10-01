@@ -13224,6 +13224,47 @@ as summarised; a legacy row never acquires a count or aggregate status; and targ
 checked on a case whose emitted values average zero while another track carries the largest rise. Reducing
 the summary back to one value per cell fails four of them.
 
+### Correction: the judge never read the collapsed per-cell value, and this fix implies no re-judging (2026-10-01)
+
+The section above justifies the per-cell fix partly by a dependency that does not exist. It says the
+versioned judge "rules on direction only in the stated cell, and that stated-cell value was one arbitrary
+track". **That is withdrawn.** Checked in the code:
+
+- `genomeos/attribution/correctness.py` contains no reference to `by_cell` at all.
+- `compiled_claims()` takes the gene, the action and the cell from the compiled rule's own fields
+  (`gene, cell = f["gene"], f["cell"]`), not from any per-cell prediction value.
+- `_direction_v2()`, which v3 also uses, compares that claim against **experimental observations** in the
+  stated cell. Its inputs are the claim and the observations, never the model's per-cell numbers.
+- `predict_target()` selects the strongest predicted effect and names its tissue, and that tissue becomes the
+  claim's stated context. So the winning track's cell and the stated cell are **the same cell** in this path,
+  not two that could disagree.
+
+The earlier trace's "cell mismatch" was between a claim's cell and the cell the screen measured, which is a
+mismatch between claim context and experiment. Treating it as a mismatch between the collapsed value and the
+stated cell conflated the two.
+
+**Consequences.** No judge registration follows from this fix, and nothing is re-judged. The current judges
+and every committed result stand unchanged.
+
+**What the fix is worth, stated precisely.** Future stored answers preserve more evidence, and an explicit
+reader can identify a legacy representation. **Existing consumers have not gained that protection
+automatically**, because `by_cell` keeps its old meaning and none of them was switched. It prevents silent
+information loss from here on; it corrects nothing already stored or already judged.
+
+**If an abstention policy is ever built on track disagreement**, the owner's conditions are recorded now,
+before any such work begins:
+
+- it belongs **before a claim is issued**, as a prediction or abstention policy, not in the evaluator. An
+  evaluator that stopped testing an already-issued claim because the model was uncertain would remove the
+  difficult claims from evaluation and make reported performance misleading;
+- it must report **coverage beside performance**, so what was skipped is visible;
+- **legacy disagreement is unknown**, never absent: the stored answers cannot say whether a cell's tracks
+  disagreed;
+- it must distinguish a **numerical sign difference** from a **materially conflicting effect**. With the
+  track identities unavailable, disagreement alone does not establish biological inconsistency.
+
+Whether a mean, or any summary, is the right biological predictor remains a separate and open question.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
