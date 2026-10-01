@@ -87,20 +87,24 @@ def _interval(gain: float, clusters: int = 23, requested: int = 2000, kept: int 
     }
 
 
+REFUSED_KEYS = tuple(f"heldout_{c}" for c in v2.WITHOUT_A_DELETION_VALUE)
+
+
 def _result() -> dict:
     """A result shaped like the real one, with one interval per BEFORE row."""
     out: dict = {}
-    for i, (_key, path, _pop, before) in enumerate(v2.BEFORE):
+    for i, (key, path, _pop, before) in enumerate(v2.BEFORE):
         node = out
         keys = path.split("/")
         for k in keys[:-1]:
             node = node.setdefault(k, {})
         gain = round(before["gain"] + 0.001 * i, 4)
-        node[keys[-1]] = (
-            crispri.gain_unavailable()
-            if any(c in path for c in v2.WITHOUT_A_DELETION_VALUE)
-            else _interval(gain)
-        )
+        if key in REFUSED_KEYS:
+            node[keys[-1]] = crispri.gain_unavailable()
+        elif key == "second_cell_type_hct116_carried":
+            node[keys[-1]] = {**_interval(gain, clusters=5), "ci95": None, "withheld": "carried"}
+        else:
+            node[keys[-1]] = _interval(gain)
     return out
 
 
@@ -125,6 +129,7 @@ def test_the_two_held_out_populations_are_named_apart() -> None:
 def test_a_refused_gain_is_reported_as_refused_and_nothing_else() -> None:
     block = v2.beside_the_old_result(_result())
     assert block["gains_now_refused"] == ["heldout_HCT116", "heldout_Jurkat", "heldout_WTC11"]
+    assert block["intervals_now_withheld"] == ["second_cell_type_hct116_carried"]
     for key in block["gains_now_refused"]:
         row = block["rows"][key]
         assert row["this_run"]["gain"] is None
@@ -286,14 +291,30 @@ def test_a_cycle_does_not_stop_the_closure(tmp_path: Path) -> None:
     assert v2.import_closure("entry.py", tmp_path) == ["entry.py", "one.py", "two.py"]
 
 
-def test_the_block_sets_the_uncommitted_files_against_the_closure() -> None:
-    block = v2.closure_block()
-    assert block["entry"] == v2.ENTRY
-    assert block["count"] == len(block["files"]) > 1
-    assert block["uncommitted_code_on_the_closure"] == [], (
-        "an uncommitted file in this shared checkout is on this script's import closure: the result "
-        f"cannot claim a clean rebuild until it is committed: {block['uncommitted_code_on_the_closure']}"
+def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path() -> None:
+    block = v2.code_cleanliness()
+    assert block["counting_path_count"] == len(block["counting_path"]) > 1
+    assert v2.ENTRY in block["counting_path"]
+    assert block["own_code_is_committed"] is True, (
+        "this lane's own code is uncommitted, so no commit reproduces a result written now: "
+        f"{block['own_uncommitted_code']}"
     )
+    assert block["foreign_uncommitted_code_on_the_counting_path"] == [], (
+        "another lane's uncommitted file is on this script's counting path, so the result could not "
+        "be rebuilt from any commit: "
+        f"{block['foreign_uncommitted_code_on_the_counting_path']}"
+    )
+    assert set(block["own_uncommitted_code"]) <= v2.OWN_CODE
+    assert not set(block["foreign_uncommitted_code"]) & v2.OWN_CODE
+
+
+def test_the_two_fields_the_rebuild_requires_are_present_under_their_exact_names() -> None:
+    """scripts/manifest_rebuild.py MUST_HOLD matches these names at any depth, on both sides."""
+    block = v2.code_cleanliness()
+    for field in ("own_code_is_committed", "foreign_uncommitted_code_on_the_counting_path"):
+        assert field in block
+    for field in ("dirty", "foreign_uncommitted_code", "git_sha"):
+        assert field in block
 
 
 # --- the manifest ---------------------------------------------------------------------------------
@@ -303,3 +324,84 @@ def test_the_manifest_says_why_the_rebuild_exists_and_keeps_the_old_file() -> No
     assert "2,000" in v2.WHY_V2
     assert "kept unchanged" in v2.WHY_V2
     assert v2.OLD in v2.WHY_V2
+
+
+# --- the carried HCT116 arm -----------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def carried() -> dict:
+    return v2.carried_hct116_arm()
+
+
+def test_the_carried_arm_says_it_is_carried_and_where_from(carried: dict) -> None:
+    assert carried["source"] == {
+        "file": v2.OLD,
+        "git_sha": v2.CARRIED_SHA,
+        "date": v2.CARRIED_DATE,
+        "rerun": False,
+    }
+    assert "not rerun" in carried["carried_not_rerun"]
+    assert v2.CARRIED_SHA in carried["carried_not_rerun"]
+
+
+def test_the_carried_arm_keeps_its_point_estimate(carried: dict, old: dict) -> None:
+    was = old[v2.CARRIED_KEY]["deletion_gain"]
+    assert carried["deletion_gain"]["gain"] == was["gain"] == 0.0222
+    assert carried["as_carried"]["models"] == old[v2.CARRIED_KEY]["models"]
+    assert carried["as_carried"]["covered_pairs"] == 363
+    assert carried["as_carried"]["regulated"] == 34
+
+
+def test_not_one_interval_survives_in_the_carried_arm(carried: dict) -> None:
+    """Every interval of the arm rests on 200 draws, and the arm itself on 5 chromosomes."""
+    found = 0
+    for node in _walk(carried):
+        if isinstance(node, dict) and "gain" in node and "ci95" in node:
+            found += 1
+            assert node["ci95"] is None, node
+            assert node["withheld"] == v2.WITHHELD_INTERVAL
+    assert found >= 4
+
+
+def test_the_arms_own_interval_says_how_few_clusters_it_had(carried: dict) -> None:
+    g = carried["deletion_gain"]
+    assert g["clusters"] == 5 < crispri.MIN_CLUSTERS_FOR_AN_INTERVAL
+    assert g["enough_clusters"] is False
+    assert g["met_minimum"] is False
+    assert "interval unreliable: 5 clusters" in g["interval_unreliable"]
+    assert g["ci95"] is None
+
+
+def test_the_spent_requests_are_named_and_not_claimed_by_this_run(carried: dict) -> None:
+    assert carried["requests"]["made_by_this_run"] == 0
+    assert carried["requests"]["delivered_in_the_carried_run"]["sent"] == 705
+    assert carried["requests"]["delivered_in_the_carried_run"]["answered"] == 705
+
+
+def test_the_carried_arm_is_read_from_git_not_from_the_working_copy() -> None:
+    """A peer editing the file on disk cannot change what this run carries."""
+    import subprocess
+
+    text = subprocess.run(
+        ["git", "-C", str(ROOT), "show", f"{v2.CARRIED_SHA}:{v2.OLD}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    assert json.loads(text)[v2.CARRIED_KEY]["deletion_gain"]["gain"] == 0.0222
+
+
+def test_the_withheld_reason_does_not_quote_the_bounds_it_withholds() -> None:
+    for bound in ("-0.0577", "0.1446", "0.2313", "0.1262"):
+        assert bound not in v2.WITHHELD_INTERVAL
+
+
+def _walk(node: object):
+    yield node
+    if isinstance(node, dict):
+        for v in node.values():
+            yield from _walk(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _walk(v)

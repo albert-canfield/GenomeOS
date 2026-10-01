@@ -33,15 +33,24 @@ The result carries two blocks this script adds for the reader:
 * `what_did_not_change`: the point AUPRCs, the bands against the published figures, the
   coverage-matched arm and the request count, each checked against the 2026-09-27 value.
 
-`result_manifest.import_closure` answers the shared checkout: several lanes hold uncommitted files
-in this working tree, so the closure of this script is computed by `import_closure` and set against
-the uncommitted code the stamp names, rather than asserted by hand.
+One block is carried rather than recomputed: `second_cell_type_hct116`, the registered second cell
+type, which rests on 705 AlphaGenome requests that were delivered on 2026-09-28. It is read from git
+at `a39073d`, marked as carried, and every interval in it is withheld, because all of them rest on
+200 draws and the arm itself on 5 chromosomes. Dropping it would read as "never measured" and could
+cost a later reader those 705 requests a second time.
+
+`result_manifest.code_cleanliness` answers the shared checkout: several lanes hold uncommitted files
+in this working tree, so the counting path of this script is computed by `import_closure` and set
+against the uncommitted code git reports, rather than asserted by hand. `own_code_is_committed` and
+`foreign_uncommitted_code_on_the_counting_path` are the two the rebuild requires to hold on both
+sides; the lists that merely describe the tree the run happened in are its environment fields.
 """
 
 from __future__ import annotations
 
 import ast
 import json
+import subprocess
 import sys
 import time
 from collections import deque
@@ -75,6 +84,34 @@ WHY_V2 = (
 #: Only the deletion gain is refused, because the two models differ there by their fitted weights
 #: alone, which is a property of the model form and not a measurement of the deletion feature.
 WITHOUT_A_DELETION_VALUE = ("HCT116", "Jurkat", "WTC11")
+
+#: The files this lane holds. Everything else uncommitted in this checkout belongs to another lane,
+#: and `code_cleanliness` reports the two apart rather than together.
+OWN_CODE = frozenset({ENTRY, "tests/test_crispri_published_v2.py"})
+
+#: The HCT116 second-cell-type arm, the one block of the 2026-09-27 file this run does not recompute.
+#: It was written by `scripts/crispri_hct116.py` on 2026-09-28 from **705 AlphaGenome requests that
+#: were actually delivered**, so it is the opposite of an unavailable stratum: saying nothing about it
+#: would read as "never measured" and could lead a later reader to buy those 705 requests again. It is
+#: carried here from git by sha, not from the working copy, so a rebuild reads the same bytes, and it
+#: is marked as carried rather than rerun. Every interval in it is withheld: all of them rest on 200
+#: draws, below `crispri.MIN_RESAMPLES`, and the arm's own gain rests on 5 chromosomes, below
+#: `crispri.MIN_CLUSTERS_FOR_AN_INTERVAL`. The point estimates stand, the intervals do not.
+CARRIED_KEY = "second_cell_type_hct116"
+CARRIED_SHA = "a39073d"
+CARRIED_DATE = "2026-09-28"
+CARRIED_WHY = (
+    f"carried from {OLD} at {CARRIED_SHA} ({CARRIED_DATE}), not rerun: this run makes 0 AlphaGenome "
+    "requests and the arm rests on 705 that were delivered then. It is kept rather than dropped "
+    "because a measured arm and a never-measured one are different outputs, and because a reader who "
+    "found nothing here could spend those 705 requests a second time"
+)
+WITHHELD_INTERVAL = (
+    f"no ci95 is reported: this interval was computed at {OLD_DRAWS} draws, below "
+    "crispri.MIN_RESAMPLES, and is carried rather than recomputed, so it is not a 95% interval this "
+    f"run can stand behind. The {OLD_DATE} bounds are quoted as that result's under "
+    "beside_the_2026_09_27_result, where they are labelled history. The point estimate stands"
+)
 
 
 # --- the import closure of this script, computed rather than listed ------------------------------
@@ -160,27 +197,109 @@ def import_closure(entry: str = ENTRY, root: Path = ROOT) -> list[str]:
     return sorted(seen)
 
 
-def closure_block(root: Path = ROOT) -> dict[str, Any]:
-    """The closure, and the uncommitted code of this shared checkout set against it.
+def code_cleanliness(root: Path = ROOT) -> dict[str, Any]:
+    """Which uncommitted code this shared checkout held, split into this lane's and other lanes', and
+    whether any of it is on the counting path. Read from git and from the imports, never asserted.
 
-    Only facts a clean rebuild reaches too are recorded here. Which files were uncommitted when this
-    ran is the run's property, not the result's, and the stamp records it under
-    `result_manifest.code.dirty_code_paths`; what is recorded here is the intersection, which is
-    empty in this checkout exactly when no uncommitted file is on the closure, and empty in a clean
-    worktree because there is nothing to intersect. A foreign file that did reach the closure would
-    therefore show up as a difference in `scripts/manifest_rebuild.py`, not pass unnoticed.
+    The field names are the convention `scripts/cell2_eligibility.py` set, so the rebuild's
+    `ENVIRONMENT_FIELDS` and `MUST_HOLD` land on the right paths: the lists that describe the tree a
+    run happened in may take their clean-worktree values, while `own_code_is_committed` and
+    `foreign_uncommitted_code_on_the_counting_path` must hold on both sides, so the exemption can
+    never excuse a result that no commit reproduces.
     """
-    closure = import_closure(root=root)
-    dirty = mf.code_revision(root).get("dirty_code_paths") or []
+    rev = mf.code_revision(root)
+    path = import_closure(root=root)
+    dirty = list(rev.get("dirty_code_paths") or [])
+    own = [p for p in dirty if p in OWN_CODE]
+    foreign = [p for p in dirty if p not in OWN_CODE]
     return {
-        "entry": ENTRY,
-        "how": "scripts/crispri_published_v2.py import_closure: the import statements parsed and "
-        "followed transitively, repository files only, sorted; not a list written by hand",
-        "files": closure,
-        "count": len(closure),
-        "uncommitted_code_at_write": "named in result_manifest.code.dirty_code_paths, which a clean "
-        "rebuild leaves empty; the intersection below is what both runs can state",
-        "uncommitted_code_on_the_closure": sorted(set(dirty) & set(closure)),
+        "git_sha": rev.get("git_sha"),
+        "dirty": rev.get("dirty"),
+        "own_uncommitted_code": own,
+        "own_code_is_committed": not own,
+        "foreign_uncommitted_code": foreign,
+        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
+        "counting_path": path,
+        "counting_path_count": len(path),
+        "counting_path_is_computed": (
+            "the transitive import closure of this script, computed from the files' import statements "
+            "at write time (import_closure); it follows scripts.* as well as the package, resolves "
+            "relative imports, and matches every path component against what its directory lists, so "
+            "a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand list"
+        ),
+        "note": (
+            "several sessions work in this one checkout. A file under foreign_uncommitted_code belongs "
+            "to another lane; this lane did not write it and did not commit it. The counting path is "
+            "the computed closure above, so a foreign file outside it cannot have entered a number "
+            "here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+        ),
+    }
+
+
+# --- the one block that is carried rather than recomputed ----------------------------------------
+
+
+def _withhold_intervals(node: Any) -> Any:
+    """The same structure with every `ci95` emptied and the reason put beside it.
+
+    A dict holding both `gain` and `ci95` is an interval, wherever it sits. The bounds are removed
+    rather than annotated, because a number in a `ci95` field is read as a 95% interval whatever is
+    written next to it; the gain itself is untouched, since the point estimate does not depend on the
+    resampling.
+    """
+    if isinstance(node, dict):
+        if "gain" in node and "ci95" in node:
+            return {
+                **{k: _withhold_intervals(v) for k, v in node.items() if k != "ci95"},
+                "ci95": None,
+                "withheld": WITHHELD_INTERVAL,
+            }
+        return {k: _withhold_intervals(v) for k, v in node.items()}
+    if isinstance(node, list):
+        return [_withhold_intervals(v) for v in node]
+    return node
+
+
+def carried_hct116_arm(root: Path = ROOT) -> dict[str, Any]:
+    """The HCT116 second-cell-type arm as `a39073d` wrote it, with every interval withheld.
+
+    Read from git by sha rather than from the working copy: the bytes are then the same in this
+    checkout and in the clean worktree a rebuild makes, whatever any lane is doing to the file on
+    disk. The arm's own gain gets its provenance from `crispri._interval_provenance`, the same helper
+    the estimators use, which records the 5 chromosomes it rests on and says why no interval follows.
+    """
+    text = subprocess.run(
+        ["git", "-C", str(root), "show", f"{CARRIED_SHA}:{OLD}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    block = json.loads(text)[CARRIED_KEY]
+    gain, clusters = block["deletion_gain"], block["chromosomes"]
+    draws = gain["resamples"]
+    out = _withhold_intervals(block)
+    out["deletion_gain"] = {
+        "gain": gain["gain"],
+        "ci95": None,
+        **crispri._interval_provenance(clusters, draws, draws),
+        "withheld": WITHHELD_INTERVAL,
+    }
+    return {
+        "carried_not_rerun": CARRIED_WHY,
+        "source": {"file": OLD, "git_sha": CARRIED_SHA, "date": CARRIED_DATE, "rerun": False},
+        "requests": {
+            "made_by_this_run": 0,
+            "delivered_in_the_carried_run": block["requests"],
+            "why_it_matters": "these are spent; nothing here needs buying again",
+        },
+        "intervals": (
+            "every interval in the carried arm is withheld: all rest on 200 draws, below "
+            f"crispri.MIN_RESAMPLES = {crispri.MIN_RESAMPLES}, and the arm's own gain rests on "
+            f"{clusters} chromosomes, below crispri.MIN_CLUSTERS_FOR_AN_INTERVAL = "
+            f"{crispri.MIN_CLUSTERS_FOR_AN_INTERVAL}. The point estimates are reported unchanged"
+        ),
+        "as_carried": out,
+        "deletion_gain": out["deletion_gain"],
     }
 
 
@@ -269,6 +388,14 @@ BEFORE: tuple[tuple[str, str, str, dict[str, Any]], ...] = (
         "the 1,744 covered K562 held-out pairs, 114 regulated, unweighted average precision, DNase "
         "only; post hoc, not registered",
         {"gain": 0.1792, "ci95": [0.1023, 0.2867], "resamples": 200},
+    ),
+    (
+        "second_cell_type_hct116_carried",
+        f"{CARRIED_KEY}/deletion_gain",
+        "the 363 covered HCT116 held-out pairs, 34 regulated, 5 chromosomes, unweighted average "
+        "precision; the registered second cell type, measured on 2026-09-28 from 705 AlphaGenome "
+        "requests that were delivered. Carried here, not rerun, and its interval withheld",
+        {"gain": 0.0222, "ci95": [-0.0577, 0.1446], "resamples": 200},
     ),
 )
 
@@ -376,7 +503,10 @@ def beside_the_old_result(result: dict[str, Any]) -> dict[str, Any]:
                 "draws_requested",
                 "draws_dropped",
                 "met_minimum",
+                "enough_clusters",
+                "interval_unreliable",
                 "unavailable",
+                "withheld",
             )
             if k in now
         }
@@ -386,6 +516,7 @@ def beside_the_old_result(result: dict[str, Any]) -> dict[str, Any]:
             "this_run": kept,
             "found_in_this_run": bool(kept),
             "gain_now_refused": bool(kept) and kept.get("gain") is None,
+            "interval_now_withheld": bool(kept) and kept.get("gain") is not None and not kept.get("ci95"),
             "gain_moved": (
                 None
                 if kept.get("gain") is None
@@ -405,6 +536,7 @@ def beside_the_old_result(result: dict[str, Any]) -> dict[str, Any]:
         f"{crispri.BOOTSTRAPS} requested draws.",
         "rows": rows,
         "gains_now_refused": sorted(k for k, v in rows.items() if v["gain_now_refused"]),
+        "intervals_now_withheld": sorted(k for k, v in rows.items() if v["interval_now_withheld"]),
         "rows_not_found_in_this_run": sorted(k for k, v in rows.items() if not v["found_in_this_run"]),
     }
 
@@ -438,7 +570,8 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair]) -> dict[
     The sources, inputs, assembly, coordinates, parameters and partitions are the same contract, read
     from `scripts/crispri_published.py` rather than copied, so the two runs cannot drift apart in
     what they claim to have read. What is added is why this run exists, what a stratum without a
-    deletion value now reports, and the import closure of this script.
+    deletion value now reports, which block is carried rather than recomputed, and the counting path
+    of this script set against the uncommitted code of a shared checkout.
     """
     m = dict(published_manifest(training, heldout))
     m["exclusions"] = [
@@ -449,15 +582,21 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair]) -> dict[
         + " report no deletion gain at all: "
         + crispri.UNAVAILABLE_GAIN
         + ". Their model AUPRCs are still reported; it is the gain that is refused",
+        f"{CARRIED_KEY} is the one block not recomputed: {CARRIED_WHY}",
+        "every interval in the carried arm is withheld, and so is any interval resting on fewer than "
+        f"{crispri.MIN_CLUSTERS_FOR_AN_INTERVAL} chromosomes: the point estimate is reported, the "
+        "interval is not",
     ]
     m["parameters"] = {
         **m.get("parameters", {}),
         "min_resamples": crispri.MIN_RESAMPLES,
-        "interval_provenance": "every interval states clusters, draws_requested, draws_dropped and "
-        "met_minimum (crispri._interval_provenance)",
+        "min_clusters_for_an_interval": crispri.MIN_CLUSTERS_FOR_AN_INTERVAL,
+        "interval_provenance": "every interval states clusters, draws_requested, draws_dropped, "
+        "met_minimum and enough_clusters (crispri._interval_provenance)",
         "gain_where_unavailable": crispri.UNAVAILABLE_GAIN,
+        "carried_block": {"key": CARRIED_KEY, "from": OLD, "git_sha": CARRIED_SHA, "rerun": False},
     }
-    m["import_closure"] = closure_block()
+    m["code_cleanliness"] = code_cleanliness()
     m["supersedes"] = {
         "file": OLD,
         "date": OLD_DATE,
@@ -473,6 +612,7 @@ def main() -> int:
         crispri.fetch(name)
     training, heldout = crispri.load(crispri.TRAINING), crispri.load(crispri.HELDOUT)
     result = crispri.score_published(training, heldout, crispri.DeletionTable(), crispri.ElementCache())
+    result[CARRIED_KEY] = carried_hct116_arm()
     result["beside_the_2026_09_27_result"] = beside_the_old_result(result)
     result["what_did_not_change"] = what_did_not_change(result)
     result[mf.KEY] = manifest(training, heldout)  # save_result takes it from the payload
@@ -485,8 +625,11 @@ def main() -> int:
         g = c["deletion_gain"]
         print(
             f"  {cell:8s} available {str(c['deletion_available']):5s} "
-            f"gain {g['gain']} ci {g['ci95']} resamples {g['resamples']}"
+            f"gain {g['gain']} ci {g['ci95']} resamples {g['resamples']} "
+            f"clusters {g.get('clusters')} enough {g.get('enough_clusters')}"
         )
+    carried = result[CARRIED_KEY]["deletion_gain"]
+    print(f"carried HCT116 arm: gain {carried['gain']} ci {carried['ci95']} clusters {carried['clusters']}")
     beside = result["beside_the_2026_09_27_result"]
     print(f"gains now refused: {beside['gains_now_refused']}")
     for key, row in beside["rows"].items():
@@ -497,10 +640,12 @@ def main() -> int:
         )
     did_not = result["what_did_not_change"]
     print(f"unchanged: {did_not['fields_checked']} fields checked, moved {did_not['fields_that_moved']}")
-    closure = result[mf.KEY]["import_closure"]
+    clean = result[mf.KEY]["code_cleanliness"]
     print(
-        f"import closure: {closure['count']} files, uncommitted on it "
-        f"{closure['uncommitted_code_on_the_closure']}"
+        f"counting path: {clean['counting_path_count']} files; own code committed "
+        f"{clean['own_code_is_committed']}; foreign uncommitted on the path "
+        f"{clean['foreign_uncommitted_code_on_the_counting_path']}; foreign uncommitted elsewhere "
+        f"{clean['foreign_uncommitted_code']}"
     )
     print(f"({time.time() - t0:.0f} s) -> {path}")
     return 0
