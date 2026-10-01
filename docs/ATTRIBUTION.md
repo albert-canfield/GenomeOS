@@ -12533,6 +12533,101 @@ module (`9be800c9…`), itself (`406b60da…`), the constants, and the header di
 - the runner's freeze check and single run;
 - the amendment 1 runner refusing.
 
+### The run under amendment 2, 2026-10-01: stopped below the floor, no estimate (lane-n1, run by the coordinator)
+
+Albert authorised measurement access at 15:19 BST, then the run itself: "Albert authorises the N1 amendment 2
+run, including downloading the two specified files and reading the control-expression values and published
+adjusted p-values required by the frozen protocol." The run was made once, from `1cb790a` with a clean tree,
+and wrote `data/results/n1_result_amendment_2.json`. Nothing in the registrations, the module or the runner
+was changed.
+
+**Checks before any value was read.**
+- The runner's freeze check passed: both earlier registrations (`8478dd76…`, `ecfb55fc…`), the module
+  (`9be800c9…`), the runner (`406b60da…`), the constants and the published header digest.
+- Both downloads match Figshare's md5. The raw pseudobulk is `4570b53c…` (sha256 `7cec96b3…`); the published
+  file is `abb0310e…` (sha256 `2dd5d2a5…`).
+- The raw identities match the registered digest.
+
+The reads were the ones registered, in order:
+1. raw `X` at the 585 controls and the 860 universe columns;
+2. a labels pass that parsed no value;
+3. the 56 principal columns at the 496 covered genes.
+
+**Status: insufficient coverage.** In the registered words: "12 defined paired differences, below the floor
+of 30; no estimate is reported and no rule is relaxed." There is no paired gain and no interval. Neither
+criterion was assessed: not the +0.02 point gain, and not the lower bound above 0.
+
+**Coverage.**
+- **Genes.**
+  - 496 of the 860 universe genes have a row in the published file, and 364 have none.
+  - No gene is listed twice, and no covered gene has non-finite control expression.
+  - All 56 factors have a usable entry at all 496 genes.
+  - The deciles of the 496 genes hold 49 or 50 genes each.
+- **Factors.**
+  - 56 are available, all 56 have a principal column, and all 56 were analysed.
+  - 12 are evaluable. For the other 44, no gene among the 496 has an adjusted p below 0.05, so both arms are
+    undefined for the same reason, `no_responders`.
+  - The 12 evaluable factors have 56 responders between them: one each for 5 factors, two or three each for
+    5, 11 for MEF2A and 27 for NRF1.
+- **Families.** 39 families are among the candidates and all 39 were analysed. 12 are represented among the
+  evaluable factors, one factor each.
+- The result records, per factor, three things: the genes with a label (496, shared by both arms), the
+  responders, and the deciles used. It does not record the number of genes inside the used deciles. That
+  number follows from the decile sizes: a factor that uses s deciles compares its responders within 49s to
+  50s genes.
+
+**Both methods, per evaluable factor.** The values are AUROCs stratified by control-expression decile, each
+arm scored on the same genes, labels and deciles. The unstratified difference is reported beside each, with no
+criterion.
+
+| Factor | Family | Responders | Deciles used | Element attribution | Promoter proximity | Difference | Unstratified difference |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SALL3 | SALL3 | 3 | 2 | 0.601 | 0.399 | +0.201 | +0.198 |
+| RFX1 | RFX-related factors | 1 | 1 | 0.500 | 0.479 | +0.021 | +0.012 |
+| HMGA1 | HMGA | 1 | 1 | 0.480 | 0.459 | +0.020 | +0.018 |
+| POU2F2 | POU domain factors | 2 | 1 | 0.489 | 0.479 | +0.011 | −0.004 |
+| NRF1 | NRF | 27 | 9 | 0.541 | 0.539 | +0.002 | −0.022 |
+| FOXL2 | FOX | 2 | 2 | 0.413 | 0.413 | 0.000 | −0.023 |
+| MAFK | Maf-related | 1 | 1 | 0.458 | 0.469 | −0.010 | −0.008 |
+| MEF2A | Regulators of differentiation | 11 | 6 | 0.455 | 0.468 | −0.013 | −0.012 |
+| ZNF683 | ZNF683 | 1 | 1 | 0.427 | 0.490 | −0.062 | −0.002 |
+| PBX2 | TALE-type homeo domain factors | 3 | 3 | 0.483 | 0.640 | −0.158 | −0.175 |
+| SPI1 | Ets-related | 3 | 3 | 0.445 | 0.627 | −0.182 | −0.181 |
+| PROP1 | Paired-related HD factors | 1 | 1 | 0.429 | 0.949 | −0.520 | −0.533 |
+
+The result also carries the unstratified mean over these 12 factors, −0.061. It has no criterion, sits below
+the floor, and is not an estimate of the gain.
+
+**What this supports.** As frozen, N1 cannot answer its question with this endpoint. For 44 of the 56
+candidates, the assigned perturbation shows no detected response at any of the 496 covered universe genes.
+The 12 factors that do respond have 1 to 27 responders. This is a limitation of the frozen pipeline (the
+candidate set, the gene universe and the endpoint together). It is not a finding about the predictions.
+
+**What it cannot establish.**
+- **Better or worse prediction.** It does not show whether the element predictions rank responders better
+  or worse than promoter proximity:
+  - there is no estimate;
+  - the per-factor differences rest on 1 to 27 responders, compared within 1 to 9 deciles;
+  - none of them is evidence either way.
+- **The meaning of the label.** An adjusted p below 0.05 marks a detected difference in a gene's expression
+  distribution, with no magnitude and no direction. An entry above the level is "no detected response".
+- **The 44 factors without responses.** It does not show that they lack a regulatory role in K562. The
+  perturbations are assigned, with no knockdown check. The run did not examine whether the candidates are
+  expressed in K562 or were effectively knocked down.
+- **Multiplicity.** The family over which the Benjamini–Hochberg adjustment ran is not documented. The
+  published 0.05 level was used as frozen, with no re-adjustment, and no 5% false discovery rate is claimed
+  for this subset.
+- **The floor.** The 30-factor floor is a minimum for reporting an estimate, not a power calculation.
+- **Scope.** A positive result would have meant better prediction of this endpoint in sampled K562 only.
+
+**Cost.** No money was spent and no model requests were made.
+- Downloads: two public CC0 files, 863,308,063 bytes, in 25 s. They are kept in the git-ignored
+  `data/cache/n1/`.
+- The run: 14.3 s wall time, 8.9 s CPU time and 85 MB peak resident memory.
+
+**Next.** No further amendment of N1 is proposed. These labels have now been read, so a new test would need
+its own registration on data not yet seen. That is the owner's decision.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

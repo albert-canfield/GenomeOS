@@ -1,0 +1,1142 @@
+{
+  "result": "n1_result_amendment_2",
+  "date": "2026-10-01",
+  "authorisation": "Albert Canfield, 2026-10-01 15:19 BST: 'I authorize access'; then 'Albert authorises the N1 amendment 2 run, including downloading the two specified files and reading the control-expression values and published adjusted p-values required by the frozen protocol.'",
+  "amendment_commit": "29e7a88b1ca3a5d116cc0c59c68bbecab7327862",
+  "files_sha256": {
+    "ad": "2dd5d2a507932beb0d94863ed55130c68b2cb540df93393008e55d93a5d93576",
+    "raw": "7cec96b3b76169abbf6b6ab9d10bf00d71d942d89e63292351f745e130b154db"
+  },
+  "datasets_read": [
+    "raw:obs/gene_transcript",
+    "raw:var/gene_id",
+    "raw:X[585 rows x 860 columns]",
+    "ad: labels",
+    "ad: values: 56 columns x 496 rows"
+  ],
+  "status": "insufficient_coverage",
+  "amendment": 2,
+  "reads": [
+    {
+      "step": "raw identities",
+      "datasets": [
+        "obs index",
+        "var gene_id"
+      ]
+    },
+    {
+      "step": "strata",
+      "rows": 585,
+      "row_kind": "non-targeting",
+      "genes": 860
+    },
+    {
+      "step": "published labels pass",
+      "values_parsed": 0
+    },
+    {
+      "step": "published values pass",
+      "columns": 56,
+      "rows": 496
+    }
+  ],
+  "coverage": {
+    "universe": 860,
+    "in_file_rows": 496,
+    "absent_from_file": 364,
+    "listed_twice": 0,
+    "non_finite_control_expression": 0,
+    "analysis_genes": 496
+  },
+  "factors_without_principal_column": [],
+  "factors": [
+    {
+      "factor": "CGGBP1",
+      "cluster": "CGGBP1",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "CREM",
+      "cluster": "CREB-related factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "FOXB1",
+      "cluster": "FOX",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "FOXD3",
+      "cluster": "FOX",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "FOXL2",
+      "cluster": "FOX",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 2,
+      "strata_used": 2,
+      "auroc_attribution": 0.413265306122449,
+      "auroc_proximity": 0.413265306122449,
+      "difference": 0.0,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.40384615384615385,
+        "proximity": 0.4271255060728745,
+        "difference": -0.023279352226720618
+      }
+    },
+    {
+      "factor": "FOXQ1",
+      "cluster": "FOX",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "HMGA1",
+      "cluster": "HMGA",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 1,
+      "strata_used": 1,
+      "auroc_attribution": 0.47959183673469385,
+      "auroc_proximity": 0.45918367346938777,
+      "difference": 0.02040816326530609,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.47878787878787876,
+        "proximity": 0.46060606060606063,
+        "difference": 0.018181818181818132
+      }
+    },
+    {
+      "factor": "HNF1B",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "HOXB13",
+      "cluster": "HOX",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "IRF1",
+      "cluster": "Interferon-regulatory factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "IRF3",
+      "cluster": "Interferon-regulatory factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "IRF7",
+      "cluster": "Interferon-regulatory factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "KLF17",
+      "cluster": "KLF17",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "KLF9",
+      "cluster": "KLF9",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "LHX3",
+      "cluster": "HD-LIM",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "MAFK",
+      "cluster": "Maf-related",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 1,
+      "strata_used": 1,
+      "auroc_attribution": 0.4583333333333333,
+      "auroc_proximity": 0.46875,
+      "difference": -0.010416666666666685,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.4797979797979798,
+        "proximity": 0.48787878787878786,
+        "difference": -0.008080808080808077
+      }
+    },
+    {
+      "factor": "MEF2A",
+      "cluster": "Regulators of differentiation",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 11,
+      "strata_used": 6,
+      "auroc_attribution": 0.45506692160611856,
+      "auroc_proximity": 0.4684512428298279,
+      "difference": -0.013384321223709361,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.4505154639175258,
+        "proximity": 0.4624179943767573,
+        "difference": -0.011902530459231508
+      }
+    },
+    {
+      "factor": "MEF2B",
+      "cluster": "Regulators of differentiation",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "MEF2D",
+      "cluster": "Regulators of differentiation",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "MLXIP",
+      "cluster": "bHLH-ZIP",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "NRF1",
+      "cluster": "NRF",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 27,
+      "strata_used": 9,
+      "auroc_attribution": 0.5414572864321608,
+      "auroc_proximity": 0.5393634840871022,
+      "difference": 0.0020938023450586263,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.544894574745321,
+        "proximity": 0.5666113875069099,
+        "difference": -0.021716812761588877
+      }
+    },
+    {
+      "factor": "ONECUT3",
+      "cluster": "HD-CUT",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "PBX2",
+      "cluster": "TALE-type homeo domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 3,
+      "strata_used": 3,
+      "auroc_attribution": 0.4828767123287671,
+      "auroc_proximity": 0.6404109589041096,
+      "difference": -0.15753424657534248,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.46754563894523327,
+        "proximity": 0.6430020283975659,
+        "difference": -0.17545638945233266
+      }
+    },
+    {
+      "factor": "PBX3",
+      "cluster": "TALE-type homeo domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "PHOX2B",
+      "cluster": "Paired-related HD factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "POU1F1",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "POU2F2",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 2,
+      "strata_used": 1,
+      "auroc_attribution": 0.48936170212765956,
+      "auroc_proximity": 0.4787234042553192,
+      "difference": 0.010638297872340385,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.47368421052631576,
+        "proximity": 0.4777327935222672,
+        "difference": -0.004048582995951455
+      }
+    },
+    {
+      "factor": "POU3F2",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "POU3F3",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "POU4F1",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "POU4F3",
+      "cluster": "POU domain factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "PRDM9",
+      "cluster": "PRDM9",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "PROP1",
+      "cluster": "Paired-related HD factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 1,
+      "strata_used": 1,
+      "auroc_attribution": 0.42857142857142855,
+      "auroc_proximity": 0.9489795918367347,
+      "difference": -0.5204081632653061,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.41414141414141414,
+        "proximity": 0.9474747474747475,
+        "difference": -0.5333333333333333
+      }
+    },
+    {
+      "factor": "RFX1",
+      "cluster": "RFX-related factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 1,
+      "strata_used": 1,
+      "auroc_attribution": 0.5,
+      "auroc_proximity": 0.4791666666666667,
+      "difference": 0.020833333333333315,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.4919191919191919,
+        "proximity": 0.4797979797979798,
+        "difference": 0.012121212121212144
+      }
+    },
+    {
+      "factor": "RFX3",
+      "cluster": "RFX-related factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "RREB1",
+      "cluster": "RREB1",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "SALL3",
+      "cluster": "SALL3",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 3,
+      "strata_used": 2,
+      "auroc_attribution": 0.6006944444444444,
+      "auroc_proximity": 0.3993055555555556,
+      "difference": 0.20138888888888884,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.5966869506423259,
+        "proximity": 0.39858012170385393,
+        "difference": 0.19810682893847198
+      }
+    },
+    {
+      "factor": "SPI1",
+      "cluster": "Ets-related",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 3,
+      "strata_used": 3,
+      "auroc_attribution": 0.4452054794520548,
+      "auroc_proximity": 0.6267123287671232,
+      "difference": -0.18150684931506844,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.4462474645030426,
+        "proximity": 0.6274509803921569,
+        "difference": -0.18120351588911426
+      }
+    },
+    {
+      "factor": "SPIB",
+      "cluster": "Ets-related",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "STAT2",
+      "cluster": "STAT factors",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZBTB40",
+      "cluster": "ZBTB40",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF131",
+      "cluster": "ZNF131",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF135",
+      "cluster": "ZNF135",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF24",
+      "cluster": "ZNF24",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF250",
+      "cluster": "ZNF250",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF347",
+      "cluster": "ZNF347",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF362",
+      "cluster": "ZNF362",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF460",
+      "cluster": "ZNF460",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF470",
+      "cluster": "ZNF470",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF471",
+      "cluster": "ZNF471",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF596",
+      "cluster": "ZNF596",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF606",
+      "cluster": "ZNF606",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF683",
+      "cluster": "ZNF683",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 1,
+      "strata_used": 1,
+      "auroc_attribution": 0.4270833333333333,
+      "auroc_proximity": 0.4895833333333333,
+      "difference": -0.0625,
+      "undefined_reason": null,
+      "unstratified": {
+        "attribution": 0.46060606060606063,
+        "proximity": 0.4626262626262626,
+        "difference": -0.0020202020202019777
+      }
+    },
+    {
+      "factor": "ZNF775",
+      "cluster": "ZNF775",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF865",
+      "cluster": "ZNF865",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    },
+    {
+      "factor": "ZNF93",
+      "cluster": "ZNF93",
+      "genes": 496,
+      "genes_missing": 0,
+      "responders": 0,
+      "strata_used": 0,
+      "auroc_attribution": null,
+      "auroc_proximity": null,
+      "difference": null,
+      "undefined_reason": "no_responders",
+      "unstratified": {
+        "attribution": null,
+        "proximity": null,
+        "difference": null
+      }
+    }
+  ],
+  "analysis": {
+    "status": "insufficient_coverage",
+    "coverage": {
+      "factors_analysed": 56,
+      "defined": 12,
+      "undefined": 44,
+      "undefined_reasons": {
+        "no_responders": 44
+      },
+      "floor": 30
+    },
+    "estimate": null,
+    "criteria": null,
+    "note": "12 defined paired differences, below the floor of 30; no estimate is reported and no rule is relaxed",
+    "secondary_unstratified": {
+      "estimate": -0.06105263899814837,
+      "factors": 12
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Replogle et al. 2022 supplemental files, Figshare+ 21632564",
+        "version": "v1",
+        "license": "CC0"
+      },
+      {
+        "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387",
+        "version": "v1",
+        "license": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/n1/anderson-darling p-values, BH-corrected.csv.gz",
+        "sha256": "2dd5d2a507932beb0d94863ed55130c68b2cb540df93393008e55d93a5d93576",
+        "md5": "abb0310e87d65c442e663e3d6364e2ca",
+        "partition": "evaluation"
+      },
+      {
+        "path": "data/cache/n1/K562_gwps_raw_bulk_01.h5ad",
+        "sha256": "7cec96b3b76169abbf6b6ab9d10bf00d71d942d89e63292351f745e130b154db",
+        "md5": "4570b53c9d62ff6df281e622f0350060",
+        "partition": "strata"
+      },
+      {
+        "path": "data/results/n1_registration.json",
+        "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883",
+        "bytes": 1084039,
+        "partition": null
+      },
+      {
+        "path": "data/results/n1_registration_amendment_1.json",
+        "sha256": "ecfb55fcf70c9a45a1b9b70f60a822aeb5c9635fa50a61c5af07aac784ab774d",
+        "bytes": 15866,
+        "partition": null
+      },
+      {
+        "path": "data/results/n1_registration_amendment_2.json",
+        "sha256": "97909dbf210a4fc9553052511c3c8b5786cceb2873fe258a37a2e4efe67ba90b",
+        "bytes": 13656,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: genes are matched by Ensembl ID; no interval is read at run time",
+    "parameters": {
+      "amendment": 2,
+      "label": "responds when the published Anderson-Darling p-value, BH-adjusted, is < 0.05",
+      "ad_level": 0.05,
+      "missing": "an empty, non-numeric or non-finite field, or one outside [0, 1]; a gene absent from the file's rows or listed twice is missing for every factor; missing is never a non-responder",
+      "row_rule": "the principal-transcript row: P1P2, else P1, else a factor's only row",
+      "knockdown_filter": "none: assigned perturbations are evaluated",
+      "strata": "deciles of the unweighted mean of raw pseudobulk X over the 585 non-targeting rows",
+      "strata_count": 10,
+      "neighbour_bp": 10000,
+      "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+      "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+      "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+      "floor_factors": 30,
+      "min_gain": 0.02,
+      "min_clusters": 10,
+      "bootstrap_b": 10000,
+      "bootstrap_seed": 20261001,
+      "lower_index": 250,
+      "upper_index": 9749
+    },
+    "exclusions": [
+      {
+        "what": "universe",
+        "count": 860
+      },
+      {
+        "what": "in_file_rows",
+        "count": 496
+      },
+      {
+        "what": "absent_from_file",
+        "count": 364
+      },
+      {
+        "what": "listed_twice",
+        "count": 0
+      },
+      {
+        "what": "non_finite_control_expression",
+        "count": 0
+      },
+      {
+        "what": "analysis_genes",
+        "count": 496
+      }
+    ],
+    "partitions": {
+      "strata": "the 585 non-targeting rows of the raw pseudobulk",
+      "evaluation": "the 56 principal columns"
+    },
+    "code": {
+      "git_sha": "1cb790a2dcdfa9ae3f3ea34b90aac316a2a2618d",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/n1_run_v3.py",
+        "--ad",
+        "data/cache/n1/anderson-darling p-values, BH-corrected.csv.gz",
+        "--raw",
+        "data/cache/n1/K562_gwps_raw_bulk_01.h5ad",
+        "--authorisation",
+        "Albert Canfield, 2026-10-01 15:19 BST: 'I authorize access'; then 'Albert authorises the N1 amendment 2 run, including downloading the two specified files and reading the control-expression values and published adjusted p-values required by the frozen protocol.'"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
