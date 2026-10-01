@@ -503,6 +503,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div id="evd-b" style="margin-top:12px"></div>
     <div id="evd-c" style="margin-top:12px"></div>
   </div>
+  <div class="card" id="rmap" style="margin-top:16px">
+    <h2><i class="ic">🗺️</i>Response map: evidence and where it stops<span class="help" data-tip="Read-only. /api/evidence/response-map organises observations, predictions, inferences and missing evidence for one example; it introduces no new biological validation or evaluator verdicts.">?</span>
+      <span class="muted" id="rmap-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="rmap-head" style="font-size:12.5px"></div>
+    <div id="rmap-assertions" style="margin-top:12px"></div>
+    <div id="rmap-chains" style="margin-top:12px"></div>
+    <div id="rmap-stops" style="margin-top:12px"></div>
+    <div id="rmap-dyn" style="margin-top:12px"></div>
+    <div id="rmap-sources" style="margin-top:12px"></div>
+  </div>
 </section>
 
 <!-- ================= AGEING ================= -->
@@ -2312,6 +2322,62 @@ async function loadDiscovery() {
 }
 document.querySelector('nav button[data-tab="evidence"]').addEventListener('click', () => setTimeout(loadDiscovery));
 if ($('#evidence').classList.contains('active')) setTimeout(loadDiscovery);  // a deep link opened the tab before this was defined
+// ---- response map: one example's evidence and where it stops, read-only. The page renders the fields
+// /api/evidence/response-map serves and computes nothing: statuses, relations and notes are the server's
+let rmapLoaded = false;
+const RMAP_STATUS = {
+  observed: 'what an experiment measured; never a mechanism',
+  predicted: 'model or compiled predictions',
+  inferred: 'interpretations inherited from existing sources',
+  unknown: 'questions or missing relationships, not facts',
+};
+const rmapTxt = x => x === null || x === undefined ? 'not recorded' : (typeof x === 'object' ? JSON.stringify(x) : String(x));
+const rmapSmall = (t, muted) => `<div class="${muted ? 'muted' : ''}" style="font-size:12px">${escH(t)}</div>`;
+function rmapRelation(a) {
+  if (a.relation === 'unresolved') return `relation unresolved between ${(a.relation_candidates || []).join(' / ')}`;
+  return a.relation || (a.kind === 'claim' ? 'compiled claim (no relation type among the eight)' : 'not recorded');
+}
+function rmapRow(a) {
+  const c = a.context || {}, m = a.measurement || {}, s = a.source || {};
+  const meas = m.quantity ? `${m.quantity}: ${rmapTxt(m.value)}${m.direction ? ` (${m.direction})` : ''}` : 'no measurement';
+  const notes = (a.conflicts || []).map(x => `conflict: ${x.detail || x.kind}`)
+    .concat((a.uncertainty || []).map(rmapTxt)).concat((a.unresolved_candidates || []).length ? [`unresolved candidates: ${rmapTxt(a.unresolved_candidates)}`] : []);
+  return `<tr data-id="${escH(a.id)}"><td><div class="mono" style="font-size:11px">${escH(a.id)}</div>${rmapSmall(rmapRelation(a))}${a.relation_note ? rmapSmall(a.relation_note, true) : ''}</td>
+    <td>${rmapSmall(`${a.subject} → ${a.object}`)}</td>
+    <td>${rmapSmall(`cell: ${rmapTxt(c.cell)}`)}${rmapSmall(`condition: ${rmapTxt(c.condition)}; perturbation: ${rmapTxt(c.perturbation)}; time: ${rmapTxt(a.time_window)}`, true)}</td>
+    <td>${rmapSmall(meas)}${a.mechanism ? rmapSmall(`mechanism: ${a.mechanism}`, true) : ''}${notes.map(t => rmapSmall(t, true)).join('')}</td>
+    <td>${rmapSmall(`${s.path || 'not recorded'} (${s.kind || ''})`, true)}${rmapSmall(s.record_key || '', true)}${s.sha256 ? rmapSmall(`sha256 ${s.sha256.slice(0, 12)}…`, true) : ''}</td></tr>`;
+}
+async function loadResponseMap() {
+  if (rmapLoaded) return;
+  try {
+    $('#rmap-status').textContent = 'reading the response map…';
+    const v = await api('/api/evidence/response-map?example=globin_k562');
+    const n = v.counts || {}, bs = n.by_status || {};
+    $('#rmap-head').innerHTML = `<div><b>${escH(v.title)}</b></div>${rmapSmall(v.header)}
+      ${rmapSmall(`Why this example: ${v.why.chosen_for}`, true)}${rmapSmall(`Examined before: ${(v.why.examined_before || []).map(e => e.result).join(', ')}`, true)}
+      ${rmapSmall(`${fmt(n.assertions)} assertions: ${Object.entries(bs).map(([k, c]) => `${k} ${fmt(c)}`).join(' · ')}; sources: ${Object.entries(n.by_source || {}).map(([k, c]) => `${k} ${fmt(c)}`).join(' · ')}`)}`;
+    const groups = Object.keys(RMAP_STATUS).map(st => {
+      const rows = v.assertions.filter(a => a.status === st);
+      return `<details${st === 'observed' ? ' open' : ''}><summary style="font-size:13px"><b>${escH(st)}</b> ${fmt(rows.length)}: <span class="muted">${escH(RMAP_STATUS[st])}</span></summary>
+        <div class="scroll" style="max-height:480px"><table><tr><th>assertion and relation</th><th>subject → object</th><th>context</th><th>measurement, conflicts and uncertainty</th><th>source</th></tr>
+        ${rows.map(rmapRow).join('')}</table></div></details>`;
+    });
+    $('#rmap-assertions').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Assertions, by evidence status</h3>${groups.join('')}`;
+    $('#rmap-chains').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Chains (ordered references; a path is not a proof of cause)</h3>`
+      + v.chains.map(c => `<div style="margin:6px 0"><b style="font-size:12.5px">${escH(c.title)}</b>${rmapSmall(c.steps.join(' → '), true)}${rmapSmall(c.note, true)}${rmapSmall(`stops at: ${(c.stops_at || []).join(', ') || 'nothing recorded'}`)}</div>`).join('');
+    $('#rmap-stops').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Where the explanation stops</h3>`
+      + v.stop_points.map(s => `<div style="margin:4px 0">${rmapSmall(`${s.id}: ${s.what_is_missing}`)}${rmapSmall(s.detail, true)}</div>`).join('');
+    $('#rmap-dyn').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Dynamics</h3>${rmapSmall(v.dynamics.note, true)}
+      <table><tr><th>question</th><th>measurements needed</th><th>available</th><th>assessment</th></tr>${v.dynamics.rows.map(r => `<tr><td>${escH(r.question)}</td><td>${escH(r.measurements_needed)}</td><td>${escH(r.available)}</td><td><b>${escH(r.assessment)}</b></td></tr>`).join('')}</table>`;
+    $('#rmap-sources').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Sources</h3>`
+      + v.sources.map(s => rmapSmall(`${s.path} [${s.kind}${s.available ? '' : ', not available in this checkout'}] sha256 ${(s.sha256 || '').slice(0, 12)}`, true)).join('');
+    $('#rmap-status').textContent = `${fmt(n.assertions)} assertions, ${fmt(v.chains.length)} chains, ${fmt(v.stop_points.length)} stop points`;
+    rmapLoaded = true;
+  } catch (e) { $('#rmap-status').textContent = e.message; }
+}
+document.querySelector('nav button[data-tab="evidence"]').addEventListener('click', () => setTimeout(loadResponseMap));
+if ($('#evidence').classList.contains('active')) setTimeout(loadResponseMap);
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
