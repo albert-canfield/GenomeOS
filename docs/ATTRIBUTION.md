@@ -12993,6 +12993,97 @@ not make an alternative informative. This is a further reason the no-go stands, 
 
 The clarification is closed. No scoring, no further randomisation search and no new registration.
 
+## The paired-enhancer feasibility check: a local proposal set out, and recommended against (2026-10-01, coordinator)
+
+Metadata only. No effect size, p-value, hit call or interaction score was read, from any dataset, and none is
+quoted here. The generalisation version stays closed: no public dataset has designed enhancer pairs across
+many loci, so only a local question was considered. The candidates surveyed were Lin et al. 2022 (MYC),
+Hsiung et al. 2024 (multiAsCas12a, the same locus), Xie et al. 2017 (Mosaic-seq), Gasperini et al. 2019
+(pairs incidental to high multiplicity, not designed), Pacalin et al. 2024 (CRISPRa plus CRISPRi, Jurkat and
+primary T cells) and mouse deletion series (no overlap by construction). Lin 2022 is the only one where
+singles and pairs share one library, one cell context and one modality.
+
+### 1. The exact biological question the data can pose
+
+**Locus:** MYC on chr8, the seven enhancers e1 to e7 over a 1.8 Mb region. **Cell context:** K562 with
+doxycycline-inducible dCas9-KRAB. **Perturbations:** a pooled library of 87,025 sgRNA pairs covering all
+single and pairwise combinations of the seven enhancers, cultured for 30 doublings. All three are quoted
+from the GEO series' own design text (GSE160768). The pairs are C(7,2) = 21 enhancer pairs, at one locus.
+
+### 2. Existing predictive capability: the project cannot predict this response
+
+Two facts, both checked here against the project's own files, decide this.
+
+- **The project predicts a different gene.** Of the project's elements overlapping the seven enhancers
+  (26 by this check, over `data/knowledge/alphagenome/all_elements/chr8.json`, against the lane's 23; the
+  difference is an overlap convention and was not resolved), **not one predicts MYC**. The predicted targets
+  are MIR1206 at e1, MIR1205 at e2, MIR1207 and MIR1208 at e3, MIR1207 at e4, CCDC26 at e5 and
+  ENSG00000285108 at e6 and e7. MYC appears only at the three elements overlapping the MYC promoter, beside
+  CASC11.
+- **The project has no interaction model, and its own pretest closed that direction.** The project's
+  predictions are of expression change on deleting one element. R8's coupling pretest (2026-09-28) returned
+  that neither coupling term beats independent deletion scoring, and R8 closed with no search built. A
+  prediction of a paired response would therefore need a **new model**, which is the opposite of the
+  direction set for this work.
+
+### 3. Comparison, response scale and uncertainty
+
+- **A singles baseline is constructible.** The library's single-perturbation measurements sit in the same
+  pool: a single is a targeting sgRNA paired with a non-targeting one, so an additive expectation from the
+  two singles can be formed without a second experiment. This is the one requirement the dataset meets well.
+- **The response scale does not match, and no mapping exists.** The screen's readout is sgRNA-pair abundance
+  before and after 30 doublings, which is proliferation, not expression. **The series contains no RNA
+  measurement at all**: its 58 samples are 16 ATAC-seq, 22 ChIP-seq and 20 other, with no RNA-seq library
+  among them. The project's quantity is a log2 expression change. Comparing them needs a declared mapping
+  from a fitness effect to an expression effect, which no part of this project has, and which would itself be
+  an assumption under test.
+- **Uncertainty.** Two biological replicates (d0 and d30, rep1 and rep2), one locus, 21 pairs. The chromatin
+  arm is smaller still: WT, four singles (e1i, e3i, e4i, e7i) and **two pairs** (e1i&e4i, e3i&e7i).
+
+### 4. Evidence available
+
+- **Controls.** Reported by the lane from the authors' `Library_Info.txt`: 40 non-targeting sgRNAs, 34
+  guides at three negative control genomic regions, and 31 guides at the MYC promoter as a positive control.
+- **Replicates.** Two biological replicates in the screen; two in most chromatin conditions.
+- **Access.** GEO GSE160768; per-construct count files in Zenodo 10.5281/zenodo.6823833 under MIT, about
+  330 kB each. They hold outcomes and **were not opened**. The series' raw bundle is about 22 GB.
+- **Prior outcome exposure: none.** Neither Lin et al. 2022 nor GSE160768 appears anywhere in
+  docs/ATTRIBUTION.md or docs/ROADMAP.md, checked by search. Nothing from it has been scored or read, so a
+  test on it could be registered before any exposure. This is the proposal's one real asset.
+
+### 5. Decision value: what a result could and could not settle
+
+- **What it could not settle.** A fitness change on silencing an enhancer cannot separate "the project's
+  assignment of e1 to MIR1206 is right, and that gene affects proliferation" from "the enhancer acts on MYC
+  and the project's assignment is wrong". Both predict a fitness change. Separating them needs an expression
+  measurement of the candidate genes, which this dataset does not contain.
+- **What would remain unresolved either way.** Whether the project's expression predictions at these
+  elements hold; whether its target assignments are right; and whether any paired response is additive,
+  redundant or cooperative, since the project predicts no interaction at all.
+- **The one question the data could pose cleanly** is about the authors' own subject, enhancer-enhancer
+  interaction at a single locus. The project has nothing to predict for it.
+
+### 6. Cost, the smallest useful analysis, and the recommendation
+
+The smallest analysis would cost almost nothing: about 1 MB already cached, no model requests, no money, and
+roughly a day's work for a registration, a singles-additive baseline and 21 paired contrasts.
+
+**It is recommended against, on its own local terms and not for failing to generalise.** The low cost does
+not rescue it: with no expression readout in the series and no MYC prediction at the seven enhancers, there
+is no quantity on both sides to compare, so the analysis would not be a test of anything the project claims.
+Spending a registration on it would produce a number whose interpretation is an assumption.
+
+**What would change the recommendation**, either one:
+- an expression readout, published or in a deposit, on single and paired perturbation of these enhancers in
+  the same cell context, for example RNA-seq or qPCR of MYC and the project's own predicted targets; or
+- a dataset whose perturbed elements carry a project prediction for the gene it measures.
+
+Hsiung et al. 2024 (GSE260832) perturbs three of the same enhancers in K562 under a different modality and
+would be the natural second check if the first condition were ever met. It is also a fitness screen, so it
+does not meet it now.
+
+**Nothing was implemented and no outcome was scored.** The proposal is recorded for the owner's review.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
