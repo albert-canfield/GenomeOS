@@ -1,0 +1,296 @@
+{
+  "result": "fresh_crispri_eligibility",
+  "date": "2026-10-02",
+  "floors": {
+    "independent_loci_at_least": 20,
+    "measured_positives_at_least": 30,
+    "cell_context_not": "K562",
+    "never_read_here": true,
+    "locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "locus_span_bp": 1000000,
+    "fixed_before_any_candidate_was_opened": true,
+    "note": "the locus rule and span are imported from genomeos/attribution/cell2.py, not restated, so a locus count here means what it means there. It is an operational grouping, not established biological independence"
+  },
+  "candidates_examined": 5,
+  "candidates": [
+    {
+      "name": "Green 2025 astrocyte CRISPRi (AstroREG)",
+      "cell_context": "cultured primary human astrocytes, fetal-derived (Lonza CC-2565), two donor lines",
+      "assay": "CRISPRi (dCas9-KRAB) with single-cell RNA-seq readout (CROP-seq)",
+      "accession": "doi 10.1038/s41593-025-02154-3, PMID 41413662, PMC12971484; Supplementary Tables 1 and 3",
+      "pairs_tested": 7759,
+      "measured_positives": 158,
+      "independent_loci": 86,
+      "distinct_measured_genes": 116,
+      "chromosomes": 22,
+      "read_here": "no outcome from this set has been read, scored or quoted here. Established by grep over docs/, genomeos/, scripts/, tests/ and the knowledge READMEs for Voineagu, AstroREG, PsychENCODE, EGrf, CROP-seq, NHA, s41593, 02154 and PMID 41413662: no hit for any of them, and the study is absent from the project's CRISPRi exposure ledger. data/knowledge/crispri/ holds only the two EPCrisprBenchmark files",
+      "fresh": true,
+      "access": "open access, CC BY 4.0; supplementary tables served by the publisher over https with no login and no payment",
+      "misses": [],
+      "eligible": true,
+      "notes": "the project has read ENCODE astrocyte chromatin peaks in its node reader lanes, so astrocyte *chromatin features* are development-exposed even though no outcome of this CRISPRi set is. Supplementary Table 1B annotates its elements against K562 validated enhancers (Yao 2022), a column this lane did not read"
+    },
+    {
+      "name": "Wang 2026 primary human T cell CRISPR enhancer annotation",
+      "cell_context": "primary human T cells, tumour-infiltrating CD8 T cells, CAR T cells",
+      "assay": "CRISPRi (dCas9-KRAB) and Cas9-indel mutagenesis",
+      "accession": "bioRxiv 2026, licence forbids PMC archiving; no accession established",
+      "pairs_tested": null,
+      "measured_positives": null,
+      "independent_loci": 3,
+      "distinct_measured_genes": null,
+      "chromosomes": null,
+      "read_here": "no outcome read here; 'primary T cells' appears once in the record, in a related-work overlap audit of Pacalin 2024, with no outcome read",
+      "fresh": true,
+      "access": "preprint; the licence does not permit PMC archiving, so the full text and its supplementary tables were not retrieved at 0 cost",
+      "misses": [
+        "independent loci 3, short of 20 by 17",
+        "positives not established, so the floor of 30 is unchecked"
+      ],
+      "eligible": false,
+      "notes": "the screen is built around three genes (PDCD1, HAVCR2, TBX21), so under the registered convention its positives cannot span more than 3 loci however many elements were tiled. Pair and positive counts were not established"
+    },
+    {
+      "name": "Caragine and Le 2025, 2.8 Mb TAD dissection in six cancer lines",
+      "cell_context": "six human cancer cell lines",
+      "assay": "CRISPRi tiling of one topologically associating domain",
+      "accession": "Nature Communications 2025, s41467-025-56568-5",
+      "pairs_tested": null,
+      "measured_positives": null,
+      "independent_loci": 1,
+      "distinct_measured_genes": null,
+      "chromosomes": null,
+      "read_here": "no outcome read here; the study is absent from the exposure ledger",
+      "fresh": true,
+      "access": "open access",
+      "misses": [
+        "independent loci 1, short of 20 by 19",
+        "positives not established, so the floor of 30 is unchecked"
+      ],
+      "eligible": false,
+      "notes": "a contiguous 2.8 Mb tiling on one chromosome chains into a single locus under cell2.INDEPENDENT_LOCUS_RULE, because each element lies within 1 Mb of the next. Dense tiling of one neighbourhood cannot clear a locus floor by construction"
+    },
+    {
+      "name": "EPCrisprBenchmark held-out five cell types (Gschwind 2025)",
+      "cell_context": "GM12878, HCT116, Jurkat, WTC11 (and K562 training)",
+      "assay": "CRISPRi, pooled from nine upstream screens",
+      "accession": "EngreitzLab/CRISPR_comparison, heldout_5_cell_types.GRCh38",
+      "pairs_tested": 4378,
+      "measured_positives": 190,
+      "independent_loci": 22,
+      "distinct_measured_genes": null,
+      "chromosomes": null,
+      "read_here": "yes: effect sizes, significance calls, per-screen prevalences, AUPRC and AlphaGenome deletion values have all been read and scored, in all five cell types. It is this project's primary registered endpoint",
+      "fresh": false,
+      "access": "open",
+      "misses": [
+        "cell context is K562, which the result already covers",
+        "not fresh: yes: effect sizes, significance calls, per-screen prevalences, AUPRC and AlphaGenome deletion values have all been read and scored, in all five cell types. It is this project's primary registered endpoint"
+      ],
+      "eligible": false,
+      "notes": "development evidence, not fresh. Recorded here so the table states why the set this project already holds cannot answer the question"
+    },
+    {
+      "name": "IGVF K562 MHC CRISPRi Perturb-seq",
+      "cell_context": "K562",
+      "assay": "CRISPRi (dCas9-KRAB) Perturb-seq, targeted panel",
+      "accession": "IGVFDS7132YVKO",
+      "pairs_tested": null,
+      "measured_positives": null,
+      "independent_loci": null,
+      "distinct_measured_genes": null,
+      "chromosomes": null,
+      "read_here": "yes: scored as this project's independent benchmark, data/results/indep_mhc_crispri.json",
+      "fresh": false,
+      "access": "open, CC BY 4.0",
+      "misses": [
+        "cell context is K562, which the result already covers",
+        "not fresh: yes: scored as this project's independent benchmark, data/results/indep_mhc_crispri.json",
+        "independent loci not established, so the floor of 20 is unchecked",
+        "positives not established, so the floor of 30 is unchecked"
+      ],
+      "eligible": false,
+      "notes": "K562, and already scored. Listed for completeness"
+    }
+  ],
+  "eligible_count": 1,
+  "verdict": "go",
+  "eligible_sets": [
+    "Green 2025 astrocyte CRISPRi (AstroREG)"
+  ],
+  "astrocyte_counts": {
+    "candidate_elements": 979,
+    "elements_tested": 957,
+    "elements_called_hit": 145,
+    "pairs_tested": 7759,
+    "measured_positives": 158,
+    "distinct_measured_genes": 116,
+    "chromosomes": 22,
+    "positives_per_chromosome": {
+      "chr1": 15,
+      "chr10": 11,
+      "chr11": 25,
+      "chr12": 4,
+      "chr13": 3,
+      "chr14": 7,
+      "chr15": 10,
+      "chr16": 2,
+      "chr17": 6,
+      "chr18": 3,
+      "chr19": 14,
+      "chr2": 9,
+      "chr20": 4,
+      "chr22": 2,
+      "chr3": 4,
+      "chr4": 1,
+      "chr5": 1,
+      "chr6": 9,
+      "chr7": 10,
+      "chr8": 6,
+      "chr9": 10,
+      "chrX": 2
+    },
+    "independent_loci": 86,
+    "positives_per_locus_max": 6,
+    "well_powered_pairs_at_fc_0_15": 2238,
+    "well_powered_pairs_at_fc_0_25": 4558,
+    "power_is_published": "the authors publish a per-pair power flag (Supplementary Table 3F, WellPowered at fold change 0.15 and 0.25). This is the quantity the second-cell-type lane could not compute for the benchmark's held-out cell types; it is read here as a label, not as a figure of merit, and no power calculation is performed by this lane"
+  },
+  "authorisation": "Albert, 2026-10-02: use the freed slot for a 0-request search for a fresh non-K562 CRISPRi set (>=20 loci, >=30 positives, never read here)",
+  "what_a_test_here_could_claim": [
+    "a first reading of the frozen model's enhancer-gene separation in a cell context this project has never scored, on a set whose outcomes it has never read",
+    "an interval over 86 independent loci, which is at or above the ten-cluster minimum, so a resampling interval is reportable rather than refused as 'interval unreliable'",
+    "a power statement taken from the authors' own published per-pair flag rather than computed here, which is what the second-cell-type lane could not obtain"
+  ],
+  "what_a_test_here_could_not_claim": [
+    "not a replication of the K562 result: a different assay readout (single-cell CROP-seq against the benchmark's mixed FlowFISH and scRNA-seq screens), a different element selection (PsychENCODE astrocyte enhancers), a different hit threshold and a different cell lineage, so a difference cannot be attributed to the cell type",
+    "not independence of the genomic regions: the locus grouping is cell2's operational convention, and AlphaGenome was trained on ENCODE tracks genome-wide, which include astrocyte chromatin; the labels are unseen, the regions are not",
+    "not a cell-type-specific claim about astrocytes: two donor lines of cultured fetal-derived astrocytes are not primary brain tissue",
+    "no claim at all until the comparison is registered before any score is computed"
+  ],
+  "left_undone": [
+    "no comparison registered and no score computed: this lane is eligibility only",
+    "the astrocyte element set has not been intersected with the project's hg38 element inventory, so the overlap with already-scored elements is not quantified",
+    "the genome build of the astrocyte coordinates is inferred from the publication's use of GENCODE v32 and PsychENCODE enhancers and has not been confirmed against a stated build",
+    "Supplementary Table 3's 158 pairs and Table 1B's 145 hit elements differ because 1B carries one representative gene per element; the pair table is authoritative and is what was counted"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Green NFO, Sutton GJ, Perez-Burillo J, et al. CRISPRi screening in cultured human astrocytes uncovers distal enhancers controlling genes dysregulated in Alzheimer's disease. Nature Neuroscience 2025;29(3):703-716 -- supplementary table 1",
+        "version": "publisher open-access supplementary store; pinned here by sha256",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02154-3/MediaObjects/41593_2025_2154_MOESM3_ESM.xlsx"
+      },
+      {
+        "accession": "Green NFO, Sutton GJ, Perez-Burillo J, et al. CRISPRi screening in cultured human astrocytes uncovers distal enhancers controlling genes dysregulated in Alzheimer's disease. Nature Neuroscience 2025;29(3):703-716 -- supplementary table 3",
+        "version": "publisher open-access supplementary store; pinned here by sha256",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02154-3/MediaObjects/41593_2025_2154_MOESM5_ESM.xlsx"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/fresh/astro_MOESM3.xlsx",
+        "sha256": "5c5f0a6cde1caa7b805d91f35194dcc6449b813bde0a09b2478eccb59fcb7e4d",
+        "bytes": 27907095,
+        "partition": null,
+        "role": "labels, element coordinates, measured gene symbols and the published per-pair power flags only; no effect size, p-value, FDR or model score was read"
+      },
+      {
+        "path": "data/cache/fresh/astro_MOESM5.xlsx",
+        "sha256": "e09bb1434329999d07505916606b93216b60927c070f4174875c14cea512680c",
+        "bytes": 36185183,
+        "partition": null,
+        "role": "labels, element coordinates, measured gene symbols and the published per-pair power flags only; no effect size, p-value, FDR or model score was read"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: the publication states no coordinate convention for its chrom:start-end element strings, so this lane does not assert one. The only use made of them is the 1 Mb locus grouping, whose outcome a one-base shift cannot change; no coordinate from this set is joined to a project interval here, and any later join must settle the convention first",
+    "parameters": {
+      "independent_locus_span_bp": 1000000,
+      "locus_floor": 20,
+      "positive_floor": 30,
+      "excluded_cell": "K562",
+      "permitted_columns": [
+        "Coord",
+        "Enh",
+        "Enhancer",
+        "EnhancerCoord",
+        "Gene",
+        "GeneID",
+        "GeneSymbol",
+        "GeneTSS",
+        "Hit",
+        "LinkedGene",
+        "Pair",
+        "Tested",
+        "WellPowered_at_FC_0.15",
+        "WellPowered_at_FC_0.25",
+        "Wellpowered"
+      ],
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "performance_metrics_computed": 0,
+      "gains_computed": 0,
+      "money_spent": 0
+    },
+    "exclusions": [
+      "no effect size, log fold change, p-value, FDR, Z statistic, gene-expression level or sensitivity figure was read from any candidate table: fresh.permit refuses the column before the workbook is opened",
+      "K562 is not a candidate cell context: the committed result already covers it",
+      "a candidate whose outcome has been read here is development evidence and is recorded as not fresh rather than counted",
+      "mouse screens are not candidates: they share no hg38 element with this project",
+      "no candidate requiring a login, a payment or controlled access was retrieved"
+    ],
+    "partitions": {
+      "astrocyte_pairs": "all 7759 element-gene pairs of the published screen; 158 carry the authors' hit call"
+    },
+    "code_cleanliness": {
+      "git_sha": "81278810792dd01f3c679bfdfef81904c1f771ff",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/crispri.py",
+        "scripts/manifest_rebuild.py",
+        "tests/test_crispri_gain_reporting.py",
+        "tests/test_manifest_rebuild_environment.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/fresh_crispri_eligibility.py"
+      ],
+      "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list; every path component is matched against what its directory actually lists, so the closure is the same on a case-sensitive filesystem (carried from cd263bc)",
+      "note": "three other lanes are live in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "81278810792dd01f3c679bfdfef81904c1f771ff",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/crispri.py",
+        "scripts/manifest_rebuild.py",
+        "tests/test_crispri_gain_reporting.py",
+        "tests/test_manifest_rebuild_environment.py"
+      ],
+      "untracked_code_paths": [
+        "tests/test_manifest_rebuild_environment.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/fresh_crispri_eligibility.json",
+        "data/results/re2g_identity.json",
+        "data/results/re2g_likeforlike.json",
+        "data/results/re2g_paired.json"
+      ],
+      "argv": [
+        "scripts/fresh_crispri_eligibility.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
