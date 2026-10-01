@@ -259,24 +259,17 @@
       "gm12878": "held-out GM12878, its own stratum"
     },
     "code": {
-      "git_sha": "f39d3cf530c746325c50e383dd686ef7be999767",
+      "git_sha": "2dd6cb5d572dff37e71004765b7a2b82565dbf3e",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/attribution/experiment_value.py",
-        "genomeos/attribution/re2g.py",
-        "scripts/re2g_k562_only_range.py",
-        "scripts/re2g_register.py",
-        "tests/test_experiment_value.py",
-        "tests/test_re2g.py"
+        "tests/test_experiment_value.py"
       ],
       "untracked_code_paths": [
         "genomeos/attribution/experiment_value.py",
-        "scripts/re2g_k562_only_range.py",
         "tests/test_experiment_value.py"
       ],
-      "dirty_result_paths": [
-        "data/results/re2g_registration.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/re2g_register.py"
       ],
