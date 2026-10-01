@@ -309,3 +309,115 @@ def test_the_shapes_beside_the_verdict_do_not_change_the_floor_decision():
     pooled = out["pooled_over_candidates"]["independent_loci_genome_wide"]
     assert v["meets_floor"] is (pooled >= 20)
     assert v["floor"] == cell2.POOLED_LOCUS_FLOOR
+
+
+# --- prior exposure, split under the pooled convention (reviewer, 2026-10-02) ------------------------
+
+
+def exposure_pairs() -> list[FakePair]:
+    """One locus held by an exposed and an unexposed cell type, one held by the unexposed one alone,
+    one held by the exposed one alone, and a K562 pair that is none of the pool's business."""
+    return [
+        FakePair("GM12878", "chr1", 1_000, 1_500, "G1", True),
+        FakePair("WTC11", "chr1", 1_200, 1_700, "G1b", True),
+        FakePair("WTC11", "chr2", 5_000_000, 5_000_500, "G2", True),
+        FakePair("HCT116", "chr3", 7_000_000, 7_000_500, "G3", True),
+        FakePair("K562", "chr4", 1_000, 1_500, "G4", True),
+        FakePair("WTC11", "chr2", 9_000_000, 9_000_500, "G5", False),
+    ]
+
+
+def test_the_exposed_cell_types_are_named_with_where_their_reading_sits():
+    assert set(cell2.EXPOSED_CELL_TYPES) == {"GM12878", "HCT116"}
+    for note in cell2.EXPOSED_CELL_TYPES.values():
+        assert "crispri_published.json" in note
+
+
+def test_exposure_splits_the_pooled_loci_and_excludes_the_primary_cell_type():
+    e = cell2.exposure(exposure_pairs())
+    assert e["pooled_positives"] == 4  # the K562 pair and the negative are out
+    assert e["pooled_loci"] == 3
+    assert e["already_exposed_loci"] == 2
+    assert e["never_exposed_loci"] == 1
+    assert e["never_exposed_cell_types"] == ["WTC11"]
+
+
+def test_a_locus_shared_with_an_exposed_cell_type_is_counted_as_exposed():
+    e = cell2.exposure(exposure_pairs())
+    assert e["loci_in_more_than_one_cell_type"] == 1
+    assert e["loci_counted_as_exposed_only_because_they_merge_with_an_exposed_cell_type"] == 1
+    assert "counted as exposed" in e["merged_locus_side"]
+    # the shared locus holds two positives and both are on the exposed side
+    assert e["already_exposed_positives"] == 3
+    assert e["never_exposed_positives"] == 1
+
+
+def test_the_split_is_not_the_sum_of_the_per_cell_type_counts():
+    e = cell2.exposure(exposure_pairs())
+    r = e["reconciliation_of_the_summed_and_pooled_counts"]
+    assert r["independent_loci_summed_per_cell_type"] == 4
+    assert r["independent_loci_pooled_genome_wide"] == 3
+    assert r["difference"] == 1
+    assert r["pooled_loci_that_absorb_more_than_one_per_cell_type_locus"] == 1
+    assert e["already_exposed_loci"] + e["never_exposed_loci"] == e["pooled_loci"]
+
+
+def test_the_never_scored_stratum_is_grouped_on_its_own_and_marked_descriptive():
+    own = cell2.exposure(exposure_pairs())["never_scored_stratum_on_its_own"]
+    assert own["positives"] == 2  # both WTC11 positives, including the one sharing an exposed locus
+    assert own["independent_loci_genome_wide"] == 2
+    assert "descriptive only" in own["status"]
+    assert "WTC11" in own["population"]
+
+
+def test_exposure_takes_an_explicit_exposed_set_without_touching_the_registered_one():
+    e = cell2.exposure(exposure_pairs(), exposed={"WTC11": "for the test only"})
+    assert e["never_exposed_cell_types"] == ["GM12878", "HCT116"] or set(e["never_exposed_cell_types"]) <= {
+        "GM12878",
+        "HCT116",
+    }
+    assert set(cell2.EXPOSED_CELL_TYPES) == {"GM12878", "HCT116"}
+
+
+# --- the power gate's registered line, readings and profile feasibility ------------------------------
+
+
+def test_the_power_gate_line_and_design_are_registered_figures():
+    assert cell2.POWER_GATE_SHARE_FLOOR == 0.5
+    assert "share of subsamples whose interval excludes zero" in cell2.POWER_GATE_DESIGN
+    assert "positives-per-locus profile" in cell2.POWER_GATE_DESIGN
+    assert "not to spend" in cell2.POWER_GATE_DESIGN
+
+
+def test_the_readings_are_fixed_in_advance_and_refuse_no_effect():
+    assert cell2.READINGS["lower_bound_above_zero"] == "replicated outside K562 on these cell types"
+    assert cell2.READINGS["interval_covering_zero"] == "no difference detected"
+    assert "no effect" in cell2.READINGS["never_say"]
+
+
+def test_a_profile_is_matchable_only_by_loci_of_exactly_the_required_sizes():
+    source = (
+        [key("chr1", i * 10_000_000, f"A{i}") for i in range(3)]
+        + [key("chr2", 0, "B1"), key("chr2", 100, "B2")]
+        + [key("chr3", 0, "C1"), key("chr3", 100, "C2"), key("chr3", 200, "C3")]
+    )
+    # source holds three loci of one positive, one of two and one of three
+    assert cell2._count_sizes(source) == {1: 3, 2: 1, 3: 1}
+    ok = cell2.profile_match({"1": 2, "3": 1}, source)
+    assert ok["exact_profile_available"] is True
+    assert ok["shortfall_by_locus_size"] == {}
+
+
+def test_a_profile_needing_a_larger_locus_than_the_source_holds_is_refused_with_the_shortfall():
+    source = [key("chr1", 0, "A1"), key("chr1", 100, "A2")]  # one locus of two positives
+    out = cell2.profile_match({"2": 1, "5": 1}, source)
+    assert out["exact_profile_available"] is False
+    assert out["shortfall_by_locus_size"] == {"5": {"required": 1, "available": 0, "missing": 1}}
+    assert "must be registered before it is used" in out["rule"]
+
+
+def test_a_larger_source_locus_cannot_stand_in_for_a_smaller_required_one():
+    source = [key("chr1", 0, "A1"), key("chr1", 100, "A2"), key("chr1", 200, "A3")]  # one locus of 3
+    out = cell2.profile_match({"1": 1}, source)
+    assert out["exact_profile_available"] is False
+    assert out["shortfall_by_locus_size"]["1"]["missing"] == 1

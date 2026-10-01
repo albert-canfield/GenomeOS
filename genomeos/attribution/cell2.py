@@ -317,3 +317,199 @@ def verdict(counted: dict[str, Any], floor: int = POOLED_LOCUS_FLOOR) -> dict[st
         "meets_floor": pooled >= floor,
         "decision": "eligible to draft a registration" if pooled >= floor else "no-go, stop",
     }
+
+
+#: Cell types of the candidate pool whose deletion reading this project has already seen, with where
+#: the reading sits. Disclosed because the decision to pool these cell types was taken after those
+#: readings were seen, which is prior exposure: a stratum that has already been scored cannot be
+#: offered as a fresh test of the same question. The readings themselves are cited, never used in any
+#: count here, and this lane re-derived none of them.
+EXPOSED_CELL_TYPES = {
+    "GM12878": (
+        "already scored: a held-out stratum of data/results/crispri_published.json "
+        "(heldout_published_pairs), reported gain +0.0146"
+    ),
+    "HCT116": (
+        "already scored: data/results/crispri_published.json second_cell_type_hct116, the lane-hct116 "
+        "run, reported gain +0.022, verdict 'passes, not replicated'"
+    ),
+}
+
+#: Which side a locus falls on when one merged locus holds positives from an exposed and an unexposed
+#: cell type. It is counted as exposed. Once any part of a locus has been scored, a later reading at
+#: that locus is not independent of the reading already seen, so counting it as fresh would overstate
+#: the never-exposed stratum. The rule is stated before the split is computed.
+MERGED_LOCUS_SIDE = (
+    "a locus holding positives from both an exposed and an unexposed cell type is counted as exposed, "
+    "because once any part of a locus has been scored a later reading there is not independent of the "
+    "reading already seen; counting it as fresh would overstate the never-exposed stratum"
+)
+
+
+def exposure(
+    pairs: Iterable[Any],
+    exposed: dict[str, str] | None = None,
+    primary: str = PRIMARY_CELL,
+    span: int = INDEPENDENT_LOCUS_SPAN,
+) -> dict[str, Any]:
+    """The pooled loci split into those whose cell types have already been scored and those never
+    scored, computed under the pooled convention itself and never by adding per-cell-type counts.
+
+    Per-cell-type counts do not sum to the pooled count: loci that appear in more than one cell type
+    merge under the convention, so a split made by addition would double-count them."""
+    exposed = EXPOSED_CELL_TYPES if exposed is None else exposed
+    ps = [p for p in pairs if p.regulated and p.cell != primary]
+    keys = [locus_key(p) for p in ps]
+    ids = group([k._replace(cell="") for k in keys], span)
+    cells_of: dict[int, set[str]] = {}
+    size_of: dict[int, int] = {}
+    for gid, k in zip(ids, keys, strict=True):
+        cells_of.setdefault(gid, set()).add(k.cell)
+        size_of[gid] = size_of.get(gid, 0) + 1
+    exposed_ids = [g for g, cs in cells_of.items() if cs & set(exposed)]
+    fresh_ids = [g for g in cells_of if g not in set(exposed_ids)]
+    mixed = [g for g in exposed_ids if cells_of[g] - set(exposed)]
+    multi = [g for g, cs in cells_of.items() if len(cs) > 1]
+    fresh_cells = sorted({c for g in fresh_ids for c in cells_of[g]})
+    # Why the per-cell-type counts sum to more than the pooled count: each pooled locus absorbs the
+    # per-cell-type loci that fall inside it, and every absorption after the first is one the summed
+    # figure counts twice. Computed, so the arithmetic can be checked rather than asserted.
+    pieces: set[tuple[int, str, int]] = set()
+    for cell in sorted({k.cell for k in keys}):
+        of_cell = [(i, k) for i, k in enumerate(keys) if k.cell == cell]
+        cell_ids = group([k for _, k in of_cell], span)
+        for (i, _), piece in zip(of_cell, cell_ids, strict=True):
+            pieces.add((ids[i], cell, piece))
+    absorbed: dict[int, int] = {}
+    for pooled_id, _, _ in pieces:
+        absorbed[pooled_id] = absorbed.get(pooled_id, 0) + 1
+    reconcile = {
+        "independent_loci_summed_per_cell_type": len(pieces),
+        "independent_loci_pooled_genome_wide": len(cells_of),
+        "difference": len(pieces) - len(cells_of),
+        "pooled_loci_that_absorb_more_than_one_per_cell_type_locus": sum(
+            1 for n in absorbed.values() if n > 1
+        ),
+        "note": (
+            "the summed figure counts a locus once for every separate per-cell-type group inside it; "
+            "the pooled figure counts it once. The difference is the number of absorptions, which is "
+            "why a split between exposed and unexposed loci must never be made by addition"
+        ),
+    }
+    fresh_keys = [k._replace(cell="") for k in keys if k.cell not in exposed]
+    return {
+        "computed_under": (
+            "the pooled convention itself: the pooled positives are grouped once, genome-wide, and "
+            "each locus is then assigned a side. No per-cell-type count is added to another"
+        ),
+        "why_addition_would_be_wrong": (
+            "per-cell-type locus counts do not sum to the pooled count, because a locus present in "
+            "more than one cell type merges under the convention; adding the per-cell figures would "
+            "count such a locus once per cell type"
+        ),
+        "exposed_cell_types": dict(exposed),
+        "merged_locus_side": MERGED_LOCUS_SIDE,
+        "pooled_loci": len(cells_of),
+        "pooled_positives": len(keys),
+        "already_exposed_loci": len(exposed_ids),
+        "already_exposed_positives": sum(size_of[g] for g in exposed_ids),
+        "never_exposed_loci": len(fresh_ids),
+        "never_exposed_positives": sum(size_of[g] for g in fresh_ids),
+        "never_exposed_cell_types": fresh_cells,
+        "loci_in_more_than_one_cell_type": len(multi),
+        "reconciliation_of_the_summed_and_pooled_counts": reconcile,
+        "loci_counted_as_exposed_only_because_they_merge_with_an_exposed_cell_type": len(mixed),
+        "never_scored_stratum_on_its_own": {
+            "population": (
+                "the measured positives of the candidate cell types never scored by this project: "
+                f"{', '.join(c for c in sorted(set(k.cell for k in keys)) if c not in exposed) or 'none'}"
+            ),
+            "positives": len(fresh_keys),
+            "independent_loci_genome_wide": count_loci(fresh_keys, span),
+            "locus_shapes_genome_wide": locus_shapes(fresh_keys, span),
+            "status": (
+                "descriptive only: this stratum is reported because the pool's exposure makes it the "
+                "only unexposed part, and it is not judged against the pooled floor"
+            ),
+        },
+    }
+
+
+# --- the power gate, registered before it is computed (reviewer, 2026-10-02) -------------------------
+
+#: The share of subsamples whose interval must exclude zero for a run to be worth paying for. Below
+#: this line a run is more likely inconclusive than not, and the recommendation is not to spend. The
+#: line is 0.5 and is written down here before the share is computed, so it cannot be moved afterwards.
+POWER_GATE_SHARE_FLOOR = 0.5
+
+#: What the gate is, in words, fixed before any share is computed.
+POWER_GATE_DESIGN = (
+    "subsample the primary cell type's held-out pairs to the second-cell structure: the same number of "
+    "independent loci, the same number of measured positives, and the same positives-per-locus "
+    "profile, under the locus convention registered here. At the primary cell type's observed effect, "
+    "report the share of subsamples whose interval excludes zero. A share below "
+    "POWER_GATE_SHARE_FLOOR means the run is more likely inconclusive than not, and the recommendation "
+    "is not to spend"
+)
+
+#: Reading fixed in advance, so neither outcome can be restated once it is seen.
+READINGS = {
+    "lower_bound_above_zero": "replicated outside K562 on these cell types",
+    "interval_covering_zero": "no difference detected",
+    "never_say": (
+        "no effect: an interval covering zero is a failure to detect a difference at this number of "
+        "loci, not evidence that the difference is absent"
+    ),
+}
+
+
+def profile_match(
+    target: dict[str, int], source: Iterable[LocusKey], span: int = INDEPENDENT_LOCUS_SPAN
+) -> dict[str, Any]:
+    """Can the primary cell type's loci supply the second cell structure's positives-per-locus profile
+    exactly, one source locus per required locus? Labels only: it compares locus sizes and nothing else.
+
+    `target` is a positives-per-locus count map as `locus_shapes` reports it. The match is greedy from
+    the largest required size, which is exact for this question: a required size can only be met by a
+    source locus of that size, so the sizes are matched independently."""
+    available: dict[int, int] = {}
+    for n in [s for s in _sizes(source, span)]:
+        available[n] = available.get(n, 0) + 1
+    shortfall: dict[str, dict[str, int]] = {}
+    for size_text, needed in sorted(target.items(), key=lambda kv: -int(kv[0])):
+        size = int(size_text)
+        have = available.get(size, 0)
+        if have < needed:
+            shortfall[size_text] = {"required": needed, "available": have, "missing": needed - have}
+        available[size] = max(0, have - needed)
+    return {
+        "required_positives_per_locus_counts": dict(target),
+        "available_positives_per_locus_counts": {
+            str(n): c for n, c in sorted(_count_sizes(source, span).items())
+        },
+        "exact_profile_available": not shortfall,
+        "shortfall_by_locus_size": shortfall,
+        "rule": (
+            "a required locus of n positives can only be met by a source locus of exactly n positives, "
+            "so the sizes are matched independently and the largest first; any relaxation of the "
+            "profile is a change to the gate and must be registered before it is used, not chosen "
+            "after seeing this"
+        ),
+    }
+
+
+def _sizes(keys: Iterable[LocusKey], span: int = INDEPENDENT_LOCUS_SPAN) -> list[int]:
+    """The number of positives in each locus of `keys`."""
+    ks = list(keys)
+    counts: dict[int, int] = {}
+    for gid in group(ks, span):
+        counts[gid] = counts.get(gid, 0) + 1
+    return sorted(counts.values(), reverse=True)
+
+
+def _count_sizes(keys: Iterable[LocusKey], span: int = INDEPENDENT_LOCUS_SPAN) -> dict[int, int]:
+    """How many loci of `keys` hold each number of positives."""
+    out: dict[int, int] = {}
+    for n in _sizes(keys, span):
+        out[n] = out.get(n, 0) + 1
+    return out

@@ -6,25 +6,68 @@
   "question": "can any second held-out cell type support a stratified test of the CRISPRi deletion result, judged by independent loci among its measured positives rather than by pair counts",
   "blinding": "labels, coordinates, measured genes and cell types only, through genomeos.attribution.crispri.load; no prediction, deletion value, model score or AUPRC was read or computed",
   "code_cleanliness": {
-    "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+    "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
     "dirty": true,
-    "own_uncommitted_code": [],
-    "own_code_is_committed": true,
+    "own_uncommitted_code": [
+      "genomeos/attribution/cell2.py",
+      "scripts/cell2_eligibility.py",
+      "tests/test_cell2_eligibility.py"
+    ],
+    "own_code_is_committed": false,
     "foreign_uncommitted_code": [
-      "genomeos/attribution/experiment_value.py",
       "genomeos/attribution/re2g.py",
-      "scripts/re2g_k562_only_range.py",
-      "tests/test_experiment_value.py"
+      "scripts/re2g_paired.py"
     ],
     "foreign_uncommitted_code_on_the_counting_path": [],
-    "modules_the_counting_path_imports": [
-      "genomeos/manifest.py",
-      "genomeos/results.py",
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/budget.py",
       "genomeos/attribution/cell2.py",
+      "genomeos/attribution/constraint.py",
       "genomeos/attribution/crispri.py",
-      "genomeos/attribution/measured.py"
+      "genomeos/attribution/measured.py",
+      "genomeos/attribution/mpra.py",
+      "genomeos/attribution/targets.py",
+      "genomeos/attribution/variation.py",
+      "genomeos/attribution/vista.py",
+      "genomeos/certainty.py",
+      "genomeos/coords.py",
+      "genomeos/genome/Annotation.py",
+      "genomeos/genome/Genome.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/annotation.py",
+      "genomeos/genome/bgzf.py",
+      "genomeos/genome/domains.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/fetch.py",
+      "genomeos/genome/genome.py",
+      "genomeos/genome/motifs.py",
+      "genomeos/genome/reader.py",
+      "genomeos/genome/regulation.py",
+      "genomeos/genome/regulatory.py",
+      "genomeos/genome/repeats.py",
+      "genomeos/genome/sequence.py",
+      "genomeos/genome/unknown.py",
+      "genomeos/ir/__init__.py",
+      "genomeos/ir/model.py",
+      "genomeos/knowledge/Reactome.py",
+      "genomeos/knowledge/__init__.py",
+      "genomeos/knowledge/across.py",
+      "genomeos/knowledge/homology.py",
+      "genomeos/knowledge/profiling.py",
+      "genomeos/knowledge/satmut.py",
+      "genomeos/lib/membership.py",
+      "genomeos/manifest.py",
+      "genomeos/predict/enhancer_target.py",
+      "genomeos/results.py",
+      "genomeos/runtime/__init__.py",
+      "genomeos/version.py",
+      "scripts/cell2_eligibility.py"
     ],
-    "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path imports only the modules listed, so a foreign file outside that list cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+    "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
   },
   "counts": {
     "convention": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
@@ -298,6 +341,138 @@
     },
     "floor": 20
   },
+  "prior_exposure": {
+    "computed_under": "the pooled convention itself: the pooled positives are grouped once, genome-wide, and each locus is then assigned a side. No per-cell-type count is added to another",
+    "why_addition_would_be_wrong": "per-cell-type locus counts do not sum to the pooled count, because a locus present in more than one cell type merges under the convention; adding the per-cell figures would count such a locus once per cell type",
+    "exposed_cell_types": {
+      "GM12878": "already scored: a held-out stratum of data/results/crispri_published.json (heldout_published_pairs), reported gain +0.0146",
+      "HCT116": "already scored: data/results/crispri_published.json second_cell_type_hct116, the lane-hct116 run, reported gain +0.022, verdict 'passes, not replicated'"
+    },
+    "merged_locus_side": "a locus holding positives from both an exposed and an unexposed cell type is counted as exposed, because once any part of a locus has been scored a later reading there is not independent of the reading already seen; counting it as fresh would overstate the never-exposed stratum",
+    "pooled_loci": 22,
+    "pooled_positives": 72,
+    "already_exposed_loci": 12,
+    "already_exposed_positives": 56,
+    "never_exposed_loci": 10,
+    "never_exposed_positives": 16,
+    "never_exposed_cell_types": [
+      "Jurkat",
+      "WTC11"
+    ],
+    "loci_in_more_than_one_cell_type": 3,
+    "reconciliation_of_the_summed_and_pooled_counts": {
+      "independent_loci_summed_per_cell_type": 26,
+      "independent_loci_pooled_genome_wide": 22,
+      "difference": 4,
+      "pooled_loci_that_absorb_more_than_one_per_cell_type_locus": 3,
+      "note": "the summed figure counts a locus once for every separate per-cell-type group inside it; the pooled figure counts it once. The difference is the number of absorptions, which is why a split between exposed and unexposed loci must never be made by addition"
+    },
+    "loci_counted_as_exposed_only_because_they_merge_with_an_exposed_cell_type": 2,
+    "never_scored_stratum_on_its_own": {
+      "population": "the measured positives of the candidate cell types never scored by this project: Jurkat, WTC11",
+      "positives": 22,
+      "independent_loci_genome_wide": 12,
+      "locus_shapes_genome_wide": {
+        "loci": 12,
+        "span_mb": {
+          "min": 0.0005,
+          "median": 0.00225,
+          "max": 0.684
+        },
+        "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+        "positives_per_locus": {
+          "min": 1.0,
+          "median": 1.5,
+          "max": 5.0
+        },
+        "positives_per_locus_counts": {
+          "1": 6,
+          "2": 4,
+          "3": 1,
+          "5": 1
+        },
+        "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+        "largest_locus_positives": 5,
+        "largest_locus_share_of_positives": 0.2273,
+        "largest_locus_span_mb": 0.684
+      },
+      "status": "descriptive only: this stratum is reported because the pool's exposure makes it the only unexposed part, and it is not judged against the pooled floor"
+    }
+  },
+  "power_gate": {
+    "design": "subsample the primary cell type's held-out pairs to the second-cell structure: the same number of independent loci, the same number of measured positives, and the same positives-per-locus profile, under the locus convention registered here. At the primary cell type's observed effect, report the share of subsamples whose interval excludes zero. A share below POWER_GATE_SHARE_FLOOR means the run is more likely inconclusive than not, and the recommendation is not to spend",
+    "share_floor": 0.5,
+    "share_floor_registered_before_the_computation": true,
+    "structure_to_match": {
+      "population": "the measured positives of the held-out cell types other than K562: GM12878, HCT116, Jurkat, WTC11",
+      "independent_loci": 22,
+      "positives": 72,
+      "positives_per_locus_counts": {
+        "1": 8,
+        "2": 5,
+        "3": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,
+        "10": 1
+      }
+    },
+    "source_population": "the measured positives of the 1918 held-out K562 pairs, grouped by the same locus convention",
+    "profile_feasibility": {
+      "required_positives_per_locus_counts": {
+        "1": 8,
+        "2": 5,
+        "3": 2,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 2,
+        "10": 1
+      },
+      "available_positives_per_locus_counts": {
+        "1": 50,
+        "2": 17,
+        "3": 4,
+        "4": 2,
+        "5": 1,
+        "9": 1
+      },
+      "exact_profile_available": false,
+      "shortfall_by_locus_size": {
+        "10": {
+          "required": 1,
+          "available": 0,
+          "missing": 1
+        },
+        "8": {
+          "required": 2,
+          "available": 0,
+          "missing": 2
+        },
+        "7": {
+          "required": 1,
+          "available": 0,
+          "missing": 1
+        },
+        "6": {
+          "required": 1,
+          "available": 0,
+          "missing": 1
+        }
+      },
+      "rule": "a required locus of n positives can only be met by a source locus of exactly n positives, so the sizes are matched independently and the largest first; any relaxation of the profile is a change to the gate and must be registered before it is used, not chosen after seeing this"
+    },
+    "share": null,
+    "share_not_computed_because": [
+      "the structure the gate specifies cannot be drawn from the primary cell type's held-out positives: they hold no locus of 6, 7, 8 or 10 positives, which the second-cell profile requires, so no subsample reproduces it. The shortfall is given under profile_feasibility, computed from labels alone",
+      "a share of intervals at the primary cell type's observed effect cannot be computed without reading measured deletion values and a gain, which this lane is blinded against: its stop conditions are labels, coordinates, genes and cells only, and to compute no gain and fit no model"
+    ],
+    "what_this_means_for_the_approved_requests": "Albert's approval requires the power figure to be at least 0.5. No figure exists yet, so the condition is not met and nothing may be spent. This is not a figure below the line and must not be read as one: the gate as registered is not computable on this source, and whether to relax the profile, or to assign the share to a lane that is not blinded, is a decision for the coordinator and the supervisor, taken before the figure is computed",
+    "not_adjusted": "the subsampling, the structure, the effect size and the line were not adjusted; the shortfall is reported as found"
+  },
   "verdict": {
     "floor": 20,
     "floor_set_before_the_count": true,
@@ -509,11 +684,187 @@
       "why_that_result_did_not_run": "HCT116 needs more deletion requests than the lane's budget; costed and handed to the coordinator",
       "total_requests_for_all_three": 1430
     },
-    "authorisation": "the request count goes to Albert for authorisation; this lane made no request and holds none",
+    "prior_exposure": {
+      "computed_under": "the pooled convention itself: the pooled positives are grouped once, genome-wide, and each locus is then assigned a side. No per-cell-type count is added to another",
+      "why_addition_would_be_wrong": "per-cell-type locus counts do not sum to the pooled count, because a locus present in more than one cell type merges under the convention; adding the per-cell figures would count such a locus once per cell type",
+      "exposed_cell_types": {
+        "GM12878": "already scored: a held-out stratum of data/results/crispri_published.json (heldout_published_pairs), reported gain +0.0146",
+        "HCT116": "already scored: data/results/crispri_published.json second_cell_type_hct116, the lane-hct116 run, reported gain +0.022, verdict 'passes, not replicated'"
+      },
+      "merged_locus_side": "a locus holding positives from both an exposed and an unexposed cell type is counted as exposed, because once any part of a locus has been scored a later reading there is not independent of the reading already seen; counting it as fresh would overstate the never-exposed stratum",
+      "pooled_loci": 22,
+      "pooled_positives": 72,
+      "already_exposed_loci": 12,
+      "already_exposed_positives": 56,
+      "never_exposed_loci": 10,
+      "never_exposed_positives": 16,
+      "never_exposed_cell_types": [
+        "Jurkat",
+        "WTC11"
+      ],
+      "loci_in_more_than_one_cell_type": 3,
+      "reconciliation_of_the_summed_and_pooled_counts": {
+        "independent_loci_summed_per_cell_type": 26,
+        "independent_loci_pooled_genome_wide": 22,
+        "difference": 4,
+        "pooled_loci_that_absorb_more_than_one_per_cell_type_locus": 3,
+        "note": "the summed figure counts a locus once for every separate per-cell-type group inside it; the pooled figure counts it once. The difference is the number of absorptions, which is why a split between exposed and unexposed loci must never be made by addition"
+      },
+      "loci_counted_as_exposed_only_because_they_merge_with_an_exposed_cell_type": 2,
+      "never_scored_stratum_on_its_own": {
+        "population": "the measured positives of the candidate cell types never scored by this project: Jurkat, WTC11",
+        "positives": 22,
+        "independent_loci_genome_wide": 12,
+        "locus_shapes_genome_wide": {
+          "loci": 12,
+          "span_mb": {
+            "min": 0.0005,
+            "median": 0.00225,
+            "max": 0.684
+          },
+          "span_mb_note": "the span of a locus is the distance from the leftmost start to the rightmost end of its elements, so a chained locus can be wider than the 1 Mb joining span",
+          "positives_per_locus": {
+            "min": 1.0,
+            "median": 1.5,
+            "max": 5.0
+          },
+          "positives_per_locus_counts": {
+            "1": 6,
+            "2": 4,
+            "3": 1,
+            "5": 1
+          },
+          "positives_per_locus_counts_note": "locus size in positives -> how many loci have that size",
+          "largest_locus_positives": 5,
+          "largest_locus_share_of_positives": 0.2273,
+          "largest_locus_span_mb": 0.684
+        },
+        "status": "descriptive only: this stratum is reported because the pool's exposure makes it the only unexposed part, and it is not judged against the pooled floor"
+      }
+    },
+    "resampling_unit": {
+      "primary": "a cluster bootstrap over the independent loci registered here, resampling whole loci with replacement, with cell type as a stratum so each stratum is resampled within itself and never pooled with K562",
+      "also_reported": "the chromosome-cluster interval, resampling whole chromosomes, which is the estimator the K562 claim used (crispri.gain_interval)",
+      "which_is_quoted": "the wider of the two intervals is the one quoted; the narrower one is reported beside it and never in its place",
+      "why": "the locus is the unit the eligibility count treats as independent, so it is the unit the interval must resample; the chromosome interval is kept for comparability with the published K562 figure, and quoting the wider of the two cannot flatter either"
+    },
+    "power_gate": {
+      "design": "subsample the primary cell type's held-out pairs to the second-cell structure: the same number of independent loci, the same number of measured positives, and the same positives-per-locus profile, under the locus convention registered here. At the primary cell type's observed effect, report the share of subsamples whose interval excludes zero. A share below POWER_GATE_SHARE_FLOOR means the run is more likely inconclusive than not, and the recommendation is not to spend",
+      "share_floor": 0.5,
+      "share_floor_registered_before_the_computation": true,
+      "structure_to_match": {
+        "population": "the measured positives of the held-out cell types other than K562: GM12878, HCT116, Jurkat, WTC11",
+        "independent_loci": 22,
+        "positives": 72,
+        "positives_per_locus_counts": {
+          "1": 8,
+          "2": 5,
+          "3": 2,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 2,
+          "10": 1
+        }
+      },
+      "source_population": "the measured positives of the 1918 held-out K562 pairs, grouped by the same locus convention",
+      "profile_feasibility": {
+        "required_positives_per_locus_counts": {
+          "1": 8,
+          "2": 5,
+          "3": 2,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 2,
+          "10": 1
+        },
+        "available_positives_per_locus_counts": {
+          "1": 50,
+          "2": 17,
+          "3": 4,
+          "4": 2,
+          "5": 1,
+          "9": 1
+        },
+        "exact_profile_available": false,
+        "shortfall_by_locus_size": {
+          "10": {
+            "required": 1,
+            "available": 0,
+            "missing": 1
+          },
+          "8": {
+            "required": 2,
+            "available": 0,
+            "missing": 2
+          },
+          "7": {
+            "required": 1,
+            "available": 0,
+            "missing": 1
+          },
+          "6": {
+            "required": 1,
+            "available": 0,
+            "missing": 1
+          }
+        },
+        "rule": "a required locus of n positives can only be met by a source locus of exactly n positives, so the sizes are matched independently and the largest first; any relaxation of the profile is a change to the gate and must be registered before it is used, not chosen after seeing this"
+      },
+      "share": null,
+      "share_not_computed_because": [
+        "the structure the gate specifies cannot be drawn from the primary cell type's held-out positives: they hold no locus of 6, 7, 8 or 10 positives, which the second-cell profile requires, so no subsample reproduces it. The shortfall is given under profile_feasibility, computed from labels alone",
+        "a share of intervals at the primary cell type's observed effect cannot be computed without reading measured deletion values and a gain, which this lane is blinded against: its stop conditions are labels, coordinates, genes and cells only, and to compute no gain and fit no model"
+      ],
+      "what_this_means_for_the_approved_requests": "Albert's approval requires the power figure to be at least 0.5. No figure exists yet, so the condition is not met and nothing may be spent. This is not a figure below the line and must not be read as one: the gate as registered is not computable on this source, and whether to relax the profile, or to assign the share to a lane that is not blinded, is a decision for the coordinator and the supervisor, taken before the figure is computed",
+      "not_adjusted": "the subsampling, the structure, the effect size and the line were not adjusted; the shortfall is reported as found"
+    },
+    "readings_fixed_in_advance": {
+      "lower_bound_above_zero": "replicated outside K562 on these cell types",
+      "interval_covering_zero": "no difference detected",
+      "never_say": "no effect: an interval covering zero is a failure to detect a difference at this number of loci, not evidence that the difference is absent"
+    },
+    "cost_measured_not_estimated": {
+      "source": "the comparable HCT116 fetch of 705 requests on 2026-09-28, data/jobs/crispri_hct116_fetch.log, 10:23:23 to 10:26:38, refused_quota: 0",
+      "rate": "3.6 requests per second over the client's five workers",
+      "fetching_for_725_requests": "about 3.3 minutes",
+      "scoring": "about a minute",
+      "cache": "0.57 MB, at 793 bytes per answer measured over 135,829 cached answers",
+      "money": "none: AlphaGenome is free under non-commercial terms, with an unpublished daily quota",
+      "local_compute": "negligible",
+      "quoted_as": "measured, with the source named; this lane re-derived none of it"
+    },
+    "cost_that_is_not_a_resource": {
+      "what": "WTC11 and Jurkat are the only cell types in this benchmark never scored here, holding 15 positives in 9 loci and 7 in 4",
+      "why_it_is_a_cost": "sending the requests converts them permanently into examined data, so this is the project's one unexposed look, and the power gate decides whether it is worth it"
+    },
+    "authorisation": {
+      "albert_approved_wording": "I approve the 725 AlphaGenome requests for the second cell type (WTC11 614, Jurkat 111), sent only after the registration is committed with genomeos-3b's four terms and the power figure is at least 0.5, and only with genomeos-3b's written sign-off.",
+      "requests_approved": 725,
+      "per_cell_type": {
+        "WTC11": 614,
+        "Jurkat": 111
+      },
+      "cached_values_reused_without_a_request": [
+        "GM12878",
+        "HCT116"
+      ],
+      "binds_before_a_single_request_is_sent": [
+        "the registration is committed, carrying all four terms",
+        "the power figure is at least 0.5, against the line registered before it is computed",
+        "the supervisor's written sign-off, which the coordinator obtains"
+      ],
+      "below_the_line": "below 0.5 nothing is spent and the reading goes on record as 'not powered to decide', which is a finished lane and a useful answer, not a failure. The subsampling, the structure, the effect size and the line are not adjusted to lift the figure over it",
+      "this_lane_sent_nothing": "this lane made no request, holds none, and sends none; it did not obtain the sign-off and did not run the comparison"
+    },
     "what_this_lane_did_not_do": [
       "computed no gain and fitted no model",
       "read no prediction, deletion value, model score or AUPRC",
-      "made no model request"
+      "made no model request and sent none",
+      "did not compute the power share, for the two reasons recorded under power_gate"
     ]
   },
   "result_manifest": {
@@ -581,42 +932,84 @@
       "heldout": "the 4,378 valid held-out pairs across five cell types; the only pairs read here"
     },
     "code_cleanliness": {
-      "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+      "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
       "dirty": true,
-      "own_uncommitted_code": [],
-      "own_code_is_committed": true,
+      "own_uncommitted_code": [
+        "genomeos/attribution/cell2.py",
+        "scripts/cell2_eligibility.py",
+        "tests/test_cell2_eligibility.py"
+      ],
+      "own_code_is_committed": false,
       "foreign_uncommitted_code": [
-        "genomeos/attribution/experiment_value.py",
         "genomeos/attribution/re2g.py",
-        "scripts/re2g_k562_only_range.py",
-        "tests/test_experiment_value.py"
+        "scripts/re2g_paired.py"
       ],
       "foreign_uncommitted_code_on_the_counting_path": [],
-      "modules_the_counting_path_imports": [
-        "genomeos/manifest.py",
-        "genomeos/results.py",
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
         "genomeos/attribution/cell2.py",
+        "genomeos/attribution/constraint.py",
         "genomeos/attribution/crispri.py",
-        "genomeos/attribution/measured.py"
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/Annotation.py",
+        "genomeos/genome/Genome.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/Reactome.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/version.py",
+        "scripts/cell2_eligibility.py"
       ],
-      "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path imports only the modules listed, so a foreign file outside that list cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+      "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+      "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "3e8f5f2f7ef5f66a6b047d3ac569955339c0fbae",
+      "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
       "dirty": true,
       "dirty_code_paths": [
-        "genomeos/attribution/experiment_value.py",
+        "genomeos/attribution/cell2.py",
         "genomeos/attribution/re2g.py",
-        "scripts/re2g_k562_only_range.py",
-        "tests/test_experiment_value.py"
+        "scripts/cell2_eligibility.py",
+        "scripts/re2g_paired.py",
+        "tests/test_cell2_eligibility.py"
       ],
       "untracked_code_paths": [
-        "genomeos/attribution/experiment_value.py",
-        "scripts/re2g_k562_only_range.py",
-        "tests/test_experiment_value.py"
+        "scripts/re2g_paired.py"
       ],
       "dirty_result_paths": [
-        "data/results/cell2_eligibility.json"
+        "data/results/re2g_paired.json"
       ],
       "argv": [
         "scripts/cell2_eligibility.py"
