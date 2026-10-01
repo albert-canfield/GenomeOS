@@ -219,6 +219,12 @@ def eligibility(
     # the positive: two cell types that measured the same place did not sample two places, so this is
     # the conservative count and the one the floor is read against.
     genome_wide = [k._replace(cell="") for k in pooled_keys]
+    # The subset the question is actually about. A candidate without a deletion value cannot carry a
+    # deletion gain at all, so a pooled count that leans on such cells names loci no gain could be
+    # measured at. This is reported beside the floor verdict and does not change it: the floor is read
+    # against the pooled count of all candidates, as registered.
+    with_feature = [c for c in candidates if per_cell[c]["deletion_value_available"]]
+    feature_keys = [k._replace(cell="") for k in pooled_keys if deletion_available(k.cell, model_cells)]
     return {
         "convention": INDEPENDENT_LOCUS_RULE,
         "convention_is_operational": (
@@ -245,6 +251,24 @@ def eligibility(
                 "a locus measured in two cell types is one place in the genome, not two, so the "
                 "genome-wide grouping is the conservative count; the summed count is reported beside "
                 "it and is never the one the floor is read against"
+            ),
+        },
+        "pooled_over_candidates_with_a_deletion_value": {
+            "population": (
+                "the measured positives of the candidate held-out cell types that have a deletion value "
+                "at all, that is those in the lines the deletion table was scored in: "
+                f"{', '.join(with_feature) if with_feature else 'none'}"
+            ),
+            "cell_types": with_feature,
+            "pairs": sum(per_cell[c]["pairs"] for c in with_feature),
+            "positives": len(feature_keys),
+            "independent_loci_genome_wide": count_loci(feature_keys, span),
+            "locus_shapes_genome_wide": locus_shapes(feature_keys, span),
+            "read_against_the_floor": False,
+            "why_it_is_reported": (
+                "a candidate without a deletion value cannot carry a deletion gain, so loci contributed "
+                "by such cells are places where the quantity in question cannot be measured. This "
+                "figure is reported beside the registered floor verdict and does not change it"
             ),
         },
         "floor": POOLED_LOCUS_FLOOR,

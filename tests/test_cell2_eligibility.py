@@ -207,6 +207,34 @@ def test_the_pooled_count_read_against_the_floor_is_the_conservative_one():
     assert out["floor"] == 20
 
 
+def test_the_subset_with_a_deletion_value_is_counted_and_is_not_read_against_the_floor():
+    pairs = heldout_like() + [
+        FakePair("GM12878", "chr1", 1_000, 1_500, "G1", True),
+        FakePair("GM12878", "chr5", 9_000_000, 9_000_500, "G9", True),
+    ]
+    out = cell2.eligibility(pairs, ("K562", "HepG2", "GM12878", "IMR-90"))
+    subset = out["pooled_over_candidates_with_a_deletion_value"]
+    assert subset["cell_types"] == ["GM12878"]
+    assert subset["positives"] == 2
+    assert subset["independent_loci_genome_wide"] == 2
+    assert subset["read_against_the_floor"] is False
+    # the floor verdict still reads the count over every candidate, which is the registered rule
+    assert out["pooled_over_candidates"]["positives"] == 5
+    assert (
+        cell2.verdict(out)["pooled_independent_loci_genome_wide"]
+        == (out["pooled_over_candidates"]["independent_loci_genome_wide"])
+    )
+
+
+def test_the_subset_is_empty_when_no_candidate_has_a_deletion_value():
+    out = cell2.eligibility(heldout_like(), ("K562", "HepG2", "IMR-90"))
+    subset = out["pooled_over_candidates_with_a_deletion_value"]
+    assert subset["cell_types"] == []
+    assert subset["positives"] == 0
+    assert subset["independent_loci_genome_wide"] == 0
+    assert "none" in subset["population"]
+
+
 def test_deletion_availability_follows_the_model_cells_and_nothing_else():
     model = ("K562", "HepG2", "GM12878", "IMR-90")
     out = cell2.eligibility(heldout_like(), model)
