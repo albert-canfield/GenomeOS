@@ -12378,6 +12378,89 @@ The run never reads the energy test, the Anderson-Darling or Mann-Whitney counts
 - the file reader on a made-up pair of files;
 - the run script's authorisation and single run.
 
+### Amendment 1, 2026-10-01: five changes before any measurement (lane-n1)
+
+Required by the owner's reviewer after reading the code. The original registration (`f9a9130`, sha256
+`8478dd76…`) and its code (`b359867`) stay as committed. The amendment adds code in `5d1710a`. Its
+registration, `data/results/n1_registration_amendment_1.json`, is in `8ebaa9a`, stamped `5d1710a`, clean.
+Nothing was measured.
+
+**Framing.** N1 is an **exploratory comparison of two prediction arms against an operational response
+label**, |T| >= 3. T = X x sqrt(n) is a proposed statistic, not a calibrated test. Passing the gate does not
+validate per-gene biological responses. An acceptable control-tail rate does not establish any of these:
+- that cells are independent;
+- the uncertainty in the control mean and sd behind each z-score;
+- calibration across cell counts or across pooled rows;
+- the variance of perturbed cells.
+
+**Correction.** The section above says the 514 core controls "would flatter the null". All 585
+non-targeting rows include those 514, so using them does not avoid the core set's role in the
+normalization; it only adds the 71 guides outside it.
+
+The five changes:
+1. **AUROC.** `auroc` returned undefined for a constant predictor. `auroc_v2` counts ties as half, so a
+   constant score gives 0.5, and it is undefined only when a class is empty. It is checked against
+   brute-force pair counting.
+2. **Knockdown units: unsupported, so the v2 run stops before the knockdown rule.** The evidence, read on
+   2026-10-01:
+   - The STAR Methods give "Knockdown was computed as the ratio of mean (unnormalized) expression of the
+     target gene within perturbed cells vs. that in cells with non-targeting sgRNAs"
+     ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)).
+   - The same methods produce "adjusted UMI counts" per gemgroup, so "unnormalized" does not settle raw
+     against depth-adjusted counts.
+   - The Figshare text defines no `.obs` field ([20029387](https://doi.org/10.25452/figshare.plus.20029387.v1)).
+   - The predecessor producer code of 2019 computes `fold_first_expr = first_expr / control_first_expr`
+     from unnormalized per-cell means pooled over control cells
+     ([`GI_generate_populations.ipynb`](https://github.com/thomasmaxwellnorman/Perturbseq_GI/blob/3b25109aeb9c0c2026bd70abd50304a0ad4e5395/GI_generate_populations.ipynb),
+     cell 27, with `metaapply` defaulting to the unnormalized matrix in `perturbseq/cell_population.py`).
+     That code is for other data, the 2022 code is not public, and `pct_expr` has no 2019 counterpart.
+
+   So `num_cells_filtered x control_expr` is not established as an expected UMI count, and the Poisson
+   reading is withdrawn. `pct_expr = fold_expr - 1` would show only algebraic consistency.
+   `ELIGIBILITY_SUPPORTED = False`, and no threshold replaces the rule. Either of two things would
+   resolve it:
+   - the 2022 code, or the authors' definition of the fields;
+   - a separately reviewed amendment deriving knockdown from documented quantities.
+3. **The gate's claim** is narrowed as above.
+4. **Expression matching was not implemented in `f9a9130`.** The proposal promised it, but the frozen
+   comparison used expression deciles only in the gate. Now the primary per-factor AUROC compares
+   responders only with non-responders of the same control-expression decile, with each decile weighted by
+   its pairs (`stratified_auroc`). The unmatched AUROC is reported beside it with no criterion. This is
+   frozen and tested, but does not run while the stop in item 2 stands.
+5. **Execution matches the freeze.**
+   - `scripts/n1_run_v2.py` refuses unless every one of these matches the amendment: the original
+     registration (sha256 `8478dd76…`), the module (`0ea47ad9…`), itself (`b33ff4f3…`) and `CONSTANTS_V2`.
+     It checks them before opening any data file.
+   - Its reader decodes `X` at the 860 selected columns only, one row at a time.
+   - The section above said the gate reads "universe genes only". The original reader in fact decoded
+     whole rows of 8,248 genes and kept the 860.
+   - `scripts/n1_run.py` gains one early line that refuses and points to v2. Its old test stays, marked
+     skipped with that reason.
+
+**Unchanged:** the universe, the candidates, the ledger, the scores, the label, the gate's rows and pass
+rule, the floor, the bootstrap and the two separate criteria. The arms' positive counts differ by design,
+for example CGGBP1 with 40 attribution and 598 proximity genes, and are not equalised.
+
+**What an authorised v2 run reads, in order:**
+1. the freeze check, with no data file opened;
+2. both files' md5 and sha256;
+3. their identities;
+4. normalized and raw `X` at the 585 non-targeting rows, decoded at the 860 universe columns, and
+   `num_cells_filtered` at those rows.
+
+It then stops with `eligibility_unsupported` and reads no candidate row.
+
+**Tests:** 33 of the 34 tests in `tests/test_n1_perturb_response.py` pass on made-up inputs; the original
+runner test is skipped, as above. The amendment's tests cover:
+- the AUROC against pair counting, including a constant score giving 0.5;
+- the stratified AUROC on a confounded example and its pair weighting;
+- the v2 stop before the knockdown rule, and a failed gate;
+- the analysis after the stop, under a patched constant;
+- freeze mismatches refused before any file is opened;
+- the v2 runner applied once;
+- the reader decoding only the selected columns, checked by a spy on h5py;
+- the original runner's refusal.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
