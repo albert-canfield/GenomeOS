@@ -12928,6 +12928,71 @@ the cache's coverage, not a finding about the model: here, regulated links are m
 or nearest measured gene. Reopening the diagnostic would need a benchmark that measures several genes per
 element at comparable distances, under a new registration.
 
+#### The two link counts are different sets, and three wording corrections (2026-10-01, the owner's questions)
+
+The owner asked not to assume that "60 links with an alternative" and the moved figure describe the same set.
+They do not, and they came from different schemes. One read-only command lists every count below; it fits no
+model, computes no metric and writes no file:
+
+```
+uv run --frozen python scripts/wiring_counts.py
+```
+
+**The exact scheme.** The primary rewiring, `element_kept`: the element is kept, and the value attached is
+the same element's cached value on another gene that element was measured against. A stratum is (element,
+distance bin); bins are `width_log10` wide in log10 distance with a random offset drawn per rewiring. S1 is
+`width_log10` 0.20, S3 is 0.30, both without expression classes (`wiring.SCHEMES`). The permutation inside a
+stratum is a derangement on the gene, so every gene's in-degree and every element's link count are exact. 20
+seeded draws (`FEASIBILITY_DRAWS`).
+
+**S1, reported on its own.**
+- Links with at least one admissible alternative: **60** of the 423 regulated.
+- Links moved by one rewiring, over the 20 registered draws: mean **37.0**, smallest observed 30, largest
+  observed **42**.
+- Unique links moved across those draws: **59**.
+- Moved links whose attached feature block is identical to their own: mean **2.0** per draw.
+- Distinct genes **42**, elements **46**, chromosomes **13**; locus clusters **28**.
+
+**S3, reported on its own.**
+- Links with at least one admissible alternative: **67**.
+- Links moved by one rewiring, over the 20 registered draws: mean **47.0**, smallest observed 39, largest
+  observed **51**.
+- Unique links moved across those draws: **63**.
+- Moved links whose attached feature block is identical to their own: mean **2.8** per draw.
+- Distinct genes **49**, elements **50**, chromosomes **14**; locus clusters **32**.
+
+**Which scheme produced the earlier figures.** The 60 is S1's count of links with an alternative. The 47 is
+S3's mean moved per draw. **The two were quoted together although they come from different schemes**, and
+they measure different things. S1's own pair is 60 and 37.0; S3's is 67 and 47.0.
+
+**Correction 1: "independent" is withdrawn.** The sections above this one call the gene and locus counts
+independent. They are **distinct** genes, elements and chromosomes. Chaining elements within 1 Mb gives
+**operational locus clusters**; it establishes no biological independence, and no test here supports that
+word. The script's printed label is `distinct` and `locus clusters`. The point the counts do support stands:
+60 links sitting in 42 distinct genes and 28 locus clusters, 8 of them in the chr11 IFITM cluster and 9
+around PRDX2, KLF1 and RAD23A on chr19, would be overstated by counting links.
+
+**Correction 2: the moved figures are observed, not maxima.** The sections above say "at most 47 of the 423
+regulated links can change per rewiring". That is wrong twice: 47.0 is S3's **mean** over the registered
+draws, and the **largest observed** at S3 is 51. No maximum over all rewirings is proved anywhere. The
+correct statement is **the mean, smallest and largest observed across the 20 registered draws**. The closure
+rests on the tested schemes failing the frozen feasibility rules, not on a proved bound.
+
+**Correction 3: feature identity is not a score claim.** The sections above say that switching a link whose
+alternatives are already regulated links of the same element "does change the frozen feature values. So the
+score would change." The second sentence is withdrawn. What was measured is feature identity: the attached
+`top_target` and `deletion_drop` are identical to the link's own in **1 of 23** such assignments at S1 and
+**0 of 28** at S3, so those swaps leave the inputs unchanged. A differing feature block **does not establish
+a different score**: no model was fitted and no prediction was computed. Separately, mean 2.0 / 2.8 moved
+links per draw receive an identical block.
+
+**The owner's reading of these alternatives holds.** 22 / 25 movable regulated links can only receive a
+value from another regulated link of the same element: the swap never tests the assignment against a
+non-target and leaves the regulated class unchanged. Admissibility was all the thresholds tested, and it did
+not make an alternative informative. This is a further reason the no-go stands, not a reason to revisit it.
+
+The clarification is closed. No scoring, no further randomisation search and no new registration.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
