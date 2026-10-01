@@ -12628,6 +12628,66 @@ candidate set, the gene universe and the endpoint together). It is not a finding
 **Next.** No further amendment of N1 is proposed. These labels have now been read, so a new test would need
 its own registration on data not yet seen. That is the owner's decision.
 
+### N1 closed, 2026-10-01: a wording correction and the coverage diagnosis (coordinator)
+
+**Closed under its registered stop rule.** The result file and the subsection above stay as committed. No
+threshold is relaxed, no factor is selected and the universe is not enlarged to rescue it. N1 is completed
+and inconclusive: it could not answer whether element attribution outperforms promoter proximity.
+
+**Wording correction, made here instead of in the lines above.** The subsection above uses three phrases
+that are too absolute: "There is no paired gain and no interval", "there is no estimate" and "none of them
+is evidence either way". The correct reading is **no primary aggregate estimate or decision**. The result
+file does contain the per-factor scores and a secondary unstratified mean of −0.061. These are descriptive
+results below the reporting floor, not a reliable conclusion about comparative performance. The registered
+note "no estimate is reported" stays as the code wrote it, about the primary estimate.
+
+**Coverage diagnosis: why 364 universe genes were absent.** It used identities and documentation only. No
+response or expression value was read, N1 was not altered, and it took about 5 of its 45 minutes (15:59 to 16:03 BST).
+
+The inputs read:
+- the published file's row labels, by its frozen labels pass, which parses no value;
+- the pseudobulk's `gene_id`, `gene_name` and `in_matrix` (the last is True for all 8,248 genes);
+- the registration's candidate gene IDs;
+- the STAR Methods ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)) and both Figshare item
+  descriptions.
+
+Findings:
+- **Identifier mismatch: ruled out.**
+  - The published file has 5,530 gene rows. All are unversioned Ensembl IDs, none is repeated, and every
+    one is among the pseudobulk's 8,248 gene IDs.
+  - 2,718 pseudobulk genes have no row. 364 of them are in the N1 universe: 42% of the universe, against
+    33% of all pseudobulk genes.
+- **Documented filtering: for the pseudobulk only.**
+  - The pseudobulk's gene set is documented as "genes expressed at >0.01 UMI per cell" (Figshare+
+    [20029387](https://doi.org/10.25452/figshare.plus.20029387)).
+  - The published test's gene set is not documented. The deposit lists "All Anderson-Darling p-values for
+    differential expression analysis", and the methods section on the test says only "for each gene".
+  - The paper uses several expression cut-offs elsewhere: 0.05, 0.1, 0.25, 0.5, 1 and 2 UMI per cell. It
+    does not say which one, if any, defines the 5,530.
+- **The reason for the 364: unresolved.** It is narrowed to an undocumented restriction, made by the
+  producers, of the genes they tested. Confirming an expression threshold would need the pseudobulk's
+  per-gene expression summaries, which this diagnosis did not read.
+- **The larger limit is the candidate factors, not the genes.**
+  - By identity alone, the 56 factors' own genes fall into three groups:
+    - 39 are not in the pseudobulk's gene list, by ID or by name. Read literally against the
+      documentation, that places them below 0.01 UMI per cell in this dataset.
+    - 5 are in the pseudobulk but were not tested.
+    - 12 are among the 5,530 tested genes.
+  - The 44 factors without a responder split 33, 4 and 7 across these groups. The 12 evaluable factors
+    split 6, 1 and 5.
+  - NRF1, absent from the list, has 27 responders. Absence from the list therefore does not mean the
+    perturbation had no effect, and the literal reading is recorded, not relied on.
+
+**What this means for another design.** Two coverage problems can be seen from identities before any value
+is read:
+1. A design on this published file can label only the 5,530 genes it tested, so its universe should be
+   drawn from them.
+2. A candidate set chosen from motif predictions, without regard to whether each factor's own gene is in
+   the dataset's expressed-gene list, will be dominated by factors that are not (here, 39 of 56). Most of
+   the factors without a responder (33 of 44) sit in that group.
+
+A new design on this deposit would not be blind: the labels for these 56 factors have been read.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
