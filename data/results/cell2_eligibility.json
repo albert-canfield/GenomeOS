@@ -6,17 +6,17 @@
   "question": "can any second held-out cell type support a stratified test of the CRISPRi deletion result, judged by independent loci among its measured positives rather than by pair counts",
   "blinding": "labels, coordinates, measured genes and cell types only, through genomeos.attribution.crispri.load; no prediction, deletion value, model score or AUPRC was read or computed",
   "code_cleanliness": {
-    "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
+    "git_sha": "ec8536dd86514857e4e30230e41ffcf11a33330e",
     "dirty": true,
-    "own_uncommitted_code": [
-      "genomeos/attribution/cell2.py",
-      "scripts/cell2_eligibility.py",
-      "tests/test_cell2_eligibility.py"
-    ],
-    "own_code_is_committed": false,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
     "foreign_uncommitted_code": [
       "genomeos/attribution/re2g.py",
-      "scripts/re2g_paired.py"
+      "scripts/re2g_identity.py",
+      "scripts/re2g_likeforlike.py",
+      "scripts/re2g_paired.py",
+      "tests/test_re2g.py",
+      "tests/test_re2g_paired.py"
     ],
     "foreign_uncommitted_code_on_the_counting_path": [],
     "counting_path": [
@@ -932,17 +932,17 @@
       "heldout": "the 4,378 valid held-out pairs across five cell types; the only pairs read here"
     },
     "code_cleanliness": {
-      "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
+      "git_sha": "ec8536dd86514857e4e30230e41ffcf11a33330e",
       "dirty": true,
-      "own_uncommitted_code": [
-        "genomeos/attribution/cell2.py",
-        "scripts/cell2_eligibility.py",
-        "tests/test_cell2_eligibility.py"
-      ],
-      "own_code_is_committed": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
       "foreign_uncommitted_code": [
         "genomeos/attribution/re2g.py",
-        "scripts/re2g_paired.py"
+        "scripts/re2g_identity.py",
+        "scripts/re2g_likeforlike.py",
+        "scripts/re2g_paired.py",
+        "tests/test_re2g.py",
+        "tests/test_re2g_paired.py"
       ],
       "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
@@ -996,17 +996,21 @@
       "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "51caf4d5ab62f7f84bf67240d7dc94a7ec12d678",
+      "git_sha": "ec8536dd86514857e4e30230e41ffcf11a33330e",
       "dirty": true,
       "dirty_code_paths": [
-        "genomeos/attribution/cell2.py",
         "genomeos/attribution/re2g.py",
-        "scripts/cell2_eligibility.py",
+        "scripts/re2g_identity.py",
+        "scripts/re2g_likeforlike.py",
         "scripts/re2g_paired.py",
-        "tests/test_cell2_eligibility.py"
+        "tests/test_re2g.py",
+        "tests/test_re2g_paired.py"
       ],
       "untracked_code_paths": [
-        "scripts/re2g_paired.py"
+        "scripts/re2g_identity.py",
+        "scripts/re2g_likeforlike.py",
+        "scripts/re2g_paired.py",
+        "tests/test_re2g_paired.py"
       ],
       "dirty_result_paths": [
         "data/results/re2g_paired.json"
