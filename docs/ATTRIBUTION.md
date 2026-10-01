@@ -12158,6 +12158,226 @@ Each run took about 50 s wall and 50 s CPU. The streaming reader peaked at 1.30 
 against about 5.4 GB for a whole-archive reader; 23 archives were streamed and 3,209 loose files read. There were 0
 downloads, 0 model requests and 0 network requests.
 
+## N1, the Perturb-seq response test, registered before any measurement: 860 genes both arms can score, 56 candidate factors, and a calibration gate on the non-targeting rows that runs first (2026-10-01, lane-n1)
+
+**The question.** Do the committed motif-to-gene predictions anticipate which genes respond to a factor's
+CRISPRi knockdown in K562 better than promoter proximity does? The data are Replogle et al. 2022 (Cell,
+doi 10.1016/j.cell.2022.05.013), the genome-scale screen at day 8, as the gemgroup-Z-normalized pseudobulk
+`K562_gwps_normalized_bulk_01.h5ad` (Figshare+ 20029387, CC BY 4.0). **The test concerns the sampled
+predictions:** the committed scan of 300 elements per chromosome (7,063 elements), at most 66 candidate
+factors before quality filtering, not genome-wide attribution. A knockdown can act indirectly, so a
+response a motif anticipates does not validate an enhancer-gene connection.
+
+**Nothing was measured.** The code was committed in `b359867` and the registration,
+`data/results/n1_registration.json`, in `f9a9130`, stamped `b359867`, clean. From the data file only
+identities were read, by HTTP range requests: the row labels and the measured genes' IDs and names
+(2,343,442 bytes fetched, four named datasets decoded), and earlier the dataset names, shapes and dtypes
+(1,163,794 bytes). No expression value, knockdown value, cell count or response statistic was opened.
+
+### What the file can measure
+
+| Field | Meaning | Status and source |
+| --- | --- | --- |
+| `X` (normalized) | per row, the mean over its cells of each cell's gemgroup z-score, z = (x - mean_control) / sd_control per gene within the cell's gemgroup, after UMI scaling | Documented. STAR Methods, "Filtering and internal normalization": "Within each gemgroup, for each gene, we compute the mean and standard deviation of expression within control cells and use these to z-normalize expression." Figshare: "gemgroup Z-normalized pseudo-bulk expression data". The mean as the aggregation: "We represented perturbations by their mean normalized expression profile" (STAR Methods), and `CellPopulation.average` in the producers' 2019 code (github.com/thomasmaxwellnorman/Perturbseq_GI at `3b25109`, `perturbseq/cell_population.py`, lines 663-709). The 2022 code is not public. |
+| `num_cells_filtered` | the row's cells passing the quality filters, over which `X` averages | Inferred from the name and "we computed a normalized gene expression matrix for cells passing the quality filters". Unconfirmed: it is float64, while `num_cells_unfiltered` is int64. |
+| `control_expr`, `fold_expr`, `pct_expr` | the target's mean unnormalized expression in non-targeting cells (the denominator); its mean in the row's cells over that; the fractional change, fold - 1 | Inferred: no source names these fields. STAR Methods: "Knockdown was computed as the ratio of mean (unnormalized) expression of the target gene within perturbed cells vs. that in cells with non-targeting sgRNAs." Figure S3 legend: the fractional change is "the expression in the targeted cells minus the expression in non-targeting cells, relative to the expression in the non-targeting cell population (-1 implies 100% knockdown)". Not known: all or core controls, pooled or per gemgroup, raw or depth-scaled UMIs. |
+| `energy_test_p_value` | a permutation test on the top 20 principal components against 5,000 control cells | Documented (STAR Methods, "Energy distance test"). Perturbation-level: it cannot label a gene. Never read. |
+| `anderson_darling_counts`, `mann_whitney_counts` | per row, counts of genes the producers' per-gene tests called | Inferred from the names and the methods. Perturbation-level; the per-gene results are not in the file. Never read. |
+| leverage scores, `.var` statistics | per-cell outlier scores summarised per row; in the 2019 code `.var` `mean` and `std` run across rows of the unnormalized means | Never read. |
+| file structure | `X` dense float32, 11,258 x 8,248; no `layers`, `uns`, `obsm` or `varm` | Read as names, shapes and dtypes only. AnnData: "layers: Key-indexed multi-dimensional arrays aligned to dimensions of X." |
+
+**Decision.** The pseudobulk file alone gives a per-gene effect size but no per-gene uncertainty. The
+registered endpoint adds one derivation, **T = X x sqrt(n)** with n = `num_cells_filtered`. It assumes
+that (a) `X` averages exactly those n cells; (b) where a gene does not respond, its per-cell z-scores
+follow the control distribution, with variance 1, as they do by construction within each gemgroup; (c)
+cells are independent; and (d) the mean of n z-scores is close enough to normal at |T| = 3. Assumption (d)
+is weakest for sparse genes, where calls would be too liberal and fall on low-expression genes, which may
+correlate with the motif scores. **A gene responds when |T| >= 3**, rising or falling. The two-sided normal
+tail there is 0.27%, about two chance responders per factor over 860 genes. A cut at 2.58 would add about
+eight more and dilute the labels; one at 4 would leave many factors with no responder and so with an
+undefined AUROC. The labels are the outcome of a ranking metric, not discoveries, so no multiplicity
+correction is applied: chance responders that are independent of the scores pull both arms toward 0.5
+alike. This is the one primary rule. It was chosen before any value was seen, and no alternative is tried
+later.
+
+### The calibration gate runs first
+
+Once access is authorised, the gate reads **only the 585 non-targeting rows**, selected from the identity
+index:
+- normalized `X` over the 860 universe genes;
+- `obs/num_cells_filtered`;
+- raw `X` from `K562_gwps_raw_bulk_01.h5ad` (md5 4570b53c…), for the expression strata only.
+
+It does not use the 514 core controls, for three reasons:
+- choosing them would mean reading the `core_control` value column;
+- the producers chose them for showing few differential genes, and they define the normalization's control mean and sd, so they would flatter the null;
+- the other 71 carry guide-level effects that any factor guide can carry too, so using all 585 errs toward stopping.
+
+**Pass rule.** The share of |T| >= 3 must be at most 1.5 times the nominal 0.0026998. This holds overall
+and in each decile of control-row expression, where expression is the cell-weighted mean of raw `X` over
+the usable rows. Each decile must also expect at least 20 exceedances. Any other outcome fails.
+
+**On failure the experiment stops.** The failure is recorded, and no factor row is read. No fallback
+endpoint is used inside this run: the authors' per-gene results or the single-cell file would be a new
+proposal.
+
+Two kinds of input are set aside rather than counted:
+- a row with a non-finite cell count is left out, and counted;
+- a gene with any non-finite T or expression leaves the universe before any factor row is read, and is listed.
+
+The gate cannot test whether perturbed cells have a different variance from controls.
+
+### Eligibility, aggregation, aliases and families
+
+Eligibility is decided only after the gate passes. It reads `num_cells_filtered`, `control_expr`,
+`fold_expr` and `pct_expr` at the 59 candidate rows and nowhere else. The rules apply in order:
+1. At least 25 cells, the producers' own minimum. Otherwise the row has too few cells.
+2. `control_expr` > 0 with n x `control_expr` >= 10 expected target UMIs. Otherwise the knockdown is
+   **unassessable and the row ineligible**. The producers admit undetected targets; this rule does not.
+   At 10 expected UMIs, a non-functional guide shows 4 or fewer with Poisson probability 0.029.
+3. A finite `fold_expr`.
+4. `pct_expr` = `fold_expr` - 1, or the same in percent. A mismatch on any assessable candidate row stops
+   the run, because the inferred meaning would be wrong.
+5. `fold_expr` <= 0.40, that is, at least 60% knockdown. This is the producers' threshold for analyses that
+   need a functional perturbation; the median knockdown in K562 is 85.5%.
+
+Fewer than 30 eligible factors stop the run before any response row is read.
+
+- **Multiple rows of one factor.** Every eligible row is pooled, weighted by its cells, and an ineligible
+  row is never used. No row is chosen by its response. CGGBP1, FOXD3 and LHX3 have P1 and P2 rows.
+- **Aliases.** A JASPAR monomer name that is a GENCODE v50 protein-coding gene name with one ID maps to
+  that ID, matched to the screen by Ensembl ID. A name GENCODE does not know falls back to the screen's own
+  symbol. A name GENCODE resolves is never re-matched by symbol.
+- **Heterodimers.** A heterodimer profile (`A::B`) counts for neither partner.
+- **Families.** Factors of one TFClass family stay separate factors with equal weight. The uncertainty is
+  clustered by `motifs.family_unit`, under which a C2H2 zinc finger is its own unit. The 56 candidates
+  fall into 39 units.
+
+### Scores, the shared universe and the candidates
+
+- **Proximity score.** The factor's hit score in the gene's promoter `requires` list: TSS ± 1,000 bp of the
+  canonical transcript.
+- **Attribution score.** The largest of the factor's hit scores over the sampled elements whose target is
+  the gene.
+- **What a zero means.** The factor is not in the frozen top-8 `requires` list of any scanned region of the
+  gene: there is no hit at 85% of the matrix range, the hit ranks below the top 8, or the factor is not
+  enriched on that chromosome. A zero never means "not scanned".
+- **The universe.** Both arms use the same genes: measured genes, by Ensembl ID, with a scanned promoter and
+  at least one sampled element attributed to them. For each factor, the perturbed gene is removed, along
+  with every gene whose canonical TSS lies within 10 kb of the factor's, because CRISPRi can silence a
+  neighbour (the paper's Figure S3).
+
+| Coverage | Genes |
+| --- | --- |
+| Measured in the file | 8,248 |
+| ... without a scanned promoter (not protein-coding, or no promoter sequence) | 322 |
+| ... with a scanned promoter but no sampled element attributed | 7,066 |
+| **Shared universe** (10.43% of measured) | **860** |
+| Element-attributed genes not measured | 1,931 |
+| Sampled elements without a target (attributed to nothing) | 3,298 elements |
+
+**The ledger** has one line per JASPAR name in the registration. Of 952 names:
+- 69 are heterodimers;
+- 12 are unresolved or ambiguous (DUX, DUXBL1, EWSR1-FLI1, MIX-A, MSX3, RHOX11, SHOX, ZBED1, ZFP335, ZFP809, ZFP961, ZNF286B);
+- 8 are not perturbed in the screen;
+- 863 are perturbed monomers.
+
+Of the perturbed monomers, 66 have at least 10 element-scored genes in their universe. The 56 candidates
+also have at least 10 proximity-scored genes. That second floor drops 10 factors: ATF2, DMRTB1, IRF2,
+MECOM, ONECUT1, POU4F2, ZFP28, ZNF354A, ZNF510 and ZNF721, whose proximity counts are 2 to 9.
+
+The candidates are CGGBP1, CREM, FOXB1, FOXD3, FOXL2, FOXQ1, HMGA1, HNF1B, HOXB13, IRF1, IRF3, IRF7, KLF17,
+KLF9, LHX3, MAFK, MEF2A, MEF2B, MEF2D, MLXIP, NRF1, ONECUT3, PBX2, PBX3, PHOX2B, POU1F1, POU2F2, POU3F2,
+POU3F3, POU4F1, POU4F3, PRDM9, PROP1, RFX1, RFX3, RREB1, SALL3, SPI1, SPIB, STAT2, ZBTB40, ZNF131, ZNF135,
+ZNF24, ZNF250, ZNF347, ZNF362, ZNF460, ZNF470, ZNF471, ZNF596, ZNF606, ZNF683, ZNF775, ZNF865 and ZNF93.
+For each, knockdown eligibility and a defined AUROC are **pending measurement**. Many are not expressed in
+K562, so their knockdown will be unassessable, and the eligible count may fall below the floor.
+
+### The comparison
+
+1. **Per-factor AUROC.** For each factor and arm, the Mann-Whitney AUROC of the score for responders over
+   the factor's universe, with midranks for ties.
+2. **Undefined AUROC.** A factor with no responders, all responders, or an arm whose scores do not vary is
+   counted in coverage with its reason. It is never dropped silently.
+3. **The estimate.** The mean over factors of d = AUROC(attribution) - AUROC(proximity), with every factor
+   weighted equally.
+4. **The uncertainty.** A cluster bootstrap over TFClass units: 10,000 replicates with seed 20261001, each
+   drawing as many units as there are, with replacement. The 95% interval is the 251st and 9,750th of the
+   sorted means. It is assessable only with at least 10 units.
+   - **Limits.** A percentile interval undercovers when there are few units. Factors in different families
+     share downstream programmes and the same universe genes, and the bootstrap does not resample them.
+     Label noise is not propagated. The element sample is fixed, so the result is conditional on it.
+5. **Two criteria, kept separate.** The point gain must be at least +0.02. The 95% lower bound must be
+   above 0. Each is reported on its own and never merged into one verdict.
+6. **The floor.** 30 defined paired differences is a feasibility floor, not shown power. Fewer stop the
+   analysis with no estimate, and no rule is relaxed.
+
+### Frozen inputs
+
+Figshare's md5 is recorded for both data files: `a3dfaa94ea8724217f5ecb1e14a5f0c8` (normalized) and
+`4570b53c9d62ff6df281e622f0350060` (raw), 374,587,922 bytes each. Their sha256 will be computed at the
+authorised download and recorded by the run. The identity digest is
+`a6e6d9bdb0000260d80499ff9a436c4487f0dea73bd633b05faf675a81e21f93`: the sha256 of the row labels and gene
+IDs in file order. A run whose files do not reproduce it stops.
+
+| Frozen input | Bytes | sha256 |
+| --- | --- | --- |
+| `data/results/motifs_chr1.json` | 3,161,055 | `0e9f8d8a1f39f0597e420484fce43add7dcda0ca7654186f8739f206a5d0a838` |
+| `data/results/motifs_chr2.json` | 2,126,147 | `6376bbf98cf89067cd01cbeea3685f8660703fb2c65a97955ddfd9f7239e5707` |
+| `data/results/motifs_chr3.json` | 1,834,500 | `6059bec828dfd22bd256312f21a9e63ee62c39a4c5ed243a2dc643c2785fa6af` |
+| `data/results/motifs_chr4.json` | 1,382,043 | `c285ca0e8064e1295b405150326fa04f78c6a41b64031287e1aeaca860cb8194` |
+| `data/results/motifs_chr5.json` | 1,600,420 | `1e8595c91de5286a9fb39b330085d8ffd2e7f1c2bb346a892dc3b7ed3bd891f8` |
+| `data/results/motifs_chr6.json` | 1,834,552 | `ef3b855d53f7910a29aff69ce5649ee2d5d5f7a199d89d55f34d54599f8c990c` |
+| `data/results/motifs_chr7.json` | 1,658,274 | `f00c67735c9c22195d1695dc2593e23ee74dc16b8df24ffd88d1d90293683182` |
+| `data/results/motifs_chr8.json` | 1,375,416 | `661f10cd52b5187957d37689a62fc47eae037196d67e8f805d310bbf6a71ac68` |
+| `data/results/motifs_chr9.json` | 1,449,731 | `56a8c7197db5dc6e2682b2a64592d633fe7cb243a88c74da3aa329c3bc0792ce` |
+| `data/results/motifs_chr10.json` | 1,425,510 | `350dc0d66258847ece42d5c364a1e21d4c183e25ec5f93af1b2d33299cc9e2c0` |
+| `data/results/motifs_chr11.json` | 2,138,689 | `b9265b0ae58a0ad3951480493a543a7e6afa075da9e6ea81f875d42c527a1fd9` |
+| `data/results/motifs_chr12.json` | 1,780,441 | `8882d0833686078b77f4cecd3b6e4b586de0ec004eecad47f2a7f22c5b065b71` |
+| `data/results/motifs_chr13.json` | 837,615 | `e536aad3749f7eebec638920572b10ad3acea1f55c473741569af376be15f40f` |
+| `data/results/motifs_chr14.json` | 1,218,407 | `1539029068b311455c8fc8ed4206f348c1f930bf0634c95f07059329ccf70fb4` |
+| `data/results/motifs_chr15.json` | 1,222,157 | `7c03f99837ec33f4bee4ef7fb169296d7c0cfa64b0ef2c99c545f21ddead930c` |
+| `data/results/motifs_chr16.json` | 1,569,402 | `16d06ca773c655a24b25c92b4979ac3e392dccccebc8d41bc3ae73a0d69bf5d3` |
+| `data/results/motifs_chr17.json` | 1,981,105 | `a20e95df94daf715e01e8f3c2e377f0b131b79852898d518949d92cdd81e9383` |
+| `data/results/motifs_chr18.json` | 780,230 | `3eac72195c6814b9854fb13da84af3c463bed3938a3d7aec4929a34f9313152b` |
+| `data/results/motifs_chr19.json` | 2,349,647 | `b764f903383f1c744109ff219aff679305dca2fed8f290abcc812ed1f28e4b12` |
+| `data/results/motifs_chr20.json` | 1,134,693 | `9a7af619548e84ee95f1c8c9b8fd58e4ffcecee24d9db2c5873610950557f8a6` |
+| `data/results/motifs_chr21.json` | 658,517 | `d9bf804a6dbb0d6c1f5812865fe81aa9784208d9e62dc421a01af72b6b5c39ae` |
+| `data/results/motifs_chr22.json` | 995,044 | `514c28040f65063ff2a5c77cdc49a460370f12ebc1bf23e1ab5e9fde109e9a3f` |
+| `data/results/motifs_chrX.json` | 1,529,809 | `f782431efc5d1694b84a94ca2222ab22c4a2bbf7c796a67c0c856608a539e0f8` |
+| `data/results/motifs_chrY.json` | 376,721 | `45b8031f8b4000dbecc8aa1966198cd13b6ea068f24527c02cfee43e72f8f8fb` |
+| `data/knowledge/jaspar/core_vertebrates_2026.jaspar` | 336,314 | `4005b5449ba07d9b58495f51143186e7e3959efd0ad670770fbddf57bf941e8f` |
+| `data/knowledge/jaspar/core_vertebrates_2026.transfac` | 521,954 | `4bb7efb6f82e9e5d1228d2cdd493f3c774fab73130b5bba90e3c0488255b99f5` |
+| `data/reference/gencode_v50_chr*.gff3.gz (24 files)` | 160,980,327 | `67ce29ad660c5f4f3e875ffa43b518b562e26a72c1b93561deaf769e57915f1b` |
+| `data/cache/n1/K562_gwps_normalized_bulk_01.identities.json` | 643,524 | `60bcf6d62a4e9e7fbc5977fe8cac38a7dcb3dcc2f10cf2263ebd08ed659b7459` |
+
+### What the run will need
+
+The run needs the owner's separate authorisation, given to `scripts/n1_run.py --authorisation`. The script
+refuses to run a second time. Its reads, in order:
+1. Download both files, check the md5 values, and record each sha256.
+2. Read both files' identities, `obs/gene_transcript` and `var/gene_id`.
+3. Run the gate on the 585 non-targeting rows: normalized and raw `X` over the 860 genes, and
+   `num_cells_filtered`.
+4. Only if the gate passes, read the four knockdown fields at the 59 candidate rows.
+5. Only if the field-semantics check holds and at least 30 factors are eligible, read normalized `X` at the
+   eligible rows.
+
+The run never reads the energy test, the Anderson-Darling or Mann-Whitney counts, the leverage scores,
+`core_control`, the other quality fields, any `.var` statistic, or any other factor's row. The 26 tests in
+`tests/test_n1_perturb_response.py` use made-up inputs only. They cover:
+- the gate passing and failing, including a single inflated decile;
+- missing versus zero, and the shared universe;
+- exclusion of the perturbed gene and its neighbours;
+- aliases and the ledger;
+- the knockdown rules, and the stop on a semantics mismatch;
+- the multi-row rule;
+- undefined AUROCs, equal weighting, and the clustered bootstrap;
+- the two separate criteria and the coverage stops;
+- the read order;
+- the file reader on a made-up pair of files;
+- the run script's authorisation and single run.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
