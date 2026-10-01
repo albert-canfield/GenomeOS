@@ -278,3 +278,34 @@ def test_the_verdict_applies_the_preset_floor_in_both_directions():
     assert v["floor"] == 20 and v["meets_floor"] is False and v["decision"] == "no-go, stop"
     at = cell2.verdict({"pooled_over_candidates": {"independent_loci_genome_wide": 20}})
     assert at["meets_floor"] is True and at["decision"] == "eligible to draft a registration"
+
+
+def test_the_verdict_names_the_population_and_says_the_primary_cell_type_is_out_of_it():
+    out = cell2.eligibility(heldout_like(), ("K562", "HepG2", "GM12878", "IMR-90"))
+    v = cell2.verdict(out)
+    assert v["cell_types_pooled"] == ["HCT116", "Jurkat"]
+    assert "K562" not in v["cell_types_pooled"]
+    assert v["primary_cell_type_excluded"] == "K562"
+    assert v["primary_cell_type_is_in_the_pool"] is False
+    assert "other than K562" in v["population"]
+    assert v["positives_pooled"] == out["pooled_over_candidates"]["positives"]
+
+
+def test_the_verdict_reports_what_carries_the_count():
+    out = cell2.eligibility(heldout_like(), ("K562", "HepG2", "GM12878", "IMR-90"))
+    carries = cell2.verdict(out)["what_carries_the_count"]
+    shapes = out["pooled_over_candidates"]["locus_shapes_genome_wide"]
+    assert carries["largest_locus_positives"] == shapes["largest_locus_positives"]
+    assert carries["largest_locus_share_of_positives"] == shapes["largest_locus_share_of_positives"]
+    assert carries["largest_locus_span_mb"] == shapes["largest_locus_span_mb"]
+    assert carries["span_mb"] == shapes["span_mb"]
+    assert carries["positives_per_locus"] == shapes["positives_per_locus"]
+    assert carries["positives_per_locus_counts"] == shapes["positives_per_locus_counts"]
+
+
+def test_the_shapes_beside_the_verdict_do_not_change_the_floor_decision():
+    out = cell2.eligibility(heldout_like(), ("K562", "HepG2", "GM12878", "IMR-90"))
+    v = cell2.verdict(out)
+    pooled = out["pooled_over_candidates"]["independent_loci_genome_wide"]
+    assert v["meets_floor"] is (pooled >= 20)
+    assert v["floor"] == cell2.POOLED_LOCUS_FLOOR

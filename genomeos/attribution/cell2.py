@@ -277,12 +277,43 @@ def eligibility(
 
 def verdict(counted: dict[str, Any], floor: int = POOLED_LOCUS_FLOOR) -> dict[str, Any]:
     """The pre-set floor applied to the pooled count. Below the floor is a no-go: the lane records it
-    and stops, computing no gain and making no model request."""
-    pooled = counted["pooled_over_candidates"]["independent_loci_genome_wide"]
+    and stops, computing no gain and making no model request.
+
+    The verdict carries the population it is about and the shape of the loci that carry it, because a
+    bare count says neither which cell types are pooled nor whether one chained locus holds most of
+    the positives. Neither figure changes the verdict: the floor is read against the pooled count
+    exactly as registered."""
+    pool = counted["pooled_over_candidates"]
+    pooled = pool["independent_loci_genome_wide"]
+    shapes = pool.get("locus_shapes_genome_wide", {})
+    primary = counted.get("primary_cell_type", PRIMARY_CELL)
+    candidates = counted.get("candidate_second_cell_types", [])
     return {
         "floor": floor,
         "floor_set_before_the_count": True,
         "pooled_independent_loci_genome_wide": pooled,
+        "population": pool.get("population"),
+        "cell_types_pooled": list(candidates),
+        "primary_cell_type_excluded": primary,
+        "primary_cell_type_is_in_the_pool": False,
+        "population_note": (
+            f"the pooled count is over the candidate second cell types only; {primary}, which the "
+            "committed result already covers, is excluded from it, so the figure is about a second "
+            "cell type and not about the benchmark as a whole"
+        ),
+        "positives_pooled": pool.get("positives"),
+        "what_carries_the_count": {
+            "largest_locus_positives": shapes.get("largest_locus_positives"),
+            "largest_locus_share_of_positives": shapes.get("largest_locus_share_of_positives"),
+            "largest_locus_span_mb": shapes.get("largest_locus_span_mb"),
+            "positives_per_locus": shapes.get("positives_per_locus"),
+            "positives_per_locus_counts": shapes.get("positives_per_locus_counts"),
+            "span_mb": shapes.get("span_mb"),
+            "note": (
+                "reported beside the verdict so a reader can see whether one chained locus carries the "
+                "margin over the floor; it does not move the floor or the convention"
+            ),
+        },
         "meets_floor": pooled >= floor,
         "decision": "eligible to draft a registration" if pooled >= floor else "no-go, stop",
     }

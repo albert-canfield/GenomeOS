@@ -32,6 +32,46 @@ from genomeos.results import save_result  # noqa: E402
 
 RESULT = "cell2_eligibility"
 PUBLISHED = Path("data/results/crispri_published.json")
+#: The files this lane wrote, so the stamp can say which uncommitted code is somebody else's. Several
+#: sessions work in this one checkout, so a stamp may be dirty through no act of this lane; a referee
+#: can accept a named foreign file that the counting path does not import, but not a bare dirty flag.
+OWN_CODE = (
+    "genomeos/attribution/cell2.py",
+    "scripts/cell2_eligibility.py",
+    "tests/test_cell2_eligibility.py",
+)
+#: Every module the counting path imports from this repository, so the claim can be checked.
+IMPORTED_HERE = (
+    "genomeos/manifest.py",
+    "genomeos/results.py",
+    "genomeos/attribution/cell2.py",
+    "genomeos/attribution/crispri.py",
+    "genomeos/attribution/measured.py",
+)
+
+
+def code_cleanliness() -> dict:
+    """Which uncommitted code the stamp names, split into this lane's and other lanes', and whether any
+    of it is on the counting path. Read from git at write time, not asserted."""
+    rev = mf.code_revision()
+    dirty = list(rev["dirty_code_paths"])
+    own = [p for p in dirty if p in OWN_CODE]
+    foreign = [p for p in dirty if p not in OWN_CODE]
+    return {
+        "git_sha": rev["git_sha"],
+        "dirty": rev["dirty"],
+        "own_uncommitted_code": own,
+        "own_code_is_committed": not own,
+        "foreign_uncommitted_code": foreign,
+        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in IMPORTED_HERE],
+        "modules_the_counting_path_imports": list(IMPORTED_HERE),
+        "note": (
+            "several sessions work in this one checkout. A file listed under foreign_uncommitted_code "
+            "belongs to another lane; this lane did not write it and did not commit it. The counting "
+            "path imports only the modules listed, so a foreign file outside that list cannot have "
+            "entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+        ),
+    }
 
 
 def quoted_cost() -> dict:
@@ -170,6 +210,7 @@ def manifest(heldout: list[crispri.Pair]) -> dict:
         "partitions": {
             "heldout": "the 4,378 valid held-out pairs across five cell types; the only pairs read here"
         },
+        "code_cleanliness": code_cleanliness(),
     }
 
 
@@ -194,12 +235,7 @@ def main() -> int:
             "labels, coordinates, measured genes and cell types only, through genomeos.attribution."
             "crispri.load; no prediction, deletion value, model score or AUPRC was read or computed"
         ),
-        "code_stamp_note": (
-            "the stamp's dirty_code_paths may name files of other lanes working in the same checkout. "
-            "The only module of theirs this script reads is genomeos/attribution/crispri.py, and the "
-            "parts it reads (Pair, parse, load, MODEL_CELLS) are identical to the committed copy: the "
-            "uncommitted change there is the gain-reporting fix, which this script never calls"
-        ),
+        "code_cleanliness": code_cleanliness(),
         "counts": counted,
         "verdict": verdict,
         "cost_quoted": cost,
