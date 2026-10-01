@@ -1,0 +1,272 @@
+{
+  "result": "re2g_registration",
+  "date": "2026-10-01",
+  "status": "registered before any comparator score was read; the comparison is NOT run",
+  "lane": "lane-re2g",
+  "claim": "On the Gschwind et al. 2026 held-out CRISPR benchmark (doi:10.1038/s41586-026-10781-4, Supplementary Table 3; the 4,378 pairs, 190 positives, 157.39 weighted, already described in data/results/crispri_published.json), the frozen 'activity + distance + deletion' model ranks regulated pairs differently from ENCODE-rE2G when both are scored on the identical pairs",
+  "endpoint": "weighted AUPRC using the benchmark's own pair weights (direct_vs_indirect_negative), by the benchmark's own estimator; positive = the benchmark's Regulated label exactly as published, with no relabelling",
+  "comparator": {
+    "preference_order": [
+      "1. a per-pair ENCODE-rE2G score carried in the benchmark table itself, if present",
+      "2. otherwise the ENCODE portal's rE2G prediction file for each benchmark biosample -- model version, accession and sha256 recorded -- joined to the pairs by the benchmark's own overlap and gene rule (JOIN_RULE), with unpredicted pairs scored 0 as the benchmark itself does"
+    ],
+    "preference_1_per_pair_score_in_the_benchmark_table": "absent: the held-out table's 42 columns carry the measurement, the five power columns, the chromatin annotations and the weight, and no column holding any predictor's score, ENCODE-rE2G's included. Preference 1 is therefore unavailable and preference 2 governs",
+    "governs": "preference 2, the ENCODE portal's rE2G predictions per benchmark biosample"
+  },
+  "comparator_files": {
+    "K562": {
+      "annotation": "ENCSR627ANP",
+      "sample": "K562_ENCSR000EOT",
+      "file": "ENCFF970QAX",
+      "bytes": 333743457
+    },
+    "GM12878": {
+      "annotation": "ENCSR604WPK",
+      "sample": "GM12878_ENCSR000EMT",
+      "file": "ENCFF260CIO",
+      "bytes": 301527890
+    },
+    "HCT116": {
+      "annotation": "ENCSR575WDI",
+      "sample": "HCT116_ENCSR000ENM",
+      "file": "ENCFF407YWT",
+      "bytes": 297785157
+    },
+    "Jurkat": {
+      "annotation": "ENCSR805BXG",
+      "sample": "Jurkat__Clone_E6-1_ENCSR000EOS",
+      "file": "ENCFF681NXF",
+      "bytes": 304665637
+    },
+    "WTC11": {
+      "annotation": "ENCSR464GSY",
+      "sample": "WTC11_ENCSR785ZUI",
+      "file": "ENCFF071ZZU",
+      "bytes": 331445001
+    }
+  },
+  "comparator_not_obtained": {
+    "gate_run": false,
+    "reason": {
+      "the_gate_is_pooled_only": "Supplementary Table 3's held-out sheet gives one 'Held-out' dataset, six predictors times three metrics, and no per-cell-type held-out AUPRC. So there is no published figure to gate the K562 stratum against, and the gate can only be run on all 4,378 pairs",
+      "the_pooled_gate_needs_all_five_cell_types": "held-out K562 carries 100.79 of the 157.39 weighted positives, 64.0%. Scoring the other 2,460 pairs 0, as a K562-only prediction file would force, sends 36.0% of the positive weight to the bottom of the ranking, so the pooled figure is missed by far more than the 0.02 tolerance by construction rather than by any property of the models",
+      "bytes": "the five full prediction files total 1,569,167,142 bytes (1.57 GB), against an authorised budget of one public download under 1 GB. The single K562 file alone fits the budget and cannot pass the gate; the set that can pass the gate does not fit the budget",
+      "hct116_is_ambiguous": "Supplementary Table 12 lists 16 HCT116 rE2G annotations. HCT116_ENCSR000ENM is recorded above as the untreated ENCODE HCT116 DNase sample, but which one the benchmark used is not established from the table alone, and JOIN_RULE['biosample'] forbids running the comparison until it is",
+      "not_a_paywall": "no file here is behind a login or a payment. The paper's baseline-predictor bundle on Synapse (syn58896208) would need an account, and is not used for that reason"
+    },
+    "bytes_required": 1569167142,
+    "bytes_authorised": 1000000000,
+    "sha256": "not recorded: no prediction file was downloaded, so no model version or file hash is claimed here beyond the accessions above"
+  },
+  "join_rule": {
+    "key": "a pair joins a prediction only within the same cell type and the same target gene: the experiment's (CellType, chrom, measuredGeneSymbol) against the prediction's (ExperimentCellType, chr, TargetGene), gene matched by symbol. This is the pipeline's own trick of folding cell type and gene into the GRanges seqname so that findOverlaps cannot cross either",
+    "overlap": "any overlap of at least one base between the perturbed element [chromStart, chromEnd] and the predicted element [start, end]. Both sides are read from BED-derived tables into the same interval convention, as the pipeline does, so the convention cancels",
+    "several_overlaps": "where one perturbed element overlaps several predicted elements, the score is aggregated by the pipeline's documented default aggregate_function, sum (workflow/scripts/createPredConfig.R). 'max' is registered here as a named sensitivity and is NOT what the gate is judged on: the gate is judged on sum alone, so that the aggregation is not chosen by which value passes",
+    "unpredicted": "a pair with no overlapping prediction takes the pipeline's fill_value, 0, and is kept in the pair set -- the benchmark's own rule (fillMissingPredictions, Prediction = 0). A sensitivity analysis drops the unpredicted pairs instead of scoring them 0, and is reported beside the primary figure, never in place of it",
+    "biosample": "one rE2G prediction set per benchmark cell type, named by the accession Supplementary Table 12 gives for that sample; where that table lists several annotations for one cell type the ambiguity is recorded and the comparison is not run until it is resolved"
+  },
+  "join_rule_source": {
+    "repository": "EngreitzLab/CRISPR_comparison",
+    "tag": "v1.0.0",
+    "commit": "50587422e6b11259ead6fbc6f867681c788f39b7",
+    "files": "workflow/scripts/crisprComparisonMergeFunctions.R (combineSingleExptPred steps 1 to 3, fillMissingPredictions) and workflow/scripts/createPredConfig.R (aggregate_function sum, fill_value 0)",
+    "pinned_not_branch": "read at the tag the paper's data availability names, not at main. The merge functions are byte-identical at both (sha256 fee907d41ff9a72740dd9cf57ace795536fa9adb67f8ff462c94777a6fea916c, 506 lines) and the defaults match, so the registered rule is the one the published comparison used",
+    "when": "the rule is the benchmark's own, read from its source before any join was attempted"
+  },
+  "gate": "before any comparison, reproduce ENCODE-rE2G's published held-out weighted AUPRC (0.5562, interval 0.4679 to 0.6312, Supplementary Table 3, sheet 'Held-out benchmarks', pooled over all 4,378 pairs) from the per-pair comparator scores. A miss of more than 0.02 stops the lane: the scores are not the published ones. The miss is recorded and nothing is compared",
+  "gate_target": {
+    "weighted_auprc": 0.556151,
+    "interval": [
+      0.467852,
+      0.631224
+    ],
+    "tolerance": 0.02,
+    "source": "Supplementary Table 3, sheet 'Held-out benchmarks', row ENCODE-rE2G / Weighted AUPRC, read from the cached zip",
+    "population": "all 4,378 held-out pairs, pooled over the five cell types. The sheet carries six predictors times three metrics for one 'Held-out' dataset and no per-cell-type held-out AUPRC, so the pooled figure is the only gate value the source gives"
+  },
+  "populations": {
+    "primary": {
+      "name": "held-out K562 pairs",
+      "pairs": 1918,
+      "positives": 118,
+      "weighted_positives": 100.79,
+      "deletion_feature": "available",
+      "why": "the stratum where the deletion feature exists"
+    },
+    "secondary": {
+      "name": "all held-out pairs, pooled",
+      "pairs": 4378,
+      "positives": 190,
+      "weighted_positives": 157.39,
+      "deletion_feature": "available on the K562 and GM12878 pairs only",
+      "why": "the population the published comparator figure is stated on, and the only one it is"
+    },
+    "gm12878": {
+      "name": "held-out GM12878 pairs",
+      "pairs": 68,
+      "positives": 16,
+      "weighted_positives": 14.3,
+      "deletion_feature": "available",
+      "why": "its own stratum, reported apart and never pooled into the primary"
+    }
+  },
+  "populations_as_counted": {
+    "per_cell_type": {
+      "WTC11": {
+        "pairs": 1921,
+        "positives": 15,
+        "weighted_positives": 13.37
+      },
+      "K562": {
+        "pairs": 1918,
+        "positives": 118,
+        "weighted_positives": 100.79
+      },
+      "HCT116": {
+        "pairs": 396,
+        "positives": 34,
+        "weighted_positives": 22.63
+      },
+      "Jurkat": {
+        "pairs": 75,
+        "positives": 7,
+        "weighted_positives": 6.29
+      },
+      "GM12878": {
+        "pairs": 68,
+        "positives": 16,
+        "weighted_positives": 14.3
+      }
+    },
+    "pooled": {
+      "pairs": 4378,
+      "positives": 190,
+      "weighted_positives": 157.39
+    },
+    "counted_from": "the held-out table's own CellType, Regulated and direct_vs_indirect_negative columns, through crispri.load, before any comparator score existed"
+  },
+  "feature_unavailable": {
+    "strata": [
+      "HCT116",
+      "Jurkat",
+      "WTC11"
+    ],
+    "reported_as": "the deletion feature is not available in this stratum, so no deletion gain is measured here: the difference between the two models would be an artefact of the model form, not a measurement",
+    "never": "a number, in either direction"
+  },
+  "statistic": "paired delta weighted AUPRC = ours minus ENCODE-rE2G, on identical resamples: chromosome-cluster bootstrap, 2000 draws requested, one seed (0) shared by both models so each draw is a paired difference. The result states clusters, draws_requested and draws_dropped (crispri._interval_provenance), because a dropped draw is a draw the interval does not rest on",
+  "statistic_parameters": {
+    "draws_requested": 2000,
+    "seed": 0,
+    "cluster": "chromosome",
+    "provenance_reported": [
+      "clusters",
+      "draws_requested",
+      "draws_dropped",
+      "resamples"
+    ]
+  },
+  "reading": {
+    "lower_bound_above_zero": "ranks better than ENCODE-rE2G on these pairs",
+    "interval_covers_zero": "no difference detected",
+    "upper_bound_below_zero": "ranks worse",
+    "no_other_wording": "these three strings are the only wording this comparison is reported in"
+  },
+  "independence_and_exposure": {
+    "a_comparator_trained_on_this_compendium": "ENCODE-rE2G was trained on K562 CRISPR pairs from the same compendium, and these held-out pairs were held out by its own authors",
+    "b_our_weights_frozen": "our weights were fitted on the training split and frozen before the held-out pairs were scored",
+    "c_reused_benchmark": "this held-out set has already been scored by this project, so it is a reused benchmark: a comparison of two frozen models, not fresh validation",
+    "d_deletion_feature_exposure": "the deletion feature comes from a model trained on ENCODE K562 tracks (features, not labels). Whether its training saw these CRISPR outcomes is not established, and is not claimed either way"
+  },
+  "falsifier": "if the primary interval covers 0 or lies below it, README may not say the deletion model performs above ENCODE-rE2G. The earlier 'above the published interval' wording is withdrawn either way, and was in fact already withdrawn on 2026-09-27 for a separate reason",
+  "code": {
+    "module": "genomeos/attribution/re2g.py",
+    "tests": "tests/test_re2g.py (synthetic inputs only; no comparator score is read)",
+    "register": "scripts/re2g_register.py"
+  },
+  "alphagenome_requests": 0,
+  "frozen_inputs": [
+    {
+      "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+      "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+      "bytes": 373837
+    },
+    {
+      "path": "data/cache/re2g/41586_2026_10781_MOESM3_ESM.zip",
+      "sha256": "88eb6c5239019cbec55281b545a3b6e450e2a83384d067ca94a0974968428332",
+      "bytes": 4409955
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Tables 3 and 12",
+        "version": "version of record, supplementary zip 41586_2026_10781_MOESM3_ESM.zip"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "version": "v1.0.0, the release the paper's data availability names"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "held-out",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz"
+      },
+      {
+        "path": "data/cache/re2g/41586_2026_10781_MOESM3_ESM.zip",
+        "sha256": "88eb6c5239019cbec55281b545a3b6e450e2a83384d067ca94a0974968428332",
+        "bytes": 4409955,
+        "partition": null,
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-10781-4/MediaObjects/41586_2026_10781_MOESM3_ESM.zip"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "gate_target": 0.556151,
+      "gate_tolerance": 0.02,
+      "draws_requested": 2000,
+      "seed": 0,
+      "cluster": "chromosome",
+      "aggregate_function": "sum",
+      "fill_value": 0
+    },
+    "exclusions": [
+      "no pair is excluded: the benchmark's published pair set and labels are used whole",
+      "no number is reported for HCT116, Jurkat, WTC11: the deletion feature does not exist there"
+    ],
+    "partitions": {
+      "primary": "held-out K562",
+      "secondary": "all held-out pairs, pooled",
+      "gm12878": "held-out GM12878, its own stratum"
+    },
+    "code": {
+      "git_sha": "f22136b92d359e68c463fe3dd2836166f3df4322",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/experiment_value.py",
+        "tests/test_experiment_value.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/experiment_value.py",
+        "tests/test_experiment_value.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/cell2_eligibility.json",
+        "data/results/re2g_registration.json"
+      ],
+      "argv": [
+        "scripts/re2g_register.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

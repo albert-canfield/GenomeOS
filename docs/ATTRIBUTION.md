@@ -13368,6 +13368,116 @@ kept and dropped draws; one below the minimum says so; the default clears the st
 estimators carry the provenance. Restoring the old behaviour fails two of them. 38 pass across this file and
 the two CRISPRi suites.
 
+## The paired comparison against ENCODE-rE2G, registered before any comparator score was read
+
+**Why this exists.** The project's figure against ENCODE-rE2G has been a *band*: our weighted AUPRC placed
+beside their published interval. A band is not a comparison of two models. The two were never scored on the
+same resamples, so no difference between them, and no interval on a difference, was ever measured. What
+follows registers the paired comparison that would replace it, in full, before any comparator score was read.
+`genomeos/attribution/re2g.py` carries every part of it, `tests/test_re2g.py` holds it to its own wording, and
+`data/results/re2g_registration.json` is the registration (manifest complete, inputs hashed, 0 model requests,
+no money).
+
+**The claim.** On the Gschwind et al. 2026 held-out CRISPR benchmark (doi:10.1038/s41586-026-10781-4,
+Supplementary Table 3; the 4,378 pairs, 190 positives, 157.39 weighted), the frozen
+`activity + distance + deletion` model ranks regulated pairs differently from ENCODE-rE2G when both are scored
+on the identical pairs. **Endpoint**: weighted AUPRC using the benchmark's own pair weights
+(`direct_vs_indirect_negative`), by the benchmark's own estimator; positive = its `Regulated` column exactly as
+published, no relabelling.
+
+**The comparator, in the order it was preferred.** (1) A per-pair ENCODE-rE2G score in the benchmark table
+itself: **absent**. The held-out table's 42 columns carry the measurement, the five power columns, the
+chromatin annotations and the weight, and no column holding any predictor's score. (2) So the ENCODE portal's
+rE2G predictions per benchmark biosample govern, and the join rule below is the one that applies.
+
+**The join rule, stated before any join.** Taken from the benchmark's own merge code and not invented here:
+`EngreitzLab/CRISPR_comparison`, `workflow/scripts/crisprComparisonMergeFunctions.R`
+(`combineSingleExptPred` steps 1 to 3, `fillMissingPredictions`) with the defaults of `createPredConfig.R`,
+read at the tag the paper's data availability names (**v1.0.0**, commit `50587422`) rather than at the moving
+branch; the merge functions are byte-identical at both and the defaults match, so the registered rule is the
+one the published comparison used.
+A pair joins a prediction only within the same cell type and the same target gene — the experiment's
+`(CellType, chrom, measuredGeneSymbol)` against the prediction's `(ExperimentCellType, chr, TargetGene)`, gene
+matched by symbol, which is the pipeline's own trick of folding cell type and gene into the `GRanges` seqname
+so `findOverlaps` cannot cross either. Any overlap of at least one base counts. Where one perturbed element
+overlaps several predicted elements the score is aggregated by the pipeline's documented default, `sum`;
+`max` is registered as a named sensitivity and is **not** what the gate is judged on, so the aggregation cannot
+be chosen by which value passes. A pair with no overlapping prediction takes the pipeline's `fill_value`, 0,
+and stays in the pair set, as the benchmark itself does; dropping the unpredicted pairs instead is a
+sensitivity reported beside the primary figure, never in place of it.
+
+**The gate, and why it decides the lane.** Before any comparison, reproduce ENCODE-rE2G's published held-out
+weighted AUPRC from the per-pair scores; a miss above 0.02 stops the lane, because the scores are then not the
+published ones. Read from the cached supplementary zip, Supplementary Table 3, sheet "Held-out benchmarks",
+row ENCODE-rE2G / Weighted AUPRC: **0.556151 [0.467852, 0.631224]**, which matches the figure already
+registered in `crispri.PUBLISHED` to four places.
+
+**The gate was not run, and the reason is not a paywall.** That sheet carries six predictors times three
+metrics for a single "Held-out" dataset and **no per-cell-type held-out AUPRC at all**. So there is no
+published figure to gate the K562 stratum against, and the gate can only be run pooled, on all 4,378 pairs.
+Reproducing a pooled figure needs rE2G predictions in all five cell types: held-out K562 carries 100.79 of the
+157.39 weighted positives (64.0%), so a K562-only prediction file, which would force the other 2,460 pairs to
+0, sends 36.0% of the positive weight to the bottom of the ranking and misses the pooled figure by far more
+than 0.02 **by construction**, whatever either model does. The five full `element gene links` files that could
+pass the gate total **1,569,167,142 bytes (1.57 GB)**, against an authorised budget of one public download
+under 1 GB: the one file that fits the budget cannot pass the gate, and the set that can pass the gate does not
+fit the budget. Two further obstacles are recorded rather than worked around: the thresholded files in the same
+annotations are a hundredth of the size but hold only pairs above the paper's 70%-recall threshold, so scoring
+every other pair 0 censors the distribution the AUPRC is taken over; and Supplementary Table 12 lists **16**
+HCT116 rE2G annotations, so which prediction set the benchmark used for that cell type is not established from
+the table alone. Nothing here is behind a login or a payment — every ENCODE file is public and free. The
+paper's baseline-predictor bundle on Synapse (`syn58896208`) would need an account, and is not used for that
+reason.
+
+**Populations, each with its count beside its name**, read from the held-out table through `crispri.load`
+before any comparator score existed. Primary, held-out **K562**: 1,918 pairs, 118 positives, 100.79 weighted,
+deletion feature available. Secondary, **all held-out pairs pooled**: 4,378 pairs, 190 positives, 157.39
+weighted, the deletion feature acting on the K562 and GM12878 pairs only. **GM12878** as its own stratum: 68
+pairs, 16 positives, 14.30 weighted, feature available. **HCT116 (396 pairs), Jurkat (75) and WTC11 (1,921)
+report null, "feature unavailable"** — never a number, in either direction, enforced by
+`crispri.gain_where_available` through `re2g.delta_where_available`.
+
+**The statistic.** Paired delta weighted AUPRC = ours minus rE2G on **identical resamples**:
+chromosome-cluster bootstrap, 2,000 draws requested, one seed (0) shared by both models, so each draw holds one
+paired difference rather than two independent ones. `clusters`, `draws_requested` and `draws_dropped` are
+reported, because a dropped draw is a draw the interval does not rest on.
+
+**The reading, fixed in advance — no other wording.** Lower bound above 0: "ranks better than ENCODE-rE2G on
+these pairs". Interval covers 0: "no difference detected". Upper bound below 0: "ranks worse". An interval
+touching 0 reads as no difference detected, and a comparison without an interval has no reading at all rather
+than one borrowed from its point estimate.
+
+**Independence and exposure, all four stated whatever the number would be.** (a) ENCODE-rE2G was trained on
+K562 CRISPR pairs from the same compendium, and these held-out pairs were held out by its own authors. (b) Our
+weights were fitted on the training split and frozen before the held-out pairs were scored. (c) This held-out
+set has already been scored by this project, so it is a **reused benchmark**: a comparison of two frozen
+models, not fresh validation. (d) The deletion feature comes from a model trained on ENCODE K562 tracks
+(features, not labels); whether its training saw these CRISPR outcomes **is not established**, and is not
+claimed either way.
+
+**Falsifier.** If the primary interval covers 0 or lies below it, README may not say the deletion model
+performs above ENCODE-rE2G. The "above the published interval" wording is withdrawn either way — and was in
+fact already withdrawn on 2026-09-27, for a separate reason: the held-out comparison flatters this project,
+every one of the 190 held-out positives sits in an H3K27ac element while 1,438 of the 4,188 negatives do not,
+and the published held-out model reads DNase only where the activity term here reads H3K27ac. README's
+surviving wording is "in the range of ENCODE-rE2G", which is still a band and still unpaired; this
+registration is what would let it be replaced by a measured difference.
+
+**Tests.** `tests/test_re2g.py`, 28: the gate target is the published figure and the tolerance the registered
+one; the gate passes only inside the tolerance and refuses in either direction, naming the miss it refuses on;
+a gate that could not be run is not a pass; the reading is the three registered strings and nothing else; an
+interval touching zero reads as no difference detected; no interval means no reading; the delta reports
+clusters, requested and dropped draws; **a model scored against itself gives a delta of exactly zero in every
+draw**, which only holds if each draw resamples one index set and scores both models on it, so an unpaired
+bootstrap fails it; swapping the two models negates the delta and reverses the interval on the same seed; the
+three strata without the feature report null and the reason; the four independence statements are all present;
+and the bytes the pooled gate needs exceed the authorised budget while the K562 file alone does not — so a
+later lane given a larger budget has to change that number deliberately.
+
+**What is left undone**, named rather than implied: the gate is not run, no comparator score exists, and
+therefore **no paired delta, no interval and no reading are reported for any population**. Nothing in this
+section may be read as a comparison of the two models.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
