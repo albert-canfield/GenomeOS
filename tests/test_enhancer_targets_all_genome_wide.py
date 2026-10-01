@@ -247,3 +247,83 @@ def test_the_measurability_rule_scores_only_chromosomes_it_was_not_fitted_on():
     assert m["per_chromosome"]["chr20"]["held"] is False
     assert m["held_out_right"] == 1 and m["held_out_wrong"] == 1
     assert m["verdict"] == "FAILED on chr7"
+
+
+# --- the node-containment reporting: the superseded control must not come back ----------------------------
+
+
+def _audit() -> dict:
+    return json.loads(Path("data/results/node_containment_audit.json").read_text())
+
+
+def _lines() -> str:
+    return "\n".join(agw.node_audit_lines())
+
+
+def test_the_superseded_archive_control_is_not_reported_again():
+    """0.791 and its +2.6 points come from the 113,399-element archive and were printed beside the
+    440,377-element measurement as if they were its control. Neither may be quoted in the reporting."""
+    source = Path("scripts/enhancer_targets_all_genome_wide.py").read_text()
+    printed = source[source.index("def main() -> int:") :]
+    assert "0.791" not in printed
+    assert "+2.6 points" not in printed
+    out = _lines()
+    assert "0.791" not in out
+    assert "2.6 points" not in out
+
+
+def test_the_superseded_control_keeps_its_warning_wherever_it_is_still_stored():
+    """The entry stays, because it records what was superseded; it may never sit there unmarked."""
+    entry = agw.CONTROLS["coding_target_inside_domain"]
+    assert entry["control"] == 0.791
+    assert "440,377" in entry["superseded_by"]
+    assert "node_containment_audit.json" in entry["superseded_by"]
+
+
+def test_the_reported_figures_are_the_audit_files_own():
+    """Read from the audit's result file, so a later fold cannot drift from it or recompute it here."""
+    uniform = _audit()["modelled"]["controls"]["uniform"]
+    out = _lines()
+    assert f"{uniform['excess_points']:+.2f}" in out
+    low, high = uniform["bootstrap_chromosomes"]["ci95"]
+    assert f"{low:+.2f} to {high:+.2f}" in out
+    assert f"{_audit()['modelled']['pairs']:,}" in out
+
+
+def test_the_reporting_says_the_figures_are_the_dated_audits_and_not_newly_computed():
+    out = _lines()
+    assert _audit()["date"] in out
+    assert "node_containment_audit.json" in out
+    assert "not recomputed here" in out
+
+
+def test_the_reporting_names_the_comparator_and_what_the_interval_describes():
+    """A bare '+2.90' says nothing: the control it is against, and what the interval is over, travel
+    with it. The interval is over chromosomes, not over the 440,377 pairs."""
+    out = _lines()
+    assert "against uniform random boundary placement" in out
+    assert "as many uniform positions as the caller has edges" in out
+    assert "the interval of that excess against that control" in out
+    assert f"over the {_audit()['modelled']['controls']['uniform']['sign_test']['of']} chromosomes" in out
+
+
+def test_the_four_baseline_range_is_kept_separate_from_the_headline():
+    controls = _audit()["modelled"]["controls"]
+    excesses = [c["excess_points"] for c in controls.values()]
+    out = _lines()
+    assert "separately" in out
+    assert f"{min(excesses):+.2f} to {max(excesses):+.2f}" in out
+    assert "not their summary" in out
+
+
+def test_the_internal_evidence_qualifier_travels_with_the_figures():
+    out = _lines()
+    assert "internal benchmark evidence" in out
+    assert "not observed" in out or "rather than observed" in out
+    assert "not independent validation" in out
+
+
+def test_an_unreadable_audit_quotes_no_figure(tmp_path):
+    out = "\n".join(agw.node_audit_lines(tmp_path / "absent.json"))
+    assert "could not be read" in out
+    assert "+2.90" not in out

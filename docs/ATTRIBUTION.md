@@ -3937,7 +3937,7 @@ chr22, chrX and chrY), 605,137 elements, 425,526 requests.
 |---|---|---|---|
 | names a gene at all | 64.1% | 58.1% (chr13) to 70.8% (chr19), median 62.8% | 87% of matched random windows in the locus benchmark |
 | the named coding gene is the nearest TSS | 62.0% | 48.8% (chrY) to 65.3% (chr22), median 61.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements. *(2026-09-27: that random set is matched on boundary count only, not on the 50 kb floor every real node passes, so it is biased low; across four baselines the excess runs +1.2 to +6.6, and on 661 measured CRISPRi pairs it is +5.89. NODES-READER-WRITER.md, the random-boundary audit.)* |
+| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements. *(2026-09-27: that random set is matched on boundary count only, not on the 50 kb floor every real node passes, so it is biased low; across four baselines the excess runs +1.2 to +6.6, and on 661 measured CRISPRi pairs it is +5.89. NODES-READER-WRITER.md, the random-boundary audit.)* *(2026-10-01, traced: both figures are the eighteen-chromosome fold of 2026-09-15, 605,137 elements scored — `data/results/enhancer_targets_all_genome_wide.json`, history entry `chromosomes: 18`, `coding_target_inside_domain: 0.772`. The 74.3% is this fold's own control, placed on the same elements by `node_control`, not the 79.1% archive control that dbad593 measured on a different element set, so it is correct for the population named in this column. The sweep has since completed: at 24 chromosomes, 961,227 elements scored and 440,377 naming a coding gene, the same measurement under the same definitions reads 75.4% against 72.5%, +2.88 points. That is a larger population, so it is recorded here beside these figures and does not replace them.)* |
 
 **The node control, re-measured where the claim is now being made.** dbad593 qualified the old
 "90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
@@ -12157,6 +12157,1169 @@ threshold and track counts, with no pair joined.
 Each run took about 50 s wall and 50 s CPU. The streaming reader peaked at 1.30 GB resident at most,
 against about 5.4 GB for a whole-archive reader; 23 archives were streamed and 3,209 loose files read. There were 0
 downloads, 0 model requests and 0 network requests.
+
+## N1, the Perturb-seq response test, registered before any measurement: 860 genes both arms can score, 56 candidate factors, and a calibration gate on the non-targeting rows that runs first (2026-10-01, lane-n1)
+
+**The question.** Do the committed motif-to-gene predictions anticipate which genes respond to a factor's
+CRISPRi knockdown in K562 better than promoter proximity does? The data are Replogle et al. 2022 (Cell,
+doi 10.1016/j.cell.2022.05.013), the genome-scale screen at day 8, as the gemgroup-Z-normalized pseudobulk
+`K562_gwps_normalized_bulk_01.h5ad` (Figshare+ 20029387, CC BY 4.0). **The test concerns the sampled
+predictions:** the committed scan of 300 elements per chromosome (7,063 elements), at most 66 candidate
+factors before quality filtering, not genome-wide attribution. A knockdown can act indirectly, so a
+response a motif anticipates does not validate an enhancer-gene connection.
+
+**Nothing was measured.** The code was committed in `b359867` and the registration,
+`data/results/n1_registration.json`, in `f9a9130`, stamped `b359867`, clean. From the data file only
+identities were read, by HTTP range requests: the row labels and the measured genes' IDs and names
+(2,343,442 bytes fetched, four named datasets decoded), and earlier the dataset names, shapes and dtypes
+(1,163,794 bytes). No expression value, knockdown value, cell count or response statistic was opened.
+
+### What the file can measure
+
+| Field | Meaning | Status and source |
+| --- | --- | --- |
+| `X` (normalized) | per row, the mean over its cells of each cell's gemgroup z-score, z = (x - mean_control) / sd_control per gene within the cell's gemgroup, after UMI scaling | Documented. STAR Methods, "Filtering and internal normalization": "Within each gemgroup, for each gene, we compute the mean and standard deviation of expression within control cells and use these to z-normalize expression." Figshare: "gemgroup Z-normalized pseudo-bulk expression data". The mean as the aggregation: "We represented perturbations by their mean normalized expression profile" (STAR Methods), and `CellPopulation.average` in the producers' 2019 code (github.com/thomasmaxwellnorman/Perturbseq_GI at `3b25109`, `perturbseq/cell_population.py`, lines 663-709). The 2022 code is not public. |
+| `num_cells_filtered` | the row's cells passing the quality filters, over which `X` averages | Inferred from the name and "we computed a normalized gene expression matrix for cells passing the quality filters". Unconfirmed: it is float64, while `num_cells_unfiltered` is int64. |
+| `control_expr`, `fold_expr`, `pct_expr` | the target's mean unnormalized expression in non-targeting cells (the denominator); its mean in the row's cells over that; the fractional change, fold - 1 | Inferred: no source names these fields. STAR Methods: "Knockdown was computed as the ratio of mean (unnormalized) expression of the target gene within perturbed cells vs. that in cells with non-targeting sgRNAs." Figure S3 legend: the fractional change is "the expression in the targeted cells minus the expression in non-targeting cells, relative to the expression in the non-targeting cell population (-1 implies 100% knockdown)". Not known: all or core controls, pooled or per gemgroup, raw or depth-scaled UMIs. |
+| `energy_test_p_value` | a permutation test on the top 20 principal components against 5,000 control cells | Documented (STAR Methods, "Energy distance test"). Perturbation-level: it cannot label a gene. Never read. |
+| `anderson_darling_counts`, `mann_whitney_counts` | per row, counts of genes the producers' per-gene tests called | Inferred from the names and the methods. Perturbation-level; the per-gene results are not in the file. Never read. |
+| leverage scores, `.var` statistics | per-cell outlier scores summarised per row; in the 2019 code `.var` `mean` and `std` run across rows of the unnormalized means | Never read. |
+| file structure | `X` dense float32, 11,258 x 8,248; no `layers`, `uns`, `obsm` or `varm` | Read as names, shapes and dtypes only. AnnData: "layers: Key-indexed multi-dimensional arrays aligned to dimensions of X." |
+
+**Decision.** The pseudobulk file alone gives a per-gene effect size but no per-gene uncertainty. The
+registered endpoint adds one derivation, **T = X x sqrt(n)** with n = `num_cells_filtered`. It assumes
+that (a) `X` averages exactly those n cells; (b) where a gene does not respond, its per-cell z-scores
+follow the control distribution, with variance 1, as they do by construction within each gemgroup; (c)
+cells are independent; and (d) the mean of n z-scores is close enough to normal at |T| = 3. Assumption (d)
+is weakest for sparse genes, where calls would be too liberal and fall on low-expression genes, which may
+correlate with the motif scores. **A gene responds when |T| >= 3**, rising or falling. The two-sided normal
+tail there is 0.27%, about two chance responders per factor over 860 genes. A cut at 2.58 would add about
+eight more and dilute the labels; one at 4 would leave many factors with no responder and so with an
+undefined AUROC. The labels are the outcome of a ranking metric, not discoveries, so no multiplicity
+correction is applied: chance responders that are independent of the scores pull both arms toward 0.5
+alike. This is the one primary rule. It was chosen before any value was seen, and no alternative is tried
+later.
+
+### The calibration gate runs first
+
+Once access is authorised, the gate reads **only the 585 non-targeting rows**, selected from the identity
+index:
+- normalized `X` over the 860 universe genes;
+- `obs/num_cells_filtered`;
+- raw `X` from `K562_gwps_raw_bulk_01.h5ad` (md5 4570b53c…), for the expression strata only.
+
+It does not use the 514 core controls, for three reasons:
+- choosing them would mean reading the `core_control` value column;
+- the producers chose them for showing few differential genes, and they define the normalization's control mean and sd, so they would flatter the null;
+- the other 71 carry guide-level effects that any factor guide can carry too, so using all 585 errs toward stopping.
+
+**Pass rule.** The share of |T| >= 3 must be at most 1.5 times the nominal 0.0026998. This holds overall
+and in each decile of control-row expression, where expression is the cell-weighted mean of raw `X` over
+the usable rows. Each decile must also expect at least 20 exceedances. Any other outcome fails.
+
+**On failure the experiment stops.** The failure is recorded, and no factor row is read. No fallback
+endpoint is used inside this run: the authors' per-gene results or the single-cell file would be a new
+proposal.
+
+Two kinds of input are set aside rather than counted:
+- a row with a non-finite cell count is left out, and counted;
+- a gene with any non-finite T or expression leaves the universe before any factor row is read, and is listed.
+
+The gate cannot test whether perturbed cells have a different variance from controls.
+
+### Eligibility, aggregation, aliases and families
+
+Eligibility is decided only after the gate passes. It reads `num_cells_filtered`, `control_expr`,
+`fold_expr` and `pct_expr` at the 59 candidate rows and nowhere else. The rules apply in order:
+1. At least 25 cells, the producers' own minimum. Otherwise the row has too few cells.
+2. `control_expr` > 0 with n x `control_expr` >= 10 expected target UMIs. Otherwise the knockdown is
+   **unassessable and the row ineligible**. The producers admit undetected targets; this rule does not.
+   At 10 expected UMIs, a non-functional guide shows 4 or fewer with Poisson probability 0.029.
+3. A finite `fold_expr`.
+4. `pct_expr` = `fold_expr` - 1, or the same in percent. A mismatch on any assessable candidate row stops
+   the run, because the inferred meaning would be wrong.
+5. `fold_expr` <= 0.40, that is, at least 60% knockdown. This is the producers' threshold for analyses that
+   need a functional perturbation; the median knockdown in K562 is 85.5%.
+
+Fewer than 30 eligible factors stop the run before any response row is read.
+
+- **Multiple rows of one factor.** Every eligible row is pooled, weighted by its cells, and an ineligible
+  row is never used. No row is chosen by its response. CGGBP1, FOXD3 and LHX3 have P1 and P2 rows.
+- **Aliases.** A JASPAR monomer name that is a GENCODE v50 protein-coding gene name with one ID maps to
+  that ID, matched to the screen by Ensembl ID. A name GENCODE does not know falls back to the screen's own
+  symbol. A name GENCODE resolves is never re-matched by symbol.
+- **Heterodimers.** A heterodimer profile (`A::B`) counts for neither partner.
+- **Families.** Factors of one TFClass family stay separate factors with equal weight. The uncertainty is
+  clustered by `motifs.family_unit`, under which a C2H2 zinc finger is its own unit. The 56 candidates
+  fall into 39 units.
+
+### Scores, the shared universe and the candidates
+
+- **Proximity score.** The factor's hit score in the gene's promoter `requires` list: TSS ± 1,000 bp of the
+  canonical transcript.
+- **Attribution score.** The largest of the factor's hit scores over the sampled elements whose target is
+  the gene.
+- **What a zero means.** The factor is not in the frozen top-8 `requires` list of any scanned region of the
+  gene: there is no hit at 85% of the matrix range, the hit ranks below the top 8, or the factor is not
+  enriched on that chromosome. A zero never means "not scanned".
+- **The universe.** Both arms use the same genes: measured genes, by Ensembl ID, with a scanned promoter and
+  at least one sampled element attributed to them. For each factor, the perturbed gene is removed, along
+  with every gene whose canonical TSS lies within 10 kb of the factor's, because CRISPRi can silence a
+  neighbour (the paper's Figure S3).
+
+| Coverage | Genes |
+| --- | --- |
+| Measured in the file | 8,248 |
+| ... without a scanned promoter (not protein-coding, or no promoter sequence) | 322 |
+| ... with a scanned promoter but no sampled element attributed | 7,066 |
+| **Shared universe** (10.43% of measured) | **860** |
+| Element-attributed genes not measured | 1,931 |
+| Sampled elements without a target (attributed to nothing) | 3,298 elements |
+
+**The ledger** has one line per JASPAR name in the registration. Of 952 names:
+- 69 are heterodimers;
+- 12 are unresolved or ambiguous (DUX, DUXBL1, EWSR1-FLI1, MIX-A, MSX3, RHOX11, SHOX, ZBED1, ZFP335, ZFP809, ZFP961, ZNF286B);
+- 8 are not perturbed in the screen;
+- 863 are perturbed monomers.
+
+Of the perturbed monomers, 66 have at least 10 element-scored genes in their universe. The 56 candidates
+also have at least 10 proximity-scored genes. That second floor drops 10 factors: ATF2, DMRTB1, IRF2,
+MECOM, ONECUT1, POU4F2, ZFP28, ZNF354A, ZNF510 and ZNF721, whose proximity counts are 2 to 9.
+
+The candidates are CGGBP1, CREM, FOXB1, FOXD3, FOXL2, FOXQ1, HMGA1, HNF1B, HOXB13, IRF1, IRF3, IRF7, KLF17,
+KLF9, LHX3, MAFK, MEF2A, MEF2B, MEF2D, MLXIP, NRF1, ONECUT3, PBX2, PBX3, PHOX2B, POU1F1, POU2F2, POU3F2,
+POU3F3, POU4F1, POU4F3, PRDM9, PROP1, RFX1, RFX3, RREB1, SALL3, SPI1, SPIB, STAT2, ZBTB40, ZNF131, ZNF135,
+ZNF24, ZNF250, ZNF347, ZNF362, ZNF460, ZNF470, ZNF471, ZNF596, ZNF606, ZNF683, ZNF775, ZNF865 and ZNF93.
+For each, knockdown eligibility and a defined AUROC are **pending measurement**. Many are not expressed in
+K562, so their knockdown will be unassessable, and the eligible count may fall below the floor.
+
+### The comparison
+
+1. **Per-factor AUROC.** For each factor and arm, the Mann-Whitney AUROC of the score for responders over
+   the factor's universe, with midranks for ties.
+2. **Undefined AUROC.** A factor with no responders, all responders, or an arm whose scores do not vary is
+   counted in coverage with its reason. It is never dropped silently.
+3. **The estimate.** The mean over factors of d = AUROC(attribution) - AUROC(proximity), with every factor
+   weighted equally.
+4. **The uncertainty.** A cluster bootstrap over TFClass units: 10,000 replicates with seed 20261001, each
+   drawing as many units as there are, with replacement. The 95% interval is the 251st and 9,750th of the
+   sorted means. It is assessable only with at least 10 units.
+   - **Limits.** A percentile interval undercovers when there are few units. Factors in different families
+     share downstream programmes and the same universe genes, and the bootstrap does not resample them.
+     Label noise is not propagated. The element sample is fixed, so the result is conditional on it.
+5. **Two criteria, kept separate.** The point gain must be at least +0.02. The 95% lower bound must be
+   above 0. Each is reported on its own and never merged into one verdict.
+6. **The floor.** 30 defined paired differences is a feasibility floor, not shown power. Fewer stop the
+   analysis with no estimate, and no rule is relaxed.
+
+### Frozen inputs
+
+Figshare's md5 is recorded for both data files: `a3dfaa94ea8724217f5ecb1e14a5f0c8` (normalized) and
+`4570b53c9d62ff6df281e622f0350060` (raw), 374,587,922 bytes each. Their sha256 will be computed at the
+authorised download and recorded by the run. The identity digest is
+`a6e6d9bdb0000260d80499ff9a436c4487f0dea73bd633b05faf675a81e21f93`: the sha256 of the row labels and gene
+IDs in file order. A run whose files do not reproduce it stops.
+
+| Frozen input | Bytes | sha256 |
+| --- | --- | --- |
+| `data/results/motifs_chr1.json` | 3,161,055 | `0e9f8d8a1f39f0597e420484fce43add7dcda0ca7654186f8739f206a5d0a838` |
+| `data/results/motifs_chr2.json` | 2,126,147 | `6376bbf98cf89067cd01cbeea3685f8660703fb2c65a97955ddfd9f7239e5707` |
+| `data/results/motifs_chr3.json` | 1,834,500 | `6059bec828dfd22bd256312f21a9e63ee62c39a4c5ed243a2dc643c2785fa6af` |
+| `data/results/motifs_chr4.json` | 1,382,043 | `c285ca0e8064e1295b405150326fa04f78c6a41b64031287e1aeaca860cb8194` |
+| `data/results/motifs_chr5.json` | 1,600,420 | `1e8595c91de5286a9fb39b330085d8ffd2e7f1c2bb346a892dc3b7ed3bd891f8` |
+| `data/results/motifs_chr6.json` | 1,834,552 | `ef3b855d53f7910a29aff69ce5649ee2d5d5f7a199d89d55f34d54599f8c990c` |
+| `data/results/motifs_chr7.json` | 1,658,274 | `f00c67735c9c22195d1695dc2593e23ee74dc16b8df24ffd88d1d90293683182` |
+| `data/results/motifs_chr8.json` | 1,375,416 | `661f10cd52b5187957d37689a62fc47eae037196d67e8f805d310bbf6a71ac68` |
+| `data/results/motifs_chr9.json` | 1,449,731 | `56a8c7197db5dc6e2682b2a64592d633fe7cb243a88c74da3aa329c3bc0792ce` |
+| `data/results/motifs_chr10.json` | 1,425,510 | `350dc0d66258847ece42d5c364a1e21d4c183e25ec5f93af1b2d33299cc9e2c0` |
+| `data/results/motifs_chr11.json` | 2,138,689 | `b9265b0ae58a0ad3951480493a543a7e6afa075da9e6ea81f875d42c527a1fd9` |
+| `data/results/motifs_chr12.json` | 1,780,441 | `8882d0833686078b77f4cecd3b6e4b586de0ec004eecad47f2a7f22c5b065b71` |
+| `data/results/motifs_chr13.json` | 837,615 | `e536aad3749f7eebec638920572b10ad3acea1f55c473741569af376be15f40f` |
+| `data/results/motifs_chr14.json` | 1,218,407 | `1539029068b311455c8fc8ed4206f348c1f930bf0634c95f07059329ccf70fb4` |
+| `data/results/motifs_chr15.json` | 1,222,157 | `7c03f99837ec33f4bee4ef7fb169296d7c0cfa64b0ef2c99c545f21ddead930c` |
+| `data/results/motifs_chr16.json` | 1,569,402 | `16d06ca773c655a24b25c92b4979ac3e392dccccebc8d41bc3ae73a0d69bf5d3` |
+| `data/results/motifs_chr17.json` | 1,981,105 | `a20e95df94daf715e01e8f3c2e377f0b131b79852898d518949d92cdd81e9383` |
+| `data/results/motifs_chr18.json` | 780,230 | `3eac72195c6814b9854fb13da84af3c463bed3938a3d7aec4929a34f9313152b` |
+| `data/results/motifs_chr19.json` | 2,349,647 | `b764f903383f1c744109ff219aff679305dca2fed8f290abcc812ed1f28e4b12` |
+| `data/results/motifs_chr20.json` | 1,134,693 | `9a7af619548e84ee95f1c8c9b8fd58e4ffcecee24d9db2c5873610950557f8a6` |
+| `data/results/motifs_chr21.json` | 658,517 | `d9bf804a6dbb0d6c1f5812865fe81aa9784208d9e62dc421a01af72b6b5c39ae` |
+| `data/results/motifs_chr22.json` | 995,044 | `514c28040f65063ff2a5c77cdc49a460370f12ebc1bf23e1ab5e9fde109e9a3f` |
+| `data/results/motifs_chrX.json` | 1,529,809 | `f782431efc5d1694b84a94ca2222ab22c4a2bbf7c796a67c0c856608a539e0f8` |
+| `data/results/motifs_chrY.json` | 376,721 | `45b8031f8b4000dbecc8aa1966198cd13b6ea068f24527c02cfee43e72f8f8fb` |
+| `data/knowledge/jaspar/core_vertebrates_2026.jaspar` | 336,314 | `4005b5449ba07d9b58495f51143186e7e3959efd0ad670770fbddf57bf941e8f` |
+| `data/knowledge/jaspar/core_vertebrates_2026.transfac` | 521,954 | `4bb7efb6f82e9e5d1228d2cdd493f3c774fab73130b5bba90e3c0488255b99f5` |
+| `data/reference/gencode_v50_chr*.gff3.gz (24 files)` | 160,980,327 | `67ce29ad660c5f4f3e875ffa43b518b562e26a72c1b93561deaf769e57915f1b` |
+| `data/cache/n1/K562_gwps_normalized_bulk_01.identities.json` | 643,524 | `60bcf6d62a4e9e7fbc5977fe8cac38a7dcb3dcc2f10cf2263ebd08ed659b7459` |
+
+### What the run will need
+
+The run needs the owner's separate authorisation, given to `scripts/n1_run.py --authorisation`. The script
+refuses to run a second time. Its reads, in order:
+1. Download both files, check the md5 values, and record each sha256.
+2. Read both files' identities, `obs/gene_transcript` and `var/gene_id`.
+3. Run the gate on the 585 non-targeting rows: normalized and raw `X` over the 860 genes, and
+   `num_cells_filtered`.
+4. Only if the gate passes, read the four knockdown fields at the 59 candidate rows.
+5. Only if the field-semantics check holds and at least 30 factors are eligible, read normalized `X` at the
+   eligible rows.
+
+The run never reads the energy test, the Anderson-Darling or Mann-Whitney counts, the leverage scores,
+`core_control`, the other quality fields, any `.var` statistic, or any other factor's row. The 26 tests in
+`tests/test_n1_perturb_response.py` use made-up inputs only. They cover:
+- the gate passing and failing, including a single inflated decile;
+- missing versus zero, and the shared universe;
+- exclusion of the perturbed gene and its neighbours;
+- aliases and the ledger;
+- the knockdown rules, and the stop on a semantics mismatch;
+- the multi-row rule;
+- undefined AUROCs, equal weighting, and the clustered bootstrap;
+- the two separate criteria and the coverage stops;
+- the read order;
+- the file reader on a made-up pair of files;
+- the run script's authorisation and single run.
+
+### Amendment 1, 2026-10-01: five changes before any measurement (lane-n1)
+
+Required by the owner's reviewer after reading the code. The original registration (`f9a9130`, sha256
+`8478dd76…`) and its code (`b359867`) stay as committed. The amendment adds code in `5d1710a`. Its
+registration, `data/results/n1_registration_amendment_1.json`, is in `8ebaa9a`, stamped `5d1710a`, clean.
+Nothing was measured.
+
+**Framing.** N1 is an **exploratory comparison of two prediction arms against an operational response
+label**, |T| >= 3. T = X x sqrt(n) is a proposed statistic, not a calibrated test. Passing the gate does not
+validate per-gene biological responses. An acceptable control-tail rate does not establish any of these:
+- that cells are independent;
+- the uncertainty in the control mean and sd behind each z-score;
+- calibration across cell counts or across pooled rows;
+- the variance of perturbed cells.
+
+**Correction.** The section above says the 514 core controls "would flatter the null". All 585
+non-targeting rows include those 514, so using them does not avoid the core set's role in the
+normalization; it only adds the 71 guides outside it.
+
+The five changes:
+1. **AUROC.** `auroc` returned undefined for a constant predictor. `auroc_v2` counts ties as half, so a
+   constant score gives 0.5, and it is undefined only when a class is empty. It is checked against
+   brute-force pair counting.
+2. **Knockdown units: unsupported, so the v2 run stops before the knockdown rule.** The evidence, read on
+   2026-10-01:
+   - The STAR Methods give "Knockdown was computed as the ratio of mean (unnormalized) expression of the
+     target gene within perturbed cells vs. that in cells with non-targeting sgRNAs"
+     ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)).
+   - The same methods produce "adjusted UMI counts" per gemgroup, so "unnormalized" does not settle raw
+     against depth-adjusted counts.
+   - The Figshare text defines no `.obs` field ([20029387](https://doi.org/10.25452/figshare.plus.20029387.v1)).
+   - The predecessor producer code of 2019 computes `fold_first_expr = first_expr / control_first_expr`
+     from unnormalized per-cell means pooled over control cells
+     ([`GI_generate_populations.ipynb`](https://github.com/thomasmaxwellnorman/Perturbseq_GI/blob/3b25109aeb9c0c2026bd70abd50304a0ad4e5395/GI_generate_populations.ipynb),
+     cell 27, with `metaapply` defaulting to the unnormalized matrix in `perturbseq/cell_population.py`).
+     That code is for other data, the 2022 code is not public, and `pct_expr` has no 2019 counterpart.
+
+   So `num_cells_filtered x control_expr` is not established as an expected UMI count, and the Poisson
+   reading is withdrawn. `pct_expr = fold_expr - 1` would show only algebraic consistency.
+   `ELIGIBILITY_SUPPORTED = False`, and no threshold replaces the rule. Either of two things would
+   resolve it:
+   - the 2022 code, or the authors' definition of the fields;
+   - a separately reviewed amendment deriving knockdown from documented quantities.
+3. **The gate's claim** is narrowed as above.
+4. **Expression matching was not implemented in `f9a9130`.** The proposal promised it, but the frozen
+   comparison used expression deciles only in the gate. Now the primary per-factor AUROC compares
+   responders only with non-responders of the same control-expression decile, with each decile weighted by
+   its pairs (`stratified_auroc`). The unmatched AUROC is reported beside it with no criterion. This is
+   frozen and tested, but does not run while the stop in item 2 stands.
+5. **Execution matches the freeze.**
+   - `scripts/n1_run_v2.py` refuses unless every one of these matches the amendment: the original
+     registration (sha256 `8478dd76…`), the module (`0ea47ad9…`), itself (`b33ff4f3…`) and `CONSTANTS_V2`.
+     It checks them before opening any data file.
+   - Its reader decodes `X` at the 860 selected columns only, one row at a time.
+   - The section above said the gate reads "universe genes only". The original reader in fact decoded
+     whole rows of 8,248 genes and kept the 860.
+   - `scripts/n1_run.py` gains one early line that refuses and points to v2. Its old test stays, marked
+     skipped with that reason.
+
+**Unchanged:** the universe, the candidates, the ledger, the scores, the label, the gate's rows and pass
+rule, the floor, the bootstrap and the two separate criteria. The arms' positive counts differ by design,
+for example CGGBP1 with 40 attribution and 598 proximity genes, and are not equalised.
+
+**What an authorised v2 run reads, in order:**
+1. the freeze check, with no data file opened;
+2. both files' md5 and sha256;
+3. their identities;
+4. normalized and raw `X` at the 585 non-targeting rows, decoded at the 860 universe columns, and
+   `num_cells_filtered` at those rows.
+
+It then stops with `eligibility_unsupported` and reads no candidate row.
+
+**Tests:** 33 of the 34 tests in `tests/test_n1_perturb_response.py` pass on made-up inputs; the original
+runner test is skipped, as above. The amendment's tests cover:
+- the AUROC against pair counting, including a constant score giving 0.5;
+- the stratified AUROC on a confounded example and its pair weighting;
+- the v2 stop before the knockdown rule, and a failed gate;
+- the analysis after the stop, under a patched constant;
+- freeze mismatches refused before any file is opened;
+- the v2 runner applied once;
+- the reader decoding only the selected columns, checked by a spy on h5py;
+- the original runner's refusal.
+
+### Amendment 2, 2026-10-01: the authors' published per-gene results as the label, for assigned perturbations (lane-n1)
+
+The original registration and amendment 1 stay as committed. The code is in `29e7a88`, and
+`data/results/n1_registration_amendment_2.json` is in `fd3d928`, stamped `29e7a88`, clean. No p-value,
+expression value or knockdown value was read.
+
+**Resource.** The authors' supplemental deposit was checked first: Figshare+ 21632564 (Replogle and
+Weissman, CC0, [doi](https://doi.org/10.25452/figshare.plus.21632564.v1)). It lists "1) All
+Anderson-Darling p-values for differential expression analysis", in
+`anderson-darling p-values, BH-corrected.csv.gz` (488,720,141 bytes, md5 `abb0310e…`).
+
+- **The statistic.** The STAR Methods describe it
+  ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)): "for each gene test whether the
+  distribution of normalized expression is identical between control cells bearing non-targeting sgRNAs
+  and cells bearing each perturbation", by `scipy.stats.anderson_ksamp`, with p-values extended through R's
+  kSamples.
+- **Adjusted, not raw.** "p-values in both cases were adjusted for multiple hypothesis testing using the
+  Benjamini-Hochberg procedure". The family the adjustment ran over is not documented.
+- **The documented level.** "p < 0.05 by Anderson-Darling test following Benjamini-Hochberg correction".
+
+**Structure, from the header alone** (131,072 bytes by range request):
+- The 11,258 perturbation columns are exactly the pseudobulk's row labels, in another order, including the
+  585 controls.
+- All 56 candidates' principal-transcript columns are present (59 of 59 candidate rows). CGGBP1, FOXD3 and
+  LHX3 are read at their P1 rows; the paper reports that P2 perturbations "did not generally have effects".
+- The genes are Ensembl IDs. The first is NOC2L, the pseudobulk's third gene.
+- The coverage of the 860 universe genes cannot be counted before download, because the gene labels sit
+  inside the compressed values. The run counts it in a labels-only pass before parsing any value.
+- How missing values are written is undocumented and was not inspected. An empty, non-numeric, non-finite
+  or out-of-range entry, or a gene absent from the rows or listed twice, is missing: it is never a
+  non-responder.
+- The raw pseudobulk's identities match the registered digest (1,950,226 bytes read).
+
+**The question changes.** Among the 56 frozen candidates, do the element predictions rank the genes the
+authors' test calls differentially expressed after the factor's **assigned** perturbation above the
+non-responders of the same control-expression decile, more than promoter proximity does?
+- No knockdown filter is used.
+- Ineffective perturbations may weaken the signal.
+- An absent response does not establish that a factor has no regulatory role.
+- No factor is chosen by its responses.
+
+**Rules.**
+- **Label:** a gene responds when the published adjusted p is below 0.05.
+- **Strata:** deciles of the unweighted mean of raw pseudobulk `X` over the 585 non-targeting rows. The
+  values are read only in the authorised run.
+- **Unchanged from earlier registrations:** the 10 kb exclusion, and amendment 1's stratified AUROC with
+  the unstratified one beside it, the equal-weight difference, the cluster bootstrap, the floor of 30 and
+  the two separate criteria.
+- **Dropped:** the |T| label, the gate and the knockdown rule. The normalized pseudobulk is not read.
+
+**Freeze.** `scripts/n1_run_v3.py` refuses unless all of these match: both earlier registrations, the
+module (`9be800c9…`), itself (`406b60da…`), the constants, and the header digest (`0dcdb88b…`). The amendment
+1 and original runners now refuse.
+
+**What an authorised run reads, in order:**
+1. the freeze check;
+2. both files downloaded, with md5 checked and sha256 recorded;
+3. the raw pseudobulk's identities;
+4. raw `X` at the 585 controls, at the 860 columns;
+5. the published file's labels pass;
+6. at the covered universe genes, the 56 principal columns, with each such line split into text and only
+   those fields converted.
+
+**Tests:** 41 of 42 pass on made-up inputs, and 1 is skipped as before. Amendment 2's cover:
+- the principal-row and missing rules;
+- a labels pass that parses no value, and a values pass that converts only the chosen cells;
+- the strict 0.05 level;
+- an end-to-end run with absent, repeated and empty entries;
+- the header-mismatch stop;
+- the runner's freeze check and single run;
+- the amendment 1 runner refusing.
+
+### The run under amendment 2, 2026-10-01: stopped below the floor, no estimate (lane-n1, run by the coordinator)
+
+Albert authorised measurement access at 15:19 BST, then the run itself: "Albert authorises the N1 amendment 2
+run, including downloading the two specified files and reading the control-expression values and published
+adjusted p-values required by the frozen protocol." The run was made once, from `1cb790a` with a clean tree,
+and wrote `data/results/n1_result_amendment_2.json`. Nothing in the registrations, the module or the runner
+was changed.
+
+**Checks before any value was read.**
+- The runner's freeze check passed: both earlier registrations (`8478dd76…`, `ecfb55fc…`), the module
+  (`9be800c9…`), the runner (`406b60da…`), the constants and the published header digest.
+- Both downloads match Figshare's md5. The raw pseudobulk is `4570b53c…` (sha256 `7cec96b3…`); the published
+  file is `abb0310e…` (sha256 `2dd5d2a5…`).
+- The raw identities match the registered digest.
+
+The reads were the ones registered, in order:
+1. raw `X` at the 585 controls and the 860 universe columns;
+2. a labels pass that parsed no value;
+3. the 56 principal columns at the 496 covered genes.
+
+**Status: insufficient coverage.** In the registered words: "12 defined paired differences, below the floor
+of 30; no estimate is reported and no rule is relaxed." There is no paired gain and no interval. Neither
+criterion was assessed: not the +0.02 point gain, and not the lower bound above 0.
+
+**Coverage.**
+- **Genes.**
+  - 496 of the 860 universe genes have a row in the published file, and 364 have none.
+  - No gene is listed twice, and no covered gene has non-finite control expression.
+  - All 56 factors have a usable entry at all 496 genes.
+  - The deciles of the 496 genes hold 49 or 50 genes each.
+- **Factors.**
+  - 56 are available, all 56 have a principal column, and all 56 were analysed.
+  - 12 are evaluable. For the other 44, no gene among the 496 has an adjusted p below 0.05, so both arms are
+    undefined for the same reason, `no_responders`.
+  - The 12 evaluable factors have 56 responders between them: one each for 5 factors, two or three each for
+    5, 11 for MEF2A and 27 for NRF1.
+- **Families.** 39 families are among the candidates and all 39 were analysed. 12 are represented among the
+  evaluable factors, one factor each.
+- The result records, per factor, three things: the genes with a label (496, shared by both arms), the
+  responders, and the deciles used. It does not record the number of genes inside the used deciles. That
+  number follows from the decile sizes: a factor that uses s deciles compares its responders within 49s to
+  50s genes.
+
+**Both methods, per evaluable factor.** The values are AUROCs stratified by control-expression decile, each
+arm scored on the same genes, labels and deciles. The unstratified difference is reported beside each, with no
+criterion.
+
+| Factor | Family | Responders | Deciles used | Element attribution | Promoter proximity | Difference | Unstratified difference |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SALL3 | SALL3 | 3 | 2 | 0.601 | 0.399 | +0.201 | +0.198 |
+| RFX1 | RFX-related factors | 1 | 1 | 0.500 | 0.479 | +0.021 | +0.012 |
+| HMGA1 | HMGA | 1 | 1 | 0.480 | 0.459 | +0.020 | +0.018 |
+| POU2F2 | POU domain factors | 2 | 1 | 0.489 | 0.479 | +0.011 | −0.004 |
+| NRF1 | NRF | 27 | 9 | 0.541 | 0.539 | +0.002 | −0.022 |
+| FOXL2 | FOX | 2 | 2 | 0.413 | 0.413 | 0.000 | −0.023 |
+| MAFK | Maf-related | 1 | 1 | 0.458 | 0.469 | −0.010 | −0.008 |
+| MEF2A | Regulators of differentiation | 11 | 6 | 0.455 | 0.468 | −0.013 | −0.012 |
+| ZNF683 | ZNF683 | 1 | 1 | 0.427 | 0.490 | −0.062 | −0.002 |
+| PBX2 | TALE-type homeo domain factors | 3 | 3 | 0.483 | 0.640 | −0.158 | −0.175 |
+| SPI1 | Ets-related | 3 | 3 | 0.445 | 0.627 | −0.182 | −0.181 |
+| PROP1 | Paired-related HD factors | 1 | 1 | 0.429 | 0.949 | −0.520 | −0.533 |
+
+The result also carries the unstratified mean over these 12 factors, −0.061. It has no criterion, sits below
+the floor, and is not an estimate of the gain.
+
+**What this supports.** As frozen, N1 cannot answer its question with this endpoint. For 44 of the 56
+candidates, the assigned perturbation shows no detected response at any of the 496 covered universe genes.
+The 12 factors that do respond have 1 to 27 responders. This is a limitation of the frozen pipeline (the
+candidate set, the gene universe and the endpoint together). It is not a finding about the predictions.
+
+**What it cannot establish.**
+- **Better or worse prediction.** It does not show whether the element predictions rank responders better
+  or worse than promoter proximity:
+  - there is no estimate;
+  - the per-factor differences rest on 1 to 27 responders, compared within 1 to 9 deciles;
+  - none of them is evidence either way.
+- **The meaning of the label.** An adjusted p below 0.05 marks a detected difference in a gene's expression
+  distribution, with no magnitude and no direction. An entry above the level is "no detected response".
+- **The 44 factors without responses.** It does not show that they lack a regulatory role in K562. The
+  perturbations are assigned, with no knockdown check. The run did not examine whether the candidates are
+  expressed in K562 or were effectively knocked down.
+- **Multiplicity.** The family over which the Benjamini–Hochberg adjustment ran is not documented. The
+  published 0.05 level was used as frozen, with no re-adjustment, and no 5% false discovery rate is claimed
+  for this subset.
+- **The floor.** The 30-factor floor is a minimum for reporting an estimate, not a power calculation.
+- **Scope.** A positive result would have meant better prediction of this endpoint in sampled K562 only.
+
+**Cost.** No money was spent and no model requests were made.
+- Downloads: two public CC0 files, 863,308,063 bytes, in 25 s. They are kept in the git-ignored
+  `data/cache/n1/`.
+- The run: 14.3 s wall time, 8.9 s CPU time and 85 MB peak resident memory.
+
+**Next.** No further amendment of N1 is proposed. These labels have now been read, so a new test would need
+its own registration on data not yet seen. That is the owner's decision.
+
+### N1 closed, 2026-10-01: a wording correction and the coverage diagnosis (coordinator)
+
+**Closed under its registered stop rule.** The result file and the subsection above stay as committed. No
+threshold is relaxed, no factor is selected and the universe is not enlarged to rescue it. N1 is completed
+and inconclusive: it could not answer whether element attribution outperforms promoter proximity.
+
+**Wording correction, made here instead of in the lines above.** The subsection above uses three phrases
+that are too absolute: "There is no paired gain and no interval", "there is no estimate" and "none of them
+is evidence either way". The correct reading is **no primary aggregate estimate or decision**. The result
+file does contain the per-factor scores and a secondary unstratified mean of −0.061. These are descriptive
+results below the reporting floor, not a reliable conclusion about comparative performance. The registered
+note "no estimate is reported" stays as the code wrote it, about the primary estimate.
+
+**Coverage diagnosis: why 364 universe genes were absent.** It used identities and documentation only. No
+response or expression value was read, N1 was not altered, and it took about 5 of its 45 minutes (15:59 to 16:03 BST).
+
+The inputs read:
+- the published file's row labels, by its frozen labels pass, which parses no value;
+- the pseudobulk's `gene_id`, `gene_name` and `in_matrix` (the last is True for all 8,248 genes);
+- the registration's candidate gene IDs;
+- the STAR Methods ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)) and both Figshare item
+  descriptions.
+
+Findings:
+- **Identifier mismatch: ruled out.**
+  - The published file has 5,530 gene rows. All are unversioned Ensembl IDs, none is repeated, and every
+    one is among the pseudobulk's 8,248 gene IDs.
+  - 2,718 pseudobulk genes have no row. 364 of them are in the N1 universe: 42% of the universe, against
+    33% of all pseudobulk genes.
+- **Documented filtering: for the pseudobulk only.**
+  - The pseudobulk's gene set is documented as "genes expressed at >0.01 UMI per cell" (Figshare+
+    [20029387](https://doi.org/10.25452/figshare.plus.20029387)).
+  - The published test's gene set is not documented. The deposit lists "All Anderson-Darling p-values for
+    differential expression analysis", and the methods section on the test says only "for each gene".
+  - The paper uses several expression cut-offs elsewhere: 0.05, 0.1, 0.25, 0.5, 1 and 2 UMI per cell. It
+    does not say which one, if any, defines the 5,530.
+- **The reason for the 364: unresolved.** It is narrowed to an undocumented restriction, made by the
+  producers, of the genes they tested. Confirming an expression threshold would need the pseudobulk's
+  per-gene expression summaries, which this diagnosis did not read.
+- **The larger limit is the candidate factors, not the genes.**
+  - By identity alone, the 56 factors' own genes fall into three groups:
+    - 39 are not in the pseudobulk's gene list, by ID or by name. Read literally against the
+      documentation, that places them below 0.01 UMI per cell in this dataset.
+    - 5 are in the pseudobulk but were not tested.
+    - 12 are among the 5,530 tested genes.
+  - The 44 factors without a responder split 33, 4 and 7 across these groups. The 12 evaluable factors
+    split 6, 1 and 5.
+  - NRF1, absent from the list, has 27 responders. Absence from the list therefore does not mean the
+    perturbation had no effect, and the literal reading is recorded, not relied on.
+
+**What this means for another design.** Two coverage problems can be seen from identities before any value
+is read:
+1. A design on this published file can label only the 5,530 genes it tested, so its universe should be
+   drawn from them.
+2. A candidate set chosen from motif predictions, without regard to whether each factor's own gene is in
+   the dataset's expressed-gene list, will be dominated by factors that are not (here, 39 of 56). Most of
+   the factors without a responder (33 of 44) sit in that group.
+
+A new design on this deposit would not be blind: the labels for these 56 factors have been read.
+
+## The wiring diagnostic, feasibility: no matching scheme meets its pre-set thresholds, because most regulated links have no other measured gene of their element at a matched distance, so no rewired assignment is scored (2026-10-01, lane-wiring)
+
+The external reviewer's advice, relayed by the owner: "On an already-examined benchmark, test whether
+existing element-to-gene assignments outperform suitably matched rewired assignments. Hold scores and
+evaluation rules fixed. If distance, coverage and connectivity cannot be controlled adequately, report
+that and stop." It "remains development evidence, not independent validation." The owner then added five
+requirements: enough links must actually change; real and rewired assignments must be balanced on
+distance, activity, the target gene's expression, coverage and links per gene; scoring must stay fixed;
+the uncertainty must allow for shared genes and loci; and the reading must stay bounded. Thresholds for
+the first two were to be set before any diagnostic was computed, and a failure to meet them is the no-go.
+
+**The outcome is the no-go.** None of the four matching schemes meets its thresholds for the primary
+rewiring. No registration is written, no model is fitted on a rewired assignment, and no performance
+figure of any rewired assignment exists. AlphaGenome requests: 0. Money: none.
+
+### The order of events
+
+1. **31e624e:** the matching, the diagnostics, the thresholds (`wiring.THRESHOLDS`, `wiring.SCHEMES`,
+   `wiring.REGULATED_FLOOR`) and the tests were committed before any diagnostic was computed on the real
+   pairs. A test makes the feasibility path fail if it fits a model or computes a metric.
+2. The first run of `scripts/wiring_feasibility.py` at 31e624e found no adequate scheme.
+3. **f58a2a3:** a block of descriptive counts (`explanatory_counts`) was added to say why. It is judged by
+   no threshold. The result `data/results/wiring_feasibility.json` was then rewritten at f58a2a3 (clean
+   stamp, 75 s), with the same decision and the same diagnostics, since the draws are seeded.
+
+### What a rewiring was allowed to change
+
+The benchmark is the K562 CRISPRi training set already examined above ("The result: the CRISPRi gain
+survives coverage…"): 10,356 pairs, 471 regulated, hold-one-chromosome-out. There, `activity + distance`
+scores AUPRC 0.5068 and `activity + distance + deletion` scores 0.7241. Those two figures were known
+before this lane began. The lane recomputed only the real 0.7241, once, while timing a fit, and it
+matched; nothing else was scored.
+
+A rewiring changes one thing: which gene's cached deletion block (`top_target`, `deletion_drop`) is
+attached to a pair. The pairs, their labels, their own distance and activity features, the split and the
+estimator never change. A pair with no admissible alternative keeps its real block in every rewiring and
+is counted, never dropped. A test checks this on synthetic inputs: the evaluated pairs and their labels
+are identical in the real assignment and in every rewiring, and only the block of a moved pair differs.
+
+The links a rewiring may touch are the **population**: covered pairs whose gene the sweep's cache
+answered. Of the 10,356 pairs:
+
+- 1,119 are uncovered;
+- 3,410 are covered but carry no cached value for their gene;
+- **5,827 form the population, 423 of them regulated** (471 regulated in all, 451 covered).
+
+Links exchange values only with one another, so coverage is held exactly.
+
+Three rewirings were defined, each for its own question. Each is a permutation inside strata, so every
+gene's in-degree and every element's number of links is kept exactly:
+
+| rewiring | stratum | the value attached comes from | question |
+|---|---|---|---|
+| **element_kept (primary)** | the element, and a distance bin | the same element's cached value on another gene it was measured against | does the gene the value is assigned to matter? |
+| gene_kept | the gene, its activity decile, and a distance bin | the same gene's cached value from another element | does the element the value comes from matter? |
+| strata (reference floor) | activity decile and distance bin | any other element's link | does the value carry anything beyond distance and activity? |
+
+The distance bins have width `width_log10` in log10 distance to TSS, with a random offset per rewiring.
+Four schemes were fixed in order, and only the first adequate one could have been registered:
+
+- **S1:** width 0.20;
+- **S2:** width 0.20, matching only within the same K562 expression quartile;
+- **S3:** width 0.30;
+- **S4:** width 0.30, with expression quartiles.
+
+**The expression covariate.** It is the mean raw pseudobulk value over the 585 non-targeting rows of
+Replogle et al.'s K562 file (Figshare+ 20029387). That file was already cached for N1, and its md5 was
+checked against Figshare before reading. Genes are matched by the benchmark's own Ensembl IDs; no symbol
+had two. Of the population's 1,557 genes, 1,489 have a value. Where a gene has no value, its expression
+is unknown, and that is counted.
+
+### The thresholds, fixed before any diagnostic (31e624e)
+
+Balance is measured on moved links, pooled over 20 seeded draws, attached gene against real gene, within
+each label class. Labels split the counts and are never used to choose a match.
+
+| requirement | check | bound |
+|---|---|---|
+| enough links move | links with at least one admissible alternative, all and regulated | ≥ 0.50 |
+| | links moved per rewiring (mean over draws), all and regulated | ≥ 0.50 |
+| | regulated links moved per rewiring (training; held-out K562) | ≥ 100; ≥ 30 |
+| distinct alternatives | movable links with two or more distinct alternatives, all and regulated | ≥ 0.50 |
+| balance | standardised mean difference of distance, activity, expression and links per gene, each class | \|SMD\| ≤ 0.10 |
+| | Kolmogorov–Smirnov D of distance and of expression, each class | ≤ 0.10 |
+| expression coverage | moved links whose real and attached genes both have a value | ≥ 0.80 |
+| | gap in the share without a value, attached minus real | ≤ 0.05 |
+| exact | permutation; same stratum; different gene (or element); within the bin; population only; gene in-degree | all hold |
+
+### The primary rewiring on the training pairs
+
+The 5,827 population links, 423 regulated. The regulated-class balance figures are given. In the
+non-regulated class, every |SMD| is at most 0.007 and every KS at most 0.003. Every exact check held in
+every draw. Values outside a bound are in bold.
+
+| | S1 (0.20) | S2 (0.20, expression) | S3 (0.30) | S4 (0.30, expression) |
+|---|---|---|---|---|
+| movable share, all | 0.513 | **0.173** | 0.574 | **0.228** |
+| movable share, regulated | **0.142** (60 of 423) | **0.035** | **0.158** | **0.047** |
+| moved per rewiring, all | **0.385** | **0.100** | **0.448** | **0.137** |
+| moved per rewiring, regulated | **0.088** | **0.014** | **0.111** | **0.021** |
+| regulated links moved per rewiring | **37.0** | **5.7** | **47.0** | **8.8** |
+| two or more alternatives, all | 0.629 | **0.297** | 0.690 | **0.307** |
+| two or more alternatives, regulated | **0.267** | **0.067** | **0.373** | **0.150** |
+| distance SMD / KS, regulated | 0.024 / 0.078 | −0.026 / **0.228** | 0.009 / 0.079 | −0.058 / **0.189** |
+| activity SMD, regulated | 0 (same element) | 0 | 0 | 0 |
+| expression SMD / KS, regulated | −0.015 / **0.119** | **0.528** / **0.326** | −0.002 / **0.127** | **0.407** / **0.232** |
+| expression known share, regulated | **0.738** | **0.754** | **0.727** | 0.863 |
+| links per gene SMD, regulated | 0.075 | −0.032 | 0.083 | −0.075 |
+
+**Distance and links per gene can be balanced; enough movement cannot.** Under S1 and S3, distance,
+activity and links per gene are within their bounds. Expression comes close on the mean but not on the
+distribution or the coverage. What fails in every scheme is movement: at most 47 of the 423 regulated
+links change per rewiring, against a floor of 100. Matching on expression makes it worse: 6 to 9 move,
+and the few that do are unbalanced on expression itself.
+
+**How concentrated the alternatives are (S1).**
+
+- Movable links by number of distinct alternative genes:
+  - one: 1,109;
+  - two: 745;
+  - three: 544;
+  - four: 278;
+  - five or more: 312.
+- In total there are 7,138 distinct link-and-alternative assignments over 737 alternative genes. The
+  most-used tenth of those genes supplies 76.6% of them.
+- Of the 60 movable regulated links, 52 have only one or two alternatives.
+- A moved regulated link receives the same alternative in 91% of the draws in which it moves (the
+  modal-source share).
+
+So even where a regulated link can move, its rewired value is nearly fixed rather than drawn from a
+spread of alternatives.
+
+### Why: the benchmark's regulated links are mostly their element's only or nearest measured gene
+
+These are descriptive counts, added after the decision (f58a2a3).
+
+- Of the 423 regulated population links, **188 are the only link of their element that carries a cached
+  value**, so no gene of the same element can stand in for them.
+- **360 are the nearest such gene of their element.**
+- For the 235 that have another gene in their element, the nearest other gene lies a median of 0.58
+  log10 units away (a factor of 3.8). The quartiles are 0.19 and 1.19. Only 25.5% are within 0.2, and
+  28.5% within 0.3.
+
+By dataset, the 423 are:
+
+| dataset | regulated | movable at S1 | movable at S3 |
+|---|---|---|---|
+| Gasperini 2019 | 326 | 36 | 41 |
+| Nasser 2021 | 75 | 15 | 17 |
+| Schraivogel 2020 | 22 | 9 | 9 |
+
+A regulated pair here is typically an element and its closest measured gene. The element's other
+measured genes, where any carry a cached value, are much farther away. A rewiring that keeps the element
+and holds distance therefore has almost nothing to exchange for the links that decide the AUPRC.
+
+### The secondary sets and rewirings
+
+- **Held-out K562, primary rewiring** (1,918 pairs; 1,152 in the population, 103 regulated): no scheme
+  is adequate. The regulated movable share is 0.039 to 0.117, and at most 8.1 regulated links move per
+  rewiring, against a floor of 30.
+- **gene_kept** fails the movement checks in every scheme. The regulated movable share is 0.140 to
+  0.161, and 43 to 52 regulated links move per rewiring.
+- **strata** moves nearly every link (regulated moved share 0.87 to 1.00). It is unbalanced on links per
+  gene in the regulated class in every scheme (|SMD| 0.47 to 0.51). Without expression classes it is also
+  unbalanced on expression (|SMD| 0.26 to 0.27; known share 0.76). It holds neither the element nor the
+  gene, so it was never a candidate for the primary.
+
+### What this result allows, and what it does not
+
+- **Allowed:** "On the K562 CRISPRi training pairs, a rewiring that keeps each element and reassigns its
+  cached deletion value to another measured gene at a matched distance cannot be drawn adequately: at
+  most 47 of the 423 regulated links can change per rewiring (floor 100), and those that do have one or
+  two alternatives. The wiring diagnostic was therefore not run on this benchmark."
+- **Not allowed:** any statement that the assignments do or do not carry information beyond matched
+  alternatives. No rewired assignment was scored, so this result says nothing about the wiring either
+  way. The CRISPRi result's registered wording above is unchanged.
+- The no-go is a property of this benchmark's design and of the sweep's cache coverage. It is not a
+  finding about the model. Loosening the matching now, after these diagnostics, is not allowed under the
+  owner's rule. Neither is any null metric on this benchmark under a scheme chosen after them.
+
+### What could make the diagnostic possible (none taken)
+
+1. A benchmark in which each tested element is measured against several expressed genes at comparable
+   distances. Of the screens here, Gasperini 2019 comes closest, but even there only 36 of its 326
+   regulated links can move under S1.
+2. Cached values for the 3,410 covered pairs that have none. That needs new model requests, which this
+   lane may not make, and it would raise the number of links that can move, not the distance gaps.
+3. A different question that this benchmark can answer. One example is a within-element contrast
+   restricted to elements measured against several genes at matched distances. That is a new, smaller
+   design, and it would need its own registration, with thresholds set before its diagnostics.
+
+Code: `genomeos/attribution/wiring.py`, `scripts/wiring_feasibility.py`, `tests/test_wiring.py` (18 tests,
+synthetic inputs only). Result: `data/results/wiring_feasibility.json`, with a complete manifest. It is
+one cell type, an already-examined benchmark, and development evidence only.
+
+### The wiring diagnostic closed as infeasible on this benchmark, 2026-10-01 (coordinator)
+
+The owner closed the diagnostic as infeasible on the K562 CRISPRi benchmark. The lane's checks had passed
+and its three commits were pushed (`31e624e`, `f58a2a3`, `9b88526`). Nothing was loosened afterwards:
+- no matching is relaxed;
+- no predictions are bought for the 3,410 covered pairs without a cached value;
+- no further rewirings are drawn to make up for missing alternatives.
+
+**Three quantities, kept apart.** The counts are for the training pairs under the primary rewiring, given
+as S1 / S3. The coordinator counted them from the committed code (`wiring.links_of`, `keys_for`,
+`alternatives`), and no rewired assignment was scored.
+- **Links that can move.**
+  - 60 / 67 of the 423 regulated links have at least one admissible alternative, and 37.0 / 47.0 move per
+    rewiring (the lane's figure).
+  - 22 / 25 of the movable links can swap only with another regulated link of the same element, so only
+    38 / 42 can change class.
+- **Distinct alternative assignments.**
+  - There are 88 / 107 link-and-alternative assignments, over 62 / 74 alternative genes.
+  - 52 / 58 of the movable regulated links have one or two alternatives.
+  - Under S1, a moved regulated link receives the same alternative in 91% of the draws in which it moves
+    (the lane's figure).
+- **Independent genes or loci.**
+  - The movable regulated links fall in 42 / 49 genes, 46 / 50 elements, 13 / 14 chromosomes and 28 / 32
+    loci. The loci are a rough count: elements chained within 1 Mb.
+  - All 423 regulated links, for comparison, fall in 290 genes and 216 such loci.
+  - The lane counts 8 of the S1 links in the IFITM locus on chr11 and 9 around PRDX2, KLF1 and RAD23A on
+    chr19.
+
+**The floor.** The 100-link floor (30 on held-out K562) was a feasibility requirement fixed before the
+diagnostics. It was not a demonstrated power. Meeting it would not have shown that the diagnostic could
+detect anything. Failing it by a wide margin (at most 47) shows that the rewiring cannot be drawn adequately
+here. More rewirings would only reduce Monte Carlo error; they would not add independent biological
+evidence.
+
+**One input disclosed.** The expression covariate is the mean raw pseudobulk over the 585 non-targeting
+rows of the Replogle K562 file cached for N1, checked by md5. Albert authorised reading those values for
+N1's protocol. Their reuse here, only as a matching covariate, followed the coordinator's instruction to use
+cached or already-examined data. No response value was read.
+
+**What it says.** The lane's reading stands as written. It makes no statement that the assignments do or do
+not carry information beyond matched alternatives. The no-go is a property of this benchmark's design and of
+the cache's coverage, not a finding about the model: here, regulated links are mostly their element's only
+or nearest measured gene. Reopening the diagnostic would need a benchmark that measures several genes per
+element at comparable distances, under a new registration.
+
+#### The two link counts are different sets, and three wording corrections (2026-10-01, the owner's questions)
+
+The owner asked not to assume that "60 links with an alternative" and the moved figure describe the same set.
+They do not, and they came from different schemes. One read-only command lists every count below; it fits no
+model, computes no metric and writes no file:
+
+```
+uv run --frozen python scripts/wiring_counts.py
+```
+
+**The exact scheme.** The primary rewiring, `element_kept`: the element is kept, and the value attached is
+the same element's cached value on another gene that element was measured against. A stratum is (element,
+distance bin); bins are `width_log10` wide in log10 distance with a random offset drawn per rewiring. S1 is
+`width_log10` 0.20, S3 is 0.30, both without expression classes (`wiring.SCHEMES`). The permutation inside a
+stratum is a derangement on the gene, so every gene's in-degree and every element's link count are exact. 20
+seeded draws (`FEASIBILITY_DRAWS`).
+
+**S1, reported on its own.**
+- Links with at least one admissible alternative: **60** of the 423 regulated.
+- Links moved by one rewiring, over the 20 registered draws: mean **37.0**, smallest observed 30, largest
+  observed **42**.
+- Unique links moved across those draws: **59**.
+- Moved links whose attached feature block is identical to their own: mean **2.0** per draw.
+- Distinct genes **42**, elements **46**, chromosomes **13**; locus clusters **28**.
+
+**S3, reported on its own.**
+- Links with at least one admissible alternative: **67**.
+- Links moved by one rewiring, over the 20 registered draws: mean **47.0**, smallest observed 39, largest
+  observed **51**.
+- Unique links moved across those draws: **63**.
+- Moved links whose attached feature block is identical to their own: mean **2.8** per draw.
+- Distinct genes **49**, elements **50**, chromosomes **14**; locus clusters **32**.
+
+**Which scheme produced the earlier figures.** The 60 is S1's count of links with an alternative. The 47 is
+S3's mean moved per draw. **The two were quoted together although they come from different schemes**, and
+they measure different things. S1's own pair is 60 and 37.0; S3's is 67 and 47.0.
+
+**Correction 1: "independent" is withdrawn.** The sections above this one call the gene and locus counts
+independent. They are **distinct** genes, elements and chromosomes. Chaining elements within 1 Mb gives
+**operational locus clusters**; it establishes no biological independence, and no test here supports that
+word. The script's printed label is `distinct` and `locus clusters`. The point the counts do support stands:
+60 links sitting in 42 distinct genes and 28 locus clusters, 8 of them in the chr11 IFITM cluster and 9
+around PRDX2, KLF1 and RAD23A on chr19, would be overstated by counting links.
+
+**Correction 2: the moved figures are observed, not maxima.** The sections above say "at most 47 of the 423
+regulated links can change per rewiring". That is wrong twice: 47.0 is S3's **mean** over the registered
+draws, and the **largest observed** at S3 is 51. No maximum over all rewirings is proved anywhere. The
+correct statement is **the mean, smallest and largest observed across the 20 registered draws**. The closure
+rests on the tested schemes failing the frozen feasibility rules, not on a proved bound.
+
+**Correction 3: feature identity is not a score claim.** The sections above say that switching a link whose
+alternatives are already regulated links of the same element "does change the frozen feature values. So the
+score would change." The second sentence is withdrawn. What was measured is feature identity: the attached
+`top_target` and `deletion_drop` are identical to the link's own in **1 of 23** such assignments at S1 and
+**0 of 28** at S3, so those swaps leave the inputs unchanged. A differing feature block **does not establish
+a different score**: no model was fitted and no prediction was computed. Separately, mean 2.0 / 2.8 moved
+links per draw receive an identical block.
+
+**The owner's reading of these alternatives holds.** 22 / 25 movable regulated links can only receive a
+value from another regulated link of the same element: the swap never tests the assignment against a
+non-target and leaves the regulated class unchanged. Admissibility was all the thresholds tested, and it did
+not make an alternative informative. This is a further reason the no-go stands, not a reason to revisit it.
+
+The clarification is closed. No scoring, no further randomisation search and no new registration.
+
+## The paired-enhancer feasibility check: a local proposal set out, and recommended against (2026-10-01, coordinator)
+
+Metadata only. No effect size, p-value, hit call or interaction score was read, from any dataset, and none is
+quoted here. The generalisation version stays closed: no public dataset has designed enhancer pairs across
+many loci, so only a local question was considered. The candidates surveyed were Lin et al. 2022 (MYC),
+Hsiung et al. 2024 (multiAsCas12a, the same locus), Xie et al. 2017 (Mosaic-seq), Gasperini et al. 2019
+(pairs incidental to high multiplicity, not designed), Pacalin et al. 2024 (CRISPRa plus CRISPRi, Jurkat and
+primary T cells) and mouse deletion series (no overlap by construction). Lin 2022 is the only one where
+singles and pairs share one library, one cell context and one modality.
+
+### 1. The exact biological question the data can pose
+
+**Locus:** MYC on chr8, the seven enhancers e1 to e7 over a 1.8 Mb region. **Cell context:** K562 with
+doxycycline-inducible dCas9-KRAB. **Perturbations:** a pooled library of 87,025 sgRNA pairs covering all
+single and pairwise combinations of the seven enhancers, cultured for 30 doublings. All three are quoted
+from the GEO series' own design text (GSE160768). The pairs are C(7,2) = 21 enhancer pairs, at one locus.
+
+### 2. Existing predictive capability: the project cannot predict this response
+
+Two facts, both checked here against the project's own files, decide this.
+
+- **The project predicts a different gene.** Of the project's elements overlapping the seven enhancers
+  (26 by this check, over `data/knowledge/alphagenome/all_elements/chr8.json`, against the lane's 23; the
+  difference is an overlap convention and was not resolved), **not one predicts MYC**. The predicted targets
+  are MIR1206 at e1, MIR1205 at e2, MIR1207 and MIR1208 at e3, MIR1207 at e4, CCDC26 at e5 and
+  ENSG00000285108 at e6 and e7. MYC appears only at the three elements overlapping the MYC promoter, beside
+  CASC11.
+- **The project has no interaction model, and its own pretest closed that direction.** The project's
+  predictions are of expression change on deleting one element. R8's coupling pretest (2026-09-28) returned
+  that neither coupling term beats independent deletion scoring, and R8 closed with no search built. A
+  prediction of a paired response would therefore need a **new model**, which is the opposite of the
+  direction set for this work.
+
+### 3. Comparison, response scale and uncertainty
+
+- **A singles baseline is constructible.** The library's single-perturbation measurements sit in the same
+  pool: a single is a targeting sgRNA paired with a non-targeting one, so an additive expectation from the
+  two singles can be formed without a second experiment. This is the one requirement the dataset meets well.
+- **The response scale does not match, and no mapping exists.** The screen's readout is sgRNA-pair abundance
+  before and after 30 doublings, which is proliferation, not expression. **The series contains no RNA
+  measurement at all**: its 58 samples are 16 ATAC-seq, 22 ChIP-seq and 20 other, with no RNA-seq library
+  among them. The project's quantity is a log2 expression change. Comparing them needs a declared mapping
+  from a fitness effect to an expression effect, which no part of this project has, and which would itself be
+  an assumption under test.
+- **Uncertainty.** Two biological replicates (d0 and d30, rep1 and rep2), one locus, 21 pairs. The chromatin
+  arm is smaller still: WT, four singles (e1i, e3i, e4i, e7i) and **two pairs** (e1i&e4i, e3i&e7i).
+
+### 4. Evidence available
+
+- **Controls.** Reported by the lane from the authors' `Library_Info.txt`: 40 non-targeting sgRNAs, 34
+  guides at three negative control genomic regions, and 31 guides at the MYC promoter as a positive control.
+- **Replicates.** Two biological replicates in the screen; two in most chromatin conditions.
+- **Access.** GEO GSE160768; per-construct count files in Zenodo 10.5281/zenodo.6823833 under MIT, about
+  330 kB each. They hold outcomes and **were not opened**. The series' raw bundle is about 22 GB.
+- **Prior outcome exposure: none.** Neither Lin et al. 2022 nor GSE160768 appears anywhere in
+  docs/ATTRIBUTION.md or docs/ROADMAP.md, checked by search. Nothing from it has been scored or read, so a
+  test on it could be registered before any exposure. This is the proposal's one real asset.
+
+### 5. Decision value: what a result could and could not settle
+
+- **What it could not settle.** A fitness change on silencing an enhancer cannot separate "the project's
+  assignment of e1 to MIR1206 is right, and that gene affects proliferation" from "the enhancer acts on MYC
+  and the project's assignment is wrong". Both predict a fitness change. Separating them needs an expression
+  measurement of the candidate genes, which this dataset does not contain.
+- **What would remain unresolved either way.** Whether the project's expression predictions at these
+  elements hold; whether its target assignments are right; and whether any paired response is additive,
+  redundant or cooperative, since the project predicts no interaction at all.
+- **The one question the data could pose cleanly** is about the authors' own subject, enhancer-enhancer
+  interaction at a single locus. The project has nothing to predict for it.
+
+### 6. Cost, the smallest useful analysis, and the recommendation
+
+The smallest analysis would cost almost nothing: about 1 MB already cached, no model requests, no money, and
+roughly a day's work for a registration, a singles-additive baseline and 21 paired contrasts.
+
+**It is recommended against, on its own local terms and not for failing to generalise.** The low cost does
+not rescue it: with no expression readout in the series and no MYC prediction at the seven enhancers, there
+is no quantity on both sides to compare, so the analysis would not be a test of anything the project claims.
+Spending a registration on it would produce a number whose interpretation is an assumption.
+
+**What would change the recommendation**, either one:
+- an expression readout, published or in a deposit, on single and paired perturbation of these enhancers in
+  the same cell context, for example RNA-seq or qPCR of MYC and the project's own predicted targets; or
+- a dataset whose perturbed elements carry a project prediction for the gene it measures.
+
+Hsiung et al. 2024 (GSE260832) perturbs three of the same enhancers in K562 under a different modality and
+would be the natural second check if the first condition were ever met. It is also a fitness screen, so it
+does not meet it now.
+
+**Nothing was implemented and no outcome was scored.** The proposal is recorded for the owner's review.
+
+### The paired-enhancer no-go accepted, with three corrections to the section above (2026-10-01, the owner)
+
+The owner accepted the no-go **for the proposed comparison with the project's current predictions**, on the
+two grounds that hold: the comparison mixes a growth readout with expression predictions, and the project has
+no frozen paired-response model. N1, the wiring diagnostic and the generalisation proposal stay closed. Three
+statements in the section above are corrected here rather than rewritten, and the corrections govern.
+
+**1. "No public dataset exists" is too broad.** What is supported is **no suitable dataset was identified in
+this survey**. The survey covered Lin 2022, Hsiung 2024, Xie 2017, Gasperini 2019, Pacalin 2024 and three
+mouse deletion series, by literature and repository metadata over about 90 minutes. That is its scope. It is
+not a proof of absence, and the search is not reopened now.
+
+**2. Not predicting MYC is not a reason to exclude a benchmark, and must not be used as one.** The section
+above lists it as a second "verified blocker". That framing is withdrawn. With a suitable expression
+measurement, a disagreement between the project's predicted target and the experimentally implicated gene
+would be **a prediction failure the benchmark exposes**, which is the kind of result a test should be able to
+return. **Choosing only experiments whose implicated gene the model already predicts would bias validation.**
+The verified fact stands and is useful on its own terms: of the project's elements overlapping e1 to e7, none
+predicts MYC. What it does **not** do is disqualify the dataset. The disqualifying reasons are the readout
+mismatch and the absent paired model.
+
+**3. Absent RNA-seq libraries do not establish absent expression measurement.** The section above says the
+series "contains no RNA measurement at all". What was checked is the deposit's library strategies: of its 58
+samples, 16 are ATAC-seq, 22 ChIP-seq and 20 other, with no RNA-seq library. A published expression
+measurement could still exist outside those libraries, for example qPCR in a supplementary table, and the
+paper's supplementary material could not be retrieved. The accurate statement is **no expression measurement
+was found in the deposit's libraries, and the supplementary material was not accessible**.
+
+**One further distinction.** Pacalin et al. 2024 was not simply unsuitable: it combines activation at one
+element with repression at another, which is **a different intervention from paired silencing**, with
+different requirements for comparability. It was not assessed against those requirements, and its cell
+contexts lie outside the four the project's predictions carry.
+
+**The lesson carried forward.** The next research proposal states first what the project predicts, what the
+experiment measures, and how the two can be compared; then verifies coverage and controls; and only then
+builds analysis code. **Eligibility never depends on whether the model already predicts the experimentally
+implicated gene.**
+
+## The superseded node-containment control is out of the genome-wide script's report (2026-10-01, coordinator)
+
+A demonstrated defect, recorded in docs/ROADMAP.md: `scripts/enhancer_targets_all_genome_wide.py` printed
+"inside the node 0.817 (random boundaries 0.791, +2.6 points)" on every run. Those two figures come from the
+113,399-element deletion archive and were being shown beside a 440,377-element measurement as though they
+were its control. The audit of 2026-09-27 (docs/NODES-READER-WRITER.md,
+`data/results/node_containment_audit.json`) superseded them. A reporting fix only: no biological rerun, no
+rescoring, no change to any stored measurement.
+
+**What changed.** The stale parenthetical is gone from the printed headline. In its place,
+`node_audit_lines()` reads the audit's own result file and reports its figures as that dated audit's:
+
+- the headline excess, **+2.90 percentage points** on the share of elements whose coding target lies inside
+  the element's own CTCF node, named against its comparator, **uniform random boundary placement** (the
+  audit's published control: as many uniform positions as the caller has edges, with no 50 kb merge), over
+  440,377 modelled pairs;
+- the interval, **95% CI +2.03 to +3.81**, stated as the interval of that excess against that control, from
+  2,000 bootstrap resamples **over the 24 chromosomes**, not over the 440,377 pairs;
+- ahead on **19 of 24** chromosomes;
+- separately, the **four defensible baselines span +1.21 to +6.58** points, with the headline named as one
+  of them and not their summary;
+- the qualifier that this is **internal benchmark evidence**, on the model's own reading rather than
+  observed enhancer-gene pairs, and not independent validation.
+
+Every number is read from the audit file at run time and printed with the audit's date and path and the
+words "not recomputed here", so a later fold cannot drift from the audit or present its figures as newly
+computed. If the file cannot be read, the report quotes no figure and says so.
+
+**The superseded entry stays** in the script's `CONTROLS`, because it records what was superseded, and its
+`superseded_by` note already says it must not be read against the 440,377-element measurement. A test now
+fails if it ever sits there without that note.
+
+**Tests.** 23 in `tests/test_enhancer_targets_all_genome_wide.py`, 15 as before and 8 new, which check the
+removal and the meanings: that 0.791 and its +2.6 points appear nowhere in the reporting; that the figures
+equal the audit file's; that the output carries the audit's date, path and "not recomputed here"; that the
+comparator is named and the interval says what it is over; that the baseline range is kept separate; that
+the internal-evidence qualifier travels with the figures; and that an unreadable audit quotes nothing. The
+removal test was confirmed to fail when the old parenthetical was put back and to pass again once reverted.
+
+## Per-cell deletion values stop being collapsed: the evidence is kept, the legacy values stay legacy (2026-10-01, coordinator)
+
+A demonstrated software limitation, recorded on 2026-09-29 as found and not fixed: in
+`genomeos/predict/enhancer_target.py`, `aggregate()` wrote `by_cell[name] = value` for every emitted track,
+so where several tracks carried one cell's name **the last one read was kept and the others were discarded at
+write time**. It matters because the versioned judge rules on direction only in the stated cell, and that
+stated-cell value was one arbitrary track. The 2026-09-29 trace found cell mismatch to be the primary cause
+for four of the five claims it examined, with winning margins from 0.0095 to 0.0711. No model request was
+made for this work, and no committed scientific result was touched.
+
+**What the fix is.** `aggregate()` now also records, per cell name, every value it received:
+
+- `values`, the multiset received, sorted so the summary does not depend on the order the tracks arrived in;
+- `emitted`, how many values were received for that cell name;
+- `signs_disagree`, computed independently of any average, because two opposite values average to zero while
+  still disagreeing;
+- `mean_of_emitted_log2fc`, **a descriptive statistic of the emitted values and nothing more**. The tracks
+  are not known to be biological replicates, so this is not a validated cell-level effect and nothing reads
+  it as one;
+- `completeness`, which states what the count is and is not.
+
+**What `emitted` does not mean.** The adapter passes a value only when `abs(val) > threshold`
+(`alphagenome_adapter.py`), so values at the threshold never arrive, and at threshold 0.0 that excludes
+exact zeros. `emitted` is therefore the number of values received for a cell name and a lower bound on that
+cell's tracks. **The cell's total track count is not recorded and is not inferred**, and no track identity is
+invented: a value arrives with its cell name and nothing else.
+
+**Prediction behaviour is unchanged, deliberately.** `by_cell` still holds the last emitted value per cell
+name, so no existing reader moves. `predict_target()` chooses by the largest drop or rise over all tracks and
+reads neither field, so this fix does **not** by itself fix claim-context selection: a claim still names the
+winning track's cell. The consumers were traced — `closure.py`, `crispri.py`, `crispri_direction.py`,
+`crispri_direction_both.py`, `targets.py`, `measured.py`, `unknown_scoring.py`, `response_map.py`,
+`body.py`, `element_types.py` and others, about 20 modules and 13 scripts — and **not one was switched** to
+the new field, to a mean, or to a different direction rule. Doing that is a separate decision with its own
+registration.
+
+**The representation is versioned, and legacy data stays legacy.** A row written from now on carries
+`by_cell_schema` 2 and a `by_cell_summary`. `per_cell(row)` returns either that summary or, for an older
+row, the last-track value marked `legacy_last_track` with no count and no aggregate status, because
+inventing either would claim evidence the file does not hold.
+
+**What cannot be recovered.** The stored archive keeps only the aggregated rows: the raw per-track values are
+discarded inside `score_element()` once `aggregate()` has run, and nothing else retains them. All 24
+chromosome archives were checked and none carries a summary, so **every stored per-cell value is legacy**.
+Neither loading nor repacking can recover the discarded values; only new model requests could, and none were
+made.
+
+**How often a cell name carried several tracks cannot be answered from what is on disk**, and that is
+recorded rather than estimated. The track table was never stored (`repression_trace.json`: "the sweep never
+read output_metadata ... so the track table it averaged over is not on disk"). Two things are known: a
+fingerprint over all 966,615 scanned answers found **371 emitted values per element at the mode against 316
+distinct tissue names**, so names do repeat; and the 2026-09-29 trace demonstrated individual cases where a
+cell's other tracks were not seen. Neither gives a per-cell count. From now on `emitted` records it.
+
+**Tests.** 21 in `tests/test_enhancer_target.py`, 10 of them new and behavioural rather than about the
+assignment: every emitted value is kept; the summary is unchanged when the input order is reversed; opposite
+signs stay visible when their mean is zero; agreeing values are not flagged; the mean is labelled as the mean
+of emitted values and the row exposes no "effect" field; the summary claims no total track count; no track
+identity is invented; the legacy field keeps its old meaning, order dependence included; a new row is marked
+as summarised; a legacy row never acquires a count or aggregate status; and target selection is unmoved,
+checked on a case whose emitted values average zero while another track carries the largest rise. Reducing
+the summary back to one value per cell fails four of them.
+
+### Correction: the judge never read the collapsed per-cell value, and this fix implies no re-judging (2026-10-01)
+
+The section above justifies the per-cell fix partly by a dependency that does not exist. It says the
+versioned judge "rules on direction only in the stated cell, and that stated-cell value was one arbitrary
+track". **That is withdrawn.** Checked in the code:
+
+- `genomeos/attribution/correctness.py` contains no reference to `by_cell` at all.
+- `compiled_claims()` takes the gene, the action and the cell from the compiled rule's own fields
+  (`gene, cell = f["gene"], f["cell"]`), not from any per-cell prediction value.
+- `_direction_v2()`, which v3 also uses, compares that claim against **experimental observations** in the
+  stated cell. Its inputs are the claim and the observations, never the model's per-cell numbers.
+- `predict_target()` selects the strongest predicted effect and names its tissue, and that tissue becomes the
+  claim's stated context. So the winning track's cell and the stated cell are **the same cell** in this path,
+  not two that could disagree.
+
+The earlier trace's "cell mismatch" was between a claim's cell and the cell the screen measured, which is a
+mismatch between claim context and experiment. Treating it as a mismatch between the collapsed value and the
+stated cell conflated the two.
+
+**Consequences.** No judge registration follows from this fix, and nothing is re-judged. The current judges
+and every committed result stand unchanged.
+
+**What the fix is worth, stated precisely.** Future stored answers preserve more evidence, and an explicit
+reader can identify a legacy representation. **Existing consumers have not gained that protection
+automatically**, because `by_cell` keeps its old meaning and none of them was switched. It prevents silent
+information loss from here on; it corrects nothing already stored or already judged.
+
+**If an abstention policy is ever built on track disagreement**, the owner's conditions are recorded now,
+before any such work begins:
+
+- it belongs **before a claim is issued**, as a prediction or abstention policy, not in the evaluator. An
+  evaluator that stopped testing an already-issued claim because the model was uncertain would remove the
+  difficult claims from evaluation and make reported performance misleading;
+- it must report **coverage beside performance**, so what was skipped is visible;
+- **legacy disagreement is unknown**, never absent: the stored answers cannot say whether a cell's tracks
+  disagreed;
+- it must distinguish a **numerical sign difference** from a **materially conflicting effect**. With the
+  track identities unavailable, disagreement alone does not establish biological inconsistency.
+
+Whether a mean, or any summary, is the right biological predictor remains a separate and open question.
+
+## A reusable discovery-overlap primitive, with the evidence interface left alone (2026-10-01, coordinator)
+
+A demonstrated software limitation, already measured: the production rule attaches a tested interval to an
+element only when their overlap is at least half of **both** widths (`measured.RECIPROCAL_OVERLAP`), so it can
+pair two intervals only when their widths are within a factor of two. Audit A registered one other rule before
+scoring it (dd8c49c, `min_side_half`: the overlap at least half of the **smaller** width), and it lived only in
+the census script, so the library had no way to apply it even for exploration.
+
+**What this delivers: a named predicate, not a policy.** `genomeos/attribution/measured.py` names both rules
+in `ATTACHMENT_RULES` (`RECIPROCAL_HALF`, `MIN_SIDE_HALF`), with `attaches(rule, ...)` to apply one by name and
+`min_side_overlap()` beside `reciprocal_overlap()`. **An overlap under the broader rule is a candidate, not a
+finding.** It does not establish which element produced a measured response.
+
+**The evidence interface is deliberately untouched.** `ablation.CrispriIndex.of()` takes **no** rule argument
+and still applies the production rule only. Exposing the broader rule there would return one observation
+independently for several elements and make it decisive evidence for each. A discovery pass needs observation
+ids, the whole candidate set and the rule's provenance; **that interface is not built here**, and this task
+does not build it.
+
+**Rule names are checked before any interval is examined.** An earlier draft of this change validated the name
+only on the path that computed an overlap, so an unknown name could be answered with a plain "no overlap" when
+the chromosome was absent or the candidate slice empty. The claim that unknown names were always refused was
+therefore false as written. `attaches()` now looks the name up first and raises before touching coordinates,
+and the empty cases are tested.
+
+**What the implication test does and does not establish.** Half of both widths is at least half of the smaller
+width, so the broader rule accepts every interval pair the production rule accepts. That is **overlap
+inclusion only**, checked as a property over 20,000 random interval pairs. It is **not** preservation of unique
+attribution, and not of verdict eligibility: a broader rule can retain every observation while resolving each
+to several elements instead of one, which lowers resolution rather than adding evidence.
+
+**The counts belong to the historical census, and were not reproduced.** The placement census of 2026-09-29
+(`data/results/placement_census.json`) measured 180 observations newly overlapping under the policy, taking the
+count from 128 of 14,734 to 308. **Those figures are that census's measurement. Reproducing them was not
+performed here**, and the delivered acceptance scope is narrowed accordingly: what is verified is the
+predicates' definitions, the overlap-inclusion property, the width asymmetry (a 300 bp element and a 1 kb
+tested interval overlap under the policy and can never overlap under the production rule), that the policy uses
+the measured layer's own 0.5 with no second threshold, that the evidence interface exposes no rule, and that an
+unknown name is refused whatever the intervals. No biological rerun was needed or done.
+
+**What the census's resolution figures do not say.** Of the 180, the census resolved 48 to a unique element,
+77 to one link and 55 to several elements. **"One link" is not a uniquely identified element**: several
+candidate elements can share one target link, so element attribution stays unresolved there too. On any
+reading, most of the 180 are unresolved as to which element produced the response.
+
+**Nothing was adopted, re-scored or re-judged.** No matcher was switched, no headline moved, no judge changed,
+no committed result touched, and no model request made. Adopting `min_side_half` for attribution is a separate
+decision with its own registration, and it needs the discovery interface first.
+
+**Tests.** `tests/test_measured_rules.py`, 10: the default predicate is the production rule; the policy
+overlaps the wide interval the production rule cannot; the overlap-inclusion property over 20,000 random
+pairs; the policy uses the measured layer's own threshold; empty and disjoint intervals score zero; a swallowed
+interval scores one; the evidence interface exposes no rule parameter and keeps its behaviour; and an unknown
+rule name is refused across disjoint, zero-width and identical intervals. 63 tests pass across this file, the
+CRISPRi suite and the correctness suite.
 
 ## What comes next, in order
 

@@ -1,0 +1,240 @@
+{
+  "result": "n1_registration_amendment_2",
+  "date": "2026-10-01",
+  "status": "amendment registered before any measurement; not run",
+  "lane": "lane-n1",
+  "amends": {
+    "original": "n1_registration (f9a9130)",
+    "amendment_1": "n1_registration_amendment_1 (8ebaa9a)"
+  },
+  "question": "Among the 56 frozen candidate factors, do the element-attribution predictions rank the genes the producers' Anderson-Darling test calls differentially expressed (BH-adjusted p < 0.05) after the factor's assigned CRISPRi perturbation above the non-responding genes of the same control-expression decile, more than promoter proximity does?",
+  "question_changes": [
+    "assigned perturbations are evaluated: no claim that every knockdown was effective, and no knockdown-quality filter is used, so the undocumented knockdown fields are not read",
+    "ineffective perturbations may weaken the signal",
+    "an absent response does not establish that a factor has no regulatory role",
+    "no factor is selected because it produced strong responses"
+  ],
+  "resource": {
+    "chosen": "the producers' supplemental deposit, checked first: Figshare+ 21632564 (Replogle and Weissman, 2022-11-29, CC0)",
+    "link": "https://doi.org/10.25452/figshare.plus.21632564.v1",
+    "file": {
+      "article": "Figshare+ 21632564",
+      "doi": "10.25452/figshare.plus.21632564.v1",
+      "license": "CC0",
+      "name": "anderson-darling p-values, BH-corrected.csv.gz",
+      "figshare_file_id": 38349308,
+      "bytes": 488720141,
+      "md5": "abb0310e87d65c442e663e3d6364e2ca",
+      "url": "https://ndownloader.figshare.com/files/38349308"
+    },
+    "deposit_quote": "Commonly requested supplemental files supporting the publication ... 1) All Anderson-Darling p-values for differential expression analysis",
+    "statistic": [
+      {
+        "where": "https://europepmc.org/article/PMC/PMC9380471, STAR Methods, 'Gene-level differential expression testing using the Anderson-Darling and Mann-Whitney tests'",
+        "quote": "we z -normalize gene expression relative to control cells as described ... and for each gene test whether the distribution of normalized expression is identical between control cells bearing non-targeting sgRNAs and cells bearing each perturbation. We used two tests implemented in scipy: the Anderson-Darling test (scipy.stats.anderson_ksamp), which is broadly sensitive to changes in distribution"
+      },
+      {
+        "where": "the same section",
+        "quote": "For the Anderson-Darling test we extended the range of p values beyond those available in scipy's implementation by computing the p-value for many values of the test statistic using R's kSamples package and interpolating any intermediate values using scipy.interpolate.interp1d."
+      }
+    ],
+    "raw_or_adjusted": {
+      "reading": "adjusted, Benjamini-Hochberg: the file is named 'BH-corrected' and the methods say so",
+      "quote": "p -values in both cases were adjusted for multiple hypothesis testing using the Benjamini-Hochberg procedure to produce the final results.",
+      "not_documented": "the family over which the adjustment ran (per perturbation, or the whole matrix)"
+    },
+    "documented_level": {
+      "level": 0.05,
+      "quote": "at least 50 differentially expressed genes at a significance of p < 0.05 by Anderson-Darling test following Benjamini-Hochberg correction",
+      "where": "https://europepmc.org/article/PMC/PMC9380471, STAR Methods, 'Functional analyses of strong perturbations'"
+    },
+    "controls_as_published": "By the AD test, 2,935 of 9,608 genetic perturbations targeting a primary transcript (30.5%) compared with 12 of 585 controls (2.1%) caused >10 DEGs in K562 cells. (Results)",
+    "principal_transcript": {
+      "rule": "a factor with several rows is evaluated by its principal-transcript row (P1P2, else P1)",
+      "quote": "targeted the principal ''P1'' transcript identified by the FANTOM consortium. (A handful of genes also had perturbations targeting the P2 transcript that did not generally have effects.)",
+      "where": "https://europepmc.org/article/PMC/PMC9380471, STAR Methods, 'Leverage scores'"
+    },
+    "missing_values": "not documented, and not inspected: the rule treats an empty, non-numeric or non-finite field, or one outside [0, 1], as missing, and a gene absent from the rows or listed twice as missing for every factor",
+    "not_used": "Nadig et al. 2025 (Figshare 29498366) publishes unadjusted DESeq2 Wald p-values by gene symbol, with the combination of a gene's guides undocumented; the producers' own deposit was checked first and is used"
+  },
+  "coverage_from_identities_and_structure": {
+    "perturbation_columns": 11258,
+    "columns_equal_pseudobulk_rows_as_a_set": true,
+    "columns_in_pseudobulk_order": false,
+    "non_targeting_columns": 585,
+    "candidate_factors": 56,
+    "candidate_principal_columns_present": 56,
+    "candidate_rows_present": 59,
+    "multi_row_candidates_and_chosen_row": {
+      "CGGBP1": "1540_CGGBP1_P1_ENSG00000163320",
+      "FOXD3": "3151_FOXD3_P1_ENSG00000187140",
+      "LHX3": "4569_LHX3_P1_ENSG00000107187"
+    },
+    "gene_axis": "Ensembl gene IDs as row labels",
+    "first_row_label": "ENSG00000188976",
+    "first_row_label_index_in_pseudobulk_genes": 2,
+    "universe_genes_in_file": "not countable before the authorised download: the gene labels sit inside the compressed values. The run's labels pass counts them first, parsing no value; an absent gene stays missing",
+    "raw_pseudobulk_identity_matches_registration": true
+  },
+  "rules": {
+    "label": "responds when the published Anderson-Darling p-value, BH-adjusted, is < 0.05",
+    "missing": "an empty, non-numeric or non-finite field, or one outside [0, 1]; a gene absent from the file's rows or listed twice is missing for every factor; missing is never a non-responder",
+    "row_rule": "the principal-transcript row: P1P2, else P1, else a factor's only row",
+    "universe": "the frozen 860 genes present once in the file's rows and with a finite control expression; per factor, minus the perturbed gene, genes within 10 kb of its TSS, and genes whose p-value is missing for that factor",
+    "strata": "deciles of the unweighted mean of raw pseudobulk X over the 585 non-targeting rows, over the analysis genes; the values are read only in the authorised run, after this rule is frozen; the unweighted mean avoids the inferred num_cells_filtered",
+    "comparison": "amendment 1's: stratified auroc_v2 primary and unstratified beside it, the equal-weight mean difference, the cluster bootstrap, the floor of 30 and the two separate criteria",
+    "replaced": "the operational label |T| >= 3, the calibration gate and the knockdown eligibility rule no longer apply; the normalized pseudobulk is not read"
+  },
+  "run_v3": {
+    "needs": "the owner's separate authorisation, given to scripts/n1_run_v3.py --authorisation",
+    "reads_in_order": [
+      "the freeze check: no data file is opened",
+      "download the published file (488,720,141 bytes) and the raw pseudobulk (374,587,922 bytes); check Figshare's md5 (abb0310e87d65c442e663e3d6364e2ca, 4570b53c9d62ff6df281e622f0350060) and record each sha256",
+      "the raw pseudobulk's identities (obs/gene_transcript, var/gene_id), checked against the digest",
+      "raw X at the 585 non-targeting rows, decoded at the 860 universe columns only (strata)",
+      "the published file's labels pass: the header, checked against the registered digest, and the first field of every line; the whole file is decompressed and no value is parsed",
+      "the values pass: at the covered universe rows each line is split into text fields and only the 56 principal columns are converted"
+    ],
+    "never_read": "the normalized pseudobulk, any knockdown field, any value outside the 56 principal columns at the universe rows (decompressed and split as text at those rows, never converted)",
+    "result": "data/results/n1_result_amendment_2.json, written once"
+  },
+  "superseded_runs": "scripts/n1_run.py refuses; scripts/n1_run_v2.py now refuses by its own freeze check, because the module gained amendment 2's functions",
+  "structure_reads": {
+    "published_header": {
+      "bytes_fetched": 131072,
+      "url": "https://ndownloader.figshare.com/files/38349308"
+    },
+    "raw_identities": {
+      "bytes_fetched": 1950226,
+      "datasets": [
+        "obs/gene_transcript",
+        "var/gene_id"
+      ]
+    }
+  },
+  "ad_header_digest": "0dcdb88b217b47fd69dbf04ddae7c3dab3eccd0c1d515724976a83f205eb523d",
+  "frozen": {
+    "original_registration": {
+      "path": "data/results/n1_registration.json",
+      "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883"
+    },
+    "amendment_1": {
+      "path": "data/results/n1_registration_amendment_1.json",
+      "sha256": "ecfb55fcf70c9a45a1b9b70f60a822aeb5c9635fa50a61c5af07aac784ab774d"
+    },
+    "module": {
+      "path": "genomeos/attribution/n1_perturb_response.py",
+      "sha256": "9be800c903fefa644a985e14ebfa224723770118c4f4a91494ee9ecfad092904"
+    },
+    "runner": {
+      "path": "scripts/n1_run_v3.py",
+      "sha256": "406b60da9ade250ad361378b75a57cf06b4de6ccde918bc994ca7bd8c9da75d7"
+    }
+  },
+  "constants": {
+    "amendment": 2,
+    "label": "responds when the published Anderson-Darling p-value, BH-adjusted, is < 0.05",
+    "ad_level": 0.05,
+    "missing": "an empty, non-numeric or non-finite field, or one outside [0, 1]; a gene absent from the file's rows or listed twice is missing for every factor; missing is never a non-responder",
+    "row_rule": "the principal-transcript row: P1P2, else P1, else a factor's only row",
+    "knockdown_filter": "none: assigned perturbations are evaluated",
+    "strata": "deciles of the unweighted mean of raw pseudobulk X over the 585 non-targeting rows",
+    "strata_count": 10,
+    "neighbour_bp": 10000,
+    "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+    "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+    "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+    "floor_factors": 30,
+    "min_gain": 0.02,
+    "min_clusters": 10,
+    "bootstrap_b": 10000,
+    "bootstrap_seed": 20261001,
+    "lower_index": 250,
+    "upper_index": 9749
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Replogle et al. 2022 supplemental files, Figshare+ 21632564 (header only)",
+        "version": "v1"
+      },
+      {
+        "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387 (identities only)",
+        "version": "v1"
+      },
+      {
+        "accession": "Replogle et al. 2022, Cell, STAR Methods (documentation)",
+        "version": "PMC9380471"
+      },
+      {
+        "accession": "GenomeOS n1_registration and n1_registration_amendment_1",
+        "version": "f9a9130, 8ebaa9a"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/n1_registration.json",
+        "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883",
+        "bytes": 1084039,
+        "partition": null
+      },
+      {
+        "path": "data/results/n1_registration_amendment_1.json",
+        "sha256": "ecfb55fcf70c9a45a1b9b70f60a822aeb5c9635fa50a61c5af07aac784ab774d",
+        "bytes": 15866,
+        "partition": null
+      },
+      {
+        "path": "data/cache/n1/ad_header.json",
+        "sha256": "3646ace044b071148b0d861ce473aec86afb3d43262d66ca61bbb11babb14220",
+        "bytes": 408780,
+        "partition": null,
+        "url": "https://ndownloader.figshare.com/files/38349308"
+      },
+      {
+        "path": "data/cache/n1/raw_identity.json",
+        "sha256": "b688518ac4fb3ba2569687b9e034f23323f2e97688a66f9bf92ab78930125e8e",
+        "bytes": 228,
+        "partition": null,
+        "url": "https://ndownloader.figshare.com/files/35774443"
+      }
+    ],
+    "assembly": "n/a: an amendment; no coordinate is read",
+    "coordinates": "n/a: an amendment; no coordinate is read",
+    "parameters": {
+      "amendment": 2,
+      "label": "responds when the published Anderson-Darling p-value, BH-adjusted, is < 0.05",
+      "ad_level": 0.05,
+      "missing": "an empty, non-numeric or non-finite field, or one outside [0, 1]; a gene absent from the file's rows or listed twice is missing for every factor; missing is never a non-responder",
+      "row_rule": "the principal-transcript row: P1P2, else P1, else a factor's only row",
+      "knockdown_filter": "none: assigned perturbations are evaluated",
+      "strata": "deciles of the unweighted mean of raw pseudobulk X over the 585 non-targeting rows",
+      "strata_count": 10,
+      "neighbour_bp": 10000,
+      "auroc": "auroc_v2: ties count half; undefined only when a class is empty",
+      "primary_auroc": "stratified by the gate's control-expression deciles, strata weighted by pairs",
+      "secondary_auroc": "unstratified auroc_v2, reported beside the primary, no criterion applied",
+      "floor_factors": 30,
+      "min_gain": 0.02,
+      "min_clusters": 10,
+      "bootstrap_b": 10000,
+      "bootstrap_seed": 20261001,
+      "lower_index": 250,
+      "upper_index": 9749
+    },
+    "exclusions": [],
+    "partitions": "n/a: an amendment registered before any measurement; nothing is evaluated",
+    "code": {
+      "git_sha": "29e7a88b1ca3a5d116cc0c59c68bbecab7327862",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/n1_register_amendment_2.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

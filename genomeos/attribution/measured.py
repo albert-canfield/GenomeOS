@@ -239,6 +239,67 @@ def measures(
     return reciprocal_overlap(a_start, a_end, b_start, b_end) >= fraction
 
 
+def min_side_overlap(a_start: int, a_end: int, b_start: int, b_end: int) -> float:
+    """The overlap as a fraction of the SMALLER of the two widths; 0.0 when either holds no base.
+
+    `reciprocal_overlap` asks for a fraction of both widths, so it can pair two intervals only when their
+    widths are within a factor of two. This asks for a fraction of the smaller one only.
+    """
+    ov = min(a_end, b_end) - max(a_start, b_start)
+    wa, wb = a_end - a_start, b_end - b_start
+    if ov <= 0 or wa <= 0 or wb <= 0:
+        return 0.0
+    return ov / min(wa, wb)
+
+
+def measures_min_side(
+    a_start: int, a_end: int, b_start: int, b_end: int, fraction: float = RECIPROCAL_OVERLAP
+) -> bool:
+    """Audit A's registered policy `min_side_half` (dd8c49c): the overlap is at least `fraction` of the
+    smaller width. It uses the measured layer's own 0.5 and introduces no second threshold."""
+    return min_side_overlap(a_start, a_end, b_start, b_end) >= fraction
+
+
+#: The overlap predicates by name. `RECIPROCAL_HALF` is the production rule: it decides evidence and every
+#: committed result, and the presence of the other does not change it. `MIN_SIDE_HALF` is audit A's policy,
+#: registered 2026-09-29 (dd8c49c) before it was scored, and it is offered here as a **discovery primitive
+#: only**. An overlap under it is a candidate: it does not establish which element produced a measured
+#: response, and one observation returned for several elements must never become decisive evidence for each.
+#: The historical census (`data/results/placement_census.json`, 2026-09-29) measured 180 observations newly
+#: overlapping under it, 128 -> 308 of 14,734; those figures are that census's and are not reproduced by this
+#: code. Adopting the policy for attribution is a separate decision with its own registration, and needs a
+#: discovery interface carrying observation ids, whole candidate sets and rule provenance, which is not built.
+RECIPROCAL_HALF = "reciprocal_half"
+MIN_SIDE_HALF = "min_side_half"
+ATTACHMENT_RULES = {RECIPROCAL_HALF: measures, MIN_SIDE_HALF: measures_min_side}
+
+#: Why one predicate implies the other, and what that does not mean: half of both widths is at least half of
+#: the smaller width, so every interval pair the production rule accepts the broader rule accepts too. That
+#: is **overlap inclusion only**. It does not preserve unique attribution or verdict eligibility: a broader
+#: rule can keep every observation while resolving each to several elements instead of one.
+RULE_IMPLICATION = (
+    "reciprocal_half implies min_side_half: an overlap at least a fraction of both widths is at least that "
+    "fraction of the smaller width, so the broader rule accepts a superset of interval pairs. This is "
+    "overlap inclusion, not preservation of unique attribution or of verdict eligibility"
+)
+
+
+def attaches(
+    rule: str, a_start: int, a_end: int, b_start: int, b_end: int, fraction: float = RECIPROCAL_OVERLAP
+) -> bool:
+    """Whether the element (a_start, a_end) overlaps the tested interval (b_start, b_end) under `rule`.
+
+    An overlap under a broader rule is a candidate, not a finding: it does not establish that this element
+    produced the measured response. Callers name the rule so a result can say which one it used, and the
+    name is checked before any interval is looked at, so an unknown name can never be answered with a
+    plain "no overlap".
+    """
+    predicate = ATTACHMENT_RULES.get(rule)
+    if predicate is None:
+        raise ValueError(f"unknown attachment rule {rule!r}; known: {sorted(ATTACHMENT_RULES)}")
+    return predicate(a_start, a_end, b_start, b_end, fraction)
+
+
 def contains(a_start: int, a_end: int, b_start: int, b_end: int) -> bool:
     """Whether the tested interval swallows the element. Counted, and never upgraded on."""
     return b_start <= a_start and b_end >= a_end

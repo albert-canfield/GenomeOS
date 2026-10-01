@@ -2,7 +2,15 @@
 """Enhancer to gene, predicted: the logic runs on an injected scorer, no network."""
 
 from genomeos.coords import Locus
-from genomeos.predict.enhancer_target import aggregate, compare, predict_target, score_element, summarise
+from genomeos.predict.enhancer_target import (
+    BY_CELL_SCHEMA,
+    aggregate,
+    compare,
+    per_cell,
+    predict_target,
+    score_element,
+    summarise,
+)
 
 
 def fake_scorer(chrom, pos, ref, alt):
@@ -160,3 +168,96 @@ def test_the_calibration_reads_a_new_link_by_its_fold_change():
     assert cc.model_score({"predicted_coding": p}) == 2.345
     # the retired formula, for reading old results, recomputes from the fold change when no confidence
     assert cc.stated_confidence({"predicted_coding": p}) == cc.PREDICTED_CAP
+
+
+# --- per-cell evidence: several tracks under one cell name must not be collapsed silently ------------------
+
+TWO_TRACKS = [
+    ("MYC", "K562", 0.30),
+    ("MYC", "K562", -0.30),
+    ("MYC", "HepG2", 0.10),
+    ("MYC", "liver", 2.00),
+]
+
+
+def test_every_emitted_value_for_a_cell_is_kept():
+    """The defect: by_cell[name] = value overwrote, so a cell's other values were lost at write time."""
+    cells = aggregate(TWO_TRACKS)[0]["by_cell_summary"]
+    assert cells["K562"]["values"] == [-0.3, 0.3]
+    assert cells["K562"]["emitted"] == 2
+    assert cells["HepG2"]["values"] == [0.1]
+
+
+def test_the_summary_does_not_depend_on_the_order_the_tracks_arrived_in():
+    assert (
+        aggregate(TWO_TRACKS)[0]["by_cell_summary"]
+        == aggregate(list(reversed(TWO_TRACKS)))[0]["by_cell_summary"]
+    )
+
+
+def test_opposite_signs_stay_visible_when_their_mean_is_zero():
+    """A mean hides a disagreement exactly when the disagreement is symmetric, so the flag is separate."""
+    k562 = aggregate(TWO_TRACKS)[0]["by_cell_summary"]["K562"]
+    assert k562["mean_of_emitted_log2fc"] == 0.0
+    assert k562["signs_disagree"] is True
+
+
+def test_agreeing_values_are_not_flagged_as_disagreeing():
+    same = aggregate([("MYC", "K562", 0.30), ("MYC", "K562", 0.10)])[0]["by_cell_summary"]["K562"]
+    assert same["signs_disagree"] is False
+    assert same["mean_of_emitted_log2fc"] == 0.2
+
+
+def test_the_mean_is_labelled_as_the_mean_of_emitted_values_and_nothing_more():
+    """It is a descriptive statistic: the tracks are not known to be replicates."""
+    k562 = aggregate(TWO_TRACKS)[0]["by_cell_summary"]["K562"]
+    assert "mean_of_emitted_log2fc" in k562
+    assert "effect" not in k562
+    assert "cell_effect" not in k562
+
+
+def test_the_summary_says_what_it_counts_and_claims_no_total_track_count():
+    k562 = aggregate(TWO_TRACKS)[0]["by_cell_summary"]["K562"]
+    assert "emitted values only" in k562["completeness"]
+    assert "unknown" in k562["completeness"]
+    assert "n_tracks" not in k562
+    assert "tracks" not in k562
+
+
+def test_no_track_identity_is_invented():
+    """A value arrives with its cell name and nothing else, so the summary names no track."""
+    k562 = aggregate(TWO_TRACKS)[0]["by_cell_summary"]["K562"]
+    assert all(not isinstance(v, str) for v in k562["values"])
+    assert "track_names" not in k562
+    assert "tissues" not in k562
+
+
+def test_the_legacy_field_keeps_its_old_meaning_so_no_reader_changes_behaviour():
+    """by_cell is still the last emitted value per cell name. Changing it would move every consumer."""
+    assert aggregate(TWO_TRACKS)[0]["by_cell"]["K562"] == -0.3
+    assert aggregate(list(reversed(TWO_TRACKS)))[0]["by_cell"]["K562"] == 0.3
+
+
+def test_a_new_row_is_marked_as_summarised():
+    row = aggregate(TWO_TRACKS)[0]
+    assert row["by_cell_schema"] == BY_CELL_SCHEMA
+    assert per_cell(row)["representation"] == "summary"
+
+
+def test_a_legacy_row_is_never_given_a_count_or_aggregate_status():
+    """An old cached answer holds one value per cell and the rest are gone; it may not be dressed up."""
+    read = per_cell({"gene": "MYC", "by_cell": {"K562": -0.3}})
+    assert read["representation"] == "legacy_last_track"
+    assert read["cells"] == {"K562": -0.3}
+    assert "emitted" not in read["cells"]
+    assert "cannot be recovered" in read["note"]
+
+
+def test_target_selection_is_untouched_by_the_new_field():
+    """predict_target chooses by the largest drop or rise over all tracks. The summary must not move it:
+    here K562's emitted values average zero while the liver track carries the largest rise."""
+    rows = aggregate(TWO_TRACKS)
+    pred = predict_target(rows, min_effect=0.1)
+    assert pred["gene"] == "MYC"
+    assert pred["tissue"] == "liver"
+    assert pred["action"] == "represses"
