@@ -13493,6 +13493,113 @@ and `scripts/re2g_k562_only_range.py` fails if the registered pair moves.
 therefore **no paired delta, no interval and no reading are reported for any population**. Nothing in this
 section may be read as a comparison of the two models.
 
+## The CRISPRi benchmark rebuilt under a new name: no point estimate moves, nine intervals shift slightly, and three numbers become no number (2026-10-02, lane-rebuild)
+
+**Why, and on whose say.** The section above corrected the reporting in code and deliberately left
+`data/results/crispri_published.json` of 2026-09-27 alone, calling a rebuild the owner's decision. Albert
+took it on 2026-10-02, relayed through the supervisor, after the coordinator and the supervisor both
+recommended it. The conditions were his: a new name with the old file untouched; 2,000 draws; no number
+where the feature is absent; a complete manifest with `scripts/manifest_rebuild.py` recording **0
+differences** before anything is quoted; old and new intervals side by side with **each population named**;
+and the record of what did *not* change. **0 AlphaGenome requests** — every deletion value is the 2026-09
+sweep's own cache, as `alphagenome_requests: 0` records in both files.
+
+**What was written.** `data/results/crispri_published_v2.json`, by `scripts/crispri_published_v2.py`. The
+2026-09-27 file is unchanged: it is still what the web server reads and still the record of what was quoted
+then. The new script does not reimplement the measurement — it calls the same `crispri.score_published` and
+reads the 2026-09-27 script's own manifest function, so the two runs cannot drift apart in what they claim
+to have read.
+
+**Old and new, each interval with its own population.** One row is one population, and the rows are not
+evidence about one another: `heldout_pooled` is all 4,378 held-out pairs and `heldout_K562` is the 1,918
+K562 pairs inside them, so neither figure says anything about the other's population. The 2026-09-27
+figures are quoted from the committed file at 200 draws, transcribed in the script's `BEFORE` and checked
+against that file by a test; they are not recomputed.
+
+| interval | population | 2026-09-27, 200 draws | this run, 2,000 requested |
+|---|---|---|---|
+| `training_loco` | all 10,356 K562 training pairs, 471 regulated, hold-one-chromosome-out, unweighted | +0.2173 [+0.1768, +0.2606] | +0.2173 [+0.1739, +0.2607], 23 clusters, 2000 of 2000 draws kept |
+| `heldout_pooled` | all 4,378 held-out pairs pooled over five cell types, 190 regulated, weighted by direct-effect probability | +0.1095 [+0.0607, +0.1741] | +0.1095 [+0.0590, +0.1737], 22 clusters, 2000 of 2000 draws kept |
+| `heldout_GM12878` | the 68 GM12878 held-out pairs, 16 regulated, weighted; GM12878 has a deletion value | +0.0146 [-0.0941, +0.2052] | +0.0146 [-0.0953, +0.1916], 7 clusters, 1997 of 2000 draws kept |
+| `heldout_K562` | the 1,918 K562 held-out pairs, 118 regulated, weighted; K562 has a deletion value | +0.1361 [+0.0768, +0.2277] | +0.1361 [+0.0734, +0.2270], 22 clusters, 2000 of 2000 draws kept |
+| `heldout_HCT116` | the 396 HCT116 held-out pairs, 34 regulated, weighted; HCT116 has no deletion value | +0.0004 [-0.0002, +0.0040] | **no gain measured** (`gain: null`, reason recorded) |
+| `heldout_Jurkat` | the 75 Jurkat held-out pairs, 7 regulated, weighted; Jurkat has no deletion value | +0.0038 [+0.0000, +0.0059] | **no gain measured** (`gain: null`, reason recorded) |
+| `heldout_WTC11` | the 1,921 WTC11 held-out pairs, 15 regulated, weighted; WTC11 has no deletion value | -0.0049 [-0.0174, +0.0000] | **no gain measured** (`gain: null`, reason recorded) |
+| `arm1_k562_all_pairs` | the 1,918 K562 held-out pairs, 118 regulated, 174 uncovered, unweighted average precision | +0.1361 [+0.0810, +0.2248] | +0.1361 [+0.0749, +0.2258], 22 clusters, 2000 of 2000 draws kept |
+| `arm3_k562_coverage_indicator_control` | the same 1,918 K562 held-out pairs, the coverage indicator in place of the deletion features, unweighted average precision | +0.0008 [-0.0009, +0.0031] | +0.0008 [-0.0009, +0.0034], 22 clusters, 2000 of 2000 draws kept |
+| `post_hoc_dnase_training_loco` | all 10,356 K562 training pairs, 471 regulated, hold-one-chromosome-out, unweighted, DNase in place of sqrt(DNase x H3K27ac); post hoc, not registered | +0.2244 [+0.1819, +0.2676] | +0.2244 [+0.1770, +0.2686], 23 clusters, 2000 of 2000 draws kept |
+| `post_hoc_dnase_heldout_pooled` | all 4,378 held-out pairs pooled over five cell types, 190 regulated, weighted, DNase only; post hoc, not registered | +0.1636 [+0.1015, +0.2368] | +0.1636 [+0.0965, +0.2332], 22 clusters, 2000 of 2000 draws kept |
+| `post_hoc_dnase_heldout_k562_covered` | the 1,744 covered K562 held-out pairs, 114 regulated, unweighted average precision, DNase only; post hoc, not registered | +0.1792 [+0.1023, +0.2867] | +0.1792 [+0.0979, +0.2839], 22 clusters, 2000 of 2000 draws kept |
+
+**Three strata report no number at all.** HCT116, Jurkat and WTC11 carry no deletion value, so their gain is
+not computed: the field is `gain: null`, `ci95: null`, `resamples: 0` and the reason that the difference
+would be an artefact of the model form rather than a measurement. In place of +0.0004, +0.0038 and -0.0049
+with intervals, two of which could have been quoted as a small positive effect, the file now says the
+measurement was not made. Their **model AUPRCs are still reported, unchanged**, because a fitted model's
+AUPRC is a real output of that model; it is the gain that is refused.
+
+**What did not change.** 46 fields were set one by one against the 2026-09-27 file and **none moved**
+(`what_did_not_change`): every point AUPRC of every model in every stratum, including the three refused
+ones; every band against a published figure (`against_encode_re2g`, `against_encode_re2g_extended`,
+`baseline_against_abc`, and the two of the post hoc DNase-only diagnostic); the estimator check on raw
+distance to TSS, 0.4359 on the training set and 0.3631 on the held-out set; the coverage-matched arm, whose
+1,000 draws are `MATCH_DRAWS` and were no part of this change (median +0.1449, all 1,000 above zero); the
+count of held-out pairs with no deletion value, 2,392; and `alphagenome_requests: 0`. **Every deletion gain
+that is still measured is the same figure to four decimals.** The draws govern the intervals, not the
+points, and that is what the file shows.
+
+**What moved.** Nine intervals, and nothing else. Their 18 bounds moved by 0 to 0.0136; the largest single
+move is the GM12878 upper bound, +0.2052 to +0.1916, on the smallest population here (68 pairs, 16
+regulated, 7 chromosomes), and the next largest is the held-out K562 coverage arm's lower bound, +0.0810 to
++0.0749. Eight of the nine intervals are a little wider, by 0.0003 to 0.0071, and GM12878's is narrower by
+0.0124. **No interval changed which side of zero it sits on**, so no reading of the result changes: the
+training, pooled held-out, K562 and DNase-only gains still exclude zero, and the GM12878 gain and the
+coverage-indicator control still cover it.
+
+**Every interval now says how it was made.** `clusters` (23 chromosomes on the training set, 22 on the
+held-out set, 7 within GM12878), `draws_requested` (2,000), `draws_dropped` and `met_minimum` against
+`MIN_RESAMPLES = 1000`. Only GM12878 dropped any draws, 3 of 2,000, for resamples that held one class alone.
+The 200-draw figures of 2026-09-27 would record `met_minimum: false` had the field existed then.
+
+**Rebuilt from its own manifest: 0 differences.** `scripts/manifest_rebuild.py` made a second checkout at
+the result's own `code.git_sha` (`cd263bc`), linked the data stores read-only, built a fresh offline
+environment from the committed `uv.lock` and ran `scripts/crispri_published_v2.py` again. **All 4 inputs
+matched by sha256** (the two benchmark tables, the all-element deletion table at 622,783,785 bytes and the
+per-element response cache at 805,894,526 bytes, 1.43 GB together) and the rebuilt result differs from the
+committed one at **0 of 14 compared fields**, with no timing field ignored. 0 model requests in the rebuild
+as in the run. Nothing above is quoted from a file that had not been rebuilt.
+
+**The shared checkout, answered by code rather than by assertion.** Six files belonging to two other lanes
+were uncommitted in this working tree when the result was written, so `code.dirty` is true and names them:
+`genomeos/attribution/cell2.py`, `genomeos/attribution/re2g.py`, `scripts/cell2_eligibility.py`,
+`scripts/re2g_paired.py`, `tests/test_cell2_eligibility.py` and `tests/test_re2g.py`. The manifest therefore
+carries `import_closure`: the transitive import closure of the entry script, **67 files**, found by parsing
+the import statements and following them rather than by listing files, and the intersection of that closure
+with the uncommitted files, which is **empty**. Recording the intersection rather than the dirty list is
+what makes the claim checkable: a foreign file that had reached the closure would show up as a difference in
+the rebuild instead of passing unnoticed. One correction the closure needed on the way: a plain existence
+check answered yes for `genomeos/genome/Genome.py` and two more on this case-insensitive filesystem, which
+are classes a module exports and not modules of their own, so every path component is now matched against
+what its directory actually lists.
+
+**Tests.** `tests/test_crispri_published_v2.py`, 27: every interval the script quotes from 2026-09-27 is the
+one that file holds, and so is every unchanged field, so a mistyped transcription fails rather than being
+quoted; the three strata it names are the three that reported a number; a refused row carries no gain, no
+interval and no width; an available row carries its clusters and its kept and dropped draws; a row whose
+field is missing is named rather than passed over; the two held-out populations are named apart; and the
+closure follows an import two steps away, survives a cycle, resolves a relative import above its package,
+keeps the case the directory keeps, and holds no uncommitted file.
+
+**What was deliberately not done.** `data/results/crispri_published.json` is neither edited nor deleted, and
+neither is `second_cell_type_hct116`, the block a later lane inserted into it; that block has no counterpart
+in the new file. `docs/CRISPRI-RESULT.md` quotes two of these intervals from the 2026-09-27 file, +0.136
+[+0.081, +0.225] and +0.001 [-0.001, +0.003] for the coverage arms, whose bounds this rebuild moves by at
+most 0.0061 without changing either reading; those sentences are the coordinator's and are left to it, and
+the "above the published interval" sentence is lane-re2g's and was not touched. README quotes no figure from
+this result and is unchanged. The headline +0.141 [+0.082, +0.231] in `docs/CRISPRI-RESULT.md` comes from
+`data/results/crispri_benchmark.json`, a different result on the 1,744 covered K562 held-out pairs that
+still rests on 200 draws and is not rebuilt here.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
