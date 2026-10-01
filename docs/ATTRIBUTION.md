@@ -13416,12 +13416,17 @@ registered in `crispri.PUBLISHED` to four places.
 metrics for a single "Held-out" dataset and **no per-cell-type held-out AUPRC at all**. So there is no
 published figure to gate the K562 stratum against, and the gate can only be run pooled, on all 4,378 pairs.
 Reproducing a pooled figure needs rE2G predictions in all five cell types: held-out K562 carries 100.79 of the
-157.39 weighted positives (64.0%), so a K562-only prediction file, which would force the other 2,460 pairs to
-0, sends 36.0% of the positive weight to the bottom of the ranking and misses the pooled figure by far more
-than 0.02 **by construction**, whatever either model does. The five full `element gene links` files that could
-pass the gate total **1,569,167,142 bytes (1.57 GB)**, against an authorised budget of one public download
-under 1 GB: the one file that fits the budget cannot pass the gate, and the set that can pass the gate does not
-fit the budget. Two further obstacles are recorded rather than worked around: the thresholded files in the same
+157.39 weighted positives (64.0%), so a K562-only prediction file would force the other 2,460 pairs to 0 and
+put 36.0% of the positive weight into one tie at the bottom. **The reason that disqualifies it is not that it
+must fail the gate.** It is that it could pass for the wrong reason: on the pooled population a K562-only file
+can attain anything from **0.064** (no skill inside K562) to **0.6341** (perfect separation inside K562), and
+that span **brackets the published 0.556151**. A figure within 0.02 of the target would therefore be no
+evidence that the scores in hand are the published ones, which is the only thing the gate exists to establish.
+Those two ends come from the benchmark's real labels and real weights with synthetic scores, so no comparator
+score is involved; `scripts/re2g_k562_only_range.py` reproduces them and fails if the registered pair moves.
+The five full `element gene links` files that could serve the gate total **1,569,167,142 bytes (1.57 GB)**,
+against an authorised budget of one public download under 1 GB: the one file that fits the budget cannot serve
+the gate, and the set that could does not fit the budget. Two further obstacles are recorded rather than worked around: the thresholded files in the same
 annotations are a hundredth of the size but hold only pairs above the paper's 70%-recall threshold, so scoring
 every other pair 0 censors the distribution the AUPRC is taken over; and Supplementary Table 12 lists **16**
 HCT116 rE2G annotations, so which prediction set the benchmark used for that cell type is not established from
@@ -13463,7 +13468,7 @@ and the published held-out model reads DNase only where the activity term here r
 surviving wording is "in the range of ENCODE-rE2G", which is still a band and still unpaired; this
 registration is what would let it be replaced by a measured difference.
 
-**Tests.** `tests/test_re2g.py`, 28: the gate target is the published figure and the tolerance the registered
+**Tests.** `tests/test_re2g.py`, 31: the gate target is the published figure and the tolerance the registered
 one; the gate passes only inside the tolerance and refuses in either direction, naming the miss it refuses on;
 a gate that could not be run is not a pass; the reading is the three registered strings and nothing else; an
 interval touching zero reads as no difference detected; no interval means no reading; the delta reports
@@ -13471,8 +13476,18 @@ clusters, requested and dropped draws; **a model scored against itself gives a d
 draw**, which only holds if each draw resamples one index set and scores both models on it, so an unpaired
 bootstrap fails it; swapping the two models negates the delta and reverses the interval on the same seed; the
 three strata without the feature report null and the reason; the four independence statements are all present;
-and the bytes the pooled gate needs exceed the authorised budget while the K562 file alone does not — so a
-later lane given a larger budget has to change that number deliberately.
+the bytes the pooled gate needs exceed the authorised budget while the K562 file alone does not, so a later
+lane given a larger budget has to change that number deliberately; and the attainable K562-only span brackets
+the gate target, with two tests fixing that reason in place and forbidding the wording it replaced.
+
+**A correction made inside this lane, before anything was pushed.** The first version of this blocker said a
+K562-only prediction file "misses the pooled figure by far more than 0.02 by construction, whatever either
+model does". That was wrong, and wrong in the direction that matters: the attainable span is 0.064 to 0.6341
+and the target sits inside it, so such a file could have **passed** the gate while carrying scores that are
+not the published ones. The error survived its first reading because the quantity it watched — 36.0% of the
+positive weight lost to a tie — is real and does degrade the figure; what it did not check was whether the
+remaining 64.0% could still reach the target, which it can. The two ends are now computed rather than argued,
+and `scripts/re2g_k562_only_range.py` fails if the registered pair moves.
 
 **What is left undone**, named rather than implied: the gate is not run, no comparator score exists, and
 therefore **no paired delta, no interval and no reading are reported for any population**. Nothing in this

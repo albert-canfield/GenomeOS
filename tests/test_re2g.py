@@ -267,3 +267,24 @@ def test_the_join_rule_is_pinned_to_the_commit_the_paper_names_not_to_a_branch()
     assert re2g.BENCHMARK_TAG == "v1.0.0"
     assert len(re2g.BENCHMARK_COMMIT) == 40
     assert re2g.BENCHMARK_COMMIT == "50587422e6b11259ead6fbc6f867681c788f39b7"
+
+
+def test_a_k562_only_file_could_pass_the_gate_for_the_wrong_reason():
+    """The bracket is the real reason the one affordable file cannot serve the gate.
+
+    The first version of this blocker said a K562-only file must miss the pooled figure by more than the
+    tolerance. That was wrong: with 36.0% of the positive weight forced into one tie at the bottom, the
+    attainable pooled figure runs from no skill inside K562 to perfect separation inside K562, and the
+    published target sits inside that span. So the gate could be passed without the scores being the
+    published ones, which is worse than failing, and this test is what keeps that straight.
+    """
+    low, high = re2g.K562_ONLY_RANGE
+    assert low < high
+    assert low <= re2g.GATE_TARGET <= high
+    assert "could pass it for the wrong reason" in re2g.BLOCKER["the_pooled_gate_needs_all_five_cell_types"]
+
+
+def test_the_blocker_does_not_claim_the_k562_only_file_must_fail_the_gate():
+    text = re2g.BLOCKER["the_pooled_gate_needs_all_five_cell_types"]
+    assert "missed by far more than" not in text
+    assert "whatever either model does" not in text

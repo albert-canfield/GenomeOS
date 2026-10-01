@@ -83,6 +83,18 @@ def main() -> None:
             "gate_run": False,
             "reason": dict(re2g.BLOCKER),
             "bytes_required": re2g.COMPARATOR_BYTES_REQUIRED,
+            "k562_only_attainable_range": {
+                "pooled_weighted_auprc": list(re2g.K562_ONLY_RANGE),
+                "population": "all 4,378 held-out pairs, pooled over the five cell types",
+                "ends": "no skill inside K562; perfect separation inside K562",
+                "brackets_the_target": True,
+                "means": (
+                    "the one prediction file that fits the download budget could land within the "
+                    "tolerance of the published figure without carrying the published scores, so passing "
+                    "the gate with it would establish nothing. Real labels and real weights, synthetic "
+                    "scores; reproduced by scripts/re2g_k562_only_range.py"
+                ),
+            },
             "bytes_authorised": re2g.DOWNLOAD_BUDGET_BYTES,
             "sha256": (
                 "not recorded: no prediction file was downloaded, so no model version or file hash is "
@@ -155,6 +167,7 @@ def main() -> None:
             "module": "genomeos/attribution/re2g.py",
             "tests": "tests/test_re2g.py (synthetic inputs only; no comparator score is read)",
             "register": "scripts/re2g_register.py",
+            "k562_only_range": "scripts/re2g_k562_only_range.py",
         },
         "alphagenome_requests": 0,
     }

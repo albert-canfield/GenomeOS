@@ -110,6 +110,13 @@ JOIN_RULE = {
     ),
 }
 
+#: The gate. The published figure is the pooled one and the only one the source gives: Supplementary
+#: Table 3, sheet "Held-out benchmarks", has six predictors times three metrics for a single "Held-out"
+#: dataset and no per-cell-type held-out AUPRC at all. So the gate can only be run on all 4,378 pairs.
+GATE_TARGET = 0.556151
+GATE_INTERVAL = (0.467852, 0.631224)
+GATE_TOLERANCE = 0.02
+
 #: The comparator files preference 2 names, one per benchmark cell type, as Supplementary Table 12 gives
 #: them: the annotation accession for that sample, the smallest full "element gene links" file in it, and
 #: that file's size. The thresholded files in the same annotations are a tenth of a percent of the size
@@ -154,6 +161,15 @@ COMPARATOR_FILES = {
 DOWNLOAD_BUDGET_BYTES = 1_000_000_000
 COMPARATOR_BYTES_REQUIRED = sum(v["bytes"] for v in COMPARATOR_FILES.values())
 
+#: What a K562-only prediction file can attain as a pooled weighted AUPRC over all 4,378 held-out pairs,
+#: with the other 2,460 pairs forced to 0 by the benchmark's own fill rule: no skill inside K562 at one
+#: end, perfect separation inside K562 at the other. Computed from the benchmark's real labels and real
+#: weights with synthetic scores, so no comparator score is involved; `scripts/re2g_k562_only_range.py`
+#: reproduces it. The published target 0.556151 falls INSIDE this range, which is why the one file that
+#: fits the download budget cannot serve the gate: passing it would not mean the scores are the
+#: published ones. A test holds the bracket, so this cannot be forgotten.
+K562_ONLY_RANGE = (0.064, 0.6341)
+
 #: Why the gate is registered and not run. Availability is not the obstacle: every file is public on the
 #: ENCODE portal, needs no login and costs nothing. The obstacle is that the only gate value the source
 #: publishes is the pooled one, and the pooled figure cannot be reproduced from one cell type's
@@ -165,16 +181,22 @@ BLOCKER = {
         "stratum against, and the gate can only be run on all 4,378 pairs"
     ),
     "the_pooled_gate_needs_all_five_cell_types": (
-        "held-out K562 carries 100.79 of the 157.39 weighted positives, 64.0%. Scoring the other 2,460 "
-        "pairs 0, as a K562-only prediction file would force, sends 36.0% of the positive weight to the "
-        "bottom of the ranking, so the pooled figure is missed by far more than the 0.02 tolerance by "
-        "construction rather than by any property of the models"
+        "held-out K562 carries 100.79 of the 157.39 weighted positives, 64.0%. A K562-only prediction "
+        "file forces the other 2,460 pairs to 0, so 36.0% of the positive weight goes into one tie at "
+        "the bottom and the quantity computed is not the published one, which used predictions in all "
+        "five cell types. The reason that disqualifies it is not that it must fail the gate but that it "
+        f"could pass it for the wrong reason: on the pooled population a K562-only file can attain "
+        f"anything from {K562_ONLY_RANGE[0]} (no skill inside K562) to {K562_ONLY_RANGE[1]} (perfect "
+        f"separation inside K562), and that range brackets the published {GATE_TARGET:.4f}. A figure "
+        "within 0.02 of the target would therefore be no evidence that the scores in hand are the "
+        "published ones, which is the only thing the gate exists to establish"
     ),
     "bytes": (
         f"the five full prediction files total {COMPARATOR_BYTES_REQUIRED:,} bytes "
         f"({COMPARATOR_BYTES_REQUIRED / 1e9:.2f} GB), against an authorised budget of one public download "
-        f"under {DOWNLOAD_BUDGET_BYTES / 1e9:.0f} GB. The single K562 file alone fits the budget and "
-        "cannot pass the gate; the set that can pass the gate does not fit the budget"
+        f"under {DOWNLOAD_BUDGET_BYTES / 1e9:.0f} GB. The single K562 file alone fits the budget but "
+        "cannot serve the gate, for the reason above; the set that could serve the gate does not fit "
+        "the budget"
     ),
     "hct116_is_ambiguous": (
         "Supplementary Table 12 lists 16 HCT116 rE2G annotations. HCT116_ENCSR000ENM is recorded above as "
@@ -187,12 +209,6 @@ BLOCKER = {
     ),
 }
 
-#: The gate. The published figure is the pooled one and the only one the source gives: Supplementary
-#: Table 3, sheet "Held-out benchmarks", has six predictors times three metrics for a single "Held-out"
-#: dataset and no per-cell-type held-out AUPRC at all. So the gate can only be run on all 4,378 pairs.
-GATE_TARGET = 0.556151
-GATE_INTERVAL = (0.467852, 0.631224)
-GATE_TOLERANCE = 0.02
 GATE = (
     "before any comparison, reproduce ENCODE-rE2G's published held-out weighted AUPRC "
     f"({GATE_TARGET:.4f}, interval {GATE_INTERVAL[0]:.4f} to {GATE_INTERVAL[1]:.4f}, Supplementary "

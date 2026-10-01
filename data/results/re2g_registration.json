@@ -1,6 +1,6 @@
 {
   "result": "re2g_registration",
-  "date": "2026-10-01",
+  "date": "2026-10-02",
   "status": "registered before any comparator score was read; the comparison is NOT run",
   "lane": "lane-re2g",
   "claim": "On the Gschwind et al. 2026 held-out CRISPR benchmark (doi:10.1038/s41586-026-10781-4, Supplementary Table 3; the 4,378 pairs, 190 positives, 157.39 weighted, already described in data/results/crispri_published.json), the frozen 'activity + distance + deletion' model ranks regulated pairs differently from ENCODE-rE2G when both are scored on the identical pairs",
@@ -49,12 +49,22 @@
     "gate_run": false,
     "reason": {
       "the_gate_is_pooled_only": "Supplementary Table 3's held-out sheet gives one 'Held-out' dataset, six predictors times three metrics, and no per-cell-type held-out AUPRC. So there is no published figure to gate the K562 stratum against, and the gate can only be run on all 4,378 pairs",
-      "the_pooled_gate_needs_all_five_cell_types": "held-out K562 carries 100.79 of the 157.39 weighted positives, 64.0%. Scoring the other 2,460 pairs 0, as a K562-only prediction file would force, sends 36.0% of the positive weight to the bottom of the ranking, so the pooled figure is missed by far more than the 0.02 tolerance by construction rather than by any property of the models",
-      "bytes": "the five full prediction files total 1,569,167,142 bytes (1.57 GB), against an authorised budget of one public download under 1 GB. The single K562 file alone fits the budget and cannot pass the gate; the set that can pass the gate does not fit the budget",
+      "the_pooled_gate_needs_all_five_cell_types": "held-out K562 carries 100.79 of the 157.39 weighted positives, 64.0%. A K562-only prediction file forces the other 2,460 pairs to 0, so 36.0% of the positive weight goes into one tie at the bottom and the quantity computed is not the published one, which used predictions in all five cell types. The reason that disqualifies it is not that it must fail the gate but that it could pass it for the wrong reason: on the pooled population a K562-only file can attain anything from 0.064 (no skill inside K562) to 0.6341 (perfect separation inside K562), and that range brackets the published 0.5562. A figure within 0.02 of the target would therefore be no evidence that the scores in hand are the published ones, which is the only thing the gate exists to establish",
+      "bytes": "the five full prediction files total 1,569,167,142 bytes (1.57 GB), against an authorised budget of one public download under 1 GB. The single K562 file alone fits the budget but cannot serve the gate, for the reason above; the set that could serve the gate does not fit the budget",
       "hct116_is_ambiguous": "Supplementary Table 12 lists 16 HCT116 rE2G annotations. HCT116_ENCSR000ENM is recorded above as the untreated ENCODE HCT116 DNase sample, but which one the benchmark used is not established from the table alone, and JOIN_RULE['biosample'] forbids running the comparison until it is",
       "not_a_paywall": "no file here is behind a login or a payment. The paper's baseline-predictor bundle on Synapse (syn58896208) would need an account, and is not used for that reason"
     },
     "bytes_required": 1569167142,
+    "k562_only_attainable_range": {
+      "pooled_weighted_auprc": [
+        0.064,
+        0.6341
+      ],
+      "population": "all 4,378 held-out pairs, pooled over the five cell types",
+      "ends": "no skill inside K562; perfect separation inside K562",
+      "brackets_the_target": true,
+      "means": "the one prediction file that fits the download budget could land within the tolerance of the published figure without carrying the published scores, so passing the gate with it would establish nothing. Real labels and real weights, synthetic scores; reproduced by scripts/re2g_k562_only_range.py"
+    },
     "bytes_authorised": 1000000000,
     "sha256": "not recorded: no prediction file was downloaded, so no model version or file hash is claimed here beyond the accessions above"
   },
@@ -182,7 +192,8 @@
   "code": {
     "module": "genomeos/attribution/re2g.py",
     "tests": "tests/test_re2g.py (synthetic inputs only; no comparator score is read)",
-    "register": "scripts/re2g_register.py"
+    "register": "scripts/re2g_register.py",
+    "k562_only_range": "scripts/re2g_k562_only_range.py"
   },
   "alphagenome_requests": 0,
   "frozen_inputs": [
@@ -248,18 +259,22 @@
       "gm12878": "held-out GM12878, its own stratum"
     },
     "code": {
-      "git_sha": "f22136b92d359e68c463fe3dd2836166f3df4322",
+      "git_sha": "f39d3cf530c746325c50e383dd686ef7be999767",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/attribution/experiment_value.py",
-        "tests/test_experiment_value.py"
+        "genomeos/attribution/re2g.py",
+        "scripts/re2g_k562_only_range.py",
+        "scripts/re2g_register.py",
+        "tests/test_experiment_value.py",
+        "tests/test_re2g.py"
       ],
       "untracked_code_paths": [
         "genomeos/attribution/experiment_value.py",
+        "scripts/re2g_k562_only_range.py",
         "tests/test_experiment_value.py"
       ],
       "dirty_result_paths": [
-        "data/results/cell2_eligibility.json",
         "data/results/re2g_registration.json"
       ],
       "argv": [
