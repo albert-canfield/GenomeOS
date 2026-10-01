@@ -12461,6 +12461,78 @@ runner test is skipped, as above. The amendment's tests cover:
 - the reader decoding only the selected columns, checked by a spy on h5py;
 - the original runner's refusal.
 
+### Amendment 2, 2026-10-01: the authors' published per-gene results as the label, for assigned perturbations (lane-n1)
+
+The original registration and amendment 1 stay as committed. The code is in `29e7a88`, and
+`data/results/n1_registration_amendment_2.json` is in `fd3d928`, stamped `29e7a88`, clean. No p-value,
+expression value or knockdown value was read.
+
+**Resource.** The authors' supplemental deposit was checked first: Figshare+ 21632564 (Replogle and
+Weissman, CC0, [doi](https://doi.org/10.25452/figshare.plus.21632564.v1)). It lists "1) All
+Anderson-Darling p-values for differential expression analysis", in
+`anderson-darling p-values, BH-corrected.csv.gz` (488,720,141 bytes, md5 `abb0310e…`).
+
+- **The statistic.** The STAR Methods describe it
+  ([PMC9380471](https://europepmc.org/article/PMC/PMC9380471)): "for each gene test whether the
+  distribution of normalized expression is identical between control cells bearing non-targeting sgRNAs
+  and cells bearing each perturbation", by `scipy.stats.anderson_ksamp`, with p-values extended through R's
+  kSamples.
+- **Adjusted, not raw.** "p-values in both cases were adjusted for multiple hypothesis testing using the
+  Benjamini-Hochberg procedure". The family the adjustment ran over is not documented.
+- **The documented level.** "p < 0.05 by Anderson-Darling test following Benjamini-Hochberg correction".
+
+**Structure, from the header alone** (131,072 bytes by range request):
+- The 11,258 perturbation columns are exactly the pseudobulk's row labels, in another order, including the
+  585 controls.
+- All 56 candidates' principal-transcript columns are present (59 of 59 candidate rows). CGGBP1, FOXD3 and
+  LHX3 are read at their P1 rows; the paper reports that P2 perturbations "did not generally have effects".
+- The genes are Ensembl IDs. The first is NOC2L, the pseudobulk's third gene.
+- The coverage of the 860 universe genes cannot be counted before download, because the gene labels sit
+  inside the compressed values. The run counts it in a labels-only pass before parsing any value.
+- How missing values are written is undocumented and was not inspected. An empty, non-numeric, non-finite
+  or out-of-range entry, or a gene absent from the rows or listed twice, is missing: it is never a
+  non-responder.
+- The raw pseudobulk's identities match the registered digest (1,950,226 bytes read).
+
+**The question changes.** Among the 56 frozen candidates, do the element predictions rank the genes the
+authors' test calls differentially expressed after the factor's **assigned** perturbation above the
+non-responders of the same control-expression decile, more than promoter proximity does?
+- No knockdown filter is used.
+- Ineffective perturbations may weaken the signal.
+- An absent response does not establish that a factor has no regulatory role.
+- No factor is chosen by its responses.
+
+**Rules.**
+- **Label:** a gene responds when the published adjusted p is below 0.05.
+- **Strata:** deciles of the unweighted mean of raw pseudobulk `X` over the 585 non-targeting rows. The
+  values are read only in the authorised run.
+- **Unchanged from earlier registrations:** the 10 kb exclusion, and amendment 1's stratified AUROC with
+  the unstratified one beside it, the equal-weight difference, the cluster bootstrap, the floor of 30 and
+  the two separate criteria.
+- **Dropped:** the |T| label, the gate and the knockdown rule. The normalized pseudobulk is not read.
+
+**Freeze.** `scripts/n1_run_v3.py` refuses unless all of these match: both earlier registrations, the
+module (`9be800c9…`), itself (`406b60da…`), the constants, and the header digest (`0dcdb88b…`). The amendment
+1 and original runners now refuse.
+
+**What an authorised run reads, in order:**
+1. the freeze check;
+2. both files downloaded, with md5 checked and sha256 recorded;
+3. the raw pseudobulk's identities;
+4. raw `X` at the 585 controls, at the 860 columns;
+5. the published file's labels pass;
+6. at the covered universe genes, the 56 principal columns, with each such line split into text and only
+   those fields converted.
+
+**Tests:** 41 of 42 pass on made-up inputs, and 1 is skipped as before. Amendment 2's cover:
+- the principal-row and missing rules;
+- a labels pass that parses no value, and a values pass that converts only the chosen cells;
+- the strict 0.05 level;
+- an end-to-end run with absent, repeated and empty entries;
+- the header-mismatch stop;
+- the runner's freeze check and single run;
+- the amendment 1 runner refusing.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
