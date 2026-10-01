@@ -12883,6 +12883,51 @@ Code: `genomeos/attribution/wiring.py`, `scripts/wiring_feasibility.py`, `tests/
 synthetic inputs only). Result: `data/results/wiring_feasibility.json`, with a complete manifest. It is
 one cell type, an already-examined benchmark, and development evidence only.
 
+### The wiring diagnostic closed as infeasible on this benchmark, 2026-10-01 (coordinator)
+
+The owner closed the diagnostic as infeasible on the K562 CRISPRi benchmark. The lane's checks had passed
+and its three commits were pushed (`31e624e`, `f58a2a3`, `9b88526`). Nothing was loosened afterwards:
+- no matching is relaxed;
+- no predictions are bought for the 3,410 covered pairs without a cached value;
+- no further rewirings are drawn to make up for missing alternatives.
+
+**Three quantities, kept apart.** The counts are for the training pairs under the primary rewiring, given
+as S1 / S3. The coordinator counted them from the committed code (`wiring.links_of`, `keys_for`,
+`alternatives`), and no rewired assignment was scored.
+- **Links that can move.**
+  - 60 / 67 of the 423 regulated links have at least one admissible alternative, and 37.0 / 47.0 move per
+    rewiring (the lane's figure).
+  - 22 / 25 of the movable links can swap only with another regulated link of the same element, so only
+    38 / 42 can change class.
+- **Distinct alternative assignments.**
+  - There are 88 / 107 link-and-alternative assignments, over 62 / 74 alternative genes.
+  - 52 / 58 of the movable regulated links have one or two alternatives.
+  - Under S1, a moved regulated link receives the same alternative in 91% of the draws in which it moves
+    (the lane's figure).
+- **Independent genes or loci.**
+  - The movable regulated links fall in 42 / 49 genes, 46 / 50 elements, 13 / 14 chromosomes and 28 / 32
+    loci. The loci are a rough count: elements chained within 1 Mb.
+  - All 423 regulated links, for comparison, fall in 290 genes and 216 such loci.
+  - The lane counts 8 of the S1 links in the IFITM locus on chr11 and 9 around PRDX2, KLF1 and RAD23A on
+    chr19.
+
+**The floor.** The 100-link floor (30 on held-out K562) was a feasibility requirement fixed before the
+diagnostics. It was not a demonstrated power. Meeting it would not have shown that the diagnostic could
+detect anything. Failing it by a wide margin (at most 47) shows that the rewiring cannot be drawn adequately
+here. More rewirings would only reduce Monte Carlo error; they would not add independent biological
+evidence.
+
+**One input disclosed.** The expression covariate is the mean raw pseudobulk over the 585 non-targeting
+rows of the Replogle K562 file cached for N1, checked by md5. Albert authorised reading those values for
+N1's protocol. Their reuse here, only as a matching covariate, followed the coordinator's instruction to use
+cached or already-examined data. No response value was read.
+
+**What it says.** The lane's reading stands as written. It makes no statement that the assignments do or do
+not carry information beyond matched alternatives. The no-go is a property of this benchmark's design and of
+the cache's coverage, not a finding about the model: here, regulated links are mostly their element's only
+or nearest measured gene. Reopening the diagnostic would need a benchmark that measures several genes per
+element at comparable distances, under a new registration.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
