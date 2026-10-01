@@ -22,7 +22,7 @@ import csv
 import gzip
 import sys
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -126,6 +126,59 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair], raw_sha:
     }
 
 
+def explain(pairs: list[crispri.Pair]) -> dict:
+    """Descriptive, added after the first run's decision and judged by no threshold: where the pairs go, and
+    why the primary null finds so few alternatives for regulated links. No model, no metric."""
+    links = wiring.links_of(pairs, {})
+    by_element = defaultdict(list)
+    for lk in links:
+        by_element[lk.element].append(lk)
+    reg = [lk for lk in links if lk.regulated]
+    gaps = sorted(
+        min(abs(x.position - lk.position) for x in by_element[lk.element] if x.gene != lk.gene)
+        for lk in reg
+        if len({x.gene for x in by_element[lk.element]}) > 1
+    )
+    movable_by_dataset = {}
+    for scheme in (wiring.SCHEMES[0], wiring.SCHEMES[2]):
+        groups, distinct = wiring.keys_for(links, "element_kept", expression_classes=False)
+        alts = wiring.alternatives(links, groups, distinct, scheme["width_log10"])
+        movable_by_dataset[scheme["name"]] = dict(
+            sorted(
+                Counter(
+                    pairs[lk.index].dataset for k, lk in enumerate(links) if lk.regulated and alts[k]
+                ).items()
+            )
+        )
+    covered = [p for p in pairs if p.covered]
+    return {
+        "note": "descriptive, added after the decision; judged by no threshold",
+        "pairs": {
+            "evaluated": len(pairs),
+            "uncovered": len(pairs) - len(covered),
+            "covered_without_a_cached_value": len(covered) - len(links),
+            "population": len(links),
+        },
+        "regulated": {
+            "evaluated": sum(p.regulated for p in pairs),
+            "covered": sum(p.regulated for p in covered),
+            "population": len(reg),
+        },
+        "regulated_population_links": {
+            "only_population_link_of_their_element": sum(len(by_element[lk.element]) == 1 for lk in reg),
+            "nearest_population_gene_of_their_element": sum(
+                lk.position == min(x.position for x in by_element[lk.element]) for lk in reg
+            ),
+            "with_another_gene_in_their_element": len(gaps),
+            "log10_gap_to_the_nearest_other_gene_quantiles": wiring.quantiles(gaps),
+            "share_of_those_within_0_2": round(sum(g < 0.2 for g in gaps) / len(gaps), 4) if gaps else None,
+            "share_of_those_within_0_3": round(sum(g < 0.3 for g in gaps) / len(gaps), 4) if gaps else None,
+            "by_dataset": dict(sorted(Counter(pairs[lk.index].dataset for lk in reg).items())),
+            "movable_by_dataset": movable_by_dataset,
+        },
+    }
+
+
 def main() -> int:
     t0 = time.time()
     training, heldout = crispri.load(crispri.TRAINING), crispri.load(crispri.HELDOUT)
@@ -185,6 +238,7 @@ def main() -> int:
         "first run; see the code stamp below",
         "expression_coverage": coverage,
         "decision": decision,
+        "explanatory_counts": explain(training),
         "assessments": assessments,
         "alphagenome_requests": 0,
     }
