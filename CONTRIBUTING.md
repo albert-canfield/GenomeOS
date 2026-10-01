@@ -241,3 +241,23 @@ under another lane's commit.
    file per chromosome as it lands.
 5. The engine (`genomeos/lang`, `ir`, `runtime`, `std`, `bio.py`) imports
    nothing from the genome, knowledge or web layers.
+
+## A result written in this shared checkout (2026-10-02)
+
+Several sessions work in one tree, so a lane's result manifest picks up every
+other lane's uncommitted files and `result_manifest.code.dirty` is true through
+no fault of its own. Requiring `dirty: false` outright would force the lanes to
+run one at a time, so the rule is this instead. A result whose stamp is dirty is
+sound only when it also carries, computed rather than asserted:
+
+1. its **own** code committed (`own_uncommitted_code` empty), with the sha;
+2. the **foreign** uncommitted files named;
+3. the **transitive import closure** of its entry script, **computed by code**,
+   showing none of those foreign files on it. A hand-written list of imports
+   does not meet this: the closure is what decides whether a dirty file could
+   have entered the number, and only code can enumerate it.
+
+And before any number from such a result is quoted in README, docs/ROADMAP.md,
+docs/ATTRIBUTION.md or a reply to the owner, run `scripts/manifest_rebuild.py`
+on it in a clean worktree at its own sha and record **0 differences**. A result
+that fails either half is a defect, not a result.
