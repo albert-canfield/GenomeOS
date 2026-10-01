@@ -130,9 +130,69 @@ def pack(chrom: str, cache: Path = CACHE, remove: bool = False) -> dict[str, Any
     }
 
 
+#: What a per-cell summary counts, and what it cannot. The adapter emits a value only when
+#: `abs(val) > threshold`, so values at exactly the threshold -- including exact zeros when the threshold is
+#: 0.0 -- never reach this function. `emitted` is therefore the number of values received for a cell name,
+#: which is a lower bound on that cell's tracks; the cell's total track count is not recorded here and is
+#: not inferred. No track identity is invented: a value arrives with its cell name and nothing else.
+EMITTED_ONLY = (
+    "emitted values only: the adapter passes a value only when |log2 fold change| > its threshold, so "
+    "values at the threshold and exact zeros are absent; the cell's total track count is unknown here"
+)
+
+#: Marks rows whose per-cell evidence is summarised rather than collapsed. A row without
+#: `by_cell_summary` is legacy: its `by_cell` holds the last emitted value per cell name and the other
+#: values were discarded when it was written. Neither loading nor repacking can recover them.
+BY_CELL_SCHEMA = 2
+
+
+def _cell_summary(values: list[float]) -> dict[str, Any]:
+    """One cell name's emitted values, as evidence rather than as a single effect.
+
+    `values` is the multiset received, sorted so the summary does not depend on the order the tracks
+    arrived in. `mean_of_emitted_log2fc` is a descriptive statistic of those values and nothing more: the
+    tracks are not known to be biological replicates, so it is not a validated cell-level effect.
+    `signs_disagree` is independent of the mean, because two opposite values average to zero while still
+    disagreeing.
+    """
+    ordered = sorted(values)
+    return {
+        "values": [round(v, 4) for v in ordered],
+        "emitted": len(ordered),
+        "signs_disagree": any(v > 0 for v in ordered) and any(v < 0 for v in ordered),
+        "mean_of_emitted_log2fc": round(sum(ordered) / len(ordered), 4) if ordered else None,
+        "completeness": EMITTED_ONLY,
+    }
+
+
+def per_cell(row: dict[str, Any]) -> dict[str, Any]:
+    """One gene row's per-cell evidence, saying which representation it is.
+
+    A row written since `BY_CELL_SCHEMA` 2 carries a summary per cell name. An older row carries only the
+    last emitted value per cell name; it is returned as that, with no count and no aggregate status, because
+    inventing either would claim evidence the file does not hold.
+    """
+    summary = row.get("by_cell_summary")
+    if summary is None:
+        return {
+            "representation": "legacy_last_track",
+            "schema": row.get("by_cell_schema"),
+            "cells": dict(row.get("by_cell") or {}),
+            "note": "the last emitted value per cell name; the other values were discarded when this row "
+            "was written and cannot be recovered by loading or repacking",
+        }
+    return {"representation": "summary", "schema": row.get("by_cell_schema"), "cells": summary}
+
+
 def aggregate(effects: list[tuple[str, str, float]], cells: tuple[str, ...] = CELLS) -> list[dict[str, Any]]:
     """Per gene over every track: mean, the largest drop and the largest rise with their tissues, and the
-    value on each of `cells`' own tracks."""
+    emitted values for each of `cells` summarised by `_cell_summary`.
+
+    `by_cell` is kept exactly as it was, the last emitted value per cell name, so no existing reader
+    changes behaviour. `by_cell_summary` is the new field and holds every value received. Target selection
+    is untouched: `predict_target` still chooses by the largest drop or rise over all tracks and does not
+    read either field.
+    """
     by_gene: dict[str, dict[str, Any]] = {}
     for gene, tissue, val in effects:
         g = by_gene.setdefault(
@@ -146,12 +206,14 @@ def aggregate(effects: list[tuple[str, str, float]], cells: tuple[str, ...] = CE
                 "max": 0.0,
                 "max_tissue": "",
                 "by_cell": {},
+                "by_cell_values": {},
             },
         )
         g["n_tracks"] += 1
         g["sum"] += val
         if tissue in cells:
-            g["by_cell"][tissue] = round(float(val), 4)
+            g["by_cell"][tissue] = round(float(val), 4)  # legacy: the last value read wins
+            g["by_cell_values"].setdefault(tissue, []).append(float(val))
         if val < g["min"]:
             g["min"], g["min_tissue"] = val, tissue
         if val > g["max"]:
@@ -168,6 +230,10 @@ def aggregate(effects: list[tuple[str, str, float]], cells: tuple[str, ...] = CE
                 "max_rise_log2fc": round(g["max"], 4),
                 "max_rise_tissue": g["max_tissue"],
                 "by_cell": g["by_cell"],
+                "by_cell_schema": BY_CELL_SCHEMA,
+                "by_cell_summary": {
+                    cell: _cell_summary(vals) for cell, vals in sorted(g["by_cell_values"].items())
+                },
             }
         )
     rows.sort(key=lambda r: r["max_drop_log2fc"])

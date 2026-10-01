@@ -13161,6 +13161,69 @@ comparator is named and the interval says what it is over; that the baseline ran
 the internal-evidence qualifier travels with the figures; and that an unreadable audit quotes nothing. The
 removal test was confirmed to fail when the old parenthetical was put back and to pass again once reverted.
 
+## Per-cell deletion values stop being collapsed: the evidence is kept, the legacy values stay legacy (2026-10-01, coordinator)
+
+A demonstrated software limitation, recorded on 2026-09-29 as found and not fixed: in
+`genomeos/predict/enhancer_target.py`, `aggregate()` wrote `by_cell[name] = value` for every emitted track,
+so where several tracks carried one cell's name **the last one read was kept and the others were discarded at
+write time**. It matters because the versioned judge rules on direction only in the stated cell, and that
+stated-cell value was one arbitrary track. The 2026-09-29 trace found cell mismatch to be the primary cause
+for four of the five claims it examined, with winning margins from 0.0095 to 0.0711. No model request was
+made for this work, and no committed scientific result was touched.
+
+**What the fix is.** `aggregate()` now also records, per cell name, every value it received:
+
+- `values`, the multiset received, sorted so the summary does not depend on the order the tracks arrived in;
+- `emitted`, how many values were received for that cell name;
+- `signs_disagree`, computed independently of any average, because two opposite values average to zero while
+  still disagreeing;
+- `mean_of_emitted_log2fc`, **a descriptive statistic of the emitted values and nothing more**. The tracks
+  are not known to be biological replicates, so this is not a validated cell-level effect and nothing reads
+  it as one;
+- `completeness`, which states what the count is and is not.
+
+**What `emitted` does not mean.** The adapter passes a value only when `abs(val) > threshold`
+(`alphagenome_adapter.py`), so values at the threshold never arrive, and at threshold 0.0 that excludes
+exact zeros. `emitted` is therefore the number of values received for a cell name and a lower bound on that
+cell's tracks. **The cell's total track count is not recorded and is not inferred**, and no track identity is
+invented: a value arrives with its cell name and nothing else.
+
+**Prediction behaviour is unchanged, deliberately.** `by_cell` still holds the last emitted value per cell
+name, so no existing reader moves. `predict_target()` chooses by the largest drop or rise over all tracks and
+reads neither field, so this fix does **not** by itself fix claim-context selection: a claim still names the
+winning track's cell. The consumers were traced — `closure.py`, `crispri.py`, `crispri_direction.py`,
+`crispri_direction_both.py`, `targets.py`, `measured.py`, `unknown_scoring.py`, `response_map.py`,
+`body.py`, `element_types.py` and others, about 20 modules and 13 scripts — and **not one was switched** to
+the new field, to a mean, or to a different direction rule. Doing that is a separate decision with its own
+registration.
+
+**The representation is versioned, and legacy data stays legacy.** A row written from now on carries
+`by_cell_schema` 2 and a `by_cell_summary`. `per_cell(row)` returns either that summary or, for an older
+row, the last-track value marked `legacy_last_track` with no count and no aggregate status, because
+inventing either would claim evidence the file does not hold.
+
+**What cannot be recovered.** The stored archive keeps only the aggregated rows: the raw per-track values are
+discarded inside `score_element()` once `aggregate()` has run, and nothing else retains them. All 24
+chromosome archives were checked and none carries a summary, so **every stored per-cell value is legacy**.
+Neither loading nor repacking can recover the discarded values; only new model requests could, and none were
+made.
+
+**How often a cell name carried several tracks cannot be answered from what is on disk**, and that is
+recorded rather than estimated. The track table was never stored (`repression_trace.json`: "the sweep never
+read output_metadata ... so the track table it averaged over is not on disk"). Two things are known: a
+fingerprint over all 966,615 scanned answers found **371 emitted values per element at the mode against 316
+distinct tissue names**, so names do repeat; and the 2026-09-29 trace demonstrated individual cases where a
+cell's other tracks were not seen. Neither gives a per-cell count. From now on `emitted` records it.
+
+**Tests.** 21 in `tests/test_enhancer_target.py`, 10 of them new and behavioural rather than about the
+assignment: every emitted value is kept; the summary is unchanged when the input order is reversed; opposite
+signs stay visible when their mean is zero; agreeing values are not flagged; the mean is labelled as the mean
+of emitted values and the row exposes no "effect" field; the summary claims no total track count; no track
+identity is invented; the legacy field keeps its old meaning, order dependence included; a new row is marked
+as summarised; a legacy row never acquires a count or aggregate status; and target selection is unmoved,
+checked on a case whose emitted values average zero while another track carries the largest rise. Reducing
+the summary back to one value per cell fails four of them.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
