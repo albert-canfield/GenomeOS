@@ -759,3 +759,178 @@ def test_reader_v2_decodes_only_the_selected_columns(tmp_path, monkeypatch):
     assert got["x"][0] == pytest.approx([world["x"][rows[0]][c] for c in cols], rel=1e-6, abs=1e-7)
     assert got["raw_x"][4] == pytest.approx([world["raw"][rows[4]][c] for c in cols], rel=1e-6)
     assert "normalized:X[5 rows x 4 columns]" in reader.datasets_read
+
+
+# --- amendment 2 -------------------------------------------------------------------------------------------
+
+
+def write_ad(path, columns, rows):
+    """A synthetic gzipped CSV in the published file's layout: an empty index name, then perturbation
+    labels; one row per gene with its adjusted p-values as text."""
+    import csv
+    import gzip
+
+    with gzip.open(path, "wt", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["", *columns])
+        for gene, values in rows:
+            w.writerow([gene, *values])
+
+
+def ad_world(tmp_path):
+    """make_world with interleaved control expression, its raw file, and a published-style p-value file:
+    each factor's 20 responders at p = 0.01, the rest at 0.5; one universe gene absent, one listed twice,
+    and one empty field for F1."""
+    world, plan = interleaved_world()
+    paths = write_pair(tmp_path, world)
+    columns = list(reversed(world["obs_index"]))  # a different order from the pseudobulk's
+    resp = {f"F{k}": {GENES[(k * 5 + q) % N_GENES] for q in range(20)} for k in range(40)}
+    rows = []
+    for g in GENES[:199]:  # GENES[199] is absent
+        vals = []
+        for lab in columns:
+            sym = lab.split("_")[1]
+            if sym == "F1" and g == GENES[10]:
+                vals.append("")
+            elif sym in resp:
+                vals.append("0.01" if g in resp[sym] else "0.5")
+            else:
+                vals.append("0.9")
+        rows.append((g, vals))
+    rows.append((GENES[198], rows[198][1]))  # GENES[198] listed twice
+    ad_path = tmp_path / "ad.csv.gz"
+    write_ad(ad_path, columns, rows)
+    return world, plan, paths, ad_path, columns
+
+
+def test_principal_row_and_missing_representation():
+    rows = [{"label": "1_X_P1_E", "tss": "P1"}, {"label": "2_X_P2_E", "tss": "P2"}]
+    assert n1.principal_row({"rows": rows}) == "1_X_P1_E"
+    assert n1.principal_row({"rows": [{"label": "3_Y_P1P2_E", "tss": "P1P2"}, *rows]}) == "3_Y_P1P2_E"
+    assert n1.principal_row({"rows": [{"label": "4_Z_ENST1_E", "tss": "ENST1"}]}) == "4_Z_ENST1_E"
+    assert n1.principal_row({"rows": [rows[1], {"label": "5_W_P3_E", "tss": "P3"}]}) is None
+    for text in ("", "nan", "NaN", "NA", "inf", "-0.1", "1.5", "abc"):
+        assert n1.parse_adjusted_p(text) is None, text
+    assert (
+        n1.parse_adjusted_p("0.03") == 0.03
+        and n1.parse_adjusted_p("1") == 1.0
+        and n1.parse_adjusted_p("0") == 0.0
+    )
+
+
+def test_the_labels_pass_parses_no_value(monkeypatch):
+    def refuse(_):
+        raise AssertionError("a value was parsed in the labels pass")
+
+    monkeypatch.setattr(n1, "parse_adjusted_p", refuse)
+    lines = [',a_X_P1_E,"b_Y_ENST1,ENST2_E"\n', "ENSG1,0.5,0.01\n", '"ENSG2",,0.3\n']
+    out = n1.ad_labels_pass(lines)
+    assert out == {"columns": ["a_X_P1_E", "b_Y_ENST1,ENST2_E"], "rows": ["ENSG1", "ENSG2"]}
+
+
+def test_the_values_pass_converts_only_the_wanted_cells(monkeypatch):
+    calls = []
+    real = n1.parse_adjusted_p
+    monkeypatch.setattr(n1, "parse_adjusted_p", lambda t: calls.append(t) or real(t))
+    lines = [",a,b,c\n", "G1,0.5,0.01,0.2\n", "G2,,0.03,0.2\n", "G3,0.9,0.9,0.9\n"]
+    out = n1.ad_values_pass(lines, {"B": 1, "A": 0}, {"G1", "G2"})
+    assert out == {"B": {"G1": 0.01, "G2": 0.03}, "A": {"G1": 0.5, "G2": None}}
+    assert len(calls) == 4  # two columns at two rows; G3 and column c are never converted
+
+
+def test_missing_p_values_stay_missing_and_the_level_is_strict():
+    genes = ["G0", "G1", "G2", "G3", "G4"]
+    cand = {
+        "factor": "F",
+        "cluster": "F",
+        "excluded_genes": ["G4"],
+        "scores": {"attribution": {"G0": 0.9}, "proximity": {}},
+    }
+    pvals = {"G0": 0.01, "G1": 0.05, "G2": None, "G3": 0.5, "G4": 0.0}
+    res = n1.factor_result_v3(cand, genes, pvals, [0, 0, 0, 0, 0])
+    assert res["genes"] == 3 and res["genes_missing"] == 1  # G2 missing, never a non-responder; G4 excluded
+    assert res["responders"] == 1  # p = 0.05 is not < 0.05
+    assert res["auroc_attribution"] == 1.0 and res["auroc_proximity"] == 0.5
+
+
+def test_run_v3_end_to_end_in_the_registered_order(tmp_path):
+    world, plan, paths, ad_path, columns = ad_world(tmp_path)
+    raw = n1.H5adRawControls(paths["raw"], expected={"md5": n1.file_digests(paths["raw"])[0]})
+    ad = n1.PublishedAdFile(ad_path, expected_md5=n1.file_digests(ad_path)[0])
+    out = n1.run_v3(plan, n1.header_digest(columns), raw, ad)
+    assert [r["step"] for r in out["reads"]] == [
+        "raw identities",
+        "strata",
+        "published labels pass",
+        "published values pass",
+    ]
+    assert ad.passes == ["labels", "values: 40 columns x 198 rows"]
+    assert out["coverage"] == {
+        "universe": 200,
+        "in_file_rows": 198,
+        "absent_from_file": 1,
+        "listed_twice": 1,
+        "non_finite_control_expression": 0,
+        "analysis_genes": 198,
+    }
+    f1 = next(f for f in out["factors"] if f["factor"] == "F1")
+    assert f1["genes_missing"] == 1
+    a = out["analysis"]
+    assert out["status"] == "analysed" and a["coverage"]["defined"] == 40
+    assert a["criteria"]["point_gain"]["met"] and a["criteria"]["lower_bound"]["met"]
+    assert not any("normalized" in d for d in raw.datasets_read)  # the normalized file is not needed
+
+
+def test_run_v3_stops_on_a_changed_header_before_any_value(tmp_path):
+    world, plan, paths, ad_path, columns = ad_world(tmp_path)
+    raw = n1.H5adRawControls(paths["raw"], expected={"md5": n1.file_digests(paths["raw"])[0]})
+    ad = n1.PublishedAdFile(ad_path, expected_md5=n1.file_digests(ad_path)[0])
+    out = n1.run_v3(plan, n1.header_digest(columns[:-1]), raw, ad)
+    assert out["status"] == "header_mismatch" and ad.passes == ["labels"]
+
+
+def test_the_v3_run_script_checks_the_freeze_first_then_runs_once(tmp_path):
+    from genomeos.results import save_result
+
+    run_v3 = load_script("n1_run_v3")
+    world, plan, paths, ad_path, columns = ad_world(tmp_path)
+    expected = {"ad": n1.file_digests(ad_path)[0], "raw": {"md5": n1.file_digests(paths["raw"])[0]}}
+
+    def results_with(constants: dict) -> Path:
+        d = tmp_path / f"results{len(list(tmp_path.glob('results*')))}"
+        d.mkdir()
+        with pytest.warns(UserWarning):
+            save_result("n1_registration", {"plan": plan}, d)
+            save_result(n1.AMENDMENT, {"note": "amendment 1"}, d)
+            frozen = {
+                "original_registration": {"sha256": n1.sha256_file(d / "n1_registration.json")},
+                "amendment_1": {"sha256": n1.sha256_file(d / f"{n1.AMENDMENT}.json")},
+                "module": {"sha256": n1.sha256_file(run_v3.MODULE)},
+                "runner": {"sha256": n1.sha256_file(run_v3.RUNNER)},
+            }
+            body = {"frozen": frozen, "constants": constants, "ad_header_digest": n1.header_digest(columns)}
+            save_result(n1.AMENDMENT_2, body, d)
+        return d
+
+    bad = results_with({**json.loads(json.dumps(n1.CONSTANTS_V3)), "ad_level": 0.1})
+    with pytest.raises(SystemExit, match="differ from the freeze"):  # refused before any file is opened
+        run_v3.execute(
+            ad_path, paths["raw"], "synthetic test", bad, {"ad": "0" * 32, "raw": {"md5": "0" * 32}}
+        )
+    good = results_with(json.loads(json.dumps(n1.CONSTANTS_V3)))
+    out = run_v3.execute(ad_path, paths["raw"], "synthetic test", good, expected)
+    assert out["status"] == "analysed" and set(out["files_sha256"]) == {"ad", "raw"}
+    with pytest.raises(SystemExit, match="applied once"):
+        run_v3.execute(ad_path, paths["raw"], "synthetic test", good, expected)
+
+
+def test_the_amendment_1_runner_is_disabled_by_any_module_change():
+    root = Path(__file__).resolve().parents[1]
+    a1 = json.loads((root / "data/results/n1_registration_amendment_1.json").read_text())
+    problems = n1.freeze_problems(
+        a1,
+        root / "data/results/n1_registration.json",
+        Path(n1.__file__).resolve(),
+        root / "scripts/n1_run_v2.py",
+    )
+    assert [p.split(":")[0] for p in problems] == ["analysis module"]

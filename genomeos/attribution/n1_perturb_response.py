@@ -1118,3 +1118,289 @@ class H5adPseudobulkV2(H5adPseudobulk):
                     row[q] = float(vals[p])
                 out[i] = row
         return out
+
+
+# =========================================================================================================
+# Amendment 2 (2026-10-01, lane-n1), additive: everything above is unchanged.
+# data/results/n1_registration_amendment_2.json states the changes and why.
+#
+# The question changes: N1 now evaluates ASSIGNED perturbations, with no knockdown filter. A gene responds
+# when the producers' own Anderson-Darling test, Benjamini-Hochberg adjusted, gives p < 0.05: the
+# definition of a differentially expressed gene in Replogle et al. 2022 (STAR Methods), published per
+# perturbation x gene on Figshare+ 21632564. Ineffective perturbations may weaken the signal, and an absent
+# response does not show that a factor has no regulatory role. No factor is chosen by its responses.
+# =========================================================================================================
+
+AMENDMENT_2 = "n1_registration_amendment_2"
+AD_LEVEL = 0.05  # the producers' level for a differentially expressed gene, BH-adjusted
+AD_SOURCE = {
+    "article": "Figshare+ 21632564",
+    "doi": "10.25452/figshare.plus.21632564.v1",
+    "license": "CC0",
+    "name": "anderson-darling p-values, BH-corrected.csv.gz",
+    "figshare_file_id": 38349308,
+    "bytes": 488_720_141,
+    "md5": "abb0310e87d65c442e663e3d6364e2ca",
+    "url": "https://ndownloader.figshare.com/files/38349308",
+}
+PRINCIPAL_TAGS = ("P1P2", "P1")
+
+CONSTANTS_V3 = {
+    "amendment": 2,
+    "label": "responds when the published Anderson-Darling p-value, BH-adjusted, is < 0.05",
+    "ad_level": AD_LEVEL,
+    "missing": "an empty, non-numeric or non-finite field, or one outside [0, 1]; a gene absent from the "
+    "file's rows or listed twice is missing for every factor; missing is never a non-responder",
+    "row_rule": "the principal-transcript row: P1P2, else P1, else a factor's only row",
+    "knockdown_filter": "none: assigned perturbations are evaluated",
+    "strata": "deciles of the unweighted mean of raw pseudobulk X over the 585 non-targeting rows",
+    "strata_count": GATE_STRATA,
+    "neighbour_bp": NEIGHBOUR_BP,
+    "auroc": CONSTANTS_V2["auroc"],
+    "primary_auroc": CONSTANTS_V2["primary_auroc"],
+    "secondary_auroc": CONSTANTS_V2["secondary_auroc"],
+    "floor_factors": FLOOR_FACTORS,
+    "min_gain": MIN_GAIN,
+    "min_clusters": MIN_CLUSTERS,
+    "bootstrap_b": BOOTSTRAP_B,
+    "bootstrap_seed": BOOTSTRAP_SEED,
+    "lower_index": LOWER_INDEX,
+    "upper_index": UPPER_INDEX,
+}
+
+
+def principal_row(candidate: dict[str, Any]) -> str | None:
+    """The row a factor is evaluated by: the one targeting its principal transcript (P1P2, else P1; the
+    paper's 'primary transcript', STAR Methods), else its only row; None when neither applies."""
+    tags = {r["tss"]: r["label"] for r in candidate["rows"]}
+    for t in PRINCIPAL_TAGS:
+        if t in tags:
+            return tags[t]
+    return candidate["rows"][0]["label"] if len(candidate["rows"]) == 1 else None
+
+
+def parse_adjusted_p(field: str) -> float | None:
+    """A published adjusted p-value, or None when missing: empty, non-numeric, non-finite, outside [0, 1]."""
+    try:
+        v = float(field)
+    except (TypeError, ValueError):
+        return None
+    return v if math.isfinite(v) and 0.0 <= v <= 1.0 else None
+
+
+def first_field(line: str) -> str:
+    """The first CSV field of a line (the row label) without splitting the rest of the line."""
+    if line.startswith('"'):
+        return line[1 : line.find('"', 1)]
+    cut = line.find(",")
+    return (line if cut < 0 else line[:cut]).rstrip("\r\n")
+
+
+def header_digest(columns: Sequence[str]) -> str:
+    """sha256 of the published file's column labels in file order."""
+    return hashlib.sha256(json.dumps(list(columns), separators=(",", ":")).encode()).hexdigest()
+
+
+def ad_labels_pass(lines: Iterable[str]) -> dict[str, list[str]]:
+    """The labels pass: the header's column labels and every row's first field. No value is parsed."""
+    import csv
+
+    it = iter(lines)
+    header = next(csv.reader([next(it)]))
+    return {"columns": header[1:], "rows": [first_field(line) for line in it]}
+
+
+def ad_values_pass(
+    lines: Iterable[str], wanted_columns: dict[str, int], wanted_rows: set[str]
+) -> dict[str, dict[str, float | None]]:
+    """The values pass: at the wanted rows only, the wanted columns' adjusted p-values (`parse_adjusted_p`).
+    `wanted_columns` maps a key to its column position among the labels (0 = the first perturbation).
+    Every other row is skipped after its first field; at a wanted row the line is split into text fields
+    and only the wanted ones are converted."""
+    import csv
+
+    it = iter(lines)
+    next(it)
+    out: dict[str, dict[str, float | None]] = {k: {} for k in wanted_columns}
+    for line in it:
+        gene = first_field(line)
+        if gene not in wanted_rows:
+            continue
+        fields = next(csv.reader([line]))
+        for k, pos in wanted_columns.items():
+            out[k][gene] = parse_adjusted_p(fields[pos + 1]) if pos + 1 < len(fields) else None
+    return out
+
+
+def raw_control_expression(raw_x: Sequence[Sequence[float]]) -> list[float]:
+    """Amendment 2's strata variable: the unweighted mean of raw pseudobulk X over the non-targeting rows,
+    so that no inferred field (num_cells_filtered) enters; non-finite when any row is."""
+    k = len(raw_x[0]) if raw_x else 0
+    return [sum(row[j] for row in raw_x) / len(raw_x) for j in range(k)]
+
+
+def factor_result_v3(
+    candidate: dict[str, Any], genes: Sequence[str], pvals: dict[str, float | None], strata: Sequence[int]
+) -> dict[str, Any]:
+    """One factor under amendment 2: responders by published adjusted p < 0.05 over its universe (the
+    analysis genes minus its excluded genes); a gene whose p-value is missing leaves this factor's universe
+    and is counted, never scored as a non-responder. AUROCs as in amendment 1."""
+    excl = set(candidate["excluded_genes"])
+    own = [j for j, g in enumerate(genes) if g not in excl]
+    keep = [j for j in own if pvals.get(genes[j]) is not None]
+    labels = [pvals[genes[j]] < AD_LEVEL for j in keep]
+    st = [strata[j] for j in keep]
+    att = [candidate["scores"]["attribution"].get(genes[j], 0.0) for j in keep]
+    prox = [candidate["scores"]["proximity"].get(genes[j], 0.0) for j in keep]
+    a_att, why, used = stratified_auroc(att, labels, st)
+    a_prox, _, _ = stratified_auroc(prox, labels, st)
+    u_att, _ = auroc_v2(att, labels)
+    u_prox, _ = auroc_v2(prox, labels)
+    defined = a_att is not None and a_prox is not None
+    return {
+        "factor": candidate["factor"],
+        "cluster": candidate["cluster"],
+        "genes": len(keep),
+        "genes_missing": len(own) - len(keep),
+        "responders": sum(labels),
+        "strata_used": used,
+        "auroc_attribution": a_att,
+        "auroc_proximity": a_prox,
+        "difference": a_att - a_prox if defined else None,
+        "undefined_reason": None if defined else why,
+        "unstratified": {
+            "attribution": u_att,
+            "proximity": u_prox,
+            "difference": u_att - u_prox if u_att is not None and u_prox is not None else None,
+        },
+    }
+
+
+def run_v3(
+    plan: dict[str, Any], frozen_header_digest: str, raw_reader: Any, ad_reader: Any
+) -> dict[str, Any]:
+    """Amendment 2's run, in order: the raw pseudobulk's identities; its non-targeting rows at the universe
+    columns (strata only); the published file's labels pass (header checked, gene coverage counted); its
+    values pass at the 56 principal columns and the covered universe genes; then the analysis."""
+    reads: list[dict[str, Any]] = []
+
+    def stop(status: str, **extra: Any) -> dict[str, Any]:
+        return {"status": status, "amendment": 2, "reads": reads, **extra}
+
+    ident = raw_reader.identities()["raw"]
+    reads.append({"step": "raw identities", "datasets": ["obs index", "var gene_id"]})
+    if identity_digest(ident["obs_index"], ident["var_gene_id"]) != plan["identity_digest"]:
+        return stop("identity_mismatch", note="the raw pseudobulk's rows or genes differ from registration")
+    col_of = {g: j for j, g in enumerate(ident["var_gene_id"])}
+    universe = list(plan["universe"])
+    control = list(plan["control_rows"])
+    raw = raw_reader.control_raw(control, [col_of[g] for g in universe])
+    reads.append(
+        {"step": "strata", "rows": len(control), "row_kind": "non-targeting", "genes": len(universe)}
+    )
+    expr = raw_control_expression([raw[i] for i in control])
+    labels = ad_reader.labels_pass()
+    reads.append({"step": "published labels pass", "values_parsed": 0})
+    if header_digest(labels["columns"]) != frozen_header_digest:
+        return stop("header_mismatch", note="the published file's columns differ from the registered header")
+    seen = Counter(labels["rows"])
+    present = {g for g in universe if seen[g] == 1}
+    coverage = {
+        "universe": len(universe),
+        "in_file_rows": len(present),
+        "absent_from_file": sum(1 for g in universe if seen[g] == 0),
+        "listed_twice": sum(1 for g in universe if seen[g] > 1),
+        "non_finite_control_expression": sum(
+            1 for j, g in enumerate(universe) if g in present and not math.isfinite(expr[j])
+        ),
+    }
+    keep = [j for j, g in enumerate(universe) if g in present and math.isfinite(expr[j])]
+    genes = [universe[j] for j in keep]
+    coverage["analysis_genes"] = len(genes)
+    strata = expression_strata([expr[j] for j in keep])
+    position = {lab: p for p, lab in enumerate(labels["columns"])}
+    chosen: dict[str, int] = {}
+    unplaced = []
+    for cand in plan["candidates"]:
+        lab = principal_row(cand)
+        if lab is None or lab not in position:
+            unplaced.append(cand["factor"])
+        else:
+            chosen[cand["factor"]] = position[lab]
+    values = ad_reader.values_pass(chosen, set(genes))
+    reads.append({"step": "published values pass", "columns": len(chosen), "rows": len(genes)})
+    results = [
+        factor_result_v3(c, genes, values[c["factor"]], strata)
+        for c in plan["candidates"]
+        if c["factor"] in chosen
+    ]
+    analysis = paired_analysis_v2(results)
+    return {
+        "status": analysis["status"],
+        "amendment": 2,
+        "reads": reads,
+        "coverage": coverage,
+        "factors_without_principal_column": unplaced,
+        "factors": results,
+        "analysis": analysis,
+    }
+
+
+def freeze_problems_v3(amendment: dict[str, Any], files: dict[str, Path]) -> list[str]:
+    """What differs from amendment 2's freeze, checked before any data file is opened: each named file's
+    sha256 against `amendment['frozen'][name]`, and CONSTANTS_V3."""
+    frozen = amendment.get("frozen", {})
+    problems = [
+        f"{name}: sha256 {sha256_file(p)} is not the registered {frozen.get(name, {}).get('sha256')}"
+        for name, p in files.items()
+        if sha256_file(p) != frozen.get(name, {}).get("sha256")
+    ]
+    if json.loads(json.dumps(CONSTANTS_V3)) != amendment.get("constants"):
+        problems.append("constants: CONSTANTS_V3 differ from the registered constants")
+    return problems
+
+
+class H5adRawControls(H5adPseudobulkV2):
+    """The raw pseudobulk alone: md5 checked first, identities, and X at the non-targeting rows decoded at
+    the selected columns only."""
+
+    def __init__(self, raw: Path, expected: dict | None = None):
+        expected = expected or SOURCE["files"]["raw"]
+        self.paths = {"raw": Path(raw)}
+        md5, sha = file_digests(self.paths["raw"])
+        if md5 != expected["md5"]:
+            raise ValueError(f"{raw}: md5 {md5} is not Figshare's {expected['md5']}")
+        self.sha256 = {"raw": sha}
+        self.datasets_read = []
+
+    def control_raw(self, rows: list[int], cols: list[int]) -> dict[int, list[float]]:
+        return self._rows("raw", rows, cols)
+
+
+class PublishedAdFile:
+    """The producers' adjusted Anderson-Darling p-values (gzipped CSV): md5 checked first, then read only
+    through `ad_labels_pass` and `ad_values_pass`."""
+
+    def __init__(self, path: Path, expected_md5: str = AD_SOURCE["md5"]):
+        self.path = Path(path)
+        md5, sha = file_digests(self.path)
+        if md5 != expected_md5:
+            raise ValueError(f"{path}: md5 {md5} is not Figshare's {expected_md5}")
+        self.sha256 = sha
+        self.passes: list[str] = []
+
+    def lines(self):
+        import gzip
+
+        with gzip.open(self.path, "rt", newline="") as f:
+            yield from f
+
+    def labels_pass(self) -> dict[str, list[str]]:
+        self.passes.append("labels")
+        return ad_labels_pass(self.lines())
+
+    def values_pass(
+        self, wanted_columns: dict[str, int], wanted_rows: set[str]
+    ) -> dict[str, dict[str, float | None]]:
+        self.passes.append(f"values: {len(wanted_columns)} columns x {len(wanted_rows)} rows")
+        return ad_values_pass(self.lines(), wanted_columns, wanted_rows)
