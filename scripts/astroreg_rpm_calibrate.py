@@ -109,16 +109,17 @@ def select_bams(experiment: str) -> dict[str, Any]:
     """
     exp = portal(f"/experiments/{experiment}/")
     released = [a for a in exp.get("analyses", []) if a.get("status") == "released"]
-    if len(released) != 1:
-        raise SystemExit(
-            f"REFUSED: {experiment} has {len(released)} released analyses, not 1 "
-            f"({[a.get('title') for a in released]}). The registered rule names the released "
-            "analysis, so a different number of them is a case this rule does not cover and must be "
-            "ruled on rather than guessed"
-        )
-
-    analysis = released[0]
-    wanted = set(analysis.get("files", []))
+    if not released:
+        raise SystemExit(f"REFUSED: {experiment} has no released analysis")
+    # SELECTION RULE, amendment 3 (registered before it was used): take the UNION of the qualifying
+    # BAMs over ALL released analyses, then require one per biological replicate. The original wording
+    # said "the released analysis", singular, on the assumption that ENCODE designates exactly one.
+    # ENCSR000EPM has TWO, so that assumption is false. The union does not CHOOSE between them, which
+    # is what filling the gap with a default would have meant; it collects what they qualify and then
+    # lets the replicate check decide whether the result is usable. Where there is one released
+    # analysis it reduces to the original rule exactly, so no earlier selection changes.
+    wanted = {f for a in released for f in a.get("files", [])}
+    analysis = released[0] if len(released) == 1 else None
     bams = []
     for f in exp.get("files", []):
         if f.get("@id") not in wanted:
@@ -146,8 +147,17 @@ def select_bams(experiment: str) -> dict[str, Any]:
         raise SystemExit(f"REFUSED for {experiment}: {e}") from e
     return {
         "experiment": experiment,
-        "analysis": analysis.get("@id"),
-        "analysis_title": analysis.get("title"),
+        "analysis": analysis.get("@id") if analysis else [a.get("@id") for a in released],
+        "analysis_title": analysis.get("title")
+        if analysis
+        else " + ".join(a.get("title") or "?" for a in released),
+        "released_analyses": [
+            {"id": a.get("@id"), "title": a.get("title"), "files": len(a.get("files", []))} for a in released
+        ],
+        "selection_note": "the union of the qualifying BAMs over all released analyses, then one per "
+        "biological replicate (amendment 3). No choice was made between analyses"
+        if len(released) > 1
+        else "the single released analysis",
         "bams": sorted(bams, key=lambda b: b["accession"]),
         "biological_replicates": sorted(seen),
         "total_bytes": sum(b["file_size"] or 0 for b in bams),
