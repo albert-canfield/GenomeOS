@@ -489,22 +489,6 @@ WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL = (
     "something about Albert that only a relay supports"
 )
 
-#: The supervisor's three words, to be recorded here from its OWN message, quoted, with the time it
-#: wrote them. None because it has not written them. Same discipline as the authorisation: a paraphrase,
-#: a boolean or another agent's account of it are not the record, and this lane may not anticipate it.
-SUPERVISOR_SIGNOFF = "dry run reviewed"
-
-#: When the supervisor wrote it, and at which HEAD, from its own message to the coordinator.
-SUPERVISOR_SIGNOFF_WRITTEN_AT = "2026-10-02 17:23:05 +0100, at HEAD 16791b4"
-
-#: The scope the supervisor attached to those three words, in its own terms. Recorded because a
-#: sign-off without its scope is a blank cheque: these words cover THIS registration, THIS list and
-#: THIS sender, and nothing else.
-SUPERVISOR_SIGNOFF_SCOPE = (
-    "AstroREG-2 as registered (astroreg2_registration at 0f4c372, Amendment 2 rule pinned at "
-    "77ff2a0a...), the reviewed 1,232-request list (digest as committed at cc5b097), sent once by "
-    "scripts/astroreg2_send.py through enhancer_target.score_element, capped by ASTROREG2_CAP = 1,232"
-)
 
 #: Why the coordinator records this and not the lane, departing from the instruction it was given.
 WHY_THE_COORDINATOR_RECORDED_THE_SIGNOFF = (
@@ -667,14 +651,6 @@ FROZEN_SCORER_PARAMETERS = (
 
 # --------------------------------------------------- the sign-off is bound to the code it was given for
 
-#: The git blob shas of the two files the supervisor read, AT SIGN-OFF (HEAD 16791b4). A sign-off is for
-#: code someone actually reviewed, so it does not carry to code they did not. These are a PAIR OF FIELDS
-#: UPDATED BY A RE-SIGN, deliberately not something this lane's own commit can satisfy: after any change
-#: to either file the send REFUSES until the supervisor re-signs against the new blobs.
-SUPERVISOR_SIGNOFF_BLOBS = {
-    "scripts/astroreg2_send.py": "4ee9245ae147c3b9542b07bde393fc0dad57d679",
-    "genomeos/attribution/astrorun.py": "bc46e3992efadf7953dfb729ecad81570f3e12cf",
-}
 
 A_SIGNOFF_IS_FOR_THE_CODE_IT_READ = (
     "the sign-off names a sender and a guard module by blob. If either file's bytes differ from the ones "
@@ -702,20 +678,102 @@ def git_blob(path: Path | str, root: Path | None = None) -> str | None:
     return r.stdout.strip() or None
 
 
-def check_signoff_blobs(blobs: dict[str, str] | None = None, root: Path | None = None) -> dict[str, str]:
-    """Refuse unless both signed files are byte-for-byte what the supervisor read. See the note above."""
-    want = blobs if blobs is not None else SUPERVISOR_SIGNOFF_BLOBS
-    differing = []
-    for path, signed in sorted(want.items()):
-        got = git_blob(path, root)
-        if got != signed:
-            differing.append(f"{path}: on disk {got}, signed {signed}")
-    if differing:
+#: The sign-off record. A FILE READ AT RUNTIME, never imported, and deliberately not in code.
+#:
+#: The first version of this stored the signed blob of `genomeos/attribution/astrorun.py` INSIDE
+#: `genomeos/attribution/astrorun.py`. That is a fixed point with no solution: writing a blob value into
+#: the file changes the file, which changes its blob, so the recorded value can never equal the computed
+#: one. Demonstrated rather than reasoned about -- writing the current blob in produced a third,
+#: different blob. The intended property was "a change invalidates the sign-off"; the property built was
+#: "the sign-off can never be valid", and no re-sign by anyone could have passed.
+#:
+#: Keeping the record OUTSIDE the code dissolves it rather than working around it: a record that
+#: describes the code from outside can name the code's hashes without being part of what it hashes. It
+#: sits beside the ledger because both are records ABOUT a run rather than parts of one.
+SIGNOFF_RECORD = Path("data/ledgers/astroreg2_signoff.json")
+
+#: The sender whose whole import closure is signed.
+SENDER_ENTRY = "scripts/astroreg2_send.py"
+
+A_SIGNOFF_IS_FOR_THE_CODE_IT_READ = (
+    "the sign-off covers the sender's WHOLE IMPORT CLOSURE, not two files. Two files were never the right "
+    "boundary: an edit to enhancer_target.score_element or to alphagenome_adapter after a sign-off would "
+    "have passed unnoticed, and those two decide what is BOUGHT and what is RECORDED. The reviewed unit "
+    "is everything the sender can reach. The closure is recomputed from the sender by the shared "
+    "mf.counting_path, which parses imports and never imports, so it is the same in any checkout of the "
+    "same revision; any file ADDED, REMOVED or CHANGED refuses the send and is NAMED. The refusal says a "
+    "re-sign is required and never that an authorisation is missing: those are different facts and "
+    "conflating them would misreport what Albert agreed to"
+)
+
+
+def sender_closure(entry: str = SENDER_ENTRY, root: Path | None = None) -> dict[str, str]:
+    """`path -> blob` for every repository file the sender can reach by import, plus the sender itself."""
+    from genomeos import manifest as mf
+
+    base = Path(root) if root is not None else ROOT_FOR_BLOBS
+    out: dict[str, str] = {}
+    for rel in sorted(set(mf.counting_path(entry, base)) | {entry}):
+        blob = git_blob(base / rel, base)
+        if blob:
+            out[rel] = blob
+    return out
+
+
+def recorded_signoff(path: Path | str | None = None) -> dict[str, Any] | None:
+    """The sign-off record as written by whoever holds the supervisor's words first-hand, or None."""
+    p = Path(path) if path is not None else ROOT_FOR_BLOBS / SIGNOFF_RECORD
+    if not p.exists():
+        return None
+    try:
+        body = json.loads(p.read_text())
+    except ValueError:
+        return None
+    return body if isinstance(body, dict) else None
+
+
+def recorded_signoff_words(path: Path | str | None = None) -> str | None:
+    rec = recorded_signoff(path)
+    return (rec or {}).get("words")
+
+
+def check_signoff_closure(
+    record: dict[str, Any] | None = None,
+    entry: str = SENDER_ENTRY,
+    root: Path | None = None,
+    path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Refuse unless the sender's whole closure is byte-for-byte what was signed. See the note above."""
+    rec = record if record is not None else recorded_signoff(path)
+    if rec is None:
+        raise SendRefusedError(
+            f"no sign-off record is present at {SIGNOFF_RECORD}, so nothing is signed. "
+            f"{A_SIGNOFF_IS_FOR_THE_CODE_IT_READ}"
+        )
+    signed = rec.get("signed_closure") or {}
+    if not signed:
+        raise SendRefusedError(
+            f"the sign-off record at {SIGNOFF_RECORD} names no signed_closure, so it signs nothing"
+        )
+    now = sender_closure(entry, root)
+    added = sorted(set(now) - set(signed))
+    removed = sorted(set(signed) - set(now))
+    changed = sorted(p for p in set(now) & set(signed) if now[p] != signed[p])
+    if added or removed or changed:
+        parts = []
+        if changed:
+            parts.append(
+                "CHANGED: " + ", ".join(f"{p} (on disk {now[p]}, signed {signed[p]})" for p in changed)
+            )
+        if added:
+            parts.append("ADDED to the closure: " + ", ".join(added))
+        if removed:
+            parts.append("REMOVED from the closure: " + ", ".join(removed))
         raise SendRefusedError(
             "the supervisor's sign-off was given for different code and a RE-SIGN is required (this is "
-            f"not a missing authorisation): {'; '.join(differing)}. {A_SIGNOFF_IS_FOR_THE_CODE_IT_READ}"
+            f"not a missing authorisation): {'; '.join(parts)}. {A_SIGNOFF_IS_FOR_THE_CODE_IT_READ}"
         )
-    return {p: s for p, s in want.items()}
+    return {"files_signed": len(signed), "signed_at": rec.get("signed_at"), "words": rec.get("words")}
 
 
 class SendRefusedError(RuntimeError):
@@ -845,7 +903,7 @@ def may_send(
                 "was produced under a different rule",
             )
 
-    check_signoff_blobs(root=ROOT_FOR_BLOBS)
+    check_signoff_closure(root=ROOT_FOR_BLOBS)
     if not signoff or "dry run reviewed" not in signoff:
         _refuse(
             "signoff",

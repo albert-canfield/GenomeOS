@@ -242,7 +242,7 @@ class TestTheSenderRefusesToday:
         that made an empty slot permissive.
         """
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
-        monkeypatch.setattr(astrorun, "SUPERVISOR_SIGNOFF", None)
+        monkeypatch.setattr(astrorun, "recorded_signoff_words", lambda *a, **k: None)
         plan = [row(i) for i in range(3)]
         p = tmp_path / "plan.json"
         p.write_text(json.dumps({"requests": plan}))
@@ -294,14 +294,16 @@ class TestACrashRestartCannotRePay:
         monkeypatch.setattr(sender, "ACTIVITY", act)
         monkeypatch.setattr(sender, "REGISTRATION", reg)
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
-        monkeypatch.setattr(astrorun, "SUPERVISOR_SIGNOFF", 'wrote "dry run reviewed" at 13:00')
+        monkeypatch.setattr(
+            astrorun, "recorded_signoff_words", lambda *a, **k: 'wrote "dry run reviewed" at 13:00'
+        )
         monkeypatch.setattr(astrorun, "ASTROREG2_CAP", 20)
         # the activity result is a temp file, so the real git predicate cannot judge it; stubbing it is
         # what lets this test reach the PARTIAL-RUN clause rather than stopping at the activity clause
         monkeypatch.setattr(sender, "committed_in_git", lambda p: True)
         # the blob check is about a DIFFERENT clause and now refuses first, since this lane changed both
         # signed files; stubbing it is what lets this test reach the partial-run clause it is about
-        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send"])
         assert sender.main() == 2
         said = capsys.readouterr().out
@@ -671,55 +673,118 @@ class TestTheFrozenFeatureParametersCannotDiverge:
             assert f'"{field}"' in src, f"the result must record {field}"
 
 
-class TestTheSignoffIsBoundToTheCodeItRead:
-    def test_both_signed_files_are_named(self):
-        assert set(astrorun.SUPERVISOR_SIGNOFF_BLOBS) == {
-            "scripts/astroreg2_send.py",
-            "genomeos/attribution/astrorun.py",
-        }
+class TestTheSignoffIsBoundToTheWholeClosure:
+    """Rebuilt after a FIXED-POINT defect in the first version, and widened from two files to the closure.
 
-    def test_it_refuses_now_because_this_lane_changed_both_files(self):
-        """Intended, not a defect: a sign-off does not carry to code the reviewer never read."""
+    The first version stored the signed blob of genomeos/attribution/astrorun.py INSIDE that same file.
+    Writing a blob value there changes the file, which changes its blob, so the recorded value can never
+    equal the computed one: no re-sign by anyone could ever have passed. The record now lives OUTSIDE the
+    code, in data/ledgers/astroreg2_signoff.json, read at runtime and never imported, which dissolves the
+    fixed point rather than working around it.
+
+    It also signs the sender's WHOLE IMPORT CLOSURE. Two files were never the right boundary: an edit to
+    enhancer_target.score_element or to alphagenome_adapter would have passed unnoticed, and those two
+    decide what is BOUGHT and what is RECORDED.
+    """
+
+    def test_the_fixed_point_is_gone_because_the_record_is_not_in_the_code(self):
+        import inspect
+
+        src = inspect.getsource(astrorun)
+        assert "SUPERVISOR_SIGNOFF_BLOBS" not in src, "the blob pair must not live in the code it hashes"
+        assert str(astrorun.SIGNOFF_RECORD) == "data/ledgers/astroreg2_signoff.json"
+        assert "fixed point with no solution" in src
+
+    def test_a_file_cannot_contain_its_own_hash_which_is_why_this_moved(self, tmp_path):
+        """The defect, demonstrated rather than reasoned about."""
+        f = tmp_path / "selfref.py"
+        f.write_text('BLOB = "x" * 40\n')
+        first = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
+        f.write_text(f'BLOB = "{first}"\n')
+        second = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
+        assert second != first, "writing a blob into a file changes that file's blob"
+
+    def test_the_closure_covers_what_decides_what_is_bought_and_recorded(self):
+        closure = astrorun.sender_closure()
+        assert astrorun.SENDER_ENTRY in closure
+        for must in (
+            "genomeos/predict/enhancer_target.py",
+            "genomeos/predict/alphagenome_adapter.py",
+            "genomeos/attribution/astrorun.py",
+        ):
+            assert must in closure, f"{must} must be signed: it decides what is bought or recorded"
+        assert len(closure) > 10, "a closure of two files is the boundary this replaced"
+
+    def test_it_refuses_while_no_record_exists(self):
+        with pytest.raises(astrorun.SendRefusedError, match="no sign-off record is present"):
+            astrorun.check_signoff_closure(record=None, path=Path("/nonexistent/signoff.json"))
+
+    def test_a_record_with_no_signed_closure_signs_nothing(self):
+        with pytest.raises(astrorun.SendRefusedError, match="signs nothing"):
+            astrorun.check_signoff_closure(record={"words": "dry run reviewed"})
+
+    def test_a_MATCHING_closure_passes(self):
+        """The positive control: an always-refusing check would look safe and be useless."""
+        rec = {
+            "signed_at": "2026-10-02T17:23:05+01:00",
+            "words": "dry run reviewed",
+            "signed_closure": astrorun.sender_closure(),
+        }
+        out = astrorun.check_signoff_closure(record=rec)
+        assert out["files_signed"] == len(rec["signed_closure"])
+        assert out["words"] == "dry run reviewed"
+
+    def test_PLANTED_an_edit_DEEP_in_the_closure_refuses(self):
+        """alphagenome_adapter is not the sender, and changing it must still stop the send."""
+        closure = astrorun.sender_closure()
+        deep = "genomeos/predict/alphagenome_adapter.py"
+        assert deep in closure
+        tampered = dict(closure)
+        tampered[deep] = "0" * 40
         with pytest.raises(astrorun.SendRefusedError) as exc:
-            astrorun.check_signoff_blobs(root=astrorun.ROOT_FOR_BLOBS)
+            astrorun.check_signoff_closure(record={"signed_closure": tampered})
         said = str(exc.value)
+        assert "CHANGED" in said and deep in said
         assert "RE-SIGN is required" in said
         assert "not a missing authorisation" in said
-        assert "astroreg2_send.py" in said or "astrorun.py" in said
 
-    def test_matching_blobs_pass(self, tmp_path):
-        """The positive control: a check that can never pass would prove nothing."""
-        f = tmp_path / "x.py"
-        f.write_text("print(1)\n")
-        blob = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
-        assert blob
-        assert astrorun.check_signoff_blobs({str(f): blob}, root=astrorun.ROOT_FOR_BLOBS)
-
-    def test_PLANTED_a_one_character_edit_refuses(self, tmp_path):
-        f = tmp_path / "x.py"
-        f.write_text("print(1)\n")
-        blob = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
-        f.write_text("print(2)\n")  # one character
-        with pytest.raises(astrorun.SendRefusedError, match="RE-SIGN is required"):
-            astrorun.check_signoff_blobs({str(f): blob}, root=astrorun.ROOT_FOR_BLOBS)
-
-    def test_a_missing_signed_file_refuses_too(self, tmp_path):
-        with pytest.raises(astrorun.SendRefusedError):
-            astrorun.check_signoff_blobs({str(tmp_path / "gone.py"): "0" * 40}, root=astrorun.ROOT_FOR_BLOBS)
-
-    def test_the_refusal_names_which_file_differs(self, tmp_path):
-        a, b = tmp_path / "a.py", tmp_path / "b.py"
-        a.write_text("A\n")
-        b.write_text("B\n")
-        blobs = {
-            str(a): astrorun.git_blob(a, root=astrorun.ROOT_FOR_BLOBS),
-            str(b): astrorun.git_blob(b, root=astrorun.ROOT_FOR_BLOBS),
-        }
-        b.write_text("B2\n")
+    def test_PLANTED_an_ADDED_module_in_the_closure_refuses(self):
+        """The case a hand-maintained path list would miss entirely."""
+        closure = astrorun.sender_closure()
+        short = {k: v for k, v in closure.items() if k != "genomeos/predict/enhancer_target.py"}
         with pytest.raises(astrorun.SendRefusedError) as exc:
-            astrorun.check_signoff_blobs(blobs, root=astrorun.ROOT_FOR_BLOBS)
+            astrorun.check_signoff_closure(record={"signed_closure": short})
         said = str(exc.value)
-        assert "b.py" in said and "a.py" not in said.split("b.py")[0].split("required")[-1]
+        assert "ADDED to the closure" in said
+        assert "enhancer_target.py" in said
+
+    def test_PLANTED_a_REMOVED_module_refuses_and_is_named(self):
+        closure = dict(astrorun.sender_closure())
+        closure["genomeos/predict/gone_module.py"] = "0" * 40
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_closure(record={"signed_closure": closure})
+        assert "REMOVED from the closure" in str(exc.value)
+        assert "gone_module.py" in str(exc.value)
+
+    def test_the_closure_is_computed_by_the_shared_function_not_a_local_copy(self):
+        import inspect
+
+        src = inspect.getsource(astrorun.sender_closure)
+        assert "mf.counting_path" in src, "eight copies of this closure had already drifted once"
+
+    def test_the_record_is_read_at_runtime_and_never_imported(self):
+        import inspect
+
+        src = inspect.getsource(astrorun.recorded_signoff)
+        assert "json.loads" in src and "read_text" in src
+        assert "import_module" not in src
+
+    def test_a_malformed_record_is_treated_as_absent_rather_than_trusted(self, tmp_path):
+        bad = tmp_path / "signoff.json"
+        bad.write_text("{not json")
+        assert astrorun.recorded_signoff(bad) is None
+        with pytest.raises(astrorun.SendRefusedError, match="no sign-off record"):
+            astrorun.check_signoff_closure(path=bad)
 
 
 class TestTheSweepAndTheSenderReachTheSamePath:

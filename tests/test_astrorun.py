@@ -768,7 +768,7 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         has its own planted tests, including the one-character edit.
         """
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
-        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
 
     @pytest.fixture
     def good(self, tmp_path):
@@ -836,7 +836,7 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         of it, a failing clause must still refuse -- here the sign-off, removed.
         """
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
-        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         assert astrorun.ASTROREG2_AUTHORISATION, "this test is about a FILLED slot"
         good["signoff"] = None
         with pytest.raises(astrorun.SendRefusedError) as exc:
@@ -846,7 +846,7 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
     def test_a_filled_slot_does_not_mask_a_partial_run_either(self, good, monkeypatch):
         """The same masking risk on the clause that guards a double spend."""
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
-        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         led = Path(good["ledger"])
         astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP).take(chrom="chr1", element="E0")
         with pytest.raises(astrorun.SendRefusedError, match="a partial run exists"):
@@ -1051,7 +1051,7 @@ class TestItemFAdapterV2:
         half.GENE_AXIS_COLUMNS_090 = (astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID,)
         monkeypatch.setitem(sys.modules, "regressed_adapter", half)
         monkeypatch.setattr(astrorun, "ADAPTER_MODULE", "regressed_adapter")
-        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
         plan = [
             {

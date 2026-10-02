@@ -223,7 +223,7 @@ def main() -> int:
             activity_result=ACTIVITY,
             registration=REGISTRATION,
             ledger=LEDGER,
-            signoff=astrorun.SUPERVISOR_SIGNOFF,
+            signoff=astrorun.recorded_signoff_words(),
             plan=plan,
             reviewed_digest=REVIEWED_DIGEST,
             committed=committed_in_git,
