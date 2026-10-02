@@ -1,0 +1,451 @@
+"""The authorised AstroREG run: the money guard, and the gate on the one input the frozen model
+needs and the astrocyte side cannot supply.
+
+Three separate things live here on purpose: the money guard, the request list, and the gate on the
+one input the frozen model needs. They are separate because each can be wrong on its own, and a
+single object that did all three would hide which one had failed.
+
+THE MONEY GUARD. Albert authorised a NUMBER, 1,322 AlphaGenome requests, not a job: "I approve the
+1,322 AlphaGenome requests for the AstroREG test as registered (astroreg_registration.json at
+e58bcee, exploratory, prevalence-matched power 0.79). Run it once, under the registration, with
+every request logged". So the cap is a constant checked before every request is sent, and reaching
+it is a REFUSAL that stops the run (`CapRefusedError`), never a warning and never a skipped element: a
+run that silently stopped at the cap and reported a result would have chosen its population by how
+much money was left. `RequestBudget.take` is the single place a request is charged, and it writes
+the ledger line BEFORE it hands back the permission to send, so a request cannot be paid for
+without being logged -- the log is the charge, not a side effect of it.
+
+AND THE BUDGET IS RECONSTRUCTED FROM THE LEDGER, NEVER FROM ZERO. The session that registered this
+test was killed before it sent a single request, which is the ordinary way a run ends: not with an
+error it can catch but with the process gone. A budget that counted from zero on startup would let
+the next session spend the whole authorised number again, so the cap would bound a process and not
+the money. The ledger is the only durable record of a charge, so `RequestBudget.__init__` counts the
+charges already in it and starts there; a restart's remaining cap is `cap` minus what the ledger
+holds, and a ledger already holding `cap` charges refuses the very first request of the new process.
+That is what `A_RESTART_MAY_NOT_DOUBLE_SPEND` says and what the resume tests prove.
+
+THE REQUEST LIST. `plan_requests` is the only enumeration of what would be sent: one row per registry
+element overlapping a covered screen pair, which is the rule the registration costed the run with.
+The dry run prints it and any sender must iterate it, so the list reviewed before the money is spent
+and the list actually sent cannot drift apart. `ONE_ENUMERATION_ONLY` says why that is structural
+rather than a matter of care.
+
+THE ACTIVITY-INPUT GATE. The frozen model is a difference between two arms, 'activity + distance +
+deletion' and 'activity + distance', and `activity` is in both. `crispri.Pair.dhs` and
+`crispri.Pair.h3k27ac` are read in exactly one place in this project, `crispri.parse`, from the
+EPCrisprBenchmark columns `DHS.RPM` and `H3K27ac.RPM`: reads per million mapped reads in the
+element. The benchmark publishes them for every pair of all five of its held-out cell types, which
+is why the HCT116 arm could be scored on the frozen path at all. The astrocyte screen is not in the
+benchmark and its Supplementary Table 3 has no activity sheet, so nothing supplies those two
+numbers for an astrocyte pair.
+
+What IS on disk for astrocyte is the registration's own two activity inputs -- ENCFF874OPW DNase
+peaks and ENCFF970DKF H3K27ac replicated peaks -- and both are narrowPeak PEAK CALLS whose third
+column is `signalValue`, not RPM. A peak call also has no value at all outside a called peak,
+whereas the benchmark's RPM is defined for every element and reaches zero continuously. Putting a
+signalValue where a weight fitted on an RPM is applied is a substitute for a missing input, and the
+registration's feasibility rule decides that case before any money is spent:
+
+    "if an input the frozen model needs is missing, the model is not applied and no substitute is
+    put in its place: a no-go is recorded instead"
+
+So this module's gate is a reading of a registered rule, not a new rule. It is deliberately a pure
+function over measured availability, so the verdict can be tested without the files and so the
+evidence it rests on has to be produced before it will answer.
+"""
+
+from __future__ import annotations
+
+import json
+import threading
+import time
+from pathlib import Path
+from typing import Any
+
+# --------------------------------------------------------------------------- the money guard
+
+#: Albert's authorisation, 2026-10-02, word for word. Quoted and never summarised, because the
+#: number in it is the whole permission.
+AUTHORISATION = (
+    "I approve the 1,322 AlphaGenome requests for the AstroREG test as registered "
+    "(astroreg_registration.json at e58bcee, exploratory, prevalence-matched power 0.79). Run it "
+    "once, under the registration, with every request logged."
+)
+
+#: The authorised number of AlphaGenome requests. 1,322, not 1,323: the registration's
+#: `requests.total_requests_needed`, which is one request per registry element overlapping a covered
+#: pair. A number was approved and a number is what may be spent.
+AUTHORISED_REQUESTS = 1_322
+
+#: Why reaching the cap stops the run instead of trimming the work to fit.
+CAP_IS_A_REFUSAL = (
+    "the cap is a refusal, not a budget to be filled: a run that reached 1,322 and carried on with "
+    "the elements it had already paid for would have chosen its population by how much money was "
+    "left, which is choosing it after seeing which part of the genome was affordable. So the "
+    "request that would be the 1,323rd raises CapRefusedError, the run stops, and the count reached and "
+    "the reason are what gets reported"
+)
+
+#: Why the ledger line is written before the request is permitted rather than after it is answered.
+LOG_IS_THE_CHARGE = (
+    "the ledger line is written inside the same lock that increments the count, before the caller "
+    "is given permission to send, so a request cannot be charged without being logged. A log "
+    "written after the answer came back would lose exactly the requests that cost money and "
+    "returned nothing"
+)
+
+
+#: Why a new process starts from the ledger's count and not from zero. The brief's own words for the
+#: failure this prevents: a lane that can be killed and restarted into a second full spend is worse
+#: than one that never runs.
+A_RESTART_MAY_NOT_DOUBLE_SPEND = (
+    "the cap must bound the money, not the process. A killed run leaves no exception to catch and no "
+    "in-memory count to carry, only the ledger it already wrote, so the budget is reconstructed from "
+    "the ledger on startup: a new RequestBudget over a ledger holding n charges has n spent and "
+    "cap - n remaining, and a ledger holding cap charges refuses the first request of the new "
+    "process. A truncated final line -- a process killed mid-write -- is counted AS A CHARGE, "
+    "because the line is written before the request is permitted, so a half-written line is "
+    "evidence that a charge was being made and the money-safe reading of it is that it was"
+)
+
+#: What the ledger does NOT protect, stated here so the guard is not read as more than it is. This is
+#: a limitation of the design and not a defect to be fixed by a bigger lock.
+WHAT_THE_LEDGER_CANNOT_DO = (
+    "the lock makes the count and the ledger line atomic WITHIN one process. It does not make them "
+    "atomic ACROSS two. Two processes started against the same ledger would each read the same count, "
+    "each believe the same request unspent, and both send it, and no amount of reading the ledger "
+    "closes that: the read and the append are two operations and another process can act between "
+    "them. So the ledger bounds a RESTART, which is one process after another, and not CONCURRENCY, "
+    "which is two at once. The only thing that closes the concurrent case is one executor holding the "
+    "budget, which is an operating rule and not a property of this code. A guard that claimed "
+    "otherwise would be the more dangerous for being trusted"
+)
+
+
+def ledger_charges(ledger: Path | str) -> dict[str, int]:
+    """What the ledger on disk says has already been charged. The count a restart resumes from.
+
+    `charges` counts every `event: request` line plus every line too damaged to read, because the
+    ledger line is written before the request is permitted: a line truncated by a kill is evidence
+    that a charge was being made, and counting it is the only reading that cannot spend twice. The
+    other counts are reported beside it so a damaged ledger is visible rather than silently absorbed.
+    """
+    path = Path(ledger)
+    if not path.exists():
+        return {"charges": 0, "request_lines": 0, "unreadable_lines": 0, "other_event_lines": 0}
+    request_lines = unreadable = other = 0
+    for line in path.read_text(errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            unreadable += 1
+            continue
+        if isinstance(row, dict) and row.get("event") == "request":
+            request_lines += 1
+        else:
+            other += 1
+    return {
+        "charges": request_lines + unreadable,
+        "request_lines": request_lines,
+        "unreadable_lines": unreadable,
+        "other_event_lines": other,
+    }
+
+
+#: A helper that makes a resume cheap is not a permission to resume. Kept beside the function so the
+#: two cannot be separated.
+A_RESUME_STILL_NEEDS_ALBERTS_WORD = (
+    "`requests_not_yet_charged` exists so that IF a resume is ever authorised it cannot re-pay for an "
+    "element the ledger already holds. It is not itself an authorisation: a run that failed part way "
+    "is reported at the count it reached, and a second run is a second spend that needs Albert's word "
+    "again. The function is the money-safe way to carry out a decision someone else has made, not the "
+    "decision"
+)
+
+
+def charged_elements(ledger: Path | str) -> set[tuple[str, str]]:
+    """(chrom, element) of every charge the ledger records, for a resume that must not re-pay.
+
+    Refuses rather than guesses when the ledger holds a line it cannot read: a damaged line is a
+    charge whose element is unknown, so the set of elements already paid for is unknown, and a
+    remainder computed from an unknown set could re-send a request that was already bought.
+    """
+    path = Path(ledger)
+    counts = ledger_charges(path)
+    if counts["unreadable_lines"]:
+        raise ValueError(
+            f"{path} holds {counts['unreadable_lines']} line(s) that cannot be read, so which "
+            "elements were already charged is unknown and no remainder may be computed from it: "
+            f"{A_RESUME_STILL_NEEDS_ALBERTS_WORD}"
+        )
+    out: set[tuple[str, str]] = set()
+    if not path.exists():
+        return out
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if isinstance(row, dict) and row.get("event") == "request":
+            out.add((row.get("chrom"), row.get("element")))
+    return out
+
+
+def requests_not_yet_charged(plan: list[dict[str, Any]], ledger: Path | str) -> list[dict[str, Any]]:
+    """The rows of `plan` the ledger holds no charge for, in the plan's own order.
+
+    Read `A_RESUME_STILL_NEEDS_ALBERTS_WORD` before calling this.
+    """
+    already = charged_elements(ledger)
+    return [r for r in plan if (r["chrom"], r["element"]) not in already]
+
+
+class CapRefusedError(RuntimeError):
+    """The authorised number of requests is reached. Raised instead of returning, so the run stops.
+
+    The message carries the count reached and the cap, because those two numbers are the report.
+    """
+
+
+class RequestBudget:
+    """The one place an AlphaGenome request is charged, and the only thing that may permit one.
+
+    `take` refuses at `cap` by raising `CapRefusedError`. Every charge appends one JSON line to `ledger`
+    before it returns, so the committed log and the money spent cannot disagree. Thread safe: the
+    count and the ledger line are written under one lock, so two workers cannot both be handed the
+    last permitted request.
+
+    Construction RESUMES: the charges already in `ledger` are counted and spent before this object
+    permits anything, so a restart cannot spend the authorised number a second time. `sent` is a
+    floor a caller may add, not a replacement for the ledger's count -- the larger of the two is
+    taken, never their sum, because a caller passing what it read from the ledger must not charge it
+    twice over. A resume appends one `event: resume` line naming the count it found, so a restart is
+    on the record the committed log makes.
+    """
+
+    def __init__(self, ledger: Path | str, cap: int = AUTHORISED_REQUESTS, sent: int = 0) -> None:
+        if cap < 0:
+            raise ValueError(f"a request cap cannot be negative: {cap}")
+        self.cap = cap
+        self.ledger = Path(ledger)
+        self.on_disk = ledger_charges(self.ledger)
+        self.resumed_from_ledger = self.on_disk["charges"]
+        self.sent = max(sent, self.resumed_from_ledger)
+        self._lock = threading.Lock()
+        if self.resumed_from_ledger:
+            self._write(
+                {
+                    "event": "resume",
+                    "charges_found_in_the_ledger": self.resumed_from_ledger,
+                    **{k: v for k, v in self.on_disk.items() if k != "charges"},
+                    "sent": self.sent,
+                    "cap": self.cap,
+                    "remaining": self.cap - self.sent,
+                    "why": A_RESTART_MAY_NOT_DOUBLE_SPEND,
+                    "t": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                }
+            )
+
+    def remaining(self) -> int:
+        return self.cap - self.sent
+
+    def take(self, **row: Any) -> int:
+        """Charge one request and log it, or refuse. Returns the running total after the charge.
+
+        `row` is what was asked for: the registry element, its coordinates, and whatever else the
+        caller wants on the record. The time, the running total and the cap are added here so no
+        caller can omit them.
+        """
+        with self._lock:
+            if self.sent >= self.cap:
+                raise CapRefusedError(
+                    f"the authorised number of AlphaGenome requests is reached: {self.sent} of "
+                    f"{self.cap} sent, and this request would be number {self.sent + 1}. "
+                    f"{CAP_IS_A_REFUSAL}"
+                )
+            self.sent += 1
+            self._write(
+                {
+                    **row,
+                    "event": "request",
+                    "n": self.sent,
+                    "cap": self.cap,
+                    "t": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                }
+            )
+            return self.sent
+
+    def note(self, **row: Any) -> None:
+        """Record something that is not a charge: an answer, a cache hit, a quota refusal, an error.
+
+        Kept apart from `take` so the ledger's `event: request` lines are exactly the requests paid
+        for and can be counted without a rule about which other events to subtract.
+        """
+        self._write({**row, "sent_so_far": self.sent, "t": time.strftime("%Y-%m-%dT%H:%M:%S")})
+
+    def _write(self, row: dict[str, Any]) -> None:
+        self.ledger.parent.mkdir(parents=True, exist_ok=True)
+        with self.ledger.open("a") as fh:
+            fh.write(json.dumps(row) + "\n")
+
+    def charged(self) -> int:
+        """The requests the ledger on disk says were charged. The count that is reported.
+
+        Read from the file and not from `self.sent`, so the number reported is the number the
+        committed artefact can be checked against.
+        """
+        return ledger_charges(self.ledger)["charges"]
+
+
+# ------------------------------------------------------------------- the request list, once
+
+#: The registration's own counting rule, quoted from requests.one_request_per. The list below is
+#: this rule executed, and the registration's total is what it is checked against.
+ONE_REQUEST_PER = "registry element overlapping a covered pair, as the HCT116 arm counted it"
+
+#: Why the enumeration lives here and not in the dry run and again in a sender.
+ONE_ENUMERATION_ONLY = (
+    "the dry run exists so the list can be reviewed before it is paid for, and a review is worth "
+    "nothing if the thing reviewed is not the thing sent. So the list is built in ONE function, "
+    "`plan_requests`, which the dry run prints and which any sender must iterate: not a second "
+    "enumeration written to match, because two enumerations drift and the drift is only visible "
+    "after the money is gone. The list is deterministic and sorted, so two runs of the dry run on "
+    "the same inputs produce the same list in the same order and a reviewer can diff them"
+)
+
+
+def plan_requests(pairs: list[dict[str, Any]], table: Any) -> list[dict[str, Any]]:
+    """THE request list: one row per registry element overlapping a covered screen pair.
+
+    `pairs` are the screen's pairs as `astroreg_register.screen_pairs` returns them, each with
+    `chrom`, `start`, `end`, `element`, `gene` and `label`. `table` is a `crispri.DeletionTable`, and
+    the overlap condition is its own `overlapping`, which is the same condition `crispri.annotate`
+    uses for `covered` and the same one the registration's coverage table counted with. A pair that
+    overlaps nothing contributes nothing, which is why no row here can be uncovered.
+
+    One row per registry element, NOT per pair: an element overlapping several pairs is one request,
+    which is the rule the registration costed the run with (`ONE_REQUEST_PER`) and the rule the
+    HCT116 arm counted by. Every pair the element serves is carried on the row, with its label, so a
+    reviewer can see what each request is for before it is bought.
+
+    Deliberately NOT filtered by label: the registered total counts elements overlapping a covered
+    pair of ANY label, so filtering here would produce a different number from the one authorised.
+    The share of elements that serve only labels the test never scores is reported by the dry run
+    instead, where it is an observation about the costing and not a change to it.
+    """
+    rows: dict[tuple[str, str], dict[str, Any]] = {}
+    for p in pairs:
+        for e in table.overlapping(p["chrom"], p["start"], p["end"]):
+            row = rows.setdefault(
+                (p["chrom"], e["id"]),
+                {
+                    "chrom": p["chrom"],
+                    "element": e["id"],
+                    "start": e["start"],
+                    "end": e["end"],
+                    "serves_screen_elements": set(),
+                    "serves_genes": set(),
+                    "serves_labels": set(),
+                },
+            )
+            row["serves_screen_elements"].add(p["element"])
+            row["serves_genes"].add(p["gene"])
+            row["serves_labels"].add(p["label"])
+    out = []
+    for key in sorted(rows, key=lambda k: (len(k[0]), k[0], rows[k]["start"], k[1])):
+        row = rows[key]
+        out.append(
+            {
+                **{k: v for k, v in row.items() if not isinstance(v, set)},
+                "serves_screen_elements": sorted(row["serves_screen_elements"]),
+                "serves_genes": sorted(row["serves_genes"]),
+                "serves_labels": sorted(row["serves_labels"]),
+            }
+        )
+    return out
+
+
+# ----------------------------------------------------------------- the activity-input gate
+
+#: The two numbers the frozen activity term is made of, and the one place they are read from.
+FROZEN_ACTIVITY_COLUMNS = ("DHS.RPM", "H3K27ac.RPM")
+
+#: The units those two numbers are in. The frozen weight on `log_activity` was fitted against these,
+#: so a value in any other unit is a different feature however reasonable it looks.
+FROZEN_ACTIVITY_UNITS = (
+    "reads per million mapped reads in the element, as EPCrisprBenchmark publishes them per pair "
+    "(crispri.parse reads DHS.RPM and H3K27ac.RPM; crispri._annotate_one forms "
+    "sqrt(dhs * h3k27ac), then log_activity = log1p(activity) and "
+    "activity_over_distance = log_activity - log(distance))"
+)
+
+#: The registration's own rule for a missing input, quoted from
+#: data/results/astroreg_registration.json, terms.feasibility_gate.rule. The gate below applies this
+#: and nothing else.
+REGISTERED_MISSING_INPUT_RULE = (
+    "if an input the frozen model needs is missing, the model is not applied and no substitute is "
+    "put in its place: a no-go is recorded instead"
+)
+
+#: Why a peak call cannot stand in for the benchmark's RPM, beyond the units differing. Two separate
+#: defects, and the second is the one no rescaling can repair.
+WHY_A_PEAK_CALL_IS_NOT_THE_INPUT = (
+    "a narrowPeak file differs from the benchmark's RPM in two independent ways. (1) UNITS: column "
+    "seven is signalValue -- fold change over control for the ChIP-seq peaks, the peak caller's "
+    "signal for the DNase peaks -- and a weight fitted on reads per million applied to it is a "
+    "different feature. (2) CENSORING: a peak call carries no value outside a called peak, so an "
+    "element in no peak can only be given zero, while the benchmark's RPM is defined for every "
+    "element and descends to zero continuously. Rescaling can address the first defect and cannot "
+    "address the second, because the values that are missing were never measured into the file"
+)
+
+
+def activity_verdict(available: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Whether the frozen activity term can be supplied for the astrocyte pairs, and the reading.
+
+    `available` maps each of `FROZEN_ACTIVITY_COLUMNS` to what was found for it, each entry naming
+    `source` (where a value would come from), `units` and `in_frozen_units` (whether that source is
+    in `FROZEN_ACTIVITY_UNITS`). Every column must be present in the mapping: a column nobody
+    looked for is not an absent input, it is an unfinished check, and it is refused as one.
+
+    The verdict is the registration's rule applied: go only when every column is available in its
+    own units, and otherwise a no-go that names each column that is not and quotes the rule.
+    """
+    missing_from_check = [c for c in FROZEN_ACTIVITY_COLUMNS if c not in available]
+    if missing_from_check:
+        raise ValueError(
+            "the activity gate was asked for a verdict without a finding for "
+            f"{missing_from_check}: a column nobody looked for is an unfinished check, not an "
+            "absent input"
+        )
+    not_in_units = [c for c in FROZEN_ACTIVITY_COLUMNS if not available[c]["in_frozen_units"]]
+    go = not not_in_units
+    return {
+        "frozen_activity_columns": list(FROZEN_ACTIVITY_COLUMNS),
+        "frozen_activity_units": FROZEN_ACTIVITY_UNITS,
+        "found": {c: available[c] for c in FROZEN_ACTIVITY_COLUMNS},
+        "columns_not_in_frozen_units": not_in_units,
+        "go": go,
+        "registered_rule": REGISTERED_MISSING_INPUT_RULE,
+        "reading": (
+            "every input the frozen activity term needs is available in its own units, so the "
+            "model may be applied"
+            if go
+            else "an input the frozen model needs is missing in its own units for "
+            + ", ".join(not_in_units)
+            + ", so by the registration's own rule the model is not applied, no substitute is put "
+            "in its place, and this no-go is recorded instead"
+        ),
+        "why_a_peak_call_is_not_the_input": WHY_A_PEAK_CALL_IS_NOT_THE_INPUT,
+    }
+
+
+def requests_permitted(verdict: dict[str, Any]) -> int:
+    """How many AlphaGenome requests the gate permits: the authorised number, or none.
+
+    The authorisation is for the registered test. A no-go means the registered test cannot be
+    computed from what the money would buy, so the number it permits is zero -- not 1,322 spent on a
+    deletion cache no registered claim can be made from.
+    """
+    return AUTHORISED_REQUESTS if verdict["go"] else 0
