@@ -134,6 +134,25 @@ THE_FOURTEENTH_INPUT_THAT_IS_NOT_WRITTEN = (
 )
 
 
+#: What naming every member of every group does NOT fix, recorded in each new file because a rebuild
+#: that passes without it would read as reproduction. The 24 `enhancer_targets_all_chr*.json` files this
+#: manifest declares are 1.6 KB each: they are pointers. `genomeos.attribution.targets.run_elements`
+#: reads the path in their `elements_where` field and opens it, which is
+#: data/knowledge/alphagenome/all_elements/<chrom>.json, about 1.4 GB over the 24 chromosomes, and no
+#: manifest declares those tables. A rebuild in a clean worktree finds them anyway, because data/knowledge
+#: is linked read-only, so it PASSES without having hashed the largest thing the run read. Raised to the
+#: supervisor as an item of its own on 2026-10-02; not closed here, because declaring them changes the
+#: input list of several results materially.
+ELEMENT_TABLES_UNDECLARED = (
+    "the 24 compiler_inputs:enhancer_targets_all_chr*.json files declared above are 1.6 KB pointers: "
+    "genomeos.attribution.targets.run_elements opens the path in each one's `elements_where` field, "
+    "data/knowledge/alphagenome/all_elements/<chrom>.json, about 1.4 GB in all, and no manifest here "
+    "declares those tables. Naming the members of every group does not close that gap, and a rebuild in "
+    "a clean worktree passes without hashing them because data/knowledge is linked read-only. Raised to "
+    "the supervisor as its own item on 2026-10-02"
+)
+
+
 def supersedes() -> dict[str, Any]:
     """The committed result this run is written beside, never over, with the bytes it is kept at."""
     p = ROOT / RESULTS_DIR / f"{RESULT}.json"
@@ -148,6 +167,7 @@ def supersedes() -> dict[str, Any]:
         "kept": "unchanged; this run is written beside it under a new name, not over it",
         "why": WHY_A_NEW_NAME,
         "declared_as_an_input_by": list(DECLARED_AS_AN_INPUT_BY),
+        "element_tables_behind_the_pointer_files": ELEMENT_TABLES_UNDECLARED,
         "inputs_recorded_as_groups": THE_FOURTEENTH_INPUT_THAT_IS_NOT_WRITTEN,
     }
 
