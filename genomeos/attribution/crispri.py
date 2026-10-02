@@ -723,6 +723,37 @@ def gain_where_available(available: bool, gain: Callable[[], dict[str, Any]]) ->
     return gain() if available else gain_unavailable()
 
 
+#: Why a gain is refused for a stratum that holds no pair at all. Distinct from `UNAVAILABLE_GAIN`: there
+#: the pairs exist and the feature does not, here there is nothing to measure either way.
+NO_PAIRS_GAIN = "the stratum holds no pair, so there is no population to measure a deletion gain on"
+
+
+def stratum_gain(rows: list[Pair], gain: Callable[[], dict[str, Any]]) -> dict[str, Any]:
+    """One stratum's deletion gain, or the refusal its own state calls for.
+
+    Two states refuse a number and are kept apart, because they are different statements about a stratum:
+    one that holds no pair at all (`NO_PAIRS_GAIN`, through `gain_unavailable`) and one whose pairs carry
+    no deletion value (`UNAVAILABLE_GAIN`, through `gain_where_available`). In both the gain is never
+    computed, so no number can reach a reader by accident.
+    """
+    if not rows:
+        return gain_unavailable(NO_PAIRS_GAIN)
+    return gain_where_available(deletion_available(rows), gain)
+
+
+def deletion_available(rows: list[Pair], cells: tuple[str, ...] = MODEL_CELLS) -> bool:
+    """Whether a stratum's deletion feature exists at all: every pair in it is in a cell whose own track
+    the sweep scored, and there is at least one pair.
+
+    `all` rather than `any` because a gain is one number over the whole stratum: if part of it carries no
+    deletion value, the difference between the two models on that part is set by the fitted weights alone,
+    and the one number cannot be read as a measurement of the feature. Each stratum `score` builds is one
+    cell type, so the two readings coincide here; the stricter one is kept so a stratum that is later
+    pooled across cells cannot acquire a number by the change.
+    """
+    return bool(rows) and all(p.cell in cells for p in rows)
+
+
 def one_call_per_element(pairs: list[Pair], threshold: float) -> dict[str, Any]:
     """Each method names one tested gene per element; how often is that gene the regulated one.
 
@@ -871,7 +902,11 @@ def score(
         with_deletion, without = s["activity + distance + deletion"], s["activity + distance"]
         held[cell] = {
             "models": {name: metrics(v, lab) for name, v in s.items()},
-            "deletion_gain": gain_interval(with_deletion, without, rows),
+            "deletion_gain": stratum_gain(
+                rows,
+                lambda a=with_deletion, b=without, rows=rows: gain_interval(a, b, rows),
+            ),
+            "deletion_available": deletion_available(rows),
             "passes": (average_precision(with_deletion, lab) or 0) > (average_precision(without, lab) or 0),
         }
     seen = defaultdict(list)
@@ -890,9 +925,13 @@ def score(
         s = {name: logistic_score(weights[name], matrix(rows, cols)) for name, cols in FEATURES.items()}
         disjoint[cell] = {
             "models": {name: metrics(v, lab) for name, v in s.items()},
-            "deletion_gain": gain_interval(
-                s["activity + distance + deletion"], s["activity + distance"], rows
+            "deletion_gain": stratum_gain(
+                rows,
+                lambda rows=rows, s=s: gain_interval(
+                    s["activity + distance + deletion"], s["activity + distance"], rows
+                ),
             ),
+            "deletion_available": deletion_available(rows),
         }
     judged = [v for v in held.values() if "passes" in v]
     return {
@@ -929,9 +968,13 @@ def score(
         },
         "training_leave_chromosome_out": {
             "models": {name: metrics(s, labels) for name, s in loco.items()},
-            "deletion_gain": gain_interval(
-                loco["activity + distance + deletion"], loco["activity + distance"], train
+            "deletion_gain": stratum_gain(
+                train,
+                lambda: gain_interval(
+                    loco["activity + distance + deletion"], loco["activity + distance"], train
+                ),
             ),
+            "deletion_available": deletion_available(train),
         },
         "weights": {
             name: dict(zip(("intercept", *cols), (round(v, 4) for v in weights[name]), strict=True))
