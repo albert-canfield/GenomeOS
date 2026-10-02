@@ -192,6 +192,11 @@ class _CacheAudit:
     """
 
     def __init__(self, root: Path = tg.ELEMENT_CACHE) -> None:
+        #: the path as the cache declares it, reported as such. `root` is resolved, for matching only:
+        #: in a rebuild worktree the store is a read-only link, so a resolved path there names the
+        #: checkout it points at and the report would differ between machines without differing in
+        #: substance.
+        self.declared = Path(root).as_posix()
         self.root = Path(root).resolve()
         self.opens: list[str] = []
         self._real = builtins.open
@@ -214,13 +219,20 @@ class _CacheAudit:
     def __exit__(self, *exc: object) -> None:
         builtins.open = self._real  # type: ignore[assignment]
 
+    def _named(self) -> set[str]:
+        """Each open spelled under the declared root, so the list does not carry this machine's paths."""
+        out = set()
+        for x in self.opens:
+            p = Path(x)
+            under = p.is_relative_to(self.root)
+            out.add((Path(self.declared) / p.relative_to(self.root)).as_posix() if under else p.name)
+        return out
+
     def block(self) -> dict[str, Any]:
         return {
-            "per_element_response_cache_root": self.root.relative_to(ROOT).as_posix()
-            if self.root.is_relative_to(ROOT)
-            else self.root.as_posix(),
+            "per_element_response_cache_root": self.declared,
             "opens": len(self.opens),
-            "files": sorted(set(self.opens))[:50],
+            "files": sorted(self._named()),
             "how_this_is_known": (
                 "recorded, not inferred: `builtins.open` was patched for the whole run and every open "
                 "of a path under the cache root was appended. No grep of the source could see it, "

@@ -92,6 +92,28 @@ def test_the_cache_audit_root_is_the_real_cache(count):
     assert count._CacheAudit().root == Path(tg.ELEMENT_CACHE).resolve()
 
 
+def test_the_audit_reports_the_declared_root_and_not_this_machines_path(count, tmp_path):
+    """What the rebuild found: a resolved path differs between machines without differing in substance.
+
+    In a rebuild worktree the data stores are read-only links, so resolving the cache root names the
+    checkout it points at. The report therefore carries the path as the cache declares it, and spells
+    each recorded open under that same declared root.
+    """
+    real = tmp_path / "real_elements"
+    real.mkdir()
+    (real / "chr21.json").write_text("{}")
+    link = tmp_path / "linked"
+    link.symlink_to(real)
+    audit = count._CacheAudit(link)
+    with audit, open(link / "chr21.json") as fh:  # noqa: PTH123 - the patched builtin is under test
+        fh.read()
+    block = audit.block()
+    assert block["per_element_response_cache_root"] == link.as_posix()
+    assert str(real) not in block["per_element_response_cache_root"]
+    assert block["files"] == [(link / "chr21.json").as_posix()]
+    assert block["opens"] == 1
+
+
 def test_the_no_measured_gene_token_suppresses_only_the_gene_arm(count):
     """Two reporter keys 10 Mb apart must not be one locus, and two 10 kb apart must be."""
     far = [
