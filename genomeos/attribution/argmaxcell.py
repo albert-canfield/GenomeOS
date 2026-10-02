@@ -231,11 +231,60 @@ AMENDMENT_1 = (
     "create a detection, widen a detection, or convert an inconclusive arm into a finding."
 )
 
+#: AMENDMENT 2's one new constant. A design effect is never allowed to NARROW an interval.
+MIN_DESIGN_EFFECT = 1.0
+
+AMENDMENT_2 = (
+    "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this "
+    "amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape "
+    "of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 "
+    "are unchanged.\n"
+    "THE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every "
+    "resample returns the same rate, so the interval has zero width and is estimating nothing. "
+    "7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 "
+    "resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm "
+    "rested on a zero-width interval. The file did not say the interval was degenerate, and a "
+    "reader could not have told it from a narrow one.\n"
+    "THE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a "
+    "cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on "
+    "an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the "
+    "file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm "
+    "with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by "
+    "test, in both directions.\n"
+    "THE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own "
+    "intracluster correlation and an assumption would decide the reading. It is taken from the arms "
+    "of this same result that CAN estimate one - 0 < k < n and a clustered interval - as "
+    "(clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an "
+    "interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its "
+    "own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the "
+    "most conservative there is, one observation per cluster (n_eff = clusters), which is "
+    "intracluster correlation of 1. Every value, the arm it came from and the one taken are "
+    "reported.\n"
+    "DISCLOSED, and this is the part that is a correction rather than a confirmation. Before "
+    "committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. "
+    "Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, "
+    "and reading (2) survives - which is what the coordinator's direction expected. The measured "
+    "design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near "
+    "39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), "
+    "THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The "
+    "rule above was chosen because measuring the design effect is the right method and assuming "
+    "independence is the thing clustering exists to doubt - not because of which answer it gives - "
+    "and the outcome it gives is reported as a contradiction of the expectation that prompted it. "
+    "It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never "
+    "towards a finding.\n"
+    "ALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that "
+    "returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-"
+    "degenerate and will score high without triggering the rule, which is reported so a reader can "
+    "see the near case rather than have this lane invent a second threshold for it."
+)
+
 FALSIFIER = (
     "Stated before any count was taken (67e14d7) and AMENDED before any count was committed "
     "(AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the "
-    "arm's own denominator, and every branch below is decided by the CLUSTERED interval on d and "
-    "never by the point estimate.\n"
+    "arm's own denominator, and every branch below is decided by the DECIDING interval on d and "
+    "never by the point estimate. The deciding interval is the CLUSTERED bootstrap, except on an "
+    "arm at 0 or n successes, where that bootstrap is degenerate and AMENDMENT_2 routes the reading "
+    "to a Wilson bound on an effective sample size instead.\n"
     "(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the "
     "label's own genome-wide frequency. The label is not evidence of where the rule acts, and on "
     "this arm it points away from it.\n"
@@ -352,6 +401,13 @@ COUNTS_NAMED = (
     "elements",
     "elements_whose_label_is_the_measured_cell",
     "observed_rate",
+    "deciding_interval",
+    "deciding_ci95_on_the_rate",
+    "deciding_ci95_on_the_difference",
+    "bootstrap_degenerate",
+    "bootstrap_identical_share",
+    "effective_sample_size",
+    "design_effect_applied",
     "clustered_ci95_on_the_rate",
     "clustered_ci95_on_the_difference",
     "clusters",
@@ -382,6 +438,9 @@ REFUSALS = (
     "an arm with fewer than 30 elements: counts are reported and NO rate reading is",
     "an arm with fewer than 10 resampling clusters: NO interval is printed and the arm is "
     "INCONCLUSIVE BY RULE, which is reading (4) and is never reported as `no information`",
+    "an arm at 0 or n successes: the cluster bootstrap is DEGENERATE and decides nothing. The "
+    "reading is decided by a Wilson bound on an effective sample size and the degeneracy is NAMED "
+    "in the file; it is never passed through as though it were a narrow interval (AMENDMENT_2)",
 )
 
 # ---- the read discipline -----------------------------------------------------------------------
@@ -780,6 +839,9 @@ def cluster_interval(
     rates.sort()
     lo = rates[int(0.025 * (len(rates) - 1))]
     hi = rates[int(0.975 * (len(rates) - 1))]
+    modal = max(set(rates), key=rates.count)
+    made["identical_share"] = round(rates.count(modal) / len(rates), 4)
+    made["degenerate"] = made["identical_share"] >= 1.0
     return {"ci95": [round(lo, 6), round(hi, 6)], "made": made, "why_no_interval": None}
 
 
@@ -814,7 +876,62 @@ def power(arm: Arm, base: float) -> dict[str, Any]:
     }
 
 
-def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) -> dict[str, Any]:
+def bootstrap_degenerate(k: int, n: int) -> bool:
+    """`AMENDMENT_2`: at 0 or n successes every cluster resample returns the same rate."""
+    return n > 0 and (k == 0 or k == n)
+
+
+def design_effect(clustered: list[float] | None, wil: list[float] | None) -> float | None:
+    """(clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT. None when either is absent.
+
+    Floored because a design effect below one would NARROW an interval, and clustering is never a
+    reason to claim more precision than the independent case.
+    """
+    if not clustered or not wil:
+        return None
+    w = wil[1] - wil[0]
+    if w <= 0:
+        return None
+    return max(MIN_DESIGN_EFFECT, ((clustered[1] - clustered[0]) / w) ** 2)
+
+
+def measured_design_effect(arms: dict[str, Arm], draws: int = BOOTSTRAPS, seed: int = SEED) -> dict[str, Any]:
+    """`AMENDMENT_2`'s design effect: the largest one estimable from this result's own arms.
+
+    An arm can estimate one when 0 < k < n and its clusters reach MIN_CLUSTERS. Every value is
+    reported with the arm it came from, so a reader can see what the number rests on.
+    """
+    per_arm: dict[str, float | None] = {}
+    for name, arm in arms.items():
+        k, n = arm.elements_matching, arm.elements
+        if n < MIN_ELEMENTS or bootstrap_degenerate(k, n):
+            per_arm[name] = None
+            continue
+        ci = cluster_interval(arm.cluster_choice()[1], draws=draws, seed=seed)
+        per_arm[name] = design_effect(ci["ci95"], wilson(k, n))
+    usable = {a: v for a, v in per_arm.items() if v is not None}
+    taken = max(usable.values()) if usable else None
+    return {
+        "per_arm": {a: (round(v, 3) if v is not None else None) for a, v in per_arm.items()},
+        "estimable_arms": sorted(usable),
+        "taken": None if taken is None else round(taken, 3),
+        "taken_from": (None if taken is None else sorted(a for a, v in usable.items() if v == taken)[0]),
+        "rule": (
+            "(clustered width / Wilson width)^2 per estimable arm, floored at "
+            f"{MIN_DESIGN_EFFECT}, largest taken. An arm can estimate one when 0 < k < n and its "
+            f"clusters reach {MIN_CLUSTERS}. With none estimable the fallback is one observation "
+            "per cluster, which is intracluster correlation of 1 (AMENDMENT_2)"
+        ),
+    }
+
+
+def reading(
+    arm: Arm,
+    base: float,
+    draws: int = BOOTSTRAPS,
+    seed: int = SEED,
+    deff: float | None = None,
+) -> dict[str, Any]:
     """`FALSIFIER` under `AMENDMENT_1`, applied. The branch is chosen by the CLUSTERED interval."""
     n, k = arm.elements, arm.elements_matching
     if n < MIN_ELEMENTS:
@@ -833,6 +950,29 @@ def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) ->
     kind, clusters = arm.cluster_choice()
     ci = cluster_interval(clusters, draws=draws, seed=seed)
     band = ci["ci95"]
+    wil = wilson(k, n)
+    # AMENDMENT_2: a degenerate bootstrap decides nothing, so the Wilson bound on an EFFECTIVE
+    # sample size decides instead, and the degeneracy is named rather than passed through.
+    degenerate = bootstrap_degenerate(k, n)
+    deciding = "clustered_bootstrap"
+    n_eff = k_eff = None
+    used_deff = None
+    if degenerate:
+        deciding = "wilson_on_an_effective_sample_size"
+        used_deff = deff if deff is not None else (n / len(clusters) if clusters else 1.0)
+        used_deff = max(MIN_DESIGN_EFFECT, float(used_deff))
+        n_eff = max(1, round(n / used_deff))
+        k_eff = min(n_eff, round(k * n_eff / n))
+        band = wilson(k_eff, n_eff)
+        ci = {
+            **ci,
+            "why_no_interval": (
+                f"the cluster bootstrap is DEGENERATE at {k} of {n} successes: every resample "
+                "returns the same rate, so it has zero width and estimates nothing. It decides "
+                f"nothing here. The reading is decided by a Wilson bound on an effective sample "
+                f"size of {n_eff} = {n} / design effect {used_deff:.3f} (AMENDMENT_2)"
+            ),
+        }
     d_lo = None if band is None else round(band[0] - base, 6)
     d_hi = None if band is None else round(band[1] - base, 6)
     if band is None:
@@ -846,7 +986,7 @@ def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) ->
     elif d_lo is not None and d_lo > TOLERANCE:
         branch, carries = 3, None
         detected = (
-            "a difference IS detected: the clustered interval's lower bound on d is above the "
+            "a difference IS detected: the deciding interval's lower bound on d is above the "
             "registered tolerance. It does NOT establish that the argmax carries cell-type "
             "information: the benchmark chose elements active in the cell it was testing, which "
             "produces this sign on its own, and this lane cannot separate the two (CONFOUND)"
@@ -855,14 +995,14 @@ def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) ->
         branch, carries = 1, False
         detected = (
             "the argmax lands on the measured cell LESS often than that label's own genome-wide "
-            "frequency, and the clustered interval's upper bound is below the tolerance. On this "
+            "frequency, and the deciding interval's upper bound is below the tolerance. On this "
             "arm the compiled cell is not evidence of where the rule acts, and it points away from it"
         )
     elif d_lo is not None and d_hi is not None and d_lo >= -TOLERANCE and d_hi <= TOLERANCE:
         branch, carries = 2, False
         detected = (
             "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the "
-            "whole clustered interval on d lies inside the registered tolerance, so this arm has "
+            "whole deciding interval on d lies inside the registered tolerance, so this arm has "
             "excluded any difference larger than it. The rate at which the compiled cell is the "
             "measured cell is that label's background frequency and nothing more, so a rule's "
             "`cell` is NOT evidence of where it acts. The confound pushes the other way, so this "
@@ -871,11 +1011,10 @@ def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) ->
     else:
         branch, carries = 4, None
         detected = (
-            "INCONCLUSIVE: THE DATA CANNOT TELL. The clustered interval on d crosses a tolerance "
+            "INCONCLUSIVE: THE DATA CANNOT TELL. The deciding interval on d crosses a tolerance "
             "bound, so this arm neither detects a difference larger than the tolerance nor excludes "
             "one. This is NOT `no cell-type information` and may never be reported as one"
         )
-    wil = wilson(k, n)
     return {
         "rate_reported": True,
         "reading": f"({branch})",
@@ -887,13 +1026,22 @@ def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) ->
             "clustered interval alone"
         ),
         "tolerance": TOLERANCE,
-        "clustered_ci95_on_the_rate": band,
-        "clustered_ci95_on_the_difference": None if band is None else [d_lo, d_hi],
+        "deciding_interval": deciding,
+        "deciding_ci95_on_the_rate": band,
+        "deciding_ci95_on_the_difference": None if band is None else [d_lo, d_hi],
+        "bootstrap_degenerate": degenerate,
+        "bootstrap_identical_share": ci["made"].get("identical_share"),
+        "effective_sample_size": n_eff,
+        "effective_successes": k_eff,
+        "design_effect_applied": None if used_deff is None else round(used_deff, 3),
+        "clustered_ci95_on_the_rate": None if degenerate else band,
+        "clustered_ci95_on_the_difference": (None if (degenerate or band is None) else [d_lo, d_hi]),
         "clustered_by": kind,
         "cluster_grouping_caveat": (CELL2_GROUP_CAVEAT if kind == "locus" else None),
         "clustered_interval_provenance": ci["made"],
         "why_no_interval": ci["why_no_interval"],
-        "clustered_interval_decides_the_reading": True,
+        "clustered_interval_decides_the_reading": not degenerate,
+        "amendment_2": AMENDMENT_2,
         "wilson95_secondary": wil,
         "wilson95_is": INTERVAL_IS_BINOMIAL,
         "wilson95_excludes_the_base_rate": None if wil is None else not (wil[0] <= base <= wil[1]),

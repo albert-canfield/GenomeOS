@@ -102,13 +102,18 @@ def payload() -> dict[str, Any]:
         # --- 1. the falsifier, before any count ---
         "falsifier": ac.FALSIFIER,
         "amendment_1": ac.AMENDMENT_1,
-        "amends": "data/results/argmaxcell_registration.json as committed at 67e14d7",
+        "amendment_2": ac.AMENDMENT_2,
+        "amends": (
+            "data/results/argmaxcell_registration.json as committed at 67e14d7 (amendment 1) and "
+            "at 18224ef (amendment 2)"
+        ),
         "falsifier_thresholds": {
             "tolerance_on_the_difference": ac.TOLERANCE,
             "usable_rate": ac.USABLE,
             "minimum_elements_for_a_rate": ac.MIN_ELEMENTS,
             "unchanged_by_amendment_1": "all three above",
             "minimum_clusters_for_an_interval": ac.MIN_CLUSTERS,
+            "minimum_design_effect": ac.MIN_DESIGN_EFFECT,
             "bootstrap_draws": ac.BOOTSTRAPS,
             "minimum_resamples": ac.MIN_RESAMPLES,
             "bootstrap_seed": ac.SEED,

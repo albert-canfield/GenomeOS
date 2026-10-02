@@ -395,10 +395,12 @@ def test_the_locus_fallback_is_tried_before_an_arm_is_called_inconclusive() -> N
     """Few chromosomes alone do NOT refuse an interval: AMENDMENT_1 (c) tries loci first."""
     a = ac.Arm(cell="K562")
     for i in range(1_000):  # 4 chromosomes, but 250 distinct 1 Mb windows on each
-        a.element_rows[f"e{i}"] = ("chr" + str(i % 4 + 1), i * ac.LOCUS_SPAN, "placenta")
+        label = "K562" if i % 16 == 0 else "placenta"  # successes, so the bootstrap is not degenerate
+        a.element_rows[f"e{i}"] = ("chr" + str(i % 4 + 1), i * ac.LOCUS_SPAN, label)
     assert len(a.clusters("chromosome")) == 4
     r = ac.reading(a, 0.062292)
     assert r["clustered_by"] == "locus"
+    assert r["deciding_interval"] == "clustered_bootstrap"
     assert r["clustered_ci95_on_the_rate"] is not None
 
 
@@ -594,3 +596,113 @@ def test_the_two_base_rates_are_reported_with_their_difference() -> None:
     assert a["committed_census_rules"] == 440_589
     assert a["difference"] == a["attributed_elements_streamed"] - 440_589
     assert "not reconciled away" in a["what_a_difference_means"]
+
+
+# ---- AMENDMENT 2: a degenerate bootstrap decides nothing ------------------------------------------
+
+
+def _zero_arm(n: int, chroms: int = 12, cell: str = "WTC11") -> ac.Arm:
+    a = ac.Arm(cell=cell)
+    for i in range(n):
+        a.element_rows[f"e{i}"] = (f"chr{i % chroms + 1}", i * 5_000_000, "placenta")
+    return a
+
+
+def test_degeneracy_is_zero_or_all_successes_and_nothing_else() -> None:
+    assert ac.bootstrap_degenerate(0, 397) is True
+    assert ac.bootstrap_degenerate(397, 397) is True
+    assert ac.bootstrap_degenerate(1, 397) is False
+    assert ac.bootstrap_degenerate(396, 397) is False
+    assert ac.bootstrap_degenerate(0, 0) is False
+
+
+def test_an_arm_with_no_successes_routes_to_the_wilson_branch() -> None:
+    """Planted in the direction AMENDMENT_2 names: 0 successes must NOT be decided by a bootstrap."""
+    r = ac.reading(_zero_arm(397), 0.000218, deff=1.0)
+    assert r["bootstrap_degenerate"] is True
+    assert r["deciding_interval"] == "wilson_on_an_effective_sample_size"
+    assert r["clustered_interval_decides_the_reading"] is False
+    assert r["clustered_ci95_on_the_rate"] is None, "a zero-width interval is never published"
+    assert r["clustered_ci95_on_the_difference"] is None
+    assert "DEGENERATE at 0 of 397 successes" in r["why_no_interval"]
+    assert r["bootstrap_identical_share"] == 1.0
+
+
+def test_an_arm_with_all_successes_routes_to_the_wilson_branch_too() -> None:
+    a = _zero_arm(100)
+    for key, (c, s, _) in list(a.element_rows.items()):
+        a.element_rows[key] = (c, s, "WTC11")
+    r = ac.reading(a, 0.000218, deff=1.0)
+    assert r["bootstrap_degenerate"] is True
+    assert r["deciding_interval"] == "wilson_on_an_effective_sample_size"
+    assert r["effective_successes"] == r["effective_sample_size"]
+
+
+def test_an_arm_with_successes_still_routes_to_the_clustered_interval() -> None:
+    """The other direction, planted: amendment 2 must not capture the ordinary case."""
+    r = ac.reading(_arm(1_000, 62), 0.062292)
+    assert r["bootstrap_degenerate"] is False
+    assert r["deciding_interval"] == "clustered_bootstrap"
+    assert r["clustered_interval_decides_the_reading"] is True
+    assert r["clustered_ci95_on_the_rate"] is not None
+    assert r["effective_sample_size"] is None and r["design_effect_applied"] is None
+
+
+def test_the_design_effect_is_the_ratio_of_widths_on_this_results_own_numbers() -> None:
+    """Planted on the figures 7a44d59 published, so the arithmetic is checkable against the file."""
+    k562 = ac.design_effect([0.15038, 0.236864], [0.176441, 0.203479])
+    assert round(k562, 2) == 10.23
+    # HCT116's own ratio is below one, and a design effect may never NARROW an interval
+    hct = ac.design_effect([0.0, 0.017986], [0.000712, 0.022483])
+    assert hct == ac.MIN_DESIGN_EFFECT == 1.0
+    assert ac.design_effect(None, [0.0, 0.1]) is None
+    assert ac.design_effect([0.0, 0.1], None) is None
+
+
+def test_a_measured_design_effect_can_turn_an_equivalence_into_inconclusive() -> None:
+    """The contradiction AMENDMENT_2 discloses, as an assertion rather than a sentence."""
+    independent = ac.reading(_zero_arm(397), 0.000218, deff=1.0)
+    measured = ac.reading(_zero_arm(397), 0.000218, deff=10.231)
+    assert independent["deciding_ci95_on_the_rate"][1] < ac.TOLERANCE
+    assert independent["reading"] == "(2)"
+    assert measured["effective_sample_size"] == 39
+    assert measured["deciding_ci95_on_the_rate"][1] > ac.TOLERANCE
+    assert measured["reading"] == "(4)"
+    assert measured["argmax_carries_cell_type_information"] is None
+
+
+def test_the_fallback_is_one_observation_per_cluster_when_nothing_is_estimable() -> None:
+    a = _zero_arm(397, chroms=12)
+    r = ac.reading(a, 0.000218, deff=None)
+    assert r["effective_sample_size"] == 12, "intracluster correlation of 1, the conservative case"
+    assert r["design_effect_applied"] == round(397 / 12, 3)
+
+
+def test_the_measured_design_effect_names_what_it_rests_on() -> None:
+    arms = {"K562": _arm(1_000, 62), "WTC11": _zero_arm(397)}
+    m = ac.measured_design_effect(arms)
+    assert m["estimable_arms"] == ["K562"], "a 0-success arm cannot estimate its own"
+    assert m["per_arm"]["WTC11"] is None
+    assert m["taken"] is not None and m["taken_from"] == "K562"
+    assert m["taken"] >= ac.MIN_DESIGN_EFFECT
+
+
+def test_amendment_two_discloses_that_it_is_post_hoc_and_contradicts_the_expectation() -> None:
+    assert "POST-HOC and says so" in ac.AMENDMENT_2
+    assert "after the result at 7a44d59" in ac.AMENDMENT_2
+    assert "contradiction of the expectation" in ac.AMENDMENT_2
+    assert "not because of which answer it gives" in ac.AMENDMENT_2
+    for unchanged in ("TOLERANCE 0.02", "USABLE 0.25", "MIN_ELEMENTS 30", "MIN_CLUSTERS 10"):
+        assert unchanged in ac.AMENDMENT_2
+    assert (ac.TOLERANCE, ac.USABLE, ac.MIN_ELEMENTS, ac.MIN_CLUSTERS) == (0.02, 0.25, 30, 10)
+
+
+def test_near_degeneracy_is_reported_without_a_second_threshold() -> None:
+    """HCT116's shape: one success, a bootstrap that is nearly but not wholly degenerate."""
+    a = ac.Arm(cell="HCT116")
+    for i in range(248):
+        a.element_rows[f"e{i}"] = (f"chr{i % 14 + 1}", i * 5_000_000, "HCT116" if i == 0 else "placenta")
+    r = ac.reading(a, 0.001348)
+    assert r["bootstrap_degenerate"] is False, "one success is not degeneracy"
+    assert r["deciding_interval"] == "clustered_bootstrap"
+    assert 0.0 < r["bootstrap_identical_share"] < 1.0

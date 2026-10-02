@@ -328,7 +328,11 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
     cen = ac.census()
     armed: dict[str, ac.Arm] = state["arms"]
     bases = {c: ac.base_rate(c, cen) for c in armed}
-    readings = {c: ac.reading(arm, bases[c]["rate"]) for c, arm in armed.items()}
+    # AMENDMENT_2: the design effect is measured from this result's own estimable arms FIRST, then
+    # applied to any arm whose bootstrap is degenerate. Two passes, so a degenerate arm's reading
+    # never rests on an assumption about its own clustering.
+    deff = ac.measured_design_effect(armed)
+    readings = {c: ac.reading(arm, bases[c]["rate"], deff=deff["taken"]) for c, arm in armed.items()}
     entries = inputs()
     return {
         "result": RESULT,
@@ -345,6 +349,8 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
         "denominator_is_separate": ac.DENOMINATOR_IS_SEPARATE,
         "falsifier": ac.FALSIFIER,
         "amendment_1": ac.AMENDMENT_1,
+        "amendment_2": ac.AMENDMENT_2,
+        "measured_design_effect": deff,
         "confound_registered_before_any_count": ac.CONFOUND,
         "base_rate_rule": ac.BASE_RATE_RULE,
         "base_rate_is_not_uniform": ac.BASE_RATE_IS_NOT_UNIFORM,
