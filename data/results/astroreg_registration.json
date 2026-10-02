@@ -37,6 +37,57 @@
       "never": "an interval covering zero is never reported as 'no effect': it is 'no gain detected'. The distinction is the whole difference between an absent effect and an underpowered test"
     },
     "power_rule": "resample the K562 held-out loci with replacement up to 74 loci, at K562's own observed gain, and report the share of resamples whose interval excludes zero. Classes from S8, fixed here: at or above 0.8 the test is confirmatory; 0.5 to 0.8 it is exploratory and is labelled so in every quote of it; below 0.5 the test is REFUSED and not run. The figure is computed before any astrocyte pair is scored, so it cannot be chosen after an outcome",
+    "power_amendment_1": "the first power figure (0.96) was optimistic in two independent ways and is superseded, not revised. (a) PREVALENCE. It resampled K562 at K562's prevalence, 114 positives in 1,744 pairs = 6.5%. The astrocyte test runs at 133 in 4,580 = 2.9%, less than half. An AUPRC gain is prevalence-dependent -- both the attainable gain and its spread move with the positive rate -- so a figure computed at 6.5% does not describe a test run at 2.9%. Each resample is therefore matched to the astrocyte prevalence by downsampling its POSITIVES, keeping every negative, which is the direction that cannot invent data. (b) EFFECT SIZE. It assumed the full K562 gain transfers, the most favourable assumption available. Power is therefore also reported at 0.5x and 0.25x, by shrinking the deletion arm's score toward the no-deletion arm, score(k) = without + k * (with - without), and the ACHIEVED gain is reported at each k so that the attenuation is visible rather than asserted. The S8 class is set by the prevalence-matched figure at the FULL effect, and the 0.5x figure travels beside it in every quote of the class. Below 0.5 the test is refused and nothing is spent. This method was registered before it was run",
+    "astrocyte_prevalence": 0.029039301310043668,
+    "k562_prevalence_note": "K562's own prevalence is computed from the covered held-out K562 pairs at run time and reported beside the astrocyte figure, so the size of the mismatch is on the record and not implied",
+    "attenuations_reported": [
+      1.0,
+      0.5,
+      0.25
+    ],
+    "attenuation_limitation": "the attenuation reduces the achieved gain as intended, but it does NOT answer the question it was asked. Shrinking the deletion arm toward the no-deletion arm scales the score separation, and the cluster bootstrap's spread scales with it, so the signal-to-noise ratio is close to preserved and the share of intervals excluding zero stays nearly flat across 1x, 0.5x and 0.25x even though the median achieved gain falls. The arm therefore shows that the DETECTABILITY of a proportionally smaller separation is similar; it does NOT show that power survives a weaker true effect against unchanged measurement noise, which is what a conventional effect-size sensitivity means. The 0.5x share may not be quoted as power at half the effect. A scheme that held the noise fixed while lowering the signal would be needed, and is not registered or run here",
+    "track_roster_rule": "the astrocyte deletion value uses the frozen K562 rule UNCHANGED -- whatever the legacy per-cell-name collapse did for K562, it does for astrocyte -- because the frozen K562 values came through that same rule and the two definitions must match. Whether `astrocyte` is one AlphaGenome track or several is not known at registration time: the cache records a winning track name, not the roster. So the FULL astrocyte track roster from the first response is written to the result BEFORE any pair is scored. If it is several tracks, that fact is recorded; it is not resolved by a new rule invented after the data are in view",
+    "activity_inputs": {
+      "h3k27ac": {
+        "file_accession": "ENCFF970DKF",
+        "experiment": "ENCSR000AOQ",
+        "assay": "ChIP-seq",
+        "target": "H3K27ac-human",
+        "biosample": "Homo sapiens astrocyte",
+        "output_type": "replicated peaks",
+        "file_type": "bed narrowPeak",
+        "assembly": "GRCh38",
+        "status": "released",
+        "date_created": "2020-09-30T04:40:52.048936+00:00",
+        "portal_md5sum": "67285e9f88b12069df30875dbfe016d3",
+        "portal_file_size": 1639983,
+        "biological_replicates": [
+          1,
+          2
+        ],
+        "local_derivation": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr*.bed.gz, 24 chromosomes, each carrying the accession in its own first line"
+      },
+      "dnase": {
+        "file_accession": "ENCFF874OPW",
+        "experiment": "ENCSR000EPM",
+        "assay": "DNase-seq",
+        "target": null,
+        "biosample": "Homo sapiens astrocyte",
+        "output_type": "peaks",
+        "file_type": "bed narrowPeak",
+        "assembly": "GRCh38",
+        "status": "released",
+        "date_created": "2020-11-18T18:31:31.509548+00:00",
+        "portal_md5sum": "12869af50a461f22f4101a7bde0fe12d",
+        "portal_file_size": 3221892,
+        "biological_replicates": [
+          1
+        ],
+        "local_derivation": "data/results/dnase_astrocyte_chr*.bed.gz, 24 chromosomes, each carrying the accession in its own first line"
+      },
+      "correction": "an earlier left-undone item of this lane said these files carried no accession anywhere in the repository. That was wrong: each per-chromosome file records its ENCODE accession in its own first line. What was missing was a manifest entry, not the provenance",
+      "why_it_matters": "the activity term is half the model: 'activity + distance' is one of the two arms the gain is a difference between, so an unprovenanced activity input would leave the comparison unauditable on the side that is not even being tested"
+    },
     "same_code_path": "the astrocyte deletion value is computed by exactly the function that produced the frozen K562 values: crispri.annotate with `cells` extended to include astrocyte, nothing else changed, weights frozen. crispri._annotate_one reaches the deletion features through `if p.cell in cells`, so `cells` is a membership gate and nothing more: extending the tuple cannot alter the value of any pair whose cell was already in it. That is why adding astrocyte leaves every K562 pair untouched, and the identity check recomputes 20 K562 pairs through the extended path to show it rather than assert it",
     "exposure": [
       "the screen's labels have never been read here: established by grep over docs/, genomeos/, scripts/, tests/ and the knowledge READMEs for Voineagu, AstroREG, PsychENCODE, EGrf, CROP-seq, NHA, the DOI stem and PMID 41413662, with no hit, and the study is absent from the project's CRISPRi exposure ledger",
@@ -332,11 +383,15 @@
   },
   "power": {
     "method": "resample the K562 held-out loci with replacement up to 74 loci, at K562's own observed gain, and report the share of resamples whose interval excludes zero. Classes from S8, fixed here: at or above 0.8 the test is confirmatory; 0.5 to 0.8 it is exploratory and is labelled so in every quote of it; below 0.5 the test is REFUSED and not run. The figure is computed before any astrocyte pair is scored, so it cannot be chosen after an outcome",
+    "amendment_1": "the first power figure (0.96) was optimistic in two independent ways and is superseded, not revised. (a) PREVALENCE. It resampled K562 at K562's prevalence, 114 positives in 1,744 pairs = 6.5%. The astrocyte test runs at 133 in 4,580 = 2.9%, less than half. An AUPRC gain is prevalence-dependent -- both the attainable gain and its spread move with the positive rate -- so a figure computed at 6.5% does not describe a test run at 2.9%. Each resample is therefore matched to the astrocyte prevalence by downsampling its POSITIVES, keeping every negative, which is the direction that cannot invent data. (b) EFFECT SIZE. It assumed the full K562 gain transfers, the most favourable assumption available. Power is therefore also reported at 0.5x and 0.25x, by shrinking the deletion arm's score toward the no-deletion arm, score(k) = without + k * (with - without), and the ACHIEVED gain is reported at each k so that the attenuation is visible rather than asserted. The S8 class is set by the prevalence-matched figure at the FULL effect, and the 0.5x figure travels beside it in every quote of the class. Below 0.5 the test is refused and nothing is spent. This method was registered before it was run",
     "k562_scope": "held-out K562",
     "k562_pairs": 1744,
     "k562_positives": 114,
+    "k562_prevalence": 0.06536697247706422,
+    "astrocyte_prevalence_target": 0.029039301310043668,
+    "prevalence_mismatch_ratio": 2.250982961992136,
     "k562_independent_loci": 136,
-    "k562_observed_gain": {
+    "k562_observed_gain_at_k562_prevalence": {
       "point": 0.14074586141954792,
       "clusters": 136,
       "requested_draws": 2000,
@@ -350,12 +405,54 @@
     },
     "resampled_to_loci": 74,
     "outer_draws": 200,
-    "usable_outer_draws": 200,
-    "intervals_excluding_zero": 192,
+    "by_attenuation": {
+      "1x": {
+        "attenuation": 1.0,
+        "share_of_resamples_excluding_zero": 0.79,
+        "usable_outer_draws": 200,
+        "intervals_excluding_zero": 158,
+        "median_achieved_gain": 0.1754094761471761,
+        "mean_positives_kept": 26.53,
+        "mean_pairs_kept": 913.01,
+        "achieved_prevalence": 0.029057732116844284
+      },
+      "0.5x": {
+        "attenuation": 0.5,
+        "share_of_resamples_excluding_zero": 0.81,
+        "usable_outer_draws": 200,
+        "intervals_excluding_zero": 162,
+        "median_achieved_gain": 0.14530554082101732,
+        "mean_positives_kept": 26.53,
+        "mean_pairs_kept": 913.01,
+        "achieved_prevalence": 0.029057732116844284
+      },
+      "0.25x": {
+        "attenuation": 0.25,
+        "share_of_resamples_excluding_zero": 0.8,
+        "usable_outer_draws": 200,
+        "intervals_excluding_zero": 160,
+        "median_achieved_gain": 0.10399563644281085,
+        "mean_positives_kept": 26.53,
+        "mean_pairs_kept": 913.01,
+        "achieved_prevalence": 0.029057732116844284
+      }
+    },
+    "class_set_by": "the prevalence-matched figure at the full effect (1x)",
     "verdict": {
-      "share": 0.96,
-      "class": "confirmatory",
-      "run": true
+      "share": 0.79,
+      "class": "exploratory",
+      "run": true,
+      "label_required": "exploratory, and labelled so in every quote of it"
+    },
+    "travels_beside_the_class": {
+      "0.5x_share": 0.81,
+      "rule": "the 0.5x figure travels beside the class in every quote of it"
+    },
+    "attenuation_limitation": "the attenuation reduces the achieved gain as intended, but it does NOT answer the question it was asked. Shrinking the deletion arm toward the no-deletion arm scales the score separation, and the cluster bootstrap's spread scales with it, so the signal-to-noise ratio is close to preserved and the share of intervals excluding zero stays nearly flat across 1x, 0.5x and 0.25x even though the median achieved gain falls. The arm therefore shows that the DETECTABILITY of a proportionally smaller separation is similar; it does NOT show that power survives a weaker true effect against unchanged measurement noise, which is what a conventional effect-size sensitivity means. The 0.5x share may not be quoted as power at half the effect. A scheme that held the noise fixed while lowering the signal would be needed, and is not registered or run here",
+    "attenuation_shares_are_flat": "the three shares sit within a few points of one another while the median achieved gain falls, which is the limitation above showing itself in the numbers, not a finding that power is insensitive to effect size",
+    "superseded": {
+      "earlier_share": 0.96,
+      "why": "computed at K562's own prevalence of 6.5% and at the full K562 gain; it does not describe a test run at 2.9% prevalence"
     },
     "alphagenome_requests": 0
   },
@@ -455,12 +552,23 @@
       "k562": "already-read development evidence, used only for the identity check and the power figure"
     },
     "code_cleanliness": {
-      "git_sha": "dd5a223dd93eb447b2af1b23a9418a16ad18573e",
-      "dirty": false,
+      "git_sha": "0eb05eb48af529e2a7e3db6692db20d5a6a8c75a",
+      "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
-      "foreign_uncommitted_code": [],
-      "foreign_uncommitted_code_on_the_counting_path": [],
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/parser.py",
+        "scripts/context_evidence_census.py",
+        "scripts/context_evidence_register.py",
+        "tests/test_context_evidence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [
+        "genomeos/ir/model.py"
+      ],
       "counting_path": [
         "genomeos/__init__.py",
         "genomeos/attribution/__init__.py",
@@ -511,11 +619,27 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered any number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "dd5a223dd93eb447b2af1b23a9418a16ad18573e",
-      "dirty": false,
-      "dirty_code_paths": [],
-      "untracked_code_paths": [],
-      "dirty_result_paths": [],
+      "git_sha": "0eb05eb48af529e2a7e3db6692db20d5a6a8c75a",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/parser.py",
+        "scripts/context_evidence_census.py",
+        "scripts/context_evidence_register.py",
+        "tests/test_context_evidence.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/context_evidence.py",
+        "scripts/context_evidence_census.py",
+        "scripts/context_evidence_register.py",
+        "tests/test_context_evidence.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/astroreg_registration.json"
+      ],
       "argv": [
         "scripts/astroreg_register.py"
       ],
