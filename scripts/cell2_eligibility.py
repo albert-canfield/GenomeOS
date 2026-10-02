@@ -19,7 +19,6 @@ data/results/crispri_published.json (second_cell_type.cost), not re-derived here
 
 from __future__ import annotations
 
-import ast
 import json
 import sys
 from pathlib import Path
@@ -36,80 +35,17 @@ PUBLISHED = Path("data/results/crispri_published.json")
 #: The files this lane wrote, so the stamp can say which uncommitted code is somebody else's. Several
 #: sessions work in this one checkout, so a stamp may be dirty through no act of this lane; a referee
 #: can accept a named foreign file that the counting path does not import, but not a bare dirty flag.
+#: This script, as the entry whose transitive import closure is the counting path of its results
+#: (genomeos.manifest.counting_path, the one implementation). Named rather than derived from
+#: __file__ so the closure is the same however the script is invoked.
+ENTRY = "scripts/cell2_eligibility.py"
+
 OWN_CODE = (
     "genomeos/attribution/cell2.py",
     "scripts/cell2_eligibility.py",
     "tests/test_cell2_eligibility.py",
 )
-#: The repository's own package, for computing the counting path rather than listing it by hand.
-PACKAGE = "genomeos"
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def counting_path(entry: Path | None = None) -> list[str]:
-    """Every module of this repository that the entry script can reach by import, computed as the
-    transitive closure of its import statements. A hand-written list cannot be checked and goes stale;
-    this is read from the syntax of the files themselves at write time."""
-    entry = entry or Path(__file__).resolve()
-    seen: dict[str, Path] = {}
-    queue = [entry]
-    while queue:
-        path = queue.pop()
-        rel = str(path.relative_to(ROOT))
-        if rel in seen:
-            continue
-        seen[rel] = path
-        try:
-            tree = ast.parse(path.read_text())
-        except (OSError, SyntaxError):
-            continue
-        names: set[str] = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                names.update(a.name for a in node.names)
-            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
-                names.add(node.module)
-                names.update(f"{node.module}.{a.name}" for a in node.names)
-        for name in names:
-            if not (name == PACKAGE or name.startswith(PACKAGE + ".")):
-                continue
-            parts = name.split(".")
-            for candidate in (
-                ROOT.joinpath(*parts).with_suffix(".py"),
-                ROOT.joinpath(*parts, "__init__.py"),
-            ):
-                if candidate.is_file():
-                    queue.append(candidate)
-    return sorted(seen)
-
-
-def code_cleanliness() -> dict:
-    """Which uncommitted code the stamp names, split into this lane's and other lanes', and whether any
-    of it is on the counting path. Read from git and from the imports at write time, not asserted."""
-    rev = mf.code_revision()
-    path = counting_path()
-    dirty = list(rev["dirty_code_paths"])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev["git_sha"],
-        "dirty": rev["dirty"],
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "counting_path_is_computed": (
-            "the transitive import closure of this script over the repository's own package, computed "
-            "from the files' import statements at write time, not a hand-written list"
-        ),
-        "note": (
-            "several sessions work in this one checkout. A file listed under foreign_uncommitted_code "
-            "belongs to another lane; this lane did not write it and did not commit it. The counting "
-            "path is the computed closure above, so a foreign file outside it cannot have entered the "
-            "count, and foreign_uncommitted_code_on_the_counting_path names any that could"
-        ),
-    }
 
 
 def quoted_cost() -> dict:
@@ -377,7 +313,7 @@ def manifest(heldout: list[crispri.Pair]) -> dict:
         "partitions": {
             "heldout": "the 4,378 valid held-out pairs across five cell types; the only pairs read here"
         },
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
 
 
@@ -404,7 +340,7 @@ def main() -> int:
             "labels, coordinates, measured genes and cell types only, through genomeos.attribution."
             "crispri.load; no prediction, deletion value, model score or AUPRC was read or computed"
         ),
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
         "counts": counted,
         "prior_exposure": exposed,
         "power_gate": gate,

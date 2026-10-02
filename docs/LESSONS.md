@@ -952,3 +952,74 @@ wrong here" are the same count only where the measurement said something at ever
 place. Both errors above survived review for hours because the arithmetic was correct;
 what was wrong was the noun.
 
+
+## Ten copies of one function, and nothing comparing them (2026-10-02)
+
+`result_manifest.code_cleanliness` is what every published result says about which code
+was uncommitted when its numbers were written: which files the writing lane had not
+committed, which files other lanes had not committed, and whether any of those lay on
+the counting path — the import closure the result's figures could have been read
+through. Thirty blocks in `data/results` carry it.
+
+It was copy-pasted into **ten** files, and the import closure behind it into **eight**.
+Nothing compared the copies. Run against the same entry script on the same tree, they
+gave **three different answers**:
+
+| copies | paths | what they followed |
+|---|---|---|
+| six | 41 | only the `genomeos` package |
+| `crispri_published_v2`, `crispri_benchmark_v2` | 68 | also `scripts.*` and each parent `__init__.py` |
+| `cell2_eligibility` | 44 | the package, with a plain `Path.is_file()` |
+
+Two of the three were wrong in ways the copies hid from each other.
+
+**`data/results/cell2_eligibility.json` publishes three paths that name no file.**
+`genomeos/genome/Genome.py`, `genomeos/genome/Annotation.py` and
+`genomeos/knowledge/Reactome.py` are the *classes* those modules export; the files are
+`genome.py`, `annotation.py` and `reactome.py`. `scripts/cell2_eligibility.py` was the
+one copy that never took the cd263bc fix, so it asked `Path.is_file()` instead of
+matching each path component against what its directory actually lists — and on this
+Mac's case-insensitive APFS the answer was yes. That result's counting path is 45
+entries here and 42 where the filesystem is case-sensitive, and a counting-path
+difference is a **real** difference, not an environment field
+(`tests/test_manifest_rebuild_environment.py`). Its recorded "0 differences" rebuild was
+run on the case-insensitive machine.
+
+**A file whose code does enter the numbers was reported as off the path.**
+`scripts/placement_cause_198.py` reaches `scripts/response_map_coverage.py` through
+`sys.path.insert(0, str(ROOT / "scripts"))` and reuses its closure;
+`response_map_coverage.attaches_to` is what defines the 198 the result is about. Its
+published counting path of 45 entries did not name that file. So the block's own note —
+a foreign file outside the counting path cannot have entered the count — did not cover
+it. **No copy caught this, including the broad one.** Resolving bare imports against the
+directories the source literally puts on `sys.path`, as well as the repository root, is
+what does.
+
+**What was not wrong, and this bound is the point.** The 24 blocks written by the narrow
+copies **under-state** their counting path, but their reported assurance still holds on
+their recorded facts. Measured by an over-approximating test across all 30 published
+blocks: **zero** has a `foreign_uncommitted_code` entry that falls inside the broad
+closure but outside the narrow one. So no published
+`foreign_uncommitted_code_on_the_counting_path` value is wrong, and nothing published
+has to be withdrawn. The narrow copies also still reproduce their published lengths
+exactly, so this was divergence between algorithms and never drift over time.
+
+**The fix, and the rule.** One `counting_path` and one `code_cleanliness` in
+`genomeos/manifest.py`, beside `code_revision` and `stamp`, both taking what a caller
+may legitimately vary as arguments — the entry whose closure is the counting path, and
+the paths the writing lane is answerable for — and guessing neither. The unified closure
+is the broadest of the three, because a counting path is a claim about what *could* have
+entered a number and the superset is the honest one. `save_result` refuses a registry
+write whose manifest lacks the block, on the quarantine path that was already there; the
+legacy allowlist is respected, so a name written before the contract still warns rather
+than fails. No committed result was retro-edited: the two already written with the broad
+closure reproduce their published counting paths exactly (67 and 68), and the narrower
+entries pick the correct value up when their owning lanes next regenerate them.
+
+**The rule.** A figure that several files each compute their own way is not one figure,
+and the agreement nobody tests is the agreement that is not there. Where a number is
+published as a property of the repository, one function computes it and a test fails if
+a second definition appears — `tests/test_code_cleanliness_shared.py` fails if any file
+under `scripts/` or `genomeos/` defines its own `counting_path` or `code_cleanliness`.
+A re-export keeps a name that other writers already reach through; a `def` is a second
+implementation, and a second implementation is drift waiting to happen.

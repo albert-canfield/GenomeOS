@@ -40,7 +40,6 @@ would turn out to hold an explanation.
 from __future__ import annotations
 
 import argparse
-import ast
 import bisect
 import sys
 import time
@@ -62,9 +61,12 @@ from genomeos.results import RESULTS_DIR, save_result  # noqa: E402
 RESULT = "response_map_coverage"
 CHROMS = tuple(f"chr{c}" for c in [*range(1, 23), "X", "Y"])
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = "genomeos"
-
 #: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
+#: This script, as the entry whose transitive import closure is the counting path of its results
+#: (genomeos.manifest.counting_path, the one implementation). Named rather than derived from
+#: __file__ so the closure is the same however the script is invoked.
+ENTRY = "scripts/response_map_coverage.py"
+
 OWN_CODE = ("scripts/response_map_coverage.py", "tests/test_response_map_coverage.py")
 
 #: The result files the compiler reads per chromosome, as globs, so the manifest names its inputs
@@ -103,81 +105,6 @@ LOCUS_STATUS_RULE = (
 
 PERTURBATION_ASSAY = "crispri"
 REPORTER_ASSAYS = tuple(a for a in ms.ASSAYS if a != PERTURBATION_ASSAY)
-
-
-def _is_file_exactly(root: Path, parts: list[str]) -> bool:
-    """A file at `parts` below `root`, spelled as the directories spell it (carried from cd263bc)."""
-    node = root
-    for part in parts:
-        try:
-            if part not in {p.name for p in node.iterdir()}:
-                return False
-        except OSError:
-            return False
-        node = node / part
-    return node.is_file()
-
-
-def counting_path(entry: Path | None = None) -> list[str]:
-    """Every module of this repository the entry script can reach by import, as the transitive
-    closure of the import statements in the files themselves. A hand-written list cannot be checked."""
-    entry = entry or Path(__file__).resolve()
-    seen: dict[str, Path] = {}
-    queue = [entry]
-    while queue:
-        path = queue.pop()
-        rel = path.relative_to(ROOT).as_posix()
-        if rel in seen:
-            continue
-        seen[rel] = path
-        try:
-            tree = ast.parse(path.read_text())
-        except (OSError, SyntaxError):
-            continue
-        names: set[str] = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                names.update(a.name for a in node.names)
-            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
-                names.add(node.module)
-                names.update(f"{node.module}.{a.name}" for a in node.names)
-        for name in names:
-            if not (name == PACKAGE or name.startswith(PACKAGE + ".")):
-                continue
-            parts = name.split(".")
-            for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
-                if _is_file_exactly(ROOT, candidate):
-                    queue.append(ROOT.joinpath(*candidate))
-    return sorted(seen)
-
-
-def code_cleanliness() -> dict[str, Any]:
-    """Which uncommitted code the stamp names, split into this lane's and other lanes', and whether
-    any of it is on the counting path. Read from git and from the imports at write time."""
-    rev = mf.code_revision()
-    path = counting_path()
-    dirty = list(rev["dirty_code_paths"])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev["git_sha"],
-        "dirty": rev["dirty"],
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "counting_path_is_computed": (
-            "the transitive import closure of this script over the repository's own package, "
-            "computed from the files' import statements at write time, not a hand-written list"
-        ),
-        "note": (
-            "several sessions work in this one checkout. A file listed under foreign_uncommitted_code "
-            "belongs to another lane; this lane did not write it and did not commit it. The counting "
-            "path is the computed closure above, so a foreign file outside it cannot have entered the "
-            "count, and foreign_uncommitted_code_on_the_counting_path names any that could"
-        ),
-    }
 
 
 def attaches_to(
@@ -459,7 +386,7 @@ def main() -> None:
             "from a sample, so no confidence interval is computed and none would mean anything here"
         ),
         "per_chromosome": per_chrom,
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
         "alphagenome_requests": 0,
         "money": "none: every input was already on disk",
         "seconds": round(time.time() - started, 1),
@@ -531,7 +458,7 @@ def main() -> None:
             "by_status": "which of the three inputs a pair, and a locus, has",
             "per_chromosome": "the counts of each chromosome, summing to the whole",
         },
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
     path = save_result(name, payload)
     print(f"{name}: {path}")

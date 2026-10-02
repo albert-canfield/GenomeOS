@@ -17,6 +17,7 @@ from typing import Any
 
 import pytest
 
+from genomeos import manifest as mf
 from genomeos.attribution import crispri
 from scripts import crispri_benchmark_v2 as v2
 
@@ -241,7 +242,7 @@ def test_the_unchanged_block_names_every_field_that_moved() -> None:
 
 
 def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path() -> None:
-    block = v2.code_cleanliness()
+    block = mf.code_cleanliness(v2.ENTRY, v2.OWN_CODE, v2.ROOT)
     assert block["counting_path_count"] == len(block["counting_path"]) > 1
     assert v2.ENTRY in block["counting_path"]
     assert "genomeos/attribution/crispri.py" in block["counting_path"]
@@ -258,14 +259,12 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
 
 
 def test_the_two_fields_the_rebuild_requires_are_present_under_their_exact_names() -> None:
-    block = v2.code_cleanliness()
+    block = mf.code_cleanliness(v2.ENTRY, v2.OWN_CODE, v2.ROOT)
     for field in ("own_code_is_committed", "foreign_uncommitted_code_on_the_counting_path"):
         assert field in block
 
 
 def test_the_manifest_states_the_interval_rules_and_no_model_request() -> None:
-    from genomeos import manifest as mf
-
     m = v2.manifest([], [])
     assert mf.validate({**m, "code": {"git_sha": "x", "dirty": False}}) == []
     p = m["parameters"]

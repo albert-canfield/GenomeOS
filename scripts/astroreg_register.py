@@ -18,7 +18,6 @@ K562 held-out pairs, whose deletion values are already in the local cache, so it
 
 from __future__ import annotations
 
-import ast
 import gzip
 import json
 import random
@@ -37,12 +36,16 @@ from genomeos.results import save_result  # noqa: E402
 
 RESULT = "astroreg_registration"
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = "genomeos"
 CACHE = Path("data/cache/fresh")
 TABLE3 = CACHE / "astro_MOESM5.xlsx"
 PAIR_SHEET = "3A_EnhancerGenePairDE"
 POWER_SHEET = "3F_PowerCalculations"
 IDENTITY_PAIRS = 20
+
+#: This script, as the entry whose transitive import closure is the counting path of its results
+#: (genomeos.manifest.counting_path, the one implementation). Named rather than derived from
+#: __file__ so the closure is the same however the script is invoked.
+ENTRY = "scripts/astroreg_register.py"
 
 OWN_CODE = (
     "genomeos/attribution/astroreg.py",
@@ -52,81 +55,6 @@ OWN_CODE = (
     "tests/test_astroreg.py",
     "tests/test_fresh_crispri.py",
 )
-
-
-def _is_file_exactly(root: Path, parts: list[str]) -> bool:
-    """A file at `parts` below `root`, spelled as the directories spell it (carried from cd263bc)."""
-    node = root
-    for part in parts:
-        try:
-            if part not in {p.name for p in node.iterdir()}:
-                return False
-        except OSError:
-            return False
-        node = node / part
-    return node.is_file()
-
-
-def counting_path(entry: Path | None = None) -> list[str]:
-    """The transitive import closure of this script over the repository's own package, from the
-    files' own import statements. A hand-written list cannot be checked and goes stale."""
-    entry = entry or Path(__file__).resolve()
-    seen: dict[str, Path] = {}
-    queue = [entry]
-    while queue:
-        path = queue.pop()
-        rel = str(path.relative_to(ROOT))
-        if rel in seen:
-            continue
-        seen[rel] = path
-        try:
-            tree = ast.parse(path.read_text())
-        except (OSError, SyntaxError):
-            continue
-        names: set[str] = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                names.update(a.name for a in node.names)
-            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
-                names.add(node.module)
-                names.update(f"{node.module}.{a.name}" for a in node.names)
-        for name in names:
-            if not (name == PACKAGE or name.startswith(PACKAGE + ".")):
-                continue
-            parts = name.split(".")
-            for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
-                if _is_file_exactly(ROOT, candidate):
-                    queue.append(ROOT.joinpath(*candidate))
-    return sorted(seen)
-
-
-def code_cleanliness() -> dict:
-    rev = mf.code_revision()
-    path = counting_path()
-    dirty = list(rev["dirty_code_paths"])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev["git_sha"],
-        "dirty": rev["dirty"],
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "counting_path_is_computed": (
-            "the transitive import closure of this script over the repository's own package, "
-            "computed from the files' import statements at write time; every path component is "
-            "matched against what its directory actually lists, so the closure is the same on a "
-            "case-sensitive filesystem (carried from cd263bc)"
-        ),
-        "note": (
-            "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs "
-            "to another lane; this lane did not write it and did not commit it. The counting path is "
-            "the computed closure above, so a foreign file outside it cannot have entered any number "
-            "here, and foreign_uncommitted_code_on_the_counting_path names any that could"
-        ),
-    }
 
 
 # ---------------------------------------------------------------- the screen's pairs and labels
@@ -613,7 +541,7 @@ def manifest(pairs: list[dict]) -> dict:
             "k562": "already-read development evidence, used only for the identity check and the "
             "power figure",
         },
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
 
 

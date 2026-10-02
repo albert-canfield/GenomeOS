@@ -238,7 +238,10 @@ def main() -> None:
         "independence_and_exposure": dict(re2g.INDEPENDENCE),
         "falsifier": re2g.SECOND_REGISTRATION["falsifier"],
         "registration_unchanged": paired.registration_unchanged(),
-        "code_cleanliness": paired.code_cleanliness(),
+        # This script's OWN import closure, not re2g_paired's: the lane's code list is shared
+        # (paired.OWN_CODE names every file of it) but a counting path is a claim about
+        # what could have entered THIS result, so it is computed from this entry.
+        "code_cleanliness": mf.code_cleanliness("scripts/re2g_likeforlike.py", paired.OWN_CODE, paired.ROOT),
         "alphagenome_requests": 0,
     }
     payload["result_manifest"] = {

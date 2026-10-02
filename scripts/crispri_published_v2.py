@@ -48,12 +48,10 @@ sides; the lists that merely describe the tree the run happened in are its envir
 
 from __future__ import annotations
 
-import ast
 import json
 import subprocess
 import sys
 import time
-from collections import deque
 from pathlib import Path
 from typing import Any
 
@@ -115,125 +113,6 @@ WITHHELD_INTERVAL = (
 
 
 # --- the import closure of this script, computed rather than listed ------------------------------
-
-
-def _module_files(module: str, root: Path) -> list[str]:
-    """The repository files a dotted module name reads when it is imported: the module itself and the
-    `__init__.py` of every package above it. Empty for a module that is not in this repository."""
-    parts = module.split(".")
-    found: list[str] = [
-        "/".join([*parts[:i], "__init__.py"])
-        for i in range(1, len(parts))
-        if _is_file_exactly(root, [*parts[:i], "__init__.py"])
-    ]
-    for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
-        if _is_file_exactly(root, candidate):
-            found.append("/".join(candidate))
-            break
-    return found
-
-
-def _is_file_exactly(root: Path, parts: list[str]) -> bool:
-    """A file at `parts` below `root`, spelled as the directories spell it.
-
-    The case matters here. `Path.is_file` on a case-insensitive filesystem answers yes for
-    `genomeos/genome/Genome.py` when only `genome.py` is there, so `from genomeos.genome import
-    Genome` — a class, not a module — would otherwise put a file that does not exist on the closure,
-    and the closure would differ between this machine and a case-sensitive one.
-    """
-    node = root
-    for part in parts:
-        try:
-            if part not in {p.name for p in node.iterdir()}:
-                return False
-        except OSError:
-            return False
-        node = node / part
-    return node.is_file()
-
-
-def _imported_modules(path: Path, root: Path) -> list[str]:
-    """Every dotted module name one file imports, with relative imports resolved against its package.
-
-    A `from X import a, b` contributes `X` and also `X.a` and `X.b`, because the name after `import`
-    may itself be a submodule; `_module_files` keeps only the ones that are files in this repository.
-    """
-    package = list(path.relative_to(root).with_suffix("").parts[:-1])
-    out: list[str] = []
-    for node in ast.walk(ast.parse(path.read_text())):
-        if isinstance(node, ast.Import):
-            out.extend(a.name for a in node.names)
-        elif isinstance(node, ast.ImportFrom):
-            if node.level:
-                base = package[: len(package) - (node.level - 1)]
-                prefix = ".".join([*base, *([node.module] if node.module else [])])
-            else:
-                prefix = node.module or ""
-            if prefix:
-                out.append(prefix)
-                out.extend(f"{prefix}.{a.name}" for a in node.names)
-    return out
-
-
-def import_closure(entry: str = ENTRY, root: Path = ROOT) -> list[str]:
-    """Every file in this repository that `entry` imports, directly or at any remove.
-
-    Found by parsing the import statements, not by importing: the answer is then the same in any
-    checkout of the same revision, which is what lets a rebuild in a clean worktree reproduce it.
-    Modules outside the repository (the standard library, the dependencies) are not on the list.
-    """
-    seen = {entry}
-    queue = deque([entry])
-    while queue:
-        rel = queue.popleft()
-        path = root / rel
-        if not path.is_file():
-            continue
-        for module in _imported_modules(path, root):
-            for f in _module_files(module, root):
-                if f not in seen:
-                    seen.add(f)
-                    queue.append(f)
-    return sorted(seen)
-
-
-def code_cleanliness(root: Path = ROOT) -> dict[str, Any]:
-    """Which uncommitted code this shared checkout held, split into this lane's and other lanes', and
-    whether any of it is on the counting path. Read from git and from the imports, never asserted.
-
-    The field names are the convention `scripts/cell2_eligibility.py` set, so the rebuild's
-    `ENVIRONMENT_FIELDS` and `MUST_HOLD` land on the right paths: the lists that describe the tree a
-    run happened in may take their clean-worktree values, while `own_code_is_committed` and
-    `foreign_uncommitted_code_on_the_counting_path` must hold on both sides, so the exemption can
-    never excuse a result that no commit reproduces.
-    """
-    rev = mf.code_revision(root)
-    path = import_closure(root=root)
-    dirty = list(rev.get("dirty_code_paths") or [])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev.get("git_sha"),
-        "dirty": rev.get("dirty"),
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "counting_path_count": len(path),
-        "counting_path_is_computed": (
-            "the transitive import closure of this script, computed from the files' import statements "
-            "at write time (import_closure); it follows scripts.* as well as the package, resolves "
-            "relative imports, and matches every path component against what its directory lists, so "
-            "a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand list"
-        ),
-        "note": (
-            "several sessions work in this one checkout. A file under foreign_uncommitted_code belongs "
-            "to another lane; this lane did not write it and did not commit it. The counting path is "
-            "the computed closure above, so a foreign file outside it cannot have entered a number "
-            "here, and foreign_uncommitted_code_on_the_counting_path names any that could"
-        ),
-    }
 
 
 # --- the one block that is carried rather than recomputed ----------------------------------------
@@ -596,7 +475,7 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair]) -> dict[
         "gain_where_unavailable": crispri.UNAVAILABLE_GAIN,
         "carried_block": {"key": CARRIED_KEY, "from": OLD, "git_sha": CARRIED_SHA, "rerun": False},
     }
-    m["code_cleanliness"] = code_cleanliness()
+    m["code_cleanliness"] = mf.code_cleanliness(ENTRY, OWN_CODE, ROOT)
     m["supersedes"] = {
         "file": OLD,
         "date": OLD_DATE,

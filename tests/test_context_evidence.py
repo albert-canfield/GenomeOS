@@ -388,15 +388,21 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
 
 def test_the_census_script_s_own_closure_is_the_module_s_closure():
     """The census was written with its own copy of the closure, before the module had one, and the
-    result it has in the registry was stamped with that copy. The two must stay the same reading."""
+    result it has in the registry was stamped with that copy. The two must stay the same reading.
+
+    Since 2026-10-02 they are the same reading by construction: there is one implementation
+    (genomeos/manifest.py) and the census calls it, so the copy that could disagree is gone. The
+    agreement is asserted here as identity rather than as equal output, which is the stronger claim.
+    """
     import importlib.util
 
     spec = importlib.util.spec_from_file_location("ce_census", "scripts/context_evidence_census.py")
     census = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(census)
+    assert not hasattr(census, "counting_path"), "the census must not hold a second copy of the closure"
+    assert census.ENTRY == "scripts/context_evidence_census.py"
     entry = Path("scripts/context_evidence_census.py").resolve()
-    assert census.counting_path(entry) == ce.counting_path(entry)
-    theirs = census.code_cleanliness()
+    theirs = ce.code_cleanliness(census.ENTRY, census.OWN_CODE)
     ours = ce.code_cleanliness(entry, census.OWN_CODE)
     assert theirs["counting_path"] == ours["counting_path"]
     assert theirs["own_code_is_committed"] == ours["own_code_is_committed"]

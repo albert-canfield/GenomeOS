@@ -329,10 +329,6 @@ def _pins_or_says_why(d: Any) -> bool:
 # reaches it through `sys.path.insert(0, str(ROOT / "scripts"))`, its code does enter the numbers, and
 # every earlier copy reported it as off the path and therefore harmless.
 
-#: Paths under these roots are the repository's own code for the closure (manifest.CODE_ROOTS covers
-#: what makes a stamp dirty; this is what a closure may follow into).
-_CLOSURE_ROOTS = ("genomeos/", "scripts/", "tests/")
-
 
 def _is_file_exactly(root: Path, parts: Sequence[str]) -> bool:
     """A file at `parts` below `root`, spelled as the directories spell it (carried from cd263bc).
@@ -486,7 +482,7 @@ def _module_files(module: str, root: Path, search: str) -> list[str]:
         if _is_file_exactly(root, candidate):
             found.append("/".join(candidate))
             break
-    return [f for f in found if f.startswith(_CLOSURE_ROOTS) or "/" not in f]
+    return found
 
 
 def counting_path(entry: str | Path, root: Path | None = None) -> list[str]:

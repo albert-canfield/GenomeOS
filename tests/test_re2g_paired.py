@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from genomeos import manifest as mf
 from genomeos.attribution import crispri
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -111,20 +112,20 @@ def test_the_import_closure_keeps_the_case_the_directory_keeps(paired, tmp_path)
     """On a case-insensitive filesystem a bare is_file would accept pkg/Thing.py for pkg/thing.py."""
     (tmp_path / "pkg").mkdir()
     (tmp_path / "pkg" / "thing.py").write_text("")
-    assert paired._is_file_exactly(tmp_path, ["pkg", "thing.py"]) is True
-    assert paired._is_file_exactly(tmp_path, ["pkg", "Thing.py"]) is False
-    assert paired._is_file_exactly(tmp_path, ["pkg", "absent.py"]) is False
+    assert mf._is_file_exactly(tmp_path, ["pkg", "thing.py"]) is True
+    assert mf._is_file_exactly(tmp_path, ["pkg", "Thing.py"]) is False
+    assert mf._is_file_exactly(tmp_path, ["pkg", "absent.py"]) is False
 
 
 def test_the_computed_closure_lists_only_files_that_are_really_there(paired):
-    for rel in paired.counting_path():
+    for rel in mf.counting_path(paired.ENTRY, paired.ROOT):
         assert (ROOT / rel).is_file(), rel
         parts = rel.split("/")
-        assert paired._is_file_exactly(ROOT, parts), rel
+        assert mf._is_file_exactly(ROOT, parts), rel
 
 
 def test_the_closure_reaches_this_lanes_module_and_the_crispri_module(paired):
-    path = paired.counting_path()
+    path = mf.counting_path(paired.ENTRY, paired.ROOT)
     assert "genomeos/attribution/re2g.py" in path
     assert "genomeos/attribution/crispri.py" in path
 

@@ -210,7 +210,10 @@ def main() -> None:
         "pair_level_two_derivations": pair_level,
         "against_the_committed_headline": against_headline,
         "coverage_rules_reconciled": reconciliation,
-        "code_cleanliness": paired.code_cleanliness(),
+        # This script's OWN import closure, not re2g_paired's: the lane's code list is shared
+        # (paired.OWN_CODE names every file of it) but a counting path is a claim about
+        # what could have entered THIS result, so it is computed from this entry.
+        "code_cleanliness": mf.code_cleanliness("scripts/re2g_identity.py", paired.OWN_CODE, paired.ROOT),
         "verdict": (
             "the model scored by scripts/re2g_paired.py is the frozen headline model: no pair differs "
             "in either deletion column or in its score between two independent derivations, and every "

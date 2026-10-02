@@ -67,7 +67,7 @@ from genomeos.attribution import crispri  # noqa: E402
 from genomeos.attribution.measured import CRISPRI_SPLIT_OF  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 from scripts.crispri_published import invalid_connections  # noqa: E402
-from scripts.crispri_published_v2 import MISSING, at, import_closure  # noqa: E402
+from scripts.crispri_published_v2 import MISSING, at  # noqa: E402
 
 NAME = "crispri_benchmark_v2"
 ENTRY = "scripts/crispri_benchmark_v2.py"
@@ -268,42 +268,6 @@ INTERVAL_FIELDS = (
 # --- the shared checkout this run happened in ----------------------------------------------------
 
 
-def code_cleanliness(root: Path = ROOT) -> dict[str, Any]:
-    """Which uncommitted code this shared checkout held, split into this lane's and other lanes', and
-    whether any of it is on the counting path. Read from git and from the imports, never asserted.
-
-    The field names are the convention `scripts/cell2_eligibility.py` set and
-    `scripts/manifest_rebuild.py` matches, so `own_code_is_committed` and
-    `foreign_uncommitted_code_on_the_counting_path` must hold on both sides of a rebuild while the lists
-    that merely describe the tree a run happened in may take their clean-worktree values.
-    """
-    rev = mf.code_revision(root)
-    path = import_closure(ENTRY, root)
-    dirty = list(rev.get("dirty_code_paths") or [])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev.get("git_sha"),
-        "dirty": rev.get("dirty"),
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "counting_path_count": len(path),
-        "counting_path_is_computed": (
-            "the transitive import closure of this script, computed from the files' import statements at "
-            "write time (scripts.crispri_published_v2.import_closure); not a hand list"
-        ),
-        "note": (
-            "several sessions work in this one checkout. A file under foreign_uncommitted_code belongs to "
-            "another lane; this lane did not write it and did not commit it. A foreign file outside the "
-            "counting path cannot have entered a number here, and "
-            "foreign_uncommitted_code_on_the_counting_path names any that could"
-        ),
-    }
-
-
 # --- the committed result beside this one --------------------------------------------------------
 
 
@@ -496,7 +460,7 @@ def manifest(training: list[crispri.Pair], heldout: list[crispri.Pair]) -> dict[
             "(training_leave_chromosome_out, training_single_predictors)",
             "heldout": "evaluation only, frozen weights (heldout, heldout_elements_not_in_training)",
         },
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
         "supersedes": {
             "file": OLD,
             "date": OLD_DATE,

@@ -53,6 +53,11 @@ from genomeos.attribution import targets as tg  # noqa: E402
 from genomeos.results import RESULTS_DIR, save_result  # noqa: E402
 
 NAME = "placement_cause_198"
+#: This script, as the entry whose transitive import closure is the counting path of its results
+#: (genomeos.manifest.counting_path, the one implementation). Named rather than derived from
+#: __file__ so the closure is the same however the script is invoked.
+ENTRY = "scripts/placement_cause_198.py"
+
 OWN_CODE = ("scripts/placement_cause_198.py", "tests/test_placement_cause_198.py")
 
 # --------------------------------------------------------------------------------------------------
@@ -186,30 +191,6 @@ def widths(pairs: list[Any]) -> dict[str, Any]:
         "why_700": (
             "the widest registry element is 350 bp, so a tested interval wider than 700 bp cannot "
             "cover half of its own width with one registry element however it lies"
-        ),
-    }
-
-
-def code_cleanliness() -> dict[str, Any]:
-    """The uncommitted code the stamp names, split into this lane's and other lanes', and whether any
-    of it lies on this script's own import closure (`response_map_coverage.counting_path`, reused)."""
-    rev = mf.code_revision()
-    path = rmc.counting_path(Path(__file__).resolve())
-    dirty = list(rev["dirty_code_paths"])
-    own = [p for p in dirty if p in OWN_CODE]
-    foreign = [p for p in dirty if p not in OWN_CODE]
-    return {
-        "git_sha": rev["git_sha"],
-        "dirty": rev["dirty"],
-        "own_uncommitted_code": own,
-        "own_code_is_committed": not own,
-        "foreign_uncommitted_code": foreign,
-        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
-        "counting_path": path,
-        "note": (
-            "several sessions work in this one checkout. The counting path is the computed transitive "
-            "import closure of this script over the repository's own package, so a foreign file "
-            "outside it cannot have entered the count"
         ),
     }
 
@@ -624,7 +605,7 @@ def main() -> None:
                 "a difference a manifest rebuild reports is always a real one"
             ),
         },
-        "code_cleanliness": code_cleanliness(),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
     p = save_result(NAME, payload, manifest=manifest(swept_chroms))
     print("saved", p, flush=True)

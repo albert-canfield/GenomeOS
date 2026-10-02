@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import crispri  # noqa: E402
 from scripts import crispri_published_v2 as v2  # noqa: E402
 
@@ -201,7 +202,7 @@ def test_the_request_count_stays_zero() -> None:
 
 
 def test_the_closure_holds_the_entry_and_what_it_imports() -> None:
-    files = v2.import_closure()
+    files = mf.counting_path(v2.ENTRY, v2.ROOT)
     assert v2.ENTRY in files
     for expected in (
         "scripts/crispri_published.py",
@@ -218,17 +219,17 @@ def test_the_closure_reaches_an_import_two_steps_away() -> None:
     """crispri.py imports genomeos.genome.epigenome, which this script never names itself."""
     source = (ROOT / v2.ENTRY).read_text()
     assert "epigenome" not in source
-    assert "genomeos/genome/epigenome.py" in v2.import_closure()
+    assert "genomeos/genome/epigenome.py" in mf.counting_path(v2.ENTRY, v2.ROOT)
 
 
 def test_the_closure_is_sorted_and_free_of_duplicates() -> None:
-    files = v2.import_closure()
+    files = mf.counting_path(v2.ENTRY, v2.ROOT)
     assert files == sorted(files)
     assert len(files) == len(set(files))
 
 
 def test_the_closure_names_nothing_outside_the_repository() -> None:
-    for f in v2.import_closure():
+    for f in mf.counting_path(v2.ENTRY, v2.ROOT):
         assert not f.startswith("/")
         assert (ROOT / f).is_file(), f
         assert f.endswith(".py")
@@ -236,7 +237,7 @@ def test_the_closure_names_nothing_outside_the_repository() -> None:
 
 def test_a_class_imported_from_a_module_is_not_mistaken_for_a_file() -> None:
     """`from genomeos.genome import Genome` names a class; `Genome.py` is not a file in this tree."""
-    files = v2.import_closure()
+    files = mf.counting_path(v2.ENTRY, v2.ROOT)
     for not_a_file in ("genomeos/genome/Genome.py", "genomeos/genome/Annotation.py"):
         assert not_a_file not in files
     assert "genomeos/genome/genome.py" in files
@@ -249,7 +250,7 @@ def test_the_closure_keeps_the_case_the_directory_keeps(tmp_path: Path) -> None:
     (tmp_path / "pkg" / "__init__.py").write_text("")
     (tmp_path / "pkg" / "thing.py").write_text("class Thing:\n    pass\n")
     (tmp_path / "entry.py").write_text("from pkg.thing import Thing\nfrom pkg import Thing as T2\n")
-    assert v2.import_closure("entry.py", tmp_path) == ["entry.py", "pkg/__init__.py", "pkg/thing.py"]
+    assert mf.counting_path("entry.py", tmp_path) == ["entry.py", "pkg/__init__.py", "pkg/thing.py"]
 
 
 def test_the_closure_is_computed_not_listed(tmp_path: Path) -> None:
@@ -260,7 +261,7 @@ def test_the_closure_is_computed_not_listed(tmp_path: Path) -> None:
     (tmp_path / "pkg" / "a.py").write_text("from .b import thing\n")
     (tmp_path / "pkg" / "b.py").write_text("import os\n\nthing = 1\n")
     (tmp_path / "pkg" / "unused.py").write_text("raise AssertionError\n")
-    assert v2.import_closure("entry.py", tmp_path) == [
+    assert mf.counting_path("entry.py", tmp_path) == [
         "entry.py",
         "pkg/__init__.py",
         "pkg/a.py",
@@ -275,7 +276,7 @@ def test_a_relative_import_above_the_package_is_resolved(tmp_path: Path) -> None
     (tmp_path / "entry.py").write_text("from pkg.sub import leaf\n")
     (tmp_path / "pkg" / "sub" / "leaf.py").write_text("from ..top import x\n")
     (tmp_path / "pkg" / "top.py").write_text("x = 1\n")
-    assert v2.import_closure("entry.py", tmp_path) == [
+    assert mf.counting_path("entry.py", tmp_path) == [
         "entry.py",
         "pkg/__init__.py",
         "pkg/sub/__init__.py",
@@ -288,11 +289,11 @@ def test_a_cycle_does_not_stop_the_closure(tmp_path: Path) -> None:
     (tmp_path / "entry.py").write_text("import one\n")
     (tmp_path / "one.py").write_text("import two\n")
     (tmp_path / "two.py").write_text("import one\n")
-    assert v2.import_closure("entry.py", tmp_path) == ["entry.py", "one.py", "two.py"]
+    assert mf.counting_path("entry.py", tmp_path) == ["entry.py", "one.py", "two.py"]
 
 
 def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path() -> None:
-    block = v2.code_cleanliness()
+    block = mf.code_cleanliness(v2.ENTRY, v2.OWN_CODE, v2.ROOT)
     assert block["counting_path_count"] == len(block["counting_path"]) > 1
     assert v2.ENTRY in block["counting_path"]
     assert block["own_code_is_committed"] is True, (
@@ -310,7 +311,7 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
 
 def test_the_two_fields_the_rebuild_requires_are_present_under_their_exact_names() -> None:
     """scripts/manifest_rebuild.py MUST_HOLD matches these names at any depth, on both sides."""
-    block = v2.code_cleanliness()
+    block = mf.code_cleanliness(v2.ENTRY, v2.OWN_CODE, v2.ROOT)
     for field in ("own_code_is_committed", "foreign_uncommitted_code_on_the_counting_path"):
         assert field in block
     for field in ("dirty", "foreign_uncommitted_code", "git_sha"):
