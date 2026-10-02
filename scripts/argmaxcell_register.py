@@ -135,6 +135,8 @@ def payload() -> dict[str, Any]:
         "arms": list(ac.ARMS),
         "overlap_rule": ac.OVERLAP_RULE,
         "label_rule": ac.LABEL_RULE,
+        "alias_rule": ac.ALIAS_RULE,
+        "labels_for_each_arm": {c: list(ac.labels_for(c)) for c in ac.ARMS},
         "interval_is_binomial": ac.INTERVAL_IS_BINOMIAL,
         "grouping": ac.GROUPING,
         "counts_named_in_advance": list(ac.COUNTS_NAMED),

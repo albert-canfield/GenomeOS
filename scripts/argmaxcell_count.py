@@ -38,7 +38,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import argmaxcell as ac  # noqa: E402
-from genomeos.attribution import compile as cp  # noqa: E402
 from genomeos.attribution import crispri as cr  # noqa: E402
 
 RESULT = "argmaxcell"
@@ -82,7 +81,7 @@ def pairs_by_chromosome() -> tuple[dict[str, list[Any]], dict[str, int], dict[st
 def run(chroms: tuple[str, ...], arms: tuple[str, ...]) -> dict[str, Any]:
     """One streaming pass: the arms' elements, the second base rate and the peak RSS."""
     by_chrom, pairs_per_cell, per_table = pairs_by_chromosome()
-    armed = {c: ac.Arm(cell=c, label=cp.context(c)) for c in arms}
+    armed = {c: ac.Arm(cell=c) for c in arms}
     genome_labels: dict[str, int] = defaultdict(int)
     streamed = 0
     per_chrom: dict[str, dict[str, int]] = {}
@@ -120,10 +119,14 @@ def run(chroms: tuple[str, ...], arms: tuple[str, ...]) -> dict[str, Any]:
 
 def cross_arm(armed: dict[str, ac.Arm], cen: dict[str, Any]) -> dict[str, Any]:
     """`CROSS_ARM`: every arm's rate on every arm's cell, each column's base rate beside it."""
-    labels = {c: cp.context(c) for c in armed}
+    labels = {c: ac.labels_for(c) for c in armed}
     return {
         "columns": [
-            {"cell": c, "label": labels[c], "genome_wide_base_rate": ac.base_rate(c, cen)["rate"]}
+            {
+                "cell": c,
+                "labels": list(labels[c]),
+                "genome_wide_base_rate": ac.base_rate(c, cen)["rate"],
+            }
             for c in armed
         ],
         "rows": [
@@ -131,7 +134,11 @@ def cross_arm(armed: dict[str, ac.Arm], cen: dict[str, Any]) -> dict[str, Any]:
                 "arm": a,
                 "elements": arm.elements,
                 "rate_of_each_column": {
-                    c: (round(arm.labels.get(labels[c], 0) / arm.elements, 6) if arm.elements else None)
+                    c: (
+                        round(sum(arm.label_counts.get(x, 0) for x in labels[c]) / arm.elements, 6)
+                        if arm.elements
+                        else None
+                    )
                     for c in armed
                 },
             }
@@ -149,9 +156,13 @@ def second_base_rates(genome_labels: dict[str, int], arms: tuple[str, ...]) -> d
         "distinct_labels_seen": len(genome_labels),
         "per_arm": {
             c: {
-                "label": cp.context(c),
-                "elements_with_this_label": genome_labels.get(cp.context(c), 0),
-                "rate": round(genome_labels.get(cp.context(c), 0) / total, 6) if total else None,
+                "labels": list(ac.labels_for(c)),
+                "elements_with_this_label": sum(genome_labels.get(x, 0) for x in ac.labels_for(c)),
+                "rate": (
+                    round(sum(genome_labels.get(x, 0) for x in ac.labels_for(c)) / total, 6)
+                    if total
+                    else None
+                ),
             }
             for c in arms
         },
@@ -286,7 +297,7 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
         "per_arm": {
             c: {
                 "cell": c,
-                "label": arm.label,
+                "labels": list(arm.labels),
                 "pairs_in_cell": state["pairs_per_cell"].get(c, 0),
                 "pairs_of_this_arm_seen": arm.pairs,
                 "pairs_on_an_attributed_element": arm.pairs_on_an_element,
@@ -328,6 +339,7 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
         "pairs_per_cell_in_the_benchmark_tables": state["pairs_per_cell"],
         "verdict": verdict(armed, readings),
         "label_rule": ac.LABEL_RULE,
+        "alias_rule": ac.ALIAS_RULE,
         "overlap_rule": ac.OVERLAP_RULE,
         "interval_is_binomial": ac.INTERVAL_IS_BINOMIAL,
         "grouping": ac.GROUPING,

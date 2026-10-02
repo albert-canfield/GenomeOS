@@ -56,7 +56,7 @@ def test_base_rate_is_the_committed_census_over_its_own_denominator() -> None:
     must_be_committed(ac.CENSUS_RELATIVE)
     cen = ac.census()
     r = ac.base_rate("K562", cen)
-    assert r["label"] == "K562"
+    assert r["labels"] == ["K562"]
     assert r["rules_total"] == cen["rules"] == 440_589
     assert r["rules_with_this_label"] == 27_445
     assert r["rate"] == round(27_445 / 440_589, 6) == 0.062292
@@ -67,7 +67,7 @@ def test_base_rate_label_is_the_compilers_own_function() -> None:
     """A cell name is looked up under the label the compiler would have written, not under itself."""
     cen = ac.census()
     assert cp.context("IMR-90") == "IMR_90"
-    assert ac.base_rate("IMR-90", cen)["label"] == "IMR_90"
+    assert ac.base_rate("IMR-90", cen)["labels"] == ["IMR_90"]
     assert ac.base_rate("IMR-90", cen)["rules_with_this_label"] == 2_942
     # a label the census never saw is a rate of zero, not a KeyError
     assert ac.base_rate("a cell that does not exist", cen)["rules_with_this_label"] == 0
@@ -162,9 +162,9 @@ def test_the_ceiling_is_two_gibibytes() -> None:
 
 
 def _arm(n: int, k: int, cell: str = "K562") -> ac.Arm:
-    a = ac.Arm(cell=cell, label=cp.context(cell))
+    a = ac.Arm(cell=cell)
     for i in range(n):
-        a.element_label[f"e{i}"] = cp.context(cell) if i < k else "placenta"
+        a.element_label[f"e{i}"] = ac.labels_for(cell)[0] if i < k else "placenta"
     return a
 
 
@@ -257,7 +257,7 @@ def test_this_lane_edits_no_rule() -> None:
 
 def test_an_element_is_counted_once_however_many_genes_were_tested_near_it() -> None:
     """DENOMINATOR: the compiled cell belongs to the element, so pairs must not weight it."""
-    a = ac.Arm(cell="K562", label="K562")
+    a = ac.Arm(cell="K562")
     els = [(100, 200, "e1", "K562")]
     assert a.add(els) is True
     assert a.add(els) is True  # a second gene tested against the same element
@@ -266,22 +266,22 @@ def test_an_element_is_counted_once_however_many_genes_were_tested_near_it() -> 
 
 
 def test_a_pair_on_no_element_is_counted_and_adds_no_element() -> None:
-    a = ac.Arm(cell="K562", label="K562")
+    a = ac.Arm(cell="K562")
     assert a.add([]) is False
     assert a.pairs == 1 and a.pairs_on_an_element == 0 and a.elements == 0 and a.rate is None
 
 
 def test_the_label_tally_and_the_denominator_cannot_disagree() -> None:
-    a = ac.Arm(cell="K562", label="K562")
+    a = ac.Arm(cell="K562")
     a.add([(1, 2, "e1", "K562"), (3, 4, "e2", "placenta"), (5, 6, "e3", "HepG2")])
-    assert sum(a.labels.values()) == a.elements == 3
-    assert a.labels["K562"] == a.elements_matching == 1
+    assert sum(a.label_counts.values()) == a.elements == 3
+    assert a.label_counts["K562"] == a.elements_matching == 1
     assert a.rate == round(1 / 3, 6)
 
 
 def test_top_labels_sets_each_label_beside_its_own_genome_wide_base_rate() -> None:
     cen = ac.census()
-    a = ac.Arm(cell="K562", label="K562")
+    a = ac.Arm(cell="K562")
     a.add([(1, 2, "e1", "K562"), (3, 4, "e2", "K562"), (5, 6, "e3", "placenta")])
     rows = {r["label"]: r for r in ac.top_labels(a, cen)}
     assert rows["K562"]["elements"] == 2
@@ -297,3 +297,49 @@ def test_the_archive_check_reads_code_and_not_prose() -> None:
     # the check has teeth: a module that really called it would be caught
     assert "load_cached" in ac.names_used("import x\nx.load_cached('chr1', 'e')\n")
     assert "gzip" in ac.names_used("import gzip\n")
+
+
+# ---- the alias map, which is a correction and not a convenience -----------------------------------
+
+
+def test_the_jurkat_arm_is_matched_against_both_spellings_of_the_line() -> None:
+    """MEASURED name mismatch: the benchmark says `Jurkat`, the model's track carries the clone."""
+    cen = ac.census()
+    assert ac.labels_for("Jurkat") == ("Jurkat", "Jurkat__Clone_E6_1")
+    r = ac.base_rate("Jurkat", cen)
+    assert r["rules_per_label"] == {"Jurkat": 5, "Jurkat__Clone_E6_1": 1_127}
+    assert r["rules_with_this_label"] == 1_132
+    assert r["rate"] == round(1_132 / 440_589, 6)
+    assert r["ontology_terms"] == {"Jurkat": "EFO:0002796", "Jurkat__Clone_E6_1": "CLO:0007045"}
+    # the spelling the benchmark uses alone would have measured 5 of 1,132
+    assert (cen["per_cell"]["Jurkat"]["rules"], r["rules_with_this_label"]) == (5, 1_132)
+
+
+def test_the_arm_counts_an_element_under_either_jurkat_label() -> None:
+    a = ac.Arm(cell="Jurkat")
+    assert a.add([(1, 2, "e1", "Jurkat__Clone_E6_1")]) is True
+    assert a.add([(3, 4, "e2", "Jurkat")]) is True
+    assert a.add([(5, 6, "e3", "K562")]) is False
+    assert a.elements == 3 and a.elements_matching == 2
+
+
+def test_the_trio_members_are_not_merged_into_gm12878() -> None:
+    """GM12891 and GM12892 are other people of the same trio and carry their own terms."""
+    cen = ac.census()
+    assert ac.labels_for("GM12878") == ("GM12878",)
+    assert ac.base_rate("GM12878", cen)["rules_with_this_label"] == 6_406
+    for other in ("GM12891", "GM12892"):
+        assert other in cen["per_cell"]
+        assert other not in ac.labels_for("GM12878")
+    assert "would merge three people" in ac.ALIAS_RULE
+
+
+def test_the_arms_are_named_by_the_benchmarks_own_celltype_strings() -> None:
+    assert ac.ARMS == ("K562", "GM12878", "HCT116", "Jurkat", "WTC11")
+    for cell in ac.ARMS:
+        assert ac.labels_for(cell), cell
+
+
+def test_a_cell_with_no_entry_in_the_map_falls_back_to_one_label() -> None:
+    assert ac.labels_for("HepG2") == ("HepG2",)
+    assert ac.base_rate("HepG2", ac.census())["rules_with_this_label"] == 14_779

@@ -145,8 +145,46 @@ SECOND_BASE_RATE = (
     "difference and not reconciled away."
 )
 
-#: The arms, in the order they are reported. Every one is a cell a benchmark table measured in.
-ARMS = ("K562", "GM12878", "HCT116", "Jurkat Clone E6-1", "WTC11")
+#: The arms, in the order they are reported, named by the benchmark tables' own `CellType` string so
+#: a pair is found by the name its own table gives it. The five cell types of the two cached tables:
+#: K562 is the training table and one held-out arm, the other four are held out.
+ARMS = ("K562", "GM12878", "HCT116", "Jurkat", "WTC11")
+
+#: The compiled labels that name each arm's cell line, and the whole of the reason for the map.
+#:
+#: MEASURED, and it is a correction to a premise this lane held while writing the first draft of this
+#: module: the two sides of the comparison do not spell every cell line the same way. The benchmark's
+#: `CellType` for the Jurkat arm is `Jurkat`; the model's own track name for that line is recorded in
+#: the committed census under TWO labels, `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045) and
+#: `Jurkat` (5 rules, EFO:0002796), and `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045
+#: as the term the model's output_metadata carries for Jurkat. A single string equality would
+#: therefore have tested the arm against 5 of its 1,132 compiled rules and would have measured the
+#: spelling rather than the question. Both labels are in the Jurkat set and the base rate is their
+#: sum, so numerator and denominator share the set.
+#:
+#: Every other arm has exactly one label in the census. GM12891 and GM12892 are NOT in the GM12878
+#: set: they are different individuals of the same trio, carry their own ontology terms
+#: (EFO:0002785, EFO:0002786) and merging them would be merging three people.
+LABELS_FOR: dict[str, tuple[str, ...]] = {
+    "K562": ("K562",),
+    "GM12878": ("GM12878",),
+    "HCT116": ("HCT116",),
+    "Jurkat": ("Jurkat", "Jurkat__Clone_E6_1"),
+    "WTC11": ("WTC11",),
+}
+
+ALIAS_RULE = (
+    "An arm's cell is matched against the SET of compiled labels that name that cell line, not "
+    "against one string, and the same set fixes the base rate and the numerator so the two stay "
+    "comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has "
+    "two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), "
+    "because the benchmark spells the line `Jurkat` while the model's own track name carries the "
+    "clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's "
+    "output_metadata gives Jurkat. Testing one spelling would have measured the spelling. "
+    "GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of "
+    "the same trio with their own ontology terms, and merging them would merge three people. "
+    "A label the census does not carry contributes 0 rules and is reported as 0, never as absent."
+)
 
 # ---- the falsifier, stated before any count ----------------------------------------------------
 
@@ -341,7 +379,9 @@ EXPLORATION_PRECEDED_THIS = (
     "and the committed `data/results/context_evidence.json` for its `per_cell` block. From that "
     "last file it had SEEN the base rates before writing them down: K562 27,445/440,589 = 0.062292, "
     "HepG2 14,779 = 0.033544, GM12878 6,406 = 0.014540, IMR_90 2,942 = 0.006677, HCT116 594 = "
-    "0.001348, WTC11 96 = 0.000218, Jurkat 5 = 0.000011. It had seen NO observed rate, NO arm "
+    "0.001348, WTC11 96 = 0.000218, Jurkat 5 and Jurkat__Clone_E6_1 1,127 = 0.002569 together, "
+    "and it had checked for a second spelling of every arm's line in the census's own label list "
+    "before fixing LABELS_FOR. It had seen NO observed rate, NO arm "
     "denominator and NO element of any arm: not one CRISPRi pair had been joined to an element and "
     "not one element table had been opened when this was written. What this registration binds is "
     "the population, the denominator, the base rate and its formula, the falsifier, the confound "
@@ -379,21 +419,33 @@ def census(path: Path = CENSUS) -> dict[str, Any]:
     return d
 
 
+def labels_for(cell: str) -> tuple[str, ...]:
+    """`ALIAS_RULE`: the compiled labels that name one arm's cell line, the compiler's own spelling.
+
+    An arm not in LABELS_FOR falls back to `compile.context(cell)` alone, so the function is total
+    and a caller cannot get a silent empty set.
+    """
+    return LABELS_FOR.get(cell) or (cp.context(cell),)
+
+
 def base_rate(cell: str, d: dict[str, Any]) -> dict[str, Any]:
-    """`BASE_RATE_RULE`, applied. The label is the compiler's own, on both sides of the lookup."""
-    label = cp.context(cell)
-    row = (d.get("per_cell") or {}).get(label) or {}
-    rules = int(row.get("rules") or 0)
+    """`BASE_RATE_RULE` over `ALIAS_RULE`'s label set. The same set fixes the numerator."""
+    per_cell = d.get("per_cell") or {}
+    labels = labels_for(cell)
+    rows = {label: (per_cell.get(label) or {}) for label in labels}
+    rules = sum(int(r.get("rules") or 0) for r in rows.values())
     total = int(d["rules"])
     return {
         "cell": cell,
-        "label": label,
+        "labels": list(labels),
+        "rules_per_label": {label: int(r.get("rules") or 0) for label, r in rows.items()},
         "rules_with_this_label": rules,
         "rules_total": total,
         "rate": round(rules / total, 6),
         "how": BASE_RATE_RULE,
+        "alias_rule": ALIAS_RULE,
         "source": CENSUS_RELATIVE,
-        "ontology_term": row.get("ontology_term"),
+        "ontology_terms": {label: r.get("ontology_term") for label, r in rows.items()},
     }
 
 
@@ -570,14 +622,17 @@ class Arm:
     """
 
     cell: str
-    label: str
+    labels: tuple[str, ...] = ()
     pairs: int = 0
     pairs_on_an_element: int = 0
     pair_level_matching: int = 0
     element_label: dict[str, str] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        self.labels = tuple(self.labels) or labels_for(self.cell)
+
     def add(self, elements: list[tuple[int, int, str, str]]) -> bool:
-        """Record one pair's overlapping elements; True when any of them carries the arm's label."""
+        """Record one pair's overlapping elements; True when any carries one of the arm's labels."""
         self.pairs += 1
         if not elements:
             return False
@@ -585,7 +640,7 @@ class Arm:
         hit = False
         for _start, _end, eid, label in elements:
             self.element_label[eid] = label
-            hit = hit or label == self.label
+            hit = hit or label in self.labels
         if hit:
             self.pair_level_matching += 1
         return hit
@@ -596,10 +651,11 @@ class Arm:
 
     @property
     def elements_matching(self) -> int:
-        return sum(1 for v in self.element_label.values() if v == self.label)
+        return sum(1 for v in self.element_label.values() if v in self.labels)
 
     @property
-    def labels(self) -> dict[str, int]:
+    def label_counts(self) -> dict[str, int]:
+        """How many of this arm's elements carry each compiled label, the arm's whole distribution."""
         out: dict[str, int] = {}
         for v in self.element_label.values():
             out[v] = out.get(v, 0) + 1
@@ -676,7 +732,7 @@ def top_labels(arm: Arm, d: dict[str, Any], n: int = 10) -> list[dict[str, Any]]
     """The arm's most frequent compiled labels, each beside its own genome-wide base rate."""
     total = arm.elements or 1
     out = []
-    for label, count in sorted(arm.labels.items(), key=lambda kv: (-kv[1], kv[0]))[:n]:
+    for label, count in sorted(arm.label_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:n]:
         row = (d.get("per_cell") or {}).get(label) or {}
         bt = int(row.get("rules") or 0) / int(d["rules"])
         out.append(
