@@ -270,6 +270,19 @@ Plant something that **must** trip the check and something that **must not**, co
 both, delete the probe, and say in the commit message that this was done. A guard
 never shown to fire is not a guard.
 
+**And show what it PREVENTS, by removing it.** Where a guard is credited with protecting
+something, run the counterfactual: strip it from a copy and show the harm then happens. If the harm
+does not happen, the guard is a **diagnosis, not a protection**, and its comment, its commit message
+and any row that cites it must say so, with the measurement.
+
+The case this came from: `scripts/push_own.sh` retries a push only when the remote's new tip is an
+ancestor of the checked sha, and its first comment claimed that without this "a retry could only land
+by discarding someone's commits". Removing the test and running the diverged case showed the push
+still failing with the peer's commit untouched — git refuses a non-fast-forward on its own, and the
+retry carries no `--force`. The ancestor test buys an actionable message, one fewer round trip, and a
+written rule where someone would otherwise add `--force`. That is worth having and it is not a safety
+property. A guard can fire correctly and still be credited with work something else was doing.
+
 The near-miss is the half usually skipped and the half that catches a check written too
 broadly. The lane adding "no shell script pushes to main" planted the push line twice
 in one file, once as a comment and once executable, and showed the check reported only
