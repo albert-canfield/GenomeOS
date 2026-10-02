@@ -10,7 +10,7 @@ expression drop AlphaGenome predicts when the enhancer is deleted, and the model
 the held-out pairs were scored. The result has been tested in **one cell type**.
 
 *(Added 2026-09-28.)* HCT116 has now been scored as registered (705 model requests). The frozen
-model's gain there is **+0.022 (95% −0.058 to +0.145; 363 pairs, 34 regulated)**. That is positive,
+model's gain there is **+0.022 on 363 pairs with 34 regulated, and its interval is withdrawn: it rested on 5 chromosomes, below the ten-cluster minimum a percentile bootstrap needs to be read as 95% (`crispri.MIN_CLUSTERS_FOR_AN_INTERVAL`, 2026-10-02). The point estimate stands; the earlier “95% −0.058 to +0.145” is withdrawn**. That is positive,
 so the pre-registered pass rule is met, but the interval includes zero, so it is **not a
 replication**. The 34 positives cover only five genes, and 228 of the 363 pairs lie beyond the
 model's 1 Mb window. The result is still replicated in one cell type.
@@ -69,7 +69,7 @@ scored element (96.6% against 90.6% in held-out K562), so three checks were regi
 
 | check | gain |
 |---|---|
-| every held-out K562 pair, unscored ones at zero | +0.136 [+0.081, +0.225] |
+| every held-out K562 pair, unscored ones at zero | +0.136 [+0.081, +0.225] at 200 draws (2026-09-27); **rebuilt 2026-10-02 at 2,000 draws over 22 clusters: +0.1361 [+0.0734, +0.2270]**, the population being the 1,918 held-out K562 pairs |
 | coverage matched, 1,000 random draws | median +0.145, all 1,000 above zero |
 | a "was it scored" flag in place of the deletion | +0.001 [−0.001, +0.003] |
 
@@ -79,7 +79,7 @@ scored element (96.6% against 90.6% in held-out K562), so three checks were regi
    regulated). AlphaGenome has HCT116 tracks, but scoring it costs 705 model requests, and that has
    not been done. GM12878 (68 pairs, 16 regulated) gives +0.015 [−0.094, +0.205]: uninformative.
    WTC11 (15 regulated) and Jurkat (7) are too small to carry a result.
-   *(Added 2026-09-28.)* HCT116 is now scored: +0.022 [−0.058, +0.145], which passes but is not
+   *(Added 2026-09-28.)* HCT116 is now scored: +0.022, interval withdrawn on 5 clusters (see above), which passes but is not
    replicated. Its 34 positives are five genes (SSFA2, FAM3C, MYC, KITLG, CCND1), and only 135 of
    the 363 pairs have their gene inside the 1 Mb window. `docs/ATTRIBUTION.md`, section of
    2026-09-28 (lane-hct116); `data/results/crispri_published.json`, key `second_cell_type_hct116`.
