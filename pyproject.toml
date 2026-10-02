@@ -57,6 +57,17 @@ dev = [
     # so without it a fresh checkout does not fail a test, it fails to COLLECT three files - which
     # reads as "no such tests" rather than as a missing dependency (genomeos-79, 2026-09-16).
     "numpy>=1.26",
+    # scripts/s5_rate_ranges.py:40 imports pandas and scripts/astroreg_register.py:28 imports
+    # openpyxl at module level, so ten tests that import those scripts fail with
+    # ModuleNotFoundError in any checkout where nobody installed the two by hand: the seven in
+    # tests/test_s5_rate_ranges.py on pandas, and the three in tests/test_code_cleanliness_shared.py
+    # on openpyxl, whose module-scope fixture imports the register. They belong here and not in
+    # [project.dependencies]: the core stays dependency-free, and these serve scripts and tests only.
+    # Licences are permissive, read from the installed metadata rather than taken on report:
+    # pandas BSD-3-Clause, openpyxl MIT, and the three they pull in - et-xmlfile MIT,
+    # python-dateutil dual Apache-2.0/BSD-3-Clause, six MIT. Nothing copyleft arrives with them.
+    "pandas>=2.2",
+    "openpyxl>=3.1",
 ]
 
 [build-system]

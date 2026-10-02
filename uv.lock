@@ -757,6 +757,8 @@ predict = [
 [package.dev-dependencies]
 dev = [
     { name = "numpy" },
+    { name = "openpyxl" },
+    { name = "pandas" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -774,6 +776,8 @@ provides-extras = ["compose", "clocks", "predict", "hla", "analysis"]
 [package.metadata.requires-dev]
 dev = [
     { name = "numpy", specifier = ">=1.26" },
+    { name = "openpyxl", specifier = ">=3.1" },
+    { name = "pandas", specifier = ">=2.2" },
     { name = "pytest", specifier = ">=8" },
     { name = "ruff", specifier = ">=0.16.6" },
 ]

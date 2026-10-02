@@ -472,3 +472,57 @@ def test_a_file_descriptor_is_not_a_path(tmp_path, monkeypatch):
     descriptor was already recorded, so the int contributes nothing rather than an exception."""
     assert mf._TRACE.canonical(7) is None
     assert mf._TRACE.canonical(None) is None
+
+
+# --- the near-miss for the per-test window itself (lane-deps, 2026-10-02) ------------------------------
+#
+# `tests/conftest.py` reopens the input-trace window once per test, so that a result written by one test
+# is not answerable for a file a different test read. That reopening is a window-clearing operation, and
+# a window-clearing operation placed between a read and the `save_result` that follows it would DELETE
+# the evidence of a genuine undeclared read: the reconciliation would then find nothing undeclared and
+# admit the pointer case with `complete: True`. Nothing else in the suite would notice, because the
+# fixture is autouse and every test runs under it. These two pin the placement that makes it safe -- at
+# the test boundary, never inside the test -- so the fixture cannot buy its isolation with a blind spot.
+
+
+@pytest.fixture
+def read_in_setup(run):
+    """The undeclared read happens HERE, in setup, and the result is written in the test body.
+
+    The shape to protect: a test that loads its table in a fixture and writes its result in the body.
+    The read belongs to the same run as the write, so the window the body's `save_result` reconciles
+    against must still hold it.
+    """
+    targets.run_elements("enhancer_targets_all", "chrT", results_dir=run)
+    return run
+
+
+def test_planted_a_read_made_in_setup_is_not_swallowed_by_the_per_test_reopening(read_in_setup):
+    """The sharp case. Reopen the window any later than the start of the test -- before the test body
+    rather than before its fixtures, which is the other obvious reading of "a window per test" -- and
+    this read is gone and the pointer case writes. It is refused, so the reopening happens first.
+    """
+    reg = read_in_setup
+    assert TABLE in mf.traced_reads(), "the setup read is in the window the body inherits"
+
+    with pytest.raises(mf.ManifestError) as e:
+        results.save_result("compiled_chrT", {"elements_compiled": 4}, reg, manifest=contract(reg))
+
+    assert TABLE in str(e.value), "the refusal must name the file setup read and the manifest omits"
+    assert "not declared and hashed in inputs" in str(e.value)
+    assert not (reg / "compiled_chrT.json").exists(), "nothing may enter the registry"
+
+
+def test_planted_the_window_the_fixture_opens_is_empty_and_live_rather_than_switched_off(run):
+    """The other half of the fixture's claim: it reopens the window instead of switching the tracer off.
+    An empty window would be indistinguishable from a silenced hook by its reads alone, so both halves
+    are asserted -- nothing carried in from the test before, and the hook still recording -- and then a
+    pointer read made in the body, with no window of this test's own opening, is still refused.
+    """
+    assert mf.traced_reads() == [], "no read of an earlier test is charged to this one"
+    assert mf._TRACE.recording is True, "and the hook is live, not switched off for the duration"
+
+    with pytest.raises(mf.ManifestError, match="not declared and hashed in inputs") as e:
+        writer(run)  # reads through the pointer and writes; opens no window of its own
+
+    assert TABLE in str(e.value)
