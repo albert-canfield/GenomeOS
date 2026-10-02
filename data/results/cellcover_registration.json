@@ -1,0 +1,322 @@
+{
+  "result": "cellcover_registration",
+  "date": "2026-10-02",
+  "lane": "lane-cellcover",
+  "question": "For the 93 published predicted assertions direction rule v2 leaves unresolved under `one_value_only`, and the 19 it leaves unresolved under `one_track_seen_twice`: which of their assigned cells is carried by an AlphaGenome RNA-seq track at all, how many tracks each is carried by, how many requests a second value for them would take, and how many of them cannot be given a second value at any price",
+  "population": "the rows of the committed data/results/respmap_direction_v2.json whose v2_unresolved_reason is `one_value_only` (93 rows) or `one_track_seen_twice` (19 rows), read from that file's own assertion rows and from no tally. The other 54 rows of its 166 are resolved and are not priced. These two counts are lane-propb's, carried unchanged; they are not re-derived here and they are added to no other count",
+  "exploration_preceded_this": "stated against this lane's own interest. This lane read the committed data/results/respmap_direction_v2.json rows and the saved track metadata interactively BEFORE writing this registration, and had already seen: 93 rows under `one_value_only` over 59 distinct cells, 19 under `one_track_seen_twice`, 371 distinct RNA-seq track names, and the split of the 59 into 44 one-track cells and 15 two-track cells. So this file does not predict those figures and no reader may treat it as having done so. What it fixes in advance of the COMMITTED PROGRAM is the rule by which a cell is priced (PURCHASABLE_RULE), how a track count may be established (HOW_ESTABLISHED), the label rule (TRACK_LABEL_RULE), the request unit (REQUEST_UNIT), the per-cell fields and the count list - so that the program's output is held against written rules rather than against this lane's recollection, and so that a figure produced by a rule invented after seeing the data would be visible as a departure from this file. The separate commit is the audit of the ORDER OF THE RULE, not of the order of the figures",
+  "premise_corrected": "the brief described the 93 as rules assigned to `a cell the sweep never requested`, and the code refuses it. (1) The sweep requests no cell: the only live request path, predict.alphagenome_adapter.AlphaGenomeAdapter._live_scorer, calls client.score_variant with an interval, a variant and one variant scorer, and passes no ontology_terms, no biosample and no cell argument, so the response carries the whole RNA-seq track axis whatever cell is of interest. (2) Every one of the 93 cached gene rows carries n_tracks 371, the full axis. (3) On each of the 93 the assigned cell is the tissue of the single retained value itself - max_drop_tissue on 79 rows and max_rise_tissue on 14 - so that cell's own track was in the response and was the extreme over all 371. The cell was requested, measured and read. What is absent is a second value for it, and the cause is retention, not coverage: predict.enhancer_target.aggregate writes a per-cell value only `if tissue in cells`, with cells defaulting to CELLS ['K562', 'HepG2', 'GM12878', 'IMR-90'], and discards every other track's value after folding it into min and max. The reframing the brief drew from its premise - `we never asked about that cell` - therefore does not hold, and the figures below are reported as a retention gap",
+  "request_unit": "one request buys one element, and cells are not a request dimension. Read from the code: predict.enhancer_target.score_element returns a cached answer without a request and otherwise calls `scorer(chrom, start, seq, seq[0])` exactly once, then `aggregate(effects)`; the scorer is one client.score_variant call carrying no cell argument; and `aggregate` is the step that selects cells, after the response has arrived. So the request count for a set of rows is the number of DISTINCT ELEMENTS those rows name, and adding a cell to the retained set costs 0 requests by itself. It is a code change to aggregate's `cells`, not a purchase",
+  "purchasable_rule": "a row of the 93 is PURCHASABLE if and only if two or more distinct RNA-seq track names in the model client's own track metadata carry its assigned cell's label under TRACK_LABEL_RULE. Two names mean two columns of the response, so re-running that element with the cell retained yields two values and satisfies v2's clause (1). One name means one column: the response has one value for that cell and will have one value on every future response too, so no request count produces a second. The rule is about the axis and never about the values, which are not read here",
+  "unpurchasable": "a cell carried by exactly one RNA-seq track name is unpurchasable at any price for v2's purposes. This is not a statement that the cell is unmeasured, that its track is poor, or that its rule is wrong: the cell is measured, by one track, and v2's clause (1) asks for two values from one cell. A second value does not exist to be bought. The only things that would change the count are a change to the model's track axis, which this project does not control, or a change to v2's clause (1), which is a rule change and not a purchase",
+  "what_it_does_not_buy": "a purchased second value is an input to the sign rule and not a resolution. Having two numerically present values, v2 still requires: they are numerically DISTINCT (amendment 1, which refuses two identical values whatever their tracks), their signs are unanimous with no zero (clause 2), and the largest |value| clears MAGNITUDE_FLOOR (clause 3). None of the three is predictable from the track axis, so the request count below is a count of rows that would GET a second value and is not a count of rows that would resolve. It also buys nothing for the unpurchasable rows, nothing for the 19, nothing about any cell's biology, and no direction for any rule: a re-run can only move a row from unresolved to resolved or leave it unresolved, by FLIPS_ARE_STRUCTURALLY_IMPOSSIBLE",
+  "how_established": "every per-cell row says how its track count was established, and the two are not the same claim. `client_track_metadata` means the cell's label is equal, character for character, to the label a track of the client's own metadata carries under TRACK_LABEL_RULE, and the count is the number of distinct track names that do so. `name_only` would mean a label matched by spelling, inflection or synonym rather than by equality, and `absent` that no track carries it. No row is resolved by judgement, by an ontology lookup or by a synonym table: a label either equals a track's own label or it does not, and whichever it is, is recorded",
+  "track_label_rule": "a track's label is predict.alphagenome_adapter.tissue_names' own rule, applied to the metadata rows rather than to a response: the gtex_tissue when the row carries one that is not empty and not the string `nan`, else the biosample_name. This is the same rule that decides the `tissue` a value arrives under in the effects, so a cell label on a compiled rule is a track label by construction. tests/test_cellcover.py holds this function against the adapter's own tissue_names on a stub response so the two cannot drift",
+  "axis_identified": "the metadata copy's RNA-seq rows are identified with the response's track axis by an equality neither side was fitted to: the copy holds 667 RNA-seq rows over exactly 371 DISTINCT track names (the surplus is the strand column, 271 `+` with 271 `-` and 125 `.`), and a real response's own record on disk gives its axis width as 371. 371 == 371, so one response column is one distinct RNA-seq track name, with the two strands of a stranded track scored as one column. The program asserts the equality and refuses rather than reporting a per-cell count it cannot ground. The response side is read from ONE loose per-element answer (AXIS_WITNESS), whose `model.tracks` the adapter sets to the length of the response's own track axis and beside which it records `model.tracks_sha256`, a digest of that axis's names",
+  "metadata_copy_limitation": "the track metadata is read from the copy a peer session saved to disk (data/cache/entex/alphagenome_track_metadata_copy.csv, the same authority attribution.context_evidence uses for its label-to-term mapping). Re-fetching it is a request this lane may not make. That the copy is the client's CURRENT output_metadata, and not a superseded one, is therefore NOT ESTABLISHED here; the 371 == 371 agreement with the sweep's own cached n_tracks is the only check this lane can run on it, and it is reported as that. A cell whose track count changed after the copy was saved would be mispriced, and no figure here detects that",
+  "the_nineteen": "the 19 `one_track_seen_twice` rows are not priced with the 93 and their count is not added to it. They have two retained values that are numerically identical, and amendment 1 refuses them because the cache cannot say whether that is one track counted twice or two tracks agreeing. The question is whether track identity can be recorded for a CACHED answer. It cannot: the response is not on disk. What the cache keeps per gene row is the extremes with their tissue labels, `by_cell` (the last emitted value per cell name), `n_tracks` and nothing else; the effects the writer saw are (gene, tissue, value) triples carrying no column, so the column was already gone before `aggregate` ran, and enhancer_target._cell_summary keeps only a sorted MULTISET per cell. For a cached answer the answer is therefore `cannot be recorded, at any price` - a finding, not a gap. For a FRESH response it is already recorded and needs no new code: alphagenome_adapter.recorded_axis keeps each cell's values in COLUMN ORDER, one entry per column of that cell, for its `cells` default CELL_TRACKS; every cell the 19 carry is in that default, so a new response for those elements would show two entries and settle whether one track was counted twice or two agreed. That is positional identity within one response and not a track name, which is weaker than a name but is exactly what amendment 1 asks. It would still not resolve the 19, because amendment 1 as implemented refuses two numerically identical values whatever their columns: consulting the identity is a change to the rule, which is not a purchase and is not proposed here. The element count is reported so the request side is priced, with no claim that it resolves anything",
+  "axis_witness": "data/knowledge/alphagenome/elements_hct116/chr12/EH38E1630471.json",
+  "axis_witness_is_not_the_population": "stated so the identification is not read as stronger than it is. The loose answer that witnesses the axis width is not one of the 93: the 93's elements exist only inside the compressed per-chromosome archives, and reading one of those is the heaviest read in this project (see AD_HOC_READ_INCIDENT), so the program does not do it. That every cached gene row of the 93 records n_tracks 371 was MEASURED, by an ad hoc read this project has since forbidden, and is reported under `measured_by_a_read_now_forbidden` rather than recomputed. The witness answer was written by the same adapter against the same scorer, which is why its axis width is evidence about the axis; that it was written on the same model revision as the 93 is NOT established, and if the axis changed between them the per-cell counts would be mispriced and nothing here would detect it",
+  "ad_hoc_read_incident": "recorded against this lane. While exploring, this lane ran two inline `python3 -c` loops that called predict.enhancer_target.load_cached once per row over the 93 and then the 19. `load_cached` falls back to the chromosome archive, so each loop decompressed whole archives: one reached 23 GB RSS, took swap to 13.1 of 14.3 GB, grew the swap file to 14 GB and took free disk to 7.8 GiB, under the project's 10 GB floor. It had exited on its own before a peer looked. The coordinator has since made the rule general: no inline exploration over the data stores, because a one-liner has no gate sample, no RSS ceiling and no name on the board, so nobody can tell what is paging the machine or who owns it. The figures that read produced are kept, named as its output, and are not re-run; the committed program reads no element answer of the population at all, which is why it needs the witness above",
+  "measured_by_a_read_now_forbidden": {
+    "what": "each cached gene row's n_tracks, and which extreme field names the assigned cell, over the 93 and the 19",
+    "one_value_only_n_tracks": {
+      "371": 93
+    },
+    "one_value_only_assigned_cell_is": {
+      "max_drop_tissue": 79,
+      "max_rise_tissue": 14
+    },
+    "one_track_seen_twice_n_tracks": {
+      "371": 19
+    },
+    "one_track_seen_twice_cells": {
+      "K562": 17,
+      "GM12878": 2
+    },
+    "by_cell_entries_per_row": 4,
+    "schema": "no cached answer of either set carries `model`, `by_cell_summary` or a gene-axis record: the row keys are gene, n_tracks, mean_log2fc, max_drop_log2fc, max_drop_tissue, max_rise_log2fc, max_rise_tissue and by_cell, and nothing else",
+    "how": "two inline loops over load_cached, which paged the machine (AD_HOC_READ_INCIDENT). The committed program does not repeat them and cannot reproduce these five figures; they are reported as that read's output and carry its authority and no more",
+    "reproducible": false
+  },
+  "no_recommendation": "this module makes no recommendation about whether to spend. It reports a count, what the count covers and what it does not buy. Nothing here argues for the purchase, no figure is framed as a return, and the decision is not this lane's",
+  "cell2_group_not_used": "no cell is grouped with another. Each of the 59 assigned cells is counted on its own label, so attribution.cell2's operational grouping - which is an operational grouping and NOT established biological independence - is neither used nor needed, and no T-cell subset is merged with another",
+  "readings_carried_unstrengthened": {
+    "unresolved_means": "unresolved means the sign rule did not resolve. It never means the element has no action, it is not a measurement of absence, and it is not a failure of the rule to produce an output: an unresolved call is the correct output of v2 wherever one cell's retained values do not carry a sign. It is recorded as molecular action unknown",
+    "flips_are_structurally_impossible": "stated before any count, because it follows from the rule and not from the data: under SIGN_RULE_V2 the flip count (c) is 0 by construction. v1's own selected value is itself one of the assigned cell's retained values, and v2 resolves only when every retained value shares one sign, so a resolved v2 call always carries v1's sign. v2 can therefore withhold a direction and can never reverse one. This is registered in advance so that a measured 0 is read as the arithmetic it is and not as evidence that v1's directions are sound",
+    "assigned_cell": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
+    "cache_is_legacy": "every cached deletion answer in data/knowledge/alphagenome/elements is pre-BY_CELL_SCHEMA 2: 0 of the 24 chromosome archives carries by_cell_summary, so a cell's full multiset of emitted values is not on disk and cannot be recovered by loading or repacking (the schema-2 note in predict.enhancer_target says so in those words). by_cell holds the last emitted value per cell name, which is order-dependent and was not chosen as a replicate. v2 therefore resolves on at most three retained values per cell and reports unresolved wherever fewer than two are retained; a resolved v2 call on a legacy row can rest on one order-dependent value beside the selected extreme, and that is a limitation of the cache and not a strength of the rule"
+  },
+  "cannot_establish": [
+    "whether a purchased second value would resolve any row: that needs the values, which need the requests this lane may not make",
+    "whether the saved track metadata copy is the client's current output_metadata: re-fetching it is a request (METADATA_COPY_LIMITATION)",
+    "the money price of one request: no committed artefact of this project states a per-request price, so the cost is reported in requests and in nothing else",
+    "whether the two tracks of a two-track cell are biological replicates: in every case found they are one biosample under two assay titles, which _cell_summary already says in those words is not known to be replication",
+    "whether a cell absent from the metadata is absent from the model: no cell of this population was absent, so the branch was never taken and its reading is untested"
+  ],
+  "not_priced": "the 54 resolved rows of the 166 are not priced, no count here is added to lane-propb's 112, 93 or 19, and the earlier 14 and 10 of other lanes are not touched, not added and not mentioned as comparable: they overlap each other and belong to other populations",
+  "retained_cells_today": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "values_needed_by_clause_1": 2,
+  "expected_axis_width": 371,
+  "per_cell_fields": [
+    "cell",
+    "rows",
+    "rna_seq_tracks",
+    "track_exists",
+    "established_how",
+    "second_value_exists_in_any_response",
+    "ontology_terms",
+    "assay_titles",
+    "data_sources",
+    "biosample_types",
+    "label_via"
+  ],
+  "counts_named_in_advance": [
+    "population_rows: the rows read from the committed v2 result under each of the two reasons, separately and never pooled",
+    "distinct_assigned_cells: how many distinct cell labels those rows carry",
+    "axis_width: the distinct RNA-seq track names in the saved metadata copy beside one real response record's own axis width, reported together so the identification is visible; the population's own n_tracks is carried under measured_by_a_read_now_forbidden and not recomputed",
+    "cells_with_no_track: assigned cells no RNA-seq track carries, which are unpurchasable because the cell is absent and not because it is thin",
+    "cells_with_one_track: assigned cells exactly one RNA-seq track carries, the unpurchasable count",
+    "cells_with_two_or_more_tracks: the purchasable cells",
+    "rows_unpurchasable_at_any_price and rows_purchasable: the same split counted over rows",
+    "requests: distinct elements among the purchasable rows, one request each",
+    "nineteen: the same figures for the 19, reported apart, with whether track identity can be recorded for a cached answer",
+    "per_cell: one row per assigned cell with its track count and how it was established"
+  ],
+  "refusals": [
+    "the program refuses rather than reporting, if the saved metadata's distinct RNA-seq track-name count is not 371, or if any cached gene row of the population records a different n_tracks: the per-cell counts are grounded on that equality (AXIS_IDENTIFIED) and must not be reported without it",
+    "the program refuses if the committed v2 result's two reason counts are not 93 and 19: the population is lane-propb's and is read, never re-derived",
+    "the program refuses if any row's assigned cell is the empty string or the compiler's context-unknown token, because such a row names no cell to price"
+  ],
+  "what_the_run_will_write": "data/results/cellcover.json",
+  "requests": {
+    "alphagenome_requests": 0,
+    "money": "none: no request is sent and no key is read",
+    "network": "none: every input is already on this machine"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed direction-rule-v2 classification of the published response map, as scripts/respmap_v2.py wrote it at 230509a",
+        "version": "the committed data/results/respmap_direction_v2.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "the model client's track metadata (output_metadata) as a peer session saved it to disk",
+        "version": "the saved copy on this machine, digested in inputs; whether it is the client's current table is not established (metadata_copy_limitation)"
+      },
+      {
+        "accession": "one answer of the deletion sweep, read as the track-axis witness",
+        "version": "the loose per-element JSON digested in inputs; no chromosome archive is opened, because the population's elements are archive-only and the loader inflates whole archives (cellcover.AD_HOC_READ_INCIDENT)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/respmap_direction_v2.json",
+        "sha256": "45ec9560b9888b89e20a92a21762c24297589c912781073a29a42d47b2061388",
+        "bytes": 163707,
+        "partition": "the committed v2 classification whose unresolved rows are the population"
+      },
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": "the saved copy of the model client's own track metadata, read for its RNA-seq rows only; re-fetching it is a request this lane may not make"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements_hct116/chr12/EH38E1630471.json",
+        "sha256": "6cb911e1aea8d7e9500749581da62a943d0aca20a68aa90dceac26b236b4c7f4",
+        "bytes": 5958,
+        "partition": "one loose per-element answer, read for its response record's own track-axis width; it is not a row of the population"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "GRCh38: the assembly the cached deletion sweep and the response map were written on. No coordinate of this registration's own is in GRCh38 or any build",
+    "coordinates": "n/a: no interval is read, written or compared. A row is identified by its element id and target gene symbol, and a cell by its label",
+    "parameters": {
+      "values_needed_by_clause_1": 2,
+      "expected_axis_width": 371,
+      "rna_output": "rna_seq",
+      "reasons_priced": [
+        "one_value_only",
+        "one_track_seen_twice"
+      ],
+      "retained_cells_today": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "no_threshold_set_here": "no magnitude, consistency or confidence threshold is set or moved: no value is read at all, only track counts and row counts"
+    },
+    "exclusions": [
+      "the 54 resolved rows of the published 166: they are not unresolved and so are not priced",
+      "the six reason tokens of direction_v2.UNRESOLVED_REASONS that no row of this population carries: they are excluded by being absent, not by a choice",
+      "every metadata row whose output is not rna_seq (chip_histone, cage, dnase, atac, contact_maps, procap): the deletion sweep's scorer is the RNA_SEQ gene scorer, so no other output is a column of the response a cell's value could come from"
+    ],
+    "partitions": {
+      "one_value_only": "the 93 rows, priced per cell and per element",
+      "one_track_seen_twice": "the 19 rows, reported apart and never pooled with the 93"
+    },
+    "code_cleanliness": {
+      "git_sha": "83c28a12d1ac5e841752eaebac499eaeeea14e6e",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/cellcover_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/cellcover_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/cellcover_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/astrorun.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "scripts/astroreg2_send.py",
+        "scripts/entry_script_census.py",
+        "tests/planted_cleanliness.py",
+        "tests/test_code_cleanliness_hermetic.py",
+        "tests/test_code_cleanliness_shared.py",
+        "tests/test_context_evidence.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_entry_script_counted.py",
+        "tests/test_legacy_allowlist_exemption.py",
+        "tests/test_manifest_enforced.py",
+        "tests/test_results_cleanliness_refusal.py",
+        "tests/test_revision_race.py",
+        "tests/test_traced_inputs.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [
+        "genomeos/manifest.py",
+        "genomeos/results.py"
+      ],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/cellcover.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/cellcover_register.py"
+      ],
+      "counting_path_count": 53,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "83c28a12d1ac5e841752eaebac499eaeeea14e6e",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/astrorun.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "scripts/astroreg2_send.py",
+        "scripts/entry_script_census.py",
+        "tests/planted_cleanliness.py",
+        "tests/test_code_cleanliness_hermetic.py",
+        "tests/test_code_cleanliness_shared.py",
+        "tests/test_context_evidence.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_entry_script_counted.py",
+        "tests/test_legacy_allowlist_exemption.py",
+        "tests/test_manifest_enforced.py",
+        "tests/test_results_cleanliness_refusal.py",
+        "tests/test_revision_race.py",
+        "tests/test_traced_inputs.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/entry_script_census.py",
+        "tests/planted_cleanliness.py",
+        "tests/test_entry_script_counted.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/cellcover_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "83c28a12d1ac5e841752eaebac499eaeeea14e6e",
+      "code_cleanliness_git_sha": "83c28a12d1ac5e841752eaebac499eaeeea14e6e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 83c28a1"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 135,
+      "opens_under_data": 3,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
