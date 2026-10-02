@@ -1,0 +1,383 @@
+{
+  "result": "rule_number_sources_registration",
+  "date": "2026-10-02",
+  "question": "For each of the rule numbers of data/demo/gastrulation.bio - strength, threshold and hill on every rule - is there a MEASURED value with a QUOTED source, or is the number unsourced? A value obtained by fitting a model is never counted as measured.",
+  "why_now": "The predecessor census (registration cd43fce, result 00e7028, row 2e1f676) established by count, 0 slots unclassified, that this file has 42 scoped slots and ZERO sourced numbers, and that corpus-wide not one strength, threshold or hill outside lateral_inhibition.bio is sourced. That is why three different sourced repressors of SOX17 gave answers identical to the digit: the module's own inhibiting numbers make any added inhibitor a switch and not a brake. This lane asks the complementary question, of the literature rather than of the file.",
+  "program": "data/demo/gastrulation.bio",
+  "rule_fields": [
+    "strength",
+    "threshold",
+    "hill"
+  ],
+  "quantity_definitions": {
+    "strength": "s, dimensionless. For an inhibitor, R = prod (1 - s H), so s is the FRACTION of the target's max_rate that this regulator alone removes at saturating regulator level: s = 1 is complete shutoff, a switch and not a brake. For an activator under the mean rule it is the fraction of max_rate this regulator alone can drive at saturation. A measurement of it would be the saturating fold-change of the TARGET'S TRANSCRIPTION RATE caused by that one regulator in the cell being modelled, with the regulator at saturation.",
+    "threshold": "K, in the same units as the regulator's protein level, which this runtime states are ARBITRARY concentration units. It is the regulator level at which the Hill term is one half. A measurement of it would be the regulator concentration at half-maximal target response (an EC50 or IC50 read on the regulator's own concentration), in units the program can convert to its own - and this program provides no such conversion.",
+    "hill": "n, the exponent of H(x) = x^n / (K^n + x^n): the sharpness of the response. Values for n in the literature are obtained by FITTING a Hill function to a dose-response curve, or by choosing n inside a model. A fit is not a measurement of n, so a literature Hill coefficient is classed F_fitted_or_modelled by construction. This consequence is declared here, before the search, so that it cannot later look like a convenience."
+  },
+  "population_size": 21,
+  "population": [
+    {
+      "rule": "Nodal activates TBXT",
+      "field": "strength",
+      "line": 18,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Nodal activates TBXT",
+      "field": "threshold",
+      "line": 18,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Nodal activates TBXT",
+      "field": "hill",
+      "line": 18,
+      "written_value": "2"
+    },
+    {
+      "rule": "Nodal activates SOX17",
+      "field": "strength",
+      "line": 19,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Nodal activates SOX17",
+      "field": "threshold",
+      "line": 19,
+      "written_value": "3.0"
+    },
+    {
+      "rule": "Nodal activates SOX17",
+      "field": "hill",
+      "line": 19,
+      "written_value": "4"
+    },
+    {
+      "rule": "Tbxt inhibits SOX2",
+      "field": "strength",
+      "line": 21,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Tbxt inhibits SOX2",
+      "field": "threshold",
+      "line": 21,
+      "written_value": "2.0"
+    },
+    {
+      "rule": "Tbxt inhibits SOX2",
+      "field": "hill",
+      "line": 21,
+      "written_value": "3"
+    },
+    {
+      "rule": "Sox2 inhibits TBXT",
+      "field": "strength",
+      "line": 22,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Sox2 inhibits TBXT",
+      "field": "threshold",
+      "line": 22,
+      "written_value": "4.0"
+    },
+    {
+      "rule": "Sox2 inhibits TBXT",
+      "field": "hill",
+      "line": 22,
+      "written_value": "3"
+    },
+    {
+      "rule": "Sox17 inhibits TBXT",
+      "field": "strength",
+      "line": 23,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Sox17 inhibits TBXT",
+      "field": "threshold",
+      "line": 23,
+      "written_value": "2.0"
+    },
+    {
+      "rule": "Sox17 inhibits TBXT",
+      "field": "hill",
+      "line": 23,
+      "written_value": "3"
+    },
+    {
+      "rule": "Sox17 inhibits SOX2",
+      "field": "strength",
+      "line": 24,
+      "written_value": "1.0"
+    },
+    {
+      "rule": "Sox17 inhibits SOX2",
+      "field": "threshold",
+      "line": 24,
+      "written_value": "2.0"
+    },
+    {
+      "rule": "Sox17 inhibits SOX2",
+      "field": "hill",
+      "line": 24,
+      "written_value": "3"
+    },
+    {
+      "rule": "Tbxt activates SOX17",
+      "field": "strength",
+      "line": 27,
+      "written_value": "0.6"
+    },
+    {
+      "rule": "Tbxt activates SOX17",
+      "field": "threshold",
+      "line": 27,
+      "written_value": "4.0"
+    },
+    {
+      "rule": "Tbxt activates SOX17",
+      "field": "hill",
+      "line": 27,
+      "written_value": "3"
+    }
+  ],
+  "classes": {
+    "M_measured_quoted": "a source that was FETCHED AND READ in this lane reports a DIRECT MEASUREMENT of the quantity this field is (as QUANTITY_DEFINITIONS fixes it), the measured value is quoted from that source, and the value is in units commensurable with the field. Not a value obtained by fitting a model, not a value chosen inside a model, not a value for a different quantity that shares the field's name.",
+    "F_fitted_or_modelled": "a fetched source gives a value for this quantity, but by FITTING a model to data, or by assuming or choosing it inside a model. It is recorded with its value and its source and is NOT a measurement of the parameter. Hill coefficients reach this class by construction.",
+    "E_existence_only": "a fetched source supports the EXISTENCE of the interaction the rule states, naming both factors, but states no value for this quantity by either route. A citation that supports an interaction is not a citation for its strength.",
+    "U_unsourced": "no source, fetched or cited, gives a value for this quantity by either route, and the slot's own citation does not even establish the interaction. Also the class when the declaration cites nothing at all."
+  },
+  "cascade": [
+    "M_measured_quoted",
+    "F_fitted_or_modelled",
+    "E_existence_only",
+    "U_unsourced"
+  ],
+  "cited_source_attribution_values": {
+    "supports_declaration": "what was fetched names both factors of the rule and supports a regulatory relation of the stated sign between them",
+    "supports_sign_in_another_system": "what was fetched names both factors and supports the sign, but in an organism, cell type or stage other than the one the program models",
+    "names_one_factor_only": "what was fetched names one of the two factors and not the other",
+    "names_neither_factor": "what was fetched names neither factor of the rule",
+    "no_source_cited": "the declaration's evidence kind is `inferred` or `none`, which BioLang's own grammar defines as not measured, so there is no citation to check"
+  },
+  "commensurability_values": {
+    "dimensionless_and_expressible": "the field is dimensionless (strength, hill), so a literature value needs no conversion to be written into it",
+    "arbitrary_units_no_conversion": "the field is in the runtime's arbitrary concentration units and this program supplies no conversion to physical units: its `translation_rate` and `mrna_half_life` are `evidence: inferred \"dimensionless\"`, and the NODAL level the two Nodal rules are read against is set by `run_gastrulation`'s unsourced `nodal_max = 6.0`. A measured EC50 therefore has no scale to be written on.",
+    "molar_threshold_refused_by_the_runtime": "writing the measured unit onto the field is refused at run time: `NetworkRuntime.__init__` raises when any active rule has a `threshold_unit`, because a concentration threshold needs a compartment with an `absolute_volume`, and this program is not located. The language parses `threshold: 3.0 nM`; this program cannot run with it."
+  },
+  "required_finding_keys": [
+    "rule",
+    "field",
+    "written_value",
+    "class",
+    "cited_source",
+    "fetched_url",
+    "fetched_what",
+    "source_claims",
+    "source_does_not_claim",
+    "cited_source_attribution",
+    "commensurable",
+    "searches"
+  ],
+  "search_plan": [
+    "each of the four works the program cites, fetched at its publisher or PubMed record: Conlon et al. 1994 Development 120:1919; Kanai-Azuma et al. 2002 Development 129:2367; Thomson et al. 2011 Cell 145:875; Lolas et al. 2014 PNAS 111:4478",
+    "for each rule, a query naming both factors together with each of `EC50`, `dose-response`, `Hill coefficient`, `half-maximal` and `fold repression`",
+    "a query for a measured or fitted dose-response of NODAL or Activin signalling on T/Brachyury and on SOX17, since those are the two rules whose regulator is the gradient",
+    "a query for any published parameterised model of the germ-layer switch that states a strength, threshold or Hill coefficient for these interactions, which would be F and not M"
+  ],
+  "every_citation_is_fetched": "Nothing is taken from memory. Each finding records the URL fetched and what was retrieved from it - at minimum an abstract actually retrieved - and states separately what the source claims and what it does not. A source that could not be fetched is recorded as not fetched and supports nothing.",
+  "fitted_is_never_measured": "A parameter estimated by fitting a model to data is not a measurement of that parameter. Such a value goes to F_fitted_or_modelled, is named as fitted, and is never counted in the measured total. lateral_inhibition.bio's threshold and hill, the only traceable ones in the corpus, are of this kind: Collier et al. 1996 is itself a parameterised theoretical model.",
+  "denominator": "21 rule numbers: 3 fields x 7 rule declarations, enumerated from the program. Both the strict and the loose measured counts are reported against this same 21.",
+  "findings_at_registration": 0,
+  "sources_fetched_at_registration": 0,
+  "verdict_at_registration": "",
+  "reports": [
+    "`data/demo/gastrulation.bio` line 3 says `Mutual repression makes the choice sharp`, and that is false of the program as written: SOX17 represses TBXT and SOX2 and is repressed by nothing. `data/demo` is shared, so this is a report and the line is not edited.",
+    "no number in any `.bio` file is changed by this lane. The area has already refused to tune two free numbers to unsourced targets (8bb9123, 19423bd) and that refusal is inherited. The Tbxt-SOX17 sign correction (5cbce26) stands.",
+    "the headline count is reported twice over the same 21 slots: strictly, counting only a measurement of the quantity the field is in commensurable units; and loosely, counting a measurement of that quantity in any organism or cell type. Both denominators are 21."
+  ],
+  "whichever_way_it_falls": "if none of the 21 slots reaches M_measured_quoted, that is the result and it is stated plainly: the program's rule numbers are unsourced. No source is stretched to fill a cell, no slot is promoted because its paper is about the right pathway, and no number is adjusted toward any value found. If some slot does reach M, the finding says so with the quoted value and does NOT write it into the program: a census does not edit its population.",
+  "exclusions": [
+    "the program's `gene`, `protein` and `param` numbers are out of scope: this census is the 21 rule numbers only. The predecessor census covers all 42 scoped slots of the file.",
+    "no judgement is passed on whether a rule is true, only on whether its numbers have a source.",
+    "no accuracy, proportion or fate figure is computed, and no run of the program is made for this census."
+  ],
+  "lane": "lane-kinetics",
+  "describes": [
+    "cd43fce / 00e7028 / 2e1f676 - the predecessor census: data/demo/gastrulation.bio has 42 scoped slots and ZERO sourced numbers (S_quoted 0, S_derived 0, E_existence_only 30, A_asserted_bare 8, D_language_default 4), and corpus-wide tier 1 is 161 numbers of which 8 are quoted from a cited source",
+    "53d9936 / b1e8839 - three different sourced repressors of SOX17 each gave an answer identical to the digit, because the module's own `threshold 2.0; hill 3` makes any added inhibitor a switch and not a brake",
+    "8bb9123 / 19423bd - tuning two free numbers to the unsourced expected_* proportions, refused; this lane inherits that refusal",
+    "5cbce26 - the Tbxt-SOX17 sign correction, which stands"
+  ],
+  "what_the_run_will_write": "data/results/rule_number_sources_census.json",
+  "frozen_inputs": [
+    {
+      "path": "data/demo/gastrulation.bio",
+      "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+      "bytes": 3765
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/demo/gastrulation.bio",
+        "version": "the working tree at the code revision stamped below, digested in inputs"
+      },
+      {
+        "accession": "genomeos/runtime/grn.py, read for what each rule field IS in the runtime",
+        "version": "the same code revision; transcribed into rule_number_sources.QUANTITY_DEFINITIONS"
+      },
+      {
+        "accession": "the published literature, reached by free web fetch only",
+        "version": "each finding of the census names the URL it fetched and what it retrieved"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+        "bytes": 3765,
+        "partition": "the hand-authored BioLang program under census"
+      }
+    ],
+    "method": "Pre-registration of a source census. The population is enumerated from the program by `rule_number_sources.slots`, never asserted. Three axes are fixed here and not afterwards: the class (what the literature holds for the quantity), the attribution of the program's own citation, and whether a literature value is commensurable with the field at all. A parameter obtained by fitting a model is recorded as fitted and is never counted as measured; Hill coefficients reach that class by construction, which is declared here before the search.",
+    "assembly": "n/a: no genomic sequence or coordinate is read; the population is a hand-authored program.",
+    "coordinates": "n/a: the census addresses declarations by file, line and field name.",
+    "parameters": {
+      "program": "data/demo/gastrulation.bio",
+      "rule_fields": [
+        "strength",
+        "threshold",
+        "hill"
+      ],
+      "population_size": 21,
+      "classes": {
+        "M_measured_quoted": "a source that was FETCHED AND READ in this lane reports a DIRECT MEASUREMENT of the quantity this field is (as QUANTITY_DEFINITIONS fixes it), the measured value is quoted from that source, and the value is in units commensurable with the field. Not a value obtained by fitting a model, not a value chosen inside a model, not a value for a different quantity that shares the field's name.",
+        "F_fitted_or_modelled": "a fetched source gives a value for this quantity, but by FITTING a model to data, or by assuming or choosing it inside a model. It is recorded with its value and its source and is NOT a measurement of the parameter. Hill coefficients reach this class by construction.",
+        "E_existence_only": "a fetched source supports the EXISTENCE of the interaction the rule states, naming both factors, but states no value for this quantity by either route. A citation that supports an interaction is not a citation for its strength.",
+        "U_unsourced": "no source, fetched or cited, gives a value for this quantity by either route, and the slot's own citation does not even establish the interaction. Also the class when the declaration cites nothing at all."
+      },
+      "cascade": [
+        "M_measured_quoted",
+        "F_fitted_or_modelled",
+        "E_existence_only",
+        "U_unsourced"
+      ],
+      "cited_source_attribution_values": {
+        "supports_declaration": "what was fetched names both factors of the rule and supports a regulatory relation of the stated sign between them",
+        "supports_sign_in_another_system": "what was fetched names both factors and supports the sign, but in an organism, cell type or stage other than the one the program models",
+        "names_one_factor_only": "what was fetched names one of the two factors and not the other",
+        "names_neither_factor": "what was fetched names neither factor of the rule",
+        "no_source_cited": "the declaration's evidence kind is `inferred` or `none`, which BioLang's own grammar defines as not measured, so there is no citation to check"
+      },
+      "commensurability_values": {
+        "dimensionless_and_expressible": "the field is dimensionless (strength, hill), so a literature value needs no conversion to be written into it",
+        "arbitrary_units_no_conversion": "the field is in the runtime's arbitrary concentration units and this program supplies no conversion to physical units: its `translation_rate` and `mrna_half_life` are `evidence: inferred \"dimensionless\"`, and the NODAL level the two Nodal rules are read against is set by `run_gastrulation`'s unsourced `nodal_max = 6.0`. A measured EC50 therefore has no scale to be written on.",
+        "molar_threshold_refused_by_the_runtime": "writing the measured unit onto the field is refused at run time: `NetworkRuntime.__init__` raises when any active rule has a `threshold_unit`, because a concentration threshold needs a compartment with an `absolute_volume`, and this program is not located. The language parses `threshold: 3.0 nM`; this program cannot run with it."
+      },
+      "required_finding_keys": [
+        "rule",
+        "field",
+        "written_value",
+        "class",
+        "cited_source",
+        "fetched_url",
+        "fetched_what",
+        "source_claims",
+        "source_does_not_claim",
+        "cited_source_attribution",
+        "commensurable",
+        "searches"
+      ],
+      "search_plan": [
+        "each of the four works the program cites, fetched at its publisher or PubMed record: Conlon et al. 1994 Development 120:1919; Kanai-Azuma et al. 2002 Development 129:2367; Thomson et al. 2011 Cell 145:875; Lolas et al. 2014 PNAS 111:4478",
+        "for each rule, a query naming both factors together with each of `EC50`, `dose-response`, `Hill coefficient`, `half-maximal` and `fold repression`",
+        "a query for a measured or fitted dose-response of NODAL or Activin signalling on T/Brachyury and on SOX17, since those are the two rules whose regulator is the gradient",
+        "a query for any published parameterised model of the germ-layer switch that states a strength, threshold or Hill coefficient for these interactions, which would be F and not M"
+      ],
+      "denominator": "21 rule numbers: 3 fields x 7 rule declarations, enumerated from the program. Both the strict and the loose measured counts are reported against this same 21.",
+      "reports": [
+        "`data/demo/gastrulation.bio` line 3 says `Mutual repression makes the choice sharp`, and that is false of the program as written: SOX17 represses TBXT and SOX2 and is repressed by nothing. `data/demo` is shared, so this is a report and the line is not edited.",
+        "no number in any `.bio` file is changed by this lane. The area has already refused to tune two free numbers to unsourced targets (8bb9123, 19423bd) and that refusal is inherited. The Tbxt-SOX17 sign correction (5cbce26) stands.",
+        "the headline count is reported twice over the same 21 slots: strictly, counting only a measurement of the quantity the field is in commensurable units; and loosely, counting a measurement of that quantity in any organism or cell type. Both denominators are 21."
+      ],
+      "findings_at_registration": 0,
+      "model_requests": 0,
+      "money_spent": "none; no paid API is called. Web fetches of the cited works are free."
+    },
+    "exclusions": [
+      "the program's `gene`, `protein` and `param` numbers are out of scope: this census is the 21 rule numbers only. The predecessor census covers all 42 scoped slots of the file.",
+      "no judgement is passed on whether a rule is true, only on whether its numbers have a source.",
+      "no accuracy, proportion or fate figure is computed, and no run of the program is made for this census."
+    ],
+    "partitions": {
+      "M_measured_quoted": "a source that was FETCHED AND READ in this lane reports a DIRECT MEASUREMENT of the quantity this field is (as QUANTITY_DEFINITIONS fixes it), the measured value is quoted from that source, and the value is in units commensurable with the field. Not a value obtained by fitting a model, not a value chosen inside a model, not a value for a different quantity that shares the field's name.",
+      "F_fitted_or_modelled": "a fetched source gives a value for this quantity, but by FITTING a model to data, or by assuming or choosing it inside a model. It is recorded with its value and its source and is NOT a measurement of the parameter. Hill coefficients reach this class by construction.",
+      "E_existence_only": "a fetched source supports the EXISTENCE of the interaction the rule states, naming both factors, but states no value for this quantity by either route. A citation that supports an interaction is not a citation for its strength.",
+      "U_unsourced": "no source, fetched or cited, gives a value for this quantity by either route, and the slot's own citation does not even establish the interaction. Also the class when the declaration cites nothing at all."
+    },
+    "code_cleanliness": {
+      "git_sha": "7c80d18de69918243579e8411aa8166740d0c5e9",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/number_provenance.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lang/rule_number_sources.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/rule_number_sources_register.py"
+      ],
+      "counting_path_count": 14,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "7c80d18de69918243579e8411aa8166740d0c5e9",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/rule_number_sources_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "7c80d18de69918243579e8411aa8166740d0c5e9",
+      "code_cleanliness_git_sha": "7c80d18de69918243579e8411aa8166740d0c5e9",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 7c80d18"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 72,
+      "opens_under_data": 2,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
