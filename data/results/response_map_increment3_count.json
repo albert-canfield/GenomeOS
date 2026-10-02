@@ -456,18 +456,16 @@
   },
   "alphagenome_requests": 0,
   "money": "none: every input was already on disk",
-  "seconds": 37.1,
+  "seconds": 53.7,
   "code_cleanliness": {
-    "git_sha": "727c9363dfcd23428e85f00da66fa99f3a818569",
+    "git_sha": "7509b1ada433ed33712fa66ffeeb2a95bc10f620",
     "dirty": true,
-    "own_uncommitted_code": [
-      "scripts/response_map_increment3_count.py"
-    ],
-    "own_code_is_committed": false,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
     "foreign_uncommitted_code": [
-      "genomeos/attribution/hct116_count.py",
-      "scripts/hct116_count.py",
-      "tests/test_hct116_count.py"
+      "genomeos/attribution/astrorun.py",
+      "scripts/astroreg_activity_gate.py",
+      "tests/test_astrorun.py"
     ],
     "foreign_uncommitted_code_on_the_counting_path": [],
     "counting_path": [
@@ -5921,7 +5919,7 @@
         "partition": null
       },
       {
-        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/eqtl_targets.json",
+        "path": "data/results/eqtl_targets.json",
         "sha256": "1d84c4fb7d750167d70eabf13c4b6d62f5ccb6fd6004834b76072cb8d98c1d8c",
         "bytes": 6156684,
         "partition": null
@@ -6225,8 +6223,289 @@
         "sha256": "367d0bb98c512cb001d658841d3bffe4456a891c91bbae4b1485a465d87d3cd1",
         "bytes": 413,
         "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/results/attribution_correctness_v3.json",
+        "sha256": "40586773bc155b73ff041ed65e97ee28318ec032f0d78fb7419b948f57debd89",
+        "bytes": 497181,
+        "partition": null
+      },
+      {
+        "path": "data/results/crispri_direction.json",
+        "sha256": "2dbd172dfb00aa30e9bd7a44b4e92df8e4fbf1c2900d4bfd75c00a002c65291a",
+        "bytes": 65870,
+        "partition": null
+      },
+      {
+        "path": "data/results/discovery_review.json",
+        "sha256": "0d51de7c2c1f112db504e4e18a21b4d057d6d09095b27f3c51f1675a3cefda64",
+        "bytes": 7172274,
+        "partition": null
+      },
+      {
+        "path": "data/results/loci_benchmark.json",
+        "sha256": "e5b10df8cb764a13e785fdd159db1187c9be979c16b7b04cd67f32a5c73f0591",
+        "bytes": 458630,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/ReactomePathways.txt",
+        "sha256": "f6d7a2bf89b5bcfe0250a0bc7f51bff94641447911712b8ff129f5b55e52df3a",
+        "bytes": 1592393,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/hic_contact/K562_4DNFITUOMFUQ_5000.json",
+        "sha256": "8b48075bd9e4464c683d43d86bff2eb392799e857dd906efa74dcd8fc84a36d3",
+        "bytes": 1598811,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/erythrocyte.bio",
+        "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+        "bytes": 3199,
+        "partition": null
+      },
+      {
+        "path": "data/cache/rates/schofield2018_TableS2_halflives.xlsx",
+        "sha256": "d5c010c1c2b1b22319310644e3194674ac58af059542862639cd43e720e60f19",
+        "bytes": 726994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
       }
     ],
+    "inputs_opened_beside_the_declared_results": {
+      "why_they_are_listed": "an input is what the writer opened, not what it said it read. The audit hook in `genomeos.manifest` records every open under `data/` and `save_result` refuses a result whose reads exceed its declared inputs, which is how these came to be named",
+      "groups": {
+        "the per-chromosome element tables reached through a result file's `elements_where` pointer": 24,
+        "the measured layer's other three assays, opened by `compile._measured_rows`": 5,
+        "increment 1's own view, read by `response_map2.map1_keys`": 9
+      },
+      "the_pointer_case": "`attribution.targets` reads a run's elements out of the table its result's `elements_where` field points at, so the path comes out of a result file at run time and no reading of the source could name it",
+      "gencode_chromosomes": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr5",
+        "chrX"
+      ]
+    },
     "inputs_are_recorded_one_file_per_entry": "scripts/manifest_rebuild.py resolves an input by its `path`, and a grouped entry carries a label there, so a grouped input would read as absent without any file being checked",
     "assembly": "GRCh38",
     "coordinates": {
@@ -6276,16 +6555,14 @@
       "native_locus": "whether the kind reads the native locus or a copy of its sequence"
     },
     "code_cleanliness": {
-      "git_sha": "727c9363dfcd23428e85f00da66fa99f3a818569",
+      "git_sha": "7509b1ada433ed33712fa66ffeeb2a95bc10f620",
       "dirty": true,
-      "own_uncommitted_code": [
-        "scripts/response_map_increment3_count.py"
-      ],
-      "own_code_is_committed": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
       "foreign_uncommitted_code": [
-        "genomeos/attribution/hct116_count.py",
-        "scripts/hct116_count.py",
-        "tests/test_hct116_count.py"
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg_activity_gate.py",
+        "tests/test_astrorun.py"
       ],
       "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
@@ -6373,21 +6650,20 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "727c9363dfcd23428e85f00da66fa99f3a818569",
+      "git_sha": "7509b1ada433ed33712fa66ffeeb2a95bc10f620",
       "dirty": true,
       "dirty_code_paths": [
-        "genomeos/attribution/hct116_count.py",
-        "scripts/hct116_count.py",
-        "scripts/response_map_increment3_count.py",
-        "tests/test_hct116_count.py"
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg_activity_gate.py",
+        "tests/test_astrorun.py"
       ],
       "untracked_code_paths": [
-        "genomeos/attribution/hct116_count.py",
-        "scripts/hct116_count.py",
-        "scripts/response_map_increment3_count.py",
-        "tests/test_hct116_count.py"
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg_activity_gate.py",
+        "tests/test_astrorun.py"
       ],
       "dirty_result_paths": [
+        "data/results/response_map_increment3.json",
         "data/results/response_map_increment3_count.json"
       ],
       "argv": [
@@ -6395,6 +6671,19 @@
       ],
       "python": "3.14.3"
     },
-    "complete": true
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 2278,
+      "opens_under_data": 1704,
+      "files_read": 986,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
   }
 }
