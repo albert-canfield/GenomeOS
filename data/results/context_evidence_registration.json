@@ -1,0 +1,248 @@
+{
+  "result": "context_evidence_registration",
+  "date": "2026-10-02",
+  "status": "registered before any genome-wide count was read; no state over the compiled programs is counted here",
+  "lane": "lane-context2",
+  "question": "for every compiled rule, is the element open in the cell the rule's `when:` names, at reader v1's own call, or is there a reason no reading can be taken?",
+  "why": "R1 (2026-09-28) made every rule carry its cell as an executable `when:`. That cell is asserted: it is the winning AlphaGenome track's tissue, or the cell a CRISPRi screen silenced in, and nothing checked whether the element is open there. This gives each rule's context chromatin evidence, or a label saying why it has none",
+  "states": {
+    "open_in_reader": "the element's locus overlaps a DNase narrowPeak of the reader biosample this rule's cell maps to by ontology term",
+    "not_open_in_reader": "no DNase narrowPeak of that biosample overlaps the locus: not detected open at the reader's registered call, which is not the same as closed",
+    "not_assessable": "no reading was taken; the reason is carried with the state"
+  },
+  "not_assessable_reasons": {
+    "no_reader_for_this_cell": "reader v1 never read this cell: its label carries no single registered ontology term, or that term is not one of the thirteen biosamples",
+    "region_outside_measured_span": "the cell has a reader, but that biosample's peak set for this chromosome covers nothing at this locus: no file, no peak in it, or a locus beyond its outermost peak"
+  },
+  "state_names_carry_no_verdict": {
+    "rule": "no state or reason name may contain any of these stems",
+    "forbidden_stems": [
+      "support",
+      "contradict",
+      "validat",
+      "confirm",
+      "refut",
+      "verif",
+      "consistent",
+      "agree",
+      "disagree",
+      "correct",
+      "wrong",
+      "true",
+      "false",
+      "good",
+      "bad",
+      "pass",
+      "fail"
+    ],
+    "tested_by": "tests/test_context_evidence.py"
+  },
+  "not_closed": "not_open_in_reader means not detected open at the reader's registered threshold, not closed: a narrowPeak set is a call set, and absence is absence of a call",
+  "not_validation": "a consistency check between two readings of the same ENCODE chromatin, not validation: reader v1's openness comes from ENCODE peaks and AlphaGenome was trained on ENCODE, so open_in_reader is never independent evidence that the rule is right and must never be quoted as validation",
+  "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+  "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+  "mapping": {
+    "by": "ontology term (EFO, CL or UBERON), never by comparing cell names",
+    "rule_side_authority": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+    "rule_side_columns": [
+      "biosample_name",
+      "gtex_tissue",
+      "ontology_curie"
+    ],
+    "metadata_rows": 2841,
+    "labels_with_one_term": 752,
+    "labels_per_ontology": {
+      "CL": 233,
+      "CLO": 52,
+      "EFO": 188,
+      "NTR": 18,
+      "UBERON": 261
+    },
+    "ontologies_a_reader_biosample_can_be_named_in": [
+      "EFO",
+      "CL",
+      "UBERON"
+    ],
+    "labels_with_more_than_one_term": 0,
+    "ambiguous_labels": {},
+    "reader_biosamples": {
+      "K562": "EFO:0002067",
+      "HepG2": "EFO:0001187",
+      "GM12878": "EFO:0002784",
+      "IMR-90": "EFO:0001196",
+      "H1": "EFO:0003042",
+      "SK-N-SH": "EFO:0003072",
+      "astrocyte": "CL:0000127",
+      "hepatocyte": "CL:0000182",
+      "keratinocyte": "CL:0000312",
+      "cardiac muscle cell": "CL:0000746",
+      "CD14-positive monocyte": "CL:0001054",
+      "ovary": "UBERON:0000992",
+      "testis": "UBERON:0000473"
+    },
+    "ambiguous_is": "not_assessable, no_reader_for_this_cell"
+  },
+  "denominator": "every compiled rule, counted as the compiler emits it",
+  "alphagenome_requests": 0,
+  "reading": {
+    "moves": "honest: an asserted cell context becomes an evidenced or a labelled one",
+    "secondary": "correct: a not_open_in_reader rule is a located candidate defect, a place where the program asserts activity in a cell whose own chromatin shows no open element",
+    "does_not_move": "complete: no rule is added, none is removed, and no part of the genome becomes attributed that was not attributed before",
+    "never": "open_in_reader is never reported as validation, support or confirmation of a rule, and not_open_in_reader is never reported as the element being closed or the rule being contradicted"
+  },
+  "denominator_on_the_record": {
+    "rules": 440589,
+    "source": "data/results/when_census.json, generated_bio_untracked: 24 programs, 440,589 rule/plain `when` clauses",
+    "the_census_counts": "the rules the compiler emits at the sha of its own run, and reports that total beside this one rather than assuming they agree"
+  },
+  "peak_sets_cached_before_the_run": {
+    "K562": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 518503
+    },
+    "HepG2": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 176634
+    },
+    "GM12878": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 76119
+    },
+    "IMR-90": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 312250
+    },
+    "H1": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 232709
+    },
+    "SK-N-SH": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 232038
+    },
+    "astrocyte": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 294713
+    },
+    "hepatocyte": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 267741
+    },
+    "keratinocyte": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 83639
+    },
+    "cardiac muscle cell": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 332799
+    },
+    "CD14-positive monocyte": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 202328
+    },
+    "ovary": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 248611
+    },
+    "testis": {
+      "chromosomes_with_a_cached_peak_set": 24,
+      "chromosomes_without_one": [],
+      "peaks": 225744
+    }
+  },
+  "mapping_table_as_read": {
+    "labels": 752,
+    "ambiguous_labels": 0,
+    "per_ontology": {
+      "CL": 233,
+      "CLO": 52,
+      "EFO": 188,
+      "NTR": 18,
+      "UBERON": 261
+    }
+  },
+  "built_while_registering": "the compiler was run once on chr21 during development, to check that the field is written on every rule line and parses back; 5,176 rules. No genome-wide count has been read at the time of writing, and no threshold here was chosen after seeing an outcome",
+  "code": {
+    "module": "genomeos/attribution/context_evidence.py",
+    "compiler": "genomeos/attribution/compile.py",
+    "grammar": "genomeos/lang/grammar.py, genomeos/lang/parser.py, genomeos/ir/model.py",
+    "tests": "tests/test_context_evidence.py",
+    "register": "scripts/context_evidence_register.py",
+    "census": "scripts/context_evidence_census.py"
+  },
+  "money": "none: every input was already on disk",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE DNase-seq narrowPeak, GRCh38, released, 13 biosamples",
+        "version": "as reader v1 cached them under data/results/dnase_*_chr*.bed.gz"
+      },
+      {
+        "accession": "AlphaGenome output track metadata",
+        "version": "data/cache/entex/alphagenome_track_metadata_copy.csv"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+      "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+      "states": [
+        "open_in_reader",
+        "not_open_in_reader",
+        "not_assessable"
+      ],
+      "not_assessable_reasons": [
+        "no_reader_for_this_cell",
+        "region_outside_measured_span"
+      ]
+    },
+    "exclusions": [
+      "no rule is excluded: the denominator is every rule the compiler emits",
+      "no new cut-off is introduced; reader v1's registered call is used unchanged"
+    ],
+    "partitions": {
+      "per_state": "the three states, with the two reasons under not_assessable",
+      "per_cell": "the rule's own `when: cell_type` label, every label counted",
+      "per_biosample": "the reader biosample a label maps to by ontology term"
+    },
+    "code": {
+      "git_sha": "2459a00c5f7f3cdabef96b6462c7e7be01379a47",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/astroreg_registration.json",
+        "data/results/context_evidence_registration.json"
+      ],
+      "argv": [
+        "scripts/context_evidence_register.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
