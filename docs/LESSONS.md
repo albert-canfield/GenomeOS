@@ -1395,3 +1395,61 @@ would make a partial genome unwritable.
 sources; missing inputs"* — and `inputs()` is never called by its own writer, only by three
 downstream ones. **A declaration that does not exist is a separate and larger gap than one
 that shrinks.**
+
+## A red verdict that was about nothing in any tree (2026-10-02)
+
+Several red verdicts that day were statements about no tree at all, and each read exactly
+like a real failure until somebody opened the log.
+
+Two were `git check-ignore` exiting 128 past a symlinked data store, so **20 tests ERRORED
+at setup** — nothing was asserted wrongly; the tests could not start. **One of those
+refused a push and held `origin/dev` thirty commits back for an hour.** One more was
+`ruff` handed `data/results/manifest_headlines.json` as a lint argument: **96 "errors" in
+a result file, the run dead at the `ruff-check` leg with `counts: null`, no test run at
+all.** A fourth was seen and is **no longer in the record**, which is its own lesson: the
+status store is **keyed by tree hash alone**, so a peer checking the same tree overwrites a
+verdict, and **it cannot be used to count anything over time.** The coordinator reported
+four and the record holds three; a sweep found exactly one of the ruff kind, and the second
+was not written up as fact.
+
+**The cause of the symlink pair was not what it looked like.** `.git/hooks/pre-push` was a
+**COPY** taken at 04:34 that still symlinked the stores, while `scripts/pre-push.sh` had
+moved at 17:52 to read-only clones — and `scripts/install-hooks.sh` **copies**, so the hook
+was not the script and the correct fix never reached what the push actually ran.
+
+**Two confident diagnoses were measured and refuted, and both were planted as negative
+tests** — because a fix aimed at either would have passed its own test while every push
+stayed red:
+
+- **`$TMPDIR` behind `/var -> private/var` is innocent.** A worktree there with real store
+  directories answers `check-ignore` 0, measured twice. Git resolves a linked worktree's
+  root physically and a relative pathspec is taken from the process's physical cwd, so the
+  leading symlink never enters the question.
+- **`realpath` before `check-ignore` fails in the DANGEROUS direction.** An ignore rule is
+  about a NAME, so resolving the path asks a different question: it can exit 1, **"not
+  ignored"**, reporting a correct marker as **wrong** rather than unanswerable. `--no-index`
+  changes neither reading; it was checked rather than assumed.
+
+**The fix is to ask git about the name the marker concerns:** truncate to the first
+component that IS a symlink and ask about that, since an ignore rule on a directory covers
+its subtree. Trusted only when the symlink's own name is ignored; otherwise it refuses and
+says it stops at the symlink rather than guessing past it.
+
+**The lesson is that a verdict must say what KIND of thing made it red, or a tooling fault
+and a broken codebase are the same artefact.** A test red and a tooling red had the same
+`verdict` ("red"), the same `exit_code` (1) and a **byte-identical** `reason` ("the check
+exited 1"). Every status file now carries `error_class`: `test` (an assertion failed),
+`test_setup` (pytest red with errors and no failures — tests could not start, where
+environment and tooling faults land), `tooling` (a non-test leg), `tree_moved`, `unknown`.
+The symlink reds classify as `test_setup`; the ruff-on-JSON red as `tooling`. **It changes
+nothing about acceptance — a merely-tooling red is still refused for a push, asserted by
+test — and everything about how long it takes to know whose problem it is.**
+
+**And the hook itself became a mechanism rather than a note**, since the stale copy is the
+same defect class as a dirty verification tool: the installed hook is now a fixed thin
+wrapper that runs `git show HEAD:scripts/pre-push.sh` and **refuses by name when the
+working-tree copy differs from HEAD's**, because an uncommitted verification script gives
+no verdict. **What it does not close, recorded in the wrapper and asserted by a test: a
+commit can still weaken its own pre-push check**, because the hook runs the `pre-push.sh`
+of the commit being pushed. That is the commit review's case — a visible diff in a tracked
+file. **The wrapper closes the SILENT case.**
