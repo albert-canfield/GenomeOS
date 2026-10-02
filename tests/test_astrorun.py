@@ -1418,12 +1418,17 @@ class TestItemGTheFullTrackVectorIsKept:
         from genomeos.predict import alphagenome_adapter as adapter
 
         meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
-        if not meta_csv.exists():
-            pytest.skip(
-                f"{meta_csv.name} is not on this machine, so the vector cannot be checked against the "
-                "REAL track table here. The send-time gate's own probe-based test still runs, so item "
-                "(g) is not left unproven by this skip -- only the 667-track case is"
-            )
+        # FAILS and does not skip when the file is absent, naming the path. A skip is not a pass, and
+        # a skip on a committed artefact is what hid tonight's 63-guard finding: with 20 results
+        # deleted the old guards reported 144 passed and 76 skipped while the converted ones reported
+        # 27 failed and 56 errors, each naming its path. The signed tree's status file must show this
+        # test PASSED, so the absence of what it needs has to be red.
+        assert meta_csv.exists(), (
+            f"the real track metadata is not at {meta_csv}, so item (g)'s claim -- that every one of "
+            "the response's tracks comes back named and equal -- is UNCHECKED against the real track "
+            "table. This is a failure and not a skip: the signed tree's status file must show this "
+            "test passed, and a skip would let an unproven claim be signed"
+        )
         with open(meta_csv) as fh:
             meta = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
         assert len(meta) > 300, "the real metadata, not a handful of rows"
@@ -1592,8 +1597,10 @@ class TestItemGTheFullTrackVectorIsKept:
             max(astrorun.ADAPTER_NOTE_TRACKS, astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA)
             == astrorun.OBSERVED_TRACKS_PER_ANSWER
         )
-        if not meta_csv.exists():
-            pytest.skip(f"{meta_csv.name} is not on this machine, so 667 cannot be read from the file")
+        assert meta_csv.exists(), (
+            f"667 is read from {meta_csv} and the file is absent, so the figure the disk estimate uses "
+            "would be taken on report. A failure, not a skip"
+        )
         with open(meta_csv) as fh:
             rna = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
         assert len(rna) == astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA, "read from the file, not remembered"
