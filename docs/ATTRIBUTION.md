@@ -15453,6 +15453,99 @@ instruction this lane was given and then repeated, not a claim the panel results
 
 0 model requests, no money: a range read of a public UCSC bigBed is not a paid call.
 
+## The 547 cannot be settled from what is on disk: a cached gene row carries eight keys and no locus, and the two lines that drop the locus are named (2026-10-02, lane-generow)
+
+lane-identity left one question to whoever owns the scoring chain. Its gene-identity comparison
+over all 440,589 compiled rules found 0 naming a different gene, but said plainly that the test did
+not fire: 440,035 of the 440,589 have a target name with one locus on the chromosome, so both sides
+resolve to it whatever the window says, and the 547 a differing id was possible for were all
+unresolvable because both loci lie inside the scorer window. Its stated repair was for the chain to
+record the Ensembl gene id AlphaGenome returns per gene row rather than only its name. This lane
+asked the prior question from the bytes already on disk, and bought nothing to do it.
+
+**The answer, first. A cached gene row carries no locus, and the 547 cannot be settled by reading
+the cache.** Every gene row in every cached answer carries exactly eight keys — `gene`, `n_tracks`,
+`mean_log2fc`, `max_drop_log2fc`, `max_drop_tissue`, `max_rise_log2fc`, `max_rise_tissue`,
+`by_cell` — and no ninth. One row verbatim from
+`data/knowledge/alphagenome/elements/chr22/satmut_chr22_27842324_27842349.json`:
+
+```json
+{"gene": "MN1", "n_tracks": 371, "mean_log2fc": 0.0049, "max_drop_log2fc": -0.0237,
+ "max_drop_tissue": "heart", "max_rise_log2fc": 0.043, "max_rise_tissue": "HepG2",
+ "by_cell": {"HepG2": 0.0397, "IMR-90": 0.033, "K562": -0.0055, "GM12878": 0.0024}}
+```
+
+No gene id, no coordinate, no strand, no transcript, no gene type. That is read by streaming the
+whole cache rather than from a docstring: **27,938,173 gene rows over 963,406 cached elements across
+24 chromosomes**, plus the 3,209 loose per-element files and the 705 newer HCT116 answers, and the
+set of low-frequency keys that are not element ids is **empty**, so no field hides on a handful of
+answers. The compact tables the committed `enhancer_targets_all_chr*` results point at carry 22
+distinct keys and no gene id either.
+
+**But the response did carry the distinction, and the chain destroys it — at two lines.**
+`genomeos/predict/alphagenome_adapter.py:227` reads one column of the response's gene axis,
+`genes = list(adata.obs.get("gene_name", []))`; nothing else from that axis is read and the row's own
+position in it is not kept, so a gene becomes a bare string. `genomeos/predict/enhancer_target.py:198`
+then keys the accumulator by that string, `by_gene.setdefault(gene, ...)`, so two response rows
+carrying one `gene_name` merge into one cached row: `n_tracks` summed, `mean_log2fc` averaged over
+both, `max_drop_log2fc` the extreme of either with nothing saying which, and `by_cell` keeping "the
+last value read wins" (line 215), one locus's number standing for both.
+
+**The merge is measurable, which is how the response is known to have separated the loci.** One
+response row contributes at most one value per column, and the chain records the response's own
+column count: `model.tracks = 371` under a single `tracks_sha256` over all 705 answers that carry a
+run record (alphagenome client 0.9.0, `RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']`, 2026-09-28). So a row
+above 371 cannot be one response row, and **226,363 of the 27,938,173 cached gene rows are above it
+(0.81%), over 420 distinct names, reaching twelve times the column count.** The banding is a lower
+bound and not a count: the sweep asked with `threshold=0.0`, which drops a value of exactly zero, so
+a constituent row may contribute fewer than 371 values.
+
+**One field does settle the same-named-locus question, 12,197 times, and it settles none of the
+547.** Taking every cached element and every gene name whose GENCODE v50 loci number two or more with
+a gene body inside the scorer window — lane-identity's own candidate rule at its own half-window —
+gives **211,202 (element, name) pairs** of the kind the 547 are. Of those: **192,341 merged**
+(pooled, unresolvable), **12,197 pinned**, 2 partly pinned, 6,662 with no signal; the four sum to
+211,202 with nothing in a residue. A pair is *pinned* when the element also carries rows named by the
+bare Ensembl ids of every other locus of that name in the window and the symbol row is not merged —
+AlphaGenome's `gene_name` for those loci *is* their id, because its annotation gives them no symbol,
+so the symbol row is the one locus left. **8,702,903 of the 27,938,173 rows (31.1%) are named by a
+bare Ensembl id**, which is the only locus-identifying string the cache holds.
+
+**The symbol-versus-locus test, met and then failed on the population that matters.** lane-identity
+warned that 295 of the 547 having exactly one protein_coding locus among their window candidates
+resolved none of them, because `predicted_coding` restricts by symbols that are protein_coding
+*somewhere on the chromosome* — a property of the SYMBOL. Pinning passes that test: the two loci
+carry one GENCODE symbol and the cache gives them **different names**, and no property of a symbol can
+differ between two loci that share it. But a compiled target comes from a `predicted_coding` block,
+so its name has a protein_coding locus on the chromosome — and **of the 9,357 ambiguous pairs whose
+name has one, 0 are pinned** (7,373 merged, 1,984 nothing). All 34 distinct pinned names are
+pseudogenes, lncRNAs and small RNAs. AlphaGenome emits a bare id only where its annotation gives the
+locus no symbol, which does not happen for the loci of a protein-coding name. **So the count of the
+547 this lane settles is 0, and the repair still needs a re-score.**
+
+**Two conditions on any such re-score.** Pinning assumes AlphaGenome's gene set holds the same loci
+of a name in a window as GENCODE v50 does, and it does not: **MATR3, NOX5 and ZNF724 have one GENCODE
+v50 locus each and a cached row that merges two response rows**, so the service's annotation carries
+loci GENCODE v50 does not — the caveat `gene_identity` already records, now with instances. And the
+merge cannot be undone after the fact: `n_tracks` says a row pooled two loci and nothing in the
+pooled numbers says which contributed what. A future run would have to read the gene id beside
+`gene_name` at `alphagenome_adapter.py:227`, carry it as `aggregate`'s key in place of the name at
+`enhancer_target.py:198`, and record the annotation release the gene axis came from.
+
+**What these figures are not.** Every one is counted over (cached element, gene name) pairs, **not
+over the 440,589 compiled rules and not over the 547**: this lane does not read the compiled rules,
+re-resolve any rule, or touch `data/results/gene_identity.json`, so it establishes no figure at the
+rule denominator. The 0 of the 547 is a property of the class a `predicted_coding` target belongs to,
+not a recount. A merge is a lost distinction and not a wrong number: 226,363 says nothing about what
+share of predictions is wrong, measures no feature's contribution, and establishes about no single
+rule that it is wrong. The 12,197 is a reading under the stated annotation condition, not an
+established identity. And the eight keys are what the chain KEPT of the response, not what the
+response contained.
+
+`data/results/gene_row_locus.json`, `genomeos/attribution/gene_row_locus.py`,
+`scripts/gene_row_locus.py`, `tests/test_gene_row_locus.py`. 0 model requests, no network, no money,
+nothing downloaded: every input was already on disk.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
