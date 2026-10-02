@@ -12,7 +12,10 @@ rebuild with the reason:
    (`code.dirty_code_paths`) is named, since the commit alone did not run;
 3. link the local data stores (data/reference, data/knowledge, data/cache) read-only, as the
    pre-push hook does, and check every input's sha256 against the manifest, naming any input that
-   is absent or has different bytes;
+   is absent or has different bytes. Every declared input is accounted for: a group of files read
+   together is opened and hashed member by member, and an input the tool cannot resolve stops the
+   rebuild by name. `inputs_declared`, `inputs_checked` and `inputs_unchecked` carry the denominator,
+   so an input that was not opened cannot leave the list and read as one that matched;
 4. run `code.argv` in the worktree, in a fresh environment from the committed uv.lock (`--venv
    fresh`, offline) or the checkout's own (`--venv shared`);
 5. compare the rebuilt result with RESULT.json field by field, ignoring only `date` and the
@@ -36,6 +39,10 @@ from genomeos import manifest as mf
 
 STORES = ("reference", "knowledge", "cache")
 IGNORED = ("date",)
+
+#: What an input's `sha256` says when nothing was hashed to produce it. Such an input cannot be
+#: checked, which is a reason to stop and say so, not a reason to pass.
+NOT_HASHED = "n/a"
 
 #: The fields a rebuild in a clean worktree is allowed to differ on, by **exact path**, because they
 #: describe the tree the run happened in and not anything the run computed. A result that honestly records
@@ -186,6 +193,207 @@ def comparable(payload: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def is_group(entry: dict[str, Any]) -> bool:
+    """Whether a declared input stands for several files read together rather than for one path.
+
+    `files_entry` marks a group since 2026-10-02. Before that a group carried `files` and so was
+    indistinguishable from `input_entry` on a directory, which carries `files` too; such an entry is
+    not treated as a group here, and falls to the unresolvable branch, which says so by name.
+    """
+    return entry.get("group") is True or isinstance(entry.get("members"), list)
+
+
+def check_inputs(worktree: Path, inputs: Any, root: Path) -> dict[str, Any]:
+    """Open and hash every declared input, a group member by member, and account for all of them.
+
+    The contract the caller rests on: `unavailable` is empty only when at least one input was declared
+    and every declared input was opened and hashed, and `entries` holds one record per declared input,
+    so nothing can leave the list silently. An input this cannot resolve is a named failure.
+
+    Written 2026-10-02 to replace a loop that resolved every input by `entry["path"]`. Because
+    `files_entry` records a label there and not a path, each group was reported "absent" with no file
+    opened, and its entry never reached `inputs`: a list with no denominator, which read as though
+    every input had matched. The direction of that error flattered the result -- a result whose inputs
+    were grouped was excused as resting on an unavailable dependency, when its files were on disk and
+    could have been compared.
+    """
+    out: dict[str, Any] = {
+        "declared": 0,
+        "checked": 0,
+        "files_opened": 0,
+        "entries": [],
+        "unavailable": [],
+        "checked_outside_the_worktree": [],
+    }
+    if not isinstance(inputs, list) or not inputs:
+        out["unavailable"].append(
+            "the manifest declares no inputs, so nothing was opened or hashed: a comparison of this "
+            "result's fields would say nothing about the bytes the run read"
+        )
+        return out
+    out["declared"] = len(inputs)
+    linked = [str((root / "data" / d).resolve()) for d in STORES]
+    for i in inputs:
+        if not isinstance(i, dict) or not isinstance(i.get("path"), str) or not i["path"]:
+            out["entries"].append({"path": None, "sha256_matches": False, "problem": "no path"})
+            out["unavailable"].append(f"a declared input carries no path: {i!r}"[:200])
+            continue
+        path = i["path"]
+        if is_group(i):
+            _check_group(worktree, i, out)
+        elif i.get("sha256") == NOT_HASHED:
+            out["entries"].append(
+                {"path": path, "sha256_matches": False, "problem": f"sha256 is {NOT_HASHED!r}"}
+            )
+            out["unavailable"].append(
+                f"input {path} records sha256 {NOT_HASHED!r}: nothing was hashed when the result was "
+                "written, so there is nothing for a rebuild to check these bytes against"
+            )
+        else:
+            _check_one_path(worktree, i, linked, out)
+    return out
+
+
+def _check_group(worktree: Path, i: dict[str, Any], out: dict[str, Any]) -> None:
+    """One grouped input: every member opened and hashed on its own, then the group's own digest."""
+    path, members = i["path"], i.get("members")
+    named = [m for m in members or [] if isinstance(m, dict) and isinstance(m.get("path"), str)]
+    if not members or len(named) != len(members):
+        out["entries"].append(
+            {
+                "path": path,
+                "group": True,
+                "members_declared": i.get("files"),
+                "members_opened_and_hashed": 0,
+                "sha256_matches": False,
+                "problem": "the group names no members",
+            }
+        )
+        out["unavailable"].append(
+            f"input {path} is a group of {i.get('files', 'an unstated number of')} files recorded under "
+            "a label whose members are not named, so not one of them could be opened: it was written "
+            "before files_entry named its members (2026-10-02) and cannot be checked from this manifest"
+        )
+        return
+    names = sorted(m["path"] for m in named)
+    absent = [n for n in names if not (worktree / n).exists()]
+    if absent:
+        out["entries"].append(
+            {
+                "path": path,
+                "group": True,
+                "members_declared": len(names),
+                "members_opened_and_hashed": 0,
+                "absent_members": absent[:20],
+                "sha256_matches": False,
+            }
+        )
+        out["unavailable"].append(
+            f"input {path}: {len(absent)} of {len(names)} files in the group are absent, first {absent[:3]}"
+        )
+        return
+    try:
+        digest, size, seen = mf.group_digest(names, root=worktree)
+    except OSError as e:
+        out["entries"].append(
+            {
+                "path": path,
+                "group": True,
+                "members_declared": len(names),
+                "members_opened_and_hashed": 0,
+                "sha256_matches": False,
+                "problem": f"a member cannot be read: {e}",
+            }
+        )
+        out["unavailable"].append(f"input {path}: a file in the group cannot be read: {e}")
+        return
+    out["files_opened"] += len(seen)
+    recorded = {m["path"]: m.get("sha256") for m in named}
+    differing = [s["path"] for s in seen if recorded.get(s["path"]) not in (None, s["sha256"])]
+    ok = digest == i.get("sha256")
+    out["entries"].append(
+        {
+            "path": path,
+            "group": True,
+            "members_declared": len(names),
+            "members_opened_and_hashed": len(seen),
+            "members_with_different_bytes": differing,
+            "sha256_matches": ok and not differing,
+            "bytes": size,
+        }
+    )
+    if differing:
+        out["unavailable"].append(
+            f"input {path}: {len(differing)} of {len(names)} files in the group have different bytes, "
+            f"first {differing[:3]}"
+        )
+        return
+    if not ok:
+        out["unavailable"].append(
+            f"input {path}: the group's own digest differs from the manifest's (sha256 {digest[:12]})"
+        )
+        return
+    out["checked"] += 1
+
+
+def _check_one_path(worktree: Path, i: dict[str, Any], linked: list[str], out: dict[str, Any]) -> None:
+    """One input recorded as a single path, which may be a file or a directory."""
+    path = i["path"]
+    outside: dict[str, Any] | None = None
+    if os.path.isabs(path):
+        # `worktree / path` leaves the worktree when path is absolute, so the bytes hashed would not be
+        # the bytes the rebuild reads -- except under data/reference, data/knowledge and data/cache,
+        # which are linked into the worktree and so are the same file.
+        real = str(Path(path).resolve())
+        store = next((s for s in linked if real == s or real.startswith(s + os.sep)), None)
+        if store is None:
+            out["entries"].append(
+                {"path": path, "sha256_matches": False, "problem": "absolute, outside the linked stores"}
+            )
+            out["unavailable"].append(
+                f"input {path} is an absolute path outside the linked data stores: the bytes there are "
+                "not the bytes this worktree reads, so it cannot be checked against this manifest"
+            )
+            return
+        outside = {"path": path, "linked_store": store}
+    p = worktree / path
+    if not p.exists():
+        # `files` on an entry with no member list reads as a group recorded under a label before
+        # files_entry named its members; saying so is the difference between an input that is missing
+        # and an input this tool cannot resolve.
+        reads_as_group = isinstance(i.get("files"), int) and i["files"] > 1
+        why = (
+            f"is absent, and reads as a group of {i['files']} files recorded under a label before "
+            "files_entry named its members (2026-10-02), so no file could be opened"
+            if reads_as_group
+            else "is absent"
+        )
+        out["entries"].append(
+            {
+                "path": path,
+                "sha256_matches": False,
+                "problem": "unresolved group" if reads_as_group else "absent",
+            }
+        )
+        out["unavailable"].append(f"input {path} {why}")
+        return
+    try:
+        digest, size, count = mf.sha256_of(p)
+    except OSError as e:
+        out["entries"].append({"path": path, "sha256_matches": False, "problem": f"cannot be read: {e}"})
+        out["unavailable"].append(f"input {path} cannot be read: {e}")
+        return
+    if outside is not None:
+        out["checked_outside_the_worktree"].append(outside)
+    ok = digest == i.get("sha256")
+    out["files_opened"] += count
+    out["entries"].append({"path": path, "sha256_matches": ok, "bytes": size, "files_opened": count})
+    if not ok:
+        out["unavailable"].append(f"input {path} has different bytes (sha256 {digest[:12]})")
+        return
+    out["checked"] += 1
+
+
 def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) -> dict[str, Any]:
     root = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip())
     original = json.loads(result.read_text())
@@ -210,18 +418,15 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
         for d in STORES:
             if (root / "data" / d).is_dir() and not (wt / "data" / d).exists():
                 (wt / "data" / d).symlink_to(root / "data" / d)
-        checks = []
-        for i in m.get("inputs", []):
-            p = wt / i["path"]
-            if not p.exists():
-                report["unavailable"].append(f"input {i['path']} is absent")
-                continue
-            digest, size, _ = mf.sha256_of(p)
-            ok = digest == i["sha256"]
-            checks.append({"path": i["path"], "sha256_matches": ok, "bytes": size})
-            if not ok:
-                report["unavailable"].append(f"input {i['path']} has different bytes (sha256 {digest[:12]})")
-        report["inputs"] = checks
+        found = check_inputs(wt, m.get("inputs"), root)
+        report["inputs"] = found["entries"]
+        report["inputs_declared"] = found["declared"]
+        report["inputs_checked"] = found["checked"]
+        report["inputs_unchecked"] = found["declared"] - found["checked"]
+        report["files_opened_and_hashed"] = found["files_opened"]
+        if found["checked_outside_the_worktree"]:
+            report["checked_outside_the_worktree"] = found["checked_outside_the_worktree"]
+        report["unavailable"] += found["unavailable"]
         if report["unavailable"]:
             return {**report, "rebuilt": False}
         env = {k: v for k, v in os.environ.items() if k not in ("VIRTUAL_ENV", "UV_PROJECT_ENVIRONMENT")}
@@ -270,6 +475,14 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
         report["leaves_compared"] = report["leaves"]["compared"]
         # despite its name this key compares fields (date and the code block ignored); the next is bytes
         # (timing keys are ignored as well, and listed in timing_fields_ignored)
+        if report["inputs_checked"] != report["inputs_declared"] or not report["inputs_declared"]:
+            # unreachable through the branch above; kept so that no later edit can write a verdict for a
+            # result whose inputs were not all opened, which is the failure this tool had on 2026-10-02
+            report["unavailable"].append(
+                f"{report['inputs_checked']} of {report['inputs_declared']} declared inputs were opened "
+                "and hashed: no verdict is reported"
+            )
+            return {**report, "rebuilt": False}
         report["identical_bytes_except_date_and_run"] = not report["differences"]
         report["identical_bytes"] = written.read_bytes() == result.read_bytes()
         return {**report, "rebuilt": True}

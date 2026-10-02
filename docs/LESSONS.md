@@ -742,3 +742,37 @@ Each is a different slip, and each is common:
 travels with it word for word (*cannot decide*, *persists after adjustment*, *no difference detected*),
 and any stronger sentence the summariser wants to write is a new claim that needs its own evidence. The
 lanes' own discipline did not fail here; the step after it did.
+
+## A verification tool can fail in the direction that flatters
+
+On 2026-10-02 `scripts/manifest_rebuild.py`, the tool the night's compliance claims rested on, resolved
+every declared input by `entry["path"]`. For an input recorded by `manifest.files_entry` — a group of
+files read together, a person's per-chromosome calls, a census's tracked programs — that field holds a
+**label**, not a path. So every grouped input was reported absent while its files sat on disk: the
+rebuild opened and hashed not one of them, the entry never reached the `inputs` list the report shows,
+and the run stopped with the dependency named unavailable, which review item R9 accepts as an outcome in
+its own right. Five committed results were excused that way, among them `context_evidence.json`, where 12
+of 13 declared inputs, standing for 873 files, were never opened. Two things made it quiet rather than
+merely wrong: the `inputs` list carried no denominator, so the 12 unchecked entries left it and the one
+that remained read as though all had matched; and a manifest declaring no inputs at all got a full
+verdict having opened nothing.
+
+The error ran one way. A result whose inputs were grouped could not fail the check, because the check
+never reached its numbers — it was let off as resting on something unavailable. Nothing in the report
+said what had not been looked at. It was found by a lane that hit it, worked around it locally by
+recording each file under its own path, and said so rather than keeping the workaround to itself.
+
+**What now makes it impossible.** `files_entry` names every file in a group, each with its own sha256 and
+byte count, and marks the entry a group, which also tells a group apart from `input_entry` on a directory.
+`manifest.group_digest` is the one implementation of the group digest, so the writer and the checker
+cannot answer differently about which bytes it covers. The rebuild opens and hashes every member on its
+own, and reports `inputs_declared`, `inputs_checked`, `inputs_unchecked` and `files_opened_and_hashed`,
+with one entry per declared input, so an input nobody looked at cannot leave the list. An input the tool
+cannot resolve — a group written before its members were named, an absolute path outside the linked
+stores, a manifest with no inputs — stops the rebuild by name, and is never a pass. Ten tests pin it;
+nine of the ten fail against the code as it stood, and the tenth asserts the group digest did not move,
+so a digest recorded earlier still verifies.
+
+**The shape to watch for**, which this project has met before: an instrument that preserves the quantity
+its test watches. The question to ask of a verification tool is not whether it reports zero differences,
+but whether it opened the files it says it checked, and whether it says how many it did not.

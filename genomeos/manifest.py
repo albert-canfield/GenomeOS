@@ -177,25 +177,57 @@ def input_entry(path: str | Path, partition: str | None = None, **extra: Any) ->
     return {**entry, **extra}
 
 
-def files_entry(label: str, paths: Any, partition: str | None = None, **extra: Any) -> dict[str, Any]:
-    """One input made of several files read together (a person's per-chromosome calls, the tracked
-    programs of a census): sha256 over each file's path and bytes in sorted path order, the way
-    `sha256_of` hashes a directory, so the same files give the same digest. Added by the item 12 S6
-    follow-up (lane-contract) for the writers it brought under the contract."""
+def group_digest(names: list[str], root: Path | None = None) -> tuple[str, int, list[dict[str, Any]]]:
+    """The digest of a group of files read together, the total bytes, and each member on its own.
+
+    The group digest is sha256 over each member's name and bytes, in the order given, the way
+    `sha256_of` hashes a directory, so the same files give the same digest wherever the checkout sits.
+    `names` are already as the repository names them and already in the order they are to be hashed;
+    `root` is the checkout to read them from, the working directory when it is None.
+
+    The one implementation of this digest. `files_entry` records a group with it and
+    `scripts/manifest_rebuild.py` checks a group with it, so the writer and the checker cannot answer
+    differently about which bytes a group's digest covers.
+    """
     h = hashlib.sha256()
+    base = Path(root) if root is not None else Path()
     total = 0
-    files = sorted({_repo_relative(x) for x in paths})
-    for name in files:
+    members: list[dict[str, Any]] = []
+    for name in names:
         h.update(name.encode() + b"\0")
-        with Path(name).open("rb") as f:
+        member = hashlib.sha256()
+        size = 0
+        with (base / name).open("rb") as f:
             for chunk in iter(lambda f=f: f.read(1 << 20), b""):
                 h.update(chunk)
-                total += len(chunk)
+                member.update(chunk)
+                size += len(chunk)
+        members.append({"path": name, "sha256": member.hexdigest(), "bytes": size})
+        total += size
+    return h.hexdigest(), total, members
+
+
+def files_entry(label: str, paths: Any, partition: str | None = None, **extra: Any) -> dict[str, Any]:
+    """One input made of several files read together (a person's per-chromosome calls, the tracked
+    programs of a census): the group digest of `group_digest`, under a label rather than a path. Added
+    by the item 12 S6 follow-up (lane-contract) for the writers it brought under the contract.
+
+    Since 2026-10-02 the entry also names every file in the group, each with its own sha256 and byte
+    count, and marks itself `group`. Until then it recorded only the label, the digest and a count, so
+    nothing downstream could open the files it stood for: `scripts/manifest_rebuild.py` resolved an
+    input by its `path`, found no file at the label, and reported an input absent that was on disk all
+    along -- and a group was indistinguishable from `input_entry` on a directory, which also carries
+    `files`. The group digest is unchanged, so a digest recorded before this date still verifies.
+    """
+    names = sorted({_repo_relative(x) for x in paths})
+    digest, total, members = group_digest(names)
     return {
         "path": label,
-        "sha256": h.hexdigest(),
+        "group": True,
+        "members": members,
+        "sha256": digest,
         "bytes": total,
-        "files": len(files),
+        "files": len(names),
         "partition": partition,
         **extra,
     }
