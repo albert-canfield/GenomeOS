@@ -45,6 +45,7 @@ from astroreg2_register import (  # noqa: E402
 from astroreg_rpm_calibrate import (  # noqa: E402
     PORTAL,
     PRODUCER_BAMS,
+    ensure_pysam_or_reexec,
     producer_bam_meta,
     stream_producer,
 )
@@ -245,6 +246,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--restream", action="store_true", help="ignore the cached reconstruction")
     args = ap.parse_args()
+    ensure_pysam_or_reexec()
     t0 = time.time()
 
     digest, _, _ = mf.sha256_of(Path("data/results/astroreg_registration.json"))

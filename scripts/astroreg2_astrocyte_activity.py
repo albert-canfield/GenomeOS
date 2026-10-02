@@ -49,6 +49,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from astroreg_register import TABLE3, screen_pairs  # noqa: E402
 from astroreg_rpm_calibrate import (  # noqa: E402
     PORTAL,
+    ensure_pysam_or_reexec,
     metadata_mapped_reads,
     select_bams,
     stream_producer,
@@ -316,6 +317,7 @@ def main() -> int:
         "are deterministic given the BAMs, and the result records that it came from a cached pass",
     )
     args = ap.parse_args()
+    ensure_pysam_or_reexec()
     t0 = time.time()
 
     pairs = screen_pairs()

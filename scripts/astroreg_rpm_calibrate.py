@@ -34,6 +34,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import subprocess
 import sys
 import tempfile
 import time
@@ -98,6 +100,61 @@ OWN_CODE = (
     "scripts/astroreg_rpm_calibrate.py",
     "tests/test_rpm.py",
 )
+
+
+#: The transient tool this chain needs, pinned. MIT, and deliberately NOT in pyproject: this project
+#: ships no runtime dependency and that is not changed for one script.
+PYSAM_PIN = "pysam==0.23.0"
+
+#: pysam 0.23.0 does not import on 3.14 (`libcalignedsegment has no attribute CMATCH`), and the project
+#: has no dependencies, so the two coexist on 3.12.
+PYSAM_PYTHON = "3.12"
+
+#: Set in the child so a failed bootstrap cannot recurse.
+BOOTSTRAP_MARK = "GENOMEOS_PYSAM_BOOTSTRAPPED"
+
+WHY_BOOTSTRAP = (
+    "a result that gates money has to rebuild from its own manifest, and manifest_rebuild runs the "
+    "recorded argv with the checkout's own interpreter -- which has no pysam, because pysam is a "
+    "transient tool kept out of pyproject. That left the chain UNREBUILDABLE for a reason that had "
+    "nothing to do with its arithmetic: ModuleNotFoundError before any comparison. Rather than add a "
+    "runtime dependency or accept an unrebuildable result, the entry point re-executes itself once "
+    "under `uv run --with pysam`, so `python scripts/<entry>.py` works in any checkout and the recorded "
+    "argv is sufficient to reproduce the result"
+)
+
+
+def ensure_pysam_or_reexec() -> None:
+    """Re-exec once under `uv run --with pysam` if pysam is missing. See `WHY_BOOTSTRAP`.
+
+    Called at the top of an entry point, before anything is read, so the child does the whole run and
+    the parent only forwards its status. A child that still cannot import pysam raises rather than
+    recursing.
+    """
+    try:
+        import pysam  # noqa: F401
+
+        return
+    except ModuleNotFoundError:
+        pass
+    if os.environ.get(BOOTSTRAP_MARK):
+        raise SystemExit(
+            f"REFUSED: {PYSAM_PIN} is unavailable even after re-executing under uv. {WHY_BOOTSTRAP}"
+        )
+    env = dict(os.environ, **{BOOTSTRAP_MARK: "1"})
+    cmd = [
+        "uv",
+        "run",
+        "--quiet",
+        "--with",
+        PYSAM_PIN,
+        "--python",
+        PYSAM_PYTHON,
+        "python",
+        *sys.argv,
+    ]
+    print(f"pysam is absent here; re-executing once under: {' '.join(cmd[:8])} ...", flush=True)
+    raise SystemExit(subprocess.call(cmd, env=env, cwd=str(ROOT)))
 
 
 def portal(path: str) -> dict[str, Any]:
