@@ -13821,8 +13821,9 @@ emits, counted from the compiled text of all 24 chromosomes: 440,589, exactly th
 | `not_assessable`, `no_reader_for_this_cell` | 358,949 | 81.47% |
 | `not_assessable`, `region_outside_measured_span` | 5 | 0.00% |
 
-Among the 81,635 rules where a reading could be taken, 0.3252 are open: **the element is not detected
-open in the very cell the rule asserts in about two of every three of them.** Per biosample, open
+Among the 81,635 rules where a reading could be taken, 0.3252 are open: the element is not detected
+open in the very cell the rule asserts in about two of every three of them. **That share means nothing
+until the base rate is beside it**, and the base rate is below. Per biosample, open
 against not-open: K562 8,081 against 19,364; CD14-positive monocyte 6,456 against 9,084; HepG2 5,301
 against 9,478; GM12878 1,627 against 4,779; keratinocyte 1,487 against 3,872; IMR-90 1,130 against
 1,812; H1 1,042 against 2,705; cardiac muscle cell 561 against 1,304; testis 507 against 1,645; ovary
@@ -13838,6 +13839,31 @@ rules with no reader, led by placenta with 14,275, whole blood with 11,325, psoa
 and small intestine with 10,006. The shortfall is not a failure of the mapping but the shape of reader
 v1: thirteen biosamples against 317 asserted cells.
 
+**The base rate, measured and not inferred (descriptive, not registered).** The elements are ENCODE
+registry cCREs, built from DNase over many biosamples, so **any** biosample opens some share of them
+whatever cell a rule names: 0.3252 could have been arithmetic rather than a finding. So the same 81,635
+rules were read again in all thirteen reader biosamples, over exactly that rule set and with the same
+openness call, mapping table and measured-span rule. Read in its own assigned cell, 0.3252 of the
+population is open. Read in the twelve biosamples that are not its own, 175,869 of 979,455
+rule-and-biosample pairs are open, **0.1796** of that population, with 165 further pairs excluded and
+counted because the locus lies outside that biosample's measured span. The difference is **+0.1456**
+against a tolerance of 0.02 fixed before any share was computed: the assigned cell is open about 1.8
+times as often as the base rate, so **the cell the compiler assigns carries information about where the
+element is actually open.** The stronger form: read on its own over the same 81,635 rules, no single
+biosample reaches 0.3252 — cardiac muscle cell is highest at 0.2845, then IMR-90 0.2503, hepatocyte
+0.2500, K562 0.2479, astrocyte 0.2362, CD14-positive monocyte 0.2094, testis 0.1851, HepG2 0.1776,
+SK-N-SH 0.1724, H1 0.1618, ovary 0.1434, GM12878 0.0827, keratinocyte 0.0783. Picking the cell per rule
+beats every fixed choice of cell, which it would not do if the assignment were noise.
+
+Two assigned cells do not clear the tolerance and are stated rather than absorbed into the pooled figure.
+For the 347 rules assigned to SK-N-SH, SK-N-SH is open on 0.2392 of them against 0.2580 in the other
+twelve — a difference of −0.0188, inside the tolerance, so **for those rules the assignment carries no
+information about openness** and if anything points slightly away from it. For the 209 rules assigned to
+astrocyte the difference is +0.0294 and for the 603 assigned to ovary +0.0260, both only just outside it.
+The largest are CD14-positive monocyte at +0.2163 over 15,540 rules, HepG2 at +0.1909 over 14,779 and
+IMR-90 at +0.1864 over 2,942. This comparison tests whether the assignment is **informative**, not
+whether it is **correct**; it is in `data/results/context_evidence_baserate.json` and was not registered.
+
 **The weakness, stated rather than buried.** Reader v1's openness comes from ENCODE DNase and histone
 peaks, and AlphaGenome was trained on ENCODE. `open_in_reader` is therefore **a consistency check
 between two readings of the same chromatin and never independent evidence that a rule is right**. It
@@ -13852,7 +13878,13 @@ genome became attributed that was not attributed before. `Rule.applies` does not
 a rule whose element is not detected open still fires in its own cell and in no other.
 
 Registered first in `data/results/context_evidence_registration.json`; counted in
-`data/results/context_evidence.json`; 0 model requests and no money, every input already on disk.
+`data/results/context_evidence.json`; the base rate beside it in
+`data/results/context_evidence_baserate.json`. A chr21-scoped census,
+`data/results/context_evidence_chr21.json`, rebuilds from its manifest in a clean worktree with 0
+differences over 3,101 of 3,112 leaves and all 38 inputs matching their recorded bytes; the genome-wide
+one cannot, because twelve of its input groups are the per-chromosome reader results and DNase peak rows,
+which are git-ignored for every chromosome but chr21, and the rebuild names them. 0 model requests and no
+money, every input already on disk.
 
 ## What comes next, in order
 
