@@ -187,3 +187,257 @@ def test_declared_inputs_are_hashed_in_the_registration() -> None:
 def test_the_registration_promises_no_spend_and_no_weakening() -> None:
     assert "0 model requests" in lg.NO_SPEND
     assert "No test, threshold, pin or registration is weakened" in lg.NEVER_WEAKENED
+
+
+def test_amendment_one_is_additive_and_discloses_that_it_appends() -> None:
+    text = lg.AMENDMENT_1
+    assert "DISCLOSED HONESTLY" in text
+    assert "47835d1" in text
+    assert "purely ADDITIVE" in text
+    assert "scripts/label_gene_count.py does not exist in the tree" in text
+    body = lg.amendment_1_payload()
+    assert body["amendment_1"] == text
+    assert "47835d1" in body["amends"]
+    # the amendment is its own file: the landed registration is not rewritten
+    assert "amendment_1" not in lg.registration()
+    # nothing the registration already fixed may move
+    assert body["band_at_control"] == [0.80, 1.25]
+    assert body["band_far_above"] == 1.50
+    assert body["min_clusters_genes"] == 10
+    assert body["reading_c_words"] == "THE DATA CANNOT TELL"
+
+
+def test_the_binding_sentence_on_disagreement_is_registered_before_either_number() -> None:
+    assert (
+        "IF THE PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE, THE RESULT "
+        "MUST SAY SO IN THOSE WORDS" in lg.AMENDMENT_1
+    )
+    assert "DECIDES NOTHING" in lg.AMENDMENT_1
+
+
+def test_disagreement_fires_on_either_registered_condition() -> None:
+    pooled = {"ci95": [1.60, 1.90], "band": "far_above"}
+    same = lg.disagreement(pooled, {"band": "far_above"}, 1.70)
+    assert same["disagree"] is False
+    bands = lg.disagreement(pooled, {"band": "at_control"}, 1.70)
+    assert bands["disagree"] is True
+    assert "DISAGREE." in bands["statement"]
+    outside = lg.disagreement(pooled, {"band": "far_above"}, 2.40)
+    assert outside["disagree"] is True
+    assert outside["equal_weight_point_outside_the_pooled_interval"] is True
+    assert "selects the reading on the PAIR-POOLED primary" in outside["the_reading_is_still_the_pooled_one"]
+
+
+# --------------------------------------------------------------------------- #
+# The counting path, on a synthetic population small enough to check by hand.
+# A @1000 B @1500 C @11000 on gene G1; D @2000 E @1001000 on gene G2.
+# Labels: A=L1 B=L1 C=L2 D=L1 E=L2.
+# --------------------------------------------------------------------------- #
+
+
+def _block(element: str, gene: str, label: str, start: int, verb: str = "activates") -> str:
+    """One element block and its predicted rule line, built so no source line runs long."""
+    evidence = f'predicted "AlphaGenome deletion, {label}" effect -0.1'
+    return (
+        f"element {element} {{\n  locus: chr21:{start}-{start}\n}}\n"
+        f"rule {element} {verb} {gene} {{ strength: 0.1; when: cell_type = {label}; "
+        f"evidence: {evidence} }}\n"
+    )
+
+
+_MEASURED = (
+    "element F_measured {\n  locus: chr21:1000-1000\n}\n"
+    "rule F_measured activates G1 { strength: 0.2; when: cell_type = K562; "
+    'evidence: experimental "a screen"; confidence: 0.9 }\n'
+)
+
+SYNTHETIC = (
+    "module t\n\n"
+    + _block("A", "G1", "L1", 1000)
+    + _block("B", "G1", "L1", 1500, verb="inhibits")
+    + _block("C", "G1", "L2", 11000)
+    + _block("D", "G2", "L1", 2000)
+    + _block("E", "G2", "L2", 1001000)
+    + _MEASURED
+)
+
+
+@pytest.fixture
+def synthetic(tmp_path):
+    path = tmp_path / "synthetic.bio"
+    path.write_text(SYNTHETIC, encoding="utf-8")
+    rows, census = lg.parse_population(str(path))
+    return rows, census
+
+
+def test_the_population_excludes_the_experimental_rule(synthetic) -> None:
+    rows, census = synthetic
+    assert census["rule_lines"] == 6
+    assert census["predicted_rules"] == 5
+    assert census["experimental_rules"] == 1
+    assert sorted(r.element for r in rows) == ["A", "B", "C", "D", "E"]
+    assert {r.gene for r in rows} == {"G1", "G2"}
+    assert next(r for r in rows if r.element == "C").midpoint == 11000
+
+
+def test_one_gene_per_element_is_verified_and_raises_when_it_fails(synthetic) -> None:
+    rows, _ = synthetic
+    assert lg.verify_one_gene_per_element(rows) == {"distinct_elements": 5, "rules": 5}
+    doubled = rows + [lg.RuleRow("A", "G9", "L1", "chr21", 1000, 1000)]
+    with pytest.raises(AssertionError, match="more than one target gene"):
+        lg.verify_one_gene_per_element(doubled)
+
+
+def test_control_one_on_the_synthetic_population(synthetic) -> None:
+    rows, _ = synthetic
+    assert lg.control_one(rows) == pytest.approx(0.6**2 + 0.4**2)
+
+
+def test_vector_bins_agrees_elementwise_with_the_scalar_rule() -> None:
+    np = pytest.importorskip("numpy")
+    probes = [
+        0,
+        1,
+        999,
+        1000,
+        1001,
+        9999,
+        10000,
+        10001,
+        100000,
+        999999,
+        1000000,
+        5_000_000,
+        10_000_000,
+        46_000_000,
+    ]
+    assert list(lg.vector_bins(np.array(probes, dtype=float))) == [lg.distance_bin(float(p)) for p in probes]
+
+
+def test_aggregate_pairs_counts_the_synthetic_pairs_by_hand(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    counts = lg.aggregate_pairs(rows)
+    assert counts.genes == ["G1", "G2"]
+    within_t = counts.within_total.sum(axis=0)
+    within_c = counts.within_concordant.sum(axis=0)
+    assert list(within_t) == [1, 2, 0, 1, 0, 0]
+    assert list(within_c) == [1, 0, 0, 0, 0, 0]
+    diff_t = counts.diff_total.sum(axis=1)
+    diff_c = counts.diff_concordant.sum(axis=1)
+    assert list(diff_t) == [2, 1, 0, 3, 0, 0]
+    assert list(diff_c) == [2, 0, 0, 1, 0, 0]
+    # every unordered pair of five elements is counted exactly once
+    assert int(within_t.sum() + diff_t.sum()) == 10
+
+
+def test_the_buffer_flush_does_not_change_a_single_count(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    whole = lg.aggregate_pairs(rows)
+    original = lg.FLUSH_AT
+    try:
+        lg.FLUSH_AT = 1
+        flushed = lg.aggregate_pairs(rows)
+    finally:
+        lg.FLUSH_AT = original
+    assert list(flushed.within_total.sum(axis=0)) == list(whole.within_total.sum(axis=0))
+    assert list(flushed.diff_concordant.sum(axis=1)) == list(whole.diff_concordant.sum(axis=1))
+
+
+def test_contributing_bins_drops_a_thin_bin_and_reports_the_dropped_weight(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    bins = lg.contributing_bins(lg.aggregate_pairs(rows))
+    # every synthetic bin is far below the minimum of 10 pairs, so none contributes
+    assert bins["contributing"] == []
+    assert bins["dropped_within_gene_weight"] == 1.0
+    assert bins["inconclusive_by_rule"] is True
+
+
+def test_point_estimates_match_the_hand_count(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    counts = lg.aggregate_pairs(rows)
+    point = lg.point_estimates(counts, keep=[0, 1, 3])
+    assert point["within_gene_pairs"] == 4
+    assert point["within_gene_concordant_pairs"] == 1
+    assert point["within_gene_concordance_primary"] == pytest.approx(0.25)
+    assert point["different_gene_pairs"] == 6
+    assert point["different_gene_concordant_pairs"] == 3
+    # weights over the contributing bins 0, 1 and 3 are 1/4, 2/4 and 1/4 of the within-gene pairs
+    assert point["within_gene_concordance_matched"] == pytest.approx(0.25 * 1.0)
+    assert point["different_gene_concordance_matched"] == pytest.approx(
+        0.25 * 1.0 + 0.5 * 0.0 + 0.25 * (1 / 3)
+    )
+
+
+def test_a_bin_with_no_pairs_in_an_arm_takes_weight_zero_and_the_rest_renormalise() -> None:
+    within_c = [1, 0, 0, 0, 0, 0]
+    within_t = [2, 2, 0, 0, 0, 0]
+    diff_c = [1, 0, 0, 0, 0, 0]
+    diff_t = [2, 0, 0, 0, 0, 0]
+    within, different, used = lg._matched(within_c, within_t, diff_c, diff_t, keep=[0, 1])
+    assert within == pytest.approx(0.5)
+    assert different == pytest.approx(0.5)
+    assert used == pytest.approx(0.5)
+
+
+def test_the_dyadic_resample_weights_a_different_gene_pair_by_both_its_genes(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    counts = lg.aggregate_pairs(rows)
+    draws = lg.resample(counts, keep=[0, 1, 3], draws=50, seed=3)
+    assert draws["clusters"] == 2
+    assert draws["met_minimum"] is False  # 2 genes is below the floor of 10
+    assert draws["resamples_used"] <= 50
+    assert "PRODUCT of its two genes'" in draws["cluster_rule"]
+
+
+def test_concentration_is_printed_with_no_threshold(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    conc = lg.concentration(lg.aggregate_pairs(rows), top=1)
+    assert conc["within_gene_pairs"] == 4
+    assert conc["top_genes"] == ["G1"]
+    assert conc["share_of_pairs_from_the_top_genes"] == pytest.approx(0.75)
+    assert conc["genes_with_at_least_one_pair"] == 2
+    assert "no reading turns on it" in conc["no_threshold"]
+
+
+def test_the_equal_weight_sensitivity_excludes_units_with_no_pairs(synthetic) -> None:
+    pytest.importorskip("numpy")
+    rows, _ = synthetic
+    equal = lg.gene_equal_weight(lg.aggregate_pairs(rows), keep=[0, 1, 3])
+    assert equal["labelled"].startswith("SENSITIVITY")
+    assert equal["genes_contributing"] == 2
+    assert equal["gene_pairs_contributing"] == 1
+    assert equal["genes_excluded_no_pairs_in_a_contributing_bin"] == 0
+    # G1 has pairs in bins 0 and 1 only, G2 in bin 3 only: each reweights over its own bins
+    assert equal["within_gene_equal_weight"] == pytest.approx(((0.25 * 1.0) / 0.75 + 0.0) / 2)
+
+
+def test_a_ratio_interval_carries_its_band_assumptions_and_identical_share() -> None:
+    block = lg.ratio_interval([0.5] * 100, 0.25, "flat / control")
+    assert block["ci95"] == [2.0, 2.0]
+    assert block["band"] == "far_above"
+    assert block["identical_resample_share"] == 1.0
+    assert block["degenerate"] is True
+    assert "GENES are the clusters" in block["instrument_assumptions"]
+    assert "held fixed through every bootstrap resample" in block["instrument_assumptions"]
+    with pytest.raises(ValueError):
+        lg.ratio_interval([0.5], 0.0, "bad")
+    with pytest.raises(ValueError, match="same resamples"):
+        lg.ratio_interval([0.5, 0.6], [0.5], "mismatched")
+
+
+def test_a_ratio_of_two_arms_uses_the_same_resamples() -> None:
+    block = lg.ratio_interval([0.6] * 50, [0.3] * 50, "arm / arm")
+    assert block["ci95"] == [2.0, 2.0]
+    assert "same gene resample" in block["instrument_assumptions"].lower()
+
+
+def test_the_gtex_normalisation_maps_a_compiled_label_onto_a_column_name() -> None:
+    assert lg.normalise_tissue("Small_Intestine_Terminal_Ileum") == lg.normalise_tissue(
+        "Small Intestine - Terminal Ileum"
+    )

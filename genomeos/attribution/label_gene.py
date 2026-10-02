@@ -640,3 +640,565 @@ def registration() -> dict[str, Any]:
             "result can never be read against a different input than the one registered."
         ),
     }
+
+
+# ---------------------------------------------------------------------------
+# Aggregation: gene-by-gene-by-bin counters, never a materialised pair list
+# ---------------------------------------------------------------------------
+
+#: How many pair records are buffered before they are folded into the counters. The buffer bounds
+#: the script's resident set: 13.4 million pairs held at once would be 107 MB of indices alone, and
+#: the registration's read discipline is that nothing in this lane scales with the pair count.
+FLUSH_AT = 2_000_000
+
+
+def vector_bins(distances: Any) -> Any:
+    """The registered decade bin of an array of distances, agreeing with `distance_bin` elementwise.
+
+    `searchsorted(..., side='left') - 1` puts an exact edge in the lower bin, which is the
+    half-open `(lower, upper]` the registration fixed; the clip at 0 is the `distance == 0` case,
+    which the registration puts in the first bin.
+    """
+    edges = _np.asarray(DISTANCE_BIN_EDGES_BP, dtype=_np.float64)
+    return _np.maximum(_np.searchsorted(edges, distances, side="left") - 1, 0)
+
+
+@dataclass
+class PairCounts:
+    """Concordant and total element pairs, counted per gene pair and per distance bin.
+
+    `within` is indexed [gene, bin]; `diff_*` are indexed [bin, gene * genes + gene] so that one
+    resample's dyadic weights can be applied as a single matrix-vector product.
+    """
+
+    genes: list[str]
+    within_concordant: Any
+    within_total: Any
+    diff_concordant: Any
+    diff_total: Any
+
+    @property
+    def gene_count(self) -> int:
+        return len(self.genes)
+
+
+def aggregate_pairs(rows: list[RuleRow]) -> PairCounts:
+    """Every unordered element pair of the population, folded into gene-by-gene-by-bin counters.
+
+    Nothing here scales with the number of pairs: the pair records are produced one source element
+    at a time and folded into fixed-size counters every FLUSH_AT records.
+    """
+    if _np is None:  # pragma: no cover
+        raise RuntimeError("numpy is required to aggregate pairs")
+    genes = sorted({row.gene for row in rows})
+    index = {gene: i for i, gene in enumerate(genes)}
+    order = sorted(range(len(rows)), key=lambda i: rows[i].midpoint)
+    gene_of = _np.array([index[rows[i].gene] for i in order], dtype=_np.int64)
+    midpoint = _np.array([rows[i].midpoint for i in order], dtype=_np.float64)
+    labels = sorted({row.label for row in rows})
+    label_index = {label: i for i, label in enumerate(labels)}
+    label_of = _np.array([label_index[rows[i].label] for i in order], dtype=_np.int64)
+
+    n_genes, n_bins = len(genes), len(BIN_LABELS)
+    cells = n_genes * n_genes * n_bins
+    total = _np.zeros(cells, dtype=_np.int64)
+    concordant = _np.zeros(cells, dtype=_np.int64)
+    buffer_flat: list[Any] = []
+    buffer_same: list[Any] = []
+    buffered = 0
+
+    def flush() -> None:
+        nonlocal buffered
+        if not buffer_flat:
+            return
+        flat = _np.concatenate(buffer_flat)
+        same = _np.concatenate(buffer_same)
+        total[:] += _np.bincount(flat, minlength=cells)
+        concordant[:] += _np.bincount(flat[same], minlength=cells)
+        buffer_flat.clear()
+        buffer_same.clear()
+        buffered = 0
+
+    for i in range(len(order) - 1):
+        others = slice(i + 1, len(order))
+        bins = vector_bins(_np.abs(midpoint[others] - midpoint[i]))
+        low = _np.minimum(gene_of[others], gene_of[i])
+        high = _np.maximum(gene_of[others], gene_of[i])
+        buffer_flat.append((low * n_genes + high) * n_bins + bins)
+        buffer_same.append(label_of[others] == label_of[i])
+        buffered += len(order) - i - 1
+        if buffered >= FLUSH_AT:
+            flush()
+    flush()
+
+    total = total.reshape(n_genes, n_genes, n_bins)
+    concordant = concordant.reshape(n_genes, n_genes, n_bins)
+    diagonal = _np.arange(n_genes)
+    within_total = total[diagonal, diagonal, :].copy()
+    within_concordant = concordant[diagonal, diagonal, :].copy()
+    total[diagonal, diagonal, :] = 0
+    concordant[diagonal, diagonal, :] = 0
+    return PairCounts(
+        genes=genes,
+        within_concordant=within_concordant,
+        within_total=within_total,
+        diff_concordant=_np.ascontiguousarray(
+            concordant.reshape(n_genes * n_genes, n_bins).T.astype(_np.float64)
+        ),
+        diff_total=_np.ascontiguousarray(total.reshape(n_genes * n_genes, n_bins).T.astype(_np.float64)),
+    )
+
+
+def contributing_bins(counts: PairCounts) -> dict[str, Any]:
+    """Which decade bins contribute to the matched comparison, by the registered rule, fixed once
+    over the FULL population and held through every resample."""
+    within = counts.within_total.sum(axis=0)
+    different = counts.diff_total.sum(axis=1)
+    keep = [
+        b
+        for b in range(len(BIN_LABELS))
+        if within[b] >= MIN_PAIRS_PER_BIN and different[b] >= MIN_PAIRS_PER_BIN
+    ]
+    all_within = float(within.sum())
+    dropped = 1.0 - (float(within[keep].sum()) / all_within if all_within else 0.0)
+    return {
+        "contributing": keep,
+        "contributing_labels": [BIN_LABELS[b] for b in keep],
+        "within_gene_pairs_per_bin": {BIN_LABELS[b]: int(within[b]) for b in range(len(BIN_LABELS))},
+        "different_gene_pairs_per_bin": {BIN_LABELS[b]: int(different[b]) for b in range(len(BIN_LABELS))},
+        "dropped_within_gene_weight": round(dropped, 6),
+        "maximum_dropped_weight": MAX_DROPPED_WEIGHT,
+        "inconclusive_by_rule": dropped > MAX_DROPPED_WEIGHT,
+        "rule": BIN_CONTRIBUTION_RULE,
+    }
+
+
+def _matched(
+    within_c: Any, within_t: Any, diff_c: Any, diff_t: Any, keep: list[int]
+) -> tuple[float | None, float | None, float]:
+    """The two reweighted arms on one distance distribution, plus the weight actually used.
+
+    A contributing bin whose resampled denominator is empty in either arm takes weight 0 and the
+    remaining weights are renormalised; the share of resamples in which that happened is reported
+    beside the interval, because it is a mechanical necessity of resampling and not a registered
+    choice.
+    """
+    usable = [b for b in keep if within_t[b] > 0 and diff_t[b] > 0]
+    mass = float(sum(within_t[b] for b in usable))
+    if not usable or mass <= 0:
+        return None, None, 0.0
+    weights = {b: float(within_t[b]) / mass for b in usable}
+    within = sum(weights[b] * float(within_c[b]) / float(within_t[b]) for b in usable)
+    different = sum(weights[b] * float(diff_c[b]) / float(diff_t[b]) for b in usable)
+    used = mass / float(sum(within_t[b] for b in keep)) if sum(within_t[b] for b in keep) else 0.0
+    return within, different, used
+
+
+def point_estimates(counts: PairCounts, keep: list[int]) -> dict[str, Any]:
+    """The primary and the two matched arms over the full population, before any resampling."""
+    within_c = counts.within_concordant.sum(axis=0)
+    within_t = counts.within_total.sum(axis=0)
+    diff_c = counts.diff_concordant.sum(axis=1)
+    diff_t = counts.diff_total.sum(axis=1)
+    primary_k, primary_n = int(within_c.sum()), int(within_t.sum())
+    within, different, used = _matched(within_c, within_t, diff_c, diff_t, keep)
+    return {
+        "within_gene_concordant_pairs": primary_k,
+        "within_gene_pairs": primary_n,
+        "within_gene_concordance_primary": (primary_k / primary_n) if primary_n else None,
+        "within_gene_concordance_matched": within,
+        "different_gene_concordance_matched": different,
+        "different_gene_concordant_pairs": int(diff_c.sum()),
+        "different_gene_pairs": int(diff_t.sum()),
+        "matched_weight_used": round(used, 6),
+    }
+
+
+def resample(
+    counts: PairCounts, keep: list[int], draws: int = BOOTSTRAPS, seed: int = SEED
+) -> dict[str, Any]:
+    """`draws` gene resamples, returning each resample's arms so every ratio shares one resample.
+
+    GENES ARE THE CLUSTERS. A within-gene pair carries its gene's multiplicity; a different-gene
+    pair carries the PRODUCT of its two genes', because such a pair is only observed when both of
+    its genes are in the sample.
+    """
+    rng = random.Random(seed)
+    n_genes = counts.gene_count
+    series: dict[str, list[float]] = {
+        "within_primary": [],
+        "within_matched": [],
+        "different_matched": [],
+    }
+    empty_bin_resamples = 0
+    for _ in range(draws):
+        multiplicity = _np.array(cluster_multiplicities(n_genes, rng), dtype=_np.float64)
+        within_c = multiplicity @ counts.within_concordant.astype(_np.float64)
+        within_t = multiplicity @ counts.within_total.astype(_np.float64)
+        dyadic = _np.outer(multiplicity, multiplicity).ravel()
+        diff_c = counts.diff_concordant @ dyadic
+        diff_t = counts.diff_total @ dyadic
+        primary = float(within_c.sum() / within_t.sum()) if within_t.sum() > 0 else None
+        within, different, used = _matched(within_c, within_t, diff_c, diff_t, keep)
+        if used < 1.0:
+            empty_bin_resamples += 1
+        if primary is None or within is None or different is None:
+            continue
+        series["within_primary"].append(primary)
+        series["within_matched"].append(within)
+        series["different_matched"].append(different)
+    return {
+        "series": series,
+        "resamples_requested": draws,
+        "resamples_used": len(series["within_primary"]),
+        "resamples_with_an_empty_contributing_bin": empty_bin_resamples,
+        "seed": seed,
+        "clusters": n_genes,
+        "cluster_minimum": MIN_CLUSTERS,
+        "met_minimum": draws >= MIN_RESAMPLES and n_genes >= MIN_CLUSTERS,
+        "cluster_rule": CLUSTER_RULE,
+    }
+
+
+def ratio_interval(numerator: list[float], denominator: list[float] | float, name: str) -> dict[str, Any]:
+    """An interval on a RATIO, from the resamples both arms shared, with its band and assumptions.
+
+    `denominator` is a list when the denominator is itself resampled (arm against arm) and a float
+    when it is control 1, which the registration holds fixed. The band, the identical-resample
+    share and the instrument's assumptions travel with the interval and are never printed apart
+    from it.
+    """
+    if isinstance(denominator, list):
+        if len(numerator) != len(denominator):
+            raise ValueError("a ratio of two arms needs both arms from the same resamples")
+        values = [n / d for n, d in zip(numerator, denominator, strict=True) if d > 0]
+        assumption = "both arms from the SAME gene resample, so their common cluster draw cancels"
+    else:
+        if denominator <= 0:
+            raise ValueError("control 1 must be positive")
+        values = [n / denominator for n in numerator]
+        assumption = CONTROL_ONE_IS_A_COMMITTED_CONSTANT
+    interval = percentile_interval(values)
+    return {
+        "ratio": name,
+        "ci95": interval["ci95"],
+        "identical_resample_share": interval["identical_share"],
+        "degenerate": interval.get("degenerate"),
+        "resamples": interval["resamples"],
+        "band": band_of(interval["ci95"]),
+        "relative_half_width": relative_half_width(interval["ci95"]),
+        "band_half_width": round(BAND_AT_CONTROL[1] - 1.0, 6),
+        "wider_than_the_band": (
+            None
+            if interval["ci95"] is None
+            else bool((relative_half_width(interval["ci95"]) or 0.0) > (BAND_AT_CONTROL[1] - 1.0))
+        ),
+        "instrument_assumptions": (
+            "GENES are the clusters; elements within a gene are NOT assumed independent. "
+            + assumption
+            + ". A percentile bootstrap over whole genes, "
+            f"{interval['resamples']} usable resamples, seed {SEED}. The identical-resample share "
+            "above is the share of resamples returning the modal value: at 1.0 the interval is "
+            "degenerate and decides nothing, and the reading routes to a Wilson bound on the "
+            "cluster count."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# The SECONDARY arm: agreement with the gene's top GTEx v8 median-TPM tissue
+# ---------------------------------------------------------------------------
+
+
+def gtex_top_tissue(path: str, wanted: set[str]) -> dict[str, Any]:
+    """The top median-TPM tissue of each wanted gene symbol, by the registered normalisation rule.
+
+    Only the wanted symbols are kept, so nothing here scales with the 56,000 rows of the matrix. A
+    symbol appearing on more than one row is DROPPED and counted, because two rows cannot both be
+    that symbol's profile.
+    """
+    import gzip
+
+    top: dict[str, str] = {}
+    seen: dict[str, int] = {}
+    with gzip.open(path, "rt", encoding="utf-8") as handle:
+        handle.readline()
+        handle.readline()
+        header = handle.readline().rstrip("\n").split("\t")
+        columns = header[2:]
+        normalised = [normalise_tissue(c) for c in columns]
+        for line in handle:
+            fields = line.rstrip("\n").split("\t")
+            symbol = fields[1]
+            if symbol not in wanted:
+                continue
+            seen[symbol] = seen.get(symbol, 0) + 1
+            values = [float(v) for v in fields[2:]]
+            top[symbol] = normalised[max(range(len(values)), key=values.__getitem__)]
+    duplicated = sorted(s for s, n in seen.items() if n > 1)
+    for symbol in duplicated:
+        top.pop(symbol, None)
+    return {
+        "top_tissue": top,
+        "gtex_columns": set(normalised),
+        "column_count": len(columns),
+        "duplicated_symbols_dropped": duplicated,
+        "wanted": len(wanted),
+        "matched": len(top),
+    }
+
+
+def gtex_arm(rows: list[RuleRow], gtex: dict[str, Any], control1: float) -> dict[str, Any]:
+    """SECONDARY: the share of rules whose argmax label is the gene's top GTEx tissue.
+
+    Clustered by gene like every other interval in this lane, and carrying the training-exposure
+    caveat, which is the strongest limitation on this whole lane.
+    """
+    top: dict[str, str] = gtex["top_tissue"]
+    columns: set[str] = gtex["gtex_columns"]
+    per_gene: dict[str, list[bool]] = {}
+    excluded_label = excluded_gene = 0
+    chance = []
+    counts = label_distribution(rows)
+    total_rules = sum(counts.values())
+    by_normalised: dict[str, int] = {}
+    for label, count in counts.items():
+        key = normalise_tissue(label)
+        by_normalised[key] = by_normalised.get(key, 0) + count
+    for row in rows:
+        key = normalise_tissue(row.label)
+        if key not in columns:
+            excluded_label += 1
+            continue
+        if row.gene not in top:
+            excluded_gene += 1
+            continue
+        per_gene.setdefault(row.gene, []).append(key == top[row.gene])
+        chance.append(by_normalised.get(top[row.gene], 0) / total_rules)
+    flags = [flag for gene in sorted(per_gene) for flag in per_gene[gene]]
+    k, n = sum(flags), len(flags)
+    rng = random.Random(SEED)
+    keys = sorted(per_gene)
+    values = []
+    if len(keys) >= MIN_CLUSTERS:
+        for _ in range(BOOTSTRAPS):
+            multiplicity = cluster_multiplicities(len(keys), rng)
+            num = den = 0
+            for index, mult in enumerate(multiplicity):
+                if not mult:
+                    continue
+                arm = per_gene[keys[index]]
+                num += mult * sum(arm)
+                den += mult * len(arm)
+            if den:
+                values.append(num / den)
+    interval = percentile_interval(values)
+    expected = sum(chance) / len(chance) if chance else None
+    return {
+        "labelled": "SECONDARY. Never the headline, and never read as evidence about biology.",
+        "rules_in_the_arm": n,
+        "agree": k,
+        "share": (k / n) if n else None,
+        "genes_in_the_arm": len(keys),
+        "clustered_ci95": interval["ci95"] if len(keys) >= MIN_CLUSTERS else None,
+        "identical_resample_share": interval["identical_share"],
+        "degenerate": bootstrap_degenerate(k, n),
+        "why_no_interval": (
+            None
+            if len(keys) >= MIN_CLUSTERS
+            else f"{len(keys)} gene clusters is below the floor of {MIN_CLUSTERS}"
+        ),
+        "wilson_unclustered_secondary": wilson(k, n),
+        "expected_share_if_labels_were_drawn_from_this_population": (
+            None if expected is None else round(expected, 6)
+        ),
+        "how_the_expected_share_is_computed": (
+            "the mean over the arm's rules of the population frequency of that gene's top GTEx "
+            "tissue as a compiled label. It is the chance level for THIS statistic, reported "
+            "beside the observed share; it is not a registered band and decides nothing"
+        ),
+        "control_1_quoted_beside_it": round(control1, 6),
+        "excluded_label_not_a_gtex_tissue": excluded_label,
+        "excluded_gene_not_in_the_gtex_matrix": excluded_gene,
+        "duplicated_symbols_dropped": gtex["duplicated_symbols_dropped"],
+        "training_exposure_caveat": TRAINING_EXPOSURE_CAVEAT,
+        "rule": SECONDARY,
+    }
+
+
+# ---------------------------------------------------------------------------
+# AMENDMENT_1: the estimand, on the coordinator's direction, still before any count
+# ---------------------------------------------------------------------------
+
+TOP_GENES_FOR_CONCENTRATION = 5
+
+AMENDMENT_1 = (
+    "AMENDED on the coordinator's direction. DISCLOSED HONESTLY: the direction arrived AFTER the "
+    "registration file was committed at 47835d1, so this text is an APPEND and not part of that "
+    "commit. It is nonetheless BLIND and pre-count, and git shows why rather than this sentence "
+    "asserting it: at the moment this amendment is committed no concordance has been computed, "
+    "scripts/label_gene_count.py does not exist in the tree, and no figure of this lane exists "
+    "anywhere. An amendment written after the figures are seen is NOT a pre-registration; this "
+    "one is written before any figure exists. It is purely ADDITIVE - no band, no floor, no "
+    "reading and no threshold of the registration is changed, and nothing is made easier to "
+    "reach.\n"
+    "THE DEFECT IT ADDRESSES IS THE ESTIMAND, NOT THE UNCERTAINTY. The primary pools PAIRS across "
+    "genes, so a gene with k elements contributes k(k-1)/2 of them. At a mean near 27 elements a "
+    "handful of large genes can dominate the number. The gene-clustered interval says how UNCERTAIN "
+    "the estimate is; it does not change WHAT is estimated. Two things are therefore registered "
+    "beside the primary:\n"
+    f"(1) THE CONCENTRATION, PRINTED: the share of all within-gene pairs contributed by the top "
+    f"{TOP_GENES_FOR_CONCENTRATION} genes by pair count. One number and NO threshold, so a reader "
+    "can see at a glance whether the primary is a statement about 180 genes or about five.\n"
+    "(2) A GENE-EQUAL-WEIGHT CONCORDANCE, labelled a SENSITIVITY that DECIDES NOTHING: each "
+    "gene's own distance-matched concordance averaged with equal weight over genes, and the SAME "
+    "equal weighting applied to the matched different-gene arm - each GENE PAIR weighted equally - "
+    "so the two arms stay comparable. A unit's distance reweighting uses the global within-gene "
+    "bin weights restricted to the contributing bins in which that unit actually has pairs, "
+    "renormalised; a unit with pairs in no contributing bin is EXCLUDED and counted. The reading "
+    "is still selected by the PAIR-POOLED primary and by nothing else.\n"
+    "(3) THE BINDING SENTENCE, registered here so it binds before either number is seen: IF THE "
+    "PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE, THE RESULT MUST SAY SO "
+    "IN THOSE WORDS, and may not report only whichever of the two reads better. They DISAGREE "
+    "when the registered band of the gene-equal-weight ratio differs from the band of the "
+    "pair-pooled ratio against the same control, or when the gene-equal-weight point estimate "
+    "falls outside the pair-pooled ratio's own interval. Either condition is enough."
+)
+
+
+def concentration(counts: PairCounts, top: int = TOP_GENES_FOR_CONCENTRATION) -> dict[str, Any]:
+    """`AMENDMENT_1` (1): the share of all within-gene pairs contributed by the top genes.
+
+    Printed with NO threshold attached. It tells a reader whether the pair-pooled primary is a
+    statement about the genes of the chromosome or about a handful of large ones.
+    """
+    per_gene = counts.within_total.sum(axis=1)
+    order = sorted(range(len(per_gene)), key=lambda g: -int(per_gene[g]))
+    total = int(per_gene.sum())
+    chosen = order[:top]
+    return {
+        "within_gene_pairs": total,
+        "top_n": top,
+        "top_genes": [counts.genes[g] for g in chosen],
+        "top_gene_pairs": [int(per_gene[g]) for g in chosen],
+        "share_of_pairs_from_the_top_genes": (
+            round(float(sum(int(per_gene[g]) for g in chosen)) / total, 6) if total else None
+        ),
+        "genes_with_at_least_one_pair": int((per_gene > 0).sum()),
+        "no_threshold": "printed as a fact about the estimand; no reading turns on it",
+    }
+
+
+def _unit_matched(conc: Any, tot: Any, keep: list[int], weights: Any) -> Any:
+    """Each unit's distance-matched concordance: the global within-gene bin weights restricted to
+    the contributing bins where that unit has pairs, renormalised. NaN where a unit has none."""
+    sub_c = conc[..., keep].astype(_np.float64)
+    sub_t = tot[..., keep].astype(_np.float64)
+    weight = _np.where(sub_t > 0, weights[None, :], 0.0)
+    mass = weight.sum(axis=1)
+    rate = _np.divide(sub_c, sub_t, out=_np.zeros_like(sub_c), where=sub_t > 0)
+    with _np.errstate(invalid="ignore", divide="ignore"):
+        return _np.where(mass > 0, (weight * rate).sum(axis=1) / _np.where(mass > 0, mass, 1.0), _np.nan)
+
+
+def gene_equal_weight(counts: PairCounts, keep: list[int]) -> dict[str, Any]:
+    """`AMENDMENT_1` (2): the equal-weight sensitivity, point estimates and its clustered interval.
+
+    A SENSITIVITY. It decides nothing: the reading is selected by the pair-pooled primary alone.
+    """
+    within_t_total = counts.within_total.sum(axis=0).astype(_np.float64)[keep]
+    weights = within_t_total / within_t_total.sum() if within_t_total.sum() > 0 else within_t_total
+    per_gene = _unit_matched(counts.within_concordant, counts.within_total, keep, weights)
+    n_genes = counts.gene_count
+    pair_c = counts.diff_concordant.T.reshape(n_genes, n_genes, len(BIN_LABELS))
+    pair_t = counts.diff_total.T.reshape(n_genes, n_genes, len(BIN_LABELS))
+    upper = _np.triu_indices(n_genes, k=1)
+    per_pair = _unit_matched(pair_c[upper], pair_t[upper], keep, weights)
+    gene_ok = ~_np.isnan(per_gene)
+    pair_ok = ~_np.isnan(per_pair)
+    rng = random.Random(SEED + 1)
+    within_series: list[float] = []
+    diff_series: list[float] = []
+    for _ in range(BOOTSTRAPS):
+        multiplicity = _np.array(cluster_multiplicities(n_genes, rng), dtype=_np.float64)
+        gene_weight = _np.where(gene_ok, multiplicity, 0.0)
+        if gene_weight.sum() > 0:
+            within_series.append(float((gene_weight * _np.nan_to_num(per_gene)).sum() / gene_weight.sum()))
+        dyadic = _np.outer(multiplicity, multiplicity)[upper]
+        pair_weight = _np.where(pair_ok, dyadic, 0.0)
+        if pair_weight.sum() > 0:
+            diff_series.append(float((pair_weight * _np.nan_to_num(per_pair)).sum() / pair_weight.sum()))
+    return {
+        "labelled": "SENSITIVITY (AMENDMENT_1 item 2). It decides nothing.",
+        "within_gene_equal_weight": (float(_np.nanmean(per_gene)) if gene_ok.any() else None),
+        "different_gene_equal_weight": (float(_np.nanmean(per_pair)) if pair_ok.any() else None),
+        "genes_contributing": int(gene_ok.sum()),
+        "genes_excluded_no_pairs_in_a_contributing_bin": int((~gene_ok).sum()),
+        "gene_pairs_contributing": int(pair_ok.sum()),
+        "gene_pairs_excluded_no_pairs_in_a_contributing_bin": int((~pair_ok).sum()),
+        "series": {"within": within_series, "different": diff_series},
+        "rule": AMENDMENT_1,
+    }
+
+
+def disagreement(pooled: dict[str, Any], equal: dict[str, Any], point: float | None) -> dict[str, Any]:
+    """`AMENDMENT_1` (3): whether the pair-pooled primary and the equal-weight sensitivity disagree.
+
+    The words are fixed by the amendment and are printed whenever either condition holds.
+    """
+    interval = pooled.get("ci95")
+    outside = (
+        None if (interval is None or point is None) else bool(point < interval[0] or point > interval[1])
+    )
+    bands_differ = pooled.get("band") != equal.get("band")
+    disagree = bool(bands_differ or outside)
+    return {
+        "bands_differ": bands_differ,
+        "equal_weight_point_outside_the_pooled_interval": outside,
+        "disagree": disagree,
+        "statement": (
+            "THE PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE."
+            if disagree
+            else "the pair-pooled primary and the gene-equal-weight sensitivity agree: same "
+            "registered band, and the equal-weight point lies inside the pooled interval"
+        ),
+        "the_reading_is_still_the_pooled_one": (
+            "the registration selects the reading on the PAIR-POOLED primary and on nothing else; "
+            "the sensitivity decides nothing either way"
+        ),
+    }
+
+
+def amendment_1_payload() -> dict[str, Any]:
+    """AMENDMENT_1 as its own registration file, the way this repository records an amendment.
+
+    The landed registration at 47835d1 is NOT rewritten: an amendment is a separate file naming
+    what it amends, which is how gene_identity recorded its three. This one is additive and
+    pre-count.
+    """
+    return {
+        "result": "label_gene_registration_amendment_1",
+        "date": "2026-10-02",
+        "lane": "lane-labelgene",
+        "amends": (
+            "data/results/label_gene_registration.json as committed at 47835d1, whose design code "
+            "is e13992a. Nothing in that file is rewritten or withdrawn; this file adds to it."
+        ),
+        "amendment_1": AMENDMENT_1,
+        "additive_only": (
+            "the bands, the floors, the four readings and (c)'s words are exactly as registered at "
+            "47835d1 and are repeated here so a reader can check that none moved."
+        ),
+        "band_at_control": list(BAND_AT_CONTROL),
+        "band_far_above": BAND_FAR_ABOVE,
+        "min_clusters_genes": MIN_CLUSTERS,
+        "reading_c_words": "THE DATA CANNOT TELL",
+        "top_genes_for_concentration": TOP_GENES_FOR_CONCENTRATION,
+        "the_reading_is_selected_by_the_pooled_primary": (
+            "unchanged by this amendment: the registration selects (a), (a'), (b) or (c) on the "
+            "PAIR-POOLED within-gene concordance and on nothing else. The gene-equal-weight figure "
+            "is a SENSITIVITY and decides nothing."
+        ),
+        "alphagenome_requests": 0,
+        "money": "none: no request is sent and no key is read",
+    }
