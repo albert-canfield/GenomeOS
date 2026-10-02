@@ -14021,6 +14021,86 @@ comparison attempted. A grouped input would have been reported absent without an
 all. 0 model requests and no money, every input already on disk. 10 tests, which hold the enumeration to
 `context_evidence.rule_loci` locus for locus and the chr21 states to the registered chr21 census.
 
+## The response map's second increment: the evidenced chain runs over 110 loci instead of one, and every assertion names the file, the record and the sha256 it came from (2026-10-02, lane-map2)
+
+Increment 1 of the response map (`genomeos/response_map.py`) arranged one example: the beta-like
+globin genes in K562, four measured perturbation assertions, one locus. The question a second
+increment had to answer first was how much more there is to arrange, and that was counted before
+anything was built. `data/results/response_map_coverage.json` (lane-rmap2, sha256 `ad0978b9`) holds the
+denominator: over the **473 independent loci** of the measured layer's perturbation assay, **110**
+carry all three of the inputs a chain needs - a measured CRISPRi perturbation, a compiled rule for the
+element it attaches to, and a reader state that is not `not_assessable` - and **1 of those 110 is the
+globin locus increment 1 already showed**. So the ceiling after this increment is **110 loci, not 111**:
+counting the globin locus beside the 110 would count it twice.
+
+`genomeos/response_map2.py` builds all 110, and `data/results/response_map_increment2.json` is the
+result: **527 assertions over 567 entities and 195 chains**, each chain running from the measured
+interval through the compiled element to the gene and the cell the measurement was taken in. **109 of
+the 110 loci the map did not cover before.**
+
+**The count is reconciled, not asserted.** The module enumerates the loci itself rather than reading a
+list, and then holds its own count against the counted one: built loci plus exclusions must come back
+to 110, and `response_map2.build` raises rather than serve a payload where it does not. All four
+exclusion causes stand at nought in this run (`element_source_file_not_in_this_checkout`,
+`perturbation_source_file_not_in_this_checkout`, `reader_peak_file_not_in_this_checkout`,
+`two_records_claim_one_observation_key`), so nothing was dropped; a locus that cannot be built in a
+checkout missing one of its sources is excluded under its cause and listed by locus, never dropped
+quietly. The status names, their order and the overlap scan that attaches a pair to an element are
+pinned by test against `scripts/response_map_coverage.py` itself, so the builder and the count cannot
+answer differently about which of the three inputs a pair is missing.
+
+**Every assertion names its source three ways** - the file's path, the record key inside that file, and
+that file's sha256 - and one that cannot name all three is excluded by cause rather than shown.
+Whether a source is committed is read from `git ls-tree HEAD` rather than inferred from its directory,
+because reader v1's cached peak sets live under `data/results/` and are git-ignored all the same; the
+path rule increment 1 uses would have called them committed and the assertion would have said something
+untrue about its own source.
+
+**`observed` is only what an experiment measured, and the 361 observed assertions are reported by what
+measured them**, because they are not one experiment: **195** are CRISPRi effects of the ENCODE
+benchmark and **166** are DNase-seq peak readings. The other **166** are the compiler's predicted
+expression changes on deleting the element, **`predicted` and never `observed`**, carrying the element
+record's own basis word for word. Where the compiled rule names a different gene than the screen
+measured, both are shown and neither is resolved. The step from a measured interval to a compiled
+element is the measured layer's own reciprocal overlap at 0.5, carried on the assertion with the
+overlap it achieved, and is not an identity between the two intervals.
+
+**What the reader state is not.** `not_open_in_reader` applies to **1 of the 195 shown pairs**, at
+`EH38E2941908` in K562 - the element whose compiled claim increment 1 shows stated in another cell -
+and is shown with lane-context2's own reading: *not detected open at the reader's registered call,
+which is not the same as closed*. The other 194 pairs are `open_in_reader`. Neither is support for a
+rule, and the sentence saying so is on every one of them and on the entity itself: a consistency check
+between two readings of the same ENCODE chromatin, because reader v1's openness comes from ENCODE peaks
+and AlphaGenome was trained on ENCODE. The genome-wide figure lane-context2 established, 55,084 of
+81,635 assessable rules not detected open in their own cell, is a different and much larger population
+than the rules a measured perturbation attaches to, and no share of it may be read off this map.
+
+**What it covers and what it does not.** 110 of 473 loci is **23.26% of one of the measured layer's
+four assays**. The other three - lentiMPRA, VISTA and saturation mutagenesis - read a sequence, or the
+bases inside it, and not the native locus after a perturbation of it, so no locus of theirs is here and
+the result says so in its own `coverage` block rather than leaving it to be inferred. The locus grouping
+is the operational 1 Mb convention imported from `attribution.cell2` and is **not established
+biological independence**: a run of elements each within 1 Mb of the next is one group however far its
+ends are apart, and the groups here are wide. Each locus therefore reports two intervals and says which
+is which: the span of the pairs it shows (median **349 bp** - most loci show one element's interval -
+and at most 12.55 Mb) and the span of every pair the grouping put with them (median **1.02 Mb**, at most
+**15.07 Mb**, on chromosome 19). The second is the group's reach, not the map's coverage. The map introduces no
+validation, no evaluator verdict and no new cut-off: the overlap rule, the locus span and the openness
+call are all imported from where they were registered, and `response_map.check` - the gate increment 1
+passes - is the gate here too.
+
+The web serves it a page at a time at `/api/evidence/response-map-2`, because 110 loci and 527
+assertions do not fit one screen. Every page carries the whole locus count, the whole assertion count,
+the reconciliation and the exclusions beside it, so a page is a page and never a truncation.
+
+**Reproduction.** Rebuilt in this checkout from the same inputs: **0 differences and 0 must-hold
+failures over 35,718 of the result's 37,617 leaves**, the remaining 1,899 being the run's own stamp
+(its manifest, its cleanliness block, its timing). `scripts/manifest_rebuild.py` stops before running
+the script and says why: **111 of the 410 declared inputs were opened and hashed and all 111 matched**,
+and the other **299 are named absent one by one** - reader v1's DNase peak sets, which live under
+`data/results/` and are git-ignored, so a clean worktree does not receive them - and no field comparison
+was attempted. 0 model requests and no money: every input was already on disk. 19 tests.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
