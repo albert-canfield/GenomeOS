@@ -67,10 +67,12 @@ ACTIVITY = Path("data/results/astroreg2_astrocyte_activity.json")
 #: save_result with a manifest. The project's own guard -- nothing under genomeos/ or scripts/ writes into
 #: data/results except through save_result -- was failing on this file, and the right answer was to move
 #: the file rather than to carve an exemption into a claim worth keeping absolute.
-LEDGER = Path("data/ledgers/astroreg2.jsonl")
+#: Set from --run. Run 1's ledger is complete, so a run must say which it is rather than inherit one.
+LEDGER = astrorun.LEDGER_RUN1
 
-#: The sign-off record, read at runtime and declared as an input because it is read.
-SIGNOFF = Path("data/ledgers/astroreg2_signoff.json")
+#: The sign-off record, read at runtime and declared as an input because it is read. Append-only JSONL:
+#: one record per line and only the LAST line governs.
+SIGNOFF = astrorun.SIGNOFF_RECORD
 
 #: The digest of the list the supervisor reviewed, as committed at cc5b097. The sender rebuilds the list
 #: and refuses on any difference, so the reviewed list and the sent list are the same object.
@@ -231,12 +233,29 @@ def send(
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
+        "--run",
+        type=int,
+        help="which run this is. Required with --send and deliberately without a default: run 1's "
+        "ledger is complete, and a run that inherited a ledger silently would either refuse for a "
+        "reason the operator did not choose or append to a finished record",
+    )
+    ap.add_argument(
         "--send",
         action="store_true",
         help="required by name. Without it nothing is sent and the clause checks are reported only",
     )
     args = ap.parse_args()
     t0 = time.time()
+    global LEDGER
+    if args.send and not args.run:
+        print(
+            "REFUSED: --send requires --run N. Run 1's ledger is complete and a new run gets its own "
+            f"file; {astrorun.A_NEW_RUN_GETS_ITS_OWN_LEDGER}"
+        )
+        return 2
+    if args.run:
+        LEDGER = astrorun.ledger_for_run(args.run)
+        print(f"run {args.run}, ledger {LEDGER}")
 
     plan = reviewed_plan()
     print(f"the reviewed list rebuilt and digest-checked against {REVIEWED_AT}: {len(plan)} requests")
@@ -324,6 +343,14 @@ def main() -> int:
         "model_version": ALPHAGENOME_MODEL_VERSION,
         "last_scan": model_version,
         "why_recorded": astrorun.FROZEN_SCORER_PARAMETERS,
+        "mixed_model_version_provenance": (
+            "MIXED MODEL-VERSION PROVENANCE. The frozen K562 features came from sweep answers whose "
+            "model_version is 'unrequested' -- the client default, with no version recorded -- while "
+            "these astrocyte answers are requested at ALL_FOLDS. The two arms of the gain therefore "
+            "rest on answers of different recorded provenance. Not a blocker and not hidden: it is "
+            "stated here under the manifest's existing rule so a reader of any number built on this "
+            "sees it without having to reconstruct it"
+        ),
         "note": "recorded beside the answers so a later reader can tell WHICH feature definition "
         "produced them without reading the code. A threshold of 0.05 where the frozen feature used 0.0 "
         "is a changed feature definition, which the registration forbids",
@@ -379,8 +406,9 @@ def manifest(out: dict[str, Any], plan: list[dict[str, Any]]) -> dict[str, Any]:
             mf.input_entry(
                 SIGNOFF,
                 partition=None,
-                role="the sign-off record, read at runtime for the supervisor's words and the signed "
-                "import closure",
+                role="the append-only sign-off record, read at runtime for the supervisor's words and "
+                "the signed import closure. Only its LAST line governs, and its committed copy must be "
+                "a byte prefix of the file on disk",
             ),
         ],
         "assembly": "GRCh38",

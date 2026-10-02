@@ -541,6 +541,24 @@ AMENDMENT_2_RULE_REGISTERED_IN = {
 #: no key added or missing. Pinned so an edit to the cited rule fails a test instead of passing quietly.
 AMENDMENT_2_CITATIONS_SHA256 = "77ff2a0a790d6b5baeacc10fa7ab2965a4ced14e6e64b5598401117c6c97c7db"
 
+#: Run 1's ledger: the completed one, 23 lines including its correction row. Never written again.
+LEDGER_RUN1 = Path("data/ledgers/astroreg2.jsonl")
+
+A_NEW_RUN_GETS_ITS_OWN_LEDGER = (
+    "a run's ledger is the record of THAT run, so a new run gets a new file rather than appending to a "
+    "finished one. Sharing one file would mix two runs' charges in a single sequence and make 'how much "
+    "did run 2 cost' unanswerable without a rule about where to cut. It also keeps run 1 exactly as it "
+    "is -- 23 lines ending in its correction row -- which is what append-only is for"
+)
+
+
+def ledger_for_run(run_id: int) -> Path:
+    """Run 1 keeps its own filename; every later run gets `astroreg2_run<N>.jsonl`."""
+    if run_id < 1:
+        raise ValueError(f"a run id is 1 or more: {run_id}")
+    return LEDGER_RUN1 if run_id == 1 else Path(f"data/ledgers/astroreg2_run{run_id}.jsonl")
+
+
 #: The ledger event that makes a completed run a TERMINAL state.
 RUN_COMPLETE_EVENT = "run_complete"
 
@@ -678,19 +696,148 @@ def git_blob(path: Path | str, root: Path | None = None) -> str | None:
     return r.stdout.strip() or None
 
 
-#: The sign-off record. A FILE READ AT RUNTIME, never imported, and deliberately not in code.
+#: The sign-off record. An APPEND-ONLY FILE READ AT RUNTIME, never imported, and never in code.
 #:
-#: The first version of this stored the signed blob of `genomeos/attribution/astrorun.py` INSIDE
-#: `genomeos/attribution/astrorun.py`. That is a fixed point with no solution: writing a blob value into
-#: the file changes the file, which changes its blob, so the recorded value can never equal the computed
-#: one. Demonstrated rather than reasoned about -- writing the current blob in produced a third,
-#: different blob. The intended property was "a change invalidates the sign-off"; the property built was
-#: "the sign-off can never be valid", and no re-sign by anyone could have passed.
-#:
-#: Keeping the record OUTSIDE the code dissolves it rather than working around it: a record that
-#: describes the code from outside can name the code's hashes without being part of what it hashes. It
-#: sits beside the ledger because both are records ABOUT a run rather than parts of one.
-SIGNOFF_RECORD = Path("data/ledgers/astroreg2_signoff.json")
+#: Two defects shaped this. The first version stored a file's own blob INSIDE that file, which is a
+#: fixed point with no solution: writing the value changes the file, so no re-sign could ever pass.
+#: Keeping the record outside the code dissolved that. The second was the FORMAT: a single JSON object
+#: that a new sign-off REPLACED. Replacement destroys the history of what was signed and when, and it makes a
+#: withdrawal indistinguishable from never having happened -- so it goes one record per LINE, and ONLY
+#: THE LAST LINE GOVERNS.
+SIGNOFF_RECORD = Path("data/ledgers/astroreg2_signoff.jsonl")
+
+#: The superseded single-object record. Reverted to its committed bytes and NEVER WRITTEN AGAIN; it is
+#: kept only so the history of what was signed is not erased by the move.
+SIGNOFF_RECORD_SUPERSEDED = Path("data/ledgers/astroreg2_signoff.json")
+
+ONLY_THE_LAST_LINE_GOVERNS = (
+    "each line is one sign-off, carrying the closure it signed, the digest of that closure, the record "
+    "it supersedes and why. ONLY THE LAST LINE AUTHORISES. An earlier line whose closure happens to "
+    "match the current code must NOT authorise, because that is exactly how a WITHDRAWN sign-off would "
+    "revive if the code were reverted -- and that is not hypothetical here: the 19:14 record signed the "
+    "closure of a sender that would have charged 1,232 requests and bought nothing. A format that let "
+    "that line speak again on a revert would reauthorise the defect"
+)
+
+APPEND_ONLY_IS_ENFORCED = (
+    "append-only is a property of the HISTORY, and at send time what is checked is stronger: the record "
+    "must be byte-IDENTICAL to its committed copy. A prefix rule is not enough, because HEAD being a "
+    "prefix of the working file is exactly what an append produces -- so 'append-only' without "
+    "'committed' authorises anybody who can write the file. Requiring identity makes the governing line "
+    "a committed line, which is an act in the repository's history rather than an edit to a file"
+)
+
+
+def closure_sha256(closure: dict[str, str]) -> str:
+    """The digest a sign-off line records for the closure it signed."""
+    import hashlib
+
+    return hashlib.sha256(json.dumps(closure, sort_keys=True).encode()).hexdigest()
+
+
+def signoff_lines(path: Path | str | None = None) -> list[dict[str, Any]]:
+    """Every sign-off record in order. Unreadable lines are kept as a marker, never skipped silently."""
+    p = Path(path) if path is not None else ROOT_FOR_BLOBS / SIGNOFF_RECORD
+    if not p.exists():
+        return []
+    out: list[dict[str, Any]] = []
+    for line in p.read_text(errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            out.append({"_unreadable": line[:80]})
+            continue
+        out.append(row if isinstance(row, dict) else {"_unreadable": str(row)[:80]})
+    return out
+
+
+def git_blobs(paths: list[str], root: Path) -> dict[str, str]:
+    """Blob shas for many files in ONE `git hash-object` call, keyed by the path given.
+
+    One call rather than one per file: 52 subprocess spawns per check was both slow and a source of
+    load-dependent failure, and a closure that changes under load is not a closure.
+    """
+    import subprocess
+
+    if not paths:
+        return {}
+    r = subprocess.run(
+        ["git", "hash-object", "--stdin-paths"],
+        cwd=str(root),
+        input="\n".join(paths) + "\n",
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    lines = [x.strip() for x in r.stdout.splitlines() if x.strip()]
+    if r.returncode != 0 or len(lines) != len(paths):
+        return {}
+    return dict(zip(paths, lines, strict=True))
+
+
+def check_signoff_is_committed(path: Path | str | None = None, root: Path | None = None) -> dict[str, Any]:
+    """Refuse unless the sign-off record is BYTE-IDENTICAL to its committed copy.
+
+    Identical, not a prefix. HEAD being a prefix of the working file is exactly what an APPEND produces,
+    so a prefix rule lets anyone who can write the file append a governing line and send. The governing
+    line must be a COMMITTED line, so a sign-off is an act in the repository's history rather than a
+    file someone has edited.
+
+    Three defects in the first version each let an uncommitted sign-off authorise, and each is now a
+    refusal: a missing HEAD copy returned "not checked" and was read as a pass; an appended uncommitted
+    line satisfied the prefix; and an absolute path broke the `git show` lookup, which landed in the
+    first branch, so a tampered file passed. A check that reports "not checked" and is treated as a pass
+    is the vacuous-pass shape, and it is worse than no check because it reads as reassurance.
+    """
+    import subprocess
+
+    base = (Path(root) if root is not None else ROOT_FOR_BLOBS).resolve()
+    given = Path(path) if path is not None else SIGNOFF_RECORD
+    target = (given if given.is_absolute() else base / given).resolve()
+    try:
+        rel = target.relative_to(base)
+    except ValueError as e:
+        raise SendRefusedError(
+            f"the sign-off record {target} is outside the repository at {base}, so it is not something "
+            "a commit can vouch for and it authorises nothing"
+        ) from e
+
+    committed = subprocess.run(
+        ["git", "show", f"HEAD:{rel.as_posix()}"], cwd=str(base), capture_output=True, check=False
+    )
+    if committed.returncode != 0:
+        raise SendRefusedError(
+            f"the sign-off record {rel.as_posix()} has no committed copy at HEAD. "
+            "An uncommitted sign-off authorises nothing: the governing line must be a committed line, "
+            "which makes a sign-off an act in the repository's history rather than an edit to a file"
+        )
+    head_bytes = committed.stdout
+    now = target.read_bytes() if target.exists() else b""
+    if now != head_bytes:
+        extra = len(now) - len(head_bytes)
+        how = (
+            f"{extra} uncommitted byte(s) beyond HEAD"
+            if now.startswith(head_bytes)
+            else "its committed bytes differ from the file on disk"
+        )
+        raise SendRefusedError(
+            f"the sign-off record {rel.as_posix()} is not byte-identical to HEAD ({how}), so the line "
+            "that would govern is uncommitted and authorises nothing. Append the re-sign AND COMMIT it "
+            f"before sending. {APPEND_ONLY_IS_ENFORCED}"
+        )
+    return {"identical_to_head": True, "bytes": len(head_bytes), "record": rel.as_posix()}
+
+
+def recorded_signoff(path: Path | str | None = None) -> dict[str, Any] | None:
+    """The sign-off that GOVERNS: the last line, or None. Earlier lines never authorise."""
+    lines = signoff_lines(path)
+    if not lines:
+        return None
+    last = lines[-1]
+    return None if "_unreadable" in last else last
+
 
 #: The sender whose whole import closure is signed.
 SENDER_ENTRY = "scripts/astroreg2_send.py"
@@ -768,24 +915,20 @@ def sender_closure(entry: str = SENDER_ENTRY, root: Path | None = None) -> dict[
     from genomeos import manifest as mf
 
     base = Path(root) if root is not None else ROOT_FOR_BLOBS
-    out: dict[str, str] = {}
-    for rel in sorted(set(mf.counting_path(entry, base)) | {entry}):
-        blob = git_blob(base / rel, base)
-        if blob:
-            out[rel] = blob
-    return out
-
-
-def recorded_signoff(path: Path | str | None = None) -> dict[str, Any] | None:
-    """The sign-off record as written by whoever holds the supervisor's words first-hand, or None."""
-    p = Path(path) if path is not None else ROOT_FOR_BLOBS / SIGNOFF_RECORD
-    if not p.exists():
-        return None
-    try:
-        body = json.loads(p.read_text())
-    except ValueError:
-        return None
-    return body if isinstance(body, dict) else None
+    rels = sorted(set(mf.counting_path(entry, base)) | {entry})
+    present = [r for r in rels if (base / r).exists()]
+    blobs = git_blobs(present, base)
+    missing = [r for r in present if r not in blobs]
+    if missing:
+        # Silently dropping a file would change the closure whenever `git hash-object` failed under
+        # load, so the signed set would depend on machine conditions rather than on the code. A file
+        # that exists and cannot be hashed is an error.
+        raise SendRefusedError(
+            f"the closure could not be computed: {len(missing)} file(s) exist but could not be hashed "
+            f"({missing[:3]}). A closure that silently omitted them would make the sign-off depend on "
+            "machine load rather than on the code"
+        )
+    return blobs
 
 
 def recorded_signoff_words(path: Path | str | None = None) -> str | None:
@@ -800,6 +943,8 @@ def check_signoff_closure(
     path: Path | str | None = None,
 ) -> dict[str, Any]:
     """Refuse unless the sender's whole closure is byte-for-byte what was signed. See the note above."""
+    if record is None:
+        check_signoff_is_committed(path, root)
     rec = record if record is not None else recorded_signoff(path)
     if rec is None:
         raise SendRefusedError(

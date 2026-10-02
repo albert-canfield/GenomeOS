@@ -275,11 +275,24 @@ class TestTheSenderRefusesToday:
         p.write_text(json.dumps({"requests": plan}))
         monkeypatch.setattr(sender, "PLAN", p)
         monkeypatch.setattr(sender, "REVIEWED_DIGEST", astrorun.plan_digest(plan))
-        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send"])
+        # main() reassigns the module's LEDGER from --run, and a global set inside a call outlives the
+        # call; recording it here is what makes teardown put it back instead of leaking into later tests
+        monkeypatch.setattr(sender, "LEDGER", sender.LEDGER)
+        # --run is required with --send, and run 1's ledger is complete; naming a run is what lets this
+        # test reach the authorisation clause rather than stopping at the missing-run clause
+        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send", "--run", "2"])
         assert sender.main() == 2
         said = capsys.readouterr().out
         assert "REFUSED" in said
         assert "no AstroREG-2 approval is recorded" in said
+
+    def test_main_refuses_when_send_names_no_run(self, monkeypatch, capsys):
+        """A run that inherited run 1's complete ledger would refuse for the wrong reason, or resume it."""
+        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send"])
+        assert sender.main() == 2
+        said = capsys.readouterr().out
+        assert "REFUSED: --send requires --run N" in said
+        assert "a new run gets its own" in said
 
     def test_the_budget_comes_only_from_astroreg2_budget(self):
         src = (ROOT / "scripts/astroreg2_send.py").read_text()
@@ -318,6 +331,8 @@ class TestACrashRestartCannotRePay:
         monkeypatch.setattr(sender, "PLAN", p)
         monkeypatch.setattr(sender, "REVIEWED_DIGEST", astrorun.plan_digest(plan))
         monkeypatch.setattr(sender, "LEDGER", led)
+        # --run resolves the ledger now, so the partial ledger has to arrive through that resolution
+        monkeypatch.setattr(astrorun, "ledger_for_run", lambda n: led)
         monkeypatch.setattr(sender, "ACTIVITY", act)
         monkeypatch.setattr(sender, "REGISTRATION", reg)
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
@@ -331,7 +346,7 @@ class TestACrashRestartCannotRePay:
         # the blob check is about a DIFFERENT clause and now refuses first, since this lane changed both
         # signed files; stubbing it is what lets this test reach the partial-run clause it is about
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
-        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send"])
+        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send", "--run", "2"])
         assert sender.main() == 2
         said = capsys.readouterr().out
         assert "a partial run exists (7 charged)" in said
@@ -590,8 +605,13 @@ class TestEveryLiveEntryPointResolves:
 class TestTheLedgerIsNotAResult:
     def test_the_ledger_is_outside_data_results(self):
         """A ledger is an append-only record of charges, not a computed value with a manifest."""
-        assert "data/results" not in str(sender.LEDGER)
+        # asserted on the DECLARATION, not on sender.LEDGER: main() reassigns that global from --run,
+        # so a test reading it would be judging whichever run a previous test last named
+        assert str(astrorun.LEDGER_RUN1) == "data/ledgers/astroreg2.jsonl"
         assert str(sender.LEDGER) == "data/ledgers/astroreg2.jsonl"
+        for run in (1, 2, 7):
+            assert "data/results" not in str(astrorun.ledger_for_run(run))
+            assert str(astrorun.ledger_for_run(run)).startswith("data/ledgers/")
 
     def test_the_reason_it_is_not_a_result_is_recorded(self):
         src = (ROOT / "scripts/astroreg2_send.py").read_text()
@@ -723,8 +743,10 @@ class TestTheSignoffIsBoundToTheWholeClosure:
 
         src = inspect.getsource(astrorun)
         assert "SUPERVISOR_SIGNOFF_BLOBS" not in src, "the blob pair must not live in the code it hashes"
-        assert str(astrorun.SIGNOFF_RECORD) == "data/ledgers/astroreg2_signoff.json"
-        assert "fixed point with no solution" in src
+        assert str(astrorun.SIGNOFF_RECORD) == "data/ledgers/astroreg2_signoff.jsonl"
+        assert "fixed point with no solution" in src, (
+            "the reason the record left the code must stay written down beside it"
+        )
 
     def test_a_file_cannot_contain_its_own_hash_which_is_why_this_moved(self, tmp_path):
         """The defect, demonstrated rather than reasoned about."""
@@ -747,8 +769,14 @@ class TestTheSignoffIsBoundToTheWholeClosure:
         assert len(closure) > 10, "a closure of two files is the boundary this replaced"
 
     def test_it_refuses_while_no_record_exists(self):
-        with pytest.raises(astrorun.SendRefusedError, match="no sign-off record is present"):
-            astrorun.check_signoff_closure(record=None, path=Path("/nonexistent/signoff.json"))
+        """A record outside the repository cannot be vouched for by a commit, so it refuses first."""
+        with pytest.raises(astrorun.SendRefusedError, match="outside the repository"):
+            astrorun.check_signoff_closure(record=None, path=Path("/nonexistent/signoff.jsonl"))
+
+    def test_an_EMPTY_committed_record_signs_nothing(self):
+        """The 'no record' branch, reached with the record supplied rather than read from a file."""
+        with pytest.raises(astrorun.SendRefusedError, match="signs nothing"):
+            astrorun.check_signoff_closure(record={"words": "dry run reviewed"})
 
     def test_a_record_with_no_signed_closure_signs_nothing(self):
         with pytest.raises(astrorun.SendRefusedError, match="signs nothing"):
@@ -806,16 +834,16 @@ class TestTheSignoffIsBoundToTheWholeClosure:
     def test_the_record_is_read_at_runtime_and_never_imported(self):
         import inspect
 
-        src = inspect.getsource(astrorun.recorded_signoff)
+        src = inspect.getsource(astrorun.signoff_lines)
         assert "json.loads" in src and "read_text" in src
         assert "import_module" not in src
+        assert "import_module" not in inspect.getsource(astrorun.recorded_signoff)
 
     def test_a_malformed_record_is_treated_as_absent_rather_than_trusted(self, tmp_path):
-        bad = tmp_path / "signoff.json"
+        bad = tmp_path / "signoff.jsonl"
         bad.write_text("{not json")
-        assert astrorun.recorded_signoff(bad) is None
-        with pytest.raises(astrorun.SendRefusedError, match="no sign-off record"):
-            astrorun.check_signoff_closure(path=bad)
+        assert astrorun.recorded_signoff(bad) is None, "an unreadable governing line authorises nothing"
+        assert len(astrorun.signoff_lines(bad)) == 1, "and the bad line is kept as a marker"
 
 
 class TestTheSweepAndTheSenderReachTheSamePath:
@@ -1118,3 +1146,321 @@ class TestCrispriReadsTheSameSeparateRoot:
         assert all(cache.value(plan["chrom"], plan["element"], g, "astrocyte") is None for g in genes), (
             "the sweep's answers carry no astrocyte value, which is the whole reason a run is needed"
         )
+
+
+class TestTheSignoffRecordIsAppendOnly:
+    """One record per line, and ONLY THE LAST LINE GOVERNS.
+
+    The single-object format let a new sign-off REPLACE the old one, which destroys the history of what
+    was signed and makes a withdrawal indistinguishable from never having happened. The concrete danger
+    is not hypothetical: the 19:14 record signed the closure of a sender that would have charged 1,232
+    requests and bought nothing, so a format in which that line could speak again on a code revert would
+    reauthorise the defect.
+    """
+
+    def line(self, closure, why="", supersedes=None, words="dry run reviewed"):
+        return {
+            "signed_at": "2026-10-02T20:05:00+01:00",
+            "words": words,
+            "signed_closure": closure,
+            "signed_closure_sha256": astrorun.closure_sha256(closure),
+            "supersedes": supersedes,
+            "why": why,
+        }
+
+    def write(self, path, records):
+        path.write_text("".join(json.dumps(r) + "\n" for r in records))
+        return path
+
+    def test_the_record_is_a_jsonl_and_the_old_object_is_marked_superseded(self):
+        assert str(astrorun.SIGNOFF_RECORD) == "data/ledgers/astroreg2_signoff.jsonl"
+        assert str(astrorun.SIGNOFF_RECORD_SUPERSEDED) == "data/ledgers/astroreg2_signoff.json"
+        assert "NEVER WRITTEN AGAIN" in Path("genomeos/attribution/astrorun.py").read_text()
+
+    def test_only_the_last_line_is_read(self, tmp_path):
+        f = self.write(
+            tmp_path / "s.jsonl",
+            [self.line({"a": "1"}, words="first"), self.line({"b": "2"}, words="second")],
+        )
+        assert len(astrorun.signoff_lines(f)) == 2
+        assert astrorun.recorded_signoff(f)["words"] == "second"
+        assert astrorun.recorded_signoff_words(f) == "second"
+
+    def test_PLANTED_an_EARLIER_line_matching_the_current_code_does_NOT_authorise(self, tmp_path):
+        """The one that matters: a withdrawn sign-off must not revive when code reverts."""
+        current = astrorun.sender_closure()
+        f = self.write(
+            tmp_path / "s.jsonl",
+            [
+                self.line(current, why="the cache-defect closure, withdrawn"),
+                self.line({"genomeos/x.py": "0" * 40}, why="supersedes the withdrawn one"),
+            ],
+        )
+        governing = astrorun.recorded_signoff(f)
+        assert governing["why"] == "supersedes the withdrawn one", "the LAST line governs"
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_closure(record=governing)
+        said = str(exc.value)
+        assert "RE-SIGN is required" in said
+        assert "ONLY THE LAST LINE" in astrorun.ONLY_THE_LAST_LINE_GOVERNS
+
+    def test_the_LAST_line_matching_the_current_code_DOES_authorise(self, tmp_path):
+        """Near-miss positive control: the same two lines in the other order."""
+        current = astrorun.sender_closure()
+        f = self.write(
+            tmp_path / "s.jsonl",
+            [self.line({"genomeos/x.py": "0" * 40}, why="old"), self.line(current, why="re-signed")],
+        )
+        governing = astrorun.recorded_signoff(f)
+        assert governing["why"] == "re-signed"
+        out = astrorun.check_signoff_closure(record=governing)
+        assert out["files_signed"] == len(current)
+
+    def commit_repo(self, tmp_path, text):
+        import subprocess
+
+        base = tmp_path / "repo"
+        base.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=base, check=True)
+        rel = Path("rec.jsonl")
+        (base / rel).write_text(text)
+        subprocess.run(["git", "add", "-A"], cwd=base, check=True)
+        subprocess.run(
+            ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "x"],
+            cwd=base,
+            check=True,
+        )
+        return base, rel
+
+    def test_a_COMMITTED_appended_line_passes(self, tmp_path):
+        """Appending is the point -- but the appended line must be committed to govern.
+
+        This replaces a test that asserted an UNCOMMITTED appended line passes. That was the defect:
+        HEAD being a prefix of the working file is exactly what an append produces, so a prefix rule
+        authorised anyone who could write the file.
+        """
+        import subprocess
+
+        base, rel = self.commit_repo(tmp_path, '{"a": 1}\n')
+        with (base / rel).open("a") as fh:
+            fh.write('{"a": 2}\n')
+        with pytest.raises(astrorun.SendRefusedError, match="not byte-identical to HEAD"):
+            astrorun.check_signoff_is_committed(rel, root=base)
+        subprocess.run(["git", "add", "-A"], cwd=base, check=True)
+        subprocess.run(
+            ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "append"],
+            cwd=base,
+            check=True,
+        )
+        out = astrorun.check_signoff_is_committed(rel, root=base)
+        assert out["identical_to_head"] is True, "once committed, the appended line governs"
+
+    def test_PLANTED_an_EDITED_line_refuses(self, tmp_path):
+        base, rel = self.commit_repo(tmp_path, '{"a": 1}\n{"a": 2}\n')
+        (base / rel).write_text('{"a": 1}\n{"a": 99}\n')
+        with pytest.raises(astrorun.SendRefusedError, match="not byte-identical to HEAD"):
+            astrorun.check_signoff_is_committed(rel, root=base)
+
+    def test_PLANTED_a_REMOVED_line_refuses_too(self, tmp_path):
+        base, rel = self.commit_repo(tmp_path, '{"a": 1}\n{"a": 2}\n')
+        (base / rel).write_text('{"a": 1}\n')
+        with pytest.raises(astrorun.SendRefusedError, match="not byte-identical to HEAD"):
+            astrorun.check_signoff_is_committed(rel, root=base)
+
+    def test_a_record_not_in_HEAD_REFUSES_rather_than_being_reported(self, tmp_path):
+        """Replaces a test asserting the opposite. 'Not checked' read as a pass is the vacuous pass."""
+        import subprocess
+
+        base = tmp_path / "repo"
+        base.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=base, check=True)
+        (base / "x.txt").write_text("x")
+        subprocess.run(["git", "add", "-A"], cwd=base, check=True)
+        subprocess.run(
+            ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "x"],
+            cwd=base,
+            check=True,
+        )
+        (base / "rec.jsonl").write_text('{"a": 1}\n')
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_is_committed(Path("rec.jsonl"), root=base)
+        assert "An uncommitted sign-off authorises nothing" in str(exc.value)
+
+    def test_an_unreadable_last_line_does_not_authorise(self, tmp_path):
+        f = tmp_path / "s.jsonl"
+        f.write_text(json.dumps(self.line({"a": "1"})) + "\n{not json\n")
+        assert astrorun.recorded_signoff(f) is None
+        assert len(astrorun.signoff_lines(f)) == 2, "the bad line is kept as a marker, not skipped"
+
+    def test_each_line_carries_the_digest_of_what_it_signed(self):
+        c = astrorun.sender_closure()
+        assert len(astrorun.closure_sha256(c)) == 64
+        assert astrorun.closure_sha256(c) == astrorun.closure_sha256(dict(reversed(list(c.items()))))
+
+
+class TestEachRunHasItsOwnLedger:
+    def test_run_one_keeps_its_filename_and_later_runs_do_not(self):
+        assert astrorun.ledger_for_run(1) == Path("data/ledgers/astroreg2.jsonl")
+        assert astrorun.ledger_for_run(2) == Path("data/ledgers/astroreg2_run2.jsonl")
+        assert astrorun.ledger_for_run(3) == Path("data/ledgers/astroreg2_run3.jsonl")
+
+    def test_a_run_id_below_one_is_refused(self):
+        with pytest.raises(ValueError, match="1 or more"):
+            astrorun.ledger_for_run(0)
+
+    def test_PLANTED_a_second_run_on_the_FIRST_ledger_refuses(self):
+        """Run 1 completed, so its ledger carries run_complete and must never be appended to again."""
+        first = Path("data/ledgers/astroreg2.jsonl")
+        if not first.exists():
+            pytest.skip("run 1's ledger is not on this machine")
+        assert astrorun.run_already_completed(first) is True
+        assert astrorun.ledger_charges(first)["charges"] == 10
+
+    def test_a_NEW_run_on_a_NEW_ledger_has_nothing_charged_and_is_not_complete(self, tmp_path):
+        fresh = tmp_path / "astroreg2_run2.jsonl"
+        assert astrorun.run_already_completed(fresh) is False
+        assert astrorun.ledger_charges(fresh)["charges"] == 0
+
+    def test_send_requires_run_and_has_no_default(self):
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert '"--run"' in src
+        assert "--send requires --run N" in src
+        assert "deliberately without a default" in src
+
+    def test_the_reason_a_run_gets_its_own_ledger_is_recorded(self):
+        assert "record of THAT run" in astrorun.A_NEW_RUN_GETS_ITS_OWN_LEDGER
+
+    def test_the_result_states_mixed_model_version_provenance(self):
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert "MIXED MODEL-VERSION PROVENANCE" in src
+        assert "unrequested" in src and "ALL_FOLDS" in src
+
+
+class TestAnUncommittedSignoffAuthorisesNothing:
+    """Three defects that each let an UNCOMMITTED sign-off authorise a send.
+
+    (a) a missing HEAD copy returned {"checked": False} and the send went on -- a check that reports
+        "not checked" and is read as a pass, which is the same vacuous-pass shape as a tracer recording
+        zero reads and satisfying "every read is declared";
+    (b) HEAD being a byte PREFIX of the working file is exactly what an APPEND produces, so anyone able
+        to write the file could append a governing line and send;
+    (c) an absolute path made `git show HEAD:<path>` fail, which landed in (a) -- so a tampered file
+        passed.
+
+    The send-time rule is therefore IDENTICAL-TO-HEAD, not prefix: the governing line must be a
+    COMMITTED line, so a sign-off is an act in the repository's history rather than a file someone has
+    edited.
+    """
+
+    def repo(self, tmp_path, committed: str | None, working: str):
+        import subprocess
+
+        base = tmp_path / "repo"
+        base.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=base, check=True)
+        rel = Path("rec.jsonl")
+        (base / "seed.txt").write_text("seed")
+        if committed is not None:
+            (base / rel).write_text(committed)
+        subprocess.run(["git", "add", "-A"], cwd=base, check=True)
+        subprocess.run(
+            ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "x"],
+            cwd=base,
+            check=True,
+        )
+        (base / rel).write_text(working)
+        return base, rel
+
+    def test_PLANTED_no_HEAD_copy_REFUSES(self, tmp_path):
+        """(a) An uncommitted sign-off authorises nothing."""
+        base, rel = self.repo(tmp_path, committed=None, working='{"a": 1}\n')
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_is_committed(rel, root=base)
+        assert "An uncommitted sign-off authorises nothing" in str(exc.value)
+
+    def test_PLANTED_an_uncommitted_APPENDED_line_REFUSES(self, tmp_path):
+        """(b) Append-only without committed authorises anybody who can write the file."""
+        base, rel = self.repo(tmp_path, committed='{"a": 1}\n', working='{"a": 1}\n{"a": 2}\n')
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_is_committed(rel, root=base)
+        said = str(exc.value)
+        assert "not byte-identical to HEAD" in said
+        assert "uncommitted" in said
+
+    def test_PLANTED_an_absolute_path_to_a_tampered_file_REFUSES(self, tmp_path):
+        """(c) The path form must not be able to turn a tampered file into a pass."""
+        base, rel = self.repo(tmp_path, committed='{"a": 1}\n', working='{"a": 99}\n')
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.check_signoff_is_committed(base / rel, root=base)
+
+    def test_a_path_OUTSIDE_the_repository_refuses(self, tmp_path):
+        base, rel = self.repo(tmp_path, committed='{"a": 1}\n', working='{"a": 1}\n')
+        outside = tmp_path / "elsewhere.jsonl"
+        outside.write_text('{"a": 1}\n')
+        with pytest.raises(astrorun.SendRefusedError, match="outside the repository"):
+            astrorun.check_signoff_is_committed(outside, root=base)
+
+    def test_NEAR_MISS_committed_and_identical_PASSES(self, tmp_path):
+        """A check that can never pass is the defect the fixed-point case already taught us."""
+        base, rel = self.repo(tmp_path, committed='{"a": 1}\n', working='{"a": 1}\n')
+        out = astrorun.check_signoff_is_committed(rel, root=base)
+        assert out["identical_to_head"] is True
+        assert out["bytes"] == len('{"a": 1}\n')
+
+    def test_PLANTED_may_send_is_WIRED_to_the_committed_check_and_refuses_today(self, tmp_path, monkeypatch):
+        """A mechanism that exists but is not wired is indistinguishable from one that does not exist.
+
+        So the subject here is the WIRING, not the check: may_send is driven to the sign-off clause with
+        every earlier clause satisfied, and it must refuse because data/ledgers/astroreg2_signoff.jsonl
+        has no committed copy at HEAD. If the call were removed from may_send, this returns and sends.
+        """
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        plan = [row(i) for i in range(astrorun.ASTROREG2_CAP)]
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(
+                plan=plan,
+                registration=reg,
+                activity_result=act,
+                reviewed_digest=astrorun.plan_digest(plan),
+                ledger=tmp_path / "l.jsonl",
+                signoff='wrote "dry run reviewed" at 13:00',
+                committed=lambda p: True,
+            )
+        said = str(exc.value)
+        assert "astroreg2_signoff.jsonl" in said
+        assert "no committed copy at HEAD" in said, said
+        assert "An uncommitted sign-off authorises nothing" in said
+
+    def test_may_send_does_NOT_hand_the_check_a_record_which_would_skip_it(self):
+        """check_signoff_closure(record=...) skips the committed check by design, for tests.
+
+        That makes `record` a way past the rule, so the call site is pinned: may_send must pass no
+        record. Planted against a call site that supplied one.
+        """
+        import ast
+
+        tree = ast.parse((ROOT / "genomeos/attribution/astrorun.py").read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "may_send")
+        calls = [
+            c
+            for c in ast.walk(fn)
+            if isinstance(c, ast.Call)
+            and isinstance(c.func, ast.Name)
+            and c.func.id == "check_signoff_closure"
+        ]
+        assert len(calls) == 1, "may_send must check the sign-off closure exactly once"
+        kw = {k.arg for k in calls[0].keywords}
+        assert "record" not in kw, (
+            "a record handed in skips check_signoff_is_committed, so may_send must let the check read "
+            "the file it is the rule about"
+        )
+        assert not calls[0].args, "no positional record either"
+
+    def test_the_governing_line_must_be_a_committed_line(self):
+        src = Path("genomeos/attribution/astrorun.py").read_text()
+        assert "act in the repository's history" in src
+        assert "An uncommitted sign-off authorises nothing" in src
