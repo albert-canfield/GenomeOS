@@ -205,8 +205,14 @@ def test_every_shown_claim_carries_its_qualification_and_its_registered_wording(
     assert all(e["counted"] for e in counted)
 
     crispri = next(e for e in shown if e["id"] == "crispri_heldout")
-    # README's words, which say "in the range of", never the stronger band the file records
-    assert crispri["wording"][:60] in readme and "in the range of" in crispri["wording"]
+    # README's words, never the stronger band the file records. The hedge was "in the range of"
+    # until 2026-10-02, when the paired like-for-like comparison replaced it: on matched inputs
+    # against ENCODE-rE2G no difference was detected, so the claim must carry that and must not
+    # claim to beat the baseline. This is stricter than the phrase it replaces, not looser.
+    assert crispri["wording"][:60] in readme
+    assert "no difference detected" in crispri["wording"]
+    forbidden = ("better than", "outperform", "beats", "above the published interval", "exceeds")
+    assert not any(w in crispri["wording"].lower() for w in forbidden), crispri["wording"]
     quals = " ".join(q["text"] for q in crispri["qualifications"])
     verdict = _result("crispri_published")["second_cell_type_hct116"]["verdict"]
     assert verdict in quals and "one cell type" in quals and "not a paired test" in quals

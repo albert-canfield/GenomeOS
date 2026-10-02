@@ -1785,7 +1785,7 @@ function figureLine(f) {
   const bits = [];
   if (f.percent != null) bits.push(`<b>${fmt(f.measured_bp)}</b> of <b>${fmt(f.total_bp)}</b> bases — <b>${f.percent}%</b>`);
   if (f.blocks_measured != null) bits.push(`${fmt(f.blocks_measured)} of ${fmt(f.blocks)} blocks touched by any of ${(f.assays || []).join(', ')}`);
-  // the file's band field is not the claim's wording (docs/CRISPRI-RESULT.md keeps "in the range of"), so it is not printed here
+  // the file's band field is not the claim's wording (since 2026-10-02 the claim carries the paired like-for-like reading, "no difference detected" on matched inputs), so it is not printed here
   if (f.held_out_gain != null) bits.push(`held-out gain <b>${f.held_out_gain}</b>${f.ci95 ? ` (95% ${f.ci95[0]} to ${f.ci95[1]})` : ''}`);
   const rep = f.replication;
   if (rep && rep.gain != null) bits.push(`second cell type ${escH(rep.cell_type)}: gain ${rep.gain}${rep.ci95 ? ` (95% ${rep.ci95[0]} to ${rep.ci95[1]})` : ''} on ${fmt(rep.covered_pairs)} pairs — <b>${rep.replicated ? 'replicated' : 'not replicated'}</b>`);
