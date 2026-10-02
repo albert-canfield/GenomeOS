@@ -23,15 +23,34 @@ of 50 random windows of each block's length outside the organiser's blocks, lift
 `attribution.unknown_scoring` and checked against its chr21 figures to the digit before any genome-wide
 figure is drawn. The 87% it used to quote was the locus benchmark's, a different instrument.
 
-Why the name carries a `_v2` since 2026-10-02. The 2026-09-27 file, `constrained_unknown_targets.json`,
-declared 193 inputs and the open-tracer counted 195 files opened for reading under `data/`. The two it
-did not declare are `data/results/unknown_chr21.json` and `data/results/budget_axes_chr21.json`, both
-opened by `lift_check` below through `attribution.unknown_scoring.unknown_blocks("chr21")`
-(`unknown_scoring.py:89`). The self-check is legitimate work -- the defect was the undeclared input and
-not the check, which stands unchanged. What made the omission worse than a plain gap is how a check
-behaved against it: both files are git-tracked, so a clean worktree holds them, the rebuild from the
-manifest ran to completion and reported 0 differences while their bytes were pinned by no sha256. A
-change to either would change this result and the rebuild would still have printed "0 differences".
+Why the name carries a `_v2` since 2026-10-02. The 2026-09-27 file,
+`constrained_unknown_targets.json`, declares 193 inputs, and it was rebuilt at `190a144` with 193 of
+193 of them opened and matching their sha256 and 0 differences -- while a tracer on that same run saw
+ONE read its manifest does not name: `data/results/unknown_chr21.json`. That is the count, measured and
+recorded in `tests/test_rebuild_write_guard.py`: one undeclared read, the 194th.
+
+The read comes in through the self-check. `lift_check` below calls
+`attribution.unknown_scoring.unknown_blocks("chr21")`, which loads the unknown blocks at
+`unknown_scoring.py:91`, and no declaration function inspects that path at all: `organise.inputs` names
+the budget, variation and duplication readings and the attribution runs, and nothing names the unknown
+blocks the self-check asks for. The self-check is legitimate work -- the lift is checked against chr21
+to the digit before any genome-wide figure is drawn -- so the defect was its undeclared input and not
+the check, which stands unchanged.
+
+What made that worse than a plain gap is the direction the check failed in. The file is git-tracked, so
+a clean worktree holds it, the rebuild found it, the run completed, and 0 differences was reported while
+its 355,767 bytes were pinned by no sha256 anywhere in the manifest. A change to it would have changed
+the result and the rebuild would have printed the same pass.
+
+One more path belongs in the record with its date, because it is NOT a defect of that run and reading
+it as one would overstate the case. `lift_check` also opens `data/results/budget_axes_chr21.json`
+through the same call. The 24 `budget_axes_chr*.json` files were added in `308484a` (2026-09-28 03:25)
+and `organise.inputs` learned to name them in `690a71c` (04:21), both AFTER `190a144` (00:40) -- so
+that file did not exist when the committed result was made and could not have been read, and the
+current code declares it anyway. It is counted here as what it is: a path the self-check opens that
+nothing in the declaration path would have inspected either, not a second omission in the 2026-09-27
+file.
+
 The remedy is a new name whose manifest declares every file `lift_check` opens (`LIFT_CHECK_INPUTS`,
 the closed list the tracer measured), not an edit to the 2026-09-27 file: that file's bytes are left
 exactly as they are and `result_manifest.supersedes` here names it and the undeclared read.
@@ -71,11 +90,12 @@ SUPERSEDED = "data/results/constrained_unknown_targets.json"
 SUPERSEDED_DATE = "2026-09-27"
 
 #: Every file `lift_check` opens for reading under data/, as the open-tracer recorded them, declared
-#: whether or not the chromosome loop happens to declare the same path. Two of these -- unknown_chr21
-#: and budget_axes_chr21 -- were the reads the 2026-09-27 manifest did not declare, and both are
-#: reached through `unknown_scoring.unknown_blocks`, which no declaration function inspected. The list
-#: is CLOSED and the paths are not guarded by `.exists()`: a missing input must fail the run loudly
-#: rather than shrink the declaration, which is the shape that let the gap through the first time.
+#: whether or not the chromosome loop happens to declare the same path. `unknown_chr21` is the one read
+#: the 2026-09-27 manifest did not declare; `budget_axes_chr21` is the one that did not yet exist then
+#: (see the module docstring for the dates). Both are reached through
+#: `unknown_scoring.unknown_blocks`, which no declaration function inspects. The list is CLOSED and the
+#: paths are not guarded by `.exists()`: a missing input must fail the run loudly rather than shrink
+#: the declaration, which is the shape that let the gap through the first time.
 LIFT_CHECK_INPUTS = (
     "data/knowledge/alphagenome/all_elements/chr21.json",
     "data/results/budget_axes_chr21.json",
@@ -662,17 +682,24 @@ def manifest(chroms: list[str], control: bool, window: bool) -> dict[str, Any]:
             "date": SUPERSEDED_DATE,
             "kept": "unchanged; this run is written beside it under a new name, not over it",
             "why": (
-                "the 2026-09-27 file declared 193 inputs and the open-tracer counted 195 files opened "
-                "for reading under data/. The undeclared reads are data/results/unknown_chr21.json and "
-                "data/results/budget_axes_chr21.json, both opened by this script's lift_check through "
-                "attribution.unknown_scoring.unknown_blocks('chr21') (unknown_scoring.py:89), a "
-                "self-check whose inputs no declaration function inspected. Both are git-tracked, so a "
-                "clean worktree holds them and the rebuild from that manifest completed and reported 0 "
-                "differences while their bytes were pinned by no sha256: a change to either would have "
-                "changed the result and the rebuild would still have passed. This run declares every "
-                "file lift_check opens (LIFT_CHECK_INPUTS). The self-check was not weakened and no "
-                "quantity was refitted; the 2026-09-27 file is kept at data/results/"
-                "constrained_unknown_targets.json with its bytes untouched as the historical record"
+                "the 2026-09-27 file declares 193 inputs and was rebuilt at 190a144 with 193 of 193 "
+                "opened and matching their sha256 and 0 differences, while a tracer on that same run "
+                "saw ONE read its manifest does not name: data/results/unknown_chr21.json, 355,767 "
+                "bytes, the 194th read, recorded in tests/test_rebuild_write_guard.py. It comes in "
+                "through this script's lift_check, which calls "
+                "attribution.unknown_scoring.unknown_blocks('chr21') and loads it at "
+                "unknown_scoring.py:91 -- a self-check whose inputs no declaration function inspects. "
+                "The file is git-tracked, so a clean worktree holds it, the rebuild found it and "
+                "reported a pass while its bytes were pinned by no sha256: a change to it would have "
+                "changed the result and the rebuild would have printed the same pass. The same call "
+                "also opens data/results/budget_axes_chr21.json, which is NOT a second omission in "
+                "that file: the 24 budget_axes_chr*.json were added in 308484a (2026-09-28 03:25) and "
+                "organise.inputs learned to name them in 690a71c (04:21), both after 190a144 (00:40), "
+                "so it did not exist when that run was made. This run declares every file lift_check "
+                "opens (LIFT_CHECK_INPUTS), 218 inputs in all against that file's 193. The self-check "
+                "was not weakened and no quantity was refitted; the 2026-09-27 file is kept at "
+                "data/results/constrained_unknown_targets.json with its bytes untouched as the "
+                "historical record"
             ),
         },
     }
