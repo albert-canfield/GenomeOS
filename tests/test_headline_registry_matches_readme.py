@@ -19,9 +19,17 @@ registry writes `unknown_coverage` as `"160,447 of 30,602,182 bp (0.52%)"` and t
 whole-string test would call it drift and teach its reader to skim the failures. Matching the numbers keeps
 the test firing only when a quantity is gone.
 
-All three tests fail today and are strict xfails with the measured counts in the reason, because the
-registry and the README are other sessions' files in a shared checkout: this file records the defect so it
-cannot be forgotten and flips to a pass the moment either is corrected. It never adjusts what it expects.
+All three tests failed when this file was written and were strict xfails with the measured counts in the
+reason, because the registry and the README are other sessions' files in a shared checkout: this file
+records the defect so it cannot be forgotten and flips to a pass the moment either is corrected. It never
+adjusts what it expects.
+
+The FIRST of the three was corrected on 2026-10-02 and its marker is gone, which is the mechanism working
+rather than an adjustment: `crispri_published_v2` and `crispri_benchmark_v2` were rebuilt and registered in
+`manifest_headlines.json`, so the README-to-registry direction holds and the strict xfail would otherwise
+XPASS and redden the suite. The other two still fail and keep their markers: `constrained_unknown_targets`
+still records "ROADMAP 1.3", and `node_containment_audit` still records `quoted_in: "README"` for a figure
+of +2.90 that the README does not contain.
 """
 
 import json
@@ -56,13 +64,6 @@ def documents(quoted_in: str) -> list[str]:
     return out
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "the registry is dated 2026-09-28 and the README has moved: crispri_published_v2.json and "
-        "crispri_benchmark_v2.json are cited by the README and registered nowhere"
-    ),
-)
 def test_every_result_the_readme_names_by_filename_is_registered():
     unregistered = sorted(n for n in readme_result_filenames() if n.removesuffix(".json") not in REGISTERED)
     assert unregistered == [], (

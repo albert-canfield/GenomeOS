@@ -63,7 +63,33 @@
       "status": "reproduced",
       "second_rerun_differences": [],
       "alphagenome_requests": 0,
-      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
+      "fourth_pass_2026_10_02": {
+        "verification_tool_at": "f9c02e52f20c79bb722620a0dd1c7b74be232e3d",
+        "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+        "inputs_declared_and_checked": "98 of 98",
+        "files_opened_and_hashed": 98,
+        "values_compared": 3032,
+        "leaves": {
+          "total": 3073,
+          "compared": 3032,
+          "not_compared": 41,
+          "set_aside": 0
+        },
+        "differences": [],
+        "comparison_reading": "0 differences, and nothing was set aside: every leaf compared reconciles",
+        "traced_reads_against_declared_inputs": {
+          "files_read_under_data": 73,
+          "declared_inputs": 98,
+          "undeclared": [],
+          "declared_but_never_opened": 25,
+          "declared_but_never_opened_detail": "24 data/results/ccres_chr*.bed.gz and one gencode gff3.gz. Unlike the unknown_coverage case these are bgzipped and tabixed and are read through htslib by pysam, which raises no 'open' audit event: the tracer cannot see them, so for this writer the undeclared: [] reading covers the 73 Python-level reads and says nothing about what htslib opened. Stated rather than counted as a pass",
+          "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+        },
+        "write_guard": "armed in both processes; no refusal, exit 0",
+        "runs_in_this_pass": "ONE, not two. This row's second_rerun_differences above is the 2026-09-28 pass's and is not restated here: free disk fell to 7.7 GB against scripts/capacity_gate.py's 10 GB floor, the gate refused a further heavy job and was not overridden. The two results registered for the first time in this pass were each rebuilt twice",
+        "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha f9c02e5 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true, so the verdict is one the tool was willing to give. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)"
+      }
     },
     {
       "result": "constrained_unknown_targets_v2",
@@ -237,7 +263,41 @@
       "status": "reproduced",
       "second_rerun_differences": [],
       "alphagenome_requests": 0,
-      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
+      "fourth_pass_2026_10_02": {
+        "verification_tool_at": "f9c02e52f20c79bb722620a0dd1c7b74be232e3d",
+        "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+        "inputs_declared_and_checked": "174 of 174",
+        "files_opened_and_hashed": 174,
+        "values_compared": 862,
+        "leaves": {
+          "total": 900,
+          "compared": 862,
+          "not_compared": 38,
+          "set_aside": 1
+        },
+        "differences": [],
+        "comparison_reading": "0 differences AFTER SETTING ASIDE 1 leaves (1 timing fields); every set-aside path is listed above with its reason, and this is not the same claim as 0 differences.",
+        "set_aside_and_why": {
+          "timing_fields": [
+            "/seconds"
+          ],
+          "value_set_aside": {
+            "/seconds": 36.7
+          }
+        },
+        "traced_reads_against_declared_inputs": {
+          "files_read_under_data": 30,
+          "declared_inputs": 174,
+          "undeclared": [],
+          "declared_but_never_opened": 144,
+          "declared_but_never_opened_detail": "six families of 24 chromosomes each under data/results -- budget_chr*.json, variation_chr*.json, duplication_chr*.json, enhancer_targets_chr*.json, enhancer_targets_all_chr*.json and constrained_targets_chr*.json -- are declared and their sha256 all match, and this run opened none of them. They are plain JSON, so the tracer's C-library blind spot does not explain it: the declaration is wider than what the writer reads. That is the OPPOSITE defect to an undeclared read and is not a reproducibility hole -- it over-pins rather than under-pins -- but '174 of 174 inputs' overstates what this figure depends on, which is 30 files",
+          "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+        },
+        "write_guard": "armed in both processes; no refusal, exit 0",
+        "runs_in_this_pass": "ONE, not two. This row's second_rerun_differences above is the 2026-09-28 pass's and is not restated here: free disk fell to 7.7 GB against scripts/capacity_gate.py's 10 GB floor, the gate refused a further heavy job and was not overridden. The two results registered for the first time in this pass were each rebuilt twice",
+        "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha f9c02e5 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true, so the verdict is one the tool was willing to give. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)"
+      }
     },
     {
       "result": "crispri_published",
@@ -260,6 +320,118 @@
       "committed_file": "the committed lines kept (written 2026-09-27 at 42d7b1b), result_manifest added from the second rerun",
       "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 0126346, fresh environment, 4 of 4 inputs matching their sha256 (both benchmark tables, the all-element deletion table and the per-element cache, 1.43 GB), 0 differences, 0 timing fields",
       "scorer_record_changed": "crispri.Pair gained the five PowerAtEffectSize fields at 0126346, before both reruns; no value moved"
+    },
+    {
+      "result": "crispri_published_v2",
+      "figure": "the AlphaGenome deletion feature's gain over activity + distance on the published held-out CRISPRi pairs, K562",
+      "quoted_as": "+0.136 95% +0.073 to +0.227 on all 1,918 held-out K562 pairs",
+      "quoted_in": "README",
+      "value": {
+        "gain": 0.1361,
+        "ci95": [
+          0.0734,
+          0.227
+        ],
+        "pairs": 1918,
+        "clusters": 22
+      },
+      "writer": "scripts/crispri_published_v2.py",
+      "argv": [
+        "scripts/crispri_published_v2.py"
+      ],
+      "rebuilt_at": "57681b2a2ec26aa2dfad3c3617a92488a219404b",
+      "verification_tool_at": "f9c02e52f20c79bb722620a0dd1c7b74be232e3d",
+      "dirty": false,
+      "manifest_complete": true,
+      "inputs_declared_and_checked": "4 of 4",
+      "files_opened_and_hashed": 3259,
+      "inputs_are_not_files": "two of the four declared inputs are directories, data/knowledge/alphagenome/all_elements and data/knowledge/alphagenome/elements; they are opened and hashed member by member, which is why 4 declared inputs come to 3,259 files",
+      "values_compared": 1110,
+      "leaves": {
+        "total": 1150,
+        "compared": 1110,
+        "not_compared": 40,
+        "set_aside": 0
+      },
+      "differences": [],
+      "comparison_reading": "0 differences, and nothing was set aside: every leaf compared reconciles",
+      "status": "reproduced",
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 3259,
+        "declared_inputs": 4,
+        "declared_files": 2,
+        "declared_directories": 2,
+        "undeclared": [],
+        "framework_reads_ignored": [],
+        "framework_read_note": "data/results_legacy.txt, the framework read this result was blocked on in the 2026-10-02 morning pass, was not read at all by this run, so the exempt-by-exact-path allowance was not exercised and nothing rests on it here",
+        "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+      },
+      "write_guard": "armed in the tool's process and in the rebuilt command's; no refusal, exit 0",
+      "alphagenome_requests": 0,
+      "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha f9c02e5 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true, so the verdict is one the tool was willing to give. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+      "second_rerun_differences": [],
+      "second_rerun_comparison_reading": "0 differences, and nothing was set aside: every leaf compared reconciles",
+      "second_rerun_inputs_declared_and_checked": "4 of 4",
+      "second_rerun_files_opened_and_hashed": 3259,
+      "second_rerun_values_compared": 1110,
+      "second_rerun_undeclared_reads": [],
+      "second_rerun_in": "its own clean git worktree, a second fresh environment from the committed uv.lock",
+      "why_registered_now": "tests/test_headline_registry_matches_readme.py (986e6c7) recorded that the README's independent-prediction claim cites this file by name and the registry named it nowhere, so the 2026-09-28 pass had rebuilt crispri_published, which no README claim depends on any more. This row is the correction; the crispri_published row above is kept as the record of that pass and is not restamped"
+    },
+    {
+      "result": "crispri_benchmark_v2",
+      "figure": "the same gain on the subset of held-out K562 pairs a scored element covers -- a second population, not the same figure twice",
+      "quoted_as": "+0.141 95% +0.079 to +0.232 on the 1,744 K562 held-out pairs a scored element covers",
+      "quoted_in": "README",
+      "value": {
+        "gain": 0.1407,
+        "ci95": [
+          0.0786,
+          0.2321
+        ],
+        "pairs": 1744,
+        "clusters": 22
+      },
+      "writer": "scripts/crispri_benchmark_v2.py",
+      "argv": [
+        "scripts/crispri_benchmark_v2.py"
+      ],
+      "rebuilt_at": "33dd8bff9997449575183399ba5491f9720da261",
+      "verification_tool_at": "f9c02e52f20c79bb722620a0dd1c7b74be232e3d",
+      "dirty": false,
+      "manifest_complete": true,
+      "inputs_declared_and_checked": "4 of 4",
+      "files_opened_and_hashed": 3259,
+      "values_compared": 1088,
+      "leaves": {
+        "total": 1126,
+        "compared": 1088,
+        "not_compared": 38,
+        "set_aside": 0
+      },
+      "differences": [],
+      "comparison_reading": "0 differences, and nothing was set aside: every leaf compared reconciles",
+      "status": "reproduced",
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 3259,
+        "declared_inputs": 4,
+        "declared_files": 2,
+        "declared_directories": 2,
+        "undeclared": [],
+        "framework_reads_ignored": [],
+        "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+      },
+      "write_guard": "armed in the tool's process and in the rebuilt command's; no refusal, exit 0",
+      "alphagenome_requests": 0,
+      "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha f9c02e5 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true, so the verdict is one the tool was willing to give. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+      "second_rerun_differences": [],
+      "second_rerun_comparison_reading": "0 differences, and nothing was set aside: every leaf compared reconciles",
+      "second_rerun_inputs_declared_and_checked": "4 of 4",
+      "second_rerun_files_opened_and_hashed": 3259,
+      "second_rerun_values_compared": 1088,
+      "second_rerun_undeclared_reads": [],
+      "second_rerun_in": "its own clean git worktree, a second fresh environment from the committed uv.lock",
+      "why_registered_now": "the README cites this file by name for the covered-element population and the registry named it nowhere: the omission tests/test_headline_registry_matches_readme.py was written to record. With both v2 results registered that test's first case passes, so its strict xfail is removed in the same commit rather than left to XPASS"
     }
   ],
   "pending": [
@@ -360,5 +532,26 @@
       "python": "3.14.3"
     },
     "complete": true
+  },
+  "fourth_pass": {
+    "date": "2026-10-02",
+    "who": "lane-gate2",
+    "membership": "the gate's membership is set by tests/test_headline_registry_matches_readme.py (986e6c7), which matches the README and this registry in both directions, and not by this file alone. crispri_published is OUT of the gate: the README cites crispri_published_v2 instead",
+    "verification_tool_at": "f9c02e52f20c79bb722620a0dd1c7b74be232e3d",
+    "how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha f9c02e5 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true, so the verdict is one the tool was willing to give. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+    "runs": "crispri_published_v2 and crispri_benchmark_v2 were rebuilt TWICE each, every run in its own clean worktree with its own fresh environment. unknown_coverage and node_containment_measured were rebuilt ONCE in this pass: by then free disk had fallen to 7.7 GB against scripts/capacity_gate.py's 10 GB floor and the gate refused a further heavy job, which was honoured rather than overridden. Their second_rerun_differences fields remain the 2026-09-28 pass's and this pass does not restate them",
+    "rebuilt_in_this_pass": [
+      "unknown_coverage",
+      "node_containment_measured",
+      "crispri_published_v2",
+      "crispri_benchmark_v2"
+    ],
+    "guard_refusals": "none. The write guard was armed in the tool's process and in the rebuilt command's for all four, and every run exited 0 with no must-hold failure. A guard refusal would mean a writer HELD A WRITE HANDLE on an input store, which is not the same thing as changing one, and is reported as its own category and never as a difference",
+    "tracer_limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it",
+    "not_rebuilt_here_and_why": {
+      "node_containment_audit": "rebuilt earlier on 2026-10-02 by another lane: 96 of 96 inputs, 3,416 leaves",
+      "constrained_unknown_targets_v2": "rebuilt earlier on 2026-10-02 by another lane: 218 declared = 218 read, undeclared [], two independent verdicts at 218/218 over 4,038 leaves",
+      "therapeutic_benchmark_v2": "owned and in flight by another lane, which landed the writer change at 1bfe12d and holds both scripts/therapeutic_benchmark.py and this file; this lane did not touch either, so its row is that lane's to write"
+    }
   }
 }
