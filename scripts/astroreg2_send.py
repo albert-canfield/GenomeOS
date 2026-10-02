@@ -69,6 +69,9 @@ ACTIVITY = Path("data/results/astroreg2_astrocyte_activity.json")
 #: the file rather than to carve an exemption into a claim worth keeping absolute.
 LEDGER = Path("data/ledgers/astroreg2.jsonl")
 
+#: The sign-off record, read at runtime and declared as an input because it is read.
+SIGNOFF = Path("data/ledgers/astroreg2_signoff.json")
+
 #: The digest of the list the supervisor reviewed, as committed at cc5b097. The sender rebuilds the list
 #: and refuses on any difference, so the reviewed list and the sent list are the same object.
 REVIEWED_DIGEST = "b96148cab7174cf10407aa07a2d26edf1c1972df5db2c00de3e682ccacf2b519"
@@ -112,8 +115,23 @@ def answer_is_usable_note(note: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def written_entry(chrom: str, element_id: str, cache: Path | None = None) -> dict[str, Any] | None:
+    """The answer AS WRITTEN TO THE CACHE, which is what the pilot must read.
+
+    `score_element` STRIPS the `genes` key from what it returns, so the pilot was reading an always-empty
+    list and failing whatever the service said. The written entry is the record that actually holds the
+    effects, so the pilot reads that.
+    """
+    return enhancer_target.load_cached(
+        chrom, element_id, Path(cache) if cache is not None else astrorun.ASTROREG2_CACHE_ROOT
+    )
+
+
 def answer_is_usable(hit: dict[str, Any]) -> dict[str, Any]:
-    """Whether one answer carries a gene name and a non-empty effects set."""
+    """Whether one answer carries a gene name and a non-empty effects set.
+
+    Takes the WRITTEN cache entry, never score_element's return value: that return has `genes` stripped.
+    """
     genes = hit.get("genes") or []
     named = [g for g in genes if (g.get("gene") or "").strip()]
     return {
@@ -130,6 +148,7 @@ def send(
     budget: astrorun.RequestBudget,
     score: Any,
     pilot_requests: int = PILOT_REQUESTS,
+    cache_root: Path | None = None,
 ) -> dict[str, Any]:
     """Iterate the reviewed list through the recording path, ledgering before each send.
 
@@ -154,7 +173,7 @@ def send(
             genes=row.get("serves_genes"),
         )
         try:
-            hit = score(chrom=row["chrom"], element_id=row["element"], start=row["start"], end=row["end"])
+            score(chrom=row["chrom"], element_id=row["element"], start=row["start"], end=row["end"])
         except BaseException as e:  # noqa: BLE001 - recorded, then re-raised unchanged
             # SMALL FIX 1: a charged-but-unanswered element is VISIBLE in the ledger rather than merely
             # implied by a missing answer line. Written before the raise propagates.
@@ -165,7 +184,11 @@ def send(
                 error=f"{type(e).__name__}: {e}",
             )
             raise
-        check = answer_is_usable(hit or {})
+        # the WRITTEN entry, not score_element's stripped return. Reading the return is what made the
+        # pilot fail on every answer regardless of what the service sent back.
+        written = written_entry(row["chrom"], row["element"], cache_root)
+        check = answer_is_usable(written or {})
+        check["from_written_entry"] = written is not None
         budget.note(event="answer", **check)
         checks.append(check)
         # SMALL FIX 2: the pilot counts the answers OF THE RUN, read from the ledger, not of this
@@ -280,7 +303,12 @@ def main() -> int:
         return genome.fetch(locus)
 
     def score(**kw: Any) -> dict[str, Any]:
-        return enhancer_target.score_element(scorer, fetch, **kw)
+        # cache= is the whole fix: the astrocyte answers go to their OWN root. Against the sweep's root
+        # every one of the 1,232 is a cache hit, so the run would have charged 1,232, sent nothing and
+        # produced a result made of K562 answers labelled as astrocyte work. And a per-element file
+        # written under the sweep's root would SHADOW its archive, silently changing the frozen K562
+        # inputs for every future rebuild -- corrupting the baseline this test is measured against.
+        return enhancer_target.score_element(scorer, fetch, cache=astrorun.ASTROREG2_CACHE_ROOT, **kw)
 
     out = send(plan, budget, score)
     out["status"] = "the ONE authorised AstroREG-2 run"
@@ -342,6 +370,18 @@ def manifest(out: dict[str, Any], plan: list[dict[str, Any]]) -> dict[str, Any]:
                 partition=None,
                 role="the astrocyte activity columns, whose presence and rule are a clause of the approval",
             ),
+            mf.input_entry(
+                LEDGER,
+                partition=None,
+                role="the money audit trail: read to resume the budget, to list the elements already "
+                "charged so none is bought twice, and to count the run's answers for the pilot",
+            ),
+            mf.input_entry(
+                SIGNOFF,
+                partition=None,
+                role="the sign-off record, read at runtime for the supervisor's words and the signed "
+                "import closure",
+            ),
         ],
         "assembly": "GRCh38",
         "coordinates": {"base": 0, "interval": "half-open"},
@@ -353,8 +393,11 @@ def manifest(out: dict[str, Any], plan: list[dict[str, Any]]) -> dict[str, Any]:
             "pilot_passed": out["pilot"]["passed"],
             "reviewed_digest": REVIEWED_DIGEST,
         },
+        "cache_root": str(astrorun.ASTROREG2_CACHE_ROOT),
+        "why_a_separate_cache_root": astrorun.WHY_A_SEPARATE_CACHE_ROOT,
         "exclusions": [
             "no request was made outside enhancer_target.score_element",
+            "nothing was written under the sweep's cache root, so the frozen K562 inputs are untouched",
             "no request was sent without a ledger line written first",
             "no second run is possible: the ledger records a completed run",
         ],

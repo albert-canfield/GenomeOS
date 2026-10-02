@@ -46,6 +46,25 @@ def nameless_answer(element_id: str) -> dict:
     return {"id": element_id, "genes": []}
 
 
+def writing_score(cache_root: Path, answer=None):
+    """A score double that WRITES the cache entry, because that is what score_element does.
+
+    The earlier doubles returned an answer and wrote nothing, so the pilot -- which now reads the written
+    entry -- would find nothing. Returning without writing is the substitution that hid the cache-hit
+    defect, so the doubles write.
+    """
+
+    def score(**kw):
+        eid, chrom = kw["element_id"], kw["chrom"]
+        hit = (answer or good_answer)(eid)
+        d = Path(cache_root) / chrom
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{eid}.json").write_text(json.dumps(hit))
+        return {k: v for k, v in hit.items() if k != "genes"}  # score_element strips genes
+
+    return score
+
+
 class RecordingPathOnly:
     """A client double that only the recording path can satisfy.
 
@@ -76,11 +95,13 @@ class TestOnlyTheRecordingPathMaySend:
         """The positive control: the shape the sender actually uses must work."""
         client = RecordingPathOnly()
         budget = astrorun.RequestBudget(tmp_path / "l.jsonl", cap=20)
-        out = sender.send(
-            [row(i) for i in range(12)],
-            budget,
-            lambda **kw: client.through_recording_path(kw["element_id"]),
-        )
+        root = tmp_path / "c"
+
+        def score(**kw):
+            client.through_recording_path(kw["element_id"])
+            return writing_score(root)(**kw)
+
+        out = sender.send([row(i) for i in range(12)], budget, score, cache_root=root)
         assert out["requests_sent"] == 12
         assert client.calls_through_recording_path == 12
         assert client.direct_calls == 0
@@ -157,18 +178,21 @@ class TestOnlyTheRecordingPathMaySend:
 
 
 class TestThePilotCheckpoint:
-    def answers(self, bad_indices):
-        def score(**kw):
-            i = int(kw["element_id"].replace("EH38E", ""))
-            return nameless_answer(kw["element_id"]) if i in bad_indices else good_answer(kw["element_id"])
+    def answers(self, bad_indices, cache_root):
+        """A writing double: the pilot reads the WRITTEN entry, so a double must write one."""
 
-        return score
+        def pick(eid):
+            i = int(eid.replace("EH38E", ""))
+            return nameless_answer(eid) if i in bad_indices else good_answer(eid)
+
+        return writing_score(cache_root, pick)
 
     def test_PLANTED_a_nameless_response_in_the_first_ten_stops_the_run(self, tmp_path):
         """At most ten requests spent, the failures recorded, and the run terminal."""
         led = tmp_path / "l.jsonl"
         budget = astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP)
-        out = sender.send([row(i) for i in range(50)], budget, self.answers({4}))
+        root = tmp_path / "c"
+        out = sender.send([row(i) for i in range(50)], budget, self.answers({4}, root), cache_root=root)
         assert out["requests_sent"] == 10, "it stops AT the checkpoint, not after the whole list"
         assert out["pilot"]["passed"] is False
         assert out["pilot"]["stopped"]["at_request"] == 10
@@ -179,7 +203,8 @@ class TestThePilotCheckpoint:
         out = sender.send(
             [row(i) for i in range(50)],
             astrorun.RequestBudget(tmp_path / "l.jsonl", cap=astrorun.ASTROREG2_CAP),
-            self.answers({0}),
+            self.answers({0}, tmp_path / "c"),
+            cache_root=tmp_path / "c",
         )
         said = out["pilot"]["stopped"]["consequence"]
         assert "CONSUMES Albert's one run" in said
@@ -191,7 +216,8 @@ class TestThePilotCheckpoint:
         out = sender.send(
             [row(i) for i in range(14)],
             astrorun.RequestBudget(tmp_path / "l.jsonl", cap=50),
-            self.answers(set()),
+            self.answers(set(), tmp_path / "c"),
+            cache_root=tmp_path / "c",
         )
         assert out["requests_sent"] == 14
         assert out["pilot"]["passed"] is True
@@ -201,7 +227,8 @@ class TestThePilotCheckpoint:
         out = sender.send(
             [row(i) for i in range(14)],
             astrorun.RequestBudget(tmp_path / "l.jsonl", cap=50),
-            self.answers({12}),
+            self.answers({12}, tmp_path / "c"),
+            cache_root=tmp_path / "c",
         )
         assert out["requests_sent"] == 14
         assert out["pilot"]["passed"] is True
@@ -410,18 +437,20 @@ class TestTheErrorNoteAndTheLedgerPilot:
         """Six answers in a first pass, four in a second: the pilot fires at the tenth overall."""
         plan = [row(i) for i in range(30)]
         led = tmp_path / "l.jsonl"
-        client = RecordingPathOnly()
+        root = tmp_path / "c"
         first = sender.send(
             plan[:6],
             astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP),
-            lambda **kw: client.through_recording_path(kw["element_id"]),
+            writing_score(root),
+            cache_root=root,
         )
         assert first["pilot"]["passed"] is True
         assert len(astrorun.answer_notes(led)) == 6
         out = sender.send(
             plan,
             astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP),
-            lambda **kw: client.through_recording_path(kw["element_id"]),
+            writing_score(root),
+            cache_root=root,
         )
         assert out["answers_checked"] >= 10
         assert out["requests_charged_before_this_pass"] == 6
@@ -429,17 +458,19 @@ class TestTheErrorNoteAndTheLedgerPilot:
     def test_the_pilot_does_not_re_fire_on_a_resume_past_ten(self, tmp_path):
         plan = [row(i) for i in range(30)]
         led = tmp_path / "l.jsonl"
-        client = RecordingPathOnly()
+        root = tmp_path / "c"
         sender.send(
             plan[:12],
             astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP),
-            lambda **kw: client.through_recording_path(kw["element_id"]),
+            writing_score(root),
+            cache_root=root,
         )
         assert len(astrorun.answer_notes(led)) == 12
         out = sender.send(
             plan,
             astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP),
-            lambda **kw: client.through_recording_path(kw["element_id"]),
+            writing_score(root),
+            cache_root=root,
         )
         assert out["pilot"]["passed"] is True, "past ten, the checkpoint is behind the run"
         assert out["requests_this_pass"] == 18
@@ -843,8 +874,13 @@ class TestTheSweepAndTheSenderReachTheSamePath:
         assert params["cache"].default is enhancer_target.CACHE
         assert params["min_effect"].default == enhancer_target.MIN_EFFECT
         sender = self.SENDER.read_text()
-        assert "cache=" not in sender and "min_effect=" not in sender, (
-            "the sender must not override the cache or the effect floor the frozen values used"
+        assert "min_effect=" not in sender, (
+            "the sender must not override the effect floor the frozen values used"
+        )
+        assert "cache=astrorun.ASTROREG2_CACHE_ROOT" in sender, (
+            "the sender MUST override the cache root: against the sweep's root every planned element is "
+            "a cache hit, so the run would charge and buy nothing, and a file written there would shadow "
+            "the frozen archive"
         )
         src = inspect.getsource(enhancer_target.Context.score)
         assert "cache=cache" in src and "min_effect=min_effect" in src
@@ -902,3 +938,183 @@ class TestTheSweepAndTheSenderReachTheSamePath:
             "mean_log2fc",
             "n_tracks",
         }
+
+
+class TestACacheHitIsRefusedNotCharged:
+    """The test whose absence let the whole thing through.
+
+    Every earlier test stubbed the scorer, and `score_element`'s cache lookup happens BEFORE the scorer
+    is ever called -- so no stub could reach it. Against the sweep's cache root all 1,232 planned
+    elements are cache hits, measured: the run would have charged 1,232 to the ledger, sent nothing to
+    the service, and produced a result made entirely of K562 answers labelled as astrocyte work. It
+    would have reported success.
+
+    These tests use the REAL archive layout, because a stub standing in for the archive is precisely the
+    substitution that hid the defect.
+    """
+
+    def archive(self, root: Path, chrom: str, entries: dict) -> Path:
+        """A chromosome archive in the layout load_cached actually reads."""
+        import gzip
+
+        root.mkdir(parents=True, exist_ok=True)
+        p = root / f"{chrom}.json.gz"
+        with gzip.open(p, "wt") as fh:
+            json.dump(entries, fh)
+        return p
+
+    def answer(self, element_id: str, genes=1) -> dict:
+        return {
+            "id": element_id,
+            "chrom": "chr1",
+            "genes": [
+                {"gene": f"G{i}", "mean_log2fc": -0.3, "n_tracks": 4, "by_cell": {"K562": -0.3}}
+                for i in range(genes)
+            ],
+        }
+
+    def test_PLANTED_an_element_already_in_the_archive_is_REFUSED(self, tmp_path):
+        """(b) and (d): the real layout, and the refusal names the count."""
+        plan = [row(i) for i in range(4)]
+        root = tmp_path / "elements_astroreg2"
+        self.archive(root, "chr1", {plan[2]["element"]: self.answer(plan[2]["element"])})
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_nothing_in_the_plan_is_already_cached(plan, root)
+        said = str(exc.value)
+        assert "1 of the 4 planned elements already have a cached answer" in said
+        assert "charged and NOT bought" in said
+        assert plan[2]["element"] in said
+
+    def test_a_loose_per_element_file_is_found_too_because_it_SHADOWS_the_archive(self, tmp_path):
+        """The shadowing hazard, in the direction that matters for the pre-flight."""
+        plan = [row(0)]
+        root = tmp_path / "elements_astroreg2"
+        d = root / "chr1"
+        d.mkdir(parents=True)
+        (d / f"{plan[0]['element']}.json").write_text(json.dumps(self.answer(plan[0]["element"])))
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.check_nothing_in_the_plan_is_already_cached(plan, root)
+
+    def test_an_EMPTY_request_root_passes(self, tmp_path):
+        """The positive control: the only state in which a request is really made."""
+        plan = [row(i) for i in range(4)]
+        out = astrorun.check_nothing_in_the_plan_is_already_cached(plan, tmp_path / "fresh")
+        assert out["already_cached"] == 0
+        assert out["plan"] == 4
+
+    def test_the_defect_is_measured_on_the_real_sweep_root(self):
+        """What would have happened: every planned element already answered, by the K562 sweep."""
+        from genomeos.predict.enhancer_target import load_cached
+
+        sweep = Path("data/knowledge/alphagenome/elements")
+        if not (sweep / "chr1.json.gz").exists():
+            pytest.skip("the sweep archive is not on this machine")
+        plan = json.loads(Path("data/results/astroreg2_request_plan.json").read_text())["requests"][:25]
+        hits = [r for r in plan if load_cached(r["chrom"], r["element"], sweep) is not None]
+        assert len(hits) == len(plan), (
+            "every sampled element is already answered in the sweep root, which is why the run would "
+            "have bought nothing"
+        )
+        one = load_cached(plan[0]["chrom"], plan[0]["element"], sweep)
+        by_cell = (one["genes"][0].get("by_cell") or {}) if one.get("genes") else {}
+        assert "astrocyte" not in by_cell, (
+            "and the cached answers carry no astrocyte value, so they could not have served the test"
+        )
+
+    def test_the_request_root_is_not_the_sweeps(self):
+        assert str(astrorun.ASTROREG2_CACHE_ROOT) == "data/knowledge/alphagenome/elements_astroreg2"
+        assert "SHADOW THE" in Path("genomeos/attribution/astrorun.py").read_text()
+
+    def test_the_sender_passes_the_separate_root_to_score_element(self):
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert "cache=astrorun.ASTROREG2_CACHE_ROOT" in src
+
+
+class TestThePilotReadsTheWrittenEntry:
+    """(c) The pilot was reading score_element's return, which has `genes` STRIPPED.
+
+    So it was always an empty list and always failed, whatever the service returned. The failure
+    accidentally stopped a run that would have bought nothing -- but it would equally have stopped a run
+    that was working.
+    """
+
+    def test_score_element_really_does_strip_the_genes_key(self):
+        """The premise, checked against the function rather than remembered."""
+        import inspect
+
+        from genomeos.predict import enhancer_target
+
+        src = inspect.getsource(enhancer_target.score_element)
+        assert 'k != "genes"' in src, "if this stops being true, the pilot's source should be revisited"
+
+    def test_PLANTED_a_written_entry_WITH_genes_passes(self, tmp_path):
+        import gzip
+
+        root = tmp_path / "c"
+        root.mkdir()
+        entry = {"id": "E1", "genes": [{"gene": "AAA", "mean_log2fc": -0.4, "n_tracks": 3}]}
+        with gzip.open(root / "chr1.json.gz", "wt") as fh:
+            json.dump({"E1": entry}, fh)
+        got = sender.written_entry("chr1", "E1", root)
+        assert got is not None
+        assert sender.answer_is_usable(got)["usable"] is True
+
+    def test_PLANTED_a_written_entry_WITHOUT_genes_fails(self, tmp_path):
+        import gzip
+
+        root = tmp_path / "c"
+        root.mkdir()
+        with gzip.open(root / "chr1.json.gz", "wt") as fh:
+            json.dump({"E1": {"id": "E1", "genes": []}}, fh)
+        got = sender.written_entry("chr1", "E1", root)
+        assert sender.answer_is_usable(got)["usable"] is False
+
+    def test_a_missing_written_entry_is_unusable_rather_than_an_error(self, tmp_path):
+        assert sender.written_entry("chr1", "nope", tmp_path) is None
+        assert sender.answer_is_usable({})["usable"] is False
+
+    def test_the_pilot_records_whether_it_read_a_written_entry(self, tmp_path):
+        """So a run cannot pass the pilot on answers it never found."""
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert "from_written_entry" in src
+
+
+class TestCrispriReadsTheSameSeparateRoot:
+    """(e) The astrocyte annotation must read the root the answers were written to."""
+
+    def test_an_element_cache_can_be_pointed_at_the_astroreg2_root(self):
+        from genomeos.attribution import crispri
+
+        cache = crispri.ElementCache(astrorun.ASTROREG2_CACHE_ROOT)
+        assert cache.root == astrorun.ASTROREG2_CACHE_ROOT
+        assert cache.root != crispri.ELEMENT_CACHE, "it must not be the sweep's root"
+
+    def test_it_reads_a_value_from_that_root_by_the_frozen_collapse_rule(self, tmp_path):
+        import gzip
+
+        from genomeos.attribution import crispri
+
+        root = tmp_path / "elements_astroreg2"
+        root.mkdir()
+        entry = {
+            "id": "E1",
+            "genes": [{"gene": "AAA", "n_tracks": 2, "by_cell": {"astrocyte": -0.7, "K562": -0.1}}],
+        }
+        with gzip.open(root / "chr1.json.gz", "wt") as fh:
+            json.dump({"E1": entry}, fh)
+        cache = crispri.ElementCache(root)
+        assert cache.value("chr1", "E1", "AAA", "astrocyte") == -0.7
+        assert cache.value("chr1", "E1", "AAA", "K562") == -0.1
+        assert cache.value("chr1", "E1", "AAA", "HepG2") is None
+
+    def test_the_sweeps_root_holds_no_astrocyte_value_so_it_cannot_serve_the_test(self):
+        from genomeos.attribution import crispri
+
+        if not (crispri.ELEMENT_CACHE / "chr1.json.gz").exists():
+            pytest.skip("the sweep archive is not on this machine")
+        plan = json.loads(Path("data/results/astroreg2_request_plan.json").read_text())["requests"][0]
+        cache = crispri.ElementCache()
+        genes = plan["serves_genes"][:3]
+        assert all(cache.value(plan["chrom"], plan["element"], g, "astrocyte") is None for g in genes), (
+            "the sweep's answers carry no astrocyte value, which is the whole reason a run is needed"
+        )

@@ -707,6 +707,62 @@ A_SIGNOFF_IS_FOR_THE_CODE_IT_READ = (
 )
 
 
+#: Where the astrocyte answers are written. NOT the sweep's root, and the reason is a trap rather than
+#: tidiness: `score_element` writes a per-element file at `cache/<chrom>/<id>.json`, and `load_cached`
+#: prefers that file over the chromosome archive. So a new file under the sweep's root would SHADOW THE
+#: ARCHIVE and silently change the FROZEN K562 inputs for every future rebuild -- corrupting the very
+#: baseline this test is measured against, invisibly and permanently.
+ASTROREG2_CACHE_ROOT = Path("data/knowledge/alphagenome/elements_astroreg2")
+
+WHY_A_SEPARATE_CACHE_ROOT = (
+    "the sweep's cache root holds the frozen K562 answers the weights were fitted on. Writing astrocyte "
+    "answers there would shadow the archive for those element ids and change the frozen inputs of every "
+    "later rebuild, which is worse than a wrong number because it would make the baseline wrong too. The "
+    "astrocyte answers go to their own root and `crispri`'s astrocyte annotation reads THAT root"
+)
+
+#: Why an already-populated request root is a refusal and not a convenience.
+AN_EXISTING_ENTRY_MEANS_NOTHING_WOULD_BE_BOUGHT = (
+    "`score_element` returns a CACHED answer without a request. The AstroREG-2 list was built from the "
+    "elements the sweep had already scored, so against the sweep's root every one of the 1,232 is a cache "
+    "hit: the run would have charged 1,232 to the ledger, sent nothing, and produced a result made "
+    "entirely of K562 answers labelled as astrocyte work. It would have looked like a success. So the "
+    "send REFUSES unless the request cache root holds NONE of the plan's elements, which is the only "
+    "state in which a request is actually made"
+)
+
+
+def plan_elements_already_cached(
+    plan: list[dict[str, Any]], cache_root: Path | str | None = None, root: Path | None = None
+) -> list[str]:
+    """The plan's elements that already have an answer in the request cache root, so would not be bought."""
+    from genomeos.predict.enhancer_target import load_cached
+
+    base = Path(root) if root is not None else ROOT_FOR_BLOBS
+    cache = Path(cache_root) if cache_root is not None else base / ASTROREG2_CACHE_ROOT
+    if not Path(cache).is_absolute():
+        cache = base / cache
+    present = []
+    for row in plan:
+        if load_cached(row["chrom"], row["element"], Path(cache)) is not None:
+            present.append(row["element"])
+    return present
+
+
+def check_nothing_in_the_plan_is_already_cached(
+    plan: list[dict[str, Any]], cache_root: Path | str | None = None, root: Path | None = None
+) -> dict[str, Any]:
+    """Refuse unless EVERY request would really be a request. See the note above."""
+    present = plan_elements_already_cached(plan, cache_root, root)
+    if present:
+        raise SendRefusedError(
+            f"{len(present)} of the {len(plan)} planned elements already have a cached answer in the "
+            f"request cache root, so they would be charged and NOT bought (first: {present[:3]}). "
+            f"{AN_EXISTING_ENTRY_MEANS_NOTHING_WOULD_BE_BOUGHT}"
+        )
+    return {"plan": len(plan), "already_cached": 0, "cache_root": str(cache_root or ASTROREG2_CACHE_ROOT)}
+
+
 def sender_closure(entry: str = SENDER_ENTRY, root: Path | None = None) -> dict[str, str]:
     """`path -> blob` for every repository file the sender can reach by import, plus the sender itself."""
     from genomeos import manifest as mf
@@ -904,6 +960,7 @@ def may_send(
             )
 
     check_signoff_closure(root=ROOT_FOR_BLOBS)
+    check_nothing_in_the_plan_is_already_cached(plan)
     if not signoff or "dry run reviewed" not in signoff:
         _refuse(
             "signoff",
