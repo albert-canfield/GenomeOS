@@ -1,0 +1,2427 @@
+{
+  "result": "reptest_answerable",
+  "date": "2026-10-02",
+  "lane": "lane-reptest",
+  "question": "how many of extractor v2's increase-derived links are ANSWERABLE IN THEIR OWN CELL, counted before any direction test and reported beside the measured count",
+  "registered_in_code_before_this_count": "genomeos/attribution/reptest.py",
+  "registration": {
+    "lane": "lane-reptest",
+    "registered": "2026-10-02",
+    "what_is_registered": "the answerability count on extractor v2's increase-derived links and the verdict rule against both imported floors. No direction test is registered: a test is registered only if the answerable count clears both floors, and then in its own commit before any direction is read",
+    "acts_on": {
+      "lane": "lane-inhibits",
+      "registration": "data/results/increase_links_registration.json",
+      "files": [
+        "data/results/increase_links_registration.json",
+        "data/results/increase_population.json",
+        "data/results/increase_registration.json",
+        "data/results/direction_link.json",
+        "data/results/direction_link_registration.json"
+      ],
+      "commits": {
+        "increase_links registration code": "fabf43c",
+        "increase_links registration result": "9548040",
+        "the extractor, v2 added and v1 byte-identical": "ba32829",
+        "the record of what v2 adds": "25aac0d",
+        "lane-increase's registration, committed before any count": "e1c2671",
+        "lane-direction's registration, committed before any direction": "0779c97"
+      },
+      "figures": {
+        "v2_links_total": 260,
+        "v2_activates_links_from_v1": 212,
+        "v2_inhibits_links_added": 48,
+        "v1_links_removed_by_v2": 0,
+        "conflicts_today": 0,
+        "increase_links_by_cell": {
+          "K562": 39,
+          "WTC11": 6,
+          "HCT116": 3
+        },
+        "increase_links_by_split": {
+          "training": 25,
+          "heldout": 23
+        },
+        "increase_links_independent_loci_as_lane_increase_counted_them": 33,
+        "lane_direction_increase_arm_measured": 48,
+        "lane_direction_increase_arm_in_the_cell_read": 39,
+        "lane_direction_increase_arm_answered": 21,
+        "lane_direction_increase_arm_absent": 18,
+        "lane_direction_increase_arm_independent_loci_of_the_answered": 13
+      },
+      "lane_direction_no_go_carried_verbatim": "an arm is below an imported floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by substituting a cell, a gene or another cache. The counts go on the record with the margin each falls short by, because a reader is owed it and not because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+      "lane_increase_go_carried_verbatim": "at or above both registered floors: a measured repression population could be built from the increases the committed extractor discards. This lane stops here. It reads no direction, reports no rate, tests no repression call and draws no conclusion about whether the compiled program's repression calls are right: a feasibility count that rolls straight into the test it enables is how a floor gets moved after the outcome is seen. The test is registered as its own lane, and this lane's remaining deliverable is a written proposal naming the extractor change the count shows is worth making"
+    },
+    "population": "the population counted here is every record `measured.rule_links_detail(row, 'v2')` returns whose `derived_from` is the increase label, over the rows `measured.rows` builds for each chromosome from `targets.attributed`. It is read out of the extractor and is not a join rebuilt beside it: lane-direction enumerated an equivalent population by hand from the cached pairs, and a count taken on a hand-rolled copy is a count about the copy. Whether the extractor's output and that hand-rolled population agree is reported as a comparison with both counts named, and it is not assumed in either direction. No compiled rule is consulted, no predicted value enters the eligibility step, and the extractor is called exactly as committed with no argument of its own changed",
+    "extractor": "v2",
+    "answerable_predicate": "a link is ANSWERABLE IN ITS OWN CELL when the finished deletion sweep's per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz holds, under that link's own element id, a gene entry whose name is exactly that link's gene, carrying an entry for that link's own cell track, and that entry's value is not exactly 0.0. This is lane-direction's own predicate, imported from `direction_link.PREDICTED_CALL` and `direction_link.SIGN_CALL` rather than restated, so a count here and a count there mean the same thing. NOTHING IS SUBSTITUTED for a missing answer: not another cell's value, not another gene's value, not a neighbouring element's value, not a pooled or marginal value, and not the partial second cache data/knowledge/alphagenome/elements_hct116, which exists over five chromosomes from a different run and does carry an HCT116 track. Mixing that cache in would widen one arm of a comparison by substitution under another name, so it is named here and NOT read",
+    "predicted_direction": "the predicted deletion direction of a link is the sign of the signed predicted log2 fold change the finished genome-wide deletion sweep cached for THAT link's own gene on THAT link's own cell track, read from the per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz under the link's own element id, at `genes[*].by_cell[cell]` for the gene whose name is exactly the link's gene. The link already names one element, so no second element is consulted and no resolution rule across overlapping elements is needed or applied. Nothing is recomputed, no model request is made and no value is derived from any other cell, gene or element",
+    "sign_rule_zero_and_absent": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+    "causes": {
+      "answerable_in_its_own_cell": "the cache holds a value for this link's own gene on this link's own cell track and the value is not exactly zero, so the link carries a predicted direction and could be asked",
+      "the_cache_carries_no_track_of_this_cell": "the link's cell is not one of the tracks the cached answers carry (('HepG2', 'IMR-90', 'K562', 'GM12878')). The sweep holds no track of ('WTC11', 'HCT116') at all, so no amount of reading what is on disk closes this gap and nothing is substituted for it. These links are absent from any test rather than negative in it",
+      "the_element_is_absent_from_the_cache_archive": "the link's element id is not in the per-chromosome cache archive, so the sweep holds no record of this element. This is a gap in the run and is reported as one; it is not a statement about the element",
+      "the_gene_is_not_in_the_scorers_window_at_this_element": "the element's cached record exists but names no gene matching the link's gene: the gene is not in the scorer's window at this element. The CRISPRi benchmark tested a pair the scorer's window did not reach, so there is nothing cached to read and no nearest gene stands in for it",
+      "the_gene_was_scored_but_carries_no_entry_on_this_cells_track": "the gene is in the element's cached record but carries no entry for the link's own cell: the gene was scored, but not on this cell's own track. The gene was scored and this cell was not scored for it, which is a different gap from a gene outside the window and is counted apart from it",
+      "the_cached_value_is_exactly_zero_so_it_carries_no_direction": "the cached value is exactly 0.0, which carries no sign under the imported sign rule and is therefore neither an agreement nor a disagreement. Excluded from the answerable count and counted on its own, never defaulted to a direction"
+    },
+    "causes_are_exhaustive": "every link of the population falls in exactly one cause and the causes sum to the population count. The result asserts the sum and fails if it does not hold, so the breakdown cannot drift from the total it explains. The answerable count is reported BESIDE the population count and never instead of it",
+    "floors": {
+      "answerable_links_at_least": 30,
+      "answerable_links_floor_imported_from": "genomeos.attribution.fresh.POSITIVE_FLOOR",
+      "independent_loci_at_least": 20,
+      "independent_loci_floor_imported_from": "genomeos.attribution.fresh.LOCUS_FLOOR, which is genomeos.attribution.cell2.POOLED_LOCUS_FLOOR",
+      "applied_to": "the ANSWERABLE links and their independent loci, never the measured links. A floor compared against a count of what exists rather than a count of what can be asked is the error lane-direction's gate caught: 48 measured links cleared 30 and 21 answerable ones did not",
+      "neither_is_chosen_here": "both floors were fixed before this lane existed. lane-inhibits deliberately applied neither so that this lane could not pick its own, and neither moves after the count is seen - not down to admit a population, not up, and not sidestepped by pooling the arms, by widening the answerable set or by taking a pilot on a short one"
+    },
+    "gate_call": "the gate is taken on the ANSWERABLE increase-derived links: their count must be at or above 30 and their independent loci at or above 20, both imported. Both floors or neither: a population that clears one and misses the other is a no-go. The arms are never pooled to reach a floor and the measured count is never substituted for the answerable one",
+    "readings": [
+      "the answerable increase-derived links are at or above both imported floors: a direction test may be registered and then run, in that order, with the registration committed before any direction is read. This lane takes no direction on the strength of the gate alone",
+      "the answerable increase-derived links are below an imported floor: a NO-GO. No direction is read, no agreement rate is computed, no interval is taken, no registration of a test is written and no floor is moved. The answerable set is not widened by substituting a cell, a gene, an element or a second cache, and the two arms are not pooled to reach a floor. The count goes on the record with the margin it falls short by, because a reader is owed the margin and NOT because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot"
+    ],
+    "there_is_no_third": true,
+    "forbidden_of_a_short_count": [
+      "close",
+      "promising",
+      "nearly enough",
+      "a good start",
+      "enough for a pilot"
+    ],
+    "statistic": "the statistic a test on this population would be registered on is BALANCED ACCURACY against 0.5, and never the difference between the two arms' agreement rates. The reason is not taste and it is not re-derived here: lane-direction proved it, before reading any value and pinned by a test over 200 cases, and the algebra is carried verbatim as `COLLAPSE`. The excess of (one arm's agreement minus the other's) over a sign-shuffled baseline is identically 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u), so with equal arms it is exactly zero and with the decreases arm larger a POSITIVE excess requires balanced accuracy BELOW 0.5 - a one-sided test of that difference is a test of the model doing worse than chance. That derivation is not assumed to transfer: `collapse_applies` recomputes its premise from THIS lane's own answered denominators and reports which arm is larger and by how much, so the claim rests on this population's counts and not on the last lane's. With one marginal sign rate there is exactly ONE skill number on a population of this shape and it is balanced accuracy",
+    "statistic_is_checked_not_assumed": "`collapse_applies` is the check, and it can refuse. It reports the two arms' answered denominators, whether they are equal, and what the collapse implies for this population. If the arms were equal the between-arm excess would be identically zero and a difference statistic would be unidentifiable here, which is a stop condition and not a detail to work around",
+    "collapse_identity_carried_verbatim": "the difference between the arms, held against a sign shuffle, cannot answer the question it looks like it answers, and the algebra is exact: with n_d answered decrease links of which a agree and n_u answered increase links of which b agree, the excess of the difference over the shuffled baseline is identically EXCESS = 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u). Two consequences follow and both were written down before the run. First, when the two arms are the same size the excess is exactly zero, so the whole difference between the arms IS the shuffled baseline and carries no information beyond the model's own marginal sign rate. Second, when the decreases arm is the larger one - which it is on this population, 212 against 48 - the factor (n_u - n_d) is negative, so a positive excess requires balanced accuracy BELOW 0.5: a one-sided test of the difference against the sign shuffle is a test of the model doing WORSE than chance, and a model that reads direction well scores below that control rather than above it. The same algebra says the two arms do not carry two skills: each arm's agreement against its own shuffled chance level (q for the decreases, 1 - q for the increases) differs from the other's only by that arm-size factor, and the two sum to 2 * (balanced_accuracy - 0.5). With one marginal sign rate there is exactly ONE skill number on this population and it is balanced accuracy. So the difference between the arms is reported, with its interval, its baseline and its excess, as a DESCRIPTION of the asymmetry and never as evidence that the model reads direction better on one sign; and the statistic the reading is taken on is balanced accuracy",
+    "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+    "prohibition_is_enforced_by": "genomeos.attribution.increase_links.check_no_mechanism_claim, called on every record this lane handles. It is not weakened, not reimplemented and not bypassed",
+    "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+    "count_is_not_coverage": "neither the 48 nor the answerable subset of them is a coverage figure. Each link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then took its gene and its cell FROM THAT MEASUREMENT: the population is the extractor's construction. An answerable count is smaller still and is a statement about what the cached deletion sweep holds, not about what the model covers. A reader may not read either number as coverage of the increase links, of the genes behind them or of anything else",
+    "decrease_arm_is_not_model_coverage": "the 212-of-212 that the decrease column keeps at lane-increase's last two ladder steps is the EXTRACTOR'S OWN CONSTRUCTION and not model coverage: a significant decrease on an attributed element raises the measured rule that then names its gene and its cell, so the decreases survive those two steps by definition. Reading it as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'. This lane's decrease arm therefore does NOT sit at those steps: it is taken at the same step as the increase arm, `and_on_an_attributed_element`, where no compiled rule is consulted at all, so the two arms share one eligibility rule and the comparison between them is not a comparison of two different gates",
+    "conflict_is_not_a_finding": "a conflict count of 0 is not a finding that the measurements agree about direction: it is a count of (gene, cell) pairs where the benchmark holds significant observations of both signs, over the small population that reaches an attributed element at all. It is reported as the count it is",
+    "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "budget": "0 model requests, no money, no downloads, no network. The cached deletion answers are read; none is bought. An answer that is not cached is a gap to COUNT and never a request to send",
+    "order": [
+      "1. the population, read out of the extractor under v2 and blind to every cached value",
+      "2. the answerability pass: one cause per link, exhaustive and disjoint, summing to the population",
+      "3. the verdict against both imported floors on the ANSWERABLE links and their loci",
+      "4. if either floor is missed: stop. Nothing further is registered and no direction is read",
+      "5. only if both clear: a direction test registered and committed, then run once"
+    ]
+  },
+  "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+  "count_is_not_coverage": "neither the 48 nor the answerable subset of them is a coverage figure. Each link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then took its gene and its cell FROM THAT MEASUREMENT: the population is the extractor's construction. An answerable count is smaller still and is a statement about what the cached deletion sweep holds, not about what the model covers. A reader may not read either number as coverage of the increase links, of the genes behind them or of anything else",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "population": {
+    "call": "the population counted here is every record `measured.rule_links_detail(row, 'v2')` returns whose `derived_from` is the increase label, over the rows `measured.rows` builds for each chromosome from `targets.attributed`. It is read out of the extractor and is not a join rebuilt beside it: lane-direction enumerated an equivalent population by hand from the cached pairs, and a count taken on a hand-rolled copy is a count about the copy. Whether the extractor's output and that hand-rolled population agree is reported as a comparison with both counts named, and it is not assumed in either direction. No compiled rule is consulted, no predicted value enters the eligibility step, and the extractor is called exactly as committed with no argument of its own changed",
+    "extractor": "v2",
+    "rows_with_a_crispri_measurement": 1505,
+    "v1_links": 212,
+    "v2_links": 260,
+    "increase_derived_links": 48,
+    "decrease_derived_links": 212,
+    "v1_links_removed_by_v2": 0,
+    "additive": true,
+    "conflicts": 0,
+    "conflict_rows": [],
+    "conflict_is_not_a_finding": "a conflict count of 0 is not a finding that the measurements agree about direction: it is a count of (gene, cell) pairs where the benchmark holds significant observations of both signs, over the small population that reaches an attributed element at all. It is reported as the count it is",
+    "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'"
+  },
+  "agrees_with_lane_direction": {
+    "what_is_compared": "this lane counted the extractor's own output; lane-direction enumerated an equivalent population by hand from the cached pairs. Both counts are named so that the agreement is a finding rather than an assumption, and neither is restated as the other's",
+    "lane_direction_figures": {
+      "v2_links_total": 260,
+      "v2_activates_links_from_v1": 212,
+      "v2_inhibits_links_added": 48,
+      "v1_links_removed_by_v2": 0,
+      "conflicts_today": 0,
+      "increase_links_by_cell": {
+        "K562": 39,
+        "WTC11": 6,
+        "HCT116": 3
+      },
+      "increase_links_by_split": {
+        "training": 25,
+        "heldout": 23
+      },
+      "increase_links_independent_loci_as_lane_increase_counted_them": 33,
+      "lane_direction_increase_arm_measured": 48,
+      "lane_direction_increase_arm_in_the_cell_read": 39,
+      "lane_direction_increase_arm_answered": 21,
+      "lane_direction_increase_arm_absent": 18,
+      "lane_direction_increase_arm_independent_loci_of_the_answered": 13
+    },
+    "increase_links_here": 48,
+    "increase_links_there": 48,
+    "increase_links_agree": true,
+    "answerable_increase_links_here": 21,
+    "answerable_increase_links_there": 21,
+    "answerable_increase_links_agree": true
+  },
+  "answerability": {
+    "call": "a link is ANSWERABLE IN ITS OWN CELL when the finished deletion sweep's per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz holds, under that link's own element id, a gene entry whose name is exactly that link's gene, carrying an entry for that link's own cell track, and that entry's value is not exactly 0.0. This is lane-direction's own predicate, imported from `direction_link.PREDICTED_CALL` and `direction_link.SIGN_CALL` rather than restated, so a count here and a count there mean the same thing. NOTHING IS SUBSTITUTED for a missing answer: not another cell's value, not another gene's value, not a neighbouring element's value, not a pooled or marginal value, and not the partial second cache data/knowledge/alphagenome/elements_hct116, which exists over five chromosomes from a different run and does carry an HCT116 track. Mixing that cache in would widen one arm of a comparison by substitution under another name, so it is named here and NOT read",
+    "predicted_direction": "the predicted deletion direction of a link is the sign of the signed predicted log2 fold change the finished genome-wide deletion sweep cached for THAT link's own gene on THAT link's own cell track, read from the per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz under the link's own element id, at `genes[*].by_cell[cell]` for the gene whose name is exactly the link's gene. The link already names one element, so no second element is consulted and no resolution rule across overlapping elements is needed or applied. Nothing is recomputed, no model request is made and no value is derived from any other cell, gene or element",
+    "sign_rule_zero_and_absent": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+    "causes": {
+      "answerable_in_its_own_cell": "the cache holds a value for this link's own gene on this link's own cell track and the value is not exactly zero, so the link carries a predicted direction and could be asked",
+      "the_cache_carries_no_track_of_this_cell": "the link's cell is not one of the tracks the cached answers carry (('HepG2', 'IMR-90', 'K562', 'GM12878')). The sweep holds no track of ('WTC11', 'HCT116') at all, so no amount of reading what is on disk closes this gap and nothing is substituted for it. These links are absent from any test rather than negative in it",
+      "the_element_is_absent_from_the_cache_archive": "the link's element id is not in the per-chromosome cache archive, so the sweep holds no record of this element. This is a gap in the run and is reported as one; it is not a statement about the element",
+      "the_gene_is_not_in_the_scorers_window_at_this_element": "the element's cached record exists but names no gene matching the link's gene: the gene is not in the scorer's window at this element. The CRISPRi benchmark tested a pair the scorer's window did not reach, so there is nothing cached to read and no nearest gene stands in for it",
+      "the_gene_was_scored_but_carries_no_entry_on_this_cells_track": "the gene is in the element's cached record but carries no entry for the link's own cell: the gene was scored, but not on this cell's own track. The gene was scored and this cell was not scored for it, which is a different gap from a gene outside the window and is counted apart from it",
+      "the_cached_value_is_exactly_zero_so_it_carries_no_direction": "the cached value is exactly 0.0, which carries no sign under the imported sign rule and is therefore neither an agreement nor a disagreement. Excluded from the answerable count and counted on its own, never defaulted to a direction"
+    },
+    "causes_are_exhaustive": "every link of the population falls in exactly one cause and the causes sum to the population count. The result asserts the sum and fails if it does not hold, so the breakdown cannot drift from the total it explains. The answerable count is reported BESIDE the population count and never instead of it",
+    "cached_cell_tracks": [
+      "HepG2",
+      "IMR-90",
+      "K562",
+      "GM12878"
+    ],
+    "cells_not_cached": [
+      "WTC11",
+      "HCT116"
+    ],
+    "archives_streamed": [
+      "data/knowledge/alphagenome/elements/chr1.json.gz",
+      "data/knowledge/alphagenome/elements/chr10.json.gz",
+      "data/knowledge/alphagenome/elements/chr11.json.gz",
+      "data/knowledge/alphagenome/elements/chr12.json.gz",
+      "data/knowledge/alphagenome/elements/chr14.json.gz",
+      "data/knowledge/alphagenome/elements/chr15.json.gz",
+      "data/knowledge/alphagenome/elements/chr16.json.gz",
+      "data/knowledge/alphagenome/elements/chr17.json.gz",
+      "data/knowledge/alphagenome/elements/chr18.json.gz",
+      "data/knowledge/alphagenome/elements/chr19.json.gz",
+      "data/knowledge/alphagenome/elements/chr2.json.gz",
+      "data/knowledge/alphagenome/elements/chr20.json.gz",
+      "data/knowledge/alphagenome/elements/chr21.json.gz",
+      "data/knowledge/alphagenome/elements/chr22.json.gz",
+      "data/knowledge/alphagenome/elements/chr3.json.gz",
+      "data/knowledge/alphagenome/elements/chr4.json.gz",
+      "data/knowledge/alphagenome/elements/chr5.json.gz",
+      "data/knowledge/alphagenome/elements/chr6.json.gz",
+      "data/knowledge/alphagenome/elements/chr7.json.gz",
+      "data/knowledge/alphagenome/elements/chr8.json.gz",
+      "data/knowledge/alphagenome/elements/chr9.json.gz",
+      "data/knowledge/alphagenome/elements/chrX.json.gz"
+    ],
+    "loose_per_element_files_opened": []
+  },
+  "arms": {
+    "increases": {
+      "arm": "increases",
+      "measured_links": 48,
+      "answerable_in_its_own_cell": 21,
+      "independent_loci_of_the_answerable_links": 13,
+      "causes": {
+        "answerable_in_its_own_cell": 21,
+        "the_cache_carries_no_track_of_this_cell": 9,
+        "the_gene_is_not_in_the_scorers_window_at_this_element": 18
+      },
+      "causes_sum_to_the_population": true,
+      "by_cell": {
+        "HCT116": 3,
+        "K562": 39,
+        "WTC11": 6
+      },
+      "by_split": {
+        "heldout": 23,
+        "training": 25
+      },
+      "answerable_by_cell": {
+        "K562": 21
+      },
+      "answerable_by_split": {
+        "heldout": 5,
+        "training": 16
+      },
+      "answerable_by_chromosome": {
+        "chr11": 3,
+        "chr12": 1,
+        "chr14": 1,
+        "chr16": 1,
+        "chr19": 8,
+        "chr21": 1,
+        "chr6": 1,
+        "chr7": 1,
+        "chrX": 4
+      },
+      "no_agreement_computed": "the cached value's sign is read only to tell an answerable link from one whose value is exactly zero. It is never compared with the link's measured sign here: that comparison is the direction test and it is gated on the floors"
+    },
+    "decreases": {
+      "arm": "decreases",
+      "measured_links": 212,
+      "answerable_in_its_own_cell": 178,
+      "independent_loci_of_the_answerable_links": 116,
+      "causes": {
+        "answerable_in_its_own_cell": 178,
+        "the_cache_carries_no_track_of_this_cell": 17,
+        "the_gene_is_not_in_the_scorers_window_at_this_element": 17
+      },
+      "causes_sum_to_the_population": true,
+      "by_cell": {
+        "GM12878": 4,
+        "HCT116": 4,
+        "Jurkat": 5,
+        "K562": 191,
+        "WTC11": 8
+      },
+      "by_split": {
+        "heldout": 43,
+        "training": 169
+      },
+      "answerable_by_cell": {
+        "GM12878": 4,
+        "K562": 174
+      },
+      "answerable_by_split": {
+        "heldout": 20,
+        "training": 158
+      },
+      "answerable_by_chromosome": {
+        "chr1": 16,
+        "chr10": 8,
+        "chr11": 34,
+        "chr12": 6,
+        "chr14": 2,
+        "chr15": 3,
+        "chr16": 4,
+        "chr17": 8,
+        "chr18": 1,
+        "chr19": 15,
+        "chr2": 10,
+        "chr20": 3,
+        "chr21": 2,
+        "chr3": 8,
+        "chr4": 7,
+        "chr5": 6,
+        "chr6": 10,
+        "chr7": 8,
+        "chr8": 7,
+        "chr9": 5,
+        "chrX": 15
+      },
+      "no_agreement_computed": "the cached value's sign is read only to tell an answerable link from one whose value is exactly zero. It is never compared with the link's measured sign here: that comparison is the direction test and it is gated on the floors"
+    },
+    "reported_apart": "the two arms are reported apart and are never pooled to reach a floor. The decreases arm is here because the collapse identity's premise is checked against both answered denominators, and its own count is the extractor's construction and NOT model coverage: the 212-of-212 that the decrease column keeps at lane-increase's last two ladder steps is the EXTRACTOR'S OWN CONSTRUCTION and not model coverage: a significant decrease on an attributed element raises the measured rule that then names its gene and its cell, so the decreases survive those two steps by definition. Reading it as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'. This lane's decrease arm therefore does NOT sit at those steps: it is taken at the same step as the increase arm, `and_on_an_attributed_element`, where no compiled rule is consulted at all, so the two arms share one eligibility rule and the comparison between them is not a comparison of two different gates"
+  },
+  "verdict": {
+    "population_measured_links": 48,
+    "answerable_links": 21,
+    "independent_loci_of_the_answerable_links": 13,
+    "floors": {
+      "answerable_links_at_least": 30,
+      "answerable_links_floor_imported_from": "genomeos.attribution.fresh.POSITIVE_FLOOR",
+      "independent_loci_at_least": 20,
+      "independent_loci_floor_imported_from": "genomeos.attribution.fresh.LOCUS_FLOOR, which is genomeos.attribution.cell2.POOLED_LOCUS_FLOOR",
+      "applied_to": "the ANSWERABLE links and their independent loci, never the measured links. A floor compared against a count of what exists rather than a count of what can be asked is the error lane-direction's gate caught: 48 measured links cleared 30 and 21 answerable ones did not",
+      "neither_is_chosen_here": "both floors were fixed before this lane existed. lane-inhibits deliberately applied neither so that this lane could not pick its own, and neither moves after the count is seen - not down to admit a population, not up, and not sidestepped by pooling the arms, by widening the answerable set or by taking a pilot on a short one"
+    },
+    "gate_call": "the gate is taken on the ANSWERABLE increase-derived links: their count must be at or above 30 and their independent loci at or above 20, both imported. Both floors or neither: a population that clears one and misses the other is a no-go. The arms are never pooled to reach a floor and the measured count is never substituted for the answerable one",
+    "meets_both_floors": false,
+    "short_by": [
+      "answerable links 21, short of the imported floor 30 by 9",
+      "independent loci 13, short of the imported floor 20 by 7"
+    ],
+    "reading": "the answerable increase-derived links are below an imported floor: a NO-GO. No direction is read, no agreement rate is computed, no interval is taken, no registration of a test is written and no floor is moved. The answerable set is not widened by substituting a cell, a gene, an element or a second cache, and the two arms are not pooled to reach a floor. The count goes on the record with the margin it falls short by, because a reader is owed the margin and NOT because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "what_follows": "nothing further is registered and no direction is read"
+  },
+  "statistic": {
+    "identity": "the difference between the arms, held against a sign shuffle, cannot answer the question it looks like it answers, and the algebra is exact: with n_d answered decrease links of which a agree and n_u answered increase links of which b agree, the excess of the difference over the shuffled baseline is identically EXCESS = 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u). Two consequences follow and both were written down before the run. First, when the two arms are the same size the excess is exactly zero, so the whole difference between the arms IS the shuffled baseline and carries no information beyond the model's own marginal sign rate. Second, when the decreases arm is the larger one - which it is on this population, 212 against 48 - the factor (n_u - n_d) is negative, so a positive excess requires balanced accuracy BELOW 0.5: a one-sided test of the difference against the sign shuffle is a test of the model doing WORSE than chance, and a model that reads direction well scores below that control rather than above it. The same algebra says the two arms do not carry two skills: each arm's agreement against its own shuffled chance level (q for the decreases, 1 - q for the increases) differs from the other's only by that arm-size factor, and the two sum to 2 * (balanced_accuracy - 0.5). With one marginal sign rate there is exactly ONE skill number on this population and it is balanced accuracy. So the difference between the arms is reported, with its interval, its baseline and its excess, as a DESCRIPTION of the asymmetry and never as evidence that the model reads direction better on one sign; and the statistic the reading is taken on is balanced accuracy",
+    "premise_recomputed_on_this_population": true,
+    "answered_decrease_links": 178,
+    "answered_increase_links": 21,
+    "arms_are_equal": false,
+    "arm_size_factor_n_u_minus_n_d_over_n": -0.788945,
+    "implication": "the decreases arm is the larger one (178 against 21), so (n_u - n_d) is negative and a POSITIVE excess of the between-arm difference requires balanced accuracy BELOW 0.5. A one-sided test of that difference against the sign shuffle would be a test of the model doing WORSE than chance, which is not the question",
+    "statistic_a_test_would_be_registered_on": "balanced accuracy, the unweighted mean of the two arms' agreement rates, against 0.5",
+    "difference_is_identifiable_as_a_skill_statistic": false,
+    "why": "the statistic a test on this population would be registered on is BALANCED ACCURACY against 0.5, and never the difference between the two arms' agreement rates. The reason is not taste and it is not re-derived here: lane-direction proved it, before reading any value and pinned by a test over 200 cases, and the algebra is carried verbatim as `COLLAPSE`. The excess of (one arm's agreement minus the other's) over a sign-shuffled baseline is identically 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u), so with equal arms it is exactly zero and with the decreases arm larger a POSITIVE excess requires balanced accuracy BELOW 0.5 - a one-sided test of that difference is a test of the model doing worse than chance. That derivation is not assumed to transfer: `collapse_applies` recomputes its premise from THIS lane's own answered denominators and reports which arm is larger and by how much, so the claim rests on this population's counts and not on the last lane's. With one marginal sign rate there is exactly ONE skill number on a population of this shape and it is balanced accuracy",
+    "checked_not_assumed": "`collapse_applies` is the check, and it can refuse. It reports the two arms' answered denominators, whether they are equal, and what the collapse implies for this population. If the arms were equal the between-arm excess would be identically zero and a difference statistic would be unidentifiable here, which is a stop condition and not a detail to work around"
+  },
+  "increase_links": [
+    {
+      "gene": "PDZK1IP1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.01,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0102,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2809371",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr1",
+      "start": 46522456,
+      "end": 46522804,
+      "element": "EH38E2809371",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "C1orf53",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.26,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.2598,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2856408",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr1",
+      "start": 198641546,
+      "end": 198641895,
+      "element": "EH38E2856408",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "ASCL2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.511,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.5108,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2940074",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 2299188,
+      "end": 2299525,
+      "element": "EH38E2940074",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.1165
+    },
+    {
+      "gene": "CD59",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.161,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1611,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1531563",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 33944762,
+      "end": 33945112,
+      "element": "EH38E1531563",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0033
+    },
+    {
+      "gene": "HIPK3",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.027,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0273,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1531563",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 33944762,
+      "end": 33945112,
+      "element": "EH38E1531563",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "FTH1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.094,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0941,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2960330",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 61164268,
+      "end": 61164572,
+      "element": "EH38E2960330",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "FTH1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.104,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1044,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1542799",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 62680884,
+      "end": 62681233,
+      "element": "EH38E1542799",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "RNASEH2C",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.146,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1459,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2963878",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 65061157,
+      "end": 65061501,
+      "element": "EH38E2963878",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "DNAJC4",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.101,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1005,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2964002",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 65150613,
+      "end": 65150961,
+      "element": "EH38E2964002",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "POLD4",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.102,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1017,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2966963",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 67620705,
+      "end": 67621037,
+      "element": "EH38E2966963",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.005
+    },
+    {
+      "gene": "CCND1",
+      "cell": "HCT116",
+      "action": "inhibits",
+      "strength": 0.282,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.2821,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1548639",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 69293176,
+      "end": 69293525,
+      "element": "EH38E1548639",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "CCND1",
+      "cell": "HCT116",
+      "action": "inhibits",
+      "strength": 0.129,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1288,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1548926",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 69588295,
+      "end": 69588640,
+      "element": "EH38E1548926",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "CCND1",
+      "cell": "HCT116",
+      "action": "inhibits",
+      "strength": 0.115,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1152,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2969333",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 70080838,
+      "end": 70081186,
+      "element": "EH38E2969333",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "TAF1D",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.073,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0732,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1561171",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr11",
+      "start": 93000533,
+      "end": 93000881,
+      "element": "EH38E1561171",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "COPZ1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.083,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0834,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1614468",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr12",
+      "start": 54304289,
+      "end": 54304638,
+      "element": "EH38E1614468",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0777
+    },
+    {
+      "gene": "PRR13",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.078,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0776,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1614468",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr12",
+      "start": 54304289,
+      "end": 54304638,
+      "element": "EH38E1614468",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "RNF31",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 1.0,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 3.1048,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1703384",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr14",
+      "start": 23694476,
+      "end": 23694806,
+      "element": "EH38E1703384",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0017
+    },
+    {
+      "gene": "PRSS8",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.047,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0468,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1811946",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr16",
+      "start": 31042286,
+      "end": 31042620,
+      "element": "EH38E1811946",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "CDT1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.125,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.125,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1837652",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr16",
+      "start": 88971757,
+      "end": 88972106,
+      "element": "EH38E1837652",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0012
+    },
+    {
+      "gene": "PIEZO1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.097,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0968,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3200826",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr16",
+      "start": 89489138,
+      "end": 89489486,
+      "element": "EH38E3200826",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "TMEM256",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.024,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0237,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3206925",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr17",
+      "start": 7356016,
+      "end": 7356360,
+      "element": "EH38E3206925",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "HOXB4",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.114,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1143,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3227831",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr17",
+      "start": 47742669,
+      "end": 47742994,
+      "element": "EH38E3227831",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "LINC01970",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 1.0,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 4.2101,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3250909",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr17",
+      "start": 81733756,
+      "end": 81734106,
+      "element": "EH38E3250909",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "RPL36",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.102,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1024,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1935015",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 5436622,
+      "end": 5436972,
+      "element": "EH38E1935015",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0024
+    },
+    {
+      "gene": "PRDX2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.049,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0487,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3291318",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 12847611,
+      "end": 12847959,
+      "element": "EH38E3291318",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0029
+    },
+    {
+      "gene": "KLF2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 1.0,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 2.1481,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3293646",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 15629305,
+      "end": 15629655,
+      "element": "EH38E3293646",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "PPP1R14A",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.06,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.06,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1952947",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 38932840,
+      "end": 38933110,
+      "element": "EH38E1952947",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "FTL",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.073,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0728,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3312692",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48819440,
+      "end": 48819759,
+      "element": "EH38E3312692",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0008
+    },
+    {
+      "gene": "BAX",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.061,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0613,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1960377",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48873510,
+      "end": 48873860,
+      "element": "EH38E1960377",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0032
+    },
+    {
+      "gene": "FTL",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.371,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.3711,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1960377",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48873510,
+      "end": 48873860,
+      "element": "EH38E1960377",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0011
+    },
+    {
+      "gene": "NUCB1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.207,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.207,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1960377",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48873510,
+      "end": 48873860,
+      "element": "EH38E1960377",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0144
+    },
+    {
+      "gene": "FTL",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.182,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1816,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1960379",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48874408,
+      "end": 48874742,
+      "element": "EH38E1960379",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0016
+    },
+    {
+      "gene": "NUCB1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.082,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0824,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E1960379",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr19",
+      "start": 48874408,
+      "end": 48874742,
+      "element": "EH38E1960379",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0031
+    },
+    {
+      "gene": "WBP1",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.06,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0597,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3353115",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr2",
+      "start": 74497875,
+      "end": 74498218,
+      "element": "EH38E3353115",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "IGFBP2",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.065,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0649,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3399359",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr2",
+      "start": 216692108,
+      "end": 216692457,
+      "element": "EH38E3399359",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "SUMO3",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.06,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0598,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3463502",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr21",
+      "start": 45150971,
+      "end": 45151255,
+      "element": "EH38E3463502",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0008
+    },
+    {
+      "gene": "H1FX",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.17,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1695,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2237620",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr3",
+      "start": 129690447,
+      "end": 129690797,
+      "element": "EH38E2237620",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "JARID2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.083,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0828,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2449567",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr6",
+      "start": 15922518,
+      "end": 15922866,
+      "element": "EH38E2449567",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0022
+    },
+    {
+      "gene": "HMGA1",
+      "cell": "WTC11",
+      "action": "inhibits",
+      "strength": 0.019,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0192,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2461870",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr6",
+      "start": 34852591,
+      "end": 34852940,
+      "element": "EH38E2461870",
+      "answerability": "the_cache_carries_no_track_of_this_cell"
+    },
+    {
+      "gene": "POP7",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.052,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0521,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3789061",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr7",
+      "start": 100545792,
+      "end": 100546133,
+      "element": "EH38E3789061",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0026
+    },
+    {
+      "gene": "POLR2J",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.035,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.035,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2576769",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr7",
+      "start": 101882965,
+      "end": 101883312,
+      "element": "EH38E2576769",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "EIF3E",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.147,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1471,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2656681",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr8",
+      "start": 109065787,
+      "end": 109066093,
+      "element": "EH38E2656681",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "TSTA3",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.081,
+      "split": "heldout",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.081,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3870083",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chr8",
+      "start": 144375442,
+      "end": 144375789,
+      "element": "EH38E3870083",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "HDAC6",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.111,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1106,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2753729",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chrX",
+      "start": 47579548,
+      "end": 47579895,
+      "element": "EH38E2753729",
+      "answerability": "the_gene_is_not_in_the_scorers_window_at_this_element"
+    },
+    {
+      "gene": "PLP2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.107,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1073,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E2754151",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chrX",
+      "start": 48789572,
+      "end": 48789898,
+      "element": "EH38E2754151",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0037
+    },
+    {
+      "gene": "PLP2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.138,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.138,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3933846",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chrX",
+      "start": 48793424,
+      "end": 48793720,
+      "element": "EH38E3933846",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": -0.0016
+    },
+    {
+      "gene": "PQBP1",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.101,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.1011,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3933849",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chrX",
+      "start": 48794399,
+      "end": 48794707,
+      "element": "EH38E3933849",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0048
+    },
+    {
+      "gene": "PLP2",
+      "cell": "K562",
+      "action": "inhibits",
+      "strength": 0.076,
+      "split": "training",
+      "extractor": "v2",
+      "derived_from": "significant_increase",
+      "evidence_status": "observed",
+      "outcome": "increase on knockdown",
+      "molecular_role": null,
+      "effect_size": 0.0759,
+      "pairs_behind_the_link": 1,
+      "element_id": "EH38E3933850",
+      "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+      "chrom": "chrX",
+      "start": 48794943,
+      "end": 48795223,
+      "element": "EH38E3933850",
+      "answerability": "answerable_in_its_own_cell",
+      "cached_value": 0.0022
+    }
+  ],
+  "seconds": 53.6,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the two benchmark tables cached under data/knowledge, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache, written with threshold=0.0",
+        "version": "the per-chromosome archives and loose per-element files this run opened, digested as a group"
+      },
+      {
+        "accession": "the attributed elements of the chromosomes this run covers",
+        "version": "re-enumerated in this run from the results on disk and the tables their `elements_where` fields point at, not read from one file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/direction_link.json",
+        "sha256": "7322d6e3e3cc9adf281573e5f1f8ee54d347f64b76f3e3691c6c30901a0fd860",
+        "bytes": 62421,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/results/increase_links_registration.json",
+        "sha256": "d3a375224339e033632d2c7a1a05e48cb42b6dd77f780bc990006e59485c1387",
+        "bytes": 31376,
+        "partition": null
+      },
+      {
+        "path": "data/results/increase_population.json",
+        "sha256": "32f766a2bc8cf41b58f8c4042bfa27cfb4d5208ec7ee18c4ceb20f524a29873d",
+        "bytes": 115834,
+        "partition": null
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          }
+        ],
+        "sha256": "bb959176c7385b192231fd23a4858d729c899028e6d0fd8559e6c06ae86f178a",
+        "bytes": 774517807,
+        "files": 22,
+        "partition": "the finished deletion sweep's own per-element cache, read for one gene on one cell track per link and for nothing else"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "extractor": "v2",
+      "population": "the population counted here is every record `measured.rule_links_detail(row, 'v2')` returns whose `derived_from` is the increase label, over the rows `measured.rows` builds for each chromosome from `targets.attributed`. It is read out of the extractor and is not a join rebuilt beside it: lane-direction enumerated an equivalent population by hand from the cached pairs, and a count taken on a hand-rolled copy is a count about the copy. Whether the extractor's output and that hand-rolled population agree is reported as a comparison with both counts named, and it is not assumed in either direction. No compiled rule is consulted, no predicted value enters the eligibility step, and the extractor is called exactly as committed with no argument of its own changed",
+      "answerable_predicate": "a link is ANSWERABLE IN ITS OWN CELL when the finished deletion sweep's per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz holds, under that link's own element id, a gene entry whose name is exactly that link's gene, carrying an entry for that link's own cell track, and that entry's value is not exactly 0.0. This is lane-direction's own predicate, imported from `direction_link.PREDICTED_CALL` and `direction_link.SIGN_CALL` rather than restated, so a count here and a count there mean the same thing. NOTHING IS SUBSTITUTED for a missing answer: not another cell's value, not another gene's value, not a neighbouring element's value, not a pooled or marginal value, and not the partial second cache data/knowledge/alphagenome/elements_hct116, which exists over five chromosomes from a different run and does carry an HCT116 track. Mixing that cache in would widen one arm of a comparison by substitution under another name, so it is named here and NOT read",
+      "predicted_direction": "the predicted deletion direction of a link is the sign of the signed predicted log2 fold change the finished genome-wide deletion sweep cached for THAT link's own gene on THAT link's own cell track, read from the per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz under the link's own element id, at `genes[*].by_cell[cell]` for the gene whose name is exactly the link's gene. The link already names one element, so no second element is consulted and no resolution rule across overlapping elements is needed or applied. Nothing is recomputed, no model request is made and no value is derived from any other cell, gene or element",
+      "sign_rule_zero_and_absent": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "causes": [
+        "answerable_in_its_own_cell",
+        "the_cache_carries_no_track_of_this_cell",
+        "the_element_is_absent_from_the_cache_archive",
+        "the_gene_is_not_in_the_scorers_window_at_this_element",
+        "the_gene_was_scored_but_carries_no_entry_on_this_cells_track",
+        "the_cached_value_is_exactly_zero_so_it_carries_no_direction"
+      ],
+      "answerable_links_floor": 30,
+      "independent_loci_floor": 20,
+      "floors": {
+        "answerable_links_at_least": 30,
+        "answerable_links_floor_imported_from": "genomeos.attribution.fresh.POSITIVE_FLOOR",
+        "independent_loci_at_least": 20,
+        "independent_loci_floor_imported_from": "genomeos.attribution.fresh.LOCUS_FLOOR, which is genomeos.attribution.cell2.POOLED_LOCUS_FLOOR",
+        "applied_to": "the ANSWERABLE links and their independent loci, never the measured links. A floor compared against a count of what exists rather than a count of what can be asked is the error lane-direction's gate caught: 48 measured links cleared 30 and 21 answerable ones did not",
+        "neither_is_chosen_here": "both floors were fixed before this lane existed. lane-inhibits deliberately applied neither so that this lane could not pick its own, and neither moves after the count is seen - not down to admit a population, not up, and not sidestepped by pooling the arms, by widening the answerable set or by taking a pilot on a short one"
+      },
+      "gate_call": "the gate is taken on the ANSWERABLE increase-derived links: their count must be at or above 30 and their independent loci at or above 20, both imported. Both floors or neither: a population that clears one and misses the other is a no-go. The arms are never pooled to reach a floor and the measured count is never substituted for the answerable one",
+      "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "independent_locus_span": 1000000,
+      "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "statistic_a_test_would_be_registered_on": "balanced accuracy, the unweighted mean of the two arms' agreement rates, against 0.5",
+      "chance": 0.5,
+      "why_a_between_arm_difference_is_not_it": "the difference between the arms, held against a sign shuffle, cannot answer the question it looks like it answers, and the algebra is exact: with n_d answered decrease links of which a agree and n_u answered increase links of which b agree, the excess of the difference over the shuffled baseline is identically EXCESS = 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u). Two consequences follow and both were written down before the run. First, when the two arms are the same size the excess is exactly zero, so the whole difference between the arms IS the shuffled baseline and carries no information beyond the model's own marginal sign rate. Second, when the decreases arm is the larger one - which it is on this population, 212 against 48 - the factor (n_u - n_d) is negative, so a positive excess requires balanced accuracy BELOW 0.5: a one-sided test of the difference against the sign shuffle is a test of the model doing WORSE than chance, and a model that reads direction well scores below that control rather than above it. The same algebra says the two arms do not carry two skills: each arm's agreement against its own shuffled chance level (q for the decreases, 1 - q for the increases) differs from the other's only by that arm-size factor, and the two sum to 2 * (balanced_accuracy - 0.5). With one marginal sign rate there is exactly ONE skill number on this population and it is balanced accuracy. So the difference between the arms is reported, with its interval, its baseline and its excess, as a DESCRIPTION of the asymmetry and never as evidence that the model reads direction better on one sign; and the statistic the reading is taken on is balanced accuracy",
+      "cached_cell_tracks": [
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "GM12878"
+      ],
+      "cells_not_cached": [
+        "WTC11",
+        "HCT116"
+      ],
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "aggregate_function": "a count per cause; no rate, no mean and no interval is taken",
+      "fill_value": "none: an unanswerable link is counted under its cause and nothing is substituted for it",
+      "model_requests": 0
+    },
+    "exclusions": [
+      "the link's cell is not one of the tracks the cached answers carry (('HepG2', 'IMR-90', 'K562', 'GM12878')). The sweep holds no track of ('WTC11', 'HCT116') at all, so no amount of reading what is on disk closes this gap and nothing is substituted for it. These links are absent from any test rather than negative in it",
+      "the cached value is exactly 0.0, which carries no sign under the imported sign rule and is therefore neither an agreement nor a disagreement. Excluded from the answerable count and counted on its own, never defaulted to a direction",
+      "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so",
+      "no agreement rate, interval, control or direction is computed by this run under any outcome of the gate",
+      "no pair is excluded for its magnitude: no effect-size bar is applied anywhere"
+    ],
+    "partitions": {
+      "increases": "links the extractor derived from a significant increase under v2; action `inhibits`, outcome `increase on knockdown`, molecular role unresolved",
+      "decreases": "links the extractor derived from a benchmark `Regulated` pair, which is a significant decrease only; v1's own links, unchanged under v2",
+      "conflicts": "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so",
+      "training_and_heldout": "the benchmark's own split, one per table, as the extractor assigns it to a link"
+    },
+    "code_cleanliness": {
+      "git_sha": "45b3a96d4c442fed8d5c87717f38b797d3ff0462",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/reptest.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/reptest_answerable.py"
+      ],
+      "counting_path_count": 125,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "45b3a96d4c442fed8d5c87717f38b797d3ff0462",
+      "dirty": true,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/reptest_answerable.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 665,
+      "opens_under_data": 415,
+      "files_read": 128,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
