@@ -55,6 +55,16 @@
     "size_is_not_a_criterion": "no file is chosen or rejected for its size. Streaming makes size a cost in time and not in disk"
   },
   "replicate_rule": "the benchmark documents no replicate rule, so one is stated here and applied identically to K562 and to astrocyte: ALL of an experiment's released filtered GRCh38 `alignments` BAMs are streamed and POOLED -- every one of them contributes to both the numerator and the denominator, which is the same thing as concatenating them. Pooling is chosen over picking one replicate because picking one would need a reason to prefer it that the benchmark does not give. The number of BAMs pooled per experiment is recorded with the result",
+  "replicate_rule_amendment_1": {
+    "supersedes": "the rule above, 'ALL of an experiment's released filtered GRCh38 alignments BAMs are streamed and POOLED'",
+    "the_defect": "'released' does not mean 'one per replicate'. ENCSR000AKP, the K562 H3K27ac experiment, publishes SEVEN released filtered GRCh38 alignment BAMs, and they are not seven replicates: they are THREE biological replicates each reprocessed by up to three pipeline versions. Biological replicate 1 appears as ENCFF301TVL (ENCODE3 GRCh38), ENCFF121RHF (ENCODE4 v1.5.1) and ENCFF600THN (ENCODE4 v1.8.0); replicate 2 as ENCFF879BWC, ENCFF907MNY and ENCFF704LGA by the same three pipelines; replicate 3 only as ENCFF232RQF (ENCODE4 v1.8.0, technical replicates 3_1 and 3_2). Pooling all seven would have counted replicates 1 and 2 THREE TIMES each and replicate 3 once",
+    "why_it_would_not_have_been_caught": "the same reads would have inflated the numerator and the denominator together, so the RPM would have been wrong by the ratio between two differently weighted replicate mixtures rather than by an obvious factor. It would have shifted the comparison without making any single number look absurd, and the gate could have failed or passed for a reason that had nothing to do with whether the feature is reconstructible",
+    "the_corrected_rule": "stream the filtered GRCh38 `alignments` BAMs of the experiment's RELEASED analysis only, which is at most one per biological replicate, and pool those. ENCODE designates exactly one analysis per experiment as released and archives the superseded ones, so this is ENCODE's own designation and not a preference of this lane's. For ENCSR000AKP the released analysis is ENCAN866TOS (ENCODE4 v1.8.0) and the BAMs are ENCFF600THN, ENCFF704LGA and ENCFF232RQF, one per biological replicate",
+    "the_check_that_enforces_it": "the runner REFUSES to stream a set in which any biological replicate appears more than once, and records the replicate of every BAM it streams. A rule is worth less than the check that makes breaking it impossible, and this defect is exactly what an unchecked rule looks like",
+    "applied_identically_to_astrocyte": "the same released-analysis restriction applies to ENCSR000AOQ and ENCSR000EPM. It was not chosen for them and it is not relaxed for them",
+    "nothing_was_computed_under_the_superseded_rule": true,
+    "found_before": "any read was counted, any BAM was opened and any correlation was taken"
+  },
   "files": {
     "h3k27ac_k562": {
       "experiment": "ENCSR000AKP",
@@ -173,7 +183,7 @@
       "astrocyte": "not touched by this script, and not touched at all unless the gate passes"
     },
     "code_cleanliness": {
-      "git_sha": "45baa114410b6aa7acc9ac5b321069004e57719a",
+      "git_sha": "3556ccdfcfa5b1c2d451b1fe65f824f1f04622e0",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
@@ -257,7 +267,7 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "45baa114410b6aa7acc9ac5b321069004e57719a",
+      "git_sha": "3556ccdfcfa5b1c2d451b1fe65f824f1f04622e0",
       "dirty": true,
       "dirty_code_paths": [
         "scripts/check_staged.py",
@@ -266,19 +276,17 @@
         "tests/test_results_writers_guard.py"
       ],
       "untracked_code_paths": [],
-      "dirty_result_paths": [
-        "data/results/astroreg_calibration_registration.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/astroreg_calib_register.py"
       ],
-      "python": "3.14.3"
+      "python": "3.12.13"
     },
     "complete": true,
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
       "active": true,
-      "opens": 159,
+      "opens": 153,
       "opens_under_data": 6,
       "files_read": 3,
       "files_written": 0,
