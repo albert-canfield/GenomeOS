@@ -14877,6 +14877,47 @@ count (731 in this checkout against 878 in the rebuild's worktree), which are pr
 happened and not of what it counted, and which `manifest_rebuild.py`'s ignore lists do not yet name. The
 trace itself reconciles on both sides: 0 undeclared reads and 0 declared files that were never opened.
 
+## The response map's third increment: 40 of the 110 loci carry a further kind of evidence, and what each kind says is reported by what measured it (2026-10-02, lane-map3)
+
+Increment 2 stated its own limit and it is carried here word for word: its evidenced chain runs over 110 loci, and that is "23.26% of one of the measured layer's four assays"; lentiMPRA, VISTA and saturation mutagenesis contributed NOTHING to it, because "they read a sequence, or the bases inside it, not the native locus after a perturbation of it". So increment 2 is one assay deep. This increment asks what else reaches those loci, and builds the map over the ones that carry something.
+
+**Counted before it was built, and the count refused to be cheapened.** `data/results/response_map_increment3_count.json` counted, over all 24 chromosomes and without building anything: 14,734 measured perturbation pairs, 473 independent loci of the measured layer, 110 addable loci re-derived by the imported counting function rather than read out of increment 2's result, 166 shown elements. Three kinds of evidence reach a native locus — the CRISPRi perturbation, the reader's own accessibility call, and a GTEx cis-eQTL — and only the eQTL is new. Beyond the two every addable locus carries by construction, **40 of the 110** carry at least one further kind: 34 lentiMPRA sequence only, 3 eQTL only, 3 both, and 70 carry nothing further.
+
+**lentiMPRA, VISTA and saturation mutagenesis contribute 0 observations of a native locus.** That is increment 2's rule holding, not a gap in the data, and the rule was not bent to admit them: a reporter reads a copy of the sequence outside the locus, so it can be neither a confirmation nor a contradiction of a perturbation of that locus. VISTA and saturation mutagenesis reach no element of this map at all; saturation mutagenesis is zero by construction besides, since it substitutes one base at a time in a reporter and never deletes the element.
+
+**40 loci built, 0 excluded, and the build refuses to serve a payload where that does not reconcile.** `data/results/response_map_increment3.json` carries 574 assertions over 337 entities, 93 chains and 0 cycles. `loci_built` plus the sum of `loci_excluded_by_cause` must equal the population the committed count named, over seven declared causes, every one of them 0; and the build refuses before that to run over a set re-derived at a different size. Every one of the 574 assertions names `source.path`, `source.record_key` and `source.sha256`; none failed to, so none was excluded for want of one.
+
+**`observed` is split by what measured it and never pooled, because four assays are not one experiment:** 93 CRISPRi perturbation effects, 73 reader DNase readings, 126 lentiMPRA tile-in-cell readings, 209 retained GTEx cis-eQTL records. 73 further assertions are predicted, carry their own basis word for word, and are reported apart from all four.
+
+**What those observations say, each at its own denominator**, because a count of observations is not a measurement of what they say:
+
+| arm | observations | what they found | loci with at least one |
+| --- | --- | --- | --- |
+| CRISPRi perturbation | 93 | 93 significant decrease | 40 |
+| reader DNase | 73 | 72 open, 1 not detected open | 40 open, 1 not |
+| lentiMPRA (tile in cell) | 126 | 98 silent, 28 active | 35 silent, 18 active |
+| GTEx cis-eQTL | 209 | 117 decrease, 92 increase | 4 decrease, 5 increase |
+| the compiler, predicted | 73 | 68 activates, 5 represses | not a measurement |
+
+Four readings of that table that it would be wrong to take from it:
+
+- **the CRISPRi arm is positives only by construction.** A pair reaches this map only with the status `all_three_present`, which requires the screen to have measured regulation, so the 4,613 pairs where it measured none are not built. No rate, direction mix or share of significant effects may be read off that arm, for the screen or for anything else: the selection chose them.
+- **the eQTL arm's 209 records sit on six loci** — 4 carry a decrease, 5 carry an increase, 3 carry both. Its size is a count of variant-gene-tissue records and emphatically not of places in the genome.
+- **the reporter label is not a reading of the tile.** It is the measured layer's declared per-cell aggregation over the element's matched tiles, carried on each of that element's tile readings, so an element's label is counted once per tile. A per-tile active/silent call was not invented to tidy the row: that would have been a cut-off of this increment's own.
+- **`not_open_in_reader` is not closed.** It is not detected open at reader v1's registered call, and a narrowPeak set is a call set, so absence there is absence of a call.
+
+**No row of the breakdown is read against another.** Several kinds of evidence at one locus are not agreement, confirmation or validation of one another, and a locus carrying three or four kinds is not a locus three or four times established: the kinds measure different things in different contexts — a perturbation of the locus, the locus's accessibility, a copy of its sequence in a reporter, an association over donor tissues — and none of them is a replication or a check of another. A reporter calling a sequence silent beside a measured CRISPRi decrease at the native locus is not a contradiction, because neither checks the other. Nothing on the map counts a locus whose readings point the same way.
+
+**The eQTL arm is a floor over a sampled frame.** The retained hits were distilled against the intervals of three sampled element sets, so at an interval outside that frame nothing could have been seen at all and its absence is UNASSESSED, not an absence of eQTLs. A cis-eQTL is an association over donors besides: linkage carries the signal some distance, so the variant inside the interval need not be causal and the eGene need not be regulated by it, and GTEx tissues are not the CRISPRi cell lines.
+
+**No verdict, no score, no new cut-off.** The overlap rule, the locus span, the openness call, the reporter threshold and its label rule, the eQTL window and GTEx's own significance set are all imported from where they were registered. The locus convention is `attribution.cell2`'s and carries its wording: an operational grouping that pools cell types, **not established biological independence**.
+
+**What a reader can check, and one thing they cannot.** Both results were rebuilt from their own manifests with `scripts/manifest_rebuild.py`, at the sha each stamps: the count 986 inputs declared, 986 checked, 0 unchecked, 0 absent, 0 with different bytes, 4,500 of 4,514 leaves compared; the map 957 declared, 957 checked, 0 unchecked, 0 absent, 0 with different bytes, 38,486 of 38,503 leaves compared. 0 must_hold failures either time. Each reported the same three differences, all inside `result_manifest.traced_inputs` and none of them a quantity the run computed: `cwd_at_open`, `cwd_at_close` and the `opens` count. The two `cwd` fields record the writing machine's absolute working directory in a region the rebuild compares, so they cannot match a second checkout by construction — a property of the shared input tracer, carried by every result written since it was introduced, recorded here rather than worked around. The thing a reader cannot check: all 574 assertions come from sources whose kind is "local cache, not committed". Each is pinned by sha256, but those bytes are not in the repository.
+
+The count was first committed at `3360c49` while its own writer was uncommitted, stamping a tree that did not contain it, so no commit reproduced the number. It was re-run after the writer was committed and replaced; the re-run gave the same count leaf for leaf, and the superseded file stays in the history with a message saying why.
+
+0 model requests, 0 downloads, no money: every input was already on disk, and the per-element response cache was opened 0 times — recorded by patching `builtins.open` for the whole run, because `targets.run_elements` reads its path out of a result file's field and no reading of the source can see it.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
