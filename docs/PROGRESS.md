@@ -1363,3 +1363,104 @@ takeover branch tested for the first time. Biology independently validated: **un
 result tonight is descriptive, diagnostic or a refusal, and nothing establishes that any one compiled
 rule is right or wrong. Release readiness: `main` unchanged; the next snapshot now additionally waits
 on the case-sensitive rebuild of all six.
+
+## 2026-10-02 (afternoon) — a conditional approval encoded as five refusals, three closed questions, and two protections found inverted
+
+**Your decision, and it is the only open one.** You approved 1,232 AlphaGenome requests for
+AstroREG-2 at `astroreg2_registration` / `0f4c372`, conditional on the astrocyte activity being
+computed under Amendment 2's rule and on the supervisor writing "dry run reviewed". **Nothing has
+been sent: £0, 0 requests, no ledger file exists.** The approval is conditional, so recording your
+words could not be allowed to make the money reachable — see the first item below.
+
+**Two corrections owed to you directly, both already given.**
+1. The activity censoring was reported to you as "dissolved". It is not. The asymmetry is **−3.9
+   points and points the SAME WAY** as the refused peak call's +37.8 — ten times rarer and ten
+   times less skewed, not gone — and the `differential_by_label` flag behind the stronger claim
+   rests on a reporting convention, not a registered term.
+2. The read-length worry raised with you was the wrong worry. The DNase replicates differ in read
+   length (36/20 bp) and agree at Spearman **0.9692**; the H3K27ac replicates share a read length
+   (36/36) and agree **less** well, 0.8691. So the real limitation is larger and more general:
+   replicate-to-replicate variation is substantial in both columns regardless of read length,
+   median ratios 2.01 and 0.71, and the producer's multi-BAM mean averages over all of it.
+
+**A conditional approval must not become unconditional by being recorded.** The runner refused to
+send while its authorisation slot was empty — so filling in your sentence would have lifted that
+refusal and turned a conditional approval into an open one, silently, in the spending direction.
+Each clause is now its own refusal quoting the clause it enforces: the activity result committed
+and identified **by content** as produced under Amendment 2's rule; the supervisor's three words
+recorded from its own message and never anticipated; **"One run" as a terminal state refused by
+name** rather than by an exhausted counter, because a reset would look like exhaustion; every
+request logged; and the runner bound to `0f4c372`'s content so the registration your approval names
+cannot drift. Proved by planting: with your words present, the send must still refuse on each
+condition individually.
+
+**A provenance error of the coordinator's, corrected by the lane.** `0f4c372` was reported as
+carrying Amendment 2's term-by-term citations. It does not: it names the repository, the commit
+`91cda73…` and the "no rescaling of any kind" term, but has **no citation block and does not name
+the file**. The term-by-term set is in `astroreg_calibration_registration.json` at `230efc8`.
+**Amendment 2's rule is registered across two files, not the one you named**, and the send path's
+fingerprints rest on the pair — now pinned by sha256 `77ff2a0a79…` with a test that recomputes it,
+so an edit to the cited rule fails a test rather than passing quietly.
+
+**Your paid data was about to be thrown away, and that is now a precondition of the send.** Two
+lanes found independently that the chain keeps a summary and discards what the model returned:
+**226,363 cached rows exceed the response's own recorded 371 columns** (so two genes merge under one
+name, dropped at `alphagenome_adapter.py:227` and `enhancer_target.py:198`), and **no chromosome
+archive carries a per-cell value multiset at all**. The coordinator judged this non-urgent because
+it cannot repair the 963,406 existing answers; the supervisor corrected that — **1,232 new answers
+are about to be bought through the same adapter**, and paid data is the one kind this project cannot
+re-fetch for free. Adapter v2 now records the gene id and the per-track multiset **additively**,
+with the frozen deletion feature required to stay **byte-identical** so your registered quantity
+cannot move.
+
+**Three questions closed, all in the negative, all free.**
+- **Fine-mapped eQTL localisation**: 1,505 of 1,505 elements assessed (against 48 before), 130
+  carry a fine-mapped cis-eQTL, **15 carry one for their own linked gene across 12 loci** against
+  floors of 30 and 20. Element rate 1.0% against matched controls 0.70%, published descriptively.
+  The 1,262 keeps its standing as an LD-tagged count; the localised question is now **answered**
+  rather than open. A request bound **fired at 225 against 222 and stands fired**, replaced by a new
+  byte registration rather than relaxed.
+- **A cached gene row cannot be tied to a locus**: eight keys and no ninth over 27,938,173 rows, so
+  the 547 cannot be settled from disk. One field settles the same ambiguity 12,197 times and
+  settles **0 of the 547**, because the service emits a bare gene id only where its annotation gives
+  the locus no symbol, which never happens for a protein-coding name.
+- **A compiled rule's direction gets a version.** v1 stays the default and compiles
+  **byte-identically on all 24 chromosomes** (both compilers run in one process against one cache).
+  v2 reads the sign in the rule's own cell: **143,696 of 156,925 repression and 264,431 of 283,452
+  activation calls become unresolved, 0 flips.** But **388,997 of those are "one value was kept for
+  that cell"** — only **14 rules genome-wide** disagree within their cell. The number is **absence
+  of evidence, not inconsistency**, and the 0 flips is arithmetic: v2 can withhold a direction,
+  never reverse one. v2 is written into no program, because BioLang has no action token for an
+  unresolved direction; adding one would change every compiled program and is **your decision**, and
+  the recommendation is not to, since it would publish a cache limitation as a biological statement.
+
+**Two protections found inverted, and a standing rule adopted.**
+- A carry-forward meant to stop a registration drifting exempted `result_manifest` **wholesale** —
+  where the floors, bounds, threshold and seed live. It **protected the prose and left the numbers
+  unprotected.** Now split, with planted drifts (a floor 30 → 5, a bound 170.4 → 9999) shown passing
+  before and held after.
+- The coordinator briefed a lane that a rebuild's `opens` field was interpreter noise. It was a
+  **real change in what a writer opened**. An exemption built on that premise would have hidden
+  exactly the defect that caught a writer becoming an undeclared input of itself. Withdrawn, and a
+  test now greps the source so the reasoning cannot return.
+
+So: **no exemption in a verification tool without a planted counterfactual.** A harmlessness
+argument is not evidence. Both failures looked like protection from outside and were holes from
+inside.
+
+**Tooling that stopped lying.** The rebuild comparison no longer reports three differences that were
+never differences — three committed results went from 3 differences and exit 1 to **0** — and the one
+exemption it keeps is declared **known-lossy** in the report's own words, because `opens` is the only
+manifest leaf sensitive to reads outside `data/`. And a test that asserted **the state of the live
+checkout** was replaced by invariants plus a hermetic planted test: **the verdict moved twice without
+the mechanism moving once**, measured from a peer's own run. Four copies existed, two had the defect,
+and three further sites were examined and deliberately **left alone** because they assert what a
+committed file recorded at write time.
+
+**What is running.** The AstroREG-2 send path, adapter v2, a sweep for other name-matched exemptions
+in the rebuild tool (one already found: the timing matcher sets aside key-frequency counts that
+happen to be spelled `seconds`), and a free diagnosis of why the gastrulation model has no mesoderm —
+**correcting a rule to match its published source took mesoderm from 0.10 to 0.00** against a measured
+0.694–0.773, so something in the program was being compensated for by the wrong sign. Registered with
+a closed, **sourced** candidate list, a pairwise pass, and a deliberately weak bound, because matching
+the census would be tuning.
