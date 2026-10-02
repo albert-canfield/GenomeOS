@@ -464,6 +464,11 @@ WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL = (
     "something about Albert that only a relay supports"
 )
 
+#: The supervisor's three words, to be recorded here from its OWN message, quoted, with the time it
+#: wrote them. None because it has not written them. Same discipline as the authorisation: a paraphrase,
+#: a boolean or another agent's account of it are not the record, and this lane may not anticipate it.
+SUPERVISOR_SIGNOFF: str | None = None
+
 #: Each clause of the approval, quoted, so a refusal can name the clause it enforces rather than saying
 #: "not authorised", which teaches nothing and can be cleared by accident.
 ASTROREG2_CLAUSES = {
@@ -541,7 +546,22 @@ A_MERGE_IS_A_LOST_DISTINCTION = "a merge is a LOST DISTINCTION, NOT A WRONG NUMB
 #: string, and default-refusing: if the building lane names these differently the refusal fires and says
 #: exactly what it looked for, which is the safe direction to be wrong in.
 ADAPTER_MODULE = "genomeos.predict.alphagenome_adapter"
-ADAPTER_V2_MUST_EXPOSE = ("ADAPTER_V2", "gene_axis_fields", "per_track_values")
+
+#: Reconciled against adapter v2 as COMMITTED, after this check refused the names this lane had guessed.
+#: That refusal was the design working: the guessed names were absent, the send refused, and the fix was
+#: to read the adapter rather than to relax the check. GENE_AXIS_COLUMNS_090 is the gene-axis field set
+#: taken from the client's own source; CELL_TRACKS and CELL_VALUES_NOTE are the per-cell value multiset
+#: before any threshold; MERGE_NOTE is the merge audit that makes a pooled row countable.
+ADAPTER_V2_MUST_EXPOSE = (
+    "GENE_AXIS_SCHEMA",
+    "GENE_AXIS_COLUMNS_090",
+    "CELL_TRACKS",
+    "CELL_VALUES_NOTE",
+    "MERGE_NOTE",
+)
+
+#: The gene-axis field without which a purchased answer cannot be tied to a gene identity.
+ADAPTER_V2_MUST_RECORD_GENE_ID = "gene_id"
 
 
 def check_adapter_v2(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
@@ -561,6 +581,8 @@ def check_adapter_v2(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
             f"be shown to write through adapter v2. {WHY_ADAPTER_V2_BEFORE_SENDING}"
         ) from e
     missing = [name for name in ADAPTER_V2_MUST_EXPOSE if not hasattr(mod, name)]
+    if not missing and ADAPTER_V2_MUST_RECORD_GENE_ID not in tuple(getattr(mod, "GENE_AXIS_COLUMNS_090", ())):
+        missing = [f"{ADAPTER_V2_MUST_RECORD_GENE_ID} in GENE_AXIS_COLUMNS_090"]
     if missing:
         raise SendRefusedError(
             f"item (f): {module_name} does not expose {missing}, so it is not adapter v2 and the gene "
@@ -676,7 +698,7 @@ def may_send(
     if run_already_completed(ledger):
         _refuse("one_run", f"the ledger already records a completed run. {ONE_RUN_IS_TERMINAL}")
 
-    check_adapter_v2()
+    check_adapter_v2(ADAPTER_MODULE)  # read at CALL time so the module under check is substitutable
 
     budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
     if budget.charged() != budget.sent:

@@ -900,13 +900,23 @@ class TestAmendment2sRuleIsUnchangedSinceItWasRegistered:
 class TestItemFAdapterV2:
     """Sign-off item (f), planted. It is the SUPERVISOR's requirement, not a clause of Albert's."""
 
-    def test_it_refuses_today_because_the_adapter_is_still_v1(self):
-        with pytest.raises(astrorun.SendRefusedError) as exc:
-            astrorun.check_adapter_v2()
-        msg = str(exc.value)
-        assert "item (f)" in msg
-        assert "ADAPTER_V2" in msg, "the refusal names what it looked for"
-        assert "PAID FOR" in msg
+    def test_adapter_v2_is_now_committed_so_item_f_is_SATISFIED(self):
+        """It refused until adapter v2 landed. It passes now, against the real module.
+
+        This check was written before adapter v2 existed and guessed the names it would expose. The
+        guesses were wrong, the check refused, and the fix was to READ the committed adapter and
+        reconcile to it -- not to relax the check. ADAPTER_V2_MUST_EXPOSE now names what is actually
+        there, and `gene_id` is required to be in the gene-axis column set rather than merely implied.
+        """
+        out = astrorun.check_adapter_v2()
+        assert out["module"] == "genomeos.predict.alphagenome_adapter"
+        assert "GENE_AXIS_COLUMNS_090" in out["exposes"]
+
+    def test_the_gene_id_field_is_required_and_not_merely_implied(self):
+        """Without gene_id a purchased answer cannot be tied to a gene identity at all."""
+        import genomeos.predict.alphagenome_adapter as real
+
+        assert astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID in real.GENE_AXIS_COLUMNS_090
 
     def test_it_is_not_attributed_to_albert(self):
         assert "not a clause of Albert's approval" in astrorun.ADAPTER_V2_IS_A_SUPERVISOR_REQUIREMENT
@@ -923,6 +933,7 @@ class TestItemFAdapterV2:
         mod = types.ModuleType("fake_adapter_v2")
         for name in astrorun.ADAPTER_V2_MUST_EXPOSE:
             setattr(mod, name, True)
+        mod.GENE_AXIS_COLUMNS_090 = (astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID, "gene_name")
         monkeypatch.setitem(sys.modules, "fake_adapter_v2", mod)
         out = astrorun.check_adapter_v2("fake_adapter_v2")
         assert out["exposes"] == list(astrorun.ADAPTER_V2_MUST_EXPOSE)
@@ -933,6 +944,7 @@ class TestItemFAdapterV2:
         mod = types.ModuleType("half_adapter")
         for name in astrorun.ADAPTER_V2_MUST_EXPOSE[:-1]:
             setattr(mod, name, True)
+        mod.GENE_AXIS_COLUMNS_090 = (astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID,)
         monkeypatch.setitem(sys.modules, "half_adapter", mod)
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.check_adapter_v2("half_adapter")
@@ -943,7 +955,7 @@ class TestItemFAdapterV2:
         import types
 
         mod = types.ModuleType("version_only")
-        mod.ADAPTER_V2 = True
+        mod.GENE_AXIS_SCHEMA = 1
         monkeypatch.setitem(sys.modules, "version_only", mod)
         with pytest.raises(astrorun.SendRefusedError):
             astrorun.check_adapter_v2("version_only")
@@ -951,8 +963,23 @@ class TestItemFAdapterV2:
     def test_the_merge_wording_is_carried_verbatim(self):
         assert astrorun.A_MERGE_IS_A_LOST_DISTINCTION == ("a merge is a LOST DISTINCTION, NOT A WRONG NUMBER")
 
-    def test_the_send_path_refuses_on_item_f_even_with_everything_else_satisfied(self, tmp_path, monkeypatch):
-        """PLANTED with Albert's authorisation recorded AND every clause of his satisfied."""
+    def test_PLANTED_a_regressed_adapter_refuses_the_send_with_everything_else_satisfied(
+        self, tmp_path, monkeypatch
+    ):
+        """PLANTED with Albert's authorisation recorded AND every clause of his satisfied.
+
+        Adapter v2 is committed, so item (f) passes against the real module. What must still hold is
+        that a FUTURE adapter losing a capability stops the send, so the check is pointed at a module
+        missing one and the refusal is shown.
+        """
+        import types
+
+        half = types.ModuleType("regressed_adapter")
+        for name in astrorun.ADAPTER_V2_MUST_EXPOSE[:-1]:
+            setattr(half, name, True)
+        half.GENE_AXIS_COLUMNS_090 = (astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID,)
+        monkeypatch.setitem(sys.modules, "regressed_adapter", half)
+        monkeypatch.setattr(astrorun, "ADAPTER_MODULE", "regressed_adapter")
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
         plan = [
             {
