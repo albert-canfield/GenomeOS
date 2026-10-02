@@ -123,6 +123,44 @@ EQTL_SETS = {
 EQTL_MARGIN = 500  # scripts/eqtl_targets.MARGIN, the margin the retained hits were distilled under
 EQTL_RESULT = "data/results/eqtl_targets.json"
 
+#: Files this count opens that no glob of `data/results` reaches, each with why it is opened. They are
+#: declared here because an input is what the writer opened, not what it said it read: the audit hook
+#: in `genomeos.manifest` records every open under `data/` and `save_result` refuses a result whose
+#: reads exceed its declared inputs. Three of these groups would have gone undeclared without it.
+OPENED_BESIDE_THE_RESULTS = {
+    # `attribution.targets` reads a run's elements out of the table its result's `elements_where` field
+    # points at, so no reading of the source names these: the path comes out of a result file at run
+    # time. 1.4 GB over 26 chromosomes, and the reason this project traces reads instead of trusting
+    # declarations.
+    "the per-chromosome element tables reached through a result file's `elements_where` pointer": [
+        f"data/knowledge/alphagenome/all_elements/{c}.json" for c in CHROMS
+    ],
+    # the measured layer loads all four of its assays per chromosome, not only the perturbation one, so
+    # the three reporter and base-level sources are opened even though they contribute no native-locus
+    # observation to this count
+    "the measured layer's other three assays, opened by `compile._measured_rows`": [
+        *[f"data/knowledge/mpra/{a}.bed.gz" for a in ("ENCFF475FKV", "ENCFF769REH", "ENCFF802FUV")],
+        "data/knowledge/vista/locus.tsv.gz",
+        "data/knowledge/satmut/elements.tsv.gz",
+    ],
+    # increment 1's map is read whole by `response_map2.map1_keys`, which is how this count knows which
+    # locus the map already covered; everything that view reads is opened with it
+    "increment 1's own view, read by `response_map2.map1_keys`": [
+        "data/results/attribution_correctness_v3.json",
+        "data/results/crispri_direction.json",
+        "data/results/discovery_review.json",
+        "data/results/loci_benchmark.json",
+        "data/knowledge/ReactomePathways.txt",
+        "data/knowledge/compiled/noncoding_chr11.bio",
+        "data/knowledge/hic_contact/K562_4DNFITUOMFUQ_5000.json",
+        "data/organisms/human/erythrocyte.bio",
+        "data/cache/rates/schofield2018_TableS2_halflives.xlsx",
+    ],
+}
+#: GENCODE is read per chromosome, and only for the chromosomes carrying a retained eQTL hit, so the
+#: set is not fixed: it is collected from what was actually opened and declared by name.
+GENCODE = "data/reference/gencode_v50_{chrom}.gff3.gz"
+
 #: A gene token for a kind of evidence that names no measured gene. `cell2.group` unions on a shared
 #: measured gene or on 1 Mb proximity; a reporter observation names no gene, so a token unique to the
 #: element suppresses the gene arm and leaves the proximity arm alone.
@@ -763,6 +801,10 @@ def main() -> None:
     p = eqtl.KNOWLEDGE / "distil_summary.json"
     if p.exists():
         paths.append(p)
+    for group in OPENED_BESIDE_THE_RESULTS.values():
+        paths += [ROOT / x for x in group]
+    for chrom in sorted(eqtl_chroms):
+        paths.append(ROOT / GENCODE.format(chrom=chrom))
     for q in paths:
         if q.as_posix() not in seen:
             seen.add(q.as_posix())
@@ -794,6 +836,20 @@ def main() -> None:
             },
         ],
         "inputs": inputs,
+        "inputs_opened_beside_the_declared_results": {
+            "why_they_are_listed": (
+                "an input is what the writer opened, not what it said it read. The audit hook in "
+                "`genomeos.manifest` records every open under `data/` and `save_result` refuses a "
+                "result whose reads exceed its declared inputs, which is how these came to be named"
+            ),
+            "groups": {k: len(v) for k, v in OPENED_BESIDE_THE_RESULTS.items()},
+            "the_pointer_case": (
+                "`attribution.targets` reads a run's elements out of the table its result's "
+                "`elements_where` field points at, so the path comes out of a result file at run time "
+                "and no reading of the source could name it"
+            ),
+            "gencode_chromosomes": sorted(eqtl_chroms),
+        },
         "inputs_are_recorded_one_file_per_entry": (
             "scripts/manifest_rebuild.py resolves an input by its `path`, and a grouped entry carries "
             "a label there, so a grouped input would read as absent without any file being checked"
