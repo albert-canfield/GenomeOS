@@ -25,7 +25,11 @@ there was nothing to record: that is history, and calling it a breach would be f
 AFTER it is a live gap. So `split_by_boundary` finds the commit that introduced the field by `git log`
 on the FUNCTION rather than by guessing a date, places each unrecorded result by ITS OWN COMMITTED
 HISTORY and never by its `date` field (which the writer supplies and could be anything), and names a
-result it cannot place in its own class instead of folding it into whichever side is smaller.
+result it cannot place in its own class instead of folding it into whichever side is smaller. One of
+those classes is split again for the same reason: an untracked result that a committed .gitignore rule
+keeps local is a DECISION somebody made in a commit, and one that nothing says should stay local is an
+omission; reporting the two as one number would read every locally-kept per-chromosome result as a gap
+in the record.
 
 NOTHING IS REWRITTEN AND NO RESULT'S BYTES ARE TOUCHED. Several results' sha256 ARE registrations in
 `data/results/manifest_headlines.json`, and rewriting one would break a pin. The census reads and
@@ -278,8 +282,13 @@ SIDES = {
     "live gap.",
     "added_in_the_boundary_commit": "the boundary commit itself added this result, so the field and "
     "the result entered the record together and neither side can be shown. UNPLACEABLE.",
-    "never_committed": "no commit holds this file, so it has no committed history to place it by and "
-    "its `date` field is the writer's word. UNPLACEABLE, and it is also not a published result.",
+    "never_committed_and_git_ignored": "no commit holds this file AND a committed .gitignore rule "
+    "says it stays local, so its absence from the record is a decision somebody made in a commit "
+    "rather than an omission. UNPLACEABLE -- it has no committed history to place it by, and its "
+    "`date` field is the writer's word -- and it is not a published result either.",
+    "never_committed_not_ignored": "no commit holds this file and nothing says it should stay local, "
+    "so it is a result that could have been committed and was not. UNPLACEABLE for the same reason, "
+    "and named apart from the ignored ones because the two are not the same fact.",
     "unplaceable_no_add_commit": "git tracks the file but reports no commit that added it, so the "
     "earliest commit containing it could not be read. UNPLACEABLE.",
     "unplaceable_unrelated_history": "the commit that added this result is neither an ancestor nor a "
@@ -290,7 +299,8 @@ SIDES = {
 #: whichever side happens to be smaller.
 UNPLACEABLE = (
     "added_in_the_boundary_commit",
-    "never_committed",
+    "never_committed_and_git_ignored",
+    "never_committed_not_ignored",
     "unplaceable_no_add_commit",
     "unplaceable_unrelated_history",
     "unplaceable_no_boundary",
@@ -305,6 +315,33 @@ def _tree_paths(ref: str) -> set[str] | None:
 def _tracked_paths() -> set[str]:
     out = _git("ls-files", "--", str(RESULTS))
     return {ln for ln in (out or "").splitlines() if ln}
+
+
+def _git_ignored(rels: list[str]) -> set[str]:
+    """Which of these paths a committed .gitignore rule keeps out of the record, asked in one call.
+
+    An untracked result cannot be placed either side of the boundary, but WHY no commit holds it is
+    two different facts: a committed rule saying it stays local is a decision, and nothing saying so
+    is an omission. Folding them together would report every locally-kept per-chromosome result as a
+    gap in the record. `check-ignore` answers for a path whether or not the file is on disk, so the
+    answer comes from the committed rules and not from this working tree.
+    """
+    if not rels:
+        return set()
+    try:
+        done = subprocess.run(
+            ["git", "check-ignore", "--stdin"],
+            input="\n".join(rels),
+            capture_output=True,
+            text=True,
+            timeout=120,
+            cwd=ROOT,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if done.returncode not in (0, 1):  # 128 is an error; an empty answer would read as "none ignored"
+        return set()
+    return {ln for ln in done.stdout.splitlines() if ln}
 
 
 def _first_add_commit(rel: str) -> str | None:
@@ -329,13 +366,16 @@ def split_by_boundary(names: list[str]) -> dict[str, Any]:
     if parent_tree is None and sha:
         parent_tree = set()  # a root commit has no parent: nothing was committed before it
 
+    rels = [f"{RESULTS.as_posix()}/{n}.json" for n in names]
+    ignored = _git_ignored([r for r in rels if r not in tracked])
+
     sides: dict[str, list[str]] = {}
     for name in names:
         rel = f"{RESULTS.as_posix()}/{name}.json"
         if not sha or boundary_tree is None:
             side = "unplaceable_no_boundary"
         elif rel not in tracked:
-            side = "never_committed"
+            side = "never_committed_and_git_ignored" if rel in ignored else "never_committed_not_ignored"
         elif rel in (parent_tree or set()):
             side = "before_the_field_existed"
         elif rel in boundary_tree:

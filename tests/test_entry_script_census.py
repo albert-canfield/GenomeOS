@@ -109,11 +109,31 @@ def test_the_boundary_commit_really_added_the_function():
 def test_a_result_no_commit_holds_is_named_unplaceable_and_not_folded():
     """The one rule the lane turns on: an unplaceable result gets its own class."""
     split = census_mod.split_by_boundary(["a_result_that_is_in_no_commit_at_all"])
-    assert split["counts"] == {"never_committed": 1}
+    assert split["counts"] == {"never_committed_not_ignored": 1}
     assert split["the_finding"]["count"] == 0
     assert split["the_history"]["count"] == 0
     assert split["the_unplaceable"]["count"] == 1
-    assert split["the_unplaceable"]["by_class"]["never_committed"] == ["a_result_that_is_in_no_commit_at_all"]
+    assert split["the_unplaceable"]["by_class"]["never_committed_not_ignored"] == [
+        "a_result_that_is_in_no_commit_at_all"
+    ]
+
+
+def test_an_untracked_result_a_committed_rule_keeps_local_is_named_apart():
+    """A committed .gitignore rule saying a result stays local is a decision, not an omission.
+
+    `reader_*_chr*.json` is the rule, committed in .gitignore; `check-ignore` answers for the path
+    whether or not the file is on disk, so this holds in a fresh checkout too.
+    """
+    ignored = "reader_a_cell_type_that_does_not_exist_chr1"
+    split = census_mod.split_by_boundary([ignored, "a_result_that_is_in_no_commit_at_all"])
+    assert split["counts"] == {
+        "never_committed_and_git_ignored": 1,
+        "never_committed_not_ignored": 1,
+    }, split["counts"]
+    by_class = split["the_unplaceable"]["by_class"]
+    assert by_class["never_committed_and_git_ignored"] == [ignored]
+    assert split["the_unplaceable"]["count"] == 2
+    assert split["the_finding"]["count"] == 0 and split["the_history"]["count"] == 0
 
 
 def test_the_finding_and_the_history_are_named_apart():
