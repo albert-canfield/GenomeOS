@@ -1257,3 +1257,73 @@ false passes."* An instrument's silence is not evidence; a verdict it cannot jus
 be withheld rather than defaulted to a pass. State the limit too — an audit hook cannot see
 a C library opening a file directly, so htslib and pysam reads are invisible, and the claim
 is about Python-level reads only.
+
+## A stub may substitute a dependency's behaviour, never its existence (2026-10-02)
+
+The AstroREG-2 sender passed **122 of its own tests**, a line-by-line code review by the
+supervisor, and a dry run that exercised every refusal. It was launched against a live
+paid API and failed **before sending a single request**:
+
+    AttributeError: module 'genomeos.predict.enhancer_target' has no attribute
+    'live_scorer_and_fetch'      scripts/astroreg2_send.py:234
+
+`enhancer_target.Scorer` is a **type alias** — `Callable[[str, int, str, str], …]` — not a
+class or a factory. The live client is `alphagenome_adapter.create_client` and
+`AlphaGenomeAdapter`. The sender called a convenience helper that **had never been
+written**.
+
+**It failed safe, and that part was built right.** The exception landed one line after the
+budget object was created and one line before any charge: `run_already_completed` false,
+`charged_elements` 0, no ledger file, no completion event — so the authorisation was still
+the same single run rather than a consumed one. Every guard on the way in had fired
+correctly: all five of the approver's clauses checked, the plan digest matched the reviewed
+list, cap 1,232 with 0 charged.
+
+**A SECOND defect surfaced in the same twenty minutes, and it had been making the whole
+tree red.** The push after the failed launch was refused by the pre-push check — 1 failed,
+4,334 passed — on
+`test_results_writers_guard.py::test_nothing_under_genomeos_or_scripts_writes_into_data_results_but_save_result`:
+the sender's ledger was at `data/results/astroreg2_ledger.jsonl`, written directly rather
+than through `save_result`. **The guard was right and the fix was not an exemption**: a
+ledger is not a result — it is an append-only record of charges, written *before* each
+charge precisely so it cannot be reconstructed from outcomes — so it moved to
+`data/ledgers/`. Adding it to the allowlist would have papered over a file being in the
+wrong place, and that guard's claim is worth keeping absolute.
+
+**Why each defect was invisible, which is the lesson rather than either fix.**
+
+- **Every test used a stub client and no network** — correctly, because testing it live
+  spends money. So **every test substituted the entry point, and not one of them could
+  prove it exists.**
+- **The dry run passed because the scorer is constructed only after the `--send` check**,
+  so the one line that only a real send could reach was the one line never reached.
+- **The writers guard lives in another file**, so nobody running the sender's own tests
+  would ever see it fail.
+
+Two distinct blind spots: **a stubbed dependency, and a test in a file nobody in the loop
+was running.**
+
+**The rules adopted, free and permanent.** A stub may substitute a dependency's
+**behaviour**, never its **existence**: every live entry point a paid path names gets an
+existence-and-signature test — real import, `inspect.signature`, no network, no key — plus
+a sweep of the path for attribute access on imported modules, asserting each resolves. And
+a sign-off on a paid path requires **the full-suite verdict from the status file of the
+committed tree**, not the module's own tests.
+
+**The sign-off itself became blob-bound.** A review is of code, so
+`SUPERVISOR_SIGNOFF` now records the **git blob sha** of the sender and of the module
+holding the refusals, and `may_send` refuses if either differs — planted with a
+one-character edit. The consequence is deliberate and will recur: the fix commit voids the
+sign-off and requires a re-sign. **No approval can carry over to code the reviewer never
+read.**
+
+**The reviewer recorded its own miss as its own, which is why this entry exists.** In its
+words: it **read** the line calling `live_scorer_and_fetch()` and **did not check that it
+exists**, and it ran only the two module test files rather than the full suite, so the
+writers-guard failure was invisible to it. "Dry run reviewed" was given on a review with
+exactly the two blind spots above. A review that reads a call without resolving it is
+reading prose, not code.
+
+**And the chain held where it mattered.** No red tree reached the remote: the pre-push
+check refused, did not retry, and said *"a red check is a red check: fix it and push
+again."* Nothing was spent, nothing was published, and the authorisation survived intact.
