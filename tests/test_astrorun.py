@@ -38,6 +38,24 @@ def grant_run(monkeypatch, run=1, requests=None, consumed=False, words="<the run
     )
 
 
+#: `needs_local_data`, the supervisor's AMENDED acceptance rule of 2026-10-02, which I had not read
+#: when I converted these two skips into failures. The amended rule is explicit: the verdict is a
+#: worktree of the committed tree WITH the git-ignored stores linked read-only, so a test needing local
+#: data RUNS there; where the stores are genuinely absent -- CI, or a bare worktree -- it SKIPS BY NAME
+#: and never fails. My failures would have RED CI, which is the same break that 21 tests caused in a
+#: worktree, 16 of them in tests/test_context_evidence.py on this very file.
+#:
+#: The marker does not weaken either assertion: both still claim every one of the response's tracks
+#: comes back named and equal, and both still read the figure from the file rather than from a
+#: constant. It changes WHERE they run, not what they claim -- and the skip names the missing store, so
+#: a reader can tell "not run here" from "passed".
+needs_track_metadata = pytest.mark.needs_local_data(
+    "data/cache/entex/alphagenome_track_metadata_copy.csv",
+    how="scripts/entex_feasibility.py writes it (AG_METADATA); data/cache is machine-local by the "
+    "data boundary, so a fresh checkout cannot have it",
+)
+
+
 class TestTheRunIsAboutTheTreeItNames:
     """A test, not a belief: the code under test must come from the tree these tests came from.
 
@@ -1491,6 +1509,7 @@ class TestItemGTheFullTrackVectorIsKept:
         est = astrorun.full_vector_disk_estimate(1, 1, 371, free_bytes=50 * 1024**3)
         assert abs(written - est["bytes_per_row"]) <= 40, (written, est["bytes_per_row"])
 
+    @needs_track_metadata
     def test_the_REAL_recording_path_keeps_the_WHOLE_vector(self):
         """(a) The real recorded_axis, run and read back: every value, named, equal.
 
@@ -1505,17 +1524,10 @@ class TestItemGTheFullTrackVectorIsKept:
         from genomeos.predict import alphagenome_adapter as adapter
 
         meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
-        # FAILS and does not skip when the file is absent, naming the path. A skip is not a pass, and
-        # a skip on a committed artefact is what hid tonight's 63-guard finding: with 20 results
-        # deleted the old guards reported 144 passed and 76 skipped while the converted ones reported
-        # 27 failed and 56 errors, each naming its path. The signed tree's status file must show this
-        # test PASSED, so the absence of what it needs has to be red.
-        assert meta_csv.exists(), (
-            f"the real track metadata is not at {meta_csv}, so item (g)'s claim -- that every one of "
-            "the response's tracks comes back named and equal -- is UNCHECKED against the real track "
-            "table. This is a failure and not a skip: the signed tree's status file must show this "
-            "test passed, and a skip would let an unproven claim be signed"
-        )
+        # The marker guarantees the store is here when this runs, and skips BY NAME when it is not.
+        # A bare `assert exists()` was wrong: data/cache is machine-local by the data boundary, so the
+        # failure it produced was about the checkout and not about the code -- a verdict determined by
+        # the environment, which is the defect class this project spent 2026-10-02 removing.
         with open(meta_csv) as fh:
             meta = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
         assert len(meta) > 300, "the real metadata, not a handful of rows"
@@ -1670,6 +1682,7 @@ class TestItemGTheFullTrackVectorIsKept:
         assert "check_adapter_writes_full_vectors" in called, "item (g)'s recording check"
         assert "check_disk_for_full_vectors" in called, "item (g)'s disk check"
 
+    @needs_track_metadata
     def test_the_two_track_counts_are_both_recorded_and_the_LARGER_is_estimated_on(self):
         """Neither figure is measured from a paid response, so the estimate takes the larger.
 
@@ -1684,10 +1697,6 @@ class TestItemGTheFullTrackVectorIsKept:
         assert (
             max(astrorun.ADAPTER_NOTE_TRACKS, astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA)
             == astrorun.OBSERVED_TRACKS_PER_ANSWER
-        )
-        assert meta_csv.exists(), (
-            f"667 is read from {meta_csv} and the file is absent, so the figure the disk estimate uses "
-            "would be taken on report. A failure, not a skip"
         )
         with open(meta_csv) as fh:
             rna = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
