@@ -2,6 +2,12 @@
 """The base rate the 0.3252 has to be read against: the same rules, read in every other biosample.
 
     uv run --frozen python scripts/context_evidence_baserate.py [--chroms chr21]
+    uv run --frozen python scripts/context_evidence_baserate.py --result context_evidence_baserate_v2 \
+        --supersedes
+
+`--result` changes the name written and nothing else; `--supersedes` records which committed result the
+run is written beside. The committed data/results/context_evidence_baserate.json is kept byte for byte:
+its sha256 is a declared input of four other committed results.
 
 `data/results/context_evidence.json` reports that 26,551 of the 81,635 assessable compiled rules are
 `open_in_reader`, 0.3252 of that population. That share means nothing on its own. The elements are
@@ -29,6 +35,7 @@ never independent evidence that a rule is right. This comparison tests whether t
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from collections import Counter, defaultdict
@@ -80,10 +87,56 @@ OWN_CODE = (
 )
 
 
+#: Why this base rate is re-recorded under a name of its own rather than over the committed file. The
+#: committed manifest declares the 312 cached DNase peak sets as one group under a label with no member
+#: list, so a rebuild in a second environment has no path to open or hash: `files_entry` did not name the
+#: members of a group until 2026-10-02. The committed bytes cannot be replaced to fix it: the sha256 of
+#: data/results/context_evidence_baserate.json is a declared input of four other committed results
+#: (not_open_profile, not_open_profile_chr21, repress2_registration, repress2_registration_amendment),
+#: which new bytes under the same name would make unrebuildable.
+WHY_A_NEW_NAME = (
+    "re-recorded under a new name on 2026-10-02 so that every group of input files names its members, "
+    "each with its own sha256 and byte count, which is what a rebuild in a second environment needs to "
+    "open and hash them; no figure of the run differs. The committed result is kept unchanged because "
+    "its sha256 is a declared input of four other committed results"
+)
+#: The committed results that declare this one's sha256 as an input, which is why it is kept byte for byte.
+DECLARED_AS_AN_INPUT_BY = (
+    "data/results/not_open_profile.json",
+    "data/results/not_open_profile_chr21.json",
+    "data/results/repress2_registration.json",
+    "data/results/repress2_registration_amendment.json",
+)
+
+
+def supersedes() -> dict[str, Any]:
+    """The committed result this run is written beside, never over, with the bytes it is kept at."""
+    p = RESULTS_DIR / f"{RESULT}.json"
+    entry = mf.input_entry(p, partition=None)
+    old = json.loads(p.read_text())
+    return {
+        "file": p.as_posix(),
+        "date": old.get("date"),
+        "sha256": entry["sha256"],
+        "bytes": entry["bytes"],
+        "kept": "unchanged; this run is written beside it under a new name, not over it",
+        "why": WHY_A_NEW_NAME,
+        "declared_as_an_input_by": list(DECLARED_AS_AN_INPUT_BY),
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chroms", default=",".join(CHROMS))
     ap.add_argument("--result", default=RESULT)
+    ap.add_argument(
+        "--supersedes",
+        action="store_true",
+        help=(
+            f"record, beside the manifest, that this run is written beside the committed {RESULT} "
+            f"rather than over it, with that file's date and sha256"
+        ),
+    )
     args = ap.parse_args()
     chroms = [c for c in args.chroms.split(",") if c]
 
@@ -289,6 +342,8 @@ def main() -> None:
         },
         "code_cleanliness": ce.code_cleanliness(ENTRY, OWN_CODE),
     }
+    if args.supersedes:
+        payload["result_manifest"]["supersedes"] = supersedes()
     path = save_result(args.result, payload)
     print(f"{args.result}: {path}")
     print(f"  population {population:,} assessable rules")

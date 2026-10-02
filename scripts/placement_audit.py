@@ -2,6 +2,11 @@
 """Audit A, candidate coverage: why measured CRISPRi links fail placement, cause by cause.
 
     uv run python scripts/placement_audit.py
+    uv run python scripts/placement_audit.py --result placement_audit_v2 --supersedes
+
+`--result` changes the name written and nothing else; `--supersedes` records which committed result the
+run is written beside. The committed data/results/placement_audit.json is kept byte for byte: its sha256
+is a declared input of three other committed results.
 
 Lane-place, 2026-09-29, for the coordinator (genomeos-9f). Item 13 C4 (`b7e4bf0`) sorted the 661 measured
 CRISPRi decrease links with `ablation.placement`: 212 meet the overlap rule in a compiled predicted element,
@@ -23,6 +28,7 @@ data/results/placement_audit.json through the result contract.
 
 from __future__ import annotations
 
+import argparse
 import bisect
 import csv
 import gzip
@@ -49,6 +55,33 @@ from genomeos.results import RESULTS_DIR, save_result
 NAME = "placement_audit"
 REGISTERED = "2026-09-29"
 ALL_ELEMENTS = Path("data/knowledge/alphagenome/all_elements")
+#: This script, as the entry whose transitive import closure is the counting path of its result
+#: (genomeos.manifest.counting_path). Named rather than taken from __file__ so the closure is the same
+#: however the script is invoked.
+ENTRY = "scripts/placement_audit.py"
+ROOT = Path(__file__).resolve().parents[1]
+#: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
+OWN_CODE = ("scripts/placement_audit.py", "tests/test_placement_audit.py")
+
+#: Why this audit is re-recorded under a name of its own rather than over the committed file. The
+#: committed manifest records the whole-chromosome deletion run's element tables as one group under a
+#: label with no member list, so a rebuild in a second environment has no path to open or hash:
+#: `files_entry` did not name the members of a group until 2026-10-02. The committed bytes cannot be
+#: replaced to fix it: the sha256 of data/results/placement_audit.json is a declared input of three other
+#: committed results (discovery_review, placement_cause_198, placement_census), which new bytes under the
+#: same name would make unrebuildable.
+WHY_A_NEW_NAME = (
+    "re-recorded under a new name on 2026-10-02 so that every group of input files names its members, "
+    "each with its own sha256 and byte count, which is what a rebuild in a second environment needs to "
+    "open and hash them; no figure of the run differs. The committed result is kept unchanged because "
+    "its sha256 is a declared input of three other committed results"
+)
+#: The committed results that declare this one's sha256 as an input, which is why it is kept byte for byte.
+DECLARED_AS_AN_INPUT_BY = (
+    "data/results/discovery_review.json",
+    "data/results/placement_cause_198.json",
+    "data/results/placement_census.json",
+)
 
 # ==================================================================================================
 # The registration (2026-09-29, lane-place), fixed before any per-outcome count of this audit.
@@ -772,6 +805,23 @@ def manifest(programs: list[Path], swept: list[Path]) -> dict[str, Any]:
             ms.TRAINING: "the CRISPRi benchmark's training file (K562); read as measurement, nothing fitted",
             ms.HELDOUT: "the CRISPRi benchmark's held-out file; read as measurement, reported apart",
         },
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+    }
+
+
+def supersedes(root: Path = ROOT) -> dict[str, Any]:
+    """The committed result this run is written beside, never over, with the bytes it is kept at."""
+    p = root / RESULTS_DIR / f"{NAME}.json"
+    entry = mf.input_entry(p, partition=None)
+    old = json.loads(p.read_text())
+    return {
+        "file": (RESULTS_DIR / f"{NAME}.json").as_posix(),
+        "date": old.get("date"),
+        "sha256": entry["sha256"],
+        "bytes": entry["bytes"],
+        "kept": "unchanged; this run is written beside it under a new name, not over it",
+        "why": WHY_A_NEW_NAME,
+        "declared_as_an_input_by": list(DECLARED_AS_AN_INPUT_BY),
     }
 
 
@@ -932,6 +982,25 @@ def group_counts(links: list[Link]) -> dict[str, dict[str, int]]:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--result",
+        default=NAME,
+        help=(
+            "the result name to write, and nothing else: no figure, no input and no parameter of the "
+            "run is read from it. A re-record under a new name leaves the committed file alone"
+        ),
+    )
+    ap.add_argument(
+        "--supersedes",
+        action="store_true",
+        help=(
+            f"record, beside the manifest, that this run is written beside the committed {NAME} rather "
+            f"than over it, with that file's date and sha256"
+        ),
+    )
+    args = ap.parse_args()
+    result_name = args.result
     t0, r0 = time.perf_counter(), resource.getrusage(resource.RUSAGE_SELF)
     programs = ho.compiled_programs()
     pairs, raw = read_pairs()
@@ -1091,7 +1160,10 @@ def main() -> None:
             "requests": 0,
         },
     }
-    p = save_result(NAME, payload, manifest=manifest(programs, swept_paths))
+    m = manifest(programs, swept_paths)
+    if args.supersedes:
+        m["supersedes"] = supersedes()
+    p = save_result(result_name, payload, manifest=m)
     print("saved", p, flush=True)
 
 
